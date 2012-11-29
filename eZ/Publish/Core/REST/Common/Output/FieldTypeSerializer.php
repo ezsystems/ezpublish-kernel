@@ -121,6 +121,7 @@ class FieldTypeSerializer
      * Returns the field type with $fieldTypeIdentifier
      *
      * @param string $fieldTypeIdentifier
+     *
      * @return \eZ\Publish\API\Repository\FieldType
      */
     protected function getFieldType( $fieldTypeIdentifier )

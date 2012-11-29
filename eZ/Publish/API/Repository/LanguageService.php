@@ -45,7 +45,7 @@ interface LanguageService
     public function updateLanguageName( Language $language, $newName );
 
     /**
-     * enables a language
+     * Enables a language
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
@@ -56,7 +56,7 @@ interface LanguageService
     public function enableLanguage( Language $language );
 
     /**
-     * disables a language
+     * Disables a language
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
@@ -80,7 +80,7 @@ interface LanguageService
     /**
      * Loads all Languages
      *
-     * @return array an aray of {@link  \eZ\Publish\API\Repository\Values\Content\Language}
+     * @return \eZ\Publish\API\Repository\Values\Content\Language[]
      */
     public function loadLanguages();
 
@@ -108,14 +108,14 @@ interface LanguageService
     public function deleteLanguage( Language $language );
 
     /**
-     * returns a configured default language code
+     * Returns a configured default language code
      *
      * @return string
      */
     public function getDefaultLanguageCode();
 
     /**
-     * instanciates an object to be used for creating languages
+     * Instantiates an object to be used for creating languages
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
      */

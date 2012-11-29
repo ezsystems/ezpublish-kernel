@@ -19,6 +19,7 @@ interface ContentViewInterface
      * Must throw a \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType exception if $templateIdentifier is invalid.
      *
      * @param string|\Closure $templateIdentifier
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
      */
     public function setTemplateIdentifier( $templateIdentifier );
@@ -56,7 +57,8 @@ interface ContentViewInterface
      * Checks if $parameterName exists.
      *
      * @param string $parameterName
-     * @return bool
+     *
+     * @return boolean
      */
     public function hasParameter( $parameterName );
 
@@ -65,8 +67,10 @@ interface ContentViewInterface
      * Throws an \InvalidArgumentException if $parameterName is not set.
      *
      * @param string $parameterName
-     * @return mixed
+     *
      * @throws \InvalidArgumentException
+     *
+     * @return mixed
      */
     public function getParameter( $parameterName );
 }

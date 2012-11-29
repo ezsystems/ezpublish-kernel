@@ -23,7 +23,9 @@ class Configured extends ProviderConfigured implements LocationViewProvider
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $viewType Variation of display for your content.
+     *
      * @throws \InvalidArgumentException
+     *
      * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|void
      */
     public function getView( Location $location, $viewType )

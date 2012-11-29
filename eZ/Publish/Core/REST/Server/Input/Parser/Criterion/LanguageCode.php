@@ -26,6 +26,7 @@ class LanguageCode extends Base
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )

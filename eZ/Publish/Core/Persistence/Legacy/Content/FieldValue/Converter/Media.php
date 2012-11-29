@@ -22,7 +22,6 @@ class Media extends BinaryFile
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @static
      * @return Image
      */
     public static function create()

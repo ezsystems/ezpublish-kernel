@@ -48,6 +48,7 @@ class RoleUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains RoleInput element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRoleInputElement( $result )
@@ -69,6 +70,7 @@ class RoleUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains RoleInput attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRoleInputAttributes( $result )
@@ -90,6 +92,7 @@ class RoleUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains identifier value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsIdentifierValueElement( $result )

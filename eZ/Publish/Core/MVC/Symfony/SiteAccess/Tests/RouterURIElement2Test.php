@@ -110,8 +110,10 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $uri
-     * @param $expectedFixedUpURI
+     * @param int $level
+     * @param string $uri
+     * @param string $expectedFixedUpURI
+     *
      * @dataProvider analyseProvider
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::analyseURI
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::setRequest
@@ -127,8 +129,10 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $fullUri
-     * @param $linkUri
+     * @param int $level
+     * @param string $fullUri
+     * @param string $linkUri
+     *
      * @dataProvider analyseProvider
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::analyseLink
      */

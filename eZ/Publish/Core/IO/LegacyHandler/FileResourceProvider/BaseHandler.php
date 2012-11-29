@@ -23,6 +23,7 @@ abstract class BaseHandler implements LegacyKernelAware
      * Injects the legacy kernel instance.
      *
      * @param \eZ\Publish\Core\MVC\Legacy\Kernel $legacyKernel
+     *
      * @return void
      */
     public function setLegacyKernel( LegacyKernel $legacyKernel )

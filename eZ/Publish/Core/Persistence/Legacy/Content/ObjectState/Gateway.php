@@ -21,6 +21,7 @@ abstract class Gateway
      * Loads data for an object state
      *
      * @param mixed $stateId
+     *
      * @return array
      */
     abstract public function loadObjectStateData( $stateId );
@@ -30,6 +31,7 @@ abstract class Gateway
      *
      * @param string $identifier
      * @param mixed $groupId
+     *
      * @return array
      */
     abstract public function loadObjectStateDataByIdentifier( $identifier, $groupId );
@@ -38,6 +40,7 @@ abstract class Gateway
      * Loads data for all object states belonging to group with $groupId ID
      *
      * @param mixed $groupId
+     *
      * @return array
      */
     abstract public function loadObjectStateListData( $groupId );
@@ -46,6 +49,7 @@ abstract class Gateway
      * Loads data for an object state group
      *
      * @param mixed $groupId
+     *
      * @return array
      */
     abstract public function loadObjectStateGroupData( $groupId );
@@ -54,6 +58,7 @@ abstract class Gateway
      * Loads data for an object state group by identifier
      *
      * @param string $identifier
+     *
      * @return array
      */
     abstract public function loadObjectStateGroupDataByIdentifier( $identifier );
@@ -63,6 +68,7 @@ abstract class Gateway
      *
      * @param int $offset
      * @param int $limit
+     *
      * @return array
      */
     abstract public function loadObjectStateGroupListData( $offset, $limit );
@@ -148,6 +154,7 @@ abstract class Gateway
      * Returns the number of objects which are in this state
      *
      * @param mixed $stateId
+     *
      * @return int
      */
     abstract public function getContentCount( $stateId );

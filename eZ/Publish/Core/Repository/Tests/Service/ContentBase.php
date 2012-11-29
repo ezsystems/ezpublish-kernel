@@ -51,9 +51,7 @@ abstract class ContentBase extends BaseServiceTest
     }
 
     /**
-     *
-     *
-     * @param bool $draft
+     * @param boolean $draft
      *
      * @return array
      */
@@ -87,8 +85,6 @@ abstract class ContentBase extends BaseServiceTest
     }
 
     /**
-     *
-     *
      * @param array $languages
      *
      * @return mixed
@@ -146,7 +142,8 @@ abstract class ContentBase extends BaseServiceTest
      * @depends testLoadContentInfo
      * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfo
      *
-     * @param $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     *
      * @return void
      */
     public function testLoadContentInfoValues( $contentInfo )
@@ -220,7 +217,8 @@ abstract class ContentBase extends BaseServiceTest
      * @depends testLoadContentInfoByRemoteId
      * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfoByRemoteId
      *
-     * @param $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     *
      * @return void
      */
     public function testLoadContentInfoByRemoteIdValues( $contentInfo )
@@ -295,6 +293,7 @@ abstract class ContentBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     *
      * @return void
      */
     public function testLoadVersionInfoByIdValues( $versionInfo )
@@ -335,6 +334,7 @@ abstract class ContentBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     *
      * @return void
      */
     public function testLoadVersionInfoByIdWithSecondParameterValues( $versionInfo )
@@ -449,11 +449,9 @@ abstract class ContentBase extends BaseServiceTest
     }
 
     /**
-     *
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param array $languages
-     * @param bool $draft
+     * @param boolean $draft
      *
      * @return void
      */
@@ -733,6 +731,7 @@ abstract class ContentBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentService::newContentCreateStruct
      *
      * @param array $data
+     *
      * @return void
      */
     public function testNewContentCreateStructValues( array $data )
@@ -946,8 +945,6 @@ abstract class ContentBase extends BaseServiceTest
     }
 
     /**
-     *
-     *
      * @param array $data
      */
     protected function assertCreateContentStructValuesRelations( array $data )
@@ -2835,6 +2832,7 @@ abstract class ContentBase extends BaseServiceTest
      * Returns the content service to test with $methods mocked
      *
      * @param string[] $methods
+     *
      * @return \eZ\Publish\Core\Repository\ContentService|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getPartlyMockedService( array $methods = array() )

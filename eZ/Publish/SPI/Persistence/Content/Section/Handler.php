@@ -18,6 +18,7 @@ interface Handler
      *
      * @param string $name
      * @param string $identifier
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Section
      * @todo Should validate that $identifier is unique??
      * @todo What about translatable $name?
@@ -30,6 +31,7 @@ interface Handler
      * @param mixed $id
      * @param string $name
      * @param string $identifier
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
     public function update( $id, $name, $identifier );
@@ -38,8 +40,10 @@ interface Handler
      * Get section data
      *
      * @param mixed $id
-     * @return \eZ\Publish\SPI\Persistence\Content\Section
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If section is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
     public function load( $id );
 
@@ -54,8 +58,10 @@ interface Handler
      * Get section data by identifier
      *
      * @param string $identifier
-     * @return \eZ\Publish\SPI\Persistence\Content\Section
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If section is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
     public function loadByIdentifier( $identifier );
 
@@ -71,7 +77,7 @@ interface Handler
     public function delete( $id );
 
     /**
-     * Assign section to single content object
+     * Assigns section to single content object
      *
      * @param mixed $sectionId
      * @param mixed $contentId
@@ -82,6 +88,7 @@ interface Handler
      * Number of content assignments a Section has
      *
      * @param mixed $sectionId
+     *
      * @return int
      */
     public function assignmentsCount( $sectionId );

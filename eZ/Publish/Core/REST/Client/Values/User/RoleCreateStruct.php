@@ -25,7 +25,7 @@ class RoleCreateStruct extends \eZ\Publish\API\Repository\Values\User\RoleCreate
     private $policies = array();
 
     /**
-     * instanciates a role create class
+     * Instantiates a role create class
      *
      * @param string $name
      */

@@ -38,6 +38,7 @@ class RoleTest extends BaseTest
      * Tests that the resulting role is in fact an instance of Role class
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $result
+     *
      * @depends testParse
      */
     public function testResultIsRole( $result )
@@ -52,6 +53,7 @@ class RoleTest extends BaseTest
      * Tests that the resulting role contains the ID
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $result
+     *
      * @depends testParse
      */
     public function testResultContainsId( $result )
@@ -66,6 +68,7 @@ class RoleTest extends BaseTest
      * Tests that the resulting role contains identifier
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $result
+     *
      * @depends testParse
      */
     public function testResultContainsIdentifier( $result )

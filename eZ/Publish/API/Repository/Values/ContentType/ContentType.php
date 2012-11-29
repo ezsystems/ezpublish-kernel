@@ -76,15 +76,16 @@ abstract class ContentType extends ValueObject
     abstract public function getNames();
 
     /**
+     * This method returns the name of the content type in the given language
      *
-     * this method returns the name of the content type in the given language
      * @param string $languageCode
+     *
      * @return string the name for the given language or null if none existis.
      */
     abstract public function getName( $languageCode );
 
     /**
-     *  This method returns the human readable description of the content type
+     * This method returns the human readable description of the content type
      *
      * The structure of this field is:
      * <code>
@@ -96,8 +97,10 @@ abstract class ContentType extends ValueObject
     abstract public function getDescriptions();
 
     /**
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
+     *
      * @param string $languageCode
+     *
      * @return string the description for the given language or null if none existis.
      */
     abstract public function getDescription( $languageCode );
@@ -112,14 +115,14 @@ abstract class ContentType extends ValueObject
     /**
      * Creation date of the content type
      *
-     * @var DateTime
+     * @var \DateTime
      */
     protected $creationDate;
 
     /**
      * Modification date of the content type
      *
-     * @var DateTime
+     * @var \DateTime
      */
     protected $modificationDate;
 
@@ -182,7 +185,7 @@ abstract class ContentType extends ValueObject
     protected $mainLanguageCode;
 
     /**
-     * if an instance of a content type is created the always available flag is set
+     * If an instance of a content type is created the always available flag is set
      * by default to this value.
      *
      * @var boolean
@@ -209,21 +212,23 @@ abstract class ContentType extends ValueObject
 
     /**
      * This method returns the content type groups this content type is assigned to
-     * @return array an array of {@link ContentTypeGroup}
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
     abstract public function getContentTypeGroups();
 
     /**
      * This method returns the content type field definitions from this type
      *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[] An array of {@link FieldDefinition}
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
     abstract public function getFieldDefinitions();
 
     /**
+     * This method returns the field definition for the given identifier
      *
-     * this method returns the field definition for the given identifier
-     * @param $fieldDefinitionIdentifier
+     * @param string $fieldDefinitionIdentifier
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
     abstract public function getFieldDefinition( $fieldDefinitionIdentifier );

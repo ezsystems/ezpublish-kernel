@@ -36,8 +36,9 @@ abstract class Gateway
      * We might want to cache this, since this method is used by about every
      * method in the location handler.
      *
-     * @optimze
+     * @todo optimize
      * @param mixed $nodeId
+     *
      * @return array
      */
     abstract public function getBasicNodeData( $nodeId );
@@ -45,8 +46,9 @@ abstract class Gateway
     /**
      * Returns an array with basic node data for the node with $remoteId
      *
-     * @optimze
+     * @todo optimize
      * @param mixed $remoteId
+     *
      * @return array
      */
     abstract public function getBasicNodeDataByRemoteId( $remoteId );
@@ -57,6 +59,7 @@ abstract class Gateway
      *
      * @param int $contentId
      * @param int $rootLocationId
+     *
      * @return array
      */
     abstract public function loadLocationDataByContent( $contentId, $rootLocationId = null );
@@ -65,6 +68,7 @@ abstract class Gateway
      * Find all content in the given subtree
      *
      * @param mixed $sourceId
+     *
      * @return array
      */
     abstract public function getSubtreeContent( $sourceId );
@@ -73,6 +77,7 @@ abstract class Gateway
      * Returns data for the first level children of the location identified by given $locationId
      *
      * @param mixed $locationId
+     *
      * @return array
      */
     abstract public function getChildren( $locationId );
@@ -83,9 +88,10 @@ abstract class Gateway
      * This query can likely be optimized to use some more advanced string
      * operations, which then depend on the respective database.
      *
-     * @optimize
+     * @todo optimize
      * @param string $fromPathString
      * @param string $toPathString
+     *
      * @return void
      */
     abstract public function moveSubtreeNodes( $fromPathString, $toPathString );
@@ -107,6 +113,7 @@ abstract class Gateway
      * @param int $oldParent
      * @param int $newParent
      * @param int $opcode
+     *
      * @return void
      */
     abstract public function updateNodeAssignment( $contentObjectId, $oldParent, $newParent, $opcode );
@@ -118,6 +125,7 @@ abstract class Gateway
      *
      * @param mixed $contentId
      * @param mixed $versionNo
+     *
      * @return void
      */
     abstract public function createLocationsFromNodeAssignments( $contentId, $versionNo );
@@ -155,6 +163,7 @@ abstract class Gateway
      *
      * @param mixed $locationId1
      * @param mixed $locationId2
+     *
      * @return boolean
      */
     abstract public function swap( $locationId1, $locationId2 );
@@ -164,6 +173,7 @@ abstract class Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
      * @param array $parentNode
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     abstract public function create( CreateStruct $createStruct, array $parentNode );
@@ -174,6 +184,7 @@ abstract class Gateway
      * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
      * @param mixed $parentNodeId
      * @param int $type
+     *
      * @return void
      */
     abstract public function createNodeAssignment( CreateStruct $createStruct, $parentNodeId, $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP );
@@ -193,6 +204,7 @@ abstract class Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId
+     *
      * @return boolean
      */
     abstract public function update( UpdateStruct $location, $locationId );
@@ -250,14 +262,16 @@ abstract class Gateway
      *
      * @param mixed $locationId
      * @param mixed $newParentId
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     abstract public function untrashLocation( $locationId, $newParentId = null );
 
     /**
-     * Load trash data specified by location ID
+     * Loads trash data specified by location ID
      *
      * @param mixed $locationId
+     *
      * @return array
      */
     abstract public function loadTrashByLocation( $locationId );
@@ -279,6 +293,7 @@ abstract class Gateway
      * @param int $offset
      * @param int $limit
      * @param array $sort
+     *
      * @return array
      */
     abstract public function listTrashed( $offset, $limit, array $sort = null );
@@ -288,6 +303,7 @@ abstract class Gateway
      * Will NOT remove associated content object nor attributes.
      *
      * @param int $id The trashed location Id
+     *
      * @return void
      */
     abstract public function removeElementFromTrash( $id );
@@ -297,6 +313,7 @@ abstract class Gateway
      *
      * @param mixed $pathString
      * @param mixed $sectionId
+     *
      * @return boolean
      */
     abstract public function setSectionForSubtree( $pathString, $sectionId );
@@ -305,6 +322,7 @@ abstract class Gateway
      * Returns how many locations given content object identified by $contentId has
      *
      * @param int $contentId
+     *
      * @return int
      */
     abstract public function countLocationsByContentId( $contentId );

@@ -17,7 +17,7 @@ namespace eZ\Publish\SPI\FieldType;
  * identified the occurred event. The properties of the class give the needed
  * event context.
  *
- * @TODO Add VersionInfo parameter
+ * @todo Add VersionInfo parameter
  */
 abstract class Event
 {

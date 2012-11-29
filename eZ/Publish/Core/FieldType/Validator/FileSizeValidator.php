@@ -69,7 +69,7 @@ class FileSizeValidator extends Validator
      *
      * @param \eZ\Publish\Core\FieldType\BinaryFile\Value $value
      *
-     * @return bool
+     * @return boolean
      */
     public function validate( BaseValue $value )
     {

@@ -21,6 +21,7 @@ abstract class Controller extends ContainerAware
      *
      * @param string $parameterName
      * @param mixed $defaultValue
+     *
      * @return mixed
      */
     public function getParameter( $parameterName, $defaultValue = null )
@@ -35,7 +36,8 @@ abstract class Controller extends ContainerAware
      * Checks if $parameterName is defined
      *
      * @param string $parameterName
-     * @return bool
+     *
+     * @return boolean
      */
     public function hasParameter( $parameterName )
     {
@@ -56,6 +58,7 @@ abstract class Controller extends ContainerAware
      * @param string $view The view name
      * @param array $parameters An array of parameters to pass to the view
      * @param \Symfony\Component\HttpFoundation\Response $response
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function render( $view, array $parameters = array(), Response $response = null )
@@ -113,7 +116,8 @@ abstract class Controller extends ContainerAware
      * Checks if current user has granted access to provided attribute
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute $attribute
-     * @return bool
+     *
+     * @return boolean
      */
     public function isGranted( AuthorizationAttribute $attribute )
     {

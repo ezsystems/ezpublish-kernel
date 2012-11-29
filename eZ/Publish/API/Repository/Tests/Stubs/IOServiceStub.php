@@ -34,7 +34,7 @@ class IOServiceStub implements IOService
     private $content = array();
 
     /**
-     * @var integer
+     * @var int
      */
     private $binaryId = 0;
 

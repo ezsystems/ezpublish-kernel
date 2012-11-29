@@ -19,7 +19,8 @@ class UrlAlias extends MultipleValued
      * Checks if a Location object matches.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @return bool
+     *
+     * @return boolean
      */
     public function matchLocation( Location $location )
     {
@@ -42,8 +43,10 @@ class UrlAlias extends MultipleValued
      * Not supported since UrlAlias is meaningful for location objects only.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     *
      * @throws \RuntimeException
-     * @return bool
+     *
+     * @return boolean
      */
     public function matchContentInfo( ContentInfo $contentInfo )
     {

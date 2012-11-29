@@ -56,8 +56,9 @@ class Provider implements APIUserProviderInterface
      * (anonymous user we try to check access via SecurityContext::isGranted())
      *
      * @param string|\eZ\Publish\Core\MVC\Symfony\Security\User $user Either the user ID to load an instance of User object. A value of -1 represents an anonymous user.
+     *
      * @return \Symfony\Component\Security\Core\User\UserInterface
-     * @throws UsernameNotFoundException if the user is not found
+     * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException if the user is not found
      *
      */
     public function loadUserByUsername( $user )
@@ -91,6 +92,7 @@ class Provider implements APIUserProviderInterface
      * @param UserInterface $user
      *
      * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
+     *
      * @return UserInterface
      */
     public function refreshUser( UserInterface $user )
@@ -115,6 +117,7 @@ class Provider implements APIUserProviderInterface
      * Loads a regular user object, usable by Symfony Security component, from a user object returned by Public API
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $apiUser
+     *
      * @return \eZ\Publish\Core\MVC\Symfony\Security\User
      */
     public function loadUserByAPIUser( APIUser $apiUser )

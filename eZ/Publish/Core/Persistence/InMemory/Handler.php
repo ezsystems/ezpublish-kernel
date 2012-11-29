@@ -165,8 +165,10 @@ class Handler implements HandlerInterface
      * Get/create instance of service handler objects
      *
      * @param string $className
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\MissingClass
+     *
      * @return object
-     * @throws MissingClass
      */
     protected function serviceHandler( $className )
     {

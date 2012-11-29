@@ -55,6 +55,7 @@ class ImageProcessor extends BinaryInputProcessor
      * $outgoingValueHash.
      *
      * @param mixed $outgoingValueHash
+     *
      * @return mixed Post processed hash
      */
     public function postProcessHash( $outgoingValueHash )
@@ -84,6 +85,7 @@ class ImageProcessor extends BinaryInputProcessor
      *
      * @param string $path
      * @param string $variant
+     *
      * @return string
      */
     protected function generateUrl( $path, $variant )

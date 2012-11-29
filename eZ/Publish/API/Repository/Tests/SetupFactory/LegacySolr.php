@@ -51,10 +51,10 @@ class LegacySolr extends Legacy
         $fieldRegistry = new Solr\Content\Search\FieldRegistry( array(
             'ezstring'              => new FieldType\TextLine\SearchField(),
             'ezprice'               => new FieldType\Price\SearchField(),
-            // @TODO: These two need proper custom search field definitions
+            // @todo: These two need proper custom search field definitions
             'eztext'                => new FieldType\TextLine\SearchField(),
             'ezxmltext'             => new FieldType\TextLine\SearchField(),
-            // @TODO: Define proper types for these:
+            // @todo: Define proper types for these:
             'ezuser'                => new FieldType\Unindexed(),
             'ezimage'               => new FieldType\Unindexed(),
             'ezboolean'             => new FieldType\Unindexed(),
@@ -151,7 +151,7 @@ class LegacySolr extends Legacy
             return;
         }
 
-        // @TODO: Is there a nicer way to get access to all content objects? We
+        // @todo: Is there a nicer way to get access to all content objects? We
         // require this to run a full index here.
         $dbHandlerProperty = new \ReflectionProperty( $persistenceHandler, 'dbHandler' );
         $dbHandlerProperty->setAccessible( true );

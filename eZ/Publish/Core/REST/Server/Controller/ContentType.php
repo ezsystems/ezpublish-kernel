@@ -839,6 +839,7 @@ class ContentType extends RestController
      * Converts the provided ContentTypeGroupCreateStruct to ContentTypeGroupUpdateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct $createStruct
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct
      */
     private function mapToGroupUpdateStruct( ContentTypeGroupCreateStruct $createStruct )

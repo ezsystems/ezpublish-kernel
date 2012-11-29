@@ -31,7 +31,7 @@ class Visibility extends Criterion implements CriterionInterface
     /**
      * Creates a new Visibility criterion
      *
-     * @param integer $value Visibility: self::VISIBLE, self::HIDDEN
+     * @param int $value Visibility: self::VISIBLE, self::HIDDEN
      *
      * @throws \InvalidArgumentException
      */

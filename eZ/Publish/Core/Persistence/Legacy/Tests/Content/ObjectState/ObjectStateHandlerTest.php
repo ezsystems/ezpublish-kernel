@@ -41,8 +41,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     protected $mapperMock;
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::createGroup
+     *
+     * @return void
      */
     public function testCreateGroup()
     {
@@ -69,8 +70,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadGroup
+     *
+     * @return void
      */
     public function testLoadGroup()
     {
@@ -115,8 +117,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadGroupByIdentifier
+     *
+     * @return void
      */
     public function testLoadGroupByIdentifier()
     {
@@ -161,8 +164,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadAllGroups
+     *
+     * @return void
      */
     public function testLoadAllGroups()
     {
@@ -192,8 +196,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadObjectStates
+     *
+     * @return void
      */
     public function testLoadObjectStates()
     {
@@ -223,8 +228,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::updateGroup
+     *
+     * @return void
      */
     public function testUpdateGroup()
     {
@@ -260,8 +266,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::deleteGroup
+     *
+     * @return void
      */
     public function testDeleteGroup()
     {
@@ -312,8 +319,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::create
+     *
+     * @return void
      */
     public function testCreate()
     {
@@ -340,8 +348,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::load
+     *
+     * @return void
      */
     public function testLoad()
     {
@@ -386,8 +395,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadByIdentifier
+     *
+     * @return void
      */
     public function testLoadByIdentifier()
     {
@@ -432,8 +442,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::update
+     *
+     * @return void
      */
     public function testUpdate()
     {
@@ -469,8 +480,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::setPriority
+     *
+     * @return void
      */
     public function testSetPriority()
     {
@@ -516,8 +528,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::delete
+     *
+     * @return void
      */
     public function testDelete()
     {
@@ -579,8 +592,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::setContentState
+     *
+     * @return void
      */
     public function testSetContentState()
     {
@@ -597,8 +611,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::getContentState
+     *
+     * @return void
      */
     public function testGetContentState()
     {
@@ -625,8 +640,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::getContentCount
+     *
+     * @return void
      */
     public function testGetContentCount()
     {

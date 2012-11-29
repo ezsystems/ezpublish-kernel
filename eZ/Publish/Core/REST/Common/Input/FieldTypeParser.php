@@ -62,6 +62,7 @@ class FieldTypeParser
      * @param string $contentInfoId
      * @param string $fieldDefIdentifier
      * @param mixed $value
+     *
      * @return mixed
      */
     public function parseFieldValue( $contentInfoId, $fieldDefIdentifier, $value )
@@ -80,6 +81,7 @@ class FieldTypeParser
      *
      * @param mixed $fieldTypeIdentifier
      * @param mixed $value
+     *
      * @return mixed
      */
     public function parseValue( $fieldTypeIdentifier, $value )
@@ -101,6 +103,7 @@ class FieldTypeParser
      *
      * @param string $fieldTypeIdentifier
      * @param mixed $settingsHash
+     *
      * @return mixed
      */
     public function parseFieldSettings( $fieldTypeIdentifier, $settingsHash )
@@ -115,6 +118,7 @@ class FieldTypeParser
      *
      * @param string $fieldTypeIdentifier
      * @param mixed $configurationHash
+     *
      * @return mixed
      */
     public function parseValidatorConfiguration( $fieldTypeIdentifier, $configurationHash )

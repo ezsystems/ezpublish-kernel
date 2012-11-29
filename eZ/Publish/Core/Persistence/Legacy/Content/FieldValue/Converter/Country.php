@@ -22,7 +22,6 @@ class Country implements Converter
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @static
      * @return Country
      */
     public static function create()

@@ -49,6 +49,7 @@ class UrlAliasGenerator extends Generator
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param array $parameters
+     *
      * @return string
      */
     public function doGenerate( $location, array $parameters )

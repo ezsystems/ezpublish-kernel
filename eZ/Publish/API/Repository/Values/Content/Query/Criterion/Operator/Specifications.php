@@ -59,7 +59,7 @@ class Specifications
      *
      * Only usable if {@see $parameterInputType} is {@see self::INPUT_TYPE_ARRAY}.
      * Not setting it means that 1...n will be required
-     * @var integer
+     * @var int
      */
     public $valueCount;
 
@@ -69,7 +69,7 @@ class Specifications
      * @param string $operator The specified operator, as one of the Operator::* constants
      * @param string $valueFormat The accepted value format, either {@see self::FORMAT_ARRAY} or {@see self::FORMAT_SINGLE}
      * @param int $valueTypes The supported value types, as a bit field of the {@see self::TYPES_*} constants
-     * @param integer $valueCount The required number of values, when the accepted format is {@see self::FORMAT_ARRAY}
+     * @param int $valueCount The required number of values, when the accepted format is {@see self::FORMAT_ARRAY}
      */
     public function __construct( $operator, $valueFormat, $valueTypes = null, $valueCount = null )
     {

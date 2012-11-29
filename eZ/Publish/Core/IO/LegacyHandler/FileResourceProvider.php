@@ -17,7 +17,8 @@ interface FileResourceProvider
 {
     /**
      * Returns a file resource for $clusterFile
-     * @param eZClusterFileHandlerInterface $clusterFile Note: no hinting as not all handlers implement the interface
+     * @param \eZClusterFileHandlerInterface $clusterFile Note: no hinting as not all handlers implement the interface
+     *
      * @return resource
      */
     public function getResource( $clusterFile );

@@ -21,7 +21,6 @@ class Keyword implements Converter
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @static
      * @return Keyword
      */
     public static function create()

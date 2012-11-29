@@ -36,7 +36,7 @@ interface Type
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
      * @param \eZ\Publish\API\Repository\Repository $repository
      *
-     * @return bool
+     * @return boolean
      */
     public function acceptValue( LimitationValue $limitationValue, Repository $repository );
 
@@ -69,12 +69,12 @@ interface Type
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
      * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
      *
-     * @return bool
+     * @return boolean
      */
     public function evaluate( LimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null );
 
     /**
-     * Return Criterion for use in find() query
+     * Returns Criterion for use in find() query
      *
      * NOTE: Repository is provided because not everything is available via the limitation value,
      * but use of repository in limitation functions should be avoided for performance reasons
@@ -88,7 +88,7 @@ interface Type
     public function getCriterion( LimitationValue $value, Repository $repository );
 
     /**
-     * Return info on valid $limitationValues
+     * Returns info on valid $limitationValues
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      *

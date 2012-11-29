@@ -52,6 +52,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains LocationUpdate element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLocationUpdateElement( $result )
@@ -73,6 +74,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains LocationUpdate attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLocationUpdateAttributes( $result )
@@ -94,6 +96,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains priority value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPriorityValueElement( $result )
@@ -114,6 +117,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains remoteId value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRemoteIdValueElement( $result )
@@ -134,6 +138,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains sortField value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSortFieldValueElement( $result )
@@ -154,6 +159,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains sortOrder value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSortOrderValueElement( $result )

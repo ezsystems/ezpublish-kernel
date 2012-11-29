@@ -66,8 +66,10 @@ class AddField extends Action
      * Applies the action to the given $content
      *
      * @param Content $content
-     * @return void
+     *
      * @todo Handle external field data
+     *
+     * @return void
      */
     public function apply( Content $content )
     {

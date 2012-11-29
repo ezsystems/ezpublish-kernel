@@ -20,7 +20,9 @@ abstract class SlotFactory
      * Returns a Slot with the given $slotIdentifier
      *
      * @param string $slotIdentifier
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException When no slot is found
+     *
      * @return \eZ\Publish\Core\SignalSlot\Slot
      */
     abstract public function getSlot( $slotIdentifier );

@@ -151,7 +151,7 @@ class Handler implements UrlAliasHandlerInterface
     /**
      * UrlAlias Gateway
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway $gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway
      */
     protected $gateway;
 
@@ -165,7 +165,7 @@ class Handler implements UrlAliasHandlerInterface
     /**
      * UrlAlias Mapper
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper $mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper
      */
     protected $mapper;
 
@@ -414,9 +414,9 @@ class Handler implements UrlAliasHandlerInterface
      *
      * @param string $action
      * @param string $path
-     * @param bool $forward
+     * @param boolean $forward
      * @param string|null $languageCode
-     * @param bool $alwaysAvailable
+     * @param boolean $alwaysAvailable
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
@@ -791,8 +791,6 @@ class Handler implements UrlAliasHandlerInterface
     }
 
     /**
-     *
-     *
      * @param mixed $oldParentId
      * @param mixed $newParentId
      *
@@ -815,7 +813,7 @@ class Handler implements UrlAliasHandlerInterface
     /**
      * Notifies the underlying engine that a location was deleted or moved to trash
      *
-     * @param $locationId
+     * @param mixed $locationId
      */
     public function locationDeleted( $locationId )
     {

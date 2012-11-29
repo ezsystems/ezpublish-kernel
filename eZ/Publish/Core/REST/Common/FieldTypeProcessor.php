@@ -25,6 +25,7 @@ interface FieldTypeProcessor
      * $outgoingValueHash.
      *
      * @param mixed $outgoingValueHash
+     *
      * @return mixed Post processed hash
      */
     public function postProcessHash( $outgoingValueHash );
@@ -40,6 +41,7 @@ interface FieldTypeProcessor
      * $incomingValueHash.
      *
      * @param mixed $incomingValueHash
+     *
      * @return mixed Pre processed hash
      */
     public function preProcessHash( $incomingValueHash );

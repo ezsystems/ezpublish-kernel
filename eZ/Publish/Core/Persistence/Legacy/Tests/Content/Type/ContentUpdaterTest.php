@@ -52,13 +52,14 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
     /**
      * Content Updater to test
      *
-     * @var eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater
      */
     protected $contentUpdater;
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
+     *
+     * @return void
      */
     public function testCtor()
     {

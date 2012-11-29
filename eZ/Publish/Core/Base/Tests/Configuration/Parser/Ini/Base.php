@@ -17,7 +17,7 @@ use eZ\Publish\Core\Base\Configuration,
 abstract class Base extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\Base\Configuration\Parser\Ini $parser
+     * @var \eZ\Publish\Core\Base\Configuration\Parser\Ini
      */
     protected $parser;
 
@@ -42,7 +42,6 @@ abstract class Base extends PHPUnit_Framework_TestCase
     /**
      * Setup parser with settings
      *
-     * @abstract
      * @return \eZ\Publish\Core\Base\Configuration\Parser\Ini
      */
     abstract protected function getParser();

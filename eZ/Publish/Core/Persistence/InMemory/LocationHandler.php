@@ -61,8 +61,10 @@ class LocationHandler implements LocationHandlerInterface
      *
      * @param int $contentId
      * @param int $rootLocationId
-     * @return \eZ\Publish\SPI\Persistence\Content\Location[]
+     *
      * @todo Add support for $rootLocationId when not child of node 1
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location[]
      */
     public function loadLocationsByContent( $contentId, $rootLocationId = null )
     {
@@ -82,8 +84,10 @@ class LocationHandler implements LocationHandlerInterface
      * Loads the data for the location identified by $remoteId.
      *
      * @param string $remoteId
-     * @return \eZ\Publish\SPI\Persistence\Content\Location
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     public function loadByRemoteId( $remoteId )
     {
@@ -103,7 +107,7 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * Get all subtree locations for the given location (including), sorted by path string
      *
-     * @param $location
+     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
      * @param array $locations
      *
      * @return array
@@ -558,6 +562,7 @@ class LocationHandler implements LocationHandlerInterface
      *
      * @todo Requires approbation
      * @param mixed $locationId
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location[]
      */
     public function loadByParentId( $locationId )
@@ -577,7 +582,6 @@ class LocationHandler implements LocationHandlerInterface
 
     /**
      * Changes main location of content identified by given $contentId to location identified by given $locationId
-     *
      *
      * @param mixed $contentId
      * @param mixed $locationId
@@ -607,6 +611,7 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * Returns parent path string for $pathString
      * @param string $pathString
+     *
      * @return string
      */
     private function getParentPathString( $pathString )
@@ -617,6 +622,7 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * Returns pathIdentificationString for provided location value object
      * @param \eZ\Publish\SPI\Persistence\Content\Location $vo
+     *
      * @return string
      */
     private function getPathIdentificationString( LocationValue $vo )
@@ -640,6 +646,7 @@ class LocationHandler implements LocationHandlerInterface
      * All downcase, special chars to underscores
      * e.g. my_content_name
      * @param LocationValue $vo
+     *
      * @return string
      */
     private function getStrippedContentName( LocationValue $vo )

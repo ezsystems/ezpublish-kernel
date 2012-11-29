@@ -21,7 +21,8 @@ class LogicalNot extends CriterionVisitor
      * CHeck if visitor is applicable to current criterion
      *
      * @param Criterion $criterion
-     * @return bool
+     *
+     * @return boolean
      */
     public function canVisit( Criterion $criterion )
     {
@@ -33,6 +34,7 @@ class LogicalNot extends CriterionVisitor
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
+     *
      * @return void
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )

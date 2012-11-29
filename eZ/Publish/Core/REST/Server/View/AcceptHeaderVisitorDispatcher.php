@@ -39,7 +39,7 @@ class AcceptHeaderVisitorDispatcher
     }
 
     /**
-     * Add view handler
+     * Adds view handler
      *
      * @param string $regexp
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
@@ -54,6 +54,7 @@ class AcceptHeaderVisitorDispatcher
      *
      * @param \eZ\Publish\Core\REST\Server\Request $request
      * @param mixed $result
+     *
      * @return \eZ\Publish\Core\REST\Common\Message
      */
     public function dispatch( Request $request, $result )

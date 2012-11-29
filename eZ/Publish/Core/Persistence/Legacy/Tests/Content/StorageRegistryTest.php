@@ -17,8 +17,9 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
 class StorageRegistryTest extends TestCase
 {
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry::register
+     *
+     * @return void
      */
     public function testRegister()
     {
@@ -35,8 +36,9 @@ class StorageRegistryTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry::getStorage
+     *
+     * @return void
      */
     public function testGetStorage()
     {

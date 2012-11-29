@@ -17,8 +17,6 @@ use RuntimeException;
 abstract class Utils
 {
     /**
-     * @static
-     *
      * @param string $persistenceHandler
      * @param string $ioHandler
      * @param string $dsn
@@ -50,7 +48,6 @@ abstract class Utils
     }
 
     /**
-     * @static
      * @return \eZ\Publish\API\Repository\Repository
      */
     public static function getRepository()

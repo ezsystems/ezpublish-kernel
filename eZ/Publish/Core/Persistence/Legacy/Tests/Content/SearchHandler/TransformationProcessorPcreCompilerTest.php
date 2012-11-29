@@ -21,6 +21,7 @@ class TransformationProcessorPcreCompilerTest extends TestCase
      *
      * @param array $transformations
      * @param string $string
+     *
      * @return string
      */
     protected function applyTransformations( array $transformations, $string )

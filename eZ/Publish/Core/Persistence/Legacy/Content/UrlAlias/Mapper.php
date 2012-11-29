@@ -37,7 +37,7 @@ class Mapper
     /**
      * Creates a UrlAlias object from database row data
      *
-     * @param $data
+     * @param mixed[] $data
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
@@ -80,8 +80,6 @@ class Mapper
     }
 
     /**
-     *
-     *
      * @throws \RuntimeException
      *
      * @param string $action
@@ -113,13 +111,13 @@ class Mapper
                     break;
 
                 default:
-                    // @TODO log message
+                    // @todo log message
                     throw new \RuntimeException( "Action type '{$actionType}' is unknown" );
             }
         }
         else
         {
-            // @TODO log message
+            // @todo log message
             throw new \RuntimeException( "Action '{$action}' is not valid" );
         }
 
@@ -127,8 +125,6 @@ class Mapper
     }
 
     /**
-     *
-     *
      * @param array $pathData
      *
      * @return array
@@ -151,8 +147,6 @@ class Mapper
     }
 
     /**
-     *
-     *
      * @param array $pathElementData
      * @param array $row
      *

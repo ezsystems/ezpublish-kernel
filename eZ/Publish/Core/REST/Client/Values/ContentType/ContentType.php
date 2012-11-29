@@ -14,8 +14,8 @@ use eZ\Publish\Core\REST\Client\ContentTypeService;
  * @property-read int $id the id of the content type
  * @property-read int $status the status of the content type. One of ContentType::STATUS_DEFINED|ContentType::STATUS_DRAFT|ContentType::STATUS_MODIFIED
  * @property-read string $identifier the identifier of the content type
- * @property-read DateTime $creationDate the date of the creation of this content type
- * @property-read DateTime $modificationDate the date of the last modification of this content type
+ * @property-read \DateTime $creationDate the date of the creation of this content type
+ * @property-read \DateTime $modificationDate the date of the last modification of this content type
  * @property-read int $creatorId the user id of the creator of this content type
  * @property-read int $modifierId the user id of the user which has last modified this content type
  * @property-read string $remoteId a global unique id of the content object
@@ -35,7 +35,7 @@ class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentT
     /**
      * Content type service to fetch additional information from
      *
-     * @var eZ\Publish\Core\REST\Client\ContentTypeService
+     * @var \eZ\Publish\Core\REST\Client\ContentTypeService
      */
     protected $contentTypeService;
 
@@ -92,9 +92,10 @@ class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentT
     }
 
     /**
+     * This method returns the name of the content type in the given language
      *
-     * this method returns the name of the content type in the given language
      * @param string $languageCode
+     *
      * @return string the name for the given language or null if none existis.
      */
     public function getName( $languageCode )
@@ -103,7 +104,7 @@ class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentT
     }
 
     /**
-     *  This method returns the human readable description of the content type
+     * This method returns the human readable description of the content type
      *
      * The structure of this field is:
      * <code>
@@ -118,8 +119,10 @@ class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentT
     }
 
     /**
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
+     *
      * @param string $languageCode
+     *
      * @return string the description for the given language or null if none existis.
      */
     public function getDescription( $languageCode )
@@ -129,17 +132,18 @@ class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentT
 
     /**
      * This method returns the content type groups this content type is assigned to
-     * @return array an array of {@link ContentTypeGroup}
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
     public function getContentTypeGroups()
     {
-        // @TODO: Implement!
+        // @todo: Implement!
     }
 
     /**
      * This method returns the content type field definitions from this type
      *
-     * @return array an array of {@link FieldDefinition}
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
     public function getFieldDefinitions()
     {
@@ -150,9 +154,10 @@ class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentT
     }
 
     /**
+     * This method returns the field definition for the given identifier
      *
-     * this method returns the field definition for the given identifier
-     * @param $fieldDefinitionIdentifier
+     * @param string $fieldDefinitionIdentifier
+     *
      * @return FieldDefinition
      */
     public function getFieldDefinition( $fieldDefinitionIdentifier )

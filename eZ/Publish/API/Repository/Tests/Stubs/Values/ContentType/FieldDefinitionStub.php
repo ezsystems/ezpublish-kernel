@@ -112,7 +112,7 @@ class FieldDefinitionStub extends FieldDefinition
     /**
      * Contains the validatorConfiguration of this field definition supported by the field type#
      *
-     * @var array an array of {@link Validator}
+     * @var \eZ\Publish\Core\FieldType\Validator[]
      */
     protected $validatorConfiguration;
 
@@ -164,9 +164,10 @@ class FieldDefinitionStub extends FieldDefinition
     }
 
     /**
+     * This method returns the name of the field in the given language
      *
-     * this method returns the name of the field in the given language
      * @param string $languageCode
+     *
      * @return string the name for the given language or null if none existis.
      */
     public function getName( $languageCode )
@@ -175,7 +176,7 @@ class FieldDefinitionStub extends FieldDefinition
     }
 
     /**
-     *  This method returns the human readable description of the field
+     * This method returns the human readable description of the field
      *
      * The structure of this field is:
      * <code>
@@ -190,8 +191,10 @@ class FieldDefinitionStub extends FieldDefinition
     }
 
     /**
-     * this method returns the name of the field in the given language
+     * This method returns the name of the field in the given language
+     *
      * @param string $languageCode
+     *
      * @return string the description for the given language or null if none existis.
      */
     public function getDescription( $languageCode )
@@ -200,7 +203,7 @@ class FieldDefinitionStub extends FieldDefinition
     }
 
     /**
-     * this method returns the validator configuration of this field definition supported by the field type
+     * This method returns the validator configuration of this field definition supported by the field type
      *
      * @return mixed
      */
@@ -210,7 +213,7 @@ class FieldDefinitionStub extends FieldDefinition
     }
 
     /**
-     * this method returns settings for the field definition supported by the field type
+     * This method returns settings for the field definition supported by the field type
      *
      * @return mixed
      */

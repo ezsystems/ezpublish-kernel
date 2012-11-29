@@ -27,8 +27,10 @@ abstract class MultipleValued extends RepositoryAware implements Matcher
      * $matchingConfig can have single (string|int...) or multiple values (array)
      *
      * @param mixed $matchingConfig
-     * @return void
+     *
      * @throws \InvalidArgumentException Should be thrown if $matchingConfig is not valid.
+     *
+     * @return void
      */
     public function setMatchingConfig( $matchingConfig )
     {

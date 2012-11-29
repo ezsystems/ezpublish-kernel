@@ -43,7 +43,8 @@ class NullStorage implements FieldStorage
 
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage::hasFieldData()
-     * @return bool
+     *
+     * @return boolean
      */
     public function hasFieldData()
     {

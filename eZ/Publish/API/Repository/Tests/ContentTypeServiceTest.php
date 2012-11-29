@@ -870,6 +870,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @param \eZ\Publish\API\Repository\Values\FieldDefinitionCreateStruct[] $expectedDefinitionCreates
      * @param \eZ\Publish\API\Repository\Values\FieldDefinition[] $actualDefinitions
+     *
      * @return void
      */
     protected function assertFieldDefinitionsCorrect( array $expectedDefinitionCreates, array $actualDefinitions )
@@ -905,6 +906,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @param \eZ\Publish\API\Repository\Values\FieldDefinitionCreateStruct $expectedDefinitionCreate
      * @param \eZ\Publish\API\Repository\Values\FieldDefinition $actualDefinition
+     *
      * @return void
      */
     protected function assertFieldDefinitionsEqual( $expectedCreate, $actualDefinition )
@@ -923,6 +925,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $expectedGroups
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $actualGroups
+     *
      * @return void
      */
     protected function assertContentTypeGroupsCorrect( $expectedGroups, $actualGroups )
@@ -1907,6 +1910,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the loadContentTypeByIdentifier() method.
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeByIdentifier()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier

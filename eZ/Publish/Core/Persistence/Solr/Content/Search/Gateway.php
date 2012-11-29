@@ -17,13 +17,13 @@ use eZ\Publish\API\Repository\Values\Content\Query;
  */
 abstract class Gateway
 {
-     /**
-     * finds content objects for the given query.
+    /**
+     * Finds content objects for the given query.
      *
-     * @TODO define structs for the field filters
+     * @todo define structs for the field filters
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array  $fieldFilters - a map of filters for the returned fields.
+     * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
@@ -33,7 +33,8 @@ abstract class Gateway
     /**
      * Indexes a content object
      *
-     * @param eZ\Publish\SPI\Persistence\Content\Search\Field[] $document
+     * @param \eZ\Publish\SPI\Persistence\Content\Search\Field[] $document
+     *
      * @return void
      */
     abstract public function indexContent( array $document );

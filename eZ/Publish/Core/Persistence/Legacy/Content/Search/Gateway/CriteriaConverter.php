@@ -28,6 +28,7 @@ class CriteriaConverter
      * Construct from an optional array of Criterion handlers
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler[] $handler
+     *
      * @return void
      */
     public function __construct( array $handler )
@@ -40,6 +41,7 @@ class CriteriaConverter
      *
      * @param \ezcQuerySelect $query
      * @param Criterion $criterion
+     *
      * @return \ezcQueryExpression
      */
     public function convertCriteria( ezcQuerySelect $query, Criterion $criterion )

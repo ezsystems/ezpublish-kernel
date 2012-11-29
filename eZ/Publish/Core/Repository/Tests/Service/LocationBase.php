@@ -108,7 +108,8 @@ abstract class LocationBase extends BaseServiceTest
     }
 
     /**
-     * @param $parentLocationId
+     * @param int $parentLocationId
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
     protected function createTestContentLocation( $parentLocationId )
@@ -147,8 +148,8 @@ abstract class LocationBase extends BaseServiceTest
     }
 
     /**
-     * @param $contentInfo
-     * @param $parentLocationId
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param int $parentLocationId
      *
      * @return mixed
      */

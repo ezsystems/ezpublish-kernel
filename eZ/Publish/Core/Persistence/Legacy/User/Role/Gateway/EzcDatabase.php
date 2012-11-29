@@ -35,6 +35,7 @@ class EzcDatabase extends Gateway
      * Construct from database handler
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $handler
+     *
      * @return void
      */
     public function __construct( EzcDbHandler $handler )
@@ -46,6 +47,7 @@ class EzcDatabase extends Gateway
      * Create new role
      *
      * @param \eZ\Publish\SPI\Persistence\User\Role $role
+     *
      * @return Role
      */
     public function createRole( Role $role )
@@ -77,9 +79,10 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Load a specified role by id
+     * Loads a specified role by id
      *
      * @param mixed $roleId
+     *
      * @return array
      */
     public function loadRole( $roleId )
@@ -134,9 +137,10 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Load a specified role by $identifier
+     * Loads a specified role by $identifier
      *
      * @param string $identifier
+     *
      * @return array
      */
     public function loadRoleByIdentifier( $identifier )
@@ -191,7 +195,7 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Load all roles
+     * Loads all roles
      *
      * @return array
      */
@@ -242,9 +246,10 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Load all roles associated with the given content objects
+     * Loads all roles associated with the given content objects
      *
      * @param array $contentIds
+     *
      * @return array
      */
     public function loadRolesForContentObjects( $contentIds )
@@ -311,7 +316,7 @@ class EzcDatabase extends Gateway
      * Loads role assignments for specified content ID
      *
      * @param mixed $groupId
-     * @param bool $inherited
+     * @param boolean $inherited
      *
      * @return array
      */
@@ -359,6 +364,7 @@ class EzcDatabase extends Gateway
      * Returns the user policies associated with the user
      *
      * @param mixed $userId
+     *
      * @return UserPolicy[]
      */
     public function loadPoliciesByUserId( $userId )
@@ -373,6 +379,7 @@ class EzcDatabase extends Gateway
      * Fetch all group IDs the user belongs to
      *
      * @param int $userId
+     *
      * @return array
      */
     protected function fetchUserGroups( $userId )
@@ -490,6 +497,7 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $roleId
      * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
+     *
      * @return void
      */
     public function addPolicy( $roleId, Policy $policy )
@@ -531,10 +539,11 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Add limitations to an existing policy
+     * Adds limitations to an existing policy
      *
      * @param int $policyId
      * @param array $limitations
+     *
      * @return void
      */
     public function addPolicyLimitations( $policyId, array $limitations )
@@ -584,6 +593,7 @@ class EzcDatabase extends Gateway
      * Removes a policy from a role
      *
      * @param mixed $policyId
+     *
      * @return void
      */
     public function removePolicy( $policyId )
@@ -606,6 +616,7 @@ class EzcDatabase extends Gateway
      * Remove all limitations for a policy
      *
      * @param mixed $policyId
+     *
      * @return void
      */
     public function removePolicyLimitations( $policyId )

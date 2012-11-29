@@ -39,11 +39,11 @@ class Provider extends PreAuthenticatedAuthenticationProvider
     /**
      * Attempts to authenticates a TokenInterface object.
      *
-     * @param TokenInterface $token The TokenInterface instance to authenticate
+     * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token The TokenInterface instance to authenticate
      *
-     * @return TokenInterface An authenticated TokenInterface instance, never null
+     * @return \Symfony\Component\Security\Core\Authentication\Token\TokenInterface An authenticated TokenInterface instance, never null
      *
-     * @throws AuthenticationException if the authentication fails
+     * @throws \Symfony\Component\Security\Core\Exception\AuthenticationException if the authentication fails
      */
     public function authenticate( TokenInterface $token )
     {

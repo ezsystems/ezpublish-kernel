@@ -29,8 +29,9 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
 class MapperTest extends TestCase
 {
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createGroupFromCreateStruct
+     *
+     * @return void
      */
     public function testCreateGroupFromCreateStruct()
     {
@@ -84,8 +85,9 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createTypeFromCreateStruct
+     *
+     * @return void
      */
     public function testTypeFromCreateStruct()
     {
@@ -149,8 +151,9 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createCreateStructFromType
+     *
+     * @return void
      */
     public function testCreateStructFromType()
     {
@@ -217,8 +220,9 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractGroupsFromRows
+     *
+     * @return void
      */
     public function testExtractGroupsFromRows()
     {

@@ -120,6 +120,7 @@ class RequestEventListener implements EventSubscriberInterface
      * Note: The event propagation will be stopped to ensure that no response can be set later and override the redirection.
      *
      * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+     *
      * @see \eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter
      */
     public function onKernelRequestRedirect( GetResponseEvent $event )

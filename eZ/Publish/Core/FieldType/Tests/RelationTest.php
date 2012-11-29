@@ -68,7 +68,7 @@ class RelationTest extends StandardizedFieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        // FIXME: Is this correct?
+        // @todo FIXME: Is this correct?
         return new Value();
     }
 

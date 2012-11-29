@@ -99,7 +99,7 @@ function generateContentTypeFixture( array $fixture )
             'creatorId' => $data['creator_id'],
             'modifierId' => $data['modifier_id'],
             'remoteId' => $data['remote_id'],
-            // TODO: How do we build the userAliasSchema?
+            // @todo: How do we build the userAliasSchema?
             //'urlAliasSchema' => $data[]
             'names' => $typeNames[$data['id']],
             'descriptions' => array(),
@@ -355,7 +355,7 @@ function generateContentInfoFixture( array $fixture )
             'creatorId' => $data['creator_id'],
             'creationDate' => dateCreateCall( $data['created'] ),
             'initialLanguageCode' => $languageCodes[$data['initial_language_id']],
-            'languageCodes' => array(), // TODO: Extract language codes from fields
+            'languageCodes' => array(), // @todo: Extract language codes from fields
             'repository' => '$this',
             'names' => $names[$data['contentobject_id']][$data['version']],
         );

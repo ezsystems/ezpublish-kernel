@@ -60,6 +60,7 @@ class PolicyTest extends ValueObjectVisitorBaseTest
      * Test if result contains Policy element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPolicyElement( $result )
@@ -82,6 +83,7 @@ class PolicyTest extends ValueObjectVisitorBaseTest
      * Test if result contains Policy element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPolicyAttributes( $result )
@@ -104,6 +106,7 @@ class PolicyTest extends ValueObjectVisitorBaseTest
      * Test if result contains id value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsIdValueElement( $result )
@@ -123,6 +126,7 @@ class PolicyTest extends ValueObjectVisitorBaseTest
      * Test if result contains module value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsModuleValueElement( $result )
@@ -142,6 +146,7 @@ class PolicyTest extends ValueObjectVisitorBaseTest
      * Test if result contains function value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsFunctionValueElement( $result )
@@ -161,6 +166,7 @@ class PolicyTest extends ValueObjectVisitorBaseTest
      * Test if result contains limitations element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLimitationsElement( $result )
@@ -179,6 +185,7 @@ class PolicyTest extends ValueObjectVisitorBaseTest
      * Test if result contains limitations attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLimitationsAttributes( $result )

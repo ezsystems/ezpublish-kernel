@@ -26,7 +26,7 @@ abstract class BaseIntegrationTest extends TestCase
     /**
      * Property indicating wether the DB already has been set up
      *
-     * @var bool
+     * @var boolean
      */
     protected static $setUp = false;
 
@@ -147,6 +147,7 @@ abstract class BaseIntegrationTest extends TestCase
      *
      * @param Legacy\Handler $handler
      * @param Content $content
+     *
      * @return void
      */
     public function postCreationHook( Legacy\Handler $handler, Content $content )
@@ -158,6 +159,7 @@ abstract class BaseIntegrationTest extends TestCase
      * Can be overwritten to assert that additional data has been deleted
      *
      * @param Content $content
+     *
      * @return void
      */
     public function assertDeletedFieldDataCorrect( Content $content )
@@ -317,6 +319,7 @@ abstract class BaseIntegrationTest extends TestCase
      * @param Type $contentType
      * @param mixed $fieldValue
      * @param string $languageCode
+     *
      * @return Content
      */
     protected function createContent( Type $contentType, $fieldValue, $languageCode = 'eng-GB' )
@@ -418,6 +421,7 @@ abstract class BaseIntegrationTest extends TestCase
      * @param mixed $contentId
      * @param mixed $contentVersion
      * @param Field $field
+     *
      * @return Content
      */
     protected function updateContent( $contentId, $contentVersion, Field $field )
@@ -482,6 +486,7 @@ abstract class BaseIntegrationTest extends TestCase
      * Deletes the given $content
      *
      * @param Content $content
+     *
      * @return void
      */
     protected function deleteContent( Content $content )

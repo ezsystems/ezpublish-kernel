@@ -57,6 +57,7 @@ class Parser
      * Construct
      *
      * @param string $installDir Base dir for rule loading
+     *
      * @return void
      */
     public function __construct( $installDir )
@@ -89,6 +90,7 @@ class Parser
      * Parse the specified transformation file into an AST
      *
      * @param string $file
+     *
      * @return array
      */
     public function parse( $file )
@@ -102,6 +104,7 @@ class Parser
      * Parse the given string into an AST
      *
      * @param string $string
+     *
      * @return array
      */
     public function parseString( $string )
@@ -144,6 +147,7 @@ class Parser
      * Returns an array of tokens
      *
      * @param string $string
+     *
      * @return array
      */
     protected function tokenize( $string )
@@ -185,6 +189,7 @@ class Parser
      * Filter out numeric array keys
      *
      * @param array $data
+     *
      * @return array
      */
     protected function filterValues( array $data )

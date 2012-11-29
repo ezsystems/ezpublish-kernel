@@ -47,7 +47,8 @@ class FieldTypeProcessorRegistry
      * Returns if a processor is registered for $fieldTypeIdentifier
      *
      * @param string $fieldTypeIdentifier
-     * @return bool
+     *
+     * @return boolean
      */
     public function hasProcessor( $fieldTypeIdentifier )
     {
@@ -58,8 +59,10 @@ class FieldTypeProcessorRegistry
      * Returns the processor for $fieldTypeIdentifier
      *
      * @param string $fieldTypeIdentifier
-     * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor
+     *
      * @throws \RuntimeException if not processor is registered for $fieldTypeIdentifier
+     *
+     * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor
      */
     public function getProcessor( $fieldTypeIdentifier )
     {

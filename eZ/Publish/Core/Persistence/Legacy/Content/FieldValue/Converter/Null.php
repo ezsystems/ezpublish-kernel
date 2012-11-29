@@ -24,7 +24,6 @@ class Null implements Converter
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @static
      * @return TextBlock
      */
     public static function create()

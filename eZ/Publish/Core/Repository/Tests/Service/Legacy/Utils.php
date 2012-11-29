@@ -18,7 +18,6 @@ use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 abstract class Utils extends InMemoryUtils
 {
     /**
-     * @static
      * @return \eZ\Publish\API\Repository\Repository
      */
     public static function getRepository()
@@ -38,8 +37,8 @@ abstract class Utils extends InMemoryUtils
     }
 
     /**
-     * @static
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $handler
+     *
      * @throws \Exception
      */
     protected static function insertLegacyData( EzcDbHandler $handler )

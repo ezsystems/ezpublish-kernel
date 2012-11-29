@@ -52,6 +52,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeGroupCreateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct $createStruct
+     *
      * @return void
      */
     public function testNewContentTypeGroupCreateStructValues( $createStruct )
@@ -113,8 +114,10 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeGroupCreateStruct
      *
      * @param array $data
-     * @return void
+     *
      * @todo remove $notImplemented when implemented
+     *
+     * @return void
      */
     public function testCreateContentTypeGroupStructValues( array $data )
     {
@@ -244,6 +247,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroup
      *
      * @param array $data
+     *
      * @return void
      */
     public function testLoadContentTypeGroupValues( array $data )
@@ -412,6 +416,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroups
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $groups
+     *
      * @return void
      */
     public function testLoadContentTypeGroupsIdentifiers( array $groups )
@@ -524,8 +529,10 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeGroup
      *
      * @param array $data
-     * @return void
+     *
      * @todo remove $notImplemented when implemented
+     *
+     * @return void
      */
     public function testUpdateContentTypeGroupStructValues( array $data )
     {
@@ -791,6 +798,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeUpdateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct $contentTypeUpdateStruct
+     *
      * @return void
      */
     public function testNewContentTypeUpdateStructValues( $contentTypeUpdateStruct )
@@ -836,6 +844,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeCreateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
+     *
      * @return void
      */
     public function testNewContentTypeCreateStructValues( $contentTypeCreateStruct )
@@ -894,6 +903,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::newFieldDefinitionCreateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
+     *
      * @return void
      */
     public function testNewFieldDefinitionCreateStructValues( $fieldDefinitionCreateStruct )
@@ -948,6 +958,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeUpdateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
+     *
      * @return void
      */
     public function testNewFieldDefinitionUpdateStructValues( $fieldDefinitionUpdateStruct )
@@ -964,7 +975,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Creates a ContentType with identifier "new-type" and remoteId "new-remoteid"
      *
-     * @param bool $publish
+     * @param boolean $publish
      * @param int $creatorId
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType|\eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
@@ -1190,6 +1201,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeGroupCreateStruct
      *
      * @param array $data
+     *
      * @return void
      */
     public function testCreateContentTypeStructValues( array $data )
@@ -1615,6 +1627,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentType
      *
      * @param array $data
+     *
      * @return void
      */
     public function testLoadContentTypeValues( array $data )
@@ -1805,6 +1818,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByIdentifier
      *
      * @param array $data
+     *
      * @return void
      */
     public function testLoadContentTypeByIdentifierValues( array $data )
@@ -1868,6 +1882,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByRemoteId
      *
      * @param array $data
+     *
      * @return void
      */
     public function testLoadContentTypeByRemoteIdValues( array $data )
@@ -1931,6 +1946,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeDraft
      *
      * @param array $data
+     *
      * @return array
      */
     public function testLoadContentTypeDraftValues( array $data )
@@ -2202,6 +2218,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypes
      *
      * @param array $types
+     *
      * @return void
      */
     public function testLoadContentTypesIdentifiers( array $types )
@@ -2402,6 +2419,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft
      *
      * @param array $data
+     *
      * @return void
      */
     public function testUpdateContentTypeDraftStructValues( array $data )
@@ -3198,6 +3216,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::removeFieldDefinition
      *
      * @param array $data
+     *
      * @return void
      */
     public function testRemoveFieldDefinitionRemoved( array $data )

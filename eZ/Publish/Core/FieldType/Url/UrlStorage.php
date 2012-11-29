@@ -14,7 +14,7 @@ use eZ\Publish\Core\FieldType\GatewayBasedStorage,
 
 /**
  * Converter for Url field type external storage
- * @TODO indroduce persistence layer (gateways)
+ * @todo indroduce persistence layer (gateways)
  *
  */
 class UrlStorage extends GatewayBasedStorage
@@ -36,6 +36,7 @@ class UrlStorage extends GatewayBasedStorage
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     *
      * @return void
      */
     public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
@@ -48,7 +49,8 @@ class UrlStorage extends GatewayBasedStorage
      * @param VersionInfo $versionInfo
      * @param array $fieldIds
      * @param array $context
-     * @return bool
+     *
+     * @return boolean
      */
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
@@ -57,7 +59,7 @@ class UrlStorage extends GatewayBasedStorage
     /**
      * Checks if field type has external data to deal with
      *
-     * @return bool
+     * @return boolean
      */
     public function hasFieldData()
     {

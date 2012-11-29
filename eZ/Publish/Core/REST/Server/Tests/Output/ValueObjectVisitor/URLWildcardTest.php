@@ -54,6 +54,7 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
      * Test if result contains UrlWildcard element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsUrlWildcardElement( $result )
@@ -76,6 +77,7 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
      * Test if result contains UrlWildcard element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsUrlWildcardAttributes( $result )
@@ -99,6 +101,7 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
      * Test if result contains sourceUrl value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSourceUrlValueElement( $result )
@@ -119,6 +122,7 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
      * Test if result contains destinationUrl value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsDestinationUrlValueElement( $result )
@@ -139,6 +143,7 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
      * Test if result contains forward value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsForwardValueElement( $result )

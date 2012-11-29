@@ -56,6 +56,7 @@ class Mapper
      *
      * @param array $rows
      * @param string $prefix
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location[]
      */
     public function createLocationsFromRows( array $rows, $prefix = '' )

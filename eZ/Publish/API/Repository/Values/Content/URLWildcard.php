@@ -23,7 +23,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 class URLWildcard extends ValueObject
 {
     /**
-     *
      * The unique id
      *
      * @var mixed
@@ -45,7 +44,7 @@ class URLWildcard extends ValueObject
     protected $destinationUrl;
 
     /**
-     * indicates if the url is redirected or not
+     * Indicates if the url is redirected or not
      *
      * @var boolean
      */

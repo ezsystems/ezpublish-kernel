@@ -20,8 +20,10 @@ interface Handler
      * $id is the same as original location (which has been previously trashed)
      *
      * @param int $id
-     * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed
      */
     public function loadTrashItem( $id );
 
@@ -49,8 +51,10 @@ interface Handler
      *
      * @param mixed $trashedId
      * @param mixed $newParentId
-     * @return int Newly restored location id
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $newParentId is invalid
+     *
+     * @return int Newly restored location id
      */
     public function recover( $trashedId, $newParentId );
 
@@ -81,6 +85,7 @@ interface Handler
      * Associated content has to be deleted
      *
      * @param int $trashedId
+     *
      * @return void
      */
     public function deleteTrashItem( $trashedId );

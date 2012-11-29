@@ -24,7 +24,6 @@ class XmlText implements Converter
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @static
      * @return XmlText
      */
     public static function create()

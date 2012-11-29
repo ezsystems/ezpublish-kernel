@@ -32,22 +32,22 @@ abstract class DateRangeFacetBuilder extends FacetBuilder {
     /**
      * Adds a range entry with explicit to and unbounded from.
      *
-     * @param DateTime $to
+     * @param \DateTime $to
      */
     public abstract function addUnboundedFrom($to);
 
     /**
      * Adds a date range
      *
-     * @param DateTime $from
-     * @param DateTime $to
+     * @param \DateTime $from
+     * @param \DateTime $to
      */
     public abstract function addRange($from, $to);
 
     /**
      * Adds a range entry with explicit from and unbounded to.
      *
-     * @param DateTime $from
+     * @param \DateTime $from
      */
     public abstract function addUnboundedTo($from);
 

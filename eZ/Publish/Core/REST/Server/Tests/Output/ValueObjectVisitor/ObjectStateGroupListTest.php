@@ -48,6 +48,7 @@ class ObjectStateGroupListTest extends ValueObjectVisitorBaseTest
      * Test if result contains ObjectStateGroupList element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsObjectStateGroupListElement( $result )
@@ -66,6 +67,7 @@ class ObjectStateGroupListTest extends ValueObjectVisitorBaseTest
      * Test if result contains ObjectStateGroupList element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsObjectStateGroupListAttributes( $result )

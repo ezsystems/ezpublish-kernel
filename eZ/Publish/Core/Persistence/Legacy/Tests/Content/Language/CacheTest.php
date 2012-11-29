@@ -25,8 +25,9 @@ class CachingTest extends TestCase
     protected $cache;
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::store
+     *
+     * @return void
      */
     public function testStore()
     {
@@ -53,8 +54,9 @@ class CachingTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::remove
+     *
+     * @return void
      */
     public function testRemove()
     {
@@ -78,8 +80,9 @@ class CachingTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getById
+     *
+     * @return void
      */
     public function testGetById()
     {
@@ -111,8 +114,9 @@ class CachingTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getByLocale
+     *
+     * @return void
      */
     public function testGetByLocale()
     {
@@ -144,8 +148,9 @@ class CachingTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getAll
+     *
+     * @return void
      */
     public function testGetAll()
     {

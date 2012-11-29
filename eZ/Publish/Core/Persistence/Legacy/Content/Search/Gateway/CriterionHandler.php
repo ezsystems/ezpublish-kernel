@@ -35,14 +35,14 @@ abstract class CriterionHandler
     /**
      * Database handler
      *
-     * @var eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected $dbHandler;
 
     /**
      * Creates a new criterion handler
      *
-     * @param EzcDbHandler $dbHandler
+     * @param \EzcDbHandler $dbHandler
      */
     public function __construct( EzcDbHandler $dbHandler )
     {
@@ -53,7 +53,8 @@ abstract class CriterionHandler
      * Check if this criterion handler accepts to handle the given criterion.
      *
      * @param Criterion $criterion
-     * @return bool
+     *
+     * @return boolean
      */
     abstract public function accept( Criterion $criterion );
 
@@ -63,6 +64,7 @@ abstract class CriterionHandler
      * @param CriteriaConverter $converter
      * @param \ezcQuerySelect $query
      * @param Criterion $criterion
+     *
      * @return \ezcQueryExpression
      */
     abstract public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion );

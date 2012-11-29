@@ -25,7 +25,7 @@ class APIContentExceptionEvent extends Event
     private $apiException;
 
     /**
-     * @var eZ\Publish\Core\MVC\Symfony\View\ContentView
+     * @var \eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
     private $contentView;
 
@@ -68,7 +68,7 @@ class APIContentExceptionEvent extends Event
     }
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function hasContentView()
     {

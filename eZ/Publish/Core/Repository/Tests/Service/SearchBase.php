@@ -277,6 +277,7 @@ abstract class SearchBase extends BaseServiceTest
      * Returns the content service to test with $methods mocked
      *
      * @param string[] $methods
+     *
      * @return \eZ\Publish\Core\Repository\SearchService|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getPartlyMockedService( array $methods = array() )

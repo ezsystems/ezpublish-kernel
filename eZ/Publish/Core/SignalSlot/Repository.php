@@ -164,9 +164,9 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     *
      * sets the current user to the user with the given user id
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
     public function setCurrentUser( User $user )
@@ -376,7 +376,7 @@ class Repository implements RepositoryInterface
      */
     public function getIOService()
     {
-        // FIXME: IOService is to be deprecated
+        // @todo FIXME: IOService is to be deprecated
         return $this->repository->getIOService();
     }
 
@@ -477,6 +477,7 @@ class Repository implements RepositoryInterface
      * Creates a \DateTime object for $timestamp in the current time zone
      *
      * @param int $timestamp
+     *
      * @return \DateTime
      */
     public function createDateTime( $timestamp = null )

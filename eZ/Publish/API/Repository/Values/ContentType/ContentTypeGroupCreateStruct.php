@@ -25,7 +25,7 @@ class ContentTypeGroupCreateStruct extends ValueObject
     public $identifier;
 
     /**
-     * if set this value overrides the current user as creator
+     * If set this value overrides the current user as creator
      *
      * @var mixed
      */

@@ -14,8 +14,9 @@ use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 class SimplifiedRequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param $url
-     * @param $expectedRequest
+     * @param string $url
+     * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $expectedRequest
+     *
      * @dataProvider fromUrlProvider
      * @covers \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest::fromUrl
      */

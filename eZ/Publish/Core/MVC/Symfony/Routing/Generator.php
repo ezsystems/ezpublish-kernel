@@ -17,7 +17,7 @@ use Symfony\Component\Routing\RequestContext;
 abstract class Generator
 {
     /**
-     * @var \Symfony\Component\Routing\RequestContext $requestContext
+     * @var \Symfony\Component\Routing\RequestContext
      */
     protected $requestContext;
 
@@ -34,7 +34,8 @@ abstract class Generator
      *
      * @param mixed $urlResource Type can be anything, depending on the context. It's up to the router to pass the appropriate value to the implemento.r
      * @param array $parameters
-     * @param bool $absolute
+     * @param boolean $absolute
+     *
      * @return string
      */
     public function generate( $urlResource, array $parameters, $absolute = false )
@@ -51,9 +52,9 @@ abstract class Generator
     /**
      * Generates the URL from $urlResource and $parameters.
      *
-     * @abstract
      * @param mixed $urlResource
      * @param array $parameters
+     *
      * @return string
      */
     abstract public function doGenerate( $urlResource, array $parameters );
@@ -61,7 +62,8 @@ abstract class Generator
     /**
      * Generates an absolute URL from $uri and the request context
      * 
-     * @param $uri
+     * @param string $uri
+     *
      * @return string
      */
     protected function generateAbsoluteUrl( $uri )

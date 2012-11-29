@@ -957,7 +957,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     *  Create Role with content/write/SubTree:/1/2/, content/read/* and user/*\/* policy
+     * Create Role with content/write/SubTree:/1/2/, content/read/* and user/*\/* policy
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */

@@ -185,6 +185,7 @@ abstract class FieldType implements FieldTypeInterface
      * value in either sort_key_string or sort_key_int.
      *
      * @param mixed $value
+     *
      * @return mixed
      */
     protected function getSortInfo( $value )
@@ -228,7 +229,7 @@ abstract class FieldType implements FieldTypeInterface
     /**
      * Returns whether the field type is searchable
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {
@@ -243,7 +244,8 @@ abstract class FieldType implements FieldTypeInterface
      * type, if necessary.
      *
      * @param mixed $value
-     * @return bool
+     *
+     * @return boolean
      */
     public function isEmptyValue( $value )
     {
@@ -298,6 +300,7 @@ abstract class FieldType implements FieldTypeInterface
      * this in your specific implementation, if neccessary.
      *
      * @param mixed $fieldSettings
+     *
      * @return array|hash|scalar|null
      */
     public function fieldSettingsToHash( $fieldSettings )
@@ -316,6 +319,7 @@ abstract class FieldType implements FieldTypeInterface
      * neccessary.
      *
      * @param array|hash|scalar|null $fieldSettingsHash
+     *
      * @return mixed
      */
     public function fieldSettingsFromHash( $fieldSettingsHash )
@@ -331,6 +335,7 @@ abstract class FieldType implements FieldTypeInterface
      * internal field types. Overwrite this method, if necessary.
      *
      * @param mixed $validatorConfiguration
+     *
      * @return array|hash|scalar|null
      */
     public function validatorConfigurationToHash( $validatorConfiguration )
@@ -348,6 +353,7 @@ abstract class FieldType implements FieldTypeInterface
      * if necessary.
      *
      * @param array|hash|scalar|null $validatorConfigurationHash
+     *
      * @return mixed
      */
     public function validatorConfigurationFromHash( $validatorConfigurationHash )

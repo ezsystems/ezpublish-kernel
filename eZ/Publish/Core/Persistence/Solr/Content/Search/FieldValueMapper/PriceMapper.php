@@ -22,6 +22,7 @@ class PriceMapper extends FieldValueMapper
      * Check if field can be mapped
      *
      * @param Field $field
+     *
      * @return void
      */
     public function canMap( Field $field )
@@ -33,6 +34,7 @@ class PriceMapper extends FieldValueMapper
      * Map field value to a proper Solr representation
      *
      * @param Field $field
+     *
      * @return void
      */
     public function map( Field $field )

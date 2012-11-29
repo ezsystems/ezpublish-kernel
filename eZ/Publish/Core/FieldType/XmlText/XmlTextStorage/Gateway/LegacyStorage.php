@@ -23,6 +23,7 @@ class LegacyStorage extends Gateway
      * Set database handler for this gateway
      *
      * @param mixed $dbHandler
+     *
      * @return void
      * @throws \RuntimeException if $dbHandler is not an instance of
      *         {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler}
@@ -44,8 +45,9 @@ class LegacyStorage extends Gateway
     /**
      * Returns the active connection
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      * @throws \RuntimeException if no connection has been set, yet.
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected function getConnection()
     {
@@ -91,6 +93,7 @@ class LegacyStorage extends Gateway
      * Returns as hash with URL id as key and corresponding URL as value.
      *
      * @param array $linkIds
+     *
      * @return array
      */
     private function getLinksUrl( array $linkIds )
@@ -120,7 +123,7 @@ class LegacyStorage extends Gateway
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      *
-     * @return bool
+     * @return boolean
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field )
     {
@@ -170,6 +173,7 @@ class LegacyStorage extends Gateway
      * Returns as hash with URL as key and corresponding URL id as value.
      *
      * @param array $linksUrls
+     *
      * @return array
      */
     private function getLinksId( array $linksUrls )

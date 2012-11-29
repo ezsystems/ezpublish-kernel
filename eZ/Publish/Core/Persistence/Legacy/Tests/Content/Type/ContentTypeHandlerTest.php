@@ -47,8 +47,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     protected $updateHandlerMock;
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::__construct
+     *
+     * @return void
      */
     public function testCtor()
     {
@@ -72,8 +73,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::createGroup
+     *
+     * @return void
      */
     public function testCreateGroup()
     {
@@ -117,8 +119,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::updateGroup
+     *
+     * @return void
      */
     public function testUpdateGroup()
     {
@@ -160,8 +163,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::deleteGroup
+     *
+     * @return void
      */
     public function testDeleteGroupSuccess()
     {
@@ -200,8 +204,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadGroup
+     *
+     * @return void
      */
     public function testLoadGroup()
     {
@@ -227,8 +232,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadGroupByIdentifier
+     *
+     * @return void
      */
     public function testLoadGroupByIdentifier()
     {
@@ -254,8 +260,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadAllGroups
+     *
+     * @return void
      */
     public function testLoadAllGroups()
     {
@@ -280,8 +287,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadContentTypes
+     *
+     * @return void
      */
     public function testLoadContentTypes()
     {
@@ -479,8 +487,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::create
+     *
+     * @return void
      */
     public function testCreate()
     {
@@ -560,8 +569,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::update
+     *
+     * @return void
      */
     public function testUpdate()
     {
@@ -600,8 +610,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::delete
+     *
+     * @return void
      */
     public function testDeleteSuccess()
     {
@@ -706,8 +717,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::createDraft
+     *
+     * @return void
      */
     public function testCreateVersion()
     {
@@ -769,8 +781,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::copy
+     *
+     * @return void
      */
     public function testCopy()
     {
@@ -838,8 +851,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::link
+     *
+     * @return void
      */
     public function testLink()
     {
@@ -861,8 +875,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::unlink
+     *
+     * @return void
      */
     public function testUnlinkSuccess()
     {
@@ -916,8 +931,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::getFieldDefinition
+     *
+     * @return void
      */
     public function testGetFieldDefinition()
     {
@@ -952,8 +968,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::addFieldDefinition
+     *
+     * @return void
      */
     public function testAddFieldDefinition()
     {
@@ -999,8 +1016,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::removeFieldDefinition
+     *
+     * @return void
      */
     public function testRemoveFieldDefinition()
     {
@@ -1020,8 +1038,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::updateFieldDefinition
+     *
+     * @return void
      */
     public function testUpdateFieldDefinition()
     {
@@ -1059,8 +1078,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::publish
+     *
+     * @return void
      */
     public function testPublish()
     {
@@ -1101,8 +1121,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::publish
+     *
+     * @return void
      */
     public function testPublishNoOldType()
     {
@@ -1159,6 +1180,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
      * Returns a handler to test with $methods mocked
      *
      * @param array $methods
+     *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler
      */
     protected function getPartlyMockedHandler( array $methods )
@@ -1194,6 +1216,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
      * Returns a mapper mock
      *
      * @param array $methods
+     *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper
      */
     protected function getMapperMock( $methods = array() )

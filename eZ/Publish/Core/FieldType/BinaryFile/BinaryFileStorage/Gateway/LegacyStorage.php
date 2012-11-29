@@ -49,6 +49,7 @@ class LegacyStorage extends BaseLegacyStorage
      * @param \ezcQuerySelect $selectQuery
      * @param int $fieldId
      * @param int $versionNo
+     *
      * @return void
      */
     protected function setFetchColumns( \ezcQuerySelect $selectQuery, $fieldId, $versionNo )
@@ -71,6 +72,7 @@ class LegacyStorage extends BaseLegacyStorage
      * @param \ezcQueryInsert $insertQuery
      * @param VersionInfo $versionInfo
      * @param Field $field
+     *
      * @return void
      */
     protected function setInsertColumns( \ezcQueryInsert $insertQuery, VersionInfo $versionInfo, Field $field )

@@ -50,7 +50,7 @@ abstract class AbstractParser implements Parser
     /**
      * Sets the base key of this parser.
      *
-     * @param string $key 
+     * @param string $key
      */
     public function setBaseKey( $key )
     {
@@ -64,6 +64,7 @@ abstract class AbstractParser implements Parser
      * @param ContainerBuilder $container
      * @param string $id
      * @param mixed $default
+     *
      * @return mixed
      */
     protected function getContainerParameter( ContainerBuilder $container, $id, $default = null )
@@ -82,6 +83,7 @@ abstract class AbstractParser implements Parser
      * @param string $id id of the setting array under ezpublish.<base_key>.<group_name>
      * @param array $config the full configuration array
      * @param int $options only self::MERGE_FROM_SECOND_LEVEL or self::UNIQUE are recognized
+     *
      * @return array
      */
     protected function groupsArraySetting( array $groups, $id, array $config, $options = 0 )

@@ -43,7 +43,7 @@ abstract class Generator
     /**
      * Returns if the document is empty or already contains data
      *
-     * @return bool
+     * @return boolean
      */
     abstract public function isEmpty();
 
@@ -70,6 +70,7 @@ abstract class Generator
      * Returns the generated document as a string.
      *
      * @param mixed $data
+     *
      * @return string
      */
     abstract public function endDocument( $data );
@@ -287,6 +288,7 @@ abstract class Generator
      * Get media type
      *
      * @param string $name
+     *
      * @return string
      */
     abstract public function getMediaType( $name );
@@ -296,6 +298,7 @@ abstract class Generator
      *
      * @param string $name
      * @param string $type
+     *
      * @return string
      */
     protected function generateMediaType( $name, $type )

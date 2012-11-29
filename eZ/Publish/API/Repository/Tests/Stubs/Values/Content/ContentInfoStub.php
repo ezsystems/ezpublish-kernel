@@ -26,7 +26,7 @@ class ContentInfoStub extends ContentInfo
     protected $repository;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $contentTypeId;
 
@@ -53,6 +53,7 @@ class ContentInfoStub extends ContentInfo
      * Internal helper method to modify the $mainLocationId property
      *
      * @param mixed $mainLocationId
+     *
      * @return void
      */
     public function __setMainLocationId( $mainLocationId )

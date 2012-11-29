@@ -40,6 +40,7 @@ class IdManager
      *
      * @param string $type
      * @param mixed $rawId
+     *
      * @return mixed
      */
     public function generateId( $type, $rawId )
@@ -60,6 +61,7 @@ class IdManager
      *
      * @param string $type
      * @param mixed $id
+     *
      * @return mixed
      */
     public function parseId( $type, $id )

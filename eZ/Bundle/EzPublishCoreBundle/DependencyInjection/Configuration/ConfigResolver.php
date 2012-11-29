@@ -120,7 +120,7 @@ class ConfigResolver implements ConfigResolverInterface
      * @param string $scope The scope you need $paramName value for. It's typically the siteaccess name.
      *                      If null, the current siteaccess name will be used.
      *
-     * @return bool
+     * @return boolean
      */
     public function hasParameter( $paramName, $namespace = null, $scope = null )
     {
@@ -146,6 +146,7 @@ class ConfigResolver implements ConfigResolverInterface
      *                      If null, the current siteaccess name will be used.
      *
      * @throws \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException
+     *
      * @return mixed
      */
     public function getParameter( $paramName, $namespace = null, $scope = null )

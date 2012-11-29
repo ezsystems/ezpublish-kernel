@@ -17,8 +17,8 @@ interface LegacyKernelAware
     /**
      * Injects the legacy kernel instance.
      *
-     * @abstract
      * @param \eZ\Publish\Core\MVC\Legacy\Kernel $legacyKernel
+     *
      * @return void
      */
     public function setLegacyKernel( Kernel $legacyKernel );

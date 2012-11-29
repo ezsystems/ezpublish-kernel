@@ -45,7 +45,8 @@ class LegacyStorageEngineFactory
      * Builds the Legacy Storage Engine
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbhandler
-     * @param $deferTypeUpdate
+     * @param boolean $deferTypeUpdate
+     *
      * @return \eZ\Publish\Core\Persistence\Legacy\Handler
      */
     public function buildLegacyEngine( EzcDbHandler $dbhandler, $deferTypeUpdate )

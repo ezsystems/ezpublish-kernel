@@ -51,6 +51,7 @@ class ContentTypeGroupInput extends Base
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
@@ -68,13 +69,13 @@ class ContentTypeGroupInput extends Base
 
         $contentTypeGroupCreateStruct = $this->contentTypeService->newContentTypeGroupCreateStruct( $contentTypeGroupIdentifier );
 
-        // @TODO mismatch between modificationDate in XSD & creationDate in struct
+        // @todo mismatch between modificationDate in XSD & creationDate in struct
         if ( array_key_exists( 'modificationDate', $data ) )
         {
             $contentTypeGroupCreateStruct->creationDate = new DateTime( $data['modificationDate'] );
         }
 
-        // @TODO mainLanguageCode, names, descriptions?
+        // @todo mainLanguageCode, names, descriptions?
 
         if ( array_key_exists( 'User', $data ) && is_array( $data['User'] ) )
         {

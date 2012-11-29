@@ -24,7 +24,6 @@ class ObjectState extends ValueObject
     public $id;
 
     /**
-     *
      * The identifier for the object state group
      *
      * @var string

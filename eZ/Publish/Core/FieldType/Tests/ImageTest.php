@@ -21,7 +21,7 @@ class ImageTest extends StandardizedFieldTypeTest
     /**
      * FileService mock
      *
-     * @var PHPUnit_Framework_Mock
+     * @var \PHPUnit_Framework_Mock
      */
     private $fileServiceMock;
 
@@ -33,7 +33,7 @@ class ImageTest extends StandardizedFieldTypeTest
     /**
      * Returns a mock for the FileService
      *
-     * @return eZ\Publish\Core\FieldType\FileService
+     * @return \eZ\Publish\Core\FieldType\FileService
      */
     protected function getFileServiceMock()
     {
@@ -369,7 +369,7 @@ class ImageTest extends StandardizedFieldTypeTest
                     )
                 ),
             ),
-            // @TODO: Provide REST upload tests
+            // @todo: Provide REST upload tests
         );
     }
 }

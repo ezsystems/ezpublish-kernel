@@ -63,6 +63,7 @@ class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Ses
      * Only for testing
      *
      * @param mixed $id
+     *
      * @private
      */
     public function setSession( $id )
@@ -92,7 +93,7 @@ class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Ses
      */
     public function createUrlAlias( Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -118,7 +119,7 @@ class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Ses
      */
     public function createGlobalUrlAlias( $resource, $path, $languageCode, $forwarding = false, $alwaysAvailable = false )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -132,7 +133,7 @@ class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Ses
      */
     public function listLocationAliases( Location $location, $custom = true, $languageCode = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -146,7 +147,7 @@ class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Ses
      */
     public function listGlobalAliases( $languageCode = null, $offset = 0, $limit = -1 )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -163,7 +164,7 @@ class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Ses
      */
     public function removeAliases( array $aliasList )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -178,7 +179,7 @@ class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Ses
      */
     public function lookup( $url, $languageCode = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -195,7 +196,7 @@ class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Ses
      */
     public function reverseLookup( Location $location, $languageCode = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -209,6 +210,6 @@ class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Ses
      */
     public function load( $id )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 }

@@ -25,7 +25,7 @@ class UserStub extends User
     protected $content;
 
     /**
-     * returns the VersionInfo for this version
+     * Returns the VersionInfo for this version
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
@@ -35,7 +35,7 @@ class UserStub extends User
     }
 
     /**
-     * returns a field value for the given value
+     * Returns a field value for the given value
      * $version->fields[$fieldDefId][$languageCode] is an equivalent call
      * if no language is given on a translatable field this method returns
      * the value of the initial language of the version if present, otherwise null.
@@ -52,9 +52,9 @@ class UserStub extends User
     }
 
     /**
-     * returns the outgoing relations
+     * Returns the outgoing relations
      *
-     * @return array an array of {@link Relation}
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
     public function getRelations()
     {
@@ -64,7 +64,7 @@ class UserStub extends User
     /**
      * This method returns the complete fields collection
      *
-     * @return array an array of {@link Field}
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[]
      */
     public function getFields()
     {
@@ -78,7 +78,7 @@ class UserStub extends User
      *
      * @param string $languageCode
      *
-     * @return array an array of {@link Field} with field identifier as keys
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[] With field identifier as keys
      */
     public function getFieldsByLanguage( $languageCode = null )
     {

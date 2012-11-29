@@ -41,13 +41,14 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * AddField action to test
      *
-     * @var eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField
      */
     protected $addFieldAction;
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
+     *
+     * @return void
      */
     public function testCtor()
     {
@@ -71,8 +72,9 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField::apply
+     *
+     * @return void
      */
     public function testApply()
     {
@@ -116,8 +118,9 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField::apply
+     *
+     * @return void
      */
     public function testApplyUnTranslatableField()
     {
@@ -125,8 +128,9 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField::apply
+     *
+     * @return void
      */
     public function testApplyUpdatingStorageHandler()
     {
@@ -134,8 +138,9 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField::apply
+     *
+     * @return void
      */
     public function testApplyUpdatingStorageHandlerUnTranslatableField()
     {

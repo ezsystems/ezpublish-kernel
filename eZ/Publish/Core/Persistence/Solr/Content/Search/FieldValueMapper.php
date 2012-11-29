@@ -20,6 +20,7 @@ abstract class FieldValueMapper
      * Check if field can be mapped
      *
      * @param Field $field
+     *
      * @return void
      */
     abstract public function canMap( Field $field );
@@ -28,6 +29,7 @@ abstract class FieldValueMapper
      * Map field value to a proper Solr representation
      *
      * @param Field $field
+     *
      * @return void
      */
     abstract public function map( Field $field );

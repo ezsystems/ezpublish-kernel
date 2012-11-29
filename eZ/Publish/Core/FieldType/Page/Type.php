@@ -40,7 +40,7 @@ class Type extends FieldType
     }
 
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -199,6 +199,7 @@ class Type extends FieldType
      * value in either sort_key_string or sort_key_int.
      *
      * @param mixed $value
+     *
      * @return mixed
      */
     protected function getSortInfo( $value )

@@ -2589,6 +2589,7 @@ abstract class UrlAliasBase extends BaseServiceTest
      * Returns the content service to test with $methods mocked
      *
      * @param string[] $methods
+     *
      * @return \eZ\Publish\Core\Repository\ContentService|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getPartlyMockedService( array $methods = array() )

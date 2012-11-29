@@ -296,6 +296,7 @@ class Handler implements HandlerInterface
 
     /**
      * @internal LocationHandler is injected into property to avoid circular dependency
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function contentHandler()

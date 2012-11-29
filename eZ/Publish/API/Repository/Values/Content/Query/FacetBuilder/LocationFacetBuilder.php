@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
  * If provided the search service returns a LocationFacet
  * which contains the counts for all content objects below the child locations.
  *
- * TODO: check hierarchical facets
+ * @todo: check hierarchical facets
  *
  * @package eZ\Publish\API\Repository\Values\Content\Query
  */
@@ -27,7 +27,7 @@ class LocationFacetBuilder extends FacetBuilder {
     /**
      * The parent location
      *
-     * @var eZ\Publish\API\Repository\Values\Content\Location
+     * @var \eZ\Publish\API\Repository\Values\Content\Location
      */
     public $location;
 

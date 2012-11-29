@@ -60,6 +60,7 @@ class RestUserRoleAssignmentTest extends ValueObjectVisitorBaseTest
      * Test if result contains RoleAssignment element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRoleAssignmentElement( $result )
@@ -81,6 +82,7 @@ class RestUserRoleAssignmentTest extends ValueObjectVisitorBaseTest
      * Test if result contains RoleAssignment element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRoleAssignmentAttributes( $result )
@@ -103,6 +105,7 @@ class RestUserRoleAssignmentTest extends ValueObjectVisitorBaseTest
      * Test if result contains Role element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRoleElement( $result )
@@ -121,6 +124,7 @@ class RestUserRoleAssignmentTest extends ValueObjectVisitorBaseTest
      * Test if result contains Role element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRoleAttributes( $result )

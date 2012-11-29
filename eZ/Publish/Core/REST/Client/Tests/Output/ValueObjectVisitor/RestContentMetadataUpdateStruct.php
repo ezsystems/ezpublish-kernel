@@ -49,6 +49,7 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that result contains ContentUpdate element
      *
      * @param string $result
+     *
      * @depends testVisitComplete
      */
     public function testResultContainsContentUpdateElement( $result )
@@ -71,6 +72,7 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that result contains Section element
      *
      * @param string $result
+     *
      * @depends testVisitComplete
      */
     public function testResultSectionElement( $result )
@@ -93,6 +95,7 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests Owner element attributes
      *
      * @param string $result
+     *
      * @depends testVisitComplete
      */
     public function testResultOwnerElement( $result )
@@ -197,7 +200,7 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
         return array(
             'sectionId' => '/content/sections/23',
             'ownerId'   => '/user/users/42',
-            // TODO: Add missing properties
+            // @todo: Add missing properties
         );
     }
 

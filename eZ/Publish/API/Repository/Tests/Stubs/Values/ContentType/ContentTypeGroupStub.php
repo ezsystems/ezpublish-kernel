@@ -43,8 +43,9 @@ class ContentTypeGroupStub extends ContentTypeGroup
 
     /**
      * 5.x only
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
      * @param string $languageCode
+     *
      * @return string the name for the given language or null if none existis.
      */
     public function getName( $languageCode )
@@ -53,7 +54,7 @@ class ContentTypeGroupStub extends ContentTypeGroup
     }
 
     /**
-     *  5.x only
+     * 5.x only
      * This method returns the human readable description of the content type
      * The structure of this field is:
      * <code>
@@ -69,8 +70,9 @@ class ContentTypeGroupStub extends ContentTypeGroup
 
     /**
      * 5.x only
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
      * @param string $languageCode
+     *
      * @return string the description for the given language or null if none existis.
      */
     public function getDescription( $languageCode )

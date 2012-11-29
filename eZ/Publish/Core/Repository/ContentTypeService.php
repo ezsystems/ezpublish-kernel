@@ -360,8 +360,6 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     *
-     *
      * @param int|null $timestamp
      *
      * @return \DateTime|null
@@ -747,6 +745,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * Builds a FieldDefinition domain object from value object returned by persistence
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $spiFieldDefinition
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
     protected function buildFieldDefinitionDomainObject( SPIFieldDefinition $spiFieldDefinition )
@@ -868,8 +867,9 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @param int $contentTypeId
      *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      * @todo Use another exception when user of draft is someone else
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
     public function loadContentTypeDraft( $contentTypeId )
     {
@@ -898,7 +898,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[] an array of {@link ContentType} which have status DEFINED
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[] Which have status DEFINED
      */
     public function loadContentTypes( APIContentTypeGroup $contentTypeGroup )
     {
@@ -1193,7 +1193,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * assign a content type to a content type group.
+     * Assigns a content type to a content type group.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to unlink a content type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the content type is already assigned the given group
@@ -1516,7 +1516,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * instantiates a new content type group create class
+     * Instantiates a new content type group create class
      *
      * @param string $identifier
      *
@@ -1537,7 +1537,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * instantiates a new content type create class
+     * Instantiates a new content type create class
      *
      * @param string $identifier
      *
@@ -1568,7 +1568,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * instantiates a new content type update struct
+     * Instantiates a new content type update struct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct
      */
@@ -1578,9 +1578,9 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * instantiates a field definition create struct
+     * Instantiates a field definition create struct
      *
-     * @param string $fieldTypeIdentifier the required  field type identifier
+     * @param string $fieldTypeIdentifier the required field type identifier
      * @param string $identifier the required identifier for the field definition
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct
@@ -1606,7 +1606,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * instantiates a field definition update class
+     * Instantiates a field definition update class
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct
      */

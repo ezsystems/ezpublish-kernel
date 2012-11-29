@@ -34,6 +34,7 @@ class ConfigResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $defaultNS
      * @param int $undefinedStrategy
+     *
      * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver
      */
     private function getResolver( $defaultNS = 'ezsettings', $undefinedStrategy = ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION, array $groupsBySiteAccess = array() )

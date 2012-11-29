@@ -423,7 +423,8 @@ abstract class TrashBase extends BaseServiceTest
     }
 
     /**
-     * @param $parentLocationId
+     * @param int $parentLocationId
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
     protected function createTestContentLocation( $parentLocationId )

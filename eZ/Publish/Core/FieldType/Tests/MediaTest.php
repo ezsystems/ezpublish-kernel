@@ -379,7 +379,7 @@ class MediaTest extends BinaryBaseTest
                     'height' => 0,
                 ) ),
             ),
-            // TODO: Test for REST upload hash
+            // @todo: Test for REST upload hash
         );
     }
 

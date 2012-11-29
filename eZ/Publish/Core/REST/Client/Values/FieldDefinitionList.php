@@ -31,7 +31,7 @@ class FieldDefinitionList
     protected $contentTypeService;
 
     /**
-     * @param eZ\Publish\Core\REST\ContentTypeService $contentTypeService
+     * @param \eZ\Publish\Core\REST\ContentTypeService $contentTypeService
      * @param string[] $fieldDefinitionReferences
      */
     public function __construct( ContentTypeService $contentTypeService, array $fieldDefinitionReferences )

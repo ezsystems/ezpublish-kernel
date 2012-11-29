@@ -32,9 +32,9 @@ class ContentTypeGroupTest extends BaseTest
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ContentTypeGroup::matchLocation
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
      *
-     * @param $matchingConfig
+     * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param $expectedResult
+     * @param boolean $expectedResult
      */
     public function testMatchLocation( $matchingConfig, Location $location, $expectedResult )
     {
@@ -76,7 +76,8 @@ class ContentTypeGroupTest extends BaseTest
     /**
      * Generates a Location object in respect of a given content type identifier
      *
-     * @param $contentTypeGroupId
+     * @param int $contentTypeGroupId
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function generateLocationForContentTypeGroup( $contentTypeGroupId )
@@ -98,7 +99,8 @@ class ContentTypeGroupTest extends BaseTest
     /**
      * Generates a ContentInfo object in respect of a given content type identifier
      *
-     * @param $contentTypeGroupId
+     * @param int $contentTypeGroupId
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function generateContentInfoForContentTypeGroup( $contentTypeGroupId )
@@ -137,9 +139,9 @@ class ContentTypeGroupTest extends BaseTest
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ContentTypeGroup::matchContentInfo
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
      *
-     * @param $matchingConfig
+     * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param $expectedResult
+     * @param boolean $expectedResult
      */
     public function testMatchContentInfo( $matchingConfig, ContentInfo $contentInfo, $expectedResult )
     {

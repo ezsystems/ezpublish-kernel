@@ -41,7 +41,7 @@ class LocationUpdateStruct extends ValueObject
     public $sortField;
 
     /**
-     * if set the sortOrder is changed.
+     * If set the sortOrder is changed.
      * The sort order specifies whether the sort order should be ascending or descending.
      * Valid values are {@link Location::SORT_ORDER_*}
      *

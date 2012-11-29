@@ -148,7 +148,7 @@ class NameSchemaService
     }
 
     /**
-     * Return the real name for a content name pattern
+     * Returns the real name for a content name pattern
      *
      * @param string $nameSchema
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
@@ -233,6 +233,7 @@ class NameSchemaService
      * </code>
      *
      * @param string $nameSchema
+     *
      * @return array
      */
     protected function extractTokens( $nameSchema )
@@ -254,7 +255,7 @@ class NameSchemaService
      * @param string $token
      * @param array $titles
      *
-     * @param $groupLookupTable
+     * @param array $groupLookupTable
      *
      * @return string
      */
@@ -308,6 +309,7 @@ class NameSchemaService
      * Checks whether $identifier is a placeholder for a token group.
      *
      * @param string $identifier
+     *
      * @return boolean
      */
     protected function isTokenGroup( $identifier )
@@ -321,7 +323,7 @@ class NameSchemaService
     }
 
     /**
-     * Return the different constituents of $token in an array.
+     * Returns the different constituents of $token in an array.
      * The normal case here is that the different identifiers within one token
      * will be tokenized and returned.
      *
@@ -331,6 +333,7 @@ class NameSchemaService
      * </code>
      *
      * @param string $token
+     *
      * @return array
      */
     protected function tokenParts( $token )
@@ -347,6 +350,7 @@ class NameSchemaService
      * tokens.
      *
      * @param string $nameSchema
+     *
      * @return string
      */
     protected function filterNameSchema( $nameSchema )
@@ -382,6 +386,7 @@ class NameSchemaService
      * Returns all identifiers from all tokens in the name schema.
      *
      * @param string $schemaString
+     *
      * @return array
      */
     protected function getIdentifiers( $schemaString )

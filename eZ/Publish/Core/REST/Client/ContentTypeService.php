@@ -80,8 +80,10 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      * Only for testing
      *
      * @param mixed tringid
-     * @return void
+     *
      * @private
+     *
+     * @return void
      */
     public function setSession( $id )
     {
@@ -103,7 +105,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function createContentTypeGroup( ContentTypeGroupCreateStruct  $contentTypeGroupCreateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -117,7 +119,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function loadContentTypeGroup( $contentTypeGroupId )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -131,17 +133,17 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function loadContentTypeGroupByIdentifier( $contentTypeGroupIdentifier )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
      * Get all Content Type Groups
      *
-     * @return aray an array of {@link ContentTypeGroup}
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
     public function loadContentTypeGroups()
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -155,7 +157,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function updateContentTypeGroup( ContentTypeGroup $contentTypeGroup, ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -170,7 +172,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function deleteContentTypeGroup( ContentTypeGroup $contentTypeGroup )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -188,7 +190,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function createContentType( ContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -202,7 +204,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function loadContentTypeDraft( $contentTypeId )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -218,7 +220,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function updateContentTypeDraft( ContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -234,7 +236,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function addFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -248,7 +250,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function removeFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -264,7 +266,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function updateFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -279,7 +281,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function publishContentTypeDraft( ContentTypeDraft $contentTypeDraft )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -310,8 +312,10 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      * the REST Client implementation.
      *
      * @param string $fieldDefinitionId
-     * @return FieldDefinition
+     *
      * @access protected
+     *
+     * @return FieldDefinition
      */
     public function loadFieldDefinition( $fieldDefinitionId )
     {
@@ -332,6 +336,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      * the REST Client implementation.
      *
      * @param mixed $fieldDefinitionListReference
+     *
      * @return FieldDefinitionList
      */
     public function loadFieldDefinitionList( $fieldDefinitionListReference )
@@ -357,7 +362,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function loadContentTypeByIdentifier( $identifier )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -371,7 +376,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function loadContentTypeByRemoteId( $remoteId )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -379,11 +384,11 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      *
-     * @return array an array of {@link ContentType} which have status DEFINED
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[] Which have status DEFINED
      */
     public function loadContentTypes( ContentTypeGroup $contentTypeGroup )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -401,7 +406,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function createContentTypeDraft( ContentType $contentType )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -416,7 +421,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function deleteContentType( ContentType $contentType )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -434,11 +439,11 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function copyContentType( ContentType $contentType, User $user = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * assign a content type to a content type group.
+     * Assigns a content type to a content type group.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to unlink a content type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the content type is already assigned the given group
@@ -448,7 +453,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function assignContentTypeGroup( ContentType $contentType, ContentTypeGroup $contentTypeGroup )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -463,11 +468,11 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function unassignContentTypeGroup( ContentType $contentType, ContentTypeGroup $contentTypeGroup )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * instanciates a new content type group create class
+     * Instantiates a new content type group create class
      *
      * @param string $identifier
      *
@@ -475,11 +480,11 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function newContentTypeGroupCreateStruct( $identifier )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * instanciates a new content type create class
+     * Instantiates a new content type create class
      *
      * @param string $identifier
      *
@@ -487,49 +492,49 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function newContentTypeCreateStruct( $identifier )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * instanciates a new content type update struct
+     * Instantiates a new content type update struct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct
      */
     public function newContentTypeUpdateStruct()
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * instanciates a new content type update struct
+     * Instantiates a new content type update struct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct
      */
     public function newContentTypeGroupUpdateStruct()
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * instanciates a field definition create struct
+     * Instantiates a field definition create struct
      *
-     * @param string $fieldTypeIdentifier the required  field type identifier
+     * @param string $fieldTypeIdentifier the required field type identifier
      * @param string $identifier the required identifier for the field definition
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct
      */
     public function newFieldDefinitionCreateStruct( $identifier, $fieldTypeIdentifier )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * instanciates a field definition update class
+     * Instantiates a field definition update class
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct
      */
     public function newFieldDefinitionUpdateStruct()
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 }

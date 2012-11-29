@@ -32,7 +32,7 @@ class Json extends Generator
     /**
      * Keeps track if the document is still empty
      *
-     * @var bool
+     * @var boolean
      */
     protected $isEmpty = true;
 
@@ -61,7 +61,7 @@ class Json extends Generator
     /**
      * Returns if the document is empty or already contains data
      *
-     * @return bool
+     * @return boolean
      */
     public function isEmpty()
     {
@@ -74,6 +74,7 @@ class Json extends Generator
      * Returns the generated document as a string.
      *
      * @param mixed $data
+     *
      * @return string
      */
     public function endDocument( $data )
@@ -91,13 +92,14 @@ class Json extends Generator
      * structure.
      *
      * @param mixed $data
+     *
      * @return mixed
      */
     protected function convertArrayObjects( $data )
     {
         if ( $data instanceof Json\ArrayObject )
         {
-            // @TODO: Check if we need to convert arrays with only one single
+            // @todo: Check if we need to convert arrays with only one single
             // element into non-arrays /cc cba
             $data = $data->getArrayCopy();
             foreach ( $data as $key => $value )
@@ -297,6 +299,7 @@ class Json extends Generator
      * Get media type
      *
      * @param string $name
+     *
      * @return string
      */
     public function getMediaType( $name )

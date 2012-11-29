@@ -54,7 +54,7 @@ class MetadataUpdateStruct extends ValueObject
     /**
      * If set, this value will change the always available flag.
      *
-     * @var bool
+     * @var boolean
      */
     public $alwaysAvailable;
 

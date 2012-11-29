@@ -39,7 +39,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
     /**
      * Returns User stub with $id as User/Content id
      *
-     * @param $id
+     * @param int $id
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
@@ -162,6 +162,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
      * @param \eZ\Publish\API\Repository\Values\ValueObject $expectedValues
      * @param \eZ\Publish\API\Repository\Values\ValueObject $actualObject
      * @param array $skipProperties
+     *
      * @return void
      */
     protected function assertStructPropertiesCorrect( ValueObject $expectedValues, ValueObject $actualObject, array $skipProperties = array() )

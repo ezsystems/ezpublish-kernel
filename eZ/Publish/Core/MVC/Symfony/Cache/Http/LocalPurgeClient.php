@@ -33,6 +33,7 @@ class LocalPurgeClient implements PurgeClientInterface
      * Triggers the cache purge $cacheElements.
      *
      * @param mixed $locationIds Cache resource(s) to purge (e.g. array of URI to purge in a reverse proxy)
+     *
      * @return void
      */
     public function purge( $locationIds )

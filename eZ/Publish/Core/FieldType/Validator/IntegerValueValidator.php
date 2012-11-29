@@ -80,7 +80,8 @@ class IntegerValueValidator extends Validator
      * $errors array.
      *
      * @param \eZ\Publish\Core\FieldType\Integer\Value $value
-     * @return bool
+     *
+     * @return boolean
      */
     public function validate( BaseValue $value )
     {

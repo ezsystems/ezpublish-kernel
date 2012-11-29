@@ -171,7 +171,7 @@ class LanguageService implements LanguageServiceInterface
     }
 
     /**
-     * enables a language
+     * Enables a language
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
@@ -214,7 +214,7 @@ class LanguageService implements LanguageServiceInterface
     }
 
     /**
-     * disables a language
+     * Disables a language
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
@@ -354,7 +354,7 @@ class LanguageService implements LanguageServiceInterface
     }
 
     /**
-     * returns a configured default language code
+     * Returns a configured default language code
      *
      * @return string
      */
@@ -367,6 +367,7 @@ class LanguageService implements LanguageServiceInterface
      * Returns a configured list of prioritized languageCodes
      *
      * @access private This is currently only for internal use in Services
+     *
      * @return string[]
      */
     public function getPrioritizedLanguageCodeList()
@@ -375,7 +376,7 @@ class LanguageService implements LanguageServiceInterface
     }
 
     /**
-     * instantiates an object to be used for creating languages
+     * Instantiates an object to be used for creating languages
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
      */

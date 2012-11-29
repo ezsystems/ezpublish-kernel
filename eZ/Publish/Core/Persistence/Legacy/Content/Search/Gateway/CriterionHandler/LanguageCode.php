@@ -41,7 +41,8 @@ class LanguageCode extends CriterionHandler
      * Check if this criterion handler accepts to handle the given criterion.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @return bool
+     *
+     * @return boolean
      */
     public function accept( Criterion $criterion )
     {
@@ -54,6 +55,7 @@ class LanguageCode extends CriterionHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter $converter
      * @param \ezcQuerySelect $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     *
      * @return \ezcQueryExpression
      */
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )

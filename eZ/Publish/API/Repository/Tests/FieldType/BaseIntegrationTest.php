@@ -38,7 +38,7 @@ use eZ\Publish\API\Repository\Tests,
  * @group integration
  * @group field-type
  *
- * @TODO Finalize dependencies to other tests (including groups!)
+ * @todo Finalize dependencies to other tests (including groups!)
  */
 abstract class BaseIntegrationTest extends Tests\BaseTest
 {
@@ -112,6 +112,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     abstract public function assertFieldDataLoadedCorrect( Field $field );
@@ -265,6 +266,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      *
      * @param Repository\Repository $repository
      * @param Repository\Values\Content\Content $content
+     *
      * @return void
      */
     public function postCreationHook( Repository\Repository $repository, Repository\Values\Content\Content $content )
@@ -299,6 +301,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      * @param mixed $validatorConfiguration
      * @param array $typeCreateOverride
      * @param array $fieldCreateOverride
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType
      */
     protected function createContentType( $fieldSettings, $validatorConfiguration, array $typeCreateOverride = array(), array $fieldCreateOverride = array() )
@@ -354,6 +357,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      * @param string $key
      * @param array $overrideValues
      * @param mixed $default
+     *
      * @return mixed
      */
     protected function getOverride( $key, array $overrideValues, $default )
@@ -512,6 +516,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      * Creates content with $fieldData
      *
      * @param mixed $fieldData
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
     protected function createContent( $fieldData, $contentType = null )
@@ -638,6 +643,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      * Updates the standard published content object with $fieldData
      *
      * @param mixed $fieldData
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
     public function updateContent( $fieldData )
@@ -753,8 +759,10 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      *
      * @param mixed $failingValue
      * @param string $expectedException
+     *
      * @dataProvider provideInvalidCreationFieldData
      * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteContent
+     *
      * @return void
      */
     public function testCreateContentFails( $failingValue, $expectedException )
@@ -783,9 +791,11 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      *
      * @param mixed $failingValue
      * @param string $expectedException
+     *
      * @dataProvider provideInvalidUpdateFieldData
-     * @return void
      * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     *
+     * @return void
      */
     public function testUpdateContentFails( $failingValue, $expectedException )
     {
@@ -826,7 +836,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     /**
      * @depends testCreateContent
      * @dataProvider provideFromHashData
-     * @TODO: Requires correct registered FieldTypeService, needs to be
+     * @todo: Requires correct registered FieldTypeService, needs to be
      *        maintained!
      */
     public function testFromHash( $hash, $expectedValue )

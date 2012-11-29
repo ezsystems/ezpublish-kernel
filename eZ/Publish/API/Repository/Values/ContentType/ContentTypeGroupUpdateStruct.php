@@ -24,7 +24,7 @@ class ContentTypeGroupUpdateStruct extends ValueObject
     public $identifier;
 
     /**
-     * if set this value overrides the current user as modifier
+     * If set this value overrides the current user as modifier
      *
      * @var mixed
      */

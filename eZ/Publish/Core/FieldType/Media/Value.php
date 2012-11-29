@@ -18,21 +18,21 @@ class Value extends BaseValue
     /**
      * If the media has a controller when being displayed
      *
-     * @var bool
+     * @var boolean
      */
     public $hasController = false;
 
     /**
-     * if the media should be automatically played
+     * If the media should be automatically played
      *
-     * @var bool
+     * @var boolean
      */
     public $autoplay = false;
 
     /**
-     * if the media should be played in a loop
+     * If the media should be played in a loop
      *
-     * @var bool
+     * @var boolean
      */
     public $loop = false;
 

@@ -117,6 +117,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     public function assertFieldDataLoadedCorrect( Field $field )
@@ -231,7 +232,7 @@ class UserIntegrationTest extends BaseIntegrationTest
                 null,
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentValidationException'
             ),
-            // TODO: Define more failure cases ...
+            // @todo: Define more failure cases ...
         );
     }
 
@@ -341,6 +342,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      * Overwrite normal content creation
      *
      * @param mixed $fieldData
+     *
      * @return void
      */
     protected function createContent( $fieldData, $contentType = null )

@@ -63,7 +63,7 @@
 {% endspaceless %}
 {% endblock %}
 
-{# TODO: add translate filter #}
+{# @todo: add translate filter #}
 {% block ezboolean_field %}
 {% spaceless %}
     {% set field_value = field.value.bool ? 'Yes' : 'No' %}
@@ -71,7 +71,7 @@
 {% endspaceless %}
 {% endblock %}
 
-{# TODO:
+{# @todo:
  # - handle default format
  # - handle eztime
  # - handle ezdate
@@ -101,7 +101,7 @@
 {% endspaceless %}
 {% endblock %}
 
-{# TODO: handle localization #}
+{# @todo: handle localization #}
 {% block ezfloat_field %}
 {% spaceless %}
     {% if field.value %}
@@ -147,7 +147,7 @@
 {% endspaceless %}
 {% endblock %}
 
-{# TODO:
+{# @todo:
  # - add translate filter
  # - legacy used to dump is_locked attribute
  #}
@@ -166,7 +166,7 @@
 {% endspaceless %}
 {% endblock %}
 
-{# TODO: handle the unit of the fileSize (si operator in legacy template engine) #}
+{# @todo: handle the unit of the fileSize (si operator in legacy template engine) #}
 {% block ezbinaryfile_field %}
 {% spaceless %}
     {% if field.value %}
@@ -251,7 +251,7 @@
 {% endspaceless %}
 {% endblock %}
 
-{# TODO:
+{# @todo:
  # - include Gmaps JS only once if the field is used several times in the page
  # - add translate filter
  #}

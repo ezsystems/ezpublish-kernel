@@ -150,7 +150,7 @@ class UserServiceStub implements UserService
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
-     * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\UserGroup}
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
      */
@@ -384,7 +384,7 @@ class UserServiceStub implements UserService
     /**
      * Loads a user
      *
-     * @param integer $userId
+     * @param int $userId
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
@@ -403,6 +403,7 @@ class UserServiceStub implements UserService
      * Loads anonymous user
      *
      * @uses loadUser()
+     *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
     public function loadAnonymousUser()
@@ -614,7 +615,7 @@ class UserServiceStub implements UserService
     }
 
     /**
-     * loads the users of a user group
+     * Loads the users of a user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the users or user group
      *
@@ -674,7 +675,7 @@ class UserServiceStub implements UserService
     /**
      * Instantiate a user create class
      *
-     * @paramb string $login the login of the new user
+     * @param string $login the login of the new user
      * @param string $email the email of the new user
      * @param string $password the plain password of the new user
      * @param string $mainLanguageCode the main language for the underlying content object

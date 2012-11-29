@@ -77,7 +77,7 @@ class StringLengthValidator extends Validator
      *
      * @param \eZ\Publish\Core\FieldType\TextLine\Value $value
      *
-     * @return bool
+     * @return boolean
      */
     public function validate( BaseValue $value )
     {

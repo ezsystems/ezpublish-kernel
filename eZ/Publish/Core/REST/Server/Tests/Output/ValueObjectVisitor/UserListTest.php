@@ -51,6 +51,7 @@ class UserListTest extends ValueObjectVisitorBaseTest
      * Test if result contains UserList element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsUserListElement( $result )
@@ -69,6 +70,7 @@ class UserListTest extends ValueObjectVisitorBaseTest
      * Test if result contains UserList element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsUserListAttributes( $result )

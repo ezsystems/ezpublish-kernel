@@ -25,7 +25,7 @@ class ContentTypeCreateStructStub extends ContentTypeCreateStruct
     }
 
     /**
-     * adds a new field definition
+     * Adds a new field definition
      *
      * @param FieldDefinitionCreate $fieldDef
      */

@@ -30,6 +30,7 @@ class LegacyStorage extends Gateway
      * Set database handler for this gateway
      *
      * @param mixed $dbHandler
+     *
      * @return void
      * @throws \RuntimeException if $dbHandler is not an instance of
      *         {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler}
@@ -51,8 +52,9 @@ class LegacyStorage extends Gateway
     /**
      * Returns the active connection
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      * @throws \RuntimeException if no connection has been set, yet.
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected function getConnection()
     {
@@ -94,6 +96,7 @@ class LegacyStorage extends Gateway
      * Fetches a row in ezurl table referenced by its $id
      *
      * @param mixed $id
+     *
      * @return null|array Hash with columns as keys or null if no entry can be found
      */
     private function fetchById( $id )
@@ -124,6 +127,7 @@ class LegacyStorage extends Gateway
      * Fetches a row in ezurl table referenced by $link
      *
      * @param string $link
+     *
      * @return null|array Hash with columns as keys or null if no entry can be found
      */
     private function fetchByLink( $link )
@@ -155,6 +159,7 @@ class LegacyStorage extends Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     *
      * @return mixed
      */
     private function insert( VersionInfo $versionInfo, Field $field )

@@ -88,6 +88,7 @@ class ConfigurationManager
      *
      * @uses load() Used the first time an instance is created
      * @param string $moduleName The name of the module (w/o .ini suffix as we would want to support other formats in the future)
+     *
      * @return \eZ\Publish\Core\Base\Configuration
      */
     public function getConfiguration( $moduleName = 'base' )
@@ -119,6 +120,7 @@ class ConfigurationManager
      *
      * @throws InvalidArgumentValue If scope has wrong value
      * @param string $scope See {@link $globalPaths} for scope values (first level keys)
+     *
      * @return array
      */
     public function getGlobalDirs( $scope = null )
@@ -139,7 +141,8 @@ class ConfigurationManager
      * @throws InvalidArgumentValue If scope has wrong value
      * @param array $paths
      * @param string $scope See {@link $globalPaths} for scope values (first level keys)
-     * @return bool Return true if paths actually changed, and thus instances where reset.
+     *
+     * @return boolean Return true if paths actually changed, and thus instances where reset.
      */
     public function setGlobalDirs( array $paths, $scope = null )
     {

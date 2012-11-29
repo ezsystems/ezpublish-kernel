@@ -34,6 +34,7 @@ class Location extends Provider implements LocationViewProviderInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $viewType Variation of display for your content.
+     *
      * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|void
      */
     public function getView( APILocation $location, $viewType )
@@ -74,7 +75,7 @@ class Location extends Provider implements LocationViewProviderInterface
                         false,
                         $params
                     );
-                    // TODO: What about persistent variable & css/js added from ezjscore ? We ideally want to handle that as well
+                    // @todo: What about persistent variable & css/js added from ezjscore ? We ideally want to handle that as well
                     return $moduleResult['content'];
                 },
                 false

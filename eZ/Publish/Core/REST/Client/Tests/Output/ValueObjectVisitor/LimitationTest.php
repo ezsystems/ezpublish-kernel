@@ -47,6 +47,7 @@ class LimitationTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains limitation element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLimitationElement( $result )
@@ -68,6 +69,7 @@ class LimitationTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains limitation attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLimitationAttributes( $result )
@@ -90,6 +92,7 @@ class LimitationTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains values element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsValuesElement( $result )

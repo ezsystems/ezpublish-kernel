@@ -49,6 +49,7 @@ class VersionListTest extends ValueObjectVisitorBaseTest
      * Test if result contains VersionList element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsVersionListElement( $result )
@@ -67,6 +68,7 @@ class VersionListTest extends ValueObjectVisitorBaseTest
      * Test if result contains VersionList element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsVersionListAttributes( $result )

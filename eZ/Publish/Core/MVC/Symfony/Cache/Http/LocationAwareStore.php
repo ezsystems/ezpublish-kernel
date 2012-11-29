@@ -58,6 +58,7 @@ class LocationAwareStore extends Store implements ContentPurger
      * @see \eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController::viewLocation()
      *
      * @param \Symfony\Component\HttpFoundation\Response $response
+     *
      * @return string
      */
     protected function generateContentDigest( Response $response )
@@ -76,6 +77,7 @@ class LocationAwareStore extends Store implements ContentPurger
      * Will detect if $key is eZ Publish specific.
      *
      * @param string $key
+     *
      * @return string
      */
     public function getPath( $key )
@@ -127,7 +129,8 @@ class LocationAwareStore extends Store implements ContentPurger
      * If not, regular purge by URI will occur.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return bool True if purge was successful. False otherwise
+     *
+     * @return boolean True if purge was successful. False otherwise
      */
     public function purgeByRequest( Request $request )
     {
@@ -161,7 +164,7 @@ class LocationAwareStore extends Store implements ContentPurger
     /**
      * Purges all cached content
      *
-     * @return bool
+     * @return boolean
      */
     public function purgeAllContent()
     {
@@ -172,7 +175,8 @@ class LocationAwareStore extends Store implements ContentPurger
      * Purges cache for $locationId
      *
      * @param int|null $locationId. If null, all locations will be purged.
-     * @return bool
+     *
+     * @return boolean
      */
     private function purgeLocation( $locationId )
     {
@@ -218,6 +222,7 @@ class LocationAwareStore extends Store implements ContentPurger
      * @internal
      *
      * @param int $locationId. If null, will return a global cache lock name (purging all content)
+     *
      * @return string
      */
     public function getLocationCacheLockName( $locationId = null )
@@ -235,6 +240,7 @@ class LocationAwareStore extends Store implements ContentPurger
      * @internal
      *
      * @param int $locationId
+     *
      * @return string
      */
     public function getLocationCacheDir( $locationId = null )

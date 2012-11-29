@@ -62,6 +62,7 @@ class Html5 implements Converter
      * Convert $xmlDoc from internal representation DOMDocument to HTML5
      *
      * @param \DOMDocument $xmlDoc
+     *
      * @return string
      */
     public function convert( DOMDocument $xmlDoc )

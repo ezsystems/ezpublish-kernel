@@ -121,7 +121,7 @@ class Visitor
     }
 
     /**
-     * Add a new visitor for the given class
+     * Adds a new visitor for the given class
      *
      * @param string $class
      * @param \eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor $visitor
@@ -177,6 +177,7 @@ class Visitor
      * Visit struct returned by controllers
      *
      * @param mixed $data
+     *
      * @return \eZ\Publish\Core\REST\Common\Message
      */
     public function visit( $data )
@@ -186,7 +187,7 @@ class Visitor
         $this->generator->startDocument( $data );
         $this->visitValueObject( $data );
 
-        //@TODO Needs refactoring!
+        //@todo Needs refactoring!
         // A hackish solution to enable outer visitors to disable setting
         // of certain headers in inner visitors, for example Accept-Patch header
         // which is valid in GET/POST/PATCH for a resource, but must not appear
@@ -251,8 +252,10 @@ class Visitor
      * Generates a media type for $type based on the used generator.
      *
      * @param string $type
-     * @return string
+     *
      * @see \eZ\Publish\Core\REST\Common\Generator::getMediaType()
+     *
+     * @return string
      */
     public function getMediaType( $type )
     {

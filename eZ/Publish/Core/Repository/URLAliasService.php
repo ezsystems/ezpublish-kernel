@@ -368,10 +368,8 @@ class URLAliasService implements URLAliasServiceInterface
     }
 
     /**
-     *
-     *
      * @param array $pathElementData
-     * @param $pathElement
+     * @param string $pathElement
      *
      * @return string|boolean
      */
@@ -637,8 +635,6 @@ class URLAliasService implements URLAliasServiceInterface
     }
 
     /**
-     *
-     *
      * @param string $url
      *
      * @return string

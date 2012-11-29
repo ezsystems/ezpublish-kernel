@@ -60,7 +60,7 @@ class ContentTypeDraft extends APIContentTypeDraft
      *
      * @param string $property
      *
-     * @return bool
+     * @return boolean
      */
     public function __isset( $property )
     {
@@ -92,9 +92,10 @@ class ContentTypeDraft extends APIContentTypeDraft
     }
 
     /**
+     * This method returns the name of the content type in the given language
      *
-     * this method returns the name of the content type in the given language
      * @param string $languageCode
+     *
      * @return string the name for the given language or null if none exists.
      */
     public function getName( $languageCode )
@@ -103,7 +104,7 @@ class ContentTypeDraft extends APIContentTypeDraft
     }
 
     /**
-     *  This method returns the human readable description of the content type
+     * This method returns the human readable description of the content type
      *
      * The structure of this field is:
      * <code>
@@ -118,8 +119,10 @@ class ContentTypeDraft extends APIContentTypeDraft
     }
 
     /**
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
+     *
      * @param string $languageCode
+     *
      * @return string the description for the given language or null if none exists.
      */
     public function getDescription( $languageCode )
@@ -129,6 +132,7 @@ class ContentTypeDraft extends APIContentTypeDraft
 
     /**
      * This method returns the content type groups this content type is assigned to
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
     public function getContentTypeGroups()
@@ -147,9 +151,10 @@ class ContentTypeDraft extends APIContentTypeDraft
     }
 
     /**
-     * this method returns the field definition for the given identifier
+     * This method returns the field definition for the given identifier
      *
      * @param string $fieldDefinitionIdentifier
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
     public function getFieldDefinition( $fieldDefinitionIdentifier )
@@ -158,7 +163,7 @@ class ContentTypeDraft extends APIContentTypeDraft
     }
 
     /**
-     * this method returns the field definition for the given id
+     * This method returns the field definition for the given id
      *
      * @param mixed $fieldDefinitionId
      *

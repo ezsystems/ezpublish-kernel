@@ -164,6 +164,7 @@ EOT
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     public function assertFieldDataLoadedCorrect( Field $field)
@@ -356,7 +357,7 @@ EOT
 
     /**
      * @dataProvider provideFromHashData
-     * @TODO: Requires correct registered FieldTypeService, needs to be
+     * @todo: Requires correct registered FieldTypeService, needs to be
      *        maintained!
      */
     public function testFromHash( $hash, $expectedValue = null )

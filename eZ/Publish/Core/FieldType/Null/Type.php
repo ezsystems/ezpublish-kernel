@@ -26,6 +26,7 @@ class Type extends FieldType
      * Constructs field type object, initializing internal data structures.
      *
      * @param string $fieldTypeIdentifier
+     *
      * @return \eZ\Publish\Core\FieldType\Null\Type
      */
     public function __construct( $fieldTypeIdentifier )
@@ -39,8 +40,10 @@ class Type extends FieldType
      * Build a FiledType\Value object with the provided $value as value.
      *
      * @param int $value
-     * @return \eZ\Publish\Core\FieldType\Null\Value
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @return \eZ\Publish\Core\FieldType\Null\Value
      */
     public function buildValue( $value )
     {
@@ -48,7 +51,7 @@ class Type extends FieldType
     }
 
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -144,7 +147,7 @@ class Type extends FieldType
     /**
      * Returns whether the field type is searchable
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {

@@ -111,6 +111,7 @@ class BinaryBaseStorage extends GatewayBasedStorage
      * @param mixed $fieldId
      * @param string $versionNo
      * @param array $context
+     *
      * @return void
      */
     protected function removeOldFile( $fieldId, $versionNo, array $context )
@@ -160,7 +161,8 @@ class BinaryBaseStorage extends GatewayBasedStorage
     /**
      * @param array $fieldIds
      * @param array $context
-     * @return bool
+     *
+     * @return boolean
      */
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
@@ -184,7 +186,7 @@ class BinaryBaseStorage extends GatewayBasedStorage
     /**
      * Checks if field type has external data to deal with
      *
-     * @return bool
+     * @return boolean
      */
     public function hasFieldData()
     {

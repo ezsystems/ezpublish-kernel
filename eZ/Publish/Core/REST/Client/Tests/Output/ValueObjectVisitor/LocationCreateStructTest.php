@@ -54,6 +54,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains LocationCreate element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLocationCreateElement( $result )
@@ -75,6 +76,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains LocationCreate attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLocationCreateAttributes( $result )
@@ -96,6 +98,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains ParentLocation element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsParentLocationElement( $result )
@@ -114,6 +117,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains ParentLocation attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsParentLocationAttributes( $result )
@@ -136,6 +140,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains priority value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPriorityValueElement( $result )
@@ -156,6 +161,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains hidden value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsHiddenValueElement( $result )
@@ -176,6 +182,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains sortField value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSortFieldValueElement( $result )
@@ -196,6 +203,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains sortOrder value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSortOrderValueElement( $result )

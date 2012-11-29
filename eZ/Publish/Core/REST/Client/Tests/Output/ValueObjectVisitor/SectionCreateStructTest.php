@@ -50,6 +50,7 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains SectionInput element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSectionInputElement( $result )
@@ -72,6 +73,7 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains SectionInput attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSectionInputAttributes( $result )
@@ -93,6 +95,7 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains identifier value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsIdentifierValueElement( $result )
@@ -113,6 +116,7 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains name value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsNameValueElement( $result )

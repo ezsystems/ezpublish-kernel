@@ -129,6 +129,7 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     public function assertFieldDataLoadedCorrect( Field $field)
@@ -241,7 +242,9 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
      *
      * @param mixed $failingValue
      * @param string $expectedException
+     *
      * @dataProvider provideInvalidUpdateFieldData
+     *
      * @return void
      */
     public function testUpdateContentFails( $failingValue, $expectedException )

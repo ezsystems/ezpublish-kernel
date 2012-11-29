@@ -16,7 +16,7 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 class Value extends BaseValue
 {
     /**
-     * email addreas
+     * Email addreas
      *
      * @var string
      */

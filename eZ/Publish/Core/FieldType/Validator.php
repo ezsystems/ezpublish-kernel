@@ -81,8 +81,6 @@ abstract class Validator
     }
 
     /**
-     * @abstract
-     *
      * @param mixed $constraints
      *
      * @return mixed
@@ -98,8 +96,6 @@ abstract class Validator
      * When a check against a constraint has failed, an entry will be added to the
      * $errors array.
      *
-     * @abstract
-     *
      * @param \eZ\Publish\Core\FieldType\Value $value
      *
      * @return boolean
@@ -107,7 +103,7 @@ abstract class Validator
     abstract public function validate( Value $value );
 
     /**
-     * Return array of messages on performed validations.
+     * Returns array of messages on performed validations.
      *
      * When no validation errors occurred, the returned array should be empty.
      *
@@ -124,6 +120,7 @@ abstract class Validator
      * @internal
      * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      * @param array $constraints
+     *
      * @return void
      */
     public function initializeWithConstraints( array $constraints )
@@ -152,8 +149,10 @@ abstract class Validator
      * Returns constraint value, from its $name
      *
      * @param string $name
-     * @return mixed
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
+     *
+     * @return mixed
      */
     public function __get( $name )
     {
@@ -171,6 +170,7 @@ abstract class Validator
      *
      * @param string $name
      * @param mixed $value
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function __set( $name, $value )
