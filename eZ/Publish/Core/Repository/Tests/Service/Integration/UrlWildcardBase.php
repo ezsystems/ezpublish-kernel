@@ -9,30 +9,15 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
 
-use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest,
-    eZ\Publish\Core\Repository\URLWildcardService,
-    eZ\Publish\API\Repository\Values\Content\URLWildcard,
-    eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
+use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
+use eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
 
 /**
  * Test case for UrlWildcard Service
  */
 abstract class UrlWildcardBase extends BaseServiceTest
 {
-    /**
-     * Test for the __construct() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::__construct
-     */
-    public function testConstructor()
-    {
-        $service = $this->getMockedService();
-
-        self::assertAttributeSame( $this->getRepositoryMock(), "repository", $service );
-        self::assertAttributeSame( $this->getHandlerMock(), "urlWildcardHandler", $service );
-        self::assertAttributeSame( array( "settings" ), "settings", $service );
-    }
-
     /**
      * Test for the load() method.
      *
@@ -189,30 +174,6 @@ abstract class UrlWildcardBase extends BaseServiceTest
     }
 
     /**
-     * Test for the create() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::create
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testCreateThrowsUnauthorizedException()
-    {
-        $mockedService = $this->getMockedService();
-        $repositoryMock = $this->getRepositoryMock();
-        $repositoryMock->expects(
-            $this->once()
-        )->method(
-            "hasAccess"
-        )->with(
-            $this->equalTo( "content" ),
-            $this->equalTo( "urltranslator" )
-        )->will(
-            $this->returnValue( false )
-        );
-
-        $mockedService->create( "lorem/ipsum", "opossum", true );
-    }
-
-    /**
      * Test for the remove() method.
      *
      * @covers \eZ\Publish\Core\Repository\URLWildcardService::remove
@@ -252,30 +213,6 @@ abstract class UrlWildcardBase extends BaseServiceTest
             $urlWildcard,
             $service->load( 1 )
         );
-    }
-
-    /**
-     * Test for the remove() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::remove
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testRemoveThrowsUnauthorizedException()
-    {
-        $mockedService = $this->getMockedService();
-        $repositoryMock = $this->getRepositoryMock();
-        $repositoryMock->expects(
-            $this->once()
-        )->method(
-            "hasAccess"
-        )->with(
-            $this->equalTo( "content" ),
-            $this->equalTo( "urltranslator" )
-        )->will(
-            $this->returnValue( false )
-        );
-
-        $mockedService->remove( new URLWildcard() );
     }
 
     /**
@@ -475,63 +412,5 @@ abstract class UrlWildcardBase extends BaseServiceTest
         $service = $this->repository->getURLWildcardService();
 
         $service->translate( "cant/get/there/from/here" );
-    }
-
-    /**
-     * @var \eZ\Publish\Core\Repository\URLWildcardService
-     */
-    private $mockedService;
-
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    private $repositoryMock;
-
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
-     */
-    private $handlerMock;
-
-    /**
-     * @return \eZ\Publish\Core\Repository\URLWildcardService
-     */
-    private function getMockedService()
-    {
-        if ( !isset( $this->mockedService ) )
-        {
-            $this->mockedService = new URLWildcardService(
-                $this->getRepositoryMock(),
-                $this->getHandlerMock(),
-                array( "settings" )
-            );
-        }
-
-        return $this->mockedService;
-    }
-
-    /**
-     * @return \eZ\Publish\API\Repository\Repository|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getRepositoryMock()
-    {
-        if ( !isset( $this->repositoryMock ) )
-        {
-            $this->repositoryMock = self::getMock( "eZ\\Publish\\API\\Repository\\Repository" );
-        }
-
-        return $this->repositoryMock;
-    }
-
-    /**
-     * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getHandlerMock()
-    {
-        if ( !isset( $this->handlerMock ) )
-        {
-            $this->handlerMock = self::getMock( "eZ\\Publish\\SPI\\Persistence\\Content\\UrlWildcard\\Handler" );
-        }
-
-        return $this->handlerMock;
     }
 }

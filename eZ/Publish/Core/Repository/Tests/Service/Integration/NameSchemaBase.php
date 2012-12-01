@@ -9,6 +9,7 @@
 
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
+
 use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
 use eZ\Publish\Core\Repository\NameSchemaService;
 use eZ\Publish\Core\Repository\Values\Content\Content;
@@ -24,130 +25,6 @@ use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
  */
 abstract class NameSchemaBase extends BaseServiceTest
 {
-    /**
-     * Test eZ\Publish\Core\Repository\NameSchemaService method
-     * @covers \eZ\Publish\Core\Repository\NameSchemaService::resolveUrlAliasSchema
-     */
-    public function testResolveUrlAliasSchema()
-    {
-        $serviceMock = $this->getServiceMock( array( "resolve" ) );
-
-        $content = $this->buildTestContent();
-
-        $serviceMock->expects(
-            $this->once()
-        )->method(
-            "resolve"
-        )->with(
-            "<urlalias_schema>",
-            $this->equalTo( $content->contentType ),
-            $this->equalTo( $content->fields ),
-            $this->equalTo( $content->versionInfo->languageCodes )
-        )->will(
-            $this->returnValue( 42 )
-        );
-
-        $result = $serviceMock->resolveUrlAliasSchema( $content );
-
-        self::assertEquals( 42, $result );
-    }
-
-    /**
-     * Test eZ\Publish\Core\Repository\NameSchemaService method
-     * @covers \eZ\Publish\Core\Repository\NameSchemaService::resolveUrlAliasSchema
-     */
-    public function testResolveUrlAliasSchemaFallbackToNameSchema()
-    {
-        $serviceMock = $this->getServiceMock( array( "resolve" ) );
-
-        $content = $this->buildTestContent( "<name_schema>", "" );
-
-        $serviceMock->expects(
-            $this->once()
-        )->method(
-            "resolve"
-        )->with(
-            "<name_schema>",
-            $this->equalTo( $content->contentType ),
-            $this->equalTo( $content->fields ),
-            $this->equalTo( $content->versionInfo->languageCodes )
-        )->will(
-            $this->returnValue( 42 )
-        );
-
-        $result = $serviceMock->resolveUrlAliasSchema( $content );
-
-        self::assertEquals( 42, $result );
-    }
-
-    /**
-     * Test eZ\Publish\Core\Repository\NameSchemaService method
-     * @covers \eZ\Publish\Core\Repository\NameSchemaService::resolveNameSchema
-     */
-    public function testResolveNameSchema()
-    {
-        $serviceMock = $this->getServiceMock( array( "resolve" ) );
-
-        $content = $this->buildTestContent();
-
-        $serviceMock->expects(
-            $this->once()
-        )->method(
-            "resolve"
-        )->with(
-            "<name_schema>",
-            $this->equalTo( $content->contentType ),
-            $this->equalTo( $content->fields ),
-            $this->equalTo( $content->versionInfo->languageCodes )
-        )->will(
-            $this->returnValue( 42 )
-        );
-
-        $result = $serviceMock->resolveNameSchema( $content );
-
-        self::assertEquals( 42, $result );
-    }
-
-    /**
-     * Test eZ\Publish\Core\Repository\NameSchemaService method
-     * @covers \eZ\Publish\Core\Repository\NameSchemaService::resolveNameSchema
-     */
-    public function testResolveNameSchemaWithFields()
-    {
-        $serviceMock = $this->getServiceMock( array( "resolve" ) );
-
-        $content = $this->buildTestContent();
-        $fields = array();
-        $fields["text3"]["cro-HR"] = new TextLineValue( "tri" );
-        $fields["text1"]["ger-DE"] = new TextLineValue( "ein" );
-        $fields["text2"]["ger-DE"] = new TextLineValue( "zwei" );
-        $fields["text3"]["ger-DE"] = new TextLineValue( "drei" );
-        $mergedFields = $fields;
-        $mergedFields["text1"]["cro-HR"] = new TextLineValue( "jedan" );
-        $mergedFields["text2"]["cro-HR"] = new TextLineValue( "dva" );
-        $mergedFields["text1"]["eng-GB"] = new TextLineValue( "one" );
-        $mergedFields["text2"]["eng-GB"] = new TextLineValue( "two" );
-        $mergedFields["text3"]["eng-GB"] = new TextLineValue( "" );
-        $languages = array( "eng-GB", "cro-HR", "ger-DE" );
-
-        $serviceMock->expects(
-            $this->once()
-        )->method(
-            "resolve"
-        )->with(
-            "<name_schema>",
-            $this->equalTo( $content->contentType ),
-            $this->equalTo( $mergedFields ),
-            $this->equalTo( $languages )
-        )->will(
-            $this->returnValue( 42 )
-        );
-
-        $result = $serviceMock->resolveNameSchema( $content, $fields, $languages );
-
-        self::assertEquals( 42, $result );
-    }
-
     /**
      * Test eZ\Publish\Core\Repository\NameSchemaService method
      * @covers \eZ\Publish\Core\Repository\NameSchemaService::resolve
@@ -419,6 +296,10 @@ abstract class NameSchemaBase extends BaseServiceTest
         );
     }
 
+    /**
+     * @param object $service
+     * @param array $configuration
+     */
     protected function setConfiguration( $service, array $configuration )
     {
         $refObject = new \ReflectionObject( $service );
@@ -428,31 +309,5 @@ abstract class NameSchemaBase extends BaseServiceTest
             $service,
             $configuration
         );
-    }
-
-    /**
-     * @var \eZ\Publish\Core\Repository\NameSchemaService|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $serviceMock;
-
-    /**
-     * Returns service with Repository mock and given $settings.
-     *
-     * @return \eZ\Publish\Core\Repository\NameSchemaService|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getServiceMock( array $methods )
-    {
-        if ( !isset( $this->serviceMock ) )
-        {
-            $this->serviceMock = self::getMock(
-                "eZ\\Publish\\Core\\Repository\\NameSchemaService",
-                $methods,
-                array(),
-                '',
-                false
-            );
-        }
-
-        return $this->serviceMock;
     }
 }

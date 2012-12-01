@@ -8,12 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
-use PHPUnit_Framework_TestCase,
-    eZ\Publish\API\Repository\Values\ValueObject,
-    eZ\Publish\Core\Repository\Values\User\User,
-    eZ\Publish\Core\Repository\Values\Content\Content,
-    eZ\Publish\Core\Repository\Values\Content\VersionInfo,
-    eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+
+use PHPUnit_Framework_TestCase;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\Core\Repository\Values\User\User;
+use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 
 /**
  * Base test case for tests on services

@@ -8,12 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
-use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest,
-    eZ\Publish\API\Repository\Values\Content\Section,
 
-    eZ\Publish\API\Repository\Exceptions\NotFoundException,
-    eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException,
-    eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;
+use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
+use eZ\Publish\API\Repository\Values\Content\Section;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
+use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;
 
 /**
  * Test case for Section Service using InMemory storage class

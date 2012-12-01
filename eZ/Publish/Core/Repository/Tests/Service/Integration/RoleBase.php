@@ -9,15 +9,13 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
 
-use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest,
-
-    eZ\Publish\Core\Repository\Values\User\Role,
-    eZ\Publish\Core\Repository\Values\User\Policy,
-    eZ\Publish\API\Repository\Values\User\Limitation,
-
-    eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound,
-    eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException,
-    eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
+use eZ\Publish\Core\Repository\Values\User\Role;
+use eZ\Publish\Core\Repository\Values\User\Policy;
+use eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;
+use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for Role Service

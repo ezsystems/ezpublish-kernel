@@ -9,17 +9,15 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
 
-use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest,
-
-    eZ\Publish\Core\Repository\Values\User\User,
-    eZ\Publish\Core\Repository\Values\User\UserGroup,
-    eZ\Publish\Core\Repository\Values\Content\Content,
-    eZ\Publish\Core\Repository\Values\Content\VersionInfo,
-    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
-
-    eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound,
-    eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException,
-    eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
+use eZ\Publish\Core\Repository\Values\User\User;
+use eZ\Publish\Core\Repository\Values\User\UserGroup;
+use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;
+use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for User Service

@@ -8,14 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
-use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest,
-    eZ\Publish\Core\Repository\Values\Content\VersionInfo,
-    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
-    eZ\Publish\API\Repository\Values\Content\LocationCreateStruct,
-    eZ\Publish\API\Repository\Values\Content\Content as APIContent,
-    eZ\Publish\API\Repository\Values\Content\Relation,
-    eZ\Publish\Core\Repository\Values\Content\Content,
-    eZ\Publish\API\Repository\Exceptions\NotFoundException;
+
+use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
+use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
+use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for Content service
@@ -23,13 +22,6 @@ use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest
 abstract class ContentBase extends BaseServiceTest
 {
     protected $testContentType;
-
-    /**
-     * Returns a persistence Handler mock
-     *
-     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $persistenceHandlerMock;
 
     protected function getContentInfoExpectedValues()
     {
@@ -380,32 +372,6 @@ abstract class ContentBase extends BaseServiceTest
     }
 
     /**
-     * Test for the loadVersionInfo() method.
-     *
-     * @depends testLoadVersionInfoById
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo
-     */
-    public function testLoadVersionInfo()
-    {
-        $contentServiceMock = $this->getPartlyMockedService(
-            array( "loadVersionInfoById" )
-        );
-        $contentServiceMock->expects(
-            $this->once()
-        )->method(
-            "loadVersionInfoById"
-        )->with(
-            $this->equalTo( 42 ),
-            $this->equalTo( 7 )
-        );
-
-        $contentServiceMock->loadVersionInfo(
-            new ContentInfo( array( "id" => 42 ) ),
-            7
-        );
-    }
-
-    /**
      * Data provider for testLoadContent()
      *
      * @return array
@@ -557,66 +523,6 @@ abstract class ContentBase extends BaseServiceTest
         // Throws an exception because content does not exists in "eng-GB" language
         $content = $contentService->loadContent( 4, array( "eng-US", "eng-GB" ) );
         /* END: Use Case */
-    }
-
-    /**
-     * Test for the loadContentByContentInfo() method.
-     *
-     * @depends testLoadContent
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentByContentInfo
-     */
-    public function testLoadContentByContentInfo()
-    {
-        $contentServiceMock = $this->getPartlyMockedService(
-            array( "loadContent" )
-        );
-        $contentServiceMock->expects(
-            $this->once()
-        )->method(
-            "loadContent"
-        )->with(
-            $this->equalTo( 42 ),
-            $this->equalTo( array( "cro-HR" ) ),
-            $this->equalTo( 7 )
-        );
-
-        $contentServiceMock->loadContentByContentInfo(
-            new ContentInfo( array( "id" => 42 ) ),
-            array( "cro-HR" ),
-            7
-        );
-    }
-
-    /**
-     * Test for the loadContentByVersionInfo() method.
-     *
-     * @depends testLoadContent
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentByVersionInfo
-     */
-    public function testLoadContentByVersionInfo()
-    {
-        $contentServiceMock = $this->getPartlyMockedService(
-            array( "loadContent" )
-        );
-        $contentServiceMock->expects(
-            $this->once()
-        )->method(
-            "loadContent"
-        )->with(
-            $this->equalTo( 42 ),
-            $this->equalTo( array( "cro-HR" ) ),
-            $this->equalTo( 7 )
-        );
-
-        $contentServiceMock->loadContentByVersionInfo(
-            new VersionInfo(
-                array(
-                    "contentInfo" => new ContentInfo( array( "id" => 42 ) ),
-                    "versionNo" => 7
-                )
-            ),
-            array( "cro-HR" )
-        );
     }
 
     /**
@@ -2804,46 +2710,6 @@ abstract class ContentBase extends BaseServiceTest
         $contentService->deleteRelation(
             $contentDraft->getVersionInfo(),
             $mediaContentInfo
-        );
-    }
-
-    /**
-     * Returns a persistence Handler mock
-     *
-     * @return \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getPersistenceHandlerMock()
-    {
-        if ( !isset( $this->persistenceHandlerMock ) )
-        {
-            $this->persistenceHandlerMock = $this->getMock(
-                "eZ\\Publish\\SPI\\Persistence\\Handler",
-                array(),
-                array(),
-                '',
-                false
-            );
-        }
-
-        return $this->persistenceHandlerMock;
-    }
-
-    /**
-     * Returns the content service to test with $methods mocked
-     *
-     * @param string[] $methods
-     *
-     * @return \eZ\Publish\Core\Repository\ContentService|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getPartlyMockedService( array $methods = array() )
-    {
-        return $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\ContentService",
-            $methods,
-            array(
-                $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' ),
-                $this->getPersistenceHandlerMock()
-            )
         );
     }
 

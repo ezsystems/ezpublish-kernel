@@ -9,14 +9,14 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
 
-use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest,
-    eZ\Publish\Core\Repository\Values\Content\TrashItem,
-    eZ\Publish\Core\Repository\Values\Content\Location,
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\API\Repository\Values\Content\LocationCreateStruct,
-    eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound,
-    eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException,
-    eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
+use eZ\Publish\Core\Repository\Values\Content\TrashItem;
+use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;
+use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for Trash Service

@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
-use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest,
-    eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\API\Repository\Values\ContentType\ContentType,
-    eZ\Publish\API\Repository\Exceptions,
-    eZ\Publish\Core\FieldType\XmlText\Value as XmlValue;
+
+use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Exceptions;
+use eZ\Publish\Core\FieldType\XmlText\Value as XmlValue;
 
 /**
  * Test case for ContentType service
