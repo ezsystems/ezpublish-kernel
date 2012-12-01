@@ -1,14 +1,14 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\SectionTest class
+ * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\SectionTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Service;
-use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
+namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
+use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\Section,
 
     eZ\Publish\API\Repository\Exceptions\NotFoundException,

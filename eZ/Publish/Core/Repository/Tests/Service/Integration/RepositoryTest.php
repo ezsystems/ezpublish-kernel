@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Service;
+namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
 
-use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest;
+use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
 
 /**
  * @group repository

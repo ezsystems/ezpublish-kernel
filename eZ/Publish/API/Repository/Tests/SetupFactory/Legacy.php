@@ -224,7 +224,7 @@ class Legacy extends SetupFactory
     {
         if ( !isset( self::$initialData ) )
         {
-            self::$initialData = include __DIR__ . '/../../../../Core/Repository/Tests/Service/Legacy/_fixtures/clean_ezdemo_47_dump.php';
+            self::$initialData = include __DIR__ . '/../../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php';
             // self::$initialData = include __DIR__ . '/../../../../Core/Repository/Tests/Service/Legacy/_fixtures/full_dump.php';
         }
         return self::$initialData;
