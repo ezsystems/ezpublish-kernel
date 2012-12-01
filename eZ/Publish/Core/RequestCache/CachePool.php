@@ -27,12 +27,18 @@ class CachePool extends ArrayObject
     private $limit;
 
     /**
+     * @var bool
+     */
+    private $useWeakRef;
+
+    /**
      * @param array|null $input
      * @param int $cacheItemLimit
      */
-    public function __construct( array $input = null, $cacheItemLimit = 100  )
+    public function __construct( array $input = null, $cacheItemLimit = 100 )
     {
         $this->limit = $cacheItemLimit;
+        $this->useWeakRef = class_exists( 'WeakRef', false );
         parent::__construct( $input );
     }
 
@@ -46,20 +52,43 @@ class CachePool extends ArrayObject
     public function set( $key, $value )
     {
         // Check if we have reached the limit of cache items
-        if ( !$this->offsetExists( $key ) && $this->count() >= $this->limit )
+        if ( $value!== null && !$this->offsetExists( $key ) && $this->count() >= $this->limit )
+            $this->reducePool();
+
+        if ( $value !== null && $this->useWeakRef )
+            $this->offsetSet( $key, new WeakRef( $value ) );
+        else
+            $this->offsetSet( $key, $value );
+        return $value;
+    }
+
+    /**
+     * Reduces the size of the pool, used when $limit is reached by {@see set()}
+     */
+    protected function reducePool()
+    {
+        // remove expired references if weakRef
+        if ( $this->useWeakRef )
         {
-            $this->exchangeArray(
-                array_slice(
-                    $this->getArrayCopy(),
-                    ((int) $this->limit * 0.3 ),// Remove 30% to avoid having to remove on each set()
-                    null,
-                    true
-                )
-            );
+            // @todo Test!
+            /** @var $value \WeakRef */
+            foreach ( $this as $key => $value )
+            {
+                if ( !$value->valid() )
+                    $this->offsetSet( $key, null );
+
+            }
         }
 
-        $this->offsetSet( $key, $value );
-        return $value;
+        // remove excess items
+        $this->exchangeArray(
+            array_slice(
+                $this->getArrayCopy(),
+                ((int) $this->limit * 0.3 ),// Remove 30% to avoid having to remove on each set()
+                null,
+                true
+            )
+        );
     }
 
     /**
