@@ -435,7 +435,6 @@ class ContentService implements ContentServiceInterface
             $contentCreateStruct->alwaysAvailable = false;
         }
 
-        // @todo: Add support for structs in Limitations
         foreach ( $locationCreateStructs as $locationCreateStruct )
         {
             if ( !$this->repository->canUser( 'content', 'create', $contentCreateStruct, $locationCreateStruct ) )
@@ -601,10 +600,11 @@ class ContentService implements ContentServiceInterface
                     new FieldTypeEvents\PreCreateEvent(
                         array(
                             'fieldDefinition' => $eventListenerFieldType['definition'],
-                            'field' => new Field(// Create new Field to make sure the correct fieldValue is used
+                            // Create new Field to make sure the correct fieldValue as it was maybe changed above
+                            'field' => new Field(
                                 array(
                                     'fieldDefIdentifier' => $fieldTypeIdentifier,
-                                    'value' => $field->$fieldValues[$fieldTypeIdentifier][$field->languageCode],
+                                    'value' => $fieldValues[$fieldTypeIdentifier][$field->languageCode],
                                     'languageCode' => $field->languageCode,
                                 )
                             )
