@@ -19,7 +19,7 @@ class EzPublishLegacyExtension extends Extension
     /**
      * Loads a specific configuration.
      *
-     * @param array            $configs    An array of configuration values
+     * @param array $configs An array of configuration values
      * @param ContainerBuilder $container A ContainerBuilder instance
      *
      * @throws InvalidArgumentException When provided tag is not defined in this extension

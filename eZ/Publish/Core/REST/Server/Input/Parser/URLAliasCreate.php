@@ -42,6 +42,7 @@ class URLAliasCreate extends Base
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
      * @return array
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )

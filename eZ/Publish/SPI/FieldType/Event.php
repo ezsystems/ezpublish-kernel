@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Values\ValueObject as APIValueObject;
  * identified the occurred event. The properties of the class give the needed
  * event context.
  *
- * @TODO Add VersionInfo parameter
+ * @todo Add VersionInfo parameter
  */
 abstract class Event extends APIValueObject
 {

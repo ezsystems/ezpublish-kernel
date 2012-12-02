@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values;
 class RelationTest extends BaseTest
 {
     /**
-     * @var eZ\Publish\Core\REST\Client\ContentService
+     * @var \eZ\Publish\Core\REST\Client\ContentService
      */
     protected $contentServiceMock;
 
@@ -85,7 +85,7 @@ class RelationTest extends BaseTest
     }
 
     /**
-     * @return eZ\Publish\Core\REST\Client\ContentService
+     * @return \eZ\Publish\Core\REST\Client\ContentService
      */
     protected function getContentServiceMock()
     {

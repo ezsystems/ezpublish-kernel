@@ -18,7 +18,8 @@ interface LegacyCompatible
      * Returns true if object supports attribute $name
      *
      * @param string $name
-     * @return bool
+     *
+     * @return boolean
      */
     public function hasAttribute( $name );
 
@@ -26,8 +27,10 @@ interface LegacyCompatible
      * Returns the value of attribute $name.
      *
      * @param string $name
-     * @return mixed
+     *
      * @throws \InvalidArgumentException If $name is not supported as a valid attribute
+     *
+     * @return mixed
      */
     public function attribute( $name );
 

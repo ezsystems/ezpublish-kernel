@@ -19,6 +19,7 @@ interface URILexer
      * Analyses $uri and removes the siteaccess part, if needed.
      *
      * @param string $uri The original URI
+     *
      * @return string The modified URI
      */
     public function analyseURI( $uri );
@@ -27,6 +28,7 @@ interface URILexer
      * Analyses $linkUri when generating a link to a route, in order to have the siteaccess part back in the URI.
      *
      * @param string $linkUri
+     *
      * @return string The modified link URI
      */
     public function analyseLink( $linkUri );

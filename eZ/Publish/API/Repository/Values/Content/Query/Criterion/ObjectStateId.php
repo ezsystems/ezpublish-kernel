@@ -24,7 +24,7 @@ class ObjectStateId extends Criterion implements CriterionInterface
     /**
      * Creates a new ObjectStateId criterion
      *
-     * @param integer|array(integer) $value One or more object state IDs that must be matched
+     * @param int|int[] $value One or more object state IDs that must be matched
      *
      * @throws \InvalidArgumentException if a non numeric id is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator

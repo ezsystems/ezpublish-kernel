@@ -57,6 +57,7 @@ class RepositoryFactory
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\SPI\IO\Handler $ioHandler
+     *
      * @return \eZ\Publish\API\Repository\Repository
      */
     public function buildRepository( PersistenceHandler $persistenceHandler, IoHandler $ioHandler )
@@ -156,8 +157,10 @@ class RepositoryFactory
      * Returns a service based on a name string (content => contentService, etc)
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param $serviceName
+     * @param string $serviceName
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     *
      * @return mixed
      */
     public function buildService( Repository $repository, $serviceName )

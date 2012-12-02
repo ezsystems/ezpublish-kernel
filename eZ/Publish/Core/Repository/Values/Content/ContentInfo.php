@@ -40,6 +40,7 @@ class ContentInfo extends APIContentInfo
      * The content type of this content object
      *
      * @deprecated Use $contentTypeId and ContentTypeService
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     public function getContentType()
@@ -71,7 +72,7 @@ class ContentInfo extends APIContentInfo
      *
      * @param string $property
      *
-     * @return bool
+     * @return boolean
      */
     public function __isset( $property )
     {

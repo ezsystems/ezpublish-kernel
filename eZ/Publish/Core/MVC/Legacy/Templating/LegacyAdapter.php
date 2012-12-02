@@ -69,7 +69,8 @@ class LegacyAdapter implements LegacyCompatible
      * Returns true if object supports attribute $name
      *
      * @param string $name
-     * @return bool
+     *
+     * @return boolean
      */
     public function hasAttribute( $name )
     {
@@ -88,8 +89,10 @@ class LegacyAdapter implements LegacyCompatible
      * Returns the value of attribute $name.
      *
      * @param string $name
-     * @return mixed
+     *
      * @throws \InvalidArgumentException If $name is not supported by aggregated object
+     *
+     * @return mixed
      */
     public function attribute( $name )
     {

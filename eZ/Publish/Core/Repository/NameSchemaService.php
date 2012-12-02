@@ -54,7 +54,7 @@ class NameSchemaService
     /**
      * @var array
      */
-    private $settings;
+    protected $settings;
 
     /**
      * Constructs a object to resolve $nameSchema with $contentVersion fields values
@@ -136,16 +136,11 @@ class NameSchemaService
 
         foreach ( $content->fields as $fieldIdentifier => $fieldLanguageMap )
         {
-            foreach ( $fieldLanguageMap as $languageCode => $fieldValue )
+            foreach ( $languageCodes as $languageCode )
             {
-                if ( !in_array( $languageCode, $languageCodes ) )
-                {
-                    continue;
-                }
-
                 $mergedFieldMap[$fieldIdentifier][$languageCode] = isset( $fieldMap[$fieldIdentifier][$languageCode] )
                     ? $fieldMap[$fieldIdentifier][$languageCode]
-                    : $fieldValue;
+                    : $fieldLanguageMap[$languageCode];
             }
         }
 
@@ -153,18 +148,7 @@ class NameSchemaService
     }
 
     /**
-     * Validates name or URL schema for ContentType
-     *
-     * @return boolean
-     * @todo implement or remove
-     */
-    public function validate( $nameSchema, $contentType )
-    {
-        return true;
-    }
-
-    /**
-     * Return the real name for a content name pattern
+     * Returns the real name for a content name pattern
      *
      * @param string $nameSchema
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
@@ -197,7 +181,7 @@ class NameSchemaService
             // Make sure length is not longer then $limit unless it's 0
             if ( $this->settings["limit"] && strlen( $name ) > $this->settings["limit"] )
             {
-                $name = rtrim( substr( $name, 0, $this->settings["limit"] - strlen( $this->settings["sequence"] ) + 1 ) ) . $this->settings["sequence"];
+                $name = rtrim( substr( $name, 0, $this->settings["limit"] - strlen( $this->settings["sequence"] ) ) ) . $this->settings["sequence"];
             }
 
             $names[$languageCode] = $name;
@@ -219,7 +203,7 @@ class NameSchemaService
      *
      * @return string[] Key is the field identifier, value is the title value
      */
-    private function getFieldTitles( array $schemaIdentifiers, ContentType $contentType, array $fieldMap, $languageCode )
+    protected function getFieldTitles( array $schemaIdentifiers, ContentType $contentType, array $fieldMap, $languageCode )
     {
         $fieldTitles = array();
 
@@ -235,10 +219,6 @@ class NameSchemaService
                     $fieldMap[$fieldDefinitionIdentifier][$languageCode]
                 );
             }
-            else
-            {
-                // @todo: log an error if $fieldIdentifier and $languageCode are invalid
-            }
         }
 
         return $fieldTitles;
@@ -253,9 +233,10 @@ class NameSchemaService
      * </code>
      *
      * @param string $nameSchema
+     *
      * @return array
      */
-    private function extractTokens( $nameSchema )
+    protected function extractTokens( $nameSchema )
     {
         preg_match_all(
             "|<([^>]+)>|U",
@@ -274,11 +255,11 @@ class NameSchemaService
      * @param string $token
      * @param array $titles
      *
-     * @param $groupLookupTable
+     * @param array $groupLookupTable
      *
      * @return string
      */
-    private function resolveToken( $token, $titles, $groupLookupTable )
+    protected function resolveToken( $token, $titles, $groupLookupTable )
     {
         $replaceString = "";
         $tokenParts = $this->tokenParts( $token );
@@ -287,8 +268,8 @@ class NameSchemaService
         {
             if ( $this->isTokenGroup( $tokenPart ) )
             {
-                $groupTokenArray = $this->extractTokens( $groupLookupTable );
                 $replaceString = $groupLookupTable[$tokenPart];
+                $groupTokenArray = $this->extractTokens( $replaceString );
 
                 foreach ( $groupTokenArray as $groupToken )
                 {
@@ -302,6 +283,8 @@ class NameSchemaService
                         $replaceString
                     );
                 }
+
+
                 // We want to stop after the first matching token part / identifier is found
                 // <id1|id2> if id1 has a value, id2 will not be used.
                 // In this case id1 or id1 is a token group.
@@ -326,9 +309,10 @@ class NameSchemaService
      * Checks whether $identifier is a placeholder for a token group.
      *
      * @param string $identifier
+     *
      * @return boolean
      */
-    private function isTokenGroup( $identifier )
+    protected function isTokenGroup( $identifier )
     {
         if ( strpos( $identifier, self::META_STRING ) === false )
         {
@@ -339,7 +323,7 @@ class NameSchemaService
     }
 
     /**
-     * Return the different constituents of $token in an array.
+     * Returns the different constituents of $token in an array.
      * The normal case here is that the different identifiers within one token
      * will be tokenized and returned.
      *
@@ -349,9 +333,10 @@ class NameSchemaService
      * </code>
      *
      * @param string $token
+     *
      * @return array
      */
-    private function tokenParts( $token )
+    protected function tokenParts( $token )
     {
         return preg_split( '#\\W#', $token, -1, PREG_SPLIT_NO_EMPTY );
     }
@@ -365,9 +350,10 @@ class NameSchemaService
      * tokens.
      *
      * @param string $nameSchema
+     *
      * @return string
      */
-    private function filterNameSchema( $nameSchema )
+    protected function filterNameSchema( $nameSchema )
     {
         $retNamePattern = "";
         $foundGroups = preg_match_all( "/[<|\\|](\\(.+\\))[\\||>]/U", $nameSchema, $groupArray );
@@ -400,9 +386,10 @@ class NameSchemaService
      * Returns all identifiers from all tokens in the name schema.
      *
      * @param string $schemaString
+     *
      * @return array
      */
-    private function getIdentifiers( $schemaString )
+    protected function getIdentifiers( $schemaString )
     {
         $allTokens = '#<(.*)>#U';
         $identifiers = '#\\W#';

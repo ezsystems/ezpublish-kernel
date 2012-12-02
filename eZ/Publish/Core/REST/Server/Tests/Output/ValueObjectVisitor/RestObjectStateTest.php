@@ -67,6 +67,7 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
      * Test if result contains ObjectState element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsObjectStateElement( $result )
@@ -88,6 +89,7 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
      * Test if result contains ObjectState element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsObjectStateAttributes( $result )
@@ -110,6 +112,7 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
      * Test if result contains ObjectStateGroup element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsObjectStateGroupElement( $result )
@@ -128,6 +131,7 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
      * Test if result contains ObjectStateGroup element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsObjectStateGroupAttributes( $result )
@@ -150,6 +154,7 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
      * Test if result contains id value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsIdValueElement( $result )
@@ -169,6 +174,7 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
      * Test if result contains identifier value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsIdentifierValueElement( $result )
@@ -188,6 +194,7 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
      * Test if result contains priority value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPriorityValueElement( $result )
@@ -207,6 +214,7 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
      * Test if result contains defaultLanguageCode value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsDefaultLanguageCodeValueElement( $result )
@@ -226,6 +234,7 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
      * Test if result contains languageCodes value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLanguageCodesValueElement( $result )
@@ -245,6 +254,7 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
      * Test if result contains names element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsNamesElement( $result )
@@ -266,6 +276,7 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
      * Test if result contains descriptions element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsDescriptionsElement( $result )

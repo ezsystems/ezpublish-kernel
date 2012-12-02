@@ -20,6 +20,7 @@ class HandlerTest extends TestCase
 {
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentHandler
+     *
      * @return void
      */
     public function testContentHandler()
@@ -39,6 +40,7 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentHandler
+     *
      * @return void
      */
     public function testContentHandlerTwice()
@@ -56,6 +58,7 @@ class HandlerTest extends TestCase
      *
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentHandler
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::getStorageRegistry
+     *
      * @return void
      */
     public function testStorageRegistryReused()
@@ -82,6 +85,7 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::getFieldValueConverterRegistry
+     *
      * @return void
      */
     public function testGetFieldValueConverterRegistry()
@@ -97,6 +101,7 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::getFieldValueConverterRegistry
+     *
      * @return void
      */
     public function testGetFieldValueConverterRegistryTwice()
@@ -111,6 +116,7 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::getStorageRegistry
+     *
      * @return void
      */
     public function testGetStorageRegistry()
@@ -126,6 +132,7 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::getStorageRegistry
+     *
      * @return void
      */
     public function testGetStorageRegistryTwice()
@@ -140,6 +147,7 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::searchHandler
+     *
      * @return void
      */
     public function testSearchHandler()
@@ -159,6 +167,7 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::searchHandler
+     *
      * @return void
      */
     public function testSearchHandlerTwice()
@@ -173,6 +182,7 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentTypeHandler
+     *
      * @return void
      */
     public function testContentTypeHandler()
@@ -192,6 +202,7 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentLanguageHandler
+     *
      * @return void
      */
     public function testContentLanguageHandler()
@@ -207,6 +218,7 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentTypeHandler
+     *
      * @return void
      */
     public function testContentTypeHandlerTwice()
@@ -221,6 +233,7 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::locationHandler
+     *
      * @return void
      */
     public function testLocationHandler()
@@ -240,6 +253,7 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::locationHandler
+     *
      * @return void
      */
     public function testLocationHandlerTwice()
@@ -254,6 +268,7 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::userHandler
+     *
      * @return void
      */
     public function testUserHandler()
@@ -273,6 +288,7 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::userHandler
+     *
      * @return void
      */
     public function testUserHandlerTwice()
@@ -287,6 +303,7 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::sectionHandler
+     *
      * @return void
      */
     public function testSectionHandler()
@@ -306,6 +323,7 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::sectionHandler
+     *
      * @return void
      */
     public function testSectionHandlerTwice()
@@ -320,6 +338,7 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::urlAliasHandler
+     *
      * @return void
      */
     public function testUrlAliasHandler()
@@ -339,6 +358,7 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::urlAliasHandler
+     *
      * @return void
      */
     public function testUrlAliasHandlerTwice()
@@ -388,6 +408,7 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\EzcDbHandler::create
+     *
      * @return void
      */
     public function testDatabaseInstance()

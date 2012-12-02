@@ -22,12 +22,12 @@ use eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent,
 class APIContentExceptionListener implements EventSubscriberInterface
 {
     /**
-     * @var eZ\Publish\Core\MVC\Legacy\View\Provider\Content
+     * @var \eZ\Publish\Core\MVC\Legacy\View\Provider\Content
      */
     protected $legacyCVP;
 
     /**
-     * @var eZ\Publish\Core\MVC\Legacy\View\Provider\Location
+     * @var \eZ\Publish\Core\MVC\Legacy\View\Provider\Location
      */
     protected $legacyLVP;
 

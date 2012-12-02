@@ -42,6 +42,7 @@ class ExceptionConversion extends Gateway
      * @param int|null $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
      * @param string[] $translations
+     *
      * @return mixed[][]
      */
     public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, array $translations = null )

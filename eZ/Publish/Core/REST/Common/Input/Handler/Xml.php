@@ -71,6 +71,7 @@ class Xml extends Handler
      * Converts the given string to an array structure
      *
      * @param string $string
+     *
      * @return array
      */
     public function convert( $string )
@@ -110,6 +111,7 @@ class Xml extends Handler
      * Converts DOM nodes to array structures
      *
      * @param \DOMNode $node
+     *
      * @return array
      */
     protected function convertDom( \DOMNode $node )
@@ -198,6 +200,7 @@ class Xml extends Handler
 
     /**
      * @param \DOMElement $domElement
+     *
      * @return array|string|null
      */
     protected function parseFieldTypeHash( \DOMElement $domElement )
@@ -217,6 +220,7 @@ class Xml extends Handler
      * Parses a node list of <value> elements
      *
      * @param \DOMNodeList $valueNodes
+     *
      * @return array|string
      */
     protected function parseFieldTypeValues( \DOMNodeList $valueNodes )
@@ -272,6 +276,7 @@ class Xml extends Handler
      * Attempts to cast the given $stringValue into a sensible scalar type
      *
      * @param string $stringValue
+     *
      * @return mixed
      */
     protected function castScalarValue( $stringValue )

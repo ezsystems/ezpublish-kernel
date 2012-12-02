@@ -18,7 +18,7 @@ parameters:
     # ezpublish.api.storage_engine.legacy.transformation_processor.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased
     ezpublish.api.storage_engine.legacy.transformation_parser.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased\Parser
     # # Transormation rules resources.
-    # # TODO: Should they be somewhat configurable for the developer?
+    # # @todo: Should they be somewhat configurable for the developer?
     ezpublish.api.storage_engine.legacy.transformation_rules.resources:
         - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/ascii.tr
         - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/basic.tr

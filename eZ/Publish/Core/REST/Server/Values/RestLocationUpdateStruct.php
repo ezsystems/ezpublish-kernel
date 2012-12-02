@@ -27,7 +27,7 @@ class RestLocationUpdateStruct extends RestValue
     /**
      * If set, the location is hidden ( == true ) or unhidden ( == false )
      *
-     * @var bool
+     * @var boolean
      */
     public $hidden;
 
@@ -35,7 +35,7 @@ class RestLocationUpdateStruct extends RestValue
      * Construct
      *
      * @param \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct $locationUpdateStruct
-     * @param bool $hidden
+     * @param boolean $hidden
      */
     public function __construct( LocationUpdateStruct $locationUpdateStruct, $hidden = null )
     {

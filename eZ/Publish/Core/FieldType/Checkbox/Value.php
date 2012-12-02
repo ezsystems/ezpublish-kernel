@@ -18,14 +18,14 @@ class Value extends BaseValue
     /**
      * Boolean value
      *
-     * @var bool
+     * @var boolean
      */
     public $bool;
 
     /**
      * Construct a new Value object and initialize it $boolValue
      *
-     * @param bool $boolValue
+     * @param boolean $boolValue
      */
     public function __construct( $boolValue = false )
     {
@@ -34,6 +34,7 @@ class Value extends BaseValue
 
     /**
      * @see \eZ\Publish\Core\FieldType\Value
+     *
      * @return string
      */
     public function __toString()

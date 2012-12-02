@@ -46,6 +46,7 @@ class FieldTypeServiceStub implements FieldTypeService
      * Returns the FieldType registered with the given identifier
      *
      * @param string $identifier
+     *
      * @return \eZ\Publish\API\Repository\FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *         if there is no FieldType registered with $identifier
@@ -63,7 +64,8 @@ class FieldTypeServiceStub implements FieldTypeService
      * Returns if there is a FieldType registered under $identifier
      *
      * @param string $identifier
-     * @return bool
+     *
+     * @return boolean
      */
     public function hasFieldType( $identifier )
     {

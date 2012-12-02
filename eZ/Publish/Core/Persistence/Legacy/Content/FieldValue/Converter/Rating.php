@@ -21,7 +21,6 @@ class Rating implements Converter
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @static
      * @return Rating
      */
     public static function create()

@@ -17,14 +17,14 @@ use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
 class TrashItem extends APITrashItem
 {
     /**
-     * content info of the content object of this trash item
+     * Content info of the content object of this trash item
      *
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
     protected $contentInfo;
 
     /**
-     * returns the content info of the content object of this trash item
+     * Returns the content info of the content object of this trash item
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
@@ -78,7 +78,7 @@ class TrashItem extends APITrashItem
      *
      * @param string $property
      *
-     * @return bool
+     * @return boolean
      */
     public function __isset( $property )
     {

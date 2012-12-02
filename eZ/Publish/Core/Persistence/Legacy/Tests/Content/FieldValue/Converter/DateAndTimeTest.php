@@ -327,6 +327,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
      * Generates XML string from $dateInterval
      *
      * @param \DateInterval $dateInterval
+     *
      * @return string
      */
     private function getXMLStringFromDateInterval( DateInterval $dateInterval )

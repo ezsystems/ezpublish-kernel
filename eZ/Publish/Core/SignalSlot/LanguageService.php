@@ -101,7 +101,7 @@ class LanguageService implements LanguageServiceInterface
     }
 
     /**
-     * enables a language
+     * Enables a language
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
@@ -123,7 +123,7 @@ class LanguageService implements LanguageServiceInterface
     }
 
     /**
-     * disables a language
+     * Disables a language
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
@@ -161,7 +161,7 @@ class LanguageService implements LanguageServiceInterface
     /**
      * Loads all Languages
      *
-     * @return array an array of {@link  \eZ\Publish\API\Repository\Values\Content\Language}
+     * @return \eZ\Publish\API\Repository\Values\Content\Language[]
      */
     public function loadLanguages()
     {
@@ -206,7 +206,7 @@ class LanguageService implements LanguageServiceInterface
     }
 
     /**
-     * returns a configured default language code
+     * Returns a configured default language code
      *
      * @return string
      */

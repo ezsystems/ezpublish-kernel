@@ -40,8 +40,9 @@ class CachingLanguageHandlerTest extends TestCase
     protected $languageCacheMock;
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::__construct
+     *
+     * @return void
      */
     public function testCtorPropertyInnerHandler()
     {
@@ -55,8 +56,9 @@ class CachingLanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::__construct
+     *
+     * @return void
      */
     public function testCtorPropertyLanguageCache()
     {
@@ -70,8 +72,9 @@ class CachingLanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::create
+     *
+     * @return void
      */
     public function testCreate()
     {
@@ -130,8 +133,9 @@ class CachingLanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::update
+     *
+     * @return void
      */
     public function testUpdate()
     {
@@ -155,8 +159,9 @@ class CachingLanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::load
+     *
+     * @return void
      */
     public function testLoad()
     {
@@ -201,8 +206,9 @@ class CachingLanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::loadByLanguageCode
+     *
+     * @return void
      */
     public function testLoadByLanguageCode()
     {
@@ -247,8 +253,9 @@ class CachingLanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::loadAll
+     *
+     * @return void
      */
     public function testLoadAll()
     {
@@ -270,8 +277,9 @@ class CachingLanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::delete
+     *
+     * @return void
      */
     public function testDelete()
     {

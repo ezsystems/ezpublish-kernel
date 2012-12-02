@@ -61,7 +61,7 @@ abstract class TransformationProcessor
     }
 
     /**
-     * Load rules
+     * Loads rules
      *
      * @return array
      */
@@ -75,6 +75,7 @@ abstract class TransformationProcessor
      *
      * @param string $string
      * @param array $ruleNames
+     *
      * @return string
      */
     public function transform( $string, array $ruleNames = null )

@@ -126,7 +126,7 @@ interface UserService
     /**
      * Loads a user
      *
-     * @param integer $userId
+     * @param int $userId
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
@@ -138,6 +138,7 @@ interface UserService
      * Loads anonymous user
      *
      * @uses loadUser()
+     *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
     public function loadAnonymousUser();
@@ -216,7 +217,7 @@ interface UserService
     public function loadUserGroupsOfUser( User $user );
 
     /**
-     * loads the users of a user group
+     * Loads the users of a user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the users or user group
      *

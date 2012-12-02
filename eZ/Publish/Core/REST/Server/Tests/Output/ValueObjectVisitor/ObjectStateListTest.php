@@ -48,6 +48,7 @@ class ObjectStateListTest extends ValueObjectVisitorBaseTest
      * Test if result contains ObjectStateList element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsObjectStateListElement( $result )
@@ -66,6 +67,7 @@ class ObjectStateListTest extends ValueObjectVisitorBaseTest
      * Test if result contains ObjectStateList element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsObjectStateListAttributes( $result )

@@ -27,7 +27,7 @@ use eZ\Publish\Core\Repository\SearchService,
 class SearchServiceTest extends BaseTest
 {
     /**
-     * Return search service to test
+     * Returns search service to test
      *
      * @return SearchService
      */
@@ -627,7 +627,7 @@ class SearchServiceTest extends BaseTest
                 ) ),
                 $fixtureDir . '/FacetTerm.php',
             ),
-            /* @TODO: It needs to be defined how this one is supposed to work.
+            /* @todo: It needs to be defined how this one is supposed to work.
             array(
                 new Query( array(
                     'criterion'   => new Criterion\SectionId( array( 1 ) ),
@@ -640,7 +640,7 @@ class SearchServiceTest extends BaseTest
                 ) ),
                 $fixtureDir . '/FacetCriterion.php',
             ), // */
-            /* @TODO: Add sane ranges here:
+            /* @todo: Add sane ranges here:
             array(
                 new Query( array(
                     'criterion'   => new Criterion\SectionId( array( 1 ) ),
@@ -715,7 +715,7 @@ class SearchServiceTest extends BaseTest
                 ) ),
                 $fixtureDir . '/FacetFieldRegexpSortCount.php',
             ),
-            /* @TODO: Add sane ranges here:
+            /* @todo: Add sane ranges here:
             array(
                 new Query( array(
                     'criterion'   => new Criterion\SectionId( array( 1 ) ),
@@ -750,6 +750,7 @@ class SearchServiceTest extends BaseTest
      *
      * @param Query $query
      * @param string $fixture
+     *
      * @return void
      */
     protected function assertQueryFixture( Query $query, $fixture )
@@ -794,6 +795,7 @@ class SearchServiceTest extends BaseTest
      * Show a simplified view of the search result for manual introspection
      *
      * @param SearchResult $result
+     *
      * @return string
      */
     protected function printResult( SearchResult $result )
@@ -813,6 +815,7 @@ class SearchServiceTest extends BaseTest
      * content objhects every time.
      *
      * @param SearchResult $result
+     *
      * @return void
      */
     protected function simplifySearchResult( SearchResult $result )

@@ -44,6 +44,7 @@ class RoleAssignInput extends Base
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\RoleAssignment
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )

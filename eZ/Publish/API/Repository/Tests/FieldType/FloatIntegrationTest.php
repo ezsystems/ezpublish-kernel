@@ -128,6 +128,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     public function assertFieldDataLoadedCorrect( Field $field)

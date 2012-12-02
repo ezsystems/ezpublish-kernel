@@ -38,7 +38,7 @@ class RoleStub extends Role
     }
 
     /**
-     * returns the list of policies of this role
+     * Returns the list of policies of this role
      * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
     public function getPolicies()

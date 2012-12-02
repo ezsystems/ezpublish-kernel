@@ -87,7 +87,7 @@ class LegacySetupController
             );
         }
 
-        /** @var \ezpKernelResult $result  */
+        /** @var \ezpKernelResult $result */
         $result = $this->getLegacyKernel()->run();
         $result->getContent();
         $response->setContent( $result->getContent() );

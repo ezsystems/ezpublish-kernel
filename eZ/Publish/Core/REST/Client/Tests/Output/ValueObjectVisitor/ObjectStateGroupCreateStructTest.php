@@ -52,6 +52,7 @@ class ObjectStateGroupCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains names element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsNamesElement( $result )
@@ -73,6 +74,7 @@ class ObjectStateGroupCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains descriptions element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsDescriptionsElement( $result )
@@ -94,6 +96,7 @@ class ObjectStateGroupCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains identifier value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsIdentifierValueElement( $result )
@@ -114,6 +117,7 @@ class ObjectStateGroupCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains defaultLanguageCode value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsDefaultLanguageCodeValueElement( $result )

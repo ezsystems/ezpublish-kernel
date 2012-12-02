@@ -128,6 +128,7 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
     /**
      * @param string $xpath
      * @param \DOMDocument $dom
+     *
      * @depends testVisitRestFieldDefinition
      * @dataProvider provideXpathAssertions
      */

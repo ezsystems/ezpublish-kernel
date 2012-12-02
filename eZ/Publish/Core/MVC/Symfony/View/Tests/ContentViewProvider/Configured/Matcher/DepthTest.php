@@ -33,9 +33,9 @@ class ParentLocationTest extends BaseTest
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Depth::matchLocation
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
      *
-     * @param $matchingConfig
+     * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param $expectedResult
+     * @param boolean $expectedResult
      */
     public function testMatchLocation( $matchingConfig, Location $location, $expectedResult )
     {
@@ -85,9 +85,10 @@ class ParentLocationTest extends BaseTest
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
      * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
      *
-     * @param $matchingConfig
+     * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param $expectedResult
+     * @param boolean $expectedResult
+     *
      * @return void
      */
     public function testMatchContentInfo( $matchingConfig, Repository $repository, $expectedResult )
@@ -129,7 +130,8 @@ class ParentLocationTest extends BaseTest
     /**
      * Returns a Repository mock configured to return the appropriate Location object with given parent location Id
      *
-     * @param $depth
+     * @param int $depth
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function generateRepositoryMockForDepth( $depth )

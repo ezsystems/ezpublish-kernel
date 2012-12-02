@@ -37,6 +37,7 @@ class LegacyStorage extends Gateway
      * Set database handler for this gateway
      *
      * @param mixed $dbHandler
+     *
      * @return void
      * @throws \RuntimeException if $dbHandler is not an instance of
      *         {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler}
@@ -58,8 +59,9 @@ class LegacyStorage extends Gateway
     /**
      * Returns the active connection
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      * @throws \RuntimeException if no connection has been set, yet.
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected function getConnection()
     {
@@ -74,6 +76,7 @@ class LegacyStorage extends Gateway
      * Returns the node path string of $versionInfo
      *
      * @param VersionInfo $versionInfo
+     *
      * @return string
      */
     public function getNodePathString( VersionInfo $versionInfo )
@@ -110,6 +113,7 @@ class LegacyStorage extends Gateway
      *
      * @param string $path
      * @param mixed $fieldId
+     *
      * @return void
      */
     public function storeImageReference( $path, $fieldId )
@@ -133,8 +137,9 @@ class LegacyStorage extends Gateway
     /**
      * Returns a the XML content stored for the given $fieldIds
      *
-     * @parent int $versionNo
+     * @param int $versionNo
      * @param array $fieldIds
+     *
      * @return array
      */
     public function getXmlForImages( $versionNo, array $fieldIds )
@@ -173,6 +178,7 @@ class LegacyStorage extends Gateway
      *
      * @param string $path
      * @param mixed $fieldId
+     *
      * @return void
      */
     public function removeImageReferences( $path, $versionNo, $fieldId )
@@ -203,6 +209,7 @@ class LegacyStorage extends Gateway
      * Returns the number of recorded references to the given $path
      *
      * @param string $path
+     *
      * @return int
      */
     public function countImageReferences( $path )

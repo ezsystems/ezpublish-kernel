@@ -38,6 +38,7 @@ class EzcDatabase extends Gateway
      *
      * @param string $name
      * @param string $identifier
+     *
      * @return int The ID of the new section
      */
     public function insertSection( $name, $identifier )
@@ -69,6 +70,7 @@ class EzcDatabase extends Gateway
      * @param int $id
      * @param string $name
      * @param string $identifier
+     *
      * @return void
      */
     public function updateSection( $id, $name, $identifier )
@@ -96,6 +98,7 @@ class EzcDatabase extends Gateway
      * Loads data for section with $id
      *
      * @param int $id
+     *
      * @return string[][]
      */
     public function loadSectionData( $id )
@@ -146,6 +149,7 @@ class EzcDatabase extends Gateway
      * Loads data for section with $identifier
      *
      * @param int $identifier
+     *
      * @return string[][]
      */
     public function loadSectionDataByIdentifier( $identifier )
@@ -174,6 +178,7 @@ class EzcDatabase extends Gateway
      * Counts the number of content objects assigned to section with $id
      *
      * @param int $id
+     *
      * @return int
      */
     public function countContentObjectsInSection( $id )
@@ -205,6 +210,7 @@ class EzcDatabase extends Gateway
      * Deletes the Section with $id
      *
      * @param int $id
+     *
      * @return void
      */
     public function deleteSection( $id )
@@ -227,6 +233,7 @@ class EzcDatabase extends Gateway
      *
      * @param int $sectionId
      * @param int $contentId
+     *
      * @return void
      */
     public function assignSectionToContent( $sectionId, $contentId )

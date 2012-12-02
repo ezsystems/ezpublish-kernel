@@ -23,6 +23,7 @@ class FieldStub extends Field
      * Allows to set the value
      *
      * @param mixed $value
+     *
      * @return void
      */
     public function setValue( $value )

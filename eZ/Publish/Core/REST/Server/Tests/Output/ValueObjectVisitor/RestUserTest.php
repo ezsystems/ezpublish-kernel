@@ -80,6 +80,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testUserHrefCorrect( \DOMDocument $dom )
@@ -89,6 +90,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testUserIdCorrect( \DOMDocument $dom )
@@ -98,6 +100,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testUserMediaTypeWithoutVersionCorrect( \DOMDocument $dom )
@@ -107,6 +110,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testUserRemoteIdCorrect( \DOMDocument $dom )
@@ -116,6 +120,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testUserTypeHrefCorrect( \DOMDocument $dom )
@@ -125,6 +130,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testUserTypeMediaTypeCorrect( \DOMDocument $dom )
@@ -134,6 +140,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testNameCorrect( \DOMDocument $dom )
@@ -143,6 +150,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testVersionsHrefCorrect( \DOMDocument $dom )
@@ -152,6 +160,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testVersionsMediaTypeCorrect( \DOMDocument $dom )
@@ -161,6 +170,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testSectionHrefCorrect( \DOMDocument $dom )
@@ -170,6 +180,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testSectionMediaTypeCorrect( \DOMDocument $dom )
@@ -179,6 +190,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testMainLocationHrefCorrect( \DOMDocument $dom )
@@ -188,6 +200,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testMainLocationMediaTypeCorrect( \DOMDocument $dom )
@@ -197,6 +210,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testLocationsHrefCorrect( \DOMDocument $dom )
@@ -206,6 +220,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testLocationsMediaTypeCorrect( \DOMDocument $dom )
@@ -215,6 +230,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testOwnerHrefCorrect( \DOMDocument $dom )
@@ -224,6 +240,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testOwnerMediaTypeCorrect( \DOMDocument $dom )
@@ -233,6 +250,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testLastModificationDateCorrect( \DOMDocument $dom )
@@ -242,6 +260,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testMainLanguageCodeCorrect( \DOMDocument $dom )
@@ -251,6 +270,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testAlwaysAvailableCorrect( \DOMDocument $dom )
@@ -260,6 +280,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testUserGroupsHrefCorrect( \DOMDocument $dom )
@@ -269,6 +290,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testUserGroupsMediaTypeCorrect( \DOMDocument $dom )
@@ -278,6 +300,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testRolesHrefCorrect( \DOMDocument $dom )
@@ -287,6 +310,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testRolesMediaTypeCorrect( \DOMDocument $dom )

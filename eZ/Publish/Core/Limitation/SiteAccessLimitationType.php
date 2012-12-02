@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\SiteAccessLimitation as APISiteAccessLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
@@ -33,7 +34,7 @@ class SiteAccessLimitationType implements SPILimitationTypeInterface
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
      * @param \eZ\Publish\API\Repository\Repository $repository
      *
-     * @return bool
+     * @return boolean
      */
     public function acceptValue( APILimitationValue $limitationValue, Repository $repository )
     {
@@ -69,21 +70,26 @@ class SiteAccessLimitationType implements SPILimitationTypeInterface
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
      * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
      *
-     * @return bool
+     * @return boolean
      */
     public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null )
     {
         if ( !$value instanceof APISiteAccessLimitation )
+        {
             throw new InvalidArgumentException( '$value', 'Must be of type: APISiteAccessLimitation' );
+        }
 
-        if ( !$object instanceof Content && !$object instanceof ContentInfo )
-            throw new InvalidArgumentException( '$object', 'Must be of type: Content or ContentInfo' );
+        if ( !$object instanceof ContentInfo && !$object instanceof Content && !$object instanceof VersionInfo )
+        {
+            throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
+        }
 
         if ( empty( $value->limitationValues ) )
+        {
             return false;
+        }
 
         /**
-         * @var \eZ\Publish\API\Repository\Values\Content\Content $object
          * @todo Use current siteaccess as dependency in constructor, or define a way it can be injected in this function
          * 4.x limitationValues in default 64bit mode is: sprintf( '%u', crc32( $siteAccessName ) )
          */
@@ -91,7 +97,7 @@ class SiteAccessLimitationType implements SPILimitationTypeInterface
     }
 
     /**
-     * Return Criterion for use in find() query
+     * Returns Criterion for use in find() query
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -104,7 +110,7 @@ class SiteAccessLimitationType implements SPILimitationTypeInterface
     }
 
     /**
-     * Return info on valid $limitationValues
+     * Returns info on valid $limitationValues
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      *

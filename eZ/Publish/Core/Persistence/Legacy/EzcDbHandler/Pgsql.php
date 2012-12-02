@@ -27,6 +27,7 @@ class Pgsql extends EzcDbHandler
      *
      * @param string $table
      * @param string $column
+     *
      * @return mixed
      */
     public function getAutoIncrementValue( $table, $column )
@@ -35,10 +36,11 @@ class Pgsql extends EzcDbHandler
     }
 
     /**
-     * Return the name of the affected sequence
+     * Returns the name of the affected sequence
      *
      * @param string $table
      * @param string $column
+     *
      * @return string
      */
     public function getSequenceName( $table, $column )

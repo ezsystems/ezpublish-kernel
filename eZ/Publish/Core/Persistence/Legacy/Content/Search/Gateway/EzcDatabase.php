@@ -52,7 +52,7 @@ class EzcDatabase extends Gateway
     /**
      * Content load query builder
      *
-     * @var eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
      */
     protected $queryBuilder;
 
@@ -73,7 +73,8 @@ class EzcDatabase extends Gateway
     /**
      * Construct from handler handler
      *
-     * @param EzcDbHandler $handler
+     * @param \EzcDbHandler $handler
+     *
      * @return void
      */
     public function __construct(
@@ -104,6 +105,7 @@ class EzcDatabase extends Gateway
      * @param int|null $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
      * @param string[] $translations
+     *
      * @return mixed[][]
      */
     public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, array $translations = null )
@@ -170,6 +172,7 @@ class EzcDatabase extends Gateway
      * @param Criterion $criterion
      * @param \ezcQuerySelect $query
      * @param mixed $translations
+     *
      * @return string
      */
     protected function getQueryCondition( Criterion $criterion, ezcQuerySelect $query, $translations )
@@ -210,6 +213,7 @@ class EzcDatabase extends Gateway
      * @param mixed $sort
      * @param int $offset
      * @param int $limit
+     *
      * @return int[]
      */
     protected function getContentIds( ezcQuerySelect $query, $condition, $sort, $offset, $limit )
@@ -249,10 +253,11 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Load the actual content based on the provided IDs
+     * Loads the actual content based on the provided IDs
      *
      * @param array $contentIds
      * @param mixed $translations
+     *
      * @return mixed[]
      */
     protected function loadContent( array $contentIds, $translations )

@@ -35,7 +35,7 @@ abstract class Value extends BaseValue
     /**
      * Size of the image file
      *
-     * @var integer
+     * @var int
      */
     public $fileSize;
 

@@ -34,7 +34,7 @@ class UserRoleAssignment extends \eZ\Publish\API\Repository\Values\User\UserRole
     protected $limitation;
 
     /**
-     * returns the limitation of the role assignment
+     * Returns the limitation of the role assignment
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation
      */
@@ -44,7 +44,7 @@ class UserRoleAssignment extends \eZ\Publish\API\Repository\Values\User\UserRole
     }
 
     /**
-     * returns the role to which the user or user group is assigned to
+     * Returns the role to which the user or user group is assigned to
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
     public function getRole()
@@ -53,7 +53,7 @@ class UserRoleAssignment extends \eZ\Publish\API\Repository\Values\User\UserRole
     }
 
     /**
-     * returns the user to which the role is assigned to
+     * Returns the user to which the role is assigned to
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */

@@ -106,7 +106,7 @@ class CreateStruct extends ValueObject
     /**
      * Determines if the type is a container
      *
-     * @var bool
+     * @var boolean
      */
     public $isContainer;
 

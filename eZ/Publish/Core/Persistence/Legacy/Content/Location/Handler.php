@@ -76,9 +76,10 @@ class Handler implements BaseLocationHandler
     }
 
     /**
-     * Return parent path string for a path string
+     * Returns parent path string for a path string
      *
      * @param string $pathString
+     *
      * @return string
      */
     protected function getParentPathString( $pathString )
@@ -90,6 +91,7 @@ class Handler implements BaseLocationHandler
      * Loads the data for the location identified by $locationId.
      *
      * @param int $locationId
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     public function load( $locationId )
@@ -102,8 +104,10 @@ class Handler implements BaseLocationHandler
      * Loads the data for the location identified by $remoteId.
      *
      * @param string $remoteId
-     * @return \eZ\Publish\SPI\Persistence\Content\Location
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     public function loadByRemoteId( $remoteId )
     {
@@ -117,6 +121,7 @@ class Handler implements BaseLocationHandler
      *
      * @param int $contentId
      * @param int $rootLocationId
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location[]
      */
     public function loadLocationsByContent( $contentId, $rootLocationId = null )
@@ -265,6 +270,7 @@ class Handler implements BaseLocationHandler
      *
      * @param mixed $sourceId
      * @param mixed $destinationParentId
+     *
      * @return boolean
      */
     public function move( $sourceId, $destinationParentId )
@@ -293,6 +299,7 @@ class Handler implements BaseLocationHandler
      *
      * @param int|string $locationId
      * @param int $timestamp
+     *
      * @return void
      */
     public function markSubtreeModified( $locationId, $timestamp = null )
@@ -335,6 +342,7 @@ class Handler implements BaseLocationHandler
      *
      * @param mixed $locationId1
      * @param mixed $locationId2
+     *
      * @return boolean
      */
     public function swap( $locationId1, $locationId2 )
@@ -347,6 +355,7 @@ class Handler implements BaseLocationHandler
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId
+     *
      * @return boolean
      */
     public function update( UpdateStruct $location, $locationId )
@@ -358,6 +367,7 @@ class Handler implements BaseLocationHandler
      * Creates a new location rooted at $location->parentId.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     public function create( CreateStruct $createStruct )
@@ -383,6 +393,7 @@ class Handler implements BaseLocationHandler
      * new main Location.
      *
      * @param mixed $locationId
+     *
      * @return boolean
      */
     public function removeSubtree( $locationId )

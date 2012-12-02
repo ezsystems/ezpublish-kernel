@@ -117,6 +117,7 @@ class ImageStorage extends GatewayBasedStorage
      * @param int $versionNo
      * @param string $languageCode
      * @param string $nodePathString
+     *
      * @return string
      */
     protected function getFieldPath( $fieldId, $versionNo, $languageCode, $nodePathString )
@@ -137,6 +138,7 @@ class ImageStorage extends GatewayBasedStorage
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     *
      * @return void
      */
     public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
@@ -150,7 +152,8 @@ class ImageStorage extends GatewayBasedStorage
     /**
      * @param array $fieldIds
      * @param array $context
-     * @return bool
+     *
+     * @return boolean
      */
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
@@ -180,6 +183,7 @@ class ImageStorage extends GatewayBasedStorage
      * Extracts the field storage path from  the given $xml string
      *
      * @param string $xml
+     *
      * @return string|false
      */
     protected function extractStorageIdentifier( $xml )
@@ -203,7 +207,7 @@ class ImageStorage extends GatewayBasedStorage
     /**
      * Checks if field type has external data to deal with
      *
-     * @return bool
+     * @return boolean
      */
     public function hasFieldData()
     {
@@ -216,7 +220,7 @@ class ImageStorage extends GatewayBasedStorage
      */
     public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
     {
-        // @TODO: Correct?
+        // @todo: Correct?
         return null;
     }
 }

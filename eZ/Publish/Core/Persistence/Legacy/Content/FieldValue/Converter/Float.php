@@ -27,7 +27,6 @@ class Float implements Converter
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @static
      * @return Float
      */
     public static function create()
@@ -133,6 +132,7 @@ class Float implements Converter
      *
      * @param int|null $minValue Minimum int value, or null if not set
      * @param int|null $maxValue Maximum int value, or null if not set
+     *
      * @return int
      */
     private function getStorageDefValidatorState( $minValue, $maxValue )

@@ -25,6 +25,7 @@ class LegacyStorage extends Gateway
      * Set database handler for this gateway
      *
      * @param mixed $dbHandler
+     *
      * @return void
      * @throws \RuntimeException if $dbHandler is not an instance of
      *         {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler}
@@ -46,8 +47,9 @@ class LegacyStorage extends Gateway
     /**
      * Returns the active connection
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      * @throws \RuntimeException if no connection has been set, yet.
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected function getConnection()
     {
@@ -66,7 +68,8 @@ class LegacyStorage extends Gateway
      *
      * @param VersionInfo $versionInfo
      * @param Field $field
-     * @return bool If restoring of the internal field data is required
+     *
+     * @return boolean If restoring of the internal field data is required
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field )
     {
@@ -102,7 +105,8 @@ class LegacyStorage extends Gateway
      *
      * @param VersionInfo $versionInfo
      * @param Field $field
-     * @return bool
+     *
+     * @return boolean
      */
     protected function updateFieldData( VersionInfo $versionInfo, Field $field )
     {
@@ -140,6 +144,7 @@ class LegacyStorage extends Gateway
      *
      * @param VersionInfo $versionInfo
      * @param Field $field
+     *
      * @return void
      */
     protected function storeNewFieldData( VersionInfo $versionInfo, Field $field )
@@ -173,6 +178,7 @@ class LegacyStorage extends Gateway
      *
      * @param VersionInfo $versionInfo
      * @param Field $field
+     *
      * @return array
      */
     public function getFieldData( VersionInfo $versionInfo, Field $field )
@@ -186,6 +192,7 @@ class LegacyStorage extends Gateway
      * If no data is found, null is returned.
      *
      * @param int $fieldId
+     *
      * @return array|null
      */
     protected function loadFieldData( $fieldId, $versionNo )
@@ -225,7 +232,8 @@ class LegacyStorage extends Gateway
      *
      * @param int $fieldId
      * @param int $versionNo
-     * @return bool
+     *
+     * @return boolean
      */
     protected function hasFieldData( $fieldId, $versionNo )
     {
@@ -237,6 +245,7 @@ class LegacyStorage extends Gateway
      *
      * @param VersionInfo $versionInfo
      * @param array $fieldIds
+     *
      * @return void
      */
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds )

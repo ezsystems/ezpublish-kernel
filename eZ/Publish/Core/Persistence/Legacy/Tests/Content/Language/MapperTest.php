@@ -19,8 +19,9 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
 class MapperTest extends TestCase
 {
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper::createLanguageFromCreateStruct
+     *
+     * @return void
      */
     public function testCreateLanguageFromCreateStruct()
     {
@@ -38,8 +39,9 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper::extractLanguagesFromRows
+     *
+     * @return void
      */
     public function testExtractLanguagesFromRows()
     {
@@ -93,7 +95,7 @@ class MapperTest extends TestCase
     /**
      * Returns a Language CreateStruct fixture
      *
-     * @return eZ\Publish\SPI\Persistence\Content\Language\CreateStruct
+     * @return \eZ\Publish\SPI\Persistence\Content\Language\CreateStruct
      */
     protected function getCreateStructFixture()
     {
@@ -109,7 +111,7 @@ class MapperTest extends TestCase
     /**
      * Returns a Language fixture
      *
-     * @return eZ\Publish\SPI\Persistence\Content\Language
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     protected function getLanguageFixture()
     {

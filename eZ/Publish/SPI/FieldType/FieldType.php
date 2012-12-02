@@ -33,7 +33,7 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
 interface FieldType
 {
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * This identifier should be globally unique and the implementer of a
      * FieldType must take care for the uniqueness. It is therefore recommended
@@ -55,6 +55,7 @@ interface FieldType
      * acceptValue()}.
      *
      * @param mixed $value
+     *
      * @return string
      */
     public function getName( $value );
@@ -162,7 +163,7 @@ interface FieldType
     /**
      * Indicates if the field type supports indexing and sort keys for searching
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable();
 
@@ -186,7 +187,8 @@ interface FieldType
      * been processed by {@link acceptValue()}.
      *
      * @param mixed $value
-     * @return bool
+     *
+     * @return boolean
      */
     public function isEmptyValue( $value );
 
@@ -222,6 +224,7 @@ interface FieldType
      * necessary. See the class description for more details on a hash format.
      *
      * @param mixed $hash
+     *
      * @return mixed
      */
     public function fromHash( $hash );
@@ -246,6 +249,7 @@ interface FieldType
      * See the class description for more details on a hash format.
      *
      * @param mixed $fieldSettings
+     *
      * @return array|hash|scalar|null
      */
     public function fieldSettingsToHash( $fieldSettings );
@@ -257,6 +261,7 @@ interface FieldType
      * See the class description for more details on a hash format.
      *
      * @param array|hash|scalar|null $fieldSettingsHash
+     *
      * @return mixed
      */
     public function fieldSettingsFromHash( $fieldSettingsHash );
@@ -267,6 +272,7 @@ interface FieldType
      * See the class description for more details on a hash format.
      *
      * @param mixed $validatorConfiguration
+     *
      * @return array|hash|scalar|null
      */
     public function validatorConfigurationToHash( $validatorConfiguration );
@@ -278,6 +284,7 @@ interface FieldType
      * See the class description for more details on a hash format.
      *
      * @param array|hash|scalar|null $validatorConfigurationHash
+     *
      * @return mixed
      */
     public function validatorConfigurationFromHash( $validatorConfigurationHash );

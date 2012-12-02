@@ -37,6 +37,7 @@ class Value extends BaseValue
      * Construct a new Value object and initialize with $dateTime
      *
      * @param \DateTime|null $dateTime Date/Time as a DateTime object or a string understood by the DateTime class
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $dateTime does not comply to a valid dateTime or string
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $dateTime does not comply to a valid date format string
      */
@@ -49,6 +50,7 @@ class Value extends BaseValue
      * Creates a Value from the given $dateString
      *
      * @param string $dateString
+     *
      * @return \eZ\Publish\Core\FieldType\DateAndTime\Value
      */
     public static function fromString( $dateString )
@@ -67,6 +69,7 @@ class Value extends BaseValue
      * Creates a Value from the given $timestamp
      *
      * @param int $timestamp
+     *
      * @return \eZ\Publish\Core\FieldType\DateAndTime\Value
      */
     public static function fromTimestamp( $timestamp )

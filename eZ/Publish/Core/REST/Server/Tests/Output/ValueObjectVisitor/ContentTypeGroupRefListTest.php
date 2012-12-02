@@ -69,6 +69,7 @@ class ContentTypeGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testContentTypeGroupRefListHrefCorrect( \DOMDocument $dom )
@@ -78,6 +79,7 @@ class ContentTypeGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testContentTypeGroupRefListMediaTypeCorrect( \DOMDocument $dom )
@@ -87,6 +89,7 @@ class ContentTypeGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testFirstContentTypeGroupRefHrefCorrect( \DOMDocument $dom )
@@ -96,6 +99,7 @@ class ContentTypeGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testFirstContentTypeGroupRefMediaTypeCorrect( \DOMDocument $dom )
@@ -105,6 +109,7 @@ class ContentTypeGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testFirstContentTypeGroupRefUnlinkHrefCorrect( \DOMDocument $dom )
@@ -114,6 +119,7 @@ class ContentTypeGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testFirstContentTypeGroupRefUnlinkMethodCorrect( \DOMDocument $dom )
@@ -123,6 +129,7 @@ class ContentTypeGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testSecondContentTypeGroupRefHrefCorrect( \DOMDocument $dom )
@@ -132,6 +139,7 @@ class ContentTypeGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testSecondContentTypeGroupRefMediaTypeCorrect( \DOMDocument $dom )
@@ -141,6 +149,7 @@ class ContentTypeGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testSecondContentTypeGroupRefUnlinkHrefCorrect( \DOMDocument $dom )
@@ -150,6 +159,7 @@ class ContentTypeGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testSecondContentTypeGroupRefUnlinkMethodCorrect( \DOMDocument $dom )

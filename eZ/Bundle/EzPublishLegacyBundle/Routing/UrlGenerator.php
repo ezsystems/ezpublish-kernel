@@ -40,8 +40,10 @@ class UrlGenerator extends Generator
      *
      * @param string $legacyModuleUri The legacy module URI, including ordered params (e.g. "/content/view/full/2"
      * @param array $parameters Named parameters for the module/view
-     * @return string
+     *
      * @throws \InvalidArgumentException
+     *
+     * @return string
      */
     public function doGenerate( $legacyModuleUri, array $parameters )
     {

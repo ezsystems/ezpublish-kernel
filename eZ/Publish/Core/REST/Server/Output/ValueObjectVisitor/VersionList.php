@@ -29,7 +29,7 @@ class VersionList extends ValueObjectVisitor
     {
         $generator->startObjectElement( 'VersionList' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'VersionList' ) );
-        //@TODO Needs refactoring, disabling certain headers should not be done this way
+        //@todo Needs refactoring, disabling certain headers should not be done this way
         $visitor->setHeader( 'Accept-Patch', false );
 
         $generator->startAttribute( 'href', $data->path );

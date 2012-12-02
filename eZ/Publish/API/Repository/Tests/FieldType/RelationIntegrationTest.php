@@ -58,8 +58,9 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
     /**
      * Get a valid $fieldSettings value
      *
+     * @todo Implement correctly
+     *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getValidFieldSettings()
     {
@@ -69,8 +70,9 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
     /**
      * Get a valid $validatorConfiguration
      *
+     * @todo Implement correctly
+     *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getValidValidatorConfiguration()
     {
@@ -80,8 +82,9 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
     /**
      * Get $fieldSettings value not accepted by the field type
      *
+     * @todo Implement correctly
+     *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getInvalidFieldSettings()
     {
@@ -91,8 +94,9 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
     /**
      * Get $validatorConfiguration not accepted by the field type
      *
+     * @todo Implement correctly
+     *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getInvalidValidatorConfiguration()
     {
@@ -116,6 +120,7 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     public function assertFieldDataLoadedCorrect( Field $field)

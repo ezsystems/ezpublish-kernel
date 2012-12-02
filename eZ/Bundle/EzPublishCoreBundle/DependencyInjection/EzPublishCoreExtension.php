@@ -41,7 +41,7 @@ class EzPublishCoreExtension extends Extension
     /**
      * Loads a specific configuration.
      *
-     * @param array            $configs    An array of configuration values
+     * @param mixed[] $configs An array of configuration values
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container A ContainerBuilder instance
      *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
@@ -101,24 +101,33 @@ class EzPublishCoreExtension extends Extension
     private function fixUpConfiguration( array &$config )
     {
         $affectedMatchMethods = array( 'Map\\URI' => true, 'Map\\Host' => true );
-        foreach ( $config[0]['siteaccess']['match'] as $mappingMethod => &$configurationBlock )
+        $affectedSystemKeys = array( 'location_view', 'content_view', 'image_variations' );
+        foreach ( $config as &$subConfig )
         {
-            if ( !isset( $affectedMatchMethods[$mappingMethod] ) )
-                continue;
-
-            $this->fixedUpKeys['siteaccess']['match'][$mappingMethod] = $this->fixUpKeyReference( $configurationBlock );
-        }
-
-        $affectedKeys = array( 'location_view', 'content_view', 'image_variations' );
-        foreach ( $config[0]['system'] as $configurationKey => &$configurationBlock )
-        {
-            foreach ( $affectedKeys as $affectedKey )
+            if ( isset( $subConfig['siteaccess']['match'] ) )
             {
-                if ( !isset( $configurationBlock[$affectedKey] ) )
-                    continue;
-                $result = $this->fixUpKeyReference( $configurationBlock[$affectedKey] );
-                if ( count( $result ) )
-                    $this->fixedUpKeys['system'][$configurationKey][$affectedKey] = $result;
+                foreach ( $subConfig['siteaccess']['match'] as $mappingMethod => &$configurationBlock )
+                {
+                    if ( !isset( $affectedMatchMethods[$mappingMethod] ) )
+                        continue;
+
+                    $this->fixedUpKeys['siteaccess']['match'][$mappingMethod] = $this->fixUpKeyReference( $configurationBlock );
+                }
+            }
+
+            if ( isset( $subConfig['system'] ) )
+            {
+                foreach ( $subConfig['system'] as $configurationKey => &$configurationBlock )
+                {
+                    foreach ( $affectedSystemKeys as $affectedKey )
+                    {
+                        if ( !isset( $configurationBlock[$affectedKey] ) )
+                            continue;
+                        $result = $this->fixUpKeyReference( $configurationBlock[$affectedKey] );
+                        if ( !empty( $result ) )
+                            $this->fixedUpKeys['system'][$configurationKey][$affectedKey] = $result;
+                    }
+                }
             }
         }
     }
@@ -190,6 +199,7 @@ class EzPublishCoreExtension extends Extension
     /**
      * @param array $config
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
      * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration
      */
     public function getConfiguration( array $config, ContainerBuilder $container )

@@ -68,8 +68,10 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      * Only for testing
      *
      * @param mixed tringid
-     * @return void
+     *
      * @private
+     *
+     * @return void
      */
     public function setSession( $id )
     {
@@ -98,7 +100,7 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      */
     public function createUserGroup( UserGroupCreateStruct $userGroupCreateStruct, UserGroup $parentGroup )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -113,7 +115,7 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      */
     public function loadUserGroup( $id )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -121,13 +123,13 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
-     * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\UserGroup}
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
      */
     public function loadSubUserGroups( UserGroup $userGroup )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -141,7 +143,7 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      */
     public function deleteUserGroup( UserGroup $userGroup )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -154,7 +156,7 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      */
     public function moveUserGroup( UserGroup $userGroup, UserGroup $newParent )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -174,7 +176,7 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      */
     public function updateUserGroup( UserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -193,13 +195,13 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      */
     public function createUser( UserCreateStruct $userCreateStruct, array $parentGroups )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
      * Loads a user
      *
-     * @param integer $userId
+     * @param int $userId
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
@@ -207,18 +209,19 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      */
     public function loadUser( $userId )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
      * Loads anonymous user
      *
      * @uses loadUser()
+     *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
     public function loadAnonymousUser()
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -233,7 +236,7 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      */
     public function loadUserByCredentials( $login, $password )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -245,7 +248,7 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      */
     public function deleteUser( User $user )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -265,7 +268,7 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      */
     public function updateUser( User $user, UserUpdateStruct $userUpdateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -279,7 +282,7 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      */
     public function assignUserToUserGroup( User $user, UserGroup $userGroup )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -293,7 +296,7 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      */
     public function unAssignUserFromUserGroup( User $user, UserGroup $userGroup )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -307,11 +310,11 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      */
     public function loadUserGroupsOfUser( User $user)
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * loads the users of a user group
+     * Loads the users of a user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the users or user group
      *
@@ -323,13 +326,13 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      */
     public function loadUsersOfUserGroup( UserGroup $userGroup, $offset = 0, $limit = -1)
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
      * Instantiate a user create class
      *
-     * @paramb string $login the login of the new user
+     * @param string $login the login of the new user
      * @param string $email the email of the new user
      * @param string $password the plain password of the new user
      * @param string $mainLanguageCode the main language for the underlying content object
@@ -339,7 +342,7 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      */
     public function newUserCreateStruct( $login, $email, $password, $mainLanguageCode, $contentType = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -352,7 +355,7 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      */
     public function newUserGroupCreateStruct( $mainLanguageCode, $contentType = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -362,7 +365,7 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      */
     public function newUserUpdateStruct()
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -372,6 +375,6 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      */
     public function newUserGroupUpdateStruct()
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 }

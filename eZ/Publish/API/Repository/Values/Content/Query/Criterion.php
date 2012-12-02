@@ -117,6 +117,7 @@ abstract class Criterion
     /**
      * Returns a callback that checks the values types depending on the operator specifications
      * @param int $valueTypes The accepted values, as a bit field of Specifications::TYPE_* constants
+     *
      * @return \Closure
      */
     private function getValueTypeCheckCallback( $valueTypes )

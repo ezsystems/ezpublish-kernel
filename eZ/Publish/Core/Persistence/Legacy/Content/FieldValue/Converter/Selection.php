@@ -23,7 +23,6 @@ class Selection implements Converter
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @static
      * @return Selection
      */
     public static function create()
@@ -118,7 +117,7 @@ class Selection implements Converter
             "options" => $options,
         ) );
 
-        // TODO: Can Selection store a default value in the DB?
+        // @todo: Can Selection store a default value in the DB?
         $fieldDef->defaultValue = new FieldValue();
         $fieldDef->defaultValue->data = array();
     }

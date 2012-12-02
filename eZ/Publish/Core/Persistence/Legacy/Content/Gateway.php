@@ -43,6 +43,7 @@ abstract class Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
+     *
      * @return int ID
      */
     abstract public function insertVersion( VersionInfo $versionInfo, array $fields );
@@ -52,6 +53,7 @@ abstract class Gateway
      *
      * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $struct
+     *
      * @return void
      */
     abstract public function updateContent( $contentId, MetadataUpdateStruct $struct );
@@ -62,6 +64,7 @@ abstract class Gateway
      * @param int $contentId
      * @param int $versionNo
      * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $struct
+     *
      * @return void
      */
     abstract public function updateVersion( $contentId, $versionNo, UpdateStruct $struct );
@@ -70,7 +73,7 @@ abstract class Gateway
      * Updates "always available" flag for content identified by $contentId, in respect to $alwaysAvailable.
      *
      * @param int $contentId
-     * @param bool $newAlwaysAvailable New "always available" value
+     * @param boolean $newAlwaysAvailable New "always available" value
      */
     abstract public function updateAlwaysAvailableFlag( $contentId, $newAlwaysAvailable );
 
@@ -82,6 +85,7 @@ abstract class Gateway
      * @param int $contentId
      * @param int $version
      * @param int $status
+     *
      * @return boolean
      */
     abstract public function setStatus( $contentId, $version, $status );
@@ -96,6 +100,7 @@ abstract class Gateway
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
+     *
      * @return int ID
      */
     abstract public function insertNewField( Content $content, Field $field, StorageFieldValue $value );
@@ -108,6 +113,7 @@ abstract class Gateway
      * @param Content $content
      * @param Field $field
      * @param StorageFieldValue $value
+     *
      * @return void
      */
     abstract public function insertExistingField( Content $content, Field $field, StorageFieldValue $value );
@@ -117,6 +123,7 @@ abstract class Gateway
      *
      * @param Field $field
      * @param StorageFieldValue $value
+     *
      * @return void
      */
     abstract public function updateField( Field $field, StorageFieldValue $value );
@@ -127,6 +134,7 @@ abstract class Gateway
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
      * @param int $contentId
+     *
      * @return void
      */
     abstract public function updateNonTranslatableField(
@@ -135,13 +143,14 @@ abstract class Gateway
         $contentId );
 
     /**
-     * Load data for a content object
+     * Loads data for a content object
      *
      * Returns an array with the relevant data.
      *
      * @param mixed $contentId
      * @param mixed $version
      * @param string[] $translations
+     *
      * @return array
      */
     abstract public function load( $contentId, $version, $translations = null );
@@ -153,8 +162,10 @@ abstract class Gateway
      *  - main_language_code => Language code for main (initial) language. E.g. "eng-GB"
      *
      * @param int $contentId
-     * @return array
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     *
+     * @return array
      */
     abstract public function loadContentInfo( $contentId );
 
@@ -175,7 +186,7 @@ abstract class Gateway
     /**
      * Returns data for all versions with given status created by the given $userId
      *
-     * @param $userId
+     * @param int $userId
      * @param int $status
      *
      * @return string[][]
@@ -186,6 +197,7 @@ abstract class Gateway
      * Returns all version data for the given $contentId
      *
      * @param mixed $contentId
+     *
      * @return string[][]
      */
     abstract public function listVersions( $contentId );
@@ -203,6 +215,7 @@ abstract class Gateway
      * Returns all IDs for locations that refer to $contentId
      *
      * @param int $contentId
+     *
      * @return int[]
      */
     abstract public function getAllLocationIds( $contentId );
@@ -234,6 +247,7 @@ abstract class Gateway
      *
      * @param int $fieldId
      * @param int $version
+     *
      * @return void
      */
     abstract public function deleteField( $fieldId, $version );
@@ -278,6 +292,7 @@ abstract class Gateway
      * @param int $version
      * @param string $name
      * @param string $language
+     *
      * @return void
      */
     abstract public function setName( $contentId, $version, $name, $language );
@@ -286,6 +301,7 @@ abstract class Gateway
      * Deletes the actual content object referred to by $contentId
      *
      * @param int $contentId
+     *
      * @return void
      */
     abstract public function deleteContent( $contentId );
@@ -295,6 +311,7 @@ abstract class Gateway
      * $contentId
      *
      * @param mixed $contentId
+     *
      * @return array
      */
     abstract public function loadLatestPublishedData( $contentId );
@@ -314,7 +331,7 @@ abstract class Gateway
      * Loads data of related to/from $contentId
      *
      * @param int $contentId
-     * @param bool $reverse Reverse relation, default false
+     * @param boolean $reverse Reverse relation, default false
      * @param int $contentVersionNo
      * @param int $relationType
      *

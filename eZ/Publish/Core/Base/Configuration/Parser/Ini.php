@@ -93,6 +93,7 @@ class Ini implements Parser
      *
      * @param string $fileName A valid file name
      * @param string $fileContent
+     *
      * @return array
      */
     public function parse( $fileName, $fileContent )
@@ -121,6 +122,7 @@ class Ini implements Parser
      * the ini files eZ Publish use because things like regex as ini variable and so on.
      *
      * @param string $fileContent
+     *
      * @return array|false Data structure for parsed ini file or false if it fails
      */
     protected function parseFilePhp( $fileContent )
@@ -168,6 +170,7 @@ class Ini implements Parser
      * @todo Change impl to use exceptions instead of trigger_error
      *
      * @param string $fileContent
+     *
      * @return array Data structure for parsed ini file
      */
     protected function parseFileEzc( $fileContent )
@@ -253,6 +256,7 @@ class Ini implements Parser
      * Injects constants which is later cleaned up in {@link parsePhpPostArrayFilter()}.
      *
      * @param string $fileContent
+     *
      * @return string
      */
     protected function parserPhpDimensionArraySupport( $fileContent )
@@ -321,6 +325,7 @@ class Ini implements Parser
      * Injects constants which is later cleaned up in {@link parsePhpPostArrayFilter()}.
      *
      * @param string $fileContent
+     *
      * @return string
      */
     protected function parserPhpQuoteSupport( $fileContent )
@@ -364,6 +369,7 @@ class Ini implements Parser
      * Marks array clearing, so post parser code in {@link Configuration::parse()} can detect it
      *
      * @param string $fileContent
+     *
      * @return string
      */
     protected function parserClearArraySupport( $fileContent )
@@ -383,6 +389,7 @@ class Ini implements Parser
      * are the same as with ezcConfigurationIniReader.
      *
      * @param mixed $iniValue
+     *
      * @return mixed
      */
     protected static function parsePhpPostFilter( $iniValue )
@@ -420,6 +427,7 @@ class Ini implements Parser
      * Deals specifically with post parse fixes for three dimensional arrays.
      *
      * @param array $array
+     *
      * @return array
      */
     protected static function parsePhpPostArrayFilter( array $array )

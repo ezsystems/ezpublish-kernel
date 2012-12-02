@@ -87,6 +87,7 @@ class RestRelation extends ValueObjectVisitor
      * Returns $relationType as a readable string
      *
      * @param int $relationType
+     *
      * @return string
      */
     protected function getRelationTypeString( $relationType )

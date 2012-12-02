@@ -54,6 +54,7 @@ class RemoveField extends Action
      * Applies the action to the given $content
      *
      * @param Content $content
+     *
      * @return void
      */
     public function apply( Content $content )

@@ -24,6 +24,7 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $matchingConfig
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getPartiallyMockedLocationViewProvider( array $matchingConfig = array() )
@@ -55,6 +56,7 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $properties
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getLocationMock( array $properties = array() )
@@ -68,6 +70,7 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $properties
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getContentInfoMock( array $properties = array() )

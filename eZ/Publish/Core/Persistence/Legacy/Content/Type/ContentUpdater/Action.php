@@ -37,6 +37,7 @@ abstract class Action
      * Applies the action to the given $content
      *
      * @param Content $content
+     *
      * @return void
      */
     abstract public function apply( Content $content );

@@ -25,6 +25,7 @@ class RoleAssignment extends Parser
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
      * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment
      * @todo Error handling
      * @todo Use dependency injection system for Role Limitation lookup

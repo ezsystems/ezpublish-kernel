@@ -418,7 +418,7 @@ class AuthorTest extends StandardizedFieldTypeTest
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\Author\Value::getName
+     * @covers \eZ\Publish\Core\FieldType\Author\Type::getName
      */
     public function testFieldValueTitle()
     {

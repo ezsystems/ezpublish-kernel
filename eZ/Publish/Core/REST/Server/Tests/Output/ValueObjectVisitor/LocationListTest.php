@@ -47,6 +47,7 @@ class LocationListTest extends ValueObjectVisitorBaseTest
      * Test if result contains LocationList element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLocationListElement( $result )
@@ -65,6 +66,7 @@ class LocationListTest extends ValueObjectVisitorBaseTest
      * Test if result contains LocationList element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLocationListAttributes( $result )

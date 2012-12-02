@@ -20,7 +20,7 @@ use eZ\Publish\Core\FieldType\FieldType,
 class Type extends FieldType
 {
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -85,7 +85,7 @@ class Type extends FieldType
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
-     * @TODO: Implement.
+     * @todo: Implement.
      */
     protected function getSortInfo( $value )
     {

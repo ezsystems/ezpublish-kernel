@@ -39,6 +39,7 @@ class EmbedToHtml5 implements Converter
      * Converts embed elements in $xmlDoc from internal representation to HTML5
      *
      * @param \DOMDocument $xmlDoc
+     *
      * @return null
      */
     public function convert( DOMDocument $xmlDoc )

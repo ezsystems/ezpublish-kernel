@@ -82,6 +82,7 @@ class LegacyStorage extends Gateway
      * Set dbHandler for gateway
      *
      * @param mixed $dbHandler
+     *
      * @return void
      */
     public function setConnection( $dbHandler )
@@ -114,6 +115,7 @@ class LegacyStorage extends Gateway
      *
      * @param mixed $fieldId
      * @param mixed $userId
+     *
      * @return array
      */
     public function getFieldData( $fieldId, $userId = null )
@@ -142,6 +144,7 @@ class LegacyStorage extends Gateway
      * Converts the given database values to properties
      *
      * @param array $databaseValues
+     *
      * @return array
      */
     protected function convertColumnsToProperties( array $databaseValues )
@@ -163,6 +166,7 @@ class LegacyStorage extends Gateway
      * Fetch basic user data
      *
      * @param mixed $fieldId
+     *
      * @return array
      */
     protected function fetchUserId( $fieldId )
@@ -190,6 +194,7 @@ class LegacyStorage extends Gateway
      * Fetch user data
      *
      * @param mixed $userId
+     *
      * @return array
      */
     protected function fetchUserData( $userId )
@@ -225,6 +230,7 @@ class LegacyStorage extends Gateway
      * ezcDatabase nor by databases like SQLite
      *
      * @param mixed $userId
+     *
      * @return array
      */
     protected function fetchUserSettings( $userId )

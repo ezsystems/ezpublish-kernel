@@ -30,7 +30,7 @@ use eZ\Publish\Core\REST\Client\ContentService;
 class VersionInfo extends \eZ\Publish\API\Repository\Values\Content\VersionInfo
 {
     /**
-     * @var eZ\Publish\Core\REST\Client\ContentService
+     * @var \eZ\Publish\Core\REST\Client\ContentService
      */
     protected $contentService;
 
@@ -62,7 +62,6 @@ class VersionInfo extends \eZ\Publish\API\Repository\Values\Content\VersionInfo
     }
 
     /**
-     *
      * Returns the names computed from the name schema in the available languages.
      *
      * @return string[]
@@ -73,7 +72,6 @@ class VersionInfo extends \eZ\Publish\API\Repository\Values\Content\VersionInfo
     }
 
     /**
-     *
      * Returns the name computed from the name schema in the given language.
      * If no language is given the name in initial language of the version if present, otherwise null.
      *

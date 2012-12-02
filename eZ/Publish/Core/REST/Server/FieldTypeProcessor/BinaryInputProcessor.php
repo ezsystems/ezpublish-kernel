@@ -36,6 +36,7 @@ abstract class BinaryInputProcessor implements FieldTypeProcessor
      * accordingly.
      *
      * @param array $incomingValueHash
+     *
      * @return array
      */
     public function preProcessHash( $incomingValueHash )

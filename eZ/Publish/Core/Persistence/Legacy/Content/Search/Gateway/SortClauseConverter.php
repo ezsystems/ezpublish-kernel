@@ -35,6 +35,7 @@ class SortClauseConverter
      * Construct from an optional array of sort clause handlers
      *
      * @param array $handlers
+     *
      * @return void
      */
     public function __construct( array $handlers = array() )
@@ -47,6 +48,7 @@ class SortClauseConverter
      *
      * @param \ezcQuerySelect $query
      * @param array $sortClauses
+     *
      * @return void
      */
     public function applySelect( ezcQuerySelect $query, array $sortClauses )
@@ -75,6 +77,7 @@ class SortClauseConverter
      *
      * @param \ezcQuerySelect $query
      * @param array $sortClauses
+     *
      * @return void
      */
     public function applyJoin( ezcQuerySelect $query, array $sortClauses )
@@ -99,6 +102,7 @@ class SortClauseConverter
      *
      * @param \ezcQuerySelect $query
      * @param array $sortClauses
+     *
      * @return void
      */
     public function applyOrderBy( ezcQuerySelect $query, array $sortClauses )
@@ -111,7 +115,7 @@ class SortClauseConverter
             );
         }
 
-        // @TODO Review needed
+        // @todo Review needed
         // The following line was added because without it, loading sub user groups through the Public API
         // fails with the database error "Unknown column sort_column_0". The change does not break any
         // integration tests or legacy persistence tests, but it can break something else, so review is needed

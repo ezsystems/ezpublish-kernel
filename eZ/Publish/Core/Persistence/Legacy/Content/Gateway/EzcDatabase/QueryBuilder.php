@@ -22,7 +22,7 @@ class QueryBuilder
     /**
      * Creates a new query builder.
      *
-     * @param EzcDbHandler $dbHandler
+     * @param \EzcDbHandler $dbHandler
      */
     public function __construct( ezcDbHandler $dbHandler )
     {
@@ -36,6 +36,7 @@ class QueryBuilder
      * content object. Does not apply any WHERE conditions.
      *
      * @param string[] $translations
+     *
      * @return \ezcQuerySelect
      */
     public function createFindQuery( array $translations = null )

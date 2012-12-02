@@ -65,6 +65,7 @@ class Backend
      * @param array $data
      * @param boolean $autoIncrement
      * @param string $idColumn By default, id column is 'id', but this can be customized here (e.g. for 'contentId')
+     *
      * @return object
      * @throws InvalidArgumentValue On invalid $type
      * @throws LogicException If $autoIncrement is false but $data does not include an id
@@ -117,6 +118,7 @@ class Backend
      * @param string $type
      * @param int|string $id
      * @param string $idColumn
+     *
      * @return object
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue On invalid $type
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If data does not exist
@@ -167,8 +169,9 @@ class Backend
      *                                'match' => array( 'contentId' => 'id' ) )
      *                            )
      *                        Value of 'sub' follows exactly same format as $joinInfo allowing recursive joining.
-     * @return object[]
      * @uses rawFind()
+     *
+     * @return object[]
      */
     public function find( $type, array $match = array(), array $joinInfo = array() )
     {
@@ -186,8 +189,10 @@ class Backend
      * @param int|string $id
      * @param array $data
      * @param boolean $union Specifies if data should be merged with existing data or not
-     * @return boolean False if data does not exist and can not be updated
+     *
      * @uses updateByMatch()
+     *
+     * @return boolean False if data does not exist and can not be updated
      */
     public function update( $type, $id, array $data, $union = true, $idColumn = 'id' )
     {
@@ -204,8 +209,10 @@ class Backend
      * @param array $match A flat array with property => value to match against
      * @param array $data
      * @param boolean $union Specifies if data should be merged with existing data or not
-     * @return boolean False if data does not exist and can not be updated
+     *
      * @throws InvalidArgumentValue On invalid $type
+     *
+     * @return boolean False if data does not exist and can not be updated
      */
     public function updateByMatch( $type, array $match, array $data, $union = true, $idColumn = 'id' )
     {
@@ -241,6 +248,7 @@ class Backend
      *
      * @param string $type
      * @param int|string $id
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If data does not exist
      * @uses deleteByMatch()
      */
@@ -257,6 +265,7 @@ class Backend
      *
      * @param string $type
      * @param array $match A flat array with property => value to match against
+     *
      * @throws InvalidArgumentValue On invalid $type
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no data to delete have been found
      */
@@ -287,8 +296,10 @@ class Backend
      * @param string $type
      * @param array $match A flat array with property => value to match against
      * @param array $joinInfo See {@link find()}
-     * @return int
+     *
      * @uses rawFind()
+     *
+     * @return int
      */
     public function count( $type, array $match = array(), array $joinInfo = array() )
     {
@@ -347,6 +358,7 @@ class Backend
      * @param string $type
      * @param array $match A multi level array with property => value to match against
      * @param array $joinInfo See {@link find()}
+     *
      * @return array[]
      * @throws InvalidArgumentValue On invalid $type
      * @throws LogicException When there is a collision between match rules in $joinInfo and $match
@@ -384,7 +396,8 @@ class Backend
      *
      * @param array $item
      * @param array $match
-     * @return bool
+     *
+     * @return boolean
      */
     private function match( array $item, array $match )
     {
@@ -458,7 +471,8 @@ class Backend
      *
      * Makes sure no id conflicts occur if data for some reason contains gaps in id numbers.
      *
-     * @param $type
+     * @param string $type
+     *
      * @return int
      */
     private function getNextId( $type, $idColumn = 'id' )
@@ -477,6 +491,7 @@ class Backend
      * @param string $type
      * @param array $data
      * @param array $joinInfo See {@link find()}
+     *
      * @return object
      */
     protected function toValue( $type, array $data, array $joinInfo = array() )
@@ -551,6 +566,7 @@ class Backend
      *
      * @param \eZ\Publish\SPI\Persistence\ValueObject $item
      * @param array $joinInfo See {@link find()}
+     *
      * @return ValueObject
      */
     private function joinToValue( ValueObject $item, array $joinInfo = array() )
@@ -592,7 +608,8 @@ class Backend
     }
 
     /**
-     * @param $obj
+     * @param \eZ\Publish\SPI\Persistence\ValueObject $obj
+     *
      * @return string
      */
     protected function getFieldTypeNamespace( $obj )

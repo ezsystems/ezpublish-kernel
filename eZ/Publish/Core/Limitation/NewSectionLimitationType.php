@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\NewSectionLimitation as APINewSectionLimitation;
@@ -33,7 +34,7 @@ class NewSectionLimitationType implements SPILimitationTypeInterface
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
      * @param \eZ\Publish\API\Repository\Repository $repository
      *
-     * @return bool
+     * @return boolean
      */
     public function acceptValue( APILimitationValue $limitationValue, Repository $repository )
     {
@@ -69,30 +70,38 @@ class NewSectionLimitationType implements SPILimitationTypeInterface
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
      * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
      *
-     * @return bool
+     * @return boolean
      */
     public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null )
     {
         if ( !$value instanceof APINewSectionLimitation )
+        {
             throw new InvalidArgumentException( '$value', 'Must be of type: APINewSectionLimitation' );
+        }
 
-        if ( !$object instanceof ContentInfo && !$object instanceof Content )
-            throw new InvalidArgumentException( '$object', 'Must be of type: Content or ContentInfo' );
+        if ( !$object instanceof ContentInfo && !$object instanceof Content && !$object instanceof VersionInfo )
+        {
+            throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
+        }
 
         if ( !$target instanceof Section )
+        {
             throw new InvalidArgumentException( '$target', 'Must be of type: Section' );
+        }
 
         if ( empty( $value->limitationValues ) )
+        {
             return false;
+        }
 
         /**
-         * @var \eZ\Publish\API\Repository\Values\Content\Section $target
+         * @var $target Section
          */
         return in_array( $target->id, $value->limitationValues );
     }
 
     /**
-     * Return Criterion for use in find() query
+     * Returns Criterion for use in find() query
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -105,7 +114,7 @@ class NewSectionLimitationType implements SPILimitationTypeInterface
     }
 
     /**
-     * Return info on valid $limitationValues
+     * Returns info on valid $limitationValues
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      *

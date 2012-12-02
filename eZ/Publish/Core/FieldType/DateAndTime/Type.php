@@ -43,7 +43,7 @@ class Type extends FieldType
     );
 
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -194,7 +194,7 @@ class Type extends FieldType
     /**
      * Returns whether the field type is searchable
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {
@@ -300,6 +300,7 @@ class Type extends FieldType
      * this in your specific implementation, if neccessary.
      *
      * @param mixed $fieldSettings
+     *
      * @return array|hash|scalar|null
      */
     public function fieldSettingsToHash( $fieldSettings )
@@ -327,6 +328,7 @@ class Type extends FieldType
      * neccessary.
      *
      * @param array|hash|scalar|null $fieldSettingsHash
+     *
      * @return mixed
      */
     public function fieldSettingsFromHash( $fieldSettingsHash )

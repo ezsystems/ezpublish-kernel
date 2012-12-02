@@ -8,7 +8,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     /**
      * If the temporary directory should be removed after the tests.
      *
-     * @var bool
+     * @var boolean
      */
     protected static $removeTmpDir = false;
 
@@ -95,6 +95,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
      * Removes the given directory path recursively
      *
      * @param string $dir
+     *
      * @return void
      */
     protected static function removeRecursive( $dir )

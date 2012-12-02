@@ -15,8 +15,9 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI as URIMapMatcher,
 class RouterMapURITest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param $uri
-     * @param $expectedFixedUpURI
+     * @param string $uri
+     * @param string $expectedFixedUpURI
+     *
      * @dataProvider fixupURIProvider
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI::analyseURI
      */
@@ -30,8 +31,9 @@ class RouterMapURITest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $fullUri
-     * @param $linkUri
+     * @param string $fullUri
+     * @param string $linkUri
+     *
      * @dataProvider fixupURIProvider
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI::analyseLink
      */

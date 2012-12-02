@@ -85,6 +85,7 @@ class RestListener implements EventSubscriberInterface
      * @param \Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent $event
      *
      * @throws \Exception
+     *
      * @return void
      */
     public function onKernelExceptionView( GetResponseForExceptionEvent $event )
@@ -124,7 +125,8 @@ class RestListener implements EventSubscriberInterface
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return bool
+     *
+     * @return boolean
      */
     protected function isRestRequest( Request $request )
     {
@@ -132,7 +134,8 @@ class RestListener implements EventSubscriberInterface
     }
 
     /**
-     * @param $result
+     * @param mixed $result
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function visitResult( $result )

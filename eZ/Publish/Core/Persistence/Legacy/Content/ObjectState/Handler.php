@@ -310,6 +310,7 @@ class Handler implements BaseObjectStateHandler
      * @param mixed $contentId
      * @param mixed $groupId
      * @param mixed $stateId
+     *
      * @return boolean
      */
     public function setContentState( $contentId, $groupId, $stateId )
@@ -327,6 +328,7 @@ class Handler implements BaseObjectStateHandler
      *
      * @param mixed $contentId
      * @param mixed $stateGroupId
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
     public function getContentState( $contentId, $stateGroupId )
@@ -345,6 +347,7 @@ class Handler implements BaseObjectStateHandler
      * Returns the number of objects which are in this state
      *
      * @param mixed $stateId
+     *
      * @return int
      */
     public function getContentCount( $stateId )

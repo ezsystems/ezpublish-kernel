@@ -44,6 +44,7 @@ class ConverterRegistry
      *
      * @param string $typeName
      * @param mixed $converter Callable or converter instance
+     *
      * @return void
      */
     public function register( $typeName, $converter )
@@ -56,7 +57,7 @@ class ConverterRegistry
      *
      * @param string $typeName
      *
-     * @throws eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
+     * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      * @throws \RuntimeException When type is neither Converter instance or callable factory
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter

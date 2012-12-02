@@ -62,7 +62,7 @@ class URLWildcardService implements URLWildcardServiceInterface
     }
 
     /**
-     * creates a new url wildcard
+     * Creates a new url wildcard
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the $sourceUrl pattern already exists
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create url wildcards
@@ -169,8 +169,7 @@ class URLWildcardService implements URLWildcardServiceInterface
     }
 
     /**
-     *
-     * loads a url wild card
+     * Loads a url wild card
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
      *
@@ -186,7 +185,7 @@ class URLWildcardService implements URLWildcardServiceInterface
     }
 
     /**
-     * loads all url wild card (paged)
+     * Loads all url wild card (paged)
      *
      * @param int $offset
      * @param int $limit
@@ -254,8 +253,9 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @param \eZ\Publish\SPI\Persistence\Content\UrlWildcard[] $spiUrlWildcards
      *
-     * @return array
      * @todo use or remove
+     *
+     * @return array
      */
     private function buildSpecificityScoreMap( array $spiUrlWildcards )
     {
@@ -293,6 +293,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      * Compiles the given url pattern into a regular expression.
      *
      * @param string $sourceUrl
+     *
      * @return string
      */
     private function compile( $sourceUrl )

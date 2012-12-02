@@ -32,10 +32,11 @@ class LegacyTreeMenuController extends Controller
      * Action rendering the tree menu for admin interface.
      * Note that parameters are not used at all since the request is entirely forwarded to the legacy kernel.
      *
-     * @param $nodeId
-     * @param $modified
-     * @param $expiry
-     * @param $perm
+     * @param int $nodeId
+     * @param int $modified
+     * @param int $expiry
+     * @param string $perm
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function viewMenu( $nodeId, $modified, $expiry, $perm )

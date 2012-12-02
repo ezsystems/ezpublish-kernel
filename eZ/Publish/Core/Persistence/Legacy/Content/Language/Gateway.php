@@ -19,6 +19,7 @@ abstract class Gateway
      * Inserts the given $language
      *
      * @param Language $language
+     *
      * @return int ID of the new language
      */
     abstract public function insertLanguage( Language $language );
@@ -27,6 +28,7 @@ abstract class Gateway
      * Updates the data of the given $language
      *
      * @param Language $language
+     *
      * @return void
      */
     abstract public function updateLanguage( Language $language );
@@ -35,6 +37,7 @@ abstract class Gateway
      * Loads data for the Language with $id
      *
      * @param int $id
+     *
      * @return string[][]
      */
     abstract public function loadLanguageData( $id );
@@ -43,6 +46,7 @@ abstract class Gateway
      * Loads data for the Language with Language Code (eg: eng-GB)
      *
      * @param string $languageCode
+     *
      * @return string[][]
      */
     abstract public function loadLanguageDataByLanguageCode( $languageCode );
@@ -58,6 +62,7 @@ abstract class Gateway
      * Deletes the language with $id
      *
      * @param int $id
+     *
      * @return void
      */
     abstract public function deleteLanguage( $id );
@@ -67,7 +72,7 @@ abstract class Gateway
      *
      * @param int $id
      *
-     * @return bool
+     * @return boolean
      */
     abstract public function canDeleteLanguage( $id );
 }

@@ -17,8 +17,9 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
 class FieldValueConverterRegistryTest extends TestCase
 {
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::register
+     *
+     * @return void
      */
     public function testRegister()
     {
@@ -35,8 +36,9 @@ class FieldValueConverterRegistryTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::getConverter
+     *
+     * @return void
      */
     public function testGetStorage()
     {

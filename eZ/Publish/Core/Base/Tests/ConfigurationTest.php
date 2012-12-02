@@ -17,12 +17,12 @@ use eZ\Publish\Core\Base\Configuration,
 class ConfigurationTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\Base\Configuration $configuration
+     * @var \eZ\Publish\Core\Base\Configuration
      */
     protected $configuration;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject $parserMock
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $parserMock;
 

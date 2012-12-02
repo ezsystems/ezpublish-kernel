@@ -20,7 +20,8 @@ class SetupFactory extends Repository\Tests\SetupFactory
     /**
      * Returns a configured repository for testing.
      *
-     * @param bool $initializeFromScratch
+     * @param boolean $initializeFromScratch
+     *
      * @return \eZ\Publish\API\Repository\Repository
      */
     public function getRepository( $initializeFromScratch = true )
@@ -44,8 +45,10 @@ class SetupFactory extends Repository\Tests\SetupFactory
      * Returns a config value for $configKey.
      *
      * @param string $configKey
-     * @return mixed
+     *
      * @throws \Exception if $configKey could not be found.
+     *
+     * @return mixed
      */
     public function getConfigValue( $configKey )
     {

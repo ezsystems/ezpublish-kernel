@@ -28,6 +28,7 @@ class InstantCachePurger implements GatewayCachePurger
      * Instantly triggers the cache purge of given $cacheElements.
      *
      * @param mixed $cacheElements
+     *
      * @return mixed
      */
     public function purge( $cacheElements )

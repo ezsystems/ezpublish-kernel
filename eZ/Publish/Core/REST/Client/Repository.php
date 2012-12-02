@@ -22,7 +22,7 @@ use \eZ\Publish\Core\REST\Common;
 class Repository implements \eZ\Publish\API\Repository\Repository
 {
     /**
-     * @var integer
+     * @var int
      */
     private $version;
 
@@ -152,6 +152,7 @@ class Repository implements \eZ\Publish\API\Repository\Repository
      * Sets the current user to the user with the given user id
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
      * @return void
      */
     public function setCurrentUser( User $user )
@@ -162,16 +163,15 @@ class Repository implements \eZ\Publish\API\Repository\Repository
     }
 
     /**
-     *
-     *
      * @param string $module
      * @param string $function
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
      * @return boolean|\eZ\Publish\API\Repository\Values\User\Limitation[] if limitations are on this function an array of limitations is returned
      */
     public function hasAccess( $module, $function, User $user = null )
     {
-        // @TODO: Implement
+        // @todo: Implement
     }
 
     /**
@@ -190,7 +190,7 @@ class Repository implements \eZ\Publish\API\Repository\Repository
      */
     public function canUser( $module, $function, ValueObject $object, ValueObject $target = null )
     {
-        // @TODO: Implement
+        // @todo: Implement
     }
 
     /**
@@ -334,7 +334,7 @@ class Repository implements \eZ\Publish\API\Repository\Repository
      */
     public function getSearchService()
     {
-        throw new \RuntimeException( '@TODO: Implememt.' );
+        throw new \RuntimeException( '@todo: Implememt.' );
     }
 
     /**
@@ -425,7 +425,7 @@ class Repository implements \eZ\Publish\API\Repository\Repository
      */
     public function getURLWildcardService()
     {
-        throw new \RuntimeException( '@TODO: Implement' );
+        throw new \RuntimeException( '@todo: Implement' );
     }
 
     /**
@@ -481,7 +481,7 @@ class Repository implements \eZ\Publish\API\Repository\Repository
      */
     public function commit()
     {
-        // @TODO: Implement / discuss
+        // @todo: Implement / discuss
     }
 
     /**
@@ -493,6 +493,6 @@ class Repository implements \eZ\Publish\API\Repository\Repository
      */
     public function rollback()
     {
-        // @TODO: Implement / discuss
+        // @todo: Implement / discuss
     }
 }

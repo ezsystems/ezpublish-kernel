@@ -75,7 +75,8 @@ class SiteAccessListener implements EventSubscriberInterface
      * Extracts view parameters from $pathinfo.
      * In the pathinfo, view parameters are in the form /(param_name)/param_value.
      *
-     * @param $pathinfo
+     * @param string $pathinfo
+     *
      * @return array First element is the cleaned up pathinfo (without the view parameters string).
      *               Second element is the view parameters hash.
      *               Third element is the view parameters string (e.g. /(foo)/bar)

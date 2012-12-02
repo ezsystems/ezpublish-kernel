@@ -65,7 +65,7 @@ abstract class Regex implements Matcher
     /**
      * Injects element to match against with the regexp
      *
-     * @param $element
+     * @param string $element
      */
     public function setMatchElement( $element )
     {

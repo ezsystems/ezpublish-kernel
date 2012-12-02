@@ -93,6 +93,7 @@ class VersionInfo extends ValueObjectVisitor
      * Maps the given version $status to a representative string
      *
      * @param int $status
+     *
      * @return string
      */
     protected function getStatusString( $status )
@@ -109,7 +110,7 @@ class VersionInfo extends ValueObjectVisitor
                 return 'ARCHIVED';
         }
 
-        // FIXME: What exception to use?
+        // @todo FIXME: What exception to use?
         throw new \Exception( 'Undefined version status: ' . $status );
     }
 }

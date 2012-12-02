@@ -29,6 +29,7 @@ abstract class StorageGateway
      * define the storage, depending on the gateway implementation.
      *
      * @param mixed $connection
+     *
      * @return void
      */
     abstract public function setConnection( $connection );

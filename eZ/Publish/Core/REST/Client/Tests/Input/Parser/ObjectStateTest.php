@@ -66,6 +66,7 @@ class ObjectStateTest extends BaseTest
      * Tests that the resulting ObjectState is in fact an instance of ObjectState class
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $result
+     *
      * @depends testParse
      */
     public function testResultIsObjectState( $result )
@@ -80,6 +81,7 @@ class ObjectStateTest extends BaseTest
      * Tests that the resulting ObjectState contains the ID
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $result
+     *
      * @depends testParse
      */
     public function testResultContainsId( $result )
@@ -94,6 +96,7 @@ class ObjectStateTest extends BaseTest
      * Tests that the resulting ObjectState contains identifier
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $result
+     *
      * @depends testParse
      */
     public function testResultContainsIdentifier( $result )
@@ -108,6 +111,7 @@ class ObjectStateTest extends BaseTest
      * Tests that the resulting ObjectState contains priority
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $result
+     *
      * @depends testParse
      */
     public function testResultContainsPriority( $result )
@@ -122,6 +126,7 @@ class ObjectStateTest extends BaseTest
      * Tests that the resulting ObjectState contains defaultLanguageCode
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $result
+     *
      * @depends testParse
      */
     public function testResultContainsDefaultLanguageCode( $result )
@@ -136,6 +141,7 @@ class ObjectStateTest extends BaseTest
      * Tests that the resulting ObjectState contains languageCodes
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $result
+     *
      * @depends testParse
      */
     public function testResultContainsDefaultLanguageCodes( $result )
@@ -150,6 +156,7 @@ class ObjectStateTest extends BaseTest
      * Tests that the resulting ObjectState contains names
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $result
+     *
      * @depends testParse
      */
     public function testResultContainsNames( $result )
@@ -167,6 +174,7 @@ class ObjectStateTest extends BaseTest
      * Tests that the resulting ObjectState contains descriptions
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $result
+     *
      * @depends testParse
      */
     public function testResultContainsDescriptions( $result )

@@ -39,7 +39,8 @@ class IntegrationTest extends Authenticator
      * of authentication was not possible or did not succeed.
      *
      * @param RMF\Request $request
-     * @return bool
+     *
+     * @return boolean
      */
     public function authenticate( RMF\Request $request )
     {

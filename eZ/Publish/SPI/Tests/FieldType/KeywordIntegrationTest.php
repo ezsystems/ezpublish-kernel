@@ -137,6 +137,7 @@ class KeywordIntegrationTest extends BaseIntegrationTest
      *
      * @param array $expectedKeywords
      * @param array $actualKeywords
+     *
      * @return void
      */
     protected function assertKeywordSetsEqual( $expectedKeywords, $actualKeywords )

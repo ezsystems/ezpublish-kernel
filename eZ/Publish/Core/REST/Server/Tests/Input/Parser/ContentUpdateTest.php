@@ -42,6 +42,7 @@ class ContentUpdateTest extends BaseTest
      * Test for valid owner ID value in result
      *
      * @param \eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct $result
+     *
      * @depends testParseValid
      */
     public function testParserResultOwner( RestContentMetadataUpdateStruct $result )

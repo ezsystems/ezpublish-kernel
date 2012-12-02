@@ -75,7 +75,7 @@ class Content extends RestController
     }
 
     /**
-     * Load a content info by remote ID
+     * Loads a content info by remote ID
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ContentList
      */
@@ -152,7 +152,7 @@ class Content extends RestController
             $updateStruct->sectionId = null;
         }
 
-        // @TODO Consider refactoring! ContentService::updateContentMetadata throws the same exception
+        // @todo Consider refactoring! ContentService::updateContentMetadata throws the same exception
         // in case the updateStruct is empty and if remoteId already exists. Since REST version of update struct
         // includes section ID in addition to other fields, we cannot throw exception if only sectionId property
         // is set, so we must skip updating content in that case instead of allowing propagation of the exception.

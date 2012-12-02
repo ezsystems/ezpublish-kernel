@@ -132,6 +132,8 @@ class FileSizeValidatorTest extends FieldTypeTest
     /**
      * Tests validating a correct value
      *
+     * @param int $size
+     *
      * @dataProvider providerForValidateOK
      * @covers \eZ\Publish\Core\FieldType\Validator\FileSizeValidator::validate
      * @covers \eZ\Publish\Core\FieldType\Validator::getMessage
@@ -146,7 +148,7 @@ class FileSizeValidatorTest extends FieldTypeTest
     }
 
     /**
-     * @param $size
+     * @param int $size
      *
      * @return \eZ\Publish\Core\FieldType\BinaryFile\Value
      */

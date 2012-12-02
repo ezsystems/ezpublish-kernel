@@ -23,7 +23,7 @@ class Subtree extends Criterion implements CriterionInterface
     /**
      * Creates a new SubTree criterion
      *
-     * @param string|array(string) $value an array of subtree path strings, eg: /1/2/
+     * @param string|string[] $value an array of subtree path strings, eg: /1/2/
      *
      * @throws InvalidArgumentException if a non path string is given
      * @throws InvalidArgumentException if the value type doesn't match the operator

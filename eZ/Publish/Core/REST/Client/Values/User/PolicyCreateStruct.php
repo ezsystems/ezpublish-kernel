@@ -56,6 +56,7 @@ class PolicyCreateStruct extends \eZ\Publish\API\Repository\Values\User\PolicyCr
      * Adds a limitation with the given identifier and list of values
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
+     *
      * @return void
      */
     public function addLimitation( Limitation $limitation )

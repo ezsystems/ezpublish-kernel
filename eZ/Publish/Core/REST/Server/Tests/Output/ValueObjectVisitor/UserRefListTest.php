@@ -65,6 +65,7 @@ class UserRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testUserRefListHrefCorrect( \DOMDocument $dom )
@@ -74,6 +75,7 @@ class UserRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testUserRefListMediaTypeCorrect( \DOMDocument $dom )
@@ -83,6 +85,7 @@ class UserRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testUserHrefCorrect( \DOMDocument $dom )
@@ -92,6 +95,7 @@ class UserRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testUserMediaTypeCorrect( \DOMDocument $dom )

@@ -22,7 +22,8 @@ abstract class Gateway extends StorageGateway
      *
      * @param VersionInfo $versionInfo
      * @param Field $field
-     * @return bool If restoring of the internal field data is required
+     *
+     * @return boolean If restoring of the internal field data is required
      */
     abstract public function storeFieldData( VersionInfo $versionInfo, Field $field );
 
@@ -31,6 +32,7 @@ abstract class Gateway extends StorageGateway
      *
      * @param VersionInfo $versionInfo
      * @param Field $field
+     *
      * @return array
      */
     abstract public function getFieldData( VersionInfo $versionInfo, Field $field );
@@ -40,6 +42,7 @@ abstract class Gateway extends StorageGateway
      *
      * @param VersionInfo $versionInfo
      * @param array $fieldIds
+     *
      * @return void
      */
     abstract public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds );

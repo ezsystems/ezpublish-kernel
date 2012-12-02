@@ -109,6 +109,7 @@ class VersionTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsVersionChildren( $result )
@@ -129,6 +130,7 @@ class VersionTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultVersionAttributes( $result )
@@ -149,6 +151,7 @@ class VersionTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsFieldsChildren( $result )

@@ -180,7 +180,6 @@ class Location extends RestController
     /**
      * Moves a subtree to a new location
      *
-     *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException if the Destination header cannot be parsed as location or trash
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
@@ -380,6 +379,7 @@ class Location extends RestController
      * Extracts and returns an item id from a path, e.g. /1/2/58 => 58
      *
      * @param string $path
+     *
      * @return mixed
      */
     private function extractLocationIdFromPath( $path )

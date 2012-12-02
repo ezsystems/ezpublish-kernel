@@ -29,6 +29,7 @@ class Aggregate extends CriterionVisitor
      * COnstruct from optional visitor array
      *
      * @param array $visitors
+     *
      * @return void
      */
     public function __construct( array $visitors = array() )
@@ -40,9 +41,10 @@ class Aggregate extends CriterionVisitor
     }
 
     /**
-     * Add visitor
+     * Adds visitor
      *
      * @param FieldValueVisitor $visitor
+     *
      * @return void
      */
     public function addVisitor( CriterionVisitor $visitor )
@@ -54,7 +56,8 @@ class Aggregate extends CriterionVisitor
      * CHeck if visitor is applicable to current criterion
      *
      * @param Criterion $criterion
-     * @return bool
+     *
+     * @return boolean
      */
     public function canVisit( Criterion $criterion )
     {
@@ -66,6 +69,7 @@ class Aggregate extends CriterionVisitor
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
+     *
      * @return void
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )

@@ -51,7 +51,7 @@ class URLWildcardService implements URLWildcardServiceInterface
     }
 
     /**
-     * creates a new url wildcard
+     * Creates a new url wildcard
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the $sourceUrl pattern already exists
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create url wildcards
@@ -99,8 +99,7 @@ class URLWildcardService implements URLWildcardServiceInterface
     }
 
     /**
-     *
-     * loads a url wild card
+     * Loads a url wild card
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
      *
@@ -114,7 +113,7 @@ class URLWildcardService implements URLWildcardServiceInterface
     }
 
     /**
-     * loads all url wild card (paged)
+     * Loads all url wild card (paged)
      *
      * @param int $offset
      * @param int $limit

@@ -326,6 +326,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
      * @param mixed $contentId
      * @param mixed $groupId
      * @param mixed $stateId
+     *
      * @return boolean
      */
     public function setContentState( $contentId, $groupId, $stateId )
@@ -391,6 +392,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
      * Returns the number of objects which are in this state
      *
      * @param mixed $stateId
+     *
      * @return int
      */
     public function getContentCount( $stateId )
@@ -442,6 +444,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
      * Returns all content IDs that belong to $stateId
      *
      * @param int $stateId
+     *
      * @return array
      */
     protected function getObjectStateContentList( $stateId )
@@ -460,6 +463,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
      * Returns all state IDs that belong to $groupId
      *
      * @param int $groupId
+     *
      * @return array
      */
     protected function getGroupStateList( $groupId )

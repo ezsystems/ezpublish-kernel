@@ -190,7 +190,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
     }
 
     /**
-     * Return translation in given $languageCode or null if it does not exist.
+     * Returns translation in given $languageCode or null if it does not exist.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\UrlAlias $urlAlias
      * @param string $languageCode
@@ -521,7 +521,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
     /**
      * Expands given $alias to array of new aliases for each different translation.
      *
-     * @param $alias
+     * @param \eZ\Publish\SPI\Persistence\Content\UrlAlias $alias
      *
      * @return array
      */
@@ -704,7 +704,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
             )
         );
 
-        // TODO: this needs to recursively historize and copy (with updated path data) the complete subtree
+        // @todo: this needs to recursively historize and copy (with updated path data) the complete subtree
         // Reparent
         foreach ( $children as $child )
         {
@@ -723,7 +723,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      *
      * @throws \RuntimeException
      *
-     * @param $locationId
+     * @param mixed $locationId
      * @param null $parentId
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias|null
@@ -827,7 +827,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
     /**
      * Notifies the underlying engine that a location was deleted or moved to trash
      *
-     * @param $locationId
+     * @param mixed $locationId
      */
     public function locationDeleted( $locationId )
     {

@@ -21,7 +21,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
 class ConfigurationConverter
 {
     /**
-     * @var eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver
+     * @var \eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver
      */
     protected $legacyResolver;
 
@@ -46,8 +46,10 @@ class ConfigurationConverter
      * Converts from legacy settings to an array dumpable to ezpublish.yml
      * @param string $sitePackage Name of the chosen install package
      * @param string $adminSiteaccess Name of the admin siteaccess
-     * @return array
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     *
+     * @return array
      */
     public function fromLegacy( $sitePackage, $adminSiteaccess )
     {
@@ -158,6 +160,7 @@ class ConfigurationConverter
      *
      * @param array $siteList
      * @param string $groupName
+     *
      * @return array
      */
     protected function getLanguages( array $siteList, $groupName )
@@ -190,6 +193,7 @@ class ConfigurationConverter
      *
      * @param array $siteList
      * @param string $groupName
+     *
      * @return array
      */
     protected function getImageVariations( array $siteList, $groupName )
@@ -217,6 +221,7 @@ class ConfigurationConverter
      * Returns the image variation settings for the siteaccess
      *
      * @param string $siteaccess
+     *
      * @return array
      */
     protected function getImageVariationsForSiteaccess( $siteaccess )
@@ -295,7 +300,7 @@ class ConfigurationConverter
         return $this->legacyKernel->runCallback(
             function () use ( $file, $groupName, $siteaccess )
             {
-                // TODO: do reset injected settings everytime
+                // @todo: do reset injected settings everytime
                 // and make sure to restore the previous injected settings
                 eZINI::injectSettings( array() );
                 return eZSiteAccess::getIni( $siteaccess, $file )->group( $groupName );
@@ -326,7 +331,7 @@ class ConfigurationConverter
         return $this->legacyKernel->runCallback(
             function () use ( $file, $groupName, $parameterName, $siteaccess )
             {
-                // TODO: do reset injected settings everytime
+                // @todo: do reset injected settings everytime
                 // and make sure to restore the previous injected settings
                 eZINI::injectSettings( array() );
                 return eZSiteAccess::getIni( $siteaccess, $file )
@@ -390,10 +395,11 @@ class ConfigurationConverter
 
     /**
      * Parses Legacy HostMatching settings to a matching array
-     * @param $siteaccessSettings
+     * @param mixed[] $siteaccessSettings
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      *
      * @return array|bool
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
     protected function resolveHostMatching( $siteaccessSettings )
     {

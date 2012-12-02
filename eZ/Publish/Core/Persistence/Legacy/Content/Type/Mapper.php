@@ -44,8 +44,10 @@ class Mapper
      * Creates a Group from its create struct.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct $struct
-     * @return Group
+     *
      * @todo $description is not supported by database, yet
+     *
+     * @return Group
      */
     public function createGroupFromCreateStruct( GroupCreateStruct $struct )
     {
@@ -69,6 +71,7 @@ class Mapper
      * Extracts Group objects from the given $rows.
      *
      * @param array $rows
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Group[]
      */
     public function extractGroupsFromRows( array $rows )
@@ -95,6 +98,7 @@ class Mapper
      * Extracts types and related data from the given $rows.
      *
      * @param array $rows
+     *
      * @return array(Type)
      */
     public function extractTypesFromRows( array $rows )
@@ -131,6 +135,7 @@ class Mapper
      * Creates a Type from the data in $row.
      *
      * @param array $row
+     *
      * @return Type
      */
     protected function extractTypeFromRow( array $row )
@@ -210,6 +215,7 @@ class Mapper
      * Extracts a StorageFieldDefinition from $row
      *
      * @param array $row
+     *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition
      */
     protected function extractStorageFieldFromRow( array $row )
@@ -287,6 +293,7 @@ class Mapper
      * Creates a create struct from an existing $type.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $type
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct
      */
     public function createCreateStructFromType( Type $type )
@@ -320,6 +327,7 @@ class Mapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
+     *
      * @return void
      */
     public function toStorageFieldDefinition(
@@ -339,6 +347,7 @@ class Mapper
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
+     *
      * @return void
      */
     public function toFieldDefinition(

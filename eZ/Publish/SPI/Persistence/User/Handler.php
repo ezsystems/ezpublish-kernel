@@ -26,26 +26,30 @@ interface Handler
      * to reference the user.
      *
      * @param \eZ\Publish\SPI\Persistence\User $user
+     *
      * @return \eZ\Publish\SPI\Persistence\User
      */
     public function create( User $user );
 
     /**
-     * Load user with user ID.
+     * Loads user with user ID.
      *
      * @param mixed $userId
-     * @return \eZ\Publish\SPI\Persistence\User
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\User
      */
     public function load( $userId );
 
     /**
-     * Load user(s) with user login / email.
+     * Loads user(s) with user login / email.
      *
      * Optimized for login use (hence the possibility to match email and return several users).
      *
      * @param string $login
      * @param boolean $alsoMatchEmail Also match user email, caller must verify that $login is a valid email address.
+     *
      * @return \eZ\Publish\SPI\Persistence\User[]
      */
     public function loadByLogin( $login, $alsoMatchEmail = false );
@@ -61,6 +65,7 @@ interface Handler
      * Delete user with the given ID.
      *
      * @param mixed $userId
+     *
      * @todo Throw on missing user?
      */
     public function delete( $userId );
@@ -69,37 +74,42 @@ interface Handler
      * Create new role
      *
      * @param \eZ\Publish\SPI\Persistence\User\Role $role
+     *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
     public function createRole( Role $role );
 
     /**
-     * Load a specified role by $roleId
+     * Loads a specified role by $roleId
      *
      * @param mixed $roleId
-     * @return \eZ\Publish\SPI\Persistence\User\Role
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role
      */
     public function loadRole( $roleId );
 
     /**
-     * Load a specified role by $identifier
+     * Loads a specified role by $identifier
      *
      * @param string $identifier
-     * @return \eZ\Publish\SPI\Persistence\User\Role
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role
      */
     public function loadRoleByIdentifier( $identifier );
 
     /**
-     * Load all roles
+     * Loads all roles
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role[]
      */
     public function loadRoles();
 
     /**
-     * Load roles assigned to a user/group (not including inherited roles)
+     * Loads roles assigned to a user/group (not including inherited roles)
      *
      * @param mixed $groupId
      *              In legacy storage engine this is the content object id a role is assigned to.
@@ -109,7 +119,7 @@ interface Handler
     public function loadRolesByGroupId( $groupId );
 
     /**
-     * Load roles assignments Role
+     * Loads roles assignments Role
      *
      * Role Assignments with same roleId and limitationIdentifier will be merged together into one.
      *
@@ -120,13 +130,13 @@ interface Handler
     public function loadRoleAssignmentsByRoleId( $roleId );
 
     /**
-     * Load roles assignments to a user/group
+     * Loads roles assignments to a user/group
      *
      * Role Assignments with same roleId and limitationIdentifier will be merged together into one.
      *
      * @param mixed $groupId In legacy storage engine this is the content object id roles are assigned to in ezuser_role.
      *                      By the nature of legacy this can currently also be used to get by $userId.
-     * @param bool $inherit If true also return inherited role assigments from user groups.
+     * @param boolean $inherit If true also return inherited role assigments from user groups.
      *
      * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
      */
@@ -151,6 +161,7 @@ interface Handler
      *
      * @param mixed $roleId
      * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
+     *
      * @return \eZ\Publish\SPI\Persistence\User\Policy
      * @todo Throw on invalid Role Id?
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $policy->limitation is empty (null, empty string/array..)
@@ -163,6 +174,7 @@ interface Handler
      * Replaces limitations values with new values.
      *
      * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $policy->limitation is empty (null, empty string/array..)
      */
     public function updatePolicy( Policy $policy );
@@ -172,8 +184,10 @@ interface Handler
      *
      * @param mixed $roleId
      * @param mixed $policyId
-     * @return void
+     *
      * @todo Throw exception on missing role / policy?
+     *
+     * @return void
      */
     public function removePolicy( $roleId, $policyId );
 
@@ -187,7 +201,7 @@ interface Handler
     public function loadPoliciesByUserId( $userId );
 
     /**
-     * Assign role to a user or user group with given limitations
+     * Assigns role to a user or user group with given limitations
      *
      * The limitation array looks like:
      * <code>

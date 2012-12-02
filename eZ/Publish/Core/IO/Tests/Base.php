@@ -38,7 +38,6 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @abstract
      * @return \eZ\Publish\SPI\IO\Handler
      */
     abstract protected function getIoHandler();
@@ -321,6 +320,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
      * @throws \Exception When given a non existing / unreadable file
      * @param string $localFile Path to local file
      * @param string $repositoryPath The path the file must be stored as
+     *
      * @return \eZ\Publish\SPI\IO\BinaryFileCreateStruct
      */
     protected function getCreateStructFromLocalFile( $localFile, $repositoryPath )
@@ -347,6 +347,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
      *
      * @throws \Exception If file does not exist
      * @param string $path
+     *
      * @return string
      */
     protected static function getMimeTypeFromPath( $path )

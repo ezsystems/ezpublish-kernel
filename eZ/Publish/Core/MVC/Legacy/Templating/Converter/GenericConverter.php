@@ -20,8 +20,10 @@ class GenericConverter implements ObjectConverter
      * Converts $object to make it compatible with eZTemplate API.
      *
      * @param mixed $object
-     * @return mixed|\eZ\Publish\Core\MVC\Legacy\Templating\LegacyCompatible
+     *
      * @throws \InvalidArgumentException If $object is actually not an object
+     *
+     * @return mixed|\eZ\Publish\Core\MVC\Legacy\Templating\LegacyCompatible
      */
     public function convert( $object )
     {

@@ -399,6 +399,7 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
     /**
      * @param mixed $inputValue
      * @param mixed $expectedOutputValue
+     *
      * @dataProvider provideValidInputForAcceptValue
      */
     public function testAcceptValue( $inputValue, $expectedOutputValue )
@@ -416,7 +417,8 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
 
     /**
      * @param mixed $inputValue
-     * @param Exception $expectedException
+     * @param \Exception $expectedException
+     *
      * @dataProvider provideInvalidInputForAcceptValue
      */
     public function testAcceptValueFailsOnInvalidValues( $inputValue, $expectedException )
@@ -452,6 +454,7 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
     /**
      * @param mixed $inputValue
      * @param array $expectedResult
+     *
      * @dataProvider provideInputForToHash
      */
     public function testToHash( $inputValue, $expectedResult )
@@ -472,6 +475,7 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
     /**
      * @param mixed $inputValue
      * @param array $expectedResult
+     *
      * @dataProvider provideInputForFromHash
      */
     public function testFromHash( $inputHash, $expectedResult )
@@ -500,8 +504,10 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
 
     /**
      * @param mixed $inputSettings
-     * @return void
+     *
      * @dataProvider provideValidFieldSettings
+     *
+     * @return void
      */
     public function testValidateFieldSettingsValid( $inputSettings )
     {
@@ -523,8 +529,10 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
 
     /**
      * @param mixed $inputSettings
-     * @return void
+     *
      * @dataProvider provideInvalidFieldSettings
+     *
+     * @return void
      */
     public function testValidateFieldSettingsInvalid( $inputSettings )
     {
@@ -556,8 +564,10 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
 
     /**
      * @param mixed $inputConfiguration
-     * @return void
+     *
      * @dataProvider provideValidValidatorConfiguration
+     *
+     * @return void
      */
     public function testValidateValidatorConfigurationValid( $inputConfiguration )
     {
@@ -579,8 +589,10 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
 
     /**
      * @param mixed $inputConfiguration
-     * @return void
+     *
      * @dataProvider provideInvalidValidatorConfiguration
+     *
+     * @return void
      */
     public function testValidateValidatorConfigurationInvalid( $inputConfiguration )
     {
@@ -612,8 +624,10 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
 
     /**
      * @param mixed $inputConfiguration
-     * @return void
+     *
      * @dataProvider provideValidFieldSettings
+     *
+     * @return void
      */
     public function testFieldSettingsToHash( $inputSettings )
     {
@@ -626,8 +640,10 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
 
     /**
      * @param mixed $inputConfiguration
-     * @return void
+     *
      * @dataProvider provideValidValidatorConfiguration
+     *
+     * @return void
      */
     public function testValidatorConfigurationToHash( $inputConfiguration )
     {
@@ -640,8 +656,10 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
 
     /**
      * @param mixed $inputConfiguration
-     * @return void
+     *
      * @dataProvider provideValidFieldSettings
+     *
+     * @return void
      */
     public function testFieldSettingsFromHash( $inputSettings )
     {
@@ -655,8 +673,10 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
 
     /**
      * @param mixed $inputConfiguration
-     * @return void
+     *
      * @dataProvider provideValidValidatorConfiguration
+     *
+     * @return void
      */
     public function testValidatorConfigurationFromHash( $inputConfiguration )
     {
@@ -673,6 +693,7 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
      *
      * @param mixed $actualHash
      * @param array $keyChain
+     *
      * @return void
      */
     protected function assertIsValidHashValue( $actualHash, $keyChain = array() )
@@ -709,5 +730,5 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
         }
     }
 
-    // @TODO: More test methods …
+    // @todo: More test methods …
 }

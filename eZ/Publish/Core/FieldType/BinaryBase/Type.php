@@ -62,6 +62,7 @@ abstract class Type extends FieldType
      * Creates a specific value of the derived class from $inputValue
      *
      * @param array $inputValue
+     *
      * @return Value
      */
     abstract protected function createValue( array $inputValue );
@@ -152,6 +153,7 @@ abstract class Type extends FieldType
      * Attempts to complete the data in $value
      *
      * @param Value $value
+     *
      * @return void
      */
     protected function completeValue( $value )
@@ -175,7 +177,7 @@ abstract class Type extends FieldType
     /**
      * BinaryBase does not support sorting
      *
-     * @return bool
+     * @return boolean
      */
     protected function getSortInfo( $value )
     {
@@ -299,7 +301,8 @@ abstract class Type extends FieldType
      * storage
      *
      * @param string $path
-     * @return bool
+     *
+     * @return boolean
      */
     protected function fileExists( $path )
     {
@@ -407,7 +410,7 @@ abstract class Type extends FieldType
     /**
      * Returns whether the field type is searchable
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {

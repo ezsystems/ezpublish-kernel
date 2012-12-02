@@ -138,6 +138,7 @@ class LocationServiceStub implements LocationService
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *         if the remoteId exists already.
      * @param string $remoteId
+     *
      * @return void
      */
     protected function checkRemoteIdNotTaken( $remoteId )
@@ -159,6 +160,7 @@ class LocationServiceStub implements LocationService
      *         if the content is in the tree of $location.
      * @param ContentInfo $contentInfo
      * @param Location $location
+     *
      * @return void
      */
     protected function checkContentNotInTree( ContentInfo $contentInfo, Location $location )
@@ -181,6 +183,7 @@ class LocationServiceStub implements LocationService
      *         if the content is in the tree of $location.
      * @param ContentInfo $contentInfo
      * @param Location $location
+     *
      * @return void
      */
     protected function checkContentNotInPath( ContentInfo $contentInfo, Location $location )
@@ -205,7 +208,7 @@ class LocationServiceStub implements LocationService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
      *
-     * @param integer $locationId
+     * @param int $locationId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
@@ -297,6 +300,7 @@ class LocationServiceStub implements LocationService
      * Checks that the remote ID used in $locationUpdateStruct does not exist
      *
      * @param LocationUpdateStruct $locationUpdateStruct
+     *
      * @return void
      */
     protected function checkRemoteIdNotExist( LocationUpdateStruct $locationUpdateStruct )
@@ -314,6 +318,7 @@ class LocationServiceStub implements LocationService
      * Returns the data of the given $location as an array
      *
      * @param Location $location
+     *
      * @return array
      */
     protected function locationToArray( Location $location )
@@ -374,7 +379,7 @@ class LocationServiceStub implements LocationService
     }
 
     /**
-     * Load children which are readable by the current user of a location object sorted by sortField and sortOrder
+     * Loads children which are readable by the current user of a location object sorted by sortField and sortOrder
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
@@ -412,6 +417,7 @@ class LocationServiceStub implements LocationService
      * Returns all location children based on their ID
      *
      * @param int $locationId
+     *
      * @return array Of {@link Location}
      */
     private function loadLocationChildrenById( $locationId )
@@ -494,6 +500,7 @@ class LocationServiceStub implements LocationService
      * Marks the sub-tree starting at $location invisible
      *
      * @param Location $location
+     *
      * @return void
      */
     protected function markInvisible( Location $location )
@@ -541,6 +548,7 @@ class LocationServiceStub implements LocationService
      * The process stops, when a hidden location is found in the subtree.
      *
      * @param mixed $location
+     *
      * @return void
      */
     protected function markVisible( $location )
@@ -593,6 +601,7 @@ class LocationServiceStub implements LocationService
      * Returns if a location for the given $contentInfo exists.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     *
      * @return boolean
      */
     protected function hasLocation( ContentInfo $contentInfo )
@@ -680,6 +689,7 @@ class LocationServiceStub implements LocationService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $subtree
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     *
      * @return void
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException

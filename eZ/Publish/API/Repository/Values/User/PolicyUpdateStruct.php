@@ -24,7 +24,7 @@ abstract class PolicyUpdateStruct extends ValueObject
     abstract public function getLimitations();
 
     /**
-     * adds a limitation to the policy - if a Limitation exists with the same identifier
+     * Adds a limitation to the policy - if a Limitation exists with the same identifier
      * the existing limitation is replaced
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
      */

@@ -30,11 +30,12 @@ abstract class Criterion extends Base
 
     /**
      * Dispatches parsing of a criterion name + data to its own parser
-     * @param $criterionName
-     * @param $criterionData
+     * @param string $criterionName
+     * @param mixed $criterionData
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
     public function dispatchCriterion( $criterionName, $criterionData, ParsingDispatcher $parsingDispatcher )

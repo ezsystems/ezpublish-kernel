@@ -46,6 +46,7 @@ class ContentInfo extends Parser
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      * @todo Error handling
      * @todo What about missing properties? Set them here, using the service to

@@ -51,7 +51,7 @@ class LegacyStorageEnginePass implements CompilerPassInterface
             $legacyStorageEngineDef->addMethodCall(
                 'registerFieldTypeConverter',
                 array(
-                     // TODO: Maybe there should be some validation here. What if no alias is provided ?
+                     // @todo: Maybe there should be some validation here. What if no alias is provided ?
                      $attributes[0]['alias'],
                      $converter
                 )

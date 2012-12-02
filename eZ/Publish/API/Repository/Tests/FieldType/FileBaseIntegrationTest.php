@@ -34,7 +34,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     /**
      * If storage data should not be cleaned up
      *
-     * @var bool
+     * @var boolean
      */
     protected static $leaveStorageData = false;
 
@@ -108,6 +108,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
      * Removes the given directory path recursively
      *
      * @param string $dir
+     *
      * @return void
      */
     protected static function cleanupStorageDir()

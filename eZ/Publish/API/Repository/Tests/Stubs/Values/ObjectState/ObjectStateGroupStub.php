@@ -35,7 +35,6 @@ class ObjectStateGroupStub extends ObjectStateGroup
     protected $descriptions = array();
 
     /**
-     *
      * This method returns the human readable name in all provided languages
      * of the content type
      *
@@ -52,7 +51,7 @@ class ObjectStateGroupStub extends ObjectStateGroup
     }
 
     /**
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
      *
      * @param string $languageCode
      *
@@ -79,7 +78,7 @@ class ObjectStateGroupStub extends ObjectStateGroup
     }
 
     /**
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
      *
      * @param string $languageCode
      *

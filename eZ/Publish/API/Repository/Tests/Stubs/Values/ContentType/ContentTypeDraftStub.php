@@ -63,9 +63,10 @@ class ContentTypeDraftStub extends ContentTypeDraft
     }
 
     /**
+     * This method returns the name of the content type in the given language
      *
-     * this method returns the name of the content type in the given language
      * @param string $languageCode
+     *
      * @return string the name for the given language or null if none existis.
      */
     public function getName( $languageCode )
@@ -74,7 +75,7 @@ class ContentTypeDraftStub extends ContentTypeDraft
     }
 
     /**
-     *  This method returns the human readable description of the content type
+     * This method returns the human readable description of the content type
      *
      * The structure of this field is:
      * <code>
@@ -89,9 +90,11 @@ class ContentTypeDraftStub extends ContentTypeDraft
     }
 
     /**
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
+     *
      * @param string $languageCode
-     * @return string the description for the given language or null if none existis.
+     *
+     * @return string the description for the given language or null if none exists.
      */
     public function getDescription( $languageCode )
     {
@@ -100,7 +103,8 @@ class ContentTypeDraftStub extends ContentTypeDraft
 
     /**
      * This method returns the content type groups this content type is assigned to
-     * @return array an array of {@link ContentTypeGroup}
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
     public function getContentTypeGroups()
     {
@@ -110,7 +114,7 @@ class ContentTypeDraftStub extends ContentTypeDraft
     /**
      * This method returns the content type field definitions from this type
      *
-     * @return array an array of {@link FieldDefinition}
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
     public function getFieldDefinitions()
     {
@@ -118,10 +122,11 @@ class ContentTypeDraftStub extends ContentTypeDraft
     }
 
     /**
+     * This method returns the field definition for the given identifier
      *
-     * this method returns the field definition for the given identifier
-     * @param $fieldDefinitionIdentifier
-     * @return FieldDefinition
+     * @param string $fieldDefinitionIdentifier
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
     public function getFieldDefinition( $fieldDefinitionIdentifier )
     {

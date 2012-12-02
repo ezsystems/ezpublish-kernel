@@ -19,7 +19,8 @@ class Section extends MultipleValued
      * Checks if a Location object matches.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @return bool
+     *
+     * @return boolean
      */
     public function matchLocation( Location $location )
     {
@@ -33,7 +34,8 @@ class Section extends MultipleValued
      * Checks if a ContentInfo object matches.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @return bool
+     *
+     * @return boolean
      */
     public function matchContentInfo( ContentInfo $contentInfo )
     {

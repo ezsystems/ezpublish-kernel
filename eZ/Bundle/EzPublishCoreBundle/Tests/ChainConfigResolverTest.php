@@ -185,10 +185,10 @@ class ChainRouterTest extends \PHPUnit_Framework_TestCase
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver::addResolver
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver::getParameter
      *
-     * @param $paramName
-     * @param $namespace
-     * @param $scope
-     * @param $expectedValue
+     * @param string $paramName
+     * @param string $namespace
+     * @param string $scope
+     * @param mixed $expectedValue
      */
     public function testGetParameter( $paramName, $namespace, $scope, $expectedValue )
     {

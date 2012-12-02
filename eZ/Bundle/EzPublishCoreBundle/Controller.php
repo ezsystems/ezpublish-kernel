@@ -20,8 +20,9 @@ class Controller extends BaseController
     private $legacyKernelClosure;
 
     /**
-     * @return \eZ\Publish\API\Repository\Repository
      * @throws \LogicException
+     *
+     * @return \eZ\Publish\API\Repository\Repository
      */
     public function getRepository()
     {
@@ -57,7 +58,8 @@ class Controller extends BaseController
      * Checks if current user has granted access to provided attribute
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute $attribute
-     * @return bool
+     *
+     * @return boolean
      */
     public function isGranted( AuthorizationAttribute $attribute )
     {

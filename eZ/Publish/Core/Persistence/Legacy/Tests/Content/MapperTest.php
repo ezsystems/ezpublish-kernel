@@ -36,8 +36,9 @@ class MapperTest extends LanguageAwareTestCase
     protected $valueConverterRegistryMock;
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::__construct
+     *
+     * @return void
      */
     public function testCtor()
     {
@@ -83,8 +84,9 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createVersionInfoForContent
+     *
+     * @return void
      */
     public function testCreateVersionInfoForContent()
     {
@@ -228,8 +230,9 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentFromRows
+     *
+     * @return void
      */
     public function testExtractContentFromRowsMultipleVersions()
     {
@@ -412,8 +415,9 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createRelationFromCreateStruct
+     *
+     * @return void
      */
     public function testCreateRelationFromCreateStruct()
     {

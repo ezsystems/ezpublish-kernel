@@ -40,7 +40,7 @@ class FieldFacet extends Facet {
     public $totalCount;
 
     /**
-     * an array of terms (key) and counts (value).
+     * An array of terms (key) and counts (value).
      *
      * @var array
      */

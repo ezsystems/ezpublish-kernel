@@ -21,6 +21,7 @@ class LegacyPublishContentTypeDraftSlot extends AbstractLegacySlot
      * Receive the given $signal and react on it
      *
      * @param \eZ\Publish\Core\SignalSlot\Signal $signal
+     *
      * @return void
      */
     public function receive( Signal $signal )

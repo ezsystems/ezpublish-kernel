@@ -698,8 +698,9 @@ class EzpDatabaseTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::deleteNodeAssignment
+     *
+     * @return void
      */
     public function testDeleteNodeAssignment()
     {
@@ -723,8 +724,9 @@ class EzpDatabaseTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::deleteNodeAssignment
+     *
+     * @return void
      */
     public function testDeleteNodeAssignmentWithSecondArgument()
     {

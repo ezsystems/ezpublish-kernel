@@ -51,6 +51,7 @@ class LocationUpdateStruct extends ValueObjectVisitor
      * Returns the '*' part of SORT_FIELD_* constant name
      *
      * @param int $sortField
+     *
      * @return string
      */
     protected function getSortFieldName( $sortField )

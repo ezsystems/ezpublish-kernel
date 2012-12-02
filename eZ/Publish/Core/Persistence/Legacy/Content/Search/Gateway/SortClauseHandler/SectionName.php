@@ -21,7 +21,8 @@ class SectionName extends SortClauseHandler
      * Check if this sort clause handler accepts to handle the given sort clause.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
-     * @return bool
+     *
+     * @return boolean
      */
     public function accept( SortClause $sortClause )
     {
@@ -37,6 +38,7 @@ class SectionName extends SortClauseHandler
      * @param \ezcQuerySelect $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
+     *
      * @return string
      */
     public function applySelect( ezcQuerySelect $query, SortClause $sortClause, $number )
@@ -61,6 +63,7 @@ class SectionName extends SortClauseHandler
      * @param \ezcQuerySelect $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
+     *
      * @return void
      */
     public function applyJoin( ezcQuerySelect $query, SortClause $sortClause, $number )

@@ -92,7 +92,7 @@ class LocationService implements LocationServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
      *
-     * @param integer $locationId
+     * @param int $locationId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
@@ -135,7 +135,7 @@ class LocationService implements LocationServiceInterface
     }
 
     /**
-     * Load children which are readable by the current user of a location object sorted by sortField and sortOrder
+     * Loads children which are readable by the current user of a location object sorted by sortField and sortOrder
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param int $offset the start offset for paging

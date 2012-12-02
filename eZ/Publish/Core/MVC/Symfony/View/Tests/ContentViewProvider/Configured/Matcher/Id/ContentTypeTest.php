@@ -32,9 +32,9 @@ class ContentTypeTest extends BaseTest
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ContentType::matchLocation
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
      *
-     * @param $matchingConfig
+     * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param $expectedResult
+     * @param boolean $expectedResult
      */
     public function testMatchLocation( $matchingConfig, Location $location, $expectedResult )
     {
@@ -76,7 +76,8 @@ class ContentTypeTest extends BaseTest
     /**
      * Generates a Location object in respect of a given content type identifier
      *
-     * @param $contentTypeId
+     * @param int $contentTypeId
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function generateLocationForContentType( $contentTypeId )
@@ -98,7 +99,8 @@ class ContentTypeTest extends BaseTest
     /**
      * Generates a ContentInfo object in respect of a given content type identifier
      *
-     * @param $contentTypeId
+     * @param int $contentTypeId
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function generateContentInfoForContentType( $contentTypeId )
@@ -127,9 +129,9 @@ class ContentTypeTest extends BaseTest
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ContentType::matchContentInfo
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
      *
-     * @param $matchingConfig
+     * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param $expectedResult
+     * @param boolean $expectedResult
      */
     public function testMatchContentInfo( $matchingConfig, ContentInfo $contentInfo, $expectedResult )
     {

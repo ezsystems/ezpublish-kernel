@@ -22,6 +22,7 @@ class SearchField implements Indexable
      * Get index data for field for search backend
      *
      * @param Field $field
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
      */
     public function getIndexData( Field $field )

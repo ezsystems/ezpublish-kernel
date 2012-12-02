@@ -72,7 +72,7 @@ class UserService implements UserServiceInterface
     /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
-     * @param \eZ\Publish\API\Repository\Repository  $repository
+     * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
      * @param array $settings
      */
@@ -546,7 +546,7 @@ class UserService implements UserServiceInterface
     /**
      * Loads a user
      *
-     * @param integer $userId
+     * @param int $userId
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
@@ -591,6 +591,7 @@ class UserService implements UserServiceInterface
      * Loads anonymous user
      *
      * @uses loadUser()
+     *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
     public function loadAnonymousUser()
@@ -951,7 +952,7 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * loads the users of a user group
+     * Loads the users of a user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the users or user group
      *

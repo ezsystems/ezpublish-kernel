@@ -409,8 +409,9 @@ class LocationHandlerTest extends TestCase
     /**
      * Test for the removeSubtree() method.
      *
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler::removeSubtree
+     *
+     * @return void
      */
     public function testRemoveSubtree()
     {
@@ -546,8 +547,9 @@ class LocationHandlerTest extends TestCase
     /**
      * Test for the copySubtree() method.
      *
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler::copySubtree
+     *
+     * @return void
      */
     public function testCopySubtree()
     {
@@ -713,6 +715,7 @@ class LocationHandlerTest extends TestCase
      * Returns the handler to test with $methods mocked
      *
      * @param string[] $methods
+     *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
      */
     protected function getPartlyMockedHandler( array $methods )

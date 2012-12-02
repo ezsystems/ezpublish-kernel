@@ -29,6 +29,7 @@ class Sqlite extends EzcDbHandler
      *
      * @param string $table
      * @param string $column
+     *
      * @return mixed
      */
     public function getAutoIncrementValue( $table, $column )

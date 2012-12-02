@@ -118,7 +118,7 @@ class LocationStub extends Location
     protected $contentInfo;
 
     /**
-     * returns the content info of the content object of this location
+     * Returns the content info of the content object of this location
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
@@ -131,6 +131,7 @@ class LocationStub extends Location
      * FOR TEST USE ONLY!
      *
      * @param int $parentLocationId
+     *
      * @return void
      */
     public function __setParentLocationId( $parentLocationId )
@@ -182,6 +183,7 @@ class LocationStub extends Location
      * FOR TEST USE ONLY!
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $newContentInfo
+     *
      * @return void
      */
     public function __setContentInfo( ContentInfo $newContentInfo )
@@ -193,6 +195,7 @@ class LocationStub extends Location
      * FOR TEST USE ONLY!
      *
      * @param int $depth
+     *
      * @return void
      */
     public function __setDepth( $depth )
@@ -204,6 +207,7 @@ class LocationStub extends Location
      * FOR TEST USE ONLY!
      *
      * @param string $pathString
+     *
      * @return void
      */
     public function __setPathString( $pathString )

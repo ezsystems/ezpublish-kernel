@@ -90,7 +90,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the trashed location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the location with the given id does not exist
      *
-     * @param integer $trashItemId
+     * @param int $trashItemId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
@@ -121,7 +121,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
      */
     public function trash( Location $location )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -138,7 +138,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
      */
     public function recover( APITrashItem $trashItem, Location $newParentLocation = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -155,7 +155,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
             'DELETE',
             $this->urlHandler->generate( 'trashItems' ),
             new Message(
-                // TODO: What media-type should we set here? Actually, it should be
+                // @todo: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "Location" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
@@ -182,7 +182,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
             'DELETE',
             $trashItem->id,
             new Message(
-                // TODO: What media-type should we set here? Actually, it should be
+                // @todo: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "Location" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?

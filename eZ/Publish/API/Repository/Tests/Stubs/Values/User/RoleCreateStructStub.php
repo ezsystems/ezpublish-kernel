@@ -26,7 +26,7 @@ class RoleCreateStructStub extends RoleCreateStruct
     private $policies = array();
 
     /**
-     * instanciates a role create class
+     * Instantiates a role create class
      *
      * @param string $name
      */

@@ -54,6 +54,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
      * Test if result contains ErrorMessage element and error code
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsErrorCode( $result )
@@ -76,6 +77,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
      * Test if result contains ErrorMessage element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsErrorMessage( $result )
@@ -98,6 +100,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
      * Test if result contains ErrorMessage element and description
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsErrorDescription( $result )
@@ -119,6 +122,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
      * Test if ErrorMessage element contains required attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsExceptionAttributes( $result )

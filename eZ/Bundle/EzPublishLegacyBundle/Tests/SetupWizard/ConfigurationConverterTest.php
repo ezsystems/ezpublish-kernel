@@ -28,17 +28,16 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
 
 
     /**
-     * @param $package
-     * @param $adminSiteaccess
-     * @param $mockParameters
-     * @param $expectedResult
-     * @param $exception exception type, if expected
+     * @param string $package
+     * @param string $adminSiteaccess
+     * @param array $mockParameters
+     * @param mixed $expectedResult
+     * @param string $exception exception type, if expected
      *
      * @throws \Exception
+     *
      * @return void
      * @internal param $mockParameter
-     *
-     * @param $exception exception type, if expected
      *
      * @dataProvider providerForTestFromLegacy
      */
@@ -87,7 +86,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
     /**
      * Converts a map of arguments + return value to a callback in order to allow exceptions
      *
-     * @param array $callbackMap array of callback parameter arrays [0..n-1 => arguments, n => return value]
+     * @param array[] $callbackMap array of callback parameter arrays [0..n-1 => arguments, n => return value]
      *
      * @return callable
      */
@@ -364,7 +363,8 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
 
     /**
      * @param array $methodsToMock
-     * @return \PHPUnit_Framework_MockObject_MockObject|eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver
      */
     protected function getLegacyConfigResolverMock( array $methodsToMock = array() )
     {

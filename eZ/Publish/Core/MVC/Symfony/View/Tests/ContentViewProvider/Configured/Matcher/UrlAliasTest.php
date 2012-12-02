@@ -31,8 +31,8 @@ class UrlAliasTest extends BaseTest
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\UrlAlias::setMatchingConfig
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
      *
-     * @param $matchingConfig
-     * @param $expectedValues
+     * @param string $matchingConfig
+     * @param string[] $expectedValues
      */
     public function testSetMatchingConfig( $matchingConfig, $expectedValues )
     {
@@ -57,7 +57,8 @@ class UrlAliasTest extends BaseTest
     /**
      * Returns a Repository mock configured to return the appropriate Section object with given section identifier
      *
-     * @param $path
+     * @param string $path
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function generateRepositoryMockForUrlAlias( $path )
@@ -102,9 +103,10 @@ class UrlAliasTest extends BaseTest
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\UrlAlias::setMatchingConfig
      * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
      *
-     * @param $matchingConfig
+     * @param string|string[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param $expectedResult
+     * @param boolean $expectedResult
+     *
      * @return void
      */
     public function testMatchLocation( $matchingConfig, Repository $repository, $expectedResult )

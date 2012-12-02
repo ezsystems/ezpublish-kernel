@@ -23,7 +23,6 @@ class EmailAddress implements Converter
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @static
      * @return Mail
      */
     public static function create()

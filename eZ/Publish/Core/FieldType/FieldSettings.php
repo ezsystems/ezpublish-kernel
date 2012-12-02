@@ -27,6 +27,7 @@ class FieldSettings extends ArrayObject
      * @throws \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException On non existing indexes
      * @param string|int $index
      * @param mixed $value
+     *
      * @return void
      */
     public function offsetSet( $index, $value )
@@ -41,8 +42,10 @@ class FieldSettings extends ArrayObject
      * Returns value from internal array, identified by $index.
      *
      * @param string $index
-     * @return mixed
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException If $index is not found
+     *
+     * @return mixed
      */
     public function offsetGet( $index )
     {

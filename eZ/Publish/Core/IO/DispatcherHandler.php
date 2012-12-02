@@ -134,7 +134,7 @@ class DispatcherHandler implements IoHandlerInterface
             return $oldHandler->update( $path, $updateFileStruct );
 
         // Move file from old to new handler
-        throw new \Exception( '@TODO: Moving from one io handler to another one is not implemented!' );
+        throw new \Exception( '@todo: Moving from one io handler to another one is not implemented!' );
         /*$newHandler->create( $updateFile );
         try
         {

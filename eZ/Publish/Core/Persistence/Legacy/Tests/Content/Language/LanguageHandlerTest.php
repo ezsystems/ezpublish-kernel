@@ -39,8 +39,9 @@ class LanguageHandlerTest extends TestCase
     protected $mapperMock;
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::create
+     *
+     * @return void
      */
     public function testCreate()
     {
@@ -89,8 +90,9 @@ class LanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::update
+     *
+     * @return void
      */
     public function testUpdate()
     {
@@ -115,8 +117,9 @@ class LanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::load
+     *
+     * @return void
      */
     public function testLoad()
     {
@@ -168,8 +171,9 @@ class LanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::loadByLanguageCode
+     *
+     * @return void
      */
     public function testLoadByLanguageCode()
     {
@@ -221,8 +225,9 @@ class LanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::loadAll
+     *
+     * @return void
      */
     public function testLoadAll()
     {
@@ -248,8 +253,9 @@ class LanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::delete
+     *
+     * @return void
      */
     public function testDeleteSuccess()
     {

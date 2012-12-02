@@ -62,7 +62,7 @@ class ContentExtension extends Twig_Extension
     /**
      * Converter used to transform XmlText content in HTML5
      *
-     * @var eZ\Publish\Core\FieldType\XmlText\Converter\Html5
+     * @var \eZ\Publish\Core\FieldType\XmlText\Converter\Html5
      */
     protected $xmlTextConverter;
 
@@ -153,7 +153,9 @@ class ContentExtension extends Twig_Extension
      * @param \eZ\Publish\Core\Repository\Values\Content\Content $content
      * @param string $fieldIdentifier Identifier for the field we want to render
      * @param array $params An array of parameters to pass to the field view
+     *
      * @throws \InvalidArgumentException If $fieldIdentifier is invalid in $content
+     *
      * @return string The HTML markup
      */
     public function renderField( Content $content, $fieldIdentifier, array $params = array() )
@@ -226,7 +228,7 @@ class ContentExtension extends Twig_Extension
     }
 
     /**
-     * @return eZ\Publish\Core\FieldType\XmlText\Converter\Html5
+     * @return \eZ\Publish\Core\FieldType\XmlText\Converter\Html5
      */
     protected function getXmlTextConverter()
     {
@@ -240,6 +242,7 @@ class ContentExtension extends Twig_Extension
      * Implements the "xmltext_to_html5" filter
      *
      * @param string $xmlData
+     *
      * @return string
      */
     public function xmltextToHtml5( $xmlData )
@@ -252,7 +255,7 @@ class ContentExtension extends Twig_Extension
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     * @param $variationName
+     * @param string $variationName
      *
      * @return \eZ\Publish\API\Repository\Values\File\ImageVariant
      */
@@ -269,8 +272,9 @@ class ContentExtension extends Twig_Extension
      * found, returns null.
      *
      * @param string $blockName
-     * @param Twig_Template $tpl
-     * @return array
+     * @param \Twig_Template $tpl
+     *
+     * @return array|null
      */
     protected function searchBlock( $blockName, Twig_Template $tpl )
     {
@@ -300,8 +304,10 @@ class ContentExtension extends Twig_Extension
      * @param Content $content
      * @param Field $field
      * @param null|string $localTemplate a file where to look for the block first
-     * @return array
+     *
      * @throws \LogicException If no template block can be found for $field
+     *
+     * @return array
      */
     protected function getBlocksByField( Content $content, Field $field, $localTemplate = null )
     {
@@ -349,6 +355,7 @@ class ContentExtension extends Twig_Extension
      *
      * @param \eZ\Publish\Core\Repository\Values\Content\Content $content
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
+     *
      * @return string
      */
     protected function getFieldBlockName( Content $content, Field $field )
@@ -361,6 +368,7 @@ class ContentExtension extends Twig_Extension
      *
      * @param \eZ\Publish\Core\Repository\Values\Content\Content $content
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
+     *
      * @return string
      */
     protected function getFieldTypeIdentifier( Content $content, Field $field )
@@ -382,7 +390,8 @@ class ContentExtension extends Twig_Extension
      * Checks if we are in edit mode or not (editorial interface).
      *
      * @todo Needs to check in the session and via the API if current user has access to edit mode
-     * @return bool
+     *
+     * @return boolean
      */
     protected function isInEditMode()
     {
@@ -396,8 +405,10 @@ class ContentExtension extends Twig_Extension
      *
      * @param \eZ\Publish\Core\Repository\Values\Content\Content $content
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
-     * @return array
+     *
      * @todo It would make sense to also ask for additional metadata supported by the field type
+     *
+     * @return array
      */
     protected function getEditMetadata( Content $content, Field $field )
     {

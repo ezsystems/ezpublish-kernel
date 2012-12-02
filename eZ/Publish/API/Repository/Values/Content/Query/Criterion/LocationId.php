@@ -26,7 +26,7 @@ class LocationId extends Criterion implements CriterionInterface
     /**
      * Creates a new LocationId criterion
      *
-     * @param integer|array(integer) $value One or more locationId that must be matched
+     * @param int|int[] $value One or more locationId that must be matched
      *
      * @throws \InvalidArgumentException if a non numeric id is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator

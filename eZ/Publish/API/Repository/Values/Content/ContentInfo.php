@@ -47,6 +47,7 @@ abstract class ContentInfo extends ValueObject
      * The content type of this content object
      *
      * @deprecated Use $contentTypeId and ContentTypeService
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     abstract public function getContentType();

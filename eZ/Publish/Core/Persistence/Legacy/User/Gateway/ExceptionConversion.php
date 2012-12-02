@@ -37,6 +37,7 @@ class ExceptionConversion extends Gateway
      * Create user
      *
      * @param user $user
+     *
      * @return mixed
      */
     public function createUser( User $user )
@@ -77,9 +78,10 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Load user with user ID.
+     * Loads user with user ID.
      *
      * @param mixed $userId
+     *
      * @return array
      */
     public function load( $userId )
@@ -99,10 +101,11 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Load user with user ID.
+     * Loads user with user ID.
      *
      * @param string $login
      * @param string|null $email
+     *
      * @return array
      */
      public function loadByLoginOrMail( $login, $email = null )
@@ -143,7 +146,7 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Assign role to user with given limitation
+     * Assigns role to user with given limitation
      *
      * @param mixed $contentId
      * @param mixed $roleId

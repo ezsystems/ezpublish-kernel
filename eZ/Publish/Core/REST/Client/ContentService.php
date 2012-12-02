@@ -81,6 +81,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      * Only for testing
      *
      * @param mixed $id
+     *
      * @private
      */
     public function setSession( $id )
@@ -142,7 +143,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
 
         if ( empty( $contentList ) )
         {
-            throw new Exceptions\NotFoundException( "@TODO: Error message." );
+            throw new Exceptions\NotFoundException( "@todo: Error message." );
         }
 
         return $this->completeContentInfo( reset( $contentList ) );
@@ -152,6 +153,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      * Returns a complete ContentInfo based on $restContentInfo
      *
      * @param \eZ\Publish\Core\REST\Client\Values\RestContentInfo $restContentInfo
+     *
      * @return \eZ\Publish\Core\REST\Client\Values\Content\ContentInfo
      */
     protected function completeContentInfo( Values\RestContentInfo $restContentInfo )
@@ -187,6 +189,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      * $currentVersionReference
      *
      * @param string $currentVersionReference
+     *
      * @return string
      */
     protected function fetchCurrentVersionUrl( $currentVersionReference )
@@ -208,7 +211,8 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      * Checks if the given response is an error
      *
      * @param Message $response
-     * @return bool
+     *
+     * @return boolean
      */
     protected function isErrorResponse( Message $response )
     {
@@ -218,7 +222,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
     }
 
     /**
-     * loads a version info of the given content object.
+     * Loads a version info of the given content object.
      *
      * If no version number is given, the method returns the current version
      *
@@ -232,11 +236,11 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function loadVersionInfo( ContentInfo $contentInfo, $versionNo = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * loads a version info of the given content object id.
+     * Loads a version info of the given content object id.
      *
      * If no version number is given, the method returns the current version
      *
@@ -250,11 +254,11 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function loadVersionInfoById( $contentId, $versionNo = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * loads content in a version for the given content info object.
+     * Loads content in a version for the given content info object.
      *
      * If no version number is given, the method returns the current version
      *
@@ -277,7 +281,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
     }
 
     /**
-     * loads content in the version given by version info.
+     * Loads content in the version given by version info.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
@@ -294,7 +298,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
     }
 
     /**
-     * loads content in a version of the given content object.
+     * Loads content in a version of the given content object.
      *
      * If no version number is given, the method returns the current version
      *
@@ -349,7 +353,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
     }
 
     /**
-     * loads content in a version for the content object reference by the given remote id.
+     * Loads content in a version for the content object reference by the given remote id.
      *
      * If no version is given, the method returns the current version
      *
@@ -386,13 +390,13 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct $contentCreateStruct
-     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationCreateStructs an array of {@link \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct} for each location parent under which a location should be created for the content
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationCreateStructs For each location parent under which a location should be created for the content
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
     public function createContent( ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array() )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -410,11 +414,11 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function updateContentMetadata( ContentInfo $contentInfo, ContentMetadataUpdateStruct $contentMetadataUpdateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * deletes a content object including all its versions and locations including their subtrees.
+     * Deletes a content object including all its versions and locations including their subtrees.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to delete the content (in one of the locations of the given content object)
      *
@@ -422,11 +426,11 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function deleteContent( ContentInfo $contentInfo )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * creates a draft from a publshed or archived version.
+     * Creates a draft from a publshed or archived version.
      *
      * If no version is given, the current published version is used.
      * 4.x: The draft is created with the initialLanguge code of the source version or if not present with the main language.
@@ -442,11 +446,11 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function createContentDraft( ContentInfo $contentInfo, VersionInfo $versionInfo = null, User $user = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * Load drafts for a user.
+     * Loads drafts for a user.
      *
      * If no user is given the drafts for the authenticated user a returned
      *
@@ -458,7 +462,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function loadContentDrafts( User $user = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -476,7 +480,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function updateContent( VersionInfo $versionInfo, ContentUpdateStruct $contentUpdateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -494,7 +498,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function publishVersion( VersionInfo $versionInfo )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -507,7 +511,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function deleteVersion( VersionInfo $versionInfo )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -517,15 +521,15 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] an array of {@link \eZ\Publish\API\Repository\Values\Content\VersionInfo} sorted by creation date
+     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] Sorted by creation date
      */
     public function loadVersions( ContentInfo $contentInfo )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * copies the content to a new location. If no version is given,
+     * Copies the content to a new location. If no version is given,
      * all versions are copied, otherwise only the given version.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to copy the content to the given location
@@ -538,16 +542,16 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function copyContent( ContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, VersionInfo $versionInfo = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * finds content objects for the given query.
+     * Finds content objects for the given query.
      *
-     * @TODO define structs for the field filters
+     * @todo define structs for the field filters
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array  $fieldFilters - a map of filters for the returned fields.
+     * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
@@ -555,7 +559,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function findContent( Query $query, array $fieldFilters, $filterOnUserPermissions = true )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -564,9 +568,9 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the query would return more than one result
      *
-     * @TODO define structs for the field filters
+     * @todo define structs for the field filters
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array  $fieldFilters - a map of filters for the returned fields.
+     * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
@@ -574,21 +578,21 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function findSingle( Query $query, array $fieldFilters, $filterOnUserPermissions = true )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * load all outgoing relations for the given version
+     * Loads all outgoing relations for the given version
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read this version
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[] an array of {@link Relation}
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
     public function loadRelations( VersionInfo $versionInfo )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -597,12 +601,14 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      * NOTE: This method is not part of the API!
      *
      * @param string $relationListId
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
+     *
      * @access protected
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
     public function loadRelationsByListId( $relationListId )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -615,11 +621,11 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[] an array of {@link Relation}
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
     public function loadReverseRelations( ContentInfo $contentInfo )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -638,7 +644,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function addRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -653,7 +659,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function deleteRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -666,7 +672,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function newContentCreateStruct( ContentType $contentType, $mainLanguageCode )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -676,7 +682,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function newContentMetadataUpdateStruct()
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -685,7 +691,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function newContentUpdateStruct()
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     // Ignore this eZ Publish 5 feature by now.
@@ -714,11 +720,11 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function translateVersion( TranslationInfo $translationInfo, TranslationValues $translationValues, User $user = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * add translation information to the content object
+     * Adds translation information to the content object
      *
      * @example Examples/translation_5x.php
      *
@@ -730,7 +736,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function addTranslationInfo( TranslationInfo $translationInfo )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -740,15 +746,16 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param array $filter
+     *
      * @todo TBD - filter by sourceversion destination version and languages
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[] an array of {@link TranslationInfo}
+     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[]
      *
      * @since 5.0
      */
     public function loadTranslationInfos( ContentInfo $contentInfo, array $filter = array() )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -757,7 +764,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function newTranslationInfo()
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -766,6 +773,6 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function newTranslationValues()
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 }

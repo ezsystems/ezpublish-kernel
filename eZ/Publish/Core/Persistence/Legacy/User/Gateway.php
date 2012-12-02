@@ -19,6 +19,7 @@ abstract class Gateway
      * Create user
      *
      * @param user $user
+     *
      * @return mixed
      */
     abstract public function createUser( User $user );
@@ -31,18 +32,20 @@ abstract class Gateway
     abstract public function deleteUser( $userId );
 
     /**
-     * Load user with user ID.
+     * Loads user with user ID.
      *
      * @param mixed $userId
+     *
      * @return array
      */
     abstract public function load( $userId );
 
     /**
-     * Load user with user ID.
+     * Loads user with user ID.
      *
      * @param string $login
      * @param string|null $email
+     *
      * @return array
      */
      abstract public function loadByLoginOrMail( $login, $email = null );
@@ -55,7 +58,7 @@ abstract class Gateway
     abstract public function updateUser( User $user );
 
     /**
-     * Assign role to user with given limitation
+     * Assigns role to user with given limitation
      *
      * @param mixed $contentId
      * @param mixed $roleId

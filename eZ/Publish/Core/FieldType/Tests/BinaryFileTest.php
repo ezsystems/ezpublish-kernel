@@ -246,7 +246,7 @@ class BinaryFileTest extends BinaryBaseTest
                     'mimeType' => 'image/jpeg',
                 ) )
             ),
-            // TODO: Provide upload struct (via REST)!
+            // @todo: Provide upload struct (via REST)!
         );
     }
 }

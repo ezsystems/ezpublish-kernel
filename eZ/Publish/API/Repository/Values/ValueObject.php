@@ -66,8 +66,8 @@ abstract class ValueObject
     /**
      * Magic set function handling writes to non public properties
      *
-     * @throws PropertyNotFoundException When property does not exist
-     * @throws PropertyReadOnlyException When property is readonly (protected)
+     * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException When property does not exist
+     * @throws \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException When property is readonly (protected)
      *
      * @param string $property Name of the property
      * @param string $value
@@ -87,7 +87,7 @@ abstract class ValueObject
      * Magic get function handling read to non public properties
      *
      * Returns value for all readonly (protected) properties.
-     * @throws PropertyNotFoundException exception on all reads to undefined properties so typos are not silently accepted.
+     * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException exception on all reads to undefined properties so typos are not silently accepted.
      *
      * @param string $property Name of the property
      *
@@ -120,8 +120,8 @@ abstract class ValueObject
     /**
      * Magic unset function handling unset() to non public properties
      *
-     * @throws PropertyNotFoundException exception on all writes to undefined properties so typos are not silently accepted and
-     * @throws PropertyReadOnlyException exception on readonly (protected) properties.
+     * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException exception on all writes to undefined properties so typos are not silently accepted and
+     * @throws \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException exception on readonly (protected) properties.
      *
      * @uses __set()
      * @param string $property Name of the property
@@ -144,6 +144,7 @@ abstract class ValueObject
      * is parsed with PHP.
      *
      * @param mixed[] $array
+     *
      * @return ValueObject
      */
     static public function __set_state( array $array )
@@ -158,7 +159,7 @@ abstract class ValueObject
      * @deprecated Since 5.0, available purely for legacy eZTemplate compatibility
      * @uses __get()
      *
-     * @param $property
+     * @param string $property
      *
      * @return mixed
      */
@@ -188,9 +189,9 @@ abstract class ValueObject
      * @deprecated Since 5.0, available purely for legacy eZTemplate compatibility
      * @uses __isset()
      *
-     * @param $property
+     * @param string $property
      *
-     * @return bool
+     * @return boolean
      */
     final public function hasAttribute( $property )
     {

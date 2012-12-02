@@ -32,7 +32,7 @@ class Xml extends Generator
     /**
      * Keeps track if the document received some content
      *
-     * @var bool
+     * @var boolean
      */
     protected $isEmpty = true;
 
@@ -64,7 +64,7 @@ class Xml extends Generator
     /**
      * Returns if the document is empty or already contains data
      *
-     * @return bool
+     * @return boolean
      */
     public function isEmpty()
     {
@@ -77,6 +77,7 @@ class Xml extends Generator
      * Returns the generated document as a string.
      *
      * @param mixed $data
+     *
      * @return string
      */
     public function endDocument( $data )
@@ -230,6 +231,7 @@ class Xml extends Generator
      * Get media type
      *
      * @param string $name
+     *
      * @return string
      */
     public function getMediaType( $name )
