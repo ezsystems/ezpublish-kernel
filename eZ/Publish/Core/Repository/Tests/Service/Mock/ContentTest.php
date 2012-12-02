@@ -104,17 +104,19 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Returns the content service to test with $methods mocked
      *
+     * Injected Repository comes from {@see getRepositoryMock()} and persistence handler from {@see getPersistenceMock()}
+     *
      * @param string[] $methods
      *
      * @return \eZ\Publish\Core\Repository\ContentService|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getPartlyMockedContentService( array $methods = array() )
+    protected function getPartlyMockedContentService( array $methods = null )
     {
         return $this->getMock(
             "eZ\\Publish\\Core\\Repository\\ContentService",
             $methods,
             array(
-                $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' ),
+                $this->getRepositoryMock(),
                 $this->getPersistenceMock()
             )
         );

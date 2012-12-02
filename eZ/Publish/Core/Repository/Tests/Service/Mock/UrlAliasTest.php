@@ -1967,4 +1967,25 @@ class UrlAliasTest extends BaseServiceMockTest
             $configuration
         );
     }
+
+    /**
+     * Returns the content service to test with $methods mocked
+     *
+     * Injected Repository comes from {@see getRepositoryMock()} and persistence handler from {@see getPersistenceMock()}
+     *
+     * @param string[] $methods
+     *
+     * @return \eZ\Publish\Core\Repository\URLAliasService|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getPartlyMockedURLAliasServiceService( array $methods = null )
+    {
+        return $this->getMock(
+            "eZ\\Publish\\Core\\Repository\\URLAliasService",
+            $methods,
+            array(
+                $this->getRepositoryMock(),
+                $this->getPersistenceMock()->urlAliasHandler()
+            )
+        );
+    }
 }

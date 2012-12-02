@@ -129,4 +129,25 @@ class SearchTest extends BaseServiceMockTest
     {
         $this->markTestIncomplete( "Test not implemented:" . __METHOD__ );
     }
+
+    /**
+     * Returns the content service to test with $methods mocked
+     *
+     * Injected Repository comes from {@see getRepositoryMock()} and persistence handler from {@see getPersistenceMock()}
+     *
+     * @param string[] $methods
+     *
+     * @return \eZ\Publish\Core\Repository\SearchService|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getPartlyMockedSearchService( array $methods = null )
+    {
+        return $this->getMock(
+            "eZ\\Publish\\Core\\Repository\\SearchService",
+            $methods,
+            array(
+                $this->getRepositoryMock(),
+                $this->getPersistenceMock()->searchHandler()
+            )
+        );
+    }
 }

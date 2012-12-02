@@ -25,9 +25,9 @@ class UrlWildcardTest extends BaseServiceMockTest
      */
     public function testConstructor()
     {
-        $service = $this->getRepository()->getURLWildcardService();
+        $service = $this->getPartlyMockedURLWildcardService();
 
-        self::assertAttributeSame( $this->getRepository(), "repository", $service );
+        self::assertAttributeSame( $this->getRepositoryMock(), "repository", $service );
         self::assertAttributeSame( $this->getPersistenceMockHandler( 'Content\\UrlWildcard\\Handler' ), "urlWildcardHandler", $service );
         self::assertAttributeSame( array(), "settings", $service );
     }
@@ -35,22 +35,23 @@ class UrlWildcardTest extends BaseServiceMockTest
     /**
      * Test for the create() method.
      *
+     * @depends testConstructor
      * @covers \eZ\Publish\Core\Repository\URLWildcardService::create
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testCreateThrowsUnauthorizedException()
     {
-        $mockedService = $this->getRepository()->getURLWildcardService();
-        $userHandlerMock = $this->getPersistenceMockHandler( 'User\\Handler' );
-        $userHandlerMock->expects(
+        $mockedService = $this->getPartlyMockedURLWildcardService();
+        $repositoryMock = $this->getRepositoryMock();
+        $repositoryMock->expects(
             $this->once()
         )->method(
-            "loadRoleAssignmentsByGroupId"
+            "hasAccess"
         )->with(
-            $this->equalTo( 14 ),
-            $this->isTrue()
+            $this->equalTo( "content" ),
+            $this->equalTo( "urltranslator" )
         )->will(
-            $this->returnValue( array() )
+            $this->returnValue( false )
         );
 
         $mockedService->create( "lorem/ipsum", "opossum", true );
@@ -59,24 +60,46 @@ class UrlWildcardTest extends BaseServiceMockTest
     /**
      * Test for the remove() method.
      *
+     * @depends testConstructor
      * @covers \eZ\Publish\Core\Repository\URLWildcardService::remove
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testRemoveThrowsUnauthorizedException()
     {
-        $mockedService = $this->getRepository()->getURLWildcardService();
-        $userHandlerMock = $this->getPersistenceMockHandler( 'User\\Handler' );
-        $userHandlerMock->expects(
+        $mockedService = $this->getPartlyMockedURLWildcardService();
+        $repositoryMock = $this->getRepositoryMock();
+        $repositoryMock->expects(
             $this->once()
         )->method(
-            "loadRoleAssignmentsByGroupId"
+            "hasAccess"
         )->with(
-            $this->equalTo( 14 ),
-            $this->isTrue()
+            $this->equalTo( "content" ),
+            $this->equalTo( "urltranslator" )
         )->will(
-            $this->returnValue( array() )
+            $this->returnValue( false )
         );
 
         $mockedService->remove( new URLWildcard() );
+    }
+
+    /**
+     * Returns the content service to test with $methods mocked
+     *
+     * Injected Repository comes from {@see getRepositoryMock()} and persistence handler from {@see getPersistenceMock()}
+     *
+     * @param string[] $methods
+     *
+     * @return \eZ\Publish\Core\Repository\URLWildcardService|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getPartlyMockedURLWildcardService( array $methods = null )
+    {
+        return $this->getMock(
+            "eZ\\Publish\\Core\\Repository\\URLWildcardService",
+            $methods,
+            array(
+                $this->getRepositoryMock(),
+                $this->getPersistenceMock()->urlWildcardHandler()
+            )
+        );
     }
 }

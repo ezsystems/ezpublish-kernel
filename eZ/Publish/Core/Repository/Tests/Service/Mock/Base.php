@@ -27,6 +27,11 @@ abstract class Base extends PHPUnit_Framework_TestCase
     private $repository;
 
     /**
+     * @var \eZ\Publish\API\Repository\Repository|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $repositoryMock;
+
+    /**
      * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
      */
     private $persistenceMock;
@@ -67,6 +72,19 @@ abstract class Base extends PHPUnit_Framework_TestCase
             $this->repository = $repository;
         }
         return $this->repository;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Repository|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getRepositoryMock()
+    {
+        if ( !isset( $this->repositoryMock ) )
+        {
+            $this->repositoryMock = self::getMock( "eZ\\Publish\\API\\Repository\\Repository" );
+        }
+
+        return $this->repositoryMock;
     }
 
     /**
@@ -185,7 +203,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    protected function getStubbedUser( $id )
+    private function getStubbedUser( $id )
     {
         return new User(
             array(

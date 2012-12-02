@@ -31,7 +31,7 @@ class NameSchemaTest extends BaseServiceMockTest
      */
     public function testResolveUrlAliasSchema()
     {
-        $serviceMock = $this->getNameSchemaServiceMock( array( "resolve" ) );
+        $serviceMock = $this->getPartlyMockedNameSchemaService( array( "resolve" ) );
 
         $content = $this->buildTestContent();
 
@@ -59,7 +59,7 @@ class NameSchemaTest extends BaseServiceMockTest
      */
     public function testResolveUrlAliasSchemaFallbackToNameSchema()
     {
-        $serviceMock = $this->getNameSchemaServiceMock( array( "resolve" ) );
+        $serviceMock = $this->getPartlyMockedNameSchemaService( array( "resolve" ) );
 
         $content = $this->buildTestContent( "<name_schema>", "" );
 
@@ -87,7 +87,7 @@ class NameSchemaTest extends BaseServiceMockTest
      */
     public function testResolveNameSchema()
     {
-        $serviceMock = $this->getNameSchemaServiceMock( array( "resolve" ) );
+        $serviceMock = $this->getPartlyMockedNameSchemaService( array( "resolve" ) );
 
         $content = $this->buildTestContent();
 
@@ -115,7 +115,7 @@ class NameSchemaTest extends BaseServiceMockTest
      */
     public function testResolveNameSchemaWithFields()
     {
-        $serviceMock = $this->getNameSchemaServiceMock( array( "resolve" ) );
+        $serviceMock = $this->getPartlyMockedNameSchemaService( array( "resolve" ) );
 
         $content = $this->buildTestContent();
         $fields = array();
@@ -265,28 +265,22 @@ class NameSchemaTest extends BaseServiceMockTest
     }
 
     /**
-     * @var \eZ\Publish\Core\Repository\NameSchemaService|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $serviceMock;
-
-    /**
-     * Returns service with Repository mock and given $settings.
+     * Returns the content service to test with $methods mocked
+     *
+     * Injected Repository comes from {@see getRepositoryMock()}
+     *
+     * @param string[] $methods
      *
      * @return \eZ\Publish\Core\Repository\NameSchemaService|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getNameSchemaServiceMock( array $methods )
+    protected function getPartlyMockedNameSchemaService( array $methods = null )
     {
-        if ( !isset( $this->serviceMock ) )
-        {
-            $this->serviceMock = self::getMock(
-                "eZ\\Publish\\Core\\Repository\\NameSchemaService",
-                $methods,
-                array(),
-                '',
-                false
-            );
-        }
-
-        return $this->serviceMock;
+        return $this->getMock(
+            "eZ\\Publish\\Core\\Repository\\NameSchemaService",
+            $methods,
+            array(
+                $this->getRepositoryMock()
+            )
+        );
     }
 }
