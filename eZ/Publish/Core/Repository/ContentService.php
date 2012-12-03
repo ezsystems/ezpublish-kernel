@@ -522,6 +522,7 @@ class ContentService implements ContentServiceInterface
 
             foreach ( $languageCodes as $languageCode )
             {
+                $isEmptyValue = false;
                 $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $contentCreateStruct->mainLanguageCode;
                 if ( isset( $fields[$fieldDefinition->identifier][$valueLanguageCode] ) )
                 {
@@ -536,6 +537,7 @@ class ContentService implements ContentServiceInterface
 
                 if ( $fieldType->isEmptyValue( $fieldValue ) )
                 {
+                    $isEmptyValue = true;
                     if ( $fieldDefinition->isRequired )
                     {
                         throw new ContentValidationException( "Required field '{$fieldDefinition->identifier}' value is empty" );
@@ -559,16 +561,20 @@ class ContentService implements ContentServiceInterface
                 }
 
                 $fieldValues[$fieldDefinition->identifier][$languageCode] = $fieldValue;
-                $spiFields[] = new SPIField(
-                    array(
-                        "id" => null,
-                        "fieldDefinitionId" => $fieldDefinition->id,
-                        "type" => $fieldDefinition->fieldTypeIdentifier,
-                        "value" => $fieldType->toPersistenceValue( $fieldValue ),
-                        "languageCode" => $languageCode,
-                        "versionNo" => null
-                    )
-                );
+
+                if ( !$isEmptyValue )
+                {
+                    $spiFields[] = new SPIField(
+                        array(
+                            "id" => null,
+                            "fieldDefinitionId" => $fieldDefinition->id,
+                            "type" => $fieldDefinition->fieldTypeIdentifier,
+                            "value" => $fieldType->toPersistenceValue( $fieldValue ),
+                            "languageCode" => $languageCode,
+                            "versionNo" => null
+                        )
+                    );
+                }
             }
         }
 
@@ -1123,6 +1129,8 @@ class ContentService implements ContentServiceInterface
 
             foreach ( $languageCodes as $languageCode )
             {
+                $isCopiedValue = false;
+                $isEmptyValue = false;
                 $isLanguageNew = !in_array( $languageCode, $content->versionInfo->languageCodes );
                 $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $initialLanguageCode;
                 $isFieldUpdated = isset( $fields[$fieldDefinition->identifier][$valueLanguageCode] );
@@ -1134,6 +1142,7 @@ class ContentService implements ContentServiceInterface
 
                 if ( !$isFieldUpdated && $isLanguageNew && !$fieldDefinition->isTranslatable )
                 {
+                    $isCopiedValue = true;
                     $fieldValue = $fieldType->acceptValue(
                         $content->getField(
                             $fieldDefinition->identifier,
@@ -1156,6 +1165,7 @@ class ContentService implements ContentServiceInterface
 
                 if ( $fieldType->isEmptyValue( $fieldValue ) )
                 {
+                    $isEmptyValue = true;
                     if ( $fieldDefinition->isRequired )
                     {
                         throw new ContentValidationException( "Required field '{$fieldDefinition->identifier}' value is empty" );
@@ -1179,18 +1189,22 @@ class ContentService implements ContentServiceInterface
                 }
 
                 $fieldValues[$fieldDefinition->identifier][$languageCode] = $fieldValue;
-                $spiFields[] = new SPIField(
-                    array(
-                        "id" => $isLanguageNew
-                            ? null
-                            : $content->getField( $fieldDefinition->identifier, $languageCode )->id,
-                        "fieldDefinitionId" => $fieldDefinition->id,
-                        "type" => $fieldDefinition->fieldTypeIdentifier,
-                        "value" => $fieldType->toPersistenceValue( $fieldValue ),
-                        "languageCode" => $languageCode,
-                        "versionNo" => $versionInfo->versionNo
-                    )
-                );
+
+                if ( !( $isCopiedValue || ( $isLanguageNew && $isEmptyValue ) ) )
+                {
+                    $spiFields[] = new SPIField(
+                        array(
+                            "id" => $isLanguageNew
+                                ? null
+                                : $content->getField( $fieldDefinition->identifier, $languageCode )->id,
+                            "fieldDefinitionId" => $fieldDefinition->id,
+                            "type" => $fieldDefinition->fieldTypeIdentifier,
+                            "value" => $fieldType->toPersistenceValue( $fieldValue ),
+                            "languageCode" => $languageCode,
+                            "versionNo" => $versionInfo->versionNo
+                        )
+                    );
+                }
             }
         }
 
