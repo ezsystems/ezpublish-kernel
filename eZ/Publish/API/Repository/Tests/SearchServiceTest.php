@@ -811,7 +811,7 @@ class SearchServiceTest extends BaseTest
     /**
      * Simplify search result
      *
-     * This leads to saner comparisios of results, since we do not get the full 
+     * This leads to saner comparisios of results, since we do not get the full
      * content objhects every time.
      *
      * @param SearchResult $result

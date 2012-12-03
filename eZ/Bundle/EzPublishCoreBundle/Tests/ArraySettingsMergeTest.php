@@ -47,7 +47,7 @@ class ArraySettingsMergeTest extends \PHPUnit_Framework_TestCase
     )
     {
         $hasParameterMap = array(
-            array( 
+            array(
                 'ezsettings.' . ConfigResolver::SCOPE_DEFAULT . '.' . $testId,
                 true
             ),
@@ -62,7 +62,7 @@ class ArraySettingsMergeTest extends \PHPUnit_Framework_TestCase
         );
 
         $getParameterMap = array(
-            array( 
+            array(
                 'ezsettings.' . ConfigResolver::SCOPE_DEFAULT . '.' . $testId,
                 $defaultValue
             ),

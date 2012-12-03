@@ -12,7 +12,7 @@
         media-type="application/vnd.ez.api.ContentInfo+xml" />
       <DestinationContent href="/content/objects/87"
         media-type="application/vnd.ez.api.ContentInfo+xml" />
-      <sourceFieldDefinitionIdentifier>body</sourceFieldDefinitionIdentifier>  
+      <sourceFieldDefinitionIdentifier>body</sourceFieldDefinitionIdentifier>
       <RelationType>EMBED</RelationType>
     </Relation>
 </Relations>

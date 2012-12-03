@@ -208,7 +208,7 @@ class LanguageService implements \eZ\Publish\API\Repository\LanguageService, Ses
 
     /**
      * Instantiates an object to be used for creating languages
-     * 
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
      */
     public function newLanguageCreateStruct()

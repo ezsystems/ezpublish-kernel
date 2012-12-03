@@ -6,7 +6,7 @@ use eZ\Publish\Core\REST\Client\ContentTypeService;
 
 /**
  * this class represents a content type value
- * 
+ *
  * @property-read array $names calls getNames() or on access getName($language)
  * @property-read array $descriptions calls getDescriptions() or on access getDescription($language)
  * @property-read array $contentTypeGroups calls getContentTypeGroups

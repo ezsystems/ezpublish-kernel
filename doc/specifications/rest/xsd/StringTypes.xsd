@@ -25,9 +25,9 @@
         maxOccurs="unbounded" />
     </xsd:sequence>
   </xsd:complexType>
- 
+
   <xsd:element name="country" type="countryType"></xsd:element>
   <xsd:element name="keywords" type="keywordType"/>
   <xsd:element name="selection" type="selectionType"></xsd:element>
-  
+
 </xsd:schema>
