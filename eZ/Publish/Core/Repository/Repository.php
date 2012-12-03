@@ -192,6 +192,7 @@ class Repository implements RepositoryInterface
             ),
             'languages' => array()
         );
+        $persistenceHandler->setFieldTypeConfig( $this->serviceSettings["fieldType"] );
 
         if ( !empty( $this->serviceSettings['languages'] ) )
         {
