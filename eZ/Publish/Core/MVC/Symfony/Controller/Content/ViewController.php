@@ -55,7 +55,7 @@ class ViewController extends Controller
                 && $this->getParameter( 'content.ttl_cache' ) === true )
             {
                 $response->setVary( 'If-None-Match' );
-                $response->setMaxAge(
+                $response->setSharedMaxAge(
                     $this->getParameter( 'content.default_ttl' )
                 );
             }
