@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\SPI\FieldType;
 
+use eZ\Publish\API\Repository\Values\ValueObject as APIValueObject;
+
 /**
  * Abstract base class for FieldType events
  *
@@ -19,7 +21,7 @@ namespace eZ\Publish\SPI\FieldType;
  *
  * @todo Add VersionInfo parameter
  */
-abstract class Event
+abstract class Event extends APIValueObject
 {
     /**
      * Definition of $field
