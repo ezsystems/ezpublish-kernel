@@ -189,19 +189,19 @@ class RelationList implements Converter
             return;
 
         if ( $selectionType = $dom->getElementsByTagName( 'selection_type' ) )
-            $fieldSettings['selectionMethod'] = (int)$selectionType->item( 0 )->getAttribute('value');
+            $fieldSettings['selectionMethod'] = (int)$selectionType->item( 0 )->getAttribute( 'value' );
 
         if (
             ( $defaultLocation = $dom->getElementsByTagName( 'contentobject-placement' ) ) &&
-            $defaultLocation->item( 0 )->hasAttribute('node-id')
+            $defaultLocation->item( 0 )->hasAttribute( 'node-id' )
         )
-            $fieldSettings['selectionDefaultLocation'] = (int)$defaultLocation->item( 0 )->getAttribute('node-id');
+            $fieldSettings['selectionDefaultLocation'] = (int)$defaultLocation->item( 0 )->getAttribute( 'node-id' );
 
         if ( !( $constraints = $dom->getElementsByTagName( 'constraints' ) ) )
             return;
 
         foreach ( $constraints->item( 0 )->childNodes as $allowedClass )
-            $fieldSettings['selectionContentTypes'][] = $allowedClass->getAttribute('contentclass-identifier');
+            $fieldSettings['selectionContentTypes'][] = $allowedClass->getAttribute( 'contentclass-identifier' );
     }
 
     /**

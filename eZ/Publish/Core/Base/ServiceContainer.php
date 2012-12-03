@@ -22,14 +22,14 @@ use ReflectionClass;
  *
  * Usage:
  *
- *     $sc = new eZ\Publish\Core\Base\ServiceContainer( $configManager->getConfiguration('service')->getAll() );
+ *     $sc = new eZ\Publish\Core\Base\ServiceContainer( $configManager->getConfiguration( 'service' )->getAll() );
  *     $sc->getRepository->getContentService()...;
  *
  * Or overriding $dependencies (in unit tests):
  * ( $dependencies keys should have same value as service.ini "arguments" values explained bellow )
  *
  *     $sc = new eZ\Publish\Core\Base\ServiceContainer(
- *         $configManager->getConfiguration('service')->getAll(),
+ *         $configManager->getConfiguration( 'service' )->getAll(),
  *         array(
  *             '@persistence_handler' => new \eZ\Publish\Core\Persistence\InMemory\Handler()
  *         )

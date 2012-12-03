@@ -29,7 +29,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                 )
             )
         );
-        $b = $sc->get('BService');
+        $b = $sc->get( 'BService' );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\B', $b );
         self::assertFalse( $b->factoryExecuted );
     }
@@ -51,7 +51,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                 )
             )
         );
-        $c = $sc->get('CService');
+        $c = $sc->get( 'CService' );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\C', $c );
         self::assertEquals( '', $c->string );
     }
@@ -77,7 +77,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                 )
             )
         );
-        $a = $sc->get('AService');
+        $a = $sc->get( 'AService' );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\A', $a );
         self::assertEquals( '__', $a->string );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\B', $a->b );
@@ -104,7 +104,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             ),
             array( '@BService' => new B )
         );
-        $a = $sc->get('AService');
+        $a = $sc->get( 'AService' );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\A', $a );
         self::assertEquals( '__', $a->string );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\B', $a->b );
@@ -127,7 +127,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             ),
             array( '$B' => new B )
         );
-        $d = $sc->get('DService');
+        $d = $sc->get( 'DService' );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\D', $d );
     }
 
@@ -152,7 +152,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                 ),
             )
         );
-        $obj = $sc->get('EService');
+        $obj = $sc->get( 'EService' );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\E', $obj );
     }
 
@@ -180,7 +180,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             ),
             array( '@B' => new B )
         );
-        $obj = $sc->get('F');
+        $obj = $sc->get( 'F' );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\F', $obj );
     }
 
@@ -210,7 +210,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                 ),
             )
         );
-        $obj = $sc->get('G');
+        $obj = $sc->get( 'G' );
         self::assertEquals( 42 * 2, $obj->hIntValue );
     }
 
@@ -248,7 +248,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array( '$H' => new H )
 
         );
-        $obj = $sc->get('ExtendedTestCheck');
+        $obj = $sc->get( 'ExtendedTestCheck' );
         self::assertEquals( 3, $obj->count );
     }
 
@@ -286,7 +286,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array( '$H' => new H )
 
         );
-        $obj = $sc->get('ExtendedTestLacyCheck');
+        $obj = $sc->get( 'ExtendedTestLacyCheck' );
         self::assertEquals( 3, $obj->count );
     }
 
@@ -325,7 +325,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array( '$H' => new H )
 
         );
-        $obj = $sc->get('ExtendedTestLacyCheck');
+        $obj = $sc->get( 'ExtendedTestLacyCheck' );
         self::assertEquals( 3, $obj->count );
     }
 
@@ -350,7 +350,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                 ),
             )
         );
-        $obj = $sc->get('ParameterTest');
+        $obj = $sc->get( 'ParameterTest' );
         self::assertEquals( $testPath, $obj->parameter );
     }
 }//ParameterTest

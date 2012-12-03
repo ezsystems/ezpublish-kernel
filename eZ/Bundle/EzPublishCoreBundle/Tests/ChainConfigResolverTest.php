@@ -54,7 +54,7 @@ class ChainRouterTest extends \PHPUnit_Framework_TestCase
         // We're using a mock here and not $this->chainResolver because we need to ensure that the sorting operation is done only once.
         $resolver = $this->buildMock(
             'eZ\\Bundle\\EzPublishCoreBundle\\DependencyInjection\\Configuration\\ChainConfigResolver',
-            array('sortResolvers')
+            array( 'sortResolvers' )
         );
         $resolver
             ->expects( $this->once() )

@@ -103,7 +103,7 @@ class LocationService implements LocationServiceInterface
         $loadedTargetLocation = $this->loadLocation( $targetParentLocation->id );
 
         if ( stripos( $loadedTargetLocation->pathString, $loadedSubtree->pathString ) !== false )
-            throw new InvalidArgumentException("targetParentLocation", "target parent location is a sub location of the given subtree");
+            throw new InvalidArgumentException( "targetParentLocation", "target parent location is a sub location of the given subtree" );
 
         // check create permission on target
         if ( !$this->repository->canUser( 'content', 'create', $loadedSubtree->getContentInfo(), $loadedTargetLocation ) )

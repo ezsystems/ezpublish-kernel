@@ -115,7 +115,7 @@ class Page implements Converter
     {
         $dom = new DOMDocument( '1.0', 'utf-8' );
         $dom->formatOutput = true;
-        $success = $dom->loadXML('<page />');
+        $success = $dom->loadXML( '<page />' );
 
         $pageNode = $dom->documentElement;
 

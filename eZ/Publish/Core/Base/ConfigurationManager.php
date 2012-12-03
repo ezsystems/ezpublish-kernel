@@ -24,7 +24,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
  * Usage:
  *
  *     // Default value on $module is 'base', so this will parse base.ini[.append.php] files given setup above
- *     $bool = $manager->getConfiguration('base')->get( 'ClassLoader', 'Repositories' );
+ *     $bool = $manager->getConfiguration( 'base' )->get( 'ClassLoader', 'Repositories' );
  *
  *
  * Usage2:

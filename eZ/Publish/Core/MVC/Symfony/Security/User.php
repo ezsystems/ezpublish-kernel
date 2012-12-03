@@ -38,7 +38,7 @@ class User implements AdvancedUserInterface, EquatableInterface
      * <code>
      * public function getRoles()
      * {
-     *     return array('ROLE_USER');
+     *     return array( 'ROLE_USER' );
      * }
      * </code>
      *

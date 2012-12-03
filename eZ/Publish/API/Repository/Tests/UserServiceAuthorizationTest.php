@@ -227,8 +227,8 @@ class UserServiceAuthorizationTest extends BaseTest
             'eng-GB'
         );
 
-        $userCreateStruct->setField('first_name', 'Christian');
-        $userCreateStruct->setField('last_name', 'Bacher');
+        $userCreateStruct->setField( 'first_name', 'Christian' );
+        $userCreateStruct->setField( 'last_name', 'Bacher' );
 
         $parentUserGroup = $userService->loadUserGroup( $editorsGroupId );
 

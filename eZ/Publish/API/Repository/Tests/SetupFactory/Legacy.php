@@ -366,7 +366,7 @@ class Legacy extends SetupFactory
         {
             $configManager = $this->getConfigurationManager();
 
-            $serviceSettings = $configManager->getConfiguration('service')->getAll();
+            $serviceSettings = $configManager->getConfiguration( 'service' )->getAll();
 
             $serviceSettings['inner_repository']['arguments']['persistence_handler'] = '@persistence_handler_legacy';
             $serviceSettings['inner_repository']['arguments']['io_handler'] = '@io_handler_legacy';

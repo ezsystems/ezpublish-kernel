@@ -55,8 +55,8 @@ class Store implements StoreInterface
         $error = error_get_last();
         if (1 === $error['type'] && false === headers_sent()) {
             // send a 503
-            header('HTTP/1.0 503 Service Unavailable');
-            header('Retry-After: 10');
+            header( 'HTTP/1.0 503 Service Unavailable' );
+            header( 'Retry-After: 10' );
             echo '503 Service Unavailable';
         }
     }
@@ -148,29 +148,29 @@ class Store implements StoreInterface
         $storedEnv = $this->persistRequest($request);
 
         // write the response body to the entity store if this is the original response
-        if (!$response->headers->has('X-Content-Digest')) {
+        if ( !$response->headers->has( 'X-Content-Digest' ) ) {
             $digest = $this->generateContentDigest($response);
 
-            if (false === $this->save($digest, $response->getContent())) {
-                throw new \RuntimeException('Unable to store the entity.');
+            if (false === $this->save( $digest, $response->getContent() ) ) {
+                throw new \RuntimeException( 'Unable to store the entity.' );
             }
 
             $response->headers->set('X-Content-Digest', $digest);
 
-            if (!$response->headers->has('Transfer-Encoding')) {
-                $response->headers->set('Content-Length', strlen($response->getContent()));
+            if (!$response->headers->has( 'Transfer-Encoding' )) {
+                $response->headers->set('Content-Length', strlen( $response->getContent() ) );
             }
         }
 
         // read existing cache entries, remove non-varying, and add this one to the list
         $entries = array();
-        $vary = $response->headers->get('vary');
+        $vary = $response->headers->get( 'vary' );
         foreach ($this->getMetadata($key) as $entry) {
             if (!isset($entry[1]['vary'][0])) {
-                $entry[1]['vary'] = array('');
+                $entry[1]['vary'] = array( '' );
             }
 
-            if ($vary != $entry[1]['vary'][0] || !$this->requestsMatch($vary, $entry[0], $storedEnv)) {
+            if ($vary != $entry[1]['vary'][0] || !$this->requestsMatch( $vary, $entry[0], $storedEnv) ) {
                 $entries[] = $entry;
             }
         }
@@ -178,10 +178,10 @@ class Store implements StoreInterface
         $headers = $this->persistResponse($response);
         unset($headers['age']);
 
-        array_unshift($entries, array($storedEnv, $headers));
+        array_unshift( $entries, array($storedEnv, $headers) );
 
-        if (false === $this->save($key, serialize($entries))) {
-            throw new \RuntimeException('Unable to store the metadata.');
+        if ( false === $this->save( $key, serialize( $entries ) ) ) {
+            throw new \RuntimeException( 'Unable to store the metadata.' );
         }
 
         return $key;
@@ -196,7 +196,7 @@ class Store implements StoreInterface
      */
     protected function generateContentDigest(Response $response)
     {
-        return 'en'.sha1($response->getContent());
+        return 'en' . sha1($response->getContent());
     }
 
     /**
@@ -210,26 +210,30 @@ class Store implements StoreInterface
         $key = $this->getCacheKey($request);
 
         $entries = array();
-        foreach ($this->getMetadata($key) as $entry) {
+        foreach ( $this->getMetadata($key) as $entry )
+        {
             $response = $this->restoreResponse($entry[1]);
             if ($response->isFresh()) {
                 $response->expire();
                 $modified = true;
-                $entries[] = array($entry[0], $this->persistResponse($response));
+                $entries[] = array( $entry[0], $this->persistResponse( $response ) );
             } else {
                 $entries[] = $entry;
             }
         }
 
-        if ($modified) {
+        if ($modified)
+        {
             if (false === $this->save($key, serialize($entries))) {
-                throw new \RuntimeException('Unable to store the metadata.');
+                throw new \RuntimeException( 'Unable to store the metadata.' );
             }
         }
 
         // As per the RFC, invalidate Location and Content-Location URLs if present
-        foreach (array('Location', 'Content-Location') as $header) {
-            if ($uri = $request->headers->get($header)) {
+        foreach ( array( 'Location', 'Content-Location' ) as $header )
+        {
+            if ($uri = $request->headers->get($header))
+            {
                 $subRequest = Request::create($uri, 'get', array(), array(), array(), $request->server->all());
 
                 $this->invalidate($subRequest);

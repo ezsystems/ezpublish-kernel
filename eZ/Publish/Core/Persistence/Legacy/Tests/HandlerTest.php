@@ -396,7 +396,7 @@ class HandlerTest extends TestCase
             $settings['base']['Configuration']['Paths']
         );
 
-        $serviceSettings = $configManager->getConfiguration('service')->getAll();
+        $serviceSettings = $configManager->getConfiguration( 'service' )->getAll();
         $serviceSettings['legacy_db_handler']['arguments']['dsn'] = $this->getDsn();
         $sc = new ServiceContainer(
             $serviceSettings,

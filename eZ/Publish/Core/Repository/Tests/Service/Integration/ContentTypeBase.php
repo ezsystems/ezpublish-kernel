@@ -1425,8 +1425,8 @@ abstract class ContentTypeBase extends BaseServiceTest
         $typeCreateStruct->creatorId = $this->repository->getCurrentUser()->id;
         $typeCreateStruct->creationDate = new \DateTime();
         $typeCreateStruct->mainLanguageCode = 'eng-GB';
-        $typeCreateStruct->names = array('eng-US' => 'A name.');
-        $typeCreateStruct->descriptions = array('eng-US' => 'A description.');
+        $typeCreateStruct->names = array( 'eng-US' => 'A name.' );
+        $typeCreateStruct->descriptions = array( 'eng-US' => 'A description.' );
 
         // Throws an exception because content type with identifier "new-type" already exists
         $type = $contentTypeService->createContentType(
@@ -1463,8 +1463,8 @@ abstract class ContentTypeBase extends BaseServiceTest
         $typeCreateStruct->creatorId = $this->repository->getCurrentUser()->id;
         $typeCreateStruct->creationDate = new \DateTime();
         $typeCreateStruct->mainLanguageCode = 'eng-GB';
-        $typeCreateStruct->names = array('eng-US' => 'A name.');
-        $typeCreateStruct->descriptions = array('eng-US' => 'A description.');
+        $typeCreateStruct->names = array( 'eng-US' => 'A name.' );
+        $typeCreateStruct->descriptions = array( 'eng-US' => 'A description.' );
 
         // Throws an exception because content type with remoteId "new-remoteid" already exists
         $type = $contentTypeService->createContentType(
@@ -1501,8 +1501,8 @@ abstract class ContentTypeBase extends BaseServiceTest
         $typeCreateStruct->creatorId = $this->repository->getCurrentUser()->id;
         $typeCreateStruct->creationDate = new \DateTime();
         $typeCreateStruct->mainLanguageCode = 'eng-GB';
-        $typeCreateStruct->names = array('eng-US' => 'A name.');
-        $typeCreateStruct->descriptions = array('eng-US' => 'A description.');
+        $typeCreateStruct->names = array( 'eng-US' => 'A name.' );
+        $typeCreateStruct->descriptions = array( 'eng-US' => 'A description.' );
 
         // Throws an exception because content type create struct does not have any field definition create structs set
         $type = $contentTypeService->createContentType(
