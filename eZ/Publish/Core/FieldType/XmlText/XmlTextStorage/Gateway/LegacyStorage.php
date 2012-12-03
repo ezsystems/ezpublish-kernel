@@ -103,8 +103,7 @@ class LegacyStorage extends Gateway
         $q
             ->select( "id", "url" )
             ->from( UrlStorage::URL_TABLE )
-            ->where( $q->expr->in( 'id', $linkIds ) )
-        ;
+            ->where( $q->expr->in( 'id', $linkIds ) );
 
         $statement = $q->prepare();
         $statement->execute();
@@ -183,8 +182,7 @@ class LegacyStorage extends Gateway
         $q
             ->select( "id", "url" )
             ->from( UrlStorage::URL_TABLE )
-            ->where( $q->expr->in( 'url', $linksUrls ) )
-        ;
+            ->where( $q->expr->in( 'url', $linksUrls ) );
 
         $statement = $q->prepare();
         $statement->execute();

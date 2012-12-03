@@ -38,8 +38,7 @@ class FieldTemplates extends AbstractParser
                         ->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 
     /**

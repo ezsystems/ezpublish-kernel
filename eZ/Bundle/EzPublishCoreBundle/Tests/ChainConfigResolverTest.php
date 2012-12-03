@@ -63,8 +63,7 @@ class ChainRouterTest extends \PHPUnit_Framework_TestCase
                 $this->returnValue(
                     array( $high, $medium, $low )
                 )
-            )
-        ;
+            );
 
         $resolver->addResolver( $low, 10 );
         $resolver->addResolver( $medium, 50 );
@@ -100,8 +99,7 @@ class ChainRouterTest extends \PHPUnit_Framework_TestCase
                 $this->returnValue(
                     array( $high, $medium, $low )
                 )
-            )
-        ;
+            );
         // The second time sortResolvers() is called, we're supposed to get the newly added router ($highest)
         $resolver
             ->expects( $this->at(1) )
@@ -110,8 +108,7 @@ class ChainRouterTest extends \PHPUnit_Framework_TestCase
                 $this->returnValue(
                     array( $highest, $high, $medium, $low )
                 )
-            )
-        ;
+            );
 
         $resolver->addResolver( $low, 10 );
         $resolver->addResolver( $medium, 50 );
@@ -149,8 +146,7 @@ class ChainRouterTest extends \PHPUnit_Framework_TestCase
             $resolver
                 ->expects( $this->once() )
                 ->method( 'setDefaultNamespace' )
-                ->with( $namespace )
-            ;
+                ->with( $namespace );
             $this->chainResolver->addResolver( $resolver, $i );
         }
 
@@ -172,8 +168,7 @@ class ChainRouterTest extends \PHPUnit_Framework_TestCase
                 ->expects( $this->once() )
                 ->method( 'getParameter' )
                 ->with( $paramName, $namespace, $scope )
-                ->will( $this->throwException( new ParameterNotFoundException( $paramName, $namespace ) ) )
-            ;
+                ->will( $this->throwException( new ParameterNotFoundException( $paramName, $namespace ) ) );
             $this->chainResolver->addResolver( $resolver );
         }
 
@@ -197,8 +192,7 @@ class ChainRouterTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'getParameter' )
             ->with( $paramName, $namespace, $scope )
-            ->will( $this->returnValue( $expectedValue ) )
-        ;
+            ->will( $this->returnValue( $expectedValue ) );
 
         $this->chainResolver->addResolver( $resolver );
         $this->assertSame( $expectedValue, $this->chainResolver->getParameter( $paramName, $namespace, $scope ) );
@@ -229,8 +223,7 @@ class ChainRouterTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'hasParameter' )
             ->with( $paramName, $namespace, $scope )
-            ->will( $this->returnValue( false ) )
-        ;
+            ->will( $this->returnValue( false ) );
         $this->chainResolver->addResolver( $resolver1 );
 
         $resolver2 = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
@@ -238,15 +231,13 @@ class ChainRouterTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'hasParameter' )
             ->with( $paramName, $namespace, $scope )
-            ->will( $this->returnValue( true ) )
-        ;
+            ->will( $this->returnValue( true ) );
         $this->chainResolver->addResolver( $resolver2 );
 
         $resolver3 = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
         $resolver3
             ->expects( $this->never() )
-            ->method( 'hasParameter' )
-        ;
+            ->method( 'hasParameter' );
         $this->chainResolver->addResolver( $resolver3 );
 
         $this->assertTrue( $this->chainResolver->hasParameter( $paramName, $namespace, $scope ) );
@@ -263,8 +254,7 @@ class ChainRouterTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'hasParameter' )
             ->with( $paramName, $namespace, $scope )
-            ->will( $this->returnValue( false ) )
-        ;
+            ->will( $this->returnValue( false ) );
         $this->chainResolver->addResolver( $resolver );
 
         $this->assertFalse( $this->chainResolver->hasParameter( $paramName, $namespace, $scope ) );
@@ -288,7 +278,6 @@ class ChainRouterTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder( $class )
             ->disableOriginalConstructor()
             ->setMethods( $methods )
-            ->getMock()
-        ;
+            ->getMock();
     }
 }

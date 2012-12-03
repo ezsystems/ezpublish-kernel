@@ -58,8 +58,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                     $this->returnCallback(
                         $this->convertMapToCallback( $callbackMap )
                     )
-                )
-            ;
+                );
         }
 
         try

@@ -37,8 +37,7 @@ class Factory extends AbstractFactory
         $container
             ->setDefinition( $providerId, new DefinitionDecorator( self::AUTHENTICATION_PROVIDER_ID ) )
             ->replaceArgument( 0, new Reference( $userProviderId ) )
-            ->addArgument( $id )
-        ;
+            ->addArgument( $id );
 
         return $providerId;
     }
@@ -49,8 +48,7 @@ class Factory extends AbstractFactory
         $listenerId = "$parentListenerId.$id";
         $container
             ->setDefinition( $listenerId, new DefinitionDecorator( $parentListenerId ) )
-            ->replaceArgument( 2, $id )
-        ;
+            ->replaceArgument( 2, $id );
 
         return $listenerId;
     }

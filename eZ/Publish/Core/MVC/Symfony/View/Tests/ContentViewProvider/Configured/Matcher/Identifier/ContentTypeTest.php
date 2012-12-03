@@ -90,8 +90,7 @@ class ContentTypeTest extends BaseTest
                 $this->returnValue(
                     $this->generateContentInfoForContentType( $contentTypeIdentifier )
                 )
-            )
-        ;
+            );
 
         return $location;
     }
@@ -118,8 +117,7 @@ class ContentTypeTest extends BaseTest
                         )
                         ->getMockForAbstractClass()
                 )
-            )
-        ;
+            );
 
         return $contentInfo;
     }

@@ -125,23 +125,19 @@ class LocationAwareStoreTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->any() )
             ->method( 'exists' )
             ->with( $locationCacheDir )
-            ->will( $this->returnValue( true ) )
-        ;
+            ->will( $this->returnValue( true ) );
         $fs
             ->expects( $this->once() )
             ->method( 'mkdir' )
-            ->with( $staleCacheDir )
-        ;
+            ->with( $staleCacheDir );
         $fs
             ->expects( $this->once() )
             ->method( 'mirror' )
-            ->with( $locationCacheDir, $staleCacheDir )
-        ;
+            ->with( $locationCacheDir, $staleCacheDir );
         $fs
             ->expects( $this->once() )
             ->method( 'remove' )
-            ->with( array( $staleCacheDir, $this->store->getLocationCacheLockName( $locationId ), $locationCacheDir ) )
-        ;
+            ->with( array( $staleCacheDir, $this->store->getLocationCacheLockName( $locationId ), $locationCacheDir ) );
 
         $request = Request::create( '/', 'PURGE' );
         $request->headers->set( 'X-Location-Id', $locationId );
@@ -169,23 +165,19 @@ class LocationAwareStoreTest extends \PHPUnit_Framework_TestCase
                 ->expects( $this->at( $i++ ) )
                 ->method( 'exists' )
                 ->with( $locationCacheDir )
-                ->will( $this->returnValue( true ) )
-            ;
+                ->will( $this->returnValue( true ) );
             $fs
                 ->expects( $this->at( $i++ ) )
                 ->method( 'mkdir' )
-                ->with( $staleCacheDir )
-            ;
+                ->with( $staleCacheDir );
             $fs
                 ->expects( $this->at( $i++ ) )
                 ->method( 'mirror' )
-                ->with( $locationCacheDir, $staleCacheDir )
-            ;
+                ->with( $locationCacheDir, $staleCacheDir );
             $fs
                 ->expects( $this->at( $i++ ) )
                 ->method( 'remove' )
-                ->with( array( $staleCacheDir, $this->store->getLocationCacheLockName( $locationId ), $locationCacheDir ) )
-            ;
+                ->with( array( $staleCacheDir, $this->store->getLocationCacheLockName( $locationId ), $locationCacheDir ) );
         }
 
         $request = Request::create( '/', 'PURGE' );
@@ -210,23 +202,19 @@ class LocationAwareStoreTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->any() )
             ->method( 'exists' )
             ->with( $locationCacheDir )
-            ->will( $this->returnValue( true ) )
-        ;
+            ->will( $this->returnValue( true ) );
         $fs
             ->expects( $this->once() )
             ->method( 'mkdir' )
-            ->with( $staleCacheDir )
-        ;
+            ->with( $staleCacheDir );
         $fs
             ->expects( $this->once() )
             ->method( 'mirror' )
-            ->with( $locationCacheDir, $staleCacheDir )
-        ;
+            ->with( $locationCacheDir, $staleCacheDir );
         $fs
             ->expects( $this->once() )
             ->method( 'remove' )
-            ->with( array( $staleCacheDir, $this->store->getLocationCacheLockName(), $locationCacheDir ) )
-        ;
+            ->with( array( $staleCacheDir, $this->store->getLocationCacheLockName(), $locationCacheDir ) );
 
         $this->store->purgeAllContent();
     }
@@ -248,23 +236,19 @@ class LocationAwareStoreTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->any() )
             ->method( 'exists' )
             ->with( $locationCacheDir )
-            ->will( $this->returnValue( true ) )
-        ;
+            ->will( $this->returnValue( true ) );
         $fs
             ->expects( $this->once() )
             ->method( 'mkdir' )
-            ->with( $staleCacheDir )
-        ;
+            ->with( $staleCacheDir );
         $fs
             ->expects( $this->once() )
             ->method( 'mirror' )
-            ->with( $locationCacheDir, $staleCacheDir )
-        ;
+            ->with( $locationCacheDir, $staleCacheDir );
         $fs
             ->expects( $this->once() )
             ->method( 'remove' )
-            ->with( array( $staleCacheDir, $this->store->getLocationCacheLockName(), $locationCacheDir ) )
-        ;
+            ->with( array( $staleCacheDir, $this->store->getLocationCacheLockName(), $locationCacheDir ) );
 
         $request = Request::create( '/', 'PURGE' );
         $request->headers->set( 'X-Location-Id', '*' );

@@ -38,8 +38,7 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
                 )
             )
             ->setMethods( array( 'getMatcher' ) )
-            ->getMock()
-        ;
+            ->getMock();
     }
 
     /**
@@ -50,8 +49,7 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
         return $this
             ->getMockBuilder( 'eZ\\Publish\\API\\Repository\Repository' )
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
     }
 
     /**
@@ -64,8 +62,7 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
         return $this
             ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' )
             ->setConstructorArgs( array( $properties ) )
-            ->getMockForAbstractClass()
-        ;
+            ->getMockForAbstractClass();
     }
 
     /**
@@ -78,7 +75,6 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
         return $this->
             getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' )
             ->setConstructorArgs( array( $properties ) )
-            ->getMockForAbstractClass()
-        ;
+            ->getMockForAbstractClass();
     }
 }

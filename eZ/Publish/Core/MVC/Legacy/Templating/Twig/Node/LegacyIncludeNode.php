@@ -38,7 +38,6 @@ class LegacyIncludeNode extends Twig_Node
             ->subcompile( $this->getNode( 'tplPath' ) )
             ->raw( ', ' )
             ->subcompile( $this->getNode( 'params' ) )
-            ->raw( " );\n" )
-        ;
+            ->raw( " );\n" );
     }
 }

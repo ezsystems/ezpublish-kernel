@@ -85,8 +85,7 @@ class SectionTest extends BaseTest
                 $this->returnValue(
                     $this->getContentInfoMock( array( 'sectionId' => $sectionId ) )
                 )
-            )
-        ;
+            );
 
         return $location;
     }

@@ -40,15 +40,13 @@ class ConfiguredLocationViewProviderTest extends BaseTest
             ->expects( $this->once() )
             ->method( 'has' )
             ->with( $matcherServiceIdentifier )
-            ->will( $this->returnValue( true ) )
-        ;
+            ->will( $this->returnValue( true ) );
         $container->expects( $this->once() )
             ->method( 'get' )
             ->with( $matcherServiceIdentifier )
             ->will(
                 $this->returnValue( $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider\\Configured\\Matcher' ) )
-            )
-        ;
+            );
 
         $resolverMock = $this->getResolverMock( $matcherServiceIdentifier );
         $lvp = new Configured( $resolverMock, $this->repositoryMock, $container );
@@ -83,8 +81,7 @@ class ConfiguredLocationViewProviderTest extends BaseTest
                          )
                     )
                 )
-            )
-        ;
+            );
 
         return $resolverMock;
     }

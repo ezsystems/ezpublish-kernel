@@ -119,8 +119,7 @@ class LocationAwareStore extends Store implements ContentPurger
            substr( $key, 0, 2 ) . DIRECTORY_SEPARATOR .
            substr( $key, 2, 2 ) . DIRECTORY_SEPARATOR .
            substr( $key, 4, 2 ) . DIRECTORY_SEPARATOR .
-           substr( $key, 6 )
-        ;
+           substr( $key, 6 );
     }
 
     /**

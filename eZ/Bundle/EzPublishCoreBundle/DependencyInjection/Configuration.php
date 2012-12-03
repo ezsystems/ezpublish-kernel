@@ -97,8 +97,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 
     private function addSystemSection( ArrayNodeDefinition $rootNode )
@@ -132,8 +131,7 @@ class Configuration implements ConfigurationInterface
                     ->useAttributeAsKey( 'key' )
                     ->requiresAtLeastOneElement()
                     ->prototype( 'array' )
-                        ->children()
-        ;
+                        ->children();
 
         // Delegate to configuration parsers
         foreach ( $this->configParsers as $parser )
@@ -181,8 +179,7 @@ EOT;
                         ->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 
     private function addHttpCacheSection( ArrayNodeDefinition $rootNode )
@@ -215,7 +212,6 @@ EOT;
                         ->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 }

@@ -35,8 +35,7 @@ class Content implements Parser
                     ->booleanNode( 'ttl_cache' )->defaultValue( false )->end()
                     ->scalarNode( 'default_ttl' )->info( 'Default value for TTL cache, in seconds' )->defaultValue( 60 )->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 
     /**

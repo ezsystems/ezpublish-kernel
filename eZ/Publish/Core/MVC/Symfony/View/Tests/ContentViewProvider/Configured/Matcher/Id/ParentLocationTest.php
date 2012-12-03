@@ -129,8 +129,7 @@ class ParentLocationTest extends BaseTest
         $locationServiceMock = $this
             ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\LocationService' )
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
         $locationServiceMock->expects( $this->once() )
             ->method( 'loadLocation' )
             ->with( 42 )
@@ -138,15 +137,13 @@ class ParentLocationTest extends BaseTest
                 $this->returnValue(
                     $this->getLocationMock( array( 'parentLocationId' => $parentLocationId ) )
                 )
-            )
-        ;
+            );
 
         $repository = $this->getRepositoryMock();
         $repository
             ->expects( $this->once() )
             ->method( 'getLocationService' )
-            ->will( $this->returnValue( $locationServiceMock ) )
-        ;
+            ->will( $this->returnValue( $locationServiceMock ) );
 
         return $repository;
     }

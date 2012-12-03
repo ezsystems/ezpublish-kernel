@@ -90,8 +90,7 @@ class ContentTypeGroupTest extends BaseTest
                 $this->returnValue(
                     $this->generateContentInfoForContentTypeGroup( $contentTypeGroupId )
                 )
-            )
-        ;
+            );
 
         return $location;
     }
@@ -121,15 +120,13 @@ class ContentTypeGroupTest extends BaseTest
         $contentType
             ->expects( $this->once() )
             ->method( 'getContentTypeGroups' )
-            ->will( $this->returnValue( $contentTypeGroups ) )
-        ;
+            ->will( $this->returnValue( $contentTypeGroups ) );
 
         $contentInfo = $this->getContentInfoMock();
         $contentInfo
             ->expects( $this->any() )
             ->method( 'getContentType' )
-            ->will( $this->returnValue( $contentType ) )
-        ;
+            ->will( $this->returnValue( $contentType ) );
 
         return $contentInfo;
     }

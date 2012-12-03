@@ -40,8 +40,7 @@ class SectionTest extends BaseTest
         $sectionServiceMock = $this
             ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\SectionService' )
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
         $sectionServiceMock->expects( $this->once() )
             ->method( 'loadSection' )
             ->will(
@@ -55,15 +54,13 @@ class SectionTest extends BaseTest
                     )
                     ->getMockForAbstractClass()
             )
-        )
-        ;
+        );
 
         $repository = $this->getRepositoryMock();
         $repository
             ->expects( $this->once() )
             ->method( 'getSectionService' )
-            ->will( $this->returnValue( $sectionServiceMock ) )
-        ;
+            ->will( $this->returnValue( $sectionServiceMock ) );
 
         return $repository;
     }
@@ -92,8 +89,7 @@ class SectionTest extends BaseTest
                 $this->returnValue(
                     $this->getContentInfoMock()
                 )
-            )
-        ;
+            );
         $this->assertSame(
             $expectedResult,
             $this->matcher->matchLocation( $location )

@@ -49,41 +49,35 @@ class ParentContentTypeTest extends BaseTest
                         )
                         ->getMockForAbstractClass()
                 )
-            )
-        ;
+            );
         $parentLocation = $this->getLocationMock();
         $parentLocation->expects( $this->once() )
             ->method( 'getContentInfo' )
             ->will(
                 $this->returnValue( $parentContentInfo )
-            )
-        ;
+            );
 
         $locationServiceMock = $this
             ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\LocationService' )
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
         $locationServiceMock->expects( $this->atLeastOnce() )
             ->method( 'loadLocation' )
             ->will(
                 $this->returnValue( $parentLocation )
-            )
-        ;
+            );
         // The following is used in the case of a match by contentInfo
         $locationServiceMock->expects( $this->any() )
             ->method( 'loadLocation' )
             ->will(
                 $this->returnValue( $this->getLocationMock() )
-            )
-        ;
+            );
 
         $repository = $this->getRepositoryMock();
         $repository
             ->expects( $this->any() )
             ->method( 'getLocationService' )
-            ->will( $this->returnValue( $locationServiceMock ) )
-        ;
+            ->will( $this->returnValue( $locationServiceMock ) );
 
         return $repository;
     }

@@ -36,8 +36,7 @@ class ConfiguredTest extends BaseTest
             ->expects( $this->once() )
             ->method( 'getMatcher' )
             ->with( 'wrongMatcher' )
-            ->will( $this->returnValue( new \stdClass() ) )
-        ;
+            ->will( $this->returnValue( new \stdClass() ) );
 
         $lvp->getView(
             $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' ),
@@ -68,8 +67,7 @@ class ConfiguredTest extends BaseTest
                 $this->onConsecutiveCalls(
                     $matchers[0], $matchers[1]
                 )
-            )
-        ;
+            );
 
         $contentView = $lvp->getView(
             $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' ),
@@ -106,8 +104,7 @@ class ConfiguredTest extends BaseTest
                 ->expects( $this->any() )
                 ->method( 'matchLocation' )
                 ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' ) )
-                ->will( $this->returnValue( true ) )
-            ;
+                ->will( $this->returnValue( true ) );
             $matchers[] = $matcherMock1;
             $matchingConfig[get_class( $matcherMock1 )] = $matchValue;
 
@@ -119,8 +116,7 @@ class ConfiguredTest extends BaseTest
                     ->expects( $this->once() )
                     ->method( 'matchLocation' )
                     ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' ) )
-                    ->will( $this->returnValue( true ) )
-                ;
+                    ->will( $this->returnValue( true ) );
                 $matchers[] = $failingMatcher;
                 $matchingConfig[get_class( $failingMatcher ) . 'failing'] = $matchValue;
             }

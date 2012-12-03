@@ -85,8 +85,7 @@ class ContentTest extends BaseTest
                 $this->returnValue(
                     $this->getContentInfoMock( array( 'id' => $contentId ) )
                 )
-            )
-        ;
+            );
 
         return $location;
     }

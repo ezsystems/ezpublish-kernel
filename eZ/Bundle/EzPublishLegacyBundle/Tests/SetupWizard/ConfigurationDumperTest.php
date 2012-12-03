@@ -51,14 +51,12 @@ class ConfigurationDumperTest extends \PHPUnit_Framework_TestCase
         $this->fs
             ->expects( $this->once() )
             ->method( 'rename' )
-            ->with( $this->cacheDir, "{$this->cacheDir}_old" )
-        ;
+            ->with( $this->cacheDir, "{$this->cacheDir}_old" );
 
         $this->fs
             ->expects( $this->once() )
             ->method( 'remove' )
-            ->with( "{$this->cacheDir}_old" )
-        ;
+            ->with( "{$this->cacheDir}_old" );
     }
 
     public function dumpProvider()
@@ -128,8 +126,7 @@ class ConfigurationDumperTest extends \PHPUnit_Framework_TestCase
         $this->fs
             ->expects( $this->any() )
             ->method( 'exists' )
-            ->will( $this->returnValue( false ) )
-        ;
+            ->will( $this->returnValue( false ) );
         $this->expectsCacheClear();
 
         $dumper = new ConfigurationDumper( $this->fs, $this->envs, __DIR__, $this->cacheDir );
@@ -151,8 +148,7 @@ class ConfigurationDumperTest extends \PHPUnit_Framework_TestCase
         $this->fs
             ->expects( $this->any() )
             ->method( 'exists' )
-            ->will( ( $this->returnValue( true ) ) )
-        ;
+            ->will( ( $this->returnValue( true ) ) );
         $this->expectBackup();
         $this->expectsCacheClear();
 
@@ -176,7 +172,6 @@ class ConfigurationDumperTest extends \PHPUnit_Framework_TestCase
                     $this->stringStartsWith( "$this->configDir/ezpublish" ),
                     $this->stringContains( '.yml-' . date( 'Y-m-d_' ) )
                 )
-            )
-        ;
+            );
     }
 }

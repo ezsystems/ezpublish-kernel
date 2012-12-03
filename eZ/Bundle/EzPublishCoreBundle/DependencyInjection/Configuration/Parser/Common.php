@@ -85,8 +85,7 @@ class Common extends AbstractParser
                         ->prototype( 'scalar' )->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 
     /**

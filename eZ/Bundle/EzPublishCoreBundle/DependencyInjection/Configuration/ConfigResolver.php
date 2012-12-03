@@ -133,8 +133,7 @@ class ConfigResolver implements ConfigResolverInterface
         return
             $this->container->hasParameter( $defaultScopeParamName )
             || $this->container->hasParameter( $relativeScopeParamName )
-            || $this->container->hasParameter( $globalScopeParamName )
-        ;
+            || $this->container->hasParameter( $globalScopeParamName );
     }
 
     /**
