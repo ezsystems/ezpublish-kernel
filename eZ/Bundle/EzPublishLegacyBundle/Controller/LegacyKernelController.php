@@ -11,13 +11,13 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Templating\EngineInterface;
-use \ezpModuleNotFound;
-use \ezpModuleViewNotFound;
-use \ezpModuleDisabled;
-use \ezpModuleViewDisabled;
-use \ezpAccessDenied;
-use \ezpContentNotFoundException;
-use \ezpLanguageNotFound;
+use ezpModuleNotFound;
+use ezpModuleViewNotFound;
+use ezpModuleDisabled;
+use ezpModuleViewDisabled;
+use ezpAccessDenied;
+use ezpContentNotFoundException;
+use ezpLanguageNotFound;
 
 /**
  * Controller embedding legacy kernel.

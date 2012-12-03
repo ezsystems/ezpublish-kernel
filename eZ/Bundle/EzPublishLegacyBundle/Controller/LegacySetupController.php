@@ -8,12 +8,12 @@
  */
 namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 
-use Symfony\Component\DependencyInjection\ContainerInterface as Container,
-    Symfony\Component\HttpFoundation\Response,
-    eZ\Publish\Core\MVC\Symfony\ConfigDumperInterface,
-    eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver,
-    eZINI,
-    eZCache;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
+use Symfony\Component\HttpFoundation\Response;
+use eZ\Publish\Core\MVC\Symfony\ConfigDumperInterface;
+use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver;
+use eZINI;
+use eZCache;
 
 class LegacySetupController
 {

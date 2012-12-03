@@ -8,10 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Section;
-use eZ\Publish\SPI\Persistence\Content\Section\Handler as BaseSectionHandler,
-    eZ\Publish\SPI\Persistence\Content\Section,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    RuntimeException;
+use eZ\Publish\SPI\Persistence\Content\Section\Handler as BaseSectionHandler;
+use eZ\Publish\SPI\Persistence\Content\Section;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use RuntimeException;
 
 /**
  * Section Handler

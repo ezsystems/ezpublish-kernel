@@ -9,8 +9,8 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser,
-    Symfony\Component\DependencyInjection\ContainerBuilder;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Provides helpers to deal with array settings. This abstract class mainly

@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests\Content\Type;
-use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
 /**
  * Test case for CreateStruct.

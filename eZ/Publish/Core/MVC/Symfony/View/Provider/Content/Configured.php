@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Provider\Content;
 
-use eZ\Publish\Core\MVC\Symfony\View\Provider\Content as ContentViewProvider,
-    eZ\Publish\Core\MVC\Symfony\View\Provider\Configured as ProviderConfigured,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Content as ContentViewProvider;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Configured as ProviderConfigured;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class Configured extends ProviderConfigured implements ContentViewProvider
 {

@@ -8,12 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator,
-    ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
+use ezcQuerySelect;
 
 /**
  * LanguageCode criterion handler

@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Section\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase.

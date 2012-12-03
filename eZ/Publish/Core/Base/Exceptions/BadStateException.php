@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Base\Exceptions;
-use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException,
-    Exception;
+use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException;
+use Exception;
 
 /**
  * BadState Exception implementation

@@ -9,10 +9,10 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
-    Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LegacyStorageEngineFactory
 {

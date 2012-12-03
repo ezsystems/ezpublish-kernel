@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\TextLine\Type as TextLineType,
-    eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue,
-    ReflectionObject;
+use eZ\Publish\Core\FieldType\TextLine\Type as TextLineType;
+use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
+use ReflectionObject;
 
 /**
  * @group fieldType

@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Base\Exceptions;
-use Exception,
-    LogicException;
+use Exception;
+use LogicException;
 
 /**
  * MissingClass Exception implementation

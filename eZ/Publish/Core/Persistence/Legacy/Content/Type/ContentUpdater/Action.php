@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
-use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 
 /**
  * Updater action base class

@@ -8,10 +8,10 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\API\Repository\Tests,
-    eZ\Publish\API\Repository,
-    eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\API\Repository\Tests;
+use eZ\Publish\API\Repository;
+use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 
 /**
  * Integration test for legacy storage field types

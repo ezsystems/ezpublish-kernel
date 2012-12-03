@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\API\Repository\Values\Content\Content,
-    eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
 /**
  * NameSchemaService is internal service for resolving content name and url alias patterns.

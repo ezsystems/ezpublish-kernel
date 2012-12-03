@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\IO;
 
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\SPI\IO\Handler as IoHandlerInterface,
-    eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
-    eZ\Publish\SPI\IO\BinaryFileCreateStruct;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\SPI\IO\Handler as IoHandlerInterface;
+use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
+use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 
 /**
  * Handler interface for handling of binary files I/O

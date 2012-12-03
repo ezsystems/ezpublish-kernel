@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
-use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface,
-    eZ\Publish\Core\MVC\Symfony\Cache\Http\RequestAwarePurger,
-    Symfony\Component\HttpFoundation\Request;
+use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
+use eZ\Publish\Core\MVC\Symfony\Cache\Http\RequestAwarePurger;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * LocalPurgeClient emulates an Http PURGE request received by the cache store.

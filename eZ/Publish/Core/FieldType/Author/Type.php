@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Author;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * Author field type.

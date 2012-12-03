@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\Content\Location;
-use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
 
-use \eZ\Publish\API\Repository\Exceptions;
+use eZ\Publish\API\Repository\Exceptions;
 
 /**
  * Test case for operations in the LocationService using in memory storage.

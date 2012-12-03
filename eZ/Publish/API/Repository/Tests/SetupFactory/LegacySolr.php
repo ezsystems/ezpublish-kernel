@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
-use eZ\Publish\Core\Persistence\Solr,
-    eZ\Publish\Core\FieldType;
+use eZ\Publish\Core\Persistence\Solr;
+use eZ\Publish\Core\FieldType;
 
 /**
  * A Test Factory is used to setup the infrastructure for a tests, based on a

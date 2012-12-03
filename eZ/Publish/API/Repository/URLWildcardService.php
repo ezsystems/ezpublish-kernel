@@ -10,7 +10,7 @@
 
 namespace eZ\Publish\API\Repository;
 
-use \eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 
 /**
  * URLAlias service

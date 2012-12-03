@@ -9,15 +9,15 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\Kernel;
 
-use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel,
-    eZ\Publish\Core\MVC\Legacy\LegacyEvents,
-    eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent,
-    eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent,
-    ezpKernelHandler,
-    eZURI,
-    Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\HttpKernel\Log\LoggerInterface,
-    Symfony\Component\HttpFoundation\ParameterBag;
+use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
+use eZ\Publish\Core\MVC\Legacy\LegacyEvents;
+use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent;
+use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent;
+use ezpKernelHandler;
+use eZURI;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * Legacy kernel loader

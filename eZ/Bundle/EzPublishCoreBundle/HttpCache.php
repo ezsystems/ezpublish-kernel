@@ -9,11 +9,11 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle;
 
-use eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore,
-    eZ\Publish\Core\MVC\Symfony\Cache\Http\RequestAwarePurger,
-    Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache as BaseHttpCache,
-    Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\HttpFoundation\Request;
+use eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore;
+use eZ\Publish\Core\MVC\Symfony\Cache\Http\RequestAwarePurger;
+use Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache as BaseHttpCache;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class HttpCache extends BaseHttpCache
 {

@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\MVC\Symfony;
-use eZ\Publish\Core\FieldType\FileService\LocalFileService,
-    eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\FieldType\FileService\LocalFileService;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 class ConfiguredLocalFileService extends LocalFileService
 {

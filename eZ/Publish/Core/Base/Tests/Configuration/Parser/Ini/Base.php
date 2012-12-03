@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Base\Tests\Configuration\Parser\Ini;
-use eZ\Publish\Core\Base\Configuration,
-    PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\Base\Configuration;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Abstract test case for Parser\Ini class

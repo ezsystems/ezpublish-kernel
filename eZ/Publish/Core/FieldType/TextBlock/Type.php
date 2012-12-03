@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\TextBlock;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * The TextBlock field type.

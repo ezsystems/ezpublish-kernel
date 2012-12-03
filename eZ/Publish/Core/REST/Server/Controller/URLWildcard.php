@@ -14,7 +14,7 @@ use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 
-use \eZ\Publish\API\Repository\URLWildcardService;
+use eZ\Publish\API\Repository\URLWildcardService;
 
 /**
  * URLWildcard controller

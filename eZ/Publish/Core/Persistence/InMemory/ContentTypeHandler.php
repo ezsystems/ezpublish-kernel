@@ -8,15 +8,15 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
-use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandlerInterface,
-    eZ\Publish\SPI\Persistence\Content\Type,
-    eZ\Publish\SPI\Persistence\Content\Type\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\Core\Base\Exceptions\BadStateException;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandlerInterface;
+use eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
 
 /**
  * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler

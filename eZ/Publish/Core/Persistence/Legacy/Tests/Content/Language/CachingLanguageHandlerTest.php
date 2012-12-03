@@ -8,10 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\SPI\Persistence\Content\Language,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler;
 
 /**
  * Test case for caching Language Handler

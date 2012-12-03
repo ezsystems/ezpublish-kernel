@@ -10,37 +10,32 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
-    eZ\Publish\API\Repository\Values\Content\LocationCreateStruct,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo,
-    eZ\Publish\Core\Repository\Values\Content\Location,
-    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
-    eZ\Publish\Core\Repository\Values\ContentType\ContentType,
-    eZ\Publish\API\Repository\Values\Content\Location as APILocation,
-    eZ\Publish\API\Repository\Values\Content\LocationList,
-
-    eZ\Publish\SPI\Persistence\Content\Location as SPILocation,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
-
-    eZ\Publish\API\Repository\LocationService as LocationServiceInterface,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\SPI\Persistence\Handler,
-
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot as CriterionLogicalNot,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree as CriterionSubtree,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
-    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
-
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\BadStateException,
-    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
-
-    DateTime;
+use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo;
+use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
+use eZ\Publish\API\Repository\Values\Content\LocationList;
+use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
+use eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\SPI\Persistence\Handler;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot as CriterionLogicalNot;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree as CriterionSubtree;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use DateTime;
 
 /**
  * Location service, used for complex subtree operations

@@ -9,22 +9,18 @@
  */
 
 namespace eZ\Publish\Core\Repository;
-use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface,
-    eZ\Publish\SPI\Persistence\Content\Language\Handler,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
-
-    eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Language as SPILanguage,
-    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct,
-
-    eZ\Publish\API\Repository\Values\Content\Language,
-
-    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
-
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
-    LogicException;
+use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Language as SPILanguage;
+use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use LogicException;
 
 /**
  * Language service, used for language operations

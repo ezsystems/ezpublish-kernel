@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\FieldType\XmlText\XmlTextStorage;
 
-use eZ\Publish\Core\FieldType\StorageGateway,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\Core\FieldType\StorageGateway;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 /**
  * Abstract gateway class for XmlText type.

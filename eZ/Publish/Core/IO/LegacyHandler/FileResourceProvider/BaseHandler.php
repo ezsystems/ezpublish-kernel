@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\IO\LegacyHandler\FileResourceProvider;
 
-use eZ\Publish\Core\MVC\Legacy\LegacyKernelAware,
-    eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
+use eZ\Publish\Core\MVC\Legacy\LegacyKernelAware;
+use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 
 abstract class BaseHandler implements LegacyKernelAware
 {

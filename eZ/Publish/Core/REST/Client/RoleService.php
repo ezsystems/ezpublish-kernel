@@ -9,29 +9,29 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
-use \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
-use \eZ\Publish\API\Repository\Values\User\Policy as APIPolicy;
-use \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
-use \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct;
-use \eZ\Publish\API\Repository\Values\User\Role as APIRole;
-use \eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
-use \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
-use \eZ\Publish\API\Repository\Values\User\User;
-use \eZ\Publish\API\Repository\Values\User\UserGroup;
+use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
+use eZ\Publish\API\Repository\Values\User\Policy as APIPolicy;
+use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
+use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\Role as APIRole;
+use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
+use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\UserGroup;
 
-use \eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
-use \eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
+use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
+use eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
 
-use \eZ\Publish\Core\REST\Client\Values\User\PolicyCreateStruct;
-use \eZ\Publish\Core\REST\Client\Values\User\PolicyUpdateStruct;
-use \eZ\Publish\Core\REST\Client\Values\User\Role;
-use \eZ\Publish\Core\REST\Client\Values\User\Policy;
-use \eZ\Publish\Core\REST\Client\Values\User\RoleAssignment;
+use eZ\Publish\Core\REST\Client\Values\User\PolicyCreateStruct;
+use eZ\Publish\Core\REST\Client\Values\User\PolicyUpdateStruct;
+use eZ\Publish\Core\REST\Client\Values\User\Role;
+use eZ\Publish\Core\REST\Client\Values\User\Policy;
+use eZ\Publish\Core\REST\Client\Values\User\RoleAssignment;
 
-use \eZ\Publish\Core\REST\Common\UrlHandler;
-use \eZ\Publish\Core\REST\Common\Input;
-use \eZ\Publish\Core\REST\Common\Output;
-use \eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input;
+use eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\Message;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\RoleService}

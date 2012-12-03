@@ -10,25 +10,20 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\TrashService as TrashServiceInterface,
-
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\SPI\Persistence\Handler,
-
-    eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\Core\Repository\Values\Content\TrashItem,
-    eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem,
-    eZ\Publish\API\Repository\Values\Content\Query,
-
-    eZ\Publish\SPI\Persistence\Content\Location\Trashed,
-
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
-
-    eZ\Publish\API\Repository\Values\Content\SearchResult,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\SortClause,
-    DateTime;
+use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\SPI\Persistence\Handler;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\Values\Content\TrashItem;
+use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\Values\Content\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use DateTime;
 
 /**
  * Trash service, used for managing trashed content

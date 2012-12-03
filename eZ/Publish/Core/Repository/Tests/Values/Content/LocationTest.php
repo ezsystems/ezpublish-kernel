@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Values\Content;
-use eZ\Publish\Core\Repository\Values\Content\Location,
-    PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\Repository\Values\Content\Location;
+use PHPUnit_Framework_TestCase;
 
 /**
  *

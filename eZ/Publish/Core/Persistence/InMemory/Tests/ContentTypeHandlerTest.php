@@ -8,14 +8,14 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
-use eZ\Publish\SPI\Persistence\Content\Type,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\Type\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * Test case for SectionHandler using in memory storage.

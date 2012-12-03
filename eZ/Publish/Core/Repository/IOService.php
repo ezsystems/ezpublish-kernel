@@ -9,21 +9,17 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\IOService as IOServiceInterface,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\SPI\IO\Handler,
-
-    eZ\Publish\API\Repository\Values\IO\BinaryFile,
-    eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct,
-
-    eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile,
-    eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct,
-
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-
-    eZ\Publish\Core\MVC\Legacy\LegacyKernelAware,
-    eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
+use eZ\Publish\API\Repository\IOService as IOServiceInterface;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\SPI\IO\Handler;
+use eZ\Publish\API\Repository\Values\IO\BinaryFile;
+use eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct;
+use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
+use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\MVC\Legacy\LegacyKernelAware;
+use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 
 
 /**

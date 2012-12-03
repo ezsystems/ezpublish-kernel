@@ -8,10 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Base\ConfigurationManager,
-    eZ\Publish\Core\Base\ServiceContainer,
-    eZ\Publish\Core\Persistence\Legacy\Handler;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Base\ConfigurationManager;
+use eZ\Publish\Core\Base\ServiceContainer;
+use eZ\Publish\Core\Persistence\Legacy\Handler;
 
 /**
  * Test case for Repository Handler

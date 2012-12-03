@@ -10,9 +10,9 @@
  */
 
 namespace eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator,
-    InvalidArgumentException;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
+use InvalidArgumentException;
 
 /**
  * @package eZ\Publish\API\Repository\Values\Content\Query

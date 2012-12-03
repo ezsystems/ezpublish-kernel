@@ -8,11 +8,11 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    ezcQuerySelect,
-    RuntimeException;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use ezcQuerySelect;
+use RuntimeException;
 
 /**
  * Date metadata criterion handler

@@ -9,19 +9,19 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
-use eZ\Publish\Core\Repository\Values\Content\Content,
-    eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\API\Repository\Values\Content\VersionInfo,
-    eZ\Publish\Core\MVC\ConfigResolverInterface,
-    Symfony\Component\DependencyInjection\ContainerInterface,
-    Twig_Extension,
-    Twig_Environment,
-    Twig_Function_Method,
-    Twig_Filter_Method,
-    Twig_Template,
-    SplObjectStorage,
-    InvalidArgumentException,
-    LogicException;
+use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Twig_Extension;
+use Twig_Environment;
+use Twig_Function_Method;
+use Twig_Filter_Method;
+use Twig_Template;
+use SplObjectStorage;
+use InvalidArgumentException;
+use LogicException;
 
 /**
  * Twig content extension for eZ Publish specific usage.

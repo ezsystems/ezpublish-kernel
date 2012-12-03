@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState;
 
-use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as BaseObjectStateHandler,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as BaseObjectStateHandler;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * The Object State Handler class provides managing of object states and groups

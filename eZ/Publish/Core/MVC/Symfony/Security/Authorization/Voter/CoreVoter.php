@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter;
 
-use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface,
-    Symfony\Component\Security\Core\Authentication\Token\TokenInterface,
-    eZ\Publish\API\Repository\Repository,
-    eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute,
-    eZ\Publish\Core\MVC\Symfony\Security\User;
+use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
+use eZ\Publish\Core\MVC\Symfony\Security\User;
 
 class CoreVoter implements VoterInterface
 {

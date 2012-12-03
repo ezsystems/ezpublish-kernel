@@ -9,12 +9,12 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
-use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
-    eZ\Publish\SPI\IO\Handler as IoHandler,
-    eZ\Publish\SPI\Limitation\Type as SPILimitationType,
-    eZ\Publish\API\Repository\Repository,
-    Symfony\Component\DependencyInjection\ContainerInterface,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\SPI\IO\Handler as IoHandler;
+use eZ\Publish\SPI\Limitation\Type as SPILimitationType;
+use eZ\Publish\API\Repository\Repository;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 class RepositoryFactory
 {

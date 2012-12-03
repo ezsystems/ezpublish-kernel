@@ -8,11 +8,11 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState;
-use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler,
-    eZ\Publish\SPI\Persistence\Content\ObjectState,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\Group,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler;
+use eZ\Publish\SPI\Persistence\Content\ObjectState;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
 
 /**
  * Test case for Object state Handler

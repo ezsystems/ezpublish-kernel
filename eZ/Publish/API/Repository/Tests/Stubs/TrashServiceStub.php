@@ -9,15 +9,15 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\TrashService;
-use \eZ\Publish\API\Repository\Values\Content\Query;
-use \eZ\Publish\API\Repository\Values\Content\Location;
-use \eZ\Publish\API\Repository\Values\Content\SearchResult;
-use \eZ\Publish\API\Repository\Values\Content\TrashItem;
+use eZ\Publish\API\Repository\TrashService;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\TrashItem;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\TrashItemStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\TrashItemStub;
 
 /**
  * Trash service used for content/location trash handling.

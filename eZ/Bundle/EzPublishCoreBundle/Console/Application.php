@@ -9,12 +9,12 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Console;
 
-use eZ\Bundle\EzPublishCoreBundle\SiteAccess,
-    Symfony\Component\HttpKernel\KernelInterface,
-    Symfony\Bundle\FrameworkBundle\Console\Application as BaseApplication,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Output\OutputInterface,
-    Symfony\Component\Console\Input\InputOption;
+use eZ\Bundle\EzPublishCoreBundle\SiteAccess;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Bundle\FrameworkBundle\Console\Application as BaseApplication;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputOption;
 
 /**
  * eZ Publish console application.

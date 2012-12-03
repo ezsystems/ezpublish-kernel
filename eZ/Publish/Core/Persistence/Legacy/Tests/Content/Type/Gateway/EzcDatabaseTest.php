@@ -8,10 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase,
-
-    // For SORT_ORDER_* constants
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase;
+use // For SORT_ORDER_* constants
     eZ\Publish\SPI\Persistence\Content\Location,
 
     eZ\Publish\SPI\Persistence\Content\Type,

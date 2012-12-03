@@ -10,8 +10,8 @@
 namespace eZ\Publish\SPI\Persistence\Content\Search;
 
 use eZ\Publish\SPI\Persistence\Content;
-use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use \eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a

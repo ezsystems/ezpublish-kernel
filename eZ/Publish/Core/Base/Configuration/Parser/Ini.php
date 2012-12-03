@@ -10,11 +10,11 @@
  */
 
 namespace eZ\Publish\Core\Base\Configuration\Parser;
-use eZ\Publish\Core\Base\Configuration,
-    eZ\Publish\Core\Base\Configuration\Parser,
-    ezcConfiguration,
-    ezcConfigurationIniReader,
-    LogicException;
+use eZ\Publish\Core\Base\Configuration;
+use eZ\Publish\Core\Base\Configuration\Parser;
+use ezcConfiguration;
+use ezcConfigurationIniReader;
+use LogicException;
 
 /**
  * Configuration Ini Parser / writer

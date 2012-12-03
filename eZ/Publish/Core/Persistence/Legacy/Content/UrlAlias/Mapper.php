@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
-use eZ\Publish\SPI\Persistence\Content\UrlAlias,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 
 /**
  * UrlAlias Mapper

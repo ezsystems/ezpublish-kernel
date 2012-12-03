@@ -8,12 +8,12 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Image;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\FieldType\FileService,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\Core\FieldType\ValidationError,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\FieldType\FileService;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 /**
  * The Image field type

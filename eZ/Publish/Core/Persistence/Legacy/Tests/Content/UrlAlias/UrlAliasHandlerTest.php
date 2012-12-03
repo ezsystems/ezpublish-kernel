@@ -9,21 +9,21 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase as EzcDatabaseLocation,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase as LanguageGateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased\Parser,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PcreCompiler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter,
-    eZ\Publish\SPI\Persistence\Content\UrlAlias,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase as EzcDatabaseLocation;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase as LanguageGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased\Parser;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PcreCompiler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * Test case for UrlAliasHandler.

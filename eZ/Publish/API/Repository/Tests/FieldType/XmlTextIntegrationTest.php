@@ -8,10 +8,10 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\XmlText\Value as XmlTextValue,
-    eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType,
-    eZ\Publish\API\Repository\Values\Content\Field,
-    DOMDocument;
+use eZ\Publish\Core\FieldType\XmlText\Value as XmlTextValue;
+use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType;
+use eZ\Publish\API\Repository\Values\Content\Field;
+use DOMDocument;
 
 /**
  * Integration test for use field type

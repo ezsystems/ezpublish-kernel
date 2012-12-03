@@ -9,12 +9,12 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\Kernel;
 
-use ezpKernelHandler,
-    eZScript,
-    eZINI,
-    RuntimeException,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess,
-    Symfony\Component\DependencyInjection\ContainerInterface;
+use ezpKernelHandler;
+use eZScript;
+use eZINI;
+use RuntimeException;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class CLIHandler implements ezpKernelHandler
 {

@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState;
 
-use eZ\Publish\SPI\Persistence\Content\ObjectState,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\Group,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct,
-    eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\SPI\Persistence\Content\ObjectState;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 
 /**
  * Mapper for ObjectState and object state Group objects

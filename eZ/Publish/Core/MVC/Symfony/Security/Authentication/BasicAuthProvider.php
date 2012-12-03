@@ -9,13 +9,13 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authentication;
 
-use Symfony\Component\Security\Core\Authentication\Provider\UserAuthenticationProvider,
-    Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken,
-    Symfony\Component\Security\Core\User\UserInterface,
-    Symfony\Component\Security\Core\User\UserCheckerInterface,
-    Symfony\Component\Security\Core\Exception\AuthenticationException,
-    eZ\Publish\Core\MVC\Symfony\Security\User,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use Symfony\Component\Security\Core\Authentication\Provider\UserAuthenticationProvider;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use eZ\Publish\Core\MVC\Symfony\Security\User;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 class BasicAuthProvider extends UserAuthenticationProvider
 {

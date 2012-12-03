@@ -8,10 +8,10 @@
  */
 
 namespace eZ\Publish\Core\IO\Tests;
-use eZ\Publish\SPI\IO\BinaryFileCreateStruct,
-    eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
-    DateTime,
-    finfo;
+use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
+use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
+use DateTime;
+use finfo;
 
 abstract class Base extends \PHPUnit_Framework_TestCase
 {

@@ -8,11 +8,11 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Author as AuthorConverter,
-    PHPUnit_Framework_TestCase,
-    DOMDocument;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Author as AuthorConverter;
+use PHPUnit_Framework_TestCase;
+use DOMDocument;
 
 /**
  * Test case for Author converter in Legacy storage

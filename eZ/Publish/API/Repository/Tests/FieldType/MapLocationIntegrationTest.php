@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\MapLocation\Value as MapLocationValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\FieldType\MapLocation\Value as MapLocationValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type

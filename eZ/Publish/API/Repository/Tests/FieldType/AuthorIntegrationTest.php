@@ -8,10 +8,10 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\Author\Author,
-    eZ\Publish\Core\FieldType\Author\AuthorCollection,
-    eZ\Publish\Core\FieldType\Author\Value as AuthorValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\FieldType\Author\Author;
+use eZ\Publish\Core\FieldType\Author\AuthorCollection;
+use eZ\Publish\Core\FieldType\Author\Value as AuthorValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type

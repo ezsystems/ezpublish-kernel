@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher,
-    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 
 class HostText extends Regex implements Matcher
 {

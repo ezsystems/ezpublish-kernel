@@ -9,16 +9,16 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway,
-    eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler,
-    eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit,
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator,
-    eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor,
-    eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor,
-    eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor,
-    eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway;
+use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
 
 /**
  * The Content Search Gateway provides the implementation for one database to

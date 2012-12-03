@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
-use eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
  * Sets sort direction on the location priority date for a content query

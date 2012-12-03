@@ -10,23 +10,19 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo,
-    eZ\Publish\API\Repository\Values\Content\Section,
-    eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct,
-
-    eZ\Publish\API\Repository\SectionService as SectionServiceInterface,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\SPI\Persistence\Content\Section\Handler,
-
-    eZ\Publish\SPI\Persistence\Content\Section as SPISection,
-
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\BadStateException,
-    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
-
-    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Section;
+use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
+use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\SPI\Persistence\Content\Section\Handler;
+use eZ\Publish\SPI\Persistence\Content\Section as SPISection;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 
 /**
  * Section service, used for section operations

@@ -9,13 +9,13 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\URLWildcardService;
-use \eZ\Publish\API\Repository\Values\Content\URLWildcard;
-use \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
+use eZ\Publish\API\Repository\URLWildcardService;
+use eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
 /**
  * Url wold service stub implementation.

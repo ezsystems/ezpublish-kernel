@@ -8,10 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\DateAndTime;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    DateTime,
-    eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use DateTime;
+use eZ\Publish\Core\FieldType\ValidationError;
 
 class Type extends FieldType
 {

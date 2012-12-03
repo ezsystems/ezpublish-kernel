@@ -10,42 +10,42 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\SPI\Persistence\Content\Type\Handler,
-    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
-    eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException,
-    eZ\Publish\API\Repository\Values\User\User,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct,
-    eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType,
-    eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentTypeDraft,
-    eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup as APIContentTypeGroup,
-    eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct,
-    eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct as APIContentTypeCreateStruct,
-    eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct,
-    eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct,
-    eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup,
-    eZ\Publish\Core\Repository\Values\ContentType\ContentType,
-    eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft,
-    eZ\Publish\Core\Repository\Values\ContentType\ContentTypeCreateStruct,
-    eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\Type as SPIContentType,
-    eZ\Publish\SPI\Persistence\Content\Type\CreateStruct as SPIContentTypeCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct as SPIContentTypeUpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as SPIFieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\Type\Group as SPIContentTypeGroup,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as SPIContentTypeGroupCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as SPIContentTypeGroupUpdateStruct,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\BadStateException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\ContentTypeFieldDefinitionValidationException,
-    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
-    DateTime,
-    Exception;
+use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentTypeDraft;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup as APIContentTypeGroup;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct as APIContentTypeCreateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeCreateStruct;
+use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\Type as SPIContentType;
+use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct as SPIContentTypeCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct as SPIContentTypeUpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as SPIFieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\Type\Group as SPIContentTypeGroup;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as SPIContentTypeGroupCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as SPIContentTypeGroupUpdateStruct;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\ContentTypeFieldDefinitionValidationException;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use DateTime;
+use Exception;
 
 /**
  * @example Examples/contenttype.php

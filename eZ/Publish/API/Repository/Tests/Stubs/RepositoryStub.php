@@ -9,14 +9,14 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\Repository;
-use \eZ\Publish\API\Repository\Values\ValueObject;
-use \eZ\Publish\API\Repository\Values\Content\Content;
-use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use \eZ\Publish\API\Repository\Values\Content\Location;
-use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use \eZ\Publish\API\Repository\Values\User\User;
-use \eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\Limitation;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Repository}

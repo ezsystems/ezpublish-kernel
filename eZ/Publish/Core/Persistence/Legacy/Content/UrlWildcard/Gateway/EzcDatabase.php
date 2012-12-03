@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\SPI\Persistence\Content\UrlWildcard;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 
 /**
  * UrlWildcard Gateway

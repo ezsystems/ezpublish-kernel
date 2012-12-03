@@ -8,10 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
-use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface,
-    eZ\Publish\SPI\Persistence\Content\UrlAlias,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\ForbiddenException;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\ForbiddenException;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler

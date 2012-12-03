@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\User;
 
-use \eZ\Publish\API\Repository\Values\User\Limitation;
-use \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct}

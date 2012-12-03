@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
-use eZ\Publish\API\Repository\Values\Content\Query,
-    ezcQuerySelect,
-    RuntimeException;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use ezcQuerySelect;
+use RuntimeException;
 
 /**
  * Converter manager for sort clauses

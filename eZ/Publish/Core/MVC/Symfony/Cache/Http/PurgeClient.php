@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
-use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface,
-    eZ\Publish\Core\MVC\ConfigResolverInterface,
-    Buzz\Browser,
-    Buzz\Client\BatchClientInterface;
+use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Buzz\Browser;
+use Buzz\Client\BatchClientInterface;
 
 class PurgeClient implements PurgeClientInterface
 {

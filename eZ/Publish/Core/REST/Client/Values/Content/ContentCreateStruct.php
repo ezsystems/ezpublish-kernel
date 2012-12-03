@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\Content;
 
-use \eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct}

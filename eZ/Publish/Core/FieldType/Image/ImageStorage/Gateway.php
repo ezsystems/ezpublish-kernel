@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Image\ImageStorage;
-use eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\Core\FieldType\StorageGateway;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\Core\FieldType\StorageGateway;
 
 abstract class Gateway extends StorageGateway
 {

@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\Matcher;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Depth as DepthMatcher,
-    eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo,
-    eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest,
-    eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Depth as DepthMatcher;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
+use eZ\Publish\API\Repository\Repository;
 
 class ParentLocationTest extends BaseTest
 {

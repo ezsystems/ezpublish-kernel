@@ -8,12 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Base;
-use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\MissingClass,
-    eZ\Publish\API\Container,
-    ReflectionClass;
+use eZ\Publish\Core\Base\Exceptions\BadConfiguration;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\MissingClass;
+use eZ\Publish\API\Container;
+use ReflectionClass;
 
 /**
  * Service container class

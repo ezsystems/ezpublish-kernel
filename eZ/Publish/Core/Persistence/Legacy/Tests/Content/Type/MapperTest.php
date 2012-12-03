@@ -8,12 +8,11 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry,
-
-    // Needed for $sortOrder and $sortField properties
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
+use // Needed for $sortOrder and $sortField properties
     eZ\Publish\SPI\Persistence\Content\Location,
 
     eZ\Publish\SPI\Persistence\Content\Type,

@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\Content\URLWildcard;
-use \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
+use eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
 
 /**
  * Test case for operations in the URLWildcardService.

@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests;
 
-use eZ\Publish\Core\MVC\Symfony\View\Manager,
-    eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZ\Publish\Core\MVC\Symfony\View\Manager;
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 
 /**
  * @group mvc

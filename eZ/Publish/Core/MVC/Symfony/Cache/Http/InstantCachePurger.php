@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
-use eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger,
-    eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
+use eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger;
+use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
 
 class InstantCachePurger implements GatewayCachePurger
 {

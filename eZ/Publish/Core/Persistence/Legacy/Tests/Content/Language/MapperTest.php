@@ -8,10 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper,
-    eZ\Publish\SPI\Persistence\Content\Language,
-    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper;
+use eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 
 /**
  * Test case for Mapper

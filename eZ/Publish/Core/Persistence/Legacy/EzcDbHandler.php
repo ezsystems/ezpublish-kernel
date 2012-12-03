@@ -8,11 +8,11 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy;
-use ezcDbHandler as ezcDbHandlerWrapped,
-    ezcQuerySelect,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Sqlite,
-    ezcDbFactory;
+use ezcDbHandler as ezcDbHandlerWrapped;
+use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Sqlite;
+use ezcDbFactory;
 
 /**
  * Wrapper class for the zeta components database handler, providing some

@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\HttpClient;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\HttpClient,
-    eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\Message;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\HttpClient;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\Message;
 
 /**
  * Simple PHP stream based HTTP client.

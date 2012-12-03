@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\Field;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor,
-    eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\Field,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\Field;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**
  * Visits the Field criterion

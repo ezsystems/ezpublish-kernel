@@ -9,31 +9,31 @@
 
 namespace eZ\Publish\Core\Persistence\InMemory;
 
-use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandlerInterface,
-    eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit,
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\RemoteId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\SectionId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\UserMetadata,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    Exception;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandlerInterface;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\RemoteId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\SectionId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\UserMetadata;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use Exception;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a

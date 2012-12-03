@@ -8,10 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use ezcQuerySelect;
 
 /**
  * Content ID criterion handler

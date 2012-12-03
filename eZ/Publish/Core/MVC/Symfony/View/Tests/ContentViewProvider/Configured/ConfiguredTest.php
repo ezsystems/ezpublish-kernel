@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured;
 
-use eZ\Publish\Core\MVC\Symfony\View\Provider\Content\Configured,
-    eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher,
-    eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Content\Configured;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher;
+use eZ\Publish\API\Repository\Values\Content\Location;
 
 class ConfiguredTest extends BaseTest
 {

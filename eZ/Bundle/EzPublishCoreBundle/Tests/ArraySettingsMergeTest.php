@@ -9,8 +9,8 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver,
-    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser;
 
 class ArraySettingsMergeTest extends \PHPUnit_Framework_TestCase
 {

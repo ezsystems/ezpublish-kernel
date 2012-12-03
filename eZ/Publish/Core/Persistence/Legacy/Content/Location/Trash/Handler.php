@@ -8,13 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash;
-use eZ\Publish\SPI\Persistence\Content\Location\Trashed,
-    eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as BaseTrashHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
+use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
+use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as BaseTrashHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 
 /**
  * The Location Handler interface defines operations on Location elements in the storage engine.

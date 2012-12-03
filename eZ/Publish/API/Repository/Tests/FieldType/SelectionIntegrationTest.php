@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\Selection\Value as SelectionValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\FieldType\Selection\Value as SelectionValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type

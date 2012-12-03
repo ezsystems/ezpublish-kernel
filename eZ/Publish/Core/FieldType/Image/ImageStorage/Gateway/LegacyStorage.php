@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
-use eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 
 class LegacyStorage extends Gateway
 {

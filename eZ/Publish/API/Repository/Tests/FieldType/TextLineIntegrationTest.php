@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type

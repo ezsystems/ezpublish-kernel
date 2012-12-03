@@ -9,16 +9,16 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View;
 
-use eZ\Publish\API\Repository\Values\Content\Content,
-    eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\Core\MVC\Symfony\View\Provider\Content as ContentViewProvider,
-    eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProvider,
-    eZ\Publish\Core\MVC\Symfony\MVCEvents,
-    eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent,
-    eZ\Publish\API\Repository\Repository,
-    Symfony\Component\Templating\EngineInterface,
-    Symfony\Component\HttpKernel\Log\LoggerInterface,
-    Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Content as ContentViewProvider;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProvider;
+use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
+use eZ\Publish\API\Repository\Repository;
+use Symfony\Component\Templating\EngineInterface;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Manager
 {

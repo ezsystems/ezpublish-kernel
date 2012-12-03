@@ -9,14 +9,14 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
-use eZ\Publish\Core\MVC\Symfony\Controller\Controller,
-    eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager,
-    eZ\Publish\Core\MVC\Symfony\MVCEvents,
-    eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent,
-    eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute,
-    Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\Security\Core\Exception\AccessDeniedException,
-    \DateTime;
+use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
+use eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager;
+use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent;
+use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use DateTime;
 
 class ViewController extends Controller
 {

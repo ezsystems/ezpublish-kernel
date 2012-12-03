@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard;
 
-use eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler as BaseUrlWildcardHandler,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler as BaseUrlWildcardHandler;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * The UrlWildcard Handler provides nice urls with wildcards management.

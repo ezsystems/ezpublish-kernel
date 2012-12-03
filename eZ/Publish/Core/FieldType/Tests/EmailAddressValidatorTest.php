@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue,
-    eZ\Publish\Core\FieldType\Validator\EmailAddressValidator;
+use eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue;
+use eZ\Publish\Core\FieldType\Validator\EmailAddressValidator;
 
 /**
  *

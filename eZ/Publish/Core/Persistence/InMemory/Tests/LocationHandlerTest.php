@@ -8,13 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
-use eZ\Publish\SPI\Persistence\Content\Location as LocationValue,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\CreateStruct as ContentCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location as LocationValue;
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\CreateStruct as ContentCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
  * Test case for Location Handler using in memory storage.

@@ -8,11 +8,11 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\SPI\Persistence\Content\Location,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase

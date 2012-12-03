@@ -9,9 +9,9 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser,
-    Symfony\Component\Config\Definition\Builder\NodeBuilder,
-    Symfony\Component\DependencyInjection\ContainerBuilder;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
+use Symfony\Component\Config\Definition\Builder\NodeBuilder;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Configuration parser handling content related config

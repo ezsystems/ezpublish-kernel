@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
-use eZ\Publish\SPI\Persistence\Content\Language,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * Language Cache

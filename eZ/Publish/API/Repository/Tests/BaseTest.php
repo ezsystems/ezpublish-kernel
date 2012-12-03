@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase;
 
-use \eZ\Publish\API\Repository\Values\ValueObject;
-use \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
-use \eZ\Publish\Core\REST\Client\Sessionable;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
+use eZ\Publish\Core\REST\Client\Sessionable;
 
 /**
  * Base class for api specific tests.

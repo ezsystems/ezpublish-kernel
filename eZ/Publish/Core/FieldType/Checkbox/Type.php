@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Checkbox;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * Checkbox field type.

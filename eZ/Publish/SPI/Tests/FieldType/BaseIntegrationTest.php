@@ -8,13 +8,13 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\Type,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 
 /**
  * Integration test for the legacy storage

@@ -9,8 +9,8 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess,
-    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 
 class ConfigResolverTest extends \PHPUnit_Framework_TestCase
 {

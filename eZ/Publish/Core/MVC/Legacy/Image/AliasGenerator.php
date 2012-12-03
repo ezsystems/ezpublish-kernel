@@ -9,15 +9,15 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\Image;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface,
-    eZ\Publish\SPI\Variation\VariationHandler,
-    eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\API\Repository\Values\Content\VersionInfo,
-    eZ\Publish\SPI\Variation\Values\ImageVariation,
-    eZ\Publish\API\Repository\Exceptions\InvalidVariationException,
-    eZContentObjectAttribute,
-    eZImageAliasHandler,
-    Closure;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\SPI\Variation\VariationHandler;
+use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\SPI\Variation\Values\ImageVariation;
+use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
+use eZContentObjectAttribute;
+use eZImageAliasHandler;
+use Closure;
 
 class AliasGenerator implements VariationHandler
 {

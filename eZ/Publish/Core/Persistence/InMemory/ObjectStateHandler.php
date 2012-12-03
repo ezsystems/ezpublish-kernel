@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\Persistence\InMemory;
 
-use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandlerInterface,
-    eZ\Publish\SPI\Persistence\Content\ObjectState,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandlerInterface;
+use eZ\Publish\SPI\Persistence\Content\ObjectState;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * The Object State Handler class provides managing of object states and groups

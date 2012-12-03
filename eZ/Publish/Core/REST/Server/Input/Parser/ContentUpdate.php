@@ -8,11 +8,11 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher,
-    eZ\Publish\Core\REST\Common\Exceptions,
-    eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct,
-    DateTime,
-    Exception;
+use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use eZ\Publish\Core\REST\Common\Exceptions;
+use eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
+use DateTime;
+use Exception;
 
 /**
  * Parser for ContentUpdate

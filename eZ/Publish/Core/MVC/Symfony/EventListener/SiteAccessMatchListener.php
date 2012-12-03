@@ -9,13 +9,13 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\EventListener;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\Router as SiteAccessRouter,
-    eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent,
-    eZ\Publish\Core\MVC\Symfony\MVCEvents,
-    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest,
-    Symfony\Component\EventDispatcher\EventDispatcherInterface,
-    Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router as SiteAccessRouter;
+use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
+use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 /**
  * kernel.request listener, triggers SiteAccess matching.

@@ -8,10 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\User;
-use eZ\Publish\SPI\Persistence\User,
-    eZ\Publish\SPI\Persistence\User\Role,
-    eZ\Publish\SPI\Persistence\User\Policy,
-    eZ\Publish\SPI\Persistence\User\RoleAssignment;
+use eZ\Publish\SPI\Persistence\User;
+use eZ\Publish\SPI\Persistence\User\Role;
+use eZ\Publish\SPI\Persistence\User\Policy;
+use eZ\Publish\SPI\Persistence\User\RoleAssignment;
 
 /**
  * mapper for User related objects

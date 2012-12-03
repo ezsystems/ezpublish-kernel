@@ -9,9 +9,9 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Routing;
 
-use eZModule,
-    eZ\Publish\Core\MVC\Symfony\Routing\Generator,
-    Symfony\Component\Routing\RequestContext;
+use eZModule;
+use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
+use Symfony\Component\Routing\RequestContext;
 
 class UrlGenerator extends Generator
 {

@@ -1,8 +1,8 @@
 <?php
 
 namespace eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway;
-use eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway,
-    eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway;
+use eZ\Publish\SPI\Persistence\Content\Field;
 
 class LegacyStorage extends Gateway
 {

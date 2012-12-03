@@ -8,12 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
-use eZ\Publish\SPI\Persistence\User,
-    eZ\Publish\SPI\Persistence\User\Role,
-    eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
-    eZ\Publish\SPI\Persistence\User\Policy,
-    eZ\Publish\SPI\Persistence\User\RoleAssignment,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use eZ\Publish\SPI\Persistence\User;
+use eZ\Publish\SPI\Persistence\User\Role;
+use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
+use eZ\Publish\SPI\Persistence\User\Policy;
+use eZ\Publish\SPI\Persistence\User\RoleAssignment;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * Test case for SectionHandler using in memory storage.

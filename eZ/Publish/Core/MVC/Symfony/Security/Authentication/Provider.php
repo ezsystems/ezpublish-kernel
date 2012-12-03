@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authentication;
 
-use Symfony\Component\Security\Core\Authentication\Provider\PreAuthenticatedAuthenticationProvider,
-    Symfony\Component\Security\Core\Authentication\Token\TokenInterface,
-    Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken,
-    Symfony\Component\Security\Core\Exception\AuthenticationException,
-    eZ\Publish\Core\MVC\Symfony\Security\User;
+use Symfony\Component\Security\Core\Authentication\Provider\PreAuthenticatedAuthenticationProvider;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use eZ\Publish\Core\MVC\Symfony\Security\User;
 
 class Provider extends PreAuthenticatedAuthenticationProvider
 {

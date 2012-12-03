@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\MVC\Legacy\Templating\Twig\Node;
-use \Twig_Node,
-    \Twig_Node_Expression,
-    \Twig_Compiler;
+use Twig_Node;
+use Twig_Node_Expression;
+use Twig_Compiler;
 
 /**
  * Represents an ez_legacy_include node

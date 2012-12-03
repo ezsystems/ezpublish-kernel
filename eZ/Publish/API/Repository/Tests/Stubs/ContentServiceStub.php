@@ -9,33 +9,33 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\ContentService;
-use \eZ\Publish\API\Repository\Values\Content\Field;
-use \eZ\Publish\API\Repository\Values\Content\Content;
-use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
-use \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
-use \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
-use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
-use \eZ\Publish\API\Repository\Values\Content\Relation;
-use \eZ\Publish\API\Repository\Values\Content\TranslationInfo;
-use \eZ\Publish\API\Repository\Values\Content\TranslationValues;
-use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use \eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
+use eZ\Publish\API\Repository\Values\Content\TranslationValues;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\User\User;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentCreateStructStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentUpdateStructStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\RelationStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\FieldStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentCreateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentUpdateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\RelationStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\FieldStub;
 
 /**
  * @example Examples/contenttype.php

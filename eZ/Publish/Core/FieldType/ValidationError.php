@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType;
-use eZ\Publish\SPI\FieldType\ValidationError as ValidationErrorInterface,
-    eZ\Publish\API\Repository\Values\Translation\Message,
-    eZ\Publish\API\Repository\Values\Translation\Plural;
+use eZ\Publish\SPI\FieldType\ValidationError as ValidationErrorInterface;
+use eZ\Publish\API\Repository\Values\Translation\Message;
+use eZ\Publish\API\Repository\Values\Translation\Plural;
 
 /**
  * Class for validation errors.

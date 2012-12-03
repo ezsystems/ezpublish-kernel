@@ -9,12 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
-use \eZ\Publish\API\Repository\Values\Content\Language;
-use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 
-use \eZ\Publish\Core\REST\Common\UrlHandler;
-use \eZ\Publish\Core\REST\Common\Input;
-use \eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input;
+use eZ\Publish\Core\REST\Common\Output;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\LanguageService}

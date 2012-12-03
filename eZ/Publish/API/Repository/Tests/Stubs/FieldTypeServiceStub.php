@@ -10,7 +10,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 use eZ\Publish\API\Repository\FieldTypeService;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\FieldTypeService}

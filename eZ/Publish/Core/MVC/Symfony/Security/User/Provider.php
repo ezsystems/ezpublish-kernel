@@ -9,12 +9,12 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Security\User;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException,
-    eZ\Publish\Core\MVC\Symfony\Security\User,
-    eZ\Publish\Core\MVC\Symfony\Security\User\APIUserProviderInterface,
-    eZ\Publish\API\Repository\Values\User\User as APIUser,
-    Symfony\Component\Security\Core\User\UserInterface,
-    Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\Core\MVC\Symfony\Security\User;
+use eZ\Publish\Core\MVC\Symfony\Security\User\APIUserProviderInterface;
+use eZ\Publish\API\Repository\Values\User\User as APIUser;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class Provider implements APIUserProviderInterface
 {

@@ -2,8 +2,8 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver,
-    eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver;
+use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
 
 class ChainRouterTest extends \PHPUnit_Framework_TestCase
 {

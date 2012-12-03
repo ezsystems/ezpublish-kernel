@@ -14,7 +14,7 @@ namespace eZ\Publish\Core\REST\Server\Authenticator;
 use eZ\Publish\Core\REST\Server\Authenticator;
 use eZ\Publish\Core\REST\Server\Exceptions;
 use eZ\Publish\API\Repository\Repository;
-use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 use Qafoo\RMF;
 

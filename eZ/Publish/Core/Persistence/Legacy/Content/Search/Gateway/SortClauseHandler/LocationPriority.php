@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler,
-    eZ\Publish\API\Repository\Values\Content\Query\SortClause,
-    ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use ezcQuerySelect;
 
 /**
  * Content locator gateway implementation using the zeta database component.

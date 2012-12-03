@@ -8,15 +8,15 @@
  */
 
 namespace eZ\Publish\Core\Repository;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\SPI\IO\Handler as IoHandler,
-    eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\API\Repository\Values\ValueObject,
-    eZ\Publish\API\Repository\Values\User\User,
-    eZ\Publish\API\Repository\Values\User\Limitation,
-    Exception,
-    RuntimeException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\SPI\IO\Handler as IoHandler;
+use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\Limitation;
+use Exception;
+use RuntimeException;
 
 /**
  * Repository class

@@ -9,8 +9,8 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController,
-    eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
+use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 
 class Controller extends BaseController
 {

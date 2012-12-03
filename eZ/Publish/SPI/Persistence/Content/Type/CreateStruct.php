@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content\Type;
-use eZ\Publish\SPI\Persistence\ValueObject,
-    eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\ValueObject;
+use eZ\Publish\SPI\Persistence\Content\Location;
 
 /**
  */

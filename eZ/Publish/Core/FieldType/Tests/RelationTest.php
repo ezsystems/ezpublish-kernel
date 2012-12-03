@@ -8,11 +8,11 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Relation\Type as Relation,
-    eZ\Publish\Core\FieldType\Relation\Value,
-    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\FieldType\Relation\Type as Relation;
+use eZ\Publish\Core\FieldType\Relation\Value;
+use eZ\Publish\Core\FieldType\Tests\FieldTypeTest;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 
 class RelationTest extends StandardizedFieldTypeTest
 {

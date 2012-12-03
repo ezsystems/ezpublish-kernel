@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use ezcQuerySelect;
 
 /**
  * Base test case for database related tests

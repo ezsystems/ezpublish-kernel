@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map,
-    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 
 class URI extends Map implements Matcher, URILexer
 {

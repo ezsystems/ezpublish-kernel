@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor,
-    eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder,
-    eZ\Publish\API\Repository\Values\Content\Search\Facet;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
+use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
+use eZ\Publish\API\Repository\Values\Content\Search\Facet;
 
 /**
  * Visits the Section facet builder

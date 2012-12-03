@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\FieldType\Page\Parts;
 
-use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException,
-    eZ\Publish\Core\FieldType\Page\Service as PageService;
+use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
+use eZ\Publish\Core\FieldType\Page\Service as PageService;
 
 class Base
 {

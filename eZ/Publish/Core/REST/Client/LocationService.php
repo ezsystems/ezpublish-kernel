@@ -14,10 +14,10 @@ use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
-use \eZ\Publish\Core\REST\Common\UrlHandler;
-use \eZ\Publish\Core\REST\Common\Input;
-use \eZ\Publish\Core\REST\Common\Output;
-use \eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input;
+use eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\Message;
 
 /**
  * Location service, used for complex subtree operations

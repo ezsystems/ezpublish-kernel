@@ -9,10 +9,10 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\SetupWizard;
 
 use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel,
-    eZINI,
-    eZSiteAccess;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
+use eZINI;
+use eZSiteAccess;
 
 /**
  * Handles conversionlegacy eZ Publish 4 parameters from a set of settings to a configuration array

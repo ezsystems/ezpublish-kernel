@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Author\Type as AuthorType,
-    eZ\Publish\Core\FieldType\Author\Value as AuthorValue,
-    eZ\Publish\Core\FieldType\Author\Author;
+use eZ\Publish\Core\FieldType\Author\Type as AuthorType;
+use eZ\Publish\Core\FieldType\Author\Value as AuthorValue;
+use eZ\Publish\Core\FieldType\Author\Author;
 
 /**
  * @group fieldType

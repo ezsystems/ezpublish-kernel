@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\Matcher\Id;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ParentContentType as ParentContentTypeMatcher,
-    eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest,
-    eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ParentContentType as ParentContentTypeMatcher;
+use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
+use eZ\Publish\API\Repository\Repository;
 
 class ParentContentTypeTest extends BaseTest
 {

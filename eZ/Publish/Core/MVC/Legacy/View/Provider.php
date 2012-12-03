@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\View;
 
-use eZ\Publish\Core\MVC\Legacy\View\TwigContentViewLayoutDecorator,
-    Symfony\Component\HttpKernel\Log\LoggerInterface,
-    Closure;
+use eZ\Publish\Core\MVC\Legacy\View\TwigContentViewLayoutDecorator;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Closure;
 
 abstract class Provider
 {

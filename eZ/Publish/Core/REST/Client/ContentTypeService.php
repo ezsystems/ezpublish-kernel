@@ -21,12 +21,12 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
-use \eZ\Publish\Core\REST\Common\UrlHandler;
-use \eZ\Publish\Core\REST\Common\Input;
-use \eZ\Publish\Core\REST\Common\Output;
-use \eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input;
+use eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\Message;
 
-use \eZ\Publish\Core\REST\Client\Values;
+use eZ\Publish\Core\REST\Client\Values;
 
 /**
  * @example Examples/contenttype.php

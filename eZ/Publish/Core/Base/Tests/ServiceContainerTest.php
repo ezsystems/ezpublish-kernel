@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Base\Tests;
-use eZ\Publish\Core\Base\ServiceContainer,
-    PHPUnit_Framework_TestCase,
-    Closure;
+use eZ\Publish\Core\Base\ServiceContainer;
+use PHPUnit_Framework_TestCase;
+use Closure;
 
 /**
  * Test class

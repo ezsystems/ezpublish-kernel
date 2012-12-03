@@ -20,10 +20,10 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 
-use \eZ\Publish\API\Repository\ContentService;
-use \eZ\Publish\API\Repository\LocationService;
-use \eZ\Publish\API\Repository\SectionService;
-use \eZ\Publish\API\Repository\SearchService;
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\SectionService;
+use eZ\Publish\API\Repository\SearchService;
 
 /**
  * Content controller

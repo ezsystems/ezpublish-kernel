@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\BinaryFile\Type as BinaryFileType,
-    eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue;
+use eZ\Publish\Core\FieldType\BinaryFile\Type as BinaryFileType;
+use eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue;
 
 /**
  * @group fieldType

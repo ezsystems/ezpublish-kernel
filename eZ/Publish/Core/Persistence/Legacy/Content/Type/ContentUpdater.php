@@ -8,15 +8,15 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
-use eZ\Publish\Core\Persistence\Legacy\Content,
-    eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry,
-    eZ\Publish\SPI\Persistence\Content\Type,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\Core\Persistence\Legacy\Content;
+use eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
+use eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * Class to update content objects to a new type version

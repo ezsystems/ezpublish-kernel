@@ -8,10 +8,10 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
-use eZ\Publish\Core\Persistence\Legacy,
-    eZ\Publish\Core\FieldType,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\Core\Persistence\Legacy;
+use eZ\Publish\Core\FieldType;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Integration test for legacy storage field types

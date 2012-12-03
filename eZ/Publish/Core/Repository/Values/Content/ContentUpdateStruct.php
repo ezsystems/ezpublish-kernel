@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\Repository\Values\Content;
 
-use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUpdateStruct,
-    eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * This class is used for updating the fields of a content object draft

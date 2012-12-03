@@ -8,10 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase,
-    eZ\Publish\SPI\Persistence\Content\ObjectState,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase;
+use eZ\Publish\SPI\Persistence\Content\ObjectState;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase.

@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\FieldType\XmlText\Converter;
 
-use eZ\Publish\Core\FieldType\XmlText\Converter,
-    eZ\Publish\Core\MVC\Symfony\View\Manager,
-    eZ\Publish\API\Repository\Repository,
-    DOMDocument;
+use eZ\Publish\Core\FieldType\XmlText\Converter;
+use eZ\Publish\Core\MVC\Symfony\View\Manager;
+use eZ\Publish\API\Repository\Repository;
+use DOMDocument;
 
 /**
  * Converts embedded elements from internal XmlText representation to HTML5

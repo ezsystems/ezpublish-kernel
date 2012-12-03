@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
  * Test case for operations in the LocationService using in memory storage.

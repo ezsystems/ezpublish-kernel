@@ -8,16 +8,16 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
-use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
-    eZ\Publish\SPI\Persistence\User,
-    eZ\Publish\SPI\Persistence\User\Role,
-    eZ\Publish\SPI\Persistence\User\RoleAssignment,
-    eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
-    eZ\Publish\SPI\Persistence\User\Policy,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    LogicException;
+use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface;
+use eZ\Publish\SPI\Persistence\User;
+use eZ\Publish\SPI\Persistence\User\Role;
+use eZ\Publish\SPI\Persistence\User\RoleAssignment;
+use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
+use eZ\Publish\SPI\Persistence\User\Policy;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use LogicException;
 
 /**
  * Storage Engine handler for user module

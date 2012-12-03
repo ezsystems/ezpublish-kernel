@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\Content\Location;
-use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
-use \eZ\Publish\API\Repository\Exceptions;
-use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
+use eZ\Publish\API\Repository\Exceptions;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for operations in the ContentTypeService using in memory storage.

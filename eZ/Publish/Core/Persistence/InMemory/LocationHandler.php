@@ -8,12 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
-use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandlerInterface,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Location as LocationValue,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandlerInterface;
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Location as LocationValue;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Location\Handler

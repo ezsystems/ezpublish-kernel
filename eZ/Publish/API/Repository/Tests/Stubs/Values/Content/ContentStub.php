@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\Content;
 
-use \eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Content;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\Content\Content}

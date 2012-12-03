@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper,
-    eZ\Publish\SPI\Persistence\Content\Search\Field,
-    eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
+use eZ\Publish\SPI\Persistence\Content\Search\Field;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
  * Maps raw document field values to something Solr can index.

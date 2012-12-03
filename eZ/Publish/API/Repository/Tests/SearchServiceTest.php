@@ -9,13 +9,13 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use eZ\Publish\Core\Repository\SearchService,
-    eZ\Publish\Core\Repository\Values\Content\Content,
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\SortClause,
-    eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder,
-    eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\Core\Repository\SearchService;
+use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 
 /**
  * Test case for operations in the SearchService using in memory storage.

@@ -9,19 +9,18 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
 
-use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler,
-    eZ\Publish\API\Repository\Exceptions\NotImplementedException,
-    eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\API\Repository\Values\Content\VersionInfo,
-
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a

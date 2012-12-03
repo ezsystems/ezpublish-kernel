@@ -8,14 +8,14 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage;
-use \eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage;
+use eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\FieldStub;
-use \eZ\Publish\API\Repository\Values\Content\Field;
-use \eZ\Publish\API\Repository\Values\Content\Content;
-use \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-use \eZ\Publish\Core\FieldType\User\Value;
+use eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\FieldStub;
+use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\FieldType\User\Value;
 
 /**
  * Handles external storage of the "user" field type.

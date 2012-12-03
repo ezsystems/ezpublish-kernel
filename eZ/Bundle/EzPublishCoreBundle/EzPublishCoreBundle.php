@@ -9,21 +9,21 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass,
-    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterStorageEnginePass,
-    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterLimitationTypePass,
-    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass,
-    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass,
-    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainConfigResolverPass,
-    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\TwigTweaksPass,
-    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ContentViewPass,
-    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LocationViewPass,
-    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension,
-    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser as ConfigParser,
-    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\Factory as EzPublishSecurityFactory,
-    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\HttpBasicFactory,
-    Symfony\Component\HttpKernel\Bundle\Bundle,
-    Symfony\Component\DependencyInjection\ContainerBuilder;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterStorageEnginePass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterLimitationTypePass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainConfigResolverPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\TwigTweaksPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ContentViewPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LocationViewPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser as ConfigParser;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\Factory as EzPublishSecurityFactory;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\HttpBasicFactory;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class EzPublishCoreBundle extends Bundle
 {

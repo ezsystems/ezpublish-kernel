@@ -9,9 +9,9 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests;
 
-use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess,
-    eZ\Bundle\EzPublishCoreBundle\View\Provider\Location\Configured;
+use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Bundle\EzPublishCoreBundle\View\Provider\Location\Configured;
 
 class ConfiguredLocationViewProviderTest extends BaseTest
 {

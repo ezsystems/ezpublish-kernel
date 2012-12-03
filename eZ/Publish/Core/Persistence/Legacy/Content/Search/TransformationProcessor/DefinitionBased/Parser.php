@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor,
-    RuntimeException;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+use RuntimeException;
 
 /**
  * Parser for transformation specifications

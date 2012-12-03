@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway,
-    eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
+use eZ\Publish\SPI\Persistence\Content\Language;
 
 /**
  * Language Handler

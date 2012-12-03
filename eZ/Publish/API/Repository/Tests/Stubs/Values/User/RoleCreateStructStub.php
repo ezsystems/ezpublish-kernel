@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\User;
 
-use \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
-use \eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
+use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
+use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\User\RoleCreateStruct}

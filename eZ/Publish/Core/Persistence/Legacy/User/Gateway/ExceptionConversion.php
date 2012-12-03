@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\User\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\User\Gateway,
-    eZ\Publish\SPI\Persistence\User;
+use eZ\Publish\Core\Persistence\Legacy\User\Gateway;
+use eZ\Publish\SPI\Persistence\User;
 
 /**
  * Base class for user gateways.

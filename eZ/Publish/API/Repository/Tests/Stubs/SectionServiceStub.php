@@ -9,16 +9,16 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\SectionService;
-use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use \eZ\Publish\API\Repository\Values\Content\Section;
-use \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
-use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
+use eZ\Publish\API\Repository\SectionService;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Section;
+use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\SectionService}

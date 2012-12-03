@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
-use \eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\User;
 
-use \eZ\Publish\Core\REST\Common;
-use \eZ\Publish\Core\REST\Client\HttpClient\Authentication\IntegrationTestAuthenticator;
+use eZ\Publish\Core\REST\Common;
+use eZ\Publish\Core\REST\Client\HttpClient\Authentication\IntegrationTestAuthenticator;
 
 /**
  * REST Client Repository to be used in integration tests

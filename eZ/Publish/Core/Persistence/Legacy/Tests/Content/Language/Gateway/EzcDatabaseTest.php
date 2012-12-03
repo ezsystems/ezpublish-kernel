@@ -8,10 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase,
-
-    eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase;
+use eZ\Publish\SPI\Persistence\Content\Language;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase.

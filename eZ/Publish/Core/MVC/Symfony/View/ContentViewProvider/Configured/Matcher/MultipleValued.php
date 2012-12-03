@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher;
 
-use eZ\Publish\Core\MVC\RepositoryAware,
-    eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher;
+use eZ\Publish\Core\MVC\RepositoryAware;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher;
 
 /**
  * Abstract class for basic matchers to be used with View\Provider\Content\Configured, accepting multiple values to match against.

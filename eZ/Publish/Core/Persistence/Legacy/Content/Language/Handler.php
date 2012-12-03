@@ -8,11 +8,11 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
-use eZ\Publish\SPI\Persistence\Content\Language,
-    eZ\Publish\SPI\Persistence\Content\Language\Handler as BaseLanguageHandler,
-    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    LogicException;
+use eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as BaseLanguageHandler;
+use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use LogicException;
 
 /**
  * Language Handler

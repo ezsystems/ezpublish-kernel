@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Values\User;
-use eZ\Publish\Core\Repository\Values\User\UserGroup,
-    PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\Repository\Values\User\UserGroup;
+use PHPUnit_Framework_TestCase;
 
 /**
  *

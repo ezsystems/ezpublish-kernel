@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor,
-    RuntimeException;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+use RuntimeException;
 
 /**
  * Compiles the AST of parsed transformation rules into a set of PCRE replace

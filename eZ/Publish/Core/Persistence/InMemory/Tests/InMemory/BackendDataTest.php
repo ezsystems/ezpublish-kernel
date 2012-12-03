@@ -8,13 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests\InMemory;
-use PHPUnit_Framework_TestCase,
-    ReflectionObject,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Location,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
-    eZ\Publish\Core\Persistence\InMemory\Backend;
+use PHPUnit_Framework_TestCase;
+use ReflectionObject;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateStruct;
+use eZ\Publish\Core\Persistence\InMemory\Backend;
 
 /**
  * Test case for Handler using in memory storage.

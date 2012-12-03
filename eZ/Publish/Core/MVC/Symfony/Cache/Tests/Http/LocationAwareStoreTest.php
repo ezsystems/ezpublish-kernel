@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\CacheTests\Http;
 
-use eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore,
-    Symfony\Component\Filesystem\Filesystem,
-    Symfony\Component\HttpFoundation\Request;
+use eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Request;
 
 class LocationAwareStoreTest extends \PHPUnit_Framework_TestCase
 {

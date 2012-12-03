@@ -9,8 +9,8 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface,
-    eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
 
 class ChainConfigResolver implements ConfigResolverInterface
 {

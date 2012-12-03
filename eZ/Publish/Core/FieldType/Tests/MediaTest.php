@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Media\Type as MediaType,
-    eZ\Publish\Core\FieldType\Media\Value as MediaValue;
+use eZ\Publish\Core\FieldType\Media\Type as MediaType;
+use eZ\Publish\Core\FieldType\Media\Value as MediaValue;
 
 /**
  * @group fieldType

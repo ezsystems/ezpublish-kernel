@@ -9,16 +9,16 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
-use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use \eZ\Publish\API\Repository\Values\Content\Section;
-use \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
-use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Section;
+use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 
-use \eZ\Publish\Core\REST\Common\UrlHandler;
-use \eZ\Publish\Core\REST\Common\Input;
-use \eZ\Publish\Core\REST\Common\Output;
-use \eZ\Publish\Core\REST\Common\Message;
-use \eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input;
+use eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\SectionService}

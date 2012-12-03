@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\User;
 
-use \eZ\Publish\API\Repository\Values\Content\Field;
-use \eZ\Publish\API\Repository\Values\User\UserCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\User\UserCreateStruct}

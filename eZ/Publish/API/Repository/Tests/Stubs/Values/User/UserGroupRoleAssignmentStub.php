@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\User;
 
-use \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment;
+use eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment}

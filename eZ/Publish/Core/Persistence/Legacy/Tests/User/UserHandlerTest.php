@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\User;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\User,
-    eZ\Publish\SPI\Persistence;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\User;
+use eZ\Publish\SPI\Persistence;
 
 /**
  * Test case for UserHandlerTest

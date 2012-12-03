@@ -9,10 +9,10 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\View\Provider\Content;
 
-use eZ\Publish\Core\MVC\Symfony\View\Provider\Content\Configured as BaseConfigured,
-    eZ\Publish\Core\MVC\ConfigResolverInterface,
-    eZ\Publish\API\Repository\Repository,
-    Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Content\Configured as BaseConfigured;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\API\Repository\Repository;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Configured extends BaseConfigured
 {

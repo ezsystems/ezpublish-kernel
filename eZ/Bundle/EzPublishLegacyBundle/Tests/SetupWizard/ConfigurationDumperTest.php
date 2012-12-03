@@ -9,9 +9,9 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Tests\SetupWizard;
 
-use eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfigurationDumper,
-    eZ\Publish\Core\MVC\Symfony\ConfigDumperInterface,
-    Symfony\Component\Yaml\Yaml;
+use eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfigurationDumper;
+use eZ\Publish\Core\MVC\Symfony\ConfigDumperInterface;
+use Symfony\Component\Yaml\Yaml;
 
 class ConfigurationDumperTest extends \PHPUnit_Framework_TestCase
 {

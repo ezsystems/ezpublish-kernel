@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\ContentUpdater\Action;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField,
-    eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField;
+use eZ\Publish\SPI\Persistence\Content;
 
 /**
  * Test case for Content Type Updater.

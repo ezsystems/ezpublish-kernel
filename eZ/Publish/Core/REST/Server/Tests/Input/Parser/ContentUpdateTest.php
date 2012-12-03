@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
-use eZ\Publish\Core\REST\Server\Input\Parser\ContentUpdate as ContentUpdateParser,
-    eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct,
-    DateTime;
+use eZ\Publish\Core\REST\Server\Input\Parser\ContentUpdate as ContentUpdateParser;
+use eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
+use DateTime;
 
 class ContentUpdateTest extends BaseTest
 {

@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
-    eZ\Publish\SPI\Persistence\Content\UrlAlias,
-    ezcQuery;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias;
+use ezcQuery;
 
 /**
  * UrlAlias Gateway

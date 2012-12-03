@@ -10,16 +10,16 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler,
-    eZ\Publish\API\Repository\Values\Content\URLWildcard,
-    eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult,
-    eZ\Publish\SPI\Persistence\Content\UrlWildcard as SPIUrlWildcard,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\ContentValidationException,
-    eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler;
+use eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
+use eZ\Publish\SPI\Persistence\Content\UrlWildcard as SPIUrlWildcard;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 
 /**
  * URLAlias service

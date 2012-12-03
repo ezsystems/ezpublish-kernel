@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests\InMemory;
-use PHPUnit_Framework_TestCase,
-    stdClass,
-    eZ\Publish\Core\Persistence\InMemory\Backend;
+use PHPUnit_Framework_TestCase;
+use stdClass;
+use eZ\Publish\Core\Persistence\InMemory\Backend;
 
 /**
  * Test case for Handler using in memory storage.

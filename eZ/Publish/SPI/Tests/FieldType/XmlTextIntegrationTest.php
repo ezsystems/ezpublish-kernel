@@ -8,13 +8,13 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText as XmlTextConverter,
-    eZ\Publish\Core\FieldType\XmlText\XmlTextStorage,
-    eZ\Publish\Core\FieldType\NullStorage,
-    eZ\Publish\Core\FieldType\FieldSettings,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
-    DOMDocument;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText as XmlTextConverter;
+use eZ\Publish\Core\FieldType\XmlText\XmlTextStorage;
+use eZ\Publish\Core\FieldType\NullStorage;
+use eZ\Publish\Core\FieldType\FieldSettings;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
+use DOMDocument;
 use eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway\LegacyStorage;
 
 /**

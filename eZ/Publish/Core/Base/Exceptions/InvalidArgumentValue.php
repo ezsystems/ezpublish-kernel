@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Base\Exceptions;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    Exception;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use Exception;
 
 /**
  * Invalid Argument Type Exception implementation

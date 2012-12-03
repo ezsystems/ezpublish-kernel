@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Country\Type as Country,
-    eZ\Publish\Core\FieldType\Country\Value as CountryValue,
-    ReflectionObject;
+use eZ\Publish\Core\FieldType\Country\Type as Country;
+use eZ\Publish\Core\FieldType\Country\Value as CountryValue;
+use ReflectionObject;
 
 /**
  * @group fieldType

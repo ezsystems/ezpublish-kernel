@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\MVC\Legacy\Templating\Twig\TokenParser;
-use eZ\Publish\Core\MVC\Legacy\Templating\Twig\Node\LegacyIncludeNode,
-    \Twig_Token,
-    \Twig_Node_Expression_Array;
+use eZ\Publish\Core\MVC\Legacy\Templating\Twig\Node\LegacyIncludeNode;
+use Twig_Token;
+use Twig_Node_Expression_Array;
 
 class LegacyIncludeParser extends \Twig_TokenParser
 {
