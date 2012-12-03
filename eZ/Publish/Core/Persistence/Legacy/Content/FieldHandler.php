@@ -13,7 +13,8 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway as TypeGateway;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * Field Handler.
@@ -28,11 +29,16 @@ class FieldHandler
     protected $contentGateway;
 
     /**
-     * Content Type Gateway
+     * Content Type Handler
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler
      */
-    protected $typeGateway;
+    public $typeHandler;
+
+    /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
+     */
+    public $languageHandler;
 
     /**
      * Content Mapper
@@ -49,23 +55,64 @@ class FieldHandler
     protected $storageHandler;
 
     /**
+     * Hash of SPI FieldTypes or callable callbacks to generate one.
+     *
+     * @var array
+     */
+    protected $fieldTypes;
+
+    /**
      * Creates a new Field Handler
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway $typeGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $mapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler
+     * @param array $fieldTypes Hash of SPI FieldTypes or callable callbacks to generate one.
      */
     public function __construct(
         Gateway $contentGateway,
-        TypeGateway $typeGateway,
         Mapper $mapper,
-        StorageHandler $storageHandler )
+        StorageHandler $storageHandler,
+        array $fieldTypes )
     {
         $this->contentGateway = $contentGateway;
-        $this->typeGateway = $typeGateway;
         $this->mapper = $mapper;
         $this->storageHandler = $storageHandler;
+        $this->fieldTypes = $fieldTypes;
+    }
+
+    /**
+     * Instantiates a FieldType\Type object
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $type not properly setup
+     *         with settings injected to service
+     *
+     * @param $identifier
+     *
+     * @return \eZ\Publish\SPI\FieldType\FieldType
+     */
+    protected function buildFieldType( $identifier )
+    {
+        if ( !isset( $this->fieldTypes[$identifier] ) )
+        {
+            throw new NotFoundException(
+                "FieldType",
+                "Provided \$identifier is unknown: '{$identifier}', has: " . var_export( array_keys( $this->fieldTypes ), true )
+            );
+        }
+
+        if ( $this->fieldTypes[$identifier] instanceof \eZ\Publish\SPI\FieldType\FieldType )
+        {
+            return $this->fieldTypes[$identifier];
+        }
+        else if ( !is_callable( $this->fieldTypes[$identifier] ) )
+        {
+            throw new InvalidArgumentException( "\$settings[$identifier]", 'must be instance of SPI\\FieldType\\FieldType or callback to generate it' );
+        }
+
+        /** @var $closure \Closure */
+        $closure = $this->fieldTypes[$identifier];
+        return $closure();
     }
 
     /**
@@ -77,9 +124,35 @@ class FieldHandler
      */
     public function createNewFields( Content $content )
     {
-        foreach ( $content->fields as $field )
+        $languageCodes = $this->getLanguageCodes( $content->versionInfo->languageIds );
+        $updateFieldMap = $this->getFieldMap( $content->fields );
+        $contentType = $this->typeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
+
+        foreach ( $contentType->fieldDefinitions as $fieldDefinition )
         {
-            $this->createNewField( $field, $content );
+            foreach ( $languageCodes as $languageCode => $dummy )
+            {
+                if ( isset( $updateFieldMap[$fieldDefinition->id][$languageCode] ) )
+                {
+                    $field = $updateFieldMap[$fieldDefinition->id][$languageCode];
+                }
+                else
+                {
+                    $fieldType = $this->buildFieldType( $fieldDefinition->fieldType );
+                    $field = new Field(
+                        array(
+                            "id" => null,
+                            "fieldDefinitionId" => $fieldDefinition->id,
+                            "type" => $fieldDefinition->fieldType,
+                            "value" => $fieldType->toPersistenceValue( $fieldType->getEmptyValue() ),
+                            "languageCode" => $languageCode,
+                            "versionNo" => null
+                        )
+                    );
+                }
+
+                $this->createNewField( $field, $content );
+            }
         }
     }
 
@@ -106,7 +179,7 @@ class FieldHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param \eZ\Publish\SPI\Persistence\Content $content
      *
-     * return void
+     * @return void
      */
     protected function createNewField( Field $field, Content $content )
     {
@@ -114,6 +187,35 @@ class FieldHandler
 
         $field->id = $this->contentGateway->insertNewField(
             $content,
+            $field,
+            $this->mapper->convertToStorageValue( $field )
+        );
+
+        // If the storage handler returns true, it means that $field value has been modified
+        // So we need to update it in order to store those modifications
+        // Field converter is called once again via the Mapper
+        if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
+        {
+            $this->contentGateway->updateField(
+                $field,
+                $this->mapper->convertToStorageValue( $field )
+            );
+        }
+    }
+
+    /**
+     * Updates an existing field in the database.
+     *
+     * Used by self::createNewFields() and self::updateFields()
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     *
+     * @return void
+     */
+    protected function updateField( Field $field, Content $content )
+    {
+        $this->contentGateway->updateField(
             $field,
             $this->mapper->convertToStorageValue( $field )
         );
@@ -183,34 +285,99 @@ class FieldHandler
      *
      * @return void
      */
-    public function updateFields( $content, UpdateStruct $updateStruct )
+    public function updateFields( Content $content, UpdateStruct $updateStruct )
     {
-        foreach ( $updateStruct->fields as $field )
-        {
-            $field->versionNo = $content->versionInfo->versionNo;
-            if ( isset( $field->id ) )
-            {
-                $this->contentGateway->updateField(
-                    $field,
-                    $this->mapper->convertToStorageValue( $field )
-                );
-            }
-            else
-            {
-                $this->createNewField( $field, $content );
-            }
+        $languageCodes = $existingLanguageCodes = $this->getLanguageCodes( $content->versionInfo->languageIds );
+        $contentFieldMap = $this->getFieldMap( $content->fields );
+        $updateFieldMap =$this->getFieldMap( $updateStruct->fields, $languageCodes );
+        $contentType = $this->typeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
 
-            // If the storage handler returns true, it means that $field value has been modified
-            // So we need to update it in order to store those modifications
-            // Field converter is called once again via the Mapper
-            if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
+        foreach ( $contentType->fieldDefinitions as $fieldDefinition )
+        {
+            foreach ( $languageCodes as $languageCode => $dummy )
             {
-                $this->contentGateway->updateField(
-                    $field,
-                    $this->mapper->convertToStorageValue( $field )
-                );
+                if ( isset( $updateFieldMap[$fieldDefinition->id][$languageCode] ) )
+                {
+                    $field = $updateFieldMap[$fieldDefinition->id][$languageCode];
+                    $field->versionNo = $content->versionInfo->versionNo;
+                    if ( isset( $field->id ) )
+                    {
+                        $this->updateField( $field, $content );
+                    }
+                    else
+                    {
+                        $this->createNewField( $field, $content );
+                    }
+                }
+                // If field is not set for new language
+                elseif ( !isset( $existingLanguageCodes[$languageCode] ) )
+                {
+                    if ( $fieldDefinition->isTranslatable )
+                    {
+                        // Use empty value
+                        $fieldType = $this->buildFieldType( $fieldDefinition->fieldType );
+                        $field = new Field(
+                            array(
+                                "fieldDefinitionId" => $fieldDefinition->id,
+                                "type" => $fieldDefinition->fieldType,
+                                "value" => $fieldType->toPersistenceValue( $fieldType->getEmptyValue() ),
+                                "languageCode" => $languageCode
+                            )
+                        );
+                    }
+                    else
+                    {
+                        // Use value from main language code
+                        $field = $contentFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
+                        $field->id = null;
+                        $field->languageCode = $languageCode;
+                    }
+
+                    $this->createNewField( $field, $content );
+                }
             }
         }
+    }
+
+    /**
+     * For given $languageIds returns array with language codes as keys.
+     *
+     * @param array $languageIds
+     *
+     * @return array
+     */
+    protected function getLanguageCodes( array $languageIds )
+    {
+        $languageCodes = array();
+        foreach ( $languageIds as $languageId )
+        {
+            $languageCodes[$this->languageHandler->load( $languageId )->languageCode] = true;
+        }
+
+        return $languageCodes;
+    }
+
+    /**
+     * Returns given $fields structured in hash array with field definition ids and language codes as keys.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
+     * @param array $languageCodes
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Field[][]
+     */
+    protected function getFieldMap( array $fields, &$languageCodes = null )
+    {
+        $fieldMap = array();
+        foreach ( $fields as $field )
+        {
+            if ( isset( $languageCodes ) )
+            {
+                $languageCodes[$field->languageCode] = true;
+            }
+            $fieldMap[$field->fieldDefinitionId][$field->languageCode] = $field;
+        }
+
+        return $fieldMap;
     }
 
     /**
