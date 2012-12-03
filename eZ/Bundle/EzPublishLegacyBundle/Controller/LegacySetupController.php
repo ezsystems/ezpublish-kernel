@@ -117,7 +117,7 @@ class LegacySetupController
                 {
                     $adminSiteaccess = $chosenSitePackage . '_admin';
                 }
-                elseif ( $accessType === 'url' )
+                else if ( $accessType === 'url' )
                 {
                     $adminSiteaccess = $request->request->get( 'P_site_extra_data_admin_access_type_value-' . $chosenSitePackage );
                 }

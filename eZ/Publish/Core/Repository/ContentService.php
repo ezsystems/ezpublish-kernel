@@ -805,7 +805,7 @@ class ContentService implements ContentServiceInterface
                 $this->publishUrlAliasesForContent( $content );
             }
             // @todo: this is legacy storage specific for updating ezcontentobject_tree.path_identification_string, to be removed
-            elseif ( isset( $contentMetadataUpdateStruct->mainLanguageCode )
+            else if ( isset( $contentMetadataUpdateStruct->mainLanguageCode )
                 && ( $loadedContentInfo->mainLanguageCode !== $contentMetadataUpdateStruct->mainLanguageCode ) )
             {
                 $content = $this->loadContent( $loadedContentInfo->id );
@@ -932,7 +932,7 @@ class ContentService implements ContentServiceInterface
 
             $versionNo = $versionInfo->versionNo;
         }
-        elseif ( $contentInfo->published )
+        else if ( $contentInfo->published )
         {
             $versionNo = $contentInfo->currentVersionNo;
         }
@@ -1140,7 +1140,7 @@ class ContentService implements ContentServiceInterface
                         )->value
                     );
                 }
-                elseif ( $isFieldUpdated )
+                else if ( $isFieldUpdated )
                 {
                     $fieldValue = $fieldType->acceptValue(
                         $fields[$fieldDefinition->identifier][$valueLanguageCode]->value

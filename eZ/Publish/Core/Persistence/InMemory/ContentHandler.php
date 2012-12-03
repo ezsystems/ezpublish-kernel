@@ -823,7 +823,7 @@ class ContentHandler implements ContentHandlerInterface
                 {
                     $contentInfoUpdateData["alwaysAvailable"] = $propertyValue;
                 }
-                elseif ( $propertyName === "mainLanguageId" )
+                else if ( $propertyName === "mainLanguageId" )
                 {
                     $contentInfoUpdateData["mainLanguageCode"] =
                         $this->handler->contentLanguageHandler()->load( $propertyValue )->languageCode;

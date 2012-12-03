@@ -50,7 +50,7 @@ class RelationList implements Converter
         foreach ( $this->getRelationXmlHashFromDB( $value->data['destinationContentIds'] ) as $row )
         {
             $relationItem = $doc->createElement( 'relation-item' );
-            foreach( self::dbAttributeMap() as $domAttrKey => $propertyKey )
+            foreach ( self::dbAttributeMap() as $domAttrKey => $propertyKey )
             {
                 if ( !isset( $row[$propertyKey] ) )
                     throw new \RuntimeException( "Missing relation-item external data property: $propertyKey" );

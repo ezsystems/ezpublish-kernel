@@ -427,7 +427,7 @@ class MapperTest extends LanguageAwareTestCase
         $relation = $mapper->createRelationFromCreateStruct( $struct );
 
         self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Relation' , $relation );
-        foreach( $struct as $property => $value )
+        foreach ( $struct as $property => $value )
         {
             self::assertSame( $value, $relation->$property );
         }

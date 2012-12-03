@@ -432,7 +432,7 @@ class Configuration
                 array_shift( $settingValue );
                 $configurationPiece[$setting] = $settingValue;
             }
-            elseif ( is_array( $settingValue ) )
+            else if ( is_array( $settingValue ) )
             {
                 $this->recursiveArrayClearing( $settingValue, $configurationPiece[$setting] );
             }

@@ -50,7 +50,7 @@ class ParentLocationRemoteId extends Base
             throw new Exceptions\Parser( "Invalid <ParentLocationRemoteIdCriterion> format" );
         }
         $contentIdArray = array();
-        foreach( explode( ',', $data['ParentLocationRemoteIdCriterion'] ) as $parentRemoteId )
+        foreach ( explode( ',', $data['ParentLocationRemoteIdCriterion'] ) as $parentRemoteId )
         {
             $location = $this->locationService->loadLocationByRemoteId( $parentRemoteId );
             $contentIdArray[] = $location->id;

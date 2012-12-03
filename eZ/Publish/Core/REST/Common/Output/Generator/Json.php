@@ -107,7 +107,7 @@ class Json extends Generator
                 $data[$key] = $this->convertArrayObjects( $value );
             }
         }
-        elseif ( $data instanceof Json\Object )
+        else if ( $data instanceof Json\Object )
         {
             foreach ( $data as $key => $value )
             {

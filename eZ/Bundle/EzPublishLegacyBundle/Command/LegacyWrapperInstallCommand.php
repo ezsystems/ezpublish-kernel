@@ -32,13 +32,14 @@ class LegacyWrapperInstallCommand extends ContainerAwareCommand
             ->addOption( 'symlink', null, InputOption::VALUE_NONE, 'Symlinks the assets instead of copying it' )
             ->addOption( 'relative', null, InputOption::VALUE_NONE, 'Make relative symlinks' )
             ->setDescription( 'Installs assets from eZ Publish legacy installation and wrapper scripts for front controllers (like index_cluster.php).' )
-            ->setHelp( <<<EOT
+            ->setHelp(
+                <<<EOT
 The command <info>%command.name%</info> installs <info>assets</info> from eZ Publish legacy installation
 and wrapper scripts for <info>front controllers</info> (like <info>index_cluster.php</info>).
 <info>Assets folders:</info> Symlinks will be created from your eZ Publish legacy directory.
 <info>Front controllers:</info> Wrapper scripts will be generated.
 EOT
-        );
+            );
     }
 
     protected function execute( InputInterface $input, OutputInterface $output )
@@ -46,7 +47,7 @@ EOT
         $targetArg = rtrim( $input->getArgument( 'target' ), '/' );
         if ( !is_dir( $targetArg ) )
         {
-            throw new \InvalidArgumentException(sprintf( 'The target directory "%s" does not exist.', $input->getArgument( 'target' ) ));
+            throw new \InvalidArgumentException( sprintf( 'The target directory "%s" does not exist.', $input->getArgument( 'target' ) ) );
         }
         else if ( !function_exists( 'symlink' ) && $input->getOption( 'symlink' ) )
         {
@@ -90,7 +91,8 @@ EOT
             $filesystem->remove( $newFrontController );
             $generator = new ezcPhpGenerator( $newFrontController, false );
             $generator->lineBreak = "\n";
-            $generator->appendCustomCode( <<<EOT
+            $generator->appendCustomCode(
+                <<<EOT
 <?php
 /**
  * File containing the wrapper around the legacy $frontController file

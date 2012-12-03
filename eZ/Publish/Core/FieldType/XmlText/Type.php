@@ -83,7 +83,7 @@ class Type extends FieldType
             {
                 $result = $textDom->firstChild->textContent;
             }
-            elseif ( $textDom )
+            else if ( $textDom )
             {
                 $result = $textDom->textContent;
             }

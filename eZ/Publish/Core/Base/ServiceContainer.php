@@ -317,7 +317,7 @@ class ServiceContainer implements Container
         {
             return $this->recursivlyLookupArguments( $this->getListOfExtendedServices( $argument, $function ) );
         }
-        elseif ( $argument[0] === '%' )// lazy loaded services
+        else if ( $argument[0] === '%' )// lazy loaded services
         {
             // Optional dependency handling
             if ( $argument[1] === '?' && !isset( $this->settings[substr( $argument, 2 )] ) )

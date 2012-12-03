@@ -49,7 +49,7 @@ class Type extends FieldType
     {
         $validationResult = array();
 
-        foreach( array_keys( $fieldSettings ) as $setting )
+        foreach ( array_keys( $fieldSettings ) as $setting )
         {
             if ( !in_array( $setting, array_keys( $this->settingsSchema ) ) )
             {
@@ -135,7 +135,7 @@ class Type extends FieldType
             $inputValue = new Value( $inputValue->id );
         }
         // content id
-        elseif ( is_integer( $inputValue ) || is_string( $inputValue ) )
+        else if ( is_integer( $inputValue ) || is_string( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
         }

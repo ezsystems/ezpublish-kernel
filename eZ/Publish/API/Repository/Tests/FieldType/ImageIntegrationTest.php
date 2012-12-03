@@ -391,7 +391,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $updatedDraft = $contentService->updateContent( $draft->versionInfo, $updateStruct );
 
         $paths = array();
-        foreach( $updatedDraft->getFields() as $field )
+        foreach ( $updatedDraft->getFields() as $field )
         {
             if ( $field->fieldDefIdentifier === 'data' )
             {

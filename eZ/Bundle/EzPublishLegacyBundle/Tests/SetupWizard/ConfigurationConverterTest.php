@@ -26,7 +26,6 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
         );
     }
 
-
     /**
      * @param string $package
      * @param string $adminSiteaccess
@@ -65,7 +64,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
         {
             $result = $configurationConverter->fromLegacy( $package, $adminSiteaccess );
         }
-        catch( \Exception $e )
+        catch ( \Exception $e )
         {
             if ( $exception !== null && $e instanceof $exception )
             {
@@ -93,7 +92,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
     {
         return function() use ( $callbackMap )
         {
-            foreach( $callbackMap as $map )
+            foreach ( $callbackMap as $map )
             {
                 $mapArguments = array_slice( $map, 0, -1 );
                 // pad the call arguments array with nulls to match the map
@@ -107,7 +106,6 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                     else
                         return $return;
                 }
-
             }
             throw new \Exception( "No callback match found for " . var_export( func_get_args(), true ) );
         };
@@ -121,8 +119,8 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
         define( 'IDX_EXPECTED_RESULT', 3 );
         define( 'IDX_EXCEPTION', 4 );
 
-        $commonResult = array (
-            'ezpublish' => array (
+        $commonResult = array(
+            'ezpublish' => array(
                 'siteaccess' => array(
                     'default_siteaccess' => 'eng',
                     'list' => array(
@@ -132,7 +130,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                     ),
                     'groups' => array(
                         'ezdemo_group' =>
-                        array (
+                        array(
                             0 => 'eng',
                             1 => 'ezdemo_site',
                             2 => 'ezdemo_site_admin',
@@ -151,13 +149,17 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                         ),
                         'var_dir' => 'var/ezdemo_site',
                         'image_variations' => array(
-                            'large' => array( 'reference' => null, 'filters' => array(
-                                array( 'name' => 'geometry/scaledownonly', 'params' => array( 360, 440 ) )
-                            ) ),
-                            'infoboximage' => array( 'reference' => null, 'filters' => array(
-                                array( 'name' => 'geometry/scalewidth', 'params' => array( 75 ) ),
-                                array( 'name' => 'flatten' )
-                            ) ),
+                            'large' => array(
+                                'reference' => null, 'filters' => array(
+                                    array( 'name' => 'geometry/scaledownonly', 'params' => array( 360, 440 ) )
+                                )
+                            ),
+                            'infoboximage' => array(
+                                'reference' => null, 'filters' => array(
+                                    array( 'name' => 'geometry/scalewidth', 'params' => array( 75 ) ),
+                                    array( 'name' => 'flatten' )
+                                )
+                            ),
                         ),
                         'languages' => array( 'eng-GB' )
                     ),
@@ -196,29 +198,50 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                 'Languages_admin' => array( 'RegionalSettings', 'SiteLanguageList', 'site.ini', 'ezdemo_site_admin', array( 'eng-GB' ) ),
             ),
             'getGroup' => array(
-                'SiteAccessSettings' => array( 'SiteAccessSettings', null, null,
-                    array( 'MatchOrder' => 'uri', 'URIMatchType' => 'element', 'URIMatchElement' => 1 ) ),
-                'DatabaseSettings' => array( 'DatabaseSettings', 'site.ini', 'eng',
-                    array( 'DatabaseImplementation' => 'ezmysqli', 'Server' => 'localhost', 'User' => 'root', 'Password' => '', 'Database' => 'ezdemo' ) ),
-                'AliasSettings' => array( 'AliasSettings', 'image.ini', 'eng',
-                    array( 'AliasList' => array( 'large', 'infoboximage' ) ) ),
-                'AliasSettings_demo' => array( 'AliasSettings', 'image.ini', 'ezdemo_site',
-                    array( 'AliasList' => array( 'large', 'infoboximage' ) ) ),
-                'AliasSettings_admin' => array( 'AliasSettings', 'image.ini', 'ezdemo_site_admin',
-                    array( 'AliasList' => array( 'large', 'infoboximage' ) ) ),
-                'large' => array( 'large', 'image.ini', 'eng',
-                    array( 'Reference' => '', 'Filters' => array( 'geometry/scaledownonly=360;440' ) ) ),
-                'infoboximage' => array( 'infoboximage', 'image.ini', 'eng',
-                    array( 'Reference' => '', 'Filters' => array( 'geometry/scalewidth=75', 'flatten' ) ) ),
-                'large_demo' => array( 'large', 'image.ini', 'ezdemo_site',
-                    array( 'Reference' => '', 'Filters' => array( 'geometry/scaledownonly=360;440' ) ) ),
-                'infoboximage_demo' => array( 'infoboximage', 'image.ini', 'ezdemo_site',
-                    array( 'Reference' => '', 'Filters' => array( 'geometry/scalewidth=75', 'flatten' ) ) ),
-                'large_admin' => array( 'large', 'image.ini', 'ezdemo_site_admin',
-                    array( 'Reference' => '', 'Filters' => array( 'geometry/scaledownonly=360;440' ) ) ),
-                'infoboximage_admin' => array( 'infoboximage', 'image.ini', 'ezdemo_site_admin',
-                    array( 'Reference' => '', 'Filters' => array( 'geometry/scalewidth=75', 'flatten' ) ) ),
-
+                'SiteAccessSettings' => array(
+                    'SiteAccessSettings', null, null,
+                    array( 'MatchOrder' => 'uri', 'URIMatchType' => 'element', 'URIMatchElement' => 1 )
+                ),
+                'DatabaseSettings' => array(
+                    'DatabaseSettings', 'site.ini', 'eng',
+                    array( 'DatabaseImplementation' => 'ezmysqli', 'Server' => 'localhost', 'User' => 'root', 'Password' => '', 'Database' => 'ezdemo' )
+                ),
+                'AliasSettings' => array(
+                    'AliasSettings', 'image.ini', 'eng',
+                    array( 'AliasList' => array( 'large', 'infoboximage' ) )
+                ),
+                'AliasSettings_demo' => array(
+                    'AliasSettings', 'image.ini', 'ezdemo_site',
+                    array( 'AliasList' => array( 'large', 'infoboximage' ) )
+                ),
+                'AliasSettings_admin' => array(
+                    'AliasSettings', 'image.ini', 'ezdemo_site_admin',
+                    array( 'AliasList' => array( 'large', 'infoboximage' ) )
+                ),
+                'large' => array(
+                    'large', 'image.ini', 'eng',
+                    array( 'Reference' => '', 'Filters' => array( 'geometry/scaledownonly=360;440' ) )
+                ),
+                'infoboximage' => array(
+                    'infoboximage', 'image.ini', 'eng',
+                    array( 'Reference' => '', 'Filters' => array( 'geometry/scalewidth=75', 'flatten' ) )
+                ),
+                'large_demo' => array(
+                    'large', 'image.ini', 'ezdemo_site',
+                    array( 'Reference' => '', 'Filters' => array( 'geometry/scaledownonly=360;440' ) )
+                ),
+                'infoboximage_demo' => array(
+                    'infoboximage', 'image.ini', 'ezdemo_site',
+                    array( 'Reference' => '', 'Filters' => array( 'geometry/scalewidth=75', 'flatten' ) )
+                ),
+                'large_admin' => array(
+                    'large', 'image.ini', 'ezdemo_site_admin',
+                    array( 'Reference' => '', 'Filters' => array( 'geometry/scaledownonly=360;440' ) )
+                ),
+                'infoboximage_admin' => array(
+                    'infoboximage', 'image.ini', 'ezdemo_site_admin',
+                    array( 'Reference' => '', 'Filters' => array( 'geometry/scalewidth=75', 'flatten' ) )
+                ),
             )
         );
 
@@ -248,11 +271,13 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
 
         // host match, with map
         $element = $baseData;
-        $element[IDX_MOCK_PARAMETERS]['getGroup']['SiteAccessSettings'] = array( 'SiteAccessSettings', null, null, array(
-            'MatchOrder' => 'host',
-            'HostMatchType' => 'map',
-            'HostMatchMapItems' => array( 'site.com;eng', 'admin.site.com;ezdemo_site_admin' )
-        ) );
+        $element[IDX_MOCK_PARAMETERS]['getGroup']['SiteAccessSettings'] = array(
+            'SiteAccessSettings', null, null, array(
+                'MatchOrder' => 'host',
+                'HostMatchType' => 'map',
+                'HostMatchMapItems' => array( 'site.com;eng', 'admin.site.com;ezdemo_site_admin' )
+            )
+        );
         $element[IDX_EXPECTED_RESULT]['ezpublish']['siteaccess']['match'] = array(
             "Map\\Host" => array( 'site.com' => 'eng', 'admin.site.com' => 'ezdemo_site_admin' )
         );
@@ -260,11 +285,13 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
 
         // host match, with map
         $element = $baseData;
-        $element[IDX_MOCK_PARAMETERS]['getGroup']['SiteAccessSettings'] = array( 'SiteAccessSettings', null, null, array(
-            'MatchOrder' => 'host',
-            'HostMatchType' => 'map',
-            'HostMatchMapItems' => array( 'site.com;eng', 'admin.site.com;ezdemo_site_admin' )
-        ) );
+        $element[IDX_MOCK_PARAMETERS]['getGroup']['SiteAccessSettings'] = array(
+            'SiteAccessSettings', null, null, array(
+                'MatchOrder' => 'host',
+                'HostMatchType' => 'map',
+                'HostMatchMapItems' => array( 'site.com;eng', 'admin.site.com;ezdemo_site_admin' )
+            )
+        );
         $element[IDX_EXPECTED_RESULT]['ezpublish']['siteaccess']['match'] = array(
             "Map\\Host" => array( 'site.com' => 'eng', 'admin.site.com' => 'ezdemo_site_admin' )
         );
@@ -378,38 +405,38 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
 
     protected function getExpectedResultForTestFromLegacy()
     {
-        return array (
+        return array(
             'ezpublish' =>
-            array (
+            array(
                 'siteaccess' =>
-                array (
+                array(
                     'default_siteaccess' => 'eng',
                     'list' =>
-                    array (
+                    array(
                         0 => 'eng',
                         1 => 'ezdemo_site',
                         2 => 'ezdemo_site_admin',
                     ),
                     'groups' =>
-                    array (
+                    array(
                         'ezdemo_site_group' =>
-                        array (
+                        array(
                             0 => 'eng',
                             1 => 'ezdemo_site',
                             2 => 'ezdemo_site_admin',
                         ),
                     ),
                     'match' =>
-                    array (
+                    array(
                         'URIElement' => 1,
                     ),
-               ),
+                ),
                 'system' =>
-                array (
+                array(
                     'ezdemo_site_group' =>
-                    array (
+                    array(
                         'database' =>
-                        array (
+                        array(
                             'type' => 'mysql',
                             'user' => 'root',
                             'password' => null,

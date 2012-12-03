@@ -75,7 +75,7 @@ class ContentUpdate extends Base
             {
                 $parsedData['alwaysAvailable'] = true;
             }
-            elseif ( $data['alwaysAvailable'] === 'false' )
+            else if ( $data['alwaysAvailable'] === 'false' )
             {
                 $parsedData['alwaysAvailable'] = false;
             }

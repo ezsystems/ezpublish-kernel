@@ -399,7 +399,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
         {
             $alias = $this->backend->create( 'Content\\UrlAlias', $data );
         }
-        elseif ( $reusableAlias->type == URLAlias::VIRTUAL || $reusableAlias->isHistory )
+        else if ( $reusableAlias->type == URLAlias::VIRTUAL || $reusableAlias->isHistory )
         {
             $this->downgrade( $reusableAlias, $languageCode );
             $alias = $this->backend->create( 'Content\\UrlAlias', $data );

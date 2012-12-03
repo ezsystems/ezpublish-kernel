@@ -263,7 +263,7 @@ class Type extends FieldType
                                     )
                                 );
                             }
-                            elseif ( !( $value instanceof \DateInterval ) )
+                            else if ( !( $value instanceof \DateInterval ) )
                             {
                                 $validationErrors[] = new ValidationError(
                                     "Setting '%setting%' value must be an instance of 'DateInterval' class",

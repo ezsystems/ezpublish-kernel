@@ -77,7 +77,7 @@ class RestExecutedView extends ValueObjectVisitor
         $generator->startHashElement( 'searchHits' );
         $generator->startList( 'searchHit' );
 
-        foreach( $data->searchResults->searchHits as $searchHit )
+        foreach ( $data->searchResults->searchHits as $searchHit )
         {
             $generator->startObjectElement( 'searchHit' );
 

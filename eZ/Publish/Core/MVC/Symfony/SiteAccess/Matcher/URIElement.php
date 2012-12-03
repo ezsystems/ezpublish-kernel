@@ -112,7 +112,7 @@ class URIElement implements Matcher, URILexer
         {
             $uri = '';
         }
-        elseif ( strpos( $uri, $uriElements ) === 0 )
+        else if ( strpos( $uri, $uriElements ) === 0 )
         {
             sscanf( $uri, "$uriElements%s", $uri );
         }

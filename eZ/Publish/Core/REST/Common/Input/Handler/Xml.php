@@ -140,7 +140,7 @@ class Xml extends Handler
                     {
                         $current[$tagName] = $this->parseFieldTypeHash( $childNode );
                     }
-                    elseif ( !isset( $current[$tagName]  ) )
+                    else if ( !isset( $current[$tagName]  ) )
                     {
                         if ( isset( $this->forceList[$parentTagName] ) &&
                              in_array( $tagName, $this->forceList[$parentTagName], true ) )
@@ -155,7 +155,7 @@ class Xml extends Handler
                             $current[$tagName] = $this->convertDom( $childNode );
                         }
                     }
-                    elseif ( !$isArray )
+                    else if ( !$isArray )
                     {
                         $current[$tagName] = array(
                             $current[$tagName],
@@ -186,11 +186,11 @@ class Xml extends Handler
         {
             $current["#text"] = $text;
         }
-        elseif ( $text !== '' )
+        else if ( $text !== '' )
         {
             $current = $text;
         }
-        elseif ( !count( $current ) )
+        else if ( !count( $current ) )
         {
             return null;
         }

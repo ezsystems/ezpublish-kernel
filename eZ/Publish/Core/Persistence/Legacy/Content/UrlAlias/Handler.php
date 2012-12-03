@@ -488,7 +488,7 @@ class Handler implements UrlAliasHandlerInterface
         // Row exists, check if it is reusable. There are 2 cases when this is possible:
         // 1. NOP entry
         // 2. history entry
-        elseif ( $row["action"] == "nop:" || $row["is_original"] == 0 )
+        else if ( $row["action"] == "nop:" || $row["is_original"] == 0 )
         {
             $data["lang_mask"] = $languageId | (int)$alwaysAvailable;
             // If history is reused move link to id

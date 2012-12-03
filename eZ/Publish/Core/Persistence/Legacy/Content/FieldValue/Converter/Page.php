@@ -302,7 +302,7 @@ class Page implements Converter
                 {
                    $page->addZone( $this->restoreZoneFromXml( $node ) );
                 }
-                elseif ( $node->nodeType == XML_ELEMENT_NODE )
+                else if ( $node->nodeType == XML_ELEMENT_NODE )
                 {
                     $page->{$node->nodeName} = $node->nodeValue;
                 }
@@ -353,7 +353,7 @@ class Page implements Converter
             {
                 $zone->addBlock( $this->restoreBlockFromXml( $node ) );
             }
-            elseif ( $node->nodeType == XML_ELEMENT_NODE )
+            else if ( $node->nodeType == XML_ELEMENT_NODE )
             {
                 $zone->{$node->nodeName} = $node->nodeValue;
             }
@@ -395,7 +395,7 @@ class Page implements Converter
             {
                 $block->addItem( $this->restoreItemFromXml( $node ) );
             }
-            elseif ( $node->nodeType == XML_ELEMENT_NODE && $node->nodeName == 'rotation' )
+            else if ( $node->nodeType == XML_ELEMENT_NODE && $node->nodeName == 'rotation' )
             {
                 $attrValue = array();
 
@@ -407,7 +407,7 @@ class Page implements Converter
 
                 $block->{$node->nodeName} = $attrValue;
             }
-            elseif ( $node->nodeType == XML_ELEMENT_NODE && $node->nodeName == 'custom_attributes' )
+            else if ( $node->nodeType == XML_ELEMENT_NODE && $node->nodeName == 'custom_attributes' )
             {
                 $attrValue = array();
 

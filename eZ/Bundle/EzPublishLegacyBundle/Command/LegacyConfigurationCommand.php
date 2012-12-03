@@ -30,13 +30,14 @@ class LegacyConfigurationCommand extends ContainerAwareCommand
                 )
             )
             ->setDescription( 'Creates the ezpublish 5 configuration based on an existing ezpublish_legacy' )
-            ->setHelp( <<<EOT
+            ->setHelp(
+                <<<EOT
 The command <info>%command.name%</info> creates the ezpublish 5 configuration,
 based on an existing ezpublish_legacy installation.
 
 Settings will be picked based on the default siteaccess.
 EOT
-        );
+            );
     }
 
     protected function execute( InputInterface $input, OutputInterface $output )

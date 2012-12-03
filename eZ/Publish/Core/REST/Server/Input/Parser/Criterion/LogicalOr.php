@@ -37,7 +37,7 @@ class LogicalOr extends CriterionParser
         }
 
         $criteria = array();
-        foreach( $data["OR"] as $criterionName => $criterionData )
+        foreach ( $data["OR"] as $criterionName => $criterionData )
         {
             $criteria[] = $this->dispatchCriterion( $criterionName, $criterionData, $parsingDispatcher );
         }

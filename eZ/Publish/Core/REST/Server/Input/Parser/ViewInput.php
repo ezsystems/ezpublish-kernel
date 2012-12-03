@@ -66,7 +66,7 @@ class ViewInput extends CriterionParser
         if ( array_key_exists( 'Criteria', $queryData ) && is_array( $queryData['Criteria'] ) )
         {
             $criteria = array();
-            foreach( $queryData['Criteria'] as $criterionName => $criterionData )
+            foreach ( $queryData['Criteria'] as $criterionName => $criterionData )
             {
                 $criteria[] = $this->dispatchCriterion( $criterionName, $criterionData, $parsingDispatcher );
             }

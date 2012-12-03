@@ -1226,7 +1226,7 @@ class UrlAliasHandlerTest extends TestCase
                     $urlAlias2->languageCodes
                 );
             }
-            elseif ( $propertyName === "pathData" )
+            else if ( $propertyName === "pathData" )
             {
                 self::assertEquals(
                     array(

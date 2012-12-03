@@ -37,7 +37,7 @@ class LogicalAnd extends CriterionParser
         }
 
         $criteria = array();
-        foreach( $data["AND"] as $criterionName => $criterionData )
+        foreach ( $data["AND"] as $criterionName => $criterionData )
         {
             $criteria[] = $this->dispatchCriterion( $criterionName, $criterionData, $parsingDispatcher );
         }

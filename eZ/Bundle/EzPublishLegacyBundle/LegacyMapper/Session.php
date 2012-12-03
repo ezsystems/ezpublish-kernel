@@ -29,7 +29,6 @@ class Session implements EventSubscriberInterface
         $this->container = $container;
     }
 
-
     public static function getSubscribedEvents()
     {
         return array(

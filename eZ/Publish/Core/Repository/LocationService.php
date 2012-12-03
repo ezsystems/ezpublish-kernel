@@ -117,7 +117,7 @@ class LocationService implements LocationServiceInterface
         {
             throw new UnauthorizedException( 'content', 'read' );
         }
-        elseif ( $contentReadCriterion !== true )
+        else if ( $contentReadCriterion !== true )
         {
             // Query if there are any content in subtree current user don't have access to
             $query = new Query(
@@ -472,7 +472,7 @@ class LocationService implements LocationServiceInterface
             $createStruct->hidden = true;
             $createStruct->invisible = true;
         }
-        elseif ( $loadedParentLocation->hidden || $loadedParentLocation->invisible )
+        else if ( $loadedParentLocation->hidden || $loadedParentLocation->invisible )
         {
             $createStruct->invisible = true;
         }
@@ -720,7 +720,7 @@ class LocationService implements LocationServiceInterface
         {
             throw new UnauthorizedException( 'content', 'read' );
         }
-        elseif ( $contentReadCriterion !== true )
+        else if ( $contentReadCriterion !== true )
         {
             // Query if there are any content in subtree current user don't have access to
             $query = new Query(
@@ -797,7 +797,7 @@ class LocationService implements LocationServiceInterface
         {
             throw new UnauthorizedException( 'content', 'remove' );
         }
-        elseif ( $contentReadCriterion !== true )
+        else if ( $contentReadCriterion !== true )
         {
             // Query if there are any content in subtree current user don't have access to
             $query = new Query(
