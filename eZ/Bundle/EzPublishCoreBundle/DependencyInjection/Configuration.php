@@ -158,9 +158,18 @@ EOT;
                     ->children()
                         ->booleanNode( 'enabled' )->defaultTrue()->end()
                         ->scalarNode( 'path' )
-                            ->info( 'Absolute path of ImageMagick / GraphicsMagick "convert" binary.' )
-                            ->validate()
-                                ->ifTrue( function ( $v ) { return !is_executable( preg_replace( '/\sconvert/i', '', $v ) ); } )
+                            ->info( 'Absolute path of ImageMagick / GraphicsMagick "convert" binary.')
+                            ->beforeNormalization()
+                                ->ifTrue(function ( $v )
+                                {
+                                    $basename = basename( $v );
+                                    // If there is a space in the basename, just drop it and everything after it.
+                                    if ( ( $wsPos = strpos( $basename, ' ' ) ) !== false )
+                                    {
+                                        $basename = substr( $basename, 0, $wsPos );
+                                    }
+                                    return  !is_executable( dirname( $v ) . DIRECTORY_SEPARATOR . $basename );
+                                })
                                 ->thenInvalid( 'Please provide full path to ImageMagick / GraphicsMagick  "convert" binary. Please also check that it is executable.' )
                             ->end()
                         ->end()
