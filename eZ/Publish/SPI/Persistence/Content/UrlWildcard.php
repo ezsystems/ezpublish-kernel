@@ -18,7 +18,6 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class UrlWildcard extends ValueObject
 {
     /**
-     *
      * The unique id
      *
      * @var mixed
@@ -40,7 +39,7 @@ class UrlWildcard extends ValueObject
     public $destinationUrl;
 
     /**
-     * indicates if the url is redirected or not
+     * Indicates if the url is redirected or not
      *
      * @var boolean
      */

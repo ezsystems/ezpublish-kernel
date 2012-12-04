@@ -83,8 +83,6 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     *
-     *
      * @param mixed $parentId
      *
      * @return array

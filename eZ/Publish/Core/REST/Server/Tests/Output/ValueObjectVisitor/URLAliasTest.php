@@ -59,6 +59,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      * Test if result contains UrlAlias element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsUrlAliasElement( $result )
@@ -81,6 +82,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      * Test if result contains UrlAlias element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsUrlAliasAttributes( $result )
@@ -105,6 +107,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      * Test if result contains url value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsUrlValueElement( $result )
@@ -125,6 +128,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      * Test if result contains path value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPathValueElement( $result )
@@ -145,6 +149,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      * Test if result contains languageCodes value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLanguageCodesValueElement( $result )
@@ -165,6 +170,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      * Test if result contains alwaysAvailable value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsAlwaysAvailableValueElement( $result )
@@ -185,6 +191,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      * Test if result contains isHistory value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsIsHistoryValueElement( $result )
@@ -205,6 +212,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      * Test if result contains forward value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsForwardValueElement( $result )
@@ -225,6 +233,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      * Test if result contains custom value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsCustomValueElement( $result )

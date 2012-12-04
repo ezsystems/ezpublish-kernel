@@ -23,6 +23,7 @@ abstract class RestContentTypeBase extends ValueObjectVisitor
      * $contentTypeStatus.
      *
      * @param int $contentTypeStatus
+     *
      * @return string
      */
     protected function getUrlTypeSuffix( $contentTypeStatus )
@@ -46,6 +47,7 @@ abstract class RestContentTypeBase extends ValueObjectVisitor
      * Serializes the given $contentTypeStatus to a string representation
      *
      * @param int $contentTypeStatus
+     *
      * @return string
      */
     protected function serializeStatus( $contentTypeStatus )

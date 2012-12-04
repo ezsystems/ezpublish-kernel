@@ -18,7 +18,7 @@ class Value extends BaseValue
     /**
      * Has stored login
      *
-     * @var bool
+     * @var boolean
      */
     public $hasStoredLogin;
 
@@ -60,7 +60,7 @@ class Value extends BaseValue
     /**
      * Is enabled
      *
-     * @var bool
+     * @var boolean
      */
     public $enabled;
 

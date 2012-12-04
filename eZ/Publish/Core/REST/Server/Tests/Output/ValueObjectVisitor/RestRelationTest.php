@@ -68,6 +68,7 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
      * Test if result contains Relation element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRelationElement( $result )
@@ -90,6 +91,7 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
      * Test if result contains Relation element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRelationAttributes( $result )
@@ -110,6 +112,7 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSourceContentElement( $result )
@@ -130,6 +133,7 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsDestinationContentElement( $result )
@@ -150,6 +154,7 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSourceFieldDefinitionIdentifierElement( $result )
@@ -167,6 +172,7 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRelationTypeElement( $result )

@@ -19,6 +19,7 @@ abstract class Gateway extends StorageGateway
      *
      * @param VersionInfo $versionInfo
      * @param Field $field
+     *
      * @return void
      */
     abstract public function storeFileReference( VersionInfo $versionInfo, Field $field );
@@ -28,6 +29,7 @@ abstract class Gateway extends StorageGateway
      *
      * @param mixed $fieldId
      * @param int $versionNo
+     *
      * @return array|void
      */
     abstract public function getFileReferenceData( $fieldId, $versionNo );
@@ -37,6 +39,7 @@ abstract class Gateway extends StorageGateway
      *
      * @param array $fieldIds
      * @param int $versionNo
+     *
      * @return void
      */
     abstract public function removeFileReferences( array $fieldIds, $versionNo );
@@ -46,6 +49,7 @@ abstract class Gateway extends StorageGateway
      *
      * @param mixed $fieldId
      * @param int $versionNo
+     *
      * @return void
      */
     abstract public function removeFileReference( $fieldId, $versionNo );
@@ -55,6 +59,7 @@ abstract class Gateway extends StorageGateway
      *
      * @param array $fieldIds
      * @param int $versionNo
+     *
      * @return array
      */
     abstract public function getReferencedFiles( array $fieldIds, $versionNo );
@@ -63,6 +68,7 @@ abstract class Gateway extends StorageGateway
      * Returns a map with the number of refereces each file from $files has
      *
      * @param array $files
+     *
      * @return array
      */
     abstract public function countFileReferences( array $files );

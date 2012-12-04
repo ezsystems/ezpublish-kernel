@@ -106,6 +106,7 @@ class ServiceContainer implements Container
      * Alias with type hints for $repo->get( 'repository' );
      *
      * @uses get()
+     *
      * @return \eZ\Publish\API\Repository\Repository
      */
     public function getRepository()
@@ -119,8 +120,10 @@ class ServiceContainer implements Container
      * Get a variable dependency
      *
      * @param string $variable
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     *
      * @return mixed
-     * @throws InvalidArgumentException
      */
     public function getVariable( $variable )
     {
@@ -140,9 +143,10 @@ class ServiceContainer implements Container
      * Get service by name
      *
      * @uses lookupArguments()
-     * @throws BadConfiguration
-     * @throws MissingClass
+     * @throws \eZ\Publish\Core\Base\Exceptions\BadConfiguration
+     * @throws \eZ\Publish\Core\Base\Exceptions\MissingClass
      * @param string $serviceName
+     *
      * @return object
      */
     public function get( $serviceName )
@@ -228,7 +232,8 @@ class ServiceContainer implements Container
      * @uses recursivlyLookupArguments()
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If undefined variable is used.
      * @param array $arguments
-     * @param bool $recursivly
+     * @param boolean $recursivly
+     *
      * @return array
      */
     protected function lookupArguments( array $arguments, $recursivly = false )
@@ -266,6 +271,7 @@ class ServiceContainer implements Container
      * @uses recursivlyLookupArguments()
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If undefined variable is used.
      * @param array $arguments
+     *
      * @return array
      */
     protected function recursivlyLookupArguments( array $arguments )
@@ -294,9 +300,11 @@ class ServiceContainer implements Container
     /**
      * @uses getListOfExtendedServices()
      * @uses recursivlyLookupArguments()
-     * @param $argument
-     * @return array|closure|mixed|object|null Null on non existing optional dependencies
+     * @param string $argument
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+     *
+     * @return array|closure|mixed|object|null Null on non existing optional dependencies
      */
     protected function getServiceArgument( $argument )
     {
@@ -355,6 +363,7 @@ class ServiceContainer implements Container
     /**
      * @param string $parent Eg: %:controller
      * @param string $function Optional function string
+     *
      * @return array
      */
     protected function getListOfExtendedServices( $parent, $function = '' )

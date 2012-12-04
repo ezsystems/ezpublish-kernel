@@ -29,7 +29,6 @@ class ContentHandlerTest extends HandlerTest
     protected $content;
 
     /**
-     *
      * @var int
      */
     protected $contentId;

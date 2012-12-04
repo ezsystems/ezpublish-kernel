@@ -27,7 +27,7 @@ class EzcDatabase extends Gateway
     /**
      * Database handler
      *
-     * @var \ezcDbHandler $dbHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected $dbHandler;
 

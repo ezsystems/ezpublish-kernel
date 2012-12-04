@@ -47,6 +47,7 @@ class ContentObjectStatesTest extends ValueObjectVisitorBaseTest
      * Test if result contains ContentObjectStates element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsContentObjectStatesElement( $result )
@@ -65,6 +66,7 @@ class ContentObjectStatesTest extends ValueObjectVisitorBaseTest
      * Test if result contains ContentObjectStates element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsContentObjectStatesAttributes( $result )

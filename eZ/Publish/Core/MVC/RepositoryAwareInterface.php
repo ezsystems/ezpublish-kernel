@@ -15,6 +15,7 @@ interface RepositoryAwareInterface
 {
     /**
      * @param \eZ\Publish\API\Repository\Repository $repository
+     *
      * @return void
      */
     public function setRepository( Repository $repository );

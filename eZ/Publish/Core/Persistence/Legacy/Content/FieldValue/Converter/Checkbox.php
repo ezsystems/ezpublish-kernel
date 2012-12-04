@@ -21,7 +21,6 @@ class Checkbox implements Converter
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @static
      * @return Checkbox
      */
     public static function create()

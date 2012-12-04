@@ -63,8 +63,10 @@ class IOService implements \eZ\Publish\API\Repository\IOService, Sessionable
      * Only for testing
      *
      * @param mixed tringid
-     * @return void
+     *
      * @private
+     *
+     * @return void
      */
     public function setSession( $id )
     {
@@ -85,7 +87,7 @@ class IOService implements \eZ\Publish\API\Repository\IOService, Sessionable
      */
     public function newBinaryCreateStructFromUploadedFile( array $uploadedFile )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -99,7 +101,7 @@ class IOService implements \eZ\Publish\API\Repository\IOService, Sessionable
      */
     public function newBinaryCreateStructFromLocalFile( $localFile )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -111,7 +113,7 @@ class IOService implements \eZ\Publish\API\Repository\IOService, Sessionable
      */
     public function createBinaryFile( BinaryFileCreateStruct $binaryFileCreateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -121,7 +123,7 @@ class IOService implements \eZ\Publish\API\Repository\IOService, Sessionable
      */
     public function deleteBinaryFile( BinaryFile $binaryFile )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -135,7 +137,7 @@ class IOService implements \eZ\Publish\API\Repository\IOService, Sessionable
      */
     public function loadBinaryFile( $binaryFileId )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -147,7 +149,7 @@ class IOService implements \eZ\Publish\API\Repository\IOService, Sessionable
      */
     public function getFileInputStream( BinaryFile $binaryFile )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -159,6 +161,6 @@ class IOService implements \eZ\Publish\API\Repository\IOService, Sessionable
      */
     public function getFileContents( BinaryFile $binaryFile )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 }

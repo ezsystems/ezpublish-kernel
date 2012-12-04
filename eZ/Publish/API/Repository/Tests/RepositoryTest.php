@@ -256,8 +256,9 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the commit() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\Repository::commit()
+     *
+     * @return void
      */
     public function testCommit()
     {
@@ -292,8 +293,9 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the rollback() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\Repository::rollback()
+     *
+     * @return void
      */
     public function testRollback()
     {

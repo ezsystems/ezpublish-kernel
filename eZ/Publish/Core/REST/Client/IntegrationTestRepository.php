@@ -73,8 +73,10 @@ class IntegrationTestRepository extends Repository implements Sessionable
      * Only for testing
      *
      * @param mixed tringid
-     * @return void
+     *
      * @private
+     *
+     * @return void
      */
     public function setSession( $id )
     {
@@ -98,6 +100,7 @@ class IntegrationTestRepository extends Repository implements Sessionable
      * Sets the current user to the user with the given user id
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
      * @return void
      */
     public function setCurrentUser( User $user )

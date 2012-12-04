@@ -24,7 +24,7 @@ class TrashItem extends \eZ\Publish\API\Repository\Values\Content\TrashItem
     protected $location;
 
     /**
-     * returns the content info of the content object of this location
+     * Returns the content info of the content object of this location
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */

@@ -51,8 +51,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::__construct
+     *
+     * @return void
      */
     public function testCtor()
     {
@@ -67,8 +68,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateData
+     *
+     * @return void
      */
     public function testLoadObjectStateData()
     {
@@ -95,8 +97,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateDataByIdentifier
+     *
+     * @return void
      */
     public function testLoadObjectStateDataByIdentifier()
     {
@@ -123,8 +126,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateListData
+     *
+     * @return void
      */
     public function testLoadObjectStateListData()
     {
@@ -166,8 +170,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateGroupData
+     *
+     * @return void
      */
     public function testLoadObjectStateGroupData()
     {
@@ -193,8 +198,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateGroupDataByIdentifier
+     *
+     * @return void
      */
     public function testLoadObjectStateGroupDataByIdentifier()
     {
@@ -220,8 +226,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateGroupListData
+     *
+     * @return void
      */
     public function testLoadObjectStateGroupListData()
     {
@@ -249,8 +256,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::insertObjectState
+     *
+     * @return void
      */
     public function testInsertObjectState()
     {
@@ -280,8 +288,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::insertObjectState
+     *
+     * @return void
      */
     public function testInsertObjectStateInEmptyGroup()
     {
@@ -319,8 +328,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::updateObjectState
+     *
+     * @return void
      */
     public function testUpdateObjectState()
     {
@@ -350,8 +360,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::deleteObjectState
+     *
+     * @return void
      */
     public function testDeleteObjectState()
     {
@@ -366,8 +377,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::updateObjectStateLinks
+     *
+     * @return void
      */
     public function testUpdateObjectStateLinks()
     {
@@ -406,8 +418,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::deleteObjectStateLinks
+     *
+     * @return void
      */
     public function testDeleteObjectStateLinks()
     {
@@ -431,8 +444,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::insertObjectStateGroup
+     *
+     * @return void
      */
     public function testInsertObjectStateGroup()
     {
@@ -460,8 +474,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::updateObjectStateGroup
+     *
+     * @return void
      */
     public function testUpdateObjectStateGroup()
     {
@@ -490,8 +505,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::deleteObjectStateGroup
+     *
+     * @return void
      */
     public function testDeleteObjectStateGroup()
     {
@@ -506,8 +522,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::setContentState
+     *
+     * @return void
      */
     public function testSetContentState()
     {
@@ -530,8 +547,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateDataForContent
+     *
+     * @return void
      */
     public function testLoadObjectStateDataForContent()
     {
@@ -558,8 +576,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::getContentCount
+     *
+     * @return void
      */
     public function testGetContentCount()
     {
@@ -572,8 +591,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::updateObjectStatePriority
+     *
+     * @return void
      */
     public function testUpdateObjectStatePriority()
     {

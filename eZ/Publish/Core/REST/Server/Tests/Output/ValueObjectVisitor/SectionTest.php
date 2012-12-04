@@ -51,6 +51,7 @@ class SectionTest extends ValueObjectVisitorBaseTest
      * Test if result contains Section element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSectionElement( $result )
@@ -73,6 +74,7 @@ class SectionTest extends ValueObjectVisitorBaseTest
      * Test if result contains Section element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSectionAttributes( $result )
@@ -95,6 +97,7 @@ class SectionTest extends ValueObjectVisitorBaseTest
      * Test if result contains sectionId value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSectionIdValueElement( $result )
@@ -115,6 +118,7 @@ class SectionTest extends ValueObjectVisitorBaseTest
      * Test if result contains identifier value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsIdentifierValueElement( $result )
@@ -135,6 +139,7 @@ class SectionTest extends ValueObjectVisitorBaseTest
      * Test if result contains name value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsNameValueElement( $result )

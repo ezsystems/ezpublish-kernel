@@ -75,9 +75,10 @@ class FieldDefinition extends APIFieldDefinition
     }
 
     /**
+     * This method returns the name of the field in the given language
      *
-     * this method returns the name of the field in the given language
      * @param string $languageCode
+     *
      * @return string the name for the given language or null if none exists.
      */
     public function getName( $languageCode )
@@ -91,7 +92,7 @@ class FieldDefinition extends APIFieldDefinition
     }
 
     /**
-     *  This method returns the human readable description of the field
+     * This method returns the human readable description of the field
      *
      * The structure of this field is:
      * <code>
@@ -106,8 +107,10 @@ class FieldDefinition extends APIFieldDefinition
     }
 
     /**
-     * this method returns the name of the field in the given language
+     * This method returns the name of the field in the given language
+     *
      * @param string $languageCode
+     *
      * @return string the description for the given language or null if none exists.
      */
     public function getDescription( $languageCode )
@@ -121,7 +124,7 @@ class FieldDefinition extends APIFieldDefinition
     }
 
     /**
-     * this method returns the validator configuration of this field definition supported by the field type
+     * This method returns the validator configuration of this field definition supported by the field type
      *
      * @return mixed
      */
@@ -131,7 +134,7 @@ class FieldDefinition extends APIFieldDefinition
     }
 
     /**
-     * this method returns settings for the field definition supported by the field type
+     * This method returns settings for the field definition supported by the field type
      *
      * @return array
      */

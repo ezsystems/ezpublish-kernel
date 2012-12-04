@@ -22,7 +22,6 @@ class Relation implements Converter
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @static
      * @return Url
      */
     public static function create()

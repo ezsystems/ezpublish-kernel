@@ -17,6 +17,7 @@ abstract class Gateway extends StorageGateway
      * Returns the node path string of $versionInfo
      *
      * @param VersionInfo $versionInfo
+     *
      * @return string
      */
     abstract public function getNodePathString( VersionInfo $versionInfo );
@@ -26,6 +27,7 @@ abstract class Gateway extends StorageGateway
      *
      * @param string $path
      * @param mixed $fieldId
+     *
      * @return void
      */
     abstract public function storeImageReference( $path, $fieldId );
@@ -33,8 +35,9 @@ abstract class Gateway extends StorageGateway
     /**
      * Returns a the XML content stored for the given $fieldIds
      *
-     * @parent int $versionNo
+     * @param int $versionNo
      * @param array $fieldIds
+     *
      * @return array
      */
     abstract public function getXmlForImages( $versionNo, array $fieldIds );
@@ -43,8 +46,9 @@ abstract class Gateway extends StorageGateway
      * Removes all references from $fieldId to a path that starts with $path
      *
      * @param string $path
-     * @parent int $versionNo
+     * @param int $versionNo
      * @param mixed $fieldId
+     *
      * @return void
      */
     abstract public function removeImageReferences( $path, $versionNo, $fieldId );
@@ -53,6 +57,7 @@ abstract class Gateway extends StorageGateway
      * Returns the number of recorded references to the given $path
      *
      * @param string $path
+     *
      * @return int
      */
     abstract public function countImageReferences( $path );

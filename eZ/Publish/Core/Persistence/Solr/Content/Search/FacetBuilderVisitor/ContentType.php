@@ -22,7 +22,8 @@ class ContentType extends FacetBuilderVisitor
      * CHeck if visitor is applicable to current facet result
      *
      * @param string $field
-     * @return bool
+     *
+     * @return boolean
      */
     public function canMap( $field )
     {
@@ -34,6 +35,7 @@ class ContentType extends FacetBuilderVisitor
      *
      * @param string $field
      * @param array $data
+     *
      * @return Facet
      */
     public function map( $field, array $data )
@@ -48,7 +50,8 @@ class ContentType extends FacetBuilderVisitor
      * Check if visitor is applicable to current facet builder
      *
      * @param FacetBuilder $facetBuilder
-     * @return bool
+     *
+     * @return boolean
      */
     public function canVisit( FacetBuilder $facetBuilder )
     {
@@ -59,6 +62,7 @@ class ContentType extends FacetBuilderVisitor
      * Map field value to a proper Solr representation
      *
      * @param FacetBuilder $facetBuilder;
+     *
      * @return void
      */
     public function visit( FacetBuilder $facetBuilder )

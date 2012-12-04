@@ -20,8 +20,9 @@ class FieldTypeServiceTest extends BaseTest
     /**
      * Test for the getFieldTypes() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\FieldTypeService::getFieldTypes()
+     *
+     * @return void
      */
     public function testGetFieldTypes()
     {
@@ -51,8 +52,9 @@ class FieldTypeServiceTest extends BaseTest
      *
      * Expects FieldType "ezurl" to be available!
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\FieldTypeService::getFieldType()
+     *
+     * @return void
      */
     public function testGetFieldType()
     {

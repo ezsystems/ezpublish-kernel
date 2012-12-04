@@ -46,6 +46,7 @@ class FieldDefinitionList extends Parser
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
      * @return \eZ\Publish\Core\REST\Client\Values\FieldDefinitionList
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )

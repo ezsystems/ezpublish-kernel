@@ -5975,7 +5975,7 @@ Content XML Schema
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
-      <xsd:complexType name="vnd.ez.api.ContentInfo">
+      <xsd:complexType name="contentBaseType">
         <xsd:complexContent>
           <xsd:extension base="ref">
             <xsd:all>
@@ -5997,9 +5997,18 @@ Content XML Schema
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.ContentInfo">
+        <xsd:complexContent>
+          <xsd:extension base="contentBaseType">
+            <xsd:all>
+              <xsd:element name="CurrentVersion" type="ref" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
       <xsd:complexType name="vnd.ez.api.Content">
         <xsd:complexContent>
-          <xsd:extension base="vnd.ez.api.ContentInfo">
+          <xsd:extension base="contentBaseType">
             <xsd:all>
               <xsd:element name="CurrentVersion" type="embeddedVersionType" />
             </xsd:all>
@@ -6007,6 +6016,7 @@ Content XML Schema
         </xsd:complexContent>
       </xsd:complexType>
       <xsd:element name="ContentInfo" type="vnd.ez.api.ContentInfo" />
+      <xsd:element name="Content" type="vnd.ez.api.Content" />
     </xsd:schema>
 
 

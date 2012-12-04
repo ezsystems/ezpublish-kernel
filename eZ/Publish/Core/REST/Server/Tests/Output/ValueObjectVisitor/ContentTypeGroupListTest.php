@@ -48,6 +48,7 @@ class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
      * Test if result contains ContentTypeGroupList element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsContentTypeGroupListElement( $result )
@@ -66,6 +67,7 @@ class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
      * Test if result contains ContentTypeGroupList element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsContentTypeGroupListAttributes( $result )

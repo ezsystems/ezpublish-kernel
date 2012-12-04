@@ -103,7 +103,8 @@ class ConfigurationDumper implements ConfigDumperInterface
     /**
      * Makes a backup copy of $configFile.
      *
-     * @param $configFile
+     * @param string $configFile
+     *
      * @return void
      */
     protected function backupConfigFile( $configFile )

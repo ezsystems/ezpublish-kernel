@@ -20,6 +20,7 @@ class Mapper
      * Creates a Language from $struct
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Language\CreateStruct $struct
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     public function createLanguageFromCreateStruct( CreateStruct $struct )
@@ -37,6 +38,7 @@ class Mapper
      * Extracts Language objects from $rows
      *
      * @param array $rows
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Language[]
      */
     public function extractLanguagesFromRows( array $rows )

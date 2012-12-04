@@ -312,18 +312,12 @@ class EzcDatabase extends Gateway
      *
      * Sets "is_original" to 0 thus marking entry as history.
      *
-     *
-     *
-     *
-     *
      * Re-links history entries.
      *
      * When location alias is published we need to check for new history entries created with self::downgrade()
      * with the same action and language, update their "link" column with id of the published entry.
      * History entry "id" column is moved to next id value so that all active (non-history) entries are kept
      * under the same id.
-     *
-     *
      *
      * @param mixed $parentId
      * @param string $textMD5
@@ -561,6 +555,7 @@ class EzcDatabase extends Gateway
      * @param array $values
      *
      * @throws \Exception
+     *
      * @return void
      */
     protected function setQueryValues( ezcQuery $query, $values )

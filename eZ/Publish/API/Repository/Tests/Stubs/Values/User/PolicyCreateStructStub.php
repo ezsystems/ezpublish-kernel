@@ -43,18 +43,19 @@ class PolicyCreateStructStub extends PolicyCreateStruct
      */
     public function getLimitations()
     {
-        // TODO: Implement getLimitations() method.
+        // @todo: Implement getLimitations() method.
     }
 
     /**
      * Adds a limitation with the given identifier and list of values
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
+     *
      * @return void
      */
     public function addLimitation( Limitation $limitation )
     {
-        // TODO: Implement addLimitation() method.
+        // @todo: Implement addLimitation() method.
     }
 
 }

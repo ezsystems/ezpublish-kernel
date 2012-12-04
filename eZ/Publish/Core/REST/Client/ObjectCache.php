@@ -27,6 +27,7 @@ class ObjectCache
      *
      * @param string $key
      * @param ValueObject $data
+     *
      * @return void
      */
     public function store( $key, ValueObject $data )
@@ -38,6 +39,7 @@ class ObjectCache
      * Restores data stored under $key, returns null if $key is not found
      *
      * @param string $key
+     *
      * @return ValueObject|null
      */
     public function restore( $key )
@@ -53,6 +55,7 @@ class ObjectCache
      * Clears the data stored in $key
      *
      * @param string $key
+     *
      * @return void
      */
     public function clear( $key )

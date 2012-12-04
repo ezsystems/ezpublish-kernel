@@ -36,6 +36,7 @@ class FileInfoDetector implements MimeTypeDetector
      * Returns the MIME type of the file identified by $path
      *
      * @param string $path
+     *
      * @return string
      */
     public function getMimeType( $path )

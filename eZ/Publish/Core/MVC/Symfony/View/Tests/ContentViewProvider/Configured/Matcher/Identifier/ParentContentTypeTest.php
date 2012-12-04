@@ -29,7 +29,8 @@ class ParentContentTypeTest extends BaseTest
     /**
      * Returns a Repository mock configured to return the appropriate Section object with given section identifier
      *
-     * @param $contentTypeIdentifier
+     * @param string $contentTypeIdentifier
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function generateRepositoryMockForContentTypeIdentifier( $contentTypeIdentifier )
@@ -93,9 +94,10 @@ class ParentContentTypeTest extends BaseTest
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
      * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
      *
-     * @param $matchingConfig
+     * @param string|string[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param $expectedResult
+     * @param boolean $expectedResult
+     *
      * @return void
      */
     public function testMatchLocation( $matchingConfig, Repository $repository, $expectedResult )
@@ -140,9 +142,10 @@ class ParentContentTypeTest extends BaseTest
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
      * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
      *
-     * @param $matchingConfig
+     * @param string|string[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param $expectedResult
+     * @param boolean $expectedResult
+     *
      * @return void
      */
     public function testMatchContentInfo( $matchingConfig, Repository $repository, $expectedResult )

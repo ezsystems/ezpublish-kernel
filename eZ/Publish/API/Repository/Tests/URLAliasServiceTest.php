@@ -97,8 +97,10 @@ class URLAliasServiceTest extends BaseTest
 
     /**
      * @param array $testData
-     * @return void
+     *
      * @depends testCreateUrlAlias
+     *
+     * @return void
      */
     public function testCreateUrlAliasPropertyValues( array $testData )
     {
@@ -156,8 +158,10 @@ class URLAliasServiceTest extends BaseTest
 
     /**
      * @param array $testData
-     * @return void
+     *
      * @depends testCreateUrlAliasWithForwarding
+     *
+     * @return void
      */
     public function testCreateUrlAliasPropertyValuesWithForwarding( array $testData )
     {
@@ -215,8 +219,10 @@ class URLAliasServiceTest extends BaseTest
 
     /**
      * @param array $testData
-     * @return void
+     *
      * @depends testCreateUrlAliasWithAlwaysAvailable
+     *
+     * @return void
      */
     public function testCreateUrlAliasPropertyValuesWithAlwaysAvailable( array $testData )
     {
@@ -295,9 +301,11 @@ class URLAliasServiceTest extends BaseTest
     }
 
     /**
-     * @param eZ\Publish\API\Repository\Values\Content\URLAlias
-     * @return void
+     * @param \eZ\Publish\API\Repository\Values\Content\URLAlias
+     *
      * @depends testCreateGlobalUrlAlias
+     *
+     * @return void
      */
     public function testCreateGlobalUrlAliasPropertyValues( URLAlias $createdUrlAlias )
     {
@@ -345,9 +353,11 @@ class URLAliasServiceTest extends BaseTest
     }
 
     /**
-     * @param eZ\Publish\API\Repository\Values\Content\URLAlias
-     * @return void
+     * @param \eZ\Publish\API\Repository\Values\Content\URLAlias
+     *
      * @depends testCreateGlobalUrlAliasWithForward
+     *
+     * @return void
      */
     public function testCreateGlobalUrlAliasWithForwardPropertyValues( URLAlias $createdUrlAlias )
     {
@@ -395,9 +405,11 @@ class URLAliasServiceTest extends BaseTest
     }
 
     /**
-     * @param eZ\Publish\API\Repository\Values\Content\URLAlias
-     * @return void
+     * @param \eZ\Publish\API\Repository\Values\Content\URLAlias
+     *
      * @depends testCreateGlobalUrlAliasWithAlwaysAvailable
+     *
+     * @return void
      */
     public function testCreateGlobalUrlAliasWithAlwaysAvailablePropertyValues( URLAlias $createdUrlAlias )
     {
@@ -482,8 +494,10 @@ class URLAliasServiceTest extends BaseTest
 
     /**
      * @param array $testData
-     * @return void
+     *
      * @depends testListLocationAliases
+     *
+     * @return void
      */
     public function testListLocationAliasesLoadsCorrectly( array $testData )
     {

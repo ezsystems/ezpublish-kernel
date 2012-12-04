@@ -22,6 +22,7 @@ class RelationCreate extends Base
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
      * @return mixed
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )

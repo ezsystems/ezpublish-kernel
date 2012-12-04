@@ -23,6 +23,7 @@ interface HttpClient
      * @param string $method
      * @param string $path
      * @param Message $message
+     *
      * @return Message
      */
     public function request( $method, $path, Message $message = null );

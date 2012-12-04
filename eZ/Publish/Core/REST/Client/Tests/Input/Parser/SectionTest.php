@@ -39,6 +39,7 @@ class SectionTest extends BaseTest
      * Tests that the resulting role is in fact an instance of Section class
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $result
+     *
      * @depends testParse
      */
     public function testResultIsSection( $result )
@@ -53,6 +54,7 @@ class SectionTest extends BaseTest
      * Tests if resulting section contains the ID
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $result
+     *
      * @depends testParse
      */
     public function testResultContainsId( $result )
@@ -67,6 +69,7 @@ class SectionTest extends BaseTest
      * Tests if resulting section contains the identifier
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $result
+     *
      * @depends testParse
      */
     public function testResultContainsIdentifier( $result )
@@ -81,6 +84,7 @@ class SectionTest extends BaseTest
      * Tests if resulting section contains the name
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $result
+     *
      * @depends testParse
      */
     public function testResultContainsName( $result )

@@ -199,8 +199,9 @@ class ContentHandler implements ContentHandlerInterface
      * @param mixed $contentId
      * @param mixed|null $versionNo Copy all versions if left null
      *
-     * @return \eZ\Publish\SPI\Persistence\Content
      * @todo Language support
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content
      */
     public function copy( $contentId, $versionNo = null )
     {
@@ -358,6 +359,7 @@ class ContentHandler implements ContentHandlerInterface
      * Returns the metadata object for a content identified by $contentId.
      *
      * @param int|string $contentId
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
     public function loadContentInfo( $contentId )
@@ -632,7 +634,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function trash( $contentId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        throw new RuntimeException( '@todo: Implement' );
     }
 
     /**
@@ -640,7 +642,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function untrash( $contentId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        throw new RuntimeException( '@todo: Implement' );
     }
 
     /**
@@ -673,7 +675,8 @@ class ContentHandler implements ContentHandlerInterface
      * Creates a relation between $sourceContentId in $sourceContentVersionNo
      * and $destinationContentId with a specific $type.
      *
-     * @param  \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $relation
+     * @param \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $relation
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation
      */
     public function addRelation( RelationCreateStruct $relation )
@@ -706,6 +709,7 @@ class ContentHandler implements ContentHandlerInterface
      * Removes a relation by relation Id.
      *
      * @param mixed $relationId
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if relation to be removed is not found.
      */
     public function removeRelation( $relationId )
@@ -727,6 +731,7 @@ class ContentHandler implements ContentHandlerInterface
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
     public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null )
@@ -850,6 +855,7 @@ class ContentHandler implements ContentHandlerInterface
      * Returns last version number for content identified by $contentId
      *
      * @param int $contentId
+     *
      * @return int
      */
     private function getLastVersionNumber( $contentId )

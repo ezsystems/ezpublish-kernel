@@ -152,7 +152,7 @@ class SectionService implements SectionServiceInterface
     }
 
     /**
-     * assigns the content to the given section
+     * Assigns the content to the given section
      * this method overrides the current assigned section
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to view provided object
@@ -198,7 +198,7 @@ class SectionService implements SectionServiceInterface
     }
 
     /**
-     * instantiates a new SectionCreateStruct
+     * Instantiates a new SectionCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
      */
@@ -208,7 +208,7 @@ class SectionService implements SectionServiceInterface
     }
 
     /**
-     * instantiates a new SectionUpdateStruct
+     * Instantiates a new SectionUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
      */

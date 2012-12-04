@@ -289,8 +289,9 @@ class LegacyHandler implements IoHandlerInterface
     /**
      * Returns the appropriate FileResourceProvider depending on the cluster handler in use
      *
-     * @return \eZ\Publish\Core\IO\LegacyHandler\FileResourceProvider
      * @throws \Exception
+     *
+     * @return \eZ\Publish\Core\IO\LegacyHandler\FileResourceProvider
      */
     private function getFileResourceProvider()
     {

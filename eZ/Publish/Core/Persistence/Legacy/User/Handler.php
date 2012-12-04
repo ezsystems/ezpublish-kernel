@@ -63,6 +63,7 @@ class Handler implements BaseUserHandler
      * to reference the user.
      *
      * @param \eZ\Publish\SPI\Persistence\User $user
+     *
      * @return \eZ\Publish\SPI\Persistence\User
      */
     public function create( User $user )
@@ -72,9 +73,10 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Load user with user ID.
+     * Loads user with user ID.
      *
      * @param mixed $userId
+     *
      * @return \eZ\Publish\SPI\Persistence\User
      */
     public function load( $userId )
@@ -90,10 +92,11 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Load user with user login / email.
+     * Loads user with user login / email.
      *
      * @param string $login
      * @param boolean $alsoMatchEmail Also match user email, caller must verify that $login is a valid email address.
+     *
      * @return \eZ\Publish\SPI\Persistence\User[]
      */
     public function loadByLogin( $login, $alsoMatchEmail = false )
@@ -132,6 +135,7 @@ class Handler implements BaseUserHandler
      * Create new role
      *
      * @param \eZ\Publish\SPI\Persistence\User\Role $role
+     *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
     public function createRole( Role $role )
@@ -147,11 +151,13 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Load a specified role by $roleId
+     * Loads a specified role by $roleId
      *
      * @param mixed $roleId
-     * @return \eZ\Publish\SPI\Persistence\User\Role
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role
      */
     public function loadRole( $roleId )
     {
@@ -166,11 +172,13 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Load a specified role by $identifier
+     * Loads a specified role by $identifier
      *
      * @param string $identifier
-     * @return \eZ\Publish\SPI\Persistence\User\Role
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role
      */
     public function loadRoleByIdentifier( $identifier )
     {
@@ -185,7 +193,7 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Load all roles
+     * Loads all roles
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role[]
      */
@@ -197,9 +205,10 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Load roles assigned to a user/group (not including inherited roles)
+     * Loads roles assigned to a user/group (not including inherited roles)
      *
      * @param mixed $groupId
+     *
      * @return \eZ\Publish\SPI\Persistence\User\Role[]
      */
     public function loadRolesByGroupId( $groupId )
@@ -246,6 +255,7 @@ class Handler implements BaseUserHandler
      *
      * @param mixed $roleId
      * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
+     *
      * @return \eZ\Publish\SPI\Persistence\User\Policy
      */
     public function addPolicy( $roleId, Policy $policy )
@@ -273,6 +283,7 @@ class Handler implements BaseUserHandler
      *
      * @param mixed $roleId
      * @param mixed $policyId
+     *
      * @return void
      */
     public function removePolicy( $roleId, $policyId )
@@ -287,6 +298,7 @@ class Handler implements BaseUserHandler
      * Returns the user policies associated with the user (including inherited policies from user groups)
      *
      * @param mixed $userId
+     *
      * @return \eZ\Publish\SPI\Persistence\User\Policy[]
      */
     public function loadPoliciesByUserId( $userId )
@@ -297,7 +309,7 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Assign role to a user or user group with given limitations
+     * Assigns role to a user or user group with given limitations
      *
      * The limitation array looks like:
      * <code>
@@ -336,7 +348,7 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Load roles assignments Role
+     * Loads roles assignments Role
      *
      * Role Assignments with same roleId and limitationIdentifier will be merged together into one.
      *
@@ -350,13 +362,13 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Load roles assignments to a user/group
+     * Loads roles assignments to a user/group
      *
      * Role Assignments with same roleId and limitationIdentifier will be merged together into one.
      *
      * @param mixed $groupId In legacy storage engine this is the content object id roles are assigned to in ezuser_role.
      *                      By the nature of legacy this can currently also be used to get by $userId.
-     * @param bool $inherit If true also return inherited role assigments from user groups.
+     * @param boolean $inherit If true also return inherited role assigments from user groups.
      *
      * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
      */

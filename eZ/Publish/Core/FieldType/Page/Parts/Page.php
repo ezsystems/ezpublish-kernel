@@ -15,6 +15,7 @@ class Page extends Base
      * Adds new $zone to the Page object
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Zone $zone
+     *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Zone
      */
     public function addZone( Zone $zone )
@@ -26,7 +27,8 @@ class Page extends Base
     /**
      * Returns zone object by given $index
      *
-     * @param integer $index
+     * @param int $index
+     *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Zone
      */
     public function getZone( $index )

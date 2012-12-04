@@ -27,6 +27,7 @@ class LegacyPathGenerator extends PathGenerator
      * Extracts the first part (before the '/') from the given $mimeType.
      *
      * @param string $mimeType
+     *
      * @return string
      */
     protected function getFirstPartOfMimeType( $mimeType )

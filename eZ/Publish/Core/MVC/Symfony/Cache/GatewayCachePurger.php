@@ -19,6 +19,7 @@ interface GatewayCachePurger
      * It's up to the implementor to decide whether to purge $cacheElements right away or to delegate to a separate process.
      *
      * @param mixed $cacheElements
+     *
      * @return mixed
      */
     public function purge( $cacheElements );

@@ -20,7 +20,8 @@ interface RequestAwarePurger
      * Purges data from $request
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return bool True if purge was successful. False otherwise
+     *
+     * @return boolean True if purge was successful. False otherwise
      */
     public function purgeByRequest( Request $request );
 }

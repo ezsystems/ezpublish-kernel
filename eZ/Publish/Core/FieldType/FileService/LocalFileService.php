@@ -49,6 +49,7 @@ class LocalFileService implements FileService
      * Returns the full path for $path
      *
      * @param string $path
+     *
      * @return string
      */
     protected function getFullPath( $path, $allowLocal = false )
@@ -66,6 +67,7 @@ class LocalFileService implements FileService
      *
      * @param string $sourcePath
      * @param string $storageIdentifier
+     *
      * @return string
      */
     public function storeFile( $sourcePath, $storageIdentifier )
@@ -122,7 +124,8 @@ class LocalFileService implements FileService
      * existing $storageIdentifier is silently ignored.
      *
      * @param string $storageIdentifier
-     * @param bool $recursive
+     * @param boolean $recursive
+     *
      * @return void
      * @throws \RuntimeException if children of $storageIdentifier exist and
      *                           $recursive is false
@@ -140,7 +143,8 @@ class LocalFileService implements FileService
      * Deletes $path, $recursive or not
      *
      * @param string $path
-     * @param bool $recursive
+     * @param boolean $recursive
+     *
      * @return void
      * @throws RuntimeException if $path is a non-empty directory and
      *                          $recursive is false
@@ -196,6 +200,7 @@ class LocalFileService implements FileService
      * encapsulated by the file service.
      *
      * @param string $path
+     *
      * @return string
      */
     public function getStorageIdentifier( $path )
@@ -215,6 +220,7 @@ class LocalFileService implements FileService
      * );
      *
      * @param string $storageIdentifier
+     *
      * @return array
      */
     public function getMetaData( $storageIdentifier )
@@ -233,6 +239,7 @@ class LocalFileService implements FileService
      * Returns the file size of the file identified by $storageIdentifier
      *
      * @param string $storageIdentifier
+     *
      * @return int
      */
     public function getFileSize( $storageIdentifier )
@@ -246,7 +253,8 @@ class LocalFileService implements FileService
      * Returns is a file/directory with the given $storageIdentifier exists
      *
      * @param string $storageIdentifier
-     * @return bool
+     *
+     * @return boolean
      */
     public function exists( $storageIdentifier )
     {
@@ -257,8 +265,10 @@ class LocalFileService implements FileService
      * Creates the given directory recursively
      *
      * @param string $directory
-     * @return void
+     *
      * @throws RuntimeException if the $directory could not be created
+     *
+     * @return void
      */
     protected function createDirectoryRecursive( $directory )
     {

@@ -47,7 +47,7 @@ abstract class Limitation extends ValueObject
      * or resources.
      *
      * @readonly
-     * @var array of mixed
+     * @var mixed[]
      */
     public $limitationValues;
 }

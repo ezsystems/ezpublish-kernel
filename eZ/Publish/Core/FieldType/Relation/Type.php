@@ -82,7 +82,7 @@ class Type extends FieldType
     }
 
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -165,6 +165,7 @@ class Type extends FieldType
      * For this FieldType, the related object's name is returned.
      *
      * @todo Repository needs to be provided to be able to get Content Relation name(s), and it is in ctor
+     *
      * @return array
      */
     protected function getSortInfo( $value )
@@ -199,7 +200,7 @@ class Type extends FieldType
     /**
      * Returns whether the field type is searchable
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {

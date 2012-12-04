@@ -84,7 +84,7 @@ class Role extends RestController
     }
 
     /**
-     * Load list of roles
+     * Loads list of roles
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RoleList
      */
@@ -119,7 +119,7 @@ class Role extends RestController
     }
 
     /**
-     * Load role
+     * Loads role
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
@@ -403,7 +403,7 @@ class Role extends RestController
     }
 
     /**
-     * Load role assignments for user
+     * Loads role assignments for user
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RoleAssignmentList
      */
@@ -418,7 +418,7 @@ class Role extends RestController
     }
 
     /**
-     * Load role assignments for user group
+     * Loads role assignments for user group
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RoleAssignmentList
      */
@@ -504,6 +504,7 @@ class Role extends RestController
      * Needed since both structs are encoded into the same media type on input.
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $createStruct
+     *
      * @return \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct
      */
     protected function mapToUpdateStruct( RoleCreateStruct $createStruct )

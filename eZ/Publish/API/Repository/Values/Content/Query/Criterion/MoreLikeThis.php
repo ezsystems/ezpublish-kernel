@@ -33,7 +33,7 @@ class MoreLikeThis extends Criterion implements CriterionInterface
     /**
      * Creates a new more like this criterion
      *
-     * @param integer $type the type (one of CONTENT,TEXT,URL)
+     * @param int $type the type (one of CONTENT,TEXT,URL)
      * @param mixed $value the value depending on the type
      *
      * @throws \InvalidArgumentException if the value type doesn't match the expected type

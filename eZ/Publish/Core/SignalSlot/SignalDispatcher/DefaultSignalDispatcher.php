@@ -57,6 +57,7 @@ class DefaultSignalDispatcher extends SignalDispatcher
      * All assigned slots will eventually receive the $signal
      *
      * @param Signal $signal
+     *
      * @return void
      */
     public function emit( Signal $signal )

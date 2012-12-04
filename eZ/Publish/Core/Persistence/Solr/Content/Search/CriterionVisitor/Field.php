@@ -52,6 +52,7 @@ abstract class Field extends CriterionVisitor
      *
      * @param FieldRegistry $fieldRegistry
      * @param ContentTypeHandler $contentTypeHandler
+     *
      * @return void
      */
     public function __construct( FieldRegistry $fieldRegistry, ContentTypeHandler $contentTypeHandler, FieldNameGenerator $nameGenerator )

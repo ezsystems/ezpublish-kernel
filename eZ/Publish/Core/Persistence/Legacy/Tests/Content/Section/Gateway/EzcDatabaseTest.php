@@ -19,7 +19,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Database gateway to test.
      *
-     * @var eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase
      */
     protected $databaseGateway;
 
@@ -38,8 +38,9 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::__construct
+     *
+     * @return void
      */
     public function testCtor()
     {
@@ -54,8 +55,9 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::insertSection
+     *
+     * @return void
      */
     public function testInsertSection()
     {
@@ -81,8 +83,9 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::updateSection
+     *
+     * @return void
      */
     public function testUpdateSection()
     {
@@ -107,8 +110,9 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::loadSectionData
+     *
+     * @return void
      */
     public function testLoadSectionData()
     {
@@ -129,8 +133,9 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::loadAllSectionData
+     *
+     * @return void
      */
     public function testLoadAllSectionData()
     {
@@ -182,8 +187,9 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::loadSectionDataByIdentifier
+     *
+     * @return void
      */
     public function testLoadSectionDataByIdentifier()
     {
@@ -204,8 +210,9 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::countContentObjectsInSection
+     *
+     * @return void
      */
     public function testCountContentObjectsInSection()
     {
@@ -224,8 +231,9 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::deleteSection
+     *
+     * @return void
      */
     public function testDeleteSection()
     {
@@ -283,7 +291,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Returns a ready to test EzcDatabase gateway
      *
-     * @return eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase
      */
     protected function getDatabaseGateway()
     {

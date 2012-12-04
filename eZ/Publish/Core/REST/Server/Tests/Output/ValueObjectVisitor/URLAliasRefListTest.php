@@ -57,6 +57,7 @@ class URLAliasRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testUrlAliasRefListHrefCorrect( \DOMDocument $dom )
@@ -66,6 +67,7 @@ class URLAliasRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testUrlAliasRefListMediaTypeCorrect( \DOMDocument $dom )
@@ -75,6 +77,7 @@ class URLAliasRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testUrlAliasHrefCorrect( \DOMDocument $dom )
@@ -84,6 +87,7 @@ class URLAliasRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testUrlAliasMediaTypeCorrect( \DOMDocument $dom )

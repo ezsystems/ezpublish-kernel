@@ -75,6 +75,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsVersionInfoChildren( $result )
@@ -95,6 +96,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testVersionInfoIdElement( $result )
@@ -112,6 +114,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testVersionInfoVersionNoElement( $result )
@@ -129,6 +132,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testVersionInfoStatusElement( $result )
@@ -146,6 +150,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testVersionInfoCreationDateElement( $result )
@@ -163,6 +168,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testVersionInfoModificationDateElement( $result )
@@ -180,6 +186,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testVersionInfoInitialLanguageCodeElement( $result )
@@ -197,6 +204,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testVersionInfoLanguageCodesElement( $result )
@@ -214,6 +222,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testVersionInfoNamesElement( $result )
@@ -234,6 +243,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testVersionInfoContentElement( $result )

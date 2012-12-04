@@ -27,6 +27,7 @@ abstract class SignalDispatcher
      * All assigned slots will eventually receive the $signal
      *
      * @param Signal $signal
+     *
      * @return void
      */
     abstract public function emit( Signal $signal );
@@ -37,9 +38,10 @@ abstract class SignalDispatcher
      *
      * @param string $signalIdentifier
      * @param string $slotIdentifier
+     *
      * @return void
      *
-     * @TODO Are we sure we want to expose this method? Might lead to dynamic
+     * @todo Are we sure we want to expose this method? Might lead to dynamic
      * attachments at runtime, which can lead to hard debugging. Better only
      * accept attachments during construction (config).
      */

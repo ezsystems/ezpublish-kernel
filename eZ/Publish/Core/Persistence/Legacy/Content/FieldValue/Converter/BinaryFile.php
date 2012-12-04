@@ -22,7 +22,6 @@ class BinaryFile implements Converter
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @static
      * @return Image
      */
     public static function create()
@@ -93,7 +92,7 @@ class BinaryFile implements Converter
      */
     public function getIndexColumn()
     {
-        // @TODO: Correct?
+        // @todo: Correct?
         return 'sort_key_string';
     }
 }

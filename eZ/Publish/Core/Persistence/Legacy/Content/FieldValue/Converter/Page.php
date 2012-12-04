@@ -108,6 +108,7 @@ class Page implements Converter
      * Generates XML string from $page object to be stored in storage engine
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Page $page
+     *
      * @return string
      */
     public function generateXmlString( $page )
@@ -148,6 +149,7 @@ class Page implements Converter
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Zone $zone
      * @param \DOMDocument $dom
+     *
      * @return \DOMElement
      */
     protected function generateZoneXmlString( $zone, DOMDocument $dom )
@@ -186,6 +188,7 @@ class Page implements Converter
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Block $block
      * @param \DOMDocument $dom
+     *
      * @return \DOMElement
      */
     protected function generateBlockXmlString( $block, DOMDocument $dom )
@@ -242,7 +245,8 @@ class Page implements Converter
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Item $item
      * @param \DOMDocument $dom
-     * @return bool|\DOMElement
+     *
+     * @return boolean|\DOMElement
      */
     protected function generateItemXmlString( $item, DOMDocument $dom )
     {
@@ -279,6 +283,7 @@ class Page implements Converter
      * Restores value from XML string
      *
      * @param string $xmlString
+     *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Page
      */
     public function restoreValueFromXmlString( $xmlString )
@@ -319,6 +324,7 @@ class Page implements Converter
      * Restores value for a given Zone $node
      *
      * @param \DOMElement $node
+     *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Zone
      */
     protected function restoreZoneFromXml( DOMElement $node )
@@ -360,6 +366,7 @@ class Page implements Converter
      * Restores value for a given Block $node
      *
      * @param \DOMElement $node
+     *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Block
      */
     protected function restoreBlockFromXml( DOMElement $node )
@@ -426,6 +433,7 @@ class Page implements Converter
      * Restores value for a given Item $node
      *
      * @param \DOMElement $node
+     *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Item
      */
     protected function restoreItemFromXml( DOMElement $node )

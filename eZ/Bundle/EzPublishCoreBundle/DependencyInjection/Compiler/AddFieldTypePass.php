@@ -21,6 +21,7 @@ class AddFieldTypePass implements CompilerPassInterface
 
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
      * @throws \LogicException
      */
     public function process( ContainerBuilder $container )

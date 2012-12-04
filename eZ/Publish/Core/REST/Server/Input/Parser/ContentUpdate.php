@@ -24,6 +24,7 @@ class ContentUpdate extends Base
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
      * @return \eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser if $data is invalid

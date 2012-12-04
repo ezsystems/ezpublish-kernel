@@ -19,13 +19,13 @@ use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
  * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType convenience getter for $versionInfo->contentInfo->contentType
  * @property-read mixed $id convenience getter for retrieving the contentId: $versionInfo->content->id
  * @property-read \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo calls getVersionInfo()
- * @property-read array $fields access fields, calls getFields()
- * @property-read array $relations calls getRelations()
+ * @property-read \eZ\Publish\API\Repository\Values\Content\Field[] $fields Access fields, calls getFields()
+ * @property-read \eZ\Publish\API\Repository\Values\Content\Relation[] $relations Calls getRelations()
  */
 class Content extends APIContent
 {
     /**
-     * @var array an array of field values like $fields[$fieldDefIdentifier][$languageCode]
+     * @var mixed[][] An array of array of field values like $fields[$fieldDefIdentifier][$languageCode]
      */
     protected $fields;
 
@@ -57,7 +57,7 @@ class Content extends APIContent
     }
 
     /**
-     * returns the VersionInfo for this version
+     * Returns the VersionInfo for this version
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
@@ -67,7 +67,7 @@ class Content extends APIContent
     }
 
     /**
-     * returns a field value for the given value
+     * Returns a field value for the given value
      * $version->fields[$fieldDefId][$languageCode] is an equivalent call
      * if no language is given on a translatable field this method returns
      * the value of the initial language of the version if present, otherwise null.
@@ -94,7 +94,7 @@ class Content extends APIContent
     }
 
     /**
-     * returns the outgoing relations
+     * Returns the outgoing relations
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[] An array of {@link Relation}
      */
@@ -145,7 +145,7 @@ class Content extends APIContent
      *
      * If not set the initialLanguage of the content version is used.
      *
-     * @param $fieldDefIdentifier
+     * @param string $fieldDefIdentifier
      * @param null $languageCode
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field|null A {@link Field} or null if nothing is found
@@ -213,7 +213,7 @@ class Content extends APIContent
      *
      * @param string $property
      *
-     * @return bool
+     * @return boolean
      */
     public function __isset( $property )
     {

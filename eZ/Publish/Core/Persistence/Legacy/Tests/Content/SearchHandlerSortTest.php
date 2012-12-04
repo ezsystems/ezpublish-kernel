@@ -71,6 +71,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
      * on.
      *
      * @param array $fullTextSearchConfiguration
+     *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler
      */
     protected function getContentSearchHandler( array $fullTextSearchConfiguration = array() )

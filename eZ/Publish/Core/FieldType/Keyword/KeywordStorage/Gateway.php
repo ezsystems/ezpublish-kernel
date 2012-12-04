@@ -22,6 +22,7 @@ abstract class Gateway extends StorageGateway
      * Sets the list of assigned keywords into $field->value->externalData
      *
      * @param Field $field
+     *
      * @return void
      */
     abstract public function getFieldData( Field $field );
@@ -30,6 +31,7 @@ abstract class Gateway extends StorageGateway
      * Retrieve the ContentType ID for the given $field
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     *
      * @return mixed
      */
     abstract public function getContentTypeID( Field $field );

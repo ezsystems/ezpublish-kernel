@@ -42,7 +42,7 @@ class Value extends BaseValue
     /**
      * Size of the image file
      *
-     * @var integer
+     * @var int
      * @required
      */
     public $fileSize;
@@ -83,6 +83,7 @@ class Value extends BaseValue
      * Creates a value only from a file path
      *
      * @param string $path
+     *
      * @return Value
      */
     public static function fromString( $path )

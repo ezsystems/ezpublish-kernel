@@ -132,7 +132,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @TODO This is a test for a feature that needs refactoring.
+     * @todo This is a test for a feature that needs refactoring.
      * @see \eZ\Publish\Core\REST\Common\Output\Visitor::visit
      */
     public function testSetFilteredHeaders()

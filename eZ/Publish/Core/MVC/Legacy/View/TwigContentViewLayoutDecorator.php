@@ -51,6 +51,7 @@ class TwigContentViewLayoutDecorator implements ContentViewInterface
      * Must throw a \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType exception if $templateIdentifier is invalid.
      *
      * @param \Closure $templateIdentifier
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
      */
     public function setTemplateIdentifier( $templateIdentifier )
@@ -64,8 +65,9 @@ class TwigContentViewLayoutDecorator implements ContentViewInterface
     /**
      * Returns the registered template identifier.
      *
-     * @return \Closure
      * @throws \RuntimeException
+     *
+     * @return \Closure
      */
     public function getTemplateIdentifier()
     {
@@ -132,7 +134,8 @@ EOT;
      * Checks if $parameterName exists.
      *
      * @param string $parameterName
-     * @return bool
+     *
+     * @return boolean
      */
     public function hasParameter( $parameterName )
     {
@@ -144,8 +147,10 @@ EOT;
      * Throws an \InvalidArgumentException if $parameterName is not set.
      *
      * @param string $parameterName
-     * @return mixed
+     *
      * @throws \InvalidArgumentException
+     *
+     * @return mixed
      */
     public function getParameter( $parameterName )
     {

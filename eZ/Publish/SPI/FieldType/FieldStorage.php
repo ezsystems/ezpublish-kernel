@@ -33,7 +33,6 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 interface FieldStorage
 {
     /**
-     *
      * Allows custom field types to store data in an external source (e.g. another DB table).
      *
      * Stores value for $field in an external data source.
@@ -63,6 +62,7 @@ interface FieldStorage
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     *
      * @return null|true
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context );
@@ -76,6 +76,7 @@ interface FieldStorage
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     *
      * @return void
      */
     public function getFieldData( VersionInfo $versionInfo, Field $field, array $context );
@@ -87,6 +88,7 @@ interface FieldStorage
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param array $fieldIds Array of field IDs
      * @param array $context
+     *
      * @return boolean
      */
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context );
@@ -103,6 +105,7 @@ interface FieldStorage
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
      */
     public function getIndexData( VersionInfo $versionInfo, Field $field, array $context );

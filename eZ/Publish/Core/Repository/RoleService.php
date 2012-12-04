@@ -188,7 +188,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * adds a new policy to the role
+     * Adds a new policy to the role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to add  a policy
      *
@@ -328,7 +328,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * loads a role for the given id
+     * Loads a role for the given id
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given id was not found
@@ -350,7 +350,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * loads a role for the given identifier
+     * Loads a role for the given identifier
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
@@ -372,7 +372,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * loads all roles
+     * Loads all roles
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the roles
      *
@@ -395,7 +395,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * deletes the given role
+     * Deletes the given role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete this role
      *
@@ -425,11 +425,11 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * loads all policies from roles which are assigned to a user or to user groups to which the user belongs
+     * Loads all policies from roles which are assigned to a user or to user groups to which the user belongs
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
      *
-     * @param $userId
+     * @param int $userId
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
@@ -453,7 +453,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * assigns a role to the given user group
+     * Assigns a role to the given user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
      *
@@ -531,7 +531,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * assigns a role to the given user
+     * Assigns a role to the given user
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
      *
@@ -609,7 +609,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * returns the assigned user and user groups to this role
+     * Returns the assigned user and user groups to this role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a role
      *
@@ -684,9 +684,8 @@ class RoleService implements RoleServiceInterface
     /**
      * Returns the roles assigned to the given user
      *
-     *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param bool $inherited
+     * @param boolean $inherited
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException If the current user is not allowed to read a role
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue On invalid User object
@@ -742,7 +741,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * instantiates a role create class
+     * Instantiates a role create class
      *
      * @param string $name
      *
@@ -759,7 +758,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * instantiates a policy create class
+     * Instantiates a policy create class
      *
      * @param string $module
      * @param string $function
@@ -778,7 +777,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * instantiates a policy update class
+     * Instantiates a policy update class
      *
      * @return \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
      */
@@ -792,7 +791,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * instantiates a policy update class
+     * Instantiates a policy update class
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct
      */

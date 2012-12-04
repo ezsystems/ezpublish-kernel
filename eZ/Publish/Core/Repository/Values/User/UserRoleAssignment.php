@@ -38,7 +38,7 @@ class UserRoleAssignment extends APIUserRoleAssignment
     protected $user;
 
     /**
-     * returns the limitation of the user role assignment
+     * Returns the limitation of the user role assignment
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation|null
      */
@@ -48,7 +48,7 @@ class UserRoleAssignment extends APIUserRoleAssignment
     }
 
     /**
-     * returns the role to which the user is assigned to
+     * Returns the role to which the user is assigned to
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
@@ -58,7 +58,7 @@ class UserRoleAssignment extends APIUserRoleAssignment
     }
 
     /**
-     * returns the user to which the role is assigned to
+     * Returns the user to which the role is assigned to
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */

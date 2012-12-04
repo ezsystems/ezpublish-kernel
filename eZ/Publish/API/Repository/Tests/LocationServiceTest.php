@@ -567,6 +567,7 @@ class LocationServiceTest extends BaseTest
      * Test for the loadLocations() method.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location[] $locations
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationsLimitedSubtree
@@ -779,6 +780,7 @@ class LocationServiceTest extends BaseTest
      * Test for the loadLocationChildren() method.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\LocationList $locations
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset)
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildrenWithOffset
@@ -1101,6 +1103,7 @@ class LocationServiceTest extends BaseTest
      *
      * @param array $expectedValues
      * @param Location $location
+     *
      * @return void
      */
     protected function assertSubtreeProperties( array $expectedValues, Location $location, $stopId = null )
@@ -1761,6 +1764,7 @@ class LocationServiceTest extends BaseTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param array $properties
+     *
      * @return array
      */
     private function loadSubtreeProperties( Location $location, array $properties = array() )
@@ -1782,6 +1786,7 @@ class LocationServiceTest extends BaseTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param mixed[] $overwrite
+     *
      * @return array
      */
     private function loadLocationProperties( Location $location, array $overwrite = array() )

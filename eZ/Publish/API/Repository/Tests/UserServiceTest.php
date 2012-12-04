@@ -1273,6 +1273,7 @@ class UserServiceTest extends BaseTest
      * Test for the updateUser() method.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
@@ -1305,6 +1306,7 @@ class UserServiceTest extends BaseTest
      * Test for the updateUser() method.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser

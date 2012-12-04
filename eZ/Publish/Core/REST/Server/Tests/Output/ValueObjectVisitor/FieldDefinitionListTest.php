@@ -85,6 +85,7 @@ class FieldDefinitionListTest extends ValueObjectVisitorBaseTest
     /**
      * @param string $xpath
      * @param \DOMDocument $dom
+     *
      * @depends testVisitFieldDefinitionList
      * @dataProvider provideXpathAssertions
      */

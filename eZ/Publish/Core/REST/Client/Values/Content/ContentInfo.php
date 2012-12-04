@@ -33,12 +33,12 @@ use eZ\Publish\Core\REST\Client\ContentTypeService;
 class ContentInfo extends \eZ\Publish\API\Repository\Values\Content\ContentInfo
 {
     /**
-     * @var integer
+     * @var int
      */
     protected $contentTypeId;
 
     /**
-     * @var eZ\Publish\Core\REST\Client\ContentTypeService
+     * @var \eZ\Publish\Core\REST\Client\ContentTypeService
      */
     protected $contentTypeService;
 

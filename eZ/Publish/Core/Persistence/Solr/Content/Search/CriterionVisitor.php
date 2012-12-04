@@ -21,7 +21,8 @@ abstract class CriterionVisitor
      * CHeck if visitor is applicable to current criterion
      *
      * @param Criterion $criterion
-     * @return bool
+     *
+     * @return boolean
      */
     abstract public function canVisit( Criterion $criterion );
 
@@ -30,6 +31,7 @@ abstract class CriterionVisitor
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
+     *
      * @return void
      */
     abstract public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null );
@@ -49,6 +51,7 @@ abstract class CriterionVisitor
      * @param mixed $operator
      * @param mixed $start
      * @param mixed $end
+     *
      * @return void
      */
     protected function getRange( $operator, $start, $end )

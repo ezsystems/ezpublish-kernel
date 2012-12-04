@@ -21,7 +21,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Database gateway to test.
      *
-     * @var eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase
      */
     protected $databaseGateway;
 
@@ -40,8 +40,9 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::__construct
+     *
+     * @return void
      */
     public function testCtor()
     {
@@ -183,8 +184,9 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::deleteLanguage
+     *
+     * @return void
      */
     public function testDeleteLanguage()
     {
@@ -219,7 +221,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Returns a ready to test EzcDatabase gateway
      *
-     * @return eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase
      */
     protected function getDatabaseGateway()
     {

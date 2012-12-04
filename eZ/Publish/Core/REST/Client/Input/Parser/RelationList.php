@@ -22,12 +22,14 @@ class RelationList extends Parser
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
+     *
      * @todo Error handling
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
-        // TODO: Implement
+        // @todo: Implement
         return;
     }
 }

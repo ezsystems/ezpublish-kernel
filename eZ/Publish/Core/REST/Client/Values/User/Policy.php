@@ -24,7 +24,6 @@ class Policy extends \eZ\Publish\API\Repository\Values\User\Policy
     protected $limitations = array();
 
     /**
-     *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
      */
     public function getLimitations()

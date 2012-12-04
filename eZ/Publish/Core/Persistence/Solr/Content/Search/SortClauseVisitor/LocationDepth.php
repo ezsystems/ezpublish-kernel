@@ -21,7 +21,8 @@ class LocationDepth extends SortClauseVisitor
      * CHeck if visitor is applicable to current sortClause
      *
      * @param SortClause $sortClause
-     * @return bool
+     *
+     * @return boolean
      */
     public function canVisit( SortClause $sortClause )
     {
@@ -32,6 +33,7 @@ class LocationDepth extends SortClauseVisitor
      * Map field value to a proper Solr representation
      *
      * @param SortClause $sortClause
+     *
      * @return void
      */
     public function visit( SortClause $sortClause )

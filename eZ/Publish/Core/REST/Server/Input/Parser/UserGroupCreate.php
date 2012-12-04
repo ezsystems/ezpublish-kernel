@@ -62,6 +62,7 @@ class UserGroupCreate extends Base
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )

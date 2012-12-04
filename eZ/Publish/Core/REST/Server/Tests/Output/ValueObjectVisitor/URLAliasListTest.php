@@ -48,6 +48,7 @@ class URLAliasListTest extends ValueObjectVisitorBaseTest
      * Test if result contains UrlAliasList element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsUrlAliasListElement( $result )
@@ -66,6 +67,7 @@ class URLAliasListTest extends ValueObjectVisitorBaseTest
      * Test if result contains UrlAliasList element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsUrlAliasListAttributes( $result )

@@ -176,6 +176,7 @@ class Manager
      *        render the view. By default, it's empty. 'content' entry is
      *        reserved for the Content that is rendered.
      * @throws \RuntimeException
+     *
      * @return string
      */
     public function renderContent( Content $content, $viewType = self::VIEW_TYPE_FULL, $parameters = array() )
@@ -205,6 +206,7 @@ class Manager
      *        entries are reserved for the Location (and its Content) that is
      *        viewed.
      * @throws \RuntimeException
+     *
      * @return string
      */
     public function renderLocation( Location $location, $viewType = self::VIEW_TYPE_FULL, $parameters = array() )
@@ -229,6 +231,7 @@ class Manager
      *
      * @param \eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface $view
      * @param array $defaultParams
+     *
      * @return string
      */
     public function renderContentView( ContentViewInterface $view, array $defaultParams = array() )

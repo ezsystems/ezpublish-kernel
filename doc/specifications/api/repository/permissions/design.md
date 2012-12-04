@@ -73,7 +73,7 @@ interface Type
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
      * @param \eZ\Publish\API\Repository\Repository $repository
      *
-     * @return bool
+     * @return boolean
      */
     public function acceptValue( LimitationValue $limitationValue, Repository $repository );
 
@@ -106,7 +106,7 @@ interface Type
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
      * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
      *
-     * @return bool
+     * @return boolean
      */
     public function evaluate( LimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null );
 

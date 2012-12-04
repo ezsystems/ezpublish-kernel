@@ -91,12 +91,13 @@ class FallbackRouter implements RouterInterface
      * // $url will be "/content/view/full/2/(offset)/30/(limit)/10"
      * </code>
      *
-     * @param string  $name       The name of the route
-     * @param mixed   $parameters An array of parameters
-     * @param Boolean $absolute   Whether to generate an absolute URL
+     * @param string $name The name of the route
+     * @param mixed $parameters An array of parameters
+     * @param boolean $absolute Whether to generate an absolute URL
      *
      * @throws \Symfony\Component\Routing\Exception\RouteNotFoundException
      * @throws \InvalidArgumentException
+     *
      * @return string The generated URL
      *
      * @api

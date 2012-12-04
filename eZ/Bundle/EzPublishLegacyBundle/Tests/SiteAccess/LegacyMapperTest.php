@@ -205,7 +205,8 @@ class LegacyMapperTest extends LegacyBasedTestCase
     }
 
     /**
-     * @param $methodsToMock
+     * @param array $methodsToMock
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\HttpFoundation\Request
      */
     private function getRequestMock( array $methodsToMock = array() )
@@ -217,7 +218,8 @@ class LegacyMapperTest extends LegacyBasedTestCase
     }
 
     /**
-     * @param $methodsToMock
+     * @param array $methodsToMock
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\DependencyInjection\ContainerInterface
      */
     private function getContainerMock( array $methodsToMock = array() )

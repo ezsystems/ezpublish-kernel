@@ -23,14 +23,14 @@ class Handler implements BaseUrlWildcardHandler
     /**
      * UrlWildcard Gateway
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway $gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway
      */
     protected $gateway;
 
     /**
      * UrlWildcard Mapper
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper $mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper
      */
     protected $mapper;
 
@@ -81,7 +81,7 @@ class Handler implements BaseUrlWildcardHandler
     }
 
     /**
-     * loads a url wild card
+     * Loads a url wild card
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
      *
@@ -102,7 +102,7 @@ class Handler implements BaseUrlWildcardHandler
     }
 
     /**
-     * loads all url wild card (paged)
+     * Loads all url wild card (paged)
      *
      * @param mixed $offset
      * @param mixed $limit

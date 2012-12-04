@@ -48,7 +48,7 @@ class ConfiguredTest extends BaseTest
     /**
      * @param \PHPUnit_Framework_MockObject_MockObject[] $matchers
      * @param array $matchingConfig
-     * @param bool $match
+     * @param boolean $match
      *
      * @return void
      * @covers eZ\Publish\Core\MVC\Symfony\View\Provider\Content\Configured::__construct

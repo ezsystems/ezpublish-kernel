@@ -56,8 +56,9 @@ class URIElement implements Matcher, URILexer
 
     /**
      * Returns URI elements as an array.
-     * @return array
      * @throws \LogicException
+     *
+     * @return array
      */
     protected function getURIElements()
     {
@@ -89,6 +90,7 @@ class URIElement implements Matcher, URILexer
      * Injects the request object to match against.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
+     *
      * @return void
      */
     public function setRequest( SimplifiedRequest $request )
@@ -100,6 +102,7 @@ class URIElement implements Matcher, URILexer
      * Analyses $uri and removes the siteaccess part, if needed.
      *
      * @param string $uri The original URI
+     *
      * @return string The modified URI
      */
     public function analyseURI( $uri )
@@ -120,6 +123,7 @@ class URIElement implements Matcher, URILexer
      * Analyses $linkUri when generating a link to a route, in order to have the siteaccess part back in the URI.
      *
      * @param string $linkUri
+     *
      * @return string The modified link URI
      */
     public function analyseLink( $linkUri )

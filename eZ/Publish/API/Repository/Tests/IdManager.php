@@ -22,6 +22,7 @@ abstract class IdManager
      *
      * @param string $type
      * @param mixed $rawId
+     *
      * @return mixed
      */
     abstract public function generateId( $type, $rawId );
@@ -34,6 +35,7 @@ abstract class IdManager
      *
      * @param string $type
      * @param mixed $id
+     *
      * @return mixed
      */
     abstract public function parseId( $type, $id );

@@ -27,7 +27,8 @@ abstract class HttpCache extends BaseHttpCache
      * All non-allowed PURGE requests will receive an HTTP 405
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param bool $catch
+     * @param boolean $catch
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function invalidate( Request $request, $catch = false )
@@ -71,7 +72,8 @@ abstract class HttpCache extends BaseHttpCache
      * This method can be overridden to extend the allowance test.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return bool
+     *
+     * @return boolean
      */
     protected function isPurgeRequestAllowed( Request $request )
     {
@@ -87,7 +89,8 @@ abstract class HttpCache extends BaseHttpCache
      * @todo Check subnets
      *
      * @param string $ip
-     * @return bool
+     *
+     * @return boolean
      */
     protected function isPurgeIPAllowed( $ip )
     {

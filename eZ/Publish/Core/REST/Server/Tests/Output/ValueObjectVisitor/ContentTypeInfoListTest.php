@@ -48,6 +48,7 @@ class ContentTypeInfoListTest extends ValueObjectVisitorBaseTest
      * Test if result contains ContentTypeInfoList element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsContentTypeInfoListElement( $result )
@@ -66,6 +67,7 @@ class ContentTypeInfoListTest extends ValueObjectVisitorBaseTest
      * Test if result contains ContentTypeInfoList element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsContentTypeInfoListAttributes( $result )

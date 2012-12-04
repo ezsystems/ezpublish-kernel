@@ -48,6 +48,7 @@ class StorageRegistry
      *
      * @param string $typeName
      * @param mixed $storage Callable or FieldStorage
+     *
      * @return void
      */
     public function register( $typeName, $storage )

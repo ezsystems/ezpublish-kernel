@@ -15,7 +15,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 class InvalidArgumentException extends Exception
 {
     /**
-     * Return HTTP status code
+     * Returns HTTP status code
      *
      * @return int
      */

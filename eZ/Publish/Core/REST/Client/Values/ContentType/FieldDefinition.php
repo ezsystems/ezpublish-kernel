@@ -40,7 +40,7 @@ class FieldDefinition extends \eZ\Publish\API\Repository\Values\ContentType\Fiel
     /**
      * Contains the validators of this field definition supported by the field type#
      *
-     * @var array an array of {@link Validator}
+     * @var \eZ\Publish\Core\FieldType\Validator[]
      */
     protected $validators;
 
@@ -76,9 +76,10 @@ class FieldDefinition extends \eZ\Publish\API\Repository\Values\ContentType\Fiel
     }
 
     /**
+     * This method returns the name of the field in the given language
      *
-     * this method returns the name of the field in the given language
      * @param string $languageCode
+     *
      * @return string the name for the given language or null if none existis.
      */
     public function getName( $languageCode )
@@ -87,7 +88,7 @@ class FieldDefinition extends \eZ\Publish\API\Repository\Values\ContentType\Fiel
     }
 
     /**
-     *  This method returns the human readable description of the field
+     * This method returns the human readable description of the field
      *
      * The structure of this field is:
      * <code>
@@ -102,8 +103,10 @@ class FieldDefinition extends \eZ\Publish\API\Repository\Values\ContentType\Fiel
     }
 
     /**
-     * this method returns the name of the field in the given language
+     * This method returns the name of the field in the given language
+     *
      * @param string $languageCode
+     *
      * @return string the description for the given language or null if none existis.
      */
     public function getDescription( $languageCode )
@@ -112,8 +115,9 @@ class FieldDefinition extends \eZ\Publish\API\Repository\Values\ContentType\Fiel
     }
 
     /**
-     * this method returns the validators of this field definition supported by the field type
-     * @return array an array of {@link Validator}
+     * This method returns the validators of this field definition supported by the field type
+     *
+     * @return \eZ\Publish\Core\FieldType\Validator[]
      */
     public function getValidatorConfiguration()
     {
@@ -121,7 +125,8 @@ class FieldDefinition extends \eZ\Publish\API\Repository\Values\ContentType\Fiel
     }
 
     /**
-     * this method returns settings for the field definition supported by the field type
+     * This method returns settings for the field definition supported by the field type
+     *
      * @return array
      */
     public function getFieldSettings()

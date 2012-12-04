@@ -33,13 +33,14 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * RemoveField action to test
      *
-     * @var eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField
      */
     protected $removeFieldAction;
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
+     *
+     * @return void
      */
     public function testCtor()
     {
@@ -58,8 +59,9 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
+     *
+     * @return void
      */
     public function testApply()
     {

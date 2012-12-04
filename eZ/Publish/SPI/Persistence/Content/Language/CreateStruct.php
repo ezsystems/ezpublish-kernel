@@ -32,7 +32,7 @@ class CreateStruct extends ValueObject
     /**
      * Indicates if language is enabled or not
      *
-     * @var bool
+     * @var boolean
      */
     public $isEnabled = true;
 }

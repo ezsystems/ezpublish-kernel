@@ -26,7 +26,7 @@ class ParentLocationId extends Criterion implements CriterionInterface
     /**
      * Creates a new ParentLocationId criterion
      *
-     * @param integer|integer[] $value One or more locationId parent locations must be matched against
+     * @param int|int[] $value One or more locationId parent locations must be matched against
      *
      * @throws \InvalidArgumentException if a non numeric id is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator

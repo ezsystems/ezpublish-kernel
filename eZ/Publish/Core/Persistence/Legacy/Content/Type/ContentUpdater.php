@@ -135,6 +135,7 @@ class ContentUpdater
      *
      * @param mixed $contentTypeId
      * @param ContentUpdater\Action[] $actions
+     *
      * @return void
      */
     public function applyUpdates( $contentTypeId, array $actions )
@@ -152,6 +153,7 @@ class ContentUpdater
      * Returns all content objects of $contentTypeId
      *
      * @param mixed $contentTypeId
+     *
      * @return Content[]
      */
     protected function loadContentObjects( $contentTypeId )

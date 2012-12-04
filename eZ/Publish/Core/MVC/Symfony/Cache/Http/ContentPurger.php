@@ -19,7 +19,7 @@ interface ContentPurger extends RequestAwarePurger
     /**
      * Purges all cached content
      *
-     * @return bool
+     * @return boolean
      */
     public function purgeAllContent();
 }

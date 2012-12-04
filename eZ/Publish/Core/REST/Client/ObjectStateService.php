@@ -69,6 +69,7 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
      * Only for testing
      *
      * @param mixed $id
+     *
      * @private
      */
     public function setSession( $id )
@@ -129,6 +130,7 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
      *
      * @param int $offset
      * @param int $limit
+     *
      * @todo Implement offset & limit
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup[]
@@ -206,7 +208,7 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
             'DELETE',
             $objectStateGroup->id,
             new Message(
-                // TODO: What media-type should we set here? Actually, it should be
+                // @todo: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "ObjectStateGroup" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
@@ -249,7 +251,7 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
     /**
      * Loads an object state
      *
-     * @param $stateId
+     * @param mixed $stateId
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the state was not found
      *
@@ -322,7 +324,7 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
             'DELETE',
             $objectState->id,
             new Message(
-                // TODO: What media-type should we set here? Actually, it should be
+                // @todo: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "ObjectState" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
@@ -411,6 +413,7 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
      * Instantiates a new Object State Group Create Struct and sets $identified in it.
      *
      * @param string $identifier
+     *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct
      */
     public function newObjectStateGroupCreateStruct( $identifier )
@@ -436,6 +439,7 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
      * Instantiates a new Object State Create Struct and sets $identifier in it.
      *
      * @param string $identifier
+     *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct
      */
     public function newObjectStateCreateStruct( $identifier )

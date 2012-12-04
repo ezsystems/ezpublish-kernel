@@ -15,6 +15,7 @@ interface PurgeClientInterface
      * Triggers the cache purge $cacheElements.
      *
      * @param mixed $cacheElements Cache resource(s) to purge (e.g. array of URI to purge in a reverse proxy)
+     *
      * @return void
      */
     public function purge( $cacheElements );

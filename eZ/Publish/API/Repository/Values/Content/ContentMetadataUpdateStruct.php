@@ -24,7 +24,7 @@ class ContentMetadataUpdateStruct extends ValueObject
     public $ownerId;
 
     /**
-     * if set this value overrides the publication date of the content. (Used in staging scenarios)
+     * If set this value overrides the publication date of the content. (Used in staging scenarios)
      *
      * @var \DateTime
      */
@@ -38,7 +38,7 @@ class ContentMetadataUpdateStruct extends ValueObject
     public $modificationDate;
 
     /**
-     * if set the main language of the content object is changed.
+     * If set the main language of the content object is changed.
      *
      * @var string
      */
@@ -52,7 +52,7 @@ class ContentMetadataUpdateStruct extends ValueObject
     public $alwaysAvailable;
 
     /**
-     * if set this value changes the remoteId.
+     * If set this value changes the remoteId.
      *
      * Needs to be a unique Content->remoteId string value.
      *

@@ -125,7 +125,7 @@ class Store implements StoreInterface
             return $this->restoreResponse($headers, $body);
         }
 
-        // TODO the metaStore referenced an entity that doesn't exist in
+        // @todo the metaStore referenced an entity that doesn't exist in
         // the entityStore. We definitely want to return nil but we should
         // also purge the entry from the meta-store when this is detected.
         return null;
@@ -137,7 +137,7 @@ class Store implements StoreInterface
      * Existing entries are read and any that match the response are removed. This
      * method calls write with the new list of cache entries.
      *
-     * @param Request  $request  A Request instance
+     * @param Request $request A Request instance
      * @param Response $response A Response instance
      *
      * @return string The key under which the response is stored
@@ -242,8 +242,8 @@ class Store implements StoreInterface
      * the vary response header value provided.
      *
      * @param string $vary A Response vary header
-     * @param array  $env1 A Request HTTP header array
-     * @param array  $env2 A Request HTTP header array
+     * @param array $env1 A Request HTTP header array
+     * @param array $env2 A Request HTTP header array
      *
      * @return Boolean true if the the two environments match, false otherwise
      */
@@ -318,7 +318,7 @@ class Store implements StoreInterface
     /**
      * Save data for the given key.
      *
-     * @param string $key  The store key
+     * @param string $key The store key
      * @param string $data The data to store
      */
     private function save($key, $data)
@@ -397,8 +397,8 @@ class Store implements StoreInterface
     /**
      * Restores a Response from the HTTP headers and body.
      *
-     * @param array  $headers An array of HTTP headers for the Response
-     * @param string $body    The Response body
+     * @param array $headers An array of HTTP headers for the Response
+     * @param string $body The Response body
      */
     private function restoreResponse($headers, $body = null)
     {

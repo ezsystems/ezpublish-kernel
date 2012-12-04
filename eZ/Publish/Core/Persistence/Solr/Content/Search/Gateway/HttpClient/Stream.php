@@ -69,6 +69,7 @@ class Stream implements HttpClient
      * @param string $method
      * @param string $path
      * @param Message $message
+     *
      * @return Message
      */
     public function request( $method, $path, Message $message = null )
@@ -142,6 +143,7 @@ class Stream implements HttpClient
      * Merged with the default values.
      *
      * @param array $headers
+     *
      * @return string
      */
     protected function getRequestHeaders( array $headers )

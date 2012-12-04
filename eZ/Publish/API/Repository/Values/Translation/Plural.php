@@ -68,6 +68,7 @@ class Plural extends Translation
      * @param string $singular
      * @param string $plural
      * @param array $values
+     *
      * @return void
      */
     public function __construct( $singular, $plural, array $values )

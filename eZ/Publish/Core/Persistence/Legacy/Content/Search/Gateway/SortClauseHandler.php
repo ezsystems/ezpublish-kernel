@@ -20,7 +20,7 @@ abstract class SortClauseHandler
     /**
      * Database handler
      *
-     * @var eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected $dbHandler;
 
@@ -38,7 +38,8 @@ abstract class SortClauseHandler
      * Check if this sort clause handler accepts to handle the given sort clause.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
-     * @return bool
+     *
+     * @return boolean
      */
     abstract public function accept( SortClause $sortClause );
 
@@ -51,16 +52,18 @@ abstract class SortClauseHandler
      * @param \ezcQuerySelect $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
+     *
      * @return string
      */
     abstract public function applySelect( ezcQuerySelect $query, SortClause $sortClause, $number );
 
     /**
-     * applies joins to the query
+     * Applies joins to the query
      *
      * @param \ezcQuerySelect $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
+     *
      * @return void
      */
     public function applyJoin( ezcQuerySelect $query, SortClause $sortClause, $number )
@@ -71,6 +74,7 @@ abstract class SortClauseHandler
      * Returns the quoted sort column name
      *
      * @param int $number
+     *
      * @return string
      */
     protected function getSortColumnName( $number )
@@ -82,6 +86,7 @@ abstract class SortClauseHandler
      * Returns the sort table name
      *
      * @param int $number
+     *
      * @return string
      */
     protected function getSortTableName( $number )

@@ -19,6 +19,7 @@ class Json extends Handler
      * Converts the given string to an array structure
      *
      * @param string $string
+     *
      * @return array
      */
     public function convert( $string )

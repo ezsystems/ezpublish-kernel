@@ -42,6 +42,7 @@ class SiteAccess implements EventSubscriberInterface
      * Maps matched siteaccess to the legacy parameters
      *
      * @param \eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent $event
+     *
      * @return void
      */
     public function onBuildKernelWebHandler( PreBuildKernelWebHandlerEvent $event )

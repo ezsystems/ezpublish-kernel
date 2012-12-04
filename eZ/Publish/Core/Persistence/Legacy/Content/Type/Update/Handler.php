@@ -19,6 +19,7 @@ abstract class Handler
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $fromType
      * @param \eZ\Publish\SPI\Persistence\Content\Type $toType
+     *
      * @return void
      */
     abstract public function updateContentObjects( $fromType, $toType );
@@ -27,6 +28,7 @@ abstract class Handler
      * Deletes $fromType and all of its field definitions
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $fromType
+     *
      * @return void
      */
     abstract public function deleteOldType( $fromType );
@@ -36,6 +38,7 @@ abstract class Handler
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $toType
      * @param int $newStatus
+     *
      * @return void
      */
     abstract public function publishNewType( $toType, $newStatus );

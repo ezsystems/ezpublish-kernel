@@ -473,8 +473,9 @@ class SectionServiceTest extends BaseTest
     /**
      * Test for the countAssignedContents() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::countAssignedContents()
+     *
+     * @return void
      */
     public function testCountAssignedContents()
     {

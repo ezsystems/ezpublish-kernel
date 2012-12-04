@@ -35,6 +35,7 @@ class EzcDatabase extends Gateway
      * Construct from database handler
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $handler
+     *
      * @return void
      */
     public function __construct( EzcDbHandler $handler )
@@ -48,8 +49,9 @@ class EzcDatabase extends Gateway
      * We might want to cache this, since this method is used by about every
      * method in the location handler.
      *
-     * @optimze
+     * @todo optimize
      * @param mixed $nodeId
+     *
      * @return array
      */
     public function getBasicNodeData( $nodeId )
@@ -78,8 +80,9 @@ class EzcDatabase extends Gateway
     /**
      * Returns an array with basic node data
      *
-     * @optimze
+     * @todo optimize
      * @param mixed $remoteId
+     *
      * @return array
      */
     public function getBasicNodeDataByRemoteId( $remoteId )
@@ -111,6 +114,7 @@ class EzcDatabase extends Gateway
      *
      * @param int $contentId
      * @param int $rootLocationId
+     *
      * @return array
      */
     public function loadLocationDataByContent( $contentId, $rootLocationId = null )
@@ -141,6 +145,7 @@ class EzcDatabase extends Gateway
      * Find all content in the given subtree
      *
      * @param mixed $sourceId
+     *
      * @return array
      */
     public function getSubtreeContent( $sourceId )
@@ -166,6 +171,7 @@ class EzcDatabase extends Gateway
      *
      * @param \ezcQuery $query
      * @param string $rootLocationId
+     *
      * @return void
      */
     protected function applySubtreeLimitation( \ezcQuery $query, $rootLocationId )
@@ -182,6 +188,7 @@ class EzcDatabase extends Gateway
      * Returns data for the first level children of the location identified by given $locationId
      *
      * @param mixed $locationId
+     *
      * @return array
      */
     public function getChildren( $locationId )
@@ -207,9 +214,10 @@ class EzcDatabase extends Gateway
      * This query can likely be optimized to use some more advanced string
      * operations, which then depend on the respective database.
      *
-     * @optimize
+     * @todo optimize
      * @param string $sourceNodeData
      * @param string $destinationNodeData
+     *
      * @return void
      */
     public function moveSubtreeNodes( $sourceNodeData, $destinationNodeData )
@@ -484,6 +492,7 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $locationId1
      * @param mixed $locationId2
+     *
      * @return boolean
      */
     public function swap( $locationId1, $locationId2 )
@@ -644,6 +653,7 @@ class EzcDatabase extends Gateway
      * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
      * @param mixed $parentNodeId
      * @param int $type
+     *
      * @return void
      */
     public function createNodeAssignment( CreateStruct $createStruct, $parentNodeId, $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP )
@@ -730,6 +740,7 @@ class EzcDatabase extends Gateway
      * @param int $oldParent
      * @param int $newParent
      * @param int $opcode
+     *
      * @return void
      */
     public function updateNodeAssignment( $contentObjectId, $oldParent, $newParent, $opcode )
@@ -767,6 +778,7 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $contentId
      * @param mixed $versionNo
+     *
      * @return void
      */
     public function createLocationsFromNodeAssignments( $contentId, $versionNo )
@@ -859,6 +871,7 @@ class EzcDatabase extends Gateway
      * Searches for the main nodeId of $contentId in $versionId
      *
      * @param int $contentId
+     *
      * @return int|bool
      */
     private function getMainNodeId( $contentId )
@@ -898,6 +911,7 @@ class EzcDatabase extends Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId
+     *
      * @return boolean
      */
     public function update( UpdateStruct $location, $locationId )
@@ -1112,9 +1126,10 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Load trash data specified by location ID
+     * Loads trash data specified by location ID
      *
      * @param mixed $locationId
+     *
      * @return array
      */
     public function loadTrashByLocation( $locationId )
@@ -1146,6 +1161,7 @@ class EzcDatabase extends Gateway
      * @param int $offset
      * @param int $limit
      * @param array $sort
+     *
      * @return array
      */
     public function listTrashed( $offset, $limit, array $sort = null )
@@ -1219,6 +1235,7 @@ class EzcDatabase extends Gateway
      * Will NOT remove associated content object nor attributes.
      *
      * @param int $id The trashed location Id
+     *
      * @return void
      */
     public function removeElementFromTrash( $id )
@@ -1240,6 +1257,7 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $pathString
      * @param mixed $sectionId
+     *
      * @return boolean
      */
     public function setSectionForSubtree( $pathString, $sectionId )
@@ -1276,6 +1294,7 @@ class EzcDatabase extends Gateway
      * Returns how many locations given content object identified by $contentId has
      *
      * @param int $contentId
+     *
      * @return int
      */
     public function countLocationsByContentId( $contentId )

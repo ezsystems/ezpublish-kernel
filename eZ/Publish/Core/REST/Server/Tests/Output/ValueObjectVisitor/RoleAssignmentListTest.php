@@ -48,6 +48,7 @@ class RoleAssignmentListTest extends ValueObjectVisitorBaseTest
      * Test if result contains RoleAssignmentList element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRoleListElement( $result )
@@ -66,6 +67,7 @@ class RoleAssignmentListTest extends ValueObjectVisitorBaseTest
      * Test if result contains RoleAssignmentList element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRoleAssignmentListAttributes( $result )

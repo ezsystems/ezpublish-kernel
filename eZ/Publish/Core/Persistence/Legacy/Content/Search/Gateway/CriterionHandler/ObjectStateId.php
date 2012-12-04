@@ -22,7 +22,8 @@ class ObjectStateId extends CriterionHandler
      * Check if this criterion handler accepts to handle the given criterion.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @return bool
+     *
+     * @return boolean
      */
     public function accept( Criterion $criterion )
     {
@@ -32,7 +33,7 @@ class ObjectStateId extends CriterionHandler
     /**
      * Check if this criterion handler accepts to handle the given criterion.
      *
-     * @TODO: Needs optimisation since this subselect can potentially be problematic
+     * @todo: Needs optimisation since this subselect can potentially be problematic
      * due to large number of contentobject_id values returned. One way to fix this
      * is to use inner joins on ezcobj_state_link table, but this is not currently
      * supported in legacy search gateway
@@ -40,6 +41,7 @@ class ObjectStateId extends CriterionHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter $converter
      * @param \ezcQuerySelect $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     *
      * @return \ezcQueryExpression
      */
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )

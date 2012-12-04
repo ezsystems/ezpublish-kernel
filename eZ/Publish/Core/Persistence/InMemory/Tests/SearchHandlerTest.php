@@ -30,7 +30,6 @@ class SearchHandlerTest extends HandlerTest
     protected $content;
 
     /**
-     *
      * @var int
      */
     protected $contentId;

@@ -46,7 +46,8 @@ abstract class ValueObjectVisitor
     /**
      * Returns a string representation for the given $boolValue
      *
-     * @param bool $boolValue
+     * @param boolean $boolValue
+     *
      * @return string
      */
     protected function serializeBool( $boolValue )
@@ -130,6 +131,7 @@ abstract class ValueObjectVisitor
      * Serializes the given $sortField to a string representation
      *
      * @param int $sortField
+     *
      * @return string
      */
     protected function serializeSortField( $sortField )
@@ -169,6 +171,7 @@ abstract class ValueObjectVisitor
      * Serializes the given $sortOrder to a string representation
      *
      * @param int $sortOrder
+     *
      * @return string
      */
     protected function serializeSortOrder( $sortOrder )

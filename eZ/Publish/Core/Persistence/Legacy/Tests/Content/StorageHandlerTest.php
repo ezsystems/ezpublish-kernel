@@ -48,8 +48,9 @@ class StorageHandlerTest extends TestCase
     protected $versionInfoMock;
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler::storeFieldData
+     *
+     * @return void
      */
     public function testStoreFieldData()
     {
@@ -78,8 +79,9 @@ class StorageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler::getFieldData
+     *
+     * @return void
      */
     public function testGetFieldDataAvailable()
     {
@@ -111,8 +113,9 @@ class StorageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler::getFieldData
+     *
+     * @return void
      */
     public function testGetFieldDataNotAvailable()
     {
@@ -139,8 +142,9 @@ class StorageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler::deleteFieldData
+     *
+     * @return void
      */
     public function testDeleteFieldData()
     {

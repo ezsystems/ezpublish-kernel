@@ -62,7 +62,7 @@ class Pattern implements UrlHandler
     }
 
     /**
-     * Add a pattern for a type
+     * Adds a pattern for a type
      *
      * @param string $type
      * @param string $pattern
@@ -78,6 +78,7 @@ class Pattern implements UrlHandler
      *
      * @param string $type
      * @param string $url
+     *
      * @return array
      */
     public function parse( $type, $url )
@@ -108,6 +109,7 @@ class Pattern implements UrlHandler
      * Compiles a given pattern to a PCRE regular expression
      *
      * @param string $pattern
+     *
      * @return string
      */
     protected function compile( $pattern )
@@ -153,6 +155,7 @@ class Pattern implements UrlHandler
      *
      * @param string $type
      * @param array $values
+     *
      * @return string
      */
     public function generate( $type, array $values = array() )

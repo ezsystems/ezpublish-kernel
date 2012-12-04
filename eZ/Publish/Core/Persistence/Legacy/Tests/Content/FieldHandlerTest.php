@@ -52,8 +52,9 @@ class FieldHandlerTest extends TestCase
     protected $storageHandlerMock;
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::createNewFields
+     *
+     * @return void
      */
     public function testCreateNewFields()
     {
@@ -92,8 +93,9 @@ class FieldHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::createNewFields
+     *
+     * @return void
      */
     public function testCreateNewFieldsUpdatingStorageHandler()
     {
@@ -101,8 +103,9 @@ class FieldHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::loadExternalFieldData
+     *
+     * @return void
      */
     public function testLoadExternalFieldData()
     {
@@ -121,8 +124,9 @@ class FieldHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
+     *
+     * @return void
      */
     public function testUpdateFieldsTranslatable()
     {
@@ -159,8 +163,9 @@ class FieldHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
+     *
+     * @return void
      */
     public function testUpdateFieldsUpdatingStorageHandlerNonTranslatable()
     {
@@ -168,8 +173,9 @@ class FieldHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
+     *
+     * @return void
      */
     public function testUpdateFieldsUpdatingStorageHandlerTranslatable()
     {
@@ -177,8 +183,9 @@ class FieldHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
+     *
+     * @return void
      */
     public function testUpdateFieldsCreatesNewFields()
     {
@@ -198,8 +205,9 @@ class FieldHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::deleteFields
+     *
+     * @return void
      */
     public function testDeleteFields()
     {
@@ -262,7 +270,7 @@ class FieldHandlerTest extends TestCase
     /**
      * Returns an UpdateStruct fixture
      *
-     * @param bool $setIds
+     * @param boolean $setIds
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UpdateStruct
      */
@@ -303,6 +311,7 @@ class FieldHandlerTest extends TestCase
      * Returns the handler to test with $methods mocked
      *
      * @param string[] $methods
+     *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
      */
     protected function getPartlyMockedFieldHandler( array $methods )

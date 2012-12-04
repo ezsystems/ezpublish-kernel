@@ -191,6 +191,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      *
      * @param Legacy\Handler $handler
      * @param Content $content
+     *
      * @return void
      */
     public function postCreationHook( Legacy\Handler $handler, Content $content )

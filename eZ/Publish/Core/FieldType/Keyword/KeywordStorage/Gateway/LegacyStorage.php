@@ -17,6 +17,7 @@ class LegacyStorage extends Gateway
      * Set database handler for this gateway
      *
      * @param mixed $dbHandler
+     *
      * @return void
      * @throws \RuntimeException if $dbHandler is not an instance of
      *         {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler}
@@ -38,8 +39,9 @@ class LegacyStorage extends Gateway
     /**
      * Returns the active connection
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      * @throws \RuntimeException if no connection has been set, yet.
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected function getConnection()
     {
@@ -78,6 +80,7 @@ class LegacyStorage extends Gateway
      * Sets the list of assigned keywords into $field->value->externalData
      *
      * @param Field $field
+     *
      * @return void
      */
     public function getFieldData( Field $field )
@@ -89,6 +92,7 @@ class LegacyStorage extends Gateway
      * Retrieve the ContentType ID for the given $field
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     *
      * @return mixed
      */
     public function getContentTypeID( Field $field )
@@ -100,6 +104,7 @@ class LegacyStorage extends Gateway
      * Returns a list of keywords assigned to $fieldId
      *
      * @param mixed $fieldId
+     *
      * @return string[]
      */
     protected function getAssignedKeywords( $fieldId )
@@ -134,6 +139,7 @@ class LegacyStorage extends Gateway
      * Retrieves the content type ID for the given $fieldDefinitionId
      *
      * @param mixed $fieldDefinitionId
+     *
      * @return mixed
      */
     protected function loadContentTypeID( $fieldDefinitionId )
@@ -176,6 +182,7 @@ class LegacyStorage extends Gateway
      *
      * @param string[] $keywordList
      * @param mixed $contentTypeID
+     *
      * @return mixed[]
      */
     protected function getExistingKeywords( $keywordList, $contentTypeID )
@@ -222,6 +229,7 @@ class LegacyStorage extends Gateway
      *
      * @param string[] $keywordsToInsert
      * @param mixed $fieldDefinitionId
+     *
      * @return mixed[]
      */
     protected function insertKeywords( array $keywordsToInsert, $contentTypeID )
@@ -290,6 +298,7 @@ class LegacyStorage extends Gateway
      *
      * @param mixed $fieldId
      * @param mixed[] $keywordMap
+     *
      * @return void
      */
     protected function assignKeywords( $fieldId, $keywordMap )

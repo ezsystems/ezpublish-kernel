@@ -98,7 +98,7 @@ class Type extends FieldType
     }
 
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -189,6 +189,7 @@ class Type extends FieldType
      * For this FieldType, the related object's name is returned.
      *
      * @todo What to do here?
+     *
      * @return array
      */
     protected function getSortInfo( $value )
@@ -223,7 +224,7 @@ class Type extends FieldType
     /**
      * Returns whether the field type is searchable
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {

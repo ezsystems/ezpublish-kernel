@@ -148,7 +148,7 @@ interface Handler
     /**
      * Notifies the underlying engine that a location was deleted or moved to trash
      *
-     * @param $locationId
+     * @param mixed $locationId
      */
     public function locationDeleted( $locationId );
 }

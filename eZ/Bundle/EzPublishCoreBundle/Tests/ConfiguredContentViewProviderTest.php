@@ -59,7 +59,8 @@ class ConfiguredLocationViewProviderTest extends BaseTest
     }
 
     /**
-     * @param $matcherServiceIdentifier
+     * @param string $matcherServiceIdentifier
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function getResolverMock( $matcherServiceIdentifier )

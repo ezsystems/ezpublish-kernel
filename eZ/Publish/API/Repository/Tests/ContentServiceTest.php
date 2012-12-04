@@ -4141,6 +4141,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @param array $expectedAliasProperties
      * @param array $actualAliases
+     *
      * @return void
      */
     private function assertAliasesCorrect( array $expectedAliasProperties, array $actualAliases )
@@ -4190,6 +4191,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * Asserts that the given fields are equal to the default fields fixture.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Field[] $fields
+     *
      * @return void
      */
     private function assertAllFieldsEquals( array $fields )
@@ -4235,6 +4237,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * specific FieldType, which is tested in a dedicated integration test.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Field[] $fields
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Field[]
      */
     private function normalizeFields( array $fields )

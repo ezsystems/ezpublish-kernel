@@ -41,7 +41,7 @@ class EzPublishCoreExtension extends Extension
     /**
      * Loads a specific configuration.
      *
-     * @param array            $configs    An array of configuration values
+     * @param mixed[] $configs An array of configuration values
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container A ContainerBuilder instance
      *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
@@ -199,6 +199,7 @@ class EzPublishCoreExtension extends Extension
     /**
      * @param array $config
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
      * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration
      */
     public function getConfiguration( array $config, ContainerBuilder $container )

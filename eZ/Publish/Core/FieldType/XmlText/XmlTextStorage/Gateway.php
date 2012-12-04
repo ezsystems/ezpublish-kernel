@@ -32,7 +32,7 @@ abstract class Gateway extends StorageGateway
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      *
-     * @return bool
+     * @return boolean
      */
     abstract public function storeFieldData( VersionInfo $versionInfo, Field $field );
 }

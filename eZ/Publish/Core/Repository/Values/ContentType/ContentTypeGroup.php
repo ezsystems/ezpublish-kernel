@@ -38,7 +38,6 @@ class ContentTypeGroup extends APIContentTypeGroup
     protected $descriptions;
 
     /**
-     *
      * This method returns the human readable name in all provided languages
      * of the content type
      *
@@ -57,7 +56,7 @@ class ContentTypeGroup extends APIContentTypeGroup
     }
 
     /**
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
      *
      * @since 5.0
      *
@@ -93,7 +92,7 @@ class ContentTypeGroup extends APIContentTypeGroup
     }
 
     /**
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
      *
      * @since 5.0
      *

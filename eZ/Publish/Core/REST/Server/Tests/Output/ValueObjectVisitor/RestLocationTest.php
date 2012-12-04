@@ -71,6 +71,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      * Test if result contains Location element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLocationElement( $result )
@@ -92,6 +93,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      * Test if result contains Location element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLocationAttributes( $result )
@@ -114,6 +116,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      * Test if result contains id value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsIdValueElement( $result )
@@ -133,6 +136,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      * Test if result contains priority value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPriorityValueElement( $result )
@@ -152,6 +156,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      * Test if result contains hidden value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsHiddenValueElement( $result )
@@ -171,6 +176,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      * Test if result contains invisible value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsInvisibleValueElement( $result )
@@ -190,6 +196,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      * Test if result contains remoteId value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRemoteIdValueElement( $result )
@@ -209,6 +216,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      * Test if result contains Children element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsChildrenElement( $result )
@@ -227,6 +235,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      * Test if result contains Children element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsChildrenAttributes( $result )
@@ -249,6 +258,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      * Test if result contains ParentLocation element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsParentLocationElement( $result )
@@ -267,6 +277,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      * Test if result contains ParentLocation element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsParentLocationAttributes( $result )
@@ -289,6 +300,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      * Test if result contains Content element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsContentElement( $result )
@@ -307,6 +319,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      * Test if result contains Content element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsContentAttributes( $result )
@@ -329,6 +342,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      * Test if result contains pathString value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPathStringValueElement( $result )
@@ -348,6 +362,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      * Test if result contains depth value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsDepthValueElement( $result )
@@ -367,6 +382,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      * Test if result contains sortField value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSortFieldValueElement( $result )
@@ -386,6 +402,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      * Test if result contains sortOrder value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSortOrderValueElement( $result )
@@ -405,6 +422,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      * Test if result contains childCount value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsChildCountValueElement( $result )

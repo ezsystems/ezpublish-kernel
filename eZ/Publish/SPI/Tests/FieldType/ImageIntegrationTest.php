@@ -239,6 +239,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      * Can be overwritten to assert that additional data has been deleted
      *
      * @param Content $content
+     *
      * @return void
      */
     public function assertDeletedFieldDataCorrect( Content $content )

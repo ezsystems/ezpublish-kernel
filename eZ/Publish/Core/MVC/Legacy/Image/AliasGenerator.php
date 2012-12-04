@@ -63,6 +63,7 @@ class AliasGenerator implements VariationHandler
      * @param array $parameters
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidVariationException
+     *
      * @return \eZ\Publish\SPI\Variation\Values\ImageVariation
      */
     public function getVariation( Field $field, VersionInfo $versionInfo, $variationName, array $parameters = array() )

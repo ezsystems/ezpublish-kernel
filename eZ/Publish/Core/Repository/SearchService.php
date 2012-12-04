@@ -45,7 +45,7 @@ class SearchService implements SearchServiceInterface
     /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
-     * @param \eZ\Publish\API\Repository\Repository  $repository
+     * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandler
      * @param array $settings
      */
@@ -58,13 +58,13 @@ class SearchService implements SearchServiceInterface
         );
     }
 
-     /**
-     * finds content objects for the given query.
+    /**
+     * Finds content objects for the given query.
      *
-     * @TODO define structs for the field filters
+     * @todo define structs for the field filters
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array  $fieldFilters - a map of filters for the returned fields.
+     * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
@@ -94,9 +94,9 @@ class SearchService implements SearchServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than one result matching the criterions
      *
-     * @TODO define structs for the field filters
+     * @todo define structs for the field filters
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array  $fieldFilters - a map of filters for the returned fields.
+     * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
@@ -128,7 +128,7 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * Add content, read Permission criteria if needed and return false if no access at all
+     * Adds content, read Permission criteria if needed and return false if no access at all
      *
      * @access private Temporarily made accessible until Location service stops using searchHandler()
      * @uses getPermissionsCriterion()
@@ -169,6 +169,7 @@ class SearchService implements SearchServiceInterface
      *
      * @uses \eZ\Publish\API\Repository::hasAccess()
      * @throws \RuntimeException If empty array of limitations are provided from hasAccess()
+     *
      * @return boolean|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
     public function getPermissionsCriterion( $module = 'content', $function = 'read' )

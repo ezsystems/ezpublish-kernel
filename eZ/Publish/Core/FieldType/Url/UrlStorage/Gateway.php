@@ -22,7 +22,8 @@ abstract class Gateway extends StorageGateway
      *
      * @param VersionInfo $versionInfo
      * @param Field $field
-     * @return bool
+     *
+     * @return boolean
      */
     abstract public function storeFieldData( VersionInfo $versionInfo, Field $field );
 
@@ -30,6 +31,7 @@ abstract class Gateway extends StorageGateway
      * Sets a loaded URL, if one is stored for the given field
      *
      * @param Field $field
+     *
      * @return void
      */
     abstract public function getFieldData( Field $field );

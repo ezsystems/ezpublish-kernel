@@ -24,7 +24,7 @@ class LanguageCode extends Criterion implements CriterionInterface
     /**
      * Creates a new LanguageCode criterion
      *
-     * @param string|array(string) $value One or more language codes that must be matched
+     * @param string|string[] $value One or more language codes that must be matched
      *
      * @throws \InvalidArgumentException if non string value is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator

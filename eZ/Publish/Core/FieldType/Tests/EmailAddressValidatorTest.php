@@ -102,7 +102,6 @@ class EmailAddressValidatorTest extends FieldTypeTest
     /**
      * Tests validating a wrong value
      *
-     *
      * @covers \eZ\Publish\Core\FieldType\Validator\EmailAddressValidator::validate
      */
     public function testValidateWrongEmailAddresses( )

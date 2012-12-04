@@ -41,8 +41,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::__construct
+     *
+     * @return void
      */
     public function testCtor()
     {
@@ -57,8 +58,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::insertGroup
+     *
+     * @return void
      */
     public function testInsertGroup()
     {
@@ -120,8 +122,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::updateGroup
+     *
+     * @return void
      */
     public function testUpdateGroup()
     {
@@ -214,8 +217,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::countTypesInGroup
+     *
+     * @return void
      */
     public function testCountTypesInGroup()
     {
@@ -236,8 +240,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::countGroupsForType
+     *
+     * @return void
      */
     public function testCountGroupsForType()
     {
@@ -258,8 +263,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroup
+     *
+     * @return void
      */
     public function testDeleteGroup()
     {
@@ -286,6 +292,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadGroupData
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::createGroupLoadQuery
+     *
      * @return void
      */
     public function testLoadGroupData()
@@ -315,6 +322,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadGroupDataByIdentifier
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::createGroupLoadQuery
+     *
      * @return void
      */
     public function testLoadGroupDataByIdentifier()
@@ -344,6 +352,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadAllGroupsData
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::createGroupLoadQuery
+     *
      * @return void
      */
     public function testLoadAllGroupsData()
@@ -374,8 +383,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadTypesDataForGroup
+     *
+     * @return void
      */
     public function testLoadTypesDataForGroup()
     {
@@ -754,8 +764,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteFieldDefinition
+     *
+     * @return void
      */
     public function testDeleteFieldDefinition()
     {
@@ -892,8 +903,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroupAssignment
+     *
+     * @return void
      */
     public function testDeleteGroupAssignment()
     {
@@ -1054,6 +1066,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::countInstancesOfType
+     *
      * @return void
      */
     public function testCountInstancesOfTypeExist()
@@ -1074,6 +1087,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::countInstancesOfType
+     *
      * @return void
      */
     public function testCountInstancesOfTypeNotExist()
@@ -1093,8 +1107,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteFieldDefinitionsForType
+     *
+     * @return void
      */
     public function testDeleteFieldDefinitionsForTypeExisting()
     {
@@ -1135,8 +1150,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteFieldDefinitionsForType
+     *
+     * @return void
      */
     public function testDeleteFieldDefinitionsForTypeNotExisting()
     {
@@ -1160,8 +1176,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroupAssignmentsForType
+     *
+     * @return void
      */
     public function testDeleteGroupAssignmentsForTypeExisting()
     {
@@ -1185,8 +1202,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroupAssignmentsForType
+     *
+     * @return void
      */
     public function testDeleteGroupAssignmentsForTypeNotExisting()
     {
@@ -1210,8 +1228,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteType
+     *
+     * @return void
      */
     public function testDeleteTypeExisting()
     {
@@ -1235,8 +1254,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteType
+     *
+     * @return void
      */
     public function testDeleteTypeNotExisting()
     {
@@ -1260,8 +1280,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::publishTypeAndFields
+     *
+     * @return void
      */
     public function testPublishTypeAndFields()
     {

@@ -43,6 +43,7 @@ abstract class Configured
      * Returns the matcher object.
      *
      * @param string $matcherIdentifier The matcher class. If it begins with a '\' it means it's a FQ class name, otherwise it is relative to this namespace.
+     *
      * @return \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher
      */
     protected function getMatcher( $matcherIdentifier )

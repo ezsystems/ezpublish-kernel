@@ -16,12 +16,12 @@ class FieldType implements Repository\FieldType
     /**
      * Wrapped FieldType.
      *
-     * @var eZ\Publish\API\Repository\FieldType
+     * @var \eZ\Publish\API\Repository\FieldType
      */
     protected $innerFieldType;
 
     /**
-     * @param eZ\Publish\SPI\FieldType\FieldType $innerFieldType
+     * @param \eZ\Publish\SPI\FieldType\FieldType $innerFieldType
      */
     public function __construct( SPI\FieldType\FieldType $innerFieldType )
     {
@@ -29,7 +29,7 @@ class FieldType implements Repository\FieldType
     }
 
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -114,7 +114,7 @@ class FieldType implements Repository\FieldType
     /**
      * Indicates if the field type supports indexing and sort keys for searching
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {
@@ -160,6 +160,7 @@ class FieldType implements Repository\FieldType
      * Converts the given $fieldSettings to a simple hash format
      *
      * @param mixed $fieldSettings
+     *
      * @return array|hash|scalar|null
      */
     public function fieldSettingsToHash( $fieldSettings )
@@ -173,6 +174,7 @@ class FieldType implements Repository\FieldType
      * This is the reverse operation of {@link fieldSettingsToHash()}.
      *
      * @param array|hash|scalar|null $fieldSettingsHash
+     *
      * @return mixed
      */
     public function fieldSettingsFromHash( $fieldSettingsHash )
@@ -184,6 +186,7 @@ class FieldType implements Repository\FieldType
      * Converts the given $validatorConfiguration to a simple hash format
      *
      * @param mixed $validatorConfiguration
+     *
      * @return array|hash|scalar|null
      */
     public function validatorConfigurationToHash( $validatorConfiguration )
@@ -196,6 +199,7 @@ class FieldType implements Repository\FieldType
      * configuration of the type
      *
      * @param array|hash|scalar|null $validatorConfigurationHash
+     *
      * @return mixed
      */
     public function validatorConfigurationFromHash( $validatorConfigurationHash )

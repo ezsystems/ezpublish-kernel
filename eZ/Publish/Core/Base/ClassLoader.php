@@ -59,10 +59,11 @@ class ClassLoader
     }
 
     /**
-     * Load classes/interfaces following PSR-0 naming and class map
+     * Loads classes/interfaces following PSR-0 naming and class map
      *
      * @param string $className
-     * @param bool $returnFileName For testing, returns file name instead of loading it
+     * @param boolean $returnFileName For testing, returns file name instead of loading it
+     *
      * @return null|boolean|string Null if no match is found, bool if match and found/not found,
      *                             string if $returnFileName is true.
      */

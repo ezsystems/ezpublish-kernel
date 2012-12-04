@@ -21,6 +21,7 @@ class MaskGeneratorTest extends LanguageAwareTestCase
     /**
      * @param array $languages
      * @param int $expectedMask
+     *
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::generateLanguageMask
      * @dataProvider getLanguageMaskData
@@ -70,6 +71,7 @@ class MaskGeneratorTest extends LanguageAwareTestCase
      * @param string $languageCode
      * @param boolean $alwaysAvailable
      * @param int $expectedIndicator
+     *
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::generateLanguageIndicator
      * @dataProvider getLanguageIndicatorData
@@ -107,8 +109,9 @@ class MaskGeneratorTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::isLanguageAlwaysAvailable
+     *
+     * @return void
      */
     public function testIsLanguageAlwaysAvailable()
     {
@@ -126,8 +129,9 @@ class MaskGeneratorTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::isLanguageAlwaysAvailable
+     *
+     * @return void
      */
     public function testIsLanguageAlwaysAvailableOtherLanguage()
     {
@@ -145,8 +149,9 @@ class MaskGeneratorTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::isLanguageAlwaysAvailable
+     *
+     * @return void
      */
     public function testIsLanguageAlwaysAvailableNoDefault()
     {
@@ -164,7 +169,8 @@ class MaskGeneratorTest extends LanguageAwareTestCase
 
     /**
      * @param int $languageMask
-     * @param bool $expectedResult
+     * @param boolean $expectedResult
+     *
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::isAlwaysAvailable
      * @dataProvider isAlwaysAvailableProvider
      */

@@ -211,7 +211,7 @@ class RelationList implements Converter
      * "sort_key_int" or "sort_key_string". This column is then used for
      * filtering and sorting for this type.
      *
-     * @return bool
+     * @return boolean
      */
     public function getIndexColumn()
     {
@@ -222,6 +222,7 @@ class RelationList implements Converter
      * @param mixed[] $destinationContentIds
      *
      * @throws \Exception
+     *
      * @return array
      */
     private function getRelationXmlHashFromDB( array $destinationContentIds )
@@ -278,7 +279,6 @@ class RelationList implements Converter
     }
 
     /**
-     * @static
      * @return array
      */
     static private function dbAttributeMap()

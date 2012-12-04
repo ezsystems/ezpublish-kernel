@@ -51,7 +51,7 @@ class Type extends FieldType
     );
 
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -110,7 +110,8 @@ class Type extends FieldType
      * Returns if the given $value is considered empty by the field type
      *
      * @param mixed $value
-     * @return bool
+     *
+     * @return boolean
      */
     public function isEmptyValue( $value )
     {
@@ -201,6 +202,7 @@ class Type extends FieldType
      * $fieldValue->data is supposed to be a DOMDocument object.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
+     *
      * @return Value
      */
     public function fromPersistenceValue( FieldValue $fieldValue )
@@ -210,6 +212,7 @@ class Type extends FieldType
 
     /**
      * @param Value $value
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
     public function toPersistenceValue( $value )
@@ -226,7 +229,7 @@ class Type extends FieldType
     /**
      * Returns whether the field type is searchable
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {

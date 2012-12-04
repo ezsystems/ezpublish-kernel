@@ -17,9 +17,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler,
 class DeferredLegacy extends Handler
 {
     /**
-     * eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
-     *
-     * @var mixed
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
      */
     protected $contentTypeGateway;
 
@@ -38,6 +36,7 @@ class DeferredLegacy extends Handler
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $fromType
      * @param \eZ\Publish\SPI\Persistence\Content\Type $toType
+     *
      * @return void
      */
     public function updateContentObjects( $fromType, $toType )
@@ -48,6 +47,7 @@ class DeferredLegacy extends Handler
      * Deletes $fromType and all of its field definitions
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $fromType
+     *
      * @return void
      */
     public function deleteOldType( $fromType )
@@ -59,6 +59,7 @@ class DeferredLegacy extends Handler
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $toType
      * @param int $newStatus
+     *
      * @return void
      */
     public function publishNewType( $toType, $newStatus )

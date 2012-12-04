@@ -40,6 +40,7 @@ class PolicyUpdateStructStub extends PolicyUpdateStruct
      * the existing limitation is replaced
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
+     *
      * @return void
      */
     public function addLimitation( Limitation $limitation )

@@ -82,7 +82,7 @@ class Exception extends ValueObjectVisitor
     }
 
     /**
-     * Return HTTP status code
+     * Returns HTTP status code
      *
      * @return int
      */

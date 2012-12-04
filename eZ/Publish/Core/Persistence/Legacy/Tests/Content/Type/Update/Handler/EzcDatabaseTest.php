@@ -26,13 +26,14 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Content Updater mock
      *
-     * @var eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater
      */
     protected $contentUpdaterMock;
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\EzcDatabase::updateContentObjects
+     *
+     * @return void
      */
     public function testUpdateContentObjects()
     {
@@ -64,8 +65,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\EzcDatabase::deleteOldType
+     *
+     * @return void
      */
     public function testDeleteOldType()
     {
@@ -86,8 +88,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\EzcDatabase::publishNewType
+     *
+     * @return void
      */
     public function testPublishNewType()
     {
@@ -157,7 +160,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a Content Updater mock
      *
-     * @return eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater
      */
     protected function getContentUpdaterMock()
     {

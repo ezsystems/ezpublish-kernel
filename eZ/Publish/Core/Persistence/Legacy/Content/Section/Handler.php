@@ -21,7 +21,7 @@ class Handler implements BaseSectionHandler
     /**
      * Section Gateway
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway $sectionGateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway
      */
     protected $sectionGateway;
 
@@ -40,6 +40,7 @@ class Handler implements BaseSectionHandler
      *
      * @param string $name
      * @param string $identifier
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
     public function create( $name, $identifier )
@@ -60,6 +61,7 @@ class Handler implements BaseSectionHandler
      * @param mixed $id
      * @param string $name
      * @param string $identifier
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
     public function update( $id, $name, $identifier )
@@ -78,8 +80,10 @@ class Handler implements BaseSectionHandler
      * Get section data
      *
      * @param mixed $id
-     * @return \eZ\Publish\SPI\Persistence\Content\Section
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If section is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
     public function load( $id )
     {
@@ -107,8 +111,10 @@ class Handler implements BaseSectionHandler
      * Get section data by identifier
      *
      * @param string $identifier
-     * @return \eZ\Publish\SPI\Persistence\Content\Section
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If section is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
     public function loadByIdentifier( $identifier )
     {
@@ -125,6 +131,7 @@ class Handler implements BaseSectionHandler
      * Creates a Section from the given $data
      *
      * @param array $data
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
     protected function createSectionFromArray( array $data )
@@ -142,6 +149,7 @@ class Handler implements BaseSectionHandler
      * Creates a Section from the given $data
      *
      * @param array $data
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Section[]
      */
     protected function createSectionsFromArray( array $data )
@@ -177,7 +185,7 @@ class Handler implements BaseSectionHandler
     }
 
     /**
-     * Assign section to single content object
+     * Assigns section to single content object
      *
      * @param mixed $sectionId
      * @param mixed $contentId
@@ -191,6 +199,7 @@ class Handler implements BaseSectionHandler
      * Number of content assignments a Section has
      *
      * @param mixed $sectionId
+     *
      * @return int
      */
     public function assignmentsCount( $sectionId )

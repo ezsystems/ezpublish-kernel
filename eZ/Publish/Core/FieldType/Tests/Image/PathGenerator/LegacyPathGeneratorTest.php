@@ -20,8 +20,10 @@ class LegacyPathGeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @param mixed $data
      * @param mixed $expectedPath
-     * @return void
+     *
      * @dataProvider provideStoragePathForFieldData
+     *
+     * @return void
      */
     public function testGetStoragePathForField( $data, $expectedPath )
     {

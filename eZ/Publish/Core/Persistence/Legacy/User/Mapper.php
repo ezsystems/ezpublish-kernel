@@ -22,6 +22,7 @@ class Mapper
      * Map user data into user object
      *
      * @param array $data
+     *
      * @return \eZ\Publish\SPI\Persistence\User
      */
     public function mapUser( array $data )
@@ -42,6 +43,7 @@ class Mapper
      * Map data for a set of user data
      *
      * @param array $data
+     *
      * @return \eZ\Publish\SPI\Persistence\User[]
      */
     public function mapUsers( array $data )
@@ -59,6 +61,7 @@ class Mapper
      * Map policy data to an array of policies
      *
      * @param array $data
+     *
      * @return \eZ\Publish\SPI\Persistence\User\Policy
      */
     public function mapPolicies( array $data )
@@ -110,6 +113,7 @@ class Mapper
      * Map role data to a role
      *
      * @param array $data
+     *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
     public function mapRole( array $data )
@@ -139,7 +143,7 @@ class Mapper
      * Map data for a set of roles
      *
      * @param array $data
-     * @param bool $indexById
+     * @param boolean $indexById
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role[]
      */
@@ -167,6 +171,7 @@ class Mapper
      * Map data for a set of role assignments
      *
      * @param array $data
+     *
      * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
      */
     public function mapRoleAssignments( array $data, array $roleData )

@@ -50,8 +50,10 @@ class StorageEngineFactory
      * Builds storage engine identified by $storageEngineIdentifier (the "alias" attribute in the service tag)
      *
      * @param string $storageEngineIdentifier The storage engine identifier
-     * @return \eZ\Publish\SPI\Persistence\Handler
+     *
      * @throws \eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidStorageEngine
+     *
+     * @return \eZ\Publish\SPI\Persistence\Handler
      */
     public function buildStorageEngine( $storageEngineIdentifier )
     {
