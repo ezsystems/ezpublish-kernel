@@ -212,7 +212,7 @@ class EzPublishCoreExtension extends Extension
         if ( !isset( $config['siteaccess'] ) )
         {
             $config['siteaccess'] = array();
-            $config['siteaccess']['list'] = array( 'setup');
+            $config['siteaccess']['list'] = array( 'setup' );
             $config['siteaccess']['default_siteaccess'] = 'setup';
             $config['siteaccess']['groups'] = array();
             $config['siteaccess']['match'] = null;
@@ -336,7 +336,9 @@ class EzPublishCoreExtension extends Extension
                     break;
                 default:
                     if ( !$container->has( $config['http_cache']['purge_type'] ) )
+                    {
                         throw new \InvalidArgumentException( "Invalid ezpublish.http_cache.purge_type. Can be 'single', 'multiple' or a valid service identifier implementing PurgeClientInterface." );
+                    }
 
                     $purgeService = $config['http_cache']['purge_type'];
             }

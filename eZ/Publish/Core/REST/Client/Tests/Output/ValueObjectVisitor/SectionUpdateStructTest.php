@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
@@ -28,10 +29,12 @@ class SectionUpdateStructTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $sectionUpdateStruct = new Content\SectionUpdateStruct( array(
-            'identifier' => 'some-section',
-            'name'       => 'Some Section',
-        ) );
+        $sectionUpdateStruct = new Content\SectionUpdateStruct(
+            array(
+                'identifier' => 'some-section',
+                'name'       => 'Some Section',
+            )
+        );
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -104,7 +107,6 @@ class SectionUpdateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'identifier',
                 'content'  => 'some-section',
-
             ),
             $result,
             'Invalid or non-existing <SectionInput> identifier value element.',
@@ -125,7 +127,6 @@ class SectionUpdateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'name',
                 'content'  => 'Some Section',
-
             ),
             $result,
             'Invalid or non-existing <SectionInput> name value element.',

@@ -437,13 +437,6 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
-
-
-
-
-
-
-
     /**
      * Test for the getNewId() method.
      *

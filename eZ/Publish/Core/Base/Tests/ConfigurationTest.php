@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Base\Tests;
+
 use eZ\Publish\Core\Base\Configuration;
 use PHPUnit_Framework_TestCase;
 

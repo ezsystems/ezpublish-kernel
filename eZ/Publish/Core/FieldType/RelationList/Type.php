@@ -173,10 +173,10 @@ class Type extends FieldType
         {
             if ( !is_integer( $destinationContentId ) && !is_string( $destinationContentId ) )
             {
-               throw new InvalidArgumentType(
+                throw new InvalidArgumentType(
                     "\$inputValue->destinationContentIds[$key]",
                     'string|int',
-                   $destinationContentId
+                    $destinationContentId
                 );
             }
         }

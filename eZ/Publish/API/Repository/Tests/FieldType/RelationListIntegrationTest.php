@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
+
 use eZ\Publish\API\Repository;
 use eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue;
 use eZ\Publish\Core\FieldType\RelationList\Type as RelationListType;

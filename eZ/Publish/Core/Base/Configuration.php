@@ -10,6 +10,7 @@
  */
 
 namespace eZ\Publish\Core\Base;
+
 use eZ\Publish\Core\Base\Configuration\Parser;
 use eZ\Publish\Core\Base\Exceptions\BadConfiguration;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
@@ -402,7 +403,7 @@ class Configuration
                 {
                     if ( !isset( $configurationData[$section] ) )
                     {
-                        $parent = substr( $section, stripos( $section, ':' ) +1 );
+                        $parent = substr( $section, stripos( $section, ':' ) + 1 );
                         if ( isset( $configurationData[$parent] ) )
                             $configurationData[$section] = $configurationData[$parent];
                         else

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\MVC\Legacy\Templating\Twig\Node;
+
 use Twig_Node;
 use Twig_Node_Expression;
 use Twig_Compiler;
@@ -21,8 +22,8 @@ class LegacyIncludeNode extends Twig_Node
     {
         return parent::__construct(
             array(
-                 'tplPath'      => $tplPath,
-                 'params'       => $params
+                'tplPath' => $tplPath,
+                'params'  => $params
             ),
             array(),
             $lineno,

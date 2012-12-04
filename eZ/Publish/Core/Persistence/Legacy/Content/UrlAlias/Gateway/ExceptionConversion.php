@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
+
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use ezcDbException;
 use PDOException;

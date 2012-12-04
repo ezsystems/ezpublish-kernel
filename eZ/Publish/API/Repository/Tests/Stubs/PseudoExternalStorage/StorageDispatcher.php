@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage;
+
 use eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage;
 
 use eZ\Publish\API\Repository\Values\Content\Field;

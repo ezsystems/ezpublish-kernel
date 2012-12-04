@@ -51,7 +51,8 @@ class SearchService implements SearchServiceInterface
     {
         $this->repository = $repository;
         $this->searchHandler = $searchHandler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
     }
@@ -222,19 +223,20 @@ class SearchService implements SearchServiceInterface
             if ( $permissionSet['limitation'] instanceof Limitation )
             {
                 $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
-                $roleAssignmentOrCriteria[] = new Criterion\LogicalAnd( array(
+                $roleAssignmentOrCriteria[] = new Criterion\LogicalAnd(
+                    array(
                         $type->getCriterion( $permissionSet['limitation'], $this->repository ),
                         isset( $policyOrCriteria[1] ) ? new Criterion\LogicalOr( $policyOrCriteria ) : $policyOrCriteria[0]
                     )
                 );
             }
-            else // Otherwise merge $policyOrCriteria into $roleAssignmentOrCriteria
+            // Otherwise merge $policyOrCriteria into $roleAssignmentOrCriteria
+            else
             {
                 $roleAssignmentOrCriteria = empty( $roleAssignmentOrCriteria ) ?
                     $policyOrCriteria :
                     array_merge( $roleAssignmentOrCriteria, $policyOrCriteria );
             }
-
         }
 
         return isset( $roleAssignmentOrCriteria[1] ) ?

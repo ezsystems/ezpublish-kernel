@@ -43,6 +43,4 @@ class TrashItemStub extends TrashItem
         }
         return parent::__get( $property );
     }
-
-
 }

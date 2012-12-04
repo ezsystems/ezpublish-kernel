@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\User;
+
 use eZ\Publish\SPI\Persistence\User;
 
 /**

@@ -35,7 +35,7 @@ class LocationServiceAuthorizationTest extends BaseTest
 
         $editorsGroupId = $this->generateId( 'group', 13 );
 
-        /* BEGIN: Use Case */;
+        /* BEGIN: Use Case */
         $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
 
@@ -131,7 +131,7 @@ class LocationServiceAuthorizationTest extends BaseTest
 
         $editorsGroupId = $this->generateId( 'group', 13 );
 
-        /* BEGIN: Use Case */;
+        /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         $locationService = $repository->getLocationService();
@@ -152,7 +152,7 @@ class LocationServiceAuthorizationTest extends BaseTest
             $originalLocation,
             $locationUpdateStruct
         );
-        /* END: Use Case */;
+        /* END: Use Case */
     }
 
     /**

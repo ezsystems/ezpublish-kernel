@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
+
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
@@ -423,25 +424,25 @@ class LocationHandlerTest extends TestCase
             ->method( "getBasicNodeData" )
             ->with( 42 )
             ->will(
-            $this->returnValue(
-                array(
-                    "contentobject_id" => 100,
-                    "main_node_id" => 200
+                $this->returnValue(
+                    array(
+                        "contentobject_id" => 100,
+                        "main_node_id" => 200
+                    )
                 )
-            )
-        );
+            );
         $this->locationGateway
             ->expects( $this->at( 1 ) )
             ->method( "getChildren" )
             ->with( 42 )
             ->will(
-            $this->returnValue(
-                array(
-                    array( "node_id" => 201 ),
-                    array( "node_id" => 202 )
+                $this->returnValue(
+                    array(
+                        array( "node_id" => 201 ),
+                        array( "node_id" => 202 )
+                    )
                 )
-            )
-        );
+            );
 
         // First recursive call
         $this->locationGateway
@@ -449,13 +450,13 @@ class LocationHandlerTest extends TestCase
             ->method( "getBasicNodeData" )
             ->with( 201 )
             ->will(
-            $this->returnValue(
-                array(
-                    "contentobject_id" => 101,
-                    "main_node_id" => 201
+                $this->returnValue(
+                    array(
+                        "contentobject_id" => 101,
+                        "main_node_id" => 201
+                    )
                 )
-            )
-        );
+            );
         $this->locationGateway
             ->expects( $this->at( 3 ) )
             ->method( "getChildren" )
@@ -485,38 +486,36 @@ class LocationHandlerTest extends TestCase
             ->method( "getBasicNodeData" )
             ->with( 202 )
             ->will(
-            $this->returnValue(
-                array(
-                    "contentobject_id" => 102,
-                    "main_node_id" => 202
+                $this->returnValue(
+                    array(
+                        "contentobject_id" => 102,
+                        "main_node_id" => 202
+                    )
                 )
-            )
-        );
+            );
         $this->locationGateway
             ->expects( $this->at( 8 ) )
             ->method( "getChildren" )
             ->with( 202 )
-            ->will(
-            $this->returnValue( array() ) );
+            ->will( $this->returnValue( array() ) );
         $this->locationGateway
             ->expects( $this->at( 9 ) )
             ->method( "countLocationsByContentId" )
             ->with( 102 )
-            ->will(
-            $this->returnValue( 2 ) );
+            ->will( $this->returnValue( 2 ) );
         $this->locationGateway
             ->expects( $this->at( 10 ) )
             ->method( "getFallbackMainNodeData" )
             ->with( 102, 202 )
             ->will(
-            $this->returnValue(
-                array(
-                    "node_id" => 203,
-                    "contentobject_version" => 1,
-                    "parent_node_id" => 204
+                $this->returnValue(
+                    array(
+                        "node_id" => 203,
+                        "contentobject_version" => 1,
+                        "parent_node_id" => 204
+                    )
                 )
-            )
-        );
+            );
         $handler
             ->expects( $this->once() )
             ->method( "changeMainLocation" )
@@ -562,13 +561,13 @@ class LocationHandlerTest extends TestCase
             )
         );
         $subtreeContentRows = array(
-            array( "node_id" => 10, "main_node_id" => 1, "parent_node_id" => 3, "contentobject_id" => 21, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test_10", "sort_field" => 2, "sort_order" => 1 ),
-            array( "node_id" => 11, "main_node_id" => 11, "parent_node_id" => 10, "contentobject_id" => 211, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test_11", "sort_field" => 2, "sort_order" => 1 ),
-            array( "node_id" => 12, "main_node_id" => 15, "parent_node_id" => 10, "contentobject_id" => 215, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test_12", "sort_field" => 2, "sort_order" => 1 ),
-            array( "node_id" => 13, "main_node_id" => 2, "parent_node_id" => 10, "contentobject_id" => 22, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test_13", "sort_field" => 2, "sort_order" => 1 ),
-            array( "node_id" => 14, "main_node_id" => 11, "parent_node_id" => 13, "contentobject_id" => 211, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test_14", "sort_field" => 2, "sort_order" => 1 ),
-            array( "node_id" => 15, "main_node_id" => 15, "parent_node_id" => 13, "contentobject_id" => 215, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test_15", "sort_field" => 2, "sort_order" => 1 ),
-            array( "node_id" => 16, "main_node_id" => 16, "parent_node_id" => 15, "contentobject_id" => 216, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test_16", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 10, "main_node_id" => 1, "parent_node_id" => 3, "contentobject_id" => 21, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority" => 0, "path_identification_string" => "test_10", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 11, "main_node_id" => 11, "parent_node_id" => 10, "contentobject_id" => 211, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority" => 0, "path_identification_string" => "test_11", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 12, "main_node_id" => 15, "parent_node_id" => 10, "contentobject_id" => 215, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority" => 0, "path_identification_string" => "test_12", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 13, "main_node_id" => 2, "parent_node_id" => 10, "contentobject_id" => 22, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority" => 0, "path_identification_string" => "test_13", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 14, "main_node_id" => 11, "parent_node_id" => 13, "contentobject_id" => 211, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority" => 0, "path_identification_string" => "test_14", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 15, "main_node_id" => 15, "parent_node_id" => 13, "contentobject_id" => 215, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority" => 0, "path_identification_string" => "test_15", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 16, "main_node_id" => 16, "parent_node_id" => 15, "contentobject_id" => 216, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority" => 0, "path_identification_string" => "test_16", "sort_field" => 2, "sort_order" => 1 ),
         );
         $destinationData = array( "node_id" => 5, "main_node_id" => 5, "parent_node_id" => 4, "contentobject_id" => 200, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 1, "path_identification_string" => "test_destination" );
         $mainLocationsMap = array( true, true, true, true, 1011, 1012, true );
@@ -586,9 +585,17 @@ class LocationHandlerTest extends TestCase
             ->with( $destinationData["node_id"] )
             ->will( $this->returnValue( $destinationData ) );
 
-        $contentIds = array_values( array_unique( array_map(
-            function ( $row ) { return $row["contentobject_id"]; },
-            $subtreeContentRows ) ) );
+        $contentIds = array_values(
+            array_unique(
+                array_map(
+                    function ( $row )
+                    {
+                        return $row["contentobject_id"];
+                    },
+                    $subtreeContentRows
+                )
+            )
+        );
         foreach ( $contentIds as $index => $contentId )
         {
             $this->contentHandler

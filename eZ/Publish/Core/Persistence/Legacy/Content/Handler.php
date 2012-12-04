@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
+
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler;
 use eZ\Publish\SPI\Persistence\Content;
@@ -119,7 +120,7 @@ class Handler implements BaseContentHandler
         $content->fields = $struct->fields;
         $content->versionInfo = $this->mapper->createVersionInfoFromCreateStruct( $struct, $versionNo );
 
-        $content->versionInfo->contentInfo->id =  $this->contentGateway->insertContentObject( $struct, $versionNo );
+        $content->versionInfo->contentInfo->id = $this->contentGateway->insertContentObject( $struct, $versionNo );
         $content->versionInfo->id = $this->contentGateway->insertVersion(
             $content->versionInfo,
             $struct->fields

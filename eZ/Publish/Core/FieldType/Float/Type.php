@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Float;
+
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
@@ -161,7 +162,7 @@ class Type extends FieldType
     {
         $value = $this->acceptValue( $value );
 
-        return (string) $value->value;
+        return (string)$value->value;
     }
 
     /**

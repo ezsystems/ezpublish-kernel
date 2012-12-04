@@ -44,7 +44,6 @@ class Configuration implements EventSubscriberInterface
         $this->options = $options;
     }
 
-
     public static function getSubscribedEvents()
     {
         return array(

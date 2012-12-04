@@ -47,9 +47,9 @@ class UserCreateStruct extends \eZ\Publish\API\Repository\Values\User\UserCreate
 
         $this->fields[] = new Field(
             array(
-                'fieldDefIdentifier'  =>  $fieldDefIdentifier,
-                'value'               =>  $value,
-                'languageCode'        =>  $language
+                'fieldDefIdentifier'  => $fieldDefIdentifier,
+                'value'               => $value,
+                'languageCode'        => $language
             )
         );
     }

@@ -624,7 +624,7 @@ class RoleServiceStub implements RoleService
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
-        $roleAssignments =  $this->getRoleAssignmentsForContent( $user );
+        $roleAssignments = $this->getRoleAssignmentsForContent( $user );
 
         if ( $inherited )
         {
@@ -638,7 +638,7 @@ class RoleServiceStub implements RoleService
             }
         }
 
-        return  $roleAssignments;
+        return $roleAssignments;
     }
 
     /**
@@ -765,7 +765,7 @@ class RoleServiceStub implements RoleService
 
             $roleAssignments = array_merge(
                 $roleAssignments,
-                    $this->getRoleAssignmentsForRoleAndContent(
+                $this->getRoleAssignmentsForRoleAndContent(
                     $this->loadRole( $roleId ),
                     $content->id
                 )

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository;
+
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\SPI\IO\Handler as IoHandler;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
@@ -275,7 +276,6 @@ class Repository implements RepositoryInterface
 
                 $permissionSet['policies'][] = $roleService->buildDomainPolicyObject( $spiPolicy );
             }
-
 
             if ( !empty( $permissionSet['policies'] ) )
             {

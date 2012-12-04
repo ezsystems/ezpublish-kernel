@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\ObjectState;
+
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 
 /**

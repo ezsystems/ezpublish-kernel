@@ -178,7 +178,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
             $newPriority = $objectStates[count( $objectStates ) - 1]->priority + 1;
         }
 
-        $inputData["groupId"] = (int) $groupId;
+        $inputData["groupId"] = (int)$groupId;
         $inputData["priority"] = $newPriority;
 
         $createdState = $this->backend->create( 'Content\\ObjectState', $inputData );
@@ -273,7 +273,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
             $priorityList[$groupState->id] = $index;
         }
 
-        $priorityList[$objectState->id] = (int) $priority;
+        $priorityList[$objectState->id] = (int)$priority;
         asort( $priorityList );
 
         foreach ( array_keys( $priorityList ) as $objectStatePriority => $objectStateId )
@@ -339,7 +339,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
 
         // If the content was in one of the group states,
         // find all content for the old state and update the old state with excluded $contentId
-        $existingStateIds = array_values( array_intersect( $groupStateIds, $contentToStateMap[(int) $contentId] ) );
+        $existingStateIds = array_values( array_intersect( $groupStateIds, $contentToStateMap[(int)$contentId] ) );
         if ( !empty( $existingStateIds ) )
         {
             $oldStateContentList = $this->getObjectStateContentList( $existingStateIds[0] );
@@ -375,7 +375,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
         if ( empty( $groupStateIds ) )
             throw new NotFound( "Content\\ObjectState", array( "groupId" => $stateGroupId ) );
 
-        $contentId = (int) $contentId;
+        $contentId = (int)$contentId;
 
         $contentToStateMap = $this->getContentToStateMap();
         if ( !isset( $contentToStateMap[$contentId] ) )
@@ -409,7 +409,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
      */
     protected function getInputData( InputStruct $input )
     {
-        $inputData = (array) $input;
+        $inputData = (array)$input;
         $inputData["languageCodes"] = array_keys( $input->name );
         return $inputData;
     }
@@ -469,7 +469,8 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
     protected function getGroupStateList( $groupId )
     {
         $groupStates = $this->loadObjectStates( $groupId );
-        return array_map( function( ObjectState $objectState )
+        return array_map(
+            function ( ObjectState $objectState )
             {
                 return $objectState->id;
             },

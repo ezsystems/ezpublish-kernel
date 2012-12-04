@@ -183,7 +183,7 @@ class LocationCreateTest extends BaseTest
      */
     protected function getLocationServiceMock()
     {
-        $locationServiceMock =  $this->getMock(
+        $locationServiceMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\LocationService',
             array(),
             array(),

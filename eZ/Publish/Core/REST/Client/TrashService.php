@@ -9,14 +9,15 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
+use eZ\Publish\API\Repository\TrashService as APITrashService;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 
 use eZ\Publish\Core\REST\Common\UrlHandler;
-use eZ\Publish\Core\REST\Common\Input;
-use eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\Input\Dispatcher;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Common\Message;
 
 /**
@@ -24,7 +25,7 @@ use eZ\Publish\Core\REST\Common\Message;
  *
  * @package eZ\Publish\API\Repository
  */
-class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionable
+class TrashService implements APITrashService, Sessionable
 {
     /**
      * @var \eZ\Publish\Core\REST\Client\LocationService
@@ -58,7 +59,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( LocationService $locationService, HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( LocationService $locationService, HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->locationService = $locationService;
         $this->client          = $client;
@@ -242,7 +243,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
                 'remoteId' => $location->remoteId,
                 'parentLocationId' => $location->parentLocationId,
                 'pathString' => $location->pathString,
-                'depth' => (int) $location->depth,
+                'depth' => (int)$location->depth,
                 'sortField' => $location->sortField,
                 'sortOrder' => $location->sortOrder,
             )

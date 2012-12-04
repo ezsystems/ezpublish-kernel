@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\User;
+
 use eZ\Publish\SPI\Persistence\User;
 use eZ\Publish\SPI\Persistence\User\Role;
 use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;

@@ -8,10 +8,14 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
+
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
+use FileSystemIterator;
 
 /**
  * Integration test for legacy storage field types
@@ -52,7 +56,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      */
     protected function getStorageIdentifierPrefix()
     {
-        return'var/my_site/storage/images';
+        return 'var/my_site/storage/images';
     }
 
     /**
@@ -146,15 +150,17 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            'externalData' => array(
-                'path' => __DIR__ . '/_fixtures/image.jpg',
-                'fileName' => 'Ice-Flower.jpg',
-                'alternativeText' => 'An icy flower.',
-            ),
-            'sortKey'      => '',
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                'externalData' => array(
+                    'path' => __DIR__ . '/_fixtures/image.jpg',
+                    'fileName' => 'Ice-Flower.jpg',
+                    'alternativeText' => 'An icy flower.',
+                ),
+                'sortKey'      => '',
+            )
+        );
     }
 
     /**
@@ -190,15 +196,17 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            'externalData' => array(
-                'path' => __DIR__ . '/_fixtures/image.png',
-                'fileName' => 'Blueish-Blue.jpg',
-                'alternativeText' => 'This blue is so blueish.',
-            ),
-            'sortKey'      => '',
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                'externalData' => array(
+                    'path' => __DIR__ . '/_fixtures/image.png',
+                    'fileName' => 'Blueish-Blue.jpg',
+                    'alternativeText' => 'This blue is so blueish.',
+                ),
+                'sortKey'      => '',
+            )
+        );
     }
 
     /**
@@ -244,13 +252,12 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      */
     public function assertDeletedFieldDataCorrect( Content $content )
     {
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator(
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(
                 $this->getTempDir() . '/' . $this->getStorageDir(),
-                \FileSystemIterator::KEY_AS_PATHNAME | \FileSystemIterator::SKIP_DOTS | \ FilesystemIterator::CURRENT_AS_FILEINFO
-
+                FileSystemIterator::KEY_AS_PATHNAME | FileSystemIterator::SKIP_DOTS | FileSystemIterator::CURRENT_AS_FILEINFO
             ),
-            \RecursiveIteratorIterator::CHILD_FIRST
+            RecursiveIteratorIterator::CHILD_FIRST
         );
 
         foreach ( $iterator as $path => $fileInfo )
@@ -265,7 +272,6 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                 );
             }
         }
-
     }
 
     /**

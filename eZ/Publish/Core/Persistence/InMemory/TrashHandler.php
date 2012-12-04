@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
+
 use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as TrashHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;

@@ -150,7 +150,7 @@ class Type extends FieldType
 
         if ( !is_integer( $inputValue->destinationContentId ) && !is_string( $inputValue->destinationContentId ) && $inputValue->destinationContentId !== null )
         {
-           throw new InvalidArgumentType(
+            throw new InvalidArgumentType(
                 '$inputValue->destinationContentId',
                 'string|int',
                 $inputValue->destinationContentId

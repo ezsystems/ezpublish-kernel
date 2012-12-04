@@ -51,7 +51,7 @@ class ContentTypeGroupIdIn extends CriterionVisitor
                     {
                         return 'group_id:"' . $value . '"';
                     },
-                    (array) $criterion->value
+                    (array)$criterion->value
                 )
             ) .
             ')';

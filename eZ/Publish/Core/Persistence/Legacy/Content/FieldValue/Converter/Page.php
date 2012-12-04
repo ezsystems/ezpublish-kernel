@@ -7,6 +7,7 @@
  * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -84,9 +85,11 @@ class Page implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings( array(
+        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
+            array(
                 'defaultLayout' => $storageDef->dataText1,
-        ) );
+            )
+        );
     }
 
     /**
@@ -102,7 +105,6 @@ class Page implements Converter
     {
         return false;
     }
-
 
     /**
      * Generates XML string from $page object to be stored in storage engine
@@ -402,7 +404,9 @@ class Page implements Converter
                 foreach ( $node->childNodes as $subNode )
                 {
                     if ( $subNode->nodeType == XML_ELEMENT_NODE )
+                    {
                         $attrValue[$subNode->nodeName] = $subNode->nodeValue;
+                    }
                 }
 
                 $block->{$node->nodeName} = $attrValue;
@@ -414,7 +418,9 @@ class Page implements Converter
                 foreach ( $node->childNodes as $subNode )
                 {
                     if ( $subNode->nodeType == XML_ELEMENT_NODE )
+                    {
                         $attrValue[$subNode->nodeName] = $subNode->nodeValue;
+                    }
                 }
 
                 $block->{$node->nodeName} = $attrValue;
@@ -422,7 +428,9 @@ class Page implements Converter
             else
             {
                 if ( $node->nodeType == XML_ELEMENT_NODE )
+                {
                     $block->{$node->nodeName} = $node->nodeValue;
+                }
             }
         }
 
@@ -451,7 +459,9 @@ class Page implements Converter
         foreach ( $node->childNodes as $node )
         {
             if ( $node->nodeType == XML_ELEMENT_NODE )
+            {
                 $item->{$node->nodeName} = $node->nodeValue;
+            }
         }
 
         return $item;

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
+
 use eZ\Publish\Core\FieldType\MapLocation\Value as MapLocationValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
@@ -100,11 +101,13 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
      */
     public function getValidCreationFieldData()
     {
-        return new MapLocationValue( array(
-            'latitude' => 51.559997,
-            'longitude' => 6.767921,
-            'address' => 'Bielefeld',
-        ) );
+        return new MapLocationValue(
+            array(
+                'latitude' => 51.559997,
+                'longitude' => 6.767921,
+                'address' => 'Bielefeld',
+            )
+        );
     }
 
     /**
@@ -158,24 +161,30 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
             array(
-                new MapLocationValue( array(
-                    'latitude' => 'string'
-                ) ),
+                new MapLocationValue(
+                    array(
+                        'latitude' => 'string'
+                    )
+                ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
             array(
-                new MapLocationValue( array(
-                    'latitude' => 23.42,
-                    'longitude' => 'invalid',
-                ) ),
+                new MapLocationValue(
+                    array(
+                        'latitude' => 23.42,
+                        'longitude' => 'invalid',
+                    )
+                ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
             array(
-                new MapLocationValue( array(
-                    'latitude' => 23.42,
-                    'longitude' => 42.23,
-                    'address' => true,
-                ) ),
+                new MapLocationValue(
+                    array(
+                        'latitude' => 23.42,
+                        'longitude' => 42.23,
+                        'address' => true,
+                    )
+                ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
         );
@@ -189,11 +198,13 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
     public function getValidUpdateFieldData()
     {
         // https://maps.google.de/maps?qll=,&spn=0.139491,0.209942&sll=51.983611,8.574829&sspn=0.36242,0.839767&oq=Punta+Cana&t=h&hnear=Punta+Cana,+La+Altagracia,+Dominikanische+Republik&z=13
-        return new MapLocationValue( array(
-            'latitude' => 18.524701,
-            'longitude' => -68.363113,
-            'address' => 'Punta Cana',
-        ) );
+        return new MapLocationValue(
+            array(
+                'latitude' => 18.524701,
+                'longitude' => -68.363113,
+                'address' => 'Punta Cana',
+            )
+        );
     }
 
     /**
@@ -277,11 +288,13 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new MapLocationValue( array(
-                    'latitude' => 51.559997,
-                    'longitude' => 6.767921,
-                    'address' => 'Bielefeld',
-                ) ),
+                new MapLocationValue(
+                    array(
+                        'latitude' => 51.559997,
+                        'longitude' => 6.767921,
+                        'address' => 'Bielefeld',
+                    )
+                ),
                 array(
                     'latitude' => 51.559997,
                     'longitude' => 6.767921,
@@ -307,11 +320,13 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
                     'longitude' => 6.767921,
                     'address' => 'Bielefeld',
                 ),
-                new MapLocationValue( array(
-                    'latitude' => 51.559997,
-                    'longitude' => 6.767921,
-                    'address' => 'Bielefeld',
-                ) )
+                new MapLocationValue(
+                    array(
+                        'latitude' => 51.559997,
+                        'longitude' => 6.767921,
+                        'address' => 'Bielefeld',
+                    )
+                )
             ),
         );
     }

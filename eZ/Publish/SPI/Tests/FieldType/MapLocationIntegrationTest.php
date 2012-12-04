@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
+
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
@@ -105,15 +106,17 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            'externalData' => array(
-                'latitude' => 51.564479,
-                'longitude' => 6.692219,
-                'address' => 'Sindelfingen'
-            ),
-            'sortKey'      => 'Sindelfingen',
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                'externalData' => array(
+                    'latitude' => 51.564479,
+                    'longitude' => 6.692219,
+                    'address' => 'Sindelfingen'
+                ),
+                'sortKey'      => 'Sindelfingen',
+            )
+        );
     }
 
     /**
@@ -145,12 +148,14 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            // Empty value
-            'externalData' => null,
-            'sortKey'      => null,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                // Empty value
+                'externalData' => null,
+                'sortKey'      => null,
+            )
+        );
     }
 
     /**

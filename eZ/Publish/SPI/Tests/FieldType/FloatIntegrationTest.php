@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
+
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
@@ -89,14 +90,19 @@ class FloatIntegrationTest extends BaseIntegrationTest
             // The ezfloat field type does not have any special field definition
             // properties
             array( 'fieldType', 'ezfloat' ),
-            array( 'fieldTypeConstraints', new Content\FieldTypeConstraints( array(
-                'validators' => array(
-                    'FloatValueValidator' => array(
-                        'minFloatValue' => false,
-                        'maxFloatValue' => false,
-                    ),
-                ),
-            ) ) ),
+            array(
+                'fieldTypeConstraints',
+                new Content\FieldTypeConstraints(
+                    array(
+                        'validators' => array(
+                            'FloatValueValidator' => array(
+                                'minFloatValue' => false,
+                                'maxFloatValue' => false,
+                            ),
+                        ),
+                    )
+                )
+            ),
         );
     }
 
@@ -107,11 +113,13 @@ class FloatIntegrationTest extends BaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => 42.42,
-            'externalData' => null,
-            'sortKey'      => 42,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => 42.42,
+                'externalData' => null,
+                'sortKey'      => 42,
+            )
+        );
     }
 
     /**
@@ -123,11 +131,12 @@ class FloatIntegrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => 23.23,
-            'externalData' => null,
-            'sortKey'      => 23,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => 23.23,
+                'externalData' => null,
+                'sortKey'      => 23,
+            )
+        );
     }
 }
-

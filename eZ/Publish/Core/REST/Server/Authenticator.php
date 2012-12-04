@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server;
+
 use eZ\Publish\API\Repository\Repository;
 
 use Qafoo\RMF;

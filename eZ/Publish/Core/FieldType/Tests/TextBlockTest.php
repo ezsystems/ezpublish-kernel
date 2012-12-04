@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
+
 use eZ\Publish\Core\FieldType\TextBlock\Type as TextBlockType;
 use eZ\Publish\Core\FieldType\TextBlock\Value as TextBlockValue;
 use ReflectionObject;
@@ -51,7 +52,7 @@ class TextBlockTest extends StandardizedFieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-       return array(
+        return array(
             'textRows' => array(
                 'type' => 'int',
                 'default' => 10,

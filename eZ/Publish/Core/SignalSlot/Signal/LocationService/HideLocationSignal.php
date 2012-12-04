@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot\Signal\LocationService;
+
 use eZ\Publish\Core\SignalSlot\Signal;
 
 /**

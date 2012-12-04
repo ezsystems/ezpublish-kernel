@@ -58,7 +58,7 @@ class PurgeClient implements PurgeClientInterface
             $locationIds = array( $locationIds );
 
         // Purging all HTTP gateways
-        foreach ($this->purgeServers as $server)
+        foreach ( $this->purgeServers as $server )
         {
             $this->doPurge( $server, $locationIds );
 

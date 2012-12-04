@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
+
 use eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler as UrlWildcardHandlerInterface;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;

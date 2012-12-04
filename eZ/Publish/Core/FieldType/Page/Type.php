@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Page;
+
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\Page\Service as PageService;
 use eZ\Publish\Core\FieldType\ValidationError;

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue;
+
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound;
 
@@ -80,8 +81,10 @@ class ConverterRegistry
 
             if ( !$this->converterMap[$typeName] instanceof Converter )
             {
-                throw new \RuntimeException( "Converter '$typeName' callable did not return a converter, instead: "
-                    . gettype( $this->converterMap[$typeName] ) );
+                throw new \RuntimeException(
+                    "Converter '$typeName' callable did not return a converter, instead: "
+                    . gettype( $this->converterMap[$typeName] )
+                );
             }
         }
         return $this->converterMap[$typeName];

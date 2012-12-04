@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
+
 use eZ\Publish\Core\FieldType\Relation\Type as Relation;
 use eZ\Publish\Core\FieldType\Relation\Value;
 use eZ\Publish\Core\FieldType\Tests\FieldTypeTest;
@@ -50,11 +51,11 @@ class RelationTest extends StandardizedFieldTypeTest
     protected function getSettingsSchemaExpectation()
     {
         return array(
-                'selectionMethod' => array(
+            'selectionMethod' => array(
                 'type' => 'int',
                 'default' => Relation::SELECTION_BROWSE,
             ),
-                'selectionRoot' => array(
+            'selectionRoot' => array(
                 'type' => 'string',
                 'default' => '',
             ),

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Relation\RelationStorage\Gateway;
+
 use eZ\Publish\Core\FieldType\Relation\RelationStorage\Gateway;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -44,21 +45,23 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $section = new Content\VersionInfo( array(
-            'id' => 23,
-            'versionNo' => 5,
-            'status' => Content\VersionInfo::STATUS_PUBLISHED,
-            'creationDate' => $this->creationDate,
-            'creatorId' => 14,
-            'modificationDate' => $this->modificationDate,
-            'initialLanguageCode' => 'eng-US',
-            'languageCodes' => array( 'eng-US', 'ger-DE' ),
-            'names' => array(
-                'eng-US' => 'Sindelfingen',
-                'eng-GB' => 'Bielefeld',
-            ),
-            'contentInfo' => new Content\ContentInfo( array( 'id' => 42 ) ),
-        ) );
+        $section = new Content\VersionInfo(
+            array(
+                'id' => 23,
+                'versionNo' => 5,
+                'status' => Content\VersionInfo::STATUS_PUBLISHED,
+                'creationDate' => $this->creationDate,
+                'creatorId' => 14,
+                'modificationDate' => $this->modificationDate,
+                'initialLanguageCode' => 'eng-US',
+                'languageCodes' => array( 'eng-US', 'ger-DE' ),
+                'names' => array(
+                    'eng-US' => 'Sindelfingen',
+                    'eng-GB' => 'Bielefeld',
+                ),
+                'contentInfo' => new Content\ContentInfo( array( 'id' => 42 ) ),
+            )
+        );
 
         $visitor->visit(
             $this->getVisitorMock(),

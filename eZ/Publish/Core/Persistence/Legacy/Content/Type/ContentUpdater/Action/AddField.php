@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
+
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;

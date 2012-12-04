@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
@@ -105,7 +106,6 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'priority',
                 'content'  => '0',
-
             ),
             $result,
             'Invalid or non-existing <LocationUpdate> priority value element.',
@@ -126,7 +126,6 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'remoteId',
                 'content'  => 'remote-id',
-
             ),
             $result,
             'Invalid or non-existing <LocationUpdate> hidden value element.',
@@ -147,7 +146,6 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'sortField',
                 'content'  => 'PATH',
-
             ),
             $result,
             'Invalid or non-existing <LocationUpdate> sortField value element.',
@@ -168,7 +166,6 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'sortOrder',
                 'content'  => 'ASC',
-
             ),
             $result,
             'Invalid or non-existing <LocationUpdate> sortOrder value element.',

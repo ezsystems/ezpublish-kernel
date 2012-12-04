@@ -129,7 +129,7 @@ class DispatcherHandler implements IoHandlerInterface
 
         // When file path has changed, check if we should move from one handler to another
         $oldHandler = $this->getHandler( $path );
-        $newHandler = $this->getHandler( $updateFileStruct->path);
+        $newHandler = $this->getHandler( $updateFileStruct->path );
         if ( $oldHandler === $newHandler )
             return $oldHandler->update( $path, $updateFileStruct );
 

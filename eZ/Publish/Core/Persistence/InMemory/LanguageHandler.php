@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
+
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Language;
 use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Keyword;
+
 use eZ\Publish\Core\FieldType\GatewayBasedStorage;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;

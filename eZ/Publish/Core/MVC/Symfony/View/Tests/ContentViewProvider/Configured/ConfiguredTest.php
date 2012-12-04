@@ -22,14 +22,14 @@ class ConfiguredTest extends BaseTest
     {
         $lvp = $this->getPartiallyMockedLocationViewProvider(
             array(
-                 'full' => array(
-                     'failingMatchBlock' => array(
-                         'match'    => array(
-                             'wrongMatcher' => 'bibou est un gentil garçon'
-                         ),
-                         'template' => "mytemplate"
-                     )
-                 )
+                'full' => array(
+                    'failingMatchBlock' => array(
+                        'match'    => array(
+                            'wrongMatcher' => 'bibou est un gentil garçon'
+                        ),
+                        'template' => "mytemplate"
+                    )
+                )
             )
         );
         $lvp

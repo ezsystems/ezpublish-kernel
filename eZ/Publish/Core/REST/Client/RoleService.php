@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
+use eZ\Publish\API\Repository\RoleService as APIRoleService;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Policy as APIPolicy;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
@@ -29,8 +30,8 @@ use eZ\Publish\Core\REST\Client\Values\User\Policy;
 use eZ\Publish\Core\REST\Client\Values\User\RoleAssignment;
 
 use eZ\Publish\Core\REST\Common\UrlHandler;
-use eZ\Publish\Core\REST\Common\Input;
-use eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\Input\Dispatcher;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Common\Message;
 
 /**
@@ -39,7 +40,7 @@ use eZ\Publish\Core\REST\Common\Message;
  *
  * @see \eZ\Publish\API\Repository\RoleService
  */
-class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
+class RoleService implements APIRoleService, Sessionable
 {
     /**
      * @var \eZ\Publish\Core\REST\Client\UserService
@@ -73,7 +74,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( UserService $userService, HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( UserService $userService, HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->userService     = $userService;
         $this->client          = $client;

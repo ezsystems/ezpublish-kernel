@@ -1,6 +1,7 @@
 <?php
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
+
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\SPI\Persistence\Content\Language;
 use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;

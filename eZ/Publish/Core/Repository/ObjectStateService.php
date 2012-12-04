@@ -66,7 +66,8 @@ class ObjectStateService implements ObjectStateServiceInterface
     {
         $this->repository = $repository;
         $this->objectStateHandler = $objectStateHandler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
     }
@@ -328,7 +329,7 @@ class ObjectStateService implements ObjectStateServiceInterface
             {
                 $this->objectStateHandler->setPriority(
                     $spiObjectState->id,
-                    (int) $objectStateCreateStruct->priority
+                    (int)$objectStateCreateStruct->priority
                 );
 
                 // Reload the object state to have the updated priority,
@@ -462,7 +463,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         {
             $this->objectStateHandler->setPriority(
                 $loadedObjectState->id,
-                (int) $priority
+                (int)$priority
             );
             $this->repository->commit();
         }
@@ -657,9 +658,9 @@ class ObjectStateService implements ObjectStateServiceInterface
 
         return new ObjectState(
             array(
-                'id' => (int) $spiObjectState->id,
+                'id' => (int)$spiObjectState->id,
                 'identifier' => $spiObjectState->identifier,
-                'priority' => (int) $spiObjectState->priority,
+                'priority' => (int)$spiObjectState->priority,
                 'defaultLanguageCode' => $spiObjectState->defaultLanguage,
                 'languageCodes' => $spiObjectState->languageCodes,
                 'names' => $spiObjectState->name,
@@ -680,7 +681,7 @@ class ObjectStateService implements ObjectStateServiceInterface
     {
         return new ObjectStateGroup(
             array(
-                'id' => (int) $spiObjectStateGroup->id,
+                'id' => (int)$spiObjectStateGroup->id,
                 'identifier' => $spiObjectStateGroup->identifier,
                 'defaultLanguageCode' => $spiObjectStateGroup->defaultLanguage,
                 'languageCodes' => $spiObjectStateGroup->languageCodes,

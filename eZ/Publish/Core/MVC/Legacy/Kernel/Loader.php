@@ -173,8 +173,8 @@ class Loader
             $container,
             $container->getParameter( 'ezpublish_legacy.kernel_handler.treemenu.class' ),
             array(
-                 'use-cache-headers'    => false,
-                 'use-exceptions'       => true
+                'use-cache-headers'    => false,
+                'use-exceptions'       => true
             )
         );
     }

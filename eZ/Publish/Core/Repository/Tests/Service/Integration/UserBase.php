@@ -71,7 +71,9 @@ abstract class UserBase extends BaseServiceTest
             $value = $user->notDefined;
             self::fail( "Succeeded getting non existing property" );
         }
-        catch( PropertyNotFound $e ) {}
+        catch ( PropertyNotFound $e )
+        {
+        }
 
         try
         {
@@ -79,7 +81,9 @@ abstract class UserBase extends BaseServiceTest
             $value = $userGroup->notDefined;
             self::fail( "Succeeded getting non existing property" );
         }
-        catch( PropertyNotFound $e ) {}
+        catch ( PropertyNotFound $e )
+        {
+        }
     }
 
     /**
@@ -95,7 +99,9 @@ abstract class UserBase extends BaseServiceTest
             $user->login = 'user';
             self::fail( "Succeeded setting read only property" );
         }
-        catch( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
 
         try
         {
@@ -103,7 +109,9 @@ abstract class UserBase extends BaseServiceTest
             $userGroup->parentId = 42;
             self::fail( "Succeeded setting read only property" );
         }
-        catch( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
     }
 
     /**
@@ -141,7 +149,9 @@ abstract class UserBase extends BaseServiceTest
             unset( $user->login );
             self::fail( 'Unsetting read-only property succeeded' );
         }
-        catch ( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
 
         $userGroup = new UserGroup( array( "parentId" => 1 ) );
         try
@@ -149,7 +159,9 @@ abstract class UserBase extends BaseServiceTest
             unset( $userGroup->parentId );
             self::fail( 'Unsetting read-only property succeeded' );
         }
-        catch ( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
     }
 
     /**
@@ -290,7 +302,9 @@ abstract class UserBase extends BaseServiceTest
             $userService->loadUserGroup( $userGroup->id );
             self::fail( "Succeeded loading deleted user group" );
         }
-        catch( NotFoundException $e ){}
+        catch ( NotFoundException $e )
+        {
+        }
     }
 
     /**

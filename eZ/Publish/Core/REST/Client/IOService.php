@@ -9,19 +9,20 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
+use eZ\Publish\API\Repository\IOService as APIIOService;
 use eZ\Publish\API\Repository\Values\IO\BinaryFile;
 use eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct;
 
 use eZ\Publish\Core\REST\Common\UrlHandler;
-use eZ\Publish\Core\REST\Common\Input;
-use eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\Input\Dispatcher;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
  * Service used to handle io operations.
  *
  * @package eZ\Publish\API\Repository
  */
-class IOService implements \eZ\Publish\API\Repository\IOService, Sessionable
+class IOService implements APIIOService, Sessionable
 {
     /**
      * @var \eZ\Publish\Core\REST\Client\HttpClient
@@ -49,7 +50,7 @@ class IOService implements \eZ\Publish\API\Repository\IOService, Sessionable
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;

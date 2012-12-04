@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
+
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
@@ -390,9 +391,9 @@ class EzcDatabase extends Gateway
             ->update( $this->dbHandler->quoteTable( 'ezcontentobject' ) )
             ->set(
                 $this->dbHandler->quoteColumn( 'language_mask' ),
-                $newAlwaysAvailable
-                    ? $q->expr->bitOr( $this->dbHandler->quoteColumn( 'language_mask' ), 1 )
-                    : $q->expr->bitAnd( $this->dbHandler->quoteColumn( 'language_mask' ), -2 )
+                $newAlwaysAvailable ?
+                    $q->expr->bitOr( $this->dbHandler->quoteColumn( 'language_mask' ), 1 ) :
+                    $q->expr->bitAnd( $this->dbHandler->quoteColumn( 'language_mask' ), -2 )
             )
             ->where(
                 $q->expr->eq(
@@ -409,9 +410,9 @@ class EzcDatabase extends Gateway
             ->update( $this->dbHandler->quoteTable( 'ezcontentobject_name' ) )
             ->set(
                 $this->dbHandler->quoteColumn( 'language_id' ),
-                $newAlwaysAvailable
-                    ? $qName->expr->bitOr( $this->dbHandler->quoteColumn( 'language_id' ), 1 )
-                    : $qName->expr->bitAnd( $this->dbHandler->quoteColumn( 'language_id' ), -2 )
+                $newAlwaysAvailable ?
+                    $qName->expr->bitOr( $this->dbHandler->quoteColumn( 'language_id' ), 1 ) :
+                    $qName->expr->bitAnd( $this->dbHandler->quoteColumn( 'language_id' ), -2 )
             )
             ->where(
                 $qName->expr->lAnd(
@@ -438,9 +439,9 @@ class EzcDatabase extends Gateway
             ->update( $this->dbHandler->quoteTable( 'ezcontentobject_attribute' ) )
             ->set(
                 $this->dbHandler->quoteColumn( 'language_id' ),
-                $newAlwaysAvailable
-                    ? $qAttr->expr->bitOr( $this->dbHandler->quoteColumn( 'language_id' ), 1 )
-                    : $qAttr->expr->bitAnd( $this->dbHandler->quoteColumn( 'language_id' ), -2 )
+                $newAlwaysAvailable ?
+                    $qAttr->expr->bitOr( $this->dbHandler->quoteColumn( 'language_id' ), 1 ) :
+                    $qAttr->expr->bitAnd( $this->dbHandler->quoteColumn( 'language_id' ), -2 )
             )
             ->where(
                 $qAttr->expr->lAnd(
@@ -952,7 +953,8 @@ class EzcDatabase extends Gateway
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $query->expr->max( $this->dbHandler->quoteColumn( 'version' ) )
-        )->from( $this->dbHandler->quoteTable( 'ezcontentobject_version' )
+        )->from(
+            $this->dbHandler->quoteTable( 'ezcontentobject_version' )
         )->where(
             $query->expr->eq(
                 $this->dbHandler->quoteColumn( 'contentobject_id' ),
@@ -1236,8 +1238,10 @@ class EzcDatabase extends Gateway
 
         // Is it an insert or an update ?
         $qSelect = $this->dbHandler->createSelectQuery();
-        $qSelect->select(
-            $qSelect->alias( $qSelect->expr->count( '*' ), 'count' ) )
+        $qSelect
+            ->select(
+                $qSelect->alias( $qSelect->expr->count( '*' ), 'count' )
+            )
             ->from( $this->dbHandler->quoteTable( 'ezcontentobject_name' ) )
             ->where(
                 $qSelect->expr->lAnd(
@@ -1261,12 +1265,12 @@ class EzcDatabase extends Gateway
             $q = $this->dbHandler->createUpdateQuery();
             $q->update( $this->dbHandler->quoteTable( 'ezcontentobject_name' ) )
                 ->where(
-                $q->expr->lAnd(
-                    $q->expr->eq( $this->dbHandler->quoteColumn( 'contentobject_id' ), $q->bindValue( $contentId ) ),
-                    $q->expr->eq( $this->dbHandler->quoteColumn( 'content_version' ), $q->bindValue( $version ) ),
-                    $q->expr->eq( $this->dbHandler->quoteColumn( 'content_translation' ), $q->bindValue( $language->languageCode ) )
-                )
-            );
+                    $q->expr->lAnd(
+                        $q->expr->eq( $this->dbHandler->quoteColumn( 'contentobject_id' ), $q->bindValue( $contentId ) ),
+                        $q->expr->eq( $this->dbHandler->quoteColumn( 'content_version' ), $q->bindValue( $version ) ),
+                        $q->expr->eq( $this->dbHandler->quoteColumn( 'content_translation' ), $q->bindValue( $language->languageCode ) )
+                    )
+                );
         }
 
         $q->set(

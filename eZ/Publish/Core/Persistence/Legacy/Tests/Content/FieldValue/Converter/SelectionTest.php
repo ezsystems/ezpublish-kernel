@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
+
 use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
@@ -140,18 +141,24 @@ class SelectionTest extends PHPUnit_Framework_TestCase
      */
     public function testToStorageFieldDefinitionMultiple()
     {
-        $fieldDefinition = new PersistenceFieldDefinition( array(
-            'fieldTypeConstraints' => new FieldTypeConstraints( array(
-                'fieldSettings' => new FieldSettings( array(
-                    'isMultiple' => true,
-                    'options' => array(
-                        0 => 'First',
-                        1 => 'Second',
-                        2 => 'Third'
+        $fieldDefinition = new PersistenceFieldDefinition(
+            array(
+                'fieldTypeConstraints' => new FieldTypeConstraints(
+                    array(
+                        'fieldSettings' => new FieldSettings(
+                            array(
+                                'isMultiple' => true,
+                                'options' => array(
+                                    0 => 'First',
+                                    1 => 'Second',
+                                    2 => 'Third'
+                                )
+                            )
+                        )
                     )
-                ) )
-            ) )
-        ) );
+                )
+            )
+        );
 
         $expectedStorageFieldDefinition = new StorageFieldDefinition();
         $expectedStorageFieldDefinition->dataInt1 = 1;
@@ -175,16 +182,22 @@ EOT;
      */
     public function testToStorageFieldDefinitionSingle()
     {
-        $fieldDefinition = new PersistenceFieldDefinition( array(
-            'fieldTypeConstraints' => new FieldTypeConstraints( array(
-                'fieldSettings' => new FieldSettings( array(
-                    'isMultiple' => false,
-                    'options' => array(
-                        0 => 'First',
+        $fieldDefinition = new PersistenceFieldDefinition(
+            array(
+                'fieldTypeConstraints' => new FieldTypeConstraints(
+                    array(
+                        'fieldSettings' => new FieldSettings(
+                            array(
+                                'isMultiple' => false,
+                                'options' => array(
+                                    0 => 'First',
+                                )
+                            )
+                        )
                     )
-                ) )
-            ) )
-        ) );
+                )
+            )
+        );
 
         $expectedStorageFieldDefinition = new StorageFieldDefinition();
         $expectedStorageFieldDefinition->dataInt1 = 0;
@@ -208,7 +221,6 @@ EOT;
      */
     public function testToFieldDefinitionMultiple()
     {
-
         $storageFieldDefinition = new StorageFieldDefinition();
         $storageFieldDefinition->dataInt1 = 1;
         $storageFieldDefinition->dataText5 = <<<EOT
@@ -222,26 +234,31 @@ EOT;
 </ezselection>
 EOT;
 
-        $expectedFieldDefinition = new PersistenceFieldDefinition( array(
-            'fieldTypeConstraints' => new FieldTypeConstraints( array(
-                'fieldSettings' => new FieldSettings( array(
-                    'isMultiple' => true,
-                    'options' => array(
-                        0 => 'First',
-                        1 => 'Second',
-                        2 => 'Third'
+        $expectedFieldDefinition = new PersistenceFieldDefinition(
+            array(
+                'fieldTypeConstraints' => new FieldTypeConstraints(
+                    array(
+                        'fieldSettings' => new FieldSettings(
+                            array(
+                                'isMultiple' => true,
+                                'options' => array(
+                                    0 => 'First',
+                                    1 => 'Second',
+                                    2 => 'Third'
+                                )
+                            )
+                        )
                     )
-                ) )
-            ) ),
-            'defaultValue' => new FieldValue( array( 'data' => array() ) )
-        ) );
+                ),
+                'defaultValue' => new FieldValue( array( 'data' => array() ) )
+            )
+        );
 
         $actualFieldDefinition = new PersistenceFieldDefinition();
 
         $this->converter->toFieldDefinition( $storageFieldDefinition, $actualFieldDefinition );
 
         $this->assertEquals( $expectedFieldDefinition, $actualFieldDefinition );
-
     }
 
     /**

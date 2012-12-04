@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
+
 use eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 

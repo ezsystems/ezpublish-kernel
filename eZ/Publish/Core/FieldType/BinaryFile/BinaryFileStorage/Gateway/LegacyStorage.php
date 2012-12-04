@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage\Gateway;
+
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway\LegacyStorage as BaseLegacyStorage;

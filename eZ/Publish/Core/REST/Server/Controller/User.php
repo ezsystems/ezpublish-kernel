@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
+
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Exceptions;

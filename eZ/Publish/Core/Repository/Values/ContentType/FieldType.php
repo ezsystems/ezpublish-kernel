@@ -9,6 +9,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\Values\ContentType;
+
 use eZ\Publish\API\Repository\FieldType as FieldTypeInterface;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldTypeInterface;
 

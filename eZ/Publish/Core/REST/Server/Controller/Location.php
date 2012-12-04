@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
+
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Values;
@@ -248,7 +249,7 @@ class Location extends RestController
     {
         $values = $this->urlHandler->parse( 'location', $this->request->path );
 
-        $locationId = $this->extractLocationIdFromPath($values['location']);
+        $locationId = $this->extractLocationIdFromPath( $values['location'] );
         $location = $this->locationService->loadLocation( $locationId );
 
         $destinationValues = $this->urlHandler->parse( 'location', $this->request->destination );

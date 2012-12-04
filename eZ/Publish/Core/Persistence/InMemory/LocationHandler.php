@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
+
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
@@ -53,7 +54,6 @@ class LocationHandler implements LocationHandlerInterface
     {
         return $this->backend->load( 'Content\\Location', $locationId );
     }
-
 
     /**
      * Loads all locations for $contentId, optionally limited to a sub tree

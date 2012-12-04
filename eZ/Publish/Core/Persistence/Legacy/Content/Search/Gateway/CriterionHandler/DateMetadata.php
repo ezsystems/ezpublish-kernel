@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
+
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -43,9 +44,9 @@ class DateMetadata extends CriterionHandler
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
     {
         $column = $this->dbHandler->quoteColumn(
-            $criterion->target === Criterion\DateMetadata::MODIFIED
-                ? 'modified'
-                : 'published',
+            $criterion->target === Criterion\DateMetadata::MODIFIED ?
+                'modified' :
+                'published',
             'ezcontentobject'
         );
 

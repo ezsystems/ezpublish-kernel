@@ -44,7 +44,7 @@ class ParentContentTypeTest extends BaseTest
                         ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' )
                         ->setConstructorArgs(
                             array(
-                                 array( 'identifier' => $contentTypeIdentifier )
+                                array( 'identifier' => $contentTypeIdentifier )
                             )
                         )
                         ->getMockForAbstractClass()

@@ -181,7 +181,7 @@ class LocationAwareStoreTest extends \PHPUnit_Framework_TestCase
         }
 
         $request = Request::create( '/', 'PURGE' );
-        $request->headers->set( 'X-Group-Location-Id', implode('; ', $locationIds ) );
+        $request->headers->set( 'X-Group-Location-Id', implode( '; ', $locationIds ) );
         $this->store->purgeByRequest( $request );
     }
 

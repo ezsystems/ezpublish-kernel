@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
@@ -101,7 +102,6 @@ class RoleUpdateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'identifier',
                 'content'  => 'some-role',
-
             ),
             $result,
             'Invalid or non-existing <RoleInput> identifier value element.',

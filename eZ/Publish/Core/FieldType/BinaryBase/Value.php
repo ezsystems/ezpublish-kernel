@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\BinaryBase;
+
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState;
+
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState;
@@ -284,10 +285,14 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $mapperMock->expects( $this->once() )
             ->method( 'createObjectStateListFromData' )
             ->with( $this->equalTo( array( array() ) ) )
-            ->will( $this->returnValue( array(
-                    new ObjectState( array( 'id' => 1 ) ),
-                    new ObjectState( array( 'id' => 2 ) )
-            ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        new ObjectState( array( 'id' => 1 ) ),
+                        new ObjectState( array( 'id' => 2 ) )
+                    )
+                )
+            );
 
         $gatewayMock->expects( $this->exactly( 2 ) )
             ->method( 'deleteObjectStateLinks' );
@@ -508,10 +513,14 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $mapperMock->expects( $this->any() )
             ->method( 'createObjectStateListFromData' )
             ->with( $this->equalTo( array( array() ) ) )
-            ->will( $this->returnValue( array(
-                    new ObjectState( array( 'id' => 1, 'groupId' => 2 ) ),
-                    new ObjectState( array( 'id' => 2, 'groupId' => 2 ) )
-                ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        new ObjectState( array( 'id' => 1, 'groupId' => 2 ) ),
+                        new ObjectState( array( 'id' => 2, 'groupId' => 2 ) )
+                    )
+                )
+            );
 
         $gatewayMock->expects( $this->exactly( 2 ) )
             ->method( 'updateObjectStatePriority' );

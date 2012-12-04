@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
+
 use eZ\Publish\Core\FieldType\Media\Value as MediaValue;
 use eZ\Publish\Core\FieldType\Media\Type as MediaType;
 use eZ\Publish\API\Repository\Values\Content\Field;
@@ -239,9 +240,11 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
             array(
-                new MediaValue( array(
-                    'path' => '/foo/bar/sindelfingen.pdf',
-                ) ),
+                new MediaValue(
+                    array(
+                        'path' => '/foo/bar/sindelfingen.pdf',
+                    )
+                ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
         );

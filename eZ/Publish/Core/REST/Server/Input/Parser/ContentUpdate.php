@@ -98,7 +98,7 @@ class ContentUpdate extends Base
             {
                 $parsedData['modificationDate'] = new DateTime( $data['modificationDate'] );
             }
-            catch( Exception $e )
+            catch ( Exception $e )
             {
                 throw new Exceptions\Parser( 'Invalid format for <modificationDate> in <ContentUpdate>', 0, $e );
             }
@@ -111,7 +111,7 @@ class ContentUpdate extends Base
             {
                 $parsedData['publishedDate'] = new DateTime( $data['publishDate'] );
             }
-            catch( Exception $e )
+            catch ( Exception $e )
             {
                 throw new Exceptions\Parser( 'Invalid format for <publishDate> in <ContentUpdate>', 0, $e );
             }

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
+
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\SPI\Persistence\Content\Language;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
@@ -198,9 +199,11 @@ class CachingLanguageHandlerTest extends TestCase
         $cacheMock->expects( $this->once() )
             ->method( 'getById' )
             ->with( $this->equalTo( 2 ) )
-            ->will( $this->throwException(
-                new NotFoundException( 'Language', 2 )
-            ) );
+            ->will(
+                $this->throwException(
+                    new NotFoundException( 'Language', 2 )
+                )
+            );
 
         $result = $handler->load( 2 );
     }
@@ -245,9 +248,11 @@ class CachingLanguageHandlerTest extends TestCase
         $cacheMock->expects( $this->once() )
             ->method( 'getByLocale' )
             ->with( $this->equalTo( 'eng-US' ) )
-            ->will( $this->throwException(
-                new NotFoundException( 'Language', 'eng-US' )
-            ) );
+            ->will(
+                $this->throwException(
+                    new NotFoundException( 'Language', 'eng-US' )
+                )
+            );
 
         $result = $handler->loadByLanguageCode( 'eng-US' );
     }

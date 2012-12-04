@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
+
 use eZ\Publish\API\Repository\Tests;
 use eZ\Publish\API\Repository;
 use eZ\Publish\API\Repository\Values\Content\Field;
@@ -279,7 +280,6 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testCreateContentType()
     {
-
         $contentType = $this->createContentType(
             $this->getValidFieldSettings(),
             $this->getValidValidatorConfiguration()

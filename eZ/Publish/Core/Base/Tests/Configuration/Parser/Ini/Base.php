@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Base\Tests\Configuration\Parser\Ini;
+
 use eZ\Publish\Core\Base\Configuration;
 use PHPUnit_Framework_TestCase;
 
@@ -202,19 +203,24 @@ legacy.dsn=sqlite://:memory:
                 'conditions' => array(
                     'eZ\\Testing\\Filter_Get::dev' => 'uri\\0:content\\uri\\1:^v\\auth:?php\\params:%php',
                     '$user_object->check' => 'ezp/system/router\\eZ\\Testing\\Filter_Get::dev',
-                    'uri\\0:§£$content',
-                    array( 'subOne' ),
-                    array( 'subTwo' ),
+                    0 => 'uri\\0:§£$content',
+                    1 => array( 'subOne' ),
+                    2 => array( 'subTwo' ),
                     'two' => array( 'two' => 'subFive', 'two2' => 'subFour' ),
-                    array( array( 'subSix' ) ),
-                    array( array( 'subSeven' ) ),
+                    3 => array( array( 'subSix' ) ),
+                    4 => array( array( 'subSeven' ) ),
                     'three' => array( 'three' => array( 'three' => 'subTen', 'three3' => 'subNine' ) ),
                     'events' => array( 'pre_request' => array( 'outputFn' ) ),
-                    'routes' => array( '__ROOT__' => array( 'item' => array( 'uri' => '' ) ),
-                                       'content' => array( 'item' => array( 'uri' => 'content/some/',
-                                                                             'params' => array( 'id' => '\d+' ),
-                                                                             'controller' => '%contentItem-controller::doList',
-                    ) ) ),
+                    'routes' => array(
+                        '__ROOT__' => array( 'item' => array( 'uri' => '' ) ),
+                        'content' => array(
+                            'item' => array(
+                                'uri' => 'content/some/',
+                                'params' => array( 'id' => '\d+' ),
+                                'controller' => '%contentItem-controller::doList',
+                            )
+                        )
+                    ),
                 )
             ),
             'contentItem:controller' => array( 'class' => 'eZ\\Publish\\Core\\ContentItemController' ),
@@ -262,7 +268,7 @@ two[one][]
             'test' => array(
                 'sub' => array( 'hi', Configuration::TEMP_INI_UNSET_VAR ),
                 'two' => array( 'one' => array( 'hi', Configuration::TEMP_INI_UNSET_VAR ) ),
-             )
+            )
         );
 
         $result = $this->parser->parse( 'DoesNotExist.ini', $iniString );

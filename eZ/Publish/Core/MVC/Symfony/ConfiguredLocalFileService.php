@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\MVC\Symfony;
+
 use eZ\Publish\Core\FieldType\FileService\LocalFileService;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 

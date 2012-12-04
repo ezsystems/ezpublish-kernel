@@ -56,7 +56,8 @@ class URLWildcardService implements URLWildcardServiceInterface
     {
         $this->repository = $repository;
         $this->urlWildcardHandler = $urlWildcardHandler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
     }
@@ -263,7 +264,7 @@ class URLWildcardService implements URLWildcardServiceInterface
 
         foreach ( $spiUrlWildcards as $spiUrlWildcard )
         {
-            $map[$spiUrlWildcard->id] = preg_replace("/[\\D]/", "", strtr( $spiUrlWildcard->sourceUrl, "/*", "10" ) );
+            $map[$spiUrlWildcard->id] = preg_replace( "/[\\D]/", "", strtr( $spiUrlWildcard->sourceUrl, "/*", "10" ) );
         }
 
         return $map;

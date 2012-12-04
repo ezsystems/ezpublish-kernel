@@ -44,17 +44,17 @@ class SectionTest extends BaseTest
         $sectionServiceMock->expects( $this->once() )
             ->method( 'loadSection' )
             ->will(
-            $this->returnValue(
-                $this
-                    ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Section' )
-                    ->setConstructorArgs(
-                        array(
-                             array( 'identifier' => $sectionIdentifier )
+                $this->returnValue(
+                    $this
+                        ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Section' )
+                        ->setConstructorArgs(
+                            array(
+                                array( 'identifier' => $sectionIdentifier )
+                            )
                         )
-                    )
-                    ->getMockForAbstractClass()
-            )
-        );
+                        ->getMockForAbstractClass()
+                )
+            );
 
         $repository = $this->getRepositoryMock();
         $repository

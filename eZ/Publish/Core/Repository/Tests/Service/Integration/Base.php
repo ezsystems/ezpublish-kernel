@@ -180,11 +180,11 @@ abstract class Base extends PHPUnit_Framework_TestCase
 
     private function assertProperty( $propertyName, $expectedValue, $actualValue, $equal = true )
     {
-        if( $expectedValue instanceof \ArrayObject )
+        if ( $expectedValue instanceof \ArrayObject )
         {
             $expectedValue = $expectedValue->getArrayCopy();
         }
-        if( $actualValue instanceof \ArrayObject )
+        if ( $actualValue instanceof \ArrayObject )
         {
             $actualValue = $actualValue->getArrayCopy();
         }

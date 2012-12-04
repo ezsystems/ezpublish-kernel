@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
+
 use eZ\Publish\Core\FieldType\Author\Type as AuthorType;
 use eZ\Publish\Core\FieldType\Author\Value as AuthorValue;
 use eZ\Publish\Core\FieldType\Author\Author;
@@ -424,7 +425,7 @@ class AuthorTest extends StandardizedFieldTypeTest
     {
         $ft = new AuthorType();
         $value = new AuthorValue( $this->authors );
-        self::assertSame( $this->authors[0]->name , $ft->getName( $value ) );
+        self::assertSame( $this->authors[0]->name, $ft->getName( $value ) );
     }
 
     /**

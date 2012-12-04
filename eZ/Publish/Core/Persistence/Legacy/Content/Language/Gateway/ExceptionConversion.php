@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
+
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Language;
 

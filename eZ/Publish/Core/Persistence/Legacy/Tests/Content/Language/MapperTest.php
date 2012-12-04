@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
+
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper;
 use eZ\Publish\SPI\Persistence\Content\Language;
@@ -65,8 +66,8 @@ class MapperTest extends TestCase
     protected function getRowsFixture()
     {
         return array(
-            array( 'disabled'=>'0', 'id'=>'2', 'locale'=>'eng-US', 'name'=>'English (American)' ),
-            array( 'disabled'=>'0', 'id'=>'4', 'locale'=>'eng-GB', 'name'=>'English (United Kingdom)' )
+            array( 'disabled' => '0', 'id' => '2', 'locale' => 'eng-US', 'name' => 'English (American)' ),
+            array( 'disabled' => '0', 'id' => '4', 'locale' => 'eng-GB', 'name' => 'English (United Kingdom)' )
         );
     }
 

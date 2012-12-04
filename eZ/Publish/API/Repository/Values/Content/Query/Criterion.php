@@ -10,6 +10,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Values\Content\Query;
+
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use InvalidArgumentException;

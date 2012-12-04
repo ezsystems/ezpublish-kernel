@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
+
 use eZ\Publish\Core\FieldType\Selection\Type as Selection;
 use eZ\Publish\Core\FieldType\Selection\Value as SelectionValue;
 use ReflectionObject;
@@ -51,7 +52,7 @@ class SelectionTest extends StandardizedFieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-       return array(
+        return array(
             'isMultiple' => array(
                 'type' => 'bool',
                 'default' => false,

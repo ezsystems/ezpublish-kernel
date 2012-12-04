@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\MapLocation;
+
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;

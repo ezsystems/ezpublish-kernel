@@ -60,7 +60,9 @@ abstract class TrashBase extends BaseServiceTest
             $value = $trashItem->notDefined;
             self::fail( "Succeeded getting non existing property" );
         }
-        catch( PropertyNotFound $e ) {}
+        catch ( PropertyNotFound $e )
+        {
+        }
     }
 
     /**
@@ -75,7 +77,9 @@ abstract class TrashBase extends BaseServiceTest
             $trashItem->id = 42;
             self::fail( "Succeeded setting read only property" );
         }
-        catch( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
     }
 
     /**
@@ -104,7 +108,9 @@ abstract class TrashBase extends BaseServiceTest
             unset( $trashItem->id );
             self::fail( 'Unsetting read-only property succeeded' );
         }
-        catch ( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
     }
 
     /**

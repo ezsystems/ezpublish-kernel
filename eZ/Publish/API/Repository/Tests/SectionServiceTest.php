@@ -66,7 +66,6 @@ class SectionServiceTest extends BaseTest
 
     }
 
-
     /**
      * Test for the newSectionCreateStruct() method.
      *

@@ -181,11 +181,11 @@ class ConfigResolverTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->exactly( 2 ) )
             ->method( 'hasParameter' )
             ->with(
-            $this->logicalOr(
-                "ezsettings.global.$paramName",
-                $relativeScopeParameter
+                $this->logicalOr(
+                    "ezsettings.global.$paramName",
+                    $relativeScopeParameter
+                )
             )
-        )
         // First call is for "global" scope, second is the right one
             ->will( $this->onConsecutiveCalls( false, true ) );
         $this->containerMock

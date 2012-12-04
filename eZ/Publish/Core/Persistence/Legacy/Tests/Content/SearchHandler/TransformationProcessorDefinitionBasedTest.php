@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandler;
+
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased;

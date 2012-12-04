@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Base\Exceptions;
+
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use Exception;
 

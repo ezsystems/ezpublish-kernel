@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;

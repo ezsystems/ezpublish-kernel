@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Validator;
+
 use eZ\Publish\Core\FieldType\Validator;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
@@ -25,7 +26,7 @@ class EmailAddressValidator extends Validator
     );
 
     protected $constraintsSchema = array(
-        "Extent" => array (
+        "Extent" => array(
             "type" => "string",
             "default" => "regex"
         )

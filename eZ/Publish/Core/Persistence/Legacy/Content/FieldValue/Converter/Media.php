@@ -53,8 +53,10 @@ class Media extends BinaryFile
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
         parent::toFieldDefinition( $storageDef, $fieldDef );
-        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings( array(
+        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
+            array(
                 'mediaType' => $storageDef->dataText1,
-        ) );
+            )
+        );
     }
 }

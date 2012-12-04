@@ -58,7 +58,8 @@ class TrashService implements TrashServiceInterface
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
     }
@@ -280,8 +281,8 @@ class TrashService implements TrashServiceInterface
 
         $spiTrashItems = $this->persistenceHandler->trashHandler()->findTrashItems(
             $query->criterion !== null ? $query->criterion : null,
-            $query->offset !== null && $query->offset > 0 ? (int) $query->offset : 0,
-            $query->limit !== null && $query->limit >= 1 ? (int) $query->limit : null,
+            $query->offset !== null && $query->offset > 0 ? (int)$query->offset : 0,
+            $query->limit !== null && $query->limit >= 1 ? (int)$query->limit : null,
             $query->sortClauses !== null ? $query->sortClauses : null
         );
 
@@ -311,16 +312,16 @@ class TrashService implements TrashServiceInterface
         return new TrashItem(
             array(
                 'contentInfo' => $this->repository->getContentService()->loadContentInfo( $spiTrashItem->contentId ),
-                'id' => (int) $spiTrashItem->id,
-                'priority' => (int) $spiTrashItem->priority,
-                'hidden' => (bool) $spiTrashItem->hidden,
-                'invisible' => (bool) $spiTrashItem->invisible,
+                'id' => (int)$spiTrashItem->id,
+                'priority' => (int)$spiTrashItem->priority,
+                'hidden' => (bool)$spiTrashItem->hidden,
+                'invisible' => (bool)$spiTrashItem->invisible,
                 'remoteId' => $spiTrashItem->remoteId,
-                'parentLocationId' => (int) $spiTrashItem->parentId,
+                'parentLocationId' => (int)$spiTrashItem->parentId,
                 'pathString' => $spiTrashItem->pathString,
-                'depth' => (int) $spiTrashItem->depth,
-                'sortField' => (int) $spiTrashItem->sortField,
-                'sortOrder' => (int) $spiTrashItem->sortOrder,
+                'depth' => (int)$spiTrashItem->depth,
+                'sortField' => (int)$spiTrashItem->sortField,
+                'sortOrder' => (int)$spiTrashItem->sortOrder,
             )
         );
     }

@@ -33,7 +33,7 @@ abstract class FieldTypeBase extends BaseServiceTest
 
         $fieldTypes = $fieldTypeService->getFieldTypes();
 
-        self::assertEquals( count( $fieldTypeSettings), count( $fieldTypes ) );
+        self::assertEquals( count( $fieldTypeSettings ), count( $fieldTypes ) );
         foreach ( $fieldTypes as $fieldType )
         {
             self::assertInstanceOf( "eZ\\Publish\\API\\Repository\\FieldType", $fieldType );
@@ -57,7 +57,7 @@ abstract class FieldTypeBase extends BaseServiceTest
                 {
                     return array( $identifier );
                 },
-                    $fieldTypeIdentifiers
+                $fieldTypeIdentifiers
             );
         }
 

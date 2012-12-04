@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\IO\Tests;
+
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
 use DateTime;
@@ -60,7 +61,6 @@ abstract class Base extends \PHPUnit_Framework_TestCase
         $repositoryPath = 'var/test/storage/images/ezplogo.gif';
         $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
         $binaryFile = $this->ioHandler->create( $struct );
-
 
         self::assertInstanceOf( 'eZ\\Publish\\SPI\\IO\\BinaryFile', $binaryFile );
         self::assertEquals( $repositoryPath, $binaryFile->path );

@@ -39,7 +39,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
 
     private $viewBaseLayout = 'EzPublishCoreBundle::viewbase.html.twig';
 
-    protected  function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->templateEngineMock = $this->getMock( 'Symfony\\Component\\Templating\\EngineInterface' );
@@ -192,10 +192,10 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
             ->method( 'getView' )
             ->with( $contentInfo )
             ->will(
-            $this->returnValue(
-                new ContentView( $closure, $params )
-            )
-        );
+                $this->returnValue(
+                    new ContentView( $closure, $params )
+                )
+            );
 
         // Configuring template engine behaviour
         $params += array( 'content' => $content, 'viewbaseLayout' => $this->viewBaseLayout );
@@ -228,10 +228,10 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
             ->method( 'getView' )
             ->with( $location, 'customViewType' )
             ->will(
-            $this->returnValue(
-                new ContentView( $templateIdentifier, $params )
-            )
-        );
+                $this->returnValue(
+                    new ContentView( $templateIdentifier, $params )
+                )
+            );
 
         $contentService = $this->getMockBuilder( "eZ\\Publish\\Core\\Repository\\ContentService" )
             ->disableOriginalConstructor()
@@ -292,10 +292,10 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
             ->method( 'getView' )
             ->with( $location )
             ->will(
-            $this->returnValue(
-                new ContentView( $closure, $params )
-            )
-        );
+                $this->returnValue(
+                    new ContentView( $closure, $params )
+                )
+            );
 
         $contentService = $this->getMockBuilder( "eZ\\Publish\\Core\\Repository\\ContentService" )
             ->disableOriginalConstructor()

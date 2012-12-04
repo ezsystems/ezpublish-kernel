@@ -1407,6 +1407,8 @@ class ObjectStateServiceTest extends BaseTest
                 )
             );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+        }
     }
 }

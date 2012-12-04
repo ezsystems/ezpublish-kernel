@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Base\Tests\Configuration\Parser\Ini;
+
 use eZ\Publish\Core\Base\Configuration\Parser\Ini as IniParser;
 use eZ\Publish\Core\Base\Tests\Configuration\Parser\Ini\Base;
 

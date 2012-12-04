@@ -53,7 +53,7 @@ class UrlGenerator extends Generator
         if ( strrpos( $legacyModuleUri, '/' ) === ( strlen( $legacyModuleUri ) - 1 ) )
             $legacyModuleUri = substr( $legacyModuleUri, 0, -1 );
 
-        list( $moduleName, $viewName )= explode( '/', $legacyModuleUri );
+        list( $moduleName, $viewName ) = explode( '/', $legacyModuleUri );
 
         return $this->getLegacyKernel()->runCallback(
             function () use ( $legacyModuleUri, $moduleName, $viewName, $parameters )

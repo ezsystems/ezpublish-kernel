@@ -9,6 +9,7 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content\ObjectState;
+
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**

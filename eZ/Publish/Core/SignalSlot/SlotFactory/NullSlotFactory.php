@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot\SlotFactory;
+
 use eZ\Publish\Core\SignalSlot\SlotFactory;
 
 class NullSlotFactory extends SlotFactory

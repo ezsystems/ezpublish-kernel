@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
+
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
@@ -89,11 +90,16 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
             // The ezstring field type does not have any special field definition
             // properties
             array( 'fieldType', 'ezemail' ),
-            array( 'fieldTypeConstraints', new Content\FieldTypeConstraints( array(
-                'validators' => array(
-                    'EmailAddressValidator' => array(),
-                ),
-            ) ) ),
+            array(
+                'fieldTypeConstraints',
+                new Content\FieldTypeConstraints(
+                    array(
+                        'validators' => array(
+                            'EmailAddressValidator' => array(),
+                        ),
+                    )
+                )
+            ),
         );
     }
 
@@ -104,11 +110,13 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => 'nospam@ez.no',
-            'externalData' => null,
-            'sortKey'      => 'nospam@ez.no',
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => 'nospam@ez.no',
+                'externalData' => null,
+                'sortKey'      => 'nospam@ez.no',
+            )
+        );
     }
 
     /**
@@ -120,11 +128,13 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => 'no-spam@example.com',
-            'externalData' => null,
-            'sortKey'      => 'no-spam@example.com',
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => 'no-spam@example.com',
+                'externalData' => null,
+                'sortKey'      => 'no-spam@example.com',
+            )
+        );
     }
 }
 

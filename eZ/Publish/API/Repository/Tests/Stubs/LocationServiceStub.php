@@ -488,7 +488,7 @@ class LocationServiceStub implements LocationService
 
         $location->__hide();
 
-        foreach ( $this->loadLocationChildren( $location )->locations as $child)
+        foreach ( $this->loadLocationChildren( $location )->locations as $child )
         {
             $this->markInvisible( $child );
         }

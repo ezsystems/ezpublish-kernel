@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
+
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandlerInterface;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use LogicException;

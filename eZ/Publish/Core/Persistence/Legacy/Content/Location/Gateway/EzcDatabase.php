@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
+
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
@@ -265,14 +266,14 @@ class EzcDatabase extends Gateway
             $newParentId = $row['parent_node_id'];
             if ( $row['path_string'] === $fromPathString )
             {
-                $newParentId = (int) implode( '', array_slice( explode( '/', $newPathString ), -3, 1 ) );
+                $newParentId = (int)implode( '', array_slice( explode( '/', $newPathString ), -3, 1 ) );
             }
 
             /** @var $query \ezcQueryUpdate */
             $query = $this->handler->createUpdateQuery();
             $query
                 ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
-                    ->set(
+                ->set(
                     $this->handler->quoteColumn( 'path_string' ),
                     $query->bindValue( $newPathString )
                 )

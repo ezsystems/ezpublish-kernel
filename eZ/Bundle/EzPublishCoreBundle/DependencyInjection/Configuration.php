@@ -71,15 +71,15 @@ class Configuration implements ConfigurationInterface
                             ->info( 'Siteaccess match configuration. First key is the matcher class, value is passed to the matcher' )
                             ->example(
                                 array(
-                                     'Map\URI'      => array(
-                                         'foo'  => 'ezdemo_site',
-                                         'ezdemo_site' => 'ezdemo_site',
-                                         'ezdemo_site_admin' => 'ezdemo_site_admin'
-                                     ),
-                                     'Map\Host'     => array(
-                                         'ezpublish.dev'        => 'ezdemo_site',
-                                         'admin.ezpublish.dev'  => 'ezdemo_site_admin'
-                                     )
+                                    'Map\\URI' => array(
+                                        'foo' => 'ezdemo_site',
+                                        'ezdemo_site' => 'ezdemo_site',
+                                        'ezdemo_site_admin' => 'ezdemo_site_admin'
+                                    ),
+                                    'Map\\Host' => array(
+                                        'ezpublish.dev' => 'ezdemo_site',
+                                        'admin.ezpublish.dev' => 'ezdemo_site_admin'
+                                    )
                                 )
                             )
                             ->isRequired()
@@ -88,8 +88,18 @@ class Configuration implements ConfigurationInterface
                                 ->beforeNormalization()
                                     // Value passed to the matcher should always be an array.
                                     // If value is not an array, we transform it to a hash, with 'value' as key.
-                                    ->ifTrue( function ( $v ) { return !is_array( $v ); } )
-                                    ->then( function ( $v ) { return array( 'value' => $v ); } )
+                                    ->ifTrue(
+                                        function ( $v )
+                                        {
+                                            return !is_array( $v );
+                                        }
+                                    )
+                                    ->then(
+                                        function ( $v )
+                                        {
+                                            return array( 'value' => $v );
+                                        }
+                                    )
                                 ->end()
                                 ->useAttributeAsKey( 'key' )
                                 ->prototype( 'variable' )->end()
@@ -108,24 +118,24 @@ class Configuration implements ConfigurationInterface
                     ->info( 'System configuration. First key is always a siteaccess or siteaccess group name' )
                     ->example(
                         array(
-                             'ezdemo_site'      => array(
-                                 'languages'        => array( 'eng-GB', 'fre-FR' ),
-                                 'content'          => array(
-                                     'view_cache'   => true,
-                                     'ttl_cache'    => true,
-                                     'default_ttl'  => 30
-                                 )
-                             ),
-                             'ezdemo_group'     => array(
-                                 'database' => array(
-                                     'type'             => 'mysql',
-                                     'server'           => 'localhost',
-                                     'port'             => 3306,
-                                     'user'             => 'root',
-                                     'password'         => 'root',
-                                     'database_name'    => 'ezdemo'
-                                 )
-                             )
+                            'ezdemo_site'      => array(
+                                'languages'        => array( 'eng-GB', 'fre-FR' ),
+                                'content'          => array(
+                                    'view_cache'   => true,
+                                    'ttl_cache'    => true,
+                                    'default_ttl'  => 30
+                                )
+                            ),
+                            'ezdemo_group'     => array(
+                                'database' => array(
+                                    'type'             => 'mysql',
+                                    'server'           => 'localhost',
+                                    'port'             => 3306,
+                                    'user'             => 'root',
+                                    'password'         => 'root',
+                                    'database_name'    => 'ezdemo'
+                                )
+                            )
                         )
                     )
                     ->useAttributeAsKey( 'key' )
@@ -156,7 +166,7 @@ EOT;
                     ->children()
                         ->booleanNode( 'enabled' )->defaultTrue()->end()
                         ->scalarNode( 'path' )
-                            ->info( 'Absolute path of ImageMagick / GraphicsMagick "convert" binary.')
+                            ->info( 'Absolute path of ImageMagick / GraphicsMagick "convert" binary.' )
                             ->beforeNormalization()
                                 ->ifTrue(
                                     function ( $v )
@@ -167,7 +177,7 @@ EOT;
                                         {
                                             $basename = substr( $basename, 0, $wsPos );
                                         }
-                                        return  !is_executable( dirname( $v ) . DIRECTORY_SEPARATOR . $basename );
+                                        return !is_executable( dirname( $v ) . DIRECTORY_SEPARATOR . $basename );
                                     }
                                 )
                                 ->thenInvalid( 'Please provide full path to ImageMagick / GraphicsMagick  "convert" binary. Please also check that it is executable.' )
@@ -205,7 +215,12 @@ EOT;
                         ->scalarNode( 'timeout' )
                             ->info( 'Timeout for each Http PURGE request, in seconds.' )
                             ->validate()
-                                ->ifTrue( function ( $v ) { return !is_int( $v ); } )
+                                ->ifTrue(
+                                    function ( $v )
+                                    {
+                                        return !is_int( $v );
+                                    }
+                                )
                                 ->thenInvalid( 'ezpublish.http_cache.timeout can only be an integer.' )
                             ->end()
                             ->defaultValue( 1 )

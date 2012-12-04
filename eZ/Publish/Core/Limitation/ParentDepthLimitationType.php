@@ -79,7 +79,7 @@ class ParentDepthLimitationType implements SPILimitationTypeInterface
 
         if ( $target instanceof LocationCreateStruct )
             $target = $repository->getLocationService()->loadLocation( $target->parentLocationId );
-        else if ( $target !== null  && !$target instanceof Location )
+        else if ( $target !== null && !$target instanceof Location )
             throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
 
         if ( $target === null )

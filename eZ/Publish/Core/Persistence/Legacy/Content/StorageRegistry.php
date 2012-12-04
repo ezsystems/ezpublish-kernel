@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
+
 use eZ\Publish\SPI\FieldType\FieldStorage;
 use eZ\Publish\Core\FieldType\NullStorage;
 

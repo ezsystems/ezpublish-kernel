@@ -117,9 +117,9 @@ class ViewController extends Controller
             $event = new APIContentExceptionEvent(
                 $e,
                 array(
-                     'contentId'    => null,
-                     'locationId'   => $locationId,
-                     'viewType'     => $viewType
+                    'contentId'    => null,
+                    'locationId'   => $locationId,
+                    'viewType'     => $viewType
                 )
             );
             $this->getEventDispatcher()->dispatch( MVCEvents::API_CONTENT_EXCEPTION, $event );
@@ -187,9 +187,9 @@ class ViewController extends Controller
             $event = new APIContentExceptionEvent(
                 $e,
                 array(
-                     'contentId'    => $contentId,
-                     'locationId'   => null,
-                     'viewType'     => $viewType
+                    'contentId'    => $contentId,
+                    'locationId'   => null,
+                    'viewType'     => $viewType
                 )
             );
             $this->getEventDispatcher()->dispatch( MVCEvents::API_CONTENT_EXCEPTION, $event );

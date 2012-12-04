@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
+
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Base\ConfigurationManager;
 use eZ\Publish\Core\Base\ServiceContainer;
@@ -386,13 +387,16 @@ class HandlerTest extends TestCase
 
         // load configuration uncached
         $configManager = new ConfigurationManager(
-            array_merge_recursive( $settings, array(
-                'base' => array(
-                    'Configuration' => array(
-                        'UseCache' => false
+            array_merge_recursive(
+                $settings,
+                array(
+                    'base' => array(
+                        'Configuration' => array(
+                            'UseCache' => false
+                        )
                     )
                 )
-            ) ),
+            ),
             $settings['base']['Configuration']['Paths']
         );
 

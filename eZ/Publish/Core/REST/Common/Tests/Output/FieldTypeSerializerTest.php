@@ -47,9 +47,11 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo( 'some-field' )
             )->will(
                 $this->returnValue(
-                    new FieldDefinition( array(
-                        'fieldTypeIdentifier' => 'myFancyFieldType',
-                    ) )
+                    new FieldDefinition(
+                        array(
+                            'fieldTypeIdentifier' => 'myFancyFieldType',
+                        )
+                    )
                 )
             );
 
@@ -57,12 +59,14 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
         $this->getFieldTypeServiceMock()->expects( $this->once() )
             ->method( 'getFieldType' )
             ->with( $this->equalTo( 'myFancyFieldType' ) )
-            ->will( $this->returnCallback(
-                function () use ( $fieldTypeMock )
-                {
-                    return $fieldTypeMock;
-                }
-            ) );
+            ->will(
+                $this->returnCallback(
+                    function () use ( $fieldTypeMock )
+                    {
+                        return $fieldTypeMock;
+                    }
+                )
+            );
 
         $fieldTypeMock->expects( $this->once() )
             ->method( 'toHash' )
@@ -98,9 +102,11 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo( 'some-field' )
             )->will(
                 $this->returnValue(
-                    new FieldDefinition( array(
-                        'fieldTypeIdentifier' => 'myFancyFieldType',
-                    ) )
+                    new FieldDefinition(
+                        array(
+                            'fieldTypeIdentifier' => 'myFancyFieldType',
+                        )
+                    )
                 )
             );
 
@@ -114,12 +120,14 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'getProcessor' )
             ->with( 'myFancyFieldType' )
-            ->will( $this->returnCallback(
-                function () use ( $processorMock )
-                {
-                    return $processorMock;
-                }
-            ) );
+            ->will(
+                $this->returnCallback(
+                    function () use ( $processorMock )
+                    {
+                        return $processorMock;
+                    }
+                )
+            );
         $processorMock->expects( $this->once() )
             ->method( 'postProcessHash' )
             ->with( $this->equalTo( array( 23, 42 ) ) )
@@ -129,12 +137,14 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
         $this->getFieldTypeServiceMock()->expects( $this->once() )
             ->method( 'getFieldType' )
             ->with( $this->equalTo( 'myFancyFieldType' ) )
-            ->will( $this->returnCallback(
-                function () use ( $fieldTypeMock )
-                {
-                    return $fieldTypeMock;
-                }
-            ) );
+            ->will(
+                $this->returnCallback(
+                    function () use ( $fieldTypeMock )
+                    {
+                        return $fieldTypeMock;
+                    }
+                )
+            );
 
         $fieldTypeMock->expects( $this->once() )
             ->method( 'getFieldTypeIdentifier' )
@@ -171,21 +181,25 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
         $this->getFieldTypeServiceMock()->expects( $this->once() )
             ->method( 'getFieldType' )
             ->with( $this->equalTo( 'myFancyFieldType' ) )
-            ->will( $this->returnCallback(
-                function () use ( $fieldTypeMock )
-                {
-                    return $fieldTypeMock;
-                }
-            ) );
+            ->will(
+                $this->returnCallback(
+                    function () use ( $fieldTypeMock )
+                    {
+                        return $fieldTypeMock;
+                    }
+                )
+            );
 
         $fieldTypeMock->expects( $this->once() )
             ->method( 'toHash' )
             ->with( $this->equalTo( 'my-field-value' ) )
             ->will( $this->returnValue( array( 23, 42 ) ) );
 
-        $fieldDefinition = new FieldDefinition( array(
-            'fieldTypeIdentifier' => 'myFancyFieldType',
-        ) );
+        $fieldDefinition = new FieldDefinition(
+            array(
+                'fieldTypeIdentifier' => 'myFancyFieldType',
+            )
+        );
 
         $serializer->serializeFieldDefaultValue(
             $this->getGeneratorMock(),
@@ -209,21 +223,25 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
         $this->getFieldTypeServiceMock()->expects( $this->once() )
             ->method( 'getFieldType' )
             ->with( $this->equalTo( 'myFancyFieldType' ) )
-            ->will( $this->returnCallback(
-                function () use ( $fieldTypeMock )
-                {
-                    return $fieldTypeMock;
-                }
-            ) );
+            ->will(
+                $this->returnCallback(
+                    function () use ( $fieldTypeMock )
+                    {
+                        return $fieldTypeMock;
+                    }
+                )
+            );
 
         $fieldTypeMock->expects( $this->once() )
             ->method( 'fieldSettingsToHash' )
             ->with( $this->equalTo( 'my-field-settings' ) )
-            ->will( $this->returnValue( array( 'foo'=> 'bar' ) ) );
+            ->will( $this->returnValue( array( 'foo' => 'bar' ) ) );
 
-        $fieldDefinition = new FieldDefinition( array(
-            'fieldTypeIdentifier' => 'myFancyFieldType',
-        ) );
+        $fieldDefinition = new FieldDefinition(
+            array(
+                'fieldTypeIdentifier' => 'myFancyFieldType',
+            )
+        );
 
         $serializer->serializeFieldSettings(
             $this->getGeneratorMock(),
@@ -247,21 +265,25 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
         $this->getFieldTypeServiceMock()->expects( $this->once() )
             ->method( 'getFieldType' )
             ->with( $this->equalTo( 'myFancyFieldType' ) )
-            ->will( $this->returnCallback(
-                function () use ( $fieldTypeMock )
-                {
-                    return $fieldTypeMock;
-                }
-            ) );
+            ->will(
+                $this->returnCallback(
+                    function () use ( $fieldTypeMock )
+                    {
+                        return $fieldTypeMock;
+                    }
+                )
+            );
 
         $fieldTypeMock->expects( $this->once() )
             ->method( 'validatorConfigurationToHash' )
             ->with( $this->equalTo( 'validator-config' ) )
-            ->will( $this->returnValue( array( 'bar'=> 'foo' ) ) );
+            ->will( $this->returnValue( array( 'bar' => 'foo' ) ) );
 
-        $fieldDefinition = new FieldDefinition( array(
-            'fieldTypeIdentifier' => 'myFancyFieldType',
-        ) );
+        $fieldDefinition = new FieldDefinition(
+            array(
+                'fieldTypeIdentifier' => 'myFancyFieldType',
+            )
+        );
 
         $serializer->serializeValidatorConfiguration(
             $this->getGeneratorMock(),

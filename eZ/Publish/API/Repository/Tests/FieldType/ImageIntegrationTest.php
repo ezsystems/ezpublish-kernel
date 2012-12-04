@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
+
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
@@ -218,16 +219,20 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
             array(
-                new ImageValue( array(
-                    'path' => __DIR__ . '/_fixtures/image.jpg',
-                ) ),
+                new ImageValue(
+                    array(
+                        'path' => __DIR__ . '/_fixtures/image.jpg',
+                    )
+                ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
             array(
-                new ImageValue( array(
-                    'path' => __DIR__ . '/_fixtures/image.jpg',
-                    'fileName' => __DIR__ . '/_fixtures/image.jpg',
-                ) ),
+                new ImageValue(
+                    array(
+                        'path' => __DIR__ . '/_fixtures/image.jpg',
+                        'fileName' => __DIR__ . '/_fixtures/image.jpg',
+                    )
+                ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
         );

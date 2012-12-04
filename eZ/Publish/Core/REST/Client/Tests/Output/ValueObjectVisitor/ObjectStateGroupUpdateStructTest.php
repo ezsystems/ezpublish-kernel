@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\API\Repository\Values\ObjectState;
@@ -105,7 +106,6 @@ class ObjectStateGroupUpdateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'identifier',
                 'content'  => 'some-group',
-
             ),
             $result,
             'Invalid or non-existing <ObjectStateGroupUpdate> identifier value element.',
@@ -126,7 +126,6 @@ class ObjectStateGroupUpdateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'defaultLanguageCode',
                 'content'  => 'eng-GB',
-
             ),
             $result,
             'Invalid or non-existing <ObjectStateGroupUpdate> defaultLanguageCode value element.',

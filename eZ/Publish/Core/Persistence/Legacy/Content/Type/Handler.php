@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
+
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as BaseContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
@@ -467,7 +468,6 @@ class Handler implements BaseContentTypeHandler
         // @todo FIXME: What is to be returned?
         return true;
     }
-
 
     /**
      * Returns field definition for the given field definition id

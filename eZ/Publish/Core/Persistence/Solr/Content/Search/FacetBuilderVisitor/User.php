@@ -40,10 +40,12 @@ class User extends FacetBuilderVisitor
      */
     public function map( $field, array $data )
     {
-        return new Facet\UserFacet( array(
-            'name'    => 'creator',
-            'entries' => $this->mapData( $data ),
-        ) );
+        return new Facet\UserFacet(
+            array(
+                'name'    => 'creator',
+                'entries' => $this->mapData( $data ),
+            )
+        );
     }
 
     /**
@@ -67,11 +69,12 @@ class User extends FacetBuilderVisitor
      */
     public function visit( FacetBuilder $facetBuilder )
     {
-        return http_build_query( array(
-            'facet.field'                => 'creator_id',
-            'f.creator_id.facet.limit'    => $facetBuilder->limit,
-            'f.creator_id.facet.mincount' => $facetBuilder->minCount,
-        ) );
+        return http_build_query(
+            array(
+                'facet.field'                => 'creator_id',
+                'f.creator_id.facet.limit'    => $facetBuilder->limit,
+                'f.creator_id.facet.mincount' => $facetBuilder->minCount,
+            )
+        );
     }
 }
-

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type;
+
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;

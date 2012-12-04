@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
+
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
@@ -95,7 +96,7 @@ class FieldDefinitionUpdate extends Base
         // @todo XSD says that position is mandatory, but field definition can be updated without it
         if ( array_key_exists( 'position', $data ) )
         {
-            $fieldDefinitionUpdate->position = (int) $data['position'];
+            $fieldDefinitionUpdate->position = (int)$data['position'];
         }
 
         // @todo XSD says that isTranslatable is mandatory, but field definition can be updated without it

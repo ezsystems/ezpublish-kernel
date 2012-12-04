@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
@@ -105,7 +106,6 @@ class PolicyCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'module',
                 'content'  => 'content',
-
             ),
             $result,
             'Invalid or non-existing <PolicyCreate> module value element.',
@@ -126,7 +126,6 @@ class PolicyCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'function',
                 'content'  => 'delete',
-
             ),
             $result,
             'Invalid or non-existing <PolicyCreate> function value element.',

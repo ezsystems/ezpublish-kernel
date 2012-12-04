@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
+
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 

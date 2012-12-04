@@ -36,7 +36,6 @@ abstract class Controller
      */
     protected $container;
 
-
     public function setInputDispatcher( InputDispatcher $inputDispatcher )
     {
         $this->inputDispatcher = $inputDispatcher;

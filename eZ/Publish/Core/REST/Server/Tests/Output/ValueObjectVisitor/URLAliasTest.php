@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -116,7 +117,6 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'resource',
                 'content'  => '/destination/url',
-
             ),
             $result,
             'Invalid or non-existing <UrlAlias> url value element.',
@@ -137,7 +137,6 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'path',
                 'content'  => '/some/path',
-
             ),
             $result,
             'Invalid or non-existing <UrlAlias> path value element.',
@@ -158,7 +157,6 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'languageCodes',
                 'content'  => 'eng-GB,eng-US',
-
             ),
             $result,
             'Invalid or non-existing <UrlAlias> languageCodes value element.',
@@ -179,7 +177,6 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'alwaysAvailable',
                 'content'  => 'true',
-
             ),
             $result,
             'Invalid or non-existing <UrlAlias> alwaysAvailable value element.',
@@ -200,7 +197,6 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'isHistory',
                 'content'  => 'true',
-
             ),
             $result,
             'Invalid or non-existing <UrlAlias> isHistory value element.',
@@ -221,7 +217,6 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'forward',
                 'content'  => 'false',
-
             ),
             $result,
             'Invalid or non-existing <UrlAlias> forward value element.',
@@ -242,7 +237,6 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'custom',
                 'content'  => 'false',
-
             ),
             $result,
             'Invalid or non-existing <UrlAlias> custom value element.',

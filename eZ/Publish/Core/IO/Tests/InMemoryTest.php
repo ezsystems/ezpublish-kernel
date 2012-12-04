@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\IO\Tests;
+
 use eZ\Publish\Core\IO\InMemoryHandler as InMemory;
 use eZ\Publish\Core\IO\Tests\Base as BaseHandlerTest;
 

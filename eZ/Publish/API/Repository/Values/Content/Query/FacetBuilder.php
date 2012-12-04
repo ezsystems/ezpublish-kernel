@@ -18,8 +18,8 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  *
  * @package eZ\Publish\API\Repository\Values\Content\Query
  */
-abstract class FacetBuilder extends ValueObject {
-
+abstract class FacetBuilder extends ValueObject
+{
     /**
      * The name of the facet
      *
@@ -54,7 +54,4 @@ abstract class FacetBuilder extends ValueObject {
      * @var int
      */
     public $minCount = 1;
-
-
-
 }

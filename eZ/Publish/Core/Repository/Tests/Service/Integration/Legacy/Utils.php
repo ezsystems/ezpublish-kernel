@@ -45,7 +45,7 @@ abstract class Utils extends InMemoryUtils
     {
         $dsn = getenv( "DATABASE" );
         if ( !$dsn )
-            $dsn =  "sqlite://:memory:";
+            $dsn = "sqlite://:memory:";
         $db = preg_replace( '(^([a-z]+).*)', '\\1', $dsn );
         $legacyHandlerDir = "eZ/Publish/Core/Persistence";
 
@@ -56,7 +56,6 @@ abstract class Utils extends InMemoryUtils
         {
             $handler->exec( $query );
         }
-
 
         // Insert some default data
         $data = require __DIR__ . '/_fixtures/clean_ezflow_dump.php';

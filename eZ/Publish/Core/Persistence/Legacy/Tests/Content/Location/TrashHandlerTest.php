@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location;
+
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler;
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
@@ -82,23 +83,23 @@ class TrashHandlerTest extends TestCase
             ->method( 'getSubtreeContent' )
             ->with( 20 )
             ->will(
-            $this->returnValue(
-                array(
+                $this->returnValue(
                     array(
-                        "contentobject_id" => 10,
-                        "node_id" => 20,
-                        "main_node_id" => 30,
-                        "parent_node_id" => 40
-                    ),
-                    array(
-                        "contentobject_id" => 11,
-                        "node_id" => 21,
-                        "main_node_id" => 31,
-                        "parent_node_id" => 41
+                        array(
+                            "contentobject_id" => 10,
+                            "node_id" => 20,
+                            "main_node_id" => 30,
+                            "parent_node_id" => 40
+                        ),
+                        array(
+                            "contentobject_id" => 11,
+                            "node_id" => 21,
+                            "main_node_id" => 31,
+                            "parent_node_id" => 41
+                        )
                     )
                 )
-            )
-        );
+            );
 
         $this->locationGateway
             ->expects( $this->at( 1 ) )
@@ -156,23 +157,23 @@ class TrashHandlerTest extends TestCase
             ->method( 'getSubtreeContent' )
             ->with( 20 )
             ->will(
-            $this->returnValue(
-                array(
+                $this->returnValue(
                     array(
-                        "contentobject_id" => 10,
-                        "node_id" => 20,
-                        "main_node_id" => 30,
-                        "parent_node_id" => 40
-                    ),
-                    array(
-                        "contentobject_id" => 11,
-                        "node_id" => 21,
-                        "main_node_id" => 31,
-                        "parent_node_id" => 41
+                        array(
+                            "contentobject_id" => 10,
+                            "node_id" => 20,
+                            "main_node_id" => 30,
+                            "parent_node_id" => 40
+                        ),
+                        array(
+                            "contentobject_id" => 11,
+                            "node_id" => 21,
+                            "main_node_id" => 31,
+                            "parent_node_id" => 41
+                        )
                     )
                 )
-            )
-        );
+            );
 
         $this->locationGateway
             ->expects( $this->at( 1 ) )
@@ -217,23 +218,23 @@ class TrashHandlerTest extends TestCase
             ->method( 'getSubtreeContent' )
             ->with( 20 )
             ->will(
-            $this->returnValue(
-                array(
+                $this->returnValue(
                     array(
-                        "contentobject_id" => 10,
-                        "node_id" => 20,
-                        "main_node_id" => 30,
-                        "parent_node_id" => 40
-                    ),
-                    array(
-                        "contentobject_id" => 11,
-                        "node_id" => 21,
-                        "main_node_id" => 21,
-                        "parent_node_id" => 41
+                        array(
+                            "contentobject_id" => 10,
+                            "node_id" => 20,
+                            "main_node_id" => 30,
+                            "parent_node_id" => 40
+                        ),
+                        array(
+                            "contentobject_id" => 11,
+                            "node_id" => 21,
+                            "main_node_id" => 21,
+                            "parent_node_id" => 41
+                        )
                     )
                 )
-            )
-        );
+            );
 
         $this->locationGateway
             ->expects( $this->at( 1 ) )
@@ -262,14 +263,14 @@ class TrashHandlerTest extends TestCase
             ->method( 'getFallbackMainNodeData' )
             ->with( 11, 21 )
             ->will(
-            $this->returnValue(
-                array(
-                    "node_id" => 100,
-                    "contentobject_version" => 101,
-                    "parent_node_id" => 102,
+                $this->returnValue(
+                    array(
+                        "node_id" => 100,
+                        "contentobject_version" => 101,
+                        "parent_node_id" => 102,
+                    )
                 )
-            )
-        );
+            );
 
         $this->locationHandler
             ->expects( $this->once() )

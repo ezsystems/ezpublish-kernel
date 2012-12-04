@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the RoleService class
+ * File containing the URLAliasService class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,19 +9,20 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
+use eZ\Publish\API\Repository\URLAliasService as APIURLAliasService;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
 use eZ\Publish\Core\REST\Common\UrlHandler;
-use eZ\Publish\Core\REST\Common\Input;
-use eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\Input\Dispatcher;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
- * Implementation of the {@link \eZ\Publish\API\Repository\RoleService}
+ * Implementation of the {@link \eZ\Publish\API\Repository\URLAliasService}
  * interface.
  *
- * @see \eZ\Publish\API\Repository\RoleService
+ * @see \eZ\Publish\API\Repository\URLAliasService
  */
-class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Sessionable
+class URLAliasService implements APIURLAliasService, Sessionable
 {
     /**
      * @var \eZ\Publish\Core\REST\Client\HttpClient
@@ -49,7 +50,7 @@ class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Ses
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
+
 use eZ\Publish\SPI\Persistence\Content\Language;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as BaseLanguageHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
+
 use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 

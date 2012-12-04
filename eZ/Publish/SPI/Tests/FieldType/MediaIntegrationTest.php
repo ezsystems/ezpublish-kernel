@@ -8,11 +8,15 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
+
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
+use FileSystemIterator;
 
 /**
  * Integration test for legacy storage field types
@@ -108,9 +112,11 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                         'maxFileSize' => 2 * 1024 * 1024, // 2 MB
                     )
                 ),
-                'fieldSettings' => new FieldType\FieldSettings( array(
-                    'mediaType' => FieldType\Media\Type::TYPE_SILVERLIGHT,
-                ) )
+                'fieldSettings' => new FieldType\FieldSettings(
+                    array(
+                        'mediaType' => FieldType\Media\Type::TYPE_SILVERLIGHT,
+                    )
+                )
             )
         );
     }
@@ -135,9 +141,11 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                                 'maxFileSize' => 2 * 1024 * 1024, // 2 MB
                             )
                         ),
-                        'fieldSettings' => new FieldType\FieldSettings( array(
-                            'mediaType' => FieldType\Media\Type::TYPE_SILVERLIGHT,
-                        ) )
+                        'fieldSettings' => new FieldType\FieldSettings(
+                            array(
+                                'mediaType' => FieldType\Media\Type::TYPE_SILVERLIGHT,
+                            )
+                        )
                     )
                 )
             ),
@@ -151,21 +159,23 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            'externalData' => array(
-                'path' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
-                'fileName' => 'Ice-Flower-Media.jpg',
-                'fileSize' => filesize( $path ),
-                'mimeType' => 'image/jpeg',
-                'hasController' => true,
-                'autoplay' => true,
-                'loop' => true,
-                'width' => 23,
-                'height' => 42,
-            ),
-            'sortKey'      => '',
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                'externalData' => array(
+                    'path' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                    'fileName' => 'Ice-Flower-Media.jpg',
+                    'fileSize' => filesize( $path ),
+                    'mimeType' => 'image/jpeg',
+                    'hasController' => true,
+                    'autoplay' => true,
+                    'loop' => true,
+                    'width' => 23,
+                    'height' => 42,
+                ),
+                'sortKey'      => '',
+            )
+        );
     }
 
     /**
@@ -206,21 +216,23 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            'externalData' => array(
-                'path' => ( $path = __DIR__ . '/_fixtures/image.png' ),
-                'fileName' => 'Blueish-Blue-Media.jpg',
-                'fileSize' => filesize( $path ),
-                'mimeType' => 'image/png',
-                'hasController' => false,
-                'autoplay' => false,
-                'loop' => false,
-                'width' => 0,
-                'height' => 0,
-            ),
-            'sortKey'      => '',
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                'externalData' => array(
+                    'path' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                    'fileName' => 'Blueish-Blue-Media.jpg',
+                    'fileSize' => filesize( $path ),
+                    'mimeType' => 'image/png',
+                    'hasController' => false,
+                    'autoplay' => false,
+                    'loop' => false,
+                    'width' => 0,
+                    'height' => 0,
+                ),
+                'sortKey'      => '',
+            )
+        );
     }
 
     /**
@@ -270,13 +282,12 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
      */
     public function assertDeletedFieldDataCorrect( Content $content )
     {
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator(
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(
                 $this->getTempDir() . '/' . $this->getStorageDir(),
-                \FileSystemIterator::KEY_AS_PATHNAME | \FileSystemIterator::SKIP_DOTS | \ FilesystemIterator::CURRENT_AS_FILEINFO
-
+                FileSystemIterator::KEY_AS_PATHNAME | FileSystemIterator::SKIP_DOTS | FileSystemIterator::CURRENT_AS_FILEINFO
             ),
-            \RecursiveIteratorIterator::CHILD_FIRST
+            RecursiveIteratorIterator::CHILD_FIRST
         );
 
         foreach ( $iterator as $path => $fileInfo )

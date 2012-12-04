@@ -71,7 +71,9 @@ abstract class ObjectStateBase extends BaseServiceTest
             $value = $objectState->notDefined;
             $this->fail( "Succeeded getting non existing property" );
         }
-        catch( PropertyNotFound $e ) {}
+        catch ( PropertyNotFound $e )
+        {
+        }
 
         try
         {
@@ -79,7 +81,9 @@ abstract class ObjectStateBase extends BaseServiceTest
             $value = $objectStateGroup->notDefined;
             $this->fail( "Succeeded getting non existing property" );
         }
-        catch( PropertyNotFound $e ) {}
+        catch ( PropertyNotFound $e )
+        {
+        }
     }
 
     /**
@@ -95,7 +99,9 @@ abstract class ObjectStateBase extends BaseServiceTest
             $objectState->id = 42;
             $this->fail( "Succeeded setting read only property" );
         }
-        catch( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
 
         try
         {
@@ -103,7 +109,9 @@ abstract class ObjectStateBase extends BaseServiceTest
             $objectStateGroup->id = 42;
             $this->fail( "Succeeded setting read only property" );
         }
-        catch( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
     }
 
     /**
@@ -141,7 +149,9 @@ abstract class ObjectStateBase extends BaseServiceTest
             unset( $objectState->id );
             $this->fail( 'Unsetting read-only property succeeded' );
         }
-        catch ( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
 
         $objectStateGroup = new ObjectStateGroup( array( "id" => 2 ) );
         try
@@ -149,7 +159,9 @@ abstract class ObjectStateBase extends BaseServiceTest
             unset( $objectStateGroup->id );
             $this->fail( 'Unsetting read-only property succeeded' );
         }
-        catch ( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
     }
 
     /**
@@ -397,7 +409,7 @@ abstract class ObjectStateBase extends BaseServiceTest
             $objectStateService->loadObjectStateGroup( 2 );
             $this->fail( "Successfully loaded object state group after deleting it" );
         }
-        catch( NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             // Do nothing
         }
@@ -407,7 +419,7 @@ abstract class ObjectStateBase extends BaseServiceTest
             $objectStateService->loadObjectState( 1 );
             $this->fail( "Successfully loaded object state from deleted group" );
         }
-        catch( NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             // Do nothing
         }
@@ -417,7 +429,7 @@ abstract class ObjectStateBase extends BaseServiceTest
             $objectStateService->loadObjectState( 2 );
             $this->fail( "Successfully loaded object state from deleted group" );
         }
-        catch( NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             // Do nothing
         }
@@ -728,13 +740,15 @@ abstract class ObjectStateBase extends BaseServiceTest
             $objectStateService->loadObjectState( 1 );
             $this->fail( "Successfully loaded object state after deleting it" );
         }
-        catch( NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             // Do nothing
         }
 
         $this->assertEquals( 0, $objectStateService->getContentCount( $state ) );
-        $this->assertGreaterThan( 0, $objectStateService->getContentCount(
+        $this->assertGreaterThan(
+            0,
+            $objectStateService->getContentCount(
                 $objectStateService->loadObjectState( 2 )
             )
         );

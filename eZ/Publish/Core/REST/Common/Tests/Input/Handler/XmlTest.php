@@ -38,7 +38,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
         {
             $fixtures[] = array(
                 file_get_contents( $xmlFile ),
-                is_file( $xmlFile . '.php' ) ? include( $xmlFile . '.php' ) : null,
+                is_file( $xmlFile . '.php' ) ? include $xmlFile . '.php' : null,
             );
         }
 

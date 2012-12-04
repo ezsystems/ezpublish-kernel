@@ -89,7 +89,8 @@ class ClassLoader
             if ( strpos( $className, $prefix ) !== 0 )
                 continue;
 
-            if ( $pearMode ) // PSR-0 PEAR compatibility mode
+            // PSR-0 PEAR compatibility mode
+            if ( $pearMode )
             {
                 $lastNsPos = strripos( $className, '\\' );
                 $fileName = $path;
@@ -104,7 +105,8 @@ class ClassLoader
                 // Replacing '_' to '/' in className part and append '.php'
                 $fileName .= str_replace( '_', DIRECTORY_SEPARATOR, substr( $className, $lastNsPos + 1 ) ) . '.php';
             }
-            else // PSR-0 NS strict mode
+            // PSR-0 NS strict mode
+            else
             {
                 $fileName = $path .
                     str_replace( '\\', DIRECTORY_SEPARATOR, $className ) .

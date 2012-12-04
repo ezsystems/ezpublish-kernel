@@ -57,7 +57,8 @@ class SectionService implements SectionServiceInterface
     {
         $this->repository = $repository;
         $this->sectionHandler = $sectionHandler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
     }
@@ -276,10 +277,13 @@ class SectionService implements SectionServiceInterface
 
         if ( $this->repository->canUser( 'section', 'assign', $loadedContentInfo, $loadedSection ) !== true )
         {
-            throw new UnauthorizedException( 'section', 'assign', array(
-                'name' => $loadedSection->name,
-                'content-name' => $loadedContentInfo->name
-            ) );
+            throw new UnauthorizedException(
+                'section', 'assign',
+                array(
+                    'name' => $loadedSection->name,
+                    'content-name' => $loadedContentInfo->name
+                )
+            );
         }
 
         $this->repository->beginTransaction();
@@ -365,7 +369,7 @@ class SectionService implements SectionServiceInterface
     {
         return new Section(
             array(
-                'id' => (int) $spiSection->id,
+                'id' => (int)$spiSection->id,
                 'identifier' => $spiSection->identifier,
                 'name' => $spiSection->name
             )

@@ -23,12 +23,12 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
  *
  * @package eZ\Publish\API\Repository\Values\Content\Query
  */
-class LocationFacetBuilder extends FacetBuilder {
+class LocationFacetBuilder extends FacetBuilder
+{
     /**
      * The parent location
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Location
      */
     public $location;
-
 }

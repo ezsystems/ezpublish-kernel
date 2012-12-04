@@ -36,28 +36,28 @@ class Image extends AbstractParser
                 ->info( 'Configuration for your image variations (aka "image aliases")' )
                 ->example(
                     array(
-                         'my_image_variation' => array(
-                             'reference'    => '~',
-                             'filters'      => array(
-                                 array(
-                                     'name'     => 'geometry/scaledownonly',
-                                     'params'   => array( 400, 350 )
-                                 )
-                             )
-                         ),
-                         'my_cropped_variation' => array(
-                             'reference'    => 'my_cropped_variation',
-                             'filters'      => array(
-                                 array(
-                                     'name'     => 'geometry/scalewidthdownonly',
-                                     'params'   => array( 300 )
-                                 ),
-                                 array(
-                                     'name'     => 'geometry/crop',
-                                     'params'   => array( 300, 300, 0, 0 )
-                                 )
-                             )
-                         )
+                        'my_image_variation' => array(
+                            'reference'    => '~',
+                            'filters'      => array(
+                                array(
+                                    'name'     => 'geometry/scaledownonly',
+                                    'params'   => array( 400, 350 )
+                                )
+                            )
+                        ),
+                        'my_cropped_variation' => array(
+                            'reference'    => 'my_cropped_variation',
+                            'filters'      => array(
+                                array(
+                                    'name'     => 'geometry/scalewidthdownonly',
+                                    'params'   => array( 300 )
+                                ),
+                                array(
+                                    'name'     => 'geometry/crop',
+                                    'params'   => array( 300, 300, 0, 0 )
+                                )
+                            )
+                        )
                     )
                 )
                 ->useAttributeAsKey( 'key' )

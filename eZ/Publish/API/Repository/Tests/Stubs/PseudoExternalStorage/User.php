@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage;
+
 use eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage;
 
 use eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub;
@@ -179,7 +180,6 @@ class User extends PseudoExternalStorage
             }
             return;
         }
-
 
         $value = $this->joinUserData(
             $this->fieldData[$content->id],

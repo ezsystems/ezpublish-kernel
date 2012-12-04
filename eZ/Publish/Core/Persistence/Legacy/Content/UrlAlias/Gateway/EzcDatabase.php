@@ -702,9 +702,9 @@ class EzcDatabase extends Gateway
                     $query->expr->eq(
                         $this->dbHandler->quoteColumn( "parent", $tableName ),
                         // root entry has parent column set to 0
-                        isset( $previousTableName )
-                            ? $this->dbHandler->quoteColumn( "link", $previousTableName )
-                            : $query->bindValue( 0, null, \PDO::PARAM_INT )
+                        isset( $previousTableName ) ?
+                            $this->dbHandler->quoteColumn( "link", $previousTableName ) :
+                            $query->bindValue( 0, null, \PDO::PARAM_INT )
                     )
                 )
             );

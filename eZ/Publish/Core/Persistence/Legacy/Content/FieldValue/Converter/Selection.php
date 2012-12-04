@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+
 use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
@@ -112,10 +113,12 @@ class Selection implements Converter
             $options[(int)$option["id"]] = (string)$option["name"];
         }
 
-        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings( array(
-            "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false,
-            "options" => $options,
-        ) );
+        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
+            array(
+                "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false,
+                "options" => $options,
+            )
+        );
 
         // @todo: Can Selection store a default value in the DB?
         $fieldDef->defaultValue = new FieldValue();

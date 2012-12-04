@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Image\ImageStorage;
+
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\Core\FieldType\StorageGateway;
 

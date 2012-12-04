@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
+
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
@@ -89,14 +90,19 @@ class TextLineIntegrationTest extends BaseIntegrationTest
             // The ezstring field type does not have any special field definition
             // properties
             array( 'fieldType', 'ezstring' ),
-            array( 'fieldTypeConstraints', new Content\FieldTypeConstraints( array(
-                'validators' => array(
-                    'StringLengthValidator' => array(
-                        'minStringLength' => 0,
-                        'maxStringLength' => 0,
-                    ),
-                ),
-            ) ) ),
+            array(
+                'fieldTypeConstraints',
+                new Content\FieldTypeConstraints(
+                    array(
+                        'validators' => array(
+                            'StringLengthValidator' => array(
+                                'minStringLength' => 0,
+                                'maxStringLength' => 0,
+                            ),
+                        ),
+                    )
+                )
+            ),
         );
     }
 
@@ -107,11 +113,13 @@ class TextLineIntegrationTest extends BaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => 'Some text…',
-            'externalData' => null,
-            'sortKey'      => 'some text',
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => 'Some text…',
+                'externalData' => null,
+                'sortKey'      => 'some text',
+            )
+        );
     }
 
     /**
@@ -123,11 +131,12 @@ class TextLineIntegrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            'externalData' => null,
-            'sortKey'      => '',
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                'externalData' => null,
+                'sortKey'      => '',
+            )
+        );
     }
 }
-

@@ -32,7 +32,7 @@ class EzcDatabaseTest extends TestCase
             'destination_url' => 'dev/{1}',
             'type' => '2',
         ),
-        1 => array (
+        1 => array(
             'id' => '2',
             'source_url' => 'repository/*',
             'destination_url' => 'repo/{1}',

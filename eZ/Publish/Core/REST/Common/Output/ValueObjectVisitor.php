@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Common\Output;
+
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\Content\Location;

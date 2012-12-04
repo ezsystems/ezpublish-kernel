@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Keyword\KeywordStorage;
+
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\FieldType\StorageGateway;
 

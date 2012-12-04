@@ -47,10 +47,10 @@ class Mapper
     {
         $objectState = new ObjectState();
 
-        $objectState->id = (int) $data[0]['ezcobj_state_id'];
-        $objectState->groupId = (int) $data[0]['ezcobj_state_group_id'];
+        $objectState->id = (int)$data[0]['ezcobj_state_id'];
+        $objectState->groupId = (int)$data[0]['ezcobj_state_group_id'];
         $objectState->identifier = $data[0]['ezcobj_state_identifier'];
-        $objectState->priority = (int) $data[0]['ezcobj_state_priority'];
+        $objectState->priority = (int)$data[0]['ezcobj_state_priority'];
         $objectState->defaultLanguage = $this->languageHandler->load(
             $data[0]['ezcobj_state_default_language_id']
         )->languageCode;
@@ -103,7 +103,7 @@ class Mapper
     {
         $objectStateGroup = new Group();
 
-        $objectStateGroup->id = (int) $data[0]['ezcobj_state_group_id'];
+        $objectStateGroup->id = (int)$data[0]['ezcobj_state_group_id'];
         $objectStateGroup->identifier = $data[0]['ezcobj_state_group_identifier'];
         $objectStateGroup->defaultLanguage = $this->languageHandler->load(
             $data[0]['ezcobj_state_group_default_language_id']

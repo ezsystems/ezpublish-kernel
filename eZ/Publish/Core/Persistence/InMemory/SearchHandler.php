@@ -177,9 +177,11 @@ class SearchHandler extends SearchHandlerInterface
         $result->searchHits = array_map(
             function ( $content )
             {
-                return new SearchHit( array(
-                    'valueObject' => $content,
-                ) );
+                return new SearchHit(
+                    array(
+                        'valueObject' => $content,
+                    )
+                );
             },
             $result->searchHits
         );
@@ -202,9 +204,7 @@ class SearchHandler extends SearchHandlerInterface
      */
     public function findSingle( Criterion $criterion, array $fieldFilters = array() )
     {
-        $list = $this->findContent( new Query( array(
-            'criterion' => $criterion,
-        ) ) );
+        $list = $this->findContent( new Query( array( 'criterion' => $criterion ) ) );
 
         if ( !$list->totalCount )
             throw new NotFound( 'Content', var_export( $criterion, true ) );
@@ -307,7 +307,6 @@ class SearchHandler extends SearchHandlerInterface
                         break;
                     default:
                         throw new Exception( "Unsupported StatusCriterion->value[0]: " . $criterion->value[0] );
-
                 }
             }
             else if ( $criterion instanceof ParentLocationId && !isset( $match['locations']['parentId'] ) )

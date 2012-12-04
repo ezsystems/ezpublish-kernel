@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
+
 use eZ\Publish\Core\FieldType\Keyword\Value as KeywordValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 

@@ -9,6 +9,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Values;
+
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
 use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
 
@@ -101,7 +102,6 @@ abstract class ValueObject
         }
         throw new PropertyNotFoundException( $property, get_class( $this ) );
     }
-
 
     /**
      * Magic isset function handling isset() to non public properties

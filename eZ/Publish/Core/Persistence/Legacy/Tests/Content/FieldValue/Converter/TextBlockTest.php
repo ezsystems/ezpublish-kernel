@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
+
 use eZ\Publish\Core\FieldType\TextBlock\Value as TextBlockValue;
 use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;

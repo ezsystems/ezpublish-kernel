@@ -831,7 +831,7 @@ class ContentServiceStub implements ContentService
             }
         }
         return $allFields;
-     }
+    }
 
     /**
      * Generates the names based on the given $contentType and $fields

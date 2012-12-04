@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway;
+
 use eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway;
 use eZ\Publish\SPI\Persistence\User\Policy;
 use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;

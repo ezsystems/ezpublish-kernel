@@ -20,6 +20,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
  *
  * @package eZ\Publish\API\Repository\Values\Content\Query
  */
-class ContentTypeFacetBuilder extends FacetBuilder {
-
+class ContentTypeFacetBuilder extends FacetBuilder
+{
 }

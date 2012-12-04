@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
+use eZ\Publish\API\Repository\Repository as APIRepository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User;
 
@@ -19,7 +20,7 @@ use eZ\Publish\Core\REST\Common;
  *
  * @see \eZ\Publish\API\Repository\Repository
  */
-class Repository implements \eZ\Publish\API\Repository\Repository
+class Repository implements APIRepository
 {
     /**
      * @var int

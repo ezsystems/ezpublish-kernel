@@ -39,7 +39,7 @@ class IntegerMapper extends FieldValueMapper
      */
     public function map( Field $field )
     {
-        return (int) $field->value;
+        return (int)$field->value;
     }
 }
 

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway;
+
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
@@ -339,9 +340,11 @@ class EzpDatabaseTrashTest extends TestCase
                 {
                     return $trashItem['path_string'];
                 },
-                $trashList = $handler->listTrashed( 0, null, array(
-                    new SortClause\LocationPathString( Query::SORT_DESC ),
-                ) )
+                $trashList = $handler->listTrashed(
+                    0, null, array(
+                        new SortClause\LocationPathString( Query::SORT_DESC ),
+                    )
+                )
             )
         );
     }
@@ -371,10 +374,12 @@ class EzpDatabaseTrashTest extends TestCase
                 {
                     return $trashItem['path_string'];
                 },
-                $trashList = $handler->listTrashed( 0, null, array(
-                    new SortClause\LocationDepth(),
-                    new SortClause\LocationPathString( Query::SORT_DESC ),
-                ) )
+                $trashList = $handler->listTrashed(
+                    0, null, array(
+                        new SortClause\LocationDepth(),
+                        new SortClause\LocationPathString( Query::SORT_DESC ),
+                    )
+                )
             )
         );
     }

@@ -14,8 +14,8 @@ use eZ\Publish\API\Repository\Values\Content\Search\Facet;
  * This class represents a field range facet
  *
  */
-class FieldRangeFacet extends Facet {
-
+class FieldRangeFacet extends Facet
+{
     /**
      * Number of documents not containing any terms in the queried fields
      *

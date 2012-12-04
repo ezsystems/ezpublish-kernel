@@ -115,37 +115,49 @@ class Native extends Gateway
         $response = $this->client->request(
             'GET',
             '/solr/select?' .
-                http_build_query( array(
+            http_build_query(
+                array(
                     'q'    => $this->criterionVisitor->visit( $query->criterion ),
-                    'sort' => implode( ', ', array_map(
-                        array( $this->sortClauseVisitor, 'visit' ),
-                        $query->sortClauses
-                    ) ),
+                    'sort' => implode(
+                        ', ',
+                        array_map(
+                            array( $this->sortClauseVisitor, 'visit' ),
+                            $query->sortClauses
+                        )
+                    ),
                     'fl'   => '*,score',
                     'wt'   => 'json',
-                ) ) .
-                ( count( $query->facetBuilders ) ? '&facet=true&facet.sort=count&' : '' ) .
-                implode( '&', array_map(
+                )
+            ) .
+            ( count( $query->facetBuilders ) ? '&facet=true&facet.sort=count&' : '' ) .
+            implode(
+                '&',
+                array_map(
                     array( $this->facetBuilderVisitor, 'visit' ),
                     $query->facetBuilders
-                ) )
+                )
+            )
         );
         // @todo: Error handling?
         $data = json_decode( $response->body );
 
         // @todo: Extract method
-        $result = new SearchResult( array(
-            'time'       => $data->responseHeader->QTime / 1000,
-            'maxScore'   => $data->response->maxScore,
-            'totalCount' => $data->response->numFound,
-        ) );
+        $result = new SearchResult(
+            array(
+                'time'       => $data->responseHeader->QTime / 1000,
+                'maxScore'   => $data->response->maxScore,
+                'totalCount' => $data->response->numFound,
+            )
+        );
 
         foreach ( $data->response->docs as $doc )
         {
-            $searchHit = new SearchHit( array(
-                'score'       => $doc->score,
-                'valueObject' => $this->contentHandler->load( $doc->id, $doc->version_id )
-            ) );
+            $searchHit = new SearchHit(
+                array(
+                    'score'       => $doc->score,
+                    'valueObject' => $this->contentHandler->load( $doc->id, $doc->version_id )
+                )
+            );
             $result->searchHits[] = $searchHit;
         }
 
@@ -219,8 +231,7 @@ class Native extends Gateway
 
         foreach ( $document as $field )
         {
-            $values = (array) $this->fieldValueMapper->map( $field );
-            foreach ( $values as $value )
+            foreach ( (array)$this->fieldValueMapper->map( $field ) as $value )
             {
                 $xml->startElement( 'field' );
                 $xml->writeAttribute(
@@ -238,4 +249,3 @@ class Native extends Gateway
         return $xml->outputMemory( true );
     }
 }
-

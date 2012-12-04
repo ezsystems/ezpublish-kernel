@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\Values\User;
+
 use eZ\Publish\API\Repository\Values\User\Role as APIRole;
 
 /**

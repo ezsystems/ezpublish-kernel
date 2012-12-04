@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot\Slot;
+
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Slot\AbstractLegacySlot;
 
@@ -29,7 +30,8 @@ class LegacyCreateLocationSlot extends AbstractLegacySlot
             return;
 
         $kernel = $this->getLegacyKernel();
-        $kernel->runCallback( function() use( $signal )
+        $kernel->runCallback(
+            function() use( $signal )
             {
                 \eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
                 $object = \eZContentObject::fetch( $signal->contentId );

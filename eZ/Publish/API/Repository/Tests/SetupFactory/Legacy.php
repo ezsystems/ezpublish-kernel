@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
+
 use eZ\Publish\API\Repository\Tests\SetupFactory;
 use eZ\Publish\API\Repository\Tests\IdManager;
 
@@ -78,7 +79,7 @@ class Legacy extends SetupFactory
     {
         self::$dsn = getenv( "DATABASE" );
         if ( !self::$dsn )
-            self::$dsn =  "sqlite://:memory:";
+            self::$dsn = "sqlite://:memory:";
 
         self::$db = preg_replace( '(^([a-z]+).*)', '\\1', self::$dsn );
     }

@@ -95,7 +95,9 @@ class SiteAccessListener implements EventSubscriberInterface
         for ( $i = 0, $iMax = count( $vpSegments ); $i < $iMax; ++$i )
         {
             if ( !isset( $vpSegments[$i] ) )
+            {
                 continue;
+            }
 
             // View parameter name.
             // We extract it + the value from the following segment (next element in $vpSegments array)

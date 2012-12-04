@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
+
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
@@ -673,8 +674,8 @@ class Content extends RestController
         );
         return new Values\RestExecutedView(
             array(
-                 'identifier'    => $viewInput->identifier,
-                 'searchResults' => $this->searchService->findContent( $viewInput->query ),
+                'identifier'    => $viewInput->identifier,
+                'searchResults' => $this->searchService->findContent( $viewInput->query ),
             )
         );
     }

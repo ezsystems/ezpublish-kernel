@@ -49,20 +49,20 @@ class SiteAccessMatchListener
         if ( !$request->attributes->has( 'siteaccess' ) )
         {
             $request->attributes->set(
-                 'siteaccess',
-                 $this->siteAccessRouter->match(
-                     new SimplifiedRequest(
-                         array(
-                              'scheme'      => $request->getScheme(),
-                              'host'        => $request->getHost(),
-                              'port'        => $request->getPort(),
-                              'pathinfo'    => $request->getPathInfo(),
-                              'queryParams' => $request->query->all(),
-                              'languages'   => $request->getLanguages(),
-                              'headers'     => $request->headers->all()
-                         )
-                     )
-                 )
+                'siteaccess',
+                $this->siteAccessRouter->match(
+                    new SimplifiedRequest(
+                        array(
+                            'scheme'      => $request->getScheme(),
+                            'host'        => $request->getHost(),
+                            'port'        => $request->getPort(),
+                            'pathinfo'    => $request->getPathInfo(),
+                            'queryParams' => $request->query->all(),
+                            'languages'   => $request->getLanguages(),
+                            'headers'     => $request->headers->all()
+                        )
+                    )
+                )
             );
         }
 

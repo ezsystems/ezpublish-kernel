@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
+
 use eZ\Publish\Core\FieldType\XmlText\Value as XmlTextValue;
 use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType;
 use eZ\Publish\API\Repository\Values\Content\Field;
@@ -328,7 +329,7 @@ EOT
         return array(
             array(
                 new XmlTextValue( $xml ),
-                array ( 'xml' => $xml->saveXML() ),
+                array( 'xml' => $xml->saveXML() ),
             ),
         );
     }

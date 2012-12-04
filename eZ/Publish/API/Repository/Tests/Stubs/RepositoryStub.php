@@ -273,7 +273,7 @@ class RepositoryStub implements Repository
         {
             --$this->permissionChecks;
             return true;
-         }
+        }
 
         foreach ( $permissionSets as $permissionSet )
         {

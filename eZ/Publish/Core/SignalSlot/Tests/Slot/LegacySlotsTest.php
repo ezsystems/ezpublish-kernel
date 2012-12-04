@@ -38,9 +38,12 @@ class LegacySlotsTest extends \PHPUnit_Framework_TestCase
         $ezpKernelHandlerMock = $this->ezpKernelHandlerMock;
         $legacySlot = $this->getMock(
             '\\eZ\\Publish\\Core\\SignalSlot\\Slot\\AbstractLegacySlot',
-            array(),//methods
-            array(// ctor arguments
-                function() use( $ezpKernelHandlerMock ){
+            // methods
+            array(),
+            // ctor arguments
+            array(
+                function() use( $ezpKernelHandlerMock )
+                {
                     return $ezpKernelHandlerMock;
                 }
             )
@@ -130,7 +133,7 @@ class LegacySlotsTest extends \PHPUnit_Framework_TestCase
         /**
          * @var \eZ\Publish\Core\SignalSlot\Signal $signal
          */
-        $signal = $this->getMock( self::SIGNAL_SLOT_NS . '\\Signal');
+        $signal = $this->getMock( self::SIGNAL_SLOT_NS . '\\Signal' );
         $slot->receive( $signal );
     }
 }

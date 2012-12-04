@@ -79,15 +79,19 @@ class SearchTest extends BaseServiceMockTest
             $this->isInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion" ),
             $this->isType( "array" )
         )->will(
-            $this->returnValue( new SPIContent( array(
-                'versionInfo' => new SPIVersionInfo(
+            $this->returnValue(
+                new SPIContent(
                     array(
-                        'contentInfo' => new SPIContentInfo( array( 'contentTypeId' => 1 ) )
+                        'versionInfo' => new SPIVersionInfo(
+                            array(
+                                'contentInfo' => new SPIContentInfo( array( 'contentTypeId' => 1 ) )
+                            )
+                        ),
+                        'fields' => array(),
+                        'relations' => array()
                     )
-                ),
-                'fields' => array(),
-                'relations' => array()
-            ) ) )
+                )
+            )
         );
 
         /*$typeHandlerMock = $this->getPersistenceMockHandler( 'Content\\Type\\Handler' );

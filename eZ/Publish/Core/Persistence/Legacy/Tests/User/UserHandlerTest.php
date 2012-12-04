@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\User;
+
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\User;
 use eZ\Publish\SPI\Persistence;
@@ -302,13 +303,17 @@ class UserHandlerTest extends TestCase
 
         $loaded = $handler->loadRole( $role->id );
         $this->assertEquals(
-            array( new Persistence\User\Policy( array(
-                'id' => 1,
-                'roleId' => 1,
-                'module' => 'foo',
-                'function' => 'bar',
-                'limitations' => '*',
-            ) ) ),
+            array(
+                new Persistence\User\Policy(
+                    array(
+                        'id' => 1,
+                        'roleId' => 1,
+                        'module' => 'foo',
+                        'function' => 'bar',
+                        'limitations' => '*',
+                    )
+                )
+            ),
             $loaded->policies
         );
     }
@@ -333,13 +338,17 @@ class UserHandlerTest extends TestCase
 
         $loaded = $handler->loadRole( $role->id );
         $this->assertEquals(
-            array( new Persistence\User\Policy( array(
-                'id' => 1,
-                'roleId' => 1,
-                'module' => 'foo',
-                'function' => 'bar',
-                'limitations' => '*',
-            ) ) ),
+            array(
+                new Persistence\User\Policy(
+                    array(
+                        'id' => 1,
+                        'roleId' => 1,
+                        'module' => 'foo',
+                        'function' => 'bar',
+                        'limitations' => '*',
+                    )
+                )
+            ),
             $loaded->policies
         );
 
@@ -370,16 +379,20 @@ class UserHandlerTest extends TestCase
 
         $loaded = $handler->loadRole( $role->id );
         $this->assertEquals(
-            array( new Persistence\User\Policy( array(
-                'id' => 1,
-                'roleId' => 1,
-                'module' => 'foo',
-                'function' => 'bar',
-                'limitations' => array(
-                    'Subtree' => array( '/1', '/1/2' ),
-                    'Foo' => array( 'Bar' ),
-                ),
-            ) ) ),
+            array(
+                new Persistence\User\Policy(
+                    array(
+                        'id' => 1,
+                        'roleId' => 1,
+                        'module' => 'foo',
+                        'function' => 'bar',
+                        'limitations' => array(
+                            'Subtree' => array( '/1', '/1/2' ),
+                            'Foo' => array( 'Bar' ),
+                        ),
+                    )
+                )
+            ),
             $loaded->policies
         );
     }
@@ -435,7 +448,7 @@ class UserHandlerTest extends TestCase
         $handler->deleteRole( 3 );
 
         $this->assertQueryResult(
-            array( ),
+            array(),
             $this->handler->createSelectQuery()->select( "id" )->from( "ezrole" )->where( "id = 3" ),
             'Expected an empty set.'
         );
@@ -625,7 +638,7 @@ class UserHandlerTest extends TestCase
 
         $this->assertQueryResult(
             array( array( 4, 3, 'Blubb' ) ),
-           $this->handler->createSelectQuery()->select( '*' )->from( 'ezpolicy_limitation_value' )
+            $this->handler->createSelectQuery()->select( '*' )->from( 'ezpolicy_limitation_value' )
         );
     }
 
@@ -655,7 +668,7 @@ class UserHandlerTest extends TestCase
                 array( 4, 3, 'Blubb' ),
                 array( 5, 4, 'something' ),
             ),
-           $this->handler->createSelectQuery()->select( '*' )->from( 'ezpolicy_limitation_value' )
+            $this->handler->createSelectQuery()->select( '*' )->from( 'ezpolicy_limitation_value' )
         );
     }
 
@@ -799,48 +812,58 @@ class UserHandlerTest extends TestCase
 
         $this->assertEquals(
             array(
-                new Persistence\User\Role( array(
-                    'id' => 1,
-                    'identifier' => 'Test role 1',
-                    'policies' => array(
-                        new Persistence\User\Policy( array(
-                            'id' => 1,
-                            'roleId' => 1,
-                            'module' => 'foo_1',
-                            'function' => 'blubb',
-                            'limitations' => array(
-                                'Foo' => array( 'Bar' ),
+                new Persistence\User\Role(
+                    array(
+                        'id' => 1,
+                        'identifier' => 'Test role 1',
+                        'policies' => array(
+                            new Persistence\User\Policy(
+                                array(
+                                    'id' => 1,
+                                    'roleId' => 1,
+                                    'module' => 'foo_1',
+                                    'function' => 'blubb',
+                                    'limitations' => array(
+                                        'Foo' => array( 'Bar' ),
+                                    ),
+                                )
                             ),
-                        ) ),
-                    ),
-                    'groupIds' => array( 23 ),
-                ) ),
-                new Persistence\User\Role( array(
-                    'id' => 2,
-                    'identifier' => 'Test role 2',
-                    'policies' => array(
-                        new Persistence\User\Policy( array(
-                            'id' => 2,
-                            'roleId' => 2,
-                            'module' => 'foo_1',
-                            'function' => 'bar',
-                            'limitations' => array(
-                                'Subtree' => array( '/1', '/1/2' ),
-                                'Foo' => array( 'Bar' ),
+                        ),
+                        'groupIds' => array( 23 ),
+                    )
+                ),
+                new Persistence\User\Role(
+                    array(
+                        'id' => 2,
+                        'identifier' => 'Test role 2',
+                        'policies' => array(
+                            new Persistence\User\Policy(
+                                array(
+                                    'id' => 2,
+                                    'roleId' => 2,
+                                    'module' => 'foo_1',
+                                    'function' => 'bar',
+                                    'limitations' => array(
+                                        'Subtree' => array( '/1', '/1/2' ),
+                                        'Foo' => array( 'Bar' ),
+                                    ),
+                                )
                             ),
-                        ) ),
-                        new Persistence\User\Policy( array(
-                            'id' => 3,
-                            'roleId' => 2,
-                            'module' => 'foo_2',
-                            'function' => 'bar',
-                            'limitations' => array(
-                                'Subtree' => array( '/1/2/3' ),
+                            new Persistence\User\Policy(
+                                array(
+                                    'id' => 3,
+                                    'roleId' => 2,
+                                    'module' => 'foo_2',
+                                    'function' => 'bar',
+                                    'limitations' => array(
+                                        'Subtree' => array( '/1/2/3' ),
+                                    ),
+                                )
                             ),
-                        ) ),
-                    ),
-                    'groupIds' => array( 23, 42 ),
-                ) ),
+                        ),
+                        'groupIds' => array( 23, 42 ),
+                    )
+                ),
             ),
             $handler->loadRolesByGroupId( 23 )
         );
@@ -863,12 +886,13 @@ class UserHandlerTest extends TestCase
                     },
                     $policies
                 ),
-            function ( $a, $b )
-            {
-                return $a && $b;
-            },
-            true
-        ) );
+                function ( $a, $b )
+                {
+                    return $a && $b;
+                },
+                true
+            )
+        );
         $this->assertEquals( 8, count( $policies ) );
     }
 

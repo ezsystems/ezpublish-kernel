@@ -56,7 +56,8 @@ class URLAliasService implements URLAliasServiceInterface
     {
         $this->repository = $repository;
         $this->urlAliasHandler = $urlAliasHandler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             "showAllTranslations" => false
         );
         // Get prioritized languages from language service to not have to call it several times
@@ -292,7 +293,7 @@ class URLAliasService implements URLAliasServiceInterface
                 return false;
             }
 
-            $pathData[$level] =  $levelEntries["translations"][$prioritizedLanguageCode];
+            $pathData[$level] = $levelEntries["translations"][$prioritizedLanguageCode];
         }
 
         return implode( "/", $pathData );

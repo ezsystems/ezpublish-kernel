@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
+
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
@@ -80,12 +81,14 @@ class RelationListIntegrationTest extends BaseIntegrationTest
     public function getTypeConstraints()
     {
         return new Content\FieldTypeConstraints(
-            array( 'fieldSettings' => array(
-                'selectionMethod' => 0,
-                'selectionDefaultLocation' => '',
-                'selectionContentTypes' => array(),
+            array(
+                'fieldSettings' => array(
+                    'selectionMethod' => 0,
+                    'selectionDefaultLocation' => '',
+                    'selectionContentTypes' => array(),
+                )
             )
-        ) );
+        );
     }
 
     /**
@@ -116,11 +119,13 @@ class RelationListIntegrationTest extends BaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => array( 'destinationContentIds' => array( 4 ) ),
-            'externalData' => array( 'destinationContentIds' => array( 4 ) ),
-            'sortKey'      => null,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => array( 'destinationContentIds' => array( 4 ) ),
+                'externalData' => array( 'destinationContentIds' => array( 4 ) ),
+                'sortKey'      => null,
+            )
+        );
     }
 
     /**
@@ -158,11 +163,13 @@ class RelationListIntegrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => array( 'destinationContentIds' => array( 11 ) ),
-            'externalData' => array( 'destinationContentIds' => array( 11 ) ),
-            'sortKey'      => null,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => array( 'destinationContentIds' => array( 11 ) ),
+                'externalData' => array( 'destinationContentIds' => array( 11 ) ),
+                'sortKey'      => null,
+            )
+        );
     }
 
     /**
@@ -194,4 +201,3 @@ class RelationListIntegrationTest extends BaseIntegrationTest
         );
     }
 }
-

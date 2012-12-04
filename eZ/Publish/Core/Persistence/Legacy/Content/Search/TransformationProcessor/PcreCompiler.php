@@ -115,7 +115,8 @@ class PcreCompiler
     protected function compileReplace( array $rule )
     {
         return array(
-            'regexp' => '([' .
+            'regexp' =>
+                '([' .
                 preg_quote( $this->compileCharacter( $rule['data']['srcStart'] ) ) . '-' .
                 preg_quote( $this->compileCharacter( $rule['data']['srcEnd'] ) ) .
                 '])us',
@@ -133,7 +134,8 @@ class PcreCompiler
     protected function compileTranspose( array $rule )
     {
         return array(
-            'regexp' => '([' .
+            'regexp' =>
+                '([' .
                 preg_quote( $this->compileCharacter( $rule['data']['srcStart'] ) ) . '-' .
                 preg_quote( $this->compileCharacter( $rule['data']['srcEnd'] ) ) .
                 '])us',
@@ -151,7 +153,8 @@ class PcreCompiler
     protected function compileTransposeModulo( array $rule )
     {
         return array(
-            'regexp' => '([' .
+            'regexp' =>
+                '([' .
                 preg_quote(
                     $this->getModuloCharRange(
                         $this->compileCharacter( $rule['data']['srcStart'] ),

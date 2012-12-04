@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -272,7 +273,7 @@ class RelationList implements Converter
         // Add priority starting from 1
         for ( $i = 0; isset( $rows[$i] ); ++$i )
         {
-            $rows[$i]['priority'] = $i+1;
+            $rows[$i]['priority'] = $i + 1;
         }
 
         return $rows;

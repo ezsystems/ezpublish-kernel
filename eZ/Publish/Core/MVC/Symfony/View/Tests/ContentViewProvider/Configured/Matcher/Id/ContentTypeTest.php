@@ -109,13 +109,13 @@ class ContentTypeTest extends BaseTest
             ->expects( $this->any() )
             ->method( 'getContentType' )
             ->will(
-            $this->returnValue(
-                $this
-                    ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' )
-                    ->setConstructorArgs(
-                        array( array( 'id' => $contentTypeId ) )
-                    )
-                    ->getMockForAbstractClass()
+                $this->returnValue(
+                    $this
+                        ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' )
+                        ->setConstructorArgs(
+                            array( array( 'id' => $contentTypeId ) )
+                        )
+                        ->getMockForAbstractClass()
                 )
             );
 

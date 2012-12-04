@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -97,14 +98,16 @@ class Integer implements Converter
         {
             if ( !empty( $storageDef->dataInt1 ) )
             {
-                $fieldDef->fieldTypeConstraints
-                         ->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'] = $storageDef->dataInt1;
+                $fieldDef
+                    ->fieldTypeConstraints
+                    ->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'] = $storageDef->dataInt1;
             }
 
             if ( !empty( $storageDef->dataInt2 ) )
             {
-                $fieldDef->fieldTypeConstraints
-                         ->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'] = $storageDef->dataInt2;
+                $fieldDef
+                    ->fieldTypeConstraints
+                    ->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'] = $storageDef->dataInt2;
             }
         }
 

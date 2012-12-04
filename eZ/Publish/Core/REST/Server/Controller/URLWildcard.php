@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
+
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Common\Message;

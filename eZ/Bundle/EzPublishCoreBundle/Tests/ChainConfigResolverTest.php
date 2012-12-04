@@ -93,7 +93,7 @@ class ChainRouterTest extends \PHPUnit_Framework_TestCase
             array( 'sortResolvers' )
         );
         $resolver
-            ->expects( $this->at(0) )
+            ->expects( $this->at( 0 ) )
             ->method( 'sortResolvers' )
             ->will(
                 $this->returnValue(
@@ -102,7 +102,7 @@ class ChainRouterTest extends \PHPUnit_Framework_TestCase
             );
         // The second time sortResolvers() is called, we're supposed to get the newly added router ($highest)
         $resolver
-            ->expects( $this->at(1) )
+            ->expects( $this->at( 1 ) )
             ->method( 'sortResolvers' )
             ->will(
                 $this->returnValue(

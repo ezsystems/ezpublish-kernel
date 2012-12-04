@@ -11,7 +11,9 @@ namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\Values\User\User;
 
-use eZ\Publish\Core\REST\Common;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input\Dispatcher;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Client\HttpClient\Authentication\IntegrationTestAuthenticator;
 
 /**
@@ -60,7 +62,7 @@ class IntegrationTestRepository extends Repository implements Sessionable
      * @param \eZ\Publish\SPI\FieldType\FieldType[] $fieldTypes
      * @param \eZ\Publish\Core\REST\Client\HttpClient\Authentication\IntegrationTestAuthentication $authenticator
      */
-    public function __construct( HttpClient $client, Common\Input\Dispatcher $inputDispatcher, Common\Output\Visitor $outputVisitor, Common\UrlHandler $urlHandler, array $fieldTypes, IntegrationTestAuthenticator $authenticator )
+    public function __construct( HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler, array $fieldTypes, IntegrationTestAuthenticator $authenticator )
     {
         parent::__construct( $client, $inputDispatcher, $outputVisitor, $urlHandler, $fieldTypes );
         $this->client        = $client;

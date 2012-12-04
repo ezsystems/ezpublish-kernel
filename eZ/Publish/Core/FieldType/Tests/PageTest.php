@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
+
 use eZ\Publish\Core\FieldType\Page\Type as PageType;
 use eZ\Publish\Core\FieldType\Page\Value as PageValue;
 use eZ\Publish\Core\FieldType\Page\Parts\Page as Page;

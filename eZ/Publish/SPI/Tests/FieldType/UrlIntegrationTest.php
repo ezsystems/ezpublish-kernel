@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
+
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
@@ -105,14 +106,16 @@ class UrlIntegrationTest extends BaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => array(
-                'urlId' => null,
-                'text'  => 'Some awesome website',
-            ),
-            'externalData' => 'http://example.com/sindelfingen',
-            'sortKey'      => null,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => array(
+                    'urlId' => null,
+                    'text'  => 'Some awesome website',
+                ),
+                'externalData' => 'http://example.com/sindelfingen',
+                'sortKey'      => null,
+            )
+        );
     }
 
     /**
@@ -150,14 +153,16 @@ class UrlIntegrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => array(
-                'urlId' => null,
-                'text' => 'An even more awesome website',
-            ),
-            'externalData' => 'http://example.com/hubba',
-            'sortKey'      => null,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => array(
+                    'urlId' => null,
+                    'text' => 'An even more awesome website',
+                ),
+                'externalData' => 'http://example.com/hubba',
+                'sortKey'      => null,
+            )
+        );
     }
 
     /**
@@ -189,4 +194,3 @@ class UrlIntegrationTest extends BaseIntegrationTest
         );
     }
 }
-

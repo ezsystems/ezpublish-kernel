@@ -41,12 +41,12 @@ class Pattern implements UrlHandler
     /**
      * Pattern regular sub-expression
      */
-    const STANDARD_VARIABLE_REGEX ='\{([A-Za-z-_]+)\}';
+    const STANDARD_VARIABLE_REGEX = '\{([A-Za-z-_]+)\}';
 
     /**
      * Pattern regular sub-expression that might contain slashes
      */
-    const SLASHES_VARIABLE_REGEX ='\{(?:\&\s*)([A-Za-z-_]+)\}';
+    const SLASHES_VARIABLE_REGEX = '\{(?:\&\s*)([A-Za-z-_]+)\}';
 
     /**
      * Construct from optional initial map
@@ -121,7 +121,8 @@ class Pattern implements UrlHandler
 
         $pcre = '(^';
 
-        do {
+        do
+        {
             switch ( true )
             {
                 case preg_match( '(^[^{]+)', $pattern, $match ):
@@ -142,7 +143,8 @@ class Pattern implements UrlHandler
                 default:
                     throw new Exceptions\InvalidArgumentException( "Invalid pattern part: '$pattern'." );
             }
-        } while ( $pattern );
+        }
+        while ( $pattern );
 
         $pcre .= '$)S';
 
@@ -167,11 +169,7 @@ class Pattern implements UrlHandler
 
         $url = $this->map[$type];
         preg_match_all(
-            '('
-                . self::STANDARD_VARIABLE_REGEX
-                . '|'
-                . self::SLASHES_VARIABLE_REGEX
-            . ')',
+            '(' . self::STANDARD_VARIABLE_REGEX . '|' . self::SLASHES_VARIABLE_REGEX . ')',
             $url,
             $matches,
             PREG_SET_ORDER

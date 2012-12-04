@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
+
 use eZ\Publish\Core\FieldType\Media\Type as MediaType;
 use eZ\Publish\Core\FieldType\Media\Value as MediaTypeValue;
 use eZ\Publish\Core\FieldType\FieldSettings;

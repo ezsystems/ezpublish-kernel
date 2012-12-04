@@ -120,13 +120,15 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->at( 0 ) )
             ->method( 'convert' )
             ->with( 'Hello world!' )
-            ->will( $this->returnValue(
-                array(
+            ->will(
+                $this->returnValue(
                     array(
-                        'someKey' => 'someValue',
+                        array(
+                            'someKey' => 'someValue',
+                        )
                     )
                 )
-            ) );
+            );
 
         $dispatcher = new Common\Input\Dispatcher( $parsingDispatcher, array( 'format' => $handler ) );
 

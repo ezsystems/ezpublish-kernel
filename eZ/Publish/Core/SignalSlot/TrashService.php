@@ -131,8 +131,7 @@ class TrashService implements TrashServiceInterface
     public function emptyTrash()
     {
         $returnValue = $this->service->emptyTrash();
-        $this->signalDispatcher->emit(
-            new EmptyTrashSignal( array() ) );
+        $this->signalDispatcher->emit( new EmptyTrashSignal( array() ) );
         return $returnValue;
     }
 

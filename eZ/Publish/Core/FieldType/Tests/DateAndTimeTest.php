@@ -8,10 +8,13 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
+
 use eZ\Publish\Core\FieldType\DateAndTime\Type as DateAndTime;
 use eZ\Publish\Core\FieldType\DateAndTime\Value as DateAndTimeValue;
 use ReflectionObject;
 use DateTime;
+use DateInterval;
+use stdClass;
 
 /**
  * @group fieldType
@@ -305,20 +308,20 @@ class DateAndTimeTest extends StandardizedFieldTypeTest
             array(
                 array(
                     'useSeconds' => true,
-                    'defaultType'=> DateAndTime::DEFAULT_EMPTY,
+                    'defaultType' => DateAndTime::DEFAULT_EMPTY,
                 )
             ),
             array(
                 array(
                     'useSeconds' => false,
-                    'defaultType'=> DateAndTime::DEFAULT_CURRENT_DATE,
+                    'defaultType' => DateAndTime::DEFAULT_CURRENT_DATE,
                 )
             ),
             array(
                 array(
                     'useSeconds' => false,
-                    'defaultType'=> DateAndTime::DEFAULT_CURRENT_DATE_ADJUSTED,
-                    'dateInterval' => new \DateInterval( 'P2Y' ),
+                    'defaultType' => DateAndTime::DEFAULT_CURRENT_DATE_ADJUSTED,
+                    'dateInterval' => new DateInterval( 'P2Y' ),
                 )
             ),
         );
@@ -359,21 +362,21 @@ class DateAndTimeTest extends StandardizedFieldTypeTest
             array(
                 array(
                     // defaultType must be constant
-                    'defaultType'=> 42,
+                    'defaultType' => 42,
                 )
             ),
             array(
                 array(
                     // No dateInterval allowed with this defaultType
-                    'defaultType'=> DateAndTime::DEFAULT_EMPTY,
-                    'dateInterval' => new \DateInterval( 'P2Y' ),
+                    'defaultType' => DateAndTime::DEFAULT_EMPTY,
+                    'dateInterval' => new DateInterval( 'P2Y' ),
                 )
             ),
             array(
                 array(
                     // dateInterval must be a \DateInterval
-                    'defaultType'=> DateAndTime::DEFAULT_CURRENT_DATE_ADJUSTED,
-                    'dateInterval' => new \stdClass(),
+                    'defaultType' => DateAndTime::DEFAULT_CURRENT_DATE_ADJUSTED,
+                    'dateInterval' => new stdClass(),
                 )
             ),
         );

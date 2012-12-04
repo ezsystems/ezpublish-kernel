@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
+
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
@@ -126,7 +127,7 @@ class ContentHandlerTest extends HandlerTest
         $this->assertTrue( $content instanceof Content );
         $this->assertEquals( $this->contentId + 1, $content->versionInfo->contentInfo->id );
         $this->assertEquals( 14, $content->versionInfo->contentInfo->ownerId );
-        $this->assertEquals( false , $content->versionInfo->contentInfo->isPublished );
+        $this->assertEquals( false, $content->versionInfo->contentInfo->isPublished );
 
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo', $content->versionInfo );
         $this->assertEquals( 14, $content->versionInfo->creatorId );

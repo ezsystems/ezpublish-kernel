@@ -95,15 +95,15 @@ class AliasGenerator implements VariationHandler
 
                 $allVariations[$variationIdentifier] = new ImageVariation(
                     array(
-                         'name'         => $variationName,
-                         'fileName'     => $aliasArray['filename'],
-                         'dirPath'      => $aliasArray['dirpath'],
-                         'fileSize'     => isset( $aliasArray['filesize'] ) ? $aliasArray['filesize'] : 0,
-                         'mimeType'     => $aliasArray['mime_type'],
-                         'lastModified' => new \DateTime( '@' . $aliasArray['timestamp'] ),
-                         'uri'          => $aliasArray['url'],
-                         'width'        => $aliasArray['width'],
-                         'height'       => $aliasArray['height'],
+                        'name'         => $variationName,
+                        'fileName'     => $aliasArray['filename'],
+                        'dirPath'      => $aliasArray['dirpath'],
+                        'fileSize'     => isset( $aliasArray['filesize'] ) ? $aliasArray['filesize'] : 0,
+                        'mimeType'     => $aliasArray['mime_type'],
+                        'lastModified' => new \DateTime( '@' . $aliasArray['timestamp'] ),
+                        'uri'          => $aliasArray['url'],
+                        'width'        => $aliasArray['width'],
+                        'height'       => $aliasArray['height'],
                     )
                 );
 

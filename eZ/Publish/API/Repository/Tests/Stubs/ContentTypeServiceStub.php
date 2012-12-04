@@ -900,7 +900,6 @@ class ContentTypeServiceStub implements ContentTypeService
         $contentTypeData['creatorId'] = $user ? $user->id : $contentTypeData['creatorId'];
         $contentTypeData['modifierId'] = $user ? $user->id : $contentTypeData['modifierId'];
 
-
         $newFieldDefinitions = array();
         foreach ( $contentTypeData['fieldDefinitions'] as $fieldDefinition )
         {

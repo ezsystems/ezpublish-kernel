@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Url;
+
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
@@ -74,7 +75,7 @@ class Type extends FieldType
                 '$inputValue',
                 'eZ\\Publish\\Core\\FieldType\\Url\\Value',
                 $inputValue
-           );
+            );
         }
 
         if ( !is_string( $inputValue->link ) )
@@ -83,7 +84,7 @@ class Type extends FieldType
                 '$inputValue->link',
                 'string',
                 $inputValue->link
-           );
+            );
         }
 
         if ( isset( $inputValue->text ) && !is_string( $inputValue->text ) )
@@ -92,7 +93,7 @@ class Type extends FieldType
                 '$inputValue->text',
                 'string',
                 $inputValue->text
-           );
+            );
         }
 
         return $inputValue;

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\Values\User;
+
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 

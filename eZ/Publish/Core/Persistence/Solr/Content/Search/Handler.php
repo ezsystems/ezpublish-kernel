@@ -326,7 +326,6 @@ class Handler extends BaseSearchHandler
         return $document;
     }
 
-
     /**
      * Purges all contents from the index
      *

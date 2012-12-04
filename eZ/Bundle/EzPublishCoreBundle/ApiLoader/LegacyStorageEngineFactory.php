@@ -60,7 +60,7 @@ class LegacyStorageEngineFactory
             ),
             $this->container->get( 'ezpublish.api.storage_engine.legacy.transformation_processor' ),
             array(
-                 'defer_type_update'            => (bool)$deferTypeUpdate,
+                'defer_type_update' => (bool)$deferTypeUpdate,
             )
         );
     }

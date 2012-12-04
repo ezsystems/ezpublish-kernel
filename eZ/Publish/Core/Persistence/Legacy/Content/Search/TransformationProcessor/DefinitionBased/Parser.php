@@ -71,14 +71,17 @@ class Parser
             TransformationProcessor::T_WHITESPACE => '(\\A\\s+)',
             TransformationProcessor::T_SECTION => '(\\A(?P<section>[a-z0-9_-]+):\s*$)m',
             TransformationProcessor::T_MAP => '(\\A(?P<src>' . $character . ')\\s*=\\s*(?P<dest>' .  $character . '))',
-            TransformationProcessor::T_REPLACE => '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
+            TransformationProcessor::T_REPLACE =>
+                '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
                 '(?P<srcEnd>'   . $character . ')\\s*=\\s*' .
                 '(?P<dest>'    .  $character . '))',
-            TransformationProcessor::T_TRANSPOSE => '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
+            TransformationProcessor::T_TRANSPOSE =>
+                '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
                 '(?P<srcEnd>'   . $character . ')\\s*' .
                 '(?P<op>[+-])\\s*' .
                 '(?P<dest>' .     $character . '))',
-            TransformationProcessor::T_TRANSPOSE_MODULO => '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
+            TransformationProcessor::T_TRANSPOSE_MODULO =>
+                '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
                 '(?P<srcEnd>'   . $character . ')\\s*%\\s*' .
                 '(?P<modulo>'   . $character . ')\\s*' .
                 '(?P<op>[+-])\\s*' .
@@ -95,9 +98,11 @@ class Parser
      */
     public function parse( $file )
     {
-        return $this->parseString( file_get_contents(
-            $this->installDir . '/' . $file
-        ) );
+        return $this->parseString(
+            file_get_contents(
+                $this->installDir . '/' . $file
+            )
+        );
     }
 
     /**
@@ -205,4 +210,3 @@ class Parser
         return $data;
     }
 }
-

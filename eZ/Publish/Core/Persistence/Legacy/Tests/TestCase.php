@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
+
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use ezcQuerySelect;
 
@@ -58,7 +59,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         {
             $this->dsn = getenv( "DATABASE" );
             if ( !$this->dsn )
-                $this->dsn =  "sqlite://:memory:";
+                $this->dsn = "sqlite://:memory:";
             $this->db = preg_replace( '(^([a-z]+).*)', '\\1', $this->dsn );
         }
 
@@ -350,7 +351,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     static protected function getInstallationDir()
     {
         static $installDir = null;
-        if ($installDir === null)
+        if ( $installDir === null )
         {
             $config = require 'config.php';
             $installDir = $config['service']['parameters']['install_dir'];

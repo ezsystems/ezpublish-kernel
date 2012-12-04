@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
+
 use eZ\Publish\Core\FieldType\Checkbox\Type as Checkbox;
 use eZ\Publish\Core\FieldType\Checkbox\Value as CheckboxValue;
 use ReflectionObject;

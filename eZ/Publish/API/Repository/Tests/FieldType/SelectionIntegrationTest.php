@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
+
 use eZ\Publish\Core\FieldType\Selection\Value as SelectionValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
@@ -316,7 +317,7 @@ class SelectionIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array( new SelectionValue ),
-            array( new SelectionValue( array( ) ) ),
+            array( new SelectionValue( array() ) ),
         );
     }
 

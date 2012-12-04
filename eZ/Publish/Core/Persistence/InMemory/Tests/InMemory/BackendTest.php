@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests\InMemory;
+
 use PHPUnit_Framework_TestCase;
 use stdClass;
 use eZ\Publish\Core\Persistence\InMemory\Backend;
@@ -150,7 +151,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateMultiple()
     {
-        for ( $i = 1; $i <= 10; ++$i)
+        for ( $i = 1; $i <= 10; ++$i )
         {
             $content = $this->backend->create( "Content\\ContentInfo", array( "sectionId" => 2 ), true );
             $this->assertEquals( $i, $content->id );

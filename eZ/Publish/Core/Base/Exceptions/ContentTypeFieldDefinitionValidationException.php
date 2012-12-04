@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Base\Exceptions;
+
 use eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException as APIContentTypeFieldDefinitionValidationException;
 
 /**
@@ -37,7 +38,7 @@ class ContentTypeFieldDefinitionValidationException extends APIContentTypeFieldD
      */
     public function __construct( array $errors )
     {
-        // var_dump($errors);
+        // var_dump( $errors );
         $this->errors = $errors;
         parent::__construct( "ContentType FieldDefinitions did not validate" );
     }

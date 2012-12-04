@@ -80,7 +80,8 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         $this->repository = $repository;
         $this->contentTypeHandler = $contentTypeHandler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
     }
@@ -270,13 +271,13 @@ class ContentTypeService implements ContentTypeServiceInterface
         $spiGroupUpdateStruct = new SPIContentTypeGroupUpdateStruct(
             array(
                 "id" => $loadedContentTypeGroup->id,
-                "identifier" => $contentTypeGroupUpdateStruct->identifier === null
-                    ? $loadedContentTypeGroup->identifier
-                    : $contentTypeGroupUpdateStruct->identifier,
+                "identifier" => $contentTypeGroupUpdateStruct->identifier === null ?
+                    $loadedContentTypeGroup->identifier :
+                    $contentTypeGroupUpdateStruct->identifier,
                 "modified" => $modifiedTimestamp,
-                "modifierId" => $contentTypeGroupUpdateStruct->modifierId === null
-                    ? $this->repository->getCurrentUser()->id
-                    : $contentTypeGroupUpdateStruct->modifierId
+                "modifierId" => $contentTypeGroupUpdateStruct->modifierId === null ?
+                    $this->repository->getCurrentUser()->id :
+                    $contentTypeGroupUpdateStruct->modifierId
             )
         );
 
@@ -649,33 +650,33 @@ class ContentTypeService implements ContentTypeServiceInterface
             array(
                 "id" => $fieldDefinition->id,
                 "fieldType" => $fieldDefinition->fieldTypeIdentifier,
-                "name" => $fieldDefinitionUpdateStruct->names === null
-                    ? $fieldDefinition->getNames()
-                    : $fieldDefinitionUpdateStruct->names,
-                "description" => $fieldDefinitionUpdateStruct->descriptions === null
-                    ? $fieldDefinition->getDescriptions()
-                    : $fieldDefinitionUpdateStruct->descriptions,
-                "identifier" => $fieldDefinitionUpdateStruct->identifier === null
-                    ? $fieldDefinition->identifier
-                    : $fieldDefinitionUpdateStruct->identifier,
-                "fieldGroup" => $fieldDefinitionUpdateStruct->fieldGroup === null
-                    ? $fieldDefinition->fieldGroup
-                    : $fieldDefinitionUpdateStruct->fieldGroup,
-                "position" => $fieldDefinitionUpdateStruct->position === null
-                    ? $fieldDefinition->position
-                    : $fieldDefinitionUpdateStruct->position,
-                "isTranslatable" => $fieldDefinitionUpdateStruct->isTranslatable === null
-                    ? $fieldDefinition->isTranslatable
-                    : $fieldDefinitionUpdateStruct->isTranslatable,
-                "isRequired" => $fieldDefinitionUpdateStruct->isRequired === null
-                    ? $fieldDefinition->isRequired
-                    : $fieldDefinitionUpdateStruct->isRequired,
-                "isInfoCollector" => $fieldDefinitionUpdateStruct->isInfoCollector === null
-                    ? $fieldDefinition->isInfoCollector
-                    : $fieldDefinitionUpdateStruct->isInfoCollector,
-                "isSearchable" => $fieldDefinitionUpdateStruct->isSearchable === null
-                    ? $fieldDefinition->isSearchable
-                    : $fieldDefinitionUpdateStruct->isSearchable,
+                "name" => $fieldDefinitionUpdateStruct->names === null ?
+                    $fieldDefinition->getNames() :
+                    $fieldDefinitionUpdateStruct->names,
+                "description" => $fieldDefinitionUpdateStruct->descriptions === null ?
+                    $fieldDefinition->getDescriptions() :
+                    $fieldDefinitionUpdateStruct->descriptions,
+                "identifier" => $fieldDefinitionUpdateStruct->identifier === null ?
+                    $fieldDefinition->identifier :
+                    $fieldDefinitionUpdateStruct->identifier,
+                "fieldGroup" => $fieldDefinitionUpdateStruct->fieldGroup === null ?
+                    $fieldDefinition->fieldGroup :
+                    $fieldDefinitionUpdateStruct->fieldGroup,
+                "position" => $fieldDefinitionUpdateStruct->position === null ?
+                    $fieldDefinition->position :
+                    $fieldDefinitionUpdateStruct->position,
+                "isTranslatable" => $fieldDefinitionUpdateStruct->isTranslatable === null ?
+                    $fieldDefinition->isTranslatable :
+                    $fieldDefinitionUpdateStruct->isTranslatable,
+                "isRequired" => $fieldDefinitionUpdateStruct->isRequired === null ?
+                    $fieldDefinition->isRequired :
+                    $fieldDefinitionUpdateStruct->isRequired,
+                "isInfoCollector" => $fieldDefinitionUpdateStruct->isInfoCollector === null ?
+                    $fieldDefinition->isInfoCollector :
+                    $fieldDefinitionUpdateStruct->isInfoCollector,
+                "isSearchable" => $fieldDefinitionUpdateStruct->isSearchable === null ?
+                    $fieldDefinition->isSearchable :
+                    $fieldDefinitionUpdateStruct->isSearchable,
                 // These properties are precreated in constructor
                 //"fieldTypeConstraints"
                 //"defaultValue"
@@ -1069,51 +1070,51 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         $updateStruct = new SPIContentTypeUpdateStruct();
 
-        $updateStruct->identifier = $contentTypeUpdateStruct->identifier !== null
-            ? $contentTypeUpdateStruct->identifier
-            : $contentTypeDraft->identifier;
-        $updateStruct->remoteId = $contentTypeUpdateStruct->remoteId !== null
-            ? $contentTypeUpdateStruct->remoteId
-            : $contentTypeDraft->remoteId;
+        $updateStruct->identifier = $contentTypeUpdateStruct->identifier !== null ?
+            $contentTypeUpdateStruct->identifier :
+            $contentTypeDraft->identifier;
+        $updateStruct->remoteId = $contentTypeUpdateStruct->remoteId !== null ?
+            $contentTypeUpdateStruct->remoteId :
+            $contentTypeDraft->remoteId;
 
-        $updateStruct->name = $contentTypeUpdateStruct->names !== null
-            ? $contentTypeUpdateStruct->names
-            : $contentTypeDraft->names;
-        $updateStruct->description = $contentTypeUpdateStruct->descriptions !== null
-            ? $contentTypeUpdateStruct->descriptions
-            : $contentTypeDraft->descriptions;
+        $updateStruct->name = $contentTypeUpdateStruct->names !== null ?
+            $contentTypeUpdateStruct->names :
+            $contentTypeDraft->names;
+        $updateStruct->description = $contentTypeUpdateStruct->descriptions !== null ?
+            $contentTypeUpdateStruct->descriptions :
+            $contentTypeDraft->descriptions;
 
-        $updateStruct->modified = $contentTypeUpdateStruct->modificationDate !== null
-            ? $contentTypeUpdateStruct->modificationDate->getTimestamp()
-            : time();
-        $updateStruct->modifierId = $contentTypeUpdateStruct->modifierId !== null
-            ? $contentTypeUpdateStruct->modifierId
-            : $this->repository->getCurrentUser()->id;
+        $updateStruct->modified = $contentTypeUpdateStruct->modificationDate !== null ?
+            $contentTypeUpdateStruct->modificationDate->getTimestamp() :
+            time();
+        $updateStruct->modifierId = $contentTypeUpdateStruct->modifierId !== null ?
+            $contentTypeUpdateStruct->modifierId :
+            $this->repository->getCurrentUser()->id;
 
-        $updateStruct->urlAliasSchema = $contentTypeUpdateStruct->urlAliasSchema !== null
-            ? $contentTypeUpdateStruct->urlAliasSchema
-            : $contentTypeDraft->urlAliasSchema;
-        $updateStruct->nameSchema = $contentTypeUpdateStruct->nameSchema !== null
-            ? $contentTypeUpdateStruct->nameSchema
-            : $contentTypeDraft->nameSchema;
+        $updateStruct->urlAliasSchema = $contentTypeUpdateStruct->urlAliasSchema !== null ?
+            $contentTypeUpdateStruct->urlAliasSchema :
+            $contentTypeDraft->urlAliasSchema;
+        $updateStruct->nameSchema = $contentTypeUpdateStruct->nameSchema !== null ?
+            $contentTypeUpdateStruct->nameSchema :
+            $contentTypeDraft->nameSchema;
 
-        $updateStruct->isContainer = $contentTypeUpdateStruct->isContainer !== null
-            ? $contentTypeUpdateStruct->isContainer
-            : $contentTypeDraft->isContainer;
-        $updateStruct->sortField = $contentTypeUpdateStruct->defaultSortField !== null
-            ? $contentTypeUpdateStruct->defaultSortField
-            : $contentTypeDraft->defaultSortField;
-        $updateStruct->sortOrder = $contentTypeUpdateStruct->defaultSortOrder !== null
-            ? (int)$contentTypeUpdateStruct->defaultSortOrder
-            : $contentTypeDraft->defaultSortOrder;
+        $updateStruct->isContainer = $contentTypeUpdateStruct->isContainer !== null ?
+            $contentTypeUpdateStruct->isContainer :
+            $contentTypeDraft->isContainer;
+        $updateStruct->sortField = $contentTypeUpdateStruct->defaultSortField !== null ?
+            $contentTypeUpdateStruct->defaultSortField :
+            $contentTypeDraft->defaultSortField;
+        $updateStruct->sortOrder = $contentTypeUpdateStruct->defaultSortOrder !== null ?
+            (int)$contentTypeUpdateStruct->defaultSortOrder :
+            $contentTypeDraft->defaultSortOrder;
 
-        $updateStruct->defaultAlwaysAvailable = $contentTypeUpdateStruct->defaultAlwaysAvailable !== null
-            ? $contentTypeUpdateStruct->defaultAlwaysAvailable
-            : $contentTypeDraft->defaultAlwaysAvailable;
+        $updateStruct->defaultAlwaysAvailable = $contentTypeUpdateStruct->defaultAlwaysAvailable !== null ?
+            $contentTypeUpdateStruct->defaultAlwaysAvailable :
+            $contentTypeDraft->defaultAlwaysAvailable;
         $updateStruct->initialLanguageId = $this->repository->getContentLanguageService()->loadLanguage(
-            $contentTypeUpdateStruct->mainLanguageCode !== null
-                ? $contentTypeUpdateStruct->mainLanguageCode
-                : $contentTypeDraft->mainLanguageCode
+            $contentTypeUpdateStruct->mainLanguageCode !== null ?
+                $contentTypeUpdateStruct->mainLanguageCode :
+                $contentTypeDraft->mainLanguageCode
         )->id;
 
         return $updateStruct;

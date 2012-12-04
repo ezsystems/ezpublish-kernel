@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
+
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;

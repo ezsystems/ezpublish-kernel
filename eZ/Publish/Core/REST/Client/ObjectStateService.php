@@ -11,10 +11,11 @@
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\Core\REST\Common\UrlHandler;
-use eZ\Publish\Core\REST\Common\Input;
-use eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\Input\Dispatcher;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Common\Message;
 
+use eZ\Publish\API\Repository\ObjectStateService as APIObjectStateService;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
@@ -27,7 +28,7 @@ use eZ\Publish\Core\REST\Common\Values\ContentObjectStates;
 /**
  * ObjectStateService service
  */
-class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateService, Sessionable
+class ObjectStateService implements APIObjectStateService, Sessionable
 {
     /**
      * @var \eZ\Publish\Core\REST\Client\HttpClient
@@ -55,7 +56,7 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;

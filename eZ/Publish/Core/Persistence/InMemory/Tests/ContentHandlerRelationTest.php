@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
+
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -86,14 +87,14 @@ class ContentHandlerRelationTest extends HandlerTest
         $struct->initialLanguageId = 2;
         $struct->fields[] = new Field(
             array(
-                 'type' => 'ezstring',
-                 // FieldValue object compatible with ezstring
-                 'value' => new FieldValue(
-                     array(
-                          'data' => $textValue
-                     )
-                 ),
-                 'languageCode' => 'eng-GB',
+                'type' => 'ezstring',
+                // FieldValue object compatible with ezstring
+                'value' => new FieldValue(
+                    array(
+                        'data' => $textValue
+                    )
+                ),
+                'languageCode' => 'eng-GB',
             )
         );
         return $struct;
@@ -418,7 +419,7 @@ class ContentHandlerRelationTest extends HandlerTest
 
         $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations( $this->content2->versionInfo->contentInfo->id, Relation::COMMON );
         self::assertEquals( 1, count( $reverseRelations ) );
-        self::assertEquals( Relation::COMMON, current($reverseRelations)->type );
+        self::assertEquals( Relation::COMMON, current( $reverseRelations )->type );
     }
 
     /**
@@ -451,11 +452,15 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testRemoveRelationDoesNotExist()
     {
-        $newRelation = $this->persistenceHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
-                                   'sourceContentId' => $this->contentId,
-                                   'destinationContentId' => $this->content2->versionInfo->contentInfo->id,
-                                   'type' => Relation::COMMON
-                                   ) ) );
+        $newRelation = $this->persistenceHandler->contentHandler()->addRelation(
+            new RelationCreateStruct(
+                array(
+                    'sourceContentId' => $this->contentId,
+                    'destinationContentId' => $this->content2->versionInfo->contentInfo->id,
+                    'type' => Relation::COMMON
+                )
+            )
+        );
 
         $this->persistenceHandler->contentHandler()->removeRelation( 42 );
     }

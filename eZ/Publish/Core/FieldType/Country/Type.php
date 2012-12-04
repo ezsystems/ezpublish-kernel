@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Country;
+
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\FieldType\Country\Exception\InvalidValue;

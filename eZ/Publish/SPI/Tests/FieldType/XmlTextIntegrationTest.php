@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
+
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText as XmlTextConverter;
 use eZ\Publish\Core\FieldType\XmlText\XmlTextStorage;
 use eZ\Publish\Core\FieldType\NullStorage;
@@ -62,7 +63,7 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
             'ezxmltext',
             new XmlTextStorage(
                 array(
-                     'LegacyStorage' => new LegacyStorage()
+                    'LegacyStorage' => new LegacyStorage()
                 )
             )
         );

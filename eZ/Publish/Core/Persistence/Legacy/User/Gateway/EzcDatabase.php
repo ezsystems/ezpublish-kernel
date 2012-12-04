@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\User\Gateway;
+
 use eZ\Publish\Core\Persistence\Legacy\User\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use eZ\Publish\SPI\Persistence\User;

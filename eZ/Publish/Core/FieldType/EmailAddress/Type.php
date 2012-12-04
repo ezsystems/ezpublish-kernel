@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\EmailAddress;
+
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;

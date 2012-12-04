@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
+
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;

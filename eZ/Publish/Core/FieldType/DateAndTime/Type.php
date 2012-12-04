@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\DateAndTime;
+
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use DateTime;

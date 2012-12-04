@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\TextLine;
+
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;

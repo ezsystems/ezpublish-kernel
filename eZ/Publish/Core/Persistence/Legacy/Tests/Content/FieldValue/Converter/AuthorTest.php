@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
+
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Author as AuthorConverter;
@@ -63,7 +64,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
         self::assertTrue( $doc->loadXML( $storageFieldValue->dataText ) );
 
         $authorsXml = $doc->getElementsByTagName( 'author' );
-        self::assertSame( count( $this->authors ) , $authorsXml->length );
+        self::assertSame( count( $this->authors ), $authorsXml->length );
 
         // Loop against XML nodes and compare them to the real Author objects.
         // Then remove Author from $this->authors

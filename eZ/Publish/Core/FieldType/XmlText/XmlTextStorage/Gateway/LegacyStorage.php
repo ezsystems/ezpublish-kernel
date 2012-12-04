@@ -108,7 +108,7 @@ class LegacyStorage extends Gateway
         $statement = $q->prepare();
         $statement->execute();
         $linkUrls = array();
-        foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row)
+        foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
         {
             $linkUrls[$row['id']] = $row['url'];
         }

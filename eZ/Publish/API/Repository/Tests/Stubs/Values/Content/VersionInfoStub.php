@@ -41,11 +41,11 @@ class VersionInfoStub extends VersionInfo
     {
         parent::__construct( $properties );
 
-        if ( $properties['status'] > 2 ) {
+        if ( $properties['status'] > 2 )
+        {
             $trace = debug_backtrace();
         }
     }
-
 
     /**
      * Content of the content this version belongs to.

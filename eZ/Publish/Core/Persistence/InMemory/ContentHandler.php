@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
+
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
@@ -65,9 +66,9 @@ class ContentHandler implements ContentHandlerInterface
                 'ownerId' => $content->ownerId,
                 'status' => VersionInfo::STATUS_DRAFT,
                 'currentVersionNo' => 1,
-                'name' => isset( $content->name[$mainLanguageCode] )
-                    ? $content->name[$mainLanguageCode]
-                    : null,
+                'name' => isset( $content->name[$mainLanguageCode] ) ?
+                    $content->name[$mainLanguageCode] :
+                    null,
                 // Published and modified timestamps for drafts is 0
                 'modificationDate' => 0,
                 'publicationDate' => 0,
@@ -474,7 +475,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function updateMetadata( $contentId, MetadataUpdateStruct $content )
     {
-        $updateData = (array) $content;
+        $updateData = (array)$content;
         $updateData["alwaysAvailable"] = $updateData["alwaysAvailable"];
         $updateData["mainLanguageCode"] = $this->handler->contentLanguageHandler()
             ->load( $content->mainLanguageId )->languageCode;

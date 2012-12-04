@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
+
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct as ContentCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Field;
@@ -79,7 +80,7 @@ class TrashHandlerTest extends HandlerTest
 
         $this->trashHandler = $this->persistenceHandler->trashHandler();
         $this->lastLocationId = 2;
-        for ( $i = 0 ; $i < $this->entriesGenerated; ++$i )
+        for ( $i = 0; $i < $this->entriesGenerated; ++$i )
         {
             $this->contents[] = $content = $this->persistenceHandler->contentHandler()->create(
                 new ContentCreateStruct(
@@ -182,7 +183,7 @@ class TrashHandlerTest extends HandlerTest
         self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trashed', $trashed );
         foreach ( $this->locations[0] as $property => $value )
         {
-            self::assertEquals( $value, $trashed->$property, "Property {$property} did not match");
+            self::assertEquals( $value, $trashed->$property, "Property {$property} did not match" );
         }
     }
 

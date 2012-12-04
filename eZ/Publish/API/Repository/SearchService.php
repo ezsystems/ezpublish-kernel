@@ -18,8 +18,8 @@ use eZ\Publish\API\Repository\Values\Content\Query;
  *
  * @package eZ\Publish\API\Repository
  */
-interface SearchService {
-
+interface SearchService
+{
     /**
      * Finds content objects for the given query.
      *
@@ -59,6 +59,5 @@ interface SearchService {
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
     public function suggest( $prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null );
-
 }
 

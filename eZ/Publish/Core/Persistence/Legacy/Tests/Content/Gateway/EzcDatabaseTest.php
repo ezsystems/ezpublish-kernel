@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Gateway;
+
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
@@ -950,7 +951,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $gateway->deleteRelations( 149 );
 
         $this->assertEquals(
-        // yes, relates to itself!
+            // yes, relates to itself!
             array(
                 'all' => $beforeCount['all'] - 2,
                 'from' => $beforeCount['from'] - 1,
@@ -1507,18 +1508,18 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                 ),
             ),
             $this->getDatabaseHandler()
-            ->createSelectQuery()
-            ->select(
-                array(
-                    'id',
-                    'from_contentobject_id',
-                    'from_contentobject_version',
-                    'contentclassattribute_id',
-                    'to_contentobject_id',
-                    'relation_type',
-                )
-            )->from( 'ezcontentobject_link' )
-            ->where( 'id = 1')
+                ->createSelectQuery()
+                ->select(
+                    array(
+                        'id',
+                        'from_contentobject_id',
+                        'from_contentobject_version',
+                        'contentclassattribute_id',
+                        'to_contentobject_id',
+                        'relation_type',
+                    )
+                )->from( 'ezcontentobject_link' )
+                ->where( 'id = 1' )
         );
     }
 

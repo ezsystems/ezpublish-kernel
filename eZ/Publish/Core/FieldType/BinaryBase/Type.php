@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\BinaryBase;
+
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\FileService;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;

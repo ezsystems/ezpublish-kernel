@@ -106,7 +106,8 @@ class Handler extends BaseSearchHandler
         $result->time       = microtime( true ) - $start;
         $result->totalCount = $data['count'];
 
-        foreach ( $this->contentMapper->extractContentFromRows( $data['rows'] ) as $content ) {
+        foreach ( $this->contentMapper->extractContentFromRows( $data['rows'] ) as $content )
+        {
             $this->fieldHandler->loadExternalFieldData( $content );
             $searchHit = new SearchHit();
             $searchHit->valueObject = $content;

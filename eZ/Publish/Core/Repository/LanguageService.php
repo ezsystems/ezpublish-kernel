@@ -9,6 +9,7 @@
  */
 
 namespace eZ\Publish\Core\Repository;
+
 use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
@@ -55,7 +56,8 @@ class LanguageService implements LanguageServiceInterface
     {
         $this->repository = $repository;
         $this->languageHandler = $languageHandler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             'languages' => array( 'eng-GB' ),
         );
     }
@@ -306,7 +308,7 @@ class LanguageService implements LanguageServiceInterface
         if ( !is_numeric( $languageId ) )
             throw new InvalidArgumentValue( "languageId", $languageId );
 
-        $language = $this->languageHandler->load( (int) $languageId );
+        $language = $this->languageHandler->load( (int)$languageId );
 
         return $this->buildDomainObject( $language );
     }

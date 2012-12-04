@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
+
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
@@ -107,11 +108,13 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            'externalData' => array(),
-            'sortKey'      => 'user',
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                'externalData' => array(),
+                'sortKey'      => 'user',
+            )
+        );
     }
 
     /**
@@ -151,18 +154,20 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            'externalData' => array(
-                'login'              => 'change', // Change is intended to not get through
-                'email'              => 'change', // Change is intended to not get through
-                'passwordHash'      => 'change', // Change is intended to not get through
-                'passwordHashType' => 'change', // Change is intended to not get through
-                'enabled'         => 'changed', // Change is intended to not get through
-                'maxLogin'          => 'changed', // Change is intended to not get through
-            ),
-            'sortKey'      => 'user',
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                'externalData' => array(
+                    'login'            => 'change', // Change is intended to not get through
+                    'email'            => 'change', // Change is intended to not get through
+                    'passwordHash'     => 'change', // Change is intended to not get through
+                    'passwordHashType' => 'change', // Change is intended to not get through
+                    'enabled'          => 'changed', // Change is intended to not get through
+                    'maxLogin'         => 'changed', // Change is intended to not get through
+                ),
+                'sortKey'      => 'user',
+            )
+        );
     }
 
     /**

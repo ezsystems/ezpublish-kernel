@@ -65,6 +65,4 @@ class FieldTemplates extends AbstractParser
             'field_templates', $config, $container
         );
     }
-
-
 }

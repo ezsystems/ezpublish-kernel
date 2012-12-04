@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\BinaryBase\MimeTypeDetector;
+
 use eZ\Publish\Core\FieldType\BinaryBase\MimeTypeDetector;
 
 class FileInfoDetector implements MimeTypeDetector

@@ -10,6 +10,7 @@
  */
 
 namespace eZ\Publish\Core\Base;
+
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 
 /**
@@ -72,10 +73,10 @@ class ConfigurationManager
     public function __construct(
         array $globalConfiguration,
         array $globalPaths = array(
-             'base' => array( 'settings/' ),
-             'modules' => array( 'eZ/Publish/Core/settings/' ),
-             'access' => array(),
-             'global' => array( 'settings/override/' ),
+            'base' => array( 'settings/' ),
+            'modules' => array( 'eZ/Publish/Core/settings/' ),
+            'access' => array(),
+            'global' => array( 'settings/override/' ),
         )
     )
     {

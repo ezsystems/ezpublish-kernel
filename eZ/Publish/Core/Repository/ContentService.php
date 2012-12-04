@@ -90,7 +90,8 @@ class ContentService implements ContentServiceInterface
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
     }
@@ -346,9 +347,11 @@ class ContentService implements ContentServiceInterface
         {
             foreach ( $languages as $languageCode )
             {
-                if ( !in_array(
-                    $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode( $languageCode )->id,
-                    $spiContent->versionInfo->languageIds )
+                if (
+                    !in_array(
+                        $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode( $languageCode )->id,
+                        $spiContent->versionInfo->languageIds
+                    )
                 )
                 {
                     throw new NotFoundException(
@@ -589,9 +592,9 @@ class ContentService implements ContentServiceInterface
                 "fields" => $spiFields,
                 "alwaysAvailable" => $contentCreateStruct->alwaysAvailable,
                 "remoteId" => $contentCreateStruct->remoteId,
-                "modified" => isset( $contentCreateStruct->modificationDate )
-                    ? $contentCreateStruct->modificationDate->getTimestamp()
-                    : time(),
+                "modified" => isset( $contentCreateStruct->modificationDate ) ?
+                    $contentCreateStruct->modificationDate->getTimestamp() :
+                    time(),
                 "initialLanguageId" => $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
                     $contentCreateStruct->mainLanguageCode
                 )->id
@@ -769,17 +772,17 @@ class ContentService implements ContentServiceInterface
                     new SPIMetadataUpdateStruct(
                         array(
                             "ownerId" => $contentMetadataUpdateStruct->ownerId,
-                            "publicationDate" => isset( $contentMetadataUpdateStruct->publishedDate )
-                                ? $contentMetadataUpdateStruct->publishedDate->getTimestamp()
-                                : null,
-                            "modificationDate" => isset( $contentMetadataUpdateStruct->modificationDate )
-                                ? $contentMetadataUpdateStruct->modificationDate->getTimestamp()
-                                : null,
-                            "mainLanguageId" => isset( $contentMetadataUpdateStruct->mainLanguageCode )
-                                ? $this->repository->getContentLanguageService()->loadLanguage(
+                            "publicationDate" => isset( $contentMetadataUpdateStruct->publishedDate ) ?
+                                $contentMetadataUpdateStruct->publishedDate->getTimestamp() :
+                                null,
+                            "modificationDate" => isset( $contentMetadataUpdateStruct->modificationDate ) ?
+                                $contentMetadataUpdateStruct->modificationDate->getTimestamp() :
+                                null,
+                            "mainLanguageId" => isset( $contentMetadataUpdateStruct->mainLanguageCode ) ?
+                                $this->repository->getContentLanguageService()->loadLanguage(
                                     $contentMetadataUpdateStruct->mainLanguageCode
-                                )->id
-                                : null,
+                                )->id :
+                                null,
                             "alwaysAvailable" => $contentMetadataUpdateStruct->alwaysAvailable,
                             "remoteId" => $contentMetadataUpdateStruct->remoteId
                         )
@@ -1134,9 +1137,9 @@ class ContentService implements ContentServiceInterface
                     $fieldValue = $fieldType->acceptValue(
                         $content->getField(
                             $fieldDefinition->identifier,
-                            $fieldDefinition->isTranslatable
-                                ? $languageCode
-                                : $content->contentInfo->mainLanguageCode
+                            $fieldDefinition->isTranslatable ?
+                                $languageCode :
+                                $content->contentInfo->mainLanguageCode
                         )->value
                     );
                 }
@@ -1178,9 +1181,9 @@ class ContentService implements ContentServiceInterface
                 $fieldValues[$fieldDefinition->identifier][$languageCode] = $fieldValue;
                 $spiFields[] = new SPIField(
                     array(
-                        "id" => $isLanguageNew
-                            ? null
-                            : $content->getField( $fieldDefinition->identifier, $languageCode )->id,
+                        "id" => $isLanguageNew ?
+                            null :
+                            $content->getField( $fieldDefinition->identifier, $languageCode )->id,
                         "fieldDefinitionId" => $fieldDefinition->id,
                         "type" => $fieldDefinition->fieldTypeIdentifier,
                         "value" => $fieldType->toPersistenceValue( $fieldValue ),
@@ -1817,12 +1820,12 @@ class ContentService implements ContentServiceInterface
                 "currentVersionNo" => $spiContentInfo->currentVersionNo,
                 "published" => $spiContentInfo->isPublished,
                 "ownerId" => $spiContentInfo->ownerId,
-                "modificationDate" => $spiContentInfo->modificationDate == 0
-                    ? null
-                    : $this->getDateTime( $spiContentInfo->modificationDate ),
-                "publishedDate" => $spiContentInfo->publicationDate == 0
-                    ? null
-                    : $this->getDateTime( $spiContentInfo->publicationDate ),
+                "modificationDate" => $spiContentInfo->modificationDate == 0 ?
+                    null :
+                    $this->getDateTime( $spiContentInfo->modificationDate ),
+                "publishedDate" => $spiContentInfo->publicationDate == 0 ?
+                    null :
+                    $this->getDateTime( $spiContentInfo->publicationDate ),
                 "alwaysAvailable" => $spiContentInfo->alwaysAvailable,
                 "remoteId" => $spiContentInfo->remoteId,
                 "mainLanguageCode" => $spiContentInfo->mainLanguageCode,

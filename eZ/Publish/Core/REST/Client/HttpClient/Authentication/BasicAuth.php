@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\HttpClient\Authentication;
+
 use eZ\Publish\Core\REST\Client\HttpClient;
 use eZ\Publish\Core\REST\Common\Message;
 
@@ -72,11 +73,13 @@ class BasicAuth implements HttpClient
         }
         $message->headers['Authorization'] = sprintf(
             'Basic %s',
-            base64_encode( sprintf(
-                '%s:%s',
-                $this->username,
-                $this->password
-            ) )
+            base64_encode(
+                sprintf(
+                    '%s:%s',
+                    $this->username,
+                    $this->password
+                )
+            )
         );
         return $this->innerClient->request( $method, $path, $message );
     }

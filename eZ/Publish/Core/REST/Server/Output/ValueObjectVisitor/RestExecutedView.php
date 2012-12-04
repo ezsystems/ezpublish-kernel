@@ -38,7 +38,6 @@ class RestExecutedView extends ValueObjectVisitor
         parent::__construct( $urlHandler );
     }
 
-
     /**
      * Visit struct returned by controllers
      *

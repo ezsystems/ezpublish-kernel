@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
+
 use eZ\Publish\Core\FieldType\BinaryBase\Type as BinaryBaseType;
 use eZ\Publish\Core\FieldType\BinaryBase\Value as BinaryBaseValue;
 

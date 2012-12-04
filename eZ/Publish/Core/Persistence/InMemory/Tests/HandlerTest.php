@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
+
 use eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryHandler;
 use PHPUnit_Framework_TestCase;
 

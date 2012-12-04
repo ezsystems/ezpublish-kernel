@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
+
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
@@ -348,7 +349,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
                         'always-available' => true,
                         'translations' => array( 'always-available' => $pathItem )
                     );
-                    $virtualAlias =  $this->backend->create(
+                    $virtualAlias = $this->backend->create(
                         'Content\\UrlAlias',
                         array(
                             'parent' => $parentId,
@@ -611,7 +612,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
             }
 
             // skip if url alias has paths on a deeper depth then what $url has
-            if ( isset( $urlAlias->pathData[$index +1]['translations'] ) )
+            if ( isset( $urlAlias->pathData[$index + 1]['translations'] ) )
                 continue;
 
             // This urlAlias seems to match, return it
@@ -674,7 +675,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
         // Make path data based on new location and the original
         $pathData = $newParentLocationAlias->pathData;
         $pathData[] = $pathItem;
-        $pathIndex = count( $pathData ) -1;
+        $pathIndex = count( $pathData ) - 1;
 
          // Create the new url alias object
         $newAlias = $this->backend->create(
@@ -804,7 +805,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
         // Make path data based on new location and the original
         $pathData = $list[0]->pathData;
         $pathData[] = $pathItem;
-        $pathIndex = count( $pathData ) -1;
+        $pathIndex = count( $pathData ) - 1;
 
         // Create the new url alias object
         $this->backend->create(

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
+
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
@@ -107,8 +108,10 @@ class Field extends CriterionHandler
 
                 if ( !$converter instanceof Converter )
                 {
-                    throw new RuntimeException( "getConverter({$row['data_type_string']}) did not return a converter, got: " .
-                        gettype( $converter ) );
+                    throw new RuntimeException(
+                        "getConverter({$row['data_type_string']}) did not return a converter, got: " .
+                        gettype( $converter )
+                    );
                 }
 
                 $fieldMapArray[ $row['data_type_string'] ] = array(

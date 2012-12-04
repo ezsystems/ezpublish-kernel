@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type;
+
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Type;
@@ -172,9 +173,13 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'findContent' )
             ->with(
-                $this->equalTo( new Query( array(
-                    'criterion' => new CriterionContentTypeId( 23 )
-                ) ) )
+                $this->equalTo(
+                    new Query(
+                        array(
+                            'criterion' => new CriterionContentTypeId( 23 )
+                        )
+                    )
+                )
             )->will(
                 $this->returnValue( $result )
             );

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType;
+
 use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;

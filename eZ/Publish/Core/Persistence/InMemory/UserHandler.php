@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
+
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface;
 use eZ\Publish\SPI\Persistence\User;
 use eZ\Publish\SPI\Persistence\User\Role;
@@ -295,7 +296,6 @@ class UserHandler implements UserHandlerInterface
         if ( $inherit === false )
             return $this->getRoleAssignmentForContent( array( $groupId ) );
 
-
         $contentIds = array( $groupId );
         $locations = $this->handler->locationHandler()->loadLocationsByContent( $groupId );
         if ( empty( $locations ) )
@@ -384,7 +384,8 @@ class UserHandler implements UserHandlerInterface
                     $new->values = array( $new->values );
                     $data[$new->role->id][$new->contentId][$new->limitationIdentifier] = $new;
                 }
-                else // merge limitation values
+                // merge limitation values
+                else
                 {
                     $data[$new->role->id][$new->contentId][$new->limitationIdentifier]->values[] = $new->values;
                 }

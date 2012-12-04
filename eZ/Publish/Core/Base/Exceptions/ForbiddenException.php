@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Base\Exceptions;
+
 use eZ\Publish\API\Repository\Exceptions\ForbiddenException as APIForbiddenException;
 
 /**

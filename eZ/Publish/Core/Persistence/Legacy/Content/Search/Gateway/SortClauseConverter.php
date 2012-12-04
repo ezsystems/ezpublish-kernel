@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
+
 use eZ\Publish\API\Repository\Values\Content\Query;
 use ezcQuerySelect;
 use RuntimeException;

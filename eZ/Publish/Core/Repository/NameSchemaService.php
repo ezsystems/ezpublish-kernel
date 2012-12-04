@@ -67,7 +67,8 @@ class NameSchemaService
     public function __construct( RepositoryInterface $repository, array $settings = array() )
     {
         $this->repository = $repository;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             'limit' => 150,
             'sequence' => '...',
         );
@@ -83,9 +84,9 @@ class NameSchemaService
     public function resolveUrlAliasSchema( Content $content )
     {
         return $this->resolve(
-            strlen( $content->contentType->urlAliasSchema ) === 0
-                ? $content->contentType->nameSchema
-                : $content->contentType->urlAliasSchema,
+            strlen( $content->contentType->urlAliasSchema ) === 0 ?
+                $content->contentType->nameSchema :
+                $content->contentType->urlAliasSchema,
             $content->contentType,
             $content->fields,
             $content->versionInfo->languageCodes
@@ -283,7 +284,6 @@ class NameSchemaService
                         $replaceString
                     );
                 }
-
 
                 // We want to stop after the first matching token part / identifier is found
                 // <id1|id2> if id1 has a value, id2 will not be used.

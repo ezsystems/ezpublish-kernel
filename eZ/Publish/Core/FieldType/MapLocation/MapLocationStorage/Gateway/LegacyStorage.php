@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage\Gateway;
+
 use eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;

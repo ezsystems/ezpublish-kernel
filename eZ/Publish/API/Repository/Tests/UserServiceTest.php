@@ -235,7 +235,6 @@ class UserServiceTest extends BaseTest
         );
     }
 
-
     /**
      * Test for the createUserGroup() method.
      *

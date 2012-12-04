@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType;
+
 use ArrayObject;
 use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;

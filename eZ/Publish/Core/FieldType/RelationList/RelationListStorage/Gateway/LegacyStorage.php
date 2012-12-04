@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\RelationList\RelationListStorage\Gateway;
+
 use eZ\Publish\Core\FieldType\Relation\RelationStorage\Gateway\LegacyStorage as RelationLegacyStorage;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;

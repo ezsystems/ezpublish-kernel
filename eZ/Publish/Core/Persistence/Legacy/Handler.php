@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy;
+
 use eZ\Publish\SPI\Persistence\Handler as HandlerInterface;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type;
 use eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler;

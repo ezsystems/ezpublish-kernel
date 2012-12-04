@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\MVC\Legacy;
+
 use ezpKernel;
 use ezpKernelHandler;
 

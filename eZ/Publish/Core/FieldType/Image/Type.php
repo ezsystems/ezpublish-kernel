@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Image;
+
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\FileService;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
@@ -301,7 +302,7 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
-        if( $hash === null )
+        if ( $hash === null )
         {
             // empty value
             return null;

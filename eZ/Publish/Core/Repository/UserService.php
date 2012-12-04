@@ -76,7 +76,8 @@ class UserService implements UserServiceInterface
     {
         $this->repository = $repository;
         $this->userHandler = $userHandler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             'anonymousUserID' => 10,
             'defaultUserPlacement' => 12,
             'userClassID' => 4,// @todo Rename this settings to swap out "Class" for "Type"
@@ -222,8 +223,8 @@ class UserService implements UserServiceInterface
     {
         $searchQuery = new Query();
 
-        $searchQuery->offset = $offset >= 0 ? (int) $offset : 0;
-        $searchQuery->limit = $limit  >= 0 ? (int) $limit  : null;
+        $searchQuery->offset = $offset >= 0 ? (int)$offset : 0;
+        $searchQuery->limit = $limit >= 0 ? (int)$limit  : null;
 
         $searchQuery->criterion = new CriterionLogicalAnd(
             array(
@@ -771,7 +772,7 @@ class UserService implements UserServiceInterface
                             $loadedUser->passwordHash,
                         'hashAlgorithm' => $this->settings['hashType'],
                         'isEnabled' => $userUpdateStruct->enabled !== null ? $userUpdateStruct->enabled : $loadedUser->enabled,
-                        'maxLogin' => $userUpdateStruct->maxLogin !== null ? (int) $userUpdateStruct->maxLogin : $loadedUser->maxLogin
+                        'maxLogin' => $userUpdateStruct->maxLogin !== null ? (int)$userUpdateStruct->maxLogin : $loadedUser->maxLogin
                     )
                 )
             );
@@ -979,8 +980,8 @@ class UserService implements UserServiceInterface
             )
         );
 
-        $searchQuery->offset = $offset > 0 ? (int) $offset : 0;
-        $searchQuery->limit = $limit >= 1 ? (int) $limit : null;
+        $searchQuery->offset = $offset > 0 ? (int)$offset : 0;
+        $searchQuery->limit = $limit >= 1 ? (int)$limit : null;
 
         $searchQuery->sortClauses = array(
             $this->getSortClauseBySortField( $mainGroupLocation->sortField, $mainGroupLocation->sortOrder )

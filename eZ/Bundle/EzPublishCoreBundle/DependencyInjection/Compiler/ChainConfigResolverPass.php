@@ -40,8 +40,8 @@ class ChainConfigResolverPass implements CompilerPassInterface
             $chainResolver->addMethodCall(
                 'addResolver',
                 array(
-                     new Reference( $id ),
-                     $priority
+                    new Reference( $id ),
+                    $priority
                 )
             );
         }

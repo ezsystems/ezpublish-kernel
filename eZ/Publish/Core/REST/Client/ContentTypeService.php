@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Client;
 
-
+use eZ\Publish\API\Repository\ContentTypeService as APIContentTypeService;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
@@ -22,8 +22,8 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
 use eZ\Publish\Core\REST\Common\UrlHandler;
-use eZ\Publish\Core\REST\Common\Input;
-use eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\Input\Dispatcher;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Common\Message;
 
 use eZ\Publish\Core\REST\Client\Values;
@@ -33,7 +33,7 @@ use eZ\Publish\Core\REST\Client\Values;
  *
  * @package eZ\Publish\API\Repository
  */
-class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeService, Sessionable
+class ContentTypeService implements APIContentTypeService, Sessionable
 {
     /**
      * @var \eZ\Publish\Core\REST\Client\ContentService
@@ -66,7 +66,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;

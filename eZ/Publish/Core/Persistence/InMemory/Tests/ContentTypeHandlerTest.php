@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
+
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
@@ -252,7 +253,7 @@ class ContentTypeHandlerTest extends HandlerTest
     {
         $handler = $this->persistenceHandler->ContentTypeHandler();
         $struct = $this->getTypeCreateStruct();
-        $struct->fieldDefinitions[] = $field =$this->getTypeFieldDefinition();
+        $struct->fieldDefinitions[] = $field = $this->getTypeFieldDefinition();
 
         $obj = $handler->create( $struct );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type', $obj );
@@ -705,11 +706,14 @@ class ContentTypeHandlerTest extends HandlerTest
     {
         $handler = $this->persistenceHandler->ContentTypeHandler();
         $type = $handler->copy( 10, 1, Type::STATUS_DEFINED );
-        try {
+        try
+        {
             $handler->load( $type->id, Type::STATUS_DRAFT );
             $this->fail( "Draft of Type still exists after publish()" );
         }
-        catch ( \Exception $e ){}
+        catch ( \Exception $e )
+        {
+        }
         $type = $handler->load( $type->id, Type::STATUS_DEFINED );
 
         $this->assertEquals( 10, $type->creatorId );

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
+
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
@@ -225,10 +226,10 @@ class FieldHandlerTest extends TestCase
         $storageHandlerMock->expects( $this->once() )
             ->method( 'deleteFieldData' )
             ->with(
-            $this->equalTo( 'some-type' ),
-            $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
-            $this->equalTo( array( 2, 3 ) )
-        );
+                $this->equalTo( 'some-type' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
+                $this->equalTo( array( 2, 3 ) )
+            );
 
         $contentGatewayMock->expects( $this->once() )
             ->method( 'deleteFields' )

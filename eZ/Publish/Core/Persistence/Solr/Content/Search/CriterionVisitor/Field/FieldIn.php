@@ -45,7 +45,7 @@ class FieldIn extends Field
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
         $fieldTypes = $this->getFieldTypes();
-        $criterion->value = (array) $criterion->value;
+        $criterion->value = (array)$criterion->value;
 
         if ( !isset( $fieldTypes[$criterion->target] ) )
         {

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
+
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
@@ -89,8 +90,7 @@ class CheckboxIntegrationTest extends BaseIntegrationTest
             // The ezbool field type does not have any special field definition
             // properties
             array( 'fieldType', 'ezbool' ),
-            array( 'fieldTypeConstraints', new Content\FieldTypeConstraints( array(
-            ) ) ),
+            array( 'fieldTypeConstraints', new Content\FieldTypeConstraints( array() ) ),
         );
     }
 
@@ -101,11 +101,13 @@ class CheckboxIntegrationTest extends BaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => true,
-            'externalData' => null,
-            'sortKey'      => 1,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => true,
+                'externalData' => null,
+                'sortKey'      => 1,
+            )
+        );
     }
 
     /**
@@ -117,11 +119,12 @@ class CheckboxIntegrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => false,
-            'externalData' => null,
-            'sortKey'      => 0,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => false,
+                'externalData' => null,
+                'sortKey'      => 0,
+            )
+        );
     }
 }
-

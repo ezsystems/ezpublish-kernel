@@ -38,9 +38,9 @@ class ContentUpdateStruct extends \eZ\Publish\API\Repository\Values\Content\Cont
     {
         $this->fields[] = new Field(
             array(
-                'fieldDefIdentifier'  =>  $fieldDefIdentifier,
-                'value'               =>  $value,
-                'languageCode'        =>  $languageCode
+                'fieldDefIdentifier'  => $fieldDefIdentifier,
+                'value'               => $value,
+                'languageCode'        => $languageCode
             )
         );
     }

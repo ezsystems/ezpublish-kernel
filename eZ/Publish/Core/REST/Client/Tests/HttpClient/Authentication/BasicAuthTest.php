@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\HttpClient\Authentication;
+
 use eZ\Publish\Core\REST\Client\HttpClient\Authentication\BasicAuth;
 use eZ\Publish\Core\REST\Common\Message;
 

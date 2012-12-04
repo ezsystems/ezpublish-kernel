@@ -9,6 +9,7 @@
  */
 
 namespace eZ\Publish\Core\Repository;
+
 use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\Persistence\Handler;

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Base;
+
 use eZ\Publish\Core\Base\Exceptions\BadConfiguration;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -159,7 +160,8 @@ class ServiceContainer implements Container
             return $this->dependencies[$serviceKey];
         }
 
-        if ( empty( $this->settings[$serviceName] ) )// Validate settings
+        // Validate settings
+        if ( empty( $this->settings[$serviceName] ) )
         {
             throw new BadConfiguration( "service\\[{$serviceName}]", "no settings exist for '{$serviceName}'" );
         }
@@ -203,7 +205,7 @@ class ServiceContainer implements Container
         else
         {
             $reflectionObj = new ReflectionClass( $settings['class'] );
-            $serviceObject =  $reflectionObj->newInstanceArgs( $arguments );
+            $serviceObject = $reflectionObj->newInstanceArgs( $arguments );
         }
 
         if ( $settings['shared'] )
@@ -241,7 +243,7 @@ class ServiceContainer implements Container
         $builtArguments = array();
         foreach ( $arguments as $argument )
         {
-            if ( isset( $argument[0] ) && ( $argument[0] === '$' || $argument[0] === '@'  || $argument[0] === '%' ) )
+            if ( isset( $argument[0] ) && ( $argument[0] === '$' || $argument[0] === '@' || $argument[0] === '%' ) )
             {
                 $serviceObject = $this->getServiceArgument( $argument );
                 if ( $argument[1] === '?' && $serviceObject === null )
@@ -253,7 +255,8 @@ class ServiceContainer implements Container
             {
                 $builtArguments[] = $this->recursivlyLookupArguments( $argument );
             }
-            else // Scalar values
+            // Scalar values
+            else
             {
                 $builtArguments[] = $argument;
             }
@@ -279,7 +282,7 @@ class ServiceContainer implements Container
         $builtArguments = array();
         foreach ( $arguments as $key => $argument )
         {
-            if ( isset( $argument[0] ) && ( $argument[0] === '$' || $argument[0] === '@'  || $argument[0] === '%' ) )
+            if ( isset( $argument[0] ) && ( $argument[0] === '$' || $argument[0] === '@' || $argument[0] === '%' ) )
             {
                 $serviceObject = $this->getServiceArgument( $argument );
                 if ( $argument[1] !== '?' || $serviceObject !== null )
@@ -289,7 +292,8 @@ class ServiceContainer implements Container
             {
                 $builtArguments[$key] = $this->recursivlyLookupArguments( $argument );
             }
-            else // Scalar values
+            // Scalar values
+            else
             {
                 $builtArguments[$key] = $argument;
             }
@@ -310,34 +314,41 @@ class ServiceContainer implements Container
     {
         $function = '';
         $serviceContainer = $this;
-        if ( stripos( $argument, '::' ) !== false )// callback
+        // callback
+        if ( stripos( $argument, '::' ) !== false )
             list( $argument, $function  ) = explode( '::', $argument );
 
-        if ( ( $argument[0] === '%' || $argument[0] === '@' ) && $argument[1] === ':' )// expand extended services
+        // expand extended services
+        if ( ( $argument[0] === '%' || $argument[0] === '@' ) && $argument[1] === ':' )
         {
             return $this->recursivlyLookupArguments( $this->getListOfExtendedServices( $argument, $function ) );
         }
-        else if ( $argument[0] === '%' )// lazy loaded services
+        // lazy loaded services
+        else if ( $argument[0] === '%' )
         {
             // Optional dependency handling
             if ( $argument[1] === '?' && !isset( $this->settings[substr( $argument, 2 )] ) )
                 return null;
 
             if ( $function !== '' )
-                return function() use ( $serviceContainer, $argument, $function ){
+                return function() use ( $serviceContainer, $argument, $function )
+                {
                     $serviceObject = $serviceContainer->get( ltrim( $argument, '%' ) );
                     return call_user_func_array( array( $serviceObject, $function ), func_get_args() );
                 };
             else
-                return function() use ( $serviceContainer, $argument ){
+                return function() use ( $serviceContainer, $argument )
+                {
                     return $serviceContainer->get( ltrim( $argument, '%' ) );
                 };
         }
-        else if ( isset( $this->dependencies[ $argument ] ) )// Existing dependencies (@Service / $Variable)
+        // Existing dependencies (@Service / $Variable)
+        else if ( isset( $this->dependencies[ $argument ] ) )
         {
             $serviceObject = $this->dependencies[ $argument ];
         }
-        else if ( $argument[0] === '$' )// Undefined variables will trow an exception
+        // Undefined variables will trow an exception
+        else if ( $argument[0] === '$' )
         {
             // Optional dependency handling
             if ( $argument[1] === '?' )
@@ -345,7 +356,8 @@ class ServiceContainer implements Container
 
             throw new InvalidArgumentValue( "\$arguments", $argument );
         }
-        else// Try to load a @service dependency
+        // Try to load a @service dependency
+        else
         {
             // Optional dependency handling
             if ( $argument[1] === '?' && !isset( $this->settings[substr( $argument, 2 )] ) )

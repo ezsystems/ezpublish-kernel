@@ -72,7 +72,8 @@ class LocationService implements LocationServiceInterface
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
     }
@@ -370,8 +371,8 @@ class LocationService implements LocationServiceInterface
                         new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
                     )
                 ),
-                'offset' => ( $offset >= 0 ? (int) $offset : 0 ),
-                'limit' => ( $limit  >= 0 ? (int) $limit  : null )
+                'offset' => ( $offset >= 0 ? (int)$offset : 0 ),
+                'limit' => ( $limit >= 0 ? (int)$limit  : null )
             )
         );
 
@@ -435,7 +436,9 @@ class LocationService implements LocationServiceInterface
                 if ( $existingLocation !== null )
                     throw new InvalidArgumentException( "locationCreateStruct", "location with provided remote ID already exists" );
             }
-            catch ( APINotFoundException $e ) {}
+            catch ( APINotFoundException $e )
+            {
+            }
         }
         else
         {
@@ -463,7 +466,7 @@ class LocationService implements LocationServiceInterface
             throw new UnauthorizedException( 'content', 'create' );
 
         $createStruct = new CreateStruct();
-        $createStruct->priority = $locationCreateStruct->priority !== null ? (int) $locationCreateStruct->priority : null;
+        $createStruct->priority = $locationCreateStruct->priority !== null ? (int)$locationCreateStruct->priority : null;
 
         // if we declare the new location as hidden, it is automatically invisible
         // otherwise, it remains unhidden, and picks up visibility from parent
@@ -478,14 +481,14 @@ class LocationService implements LocationServiceInterface
         }
 
         $createStruct->remoteId = trim( $locationCreateStruct->remoteId );
-        $createStruct->contentId = (int) $contentInfo->id;
-        $createStruct->contentVersion = (int) $contentInfo->currentVersionNo;
+        $createStruct->contentId = (int)$contentInfo->id;
+        $createStruct->contentVersion = (int)$contentInfo->currentVersionNo;
 
         if ( $contentInfo->mainLocationId !== null )
             $createStruct->mainLocationId = $contentInfo->mainLocationId;
 
-        $createStruct->sortField = $locationCreateStruct->sortField !== null ? (int) $locationCreateStruct->sortField : APILocation::SORT_FIELD_NAME;
-        $createStruct->sortOrder = $locationCreateStruct->sortOrder !== null ? (int) $locationCreateStruct->sortOrder : APILocation::SORT_ORDER_ASC;
+        $createStruct->sortField = $locationCreateStruct->sortField !== null ? (int)$locationCreateStruct->sortField : APILocation::SORT_FIELD_NAME;
+        $createStruct->sortOrder = $locationCreateStruct->sortOrder !== null ? (int)$locationCreateStruct->sortOrder : APILocation::SORT_ORDER_ASC;
         $createStruct->parentId = $loadedParentLocation->id;
 
         $this->repository->beginTransaction();
@@ -557,17 +560,19 @@ class LocationService implements LocationServiceInterface
                 if ( $existingLocation !== null )
                     throw new InvalidArgumentException( "locationUpdateStruct", "location with provided remote ID already exists" );
             }
-            catch ( APINotFoundException $e ) {}
+            catch ( APINotFoundException $e )
+            {
+            }
         }
 
         if ( !$this->repository->canUser( 'content', 'edit', $loadedLocation->getContentInfo(), $loadedLocation ) )
             throw new UnauthorizedException( 'content', 'edit' );
 
         $updateStruct = new UpdateStruct();
-        $updateStruct->priority = $locationUpdateStruct->priority !== null ? (int) $locationUpdateStruct->priority : $loadedLocation->priority;
+        $updateStruct->priority = $locationUpdateStruct->priority !== null ? (int)$locationUpdateStruct->priority : $loadedLocation->priority;
         $updateStruct->remoteId = $locationUpdateStruct->remoteId !== null ? trim( $locationUpdateStruct->remoteId ) : $loadedLocation->remoteId;
-        $updateStruct->sortField = $locationUpdateStruct->sortField !== null ? (int) $locationUpdateStruct->sortField : $loadedLocation->sortField;
-        $updateStruct->sortOrder = $locationUpdateStruct->sortOrder !== null ? (int) $locationUpdateStruct->sortOrder : $loadedLocation->sortOrder;
+        $updateStruct->sortField = $locationUpdateStruct->sortField !== null ? (int)$locationUpdateStruct->sortField : $loadedLocation->sortField;
+        $updateStruct->sortOrder = $locationUpdateStruct->sortOrder !== null ? (int)$locationUpdateStruct->sortOrder : $loadedLocation->sortOrder;
 
         $this->repository->beginTransaction();
         try
@@ -830,7 +835,6 @@ class LocationService implements LocationServiceInterface
         }
     }
 
-
     /**
      * Instantiates a new location create class
      *
@@ -842,7 +846,7 @@ class LocationService implements LocationServiceInterface
     {
         return new LocationCreateStruct(
             array(
-                'parentLocationId' => (int) $parentLocationId
+                'parentLocationId' => (int)$parentLocationId
             )
         );
     }
@@ -875,9 +879,9 @@ class LocationService implements LocationServiceInterface
                     'mainLocationId' => 1,
                     'contentType' => new ContentType(
                         array(
-                             'identifier' => 'folder',
-                             'isContainer' => true,
-                             'fieldDefinitions' => array()
+                            'identifier' => 'folder',
+                            'isContainer' => true,
+                            'fieldDefinitions' => array()
                         )
                     )
                 )
@@ -888,16 +892,16 @@ class LocationService implements LocationServiceInterface
         return new Location(
             array(
                 'contentInfo' => $contentInfo,
-                'id' => (int) $spiLocation->id,
-                'priority' => (int) $spiLocation->priority,
-                'hidden' => (bool) $spiLocation->hidden,
-                'invisible' => (bool) $spiLocation->invisible,
+                'id' => (int)$spiLocation->id,
+                'priority' => (int)$spiLocation->priority,
+                'hidden' => (bool)$spiLocation->hidden,
+                'invisible' => (bool)$spiLocation->invisible,
                 'remoteId' => $spiLocation->remoteId,
-                'parentLocationId' => (int) $spiLocation->parentId,
+                'parentLocationId' => (int)$spiLocation->parentId,
                 'pathString' => $spiLocation->pathString,
-                'depth' => (int) $spiLocation->depth,
-                'sortField' => (int) $spiLocation->sortField,
-                'sortOrder' => (int) $spiLocation->sortOrder,
+                'depth' => (int)$spiLocation->depth,
+                'sortField' => (int)$spiLocation->sortField,
+                'sortOrder' => (int)$spiLocation->sortOrder,
             )
         );
     }

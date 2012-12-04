@@ -129,8 +129,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                         2 => 'ezdemo_site_admin',
                     ),
                     'groups' => array(
-                        'ezdemo_group' =>
-                        array(
+                        'ezdemo_group' => array(
                             0 => 'eng',
                             1 => 'ezdemo_site',
                             2 => 'ezdemo_site_admin',
@@ -383,7 +382,6 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
         unset( $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['languages'] );
         $data[] = $element;
 
-
         return $data;
     }
 
@@ -406,37 +404,28 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
     protected function getExpectedResultForTestFromLegacy()
     {
         return array(
-            'ezpublish' =>
-            array(
-                'siteaccess' =>
-                array(
+            'ezpublish' => array(
+                'siteaccess' => array(
                     'default_siteaccess' => 'eng',
-                    'list' =>
-                    array(
+                    'list' => array(
                         0 => 'eng',
                         1 => 'ezdemo_site',
                         2 => 'ezdemo_site_admin',
                     ),
-                    'groups' =>
-                    array(
-                        'ezdemo_site_group' =>
-                        array(
+                    'groups' => array(
+                        'ezdemo_site_group' => array(
                             0 => 'eng',
                             1 => 'ezdemo_site',
                             2 => 'ezdemo_site_admin',
                         ),
                     ),
-                    'match' =>
-                    array(
+                    'match' => array(
                         'URIElement' => 1,
                     ),
                 ),
-                'system' =>
-                array(
-                    'ezdemo_site_group' =>
-                    array(
-                        'database' =>
-                        array(
+                'system' => array(
+                    'ezdemo_site_group' => array(
+                        'database' => array(
                             'type' => 'mysql',
                             'user' => 'root',
                             'password' => null,
@@ -444,8 +433,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                             'database_name' => 'ezdemo',
                         ),
                     ),
-                    'ezdemo_site_admin' =>
-                    array(
+                    'ezdemo_site_admin' => array(
                         'legacy_mode' => true,
                     )
                 ),

@@ -300,7 +300,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         return array(
             'expected' => $storedGroup,
             'actual' => $loadedGroup,
-    );
+        );
     }
 
     /**
@@ -1370,8 +1370,8 @@ abstract class ContentTypeBase extends BaseServiceTest
         {
             $this->assertContentTypeGroupsEqual(
                 array(
-                     "expected" => $expectedGroup,
-                     "actual" => $actualGroups[$index]
+                    "expected" => $expectedGroup,
+                    "actual" => $actualGroups[$index]
                 )
             );
         }
@@ -2431,20 +2431,20 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                 'id' => $originalType->id,
-                 'names' => $updateStruct->names,
-                 'descriptions' => $updateStruct->descriptions,
-                 'identifier' => $updateStruct->identifier,
-                 'creationDate' => $originalType->creationDate,
-                 'modificationDate' => $updateStruct->modificationDate,
-                 'creatorId' => $originalType->creatorId,
-                 'modifierId' => $updateStruct->modifierId,
-                 'urlAliasSchema' => $updateStruct->urlAliasSchema,
-                 'nameSchema' => $updateStruct->nameSchema,
-                 'isContainer' => $updateStruct->isContainer,
-                 'mainLanguageCode' => $updateStruct->mainLanguageCode,
-                 'contentTypeGroups' => $originalType->contentTypeGroups,
-                 //'fieldDefinitions' => $originalType->fieldDefinitions,
+                'id' => $originalType->id,
+                'names' => $updateStruct->names,
+                'descriptions' => $updateStruct->descriptions,
+                'identifier' => $updateStruct->identifier,
+                'creationDate' => $originalType->creationDate,
+                'modificationDate' => $updateStruct->modificationDate,
+                'creatorId' => $originalType->creatorId,
+                'modifierId' => $updateStruct->modifierId,
+                'urlAliasSchema' => $updateStruct->urlAliasSchema,
+                'nameSchema' => $updateStruct->nameSchema,
+                'isContainer' => $updateStruct->isContainer,
+                'mainLanguageCode' => $updateStruct->mainLanguageCode,
+                'contentTypeGroups' => $originalType->contentTypeGroups,
+                //'fieldDefinitions' => $originalType->fieldDefinitions,
             ),
             $updatedType
         );
@@ -3449,36 +3449,36 @@ abstract class ContentTypeBase extends BaseServiceTest
             array(
                 'id' => $originalField->id,
                 'fieldTypeIdentifier' => $originalField->fieldTypeIdentifier,
-                'identifier' => $updateStruct->identifier === null
-                    ? $originalField->identifier
-                    : $updateStruct->identifier,
-                'names' => $updateStruct->names === null
-                    ? $originalField->names
-                    : $updateStruct->names,
-                'descriptions' => $updateStruct->descriptions === null
-                    ? $originalField->descriptions
-                    : $updateStruct->descriptions,
-                'fieldGroup' => $updateStruct->fieldGroup === null
-                    ? $originalField->fieldGroup
-                    : $updateStruct->fieldGroup,
-                'position' => $updateStruct->position === null
-                    ? $originalField->position
-                    : $updateStruct->position,
-                'isTranslatable' => $updateStruct->isTranslatable === null
-                    ? $originalField->isTranslatable
-                    : $updateStruct->isTranslatable,
-                'isRequired' => $updateStruct->isRequired === null
-                    ? $originalField->isRequired
-                    : $updateStruct->isRequired,
-                'isInfoCollector' => $updateStruct->isInfoCollector === null
-                    ? $originalField->isInfoCollector
-                    : $updateStruct->isInfoCollector,
-                'defaultValue' => $originalField->defaultValue === null
-                    ? $originalField->defaultValue
-                    : $updateStruct->defaultValue,
-                'isSearchable' => $updateStruct->isSearchable === null
-                    ? $originalField->isSearchable
-                    : $updateStruct->isSearchable,
+                'identifier' => $updateStruct->identifier === null ?
+                    $originalField->identifier :
+                    $updateStruct->identifier,
+                'names' => $updateStruct->names === null ?
+                    $originalField->names :
+                    $updateStruct->names,
+                'descriptions' => $updateStruct->descriptions === null ?
+                    $originalField->descriptions :
+                    $updateStruct->descriptions,
+                'fieldGroup' => $updateStruct->fieldGroup === null ?
+                    $originalField->fieldGroup :
+                    $updateStruct->fieldGroup,
+                'position' => $updateStruct->position === null ?
+                    $originalField->position :
+                    $updateStruct->position,
+                'isTranslatable' => $updateStruct->isTranslatable === null ?
+                    $originalField->isTranslatable :
+                    $updateStruct->isTranslatable,
+                'isRequired' => $updateStruct->isRequired === null ?
+                    $originalField->isRequired :
+                    $updateStruct->isRequired,
+                'isInfoCollector' => $updateStruct->isInfoCollector === null ?
+                    $originalField->isInfoCollector :
+                    $updateStruct->isInfoCollector,
+                'defaultValue' => $originalField->defaultValue === null ?
+                    $originalField->defaultValue :
+                    $updateStruct->defaultValue,
+                'isSearchable' => $updateStruct->isSearchable === null ?
+                    $originalField->isSearchable :
+                    $updateStruct->isSearchable,
             ),
             $updatedField,
             // Do not compare defaultValue as they may have different representations

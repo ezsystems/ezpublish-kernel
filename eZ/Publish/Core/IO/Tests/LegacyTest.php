@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\IO\Tests;
+
 use eZ\Publish\Core\IO\LegacyHandler as Legacy;
 use eZ\Publish\Core\IO\Tests\Base as BaseHandlerTest;
 use ezcBaseFile;

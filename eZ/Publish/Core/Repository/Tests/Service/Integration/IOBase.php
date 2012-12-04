@@ -59,7 +59,9 @@ abstract class IOBase extends BaseServiceTest
             $value = $binaryFile->notDefined;
             self::fail( "Succeeded getting non existing property" );
         }
-        catch( PropertyNotFound $e ) {}
+        catch ( PropertyNotFound $e )
+        {
+        }
     }
 
     /**
@@ -74,7 +76,9 @@ abstract class IOBase extends BaseServiceTest
             $binaryFile->id = 42;
             self::fail( "Succeeded setting read only property" );
         }
-        catch( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
     }
 
     /**
@@ -103,7 +107,9 @@ abstract class IOBase extends BaseServiceTest
             unset( $binaryFile->id );
             self::fail( 'Unsetting read-only property succeeded' );
         }
-        catch ( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
     }
 
     /**
@@ -120,22 +126,25 @@ abstract class IOBase extends BaseServiceTest
 
         if ( $result->failureCount() > 0 )
         {
-            self::fail( "Failed file upload test, failureCount() > 0: "
-                    . $this->expandFailureMessages( $result->failures() )
+            self::fail(
+                "Failed file upload test, failureCount() > 0: " .
+                $this->expandFailureMessages( $result->failures() )
             );
         }
 
         if ( $result->errorCount() > 0 )
         {
-            self::fail( "Failed file upload test, errorCount() > 0: "
-                    . $this->expandFailureMessages( $result->errors() )
+            self::fail(
+                "Failed file upload test, errorCount() > 0: " .
+                $this->expandFailureMessages( $result->errors() )
             );
         }
 
         if ( $result->skippedCount() > 0 )
         {
-            self::fail( "Failed file upload test, skippedCount() > 0: "
-                    . $this->expandFailureMessages( $result->skipped() )
+            self::fail(
+                "Failed file upload test, skippedCount() > 0: " .
+                $this->expandFailureMessages( $result->skipped() )
             );
         }
     }
@@ -155,11 +164,10 @@ abstract class IOBase extends BaseServiceTest
         foreach ( $failures as $failure )
         {
             $e = $failure->thrownException();
-            $text = "\n\nException " . get_class($e) . ' in file ' . $e->getFile() . ':' . $e->getLine() . "\n";
+            $text = "\n\nException " . get_class( $e ) . ' in file ' . $e->getFile() . ':' . $e->getLine() . "\n";
             $text .= $e->toString();
             $text .= "\n" . $e->getTraceAsString();
             $messages[] = $text;
-
         }
         return implode( $delimiter, $messages );
 

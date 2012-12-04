@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -110,7 +111,6 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'sourceUrl',
                 'content'  => '/source/url',
-
             ),
             $result,
             'Invalid or non-existing <UrlWildcard> sourceUrl value element.',
@@ -131,7 +131,6 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'destinationUrl',
                 'content'  => '/destination/url',
-
             ),
             $result,
             'Invalid or non-existing <UrlWildcard> destinationUrl value element.',
@@ -152,7 +151,6 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'forward',
                 'content'  => 'true',
-
             ),
             $result,
             'Invalid or non-existing <UrlWildcard> forward value element.',

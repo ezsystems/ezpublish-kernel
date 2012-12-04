@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash;
+
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as BaseTrashHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler;

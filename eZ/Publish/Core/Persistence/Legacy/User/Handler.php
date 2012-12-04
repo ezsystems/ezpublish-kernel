@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\User;
+
 use eZ\Publish\SPI\Persistence\User;
 use eZ\Publish\SPI\Persistence\User\Handler as BaseUserHandler;
 use eZ\Publish\SPI\Persistence\User\Role;

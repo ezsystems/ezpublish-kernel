@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Rating;
+
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 

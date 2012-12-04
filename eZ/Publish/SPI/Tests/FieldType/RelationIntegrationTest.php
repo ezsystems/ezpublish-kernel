@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
+
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
@@ -80,11 +81,13 @@ class RelationIntegrationTest extends BaseIntegrationTest
     public function getTypeConstraints()
     {
         return new Content\FieldTypeConstraints(
-            array( 'fieldSettings' => array(
-                'selectionMethod' => 0,
-                'selectionRoot' => ''
+            array(
+                'fieldSettings' => array(
+                    'selectionMethod' => 0,
+                    'selectionRoot' => ''
+                )
             )
-        ) );
+        );
     }
 
     /**
@@ -114,11 +117,13 @@ class RelationIntegrationTest extends BaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => array( 'destinationContentId' => 1),
-            'externalData' => array( 'destinationContentId' => 1),
-            'sortKey'      => null,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => array( 'destinationContentId' => 1 ),
+                'externalData' => array( 'destinationContentId' => 1 ),
+                'sortKey'      => null,
+            )
+        );
     }
 
     /**
@@ -156,11 +161,13 @@ class RelationIntegrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => array( 'destinationContentId' => 2 ),
-            'externalData' => array( 'destinationContentId' => 2 ),
-            'sortKey'      => null,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => array( 'destinationContentId' => 2 ),
+                'externalData' => array( 'destinationContentId' => 2 ),
+                'sortKey'      => null,
+            )
+        );
     }
 
     /**
@@ -192,4 +199,3 @@ class RelationIntegrationTest extends BaseIntegrationTest
         );
     }
 }
-

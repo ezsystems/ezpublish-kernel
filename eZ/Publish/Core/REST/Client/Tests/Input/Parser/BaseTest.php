@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
+
 use eZ\Publish\Core\REST\Server\Tests;
 
 abstract class BaseTest extends Tests\BaseTest

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\ContentUpdater\Action;
+
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField;
 use eZ\Publish\SPI\Persistence\Content;
 

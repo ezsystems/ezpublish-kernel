@@ -40,8 +40,8 @@ abstract class ViewPass implements CompilerPassInterface
             $viewManagerDef->addMethodCall(
                 static::ADD_VIEW_PROVIDER_METHOD,
                 array(
-                     new Reference( $id ),
-                     $priority
+                    new Reference( $id ),
+                    $priority
                 )
             );
         }

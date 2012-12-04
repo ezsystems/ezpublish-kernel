@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
+
 use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
@@ -223,8 +224,8 @@ class EzcDatabase extends Gateway
 
         $maxPriority = $statement->fetchColumn();
 
-        $objectState->priority = $maxPriority === null ? 0 : (int) $maxPriority + 1;
-        $objectState->groupId = (int) $groupId;
+        $objectState->priority = $maxPriority === null ? 0 : (int)$maxPriority + 1;
+        $objectState->groupId = (int)$groupId;
 
         $query = $this->dbHandler->createInsertQuery();
         $query->insertInto(
@@ -254,7 +255,7 @@ class EzcDatabase extends Gateway
 
         $query->prepare()->execute();
 
-        $objectState->id = (int) $this->dbHandler->lastInsertId(
+        $objectState->id = (int)$this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName( 'ezcobj_state', 'id' )
         );
 
@@ -404,7 +405,7 @@ class EzcDatabase extends Gateway
 
         $query->prepare()->execute();
 
-        $objectStateGroup->id = (int) $this->dbHandler->lastInsertId(
+        $objectStateGroup->id = (int)$this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName( 'ezcobj_state_group', 'id' )
         );
 
@@ -614,7 +615,7 @@ class EzcDatabase extends Gateway
 
         $count = $statement->fetchColumn();
 
-        return $count !== null ? (int) $count : 0;
+        return $count !== null ? (int)$count : 0;
     }
 
     /**

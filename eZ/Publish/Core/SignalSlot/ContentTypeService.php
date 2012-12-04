@@ -459,10 +459,12 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         $returnValue = $this->service->removeFieldDefinition( $contentTypeDraft, $fieldDefinition );
         $this->signalDispatcher->emit(
-            new RemoveFieldDefinitionSignal( array(
-                'contentTypeDraftId' => $contentTypeDraft->id,
-                'fieldDefinitionId' => $fieldDefinition->id,
-            ) )
+            new RemoveFieldDefinitionSignal(
+                array(
+                    'contentTypeDraftId' => $contentTypeDraft->id,
+                    'fieldDefinitionId' => $fieldDefinition->id,
+                )
+            )
         );
         return $returnValue;
     }

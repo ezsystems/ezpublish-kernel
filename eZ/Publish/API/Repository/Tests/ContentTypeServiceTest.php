@@ -1730,8 +1730,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'names' => array(
                     'eng-US' => 'User group',
                 ),
-                'descriptions' => array(
-                ),
+                'descriptions' => array(),
                 'nameSchema' => '<name>',
                 'isContainer' => true,
                 'mainLanguageCode' => 'eng-US',
@@ -1771,8 +1770,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'names' => array(
                     'eng-US' => 'Name',
                 ),
-                'descriptions' => array(
-                ),
+                'descriptions' => array(),
             ),
             'description' => array(
                 'identifier' => 'description',
@@ -1787,8 +1785,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'names' => array(
                     'eng-US' => 'Description',
                 ),
-                'descriptions' => array(
-                ),
+                'descriptions' => array(),
             )
         );
 
@@ -2236,7 +2233,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             $contentTypeService->loadContentType( $commentType->id );
             $this->fail( 'Content type could be loaded after delete.' );
         }
-        catch( Exceptions\NotFoundException $e )
+        catch ( Exceptions\NotFoundException $e )
         {
             // All fine
         }

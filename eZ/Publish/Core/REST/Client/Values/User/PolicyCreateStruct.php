@@ -36,8 +36,8 @@ class PolicyCreateStruct extends \eZ\Publish\API\Repository\Values\User\PolicyCr
     {
         parent::__construct(
             array(
-                'module'    =>  $module,
-                'function'  =>  $function
+                'module'    => $module,
+                'function'  => $function
             )
         );
     }

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\MVC\Legacy\Templating\Twig\TokenParser;
+
 use eZ\Publish\Core\MVC\Legacy\Templating\Twig\Node\LegacyIncludeNode;
 use Twig_Token;
 use Twig_Node_Expression_Array;

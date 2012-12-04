@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -169,7 +170,6 @@ EOT;
         $fieldValue->data = $this->parseLegacyXml( $value->dataText );
     }
 
-
     /**
      * Parses the XML from the legacy database
      *
@@ -237,15 +237,17 @@ EOT;
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints( array(
-            'validators' => array(
-                'FileSizeValidator' => array(
-                    'maxFileSize' => ( $storageDef->dataInt1 != 0
-                        ? (int)$storageDef->dataInt1 * 1024 * 1024
-                        : false ),
+        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints(
+            array(
+                'validators' => array(
+                    'FileSizeValidator' => array(
+                        'maxFileSize' => ( $storageDef->dataInt1 != 0
+                            ? (int)$storageDef->dataInt1 * 1024 * 1024
+                            : false ),
+                    )
                 )
             )
-        ) );
+        );
     }
 
     /**

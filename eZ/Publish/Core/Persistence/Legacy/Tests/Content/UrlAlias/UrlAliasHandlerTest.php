@@ -2169,15 +2169,6 @@ class UrlAliasHandlerTest extends TestCase
         );
     }
 
-
-
-
-
-
-
-
-
-
     /**
      * Test for the locationDeleted() method.
      *

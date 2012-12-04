@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Common\Output\Generator;
+
 use eZ\Publish\Core\REST\Common\Output\Generator;
 
 /**

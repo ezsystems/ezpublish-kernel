@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
+
 use eZ\Publish\Core\Persistence\Legacy\Content;
 use eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
@@ -158,9 +159,13 @@ class ContentUpdater
      */
     protected function loadContentObjects( $contentTypeId )
     {
-        $result = $this->searchHandler->findContent( new Query( array(
-            'criterion' => new Criterion\ContentTypeId( $contentTypeId )
-        ) ) );
+        $result = $this->searchHandler->findContent(
+            new Query(
+                array(
+                    'criterion' => new Criterion\ContentTypeId( $contentTypeId )
+                )
+            )
+        );
 
         $content = array();
         foreach ( $result->searchHits as $hit )

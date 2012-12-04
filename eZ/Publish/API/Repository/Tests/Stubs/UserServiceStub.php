@@ -164,7 +164,7 @@ class UserServiceStub implements UserService
         $subUserGroups = array();
         foreach ( $this->userGroups as $group )
         {
-            if ( (string) $group->parentId === (string) $userGroup->id )
+            if ( (string)$group->parentId === (string)$userGroup->id )
             {
                 $subUserGroups[] = $group;
             }
@@ -532,7 +532,8 @@ class UserServiceStub implements UserService
                     $this->createHash(
                         $user->login,
                         $userUpdateStruct->password,
-                        $user->hashAlgorithm ) : $user->passwordHash,
+                        $user->hashAlgorithm
+                    ) : $user->passwordHash,
 
                 'content' => $content,
             )

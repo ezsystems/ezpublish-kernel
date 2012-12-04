@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Base\Exceptions;
+
 use Exception;
 use LogicException;
 

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
+
 use eZ\Publish\Core\FieldType\Rating\Type as Rating;
 use eZ\Publish\Core\FieldType\Rating\Value as RatingValue;
 use ReflectionObject;

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\View;
+
 use eZ\Publish\Core\REST\Server\Request;
 use eZ\Publish\Core\REST\Common\Output\Visitor as OutputVisitor;
 use Qafoo\RMF\View\NowViewFoundException;

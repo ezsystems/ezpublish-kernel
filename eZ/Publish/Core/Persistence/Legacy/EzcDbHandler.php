@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy;
+
 use ezcDbHandler as ezcDbHandlerWrapped;
 use ezcQuerySelect;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql;

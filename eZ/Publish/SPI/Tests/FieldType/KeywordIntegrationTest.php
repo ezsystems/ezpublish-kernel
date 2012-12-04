@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
+
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
@@ -105,11 +106,13 @@ class KeywordIntegrationTest extends BaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            'externalData' => array( 'foo', 'bar', 'sindelfingen' ),
-            'sortKey'      => null,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                'externalData' => array( 'foo', 'bar', 'sindelfingen' ),
+                'sortKey'      => null,
+            )
+        );
     }
 
     /**
@@ -178,11 +181,13 @@ class KeywordIntegrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            'externalData' => array( 'sindelfingen', 'baz' ),
-            'sortKey'      => null,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                'externalData' => array( 'sindelfingen', 'baz' ),
+                'sortKey'      => null,
+            )
+        );
     }
 
     /**

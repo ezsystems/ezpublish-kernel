@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
+
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
@@ -103,7 +104,7 @@ class FieldDefinitionCreate extends Base
         // @todo XSD says that position is mandatory, but content type can be created without it
         if ( array_key_exists( 'position', $data ) )
         {
-            $fieldDefinitionCreate->position = (int) $data['position'];
+            $fieldDefinitionCreate->position = (int)$data['position'];
         }
 
         // @todo XSD says that isTranslatable is mandatory, but content type can be created without it

@@ -21,7 +21,6 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\MVC\Legacy\LegacyKernelAware;
 use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 
-
 /**
  * The io service for managing binary files
  *
@@ -60,7 +59,8 @@ class IOService implements IOServiceInterface, LegacyKernelAware
     {
         $this->repository = $repository;
         $this->ioHandler = $handler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
     }
@@ -279,7 +279,7 @@ class IOService implements IOServiceInterface, LegacyKernelAware
             array(
                 //@todo is setting the id of file to path correct?
                 'id' => $spiBinaryFile->path,
-                'size' => (int) $spiBinaryFile->size,
+                'size' => (int)$spiBinaryFile->size,
                 'mtime' => $spiBinaryFile->mtime,
                 'ctime' => $spiBinaryFile->ctime,
                 'mimeType' => $spiBinaryFile->mimeType,

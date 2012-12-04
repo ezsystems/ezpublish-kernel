@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
@@ -149,7 +150,6 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'priority',
                 'content'  => '0',
-
             ),
             $result,
             'Invalid or non-existing <LocationCreate> priority value element.',
@@ -170,7 +170,6 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'hidden',
                 'content'  => 'false',
-
             ),
             $result,
             'Invalid or non-existing <LocationCreate> hidden value element.',
@@ -191,7 +190,6 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'sortField',
                 'content'  => 'PATH',
-
             ),
             $result,
             'Invalid or non-existing <LocationCreate> sortField value element.',
@@ -212,7 +210,6 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'sortOrder',
                 'content'  => 'ASC',
-
             ),
             $result,
             'Invalid or non-existing <LocationCreate> sortOrder value element.',

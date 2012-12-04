@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
+
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
@@ -89,8 +90,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
             // The ezsrrating field type does not have any special field definition
             // properties
             array( 'fieldType', 'ezsrrating' ),
-            array( 'fieldTypeConstraints', new Content\FieldTypeConstraints( array(
-            ) ) ),
+            array( 'fieldTypeConstraints', new Content\FieldTypeConstraints( array() ) ),
         );
     }
 
@@ -101,11 +101,13 @@ class RatingIntegrationTest extends BaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => 5,
-            'externalData' => null,
-            'sortKey'      => null,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => 5,
+                'externalData' => null,
+                'sortKey'      => null,
+            )
+        );
     }
 
     /**
@@ -117,11 +119,12 @@ class RatingIntegrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => 2,
-            'externalData' => null,
-            'sortKey'      => null,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => 2,
+                'externalData' => null,
+                'sortKey'      => null,
+            )
+        );
     }
 }
-

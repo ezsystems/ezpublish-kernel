@@ -155,9 +155,9 @@ class EzcDatabase extends Gateway
         )->from(
             $this->dbHandler->quoteTable( "ezurlwildcard" )
         )->limit(
-            $limit > 0
-                ? $limit
-                : self::MAX_LIMIT,
+            $limit > 0 ?
+                $limit :
+                self::MAX_LIMIT,
             $offset
         );
 

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\TextBlock;
+
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\ValidationError;

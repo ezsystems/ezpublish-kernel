@@ -583,7 +583,7 @@ class Handler implements UrlAliasHandlerInterface
         {
             if ( $urlAlias->isCustom )
             {
-                list( $parentId, $textMD5 ) = explode( "-" , $urlAlias->id );
+                list( $parentId, $textMD5 ) = explode( "-", $urlAlias->id );
                 if ( !$this->gateway->removeCustomAlias( $parentId, $textMD5 ) )
                 {
                     return false;
@@ -773,9 +773,7 @@ class Handler implements UrlAliasHandlerInterface
             if ( !isset( $newIdsMap[$oldParentAliasId] ) )
             {
                 $newIdsMap[$oldParentAliasId] = $this->gateway->getNextId();
-
-         }
-
+            }
 
             $row["action"] = $actionMap[$row["action"]];
             $row["parent"] = $newParentAliasId;
@@ -1024,9 +1022,12 @@ class Handler implements UrlAliasHandlerInterface
     {
         switch ( $this->configuration["wordSeparatorName"] )
         {
-            case "dash": return "-";
-            case "underscore": return "_";
-            case "space": return " ";
+            case "dash":
+                return "-";
+            case "underscore":
+                return "_";
+            case "space":
+                return " ";
         }
 
         return "-";

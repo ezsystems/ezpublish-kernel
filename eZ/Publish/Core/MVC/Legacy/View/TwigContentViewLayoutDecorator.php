@@ -93,7 +93,7 @@ EOT;
             return $twig->render(
                 $twigContentTemplate,
                 array(
-                     'viewResult' => $contentViewClosure( $params )
+                    'viewResult' => $contentViewClosure( $params )
                 )
             );
         };
