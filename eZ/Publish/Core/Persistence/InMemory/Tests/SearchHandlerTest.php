@@ -134,7 +134,7 @@ class SearchHandlerTest extends HandlerTest
         $struct->nameSchema = "<short_title|title>";
         $struct->fieldDefinitions = array();
         $struct->groupIds = array( 1 );
-        $struct->fieldDefinitions[] = $field =$this->getTypeFieldDefinition();
+        $struct->fieldDefinitions[] = $field = $this->getTypeFieldDefinition();
         return $struct;
     }
 

@@ -328,7 +328,7 @@ class FieldHandler
     {
         $languageCodes = $existingLanguageCodes = $this->getLanguageCodes( $content->versionInfo->languageIds );
         $contentFieldMap = $this->getFieldMap( $content->fields );
-        $updateFieldMap =$this->getFieldMap( $updateStruct->fields, $languageCodes );
+        $updateFieldMap = $this->getFieldMap( $updateStruct->fields, $languageCodes );
         $contentType = $this->typeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
 
         foreach ( $contentType->fieldDefinitions as $fieldDefinition )
@@ -349,7 +349,7 @@ class FieldHandler
                     }
                 }
                 // If field is not set for new language
-                elseif ( !isset( $existingLanguageCodes[$languageCode] ) )
+                else if ( !isset( $existingLanguageCodes[$languageCode] ) )
                 {
                     if ( $fieldDefinition->isTranslatable )
                     {

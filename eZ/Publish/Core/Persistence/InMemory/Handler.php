@@ -195,7 +195,7 @@ class Handler implements HandlerInterface
                     break;
                 default:
                     $handler = new $className( $this, $this->backend );
-              }
+            }
 
             return $this->serviceHandlers[$className] = $handler;
         }

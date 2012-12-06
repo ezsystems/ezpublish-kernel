@@ -142,7 +142,7 @@ class ContentHandlerRelationTest extends HandlerTest
         $struct->nameSchema = "<short_title|title>";
         $struct->fieldDefinitions = array();
         $struct->groupIds = array( 1 );
-        $struct->fieldDefinitions[] = $field =$this->getTypeFieldDefinition();
+        $struct->fieldDefinitions[] = $field = $this->getTypeFieldDefinition();
         return $struct;
     }
 
@@ -182,7 +182,7 @@ class ContentHandlerRelationTest extends HandlerTest
         $struct->name = $name;
         $struct->ownerId = 14;
         $struct->sectionId = 1;
-        $struct->typeId =$type->id;
+        $struct->typeId = $type->id;
         $struct->initialLanguageId = 2;
         $struct->fields[] = new Field(
             array(
