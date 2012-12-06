@@ -24,6 +24,8 @@ class LegacyStorageEngineFactory
 
     protected $converters = array();
 
+    protected $fieldTypes = array();
+
     public function __construct( ContainerInterface $container )
     {
         $this->container = $container;
@@ -39,6 +41,22 @@ class LegacyStorageEngineFactory
     public function registerFieldTypeConverter( $typeIdentifier, $className )
     {
         $this->converters[$typeIdentifier] = $className;
+    }
+
+    /**
+     * Registers an eZ Publish field type.
+     * Field types are being registered as a closure so that they will be lazy loaded.
+     *
+     * @param string $fieldTypeServiceId The field type service Id
+     * @param string $fieldTypeAlias The field type alias (e.g. "ezstring")
+     */
+    public function registerFieldType( $fieldTypeServiceId, $fieldTypeAlias )
+    {
+        $container = $this->container;
+        $this->fieldTypes[$fieldTypeAlias] = function() use ( $container, $fieldTypeServiceId )
+        {
+            return $container->get( $fieldTypeServiceId );
+        };
     }
 
     /**
@@ -61,6 +79,7 @@ class LegacyStorageEngineFactory
             $this->container->get( 'ezpublish.api.storage_engine.legacy.transformation_processor' ),
             array(
                 'defer_type_update' => (bool)$deferTypeUpdate,
+                'field_type' => $this->fieldTypes,
             )
         );
     }
