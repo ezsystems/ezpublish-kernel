@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Event;
 
-use Symfony\Component\EventDispatcher\Event,
-    eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface,
-    Exception;
+use Symfony\Component\EventDispatcher\Event;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface;
+use Exception;
 
 /**
  * This event is dispatched when an Exception from eZ Publish API is thrown and could not be caught before.

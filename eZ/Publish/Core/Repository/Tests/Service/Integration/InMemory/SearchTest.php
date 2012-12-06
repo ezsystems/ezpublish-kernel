@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration\InMemory;
+
 use eZ\Publish\Core\Repository\Tests\Service\Integration\SearchBase as BaseSearchServiceTest;
 
 /**

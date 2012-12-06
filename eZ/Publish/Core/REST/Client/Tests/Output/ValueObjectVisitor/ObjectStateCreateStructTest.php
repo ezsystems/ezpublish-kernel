@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\API\Repository\Values\ObjectState;
@@ -106,7 +107,6 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'identifier',
                 'content'  => 'some-state',
-
             ),
             $result,
             'Invalid or non-existing <ObjectStateCreate> identifier value element.',
@@ -127,7 +127,6 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'priority',
                 'content'  => '0',
-
             ),
             $result,
             'Invalid or non-existing <ObjectStateCreate> priority value element.',
@@ -148,7 +147,6 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'defaultLanguageCode',
                 'content'  => 'eng-GB',
-
             ),
             $result,
             'Invalid or non-existing <ObjectStateCreate> defaultLanguageCode value element.',

@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\REST\Client;
-use eZ\Publish\API\Repository;
+
+use eZ\Publish\API\Repository\FieldType as APIFieldType;
 use eZ\Publish\SPI;
 
-class FieldType implements Repository\FieldType
+class FieldType implements APIFieldType
 {
     /**
      * Wrapped FieldType.

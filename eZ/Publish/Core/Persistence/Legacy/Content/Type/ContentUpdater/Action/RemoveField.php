@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
 /**
  * Action to remove a field from content objects
@@ -72,7 +73,8 @@ class RemoveField extends Action
             }
         }
 
-        foreach ( $fieldIdsToRemoveMap as $fieldType => $ids ) {
+        foreach ( $fieldIdsToRemoveMap as $fieldType => $ids )
+        {
             $this->storageHandler->deleteFieldData( $fieldType, $content->versionInfo, $ids );
         }
     }

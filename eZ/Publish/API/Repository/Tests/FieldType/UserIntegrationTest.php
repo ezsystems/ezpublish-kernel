@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\User\Value as UserValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+
+use eZ\Publish\Core\FieldType\User\Value as UserValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type
@@ -182,13 +183,15 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getValidUpdateFieldData()
     {
-        return new UserValue( array(
-            'login'            => 'change', // Change is intended to not get through
-            'email'            => 'change', // Change is intended to not get through
-            'passwordHash'     => 'change', // Change is intended to not get through
-            'passwordHashType' => 'change', // Change is intended to not get through
-            'enabled'        => 'change', // Change is intended to not get through
-        ) );
+        return new UserValue(
+            array(
+                'login'            => 'change', // Change is intended to not get through
+                'email'            => 'change', // Change is intended to not get through
+                'passwordHash'     => 'change', // Change is intended to not get through
+                'passwordHashType' => 'change', // Change is intended to not get through
+                'enabled'        => 'change', // Change is intended to not get through
+            )
+        );
     }
 
     /**
@@ -266,7 +269,6 @@ class UserIntegrationTest extends BaseIntegrationTest
             $expectedData,
             $field->value
         );
-        return ;
     }
 
     /**

@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\SPI\Persistence\User\Policy,
-    eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
-    eZ\Publish\SPI\Persistence\User\Role;
+
+use eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\SPI\Persistence\User\Policy;
+use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
+use eZ\Publish\SPI\Persistence\User\Role;
 
 /**
  * Base class for content type gateways.
@@ -322,7 +323,6 @@ class EzcDatabase extends Gateway
      */
     public function loadRoleAssignmentsByGroupId( $groupId, $inherited = false )
     {
-
         $query = $this->handler->createSelectQuery();
         $query->select(
             $this->handler->quoteColumn( 'contentobject_id' ),

@@ -8,7 +8,6 @@
  * @package eZ\Publish\API\Repository
  */
 
-
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
 use eZ\Publish\API\Repository\ObjectStateService;
@@ -152,10 +151,14 @@ class ObjectStateServiceStub implements ObjectStateService
      */
     protected function determineLanguageCodes( $names, $descriptions )
     {
-        return array_unique( array_keys( array_merge(
-            $names ?: array(),
-            $descriptions ?: array()
-        ) ) );
+        return array_unique(
+            array_keys(
+                array_merge(
+                    $names ?: array(),
+                    $descriptions ?: array()
+                )
+            )
+        );
     }
 
     /**
@@ -175,7 +178,6 @@ class ObjectStateServiceStub implements ObjectStateService
         }
         return $this->groups[$objectStateGroupId];
     }
-
 
     /**
      * Loads all object state groups
@@ -552,7 +554,6 @@ class ObjectStateServiceStub implements ObjectStateService
 
         return $selectedState;
     }
-
 
     /**
      * Sets the object-state of a state group to $state for the given content.

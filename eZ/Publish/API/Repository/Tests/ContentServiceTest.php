@@ -9,13 +9,13 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\Content\Field;
-use \eZ\Publish\API\Repository\Values\Content\Location;
-use \eZ\Publish\API\Repository\Values\Content\URLAlias;
-use \eZ\Publish\API\Repository\Values\Content\Relation;
-use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\URLAlias;
+use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
-use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for operations in the ContentService using in memory storage.
@@ -327,7 +327,6 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentThrowsContentValidationException()
     {
-
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -439,7 +438,6 @@ class ContentServiceTest extends BaseContentServiceTest
         );
         /* END: Use Case */
     }
-
 
     /**
      * Test for the loadContentInfo() method.
@@ -1325,7 +1323,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // Now create an update struct and modify some fields
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
         // The name field does not accept a stdClass object as its input
-        $contentUpdateStruct->setField( 'name', new\stdClass(), 'eng-US' );
+        $contentUpdateStruct->setField( 'name', new \stdClass(), 'eng-US' );
 
         // Throws an InvalidArgumentException, since the value for field "name"
         // is not accepted
@@ -2050,13 +2048,16 @@ class ContentServiceTest extends BaseContentServiceTest
                 )
             );
         }
-        usort( $actual, function ( $field1, $field2 ) {
-            if ( 0 === ( $return = strcasecmp( $field1->fieldDefIdentifier, $field2->fieldDefIdentifier ) ) )
-            {
-                return strcasecmp( $field1->languageCode, $field2->languageCode );
+        usort(
+            $actual,
+            function ( $field1, $field2 ) {
+                if ( 0 === ( $return = strcasecmp( $field1->fieldDefIdentifier, $field2->fieldDefIdentifier ) ) )
+                {
+                    return strcasecmp( $field1->languageCode, $field2->languageCode );
+                }
+                return $return;
             }
-            return $return;
-        } );
+        );
 
         $expected = array(
             new Field(
@@ -2288,7 +2289,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         $draft = $this->createMultipleLanguageDraftVersion1();
 
-        $contentService->publishVersion($draft->versionInfo);
+        $contentService->publishVersion( $draft->versionInfo );
 
         // This draft contains those fields localized with "eng-GB"
         $draftLocalized = $contentService->loadContentByRemoteId(
@@ -2720,12 +2721,15 @@ class ContentServiceTest extends BaseContentServiceTest
         $relations = $contentService->loadRelations( $draft->getVersionInfo() );
         /* END: Use Case */
 
-        usort( $relations, function( $rel1, $rel2 ) {
-            return strcasecmp(
-                $rel2->getDestinationContentInfo()->remoteId,
-                $rel1->getDestinationContentInfo()->remoteId
-            );
-        } );
+        usort(
+            $relations,
+            function( $rel1, $rel2 ) {
+                return strcasecmp(
+                    $rel2->getDestinationContentInfo()->remoteId,
+                    $rel1->getDestinationContentInfo()->remoteId
+                );
+            }
+        );
 
         $this->assertEquals(
             array(
@@ -2811,12 +2815,15 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals( 0, count( $relations ) );
         $this->assertEquals( 2, count( $reverseRelations ) );
 
-        usort( $reverseRelations, function( $rel1, $rel2 ) {
-            return strcasecmp(
-                $rel2->getSourceContentInfo()->remoteId,
-                $rel1->getSourceContentInfo()->remoteId
-            );
-        } );
+        usort(
+            $reverseRelations,
+            function( $rel1, $rel2 ) {
+                return strcasecmp(
+                    $rel2->getSourceContentInfo()->remoteId,
+                    $rel1->getSourceContentInfo()->remoteId
+                );
+            }
+        );
 
         $this->assertEquals(
             array(
@@ -4254,13 +4261,16 @@ class ContentServiceTest extends BaseContentServiceTest
                 )
             );
         }
-        usort( $normalized, function ( $field1, $field2 ) {
-            if ( 0 === ( $return = strcasecmp( $field1->fieldDefIdentifier, $field2->fieldDefIdentifier ) ) )
-            {
-                return strcasecmp( $field1->languageCode, $field2->languageCode );
+        usort(
+            $normalized,
+            function ( $field1, $field2 ) {
+                if ( 0 === ( $return = strcasecmp( $field1->fieldDefIdentifier, $field2->fieldDefIdentifier ) ) )
+                {
+                    return strcasecmp( $field1->languageCode, $field2->languageCode );
+                }
+                return $return;
             }
-            return $return;
-        } );
+        );
 
         return $normalized;
     }

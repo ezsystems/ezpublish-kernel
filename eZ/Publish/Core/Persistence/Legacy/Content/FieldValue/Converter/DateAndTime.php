@@ -8,17 +8,18 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\FieldType\DateAndTime\Type as DateAndTimeType,
-    eZ\Publish\Core\FieldType\FieldSettings,
-    DateTime,
-    DateInterval,
-    DOMDocument,
-    SimpleXMLElement;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+use eZ\Publish\Core\FieldType\DateAndTime\Type as DateAndTimeType;
+use eZ\Publish\Core\FieldType\FieldSettings;
+use DateTime;
+use DateInterval;
+use DOMDocument;
+use SimpleXMLElement;
 
 class DateAndTime implements Converter
 {

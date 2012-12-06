@@ -21,6 +21,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
  *
  * @package eZ\Publish\API\Repository\Values\Content\Query
  */
-class CritierionFacetBuilder extends FacetBuilder {
-
+class CritierionFacetBuilder extends FacetBuilder
+{
 }

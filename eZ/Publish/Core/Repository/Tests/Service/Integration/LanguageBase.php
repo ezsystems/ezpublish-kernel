@@ -51,7 +51,9 @@ abstract class LanguageBase extends BaseServiceTest
             $value = $language->notDefined;
             self::fail( "Succeeded getting non existing property" );
         }
-        catch( PropertyNotFound $e ) {}
+        catch ( PropertyNotFound $e )
+        {
+        }
     }
 
     /**
@@ -66,7 +68,9 @@ abstract class LanguageBase extends BaseServiceTest
             $language->id = 42;
             self::fail( "Succeeded setting read only property" );
         }
-        catch( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
     }
 
     /**
@@ -95,7 +99,9 @@ abstract class LanguageBase extends BaseServiceTest
             unset( $language->id );
             self::fail( 'Unsetting read-only property succeeded' );
         }
-        catch ( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
     }
 
     /**

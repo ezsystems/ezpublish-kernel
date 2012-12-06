@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\FieldType\Price;
 
-use eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\FieldType\Indexable,
-    eZ\Publish\SPI\Persistence\Content\Search;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\FieldType\Indexable;
+use eZ\Publish\SPI\Persistence\Content\Search;
 
 /**
  * Indexable definition for string field type

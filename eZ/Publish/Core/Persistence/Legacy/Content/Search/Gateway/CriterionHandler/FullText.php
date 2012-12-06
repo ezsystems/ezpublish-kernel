@@ -8,12 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    ezcQuerySelect;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use ezcQuerySelect;
 
 /**
  * Full text criterion handler

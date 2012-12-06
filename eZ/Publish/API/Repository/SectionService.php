@@ -100,7 +100,6 @@ interface SectionService
      */
     public function assignSection( ContentInfo $contentInfo, Section $section );
 
-
     /**
      * Deletes $section from content repository
      *

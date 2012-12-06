@@ -8,18 +8,19 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\SPI\Persistence\Content\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\API\Repository\Values\Content\Relation as RelationValue,
-    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\SPI\Persistence\Content\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\Content\Relation as RelationValue;
+use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase.
@@ -950,7 +951,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $gateway->deleteRelations( 149 );
 
         $this->assertEquals(
-        // yes, relates to itself!
+            // yes, relates to itself!
             array(
                 'all' => $beforeCount['all'] - 2,
                 'from' => $beforeCount['from'] - 1,
@@ -1507,18 +1508,18 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                 ),
             ),
             $this->getDatabaseHandler()
-            ->createSelectQuery()
-            ->select(
-                array(
-                    'id',
-                    'from_contentobject_id',
-                    'from_contentobject_version',
-                    'contentclassattribute_id',
-                    'to_contentobject_id',
-                    'relation_type',
-                )
-            )->from( 'ezcontentobject_link' )
-            ->where( 'id = 1')
+                ->createSelectQuery()
+                ->select(
+                    array(
+                        'id',
+                        'from_contentobject_id',
+                        'from_contentobject_version',
+                        'contentclassattribute_id',
+                        'to_contentobject_id',
+                        'relation_type',
+                    )
+                )->from( 'ezcontentobject_link' )
+                ->where( 'id = 1' )
         );
     }
 

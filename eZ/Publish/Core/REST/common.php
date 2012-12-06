@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST;
+
 use eZ\Publish\Core\FieldType;
 
 if ( !defined( 'HTTP_BASE_URL' ) )
@@ -35,7 +36,6 @@ $generator = getenv( 'backendEncoding' ) === 'xml' ?
 // The URL Handler is responsible for URL parsing and generation. It will be
 // used in the output generators and in some parsing handlers.
 $urlHandler = new Common\UrlHandler\eZPublish();
-
 
 // FieldTypes to be used in integration tests. The field types are only used
 // in terms of conversions from and to hash values.
@@ -121,7 +121,6 @@ $repository = new Client\IntegrationTestRepository(
     $authenticator
 );
 
-
 // Object with convenience methods for parsers
 $parserTools = new Common\Input\ParserTools();
 
@@ -152,7 +151,7 @@ $inputParsers = array(
     'application/vnd.ez.api.ContentInfo'          => new Client\Input\Parser\ContentInfo(
         $parserTools,
         $repository->getContentTypeService()
-     ),
+    ),
     'application/vnd.ez.api.ContentType'          => new Client\Input\Parser\ContentType(
         $parserTools,
         $repository->getContentTypeService()
@@ -202,7 +201,7 @@ foreach ( $inputParsers as $mimeType => $parser )
 $repository->setCurrentUser(
     new \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub(
         array(
-            'content'  =>  new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
+            'content'  => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub(
                 array(
                     'id' => 14
                 )

@@ -2,7 +2,7 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
   <xsd:include schemaLocation="CommonDefinitions.xsd" />
-  
+
   <xsd:complexType name="vnd.ez.api.UserCreate">
     <xsd:all>
       <xsd:element name="ContentType" type="ref" minOccurs="0" />

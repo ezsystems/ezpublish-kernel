@@ -119,7 +119,9 @@ class UserGroup extends APIUserGroup
             case 'id':
                 $versionInfo = $this->getVersionInfo();
                 if ( empty( $versionInfo ) )
+                {
                     return null;
+                }
                 return $versionInfo->getContentInfo()->id;
 
             case 'versionInfo':

@@ -9,6 +9,7 @@
  */
 
 namespace eZ\Publish\SPI\FieldType;
+
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 

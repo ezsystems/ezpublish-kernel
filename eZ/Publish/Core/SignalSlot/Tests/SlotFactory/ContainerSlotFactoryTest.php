@@ -54,7 +54,9 @@ class ContainerSlotFactoryTest extends \PHPUnit_Framework_TestCase
                 $factory->getSlot( $slotIdentifier );
                 $this->fail( 'expected NotFoundException ' );
             }
-            catch ( NotFoundException $e ){}
+            catch ( NotFoundException $e )
+            {
+            }
         }
     }
 

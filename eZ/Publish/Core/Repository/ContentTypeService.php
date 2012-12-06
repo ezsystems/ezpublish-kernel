@@ -10,42 +10,42 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\SPI\Persistence\Content\Type\Handler,
-    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
-    eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException,
-    eZ\Publish\API\Repository\Values\User\User,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct,
-    eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType,
-    eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentTypeDraft,
-    eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup as APIContentTypeGroup,
-    eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct,
-    eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct as APIContentTypeCreateStruct,
-    eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct,
-    eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct,
-    eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup,
-    eZ\Publish\Core\Repository\Values\ContentType\ContentType,
-    eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft,
-    eZ\Publish\Core\Repository\Values\ContentType\ContentTypeCreateStruct,
-    eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\Type as SPIContentType,
-    eZ\Publish\SPI\Persistence\Content\Type\CreateStruct as SPIContentTypeCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct as SPIContentTypeUpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as SPIFieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\Type\Group as SPIContentTypeGroup,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as SPIContentTypeGroupCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as SPIContentTypeGroupUpdateStruct,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\BadStateException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\ContentTypeFieldDefinitionValidationException,
-    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
-    DateTime,
-    Exception;
+use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentTypeDraft;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup as APIContentTypeGroup;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct as APIContentTypeCreateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeCreateStruct;
+use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\Type as SPIContentType;
+use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct as SPIContentTypeCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct as SPIContentTypeUpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as SPIFieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\Type\Group as SPIContentTypeGroup;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as SPIContentTypeGroupCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as SPIContentTypeGroupUpdateStruct;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\ContentTypeFieldDefinitionValidationException;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use DateTime;
+use Exception;
 
 /**
  * @example Examples/contenttype.php
@@ -80,7 +80,8 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         $this->repository = $repository;
         $this->contentTypeHandler = $contentTypeHandler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
     }
@@ -270,13 +271,13 @@ class ContentTypeService implements ContentTypeServiceInterface
         $spiGroupUpdateStruct = new SPIContentTypeGroupUpdateStruct(
             array(
                 "id" => $loadedContentTypeGroup->id,
-                "identifier" => $contentTypeGroupUpdateStruct->identifier === null
-                    ? $loadedContentTypeGroup->identifier
-                    : $contentTypeGroupUpdateStruct->identifier,
+                "identifier" => $contentTypeGroupUpdateStruct->identifier === null ?
+                    $loadedContentTypeGroup->identifier :
+                    $contentTypeGroupUpdateStruct->identifier,
                 "modified" => $modifiedTimestamp,
-                "modifierId" => $contentTypeGroupUpdateStruct->modifierId === null
-                    ? $this->repository->getCurrentUser()->id
-                    : $contentTypeGroupUpdateStruct->modifierId
+                "modifierId" => $contentTypeGroupUpdateStruct->modifierId === null ?
+                    $this->repository->getCurrentUser()->id :
+                    $contentTypeGroupUpdateStruct->modifierId
             )
         );
 
@@ -649,33 +650,33 @@ class ContentTypeService implements ContentTypeServiceInterface
             array(
                 "id" => $fieldDefinition->id,
                 "fieldType" => $fieldDefinition->fieldTypeIdentifier,
-                "name" => $fieldDefinitionUpdateStruct->names === null
-                    ? $fieldDefinition->getNames()
-                    : $fieldDefinitionUpdateStruct->names,
-                "description" => $fieldDefinitionUpdateStruct->descriptions === null
-                    ? $fieldDefinition->getDescriptions()
-                    : $fieldDefinitionUpdateStruct->descriptions,
-                "identifier" => $fieldDefinitionUpdateStruct->identifier === null
-                    ? $fieldDefinition->identifier
-                    : $fieldDefinitionUpdateStruct->identifier,
-                "fieldGroup" => $fieldDefinitionUpdateStruct->fieldGroup === null
-                    ? $fieldDefinition->fieldGroup
-                    : $fieldDefinitionUpdateStruct->fieldGroup,
-                "position" => $fieldDefinitionUpdateStruct->position === null
-                    ? $fieldDefinition->position
-                    : $fieldDefinitionUpdateStruct->position,
-                "isTranslatable" => $fieldDefinitionUpdateStruct->isTranslatable === null
-                    ? $fieldDefinition->isTranslatable
-                    : $fieldDefinitionUpdateStruct->isTranslatable,
-                "isRequired" => $fieldDefinitionUpdateStruct->isRequired === null
-                    ? $fieldDefinition->isRequired
-                    : $fieldDefinitionUpdateStruct->isRequired,
-                "isInfoCollector" => $fieldDefinitionUpdateStruct->isInfoCollector === null
-                    ? $fieldDefinition->isInfoCollector
-                    : $fieldDefinitionUpdateStruct->isInfoCollector,
-                "isSearchable" => $fieldDefinitionUpdateStruct->isSearchable === null
-                    ? $fieldDefinition->isSearchable
-                    : $fieldDefinitionUpdateStruct->isSearchable,
+                "name" => $fieldDefinitionUpdateStruct->names === null ?
+                    $fieldDefinition->getNames() :
+                    $fieldDefinitionUpdateStruct->names,
+                "description" => $fieldDefinitionUpdateStruct->descriptions === null ?
+                    $fieldDefinition->getDescriptions() :
+                    $fieldDefinitionUpdateStruct->descriptions,
+                "identifier" => $fieldDefinitionUpdateStruct->identifier === null ?
+                    $fieldDefinition->identifier :
+                    $fieldDefinitionUpdateStruct->identifier,
+                "fieldGroup" => $fieldDefinitionUpdateStruct->fieldGroup === null ?
+                    $fieldDefinition->fieldGroup :
+                    $fieldDefinitionUpdateStruct->fieldGroup,
+                "position" => $fieldDefinitionUpdateStruct->position === null ?
+                    $fieldDefinition->position :
+                    $fieldDefinitionUpdateStruct->position,
+                "isTranslatable" => $fieldDefinitionUpdateStruct->isTranslatable === null ?
+                    $fieldDefinition->isTranslatable :
+                    $fieldDefinitionUpdateStruct->isTranslatable,
+                "isRequired" => $fieldDefinitionUpdateStruct->isRequired === null ?
+                    $fieldDefinition->isRequired :
+                    $fieldDefinitionUpdateStruct->isRequired,
+                "isInfoCollector" => $fieldDefinitionUpdateStruct->isInfoCollector === null ?
+                    $fieldDefinition->isInfoCollector :
+                    $fieldDefinitionUpdateStruct->isInfoCollector,
+                "isSearchable" => $fieldDefinitionUpdateStruct->isSearchable === null ?
+                    $fieldDefinition->isSearchable :
+                    $fieldDefinitionUpdateStruct->isSearchable,
                 // These properties are precreated in constructor
                 //"fieldTypeConstraints"
                 //"defaultValue"
@@ -1069,51 +1070,51 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         $updateStruct = new SPIContentTypeUpdateStruct();
 
-        $updateStruct->identifier = $contentTypeUpdateStruct->identifier !== null
-            ? $contentTypeUpdateStruct->identifier
-            : $contentTypeDraft->identifier;
-        $updateStruct->remoteId = $contentTypeUpdateStruct->remoteId !== null
-            ? $contentTypeUpdateStruct->remoteId
-            : $contentTypeDraft->remoteId;
+        $updateStruct->identifier = $contentTypeUpdateStruct->identifier !== null ?
+            $contentTypeUpdateStruct->identifier :
+            $contentTypeDraft->identifier;
+        $updateStruct->remoteId = $contentTypeUpdateStruct->remoteId !== null ?
+            $contentTypeUpdateStruct->remoteId :
+            $contentTypeDraft->remoteId;
 
-        $updateStruct->name = $contentTypeUpdateStruct->names !== null
-            ? $contentTypeUpdateStruct->names
-            : $contentTypeDraft->names;
-        $updateStruct->description = $contentTypeUpdateStruct->descriptions !== null
-            ? $contentTypeUpdateStruct->descriptions
-            : $contentTypeDraft->descriptions;
+        $updateStruct->name = $contentTypeUpdateStruct->names !== null ?
+            $contentTypeUpdateStruct->names :
+            $contentTypeDraft->names;
+        $updateStruct->description = $contentTypeUpdateStruct->descriptions !== null ?
+            $contentTypeUpdateStruct->descriptions :
+            $contentTypeDraft->descriptions;
 
-        $updateStruct->modified = $contentTypeUpdateStruct->modificationDate !== null
-            ? $contentTypeUpdateStruct->modificationDate->getTimestamp()
-            : time();
-        $updateStruct->modifierId = $contentTypeUpdateStruct->modifierId !== null
-            ? $contentTypeUpdateStruct->modifierId
-            : $this->repository->getCurrentUser()->id;
+        $updateStruct->modified = $contentTypeUpdateStruct->modificationDate !== null ?
+            $contentTypeUpdateStruct->modificationDate->getTimestamp() :
+            time();
+        $updateStruct->modifierId = $contentTypeUpdateStruct->modifierId !== null ?
+            $contentTypeUpdateStruct->modifierId :
+            $this->repository->getCurrentUser()->id;
 
-        $updateStruct->urlAliasSchema = $contentTypeUpdateStruct->urlAliasSchema !== null
-            ? $contentTypeUpdateStruct->urlAliasSchema
-            : $contentTypeDraft->urlAliasSchema;
-        $updateStruct->nameSchema = $contentTypeUpdateStruct->nameSchema !== null
-            ? $contentTypeUpdateStruct->nameSchema
-            : $contentTypeDraft->nameSchema;
+        $updateStruct->urlAliasSchema = $contentTypeUpdateStruct->urlAliasSchema !== null ?
+            $contentTypeUpdateStruct->urlAliasSchema :
+            $contentTypeDraft->urlAliasSchema;
+        $updateStruct->nameSchema = $contentTypeUpdateStruct->nameSchema !== null ?
+            $contentTypeUpdateStruct->nameSchema :
+            $contentTypeDraft->nameSchema;
 
-        $updateStruct->isContainer = $contentTypeUpdateStruct->isContainer !== null
-            ? $contentTypeUpdateStruct->isContainer
-            : $contentTypeDraft->isContainer;
-        $updateStruct->sortField = $contentTypeUpdateStruct->defaultSortField !== null
-            ? $contentTypeUpdateStruct->defaultSortField
-            : $contentTypeDraft->defaultSortField;
-        $updateStruct->sortOrder = $contentTypeUpdateStruct->defaultSortOrder !== null
-            ? (int)$contentTypeUpdateStruct->defaultSortOrder
-            : $contentTypeDraft->defaultSortOrder;
+        $updateStruct->isContainer = $contentTypeUpdateStruct->isContainer !== null ?
+            $contentTypeUpdateStruct->isContainer :
+            $contentTypeDraft->isContainer;
+        $updateStruct->sortField = $contentTypeUpdateStruct->defaultSortField !== null ?
+            $contentTypeUpdateStruct->defaultSortField :
+            $contentTypeDraft->defaultSortField;
+        $updateStruct->sortOrder = $contentTypeUpdateStruct->defaultSortOrder !== null ?
+            (int)$contentTypeUpdateStruct->defaultSortOrder :
+            $contentTypeDraft->defaultSortOrder;
 
-        $updateStruct->defaultAlwaysAvailable = $contentTypeUpdateStruct->defaultAlwaysAvailable !== null
-            ? $contentTypeUpdateStruct->defaultAlwaysAvailable
-            : $contentTypeDraft->defaultAlwaysAvailable;
+        $updateStruct->defaultAlwaysAvailable = $contentTypeUpdateStruct->defaultAlwaysAvailable !== null ?
+            $contentTypeUpdateStruct->defaultAlwaysAvailable :
+            $contentTypeDraft->defaultAlwaysAvailable;
         $updateStruct->initialLanguageId = $this->repository->getContentLanguageService()->loadLanguage(
-            $contentTypeUpdateStruct->mainLanguageCode !== null
-                ? $contentTypeUpdateStruct->mainLanguageCode
-                : $contentTypeDraft->mainLanguageCode
+            $contentTypeUpdateStruct->mainLanguageCode !== null ?
+                $contentTypeUpdateStruct->mainLanguageCode :
+                $contentTypeDraft->mainLanguageCode
         )->id;
 
         return $updateStruct;

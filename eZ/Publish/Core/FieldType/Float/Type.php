@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Float;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\FieldType\ValidationError,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * Float field types
@@ -161,7 +162,7 @@ class Type extends FieldType
     {
         $value = $this->acceptValue( $value );
 
-        return (string) $value->value;
+        return (string)$value->value;
     }
 
     /**

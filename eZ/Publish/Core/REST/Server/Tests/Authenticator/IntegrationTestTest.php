@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Authenticator;
+
 use eZ\Publish\Core\REST\Server\Tests\BaseTest;
 
 use eZ\Publish\Core\REST\Server\Authenticator\IntegrationTest;
@@ -37,9 +38,11 @@ class IntegrationTestTest extends BaseTest
             ->expects( $this->once() )
             ->method( 'loadUser' )
             ->with( 23 )
-            ->will( $this->returnValue(
-                $user = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\User\\User' )
-            ) );
+            ->will(
+                $this->returnValue(
+                    $user = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\User\\User' )
+                )
+            );
 
         $this->getRepositoryMock()
             ->expects( $this->once() )
@@ -71,12 +74,14 @@ class IntegrationTestTest extends BaseTest
 
             $this->repositoryMock->expects( $this->any() )
                 ->method( 'getUserService' )
-                ->will( $this->returnCallback(
-                    function () use ( $userServiceMock )
-                    {
-                        return $userServiceMock;
-                    }
-                ) );
+                ->will(
+                    $this->returnCallback(
+                        function () use ( $userServiceMock )
+                        {
+                            return $userServiceMock;
+                        }
+                    )
+                );
         }
         return $this->repositoryMock;
     }

@@ -8,16 +8,17 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
-use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * Test case for SearchHandler using in memory storage.
@@ -96,9 +97,13 @@ class SearchHandlerTest extends HandlerTest
      */
     public function testFindContent()
     {
-        $result = $this->persistenceHandler->searchHandler()->findContent( new Query( array(
-            'criterion' => new ContentId( $this->content->versionInfo->contentInfo->id ),
-        ) ) );
+        $result = $this->persistenceHandler->searchHandler()->findContent(
+            new Query(
+                array(
+                    'criterion' => new ContentId( $this->content->versionInfo->contentInfo->id ),
+                )
+            )
+        );
 
         $this->assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchResult', $result );
         $this->assertEquals( 1, $result->totalCount );

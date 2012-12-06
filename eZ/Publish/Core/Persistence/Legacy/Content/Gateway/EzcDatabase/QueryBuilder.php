@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase;
+
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 
 class QueryBuilder
@@ -117,9 +118,10 @@ class QueryBuilder
                     $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' )
                 )
             )
+        )
         // @todo: Joining with ezcontentobject_name is probably a VERY bad way to gather that information
         // since it creates an additional cartesian product with translations.
-        )->leftJoin(
+        ->leftJoin(
             $this->dbHandler->quoteTable( 'ezcontentobject_name' ),
             $query->expr->lAnd(
                 // ezcontentobject_name.content_translation is also part of the PK but can't be
@@ -237,9 +239,10 @@ class QueryBuilder
                     $this->dbHandler->quoteColumn( 'node_id', 'ezcontentobject_tree' )
                 )
             )
+        )
         // @todo: Joining with ezcontentobject_name is probably a VERY bad way to gather that information
         // since it creates an additional cartesian product with translations.
-        )->leftJoin(
+        ->leftJoin(
             $this->dbHandler->quoteTable( 'ezcontentobject_name' ),
             $query->expr->lAnd(
                 // ezcontentobject_name.content_translation is also part of the PK but can't be

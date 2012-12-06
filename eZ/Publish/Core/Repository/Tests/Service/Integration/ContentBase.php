@@ -552,7 +552,7 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function testLoadContentByRemoteId( $remoteId, array $languages = null, $versionNo )
+    public function testLoadContentByRemoteId( $remoteId, array $languages, $versionNo )
     {
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
@@ -2298,7 +2298,11 @@ abstract class ContentBase extends BaseServiceTest
 
         $originalVersionInfos = $contentService->loadVersions( $contentInfo );
         $copiedVersionInfos = $contentService->loadVersions( $copiedContent->contentInfo );
-        $sorter = function( $a, $b ) { return strcmp( $a->versionNo, $b->versionNo ); };
+        $sorter =
+            function( $a, $b )
+            {
+                return strcmp( $a->versionNo, $b->versionNo );
+            };
         usort( $originalVersionInfos, $sorter );
         usort( $copiedVersionInfos, $sorter );
         $this->assertCount(

@@ -74,15 +74,7 @@ class LegacyAdapter implements LegacyCompatible
      */
     public function hasAttribute( $name )
     {
-        if (
-            isset( $this->properties[$name] )
-            || isset( $this->getters['get' . ucfirst( $name )] )
-        )
-        {
-            return true;
-        }
-
-        return false;
+        return isset( $this->properties[$name] ) || isset( $this->getters['get' . ucfirst( $name )] );
     }
 
     /**

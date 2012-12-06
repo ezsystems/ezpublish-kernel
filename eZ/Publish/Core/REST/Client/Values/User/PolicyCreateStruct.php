@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\User;
 
-use \eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\API\Repository\Values\User\Limitation;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct}
@@ -36,8 +36,8 @@ class PolicyCreateStruct extends \eZ\Publish\API\Repository\Values\User\PolicyCr
     {
         parent::__construct(
             array(
-                'module'    =>  $module,
-                'function'  =>  $function
+                'module'    => $module,
+                'function'  => $function
             )
         );
     }

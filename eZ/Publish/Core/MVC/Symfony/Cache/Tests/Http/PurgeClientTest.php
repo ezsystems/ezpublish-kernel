@@ -24,30 +24,25 @@ class PurgeClientTest extends HttpBasedPurgeClientTest
             ->expects( $this->once() )
             ->method( 'getParameter' )
             ->with( 'http_cache.purge_servers' )
-            ->will( $this->returnValue( array( $purgeServer ) ) )
-        ;
+            ->will( $this->returnValue( array( $purgeServer ) ) );
 
         $locations = array( 123, 456, 789 );
 
         $this->httpBrowser
             ->expects( $this->at( 0 ) )
             ->method( 'call' )
-            ->with( $purgeServer, 'PURGE', array( 'X-Location-Id' => $locations[0] ) )
-        ;
+            ->with( $purgeServer, 'PURGE', array( 'X-Location-Id' => $locations[0] ) );
         $this->httpBrowser
             ->expects( $this->at( 1 ) )
             ->method( 'call' )
-            ->with( $purgeServer, 'PURGE', array( 'X-Location-Id' => $locations[1] ) )
-        ;
+            ->with( $purgeServer, 'PURGE', array( 'X-Location-Id' => $locations[1] ) );
         $this->httpBrowser
             ->expects( $this->at( 2 ) )
             ->method( 'call' )
-            ->with( $purgeServer, 'PURGE', array( 'X-Location-Id' => $locations[2] ) )
-        ;
+            ->with( $purgeServer, 'PURGE', array( 'X-Location-Id' => $locations[2] ) );
         $this->httpClient
             ->expects( $this->once() )
-            ->method( 'flush' )
-        ;
+            ->method( 'flush' );
 
         $purgeClient = new PurgeClient( $this->configResolver, $this->httpBrowser );
         $purgeClient->purge( $locations );
@@ -64,14 +59,12 @@ class PurgeClientTest extends HttpBasedPurgeClientTest
             ->expects( $this->once() )
             ->method( 'getParameter' )
             ->with( 'http_cache.purge_servers' )
-            ->will( $this->returnValue( array( $purgeServer ) ) )
-        ;
+            ->will( $this->returnValue( array( $purgeServer ) ) );
 
         $this->httpBrowser
             ->expects( $this->once() )
             ->method( 'call' )
-            ->with( $purgeServer, 'PURGE', array( 'X-Location-Id' => '*' ) )
-        ;
+            ->with( $purgeServer, 'PURGE', array( 'X-Location-Id' => '*' ) );
 
         $purgeClient = new PurgeClient( $this->configResolver, $this->httpBrowser );
         $purgeClient->purgeAll();

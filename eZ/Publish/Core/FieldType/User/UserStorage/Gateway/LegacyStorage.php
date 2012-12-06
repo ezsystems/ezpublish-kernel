@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\User\UserStorage\Gateway;
+
 use eZ\Publish\Core\FieldType\User\UserStorage\Gateway;
 
 class LegacyStorage extends Gateway
@@ -45,7 +46,11 @@ class LegacyStorage extends Gateway
         return array(
             'has_stored_login' => array(
                 'name' => 'hasStoredlogin',
-                'cast' => function ( $input ) { return ( $input == "1" ); },
+                'cast' =>
+                    function ( $input )
+                    {
+                        return ( $input == "1" );
+                    },
             ),
             'contentobject_id' => array(
                 'name' => 'contentId',
@@ -69,7 +74,11 @@ class LegacyStorage extends Gateway
             ),
             'is_enabled' => array(
                 'name' => 'enabled',
-                'cast' => function ( $input ) { return ( $input == "1" ); }
+                'cast' =>
+                    function ( $input )
+                    {
+                        return ( $input == "1" );
+                    }
             ),
             'max_login' => array(
                 'name' => 'maxLogin',

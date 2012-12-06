@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\MapLocation;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * MapLocation field types

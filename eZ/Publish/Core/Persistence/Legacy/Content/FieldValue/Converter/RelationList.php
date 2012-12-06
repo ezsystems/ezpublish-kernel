@@ -8,14 +8,15 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    DOMDocument;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+use eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use DOMDocument;
 
 class RelationList implements Converter
 {
@@ -50,7 +51,7 @@ class RelationList implements Converter
         foreach ( $this->getRelationXmlHashFromDB( $value->data['destinationContentIds'] ) as $row )
         {
             $relationItem = $doc->createElement( 'relation-item' );
-            foreach( self::dbAttributeMap() as $domAttrKey => $propertyKey )
+            foreach ( self::dbAttributeMap() as $domAttrKey => $propertyKey )
             {
                 if ( !isset( $row[$propertyKey] ) )
                     throw new \RuntimeException( "Missing relation-item external data property: $propertyKey" );
@@ -189,19 +190,19 @@ class RelationList implements Converter
             return;
 
         if ( $selectionType = $dom->getElementsByTagName( 'selection_type' ) )
-            $fieldSettings['selectionMethod'] = (int)$selectionType->item( 0 )->getAttribute('value');
+            $fieldSettings['selectionMethod'] = (int)$selectionType->item( 0 )->getAttribute( 'value' );
 
         if (
             ( $defaultLocation = $dom->getElementsByTagName( 'contentobject-placement' ) ) &&
-            $defaultLocation->item( 0 )->hasAttribute('node-id')
+            $defaultLocation->item( 0 )->hasAttribute( 'node-id' )
         )
-            $fieldSettings['selectionDefaultLocation'] = (int)$defaultLocation->item( 0 )->getAttribute('node-id');
+            $fieldSettings['selectionDefaultLocation'] = (int)$defaultLocation->item( 0 )->getAttribute( 'node-id' );
 
         if ( !( $constraints = $dom->getElementsByTagName( 'constraints' ) ) )
             return;
 
         foreach ( $constraints->item( 0 )->childNodes as $allowedClass )
-            $fieldSettings['selectionContentTypes'][] = $allowedClass->getAttribute('contentclass-identifier');
+            $fieldSettings['selectionContentTypes'][] = $allowedClass->getAttribute( 'contentclass-identifier' );
     }
 
     /**
@@ -272,7 +273,7 @@ class RelationList implements Converter
         // Add priority starting from 1
         for ( $i = 0; isset( $rows[$i] ); ++$i )
         {
-            $rows[$i]['priority'] = $i+1;
+            $rows[$i]['priority'] = $i + 1;
         }
 
         return $rows;

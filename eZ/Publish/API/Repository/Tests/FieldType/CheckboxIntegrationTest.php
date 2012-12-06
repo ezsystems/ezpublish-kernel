@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\Checkbox\Value as CheckboxValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+
+use eZ\Publish\Core\FieldType\Checkbox\Value as CheckboxValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type
@@ -268,7 +269,7 @@ class CheckboxIntegrationTest extends BaseIntegrationTest
         return array(
             array(
                 new CheckboxValue( true ),
-               '1'
+                '1'
             ),
         );
     }

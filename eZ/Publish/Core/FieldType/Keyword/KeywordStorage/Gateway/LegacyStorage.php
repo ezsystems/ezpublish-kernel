@@ -1,8 +1,9 @@
 <?php
 
 namespace eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway;
-use eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway,
-    eZ\Publish\SPI\Persistence\Content\Field;
+
+use eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway;
+use eZ\Publish\SPI\Persistence\Content\Field;
 
 class LegacyStorage extends Gateway
 {
@@ -133,7 +134,6 @@ class LegacyStorage extends Gateway
 
         return $statement->fetchAll( \PDO::FETCH_COLUMN, 0 );
     }
-
 
     /**
      * Retrieves the content type ID for the given $fieldDefinitionId

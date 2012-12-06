@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -96,10 +97,12 @@ class ObjectStateGroupListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $groupList = new ObjectStateGroupList( array(
-            new ObjectStateGroup(),
-            new ObjectStateGroup(),
-        ) );
+        $groupList = new ObjectStateGroupList(
+            array(
+                new ObjectStateGroup(),
+                new ObjectStateGroup(),
+            )
+        );
 
         $this->getVisitorMock()->expects( $this->exactly( 2 ) )
             ->method( 'visitValueObject' )

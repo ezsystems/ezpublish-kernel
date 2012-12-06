@@ -52,7 +52,7 @@ class ObjectState extends Parser
             array(
                 'id' => $data['_href'],
                 'identifier' => $data['identifier'],
-                'priority' => (int) $data['priority'],
+                'priority' => (int)$data['priority'],
                 'defaultLanguageCode' => $data['defaultLanguageCode'],
                 'languageCodes' => explode( ',', $data['languageCodes'] ),
                 'names' => $names,

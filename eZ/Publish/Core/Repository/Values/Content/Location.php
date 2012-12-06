@@ -68,11 +68,15 @@ class Location extends APILocation
                 return $this->contentInfo->id;
             case 'path':
                 if ( $this->path !== null )
+                {
                     return $this->path;
-                else if ( isset( $this->pathString[1] ) && $this->pathString[0] === '/' )
+                }
+                if ( isset( $this->pathString[1] ) && $this->pathString[0] === '/' )
+                {
                     return $this->path = explode( '/', trim( $this->pathString, '/' ) );
-                else
-                    return $this->path = array();
+                }
+
+                return $this->path = array();
         }
 
         return parent::__get( $property );

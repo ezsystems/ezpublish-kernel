@@ -9,10 +9,10 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess,
-    eZ\Publish\Core\MVC\Exception\ParameterNotFoundException,
-    Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * This class will help you get settings for a specific scope.
@@ -133,8 +133,7 @@ class ConfigResolver implements ConfigResolverInterface
         return
             $this->container->hasParameter( $defaultScopeParamName )
             || $this->container->hasParameter( $relativeScopeParamName )
-            || $this->container->hasParameter( $globalScopeParamName )
-        ;
+            || $this->container->hasParameter( $globalScopeParamName );
     }
 
     /**

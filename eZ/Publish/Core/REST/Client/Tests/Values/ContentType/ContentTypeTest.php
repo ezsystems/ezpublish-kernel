@@ -151,12 +151,16 @@ class ContentTypeTest extends \PHPUnit_Framework_TestCase
     protected function getFieldDefinitions()
     {
         return array(
-            new FieldDefinition( array(
-                'identifier' => 'first-field',
-            ) ),
-            new FieldDefinition( array(
-                'identifier' => 'second-field',
-            ) ),
+            new FieldDefinition(
+                array(
+                    'identifier' => 'first-field',
+                )
+            ),
+            new FieldDefinition(
+                array(
+                    'identifier' => 'second-field',
+                )
+            ),
         );
     }
 }

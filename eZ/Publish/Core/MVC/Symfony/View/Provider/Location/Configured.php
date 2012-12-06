@@ -9,12 +9,12 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Provider\Location;
 
-use eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProvider,
-    eZ\Publish\Core\MVC\Symfony\View\Provider\Configured as ProviderConfigured,
-    eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher,
-    eZ\Publish\Core\MVC\RepositoryAwareInterface,
-    eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProvider;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Configured as ProviderConfigured;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher;
+use eZ\Publish\Core\MVC\RepositoryAwareInterface;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 
 class Configured extends ProviderConfigured implements LocationViewProvider
 {

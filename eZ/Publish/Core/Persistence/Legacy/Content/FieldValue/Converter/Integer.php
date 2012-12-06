@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 class Integer implements Converter
 {
@@ -97,14 +98,16 @@ class Integer implements Converter
         {
             if ( !empty( $storageDef->dataInt1 ) )
             {
-                $fieldDef->fieldTypeConstraints
-                         ->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'] = $storageDef->dataInt1;
+                $fieldDef
+                    ->fieldTypeConstraints
+                    ->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'] = $storageDef->dataInt1;
             }
 
             if ( !empty( $storageDef->dataInt2 ) )
             {
-                $fieldDef->fieldTypeConstraints
-                         ->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'] = $storageDef->dataInt2;
+                $fieldDef
+                    ->fieldTypeConstraints
+                    ->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'] = $storageDef->dataInt2;
             }
         }
 

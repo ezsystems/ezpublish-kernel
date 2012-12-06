@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 
 /**
  * Section Handler

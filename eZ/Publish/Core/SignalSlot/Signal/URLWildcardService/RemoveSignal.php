@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot\Signal\URLWildcardService;
+
 use eZ\Publish\Core\SignalSlot\Signal;
 
 /**

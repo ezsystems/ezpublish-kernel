@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
+
 use eZ\Publish\Core\REST\Server\Input\Parser\Criterion as CriterionParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
@@ -37,7 +38,7 @@ class LogicalAnd extends CriterionParser
         }
 
         $criteria = array();
-        foreach( $data["AND"] as $criterionName => $criterionData )
+        foreach ( $data["AND"] as $criterionName => $criterionData )
         {
             $criteria[] = $this->dispatchCriterion( $criterionName, $criterionData, $parsingDispatcher );
         }

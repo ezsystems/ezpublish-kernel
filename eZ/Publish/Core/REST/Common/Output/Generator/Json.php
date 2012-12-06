@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Common\Output\Generator;
+
 use eZ\Publish\Core\REST\Common\Output\Generator;
 
 /**
@@ -107,7 +108,7 @@ class Json extends Generator
                 $data[$key] = $this->convertArrayObjects( $value );
             }
         }
-        elseif ( $data instanceof Json\Object )
+        else if ( $data instanceof Json\Object )
         {
             foreach ( $data as $key => $value )
             {

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Values\RestUserGroup;
 
@@ -52,28 +53,34 @@ class RestUserGroupTest extends ValueObjectVisitorBaseTest
     {
         return new RestUserGroup(
             new Values\User\UserGroup(),
-            new Values\Content\ContentInfo( array(
-                'id' => 'content23',
-                'name' => 'Sindelfingen',
-                'sectionId' => 'section23',
-                'currentVersionNo' => 5,
-                'published' => true,
-                'ownerId' => 'user23',
-                'modificationDate' => new \DateTime( '2012-09-05 15:27 Europe/Berlin' ),
-                'publishedDate' => new \DateTime( '2012-09-05 15:27 Europe/Berlin' ),
-                'alwaysAvailable' => true,
-                'remoteId' => 'abc123',
-                'mainLanguageCode' => 'eng-US',
-                'mainLocationId' => 'location23',
-                'contentType' => new Values\ContentType\ContentType( array(
-                    'id' => 'contentType23',
-                    'fieldDefinitions' => array(),
-                ) )
-            ) ),
-            new Values\Content\Location( array(
-                'pathString' => '/1/2/23',
-                'path' => array( 1, 2, 23 )
-            ) ),
+            new Values\Content\ContentInfo(
+                array(
+                    'id' => 'content23',
+                    'name' => 'Sindelfingen',
+                    'sectionId' => 'section23',
+                    'currentVersionNo' => 5,
+                    'published' => true,
+                    'ownerId' => 'user23',
+                    'modificationDate' => new \DateTime( '2012-09-05 15:27 Europe/Berlin' ),
+                    'publishedDate' => new \DateTime( '2012-09-05 15:27 Europe/Berlin' ),
+                    'alwaysAvailable' => true,
+                    'remoteId' => 'abc123',
+                    'mainLanguageCode' => 'eng-US',
+                    'mainLocationId' => 'location23',
+                    'contentType' => new Values\ContentType\ContentType(
+                        array(
+                            'id' => 'contentType23',
+                            'fieldDefinitions' => array(),
+                        )
+                    )
+                )
+            ),
+            new Values\Content\Location(
+                array(
+                    'pathString' => '/1/2/23',
+                    'path' => array( 1, 2, 23 )
+                )
+            ),
             null
         );
     }

@@ -8,18 +8,18 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase,
 
-    // For SORT_ORDER_* constants
-    eZ\Publish\SPI\Persistence\Content\Location,
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase;
+// For SORT_ORDER_* constants
+use eZ\Publish\SPI\Persistence\Content\Location;
 
-    eZ\Publish\SPI\Persistence\Content\Type,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\Group,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\Group;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase.

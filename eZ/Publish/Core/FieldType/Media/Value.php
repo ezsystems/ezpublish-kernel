@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Media;
+
 use eZ\Publish\Core\FieldType\BinaryBase\Value as BaseValue;
 
 /**

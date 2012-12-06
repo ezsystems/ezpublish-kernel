@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PcreCompiler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased\Parser;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PcreCompiler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased\Parser;
 
 /**
  * Class for processing a set of transformations, loaded from .tr files, on a string

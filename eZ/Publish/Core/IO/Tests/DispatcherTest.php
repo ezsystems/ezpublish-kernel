@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\IO\Tests;
-use eZ\Publish\Core\IO\DispatcherHandler as Dispatcher,
-    eZ\Publish\Core\IO\InMemoryHandler as InMemory,
-    eZ\Publish\Core\IO\Tests\Base as BaseHandlerTest;
+
+use eZ\Publish\Core\IO\DispatcherHandler as Dispatcher;
+use eZ\Publish\Core\IO\InMemoryHandler as InMemory;
+use eZ\Publish\Core\IO\Tests\Base as BaseHandlerTest;
 
 /**
  * Handler test

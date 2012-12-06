@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
+
 use eZ\Publish\Core\REST\Server\Input\Parser\Base;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
@@ -45,7 +46,7 @@ abstract class Criterion extends Base
         {
             return $parsingDispatcher->parse( array( $criterionName => $criterionData ), $mediaType );
         }
-        catch( Exceptions\Parser $e )
+        catch ( Exceptions\Parser $e )
         {
             throw new Exceptions\Parser( "Invalid Criterion id <$criterionName> in <AND>", 0, $e );
         }

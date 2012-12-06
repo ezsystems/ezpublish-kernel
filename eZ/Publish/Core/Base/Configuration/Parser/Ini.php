@@ -10,11 +10,12 @@
  */
 
 namespace eZ\Publish\Core\Base\Configuration\Parser;
-use eZ\Publish\Core\Base\Configuration,
-    eZ\Publish\Core\Base\Configuration\Parser,
-    ezcConfiguration,
-    ezcConfigurationIniReader,
-    LogicException;
+
+use eZ\Publish\Core\Base\Configuration;
+use eZ\Publish\Core\Base\Configuration\Parser;
+use ezcConfiguration;
+use ezcConfigurationIniReader;
+use LogicException;
 
 /**
  * Configuration Ini Parser / writer
@@ -178,11 +179,15 @@ class Ini implements Parser
         // First some pre processing to normalize result with parse_ini_string result
         $fileContent = str_replace( array( "\r\n", "\r" ), "\n", $fileContent . "\n" );
         $fileContent = preg_replace( array( '/^<\?php[^\/]\/\*\s*/', '/\*\/[^\?]\?>/' ), '', $fileContent );
-        $fileContent = preg_replace_callback ( '/\n\[(\w+):[^\]]+\]\n/' , function( $matches )
-        {
-            // replace ':' in section names as it is not supported by ezcConfigurationIniReader
-            return str_replace( ':', '__EXT__', $matches[0] );
-        }, $fileContent );
+        $fileContent = preg_replace_callback(
+            '/\n\[(\w+):[^\]]+\]\n/',
+            function ( $matches )
+            {
+                // replace ':' in section names as it is not supported by ezcConfigurationIniReader
+                return str_replace( ':', '__EXT__', $matches[0] );
+            },
+            $fileContent
+        );
         $fileContent = $this->parserClearArraySupport( $fileContent );
 
         // Create ini dir if it does not exist

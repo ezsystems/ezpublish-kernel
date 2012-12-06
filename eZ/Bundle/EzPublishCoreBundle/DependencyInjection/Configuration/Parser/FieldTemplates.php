@@ -9,9 +9,9 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser,
-    Symfony\Component\Config\Definition\Builder\NodeBuilder,
-    Symfony\Component\DependencyInjection\ContainerBuilder;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser;
+use Symfony\Component\Config\Definition\Builder\NodeBuilder;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class FieldTemplates extends AbstractParser
 {
@@ -38,8 +38,7 @@ class FieldTemplates extends AbstractParser
                         ->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 
     /**
@@ -66,6 +65,4 @@ class FieldTemplates extends AbstractParser
             'field_templates', $config, $container
         );
     }
-
-
 }

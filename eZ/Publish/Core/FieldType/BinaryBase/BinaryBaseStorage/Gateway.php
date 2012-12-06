@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage;
-use eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\Core\FieldType\StorageGateway;
+
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\Core\FieldType\StorageGateway;
 
 abstract class Gateway extends StorageGateway
 {

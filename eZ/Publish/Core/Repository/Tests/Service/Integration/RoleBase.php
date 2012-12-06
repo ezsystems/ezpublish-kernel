@@ -65,7 +65,9 @@ abstract class RoleBase extends BaseServiceTest
             $value = $role->notDefined;
             self::fail( "Succeeded getting non existing property" );
         }
-        catch( PropertyNotFound $e ) {}
+        catch ( PropertyNotFound $e )
+        {
+        }
 
         try
         {
@@ -73,7 +75,9 @@ abstract class RoleBase extends BaseServiceTest
             $value = $policy->notDefined;
             self::fail( "Succeeded getting non existing property" );
         }
-        catch( PropertyNotFound $e ) {}
+        catch ( PropertyNotFound $e )
+        {
+        }
     }
 
     /**
@@ -89,7 +93,9 @@ abstract class RoleBase extends BaseServiceTest
             $role->id = 42;
             self::fail( "Succeeded setting read only property" );
         }
-        catch( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
 
         try
         {
@@ -97,7 +103,9 @@ abstract class RoleBase extends BaseServiceTest
             $policy->id = 42;
             self::fail( "Succeeded setting read only property" );
         }
-        catch( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
     }
 
     /**
@@ -135,7 +143,9 @@ abstract class RoleBase extends BaseServiceTest
             unset( $role->id );
             self::fail( 'Unsetting read-only property succeeded' );
         }
-        catch ( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
 
         $policy = new Policy( array( "id" => 1 ) );
         try
@@ -143,7 +153,9 @@ abstract class RoleBase extends BaseServiceTest
             unset( $policy->id );
             self::fail( 'Unsetting read-only property succeeded' );
         }
-        catch ( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
     }
 
     /**

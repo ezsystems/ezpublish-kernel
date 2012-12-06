@@ -9,16 +9,14 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\SearchService as SearchServiceInterface,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\API\Repository\Values\User\Limitation,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
-
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-
-    eZ\Publish\SPI\Persistence\Content\Search\Handler;
+use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\SPI\Persistence\Content\Search\Handler;
 
 /**
  * Search service
@@ -53,7 +51,8 @@ class SearchService implements SearchServiceInterface
     {
         $this->repository = $repository;
         $this->searchHandler = $searchHandler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
     }
@@ -224,19 +223,20 @@ class SearchService implements SearchServiceInterface
             if ( $permissionSet['limitation'] instanceof Limitation )
             {
                 $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
-                $roleAssignmentOrCriteria[] = new Criterion\LogicalAnd( array(
+                $roleAssignmentOrCriteria[] = new Criterion\LogicalAnd(
+                    array(
                         $type->getCriterion( $permissionSet['limitation'], $this->repository ),
                         isset( $policyOrCriteria[1] ) ? new Criterion\LogicalOr( $policyOrCriteria ) : $policyOrCriteria[0]
                     )
                 );
             }
-            else // Otherwise merge $policyOrCriteria into $roleAssignmentOrCriteria
+            // Otherwise merge $policyOrCriteria into $roleAssignmentOrCriteria
+            else
             {
                 $roleAssignmentOrCriteria = empty( $roleAssignmentOrCriteria ) ?
                     $policyOrCriteria :
                     array_merge( $roleAssignmentOrCriteria, $policyOrCriteria );
             }
-
         }
 
         return isset( $roleAssignmentOrCriteria[1] ) ?

@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator as CriterionOperator,
-    ezcQuerySelect;
+
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator as CriterionOperator;
+use ezcQuerySelect;
 
 /**
  * Content locator gateway implementation using the zeta database component.

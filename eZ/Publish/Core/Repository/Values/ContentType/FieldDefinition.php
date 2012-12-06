@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\Values\ContentType;
+
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
 
 /**
@@ -83,7 +84,7 @@ class FieldDefinition extends APIFieldDefinition
      */
     public function getName( $languageCode )
     {
-        if ( array_key_exists( $languageCode, $this->names ))
+        if ( array_key_exists( $languageCode, $this->names ) )
         {
             return $this->names[$languageCode];
         }

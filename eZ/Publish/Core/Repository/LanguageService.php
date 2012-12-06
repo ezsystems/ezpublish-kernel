@@ -9,22 +9,19 @@
  */
 
 namespace eZ\Publish\Core\Repository;
-use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface,
-    eZ\Publish\SPI\Persistence\Content\Language\Handler,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
 
-    eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Language as SPILanguage,
-    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct,
-
-    eZ\Publish\API\Repository\Values\Content\Language,
-
-    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
-
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
-    LogicException;
+use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Language as SPILanguage;
+use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use LogicException;
 
 /**
  * Language service, used for language operations
@@ -59,7 +56,8 @@ class LanguageService implements LanguageServiceInterface
     {
         $this->repository = $repository;
         $this->languageHandler = $languageHandler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             'languages' => array( 'eng-GB' ),
         );
     }
@@ -310,7 +308,7 @@ class LanguageService implements LanguageServiceInterface
         if ( !is_numeric( $languageId ) )
             throw new InvalidArgumentValue( "languageId", $languageId );
 
-        $language = $this->languageHandler->load( (int) $languageId );
+        $language = $this->languageHandler->load( (int)$languageId );
 
         return $this->buildDomainObject( $language );
     }

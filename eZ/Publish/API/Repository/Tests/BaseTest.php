@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase;
 
-use \eZ\Publish\API\Repository\Values\ValueObject;
-use \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
-use \eZ\Publish\Core\REST\Client\Sessionable;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
+use eZ\Publish\Core\REST\Client\Sessionable;
 
 /**
  * Base class for api specific tests.
@@ -59,7 +59,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped(
                 'Cannot create a repository with predefined user. ' .
                 'Check the UserService or RoleService implementation. ' .
-                 PHP_EOL . PHP_EOL.
+                PHP_EOL . PHP_EOL .
                 'Exception: ' . $e
             );
         }
@@ -315,7 +315,6 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
                 )
             )
         );
-
 
         // Instantiate a create struct with mandatory properties
         $userCreate = $userService->newUserCreateStruct(

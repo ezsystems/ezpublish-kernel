@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Values\ObjectState;
+
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**

@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor,
-    eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder,
-    eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
+use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
  * Visits the facet builder tree into a Solr query

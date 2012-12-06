@@ -50,7 +50,9 @@ abstract class SectionBase extends BaseServiceTest
             $value = $section->notDefined;
             self::fail( "Succeeded getting non existing property" );
         }
-        catch ( PropertyNotFound $e ) {}
+        catch ( PropertyNotFound $e )
+        {
+        }
     }
 
     /**
@@ -65,7 +67,9 @@ abstract class SectionBase extends BaseServiceTest
             $section->id = 22;
             self::fail( "Succeeded setting read only property" );
         }
-        catch( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
     }
 
     /**
@@ -94,7 +98,9 @@ abstract class SectionBase extends BaseServiceTest
             unset( $section->id );
             self::fail( 'Unsetting read-only property succeeded' );
         }
-        catch ( PropertyReadOnlyException $e ) {}
+        catch ( PropertyReadOnlyException $e )
+        {
+        }
     }
 
     /**

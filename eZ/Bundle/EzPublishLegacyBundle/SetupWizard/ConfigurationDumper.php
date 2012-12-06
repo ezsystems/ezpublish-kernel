@@ -9,9 +9,9 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\SetupWizard;
 
-use eZ\Publish\Core\MVC\Symfony\ConfigDumperInterface,
-    Symfony\Component\Yaml\Yaml,
-    Symfony\Component\Filesystem\Filesystem;
+use eZ\Publish\Core\MVC\Symfony\ConfigDumperInterface;
+use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ConfigurationDumper implements ConfigDumperInterface
 {
@@ -110,7 +110,7 @@ class ConfigurationDumper implements ConfigDumperInterface
     protected function backupConfigFile( $configFile )
     {
         if ( $this->fs->exists( $configFile ) )
-            $this->fs->copy( $configFile, $configFile . '-' . date('Y-m-d_H-i-s') );
+            $this->fs->copy( $configFile, $configFile . '-' . date( 'Y-m-d_H-i-s' ) );
     }
 
     /**

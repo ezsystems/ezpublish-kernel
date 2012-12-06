@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
+
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Client\ContentService;
 

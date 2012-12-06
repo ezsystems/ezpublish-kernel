@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\HttpClient\Authentication;
+
 use eZ\Publish\Core\REST\Client\HttpClient;
 use eZ\Publish\Core\REST\Client\Sessionable;
 use eZ\Publish\Core\REST\Common\Message;

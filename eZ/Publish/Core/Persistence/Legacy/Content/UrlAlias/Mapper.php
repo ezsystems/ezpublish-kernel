@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
-use eZ\Publish\SPI\Persistence\Content\UrlAlias,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 
 /**
  * UrlAlias Mapper
@@ -163,7 +163,7 @@ class Mapper
                 $pathElementData["translations"][$languageCode] = $row["text"];
             }
         }
-        elseif ( $pathElementData["always-available"] )
+        else if ( $pathElementData["always-available"] )
         {
             // NOP entry, lang_mask == 1
             $pathElementData["translations"]["always-available"] = $row["text"];

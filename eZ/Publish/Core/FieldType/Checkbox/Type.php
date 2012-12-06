@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Checkbox;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * Checkbox field type.
@@ -97,7 +98,7 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
-        return (int) $value->bool;
+        return (int)$value->bool;
     }
 
     /**

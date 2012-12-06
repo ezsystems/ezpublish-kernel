@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Page;
+
 use eZ\Publish\Core\FieldType\Page\Parts\Page;
 
 class Service

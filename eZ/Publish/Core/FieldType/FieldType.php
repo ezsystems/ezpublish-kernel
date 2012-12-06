@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType;
-use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+
+use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 
 /**
  * Base class for field types, the most basic storage unit of data inside eZ Publish.

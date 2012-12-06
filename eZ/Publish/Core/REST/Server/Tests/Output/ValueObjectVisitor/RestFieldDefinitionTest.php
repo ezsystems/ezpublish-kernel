@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Values\RestFieldDefinition;
 
@@ -73,27 +74,31 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
     protected function getBasicRestFieldDefinition()
     {
         return new Server\Values\RestFieldDefinition(
-            new Values\ContentType\ContentType( array(
-                'id' => 'contentTypeId',
-                'status' => Values\ContentType\ContentType::STATUS_DEFINED,
-                'fieldDefinitions' => array(),
-            ) ),
-            new Values\ContentType\FieldDefinition( array(
-                'id' => 'fieldDefinitionId_23',
-                'fieldSettings' => array( 'setting' => 'foo' ),
-                'validatorConfiguration' => array( 'validator' => 'bar' ),
-                'identifier' => 'title',
-                'fieldGroup' => 'abstract-field-group',
-                'position' => 2,
-                'fieldTypeIdentifier' => 'my-field-type',
-                'isTranslatable' => true,
-                'isRequired' => false,
-                'isSearchable' => true,
-                'isInfoCollector' => false,
-                'defaultValue' => 'my default value text',
-                'names' => array( 'eng-US' => 'Sindelfingen' ),
-                'descriptions' => array( 'eng-GB' => 'Bielefeld' ),
-            ) )
+            new Values\ContentType\ContentType(
+                array(
+                    'id' => 'contentTypeId',
+                    'status' => Values\ContentType\ContentType::STATUS_DEFINED,
+                    'fieldDefinitions' => array(),
+                )
+            ),
+            new Values\ContentType\FieldDefinition(
+                array(
+                    'id' => 'fieldDefinitionId_23',
+                    'fieldSettings' => array( 'setting' => 'foo' ),
+                    'validatorConfiguration' => array( 'validator' => 'bar' ),
+                    'identifier' => 'title',
+                    'fieldGroup' => 'abstract-field-group',
+                    'position' => 2,
+                    'fieldTypeIdentifier' => 'my-field-type',
+                    'isTranslatable' => true,
+                    'isRequired' => false,
+                    'isSearchable' => true,
+                    'isInfoCollector' => false,
+                    'defaultValue' => 'my default value text',
+                    'names' => array( 'eng-US' => 'Sindelfingen' ),
+                    'descriptions' => array( 'eng-GB' => 'Bielefeld' ),
+                )
+            )
         );
     }
 
@@ -147,7 +152,6 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
         return new ValueObjectVisitor\RestFieldDefinition(
             new Common\UrlHandler\eZPublish(),
             $this->fieldTypeSerializerMock
-
         );
     }
 }

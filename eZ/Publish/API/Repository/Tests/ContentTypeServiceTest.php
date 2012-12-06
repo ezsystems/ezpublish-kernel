@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\Content\Location;
-use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
-use \eZ\Publish\API\Repository\Exceptions;
-use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
+use eZ\Publish\API\Repository\Exceptions;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for operations in the ContentTypeService using in memory storage.
@@ -1730,8 +1730,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'names' => array(
                     'eng-US' => 'User group',
                 ),
-                'descriptions' => array(
-                ),
+                'descriptions' => array(),
                 'nameSchema' => '<name>',
                 'isContainer' => true,
                 'mainLanguageCode' => 'eng-US',
@@ -1771,8 +1770,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'names' => array(
                     'eng-US' => 'Name',
                 ),
-                'descriptions' => array(
-                ),
+                'descriptions' => array(),
             ),
             'description' => array(
                 'identifier' => 'description',
@@ -1787,8 +1785,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'names' => array(
                     'eng-US' => 'Description',
                 ),
-                'descriptions' => array(
-                ),
+                'descriptions' => array(),
             )
         );
 
@@ -2236,7 +2233,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             $contentTypeService->loadContentType( $commentType->id );
             $this->fail( 'Content type could be loaded after delete.' );
         }
-        catch( Exceptions\NotFoundException $e )
+        catch ( Exceptions\NotFoundException $e )
         {
             // All fine
         }

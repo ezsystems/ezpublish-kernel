@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\Matcher\Id;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ContentTypeGroup as ContentTypeGroupIdMatcher,
-    eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo,
-    eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ContentTypeGroup as ContentTypeGroupIdMatcher;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
 
 class ContentTypeGroupTest extends BaseTest
 {
@@ -90,8 +90,7 @@ class ContentTypeGroupTest extends BaseTest
                 $this->returnValue(
                     $this->generateContentInfoForContentTypeGroup( $contentTypeGroupId )
                 )
-            )
-        ;
+            );
 
         return $location;
     }
@@ -121,15 +120,13 @@ class ContentTypeGroupTest extends BaseTest
         $contentType
             ->expects( $this->once() )
             ->method( 'getContentTypeGroups' )
-            ->will( $this->returnValue( $contentTypeGroups ) )
-        ;
+            ->will( $this->returnValue( $contentTypeGroups ) );
 
         $contentInfo = $this->getContentInfoMock();
         $contentInfo
             ->expects( $this->any() )
             ->method( 'getContentType' )
-            ->will( $this->returnValue( $contentType ) )
-        ;
+            ->will( $this->returnValue( $contentType ) );
 
         return $contentInfo;
     }

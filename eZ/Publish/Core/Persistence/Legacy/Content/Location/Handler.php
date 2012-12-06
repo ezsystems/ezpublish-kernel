@@ -8,16 +8,17 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location;
-use eZ\Publish\SPI\Persistence\Content\Location,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Location\Handler as BaseLocationHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler as UrlAliasHandler,
-    eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
+
+use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as BaseLocationHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler as UrlAliasHandler;
+use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
 
 /**
  * The Location Handler interface defines operations on Location elements in the storage engine.

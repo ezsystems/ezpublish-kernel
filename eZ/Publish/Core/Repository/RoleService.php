@@ -9,38 +9,34 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct,
-    eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct,
-    eZ\Publish\Core\Repository\Values\User\Policy,
-    eZ\Publish\API\Repository\Values\User\Policy as APIPolicy,
-    eZ\Publish\API\Repository\Values\User\RoleUpdateStruct,
-    eZ\Publish\Core\Repository\Values\User\PolicyCreateStruct,
-    eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct,
-    eZ\Publish\Core\Repository\Values\User\Role,
-    eZ\Publish\API\Repository\Values\User\Role as APIRole,
-    eZ\Publish\Core\Repository\Values\User\RoleCreateStruct,
-    eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct,
-    eZ\Publish\Core\Repository\Values\User\UserRoleAssignment,
-    eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment,
-    eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation,
-    eZ\Publish\API\Repository\Values\User\User,
-    eZ\Publish\API\Repository\Values\User\UserGroup,
-
-    eZ\Publish\SPI\Persistence\User\Policy as SPIPolicy,
-    eZ\Publish\SPI\Persistence\User\RoleAssignment as SPIRoleAssignment,
-    eZ\Publish\SPI\Persistence\User\Role as SPIRole,
-    eZ\Publish\SPI\Persistence\User\RoleUpdateStruct as SPIRoleUpdateStruct,
-
-    eZ\Publish\API\Repository\RoleService as RoleServiceInterface,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\SPI\Persistence\User\Handler,
-
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
-
-    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct;
+use eZ\Publish\Core\Repository\Values\User\Policy;
+use eZ\Publish\API\Repository\Values\User\Policy as APIPolicy;
+use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
+use eZ\Publish\Core\Repository\Values\User\PolicyCreateStruct;
+use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
+use eZ\Publish\Core\Repository\Values\User\Role;
+use eZ\Publish\API\Repository\Values\User\Role as APIRole;
+use eZ\Publish\Core\Repository\Values\User\RoleCreateStruct;
+use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
+use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
+use eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
+use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\UserGroup;
+use eZ\Publish\SPI\Persistence\User\Policy as SPIPolicy;
+use eZ\Publish\SPI\Persistence\User\RoleAssignment as SPIRoleAssignment;
+use eZ\Publish\SPI\Persistence\User\Role as SPIRole;
+use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct as SPIRoleUpdateStruct;
+use eZ\Publish\API\Repository\RoleService as RoleServiceInterface;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\SPI\Persistence\User\Handler;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 
 /**
  * This service provides methods for managing Roles and Policies
@@ -75,7 +71,8 @@ class RoleService implements RoleServiceInterface
     {
         $this->repository = $repository;
         $this->userHandler = $userHandler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             'limitationTypes' => array(),
             'limitationMap' => array(),
         );

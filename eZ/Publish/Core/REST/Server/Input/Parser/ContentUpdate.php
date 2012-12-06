@@ -8,11 +8,11 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher,
-    eZ\Publish\Core\REST\Common\Exceptions,
-    eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct,
-    DateTime,
-    Exception;
+use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use eZ\Publish\Core\REST\Common\Exceptions;
+use eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
+use DateTime;
+use Exception;
 
 /**
  * Parser for ContentUpdate
@@ -75,7 +75,7 @@ class ContentUpdate extends Base
             {
                 $parsedData['alwaysAvailable'] = true;
             }
-            elseif ( $data['alwaysAvailable'] === 'false' )
+            else if ( $data['alwaysAvailable'] === 'false' )
             {
                 $parsedData['alwaysAvailable'] = false;
             }
@@ -98,7 +98,7 @@ class ContentUpdate extends Base
             {
                 $parsedData['modificationDate'] = new DateTime( $data['modificationDate'] );
             }
-            catch( Exception $e )
+            catch ( Exception $e )
             {
                 throw new Exceptions\Parser( 'Invalid format for <modificationDate> in <ContentUpdate>', 0, $e );
             }
@@ -111,7 +111,7 @@ class ContentUpdate extends Base
             {
                 $parsedData['publishedDate'] = new DateTime( $data['publishDate'] );
             }
-            catch( Exception $e )
+            catch ( Exception $e )
             {
                 throw new Exceptions\Parser( 'Invalid format for <publishDate> in <ContentUpdate>', 0, $e );
             }

@@ -8,16 +8,17 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
-use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandlerInterface,
-    eZ\Publish\SPI\Persistence\Content\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    RuntimeException,
-    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+
+use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandlerInterface;
+use eZ\Publish\SPI\Persistence\Content\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use RuntimeException;
+use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Handler
@@ -65,9 +66,9 @@ class ContentHandler implements ContentHandlerInterface
                 'ownerId' => $content->ownerId,
                 'status' => VersionInfo::STATUS_DRAFT,
                 'currentVersionNo' => 1,
-                'name' => isset( $content->name[$mainLanguageCode] )
-                    ? $content->name[$mainLanguageCode]
-                    : null,
+                'name' => isset( $content->name[$mainLanguageCode] ) ?
+                    $content->name[$mainLanguageCode] :
+                    null,
                 // Published and modified timestamps for drafts is 0
                 'modificationDate' => 0,
                 'publicationDate' => 0,
@@ -474,7 +475,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function updateMetadata( $contentId, MetadataUpdateStruct $content )
     {
-        $updateData = (array) $content;
+        $updateData = (array)$content;
         $updateData["alwaysAvailable"] = $updateData["alwaysAvailable"];
         $updateData["mainLanguageCode"] = $this->handler->contentLanguageHandler()
             ->load( $content->mainLanguageId )->languageCode;
@@ -823,7 +824,7 @@ class ContentHandler implements ContentHandlerInterface
                 {
                     $contentInfoUpdateData["alwaysAvailable"] = $propertyValue;
                 }
-                elseif ( $propertyName === "mainLanguageId" )
+                else if ( $propertyName === "mainLanguageId" )
                 {
                     $contentInfoUpdateData["mainLanguageCode"] =
                         $this->handler->contentLanguageHandler()->load( $propertyValue )->languageCode;

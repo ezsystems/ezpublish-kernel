@@ -12,4 +12,4 @@
       <xsd:element name="value" type="valueType" minOccurs="0" maxOccurs="unbounded"></xsd:element>
     </xsd:sequence>
   </xsd:complexType>
-</xsd:schema> 
+</xsd:schema>

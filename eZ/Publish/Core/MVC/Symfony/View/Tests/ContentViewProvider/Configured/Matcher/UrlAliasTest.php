@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\Matcher;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\UrlAlias as UrlAliasMatcher,
-    eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest,
-    eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\UrlAlias as UrlAliasMatcher;
+use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
+use eZ\Publish\API\Repository\Repository;
 
 class UrlAliasTest extends BaseTest
 {
@@ -76,23 +76,20 @@ class UrlAliasTest extends BaseTest
         $urlAliasServiceMock = $this
             ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\URLAliasService' )
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
         $urlAliasServiceMock->expects( $this->once() )
             ->method( 'listLocationAliases' )
             ->with(
                 $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' ),
                 $this->isType( 'boolean' )
             )
-            ->will( $this->returnValue( $urlAliasList ) )
-        ;
+            ->will( $this->returnValue( $urlAliasList ) );
 
         $repository = $this->getRepositoryMock();
         $repository
             ->expects( $this->once() )
             ->method( 'getUrlAliasService' )
-            ->will( $this->returnValue( $urlAliasServiceMock ) )
-        ;
+            ->will( $this->returnValue( $urlAliasServiceMock ) );
 
         return $repository;
     }

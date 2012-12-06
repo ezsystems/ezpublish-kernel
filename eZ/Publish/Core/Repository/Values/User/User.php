@@ -139,7 +139,9 @@ class User extends APIUser
             case 'id':
                 $versionInfo = $this->getVersionInfo();
                 if ( empty( $versionInfo ) )
+                {
                     return null;
+                }
                 return $versionInfo->getContentInfo()->id;
 
             case 'versionInfo':

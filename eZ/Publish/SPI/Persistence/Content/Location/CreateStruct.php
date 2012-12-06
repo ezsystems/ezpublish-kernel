@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content\Location;
+
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 class CreateStruct extends ValueObject

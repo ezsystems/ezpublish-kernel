@@ -25,7 +25,7 @@ class PurgeClientSingleRequest extends PurgeClient
             $server,
             'PURGE',
             array(
-                 'X-Group-Location-Id' => implode( '; ', $locationIds )
+                'X-Group-Location-Id' => implode( '; ', $locationIds )
             )
         );
     }

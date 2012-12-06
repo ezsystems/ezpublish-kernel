@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
-use eZ\Publish\Core\REST\Server\Input\Parser\ContentUpdate as ContentUpdateParser,
-    eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct,
-    DateTime;
+use eZ\Publish\Core\REST\Server\Input\Parser\ContentUpdate as ContentUpdateParser;
+use eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
+use DateTime;
 
 class ContentUpdateTest extends BaseTest
 {
@@ -65,13 +65,14 @@ class ContentUpdateTest extends BaseTest
 
         $contentUpdateParser = $this->getContentUpdate();
 
-        try {
+        try
+        {
             $contentUpdateParser->parse(
                 $inputArray,
                 $this->getParsingDispatcherMock()
             );
         }
-        catch( \eZ\Publish\Core\REST\Common\Exceptions\Parser $e )
+        catch ( \eZ\Publish\Core\REST\Common\Exceptions\Parser $e )
         {
             if ( $e->getMessage() != $exceptionMessage )
             {
@@ -106,13 +107,14 @@ class ContentUpdateTest extends BaseTest
 
         $contentUpdateParser = $this->getContentUpdate();
 
-        try {
+        try
+        {
             $contentUpdateParser->parse(
                 $inputArray,
                 $this->getParsingDispatcherMock()
             );
         }
-        catch( \eZ\Publish\Core\REST\Common\Exceptions\Parser $e )
+        catch ( \eZ\Publish\Core\REST\Common\Exceptions\Parser $e )
         {
             if ( $e->getMessage() != $exceptionMessage )
             {
@@ -152,16 +154,18 @@ class ContentUpdateTest extends BaseTest
      */
     protected function getContentUpdateStruct()
     {
-        return new RestContentMetadataUpdateStruct( array(
-            'mainLanguageCode' => 'eng-GB',
-            'sectionId'        => '23',
-            'mainLocationId'   => '/1/2/55',
-            'ownerId'          => '42',
-            'alwaysAvailable'  => false,
-            'remoteId'         => '7e7afb135e50490a281dafc0aafb6dac',
-            'modificationDate' => new DateTime( '19/Sept/2012:14:05:00 +0200' ),
-            'publishedDate'    => new DateTime( '19/Sept/2012:14:05:00 +0200' )
-        ) );
+        return new RestContentMetadataUpdateStruct(
+            array(
+                'mainLanguageCode' => 'eng-GB',
+                'sectionId'        => '23',
+                'mainLocationId'   => '/1/2/55',
+                'ownerId'          => '42',
+                'alwaysAvailable'  => false,
+                'remoteId'         => '7e7afb135e50490a281dafc0aafb6dac',
+                'modificationDate' => new DateTime( '19/Sept/2012:14:05:00 +0200' ),
+                'publishedDate'    => new DateTime( '19/Sept/2012:14:05:00 +0200' )
+            )
+        );
     }
 
     /**

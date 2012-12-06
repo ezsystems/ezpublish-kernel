@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
-use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandlerInterface,
-    eZ\Publish\SPI\Persistence\Content\Language,
-    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    LogicException;
+
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandlerInterface;
+use eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use LogicException;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Section\Handler

@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Author;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * Author field type.
@@ -110,13 +111,15 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
-        return new Value( array_map(
-            function ( $author )
-            {
-                return new Author( $author );
-            },
-            $hash
-        ) );
+        return new Value(
+            array_map(
+                function ( $author )
+                {
+                    return new Author( $author );
+                },
+                $hash
+            )
+        );
     }
 
     /**
@@ -131,7 +134,7 @@ class Type extends FieldType
         return array_map(
             function ( $author )
             {
-                return (array) $author;
+                return (array)$author;
             },
             $value->authors->getArrayCopy()
         );

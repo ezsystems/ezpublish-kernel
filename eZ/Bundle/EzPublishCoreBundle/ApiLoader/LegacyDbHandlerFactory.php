@@ -9,8 +9,8 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 class LegacyDbHandlerFactory
 {

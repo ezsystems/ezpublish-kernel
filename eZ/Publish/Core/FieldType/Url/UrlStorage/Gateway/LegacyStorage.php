@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway;
-use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field;
+
+use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  *

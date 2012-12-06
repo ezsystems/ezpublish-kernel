@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests;
+
 use eZ\Publish\Core\REST\Common;
 use eZ\Publish\API\Repository;
 

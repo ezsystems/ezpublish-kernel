@@ -8,12 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
-    eZ\Publish\SPI\Persistence\ValueObject,
-    LogicException;
+
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
+use eZ\Publish\SPI\Persistence\ValueObject;
+use LogicException;
 
 /**
  * The Storage Engine backend for in memory storage

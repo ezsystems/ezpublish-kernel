@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\DateMetadata;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\DateMetadata,
-    eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\DateMetadata;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**
  * Visits the DateMetadata criterion

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot\Signal\SectionService;
+
 use eZ\Publish\Core\SignalSlot\Signal;
 
 /**

@@ -8,17 +8,18 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator,
-    eZ\Publish\SPI\Persistence\Content\Type,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\Group,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    ezcQuery,
-    ezcQuerySelect;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
+use eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\Group;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+use ezcQuery;
+use ezcQuerySelect;
 
 /**
  * Zeta Component Database based content type gateway.

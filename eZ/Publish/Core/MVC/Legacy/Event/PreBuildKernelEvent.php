@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\Event;
 
-use Symfony\Component\EventDispatcher\Event,
-    Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * This event is triggered right before the initialization of the legacy kernel.

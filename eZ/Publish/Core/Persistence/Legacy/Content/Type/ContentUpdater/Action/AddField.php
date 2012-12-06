@@ -8,13 +8,14 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
 /**
  * Action to add a field to content objects

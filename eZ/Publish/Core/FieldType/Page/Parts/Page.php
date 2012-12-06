@@ -33,11 +33,6 @@ class Page extends Base
      */
     public function getZone( $index )
     {
-        $zone = null;
-
-        if( isset( $this->properties['zones'][$index] ) )
-            $zone = $this->properties['zones'][$index];
-
-        return $zone;
+        return isset( $this->properties['zones'][$index] ) ? $this->properties['zones'][$index] : null;
     }
 }

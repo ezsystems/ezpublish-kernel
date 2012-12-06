@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
+
 use eZ\Publish\Core\REST\Common\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 

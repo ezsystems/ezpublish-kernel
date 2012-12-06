@@ -9,9 +9,9 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface,
-    eZ\Publish\Core\MVC\Exception\ParameterNotFoundException,
-    eZINI;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
+use eZINI;
 
 /**
  * Configuration resolver for eZ Publish legacy.

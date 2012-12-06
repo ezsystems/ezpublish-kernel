@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Common\Tests\Output;
+
 use eZ\Publish\Core\REST\Server\Tests;
 
 use eZ\Publish\Core\REST\Common\Output\Generator;

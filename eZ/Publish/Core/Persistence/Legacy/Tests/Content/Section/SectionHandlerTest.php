@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Section;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\SPI\Persistence\Content\Section,
-    eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\SPI\Persistence\Content\Section;
+use eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler;
 
 /**
  * Test case for Section Handler

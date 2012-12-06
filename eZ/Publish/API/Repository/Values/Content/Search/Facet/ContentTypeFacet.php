@@ -16,8 +16,8 @@ use eZ\Publish\API\Repository\Values\Content\Search\Facet;
  * This class holds counts of content with content type
  *
  */
-class ContentTypeFacet extends Facet {
-
+class ContentTypeFacet extends Facet
+{
     /**
      * An array with contentTypeIdentifier as key and count of matching content objects as value
      *

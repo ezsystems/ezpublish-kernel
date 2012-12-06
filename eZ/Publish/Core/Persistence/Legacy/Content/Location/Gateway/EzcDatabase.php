@@ -8,16 +8,17 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\SPI\Persistence\Content\Location,
-    eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
-    eZ\Publish\API\Repository\Values\Content\Query\SortClause,
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    RuntimeException;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use RuntimeException;
 
 /**
  * Location gateway implementation using the zeta database component.
@@ -265,14 +266,14 @@ class EzcDatabase extends Gateway
             $newParentId = $row['parent_node_id'];
             if ( $row['path_string'] === $fromPathString )
             {
-                $newParentId = (int) implode( '', array_slice( explode( '/', $newPathString ), -3, 1 ) );
+                $newParentId = (int)implode( '', array_slice( explode( '/', $newPathString ), -3, 1 ) );
             }
 
             /** @var $query \ezcQueryUpdate */
             $query = $this->handler->createUpdateQuery();
             $query
                 ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
-                    ->set(
+                ->set(
                     $this->handler->quoteColumn( 'path_string' ),
                     $query->bindValue( $newPathString )
                 )

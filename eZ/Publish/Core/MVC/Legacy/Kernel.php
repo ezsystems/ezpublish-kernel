@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\MVC\Legacy;
-use \ezpKernel,
-    \ezpKernelHandler;
+
+use ezpKernel;
+use ezpKernelHandler;
 
 /**
  * Class wrapping the legacy kernel

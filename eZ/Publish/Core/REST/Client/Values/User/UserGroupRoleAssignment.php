@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\User;
 
-
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment}
  * class.

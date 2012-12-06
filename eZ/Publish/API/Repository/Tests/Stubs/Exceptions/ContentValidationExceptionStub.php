@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
 
-use \eZ\Publish\API\Repository\Exceptions\ContentValidationException;
+use eZ\Publish\API\Repository\Exceptions\ContentValidationException;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Exceptions\ContentValidationException}

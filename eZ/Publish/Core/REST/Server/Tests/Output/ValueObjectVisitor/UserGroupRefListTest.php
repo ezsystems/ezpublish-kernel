@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\Repository\Values\User\UserGroup;
 
@@ -38,21 +39,21 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
                     new UserGroup(),
                     new ContentInfo(),
                     new Location(
-                         array(
-                              'pathString' => '/1/5/14',
-                              'path' => array( 1, 5, 14 )
-                         )
-                     )
+                        array(
+                            'pathString' => '/1/5/14',
+                            'path' => array( 1, 5, 14 )
+                        )
+                    )
                 ),
                 new RestUserGroup(
                     new UserGroup(),
                     new ContentInfo(),
                     new Location(
-                         array(
-                              'pathString' => '/1/5/13',
-                              'path' => array( 1, 5, 13 )
-                         )
-                     )
+                        array(
+                            'pathString' => '/1/5/13',
+                            'path' => array( 1, 5, 13 )
+                        )
+                    )
                 )
             ),
             '/some/path',

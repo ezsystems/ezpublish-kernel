@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway,
-    eZ\Publish\SPI\Persistence\Content\Language,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    ezcQuery;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
+use eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use ezcQuery;
 
 /**
  * ezcDatabase based Language Gateway
@@ -233,7 +234,7 @@ class EzcDatabase extends Gateway
     {
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcobj_state" )
         )->where(
@@ -257,7 +258,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcobj_state_group" )
         )->where(
@@ -281,7 +282,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcobj_state_group_language" )
         )->where(
@@ -299,7 +300,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcobj_state_language" )
         )->where(
@@ -317,7 +318,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcontentclass" )
         )->where(
@@ -341,7 +342,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcontentclass_name" )
         )->where(
@@ -359,7 +360,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcontentobject" )
         )->where(
@@ -383,7 +384,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcontentobject_attribute" )
         )->where(
@@ -401,7 +402,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcontentobject_name" )
         )->where(
@@ -419,7 +420,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcontentobject_version" )
         )->where(
@@ -443,7 +444,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezurlalias_ml" )
         )->where(

@@ -9,10 +9,10 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\SetupWizard;
 
 use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel,
-    eZINI,
-    eZSiteAccess;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
+use eZINI;
+use eZSiteAccess;
 
 /**
  * Handles conversionlegacy eZ Publish 4 parameters from a set of settings to a configuration array
@@ -126,7 +126,6 @@ class ConfigurationConverter
         if ( $storageDir !== 'storage' )
             $settings['ezpublish']['system'][$groupName]['storage_dir'] = $storageDir;
 
-
         // ImageMagick settings
         $imageMagickEnabled = $this->getParameter( 'ImageMagick', 'IsEnabled', 'image.ini', $defaultSiteaccess );
         if ( $imageMagickEnabled == 'true' )
@@ -228,7 +227,7 @@ class ConfigurationConverter
     {
         $variations = array();
         $imageAliasesList = $this->getGroup( 'AliasSettings', 'image.ini', $siteaccess );
-        foreach( $imageAliasesList['AliasList'] as $imageAliasIdentifier )
+        foreach ( $imageAliasesList['AliasList'] as $imageAliasIdentifier )
         {
             $variationSettings = array( 'reference' => null, 'filters' => array() );
             $aliasSettings = $this->getGroup( $imageAliasIdentifier, 'image.ini', $siteaccess );
@@ -239,7 +238,7 @@ class ConfigurationConverter
             if ( isset( $aliasSettings['Filters'] ) && is_array( $aliasSettings['Filters'] ) )
             {
                 // parse filters. Format: filtername=param1;param2...paramN
-                foreach( $aliasSettings['Filters'] as $filterString )
+                foreach ( $aliasSettings['Filters'] as $filterString )
                 {
                     $filteringSettings = array();
 
@@ -249,10 +248,14 @@ class ConfigurationConverter
                         $filterParams = explode( ';', $filterParams );
 
                         // make sure integers are actually integers, not strings
-                        array_walk( $filterParams, function( &$value ) {
-                            if ( preg_match( '/^[0-9]+$/', $value ) )
-                                $value = (int)$value;
-                        } );
+                        array_walk(
+                            $filterParams,
+                            function( &$value )
+                            {
+                                if ( preg_match( '/^[0-9]+$/', $value ) )
+                                    $value = (int)$value;
+                            }
+                        );
 
                         $filteringSettings['params'] = $filterParams;
                     }
@@ -345,7 +348,7 @@ class ConfigurationConverter
         $siteaccessSettings = $this->getGroup( 'SiteAccessSettings' );
 
         $matching = array(); $match = false;
-        foreach( explode( ';', $siteaccessSettings['MatchOrder'] ) as $matchMethod )
+        foreach ( explode( ';', $siteaccessSettings['MatchOrder'] ) as $matchMethod )
         {
             switch( $matchMethod )
             {
@@ -367,7 +370,6 @@ class ConfigurationConverter
             {
                 $matching = $match + $matching;
             }
-
         }
         return $matching;
     }

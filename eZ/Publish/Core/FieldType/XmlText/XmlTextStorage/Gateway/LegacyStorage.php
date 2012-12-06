@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway;
 
-use eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlStorage,
-    DOMDocument;
+use eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlStorage;
+use DOMDocument;
 
 class LegacyStorage extends Gateway
 {
@@ -103,13 +103,12 @@ class LegacyStorage extends Gateway
         $q
             ->select( "id", "url" )
             ->from( UrlStorage::URL_TABLE )
-            ->where( $q->expr->in( 'id', $linkIds ) )
-        ;
+            ->where( $q->expr->in( 'id', $linkIds ) );
 
         $statement = $q->prepare();
         $statement->execute();
         $linkUrls = array();
-        foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row)
+        foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
         {
             $linkUrls[$row['id']] = $row['url'];
         }
@@ -183,8 +182,7 @@ class LegacyStorage extends Gateway
         $q
             ->select( "id", "url" )
             ->from( UrlStorage::URL_TABLE )
-            ->where( $q->expr->in( 'url', $linksUrls ) )
-        ;
+            ->where( $q->expr->in( 'url', $linksUrls ) );
 
         $statement = $q->prepare();
         $statement->execute();

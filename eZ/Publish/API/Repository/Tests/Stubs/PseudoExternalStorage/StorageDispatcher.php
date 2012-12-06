@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage;
-use \eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage;
 
-use \eZ\Publish\API\Repository\Values\Content\Field;
-use \eZ\Publish\API\Repository\Values\Content\Content;
-use \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage;
+
+use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 
 /**
  * Dispatcher for PseudoExternalStorage implementations.

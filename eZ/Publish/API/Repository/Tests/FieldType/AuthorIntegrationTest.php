@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\Author\Author,
-    eZ\Publish\Core\FieldType\Author\AuthorCollection,
-    eZ\Publish\Core\FieldType\Author\Value as AuthorValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+
+use eZ\Publish\Core\FieldType\Author\Author;
+use eZ\Publish\Core\FieldType\Author\AuthorCollection;
+use eZ\Publish\Core\FieldType\Author\Value as AuthorValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type
@@ -104,13 +105,17 @@ class AuthorIntegrationTest extends BaseIntegrationTest
     {
         // We may only create times from timestamps here, since storing will
         // loose information about the timezone.
-        return new AuthorValue( array(
-            new Author( array(
-                'id'    => 23,
-                'name'  => 'Hans Mueller',
-                'email' => 'hans@example.com',
-            ) ),
-        ) );
+        return new AuthorValue(
+            array(
+                new Author(
+                    array(
+                        'id'    => 23,
+                        'name'  => 'Hans Mueller',
+                        'email' => 'hans@example.com',
+                    )
+                ),
+            )
+        );
     }
 
     /**
@@ -131,13 +136,17 @@ class AuthorIntegrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'authors' => new AuthorCollection( array(
-                new Author( array(
-                    'id'    => 23,
-                    'name'  => 'Hans Mueller',
-                    'email' => 'hans@example.com',
-                ) ),
-            ) )
+            'authors' => new AuthorCollection(
+                array(
+                    new Author(
+                        array(
+                            'id'    => 23,
+                            'name'  => 'Hans Mueller',
+                            'email' => 'hans@example.com',
+                        )
+                    ),
+                )
+            )
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -180,13 +189,17 @@ class AuthorIntegrationTest extends BaseIntegrationTest
      */
     public function getValidUpdateFieldData()
     {
-        return new AuthorValue( array(
-            new Author( array(
-                'id'    => 42,
-                'name'  => 'Lieschen Mueller',
-                'email' => 'lieschen@example.com',
-            ) ),
-        ) );
+        return new AuthorValue(
+            array(
+                new Author(
+                    array(
+                        'id'    => 42,
+                        'name'  => 'Lieschen Mueller',
+                        'email' => 'lieschen@example.com',
+                    )
+                ),
+            )
+        );
     }
 
     /**
@@ -204,13 +217,17 @@ class AuthorIntegrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'authors' => new AuthorCollection( array(
-                new Author( array(
-                    'id'    => 42,
-                    'name'  => 'Lieschen Mueller',
-                    'email' => 'lieschen@example.com',
-                ) ),
-            ) )
+            'authors' => new AuthorCollection(
+                array(
+                    new Author(
+                        array(
+                            'id'    => 42,
+                            'name'  => 'Lieschen Mueller',
+                            'email' => 'lieschen@example.com',
+                        )
+                    ),
+                )
+            )
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -260,13 +277,17 @@ class AuthorIntegrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'authors' => new AuthorCollection( array(
-                new Author( array(
-                    'id'    => 23,
-                    'name'  => 'Hans Mueller',
-                    'email' => 'hans@example.com',
-                ) ),
-            ) )
+            'authors' => new AuthorCollection(
+                array(
+                    new Author(
+                        array(
+                            'id'    => 23,
+                            'name'  => 'Hans Mueller',
+                            'email' => 'hans@example.com',
+                        )
+                    ),
+                )
+            )
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -298,13 +319,17 @@ class AuthorIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new AuthorValue( array(
-                    new Author( array(
-                        'id'    => 23,
-                        'name'  => 'Hans Mueller',
-                        'email' => 'hans@example.com',
-                    ) ),
-                ) ),
+                new AuthorValue(
+                    array(
+                        new Author(
+                            array(
+                                'id'    => 23,
+                                'name'  => 'Hans Mueller',
+                                'email' => 'hans@example.com',
+                            )
+                        ),
+                    )
+                ),
                 array(
                     array(
                         'id'    => 23,
@@ -334,13 +359,17 @@ class AuthorIntegrationTest extends BaseIntegrationTest
                         'email' => 'hans@example.com',
                     ),
                 ),
-                new AuthorValue( array(
-                    new Author( array(
-                        'id'    => 23,
-                        'name'  => 'Hans Mueller',
-                        'email' => 'hans@example.com',
-                    ) ),
-                ) ),
+                new AuthorValue(
+                    array(
+                        new Author(
+                            array(
+                                'id'    => 23,
+                                'name'  => 'Hans Mueller',
+                                'email' => 'hans@example.com',
+                            )
+                        ),
+                    )
+                ),
             ),
         );
     }

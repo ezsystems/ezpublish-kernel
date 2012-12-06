@@ -9,30 +9,31 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
-use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
-use \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
-use \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
-use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
-use \eZ\Publish\API\Repository\Values\Content\TranslationInfo;
-use \eZ\Publish\API\Repository\Values\Content\TranslationValues;
-use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use \eZ\Publish\API\Repository\Values\Content\Query;
-use \eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\ContentService as APIContentService;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
+use eZ\Publish\API\Repository\Values\Content\TranslationValues;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\User\User;
 
-use \eZ\Publish\Core\REST\Common\UrlHandler;
-use \eZ\Publish\Core\REST\Common\Input;
-use \eZ\Publish\Core\REST\Common\Output;
-use \eZ\Publish\Core\REST\Common\Message;
-use \eZ\Publish\Core\REST\Common\Exceptions;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input\Dispatcher;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\REST\Common\Exceptions;
 
-use \eZ\Publish\Core\REST\Client\Values;
+use eZ\Publish\Core\REST\Client\Values;
 
 /**
  * @example Examples/contenttype.php
  */
-class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessionable
+class ContentService implements APIContentService, Sessionable
 {
     /**
      * @var \eZ\Publish\Core\REST\Client\HttpClient
@@ -66,7 +67,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\Core\REST\Client\ContentTypeService $contentTypeService
      */
-    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler, ContentTypeService $contentTypeService )
+    public function __construct( HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler, ContentTypeService $contentTypeService )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;

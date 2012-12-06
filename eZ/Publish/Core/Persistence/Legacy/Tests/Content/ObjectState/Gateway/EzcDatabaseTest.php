@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase,
-    eZ\Publish\SPI\Persistence\Content\ObjectState,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase;
+use eZ\Publish\SPI\Persistence\Content\ObjectState;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase.
@@ -150,8 +151,8 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                         'ezcobj_state_language_language_id' => 3,
                         'ezcobj_state_language_name' => 'Not locked'
                     )
-                 ),
-                 array(
+                ),
+                array(
                     array(
                         'ezcobj_state_default_language_id' => 2,
                         'ezcobj_state_group_id' => 2,
@@ -249,7 +250,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                         'ezcobj_state_group_language_real_language_id' => 2,
                         'ezcobj_state_group_language_name' => 'Lock'
                     )
-                 )
+                )
             ),
             $result
         );

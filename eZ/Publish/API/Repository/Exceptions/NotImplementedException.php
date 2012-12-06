@@ -11,7 +11,7 @@ namespace eZ\Publish\API\Repository\Exceptions;
 
 /**
  * This Exception is thrown if a feature has not been implemented
- * _intentionally_. The main prupose is the search handler, where some features 
+ * _intentionally_. The main prupose is the search handler, where some features
  * are just not supported in the legacy search implementation.
  */
 class NotImplementedException extends ForbiddenException

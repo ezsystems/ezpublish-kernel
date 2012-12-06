@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\MapLocation;
+
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**

@@ -9,13 +9,13 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\LegacyMapper;
 
-use eZ\Publish\Core\MVC\Legacy\LegacyEvents,
-    eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent,
-    eZ\Publish\Core\MVC\ConfigResolverInterface,
-    eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger,
-    ezpEvent,
-    Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\Core\MVC\Legacy\LegacyEvents;
+use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger;
+use ezpEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Maps configuration parameters to the legacy parameters
@@ -43,7 +43,6 @@ class Configuration implements EventSubscriberInterface
         $this->gatewayCachePurger = $gatewayCachePurger;
         $this->options = $options;
     }
-
 
     public static function getSubscribedEvents()
     {

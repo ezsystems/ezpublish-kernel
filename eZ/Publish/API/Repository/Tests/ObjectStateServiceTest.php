@@ -9,14 +9,14 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
-use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
-use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
-use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
-use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
-use \eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 
-use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for operations in the ObjectStateService using in memory storage.
@@ -1407,6 +1407,8 @@ class ObjectStateServiceTest extends BaseTest
                 )
             );
         }
-        catch ( NotFoundException $e ) {}
+        catch ( NotFoundException $e )
+        {
+        }
     }
 }

@@ -8,12 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 class BinaryFile implements Converter
 {
@@ -70,15 +71,17 @@ class BinaryFile implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints( array(
-            'validators' => array(
-                'FileSizeValidator' => array(
-                    'maxFileSize' => ( $storageDef->dataInt1 != 0
-                        ? $storageDef->dataInt1
-                        : false ),
+        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints(
+            array(
+                'validators' => array(
+                    'FileSizeValidator' => array(
+                        'maxFileSize' => ( $storageDef->dataInt1 != 0
+                            ? $storageDef->dataInt1
+                            : false ),
+                    )
                 )
             )
-        ) );
+        );
     }
 
     /**

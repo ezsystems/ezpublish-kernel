@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\FieldType\XmlText\Input;
 
-use eZ\Publish\Core\FieldType\XmlText\Input,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    DOMDocument;
+use eZ\Publish\Core\FieldType\XmlText\Input;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use DOMDocument;
 
 class EzXml extends Input
 {

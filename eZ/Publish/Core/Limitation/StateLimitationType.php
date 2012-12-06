@@ -82,7 +82,7 @@ class StateLimitationType implements SPILimitationTypeInterface
 
         if ( $object instanceof ContentCreateStruct )
         {
-           throw new InvalidArgumentException(
+            throw new InvalidArgumentException(
                 '$object',
                 'ContentCreateStruct not yet supported, only possible way would be if state is default state, as created content will be auto assigned'
             );

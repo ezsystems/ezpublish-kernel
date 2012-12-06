@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
-    eZ\Publish\SPI\Persistence\Content\UrlAlias,
-    ezcQuery;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias;
+use ezcQuery;
 
 /**
  * UrlAlias Gateway
@@ -702,9 +702,9 @@ class EzcDatabase extends Gateway
                     $query->expr->eq(
                         $this->dbHandler->quoteColumn( "parent", $tableName ),
                         // root entry has parent column set to 0
-                        isset( $previousTableName )
-                            ? $this->dbHandler->quoteColumn( "link", $previousTableName )
-                            : $query->bindValue( 0, null, \PDO::PARAM_INT )
+                        isset( $previousTableName ) ?
+                            $this->dbHandler->quoteColumn( "link", $previousTableName ) :
+                            $query->bindValue( 0, null, \PDO::PARAM_INT )
                     )
                 )
             );

@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 
 /**
  * DeferredLegacy based type update handler

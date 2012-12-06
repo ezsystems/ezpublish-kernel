@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor,
-    eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
  * Visits the sortClause tree into a Solr query

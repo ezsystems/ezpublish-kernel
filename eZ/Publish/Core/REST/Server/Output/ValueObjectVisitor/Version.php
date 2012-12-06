@@ -9,16 +9,14 @@
 
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
-use eZ\Publish\Core\REST\Common\UrlHandler,
-    eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor,
-    eZ\Publish\Core\REST\Common\Output\Generator,
-    eZ\Publish\Core\REST\Common\Output\Visitor,
-    eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer,
-
-    eZ\Publish\Core\REST\Server\Values\RelationList as RelationListValue,
-
-    eZ\Publish\API\Repository\Values\ContentType\ContentType,
-    eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Common\Output\Generator;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer;
+use eZ\Publish\Core\REST\Server\Values\RelationList as RelationListValue;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Version value object visitor

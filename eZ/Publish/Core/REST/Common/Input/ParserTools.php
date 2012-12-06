@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\REST\Common\Input;
-use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher,
-    eZ\Publish\API\Repository\Values,
-    eZ\Publish\Core\REST\Common\Exceptions,
-    RuntimeException;
+
+use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use eZ\Publish\API\Repository\Values;
+use eZ\Publish\Core\REST\Common\Exceptions;
+use RuntimeException;
 
 /**
  * Tools object to be used in Input Parsers

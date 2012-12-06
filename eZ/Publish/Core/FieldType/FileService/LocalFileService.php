@@ -8,7 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\FileService;
+
 use eZ\Publish\Core\FieldType\FileService;
+use RuntimeException;
 
 class LocalFileService implements FileService
 {
@@ -89,7 +91,7 @@ class LocalFileService implements FileService
 
         if ( false === $copyResult )
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not copy "%s" to "%s"',
                     $fullSourcePath,
@@ -102,7 +104,7 @@ class LocalFileService implements FileService
 
         if ( false === $chmodResult )
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not change permissions of "%s" to "%s"',
                     $fullTargetPath,
@@ -162,7 +164,7 @@ class LocalFileService implements FileService
             {
                 if ( !$recursive )
                 {
-                    throw new \RuntimeException(
+                    throw new RuntimeException(
                         sprintf(
                             'Cannot remove "%s", because directory is not empty.',
                             $path
@@ -175,7 +177,7 @@ class LocalFileService implements FileService
             $rmdirResult = @rmdir( $path );
             if ( false === $rmdirResult )
             {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     sprintf( 'Could not remove directory "%s"', $path )
                 );
             }
@@ -185,7 +187,7 @@ class LocalFileService implements FileService
             $unlinkResult = @unlink( $path );
             if ( false === $unlinkResult )
             {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     sprintf( 'Could not remove file "%s"', $path )
                 );
             }
@@ -279,7 +281,7 @@ class LocalFileService implements FileService
 
         if ( $directory === '' )
         {
-            throw new \RuntimeException( "Unable to create empty directory!" );
+            throw new RuntimeException( "Unable to create empty directory!" );
         }
 
         $this->createDirectoryRecursive( dirname( $directory ) );
@@ -288,14 +290,14 @@ class LocalFileService implements FileService
 
         if ( false === $result )
         {
-            throw new  \RuntimeException( "Could not create directory '{$directory}'." );
+            throw new RuntimeException( "Could not create directory '{$directory}'." );
         }
 
         $chmodResult = @chmod( $directory, 0775 );
 
         if ( false === $chmodResult )
         {
-            throw new  \RuntimeException(
+            throw new RuntimeException(
                 "Could not set permissions 0775 on directory '{$directory}'."
             );
         }

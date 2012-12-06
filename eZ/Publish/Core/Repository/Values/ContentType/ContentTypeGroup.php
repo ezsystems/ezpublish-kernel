@@ -31,7 +31,6 @@ class ContentTypeGroup extends APIContentTypeGroup
      */
     protected $names;
 
-
     /**
      * @var string[]
      */

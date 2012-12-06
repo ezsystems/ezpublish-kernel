@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot\Slot;
+
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Slot\AbstractLegacySlot;
 
@@ -29,7 +30,8 @@ class LegacyHideLocationSlot extends AbstractLegacySlot
             return;
 
         $kernel = $this->getLegacyKernel();
-        $kernel->runCallback( function() use( $signal )
+        $kernel->runCallback(
+            function() use( $signal )
             {
                 $node = \eZContentObjectTreeNode::fetch( $signal->locationId );
                 \eZContentObjectTreeNode::clearViewCacheForSubtree( $node );

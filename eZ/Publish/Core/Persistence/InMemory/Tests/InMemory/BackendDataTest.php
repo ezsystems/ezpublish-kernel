@@ -8,13 +8,14 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests\InMemory;
-use PHPUnit_Framework_TestCase,
-    ReflectionObject,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Location,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
-    eZ\Publish\Core\Persistence\InMemory\Backend;
+
+use PHPUnit_Framework_TestCase;
+use ReflectionObject;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateStruct;
+use eZ\Publish\Core\Persistence\InMemory\Backend;
 
 /**
  * Test case for Handler using in memory storage.
@@ -239,7 +240,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( 'folder', $types[0]->identifier );
         $this->assertEquals( 13, $types[1]->id );
         $this->assertEquals( 'comment', $types[1]->identifier );
-        }
+    }
 
     /**
      * Test finding content with results using join
@@ -359,7 +360,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         $location->pathIdentificationString = '/1/3/';
         $location->sortField = Location::SORT_FIELD_MODIFIED;
         $location->sortOrder = Location::SORT_ORDER_DESC;
-        $this->backend->create( 'Content\\Location', (array) $location );
+        $this->backend->create( 'Content\\Location', (array)$location );
         /**
          * @var \eZ\Publish\SPI\Persistence\Content[] $list
          */
@@ -412,8 +413,8 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         $this->backend->find(
             'Content',
             array( "locations" => array( 'contentId' => 2 ) ),
-            array( 'locations' =>
-                array(
+            array(
+                'locations' => array(
                     'type' => 'Content\\Location',
                     'match' => array( 'contentId' => 'id' )
                 )
@@ -567,8 +568,8 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         $this->backend->count(
             'Content',
             array( "locations" => array( 'contentId' => 2 ) ),
-            array( 'locations' =>
-                array(
+            array(
+                'locations' => array(
                     'type' => 'Content\\Location',
                     'match' => array( 'contentId' => 'id' )
                 )

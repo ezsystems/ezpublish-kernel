@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\User\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\User\Gateway,
-    eZ\Publish\SPI\Persistence\User;
+
+use eZ\Publish\Core\Persistence\Legacy\User\Gateway;
+use eZ\Publish\SPI\Persistence\User;
 
 /**
  * Base class for user gateways.
@@ -108,7 +109,7 @@ class ExceptionConversion extends Gateway
      *
      * @return array
      */
-     public function loadByLoginOrMail( $login, $email = null )
+    public function loadByLoginOrMail( $login, $email = null )
     {
         try
         {

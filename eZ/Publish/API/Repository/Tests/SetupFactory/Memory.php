@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
+
 use eZ\Publish\API\Repository\Tests\SetupFactory;
 use eZ\Publish\API\Repository\Tests\IdManager;
 use eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub;
@@ -29,7 +30,7 @@ class Memory extends SetupFactory
     {
         $repository = new RepositoryStub(
             __DIR__ . '/../_fixtures',
-            ( isset( $_ENV['backendVersion'] ) ? (int) $_ENV['backendVersion'] : 5 )
+            ( isset( $_ENV['backendVersion'] ) ? (int)$_ENV['backendVersion'] : 5 )
         );
 
         $repository->setCurrentUser(

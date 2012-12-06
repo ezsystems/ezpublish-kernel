@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\Matcher\Id;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ContentType as ContentTypeIdMatcher,
-    eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo,
-    eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ContentType as ContentTypeIdMatcher;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
 
 class ContentTypeTest extends BaseTest
 {
@@ -90,8 +90,7 @@ class ContentTypeTest extends BaseTest
                 $this->returnValue(
                     $this->generateContentInfoForContentType( $contentTypeId )
                 )
-            )
-        ;
+            );
 
         return $location;
     }
@@ -110,16 +109,15 @@ class ContentTypeTest extends BaseTest
             ->expects( $this->any() )
             ->method( 'getContentType' )
             ->will(
-            $this->returnValue(
-                $this
-                    ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' )
-                    ->setConstructorArgs(
-                        array( array( 'id' => $contentTypeId ) )
-                    )
-                    ->getMockForAbstractClass()
+                $this->returnValue(
+                    $this
+                        ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' )
+                        ->setConstructorArgs(
+                            array( array( 'id' => $contentTypeId ) )
+                        )
+                        ->getMockForAbstractClass()
                 )
-            )
-        ;
+            );
 
         return $contentInfo;
     }

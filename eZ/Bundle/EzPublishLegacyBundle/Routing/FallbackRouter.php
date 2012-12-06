@@ -9,13 +9,13 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Routing;
 
-use eZModule,
-    Symfony\Component\Routing\RouterInterface,
-    Symfony\Component\Routing\RequestContext,
-    Symfony\Component\Routing\RouteCollection,
-    Symfony\Component\Routing\Exception\RouteNotFoundException,
-    Symfony\Component\HttpKernel\Log\LoggerInterface,
-    Symfony\Component\DependencyInjection\ContainerInterface;
+use eZModule;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class FallbackRouter implements RouterInterface
 {

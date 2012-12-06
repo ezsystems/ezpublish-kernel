@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Common\Output\Generator\Xml;
+
 use eZ\Publish\Core\REST\Common\Output\Generator\Xml as XmlWriter;
 
 class FieldTypeHashGenerator

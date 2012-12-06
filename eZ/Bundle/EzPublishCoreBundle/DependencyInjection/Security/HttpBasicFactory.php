@@ -9,9 +9,9 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security;
 
-use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\HttpBasicFactory as BaseHttpBasicFactory,
-    Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\HttpBasicFactory as BaseHttpBasicFactory;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
 /**
  * Basic auth based authentication provider, working with eZ Publish repository
@@ -29,8 +29,7 @@ class HttpBasicFactory extends BaseHttpBasicFactory
         $provider = self::AUTHENTICATION_PROVIDER_ID . ".$id";
         $container
             ->setDefinition( $provider, new DefinitionDecorator( self::AUTHENTICATION_PROVIDER_ID ) )
-            ->replaceArgument( 2, $id )
-        ;
+            ->replaceArgument( 2, $id );
 
         return array( $provider, $listenerId, $entryPointId );
     }

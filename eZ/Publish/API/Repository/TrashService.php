@@ -12,7 +12,7 @@ namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
-use \eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query;
 
 /**
  * Trash service, used for managing trashed content

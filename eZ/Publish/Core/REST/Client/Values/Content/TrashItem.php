@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\Content;
 
-
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\Content\TrashItem}
  * class.
@@ -42,6 +41,5 @@ class TrashItem extends \eZ\Publish\API\Repository\Values\Content\TrashItem
         }
         return parent::__get( $property );
     }
-
 
 }

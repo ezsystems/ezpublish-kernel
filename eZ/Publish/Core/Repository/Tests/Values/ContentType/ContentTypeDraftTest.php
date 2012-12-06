@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Values\ContentType;
+
 use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType,
-    PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use PHPUnit_Framework_TestCase;
 
 /**
  *
@@ -22,9 +23,11 @@ class ContentTypeDraftTest extends PHPUnit_Framework_TestCase
      */
     public function testObjectProperties()
     {
-        $object = new ContentTypeDraft( array(
-            'innerContentType' => new ContentType( array( 'fieldDefinitions' => array() ) )
-        ) );
+        $object = new ContentTypeDraft(
+            array(
+                'innerContentType' => new ContentType( array( 'fieldDefinitions' => array() ) )
+            )
+        );
         $properties = $object->attributes();
         self::assertNotContains( 'internalFields', $properties, 'Internal property found ' );
         self::assertContains( 'contentTypeGroups', $properties, 'Property not found' );

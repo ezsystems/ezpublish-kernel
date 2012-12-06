@@ -9,12 +9,12 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\View\Provider;
 
-use eZ\Publish\Core\MVC\Legacy\View\Provider,
-    eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProviderInterface,
-    eZ\Publish\API\Repository\Values\Content\Location as APILocation,
-    eZ\Publish\Core\MVC\Symfony\View\ContentView,
-    eZModule,
-    Symfony\Component\HttpFoundation\Request;
+use eZ\Publish\Core\MVC\Legacy\View\Provider;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProviderInterface;
+use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZModule;
+use Symfony\Component\HttpFoundation\Request;
 
 class Location extends Provider implements LocationViewProviderInterface
 {

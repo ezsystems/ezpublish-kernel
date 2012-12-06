@@ -9,16 +9,17 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
-use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use \eZ\Publish\API\Repository\Values\Content\Section;
-use \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
-use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
+use eZ\Publish\API\Repository\SectionService as APISectionService;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Section;
+use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 
-use \eZ\Publish\Core\REST\Common\UrlHandler;
-use \eZ\Publish\Core\REST\Common\Input;
-use \eZ\Publish\Core\REST\Common\Output;
-use \eZ\Publish\Core\REST\Common\Message;
-use \eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input\Dispatcher;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\SectionService}
@@ -26,7 +27,7 @@ use \eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
  *
  * @see \eZ\Publish\API\Repository\SectionService
  */
-class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessionable
+class SectionService implements APISectionService, Sessionable
 {
     /**
      * @var \eZ\Publish\Core\REST\Client\HttpClient
@@ -54,7 +55,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;

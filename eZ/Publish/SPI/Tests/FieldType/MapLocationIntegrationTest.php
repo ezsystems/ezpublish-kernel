@@ -8,16 +8,17 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
-use eZ\Publish\Core\Persistence\Legacy,
-    eZ\Publish\Core\FieldType,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Field;
+
+use eZ\Publish\Core\Persistence\Legacy;
+use eZ\Publish\Core\FieldType;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Integration test for legacy storage field types
  *
  * This abstract base test case is supposed to be the base for field type
- * integration tests. It basically calls all involved methods in the field type 
+ * integration tests. It basically calls all involved methods in the field type
  * ``Converter`` and ``Storage`` implementations. Fo get it working implement
  * the abstract methods in a sensible way.
  *
@@ -105,15 +106,17 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            'externalData' => array(
-                'latitude' => 51.564479,
-                'longitude' => 6.692219,
-                'address' => 'Sindelfingen'
-            ),
-            'sortKey'      => 'Sindelfingen',
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                'externalData' => array(
+                    'latitude' => 51.564479,
+                    'longitude' => 6.692219,
+                    'address' => 'Sindelfingen'
+                ),
+                'sortKey'      => 'Sindelfingen',
+            )
+        );
     }
 
     /**
@@ -145,12 +148,14 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            // Empty value
-            'externalData' => null,
-            'sortKey'      => null,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                // Empty value
+                'externalData' => null,
+                'sortKey'      => null,
+            )
+        );
     }
 
     /**

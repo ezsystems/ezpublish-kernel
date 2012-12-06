@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess,
-    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest,
-    eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+use eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException;
 
 class Router
 {

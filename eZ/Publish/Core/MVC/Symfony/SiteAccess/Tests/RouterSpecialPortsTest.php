@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
-use PHPUnit_Framework_TestCase,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\Router,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Port as PortMatcher,
-    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+
+use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Port as PortMatcher;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 
 class RouterSpecialPortsTest extends PHPUnit_Framework_TestCase
 {

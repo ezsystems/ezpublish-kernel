@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState;
 
-use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as BaseObjectStateHandler,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as BaseObjectStateHandler;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * The Object State Handler class provides managing of object states and groups
@@ -139,7 +139,7 @@ class Handler implements BaseObjectStateHandler
     public function updateGroup( $groupId, InputStruct $input )
     {
         $objectStateGroup = $this->objectStateMapper->createObjectStateGroupFromInputStruct( $input );
-        $objectStateGroup->id = (int) $groupId;
+        $objectStateGroup->id = (int)$groupId;
 
         $this->objectStateGateway->updateObjectStateGroup( $objectStateGroup );
 
@@ -236,7 +236,7 @@ class Handler implements BaseObjectStateHandler
     public function update( $stateId, InputStruct $input )
     {
         $objectState = $this->objectStateMapper->createObjectStateFromInputStruct( $input );
-        $objectState->id = (int) $stateId;
+        $objectState->id = (int)$stateId;
 
         $this->objectStateGateway->updateObjectState( $objectState );
 
@@ -260,7 +260,7 @@ class Handler implements BaseObjectStateHandler
             $priorityList[$groupState->id] = $index;
         }
 
-        $priorityList[$objectState->id] = (int) $priority;
+        $priorityList[$objectState->id] = (int)$priority;
         asort( $priorityList );
 
         foreach ( array_keys( $priorityList ) as $objectStatePriority => $objectStateId )

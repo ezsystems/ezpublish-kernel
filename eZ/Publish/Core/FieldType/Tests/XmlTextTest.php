@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\FieldType\Tests;
 
-use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType,
-    eZ\Publish\Core\FieldType\XmlText\Input\EzXml,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    Exception,
-    DOMDocument;
+use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType;
+use eZ\Publish\Core\FieldType\XmlText\Input\EzXml;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use Exception;
+use DOMDocument;
 
 /**
  * @group fieldType

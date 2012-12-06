@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Controller;
 
-use Symfony\Component\DependencyInjection\ContainerAware,
-    Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\HttpFoundation\Response,
-    eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
+use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Response;
+use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 
 abstract class Controller extends ContainerAware
 {

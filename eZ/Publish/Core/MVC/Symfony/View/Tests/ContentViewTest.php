@@ -35,8 +35,20 @@ class ContentViewTest extends \PHPUnit_Framework_TestCase
             array( 'some:valid:identifier', array( 'foo' => 'bar' ) ),
             array( 'another::identifier', array() ),
             array( 'oops:i_did_it:again', array( 'singer' => 'Britney Spears' ) ),
-            array( function () { return true; }, array() ),
-            array( function () { return true; }, array( 'truc' => 'muche' ) ),
+            array(
+                function ()
+                {
+                    return true;
+                },
+                array()
+            ),
+            array(
+                function ()
+                {
+                    return true;
+                },
+                array( 'truc' => 'muche' )
+            ),
         );
     }
 

@@ -21,8 +21,8 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
  *
  * @package eZ\Publish\API\Repository\Values\Content\Query
  */
-abstract class DateRangeFacetBuilder extends FacetBuilder {
-
+abstract class DateRangeFacetBuilder extends FacetBuilder
+{
     const PUBLISHED = 0;
     const CREATED = 1;
     const MODIFIED = 2;
@@ -34,7 +34,7 @@ abstract class DateRangeFacetBuilder extends FacetBuilder {
      *
      * @param \DateTime $to
      */
-    public abstract function addUnboundedFrom($to);
+    public abstract function addUnboundedFrom( $to );
 
     /**
      * Adds a date range
@@ -42,14 +42,12 @@ abstract class DateRangeFacetBuilder extends FacetBuilder {
      * @param \DateTime $from
      * @param \DateTime $to
      */
-    public abstract function addRange($from, $to);
+    public abstract function addRange( $from, $to );
 
     /**
      * Adds a range entry with explicit from and unbounded to.
      *
      * @param \DateTime $from
      */
-    public abstract function addUnboundedTo($from);
-
-
+    public abstract function addUnboundedTo( $from );
 }

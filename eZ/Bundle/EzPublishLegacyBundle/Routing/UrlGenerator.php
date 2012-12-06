@@ -9,9 +9,9 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Routing;
 
-use eZModule,
-    eZ\Publish\Core\MVC\Symfony\Routing\Generator,
-    Symfony\Component\Routing\RequestContext;
+use eZModule;
+use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
+use Symfony\Component\Routing\RequestContext;
 
 class UrlGenerator extends Generator
 {
@@ -53,7 +53,7 @@ class UrlGenerator extends Generator
         if ( strrpos( $legacyModuleUri, '/' ) === ( strlen( $legacyModuleUri ) - 1 ) )
             $legacyModuleUri = substr( $legacyModuleUri, 0, -1 );
 
-        list( $moduleName, $viewName )= explode( '/', $legacyModuleUri );
+        list( $moduleName, $viewName ) = explode( '/', $legacyModuleUri );
 
         return $this->getLegacyKernel()->runCallback(
             function () use ( $legacyModuleUri, $moduleName, $viewName, $parameters )

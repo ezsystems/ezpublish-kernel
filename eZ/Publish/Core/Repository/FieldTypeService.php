@@ -9,15 +9,14 @@
  */
 
 namespace eZ\Publish\Core\Repository;
-use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
 
-    eZ\Publish\SPI\Persistence\Handler,
-    eZ\Publish\SPI\FieldType\FieldType as SPIFieldType,
-
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Repository\Values\ContentType\FieldType;
+use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\SPI\Persistence\Handler;
+use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Repository\Values\ContentType\FieldType;
 
 /**
  * An implementation of this class provides access to FieldTypes

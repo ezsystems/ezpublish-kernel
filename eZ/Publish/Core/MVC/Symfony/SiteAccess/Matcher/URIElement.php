@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher,
-    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 
 class URIElement implements Matcher, URILexer
 {
@@ -112,7 +112,7 @@ class URIElement implements Matcher, URILexer
         {
             $uri = '';
         }
-        elseif ( strpos( $uri, $uriElements ) === 0 )
+        else if ( strpos( $uri, $uriElements ) === 0 )
         {
             sscanf( $uri, "$uriElements%s", $uri );
         }

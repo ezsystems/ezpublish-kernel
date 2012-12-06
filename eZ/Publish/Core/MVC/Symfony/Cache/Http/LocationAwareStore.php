@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
-use Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\Filesystem\Filesystem,
-    Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 /**
  * LocationAwareStore implements all the logic for storing cache metadata regarding locations.
@@ -119,8 +119,7 @@ class LocationAwareStore extends Store implements ContentPurger
            substr( $key, 0, 2 ) . DIRECTORY_SEPARATOR .
            substr( $key, 2, 2 ) . DIRECTORY_SEPARATOR .
            substr( $key, 4, 2 ) . DIRECTORY_SEPARATOR .
-           substr( $key, 6 )
-        ;
+           substr( $key, 6 );
     }
 
     /**

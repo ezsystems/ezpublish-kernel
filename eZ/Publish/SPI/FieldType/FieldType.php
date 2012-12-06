@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\SPI\FieldType;
 
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\FieldType\Event;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\FieldType\Event;
 
 /**
  * The field type interface which all field types have to implement.

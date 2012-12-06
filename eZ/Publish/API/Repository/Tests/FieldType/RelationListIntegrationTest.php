@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\API\Repository,
-    eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue,
-    eZ\Publish\Core\FieldType\RelationList\Type as RelationListType,
-    eZ\Publish\API\Repository\Values\Content\Field;
+
+use eZ\Publish\API\Repository;
+use eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue;
+use eZ\Publish\Core\FieldType\RelationList\Type as RelationListType;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type

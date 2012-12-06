@@ -33,9 +33,9 @@ class RegisterStorageEnginePass implements CompilerPassInterface
             $storageEngineFactoryDef->addMethodCall(
                 'registerStorageEngine',
                 array(
-                     $id,
-                     // @todo: Maybe there should be some validation here. What if no alias is provided ?
-                     $attributes[0]['alias']
+                    $id,
+                    // @todo: Maybe there should be some validation here. What if no alias is provided ?
+                    $attributes[0]['alias']
                 )
             );
         }

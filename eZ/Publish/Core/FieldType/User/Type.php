@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\User;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * The User field type.
@@ -43,7 +44,7 @@ class Type extends FieldType
     {
         $value = $this->acceptValue( $value );
 
-        return (string) $value->login;
+        return (string)$value->login;
     }
 
     /**
@@ -121,7 +122,7 @@ class Type extends FieldType
         {
             return null;
         }
-        return (array) $value;
+        return (array)$value;
     }
 
      /**

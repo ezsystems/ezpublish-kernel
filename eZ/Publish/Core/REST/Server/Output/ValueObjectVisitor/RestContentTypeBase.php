@@ -9,9 +9,8 @@
 
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
-use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor,
-
-    eZ\Publish\API\Repository\Values;
+use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
+use eZ\Publish\API\Repository\Values;
 
 /**
  * Base for RestContentType related value object visitors

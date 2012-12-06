@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\TextBlock;
+
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 
 /**

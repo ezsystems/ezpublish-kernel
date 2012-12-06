@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use \eZ\Publish\API\Repository\Values\Content\Section;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Values\Content\Section;
 
 /**
  * Test case for operations in the SectionService using in memory storage.
@@ -65,7 +65,6 @@ class SectionServiceTest extends BaseTest
         }
 
     }
-
 
     /**
      * Test for the newSectionCreateStruct() method.

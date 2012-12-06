@@ -11,7 +11,6 @@
 
 namespace eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 
-
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 
 /**
@@ -24,9 +23,8 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
  * @package eZ\Publish\API\Repository\Values\Content\Query
  */
 
-
-class FieldFacetBuilder extends FacetBuilder {
-
+class FieldFacetBuilder extends FacetBuilder
+{
     const COUNT_ASC = 0;
     const COUNT_DESC = 1;
     const TERM_ASC = 2;
@@ -53,6 +51,4 @@ class FieldFacetBuilder extends FacetBuilder {
      * @var int
      */
     public $sort;
-
-
 }

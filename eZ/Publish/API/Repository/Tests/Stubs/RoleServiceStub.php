@@ -9,28 +9,28 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\RoleService;
-use \eZ\Publish\API\Repository\Values\Content\Content;
-use \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
-use \eZ\Publish\API\Repository\Values\User\Policy;
-use \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
-use \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
-use \eZ\Publish\API\Repository\Values\User\Role;
-use \eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
-use \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
-use \eZ\Publish\API\Repository\Values\User\User;
-use \eZ\Publish\API\Repository\Values\User\UserGroup;
+use eZ\Publish\API\Repository\RoleService;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
+use eZ\Publish\API\Repository\Values\User\Policy;
+use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
+use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\Role;
+use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
+use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\UserGroup;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyCreateStructStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyUpdateStructStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleCreateStructStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserRoleAssignmentStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupRoleAssignmentStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyCreateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyUpdateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleCreateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserRoleAssignmentStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupRoleAssignmentStub;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\RoleService}
@@ -624,7 +624,7 @@ class RoleServiceStub implements RoleService
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
-        $roleAssignments =  $this->getRoleAssignmentsForContent( $user );
+        $roleAssignments = $this->getRoleAssignmentsForContent( $user );
 
         if ( $inherited )
         {
@@ -638,7 +638,7 @@ class RoleServiceStub implements RoleService
             }
         }
 
-        return  $roleAssignments;
+        return $roleAssignments;
     }
 
     /**
@@ -765,7 +765,7 @@ class RoleServiceStub implements RoleService
 
             $roleAssignments = array_merge(
                 $roleAssignments,
-                    $this->getRoleAssignmentsForRoleAndContent(
+                $this->getRoleAssignmentsForRoleAndContent(
                     $this->loadRole( $roleId ),
                     $content->id
                 )

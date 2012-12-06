@@ -10,16 +10,16 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler,
-    eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\API\Repository\Values\Content\URLAlias,
-    eZ\Publish\SPI\Persistence\Content\URLAlias as SPIURLAlias,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\API\Repository\Exceptions\ForbiddenException,
-    Exception;
+use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\URLAlias;
+use eZ\Publish\SPI\Persistence\Content\URLAlias as SPIURLAlias;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\API\Repository\Exceptions\ForbiddenException;
+use Exception;
 
 /**
  * URLAlias service
@@ -56,7 +56,8 @@ class URLAliasService implements URLAliasServiceInterface
     {
         $this->repository = $repository;
         $this->urlAliasHandler = $urlAliasHandler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             "showAllTranslations" => false
         );
         // Get prioritized languages from language service to not have to call it several times
@@ -292,7 +293,7 @@ class URLAliasService implements URLAliasServiceInterface
                 return false;
             }
 
-            $pathData[$level] =  $levelEntries["translations"][$prioritizedLanguageCode];
+            $pathData[$level] = $levelEntries["translations"][$prioritizedLanguageCode];
         }
 
         return implode( "/", $pathData );

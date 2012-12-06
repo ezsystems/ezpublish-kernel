@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
+
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
@@ -20,10 +21,10 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 
-use \eZ\Publish\API\Repository\ContentService;
-use \eZ\Publish\API\Repository\LocationService;
-use \eZ\Publish\API\Repository\SectionService;
-use \eZ\Publish\API\Repository\SearchService;
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\SectionService;
+use eZ\Publish\API\Repository\SearchService;
 
 /**
  * Content controller
@@ -673,8 +674,8 @@ class Content extends RestController
         );
         return new Values\RestExecutedView(
             array(
-                 'identifier'    => $viewInput->identifier,
-                 'searchResults' => $this->searchService->findContent( $viewInput->query ),
+                'identifier'    => $viewInput->identifier,
+                'searchResults' => $this->searchService->findContent( $viewInput->query ),
             )
         );
     }

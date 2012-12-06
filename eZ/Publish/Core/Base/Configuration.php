@@ -10,10 +10,11 @@
  */
 
 namespace eZ\Publish\Core\Base;
-use eZ\Publish\Core\Base\Configuration\Parser,
-    eZ\Publish\Core\Base\Exceptions\BadConfiguration,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    ezcPhpGenerator;
+
+use eZ\Publish\Core\Base\Configuration\Parser;
+use eZ\Publish\Core\Base\Exceptions\BadConfiguration;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use ezcPhpGenerator;
 
 /**
  * Configuration instance class
@@ -402,7 +403,7 @@ class Configuration
                 {
                     if ( !isset( $configurationData[$section] ) )
                     {
-                        $parent = substr( $section, stripos( $section, ':' ) +1 );
+                        $parent = substr( $section, stripos( $section, ':' ) + 1 );
                         if ( isset( $configurationData[$parent] ) )
                             $configurationData[$section] = $configurationData[$parent];
                         else
@@ -432,7 +433,7 @@ class Configuration
                 array_shift( $settingValue );
                 $configurationPiece[$setting] = $settingValue;
             }
-            elseif ( is_array( $settingValue ) )
+            else if ( is_array( $settingValue ) )
             {
                 $this->recursiveArrayClearing( $settingValue, $configurationPiece[$setting] );
             }

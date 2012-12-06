@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\User;
-use eZ\Publish\Core\FieldType\GatewayBasedStorage,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field;
+
+use eZ\Publish\Core\FieldType\GatewayBasedStorage;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Description of UserStorage

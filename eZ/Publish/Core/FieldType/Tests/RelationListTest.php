@@ -8,12 +8,13 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\RelationList\Type as RelationList,
-    eZ\Publish\Core\FieldType\RelationList\Value,
-    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    PHPUnit_Framework_TestCase,
-    eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+
+use eZ\Publish\Core\FieldType\RelationList\Type as RelationList;
+use eZ\Publish\Core\FieldType\RelationList\Value;
+use eZ\Publish\Core\FieldType\Tests\FieldTypeTest;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 
 class RelationListTest extends StandardizedFieldTypeTest
 {

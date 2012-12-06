@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Common\Output;
+
 use eZ\Publish\Core\REST\Common\Message;
 
 /**
@@ -182,7 +183,6 @@ class Visitor
      */
     public function visit( $data )
     {
-
         $this->generator->reset();
         $this->generator->startDocument( $data );
         $this->visitValueObject( $data );
@@ -237,13 +237,15 @@ class Visitor
         $checkedClassNames = array();
 
         $classname = get_class( $data );
-        do {
+        do
+        {
             $checkedClassNames[] = $classname;
             if ( isset( $this->visitors[$classname] ) )
             {
                 return $this->visitors[$classname]->visit( $this, $this->generator, $data );
             }
-        } while ( $classname = get_parent_class( $classname ) );
+        }
+        while ( $classname = get_parent_class( $classname ) );
 
         throw new Exceptions\NoVisitorFoundException( $checkedClassNames );
     }

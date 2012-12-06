@@ -36,11 +36,11 @@ class RestRelation extends ValueObjectVisitor
             'href',
             $this->urlHandler->generate(
                 'objectVersionRelation',
-                 array(
+                array(
                     'object' => $data->contentId,
                     'version' => $data->versionNo,
                     'relation' => $data->relation->id
-                 )
+                )
             )
         );
         $generator->endAttribute( 'href' );
@@ -50,9 +50,9 @@ class RestRelation extends ValueObjectVisitor
             'href',
             $this->urlHandler->generate(
                 'object',
-                 array(
+                array(
                     'object' => $data->contentId,
-                 )
+                )
             )
         );
         $generator->endAttribute( 'href' );
@@ -63,9 +63,9 @@ class RestRelation extends ValueObjectVisitor
             'href',
             $this->urlHandler->generate(
                 'object',
-                 array(
+                array(
                     'object' => $data->relation->getDestinationContentInfo()->id,
-                 )
+                )
             )
         );
         $generator->endAttribute( 'href' );

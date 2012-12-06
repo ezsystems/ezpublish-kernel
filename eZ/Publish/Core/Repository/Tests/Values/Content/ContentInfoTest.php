@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Values\Content;
-use eZ\Publish\Core\Repository\Values\Content\ContentInfo,
-    PHPUnit_Framework_TestCase;
+
+use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use PHPUnit_Framework_TestCase;
 
 /**
  *

@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Country;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\Core\FieldType\Country\Exception\InvalidValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\Core\FieldType\ValidationError;
+
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\FieldType\Country\Exception\InvalidValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * The Country field type.

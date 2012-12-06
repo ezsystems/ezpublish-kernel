@@ -9,12 +9,13 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
-use \eZ\Publish\API\Repository\Values\Content\Language;
-use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
+use eZ\Publish\API\Repository\LanguageService as APILanguageService;
+use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 
-use \eZ\Publish\Core\REST\Common\UrlHandler;
-use \eZ\Publish\Core\REST\Common\Input;
-use \eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input\Dispatcher;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\LanguageService}
@@ -22,7 +23,7 @@ use \eZ\Publish\Core\REST\Common\Output;
  *
  * @see \eZ\Publish\API\Repository\LanguageService
  */
-class LanguageService implements \eZ\Publish\API\Repository\LanguageService, Sessionable
+class LanguageService implements APILanguageService, Sessionable
 {
     /**
      * @var \eZ\Publish\Core\REST\Client\ContentService
@@ -60,7 +61,7 @@ class LanguageService implements \eZ\Publish\API\Repository\LanguageService, Ses
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( ContentService $contentService, $defaultLanguageCode, HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( ContentService $contentService, $defaultLanguageCode, HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->contentService      = $contentService;
         $this->defaultLanguageCode = $defaultLanguageCode;
@@ -208,7 +209,7 @@ class LanguageService implements \eZ\Publish\API\Repository\LanguageService, Ses
 
     /**
      * Instantiates an object to be used for creating languages
-     * 
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
      */
     public function newLanguageCreateStruct()

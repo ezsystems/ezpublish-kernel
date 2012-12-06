@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\HttpClient;
+
 use eZ\Publish\Core\REST\Client\HttpClient;
 use eZ\Publish\Core\REST\Common\Message;
 
@@ -124,7 +125,7 @@ class Stream implements HttpClient
             if ( preg_match( '(^HTTP/(?P<version>\d+\.\d+)\s+(?P<status>\d+))S', $lineContent, $match ) )
             {
                 $headers['version'] = $match['version'];
-                $headers['status']  = (int) $match['status'];
+                $headers['status']  = (int)$match['status'];
             }
             else
             {

@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Repository\Values\User;
-use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct,
-    eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
+
+use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
+use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
 
 /**
  * This class is used to create a new role

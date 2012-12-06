@@ -8,15 +8,16 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
-use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandlerInterface,
-    eZ\Publish\SPI\Persistence\Content\Type,
-    eZ\Publish\SPI\Persistence\Content\Type\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\Core\Base\Exceptions\BadStateException;
+
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandlerInterface;
+use eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
 
 /**
  * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler
@@ -78,9 +79,9 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         if ( $this->backend->count( 'Content\\Type', array( 'groupIds' => $groupId ) ) )
         {
             throw new BadStateException( '$groupId', "Group {$groupId} still contains Types and can not be deleted" );
-                }
+        }
         $this->backend->delete( 'Content\\Type\\Group', $groupId );
-            }
+    }
 
     /**
      * @param mixed $groupId
@@ -271,11 +272,13 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         {
             throw new BadStateException( '$contentTypeId', "Content of Type {$contentTypeId} still exists, can not delete" );
         }
-        $this->backend->deleteByMatch(// This will throw if none are found
+        // This will throw if none are found
+        $this->backend->deleteByMatch(
             'Content\\Type',
             array( 'id' => $contentTypeId, 'status' => $status )
         );
-        $this->backend->deleteByMatch(// So will this, which means you can not delete types with no fields (fix?)
+        // So will this, which means you can not delete types with no fields (fix?)
+        $this->backend->deleteByMatch(
             'Content\\Type\\FieldDefinition',
             array( '_typeId' => $contentTypeId, '_status' => $status )
         );

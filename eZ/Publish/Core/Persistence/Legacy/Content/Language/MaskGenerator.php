@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
+
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 
 /**
@@ -66,8 +67,7 @@ class MaskGenerator
      */
     public function generateLanguageIndicator( $languageCode, $alwaysAvailable )
     {
-        return $this->languageHandler->loadByLanguageCode( $languageCode )->id
-            | ( $alwaysAvailable ? 1 : 0 );
+        return $this->languageHandler->loadByLanguageCode( $languageCode )->id | ( $alwaysAvailable ? 1 : 0 );
     }
 
     /**

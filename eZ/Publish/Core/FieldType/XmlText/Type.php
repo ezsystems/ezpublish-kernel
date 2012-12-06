@@ -9,13 +9,13 @@
 
 namespace eZ\Publish\Core\FieldType\XmlText;
 
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\Core\FieldType\ValidationError,
-    eZ\Publish\Core\FieldType\XmlText\Input,
-    eZ\Publish\Core\FieldType\XmlText\Input\EzXml,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    DOMDocument;
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\FieldType\XmlText\Input;
+use eZ\Publish\Core\FieldType\XmlText\Input\EzXml;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use DOMDocument;
 
 /**
  * XmlText field type.
@@ -83,7 +83,7 @@ class Type extends FieldType
             {
                 $result = $textDom->firstChild->textContent;
             }
-            elseif ( $textDom )
+            else if ( $textDom )
             {
                 $result = $textDom->textContent;
             }
@@ -219,9 +219,9 @@ class Type extends FieldType
     {
         return new FieldValue(
             array(
-                 'data'         => $value->xml,
-                 'externalData' => null,
-                 'sortKey'      => $this->getSortInfo( $value )
+                'data'         => $value->xml,
+                'externalData' => null,
+                'sortKey'      => $this->getSortInfo( $value )
             )
         );
     }

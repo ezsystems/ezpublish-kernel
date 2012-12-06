@@ -9,9 +9,9 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests;
 
-use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess,
-    eZ\Bundle\EzPublishCoreBundle\View\Provider\Location\Configured;
+use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Bundle\EzPublishCoreBundle\View\Provider\Location\Configured;
 
 class ConfiguredLocationViewProviderTest extends BaseTest
 {
@@ -40,15 +40,13 @@ class ConfiguredLocationViewProviderTest extends BaseTest
             ->expects( $this->once() )
             ->method( 'has' )
             ->with( $matcherServiceIdentifier )
-            ->will( $this->returnValue( true ) )
-        ;
+            ->will( $this->returnValue( true ) );
         $container->expects( $this->once() )
             ->method( 'get' )
             ->with( $matcherServiceIdentifier )
             ->will(
                 $this->returnValue( $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider\\Configured\\Matcher' ) )
-            )
-        ;
+            );
 
         $resolverMock = $this->getResolverMock( $matcherServiceIdentifier );
         $lvp = new Configured( $resolverMock, $this->repositoryMock, $container );
@@ -73,18 +71,17 @@ class ConfiguredLocationViewProviderTest extends BaseTest
             ->will(
                 $this->returnValue(
                     array(
-                         'full' => array(
-                             'matchRule' => array(
-                                 'template'    => 'my_template.html.twig',
-                                 'match'            => array(
-                                     $matcherServiceIdentifier   => 'someValue'
-                                 )
-                             )
-                         )
+                        'full' => array(
+                            'matchRule' => array(
+                                'template'    => 'my_template.html.twig',
+                                'match'            => array(
+                                    $matcherServiceIdentifier   => 'someValue'
+                                )
+                            )
+                        )
                     )
                 )
-            )
-        ;
+            );
 
         return $resolverMock;
     }

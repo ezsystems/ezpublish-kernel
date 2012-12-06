@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
+
 use eZ\Publish\Core\REST\Server\Input\Parser\Criterion as CriterionParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
@@ -53,7 +54,7 @@ class ViewInput extends CriterionParser
         $restViewInput->identifier  = $data['identifier'];
 
         // query
-        if ( !array_key_exists( 'Query', $data ) || !is_array( $data['Query']))
+        if ( !array_key_exists( 'Query', $data ) || !is_array( $data['Query'] ) )
         {
             throw new Exceptions\Parser( "Missing <Query> attribute for <ViewInput>." );
         }
@@ -66,7 +67,7 @@ class ViewInput extends CriterionParser
         if ( array_key_exists( 'Criteria', $queryData ) && is_array( $queryData['Criteria'] ) )
         {
             $criteria = array();
-            foreach( $queryData['Criteria'] as $criterionName => $criterionData )
+            foreach ( $queryData['Criteria'] as $criterionName => $criterionData )
             {
                 $criteria[] = $this->dispatchCriterion( $criterionName, $criterionData, $parsingDispatcher );
             }
@@ -98,20 +99,16 @@ class ViewInput extends CriterionParser
         // ---- SortField
         if ( array_key_exists( 'SortClauses', $queryData ) )
         {
-
         }
 
         // FacetBuilders
         // -- contentTypeFacetBuilder
         if ( array_key_exists( 'FacetBuilders', $queryData ) )
         {
-
         }
 
         $restViewInput->query = $query;
 
         return $restViewInput;
     }
-
 }
-

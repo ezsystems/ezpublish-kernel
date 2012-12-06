@@ -45,7 +45,7 @@ abstract class Generator
         {
             $url = $this->generateAbsoluteUrl( $url );
         }
-        
+
         return $url;
     }
 
@@ -61,7 +61,7 @@ abstract class Generator
 
     /**
      * Generates an absolute URL from $uri and the request context
-     * 
+     *
      * @param string $uri
      *
      * @return string

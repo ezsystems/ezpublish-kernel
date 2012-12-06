@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
-use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor,
-    eZ\Publish\Core\REST\Common\Output\Generator,
-    eZ\Publish\Core\REST\Common\Output\Visitor,
-    eZ\Publish\Core\REST\Server\Values\Version as VersionValue;
+use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Common\Output\Generator;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Values\Version as VersionValue;
 
 /**
  * RestUser value object visitor

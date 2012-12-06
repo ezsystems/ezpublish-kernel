@@ -10,12 +10,11 @@ namespace eZ\Publish\API\Repository\Values\Content\Search\Facet;
 
 use eZ\Publish\API\Repository\Values\Content\Search\Facet;
 
-
 /**
  * This calss represents a date range facet holding counts for content in the built date ranges.
  */
-class DateRangeFacet extends Facet {
-
+class DateRangeFacet extends Facet
+{
     /**
      * The date invervals with statitical data
      *

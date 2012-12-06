@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
-use \eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
-use \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 
 /**
  * Test case for operations in the RoleService using in memory storage.
@@ -535,9 +535,13 @@ class RoleServiceTest extends BaseTest
                 'function' => $policy->function
             );
         }
-        usort( $actual, function( $p1, $p2 ) {
-            return strcasecmp( $p1['function'], $p2['function'] );
-        } );
+        usort(
+            $actual,
+            function ( $p1, $p2 )
+            {
+                return strcasecmp( $p1['function'], $p2['function'] );
+            }
+        );
 
         $this->assertEquals(
             array(
@@ -1018,7 +1022,7 @@ class RoleServiceTest extends BaseTest
         $role = $roleService->loadRoleByIdentifier( 'Member' );
 
         // Assign the "Member" role to the newly created user
-        $roleService->assignRoleToUser( $role, $user);
+        $roleService->assignRoleToUser( $role, $user );
 
         // Unassign user from role
         $roleService->unassignRoleFromUser( $role, $user );

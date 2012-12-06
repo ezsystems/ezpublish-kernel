@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+
+use eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type
@@ -226,9 +227,11 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
             array(
-                new BinaryFileValue( array(
-                    'path' => '/foo/bar/sindelfingen.pdf',
-                ) ),
+                new BinaryFileValue(
+                    array(
+                        'path' => '/foo/bar/sindelfingen.pdf',
+                    )
+                ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
         );

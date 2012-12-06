@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor,
-    eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder,
-    eZ\Publish\API\Repository\Values\Content\Search\Facet;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
+use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
+use eZ\Publish\API\Repository\Values\Content\Search\Facet;
 
 /**
  * Visits the ContentType facet builder
@@ -40,10 +40,12 @@ class ContentType extends FacetBuilderVisitor
      */
     public function map( $field, array $data )
     {
-        return new Facet\ContentTypeFacet( array(
-            'name'    => 'type',
-            'entries' => $this->mapData( $data ),
-        ) );
+        return new Facet\ContentTypeFacet(
+            array(
+                'name'    => 'type',
+                'entries' => $this->mapData( $data ),
+            )
+        );
     }
 
     /**
@@ -67,11 +69,13 @@ class ContentType extends FacetBuilderVisitor
      */
     public function visit( FacetBuilder $facetBuilder )
     {
-        return http_build_query( array(
-            'facet.field'             => 'type_id',
-            'f.type_id.facet.limit'    => $facetBuilder->limit,
-            'f.type_id.facet.mincount' => $facetBuilder->minCount,
-        ) );
+        return http_build_query(
+            array(
+                'facet.field'             => 'type_id',
+                'f.type_id.facet.limit'    => $facetBuilder->limit,
+                'f.type_id.facet.mincount' => $facetBuilder->minCount,
+            )
+        );
     }
 }
 

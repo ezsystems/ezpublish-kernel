@@ -36,9 +36,11 @@ class PatternTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseInvalidPattern()
     {
-        $urlHandler = new Common\UrlHandler\Pattern( array(
-            'invalid' => '/foo/{broken',
-        ) );
+        $urlHandler = new Common\UrlHandler\Pattern(
+            array(
+                'invalid' => '/foo/{broken',
+            )
+        );
         $urlHandler->parse( 'invalid', '/foo' );
     }
 
@@ -50,9 +52,11 @@ class PatternTest extends \PHPUnit_Framework_TestCase
      */
     public function testPatternDoesNotMatch()
     {
-        $urlHandler = new Common\UrlHandler\Pattern( array(
-            'pattern' => '/foo/{foo}',
-        ) );
+        $urlHandler = new Common\UrlHandler\Pattern(
+            array(
+                'pattern' => '/foo/{foo}',
+            )
+        );
         $urlHandler->parse( 'pattern', '/bar' );
     }
 
@@ -64,9 +68,11 @@ class PatternTest extends \PHPUnit_Framework_TestCase
      */
     public function testPatternDoesNotMatchTrailing()
     {
-        $urlHandler = new Common\UrlHandler\Pattern( array(
-            'pattern' => '/foo/{foo}',
-        ) );
+        $urlHandler = new Common\UrlHandler\Pattern(
+            array(
+                'pattern' => '/foo/{foo}',
+            )
+        );
         $urlHandler->parse( 'pattern', '/foo/23/bar' );
     }
 
@@ -145,9 +151,11 @@ class PatternTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateMissingValue()
     {
-        $urlHandler = new Common\UrlHandler\Pattern( array(
-            'pattern' => '/foo/{unknown}',
-        ) );
+        $urlHandler = new Common\UrlHandler\Pattern(
+            array(
+                'pattern' => '/foo/{unknown}',
+            )
+        );
         $urlHandler->generate( 'pattern', array() );
     }
 
@@ -159,13 +167,18 @@ class PatternTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateSuperfluousValue()
     {
-        $urlHandler = new Common\UrlHandler\Pattern( array(
-            'pattern' => '/foo/{foo}',
-        ) );
-        $urlHandler->generate( 'pattern', array(
-            'foo' => 23,
-            'bar' => 42,
-        ) );
+        $urlHandler = new Common\UrlHandler\Pattern(
+            array(
+                'pattern' => '/foo/{foo}',
+            )
+        );
+        $urlHandler->generate(
+            'pattern',
+            array(
+                'foo' => 23,
+                'bar' => 42,
+            )
+        );
     }
 
     /**
@@ -190,11 +203,13 @@ class PatternTest extends \PHPUnit_Framework_TestCase
      */
     protected function getWorkingUrlHandler()
     {
-        return new Common\UrlHandler\Pattern( array(
-            'section'          => '/content/section/{section}',
-            'objectversion'    => '/content/object/{object}/{version}',
-            'locationChildren' => '/content/locations/{&location}/children',
-            'location'         => '/content/locations/{&location}',
-        ) );
+        return new Common\UrlHandler\Pattern(
+            array(
+                'section'          => '/content/section/{section}',
+                'objectversion'    => '/content/object/{object}/{version}',
+                'locationChildren' => '/content/locations/{&location}/children',
+                'location'         => '/content/locations/{&location}',
+            )
+        );
     }
 }

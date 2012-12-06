@@ -11,11 +11,11 @@ namespace eZ\Publish\Core\REST\Common\Output;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry;
 
-use eZ\Publish\API\Repository\FieldTypeService,
-    eZ\Publish\API\Repository\FieldType,
-    eZ\Publish\API\Repository\Values\ContentType\ContentType,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\FieldTypeService;
+use eZ\Publish\API\Repository\FieldType;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Serializes FieldType related data for REST output.

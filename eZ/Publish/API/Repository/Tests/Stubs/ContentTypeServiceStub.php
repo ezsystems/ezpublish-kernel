@@ -23,15 +23,15 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\ContentServiceStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeDraftStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeCreateStructStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\ContentServiceStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeDraftStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeCreateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
 /**
  * @example Examples/contenttype.php
@@ -899,7 +899,6 @@ class ContentTypeServiceStub implements ContentTypeService
         $contentTypeData['modificationDate'] = new \DateTime();
         $contentTypeData['creatorId'] = $user ? $user->id : $contentTypeData['creatorId'];
         $contentTypeData['modifierId'] = $user ? $user->id : $contentTypeData['modifierId'];
-
 
         $newFieldDefinitions = array();
         foreach ( $contentTypeData['fieldDefinitions'] as $fieldDefinition )

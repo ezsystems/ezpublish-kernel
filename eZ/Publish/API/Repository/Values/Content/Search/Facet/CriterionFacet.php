@@ -13,7 +13,8 @@ use eZ\Publish\API\Repository\Values\Content\Search\Facet;
 /**
  * This class holds the count of cotnent mathing the criterion
  */
-class CriterionFacet extends Facet {
+class CriterionFacet extends Facet
+{
     /**
      * The count of objects matching the criterion
      *

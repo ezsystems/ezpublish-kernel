@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\HttpClient;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\HttpClient,
-    eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\Message;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\HttpClient;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\Message;
 
 /**
  * Simple PHP stream based HTTP client.
@@ -122,7 +122,7 @@ class Stream implements HttpClient
             if ( preg_match( '(^HTTP/(?P<version>\d+\.\d+)\s+(?P<status>\d+))S', $lineContent, $match ) )
             {
                 $headers['version'] = $match['version'];
-                $headers['status']  = (int) $match['status'];
+                $headers['status']  = (int)$match['status'];
             }
             else
             {

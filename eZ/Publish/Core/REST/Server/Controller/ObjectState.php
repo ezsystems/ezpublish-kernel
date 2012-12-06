@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
+
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Common\Values\RestObjectState;
@@ -307,7 +308,7 @@ class ObjectState extends RestController
         $countByGroups = array();
         foreach ( $newObjectStates as $newObjectState )
         {
-            $groupId = (int) $newObjectState->groupId;
+            $groupId = (int)$newObjectState->groupId;
             if ( array_key_exists( $groupId, $countByGroups ) )
             {
                 $countByGroups[$groupId]++;
@@ -333,7 +334,7 @@ class ObjectState extends RestController
         {
             $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $newObjectState->groupId );
             $this->objectStateService->setContentState( $contentInfo, $objectStateGroup, $newObjectState->objectState );
-            $contentObjectStates[(int) $objectStateGroup->id] = $newObjectState;
+            $contentObjectStates[(int)$objectStateGroup->id] = $newObjectState;
         }
 
         return new ContentObjectStates( $contentObjectStates );

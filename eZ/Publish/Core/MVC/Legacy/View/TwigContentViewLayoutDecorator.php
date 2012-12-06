@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\View;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface,
-    eZ\Publish\Core\MVC\Symfony\View\ContentView,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    Twig_Environment;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface;
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use Twig_Environment;
 
 class TwigContentViewLayoutDecorator implements ContentViewInterface
 {
@@ -93,7 +93,7 @@ EOT;
             return $twig->render(
                 $twigContentTemplate,
                 array(
-                     'viewResult' => $contentViewClosure( $params )
+                    'viewResult' => $contentViewClosure( $params )
                 )
             );
         };

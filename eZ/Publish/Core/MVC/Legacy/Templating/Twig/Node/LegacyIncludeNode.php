@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\MVC\Legacy\Templating\Twig\Node;
-use \Twig_Node,
-    \Twig_Node_Expression,
-    \Twig_Compiler;
+
+use Twig_Node;
+use Twig_Node_Expression;
+use Twig_Compiler;
 
 /**
  * Represents an ez_legacy_include node
@@ -21,8 +22,8 @@ class LegacyIncludeNode extends Twig_Node
     {
         return parent::__construct(
             array(
-                 'tplPath'      => $tplPath,
-                 'params'       => $params
+                'tplPath' => $tplPath,
+                'params'  => $params
             ),
             array(),
             $lineno,
@@ -38,7 +39,6 @@ class LegacyIncludeNode extends Twig_Node
             ->subcompile( $this->getNode( 'tplPath' ) )
             ->raw( ', ' )
             ->subcompile( $this->getNode( 'params' ) )
-            ->raw( " );\n" )
-        ;
+            ->raw( " );\n" );
     }
 }

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Common\Input\Handler;
+
 use eZ\Publish\Core\REST\Common\Input\Handler;
 
 /**

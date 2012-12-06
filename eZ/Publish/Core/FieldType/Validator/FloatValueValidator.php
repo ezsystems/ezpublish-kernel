@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Validator;
-use eZ\Publish\Core\FieldType\Validator,
-    eZ\Publish\Core\FieldType\ValidationError,
-    eZ\Publish\Core\FieldType\Value as BaseValue;
+
+use eZ\Publish\Core\FieldType\Validator;
+use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * Validator to validate ranges in float values.

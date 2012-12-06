@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\API\Repository,
-    eZ\Publish\Core\FieldType\Relation\Value as RelationValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+
+use eZ\Publish\API\Repository;
+use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type

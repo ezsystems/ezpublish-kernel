@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\REST\Client;
-use eZ\Publish\API,
-    eZ\Publish\Core\REST\Common\Exceptions;
 
-class FieldTypeService implements API\Repository\FieldTypeService
+use eZ\Publish\API\Repository\FieldTypeService as APIFieldTypeService;
+use eZ\Publish\Core\REST\Common\Exceptions;
+
+class FieldTypeService implements APIFieldTypeService
 {
     /**
      * FieldTypes by identifier

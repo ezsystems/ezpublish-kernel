@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Base\Exceptions;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
-    Exception;
+
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use Exception;
 
 /**
  * Not Found Exception implementation

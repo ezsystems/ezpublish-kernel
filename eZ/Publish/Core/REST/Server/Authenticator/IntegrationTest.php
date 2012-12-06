@@ -11,6 +11,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Authenticator;
+
 use eZ\Publish\Core\REST\Server\Authenticator;
 use eZ\Publish\API\Repository\Repository;
 

@@ -17,10 +17,10 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
 /**
  * Location service, used for complex subtree operations
@@ -488,7 +488,7 @@ class LocationServiceStub implements LocationService
 
         $location->__hide();
 
-        foreach ( $this->loadLocationChildren( $location )->locations as $child)
+        foreach ( $this->loadLocationChildren( $location )->locations as $child )
         {
             $this->markInvisible( $child );
         }

@@ -9,21 +9,21 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\UserService;
-use \eZ\Publish\API\Repository\Values\User\User;
-use \eZ\Publish\API\Repository\Values\User\UserCreateStruct;
-use \eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
-use \eZ\Publish\API\Repository\Values\User\UserGroup;
-use \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
-use \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
+use eZ\Publish\API\Repository\UserService;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
+use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\UserGroup;
+use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
+use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserCreateStructStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupCreateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserCreateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupCreateStructStub;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\UserService}
@@ -164,7 +164,7 @@ class UserServiceStub implements UserService
         $subUserGroups = array();
         foreach ( $this->userGroups as $group )
         {
-            if ( (string) $group->parentId === (string) $userGroup->id )
+            if ( (string)$group->parentId === (string)$userGroup->id )
             {
                 $subUserGroups[] = $group;
             }
@@ -532,7 +532,8 @@ class UserServiceStub implements UserService
                     $this->createHash(
                         $user->login,
                         $userUpdateStruct->password,
-                        $user->hashAlgorithm ) : $user->passwordHash,
+                        $user->hashAlgorithm
+                    ) : $user->passwordHash,
 
                 'content' => $content,
             )

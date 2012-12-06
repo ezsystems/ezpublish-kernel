@@ -35,9 +35,9 @@ class SimplifiedRequestTest extends \PHPUnit_Framework_TestCase
                 'http://www.example.com/foo/bar',
                 new SimplifiedRequest(
                     array(
-                         'scheme'       => 'http',
-                         'host'         => 'www.example.com',
-                         'pathinfo'     => '/foo/bar'
+                        'scheme'       => 'http',
+                        'host'         => 'www.example.com',
+                        'pathinfo'     => '/foo/bar'
                     )
                 )
             ),
@@ -45,9 +45,9 @@ class SimplifiedRequestTest extends \PHPUnit_Framework_TestCase
                 'https://www.example.com/',
                 new SimplifiedRequest(
                     array(
-                         'scheme'       => 'https',
-                         'host'         => 'www.example.com',
-                         'pathinfo'     => '/'
+                        'scheme'       => 'https',
+                        'host'         => 'www.example.com',
+                        'pathinfo'     => '/'
                     )
                 )
             ),
@@ -55,10 +55,10 @@ class SimplifiedRequestTest extends \PHPUnit_Framework_TestCase
                 'http://www.example.com/foo?param=value&this=that',
                 new SimplifiedRequest(
                     array(
-                         'scheme'       => 'http',
-                         'host'         => 'www.example.com',
-                         'pathinfo'     => '/foo',
-                         'queryParams'    => array( 'param' => 'value', 'this' => 'that' )
+                        'scheme'       => 'http',
+                        'host'         => 'www.example.com',
+                        'pathinfo'     => '/foo',
+                        'queryParams'    => array( 'param' => 'value', 'this' => 'that' )
                     )
                 )
             )

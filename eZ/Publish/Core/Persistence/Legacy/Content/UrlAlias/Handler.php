@@ -9,14 +9,14 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
-use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
-    eZ\Publish\SPI\Persistence\Content\UrlAlias,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\ForbiddenException,
-    RuntimeException;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\ForbiddenException;
+use RuntimeException;
 
 /**
  * The UrlAlias Handler provides nice urls management.
@@ -488,7 +488,7 @@ class Handler implements UrlAliasHandlerInterface
         // Row exists, check if it is reusable. There are 2 cases when this is possible:
         // 1. NOP entry
         // 2. history entry
-        elseif ( $row["action"] == "nop:" || $row["is_original"] == 0 )
+        else if ( $row["action"] == "nop:" || $row["is_original"] == 0 )
         {
             $data["lang_mask"] = $languageId | (int)$alwaysAvailable;
             // If history is reused move link to id
@@ -583,7 +583,7 @@ class Handler implements UrlAliasHandlerInterface
         {
             if ( $urlAlias->isCustom )
             {
-                list( $parentId, $textMD5 ) = explode( "-" , $urlAlias->id );
+                list( $parentId, $textMD5 ) = explode( "-", $urlAlias->id );
                 if ( !$this->gateway->removeCustomAlias( $parentId, $textMD5 ) )
                 {
                     return false;
@@ -773,9 +773,7 @@ class Handler implements UrlAliasHandlerInterface
             if ( !isset( $newIdsMap[$oldParentAliasId] ) )
             {
                 $newIdsMap[$oldParentAliasId] = $this->gateway->getNextId();
-
-         }
-
+            }
 
             $row["action"] = $actionMap[$row["action"]];
             $row["parent"] = $newParentAliasId;
@@ -1024,9 +1022,12 @@ class Handler implements UrlAliasHandlerInterface
     {
         switch ( $this->configuration["wordSeparatorName"] )
         {
-            case "dash": return "-";
-            case "underscore": return "_";
-            case "space": return " ";
+            case "dash":
+                return "-";
+            case "underscore":
+                return "_";
+            case "space":
+                return " ";
         }
 
         return "-";

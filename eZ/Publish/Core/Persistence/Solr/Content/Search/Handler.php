@@ -9,17 +9,16 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search;
 
-use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler,
-    eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler,
-    eZ\Publish\SPI\Persistence\Content\Search\Field,
-    eZ\Publish\SPI\Persistence\Content\Search\FieldType,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query,
-
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
+use eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler;
+use eZ\Publish\SPI\Persistence\Content\Search\Field;
+use eZ\Publish\SPI\Persistence\Content\Search\FieldType;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -326,7 +325,6 @@ class Handler extends BaseSearchHandler
 
         return $document;
     }
-
 
     /**
      * Purges all contents from the index

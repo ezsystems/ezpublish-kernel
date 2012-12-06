@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\SPI\Persistence\Content\Location,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase
@@ -716,10 +717,10 @@ class EzpDatabaseTest extends TestCase
                 ->select( 'count(*)' )
                 ->from( 'eznode_assignment' )
                 ->where(
-                $query->expr->lAnd(
-                    $query->expr->eq( 'contentobject_id', 11 )
+                    $query->expr->lAnd(
+                        $query->expr->eq( 'contentobject_id', 11 )
+                    )
                 )
-            )
         );
     }
 
@@ -738,13 +739,13 @@ class EzpDatabaseTest extends TestCase
             ->select( 'count(*)' )
             ->from( 'eznode_assignment' )
             ->where(
-            $query->expr->lAnd(
-                $query->expr->eq( 'contentobject_id', 11 )
-            )
-        );
+                $query->expr->lAnd(
+                    $query->expr->eq( 'contentobject_id', 11 )
+                )
+            );
         $statement = $query->prepare();
         $statement->execute();
-        $nodeAssignmentsCount = (int) $statement->fetchColumn();
+        $nodeAssignmentsCount = (int)$statement->fetchColumn();
 
         $handler->deleteNodeAssignment( 11, 1 );
 
@@ -755,10 +756,10 @@ class EzpDatabaseTest extends TestCase
                 ->select( 'count(*)' )
                 ->from( 'eznode_assignment' )
                 ->where(
-                $query->expr->lAnd(
-                    $query->expr->eq( 'contentobject_id', 11 )
+                    $query->expr->lAnd(
+                        $query->expr->eq( 'contentobject_id', 11 )
+                    )
                 )
-            )
         );
     }
 
@@ -794,10 +795,12 @@ class EzpDatabaseTest extends TestCase
             $query
                 ->select( 'path_string' )
                 ->from( 'ezcontentobject_tree' )
-                ->where( $query->expr->lAnd(
-                    $query->expr->eq( 'contentobject_id', 68 ),
-                    $query->expr->eq( 'parent_node_id', 77 )
-                ) )
+                ->where(
+                    $query->expr->lAnd(
+                        $query->expr->eq( 'contentobject_id', 68 ),
+                        $query->expr->eq( 'parent_node_id', 77 )
+                    )
+                )
         );
     }
 
@@ -833,10 +836,12 @@ class EzpDatabaseTest extends TestCase
             $query
                 ->select( 'op_code' )
                 ->from( 'eznode_assignment' )
-                ->where( $query->expr->lAnd(
-                    $query->expr->eq( 'contentobject_id', 68 ),
-                    $query->expr->eq( 'parent_node', 77 )
-                ) )
+                ->where(
+                    $query->expr->lAnd(
+                        $query->expr->eq( 'contentobject_id', 68 ),
+                        $query->expr->eq( 'parent_node', 77 )
+                    )
+                )
         );
     }
 
@@ -893,10 +898,10 @@ class EzpDatabaseTest extends TestCase
         $gateway = $this->getLocationGateway();
 
         $gateway->changeMainLocation(
-            10,// content id
-            228,// new main location id
-            2,// content version number
-            227// new main location parent id
+            10, // content id
+            228, // new main location id
+            2, // content version number
+            227 // new main location parent id
         );
 
         $query = $this->handler->createSelectQuery();

@@ -90,7 +90,7 @@ class LocationLimitationType implements SPILimitationTypeInterface
         {
             $object = $object->getContentInfo();
         }
-        else if ( $object instanceof ContentCreateStruct)
+        else if ( $object instanceof ContentCreateStruct )
         {
             // If target is null return false as user does not have access to content w/o location with this limitation
             if ( $target === null )
@@ -112,7 +112,7 @@ class LocationLimitationType implements SPILimitationTypeInterface
             );
         }
 
-        if ( $target !== null  && !$target instanceof Location && !$target instanceof LocationCreateStruct )
+        if ( $target !== null && !$target instanceof Location && !$target instanceof LocationCreateStruct )
         {
             throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
         }
@@ -128,11 +128,11 @@ class LocationLimitationType implements SPILimitationTypeInterface
          */
         if ( $target instanceof Location )
         {
-            return in_array( $target->id, $value->limitationValues ) ;
+            return in_array( $target->id, $value->limitationValues );
         }
-        else if ( $target instanceof LocationCreateStruct )
+        if ( $target instanceof LocationCreateStruct )
         {
-            return in_array( $target->parentLocationId, $value->limitationValues ) ;
+            return in_array( $target->parentLocationId, $value->limitationValues );
         }
 
         /**

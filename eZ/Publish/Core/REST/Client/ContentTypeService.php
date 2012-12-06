@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Client;
 
-
+use eZ\Publish\API\Repository\ContentTypeService as APIContentTypeService;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
@@ -21,19 +21,19 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
-use \eZ\Publish\Core\REST\Common\UrlHandler;
-use \eZ\Publish\Core\REST\Common\Input;
-use \eZ\Publish\Core\REST\Common\Output;
-use \eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input\Dispatcher;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Common\Message;
 
-use \eZ\Publish\Core\REST\Client\Values;
+use eZ\Publish\Core\REST\Client\Values;
 
 /**
  * @example Examples/contenttype.php
  *
  * @package eZ\Publish\API\Repository
  */
-class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeService, Sessionable
+class ContentTypeService implements APIContentTypeService, Sessionable
 {
     /**
      * @var \eZ\Publish\Core\REST\Client\ContentService
@@ -66,7 +66,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
@@ -126,7 +126,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      * Get a Content Type Group object by identifier
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group can not be found
-     * 
+     *
      * @param string $contentTypeGroupIdentifier
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
@@ -161,10 +161,10 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
     }
 
     /**
-     * Delete a Content Type Group. 
-     * 
+     * Delete a Content Type Group.
+     *
      * This method only deletes an content type group which has content types without any content instances
-     * 
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete a content type group
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If  a to be deleted content type has instances
      *
@@ -176,8 +176,8 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
     }
 
     /**
-     * Create a Content Type object. 
-     * 
+     * Create a Content Type object.
+     *
      * The content type is created in the state STATUS_DRAFT.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the identifier or remoteId in the content type create struct already exists
@@ -224,8 +224,8 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
     }
 
     /**
-     * Adds a new field definition to an existing content type. 
-     * 
+     * Adds a new field definition to an existing content type.
+     *
      * The content type must be in state DRAFT.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the identifier in already exists in the content type
@@ -392,8 +392,8 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
     }
 
     /**
-     * Creates a draft from an existing content type. 
-     * 
+     * Creates a draft from an existing content type.
+     *
      * This is a complete copy of the content
      * type wiich has the state STATUS_DRAFT.
      *
@@ -410,8 +410,8 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
     }
 
     /**
-     * Delete a Content Type object. 
-     * 
+     * Delete a Content Type object.
+     *
      * Deletes a content type if it has no instances
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If there exist content objects of this type

@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Media;
-use eZ\Publish\Core\FieldType\BinaryBase\Type as BaseType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\Core\FieldType\ValidationError;
+
+use eZ\Publish\Core\FieldType\BinaryBase\Type as BaseType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * The TextLine field type.

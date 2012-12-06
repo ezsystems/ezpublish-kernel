@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
+
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Client\ContentTypeService;
 
@@ -55,7 +56,6 @@ class ContentInfo extends Parser
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
-
         $contentTypeId = $this->parserTools->parseObjectElement( $data['ContentType'], $parsingDispatcher );
         $ownerId = $this->parserTools->parseObjectElement( $data['Owner'], $parsingDispatcher );
         $mainLocationId = $this->parserTools->parseObjectElement( $data['MainLocation'], $parsingDispatcher );

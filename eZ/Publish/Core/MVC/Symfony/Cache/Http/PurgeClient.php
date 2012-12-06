@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
-use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface,
-    eZ\Publish\Core\MVC\ConfigResolverInterface,
-    Buzz\Browser,
-    Buzz\Client\BatchClientInterface;
+use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Buzz\Browser;
+use Buzz\Client\BatchClientInterface;
 
 class PurgeClient implements PurgeClientInterface
 {
@@ -58,7 +58,7 @@ class PurgeClient implements PurgeClientInterface
             $locationIds = array( $locationIds );
 
         // Purging all HTTP gateways
-        foreach ($this->purgeServers as $server)
+        foreach ( $this->purgeServers as $server )
         {
             $this->doPurge( $server, $locationIds );
 

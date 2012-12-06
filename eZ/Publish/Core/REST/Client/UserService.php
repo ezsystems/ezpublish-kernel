@@ -9,16 +9,17 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
-use \eZ\Publish\API\Repository\Values\User\User;
-use \eZ\Publish\API\Repository\Values\User\UserCreateStruct;
-use \eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
-use \eZ\Publish\API\Repository\Values\User\UserGroup;
-use \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
-use \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
+use eZ\Publish\API\Repository\UserService as APIUserService;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
+use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\UserGroup;
+use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
+use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 
-use \eZ\Publish\Core\REST\Common\UrlHandler;
-use \eZ\Publish\Core\REST\Common\Input;
-use \eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input\Dispatcher;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\UserService}
@@ -26,7 +27,7 @@ use \eZ\Publish\Core\REST\Common\Output;
  *
  * @see \eZ\Publish\API\Repository\UserService
  */
-class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
+class UserService implements APIUserService, Sessionable
 {
     /**
      * @var \eZ\Publish\Core\REST\Client\HttpClient
@@ -54,7 +55,7 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;

@@ -10,6 +10,7 @@
  */
 
 namespace eZ\Publish\Core\Base;
+
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 
 /**
@@ -24,7 +25,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
  * Usage:
  *
  *     // Default value on $module is 'base', so this will parse base.ini[.append.php] files given setup above
- *     $bool = $manager->getConfiguration('base')->get( 'ClassLoader', 'Repositories' );
+ *     $bool = $manager->getConfiguration( 'base' )->get( 'ClassLoader', 'Repositories' );
  *
  *
  * Usage2:
@@ -72,10 +73,10 @@ class ConfigurationManager
     public function __construct(
         array $globalConfiguration,
         array $globalPaths = array(
-             'base' => array( 'settings/' ),
-             'modules' => array( 'eZ/Publish/Core/settings/' ),
-             'access' => array(),
-             'global' => array( 'settings/override/' ),
+            'base' => array( 'settings/' ),
+            'modules' => array( 'eZ/Publish/Core/settings/' ),
+            'access' => array(),
+            'global' => array( 'settings/override/' ),
         )
     )
     {

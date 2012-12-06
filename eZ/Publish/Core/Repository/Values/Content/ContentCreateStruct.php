@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\Repository\Values\Content;
 
-use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct as APIContentCreateStruct,
-    eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct as APIContentCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * This class is used for creating a new content object

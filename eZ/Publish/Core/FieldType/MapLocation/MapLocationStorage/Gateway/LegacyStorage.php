@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage\Gateway;
-use eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage\Gateway,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo;
+
+use eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage\Gateway;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 class LegacyStorage extends Gateway
 {

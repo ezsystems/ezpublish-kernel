@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
 
 /**
  * EzcDatabase based type update handler

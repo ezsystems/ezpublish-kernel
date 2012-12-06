@@ -148,7 +148,7 @@ class URLAliasServiceStub implements URLAliasService
         {
             // Filter non-location aliases and location aliases for other
             // locations
-            if ( $existingAlias->type != URLAlias::LOCATION  || $existingAlias->destination != $location->id )
+            if ( $existingAlias->type != URLAlias::LOCATION || $existingAlias->destination != $location->id )
             {
                 continue;
             }
@@ -204,7 +204,6 @@ class URLAliasServiceStub implements URLAliasService
 
         return array_slice( $globalAliases, $offset, ( $limit == -1 ? null : $limit ) );
     }
-
 
     /**
      * Removes urls aliases.

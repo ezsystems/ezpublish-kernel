@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\Content;
 
-use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\Content\VersionInfo}
@@ -41,11 +41,11 @@ class VersionInfoStub extends VersionInfo
     {
         parent::__construct( $properties );
 
-        if ( $properties['status'] > 2 ) {
+        if ( $properties['status'] > 2 )
+        {
             $trace = debug_backtrace();
         }
     }
-
 
     /**
      * Content of the content this version belongs to.

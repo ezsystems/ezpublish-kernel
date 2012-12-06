@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
+
 use eZ\Publish\Core\REST\Server\Input\Parser\Criterion as CriterionParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
@@ -43,5 +44,6 @@ class LogicalNot extends CriterionParser
         list( $criterionName, $criterionData ) = each( $data['NOT'] );
         $criteria = $this->dispatchCriterion( $criterionName, $criterionData, $parsingDispatcher );
 
-        return new LogicalNotCriterion( $criteria );    }
+        return new LogicalNotCriterion( $criteria );
+    }
 }

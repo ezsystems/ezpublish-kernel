@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\FieldType\DateAndTime;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    DateTime,
-    eZ\Publish\Core\FieldType\ValidationError;
+
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use DateTime;
+use eZ\Publish\Core\FieldType\ValidationError;
 
 class Type extends FieldType
 {
@@ -263,7 +264,7 @@ class Type extends FieldType
                                     )
                                 );
                             }
-                            elseif ( !( $value instanceof \DateInterval ) )
+                            else if ( !( $value instanceof \DateInterval ) )
                             {
                                 $validationErrors[] = new ValidationError(
                                     "Setting '%setting%' value must be an instance of 'DateInterval' class",

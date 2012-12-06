@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\FieldType\XmlText;
 
-use eZ\Publish\Core\FieldType\Value as BaseValue,
-    DOMDocument;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
+use DOMDocument;
 
 /**
  * Basic for TextLine field type

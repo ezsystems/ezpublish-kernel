@@ -191,13 +191,13 @@ class Factory
         $valueObjectVisitors = array(
             // Errors
 
-            '\\eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'   => new Output\ValueObjectVisitor\InvalidArgumentException( $urlHandler,  true ),
-            '\\eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException'          => new Output\ValueObjectVisitor\NotFoundException( $urlHandler,  true ),
-            '\\eZ\\Publish\\API\\Repository\\Exceptions\\UnauthorizedException'      => new Output\ValueObjectVisitor\UnauthorizedException( $urlHandler,  true ),
-            '\\eZ\\Publish\\API\\Repository\\Exceptions\\BadStateException'          => new Output\ValueObjectVisitor\BadStateException( $urlHandler,  true ),
-            '\\eZ\\Publish\\Core\\REST\\Server\\Exceptions\\BadRequestException'     => new Output\ValueObjectVisitor\BadRequestException( $urlHandler,  true ),
-            '\\eZ\\Publish\\Core\\REST\\Server\\Exceptions\\ForbiddenException'      => new Output\ValueObjectVisitor\ForbiddenException( $urlHandler,  true ),
-            '\\Exception'                                                            => new Output\ValueObjectVisitor\Exception( $urlHandler,  true ),
+            '\\eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'   => new Output\ValueObjectVisitor\InvalidArgumentException( $urlHandler, true ),
+            '\\eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException'          => new Output\ValueObjectVisitor\NotFoundException( $urlHandler, true ),
+            '\\eZ\\Publish\\API\\Repository\\Exceptions\\UnauthorizedException'      => new Output\ValueObjectVisitor\UnauthorizedException( $urlHandler, true ),
+            '\\eZ\\Publish\\API\\Repository\\Exceptions\\BadStateException'          => new Output\ValueObjectVisitor\BadStateException( $urlHandler, true ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Exceptions\\BadRequestException'     => new Output\ValueObjectVisitor\BadRequestException( $urlHandler, true ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Exceptions\\ForbiddenException'      => new Output\ValueObjectVisitor\ForbiddenException( $urlHandler, true ),
+            '\\Exception'                                                            => new Output\ValueObjectVisitor\Exception( $urlHandler, true ),
 
             // Section
 
@@ -335,7 +335,7 @@ class Factory
         );
 
         $acceptHeaderVisitorMapping = array(
-            '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+json$)' =>  $jsonVisitor,
+            '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+json$)' => $jsonVisitor,
             '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+xml$)'  => $xmlVisitor,
             '(^application/json$)'  => $jsonVisitor,
             '(^application/xml$)'  => $xmlVisitor,

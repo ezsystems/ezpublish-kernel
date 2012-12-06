@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor,
-    eZ\Publish\API\Repository\Values\Content\Query\SortClause,
-    eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
  * Visits the sortClause tree into a Solr query
