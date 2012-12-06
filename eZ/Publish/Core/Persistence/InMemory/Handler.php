@@ -32,11 +32,21 @@ class Handler implements HandlerInterface
     protected $backend;
 
     /**
+     * General configuration
+     *
+     * @var array
+     */
+    protected $config;
+
+    /**
      * Setup instance with an instance of Backend class
      */
-    public function __construct()
+    public function __construct( array $config = array() )
     {
         $this->backend = new Backend( json_decode( file_get_contents( __DIR__ . '/data.json' ), true ) );
+        $this->config = $config + array(
+            "field_type" => array()
+        );
     }
 
     /**
@@ -177,7 +187,18 @@ class Handler implements HandlerInterface
             return $this->serviceHandlers[$className];
 
         if ( class_exists( $className ) )
-            return $this->serviceHandlers[$className] = new $className( $this, $this->backend );
+        {
+            switch ( $className )
+            {
+                case 'eZ\\Publish\\Core\\Persistence\\InMemory\\ContentHandler':
+                    $handler = new $className( $this, $this->backend, $this->config["field_type"] );
+                    break;
+                default:
+                    $handler = new $className( $this, $this->backend );
+              }
+
+            return $this->serviceHandlers[$className] = $handler;
+        }
 
         throw new MissingClass( $className, 'service handler' );
     }
