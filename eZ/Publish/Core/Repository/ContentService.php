@@ -524,6 +524,7 @@ class ContentService implements ContentServiceInterface
             {
                 $isEmptyValue = false;
                 $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $contentCreateStruct->mainLanguageCode;
+                $isLanguageMain = $valueLanguageCode === $contentCreateStruct->mainLanguageCode;
                 if ( isset( $fields[$fieldDefinition->identifier][$valueLanguageCode] ) )
                 {
                     $fieldValue = $fieldType->acceptValue(
@@ -562,7 +563,8 @@ class ContentService implements ContentServiceInterface
 
                 $fieldValues[$fieldDefinition->identifier][$languageCode] = $fieldValue;
 
-                if ( !$isEmptyValue )
+                // Only non-empty value fields and untranslatable fields in main language
+                if ( !$isEmptyValue && ( $fieldDefinition->isTranslatable || $isLanguageMain ) )
                 {
                     $spiFields[] = new SPIField(
                         array(
