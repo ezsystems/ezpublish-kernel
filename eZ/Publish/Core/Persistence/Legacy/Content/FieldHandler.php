@@ -14,6 +14,7 @@ use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
@@ -125,36 +126,73 @@ class FieldHandler
      */
     public function createNewFields( Content $content )
     {
-        $languageCodes = $this->getLanguageCodes( $content->versionInfo->languageIds );
-        $updateFieldMap = $this->getFieldMap( $content->fields );
+        $this->createCompleteFields( $content );
+
+        foreach ( $content->fields as $field )
+        {
+            $this->createNewField( $field, $content );
+        }
+    }
+
+    /**
+     * Adds missing fields to the given $content field collection.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     *
+     * @return void
+     */
+    protected function createCompleteFields( Content $content )
+    {
+        $languageCodes = array();
+        $fields = $this->getFieldMap( $content->fields, $languageCodes );
         $contentType = $this->typeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
 
         foreach ( $contentType->fieldDefinitions as $fieldDefinition )
         {
             foreach ( $languageCodes as $languageCode => $dummy )
             {
-                if ( isset( $updateFieldMap[$fieldDefinition->id][$languageCode] ) )
+                if ( isset( $fields[$fieldDefinition->id][$languageCode] ) )
                 {
-                    $field = $updateFieldMap[$fieldDefinition->id][$languageCode];
+                    continue;
+                }
+
+                if ( $fieldDefinition->isTranslatable
+                    || !isset( $fields[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode] ) )
+                {
+                    $content->fields[] = $this->getEmptyField( $fieldDefinition, $languageCode );
                 }
                 else
                 {
-                    $fieldType = $this->buildFieldType( $fieldDefinition->fieldType );
-                    $field = new Field(
-                        array(
-                            "id" => null,
-                            "fieldDefinitionId" => $fieldDefinition->id,
-                            "type" => $fieldDefinition->fieldType,
-                            "value" => $fieldType->toPersistenceValue( $fieldType->getEmptyValue() ),
-                            "languageCode" => $languageCode,
-                            "versionNo" => null
-                        )
-                    );
+                    $field = clone $fields[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
+                    $field->id = null;
+                    $field->languageCode = $languageCode;
+                    $content->fields[] = $field;
                 }
-
-                $this->createNewField( $field, $content );
             }
         }
+    }
+
+    /**
+     * Returns empty Field object for given field definition and language code.
+     *
+     * Uses FieldType to create empty field value.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Field
+     */
+    protected function getEmptyField( FieldDefinition $fieldDefinition, $languageCode )
+    {
+        $fieldType = $this->buildFieldType( $fieldDefinition->fieldType );
+        return new Field(
+            array(
+                "fieldDefinitionId" => $fieldDefinition->id,
+                "type" => $fieldDefinition->fieldType,
+                "value" => $fieldType->toPersistenceValue( $fieldType->getEmptyValue() ),
+                "languageCode" => $languageCode
+            )
+        );
     }
 
     /**
@@ -316,15 +354,7 @@ class FieldHandler
                     if ( $fieldDefinition->isTranslatable )
                     {
                         // Use empty value
-                        $fieldType = $this->buildFieldType( $fieldDefinition->fieldType );
-                        $field = new Field(
-                            array(
-                                "fieldDefinitionId" => $fieldDefinition->id,
-                                "type" => $fieldDefinition->fieldType,
-                                "value" => $fieldType->toPersistenceValue( $fieldType->getEmptyValue() ),
-                                "languageCode" => $languageCode
-                            )
-                        );
+                        $field = $this->getEmptyField( $fieldDefinition, $languageCode );
                     }
                     else
                     {

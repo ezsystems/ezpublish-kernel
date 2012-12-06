@@ -151,7 +151,7 @@ class Handler implements BaseContentHandler
             );
         }
 
-        return $this->load( $content->versionInfo->contentInfo->id, $versionNo );
+        return $content;
     }
 
     /**
