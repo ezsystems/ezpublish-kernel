@@ -292,7 +292,7 @@ class Handler implements HandlerInterface
         $this->converterRegistry = $converterRegistry;
         $this->storageRegistry = $storageRegistry;
         $this->transformationProcessor = $transformationProcessor;
-        $this->config = $config;
+        $this->config = $config + array( "field_type" => array() );
     }
 
     /**
