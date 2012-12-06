@@ -296,18 +296,6 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * Injects field type configuration.
-     *
-     * @param array $fieldTypes
-     *
-     * @return void
-     */
-    public function setFieldTypeConfig( array $fieldTypes )
-    {
-        $this->config["field_type"] = $fieldTypes;
-    }
-
-    /**
      * @internal LocationHandler is injected into property to avoid circular dependency
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Handler
