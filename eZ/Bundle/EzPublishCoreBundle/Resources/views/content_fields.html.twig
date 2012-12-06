@@ -8,8 +8,6 @@
  # - array parameters options passed to ez_render_field under the parameters key
  # - array attr the attributes to add the generate HTML, contains at least a "class" entry
  #              containing <fieldtypeidentifier>-field
- # - bool editMode not used for now
- # - array editMeta not used for now
  #}
 
 {% block ezstring_field %}
@@ -400,9 +398,6 @@
 {% block field_attributes %}
 {% spaceless %}
     {% set attr = attr|default( {} ) %}
-    {% set editMeta = editMeta|default( {} ) %}
     {% for attrname, attrvalue in attr %}{{ attrname }}="{{ attrvalue }}" {% endfor %}
-    {# Rendering metadata for editorial interface, if available #}
-    {% for metaName, metaValue in editMeta %}{{ 'data-ez-' ~ metaName }}="{{ metaValue }}" {% endfor %}
 {% endspaceless %}
 {% endblock %}

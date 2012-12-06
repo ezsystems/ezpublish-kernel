@@ -148,29 +148,23 @@ class ContentExtension extends Twig_Extension
     }
 
     /**
-     * Renders the HTML for a given field.
+     * Generates the array of parameter to pass to the field template.
      *
      * @param \eZ\Publish\Core\Repository\Values\Content\Content $content
-     * @param string $fieldIdentifier Identifier for the field we want to render
+     * @param \eZ\Publish\Core\Repository\Values\Content\Field $field the Field to display
      * @param array $params An array of parameters to pass to the field view
      *
-     * @throws \InvalidArgumentException If $fieldIdentifier is invalid in $content
-     *
-     * @return string The HTML markup
+     * @return array
      */
-    public function renderField( Content $content, $fieldIdentifier, array $params = array() )
+    protected function getRenderFieldBlockParameters(
+        Content $content, Field $field, array $params = array()
+    )
     {
         // Merging passed parameters to default ones
         $params += array(
-            'lang' => null,
-            'editMode' => false,
             'parameters' => array(), // parameters dedicated to template processing
             'attr' => array() // attributes to add on the enclosing HTML tags
         );
-
-        $field = $content->getField( $fieldIdentifier, $params['lang'] );
-        if ( !$field instanceof Field )
-            throw new InvalidArgumentException( "Invalid field identifier '$fieldIdentifier' for content #{$content->contentInfo->id}" );
 
         $versionInfo = $content->getVersionInfo();
         $contentInfo = $versionInfo->getContentInfo();
@@ -178,22 +172,15 @@ class ContentExtension extends Twig_Extension
         // Adding Field, FieldSettings and ContentInfo objects to
         // parameters to be passed to the template
         $params += array(
-            'field'             => $field,
-            'contentInfo'       => $contentInfo,
-            'versionInfo'       => $versionInfo,
-            'fieldSettings'     => $contentType->getFieldDefinition( $fieldIdentifier )->getFieldSettings()
+            'field' => $field,
+            'contentInfo' => $contentInfo,
+            'versionInfo' => $versionInfo,
+            'fieldSettings' => $contentType
+                ->getFieldDefinition( $field->fieldDefIdentifier )
+                ->getFieldSettings()
         );
 
-        // Ensure that not edit metadata has been injected from the template
-        unset( $params['editMeta'] );
-        if ( $params['editMode'] ?: $this->isInEditMode() )
-        {
-            $params += array(
-                'editMeta' => $this->getEditMetadata( $content, $field )
-            );
-        }
-
-        // make we can easily add class="<fieldtypeidentifier>-field" to the
+        // make sure we can easily add class="<fieldtypeidentifier>-field" to the
         // generated HTML
         if ( isset( $params['attr']['class'] ) )
         {
@@ -202,6 +189,33 @@ class ContentExtension extends Twig_Extension
         else
         {
             $params['attr']['class'] = $this->getFieldTypeIdentifier( $content, $field ) . '-field';
+        }
+        return $params;
+    }
+
+    /**
+     * Renders the HTML for a given field.
+     *
+     * @param \eZ\Publish\Core\Repository\Values\Content\Content $content
+     * @param string $fieldIdentifier Identifier for the field we want to render
+     * @param array $params An array of parameters to pass to the field view
+     * @throws \InvalidArgumentException If $fieldIdentifier is invalid in $content
+     * @return string The HTML markup
+     */
+    public function renderField( Content $content, $fieldIdentifier, array $params = array() )
+    {
+        $lang = null;
+        if ( isset( $params['lang'] ) )
+        {
+            $lang = $params['lang'];
+            unset( $params['lang'] );
+        }
+        $field = $content->getField( $fieldIdentifier, $lang );
+        if ( !$field instanceof Field )
+        {
+            throw new InvalidArgumentException(
+                "Invalid field identifier '$fieldIdentifier' for content #{$content->contentInfo->id}"
+            );
         }
 
         $localTemplate = null;
@@ -212,6 +226,8 @@ class ContentExtension extends Twig_Extension
             $localTemplate = $params['template'];
             unset( $params['template'] );
         }
+
+        $params = $this->getRenderFieldBlockParameters( $content, $field, $params );
 
         // Getting instance of Twig_Template that will be used to render blocks
         if ( !$this->template instanceof Twig_Template )
@@ -384,43 +400,5 @@ class ContentExtension extends Twig_Extension
         }
 
         return $this->fieldTypeIdentifiers[$field->fieldDefIdentifier];
-    }
-
-    /**
-     * Checks if we are in edit mode or not (editorial interface).
-     *
-     * @todo Needs to check in the session and via the API if current user has access to edit mode
-     *
-     * @return boolean
-     */
-    protected function isInEditMode()
-    {
-        return false;
-    }
-
-    /**
-     * Returns metadata needed for edition while using the editorial interface.
-     * These will basically be rendered as HTML data attributes, prefixed by "data-ez".
-     * Example: data-ez-field-id="12345"
-     *
-     * @param \eZ\Publish\Core\Repository\Values\Content\Content $content
-     * @param \eZ\Publish\API\Repository\Values\Content\Field $field
-     *
-     * @todo It would make sense to also ask for additional metadata supported by the field type
-     *
-     * @return array
-     */
-    protected function getEditMetadata( Content $content, Field $field )
-    {
-        $versionInfo = $content->getVersionInfo();
-
-        return array(
-            'field-id'                  => $field->id,
-            'field-identifier'          => $field->fieldDefIdentifier,
-            'field-type-identifier'     => $this->getFieldTypeIdentifier( $content, $field ),
-            'content-id'                => $versionInfo->getContentInfo()->id,
-            'version'                   => $versionInfo->versionNo,
-            'locale-code'               => $field->languageCode
-        );
     }
 }
