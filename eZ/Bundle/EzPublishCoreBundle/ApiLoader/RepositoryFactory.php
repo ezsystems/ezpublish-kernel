@@ -9,15 +9,18 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
-use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
-use eZ\Publish\SPI\IO\Handler as IoHandler;
-use eZ\Publish\SPI\Limitation\Type as SPILimitationType;
-use eZ\Publish\API\Repository\Repository;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
-class RepositoryFactory
-{
+
+use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
+    eZ\Publish\SPI\IO\Handler as IoHandler,
+    eZ\Publish\SPI\Limitation\Type as SPILimitationType,
+    eZ\Publish\API\Repository\Repository,
+    Symfony\Component\DependencyInjection\ContainerInterface,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+
+
+
+class RepositoryFactory {
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
@@ -44,8 +47,7 @@ class RepositoryFactory
      */
     protected $roleLimitations = array();
 
-    public function __construct( ContainerInterface $container )
-    {
+    public function __construct( ContainerInterface $container ) {
         $this->container = $container;
     }
 
@@ -60,8 +62,7 @@ class RepositoryFactory
      *
      * @return \eZ\Publish\API\Repository\Repository
      */
-    public function buildRepository( PersistenceHandler $persistenceHandler, IoHandler $ioHandler )
-    {
+    public function buildRepository( PersistenceHandler $persistenceHandler, IoHandler $ioHandler ) {
         /** @var $configResolver \eZ\Publish\Core\MVC\ConfigResolverInterface */
         $configResolver = $this->container->get( 'ezpublish.config.resolver' );
         $repositoryClass = $this->container->getParameter( 'ezpublish.api.inner_repository.class' );
@@ -85,8 +86,7 @@ class RepositoryFactory
      *
      * @return \Closure
      */
-    public function buildLazyRepository()
-    {
+    public function buildLazyRepository() {
         $container = $this->container;
         return function () use ( $container )
         {
@@ -107,8 +107,7 @@ class RepositoryFactory
      * @param string $fieldTypeServiceId The field type service Id
      * @param string $fieldTypeAlias The field type alias (e.g. "ezstring")
      */
-    public function registerFieldType( $fieldTypeServiceId, $fieldTypeAlias )
-    {
+    public function registerFieldType( $fieldTypeServiceId, $fieldTypeAlias ) {
         $container = $this->container;
         $this->fieldTypes[$fieldTypeAlias] = function() use ( $container, $fieldTypeServiceId )
         {
@@ -123,8 +122,7 @@ class RepositoryFactory
      * @param string $serviceId The external storage handler service Id
      * @param string $fieldTypeAlias The field type alias (e.g. "ezstring")
      */
-    public function registerExternalStorageHandler( $serviceId, $fieldTypeAlias )
-    {
+    public function registerExternalStorageHandler( $serviceId, $fieldTypeAlias ) {
         $container = $this->container;
         $this->externalStorages[$fieldTypeAlias] = function () use ( $container, $serviceId )
         {
@@ -138,8 +136,7 @@ class RepositoryFactory
      * @param string $limitationName
      * @param \eZ\Publish\SPI\Limitation\Type $limitationType
      */
-    public function registerLimitationType( $limitationName, SPILimitationType $limitationType )
-    {
+    public function registerLimitationType( $limitationName, SPILimitationType $limitationType ) {
         $this->roleLimitations[$limitationName] = $limitationType;
     }
 
@@ -148,8 +145,7 @@ class RepositoryFactory
      *
      * @return \Closure[]
      */
-    public function getExternalStorageHandlers()
-    {
+    public function getExternalStorageHandlers() {
         return $this->externalStorages;
     }
 
@@ -163,8 +159,7 @@ class RepositoryFactory
      *
      * @return mixed
      */
-    public function buildService( Repository $repository, $serviceName )
-    {
+    public function buildService( Repository $repository, $serviceName ) {
         $methodName = 'get' . $serviceName . 'Service';
         if ( !method_exists( $repository, $methodName ) )
         {
