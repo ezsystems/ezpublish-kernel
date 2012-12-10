@@ -284,11 +284,15 @@ class URLAliasServiceStub implements URLAliasService
      * ATTENTION: This method is not part of the Public API but is only used
      * internally in this implementation.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param \eZ\Publish\API\Repository\Content\VersionInfo $versionInfo
      *
      * @return void
      */
-    public function _createAliasesForVersion( VersionInfo $versionInfo )
+    public function createAliasesForVersion( VersionInfo $versionInfo )
     {
         $locationService = $this->repository->getLocationService();
 
@@ -298,8 +302,8 @@ class URLAliasServiceStub implements URLAliasService
 
         foreach ( $locations as $location )
         {
-            $this->_obsoleteOldAliases( $location );
-            $this->_createAliasesForLocation( $location );
+            $this->obsoleteOldAliases( $location );
+            $this->createAliasesForLocation( $location );
         }
     }
 
@@ -311,11 +315,15 @@ class URLAliasServiceStub implements URLAliasService
      * ATTENTION: This method is not part of the Public API but is only used
      * internally in this implementation.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param Location $location
      *
      * @return void
      */
-    public function _createAliasesForLocation( Location $location )
+    public function createAliasesForLocation( Location $location )
     {
         $contentService = $this->repository->getContentService();
         $content = $contentService->loadContent(
@@ -331,7 +339,7 @@ class URLAliasServiceStub implements URLAliasService
         $versionInfo = $content->getVersionInfo();
         $contentInfo = $versionInfo->getContentInfo();
 
-        $this->_obsoleteOldAliases( $location );
+        $this->obsoleteOldAliases( $location );
 
         foreach ( $versionInfo->getNames() as $languageCode => $name )
         {
@@ -464,7 +472,7 @@ class URLAliasServiceStub implements URLAliasService
      *
      * @return void
      */
-    public function _obsoleteOldAliases( Location $location )
+    private function obsoleteOldAliases( Location $location )
     {
         $aliases = $this->listLocationAliases( $location, false );
         foreach ( $aliases as $alias )

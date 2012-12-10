@@ -752,7 +752,7 @@ class LocationServiceStub implements LocationService
         );
 
         $newLocation = $this->locations[$location->id] = new LocationStub( $values );
-        $this->repository->getUrlAliasService()->_createAliasesForLocation( $newLocation );
+        $this->repository->getUrlAliasService()->createAliasesForLocation( $newLocation );
 
         foreach ( $this->loadLocationChildren( $location )->locations as $childLocation )
         {
@@ -815,7 +815,7 @@ class LocationServiceStub implements LocationService
             $location->getContentInfo()->__setMainLocationId( $location->id );
         }
 
-        $this->repository->getUrlAliasService()->_createAliasesForLocation( $location );
+        $this->repository->getUrlAliasService()->createAliasesForLocation( $location );
 
         return ( $this->locations[$location->id] = $location );
     }

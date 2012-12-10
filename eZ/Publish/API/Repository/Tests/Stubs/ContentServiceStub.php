@@ -1310,7 +1310,7 @@ class ContentServiceStub implements ContentService
         $this->contentInfo[$contentInfo->id] = $publishedContentInfo;
         $this->versionInfo[$versionInfo->id] = $publishedVersionInfo;
 
-        $this->repository->getUrlAliasService()->_createAliasesForVersion(
+        $this->repository->getUrlAliasService()->createAliasesForVersion(
             $publishedVersionInfo
         );
 
@@ -1495,7 +1495,7 @@ class ContentServiceStub implements ContentService
             $destinationLocationCreateStruct
         );
 
-        $this->repository->getUrlAliasService()->_createAliasesForLocation( $location );
+        $this->repository->getUrlAliasService()->createAliasesForLocation( $location );
 
         return $this->loadContent( $this->contentNextId );
     }
