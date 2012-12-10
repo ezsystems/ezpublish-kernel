@@ -250,7 +250,7 @@ class LanguageServiceStub implements LanguageService
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
-        if ( count( $this->contentService->__loadContentInfoByLanguageCode( $language->languageCode ) ) )
+        if ( count( $this->contentService->loadContentInfoByLanguageCode( $language->languageCode ) ) )
         {
             throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
@@ -280,9 +280,13 @@ class LanguageServiceStub implements LanguageService
     /**
      * Internal helper method to emulate a rollback.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __rollback()
+    public function rollback()
     {
         $this->initFromFixture();
     }

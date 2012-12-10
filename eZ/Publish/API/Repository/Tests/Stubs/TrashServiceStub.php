@@ -95,7 +95,7 @@ class TrashServiceStub implements TrashService
         }
 
         // Trash all children
-        foreach ( $this->locationService->__trashLocation( $location ) as $trashedLocation )
+        foreach ( $this->locationService->trashLocation( $location ) as $trashedLocation )
         {
             $this->trashItems[$trashedLocation->id] = $this->trashItemFromLocation( $trashedLocation );
         }
@@ -150,7 +150,7 @@ class TrashServiceStub implements TrashService
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
-        $location = $this->locationService->__recoverLocation(
+        $location = $this->locationService->recoverLocation(
             $trashItem->location,
             $newParentLocation
         );
@@ -226,9 +226,13 @@ class TrashServiceStub implements TrashService
     /**
      * Internal helper method to emulate a rollback.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __rollback()
+    public function rollback()
     {
         $this->emptyTrash();
     }

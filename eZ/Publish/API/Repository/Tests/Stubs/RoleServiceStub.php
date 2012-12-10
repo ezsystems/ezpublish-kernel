@@ -419,7 +419,7 @@ class RoleServiceStub implements RoleService
     public function loadPoliciesByUserId( $userId )
     {
         $contentIds = array( $userId );
-        foreach ( $this->userService->__loadUserGroupsByUserId( $userId ) as $group )
+        foreach ( $this->userService->loadUserGroupsByUserId( $userId ) as $group )
         {
             $contentIds[] = $group->id;
         }
@@ -471,13 +471,15 @@ class RoleServiceStub implements RoleService
     /**
      * Loads all policies from a role
      *
-     * @private
+     * @access private
+     *
+     * @internal
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
-    public function __getRolePolicies( Role $role )
+    public function getRolePolicies( Role $role )
     {
         $policies = array();
         foreach ( $this->role2policy[$role->id] as $policyId )
@@ -628,7 +630,7 @@ class RoleServiceStub implements RoleService
 
         if ( $inherited )
         {
-            $userGroups = $this->repository->getUserService()->__loadUserGroupsByUserId( $user->id );
+            $userGroups = $this->repository->getUserService()->loadUserGroupsByUserId( $user->id );
             foreach ( $userGroups as $userGroup )
             {
                 $roleAssignments = array_merge(
@@ -965,9 +967,13 @@ class RoleServiceStub implements RoleService
     /**
      * Internal helper method to emulate a rollback.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __rollback()
+    public function rollback()
     {
         $this->initFromFixture();
     }
