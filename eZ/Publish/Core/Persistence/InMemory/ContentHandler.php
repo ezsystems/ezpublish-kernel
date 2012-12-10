@@ -684,7 +684,9 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @todo document
+     * Returns empty Field object for given field definition and language code.
+     *
+     * Uses FieldType to create empty field value.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @param string $languageCode
