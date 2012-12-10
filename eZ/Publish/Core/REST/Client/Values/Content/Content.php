@@ -20,15 +20,15 @@ use eZ\Publish\Core\REST\Client\ContentService;
  * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType convenience getter for $versionInfo->contentInfo->contentType
  * @property-read mixed $id convenience getter for retrieving the contentId: $versionInfo->content->id
  * @property-read \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo calls getVersionInfo()
- * @property-read array $fields access fields, calls getFields()
- * @property-read array $relations calls getRelations()
+ * @property-read \eZ\Publish\API\Repository\Values\Content\Field[] $fields access fields, calls getFields()
+ * @property-read \eZ\Publish\API\Repository\Values\Content\Relation[] $relations Calls getRelations()
  *
  * @todo Implement convenience property access!
  */
 class Content extends \eZ\Publish\API\Repository\Values\Content\Content
 {
     /**
-     * @var array an array of field values like $fields[$fieldDefIdentifier][$languageCode]
+     * @var \eZ\Publish\API\Repository\Values\Content\Field[][] Array of array of field values like $fields[$fieldDefIdentifier][$languageCode]
      */
     protected $fields;
 
@@ -43,7 +43,7 @@ class Content extends \eZ\Publish\API\Repository\Values\Content\Content
     protected $versionInfo;
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field}
+     * @var \eZ\Publish\API\Repository\Values\Content\Field[]
      */
     private $internalFields;
 
@@ -57,6 +57,7 @@ class Content extends \eZ\Publish\API\Repository\Values\Content\Content
      *
      * @param ContentService $contentService
      * @param array $data
+     *
      * @access protected
      */
     function __construct( ContentService $contentService, array $data = array() )
@@ -73,7 +74,7 @@ class Content extends \eZ\Publish\API\Repository\Values\Content\Content
     }
 
     /**
-     * returns the VersionInfo for this version
+     * Returns the VersionInfo for this version
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
@@ -83,7 +84,7 @@ class Content extends \eZ\Publish\API\Repository\Values\Content\Content
     }
 
     /**
-     * returns a field value for the given value
+     * Returns a field value for the given value
      * $version->fields[$fieldDefId][$languageCode] is an equivalent call
      * if no language is given on a translatable field this method returns
      * the value of the initial language of the version if present, otherwise null.
@@ -110,7 +111,7 @@ class Content extends \eZ\Publish\API\Repository\Values\Content\Content
     }
 
     /**
-     * returns the outgoing relations
+     * Returns the outgoing relations
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[] An array of {@link Relation}
      */
@@ -163,8 +164,8 @@ class Content extends \eZ\Publish\API\Repository\Values\Content\Content
      *
      * If not set the initialLanguage of the content version is used.
      *
-     * @param $fieldDefIdentifier
-     * @param null $languageCode
+     * @param string $fieldDefIdentifier
+     * @param string|null $languageCode
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field|null A {@link Field} or null if nothing is found
      */

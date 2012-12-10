@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\SPI\Persistence\Content\UrlWildcard;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 
 /**
  * UrlWildcard Gateway
@@ -27,7 +27,7 @@ class EzcDatabase extends Gateway
     /**
      * Database handler
      *
-     * @var \ezcDbHandler $dbHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected $dbHandler;
 
@@ -155,9 +155,9 @@ class EzcDatabase extends Gateway
         )->from(
             $this->dbHandler->quoteTable( "ezurlwildcard" )
         )->limit(
-            $limit > 0
-                ? $limit
-                : self::MAX_LIMIT,
+            $limit > 0 ?
+                $limit :
+                self::MAX_LIMIT,
             $offset
         );
 

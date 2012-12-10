@@ -23,6 +23,7 @@ interface Converter
      *  - null if a partial work is done on $xmlDoc (useful for pre-conversion).
      *
      * @param \DOMDocument $xmlDoc
+     *
      * @return string|null
      */
     public function convert( DOMDocument $xmlDoc );

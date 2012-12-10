@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
-use PHPUnit_Framework_TestCase,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\Router,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement as URIElementMatcher,
-    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+
+use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement as URIElementMatcher;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 
 class RouterURIElementTest extends PHPUnit_Framework_TestCase
 {
@@ -117,8 +118,9 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $uri
-     * @param $expectedFixedUpURI
+     * @param string $uri
+     * @param string $expectedFixedUpURI
+     *
      * @dataProvider analyseProvider
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::analyseURI
      */
@@ -132,8 +134,9 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $fullUri
-     * @param $linkUri
+     * @param string $fullUri
+     * @param string $linkUri
+     *
      * @dataProvider analyseProvider
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::analyseLink
      */

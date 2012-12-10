@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\IdManager;
+
 use eZ\Publish\API\Repository\Tests\IdManager;
 
 /**
@@ -23,6 +24,7 @@ class Php extends IdManager
      *
      * @param string $type
      * @param mixed $rawId
+     *
      * @return mixed
      */
     public function generateId( $type, $rawId )
@@ -38,6 +40,7 @@ class Php extends IdManager
      *
      * @param string $type
      * @param mixed $id
+     *
      * @return mixed
      */
     public function parseId( $type, $id )

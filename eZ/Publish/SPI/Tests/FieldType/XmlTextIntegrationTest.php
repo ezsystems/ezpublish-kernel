@@ -8,20 +8,21 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText as XmlTextConverter,
-    eZ\Publish\Core\FieldType\XmlText\XmlTextStorage,
-    eZ\Publish\Core\FieldType\NullStorage,
-    eZ\Publish\Core\FieldType\FieldSettings,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
-    DOMDocument;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText as XmlTextConverter;
+use eZ\Publish\Core\FieldType\XmlText\XmlTextStorage;
+use eZ\Publish\Core\FieldType\NullStorage;
+use eZ\Publish\Core\FieldType\FieldSettings;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
+use DOMDocument;
 use eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway\LegacyStorage;
 
 /**
  * Integration test for legacy storage field types
  *
  * This abstract base test case is supposed to be the base for field type
- * integration tests. It basically calls all involved methods in the field type 
+ * integration tests. It basically calls all involved methods in the field type
  * ``Converter`` and ``Storage`` implementations. Fo get it working implement
  * the abstract methods in a sensible way.
  *
@@ -62,7 +63,7 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
             'ezxmltext',
             new XmlTextStorage(
                 array(
-                     'LegacyStorage' => new LegacyStorage()
+                    'LegacyStorage' => new LegacyStorage()
                 )
             )
         );

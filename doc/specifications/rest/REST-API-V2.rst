@@ -44,15 +44,15 @@ transforms to:
           "#text":"value"
         },
         "simpleValue":"45",
-        "fields": { 
+        "fields": {
            "field": [ 1, 2 ]
         }
       }
     }
 
 
-Different schemas which induce different media types one on resource can be used to allow to make specific 
-representations optimized for purposes of clients. 
+Different schemas which induce different media types one on resource can be used to allow to make specific
+representations optimized for purposes of clients.
 It is possible to make a new schema for mobile devices for retieving e.g. an article.
 
 .. code:: xml
@@ -104,7 +104,7 @@ URIs
 The REST api is designed that the client has not to construct any uri's to resources by itself.
 Starting from the root resources (ListRoot_) every response includes further links to related resources.
 The uris should be used directly as identifiers on the client side and the client should not
-contruct an uri by using an id.  
+contruct an uri by using an id.
 
 
 Authentication
@@ -135,13 +135,13 @@ If activated the user has to login and the client has to send the session cookie
 :Resource:    /user/sessions
 :Method:      POST
 :Description: Performs a login for the user and returns the session cookie
-:Request format: application/x-www-form-urlencoded 
+:Request format: application/x-www-form-urlencoded
 :Parameters:
         :login:  the login of the user
         :password:  the password
-:Response: 200 Set-Cookie: SessionId : <sessionID>  A unique session id containing encryped information of client host and expiretime  
+:Response: 200 Set-Cookie: SessionId : <sessionID>  A unique session id containing encryped information of client host and expiretime
            <Uri of user>
-:Error codes: 
+:Error codes:
        :401: If the authorization failed
 
 
@@ -168,47 +168,47 @@ Content
 Overview
 --------
 
-In the content module there are the root collections objects, locations, trash and sections 
+In the content module there are the root collections objects, locations, trash and sections
 
 ===================================================== =================== ======================= ============================ ================ ==============
         :Resource:                                          POST                GET                  PATCH/PUT                   DELETE            COPY
 ----------------------------------------------------- ------------------- ----------------------- ---------------------------- ---------------- --------------
-/                                                     .                   list root resources     .                            .                             
-/content/objects                                      create new content  .                       .                            .            
+/                                                     .                   list root resources     .                            .
+/content/objects                                      create new content  .                       .                            .
 /content/objects/<ID>                                 .                   load content            update content meta data     delete content   copy content
 /content/objects/<ID>/<lang_code>                     .                   .                       .                            delete language
-                                                                                                                               from content   
-/content/objects/<ID>/versions                        .                   load all versions       .                            .            
+                                                                                                                               from content
+/content/objects/<ID>/versions                        .                   load all versions       .                            .
                                                                           (version infos)
 /content/objects/<ID>/currentversion                  .                   redirect to current v.  .                            .                 create draft
                                                                                                                                                  from current
                                                                                                                                                  version
 /content/objects/<ID>/versions/<no>                   .                   get a specific version  update a version/draft       delete version    create draft
                                                                                                                                                  from version
-/content/objects/<ID>/versions/<no>/relations         create new relation load relations of vers. .                            .              
+/content/objects/<ID>/versions/<no>/relations         create new relation load relations of vers. .                            .
 /content/objects/<ID>/versions/<no>/relations/<ID>    .                   load relation details   .                            delete relation
 /content/objects/<ID>/locations                       create location     load locations of cont- .                            .
-                                                                          ent                            
-/content/locations                                    .                   list/find locations     .                            .                              
+                                                                          ent
+/content/locations                                    .                   list/find locations     .                            .
 /content/locations/<path>                             .                   load a location         update location              delete location  copy subtree
-/content/locations/<path>/children                    .                   load children           .                            .                  
-/content/views                                        create view         list views              .                            .            
+/content/locations/<path>/children                    .                   load children           .                            .
+/content/views                                        create view         list views              .                            .
 /content/views/<ID>                                   .                   get view                .                            delete view
-/content/views/<ID>/results                           .                   get view results        .                            .          
-/content/sections                                     create section      list all sections       .                            .                    
+/content/views/<ID>/results                           .                   get view results        .                            .
+/content/sections                                     create section      list all sections       .                            .
 /content/sections/<ID>                                .                   load section            update section               delete section
 /content/trash                                        .                   list trash items        .                            empty trash
 /content/trash/<ID>                                   .                   load trash item         untrash item                 delete from trsh
 /content/objectstategroups                            create objectstate  list objectstategroups  .                            .
                                                       group
 /content/objectstategroups/<ID>                       .                   get objectstate group   update objectstategroup      delete osg.
-/content/objectstategroups/<ID>/objectstates          create object state list object states      .                            .          
+/content/objectstategroups/<ID>/objectstates          create object state list object states      .                            .
 /content/objectstategroups/<ID>/objectstates/<ID>     .                   get object state        update objectstate           delete objectst.
 /content/objects/<ID>/objectstates                    .                   get object states of    update objectstates of       .
                                                                           content                 content
-/content/urlaliases                                   create url alias    list url aliases        .                            .          
+/content/urlaliases                                   create url alias    list url aliases        .                            .
 /content/urlaliases/<ID>                              .                   get url alias           .                            delete url wc.
-/content/urlwildcards                                 create url wildcard list url wildcards      .                            .          
+/content/urlwildcards                                 create url wildcard list url wildcards      .                            .
 /content/urlwildcards/<ID>                            .                   get url wildcard        .                            delete url wc.
 ===================================================== =================== ======================= ============================ ================ ==============
 
@@ -238,7 +238,7 @@ List Root Resources
     :Accept:
          :application/vnd.ez.api.Root+xml:  if set the list is return in xml format (see Root_)
          :application/vnd.ez.api.Root+json:  if set the list is returned in json format (see Root_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -246,8 +246,8 @@ List Root Resources
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Root_     
- 
+          Root_
+
 XML Example
 ```````````
 
@@ -337,7 +337,7 @@ JSON Example
         }
       }
     }
-     
+
 
 Managing content
 ~~~~~~~~~~~~~~~~
@@ -361,22 +361,22 @@ Creating Content
     :Content-Type:
          :application/vnd.ez.api.ContentCreate+json: the ContentCreate_ schema encoded in json
          :application/vnd.ez.api.ContentCreate+xml: the ContentCreate_ schema encoded in xml
-:Response: 
+:Response:
 
 
 .. code:: http
 
-          HTTP/1.1 201 Created  
+          HTTP/1.1 201 Created
           Location: /content/objects/<newID>
           ETag: "<new etag>"
           Accept-Patch: application/vnd.ez.api.ContentUpdate+(json|xml)
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Content_      
-          
-:Error codes: 
-       :400: If the Input does not match the input schema definition or the validation on a field fails, 
+          Content_
+
+:Error codes:
+       :400: If the Input does not match the input schema definition or the validation on a field fails,
        :401: If the user is not authorized to create this object in this location
        :404: If a parent location in specified in the request body (see ContentCreate_) and it does not exist
 
@@ -433,7 +433,7 @@ XML Example
         </field>
       </fields>
     </ContentCreate>
-    
+
 .. code:: http
 
     HTTP/1.1 201 Created
@@ -524,8 +524,8 @@ JSON Example
         },
         "mainLanguageCode": "eng-US",
         "LocationCreate": {
-          "ParentLocation": { 
-            "_href": "/content/locations/1/4/89" 
+          "ParentLocation": {
+            "_href": "/content/locations/1/4/89"
           },
           "priority": "0",
           "hidden": "false",
@@ -633,7 +633,7 @@ JSON Example
                 {
                   "fieldDefinitionIdentifer": "authors",
                   "languageCode": "eng-US",
-                  "fieldValue": 
+                  "fieldValue":
                   [
                     {
                       "name": "John Doe",
@@ -677,11 +677,11 @@ List/Search Content
 ```````````````````
 :Resource: /content/objects
 :Method: GET (not implemented)
-:Description: This resource will used in future for searching content by providing a query string as alternative to posting a view to /content/views. 
-        
+:Description: This resource will used in future for searching content by providing a query string as alternative to posting a view to /content/views.
+
 Load Content
 ````````````
-:Resource: /content/objects/<ID> 
+:Resource: /content/objects/<ID>
 :Method: GET
 :Description: Loads the content object for the given id. Depending on the Accept header the current version is embedded (i.e the current published version or if not exists the draft of the authenticated user)
 :Headers:
@@ -693,7 +693,7 @@ Load Content
     :If-None-Match: <etag> If the provided etag matches the current etag then a 304 Not Modified is returned. The etag changes if the meta data was changed - this happens also if there is a new published version..
 :Parameters:
     :languages: (comma separated list) restricts the output of translatable fields to the given languages
-:Response: 
+:Response:
 
 
 .. code:: http
@@ -704,8 +704,8 @@ Load Content
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Content_      
-          
+          Content_
+
 :Error Codes:
     :401: If the user is not authorized to read  this object. This could also happen if there is no published version yet and another user owns a draft of this content
     :404: If the ID is not found
@@ -746,12 +746,12 @@ XML Example
       <mainLanguageCode>eng-US</mainLanguageCode>
       <alwaysAvailable>true</alwaysAvailable>
     </Content>
-        
+
 
 
 Update Content
 ``````````````
-:Resource: /content/objects/<ID> 
+:Resource: /content/objects/<ID>
 :Method: PATCH or POST with header: X-HTTP-Method-Override: PATCH
 :Description: this method updates the content metadata which is independent from a version.
 :Headers:
@@ -759,10 +759,10 @@ Update Content
          :application/vnd.ez.api.ContentInfo+xml:  if set all informations for the content object (excluding the current version) are returned in xml format (see Content_)
          :application/vnd.ez.api.ContentInfo+json:  if set all informations for the content object (excluding the current version) are returned in json format (see Content_)
     :If-Match: <etag> Causes to patch only if the specified etag is the current one. Otherwise a 412 is returned.
-    :Content-Type: 
+    :Content-Type:
          :application/vnd.ez.api.ContentUpdate+json: the ContentUpdate_ schema encoded in json
          :application/vnd.ez.api.ContentUpdate+xml: the ContentUpdate_ schema encoded in xml
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -772,8 +772,8 @@ Update Content
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Content_      
-          
+          Content_
+
 
 :Error Codes:
     :400: If the Input does not match the input schema definition.
@@ -793,7 +793,7 @@ In this example
     - the owner of the content object is changed
 
 .. code:: http
- 
+
     POST /content/objects/23 HTTP/1.1
     X-HTTP-Method-Override: PATCH
     Host: www.example.net
@@ -813,7 +813,7 @@ In this example
       <alwaysAvailable>false</alwaysAvailable>
       <remoteId>qwert4321</remoteId>
     </ContentUpdate>
-    
+
 .. code:: http
 
     HTTP/1.1 200 OK
@@ -821,7 +821,7 @@ In this example
     Accept-Patch: application/vnd.ez.api.ContentUpdate+xml;charset=utf8
     Content-Type: application/vnd.ez.api.ContentInfo+xml
     Content-Length: xxx
-    
+
 .. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
@@ -844,9 +844,9 @@ In this example
 
 Delete Content
 ``````````````
-:Resource: /content/objects/<ID> 
+:Resource: /content/objects/<ID>
 :Method: DELETE
-:Description: The content is deleted. If the content has locations (which is required in 4.x) 
+:Description: The content is deleted. If the content has locations (which is required in 4.x)
               on delete all locations assigned the content object are deleted via delete subtree.
 :Response: 204
 :Error Codes:
@@ -858,19 +858,19 @@ Copy content
 
 :Resource:    /content/objects/<ID>
 :Method:      COPY or POST with header: X-HTTP-Method-Override COPY
-:Description: Creates a new content object as copy under the given parent location given in the destination header. 
+:Description: Creates a new content object as copy under the given parent location given in the destination header.
 :Headers:
     :Destination: A location resource to which the content object should be copied.
-:Response: 
+:Response:
 
 .. code:: http
 
       HTTP/1.1 201 Created
       Location: /content/objects/<newId>
 
-:Error codes: 
+:Error codes:
        :401: If the user is not authorized to copy this object to the given location
-       :404: If the source or destination resource do not exist.  
+       :404: If the source or destination resource do not exist.
 
 Example
 '''''''
@@ -893,7 +893,7 @@ Get Current Version
 :Resource: /content/objects/<ID>/currentversion
 :Method: GET
 :Description: Redirects to the current version of the content object
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -912,8 +912,8 @@ List Versions
 :Headers:
     :Accept:
          :application/vnd.ez.api.VersionList+xml:  if set the version list is returned in xml format (see VersionList_)
-         :application/vnd.ez.api.VersionList+json:  if set the version list is returned in json format 
-:Response: 
+         :application/vnd.ez.api.VersionList+json:  if set the version list is returned in json format
+:Response:
 
 .. code:: http
 
@@ -1018,7 +1018,7 @@ Load Version
 :Resource: /content/objects/<ID>/versions/<versionNo>
 :Method: GET
 :Description: Loads a specific version of a content object. This method returns  fields and relations
-:Parameters: 
+:Parameters:
     :fields: comma separated list of fields which should be returned in the response (see Content)
     :responseGroups: alternative: comma separated lists of predefined field groups (see REST API Spec v1)
     :languages: (comma separated list) restricts the output of translatable fields to the given languages
@@ -1026,8 +1026,8 @@ Load Version
     :If-None-Match: <etag> Only return the version if the given <etag> is the not current one otherwise a 304 is returned.
     :Accept:
          :application/vnd.ez.api.Version+xml:  if set the version list is returned in xml format (see VersionList_)
-         :application/vnd.ez.api.Version+json:  if set the version list is returned in json format 
-:Response: 
+         :application/vnd.ez.api.Version+json:  if set the version list is returned in json format
+:Response:
 
 .. code:: http
 
@@ -1054,7 +1054,7 @@ XML Example
     Host: api.example.com
     If-None-Match: "1758f762"
     Accept: application/vnd.ez.api.Version+xml
-       
+
 .. code:: http
 
     HTTP/1.1 200 OK
@@ -1066,7 +1066,7 @@ XML Example
 .. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <Version href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml" 
+    <Version href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <VersionInfo>
         <id>45</id>
@@ -1120,18 +1120,18 @@ Update Version
 ``````````````
 :Resource: /content/objects/<ID>/version/<versionNo>
 :Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
-:Description: A specific draft is updated. 
-:Parameters: 
+:Description: A specific draft is updated.
+:Parameters:
     :languages: (comma separated list) restricts the output of translatable fields to the given languages
 :Headers:
     :Accept:
          :application/vnd.ez.api.Version+xml:  if set the updated version is returned in xml format (see Version_)
          :application/vnd.ez.api.Version+json:  if set the updated version returned in json format (see Version_)
     :If-Match: Causes to patch only if the specified etag is the current one
-    :Content-Type: 
+    :Content-Type:
          :application/vnd.ez.api.VersionUpdate+json: the VersionUpdate_ schema encoded in json
          :application/vnd.ez.api.VersionUpdate+xml: the VersionUpdate_ schema encoded in xml
-:Response: 
+:Response:
 
 .. code:: xml
 
@@ -1141,11 +1141,11 @@ Update Version
         Content-Type: <depending on accept header>
         Content-Length: <length>
 .. parsed-literal::
-        Version_      
+        Version_
 
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to update this version  
+    :401: If the user is not authorized to update this version
     :403: If the version is not allowed to change - i.e is not a DRAFT
     :404: If the content id or version id does not exist
     :412: If the current ETag does not match with the provided one in the If-Match header
@@ -1260,18 +1260,18 @@ Create a Draft from a Version
 :Response:
 
 .. code:: http
- 
+
         HTTP/1.1 201 Created
-        Location: /content/objects/<ID>/versions/<new-versionNo> 
+        Location: /content/objects/<ID>/versions/<new-versionNo>
         ETag: <etag>
-        Accept-Patch: application/vnd.ez.api.VersionUpdate+xml 
+        Accept-Patch: application/vnd.ez.api.VersionUpdate+xml
         Content-Type: <depending on accept header>
         Content-Length: <length>
 .. parsed-literal::
         Version_
 
 :Error Codes:
-    :401: If the user is not authorized to update this object  
+    :401: If the user is not authorized to update this object
     :404: If the content object was not found
 
 Create a Draft from current Version
@@ -1287,18 +1287,18 @@ Create a Draft from current Version
 :Response:
 
 .. code:: http
- 
+
         HTTP/1.1 201 Created
-        Location: /content/objects/<ID>/versions/<new-versionNo> 
+        Location: /content/objects/<ID>/versions/<new-versionNo>
         ETag: <etag>
-        Accept-Patch: application/vnd.ez.api.VersionUpdate+xml 
+        Accept-Patch: application/vnd.ez.api.VersionUpdate+xml
         Content-Type: <depending on accept header>
         Content-Length: <length>
 .. parsed-literal::
         Version_
 
 :Error Codes:
-    :401: If the user is not authorized to update this object  
+    :401: If the user is not authorized to update this object
     :403: If the current version is already a draft
     :404: If the content object was not found
 
@@ -1307,15 +1307,15 @@ Delete Content Version
 :Resource: /content/objects/<ID>/version/<versionNo>
 :Method: DELETE
 :Description: The version is deleted
-:Response: 
+:Response:
 
 .. code:: http
 
     HTTP/1.1 204 No Content
-    
+
 :Error Codes:
     :404: if the content object or version nr was not found
-    :401: If the user is not authorized to delete this version 
+    :401: If the user is not authorized to delete this version
     :403: If the version is in state published
 
 Publish a content version
@@ -1323,7 +1323,7 @@ Publish a content version
 :Resource: /content/objects/<ID>/version/<versionNo>
 :Method: PUBLISH or POST with header X-HTTP-Method-Override: PUBLISH
 :Description: The content version is published
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -1342,7 +1342,7 @@ Load relations of content
 :Resource: /content/objects/<ID>/relations
 :Method: GET
 :Description: redirects to the relations of the current version
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -1365,7 +1365,7 @@ Load relations of version
     :Accept:
          :application/vnd.ez.api.RelationList+xml:  if set the relation is returned in xml format (see RelationList_)
          :application/vnd.ez.api.RelationList+json:  if set the relation is returned in json format (see RelationList_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -1373,7 +1373,7 @@ Load relations of version
         Content-Type: <depending on Accept header>
         Content-Length: xxx
 .. parsed-literal::
-        RelationList_ 
+        RelationList_
 
 :Error Codes:
     :401: If the user is not authorized to read  this object
@@ -1409,7 +1409,7 @@ XML Example
             media-type="application/vnd.ez.api.ContentInfo+xml" />
           <DestinationContent href="/content/objects/87"
             media-type="application/vnd.ez.api.ContentInfo+xml" />
-          <sourceFieldDefinitionIdentifier>body</sourceFieldDefinitionIdentifier>  
+          <sourceFieldDefinitionIdentifier>body</sourceFieldDefinitionIdentifier>
           <RelationType>EMBED</RelationType>
         </Relation>
     </Relations>
@@ -1425,7 +1425,7 @@ Load a relation
     :Accept:
          :application/vnd.ez.api.Relation+xml:  if set the relation is returned in xml format (see Relation_)
          :application/vnd.ez.api.Relation+json:  if set the relation is returned in json format (see Relation_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -1437,21 +1437,21 @@ Load a relation
 
 :Error Codes:
     :404: If the  object with the given id or the relation does not exist
-    :401: If the user is not authorized to read this object  
-        
+    :401: If the user is not authorized to read this object
+
 Create a new Relation
 `````````````````````
 :Resource: /content/objects/<ID>/versions/<no>/relations
 :Method: POST
-:Description: Creates a new relation of type COMMON for the given draft. 
+:Description: Creates a new relation of type COMMON for the given draft.
 :Headers:
     :Accept:
          :application/vnd.ez.api.Relation+xml:  if set the updated version is returned in xml format (see RelationCreate_)
          :application/vnd.ez.api.Relation+json:  if set the updated version returned in json format (see RelationCreate_)
-    :Content-Type: 
+    :Content-Type:
          :application/vnd.ez.api.RelationCreate+xml: the RelationCreate (see RelationCreate_) schema encoded in xml
          :application/vnd.ez.api.RelationCreate+json: the RelationCreate (see RelationCreate_) schema encoded in json
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -1490,7 +1490,7 @@ XML Example
     Location: /content/objects/23/versions/4/relations
     Content-Type: application/vnd.ez.api.RelationCreate+xml
     Content-Length: xxx
-    
+
 .. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
@@ -1501,14 +1501,14 @@ XML Example
         media-type="application/vnd.ez.api.ContentInfo+xml" />
       <RelationType>COMMON</RelationType>
     </Relation>
- 
+
 
 Delete a relation
 `````````````````
 :Resource: /content/objects/<ID>/versions/<versionNo>/relations/<ID>
 :Method: DELETE
 :Description: Deletes a relation of the given draft.
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -1516,9 +1516,9 @@ Delete a relation
 
 :Error Codes:
     :404: content object was not found or the relation was not found in the given version
-    :401: If the user is not authorized to delete this relation 
+    :401: If the user is not authorized to delete this relation
     :403: If the relation is not of type COMMON or the given version is not a draft
-        
+
 
 
 Managing Locations
@@ -1536,22 +1536,22 @@ Create a new location for a content object
     :Content-Type:
          :application/vnd.ez.api.LocationCreate+json: the LocationCreate_ schema encoded in json
          :application/vnd.ez.api.LocationCreate+xml: the LocationCreate_ schema encoded in xml
-:Response: 
+:Response:
 
 .. code:: xml
 
-          HTTP/1.1 201 Created  
+          HTTP/1.1 201 Created
           Location: /content/locations/<newPath>
           ETag: "<new etag>"
           Accept-Patch: application/vnd.ez.api.LocationUpdate+(json|xml)
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Location_      
+          Location_
 
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to create this location  
+    :401: If the user is not authorized to create this location
     :403: If a location under the given parent id already exists
 
 XML Example
@@ -1602,9 +1602,9 @@ XML Example
       <sortField>PATH</sortField>
       <sortOrder>ASC</sortOrder>
     </Location>
-        
- 
-        
+
+
+
 Get locations for a content object
 ``````````````````````````````````
 :Resource: /content/objects/<ID>/locations
@@ -1615,7 +1615,7 @@ Get locations for a content object
          :application/vnd.ez.api.LocationList+xml:  if set the new location is returned in xml format (see Location_)
          :application/vnd.ez.api.LocationList+json:  if set the new location is returned in json format (see Location_)
     :If-None-Match: <etag>
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -1624,11 +1624,11 @@ Get locations for a content object
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Location_  (locationListType)     
+          Location_  (locationListType)
 
 :Error Codes:
     :404: If the  object with the given id does not exist
-    :401: If the user is not authorized to read this object  
+    :401: If the user is not authorized to read this object
 
 XML Example
 '''''''''''
@@ -1652,7 +1652,7 @@ XML Example
       <Location href="/content/locations/1/2/56" media-type="application/vnd.ez.api.Location+xml"/>
       <Location href="/content/locations/1/4/73/133" media-type="application/vnd.ez.api.Location+xml"/>
     </LocationList>
-        
+
 Load locations by id
 ````````````````````
 :Resource: /content/locations
@@ -1660,7 +1660,7 @@ Load locations by id
 :Description: loads the location for a given id (x)or remote id
 :Parameters: :id: the id of the location. If present the location is with the given id is returned.
              :remoteId: the remoteId of the location. If present the location with the given remoteId is returned
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -1670,7 +1670,7 @@ Load locations by id
 :Error Codes:
     :404: If the  location with the given id (remoteId) does not exist
 
-Load location 
+Load location
 `````````````
 :Resource: /content/locations/<path>
 :Method: GET
@@ -1680,7 +1680,7 @@ Load location
          :application/vnd.ez.api.Location+xml:  if set the new location is returned in xml format (see Location_)
          :application/vnd.ez.api.Location+json:  if set the new location is returned in json format (see Location_)
     :If-None-Match: <etag>
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -1691,11 +1691,11 @@ Load location
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Location_      
+          Location_
 
 :Error Codes:
     :404: If the  location with the given path does not exist
-    :401: If the user is not authorized to read this location  
+    :401: If the user is not authorized to read this location
 
 XML Example
 '''''''''''
@@ -1733,7 +1733,7 @@ XML Example
       <sortField>PATH</sortField>
       <sortOrder>ASC</sortOrder>
     </Location>
-     
+
 
 Update location
 ```````````````
@@ -1748,7 +1748,7 @@ Update location
          :application/vnd.ez.api.LocationUpdate+json: the LocationUpdate_ schema encoded in json
          :application/vnd.ez.api.LocationUpdate+xml: the LocationUpdate_ schema encoded in xml
     :If-Match: <etag>
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -1759,11 +1759,11 @@ Update location
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Location_      
+          Location_
 
 :Error Codes:
     :404: If the  location with the given id does not exist
-    :401: If the user is not authorized to update this location  
+    :401: If the user is not authorized to update this location
 
 
 XML Example
@@ -1797,7 +1797,7 @@ XML Example
     Accept-Patch: application/vnd.ez.api.LocationUpdate+xml
     Content-Type: application/vnd.ez.api.Location+xml
     Content-Length: xxx
-    
+
 .. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
@@ -1816,9 +1816,9 @@ XML Example
       <sortField>CLASS</sortField>
       <sortOrder>ASC</sortOrder>
     </Location>
-     
 
-Get child locations 
+
+Get child locations
 ```````````````````
 :Resource: /content/locations/<path>/children
 :Method: GET
@@ -1830,7 +1830,7 @@ Get child locations
     :Accept:
          :application/vnd.ez.api.LocationList+xml:  if set the new location list is returned in xml format (see Location_)
          :application/vnd.ez.api.LocationList+json:  if set the new location list is returned in json format (see Location_)
-:Response: 
+:Response:
 
 .. code:: xml
 
@@ -1838,11 +1838,11 @@ Get child locations
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Location_      
+          Location_
 
 :Error Codes:
     :404: If the  object with the given id does not exist
-    :401: If the user is not authorized to read this object  
+    :401: If the user is not authorized to read this object
 
 XML Example
 '''''''''''
@@ -1874,10 +1874,10 @@ Move Subtree
 :Description: moves the location to another parent. The destination can also be /content/trash where the location is put into the trash.
 :Headers:
     :Destination: A parent location resource to which the location is moved
-:Response: 
+:Response:
 
 .. code:: http
-    
+
         HTTP/1.1 201 Created
         Location: /content/locations/<newPath>
 
@@ -1890,8 +1890,8 @@ or if destination is /content/trash
 
 :Error Codes:
     :404: If the  location with the given id does not exist
-    :401: If the user is not authorized to move this location  
-        
+    :401: If the user is not authorized to move this location
+
 Copy Subtree
 ````````````
 :Resource: /content/locations/<path>
@@ -1899,16 +1899,16 @@ Copy Subtree
 :Description: copies the subtree to another parent
 :Headers:
     :Destination: A parent location resource to which the location is moved
-:Response: 
+:Response:
 
 .. code:: http
-    
+
         HTTP/1.1 201 Created
         Location: /content/locations/<newPath>
 
 :Error Codes:
     :404: If the location with the given id does not exist
-    :401: If the user is not authorized to move this location  
+    :401: If the user is not authorized to move this location
 
 Swap Location
 `````````````
@@ -1917,15 +1917,15 @@ Swap Location
 :Description: Swaps the content of the location with the content of the given location
 :Headers:
     :Destination: A location resource with which the content is swapped
-:Response: 
+:Response:
 
 .. code:: http
-    
+
         HTTP/1.1 204 No Content
 
 :Error Codes:
     :404: If the location with the given id does not exist
-    :401: If the user is not authorized to swap this location  
+    :401: If the user is not authorized to swap this location
 
 Delete Subtree
 ``````````````
@@ -1933,15 +1933,15 @@ Delete Subtree
 :Method: DELETE
 :Description: Deletes the complete subtree for the given path. Every content object is deleted which does not have any other location. Otherwise the deleted location is removed from the content object. The children a recursively deleted.
 :Response: 204
-:Response: 
+:Response:
 
 .. code:: http
-    
+
         HTTP/1.1 204 No Content
 
 :Error Codes:
     :404: If the  location with the given id does not exist
-    :401: If the user is not authorized to delete this subtree  
+    :401: If the user is not authorized to delete this subtree
 
 Views
 ~~~~~
@@ -1950,13 +1950,13 @@ Create View
 ```````````
 :Resource: /content/views
 :Method:  POST
-:Description: executes a query and returns view including the results 
+:Description: executes a query and returns view including the results
               The View_ input reflects the criteria model of the public API.
 :Headers:
     :Accept:
         :application/vnd.ez.api.View+xml: the view in xml format (see View_)
         :application/vnd.ez.api.View+json: the view in xml format (see View_)
-    :Content-Type: 
+    :Content-Type:
         :application/vnd.ez.api.ViewInput+xml: the view input in xml format (see View_)
         :application/vnd.ez.api.ViewInput+json: the view input in xml format (see View_)
 :Response:
@@ -2008,7 +2008,7 @@ Perform a query on articles with a specific title.
     </ViewInput>
 
 .. code:: http
-    
+
     HTTP/1.1 201 Created
     Location: /content/views/view1234
     Content-Type: application/vnd.ez.api.View+xml
@@ -2132,14 +2132,14 @@ List views
         :application/vnd.ez.api.RefList+xml: the view link list in xml format (see View_)
         :application/vnd.ez.api.RefList+json: the view link list in xml format (see View_)
 :Response:
- 
+
 .. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Common_  
+          Common_
 
 Get View
 ````````
@@ -2151,14 +2151,14 @@ Get View
         :application/vnd.ez.api.View+xml: the view excluding results in xml format (see View_)
         :application/vnd.ez.api.View+json: the view excluding results in json format (see View_)
 :Response:
- 
+
 .. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          View_  
+          View_
 
 :Error Codes:
     :401: if the view is not public and from another user
@@ -2174,14 +2174,14 @@ Get Results of existing View
         :application/vnd.ez.api.ViewResult+xml: the view excluding results in xml format (see View_)
         :application/vnd.ez.api.ViewResult+json: the view excluding results in json format (see View_)
 :Response:
- 
+
 .. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          View_  
+          View_
 
 :Error Codes:
     :401: if the view is not public and from another user
@@ -2192,10 +2192,10 @@ Delete View
 :Method: DELETE
 :Description: the given view is deleted
 :Parameters:
-:Response: 
+:Response:
 
 .. code:: http
-        
+
          HTTP/1.1 204 No Content
 
 :Error Codes:
@@ -2219,7 +2219,7 @@ Create a new Section
     :Content-Type:
          :application/vnd.ez.api.SectionInput+json: the Section_ input schema encoded in json
          :application/vnd.ez.api.SectionInput+xml: the Section_ input schema encoded in xml
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -2230,11 +2230,11 @@ Create a new Section
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Section_      
+          Section_
 
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to create this section  
+    :401: If the user is not authorized to create this section
     :403: If a section with same identifier already exists
 
 XML Example
@@ -2255,7 +2255,7 @@ XML Example
       <identifier>restricted</identifier>
       <name>Restricted</name>
     </SectionInput>
-        
+
 .. code:: http
 
     HTTP/1.1 201 Created
@@ -2273,7 +2273,7 @@ XML Example
       <identifier>restricted</identifier>
       <name>Restriced</name>
     </Section>
-       
+
 
 
 Get Sections
@@ -2289,7 +2289,7 @@ Get Sections
          :application/vnd.ez.api.SectionList+json:  if set the section list is returned in json format (see Section_)
     :If-None-Match: <etag>
 :Response:
- 
+
 .. code:: http
 
           HTTP/1.1 200 OK
@@ -2297,7 +2297,7 @@ Get Sections
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Section_  (sectionListType)    
+          Section_  (sectionListType)
 
 :Error Codes:
     :401: If the user has no permission to read the sections
@@ -2345,7 +2345,7 @@ XML Example
       </Section>
     </SectionList>
 
-        
+
 Get Section
 ```````````
 :Resource: /content/sections/<ID>
@@ -2356,7 +2356,7 @@ Get Section
          :application/vnd.ez.api.Section+xml:  if set the section is returned in xml format (see Section_)
          :application/vnd.ez.api.Section+json:  if set the section is returned in json format (see Section_)
     :If-None-match: <etag>
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -2369,7 +2369,7 @@ Get Section
           Section_
 
 :ErrorCodes:
-    :401: If the user is not authorized to read this section  
+    :401: If the user is not authorized to read this section
     :404: If the section does not exist
 
 XML Example
@@ -2413,7 +2413,7 @@ Update a Section
          :application/vnd.ez.api.SectionInput+json: the Section_ input schema encoded in json
          :application/vnd.ez.api.SectionInput+xml: the Section_ input schema encoded in xml
     :If-Match: <etag>
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -2423,11 +2423,11 @@ Update a Section
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Section_  (sectionListType)    
+          Section_  (sectionListType)
 
 :Error Codes:
     :400; If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to create this section  
+    :401: If the user is not authorized to create this section
     :403: If a section with the given new identifier already exists
     :412: If the current ETag does not match with the provided one in the If-Match header
 
@@ -2440,10 +2440,10 @@ Delete Section
     :Accept:
          :application/vnd.ez.api.ErrorMessage+xml:  if set in the case of an error the error message is returned in xml format (see ErrorMessage_)
          :application/vnd.ez.api.ErrorMessage+json:  if set in the case of an error the error message is returned in json format (see ErrorMessage_)
-:Response: 
+:Response:
 
 .. code:: http
-        
+
          HTTP/1.1 204 No Content
 
 :Error Codes:
@@ -2465,7 +2465,7 @@ List TrashItems
     :Accept:
          :application/vnd.ez.api.Trash+xml:  if set the new location is returned in xml format (see Trash_)
          :application/vnd.ez.api.Trash+json:  if set the new location is returned in json format (see Trash_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -2475,7 +2475,7 @@ List TrashItems
 .. parsed-literal::
           Trash_
 
-:ErrorCodes: 
+:ErrorCodes:
     :401: If the user has no permission to read the trash
 
 Get TrashItem
@@ -2487,7 +2487,7 @@ Get TrashItem
     :Accept:
          :application/vnd.ez.api.TrashItem+xml:  if set the new trash item is returned in xml format (see Trash_)
          :application/vnd.ez.api.TrashItem+json:  if set the new trash item is returned in json format (see Trash_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -2495,7 +2495,7 @@ Get TrashItem
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Trash_      
+          Trash_
 
 :Error Codes:
     :401: If the user has no permission to read the trash item
@@ -2508,15 +2508,15 @@ Untrash Item
 :Description: Restores a trashItem
 :Headers:
         :Destination: if given the trash item is restored under this location otherwise under its orifinal parent location
-:Response: 
+:Response:
 
 .. code:: http
-    
+
         HTTP/1.1 201 Created
         Location: /content/locations/<newPath>
-        
+
 :Error Codes:
-    :401: If the user is not authorized to restore this trash item  
+    :401: If the user is not authorized to restore this trash item
     :403: if the given parent location does not exist
     :404: if the given trash item does not exist
 
@@ -2525,12 +2525,12 @@ Empty Trash
 :Resource: /content/trash
 :Method: DELETE
 :Description: Empties the trash
-:Response: 
+:Response:
 
 .. code:: http
-  
+
         HTTP/1.1 204 No Content
-    
+
 :Error Codes:
     :401: If the user is not authorized to empty all trash items
 
@@ -2539,10 +2539,10 @@ Delete TrashItem
 :Resource: /content/trash/items/<ID>
 :Method: DELETE
 :Description: Deletes the given trash item
-:Response: 
+:Response:
 
 .. code:: http
-  
+
         HTTP/1.1 204 No Content
 
 :Error Codes:
@@ -2564,7 +2564,7 @@ Create ObjectStateGroup
     :Content-Type:
          :application/vnd.ez.api.ObjectStateGroupCreate+json: the ObjectStateGroup_ input schema encoded in json
          :application/vnd.ez.api.ObjectStateGroupCreate+xml: the ObjectStateGroup_ input schema encoded in xml
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -2575,7 +2575,7 @@ Create ObjectStateGroup
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          ObjectStateGroup_      
+          ObjectStateGroup_
 
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
@@ -2593,7 +2593,7 @@ List ObjectStateGroups
          :application/vnd.ez.api.ObjectStateGroupList+json:  if set the object state group list is returned in json format (see ObjectStateGroup_)
     :If-None-Match: <etag>
 :Response:
- 
+
 .. code:: http
 
           HTTP/1.1 200 OK
@@ -2601,7 +2601,7 @@ List ObjectStateGroups
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          ObjectStateGroup_  
+          ObjectStateGroup_
 
 :Error Codes:
     :401: If the user has no permission to read object state groups
@@ -2618,7 +2618,7 @@ Get ObjectStateGroup
          :application/vnd.ez.api.ObjectStateGroup+xml:  if set the object state group is returned in xml format (see ObjectStateGroup_)
          :application/vnd.ez.api.ObjectStateGroup+json:  if set the object state group is returned in json format (see ObjectStateGroup_)
     :If-None-match: <etag>
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -2628,7 +2628,7 @@ Get ObjectStateGroup
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          ObjectStateGroup_ 
+          ObjectStateGroup_
 
 :ErrorCodes:
     :401: If the user is not authorized to read object state groups
@@ -2647,7 +2647,7 @@ Update ObjectStateGroup
          :application/vnd.ez.api.ObjectStateGroupUpdate+json: the ObjectStateGroup_ input schema encoded in json
          :application/vnd.ez.api.ObjectStateGroupUpdate+xml: the ObjectStateGroup_ input schema encoded in xml
     :If-Match: <etag>
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -2657,7 +2657,7 @@ Update ObjectStateGroup
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          ObjectStateGroup_  
+          ObjectStateGroup_
 
 :Error Codes:
     :400; If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
@@ -2671,10 +2671,10 @@ Delete ObjectStateGroup
 :Method: DELETE
 :Description: the given object state group including the object states is deleted
 :Parameters:
-:Response: 
+:Response:
 
 .. code:: http
-        
+
          HTTP/1.1 204 No Content
 
 :Error Codes:
@@ -2693,7 +2693,7 @@ Create ObjectState
     :Content-Type:
          :application/vnd.ez.api.ObjectStateGroupCreate+json: the ObjectState_ input schema encoded in json
          :application/vnd.ez.api.ObjectStateGroupCreate+xml: the ObjectState_ input schema encoded in xml
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -2704,25 +2704,25 @@ Create ObjectState
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          ObjectStateGroup_      
+          ObjectStateGroup_
 
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to create an object state 
+    :401: If the user is not authorized to create an object state
     :403: If a object state with same identifier already exists in the given group
 
 List Objectstates
 `````````````````
 :Resource: /content/objectstategroups/<ID>/objectstates
 :Method: GET
-:Description: Returns a list of all object states of the given group 
+:Description: Returns a list of all object states of the given group
 :Headers:
     :Accept:
          :application/vnd.ez.api.ObjectStateList+xml:  if set the object state list is returned in xml format (see ObjectState_)
          :application/vnd.ez.api.ObjectStateList+json:  if set the object state list is returned in json format (see ObjectState_)
     :If-None-Match: <etag>
 :Response:
- 
+
 .. code:: http
 
           HTTP/1.1 200 OK
@@ -2730,7 +2730,7 @@ List Objectstates
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          ObjectStateGroup_  
+          ObjectStateGroup_
 
 :Error Codes:
     :401: If the user has no permission to read object states
@@ -2741,13 +2741,13 @@ Get ObjectState
 ```````````````
 :Resource: /content/objectstategroups/<ID>/objectstates/<ID>
 :Method: GET
-:Description: Returns the object state 
+:Description: Returns the object state
 :Headers:
     :Accept:
          :application/vnd.ez.api.ObjectState+xml:  if set the object state is returned in xml format (see ObjectState_)
          :application/vnd.ez.api.ObjectState+json:  if set the object state is returned in json format (see ObjectState_)
     :If-None-match: <etag>
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -2757,7 +2757,7 @@ Get ObjectState
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          ObjectStateGroup_ 
+          ObjectStateGroup_
 
 :ErrorCodes:
     :401: If the user is not authorized to read object state groups
@@ -2776,7 +2776,7 @@ Update ObjectState
          :application/vnd.ez.api.ObjectStateUpdate+json: the ObjectState_ input schema encoded in json
          :application/vnd.ez.api.ObjectStateUpdate+xml: the ObjectState_ input schema encoded in xml
     :If-Match: <etag>
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -2786,11 +2786,11 @@ Update ObjectState
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          ObjectStateGroup_  
+          ObjectStateGroup_
 
 :Error Codes:
     :400; If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to update an object state 
+    :401: If the user is not authorized to update an object state
     :403: If an object state with the given new identifier already exists in this group
     :412: If the current ETag does not match with the provided one in the If-Match header
 
@@ -2800,10 +2800,10 @@ Delete ObjectState
 :Method: DELETE
 :Description: the given object state is deleted
 :Parameters:
-:Response: 
+:Response:
 
 .. code:: http
-        
+
          HTTP/1.1 204 No Content
 
 :Error Codes:
@@ -2815,13 +2815,13 @@ Get ObjectStates of Content
 ```````````````````````````
 :Resource: /content/objects/<ID>/objectstates
 :Method: GET
-:Description: Returns the object states of content 
+:Description: Returns the object states of content
 :Headers:
     :Accept:
          :application/vnd.ez.api.ContentObjectStates+xml:  if set the object state is returned in xml format (see ContentObjectStates_)
          :application/vnd.ez.api.ContentObjectStates+json:  if set the object state is returned in json format (see ContentObjectStates_)
     :If-None-match: <etag>
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -2831,7 +2831,7 @@ Get ObjectStates of Content
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          ContentObjectStates_ 
+          ContentObjectStates_
 
 :ErrorCodes:
     :404: If the content object does not exist
@@ -2849,7 +2849,7 @@ Set ObjectStates of Content
          :application/vnd.ez.api.ContentObjectStates+json: the ContentObjectStates_ input schema encoded in json
          :application/vnd.ez.api.ContentObjectStates+xml: the ContentObjectStates_ input schema encoded in xml
     :If-Match: <etag>
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -2859,11 +2859,11 @@ Set ObjectStates of Content
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          ContentObjectStates_  
+          ContentObjectStates_
 
 :Error Codes:
     :400; If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to set an object state 
+    :401: If the user is not authorized to set an object state
     :403: If the input contains multiple object states of the same object state group
     :412: If the current ETag does not match with the provided one in the If-Match header
 
@@ -2882,7 +2882,7 @@ Create Url Alias
     :Content-Type:
          :application/vnd.ez.api.UrlAliasCreate+json: the UrlAlias_ input schema encoded in json
          :application/vnd.ez.api.UrlAliasCreate+xml: the UrlAlias_ input schema encoded in xml
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -2905,20 +2905,20 @@ List UrlAliases for location
 :Method: GET
 :Description: Returns the list of url aliases for a location
 :Parameters:
-    :custom: (default true) this flag indicates wether autogenerated (false) or manual url aliases (true) should be returned. 
+    :custom: (default true) this flag indicates wether autogenerated (false) or manual url aliases (true) should be returned.
 :Headers:
     :Accept:
          :application/vnd.ez.api.UrlAliasRefList+xml:  if set the url alias list contains only references and is returned in xml format (see UrlAlias_)
          :application/vnd.ez.api.UrlAliasRefList+json:  if set the url alias list contains only references is and returned in json format (see UrlAlias_)
 :Response:
- 
+
 .. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          UrlAlias_  
+          UrlAlias_
 
 :Error Codes:
     :401: If the user has no permission to read urlaliases
@@ -2935,14 +2935,14 @@ List Global UrlAliases
          :application/vnd.ez.api.UrlAliasRefList+xml:  if set the url alias list contains only references and is returned in xml format (see UrlAlias_)
          :application/vnd.ez.api.UrlAliasRefList+json:  if set the url alias list contains only references is and returned in json format (see UrlAlias_)
 :Response:
- 
+
 .. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          UrlAlias_  
+          UrlAlias_
 
 :Error Codes:
     :401: If the user has no permission to read urlaliases
@@ -2956,7 +2956,7 @@ Get UrlAlias
     :Accept:
          :application/vnd.ez.api.UrlAlias+xml:  if set the url alias is returned in xml format (see UrlAlias_)
          :application/vnd.ez.api.UrlAlias+json:  if set the url alias is returned in json format (see UrlAlias_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -2964,7 +2964,7 @@ Get UrlAlias
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          UrlAlias_ 
+          UrlAlias_
 
 :ErrorCodes:
     :401: If the user is not authorized to read url aliases
@@ -2976,10 +2976,10 @@ Delete UrlAlias
 :Method: DELETE
 :Description: the given url alias is deleted
 :Parameters:
-:Response: 
+:Response:
 
 .. code:: http
-        
+
          HTTP/1.1 204 No Content
 
 :Error Codes:
@@ -3002,7 +3002,7 @@ Create Url Wildcard
     :Content-Type:
          :application/vnd.ez.api.UrlWildcardCreate+json: the UrlWildcard_ input schema encoded in json
          :application/vnd.ez.api.UrlWildcardCreate+xml: the UrlWildcard_ input schema encoded in xml
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -3029,14 +3029,14 @@ List UrlWildcards
          :application/vnd.ez.api.UrlWildcardList+xml:  if set the url wildcard list is returned in xml format (see UrlWildcard_)
          :application/vnd.ez.api.UrlWildcardList+json:  if set the url wildcard list is returned in json format (see UrlWildcard_)
 :Response:
- 
+
 .. code:: http
 
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          UrlWildcard_  
+          UrlWildcard_
 
 :Error Codes:
     :401: If the user has no permission to read urlwildcards
@@ -3050,7 +3050,7 @@ Get UrlWildcard
     :Accept:
          :application/vnd.ez.api.UrlWildcard+xml:  if set the url wildcard is returned in xml format (see UrlWildcard_)
          :application/vnd.ez.api.UrlWildcard+json:  if set the url wildcard is returned in json format (see UrlWildcard_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -3058,7 +3058,7 @@ Get UrlWildcard
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          UrlWildcard_ 
+          UrlWildcard_
 
 :ErrorCodes:
     :401: If the user is not authorized to read url wildcards
@@ -3070,10 +3070,10 @@ Delete UrlWildcard
 :Method: DELETE
 :Description: the given url wildcard is deleted
 :Parameters:
-:Response: 
+:Response:
 
 .. code:: http
-        
+
          HTTP/1.1 204 No Content
 
 :Error Codes:
@@ -3090,15 +3090,15 @@ Overview
 ================================================== =================== =================== ======================= =======================
       Resource                                           POST             GET                 PUT/PATCH               DELETE
 -------------------------------------------------- ------------------- ------------------- ----------------------- -----------------------
-/content/typegroups                                create new group    load all groups     .                       .            
+/content/typegroups                                create new group    load all groups     .                       .
 /content/typegroups/<ID>                           .                   load group          update group            delete group
-/content/typegroups/<ID>/types                     create content type list content types  .                       .                  
-/content/types                                     .                   list content types  .                       .            
+/content/typegroups/<ID>/types                     create content type list content types  .                       .
+/content/types                                     .                   list content types  .                       .
 /content/types/<ID>                                copy content type   load content type   create draft            delete content type
-/content/types/<ID>/groups                         link group          list groups         .                       .                  
-/content/types/<ID>/groups/<ID>                    .                   .                   .                       unlink group       
-/content/types/<ID>/draft                          publish draft       load draft          update draft            delete draft       
-/content/types/<ID>/draft/fieldDefinitions         create field def.   .                   .                       .            
+/content/types/<ID>/groups                         link group          list groups         .                       .
+/content/types/<ID>/groups/<ID>                    .                   .                   .                       unlink group
+/content/types/<ID>/draft                          publish draft       load draft          update draft            delete draft
+/content/types/<ID>/draft/fieldDefinitions         create field def.   .                   .                       .
 /content/types/<ID>/draft/fieldDefinitions/<ID>    .                   load field def.     update field definition delete field definition
 ================================================== =================== =================== ======================= =======================
 
@@ -3112,7 +3112,7 @@ Create Content Type Group
 `````````````````````````
 :Resource: /content/typegroups
 :Method: POST
-:Description: Creates a new content type group 
+:Description: Creates a new content type group
 :Headers:
     :Accept:
          :application/vnd.ez.api.ContentTypeGroup+xml:  if set the new section is returned in xml format (see ContentTypeGroup_)
@@ -3120,7 +3120,7 @@ Create Content Type Group
     :Content-Type:
          :application/vnd.ez.api.ContentTypeGroupInput+json: the ContentTypeGroup_ input schema encoded in json
          :application/vnd.ez.api.ContentTypeGroupInput+xml: the ContentTypeGroup_ input schema encoded in xml
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -3131,7 +3131,7 @@ Create Content Type Group
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          ContentTypeGroup_      
+          ContentTypeGroup_
 
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
@@ -3178,7 +3178,7 @@ XML Example
       <Modifier href="/user/users/13" media-type="application/vnd.ez.api.User+xml"/>
       <ContentTypes href="/content/typegroups/7/types" media-type="application/vnd.ez.api.ContentTypeList+xml"/>
     </ContentTypeGroup>
-     
+
 
 Get Content Type Groups
 ```````````````````````
@@ -3189,7 +3189,7 @@ Get Content Type Groups
     :Accept:
          :application/vnd.ez.api.ContentTypeGroupList+xml:  if set the new section is returned in xml format (see ContentTypeGroup_)
          :application/vnd.ez.api.ContentTypeGroupList+json:  if set the new section is returned in json format (see ContentTypeGroup_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -3197,7 +3197,7 @@ Get Content Type Groups
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          ContentTypeGroup_  (contentTypeGroupListType)     
+          ContentTypeGroup_  (contentTypeGroupListType)
 
 :Error Codes:
     :401: If the user has no permission to read the content types
@@ -3241,7 +3241,7 @@ XML Example
       </ContentTypeGroup>
     </ContentTypeGroupList>
 
-        
+
 Get Content Type Group
 ``````````````````````
 :Resource: /content/typegroups/<ID>
@@ -3252,7 +3252,7 @@ Get Content Type Group
          :application/vnd.ez.api.ContentTypeGroup+xml:  if set the new section is returned in xml format (see ContentTypeGroup_)
          :application/vnd.ez.api.ContentTypeGroup+json:  if set the new section is returned in json format (see ContentTypeGroup_)
     :If-None-Match: <etag>
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -3262,17 +3262,17 @@ Get Content Type Group
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          ContentTypeGroup_      
+          ContentTypeGroup_
 
 :ErrorCodes:
-    :401: If the user is not authorized to read this content type  
+    :401: If the user is not authorized to read this content type
     :404: If the content type group does not exist
 
 Update Content Type Group
 `````````````````````````
 :Resource: /content/typegroups/<ID>
 :Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
-:Description: Updates a content type group 
+:Description: Updates a content type group
 :Headers:
     :Accept:
          :application/vnd.ez.api.ContentTypeGroup+xml:  if set the new section is returned in xml format (see ContentTypeGroup_)
@@ -3281,7 +3281,7 @@ Update Content Type Group
          :application/vnd.ez.api.ContentTypeGroupInput+json: the ContentTypeGroup_ input schema encoded in json
          :application/vnd.ez.api.ContentTypeGroupInput+xml: the ContentTypeGroup_ input schema encoded in xml
     :If-Match: <etag> Causes to patch only if the specified etag is the current one. Otherwise a 412 is returned.
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -3291,7 +3291,7 @@ Update Content Type Group
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          ContentTypeGroup_      
+          ContentTypeGroup_
 
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
@@ -3341,17 +3341,17 @@ XML Example
       <Modifier href="/user/users/8" media-type="application/vnd.ez.api.User+xml"/>
       <ContentTypes href="/content/typegroups/7/types" media-type="application/vnd.ez.api.ContentTypeList+xml"/>
     </ContentTypeGroup>
-     
+
 
 Delete Content Type Group
 `````````````````````````
 :Resource: /content/typegroups/<ID>
 :Method: DELETE
 :Description: the given content type group is deleted
-:Response: 
+:Response:
 
 .. code:: http
-  
+
         HTTP/1.1 204 No Content
 
 :Error Codes:
@@ -3370,7 +3370,7 @@ List Content Types for Group
          :application/vnd.ez.api.ContentTypeInfoList+json:  if set the list of content type info objects is returned in json format (see ContentType_)
          :application/vnd.ez.api.ContentTypeList+xml:  if set the list of content type objects (including field definitions) is returned in xml format (see ContentType_)
          :application/vnd.ez.api.ContentTypeList+json:  if set the list content type objects (including field definitions) is returned in json format (see ContentType_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -3378,7 +3378,7 @@ List Content Types for Group
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          ContentType_      
+          ContentType_
 
 :Error Codes:
     :401: If the user has no permission to read the content types
@@ -3400,7 +3400,7 @@ Create Content Type
     :Content-Type:
          :application/vnd.ez.api.ContentTypeCreate+json: the ContentTypeCreate_  schema encoded in json
          :application/vnd.ez.api.ContentTypeCreate+xml: the ContentTypeCreate_  schema encoded in xml
-:Response: 
+:Response:
    If publish = false:
 
 .. code:: http
@@ -3412,7 +3412,7 @@ Create Content Type
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          ContentType_      
+          ContentType_
 
 If publish = true:
 
@@ -3424,12 +3424,12 @@ If publish = true:
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          ContentType_      
+          ContentType_
 
 :Error Codes:
     :400: - If the Input does not match the input schema definition,
-          - If publish = true and the input is not complete e.g. no field definitions are provided 
-    :401: If the user is not authorized to create this content type  
+          - If publish = true and the input is not complete e.g. no field definitions are provided
+    :401: If the user is not authorized to create this content type
     :403: If a content type with same identifier already exists
 
 XML Example
@@ -3441,7 +3441,7 @@ XML Example
     Accept: application/vnd.ez.api.ContentType
     Content-Type: application/vnd.ez.api.ContentTypeCreate
     Content-Length: xxx
-    
+
 .. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
@@ -3579,7 +3579,7 @@ Copy Content Type
 `````````````````
 :Resource: /content/types/<ID>
 :Method:      COPY or POST with header: X-HTTP-Method-Override COPY
-:Description: copies a content type. The identifier of the copy is changed to copy_of_<identifier> anda new remoteIdis generated. 
+:Description: copies a content type. The identifier of the copy is changed to copy_of_<identifier> anda new remoteIdis generated.
 :Response:
 
 .. code:: http
@@ -3589,17 +3589,17 @@ Copy Content Type
 
 
 :Error Codes:
-    :401: If the user is not authorized to copy this content type  
-        
+    :401: If the user is not authorized to copy this content type
+
 List Content Types
 ``````````````````
 :Resource: /content/types
 :Method: GET
-:Description: Returns a list of content types 
+:Description: Returns a list of content types
 :Parameters:
     :identifier: retrieves the content type for the given identifer
-    :remoteId: retieves the content type for the given remoteId 
-    :limit:    only <limit> items will be returned started by offset 
+    :remoteId: retieves the content type for the given remoteId
+    :limit:    only <limit> items will be returned started by offset
     :offset:   offset of the result set
     :orderby:   one of (name | lastmodified)
     :sort:      one of (asc|desc)
@@ -3609,7 +3609,7 @@ List Content Types
          :application/vnd.ez.api.ContentTypeInfoList+json:  if set the list of content type info objects is returned in json format (see ContentType_)
          :application/vnd.ez.api.ContentTypeList+xml:  if set the list of content type objects (including field definitions) is returned in xml format (see ContentType_)
          :application/vnd.ez.api.ContentTypeList+json:  if set the list content type objects (including field definitions) is returned in json format (see ContentType_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -3617,12 +3617,12 @@ List Content Types
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          ContentType_      
+          ContentType_
 
 :Error Codes:
     :401: If the user has no permission to read the content types
 
-Get Content Type 
+Get Content Type
 ````````````````
 :Resource: /content/types/<ID>
 :Method: GET
@@ -3633,7 +3633,7 @@ Get Content Type
          :application/vnd.ez.api.ContentType+json:  if set the list is returned in json format (see ContentType_)
     :If-None-Match: <etag>
 
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -3643,16 +3643,16 @@ Get Content Type
           Content-Length: <length>
 .. parsed-literal::
           ContentType_
-      
+
 :ErrorCodes:
-    :401: If the user is not authorized to read this content type  
+    :401: If the user is not authorized to read this content type
     :404: If the content type does not exist
 
 
 Create Draft
 ````````````
 :Resource: /content/types/<ID>
-:Method: POST 
+:Method: POST
 :Description: Cretes a draft and updates it with the given data
 :Headers:
     :Accept:
@@ -3676,7 +3676,7 @@ Create Draft
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to create the draft
     :403: - If a content type with the given new identifier already exists.
-          - If there exists already a draft. 
+          - If there exists already a draft.
 
 
 
@@ -3705,7 +3705,7 @@ Update Draft
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to update the draft.
-    :403: If a content type with the given new identifier already exists.  
+    :403: If a content type with the given new identifier already exists.
     :404: If there is no draft on this content type
 
 XML Example
@@ -3715,7 +3715,7 @@ XML Example
 
     POST /content/types/32/draft HTTP/1.1
     X-HTTP-Method-Override: PATCH
-    Accept: application/vnd.ez.api.ContentTypeInfo+xml 
+    Accept: application/vnd.ez.api.ContentTypeInfo+xml
     Content-Type: application/vnd.ez.api.ContentTypeUpdate+xml
     Content-Length: xxx
 
@@ -3764,7 +3764,7 @@ XML Example
       <defaultAlwaysAvailable>true</defaultAlwaysAvailable>
       <defaultSortField>PATH</defaultSortField>
       <defaultSortOrder>ASC</defaultSortOrder>
-    </ContentType> 
+    </ContentType>
 
 Add Field definition
 ````````````````````
@@ -3778,7 +3778,7 @@ Add Field definition
     :Content-Type:
          :application/vnd.ez.api.FieldDefinitionCreate+json: the FieldDefinitionCreate_  schema encoded in json
          :application/vnd.ez.api.FieldDefinitionCreate+xml: the FieldDefinitionCreate_  schema encoded in xml
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -3788,12 +3788,12 @@ Add Field definition
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          FieldDefinition_      
+          FieldDefinition_
 
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to add a field definition  
-    :403: If a field definition with same identifier already exists in the given content type 
+    :401: If the user is not authorized to add a field definition
+    :403: If a field definition with same identifier already exists in the given content type
 
 Get Fielddefinition
 ```````````````````
@@ -3804,7 +3804,7 @@ Get Fielddefinition
     :Accept:
          :application/vnd.ez.api.FieldDefinition+xml:  if set the new fielddefinition is returned in xml format (see FieldDefinition_)
          :application/vnd.ez.api.FieldDefinition+json:  if set the new fielddefinition is returned in json format (see FieldDefinition_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -3813,9 +3813,9 @@ Get Fielddefinition
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          FieldDefinition_      
+          FieldDefinition_
 
-:ErrorCodes: 
+:ErrorCodes:
     :401: If the user is not authorized to read the content type draft
     :404: If the content type or draft does not exist
 
@@ -3831,7 +3831,7 @@ Update Fielddefinition
     :Content-Type:
          :application/vnd.ez.api.FieldDefinitionUpdate+json: the FieldDefinitionUpdate_  schema encoded in json
          :application/vnd.ez.api.FieldDefinitionUpdate+xml: the FieldDefinitionUpdate_  schema encoded in xml
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -3840,19 +3840,19 @@ Update Fielddefinition
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          FieldDefinition_      
+          FieldDefinition_
 
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to update the field definition
-    :403: If a field definition with the given new identifier already exists in the given content type. 
+    :403: If a field definition with the given new identifier already exists in the given content type.
 
 Delete Fielddefinition
 ``````````````````````
 :Resource: /content/types/<ID>/draft/fielddefinitions/<ID>
 :Method: DELETE
 :Description: the given field definition is deleted
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -3867,7 +3867,7 @@ Publish content type
 :Resource: /content/types/<ID>/draft
 :Method: PUBLISH or POST with header: X-HTTP-Method-Override: PUBLISH
 :Description: Publishes a content type draft
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -3887,10 +3887,10 @@ Delete Content Type Draft
 :Resource: /content/types/<ID>/draft
 :Method: DELETE
 :Description: the given content type draft is deleted
-:Response: 
+:Response:
 
 .. code:: http
-  
+
         HTTP/1.1 204 No Content
 
 :Error Codes:
@@ -3903,10 +3903,10 @@ Delete Content Type
 :Resource: /content/types/<ID>
 :Method: DELETE
 :Description: the given content type is deleted
-:Response: 
+:Response:
 
 .. code:: http
-  
+
         HTTP/1.1 204 No Content
 
 :Error Codes:
@@ -3924,7 +3924,7 @@ Get Groups of Content Type
     :Accept:
          :application/vnd.ez.api.ContentTypeGroupRefList+xml:  if set the list is returned in xml format (see ContentType_)
          :application/vnd.ez.api.ContentTypeGroupRefList+json:  if set the list is returned in json format (see ContentType_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -3933,9 +3933,9 @@ Get Groups of Content Type
           Content-Length: <length>
 .. parsed-literal::
           ContentTypeGroup_
-      
+
 :ErrorCodes:
-    :401: If the user is not authorized to read this content type  
+    :401: If the user is not authorized to read this content type
     :404: If the content type does not exist
 
 XML Example
@@ -3945,7 +3945,7 @@ XML Example
 
     GET /content/types/32/groups HTTP/1.1
     Accept: application/vnd.ez.api.ContentTypeGroupRefList+xml
-    
+
 .. code:: http
 
     HTTP/1.1 200 OK
@@ -3963,13 +3963,13 @@ Link Group to Content Type
 :Resource: /content/types/<ID>/groups
 :Method: POST
 :Description: links a content type group to the content type and returns the updated group list
-:Parameters: 
+:Parameters:
     :group: (uri) the uri of the group to which the content type should be linked
 :Headers:
     :Accept:
          :application/vnd.ez.api.ContentTypeGroupRefList+xml:  if set the list is returned in xml format (see ContentTypeGroup_)
          :application/vnd.ez.api.ContentTypeGroupRefList+json:  if set the list is returned in json format (see ContentTypeGroup_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -3991,7 +3991,7 @@ XML Example
 
     POST /content/types/32/groups?/content/typegroups/10
     Accept: application/vnd.ez.api.ContentTypeGroupRefList+xml
-    
+
 .. code:: http
 
     HTTP/1.1 200 OK
@@ -4019,7 +4019,7 @@ Unlink Group from Content Type
     :Accept:
          :application/vnd.ez.api.ContentTypeGroupRefList+xml:  if set the list is returned in xml format (see ContentType_)
          :application/vnd.ez.api.ContentTypeGroupRefList+json:  if set the list is returned in json format (see ContentType_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -4033,7 +4033,7 @@ Unlink Group from Content Type
     :401: If the user is not authorized to delete this content type
     :403: If the given group is the last one
     :404: If the resource does not exist
-        
+
 XML Example
 '''''''''''
 
@@ -4041,7 +4041,7 @@ XML Example
 
     DELETE /content/types/32/groups/7
     Accept: application/vnd.ez.api.ContentTypeGroupRefList+xml
-    
+
 .. code:: http
 
     HTTP/1.1 200 OK
@@ -4064,26 +4064,26 @@ Overview
 ============================================= ===================== ===================== ===================== =======================
 Resource                                      POST                  GET                   PUT                   DELETE
 --------------------------------------------- --------------------- --------------------- --------------------- -----------------------
-/user/groups                                  .                     load all topl. groups .                     .            
-/user/groups/root                             .                     redirect to root      .                     .            
+/user/groups                                  .                     load all topl. groups .                     .
+/user/groups/root                             .                     redirect to root      .                     .
 /user/groups/<path>                           .                     load user group       update user group     delete user group
-/user/groups/<path>/users                     .                     load users of group   .                     .                             
+/user/groups/<path>/users                     .                     load users of group   .                     .
 /user/groups/<path>/subgroups                 create user group     load sub groups       .                     remove all sub groups
-/user/groups/<path>/roles                     assign role to group  load roles of group   .                     .            
+/user/groups/<path>/roles                     assign role to group  load roles of group   .                     .
 /user/groups/<path>/roles/<ID>                .                     .                     .                     unassign role from group
-/user/users                                   create user           list users            .                     .            
+/user/users                                   create user           list users            .                     .
 /user/users/<ID>                              .                     load user             update user           delete user
-/user/users/<ID>/groups                       .                     load groups of user   add to group          .            
-/user/users/<ID>/drafts                       .                     list all drafts owned .                     .                
-                                                                    by the user                                                     
-/user/users/<ID>/roles                        assign role to user   load roles of group   .                     .            
-/user/users/<ID>/roles/<ID>                   .                     load roleassignment   .                     unassign role from user 
-/user/roles                                   create new role       load all roles        .                     .            
+/user/users/<ID>/groups                       .                     load groups of user   add to group          .
+/user/users/<ID>/drafts                       .                     list all drafts owned .                     .
+                                                                    by the user
+/user/users/<ID>/roles                        assign role to user   load roles of group   .                     .
+/user/users/<ID>/roles/<ID>                   .                     load roleassignment   .                     unassign role from user
+/user/roles                                   create new role       load all roles        .                     .
 /user/roles/<ID>                              .                     load role             update role           delete role
 /user/roles/<ID>/policies                     create policy         load policies         .                     delete all policies from role
 /user/roles/<ID>/policies/<ID>                .                     load policy           update policy         delete policy
 ============================================= ===================== ===================== ===================== =======================
-        
+
 
 Managing Users and Groups
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -4093,7 +4093,7 @@ Get Root User Group
 :Resource: /user/groups/root
 :Method: GET
 :Description: Redirects to the root user group
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -4112,7 +4112,7 @@ Load User Group
          :application/vnd.ez.api.UserGroup+xml:  if set the new user group is returned in xml format (see UserGroup_)
          :application/vnd.ez.api.UserGroup+json:  if set the new user group is returned in json format (see UserGroup_)
     :If-None-Match: <etag>
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -4122,7 +4122,7 @@ Load User Group
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          UserGroup_      
+          UserGroup_
 
 :Error Codes:
     :401: If the user has no permission to read user groups
@@ -4135,17 +4135,17 @@ Load User Groups
 :Resource: /user/groups
 :Method: GET
 :Description: Load user groups for either an id or remoteId or role.
-:Parameters: 
+:Parameters:
     :roleId: lists user groups assigned to the given role
-    :id: retieves the user group for the given Id 
-    :remoteId: retieves the user group for the given remoteId 
+    :id: retieves the user group for the given Id
+    :remoteId: retieves the user group for the given remoteId
 :Headers:
     :Accept:
          :application/vnd.ez.api.UserGroupList+xml:  if set the user group list returned in xml format (see UserGroup_)
          :application/vnd.ez.api.UserGroupList+json:  if set the user group list is returned in json format (see UserGroup_)
          :application/vnd.ez.api.UserGroupRefList+xml:  if set the link list of user groups is returned in xml format (see UserGroup_)
          :application/vnd.ez.api.UserGroupRefList+json:  if set the link list of user groups is returned in json format (see UserGroup_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -4153,7 +4153,7 @@ Load User Groups
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          UserGroup_      
+          UserGroup_
 
 :Error Codes:
     :401: If the user has no permission to read user groups
@@ -4171,7 +4171,7 @@ Create User Group
     :Content-Type:
          :application/vnd.ez.api.UserGroupCreate+json: the UserGroupCreate_  schema encoded in json
          :application/vnd.ez.api.UserGroupCreate+xml: the UserGroupCreate_  schema encoded in xml
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -4182,7 +4182,7 @@ Create User Group
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          UserGroup_      
+          UserGroup_
 
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
@@ -4248,7 +4248,7 @@ Creating a top level group
       <Users href="/user/groups/1/5/users" media-type="application/vnd.ez.api.UserList+xml"/>
       <Roles href="/user/groups/1/5/roles" media-type="application/vnd.ez.api.RoleList+xml"/>
     </UserGroup>
-        
+
 .. code:: http
 
     POST /user/groups/1/5/subgroups HTTP/1.1
@@ -4275,7 +4275,7 @@ Creating a top level group
         </field>
       </fields>
     </UserGroupCreate>
-         
+
 .. code:: http
 
     HTTP/1.1 201 Created
@@ -4334,7 +4334,7 @@ Creating a top level group
     </UserGroup>
 
 
-    
+
 
 Update User Group
 `````````````````
@@ -4349,7 +4349,7 @@ Update User Group
          :application/vnd.ez.api.UserGroupUpdate+json: the UserGroupUpdate_  schema encoded in json
          :application/vnd.ez.api.UserGroupUpdate+xml: the UserGroupUpdate_  schema encoded in xml
     :If-Match: <etag> Causes to patch only if the specified etag is the current one. Otherwise a 412 is returned.
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -4359,7 +4359,7 @@ Update User Group
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          UserGroup_      
+          UserGroup_
 
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
@@ -4454,7 +4454,7 @@ Delete User Group
 :Resource: /user/groups/<path>
 :Method: DELETE
 :Description: the given user group is deleted
-:Response: 
+:Response:
 
 .. code:: xml
 
@@ -4485,7 +4485,7 @@ Load Users of Group
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          User_      
+          User_
 
 :Error Codes:
     :401: If the user has no permission to read user groups
@@ -4499,10 +4499,10 @@ Move user Group
 :Description: moves the user group to another parent.
 :Headers:
     :Destination: A parent group resource to which the location is moved
-:Response: 
+:Response:
 
 .. code:: http
-    
+
         HTTP/1.1 201 Created
         Location: /user/groups/<newPath>
 
@@ -4530,7 +4530,7 @@ Load Subgroups
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          UserGroup_      
+          UserGroup_
 
 
 :Error Codes:
@@ -4549,7 +4549,7 @@ Create User
     :Content-Type:
          :application/vnd.ez.api.UserCreate+json: the UserCreate_  schema encoded in json
          :application/vnd.ez.api.UserCreate+xml: the UserCreate_  schema encoded in xml
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -4560,11 +4560,11 @@ Create User
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          User_      
+          User_
 
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to create this user 
+    :401: If the user is not authorized to create this user
     :403: If a user with the same login already exists
     :404: If the group with the given ID does not exist
 
@@ -4600,7 +4600,7 @@ XML Example
         </field>
       </fields>
     </UserCreate>
-        
+
 .. code:: http
 
     HTTP/1.1 201 Created
@@ -4664,9 +4664,9 @@ List Users
 :Resource: /user/users
 :Method: GET
 :Description: Load users either for a given remoteId or role
-:Parameters: 
+:Parameters:
     :roleId: lists users assigned to the given role
-    :remoteId: retieves the user for the given remoteId 
+    :remoteId: retieves the user for the given remoteId
 :Headers:
     :Accept:
          :application/vnd.ez.api.UserList+xml:  if set the user list returned in xml format (see User_)
@@ -4681,8 +4681,8 @@ List Users
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          User_      
- 
+          User_
+
 :Error Codes:
     :401: If the user has no permission to read users
 
@@ -4696,7 +4696,7 @@ Load User
          :application/vnd.ez.api.User+xml:  if set the new user is returned in xml format (see User_)
          :application/vnd.ez.api.User+json:  if set the new user is returned in json format (see User_)
     :If-None-Match: <etag>
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -4707,7 +4707,7 @@ Load User
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          User_      
+          User_
 
 :Error Codes:
     :401: If the user has no permission to read users
@@ -4726,7 +4726,7 @@ Update User
          :application/vnd.ez.api.UserUpdate+json: the UserUpdate_  schema encoded in json
          :application/vnd.ez.api.UserUpdate+xml: the UserUpdate_  schema encoded in xml
     :If-Match: <etag> Causes to patch only if the specified etag is the current one. Otherwise a 412 is returned.
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -4736,11 +4736,11 @@ Update User
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          User_      
+          User_
 
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to update the user 
+    :401: If the user is not authorized to update the user
     :404: If the user does not exist
     :412: If the current ETag does not match with the provided one in the If-Match header
 
@@ -4779,7 +4779,7 @@ XML Example
     HTTP/1.1 200 OK
     Accept-Patch:  application/vnd.ez.api.UserUpdate+(json|xml)
     ETag: "435908672409561"
-    Content-Type: application/vnd.ez.api.User+xml 
+    Content-Type: application/vnd.ez.api.User+xml
     Content-Length: xxx
 
 .. code:: xml
@@ -4839,14 +4839,14 @@ XML Example
       <Roles href="/user/users/99/roles" media-type="application/vnd.ez.api.RoleAssignmentList+xml" />
       <UserGroups href="/user/users/99/group" media-type="vns.ez.api.UserGroupRefList+xml" />
     </User>
-    
+
 
 Delete User
 ```````````
 :Resource: /user/users/<ID>
 :Method: DELETE
 :Description: the given user is deleted
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -4874,7 +4874,7 @@ Load Groups Of User
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          UserGroup_      
+          UserGroup_
 
 :Error Codes:
     :401: If the user has no permission to read user groups
@@ -4913,7 +4913,7 @@ Assign User Group
 :Resource: /user/users/<ID>/groups
 :Method: POST
 :Description: Assigns the user to a user group
-:Parameters: :group: the new parent group resource of the user  
+:Parameters: :group: the new parent group resource of the user
 :Headers:
     :Accept:
          :application/vnd.ez.api.UserGroupRefList+xml:  if set the link list of user groups is returned in xml format (see UserGroup_)
@@ -4926,7 +4926,7 @@ Assign User Group
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          UserGroup_ 
+          UserGroup_
 
 :Error Codes:
     :401: If the user is not authorized to assign user groups
@@ -4947,7 +4947,7 @@ XML Example
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.UserGroupRefList+xml
     Content-Length: xxx
-    
+
 .. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
@@ -4982,7 +4982,7 @@ Unassign User Group
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          UserGroup_      
+          UserGroup_
 
 :Error Codes:
     :401: If the user is not authorized to unassign user groups
@@ -5002,7 +5002,7 @@ XML Example
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.UserGroupRefList+xml
     Content-Length: xxx
-    
+
 .. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
@@ -5015,7 +5015,7 @@ XML Example
         <unassign href="/user/users/45/groups/88" method="DELETE" />
       </UserGroup>
     </UserGroupRefList>
-    
+
 
 
 Managing Roles and Policies
@@ -5033,7 +5033,7 @@ Create Role
     :Content-Type:
          :application/vnd.ez.api.RoleInput+json: the RoleInput_  schema encoded in json
          :application/vnd.ez.api.RoleInput+xml: the RoleInput_  schema encoded in xml
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -5044,7 +5044,7 @@ Create Role
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Role_      
+          Role_
 
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
@@ -5083,15 +5083,15 @@ XML Example
       <identifier>NewRole</identifier>
       <Policies href="/user/roles/11/policies" media-type="application/vnd.ez.api.PolicyList+xml"/>
     </Role>
-        
 
- 
+
+
 Load Roles
 ``````````
 :Resource: /user/roles
 :Method: GET
 :Description: Returns a list of all roles
-:Parameters: 
+:Parameters:
     :identifier: Restricts the result to a list containing the role with the given identifier. If the role is not found an empty list is returned.
     :limit:    only <limit> items will be returned started by offset
     :offset:   offset of the result set
@@ -5108,7 +5108,7 @@ Load Roles
           Content-Length: <length>
           ETag: "<Etag>"
 .. parsed-literal::
-          Role_      
+          Role_
 
 :Error Codes:
     :401: If the user has no permission to read roles
@@ -5134,7 +5134,7 @@ Load Role
           Content-Length: <length>
 
 .. parsed-literal::
-          Role_      
+          Role_
 
 :Error Codes:
     :401: If the user has no permission to read roles
@@ -5153,7 +5153,7 @@ Update Role
          :application/vnd.ez.api.RoleInput+json: the RoleInput  schema encoded in json
          :application/vnd.ez.api.RoleInput+xml: the RoleInput  schema encoded in xml
     :If-Match: <etag> Causes to patch only if the specified etag is the current one. Otherwise a 412 is returned.
-:Response: 
+:Response:
 
 .. code:: xml
 
@@ -5163,7 +5163,7 @@ Update Role
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Role_      
+          Role_
 
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
@@ -5175,7 +5175,7 @@ Delete Role
 :Resource: /user/roles/<ID>
 :Method: DELETE
 :Description: the given role and all assignments to users or user groups are deleted
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -5194,7 +5194,7 @@ Load Roles for User or User Group
     :Accept:
          :application/vnd.ez.api.RoleAssignmentList+xml:  if set the role assignment list  is returned in xml format (see Role_)
          :application/vnd.ez.api.RoleAssignmentList+json:  if set the role assignment list  is returned in json format (see Role_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -5202,7 +5202,7 @@ Load Roles for User or User Group
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Role_      
+          Role_
 
 :Error Codes:
     :401: If the user has no permission to read roles
@@ -5214,7 +5214,7 @@ XML Example
 
     GET /user/groups/1/5/65/roles HTTP/1.1
     Accept: application/vnd.ez.api.RoleAssignmentList+xml
-    
+
 .. code:: http
 
     HTTP/1.1 200 OK
@@ -5249,7 +5249,7 @@ Load Assignment
     :Accept:
          :application/vnd.ez.api.RoleAssignment+xml:  if set the role assignment list  is returned in xml format (see Role_)
          :application/vnd.ez.api.RoleAssignment+json:  if set the role assignment list  is returned in json format (see Role_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -5257,7 +5257,7 @@ Load Assignment
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Role_      
+          Role_
 
 :Error Codes:
     :401: If the user has no permission to read roles
@@ -5277,7 +5277,7 @@ Assign Role to User or User Group
     :Content-Type:
          :application/vnd.ez.api.RoleAssignInput+json: the RoleAssignInput_  schema encoded in json
          :application/vnd.ez.api.RoleAssignInput+xml: the RoleAssignInput_  schema encoded in xml
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -5285,7 +5285,7 @@ Assign Role to User or User Group
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Role_      
+          Role_
 
 :Error Codes:
     :401: If the user is not authorized to assign this role
@@ -5345,21 +5345,21 @@ XML Example
         <Role href="/user/roles/11" media-type="application/vnd.ez.api.Role+xml"/>
       </RoleAssignment>
     </RoleAssignmentList>
-     
-         
+
+
 
 
 Unassign Role from User or User Group
 ``````````````````````````````````````
 :Resource: - /user/groups/<path>/roles/<ID> for user group
-           - /user/users/<ID>/roles/<ID> for user 
+           - /user/users/<ID>/roles/<ID> for user
 :Method: DELETE
 :Description: the given role is removed from the user or user group
 :Headers:
     :Accept:
          :application/vnd.ez.api.RoleAssignmentList+xml:  if set the updated role assignment list  is returned in xml format (see Role_)
          :application/vnd.ez.api.RoleAssignmentList+json:  if set the updated role assignment list  is returned in json format (see Role_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -5367,7 +5367,7 @@ Unassign Role from User or User Group
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Role_      
+          Role_
 
 :Error Codes:
     :401: If the user is not authorized to delete this content type
@@ -5379,7 +5379,7 @@ XML Example
 
     DELETE /user/groups/1/5/65/roles/7 HTTP/1.1
     Accept: application/vnd.ez.api.RoleAssignmentList+xml
-    
+
 .. code:: http
 
     HTTP/1.1 200 OK
@@ -5403,7 +5403,7 @@ XML Example
         <Role href="/user/roles/11" media-type="application/vnd.ez.api.Role+xml"/>
       </RoleAssignment>
     </RoleAssignmentList>
-    
+
 
 
 Load Policies
@@ -5415,7 +5415,7 @@ Load Policies
     :Accept:
          :application/vnd.ez.api.PolicyList+xml:  if set the policy list  is returned in xml format (see Policy_)
          :application/vnd.ez.api.PolicyList+json:  if set the policy list  is returned in json format (see Policy_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -5423,7 +5423,7 @@ Load Policies
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Policy_      
+          Policy_
 
 
 :Error Codes:
@@ -5490,7 +5490,7 @@ Delete Policies
 :Resource: /user/roles/<ID>/policies
 :Method: DELETE
 :Description: all policies of the given role are deleted
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -5509,7 +5509,7 @@ Load Policy
          :application/vnd.ez.api.Policy+xml:  if set the policy is returned in xml format (see Policy_)
          :application/vnd.ez.api.Policy+json:  if set the policy is returned in json format (see Policy_)
     :If-None-Match: <etag>
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -5519,7 +5519,7 @@ Load Policy
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Policy_      
+          Policy_
 
 :Error Codes:
     :401: If the user has no permission to read roles
@@ -5564,13 +5564,13 @@ XML Example
       </limitations>
     </Policy>
 
-     
+
 
 Create Policy
 `````````````
 :Resource: /user/roles/<ID>/policies/<ID>
 :Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
-:Description: updates a policy 
+:Description: updates a policy
 :Headers:
     :Accept:
          :application/vnd.ez.api.Policy+xml:  if set the updated policy is returned in xml format (see Policy_)
@@ -5579,7 +5579,7 @@ Create Policy
          :application/vnd.ez.api.PolicyCreate+xml:  if set the updated policy is returned in xml format (see Policy_)
          :application/vnd.ez.api.PolicyCreate+json:  if set the updated policy is returned in json format (see Policy_)
 
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -5590,7 +5590,7 @@ Create Policy
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Policy_      
+          Policy_
 
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
@@ -5626,7 +5626,7 @@ XML Example
         </limitation>
       </limitations>
     </PolicyCreate>
-     
+
 .. code:: http
 
     HTTP/1.1 201 Created
@@ -5655,13 +5655,13 @@ XML Example
         </limitation>
       </limitations>
      </Policy>
-        
+
 
 Update Policy
 `````````````
 :Resource: /user/roles/<ID>/policies/<ID>
 :Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
-:Description: updates a policy 
+:Description: updates a policy
 :Headers:
     :Accept:
          :application/vnd.ez.api.Policy+xml:  if set the updated policy is returned in xml format (see Policy_)
@@ -5670,7 +5670,7 @@ Update Policy
          :application/vnd.ez.api.PolicyUpdate+xml:  if set the updated policy is returned in xml format (see Policy_)
          :application/vnd.ez.api.PolicyUpdate+json:  if set the updated policy is returned in json format (see Policy_)
     :If-Match: <etag> Causes to patch only if the specified etag is the current one. Otherwise a 412 is returned.
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -5680,7 +5680,7 @@ Update Policy
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Policy_      
+          Policy_
 
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
@@ -5745,13 +5745,13 @@ XML Example
         </limitation>
       </limitations>
      </Policy>
-    
+
 
 Delete Policy
 `````````````
 :Resource: /user/roles/<ID>/policies/<ID>
 :Method: DELETE
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -5769,12 +5769,12 @@ List Policies for user
 :Method: GET
 :Description: search all policies which are applied to a given user
 :Parameters:
-    :userId: the user id 
+    :userId: the user id
 :Headers:
     :Accept:
          :application/vnd.ez.api.PolicyList+xml:  if set the policy list  is returned in xml format (see Policy_)
          :application/vnd.ez.api.PolicyList+json:  if set the policy list  is returned in json format (see Policy_)
-:Response: 
+:Response:
 
 .. code:: http
 
@@ -5782,7 +5782,7 @@ List Policies for user
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Policy_      
+          Policy_
 
 
 :Error Codes:
@@ -5975,7 +5975,7 @@ Content XML Schema
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
-      <xsd:complexType name="vnd.ez.api.ContentInfo">
+      <xsd:complexType name="contentBaseType">
         <xsd:complexContent>
           <xsd:extension base="ref">
             <xsd:all>
@@ -5997,9 +5997,18 @@ Content XML Schema
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
+      <xsd:complexType name="vnd.ez.api.ContentInfo">
+        <xsd:complexContent>
+          <xsd:extension base="contentBaseType">
+            <xsd:all>
+              <xsd:element name="CurrentVersion" type="ref" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
       <xsd:complexType name="vnd.ez.api.Content">
         <xsd:complexContent>
-          <xsd:extension base="vnd.ez.api.ContentInfo">
+          <xsd:extension base="contentBaseType">
             <xsd:all>
               <xsd:element name="CurrentVersion" type="embeddedVersionType" />
             </xsd:all>
@@ -6007,6 +6016,7 @@ Content XML Schema
         </xsd:complexContent>
       </xsd:complexType>
       <xsd:element name="ContentInfo" type="vnd.ez.api.ContentInfo" />
+      <xsd:element name="Content" type="vnd.ez.api.Content" />
     </xsd:schema>
 
 
@@ -6414,7 +6424,7 @@ View XML Schema
               <xsd:documentation>
                 The identifier of the field i.e identifier
                 of the corresponding field
-                definition 
+                definition
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
@@ -7280,7 +7290,7 @@ UrlWildcard XML Schema
 
 
 .. _Section:
-    
+
 Section XML Schema
 ------------------
 
@@ -7291,7 +7301,7 @@ Section XML Schema
       xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
 
       <xsd:include schemaLocation="CommonDefinitions.xsd" />
-      
+
       <xsd:complexType name="vnd.ez.api.Section">
         <xsd:complexContent>
           <xsd:extension base="ref">
@@ -8327,7 +8337,7 @@ FieldDefinitionCreate XML Schema
           <xsd:element name="descriptions" type="multiLanguageValuesType" />
         </xsd:all>
       </xsd:complexType>
-      
+
       <xsd:element name="FieldDefinitionInput" type="vnd.ez.api.FieldDefinitionCreate" />
     </xsd:schema>
 
@@ -8406,7 +8416,7 @@ FieldDefinitionUpdate XML Schema
           <xsd:element name="descriptions" type="multiLanguageValuesType" />
         </xsd:all>
       </xsd:complexType>
-      
+
       <xsd:element name="FieldDefinitionInput" type="vnd.ez.api.FieldDefinitionUpdate" />
     </xsd:schema>
 
@@ -8421,7 +8431,7 @@ UserGroupCreate XML Schema
     <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
       xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
       <xsd:include schemaLocation="CommonDefinitions.xsd" />
-      
+
       <xsd:complexType name="vnd.ez.api.UserGroupCreate">
         <xsd:all>
           <xsd:element name="ContentType" type="ref" minOccurs="0" />
@@ -8451,7 +8461,7 @@ UserGroupUpdate XML Schema
     <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
       xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
       <xsd:include schemaLocation="CommonDefinitions.xsd" />
-      
+
       <xsd:complexType name="vnd.ez.api.UserGroupUpdate">
         <xsd:all>
           <xsd:element name="mainLanguageCode" type="xsd:string" minOccurs="0"/>
@@ -8537,7 +8547,7 @@ UserCreate XML Schema
     <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
       xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
       <xsd:include schemaLocation="CommonDefinitions.xsd" />
-      
+
       <xsd:complexType name="vnd.ez.api.UserCreate">
         <xsd:all>
           <xsd:element name="ContentType" type="ref" minOccurs="0" />
@@ -8709,7 +8719,7 @@ Limitation XML Schema
             maxOccurs="unbounded" />
         </xsd:sequence>
       </xsd:complexType>
-      
+
     </xsd:schema>
 
 
@@ -8854,7 +8864,7 @@ Role XML Schema
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
-      
+
       <xsd:element name="RoleInput" type="vnd.ez.api.RoleInput"/>
       <xsd:element name="Role" type="vnd.ez.api.Role"/>
       <xsd:element name="RoleAssignInput" type="vnd.ez.api.RoleAssignInput"/>

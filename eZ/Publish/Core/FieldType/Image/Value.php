@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Image;
-use eZ\Publish\Core\FieldType\Value as BaseValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
+
+use eZ\Publish\Core\FieldType\Value as BaseValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
 
 /**
  * Value for Image field type
@@ -42,7 +43,7 @@ class Value extends BaseValue
     /**
      * Size of the image file
      *
-     * @var integer
+     * @var int
      * @required
      */
     public $fileSize;
@@ -83,6 +84,7 @@ class Value extends BaseValue
      * Creates a value only from a file path
      *
      * @param string $path
+     *
      * @return Value
      */
     public static function fromString( $path )

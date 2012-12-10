@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\Matcher\Id;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\Section as SectionIdMatcher,
-    eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo,
-    eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\Section as SectionIdMatcher;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
 
 class SectionTest extends BaseTest
 {
@@ -32,9 +32,9 @@ class SectionTest extends BaseTest
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\Section::matchLocation
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
      *
-     * @param $matchingConfig
+     * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param $expectedResult
+     * @param boolean $expectedResult
      */
     public function testMatchLocation( $matchingConfig, Location $location, $expectedResult )
     {
@@ -71,7 +71,8 @@ class SectionTest extends BaseTest
     /**
      * Generates a Location mock in respect of a given content Id
      *
-     * @param $sectionId
+     * @param int $sectionId
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function generateLocationForSectionId( $sectionId )
@@ -84,8 +85,7 @@ class SectionTest extends BaseTest
                 $this->returnValue(
                     $this->getContentInfoMock( array( 'sectionId' => $sectionId ) )
                 )
-            )
-        ;
+            );
 
         return $location;
     }
@@ -95,9 +95,9 @@ class SectionTest extends BaseTest
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\Section::matchContentInfo
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
      *
-     * @param $matchingConfig
+     * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param $expectedResult
+     * @param boolean $expectedResult
      */
     public function testMatchContentInfo( $matchingConfig, ContentInfo $contentInfo, $expectedResult )
     {

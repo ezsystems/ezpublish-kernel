@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType;
+
 use eZ\Publish\SPI\FieldType\FieldStorage;
 
 /**
@@ -47,10 +48,11 @@ abstract class GatewayBasedStorage implements FieldStorage
     }
 
     /**
-     * Add a storage $gateway assigned to the given $identifier
+     * Adds a storage $gateway assigned to the given $identifier
      *
      * @param string $identifier
      * @param \eZ\Publish\Core\FieldType\StorageGateway $gateway
+     *
      * @return void
      */
     public function addGateway( $identifier, StorageGateway $gateway )
@@ -62,6 +64,7 @@ abstract class GatewayBasedStorage implements FieldStorage
      * Retrieve the fitting gateway, base on the identifer in $context
      *
      * @param array $context
+     *
      * @return \eZ\Publish\Core\FieldType\StorageGateway
      */
     protected function getGateway( array $context )

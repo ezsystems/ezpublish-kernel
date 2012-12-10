@@ -183,7 +183,7 @@ class VersionUpdateTest extends BaseTest
      */
     protected function getContentServiceMock()
     {
-        $contentServiceMock =  $this->getMock(
+        $contentServiceMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\ContentService',
             array(),
             array(),

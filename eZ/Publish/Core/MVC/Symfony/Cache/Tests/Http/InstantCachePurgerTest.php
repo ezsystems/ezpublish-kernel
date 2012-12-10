@@ -34,8 +34,7 @@ class InstantCachePurgerTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'purge' )
             ->with( $locationIds )
-            ->will( $this->returnArgument( 0 ) )
-        ;
+            ->will( $this->returnArgument( 0 ) );
 
         $purger = new InstantCachePurger( $this->purgeClient );
         $this->assertSame( $locationIds, $purger->purge( $locationIds ) );
@@ -48,8 +47,7 @@ class InstantCachePurgerTest extends \PHPUnit_Framework_TestCase
     {
         $this->purgeClient
             ->expects( $this->once() )
-            ->method( 'purgeAll' )
-        ;
+            ->method( 'purgeAll' );
 
         $purger = new InstantCachePurger( $this->purgeClient );
         $purger->purgeAll();

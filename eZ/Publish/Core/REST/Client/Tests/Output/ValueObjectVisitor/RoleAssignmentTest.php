@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
@@ -20,8 +21,9 @@ class RoleAssignmentTest extends ValueObjectVisitorBaseTest
     /**
      * Tests the RoleAssignment visitor
      *
-     * @return \eZ\Publish\Core\REST\Client\Values\User\RoleAssignment
      * @todo test with limitations
+     *
+     * @return \eZ\Publish\Core\REST\Client\Values\User\RoleAssignment
      */
     public function testVisitComplete()
     {
@@ -57,6 +59,7 @@ class RoleAssignmentTest extends ValueObjectVisitorBaseTest
      * Tests if result contains Role element
      *
      * @param string $result
+     *
      * @depends testVisitComplete
      */
     public function testResultContainsRoleElement( $result )
@@ -75,6 +78,7 @@ class RoleAssignmentTest extends ValueObjectVisitorBaseTest
      * Tests if result contains Role element attributes
      *
      * @param string $result
+     *
      * @depends testVisitComplete
      */
     public function testResultContainsRoleElementAttributes( $result )

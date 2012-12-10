@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
-use eZ\Publish\SPI\Persistence\Content\Language,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException;
+
+use eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * Language Cache
@@ -34,6 +35,7 @@ class Cache
      * Stores the $language into the cache
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Language $language
+     *
      * @return void
      */
     public function store( Language $language )
@@ -46,6 +48,7 @@ class Cache
      * Removes the language with $id from the cache
      *
      * @param mixed $id
+     *
      * @return void
      */
     public function remove( $id )
@@ -64,6 +67,7 @@ class Cache
      * Returns the Language with $id from the cache
      *
      * @param mixed $id
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *         if the Language could not be found
@@ -81,6 +85,7 @@ class Cache
      * Returns the Language with $languageCode from the cache
      *
      * @param string $languageCode
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *         if the Language could not be found

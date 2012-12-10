@@ -93,7 +93,7 @@ class RoleInputTest extends BaseTest
      */
     protected function getRoleServiceMock()
     {
-        $roleServiceMock =  $this->getMock(
+        $roleServiceMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\RoleService',
             array(),
             array(),

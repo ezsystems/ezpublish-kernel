@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications,
-    eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
+
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * A criterion that matches content based on remote ID of its locations
@@ -24,7 +25,7 @@ class LocationRemoteId extends Criterion implements CriterionInterface
     /**
      * Creates a new locationRemoteId criterion
      *
-     * @param integer|array(integer) $value One or more locationRemoteId that must be matched
+     * @param int|int[] $value One or more locationRemoteId that must be matched
      *
      * @throws \InvalidArgumentException if a non numeric id is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator

@@ -14,8 +14,8 @@ use eZ\Publish\API\Repository\Values\Content\Search\Facet;
  * this class hold counts for content in sections
  *
  */
-class TermFacet extends Facet {
-
+class TermFacet extends Facet
+{
     /**
      * An array with term as key and count of matching content objects as value
      *

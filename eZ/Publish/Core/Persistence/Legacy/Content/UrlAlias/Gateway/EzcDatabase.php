@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
-    eZ\Publish\SPI\Persistence\Content\UrlAlias,
-    ezcQuery;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias;
+use ezcQuery;
 
 /**
  * UrlAlias Gateway
@@ -312,18 +312,12 @@ class EzcDatabase extends Gateway
      *
      * Sets "is_original" to 0 thus marking entry as history.
      *
-     *
-     *
-     *
-     *
      * Re-links history entries.
      *
      * When location alias is published we need to check for new history entries created with self::downgrade()
      * with the same action and language, update their "link" column with id of the published entry.
      * History entry "id" column is moved to next id value so that all active (non-history) entries are kept
      * under the same id.
-     *
-     *
      *
      * @param mixed $parentId
      * @param string $textMD5
@@ -561,6 +555,7 @@ class EzcDatabase extends Gateway
      * @param array $values
      *
      * @throws \Exception
+     *
      * @return void
      */
     protected function setQueryValues( ezcQuery $query, $values )
@@ -707,9 +702,9 @@ class EzcDatabase extends Gateway
                     $query->expr->eq(
                         $this->dbHandler->quoteColumn( "parent", $tableName ),
                         // root entry has parent column set to 0
-                        isset( $previousTableName )
-                            ? $this->dbHandler->quoteColumn( "link", $previousTableName )
-                            : $query->bindValue( 0, null, \PDO::PARAM_INT )
+                        isset( $previousTableName ) ?
+                            $this->dbHandler->quoteColumn( "link", $previousTableName ) :
+                            $query->bindValue( 0, null, \PDO::PARAM_INT )
                     )
                 )
             );

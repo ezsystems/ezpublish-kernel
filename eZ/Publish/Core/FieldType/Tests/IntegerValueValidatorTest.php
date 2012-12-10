@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Integer\Value as IntegerValue,
-    eZ\Publish\Core\FieldType\Validator\IntegerValueValidator;
+
+use eZ\Publish\Core\FieldType\Integer\Value as IntegerValue;
+use eZ\Publish\Core\FieldType\Validator\IntegerValueValidator;
 
 /**
  * @group fieldType

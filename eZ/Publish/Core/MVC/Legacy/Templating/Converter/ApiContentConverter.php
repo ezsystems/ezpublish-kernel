@@ -46,9 +46,11 @@ class ApiContentConverter implements MultipleObjectConverter
     /**
      * Converts $object to make it compatible with eZTemplate API.
      *
-     * @param $object
-     * @return mixed|\eZ\Publish\Core\MVC\Legacy\Templating\LegacyCompatible
+     * @param object $object
+     *
      * @throws \InvalidArgumentException If $object is actually not an object
+     *
+     * @return mixed|\eZ\Publish\Core\MVC\Legacy\Templating\LegacyCompatible
      */
     public function convert( $object )
     {
@@ -76,8 +78,10 @@ class ApiContentConverter implements MultipleObjectConverter
      *
      * @param mixed $object
      * @param string $alias
-     * @return void
+     *
      * @throws \InvalidArgumentException If $object is not an object
+     *
+     * @return void
      */
     public function register( $object, $alias )
     {

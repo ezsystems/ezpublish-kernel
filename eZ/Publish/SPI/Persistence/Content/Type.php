@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content;
+
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
@@ -136,7 +137,7 @@ class Type extends ValueObject
     /**
      * Determines if the type is a container
      *
-     * @var bool
+     * @var boolean
      */
     public $isContainer;
 

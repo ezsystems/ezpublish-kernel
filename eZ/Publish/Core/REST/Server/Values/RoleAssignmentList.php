@@ -33,7 +33,7 @@ class RoleAssignmentList extends RestValue
     /**
      * Indicator if the role assignment is for user group
      *
-     * @var bool
+     * @var boolean
      */
     public $isGroupAssignment;
 
@@ -42,7 +42,7 @@ class RoleAssignmentList extends RestValue
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleAssignment[] $roleAssignments
      * @param mixed $id
-     * @param bool $isGroupAssignment
+     * @param boolean $isGroupAssignment
      */
     public function __construct( array $roleAssignments, $id, $isGroupAssignment = false )
     {

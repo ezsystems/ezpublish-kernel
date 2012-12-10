@@ -8,12 +8,13 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Image;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\FieldType\FileService,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\Core\FieldType\ValidationError,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\FieldValue;
+
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\FieldType\FileService;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 /**
  * The Image field type
@@ -50,7 +51,7 @@ class Type extends FieldType
     }
 
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -162,7 +163,8 @@ class Type extends FieldType
      * Returns if the given $value is considered empty by the field type
      *
      * @param mixed $value
-     * @return bool
+     *
+     * @return boolean
      */
     public function isEmptyValue( $value )
     {
@@ -174,7 +176,8 @@ class Type extends FieldType
      * storage
      *
      * @param string $path
-     * @return bool
+     *
+     * @return boolean
      */
     protected function fileExists( $path )
     {
@@ -281,8 +284,9 @@ class Type extends FieldType
 
     /**
      * @see \eZ\Publish\Core\FieldType::getSortInfo()
-     * @return bool
      * @todo Correct?
+     *
+     * @return boolean
      */
     protected function getSortInfo( $value )
     {
@@ -298,7 +302,7 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
-        if( $hash === null )
+        if ( $hash === null )
         {
             // empty value
             return null;

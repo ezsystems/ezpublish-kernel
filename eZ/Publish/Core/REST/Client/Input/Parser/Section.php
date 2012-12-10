@@ -24,8 +24,10 @@ class Section extends Parser
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\API\Repository\Values\Content\Section
+     *
      * @todo Error handling
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {

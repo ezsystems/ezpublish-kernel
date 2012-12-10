@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\Matcher\Identifier;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Identifier\Section as SectionIdentifierMatcher,
-    eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo,
-    eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest,
-    eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Identifier\Section as SectionIdentifierMatcher;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
+use eZ\Publish\API\Repository\Repository;
 
 class SectionTest extends BaseTest
 {
@@ -31,7 +31,8 @@ class SectionTest extends BaseTest
     /**
      * Returns a Repository mock configured to return the appropriate Section object with given section identifier
      *
-     * @param $sectionIdentifier
+     * @param string $sectionIdentifier
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function generateRepositoryMockForSectionIdentifier( $sectionIdentifier )
@@ -39,30 +40,27 @@ class SectionTest extends BaseTest
         $sectionServiceMock = $this
             ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\SectionService' )
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
         $sectionServiceMock->expects( $this->once() )
             ->method( 'loadSection' )
             ->will(
-            $this->returnValue(
-                $this
-                    ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Section' )
-                    ->setConstructorArgs(
-                        array(
-                             array( 'identifier' => $sectionIdentifier )
+                $this->returnValue(
+                    $this
+                        ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Section' )
+                        ->setConstructorArgs(
+                            array(
+                                array( 'identifier' => $sectionIdentifier )
+                            )
                         )
-                    )
-                    ->getMockForAbstractClass()
-            )
-        )
-        ;
+                        ->getMockForAbstractClass()
+                )
+            );
 
         $repository = $this->getRepositoryMock();
         $repository
             ->expects( $this->once() )
             ->method( 'getSectionService' )
-            ->will( $this->returnValue( $sectionServiceMock ) )
-        ;
+            ->will( $this->returnValue( $sectionServiceMock ) );
 
         return $repository;
     }
@@ -73,9 +71,10 @@ class SectionTest extends BaseTest
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
      * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
      *
-     * @param $matchingConfig
+     * @param string|string[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param $expectedResult
+     * @param boolean $expectedResult
+     *
      * @return void
      */
     public function testMatchLocation( $matchingConfig, Repository $repository, $expectedResult )
@@ -90,8 +89,7 @@ class SectionTest extends BaseTest
                 $this->returnValue(
                     $this->getContentInfoMock()
                 )
-            )
-        ;
+            );
         $this->assertSame(
             $expectedResult,
             $this->matcher->matchLocation( $location )
@@ -130,9 +128,10 @@ class SectionTest extends BaseTest
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
      * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
      *
-     * @param $matchingConfig
+     * @param string|string[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param $expectedResult
+     * @param boolean $expectedResult
+     *
      * @return void
      */
     public function testMatchContentInfo( $matchingConfig, Repository $repository, $expectedResult )

@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
-use eZ\Publish\SPI\FieldType\FieldStorage,
-    eZ\Publish\Core\FieldType\NullStorage;
+
+use eZ\Publish\SPI\FieldType\FieldStorage;
+use eZ\Publish\Core\FieldType\NullStorage;
 
 /**
  * Registry for external storages
@@ -48,6 +49,7 @@ class StorageRegistry
      *
      * @param string $typeName
      * @param mixed $storage Callable or FieldStorage
+     *
      * @return void
      */
     public function register( $typeName, $storage )

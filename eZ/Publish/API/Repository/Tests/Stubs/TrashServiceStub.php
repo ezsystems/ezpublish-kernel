@@ -9,15 +9,15 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\TrashService;
-use \eZ\Publish\API\Repository\Values\Content\Query;
-use \eZ\Publish\API\Repository\Values\Content\Location;
-use \eZ\Publish\API\Repository\Values\Content\SearchResult;
-use \eZ\Publish\API\Repository\Values\Content\TrashItem;
+use eZ\Publish\API\Repository\TrashService;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\TrashItem;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\TrashItemStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\TrashItemStub;
 
 /**
  * Trash service used for content/location trash handling.
@@ -59,7 +59,7 @@ class TrashServiceStub implements TrashService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to read the trashed location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the location with the given id does not exist
      *
-     * @param integer $trashItemId
+     * @param int $trashItemId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
@@ -108,6 +108,7 @@ class TrashServiceStub implements TrashService
      * Creates a TrashItem for the given $location.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
     protected function trashItemFromLocation( Location $location )

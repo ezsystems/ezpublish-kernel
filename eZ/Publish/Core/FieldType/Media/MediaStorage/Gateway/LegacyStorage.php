@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Media\MediaStorage\Gateway;
-use eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway\LegacyStorage as BaseLegacyStorage;
+
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway\LegacyStorage as BaseLegacyStorage;
 
 class LegacyStorage extends BaseLegacyStorage
 {
@@ -34,15 +35,27 @@ class LegacyStorage extends BaseLegacyStorage
         $propertyMap = parent::getPropertyMapping();
         $propertyMap['has_controller'] = array(
             'name' => 'hasController',
-            'cast' => function ( $val ) { return (bool)$val; },
+            'cast' =>
+                function ( $val )
+                {
+                    return (bool)$val;
+                },
         );
         $propertyMap['is_autoplay'] = array(
             'name' => 'autoplay',
-            'cast' => function ( $val ) { return (bool)$val; },
+            'cast' =>
+                function ( $val )
+                {
+                    return (bool)$val;
+                },
         );
         $propertyMap['is_loop'] = array(
             'name' => 'loop',
-            'cast' => function ( $val ) { return (bool)$val; },
+            'cast' =>
+                function ( $val )
+                {
+                    return (bool)$val;
+                },
         );
         $propertyMap['width'] = array(
             'name' => 'width',
@@ -65,6 +78,7 @@ class LegacyStorage extends BaseLegacyStorage
      * @param \ezcQuerySelect $selectQuery
      * @param int $fieldId
      * @param int $versionNo
+     *
      * @return void
      */
     protected function setFetchColumns( \ezcQuerySelect $selectQuery, $fieldId, $versionNo )
@@ -91,6 +105,7 @@ class LegacyStorage extends BaseLegacyStorage
      * @param \ezcQueryInsert $insertQuery
      * @param VersionInfo $versionInfo
      * @param Field $field
+     *
      * @return void
      */
     protected function setInsertColumns( \ezcQueryInsert $insertQuery, VersionInfo $versionInfo, Field $field )

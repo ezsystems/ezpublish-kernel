@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception;
+
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**

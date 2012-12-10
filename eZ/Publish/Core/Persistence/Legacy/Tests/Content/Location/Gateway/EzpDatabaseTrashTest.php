@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\API\Repository\Values\Content\Query\SortClause,
-    eZ\Publish\API\Repository\Values\Content\Query;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\API\Repository\Values\Content\Query;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase
@@ -339,9 +340,11 @@ class EzpDatabaseTrashTest extends TestCase
                 {
                     return $trashItem['path_string'];
                 },
-                $trashList = $handler->listTrashed( 0, null, array(
-                    new SortClause\LocationPathString( Query::SORT_DESC ),
-                ) )
+                $trashList = $handler->listTrashed(
+                    0, null, array(
+                        new SortClause\LocationPathString( Query::SORT_DESC ),
+                    )
+                )
             )
         );
     }
@@ -371,10 +374,12 @@ class EzpDatabaseTrashTest extends TestCase
                 {
                     return $trashItem['path_string'];
                 },
-                $trashList = $handler->listTrashed( 0, null, array(
-                    new SortClause\LocationDepth(),
-                    new SortClause\LocationPathString( Query::SORT_DESC ),
-                ) )
+                $trashList = $handler->listTrashed(
+                    0, null, array(
+                        new SortClause\LocationDepth(),
+                        new SortClause\LocationPathString( Query::SORT_DESC ),
+                    )
+                )
             )
         );
     }

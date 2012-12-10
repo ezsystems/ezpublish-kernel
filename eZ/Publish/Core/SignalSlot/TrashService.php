@@ -61,7 +61,7 @@ class TrashService implements TrashServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the trashed location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the location with the given id does not exist
      *
-     * @param integer $trashItemId
+     * @param int $trashItemId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
@@ -131,8 +131,7 @@ class TrashService implements TrashServiceInterface
     public function emptyTrash()
     {
         $returnValue = $this->service->emptyTrash();
-        $this->signalDispatcher->emit(
-            new EmptyTrashSignal( array() ) );
+        $this->signalDispatcher->emit( new EmptyTrashSignal( array() ) );
         return $returnValue;
     }
 

@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher;
 
-use eZ\Publish\Core\MVC\RepositoryAware,
-    eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher;
+use eZ\Publish\Core\MVC\RepositoryAware;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher;
 
 /**
  * Abstract class for basic matchers to be used with View\Provider\Content\Configured, accepting multiple values to match against.
@@ -27,8 +27,10 @@ abstract class MultipleValued extends RepositoryAware implements Matcher
      * $matchingConfig can have single (string|int...) or multiple values (array)
      *
      * @param mixed $matchingConfig
-     * @return void
+     *
      * @throws \InvalidArgumentException Should be thrown if $matchingConfig is not valid.
+     *
+     * @return void
      */
     public function setMatchingConfig( $matchingConfig )
     {

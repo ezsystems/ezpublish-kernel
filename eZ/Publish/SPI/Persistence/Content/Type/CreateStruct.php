@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content\Type;
-use eZ\Publish\SPI\Persistence\ValueObject,
-    eZ\Publish\SPI\Persistence\Content\Location;
+
+use eZ\Publish\SPI\Persistence\ValueObject;
+use eZ\Publish\SPI\Persistence\Content\Location;
 
 /**
  */
@@ -106,7 +107,7 @@ class CreateStruct extends ValueObject
     /**
      * Determines if the type is a container
      *
-     * @var bool
+     * @var boolean
      */
     public $isContainer;
 

@@ -42,6 +42,7 @@ class BinaryProcessor extends BinaryInputProcessor
      * $outgoingValueHash.
      *
      * @param mixed $outgoingValueHash
+     *
      * @return mixed Post processed hash
      */
     public function postProcessHash( $outgoingValueHash )
@@ -61,6 +62,7 @@ class BinaryProcessor extends BinaryInputProcessor
      * Generates a URL for $path
      *
      * @param string $path
+     *
      * @return string
      */
     protected function generateUrl( $path )

@@ -9,13 +9,13 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\LanguageService;
-use \eZ\Publish\API\Repository\Values\Content\Language;
-use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
+use eZ\Publish\API\Repository\LanguageService;
+use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\LanguageService}
@@ -41,7 +41,7 @@ class LanguageServiceStub implements LanguageService
     private $defaultLanguageCode;
 
     /**
-     * @var integer
+     * @var int
      */
     private $nextId = 0;
 
@@ -141,7 +141,7 @@ class LanguageServiceStub implements LanguageService
     }
 
     /**
-     * enables a language
+     * Enables a language
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
@@ -165,7 +165,7 @@ class LanguageServiceStub implements LanguageService
     }
 
     /**
-     * disables a language
+     * Disables a language
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
@@ -209,7 +209,7 @@ class LanguageServiceStub implements LanguageService
     /**
      * Loads all Languages
      *
-     * @return array an aray of {@link  \eZ\Publish\API\Repository\Values\Content\Language}
+     * @return \eZ\Publish\API\Repository\Values\Content\Language[]
      */
     public function loadLanguages()
     {
@@ -258,7 +258,7 @@ class LanguageServiceStub implements LanguageService
     }
 
     /**
-     * returns a configured default language code
+     * Returns a configured default language code
      *
      * @return string
      */
@@ -268,7 +268,7 @@ class LanguageServiceStub implements LanguageService
     }
 
     /**
-     * instanciates an object to be used for creating languages
+     * Instantiates an object to be used for creating languages
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
      */

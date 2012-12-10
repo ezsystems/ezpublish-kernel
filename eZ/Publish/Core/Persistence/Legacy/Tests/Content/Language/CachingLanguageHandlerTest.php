@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\SPI\Persistence\Content\Language,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler;
 
 /**
  * Test case for caching Language Handler
@@ -40,8 +41,9 @@ class CachingLanguageHandlerTest extends TestCase
     protected $languageCacheMock;
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::__construct
+     *
+     * @return void
      */
     public function testCtorPropertyInnerHandler()
     {
@@ -55,8 +57,9 @@ class CachingLanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::__construct
+     *
+     * @return void
      */
     public function testCtorPropertyLanguageCache()
     {
@@ -70,8 +73,9 @@ class CachingLanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::create
+     *
+     * @return void
      */
     public function testCreate()
     {
@@ -130,8 +134,9 @@ class CachingLanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::update
+     *
+     * @return void
      */
     public function testUpdate()
     {
@@ -155,8 +160,9 @@ class CachingLanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::load
+     *
+     * @return void
      */
     public function testLoad()
     {
@@ -193,16 +199,19 @@ class CachingLanguageHandlerTest extends TestCase
         $cacheMock->expects( $this->once() )
             ->method( 'getById' )
             ->with( $this->equalTo( 2 ) )
-            ->will( $this->throwException(
-                new NotFoundException( 'Language', 2 )
-            ) );
+            ->will(
+                $this->throwException(
+                    new NotFoundException( 'Language', 2 )
+                )
+            );
 
         $result = $handler->load( 2 );
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::loadByLanguageCode
+     *
+     * @return void
      */
     public function testLoadByLanguageCode()
     {
@@ -239,16 +248,19 @@ class CachingLanguageHandlerTest extends TestCase
         $cacheMock->expects( $this->once() )
             ->method( 'getByLocale' )
             ->with( $this->equalTo( 'eng-US' ) )
-            ->will( $this->throwException(
-                new NotFoundException( 'Language', 'eng-US' )
-            ) );
+            ->will(
+                $this->throwException(
+                    new NotFoundException( 'Language', 'eng-US' )
+                )
+            );
 
         $result = $handler->loadByLanguageCode( 'eng-US' );
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::loadAll
+     *
+     * @return void
      */
     public function testLoadAll()
     {
@@ -270,8 +282,9 @@ class CachingLanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::delete
+     *
+     * @return void
      */
     public function testDelete()
     {

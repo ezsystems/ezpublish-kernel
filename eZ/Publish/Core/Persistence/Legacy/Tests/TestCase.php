@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    ezcQuerySelect;
+
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use ezcQuerySelect;
 
 /**
  * Base test case for database related tests
@@ -58,7 +59,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         {
             $this->dsn = getenv( "DATABASE" );
             if ( !$this->dsn )
-                $this->dsn =  "sqlite://:memory:";
+                $this->dsn = "sqlite://:memory:";
             $this->db = preg_replace( '(^([a-z]+).*)', '\\1', $this->dsn );
         }
 
@@ -132,6 +133,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      * Get a text representation of a result set
      *
      * @param array $result
+     *
      * @return string
      */
     protected static function getResultTextRepresentation( array $result )
@@ -152,6 +154,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      * Inserts database fixture from $file.
      *
      * @param string $file
+     *
      * @return void
      */
     protected function insertDatabaseFixture( $file )
@@ -245,6 +248,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      * @param array $expectation
      * @param \ezcQuerySelect $query
      * @param string $message
+     *
      * @return void
      */
     public static function assertQueryResult( array $expectation, ezcQuerySelect $query, $message = null )
@@ -273,6 +277,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      *
      * @param array $properties
      * @param object $object
+     *
      * @return void
      */
     protected function assertPropertiesCorrect( array $properties, $object )
@@ -325,6 +330,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      * Returns public property names in $object
      *
      * @param object $object
+     *
      * @return array
      */
     protected function getPublicPropertyNames( $object )
@@ -340,13 +346,12 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @static
      * @return string
      */
     static protected function getInstallationDir()
     {
         static $installDir = null;
-        if ($installDir === null)
+        if ( $installDir === null )
         {
             $config = require 'config.php';
             $installDir = $config['service']['parameters']['install_dir'];

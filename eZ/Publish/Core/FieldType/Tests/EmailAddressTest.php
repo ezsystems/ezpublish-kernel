@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\EmailAddress\Type as EmailAddressType,
-    eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue,
-    ReflectionObject;
+
+use eZ\Publish\Core\FieldType\EmailAddress\Type as EmailAddressType;
+use eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue;
+use ReflectionObject;
 
 /**
  * @group fieldType

@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\Content;
 
-use \eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct}
@@ -32,15 +32,15 @@ class ContentUpdateStruct extends \eZ\Publish\API\Repository\Values\Content\Cont
      *
      * @param string $fieldDefIdentifier the identifier of the field definition
      * @param mixed $value Either a plain value which is understandable by the field type or an instance of a Value class provided by the field type
-     * @param bool|string $languageCode If not given on a translatable field the initial language is used,
+     * @param boolean|string $languageCode If not given on a translatable field the initial language is used,
      */
     public function setField( $fieldDefIdentifier, $value, $languageCode = null )
     {
         $this->fields[] = new Field(
             array(
-                'fieldDefIdentifier'  =>  $fieldDefIdentifier,
-                'value'               =>  $value,
-                'languageCode'        =>  $languageCode
+                'fieldDefIdentifier'  => $fieldDefIdentifier,
+                'value'               => $value,
+                'languageCode'        => $languageCode
             )
         );
     }

@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Relation\RelationStorage;
-use eZ\Publish\Core\FieldType\StorageGateway,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field;
+
+use eZ\Publish\Core\FieldType\StorageGateway;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  *
@@ -22,7 +23,8 @@ abstract class Gateway extends StorageGateway
      *
      * @param VersionInfo $versionInfo
      * @param Field $field
-     * @return bool
+     *
+     * @return boolean
      */
     abstract public function storeFieldData( VersionInfo $versionInfo, Field $field );
 
@@ -30,6 +32,7 @@ abstract class Gateway extends StorageGateway
      * Sets a loaded URL, if one is stored for the given field
      *
      * @param Field $field
+     *
      * @return void
      */
     abstract public function getFieldData( Field $field );
@@ -40,8 +43,10 @@ abstract class Gateway extends StorageGateway
      * @param VersionInfo $versionInfo
      * @param array $fieldId Array of field Ids
      * @param array $context
+     *
+     * @todo Remove $context, since it is inherent to the Gateway
+     *
      * @return boolean
-     * @TODO Remove $context, since it is inherent to the Gateway
      */
     abstract public function deleteFieldData( VersionInfo $versionInfo, array $fieldId, array $context );
 }

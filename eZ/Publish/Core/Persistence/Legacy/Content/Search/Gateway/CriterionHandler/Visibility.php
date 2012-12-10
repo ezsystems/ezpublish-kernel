@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    ezcQuerySelect;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use ezcQuerySelect;
 
 /**
  * Visibility criterion handler
@@ -22,7 +23,8 @@ class Visibility extends CriterionHandler
      * Check if this criterion handler accepts to handle the given criterion.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @return bool
+     *
+     * @return boolean
      */
     public function accept( Criterion $criterion )
     {
@@ -32,7 +34,7 @@ class Visibility extends CriterionHandler
     /**
      * Check if this criterion handler accepts to handle the given criterion.
      *
-     * @TODO: Needs optimisation since this subselect can potentially be problematic
+     * @todo: Needs optimisation since this subselect can potentially be problematic
      * due to large number of contentobject_id values returned. One way to fix this
      * is to use inner joins on ezcontentobject_tree table, but this is not currently
      * supported in legacy search gateway
@@ -40,6 +42,7 @@ class Visibility extends CriterionHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter $converter
      * @param \ezcQuerySelect $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     *
      * @return \ezcQueryExpression
      */
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )

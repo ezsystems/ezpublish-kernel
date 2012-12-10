@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
-use Buzz\Client\Curl as BaseCurl,
-    Buzz\Message\RequestInterface,
-    Buzz\Message\MessageInterface,
-    Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Buzz\Client\Curl as BaseCurl;
+use Buzz\Message\RequestInterface;
+use Buzz\Message\MessageInterface;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 class Curl extends BaseCurl
 {

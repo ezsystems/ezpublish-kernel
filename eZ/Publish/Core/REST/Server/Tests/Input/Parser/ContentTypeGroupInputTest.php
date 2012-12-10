@@ -94,7 +94,7 @@ class ContentTypeGroupInputTest extends BaseTest
      */
     protected function getContentTypeServiceMock()
     {
-        $contentTypeServiceMock =  $this->getMock(
+        $contentTypeServiceMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\ContentTypeService',
             array(),
             array(),

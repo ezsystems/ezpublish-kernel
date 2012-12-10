@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor,
-    eZ\Publish\API\Repository\Values\Content\Query\SortClause,
-    eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
  * Visits the sortClause tree into a Solr query
@@ -29,6 +29,7 @@ class Aggregate extends SortClauseVisitor
      * COnstruct from optional visitor array
      *
      * @param array $visitors
+     *
      * @return void
      */
     public function __construct( array $visitors = array() )
@@ -40,9 +41,10 @@ class Aggregate extends SortClauseVisitor
     }
 
     /**
-     * Add visitor
+     * Adds visitor
      *
      * @param FieldValueVisitor $visitor
+     *
      * @return void
      */
     public function addVisitor( SortClauseVisitor $visitor )
@@ -54,7 +56,8 @@ class Aggregate extends SortClauseVisitor
      * CHeck if visitor is applicable to current sortClause
      *
      * @param SortClause $sortClause
-     * @return bool
+     *
+     * @return boolean
      */
     public function canVisit( SortClause $sortClause )
     {
@@ -65,6 +68,7 @@ class Aggregate extends SortClauseVisitor
      * Map field value to a proper Solr representation
      *
      * @param SortClause $sortClause
+     *
      * @return void
      */
     public function visit( SortClause $sortClause )

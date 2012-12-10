@@ -579,7 +579,7 @@ class ContentCreateTest extends BaseTest
      */
     protected function getContentServiceMock()
     {
-        $contentServiceMock =  $this->getMock(
+        $contentServiceMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\ContentService',
             array(),
             array(),
@@ -598,7 +598,7 @@ class ContentCreateTest extends BaseTest
                 $this->returnValue(
                     new ContentCreateStruct(
                         array(
-                            'contentType' =>  $contentType,
+                            'contentType' => $contentType,
                             'mainLanguageCode' => 'eng-US'
                         )
                     )
@@ -645,16 +645,16 @@ class ContentCreateTest extends BaseTest
                 'fieldDefinitions' => array(
                     new FieldDefinition(
                         array(
-                             'id' => 42,
-                             'identifier' => 'subject',
-                             'fieldTypeIdentifier' => 'ezstring'
+                            'id' => 42,
+                            'identifier' => 'subject',
+                            'fieldTypeIdentifier' => 'ezstring'
                         )
                     ),
                     new FieldDefinition(
                         array(
-                             'id' => 43,
-                             'identifier' => 'author',
-                             'fieldTypeIdentifier' => 'ezstring'
+                            'id' => 43,
+                            'identifier' => 'author',
+                            'fieldTypeIdentifier' => 'ezstring'
                         )
                     )
                 )

@@ -37,7 +37,7 @@ class PreprocessedBased extends TransformationProcessor
     }
 
     /**
-     * Load rules
+     * Loads rules
      *
      * @return array
      */

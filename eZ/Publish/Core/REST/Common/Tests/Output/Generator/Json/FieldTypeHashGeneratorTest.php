@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\REST\Common\Tests\Output\Generator\Json;
 
-use eZ\Publish\Core\REST\Common,
-    eZ\Publish\Core\REST\Common\Tests\Output\Generator\FieldTypeHashGeneratorBaseTest;
+use eZ\Publish\Core\REST\Common;
+use eZ\Publish\Core\REST\Common\Tests\Output\Generator\FieldTypeHashGeneratorBaseTest;
 
 class FieldTypeHashGeneratorTest extends FieldTypeHashGeneratorBaseTest
 {

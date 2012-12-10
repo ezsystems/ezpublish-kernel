@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\Content;
 
-use \eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct}
@@ -47,9 +47,9 @@ class ContentCreateStruct extends \eZ\Publish\API\Repository\Values\Content\Cont
 
         $this->fields[] = new Field(
             array(
-                'fieldDefIdentifier'  =>  $fieldDefIdentifier,
-                'value'               =>  $value,
-                'languageCode'        =>  $language
+                'fieldDefIdentifier'  => $fieldDefIdentifier,
+                'value'               => $value,
+                'languageCode'        => $language
             )
         );
     }

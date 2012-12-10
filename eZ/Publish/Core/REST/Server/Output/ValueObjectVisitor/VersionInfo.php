@@ -9,11 +9,10 @@
 
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
-use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor,
-    eZ\Publish\Core\REST\Common\Output\Generator,
-    eZ\Publish\Core\REST\Common\Output\Visitor,
-
-    eZ\Publish\API\Repository\Values;
+use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Common\Output\Generator;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\API\Repository\Values;
 
 /**
  * VersionInfo value object visitor
@@ -93,6 +92,7 @@ class VersionInfo extends ValueObjectVisitor
      * Maps the given version $status to a representative string
      *
      * @param int $status
+     *
      * @return string
      */
     protected function getStatusString( $status )
@@ -109,7 +109,7 @@ class VersionInfo extends ValueObjectVisitor
                 return 'ARCHIVED';
         }
 
-        // FIXME: What exception to use?
+        // @todo FIXME: What exception to use?
         throw new \Exception( 'Undefined version status: ' . $status );
     }
 }

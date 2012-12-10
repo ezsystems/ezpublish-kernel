@@ -9,19 +9,18 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
 
-use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler,
-    eZ\Publish\API\Repository\Exceptions\NotImplementedException,
-    eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\API\Repository\Values\Content\VersionInfo,
-
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -81,13 +80,13 @@ class Handler extends BaseSearchHandler
         $this->fieldHandler = $fieldHandler;
     }
 
-     /**
-     * finds content objects for the given query.
+    /**
+     * Finds content objects for the given query.
      *
-     * @TODO define structs for the field filters
+     * @todo define structs for the field filters
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array  $fieldFilters - a map of filters for the returned fields.
+     * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
@@ -107,7 +106,8 @@ class Handler extends BaseSearchHandler
         $result->time       = microtime( true ) - $start;
         $result->totalCount = $data['count'];
 
-        foreach ( $this->contentMapper->extractContentFromRows( $data['rows'] ) as $content ) {
+        foreach ( $this->contentMapper->extractContentFromRows( $data['rows'] ) as $content )
+        {
             $this->fieldHandler->loadExternalFieldData( $content );
             $searchHit = new SearchHit();
             $searchHit->valueObject = $content;
@@ -124,9 +124,9 @@ class Handler extends BaseSearchHandler
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
-     * @TODO define structs for the field filters
+     * @todo define structs for the field filters
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array  $fieldFilters - a map of filters for the returned fields.
+     * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
@@ -165,6 +165,7 @@ class Handler extends BaseSearchHandler
      * Indexes a content object
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
+     *
      * @return void
      */
     public function indexContent( Content $content )

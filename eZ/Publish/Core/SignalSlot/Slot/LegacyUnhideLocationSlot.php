@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot\Slot;
+
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Slot\AbstractLegacySlot;
 
@@ -20,6 +21,7 @@ class LegacyUnhideLocationSlot extends AbstractLegacySlot
      * Receive the given $signal and react on it
      *
      * @param \eZ\Publish\Core\SignalSlot\Signal $signal
+     *
      * @return void
      */
     public function receive( Signal $signal )
@@ -28,7 +30,8 @@ class LegacyUnhideLocationSlot extends AbstractLegacySlot
             return;
 
         $kernel = $this->getLegacyKernel();
-        $kernel->runCallback( function() use( $signal )
+        $kernel->runCallback(
+            function() use( $signal )
             {
                 $node = \eZContentObjectTreeNode::fetch( $signal->locationId );
                 \eZContentObjectTreeNode::clearViewCacheForSubtree( $node );

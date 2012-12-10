@@ -9,13 +9,13 @@
 
 namespace eZ\Publish\Core\FieldType\XmlText;
 
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\Core\FieldType\ValidationError,
-    eZ\Publish\Core\FieldType\XmlText\Input,
-    eZ\Publish\Core\FieldType\XmlText\Input\EzXml,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    DOMDocument;
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\FieldType\XmlText\Input;
+use eZ\Publish\Core\FieldType\XmlText\Input\EzXml;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use DOMDocument;
 
 /**
  * XmlText field type.
@@ -51,7 +51,7 @@ class Type extends FieldType
     );
 
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -83,7 +83,7 @@ class Type extends FieldType
             {
                 $result = $textDom->firstChild->textContent;
             }
-            elseif ( $textDom )
+            else if ( $textDom )
             {
                 $result = $textDom->textContent;
             }
@@ -110,7 +110,8 @@ class Type extends FieldType
      * Returns if the given $value is considered empty by the field type
      *
      * @param mixed $value
-     * @return bool
+     *
+     * @return boolean
      */
     public function isEmptyValue( $value )
     {
@@ -201,6 +202,7 @@ class Type extends FieldType
      * $fieldValue->data is supposed to be a DOMDocument object.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
+     *
      * @return Value
      */
     public function fromPersistenceValue( FieldValue $fieldValue )
@@ -210,15 +212,16 @@ class Type extends FieldType
 
     /**
      * @param Value $value
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
     public function toPersistenceValue( $value )
     {
         return new FieldValue(
             array(
-                 'data'         => $value->xml,
-                 'externalData' => null,
-                 'sortKey'      => $this->getSortInfo( $value )
+                'data'         => $value->xml,
+                'externalData' => null,
+                'sortKey'      => $this->getSortInfo( $value )
             )
         );
     }
@@ -226,7 +229,7 @@ class Type extends FieldType
     /**
      * Returns whether the field type is searchable
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {

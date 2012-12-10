@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\File;
 
-use eZ\Publish\Core\FieldType\FileService\LocalFileService,
-    eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\FieldType\FileService\LocalFileService;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 /**
  * Local file service for images.

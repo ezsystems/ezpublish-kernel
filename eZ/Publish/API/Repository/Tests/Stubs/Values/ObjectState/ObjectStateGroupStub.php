@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\ObjectState;
+
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 
 /**
@@ -35,7 +36,6 @@ class ObjectStateGroupStub extends ObjectStateGroup
     protected $descriptions = array();
 
     /**
-     *
      * This method returns the human readable name in all provided languages
      * of the content type
      *
@@ -52,7 +52,7 @@ class ObjectStateGroupStub extends ObjectStateGroup
     }
 
     /**
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
      *
      * @param string $languageCode
      *
@@ -79,7 +79,7 @@ class ObjectStateGroupStub extends ObjectStateGroup
     }
 
     /**
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
      *
      * @param string $languageCode
      *

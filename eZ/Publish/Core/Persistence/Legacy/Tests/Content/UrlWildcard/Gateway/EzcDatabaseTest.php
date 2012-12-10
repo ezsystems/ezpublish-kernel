@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlWildcard\Gateway;
 
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase,
-    eZ\Publish\SPI\Persistence\Content\UrlWildcard;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase;
+use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase.
@@ -32,7 +32,7 @@ class EzcDatabaseTest extends TestCase
             'destination_url' => 'dev/{1}',
             'type' => '2',
         ),
-        1 => array (
+        1 => array(
             'id' => '2',
             'source_url' => 'repository/*',
             'destination_url' => 'repo/{1}',

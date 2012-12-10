@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
-use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct,
-    eZ\Publish\API\Repository\Exceptions\NotFoundException;
+
+use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for ObjectStateHandler using in memory storage.
@@ -188,7 +189,7 @@ class ObjectStateHandlerTest extends HandlerTest
             $this->handler->loadGroup( 2 );
             $this->fail( 'Successfully loaded deleted object state group' );
         }
-        catch( NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             // Do nothing
         }
@@ -198,7 +199,7 @@ class ObjectStateHandlerTest extends HandlerTest
             $this->handler->load( 1 );
             $this->fail( 'Successfully loaded one of the states from deleted object state group' );
         }
-        catch( NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             // Do nothing
         }
@@ -208,7 +209,7 @@ class ObjectStateHandlerTest extends HandlerTest
             $this->handler->load( 2 );
             $this->fail( 'Successfully loaded one of the states from deleted object state group' );
         }
-        catch( NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             // Do nothing
         }
@@ -356,7 +357,7 @@ class ObjectStateHandlerTest extends HandlerTest
             $this->handler->load( 1 );
             $this->fail( 'Successfully loaded deleted object state' );
         }
-        catch( NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             // Do nothing
         }

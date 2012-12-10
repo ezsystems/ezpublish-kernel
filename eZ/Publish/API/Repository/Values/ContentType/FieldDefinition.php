@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Values\ContentType;
+
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
@@ -56,15 +57,16 @@ abstract class FieldDefinition extends ValueObject
     abstract public function getNames();
 
     /**
+     * This method returns the name of the field in the given language
      *
-     * this method returns the name of the field in the given language
      * @param string $languageCode
+     *
      * @return string the name for the given language or null if none existis.
      */
     abstract public function getName( $languageCode );
 
     /**
-     *  This method returns the human readable description of the field
+     * This method returns the human readable description of the field
      *
      * The structure of this field is:
      * <code>
@@ -76,8 +78,10 @@ abstract class FieldDefinition extends ValueObject
     abstract public function getDescriptions();
 
     /**
-     * this method returns the name of the field in the given language
+     * This method returns the name of the field in the given language
+     *
      * @param string $languageCode
+     *
      * @return string the description for the given language or null if none existis.
      */
     abstract public function getDescription( $languageCode );
@@ -125,14 +129,14 @@ abstract class FieldDefinition extends ValueObject
     protected $isInfoCollector;
 
     /**
-     * this method returns the validator configuration of this field definition supported by the field type
+     * This method returns the validator configuration of this field definition supported by the field type
      *
      * @return mixed
      */
     abstract public function getValidatorConfiguration();
 
     /**
-     * this method returns settings for the field definition supported by the field type
+     * This method returns settings for the field definition supported by the field type
      *
      * @return mixed
      */

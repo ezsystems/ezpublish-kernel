@@ -8,12 +8,12 @@
  */
 namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 
-use Symfony\Component\DependencyInjection\ContainerInterface as Container,
-    Symfony\Component\HttpFoundation\Response,
-    eZ\Publish\Core\MVC\Symfony\ConfigDumperInterface,
-    eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver,
-    eZINI,
-    eZCache;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
+use Symfony\Component\HttpFoundation\Response;
+use eZ\Publish\Core\MVC\Symfony\ConfigDumperInterface;
+use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver;
+use eZINI;
+use eZCache;
 
 class LegacySetupController
 {
@@ -72,7 +72,7 @@ class LegacySetupController
         $response = new Response();
 
         // inject the extra ezpublish5 folders we want permissions checked for
-        if ( $currentStep == 'Welcome' || $currentStep == 'SystemCheck')
+        if ( $currentStep == 'Welcome' || $currentStep == 'SystemCheck' )
         {
             $this->getLegacyKernel()->runCallback(
                 function()
@@ -87,7 +87,7 @@ class LegacySetupController
             );
         }
 
-        /** @var \ezpKernelResult $result  */
+        /** @var \ezpKernelResult $result */
         $result = $this->getLegacyKernel()->run();
         $result->getContent();
         $response->setContent( $result->getContent() );
@@ -117,7 +117,7 @@ class LegacySetupController
                 {
                     $adminSiteaccess = $chosenSitePackage . '_admin';
                 }
-                elseif ( $accessType === 'url' )
+                else if ( $accessType === 'url' )
                 {
                     $adminSiteaccess = $request->request->get( 'P_site_extra_data_admin_access_type_value-' . $chosenSitePackage );
                 }

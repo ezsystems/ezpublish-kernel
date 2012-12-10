@@ -8,12 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 class Image implements Converter
 {
@@ -22,7 +23,6 @@ class Image implements Converter
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @static
      * @return Image
      */
     public static function create()
@@ -62,6 +62,7 @@ class Image implements Converter
      * Creates an XML considered "empty" by the legacy storage
      *
      * @param array $contentMetaData
+     *
      * @return string
      */
     protected function createEmptyLegacyXml( $contentMetaData )
@@ -91,6 +92,7 @@ class Image implements Converter
      * Returns the XML required by the legacy database
      *
      * @param array $data
+     *
      * @return string
      */
     protected function createLegacyXml( array $data )
@@ -105,6 +107,7 @@ class Image implements Converter
      * @param array $imageData
      * @param array $pathInfo
      * @param int $timestamp
+     *
      * @return string
      */
     protected function fillXml( $imageData, $pathInfo, $timestamp )
@@ -133,7 +136,7 @@ EOT;
             htmlspecialchars( $pathInfo['filename'] ), // basename="%s"
             htmlspecialchars( $pathInfo['dirname'] ), // dirpath
             htmlspecialchars( $imageData['path'] ), // url
-            htmlspecialchars( $pathInfo['basename'] ), // @TODO: Needs original file name, for whatever reason?
+            htmlspecialchars( $pathInfo['basename'] ), // @todo: Needs original file name, for whatever reason?
             htmlspecialchars( $imageData['mime'] ), // mime_type
             htmlspecialchars( $imageData['width'] ), // width
             htmlspecialchars( $imageData['height'] ), // height
@@ -147,7 +150,7 @@ EOT;
             // <information>
             $imageData['height'], // Height
             $imageData['width'], // Width
-            1 // IsColor @TODO Do we need to fix that here?
+            1 // IsColor @todo Do we need to fix that here?
         );
     }
 
@@ -167,13 +170,13 @@ EOT;
         $fieldValue->data = $this->parseLegacyXml( $value->dataText );
     }
 
-
     /**
      * Parses the XML from the legacy database
      *
      * Returns only the data required by the FieldType, nothing more.
      *
      * @param string $xml
+     *
      * @return array
      */
     protected function parseLegacyXml( $xml )
@@ -234,15 +237,17 @@ EOT;
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints( array(
-            'validators' => array(
-                'FileSizeValidator' => array(
-                    'maxFileSize' => ( $storageDef->dataInt1 != 0
-                        ? (int)$storageDef->dataInt1 * 1024 * 1024
-                        : false ),
+        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints(
+            array(
+                'validators' => array(
+                    'FileSizeValidator' => array(
+                        'maxFileSize' => ( $storageDef->dataInt1 != 0
+                            ? (int)$storageDef->dataInt1 * 1024 * 1024
+                            : false ),
+                    )
                 )
             )
-        ) );
+        );
     }
 
     /**
@@ -256,7 +261,7 @@ EOT;
      */
     public function getIndexColumn()
     {
-        // @TODO: Correct?
+        // @todo: Correct?
         return 'sort_key_string';
     }
 }

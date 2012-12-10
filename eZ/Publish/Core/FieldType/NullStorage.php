@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType;
-use eZ\Publish\SPI\FieldType\FieldStorage,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field;
+
+use eZ\Publish\SPI\FieldType\FieldStorage;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Description of NullStorage
@@ -43,7 +44,8 @@ class NullStorage implements FieldStorage
 
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage::hasFieldData()
-     * @return bool
+     *
+     * @return boolean
      */
     public function hasFieldData()
     {

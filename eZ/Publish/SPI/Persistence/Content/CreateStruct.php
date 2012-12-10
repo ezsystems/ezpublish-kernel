@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content;
+
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
@@ -35,7 +36,7 @@ class CreateStruct extends ValueObject
     public $ownerId;
 
     /**
-     * contentId, contentVersion and mainLocationId are allowed to be left empty
+     * ContentId, contentVersion and mainLocationId are allowed to be left empty
      * when used on with this struct as these values are created by the create method.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct[]

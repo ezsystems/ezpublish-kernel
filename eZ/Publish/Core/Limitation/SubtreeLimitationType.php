@@ -37,7 +37,7 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
      * @param \eZ\Publish\API\Repository\Repository $repository
      *
-     * @return bool
+     * @return boolean
      */
     public function acceptValue( APILimitationValue $limitationValue, Repository $repository )
     {
@@ -73,7 +73,7 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
      * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
      *
-     * @return bool
+     * @return boolean
      */
     public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null )
     {
@@ -90,7 +90,7 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
         {
             $object = $object->getContentInfo();
         }
-        else if ( $object instanceof ContentCreateStruct)
+        else if ( $object instanceof ContentCreateStruct )
         {
             // If target is null return false as user does not have access to content w/o location with this limitation
             if ( $target === null )
@@ -112,7 +112,7 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
             );
         }
 
-        if ( $target !== null  && !$target instanceof Location && !$target instanceof LocationCreateStruct )
+        if ( $target !== null && !$target instanceof Location && !$target instanceof LocationCreateStruct )
         {
             throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
         }
@@ -121,7 +121,6 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
         {
             return false;
         }
-
 
         // Load location in case of LocationCreateStruct for the path comparison below
         if ( $target instanceof LocationCreateStruct )
@@ -165,7 +164,7 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
     }
 
     /**
-     * Return Criterion for use in find() query
+     * Returns Criterion for use in find() query
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -185,7 +184,7 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
     }
 
     /**
-     * Return info on valid $limitationValues
+     * Returns info on valid $limitationValues
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      *

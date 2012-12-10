@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\Matcher;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\UrlAlias as UrlAliasMatcher,
-    eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest,
-    eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\UrlAlias as UrlAliasMatcher;
+use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
+use eZ\Publish\API\Repository\Repository;
 
 class UrlAliasTest extends BaseTest
 {
@@ -31,8 +31,8 @@ class UrlAliasTest extends BaseTest
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\UrlAlias::setMatchingConfig
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
      *
-     * @param $matchingConfig
-     * @param $expectedValues
+     * @param string $matchingConfig
+     * @param string[] $expectedValues
      */
     public function testSetMatchingConfig( $matchingConfig, $expectedValues )
     {
@@ -57,7 +57,8 @@ class UrlAliasTest extends BaseTest
     /**
      * Returns a Repository mock configured to return the appropriate Section object with given section identifier
      *
-     * @param $path
+     * @param string $path
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function generateRepositoryMockForUrlAlias( $path )
@@ -75,23 +76,20 @@ class UrlAliasTest extends BaseTest
         $urlAliasServiceMock = $this
             ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\URLAliasService' )
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
         $urlAliasServiceMock->expects( $this->once() )
             ->method( 'listLocationAliases' )
             ->with(
                 $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' ),
                 $this->isType( 'boolean' )
             )
-            ->will( $this->returnValue( $urlAliasList ) )
-        ;
+            ->will( $this->returnValue( $urlAliasList ) );
 
         $repository = $this->getRepositoryMock();
         $repository
             ->expects( $this->once() )
             ->method( 'getUrlAliasService' )
-            ->will( $this->returnValue( $urlAliasServiceMock ) )
-        ;
+            ->will( $this->returnValue( $urlAliasServiceMock ) );
 
         return $repository;
     }
@@ -102,9 +100,10 @@ class UrlAliasTest extends BaseTest
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\UrlAlias::setMatchingConfig
      * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
      *
-     * @param $matchingConfig
+     * @param string|string[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param $expectedResult
+     * @param boolean $expectedResult
+     *
      * @return void
      */
     public function testMatchLocation( $matchingConfig, Repository $repository, $expectedResult )

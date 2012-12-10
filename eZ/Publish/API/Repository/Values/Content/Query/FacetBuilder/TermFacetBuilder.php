@@ -21,6 +21,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
  *
  * @package eZ\Publish\API\Repository\Values\Content\Query
  */
-class TermFacetBuilder extends FacetBuilder {
-
+class TermFacetBuilder extends FacetBuilder
+{
 }

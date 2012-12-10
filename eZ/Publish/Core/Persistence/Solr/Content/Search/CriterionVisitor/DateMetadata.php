@@ -20,6 +20,7 @@ abstract class DateMetadata extends CriterionVisitor
      * Map value to a proper Solr date representation
      *
      * @param mixed $value
+     *
      * @return string
      */
     protected function getSolrTime( $value )

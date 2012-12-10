@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
+
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
@@ -65,11 +66,12 @@ class ContentTypeCreate extends Base
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
-        // @TODO XSD says that minOccurs = 0 for identifier, but identifier is required
+        // @todo XSD says that minOccurs = 0 for identifier, but identifier is required
         if ( !array_key_exists( 'identifier', $data ) )
         {
             throw new Exceptions\Parser( "Missing 'identifier' element for ContentTypeCreate." );
@@ -94,37 +96,37 @@ class ContentTypeCreate extends Base
             $contentTypeCreateStruct->urlAliasSchema = $data['urlAliasSchema'];
         }
 
-        // @TODO XSD says that nameSchema is mandatory, but it is not in create struct
+        // @todo XSD says that nameSchema is mandatory, but it is not in create struct
         if ( array_key_exists( 'nameSchema', $data ) )
         {
             $contentTypeCreateStruct->nameSchema = $data['nameSchema'];
         }
 
-        // @TODO XSD says that isContainer is mandatory, but it is not in create struct
+        // @todo XSD says that isContainer is mandatory, but it is not in create struct
         if ( array_key_exists( 'isContainer', $data ) )
         {
             $contentTypeCreateStruct->isContainer = $this->parserTools->parseBooleanValue( $data['isContainer'] );
         }
 
-        // @TODO XSD says that defaultSortField is mandatory, but it is not in create struct
+        // @todo XSD says that defaultSortField is mandatory, but it is not in create struct
         if ( array_key_exists( 'defaultSortField', $data ) )
         {
             $contentTypeCreateStruct->defaultSortField = $this->parserTools->parseDefaultSortField( $data['defaultSortField'] );
         }
 
-        // @TODO XSD says that defaultSortOrder is mandatory, but it is not in create struct
+        // @todo XSD says that defaultSortOrder is mandatory, but it is not in create struct
         if ( array_key_exists( 'defaultSortOrder', $data ) )
         {
             $contentTypeCreateStruct->defaultSortOrder = $this->parserTools->parseDefaultSortOrder( $data['defaultSortOrder'] );
         }
 
-        // @TODO XSD says that defaultAlwaysAvailable is mandatory, but it is not in create struct
+        // @todo XSD says that defaultAlwaysAvailable is mandatory, but it is not in create struct
         if ( array_key_exists( 'defaultAlwaysAvailable', $data ) )
         {
             $contentTypeCreateStruct->defaultAlwaysAvailable = $this->parserTools->parseBooleanValue( $data['defaultAlwaysAvailable'] );
         }
 
-        // @TODO XSD says that names is mandatory, but content type can be created without names
+        // @todo XSD says that names is mandatory, but content type can be created without names
         if ( array_key_exists( 'names', $data ) )
         {
             if ( !is_array( $data['names'] ) || !array_key_exists( 'value', $data['names'] ) || !is_array( $data['names']['value'] ) )
@@ -135,7 +137,7 @@ class ContentTypeCreate extends Base
             $contentTypeCreateStruct->names = $this->parserTools->parseTranslatableList( $data['names'] );
         }
 
-        // @TODO XSD says that descriptions is mandatory, but content type can be created without descriptions
+        // @todo XSD says that descriptions is mandatory, but content type can be created without descriptions
         if ( array_key_exists( 'descriptions', $data ) )
         {
             if ( !is_array( $data['descriptions'] ) || !array_key_exists( 'value', $data['descriptions'] ) || !is_array( $data['descriptions']['value'] ) )
@@ -146,8 +148,8 @@ class ContentTypeCreate extends Base
             $contentTypeCreateStruct->descriptions = $this->parserTools->parseTranslatableList( $data['descriptions'] );
         }
 
-        // @TODO 1: XSD says that modificationDate is mandatory, but it is not in create struct
-        // @TODO 2: mismatch between XSD naming and create struct naming
+        // @todo 1: XSD says that modificationDate is mandatory, but it is not in create struct
+        // @todo 2: mismatch between XSD naming and create struct naming
         if ( array_key_exists( 'modificationDate', $data ) )
         {
             $contentTypeCreateStruct->creationDate = new DateTime( $data['modificationDate'] );

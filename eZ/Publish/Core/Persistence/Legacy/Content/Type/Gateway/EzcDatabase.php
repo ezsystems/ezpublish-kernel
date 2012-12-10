@@ -8,17 +8,18 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator,
-    eZ\Publish\SPI\Persistence\Content\Type,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\Group,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    ezcQuery,
-    ezcQuerySelect;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
+use eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\Group;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+use ezcQuery;
+use ezcQuerySelect;
 
 /**
  * Zeta Component Database based content type gateway.
@@ -111,6 +112,7 @@ class EzcDatabase extends Gateway
      * Inserts the given $group.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Group $group
+     *
      * @return mixed Group ID
      */
     public function insertGroup( Group $group )
@@ -148,6 +150,7 @@ class EzcDatabase extends Gateway
      * Updates a group with data in $group.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct $group
+     *
      * @return void
      */
     public function updateGroup( GroupUpdateStruct $group )
@@ -178,6 +181,7 @@ class EzcDatabase extends Gateway
      * Returns the number of types in a certain group.
      *
      * @param int $groupId
+     *
      * @return int
      */
     public function countTypesInGroup( $groupId )
@@ -210,6 +214,7 @@ class EzcDatabase extends Gateway
      *
      * @param int $typeId
      * @param int $status
+     *
      * @return int
      */
     public function countGroupsForType( $typeId, $status )
@@ -249,6 +254,7 @@ class EzcDatabase extends Gateway
      * Deletes the Group with the given $groupId.
      *
      * @param int $groupId
+     *
      * @return void
      */
     public function deleteGroup( $groupId )
@@ -270,6 +276,7 @@ class EzcDatabase extends Gateway
      * @param int $typeId
      * @param int $typeStatus
      * @param string[] $languages
+     *
      * @return void
      */
     protected function insertTypeNameData( $typeId, $typeStatus, array $languages )
@@ -353,6 +360,7 @@ class EzcDatabase extends Gateway
      *
      * @param \ezcQuery $q
      * @param mixed $type
+     *
      * @return void
      */
     protected function setCommonTypeColumns( ezcQuery $q, $type )
@@ -412,6 +420,7 @@ class EzcDatabase extends Gateway
      * @param mixed $groupId
      * @param mixed $typeId
      * @param int $status
+     *
      * @return void
      */
     public function insertGroupAssignment( $groupId, $typeId, $status )
@@ -445,6 +454,7 @@ class EzcDatabase extends Gateway
      * @param mixed $groupId
      * @param mixed $typeId
      * @param int $status
+     *
      * @return void
      */
     public function deleteGroupAssignment( $groupId, $typeId, $status )
@@ -475,6 +485,7 @@ class EzcDatabase extends Gateway
      * Loads data about Group with $groupId.
      *
      * @param mixed $groupId
+     *
      * @return string[][]
      */
     public function loadGroupData( $groupId )
@@ -496,6 +507,7 @@ class EzcDatabase extends Gateway
      * Loads data about Group with $identifier.
      *
      * @param mixed $identifier
+     *
      * @return string[][]
      */
     public function loadGroupDataByIdentifier( $identifier )
@@ -554,6 +566,7 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $groupId
      * @param int $status
+     *
      * @return string[][]
      */
     public function loadTypesDataForGroup( $groupId, $status )
@@ -635,6 +648,7 @@ class EzcDatabase extends Gateway
      * @param \ezcQuery $q
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
+     *
      * @return void
      */
     protected function setCommonFieldColumns(
@@ -756,6 +770,7 @@ class EzcDatabase extends Gateway
      * @param mixed $typeId
      * @param int $status
      * @param mixed $fieldDefinitionId
+     *
      * @return void
      */
     public function deleteFieldDefinition( $typeId, $status, $fieldDefinitionId )
@@ -773,7 +788,7 @@ class EzcDatabase extends Gateway
                     $this->dbHandler->quoteColumn( 'version' ),
                     $q->bindValue( $status, null, \PDO::PARAM_INT )
                 ),
-                // FIXME: Actually not needed
+                // @todo FIXME: Actually not needed
                 $q->expr->eq(
                     $this->dbHandler->quoteColumn( 'contentclass_id' ),
                     $q->bindValue( $typeId, null, \PDO::PARAM_INT )
@@ -791,6 +806,7 @@ class EzcDatabase extends Gateway
      * @param int $status
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
+     *
      * @return void
      */
     public function updateFieldDefinition(
@@ -811,7 +827,7 @@ class EzcDatabase extends Gateway
                     $this->dbHandler->quoteColumn( 'version' ),
                     $q->bindValue( $status, null, \PDO::PARAM_INT )
                 ),
-                // FIXME: Actually not needed
+                // @todo FIXME: Actually not needed
                 $q->expr->eq(
                     $this->dbHandler->quoteColumn( 'contentclass_id' ),
                     $q->bindValue( $typeId, null, \PDO::PARAM_INT )
@@ -827,6 +843,7 @@ class EzcDatabase extends Gateway
      *
      * @param int $typeId
      * @param int $typeStatus
+     *
      * @return void
      */
     protected function deleteTypeNameData( $typeId, $typeStatus )
@@ -854,6 +871,7 @@ class EzcDatabase extends Gateway
      * @param mixed $typeId
      * @param int $status
      * @param \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $updateStruct
+     *
      * @return void
      */
     public function updateType( $typeId, $status, UpdateStruct $updateStruct )
@@ -887,6 +905,7 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $typeId
      * @param int $status
+     *
      * @return array Data rows.
      */
     public function loadTypeData( $typeId, $status )
@@ -916,6 +935,7 @@ class EzcDatabase extends Gateway
      *
      * @param string $identifier
      * @param int $status
+     *
      * @return array(int=>array(string=>mixed)) Data rows.
      */
     public function loadTypeDataByIdentifier( $identifier, $status )
@@ -945,6 +965,7 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $remoteId
      * @param int $status
+     *
      * @return array(int=>array(string=>mixed)) Data rows.
      */
     public function loadTypeDataByRemoteId( $remoteId, $status )
@@ -1045,6 +1066,7 @@ class EzcDatabase extends Gateway
      * Counts the number of instances that exists of the identified type.
      *
      * @param int $typeId
+     *
      * @return int
      */
     public function countInstancesOfType( $typeId )
@@ -1105,6 +1127,7 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $typeId
      * @param int $status
+     *
      * @return void
      */
     public function delete( $typeId, $status )
@@ -1188,6 +1211,7 @@ class EzcDatabase extends Gateway
      * @param int $typeId
      * @param int $sourceVersion
      * @param int $targetVersion
+     *
      * @return void
      */
     public function publishTypeAndFields( $typeId, $sourceVersion, $targetVersion )

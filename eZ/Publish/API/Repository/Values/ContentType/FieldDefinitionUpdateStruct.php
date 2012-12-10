@@ -40,35 +40,35 @@ class FieldDefinitionUpdateStruct extends ValueObject
     public $descriptions;
 
     /**
-     * if set the field group is changed to this name
+     * If set the field group is changed to this name
      *
      * @var string
      */
     public $fieldGroup;
 
     /**
-     * if set the position of the field in the content type
+     * If set the position of the field in the content type
      *
      * @var int
      */
     public $position;
 
     /**
-     * if set translatable flag is set to this value
+     * If set translatable flag is set to this value
      *
      * @var boolean
      */
     public $isTranslatable;
 
     /**
-     * if set the required flag is set to this value
+     * If set the required flag is set to this value
      *
      * @var boolean
      */
     public $isRequired;
 
     /**
-     * if set the information collector flag is set to this value
+     * If set the information collector flag is set to this value
      *
      * @var boolean
      */

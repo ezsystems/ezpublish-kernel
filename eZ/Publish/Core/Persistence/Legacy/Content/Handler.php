@@ -8,15 +8,16 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
-use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
-    eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
+use eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * The Content Handler stores Content and ContentType objects.
@@ -108,7 +109,7 @@ class Handler implements BaseContentHandler
      * @param mixed $versionNo Used by self::copy() to maintain version numbers
      *
      * @todo remove $copy param
-     * @param bool $copy
+     * @param boolean $copy
      *
      * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
@@ -119,7 +120,7 @@ class Handler implements BaseContentHandler
         $content->fields = $struct->fields;
         $content->versionInfo = $this->mapper->createVersionInfoFromCreateStruct( $struct, $versionNo );
 
-        $content->versionInfo->contentInfo->id =  $this->contentGateway->insertContentObject( $struct, $versionNo );
+        $content->versionInfo->contentInfo->id = $this->contentGateway->insertContentObject( $struct, $versionNo );
         $content->versionInfo->id = $this->contentGateway->insertVersion(
             $content->versionInfo,
             $struct->fields
@@ -268,6 +269,7 @@ class Handler implements BaseContentHandler
      * @param int|string $id
      * @param int|string $version
      * @param string[] $translations
+     *
      * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
     public function load( $id, $version, $translations = null )
@@ -291,6 +293,7 @@ class Handler implements BaseContentHandler
      * Returns the metadata object for a content identified by $contentId.
      *
      * @param int|string $contentId
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
     public function loadContentInfo( $contentId )
@@ -346,6 +349,7 @@ class Handler implements BaseContentHandler
      * @param int $contentId
      * @param int $status
      * @param int $version
+     *
      * @return boolean
      */
     public function setStatus( $contentId, $status, $version )
@@ -358,6 +362,7 @@ class Handler implements BaseContentHandler
      *
      * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $content
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
     public function updateMetadata( $contentId, MetadataUpdateStruct $content )
@@ -400,6 +405,7 @@ class Handler implements BaseContentHandler
      * assigned nodes of this content objects are removed (recursively).
      *
      * @param int $contentId
+     *
      * @return boolean
      */
     public function deleteContent( $contentId )
@@ -465,9 +471,10 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Return the versions for $contentId
+     * Returns the versions for $contentId
      *
      * @param int $contentId
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
     public function listVersions( $contentId )

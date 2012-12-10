@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\Matcher\Id;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ContentType as ContentTypeIdMatcher,
-    eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo,
-    eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ContentType as ContentTypeIdMatcher;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
 
 class ContentTypeTest extends BaseTest
 {
@@ -32,9 +32,9 @@ class ContentTypeTest extends BaseTest
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ContentType::matchLocation
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
      *
-     * @param $matchingConfig
+     * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param $expectedResult
+     * @param boolean $expectedResult
      */
     public function testMatchLocation( $matchingConfig, Location $location, $expectedResult )
     {
@@ -76,7 +76,8 @@ class ContentTypeTest extends BaseTest
     /**
      * Generates a Location object in respect of a given content type identifier
      *
-     * @param $contentTypeId
+     * @param int $contentTypeId
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function generateLocationForContentType( $contentTypeId )
@@ -89,8 +90,7 @@ class ContentTypeTest extends BaseTest
                 $this->returnValue(
                     $this->generateContentInfoForContentType( $contentTypeId )
                 )
-            )
-        ;
+            );
 
         return $location;
     }
@@ -98,7 +98,8 @@ class ContentTypeTest extends BaseTest
     /**
      * Generates a ContentInfo object in respect of a given content type identifier
      *
-     * @param $contentTypeId
+     * @param int $contentTypeId
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function generateContentInfoForContentType( $contentTypeId )
@@ -108,16 +109,15 @@ class ContentTypeTest extends BaseTest
             ->expects( $this->any() )
             ->method( 'getContentType' )
             ->will(
-            $this->returnValue(
-                $this
-                    ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' )
-                    ->setConstructorArgs(
-                        array( array( 'id' => $contentTypeId ) )
-                    )
-                    ->getMockForAbstractClass()
+                $this->returnValue(
+                    $this
+                        ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' )
+                        ->setConstructorArgs(
+                            array( array( 'id' => $contentTypeId ) )
+                        )
+                        ->getMockForAbstractClass()
                 )
-            )
-        ;
+            );
 
         return $contentInfo;
     }
@@ -127,9 +127,9 @@ class ContentTypeTest extends BaseTest
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ContentType::matchContentInfo
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
      *
-     * @param $matchingConfig
+     * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param $expectedResult
+     * @param boolean $expectedResult
      */
     public function testMatchContentInfo( $matchingConfig, ContentInfo $contentInfo, $expectedResult )
     {

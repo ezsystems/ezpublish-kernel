@@ -13,10 +13,9 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class represents a search result
- *
  */
-class SearchResult extends ValueObject {
-
+class SearchResult extends ValueObject
+{
     /**
      * The facets for this search
      *
@@ -66,5 +65,4 @@ class SearchResult extends ValueObject {
      * @var int
      */
     public $totalCount;
-
 }

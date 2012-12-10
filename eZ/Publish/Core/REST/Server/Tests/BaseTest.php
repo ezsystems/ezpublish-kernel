@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Tests;
 
-use \PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Base test class.

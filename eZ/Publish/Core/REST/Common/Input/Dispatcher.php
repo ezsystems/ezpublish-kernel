@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Common\Input;
+
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Exceptions;
 
@@ -53,7 +54,7 @@ class Dispatcher
     }
 
     /**
-     * Add another handler for the given Content Type
+     * Adds another handler for the given Content Type
      *
      * @param string $type
      * @param \eZ\Publish\Core\REST\Common\Input\Handler $handler
@@ -67,6 +68,7 @@ class Dispatcher
      * Parse provided request
      *
      * @param \eZ\Publish\Core\REST\Common\Message $message
+     *
      * @return mixed
      */
     public function parse( Message $message )
@@ -95,7 +97,7 @@ class Dispatcher
         // Only 1 XML root node
         $rootNodeArray = reset( $rawArray );
 
-        // @TODO: This needs to be refactored in order to make the called URL
+        // @todo: This needs to be refactored in order to make the called URL
         // available to parsers in the server in a sane way
         if ( isset( $message->headers['Url'] ) )
         {

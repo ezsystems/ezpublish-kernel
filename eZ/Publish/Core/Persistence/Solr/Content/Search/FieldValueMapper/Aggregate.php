@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper,
-    eZ\Publish\SPI\Persistence\Content\Search\Field,
-    eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
+use eZ\Publish\SPI\Persistence\Content\Search\Field;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
  * Maps raw document field values to something Solr can index.
@@ -29,6 +29,7 @@ class Aggregate extends FieldValueMapper
      * COnstruct from optional mapper array
      *
      * @param array $mappers
+     *
      * @return void
      */
     public function __construct( array $mappers = array() )
@@ -40,9 +41,10 @@ class Aggregate extends FieldValueMapper
     }
 
     /**
-     * Add mapper
+     * Adds mapper
      *
      * @param FieldValueMapper $mapper
+     *
      * @return void
      */
     public function addMapper( FieldValueMapper $mapper )
@@ -54,6 +56,7 @@ class Aggregate extends FieldValueMapper
      * Check if field can be mapped
      *
      * @param Field $field
+     *
      * @return void
      */
     public function canMap( Field $field )
@@ -65,6 +68,7 @@ class Aggregate extends FieldValueMapper
      * Map field value to a proper Solr representation
      *
      * @param Field $field
+     *
      * @return void
      */
     public function map( Field $field )

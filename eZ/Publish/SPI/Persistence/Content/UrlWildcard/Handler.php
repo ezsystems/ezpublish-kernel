@@ -18,7 +18,7 @@ namespace eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 interface Handler
 {
     /**
-     * creates a new url wildcard
+     * Creates a new url wildcard
      *
      * @param string $sourceUrl
      * @param string $destinationUrl
@@ -29,7 +29,6 @@ interface Handler
     public function create( $sourceUrl, $destinationUrl, $forward = false );
 
     /**
-     *
      * removes an url wildcard
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
@@ -39,22 +38,21 @@ interface Handler
     public function remove( $id );
 
     /**
-     *
-     * loads a url wild card
+     * Loads a url wild card
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
      *
-     * @param $id
+     * @param mixed $id
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard
      */
     public function load( $id );
 
     /**
-     * loads all url wild card (paged)
+     * Loads all url wild card (paged)
      *
-     * @param $offset
-     * @param $limit
+     * @param int $offset
+     * @param int $limit
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard[]
      */

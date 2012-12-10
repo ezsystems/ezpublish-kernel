@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
+
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Client\ContentService;
 
@@ -67,8 +68,10 @@ class Content extends Parser
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     *
      * @todo Error handling
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
@@ -95,6 +98,7 @@ class Content extends Parser
      *
      * @param array $rawFieldsData
      * @param string $contentId
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Field[]
      */
     protected function parseFields( array $rawFieldsData, $contentId )

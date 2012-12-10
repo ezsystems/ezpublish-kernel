@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\View;
+
 use eZ\Publish\Core\REST\Server\Request;
-use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Common\Output\Visitor as OutputVisitor;
 use Qafoo\RMF\View\NowViewFoundException;
 
 /**
@@ -39,12 +40,12 @@ class AcceptHeaderVisitorDispatcher
     }
 
     /**
-     * Add view handler
+     * Adds view handler
      *
      * @param string $regexp
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      */
-    public function addVisitor( $regexp, Visitor $visitor )
+    public function addVisitor( $regexp, OutputVisitor $visitor )
     {
         $this->mapping[$regexp] = $visitor;
     }
@@ -54,6 +55,7 @@ class AcceptHeaderVisitorDispatcher
      *
      * @param \eZ\Publish\Core\REST\Server\Request $request
      * @param mixed $result
+     *
      * @return \eZ\Publish\Core\REST\Common\Message
      */
     public function dispatch( Request $request, $result )

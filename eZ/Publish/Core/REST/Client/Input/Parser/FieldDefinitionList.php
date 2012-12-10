@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
+
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Client\ContentTypeService;
 
@@ -46,6 +47,7 @@ class FieldDefinitionList extends Parser
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
      * @return \eZ\Publish\Core\REST\Client\Values\FieldDefinitionList
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )

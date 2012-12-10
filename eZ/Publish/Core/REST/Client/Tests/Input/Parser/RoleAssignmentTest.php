@@ -41,6 +41,7 @@ class RoleAssignmentTest extends BaseTest
      * Tests that the resulting role is in fact an instance of RoleAssignment class
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleAssignment $result
+     *
      * @depends testParse
      */
     public function testResultIsRoleAssignment( $result )

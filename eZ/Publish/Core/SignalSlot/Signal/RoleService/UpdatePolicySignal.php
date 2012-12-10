@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot\Signal\RoleService;
+
 use eZ\Publish\Core\SignalSlot\Signal;
 
 /**

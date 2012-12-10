@@ -9,8 +9,9 @@
  */
 
 namespace eZ\Publish\Core\Repository\Values\ContentType;
-use eZ\Publish\API\Repository\FieldType as FieldTypeInterface,
-    eZ\Publish\SPI\FieldType\FieldType as SPIFieldTypeInterface;
+
+use eZ\Publish\API\Repository\FieldType as FieldTypeInterface;
+use eZ\Publish\SPI\FieldType\FieldType as SPIFieldTypeInterface;
 
 /**
  * This class represents a FieldType available to Public API users
@@ -36,7 +37,7 @@ class FieldType implements FieldTypeInterface
     }
 
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -121,7 +122,7 @@ class FieldType implements FieldTypeInterface
     /**
      * Indicates if the field type supports indexing and sort keys for searching
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {
@@ -167,6 +168,7 @@ class FieldType implements FieldTypeInterface
      * Converts the given $fieldSettings to a simple hash format
      *
      * @param mixed $fieldSettings
+     *
      * @return array|hash|scalar|null
      */
     public function fieldSettingsToHash( $fieldSettings )
@@ -180,6 +182,7 @@ class FieldType implements FieldTypeInterface
      * This is the reverse operation of {@link fieldSettingsToHash()}.
      *
      * @param array|hash|scalar|null $fieldSettingsHash
+     *
      * @return mixed
      */
     public function fieldSettingsFromHash( $fieldSettingsHash )
@@ -191,6 +194,7 @@ class FieldType implements FieldTypeInterface
      * Converts the given $validatorConfiguration to a simple hash format
      *
      * @param mixed $validatorConfiguration
+     *
      * @return array|hash|scalar|null
      */
     public function validatorConfigurationToHash( $validatorConfiguration )
@@ -203,6 +207,7 @@ class FieldType implements FieldTypeInterface
      * configuration of the type
      *
      * @param array|hash|scalar|null $validatorConfigurationHash
+     *
      * @return mixed
      */
     public function validatorConfigurationFromHash( $validatorConfigurationHash )

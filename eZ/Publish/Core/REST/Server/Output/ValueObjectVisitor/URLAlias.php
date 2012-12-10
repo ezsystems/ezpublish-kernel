@@ -84,6 +84,7 @@ class URLAlias extends ValueObjectVisitor
      * Serializes the given $urlAliasType to a string representation
      *
      * @param int $urlAliasType
+     *
      * @return string
      */
     protected function serializeType( $urlAliasType )

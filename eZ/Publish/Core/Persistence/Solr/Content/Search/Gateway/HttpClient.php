@@ -22,6 +22,7 @@ interface HttpClient
      * @param string $method
      * @param string $path
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\Message $message
+     *
      * @return \eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\Message
      */
     public function request( $method, $path, Message $message = null );

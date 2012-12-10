@@ -10,23 +10,19 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo,
-    eZ\Publish\API\Repository\Values\Content\Section,
-    eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct,
-
-    eZ\Publish\API\Repository\SectionService as SectionServiceInterface,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\SPI\Persistence\Content\Section\Handler,
-
-    eZ\Publish\SPI\Persistence\Content\Section as SPISection,
-
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\BadStateException,
-    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
-
-    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Section;
+use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
+use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\SPI\Persistence\Content\Section\Handler;
+use eZ\Publish\SPI\Persistence\Content\Section as SPISection;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 
 /**
  * Section service, used for section operations
@@ -53,7 +49,7 @@ class SectionService implements SectionServiceInterface
     /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
-     * @param \eZ\Publish\API\Repository\Repository  $repository
+     * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Content\Section\Handler $sectionHandler
      * @param array $settings
      */
@@ -61,7 +57,8 @@ class SectionService implements SectionServiceInterface
     {
         $this->repository = $repository;
         $this->sectionHandler = $sectionHandler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
     }
@@ -259,7 +256,7 @@ class SectionService implements SectionServiceInterface
     }
 
     /**
-     * assigns the content to the given section
+     * Assigns the content to the given section
      * this method overrides the current assigned section
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to view provided object
@@ -280,10 +277,13 @@ class SectionService implements SectionServiceInterface
 
         if ( $this->repository->canUser( 'section', 'assign', $loadedContentInfo, $loadedSection ) !== true )
         {
-            throw new UnauthorizedException( 'section', 'assign', array(
-                'name' => $loadedSection->name,
-                'content-name' => $loadedContentInfo->name
-            ) );
+            throw new UnauthorizedException(
+                'section', 'assign',
+                array(
+                    'name' => $loadedSection->name,
+                    'content-name' => $loadedContentInfo->name
+                )
+            );
         }
 
         $this->repository->beginTransaction();
@@ -339,7 +339,7 @@ class SectionService implements SectionServiceInterface
     }
 
     /**
-     * instantiates a new SectionCreateStruct
+     * Instantiates a new SectionCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
      */
@@ -349,7 +349,7 @@ class SectionService implements SectionServiceInterface
     }
 
     /**
-     * instantiates a new SectionUpdateStruct
+     * Instantiates a new SectionUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
      */
@@ -369,7 +369,7 @@ class SectionService implements SectionServiceInterface
     {
         return new Section(
             array(
-                'id' => (int) $spiSection->id,
+                'id' => (int)$spiSection->id,
                 'identifier' => $spiSection->identifier,
                 'name' => $spiSection->name
             )

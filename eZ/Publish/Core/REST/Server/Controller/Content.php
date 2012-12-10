@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
+
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
@@ -20,10 +21,10 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 
-use \eZ\Publish\API\Repository\ContentService;
-use \eZ\Publish\API\Repository\LocationService;
-use \eZ\Publish\API\Repository\SectionService;
-use \eZ\Publish\API\Repository\SearchService;
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\SectionService;
+use eZ\Publish\API\Repository\SearchService;
 
 /**
  * Content controller
@@ -75,7 +76,7 @@ class Content extends RestController
     }
 
     /**
-     * Load a content info by remote ID
+     * Loads a content info by remote ID
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ContentList
      */
@@ -152,7 +153,7 @@ class Content extends RestController
             $updateStruct->sectionId = null;
         }
 
-        // @TODO Consider refactoring! ContentService::updateContentMetadata throws the same exception
+        // @todo Consider refactoring! ContentService::updateContentMetadata throws the same exception
         // in case the updateStruct is empty and if remoteId already exists. Since REST version of update struct
         // includes section ID in addition to other fields, we cannot throw exception if only sectionId property
         // is set, so we must skip updating content in that case instead of allowing propagation of the exception.
@@ -673,8 +674,8 @@ class Content extends RestController
         );
         return new Values\RestExecutedView(
             array(
-                 'identifier'    => $viewInput->identifier,
-                 'searchResults' => $this->searchService->findContent( $viewInput->query ),
+                'identifier'    => $viewInput->identifier,
+                'searchResults' => $this->searchService->findContent( $viewInput->query ),
             )
         );
     }

@@ -9,15 +9,15 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    Symfony\Component\HttpKernel\KernelEvents,
-    Symfony\Component\HttpKernel\Event\GetResponseEvent,
-    Symfony\Component\HttpKernel\HttpKernelInterface,
-    Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\HttpKernel\Log\LoggerInterface,
-    Symfony\Component\HttpFoundation\RedirectResponse,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 
 class RequestEventListener implements EventSubscriberInterface
 {
@@ -120,6 +120,7 @@ class RequestEventListener implements EventSubscriberInterface
      * Note: The event propagation will be stopped to ensure that no response can be set later and override the redirection.
      *
      * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+     *
      * @see \eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter
      */
     public function onKernelRequestRedirect( GetResponseEvent $event )

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -62,6 +63,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
      * Test if result contains ObjectStateGroup element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsObjectStateGroupElement( $result )
@@ -83,6 +85,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
      * Test if result contains ObjectStateGroup element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsObjectStateGroupAttributes( $result )
@@ -105,6 +108,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
      * Test if result contains id value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsIdValueElement( $result )
@@ -124,6 +128,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
      * Test if result contains identifier value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsIdentifierValueElement( $result )
@@ -143,6 +148,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
      * Test if result contains defaultLanguageCode value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsDefaultLanguageCodeValueElement( $result )
@@ -162,6 +168,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
      * Test if result contains languageCodes value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLanguageCodesValueElement( $result )
@@ -181,6 +188,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
      * Test if result contains names element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsNamesElement( $result )
@@ -202,6 +210,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
      * Test if result contains descriptions element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsDescriptionsElement( $result )

@@ -8,18 +8,19 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\SPI\Persistence\Content\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\API\Repository\Values\Content\Relation as RelationValue,
-    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\SPI\Persistence\Content\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\Content\Relation as RelationValue;
+use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase.
@@ -34,8 +35,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     protected $databaseGateway;
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::__construct
+     *
+     * @return void
      */
     public function testCtor()
     {
@@ -229,8 +231,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::setStatus
+     *
+     * @return void
      */
     public function testSetStatus()
     {
@@ -268,8 +271,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::setStatus
+     *
+     * @return void
      */
     public function testSetStatusPublished()
     {
@@ -307,8 +311,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::setStatus
+     *
+     * @return void
      */
     public function testSetStatusUnknownVersion()
     {
@@ -320,8 +325,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::updateContent
+     *
+     * @return void
      */
     public function testUpdateContent()
     {
@@ -393,6 +399,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::updateVersion
+     *
      * @return void
      */
     public function testUpdateVersion()
@@ -433,6 +440,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::insertNewField
+     *
      * @return void
      */
     public function testInsertNewField()
@@ -488,6 +496,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::updateField
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::setFieldUpdateValues
+     *
      * @return void
      */
     public function testUpdateField()
@@ -540,6 +549,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::updateNonTranslatableField
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::setFieldUpdateValues
+     *
      * @return void
      */
     public function testUpdateNonTranslatableField()
@@ -602,8 +612,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::listVersions
+     *
+     * @return void
      */
     public function testListVersions()
     {
@@ -647,8 +658,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::listVersionsForUser
+     *
+     * @return void
      */
     public function testListVersionsForUser()
     {
@@ -828,6 +840,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
      * @param string $columnKey
      * @param string[] $expectedValues
      * @param string[][] $actualRows
+     *
      * @return void
      */
     protected function assertValuesInRows( $columnKey, array $expectedValues, array $actualRows )
@@ -854,8 +867,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::getAllLocationIds
+     *
+     * @return void
      */
     public function testGetAllLocationIds()
     {
@@ -872,8 +886,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::getFieldIdsByType
+     *
+     * @return void
      */
     public function testGetFieldIdsByType()
     {
@@ -895,8 +910,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::getFieldIdsByType
+     *
+     * @return void
      */
     public function testGetFieldIdsByTypeWithSecondArgument()
     {
@@ -915,8 +931,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteRelations
+     *
+     * @return void
      */
     public function testDeleteRelationsTo()
     {
@@ -934,7 +951,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $gateway->deleteRelations( 149 );
 
         $this->assertEquals(
-        // yes, relates to itself!
+            // yes, relates to itself!
             array(
                 'all' => $beforeCount['all'] - 2,
                 'from' => $beforeCount['from'] - 1,
@@ -949,8 +966,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteRelations
+     *
+     * @return void
      */
     public function testDeleteRelationsFrom()
     {
@@ -982,8 +1000,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteRelations
+     *
+     * @return void
      */
     public function testDeleteRelationsWithSecondArgument()
     {
@@ -1015,8 +1034,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteField
+     *
+     * @return void
      */
     public function testDeleteField()
     {
@@ -1044,8 +1064,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteFields
+     *
+     * @return void
      */
     public function testDeleteFields()
     {
@@ -1074,8 +1095,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteFields
+     *
+     * @return void
      */
     public function testDeleteFieldsWithSecondArgument()
     {
@@ -1104,8 +1126,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteVersions
+     *
+     * @return void
      */
     public function testDeleteVersions()
     {
@@ -1134,8 +1157,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteVersions
+     *
+     * @return void
      */
     public function testDeleteVersionsWithSecondArgument()
     {
@@ -1164,8 +1188,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::setName
+     *
+     * @return void
      */
     public function testSetName()
     {
@@ -1188,8 +1213,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteNames
+     *
+     * @return void
      */
     public function testDeleteNames()
     {
@@ -1218,8 +1244,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteNames
+     *
+     * @return void
      */
     public function testDeleteNamesWithSecondArgument()
     {
@@ -1248,8 +1275,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteContent
+     *
+     * @return void
      */
     public function testDeleteContent()
     {
@@ -1275,8 +1303,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::loadLatestPublishedData
+     *
+     * @return void
      */
     public function testLoadLatestPublishedData()
     {
@@ -1440,8 +1469,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /*
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::getLastVersionNumber
+     *
+     * @return void
      */
     public function testGetLastVersionNumber()
     {
@@ -1478,18 +1508,18 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                 ),
             ),
             $this->getDatabaseHandler()
-            ->createSelectQuery()
-            ->select(
-                array(
-                    'id',
-                    'from_contentobject_id',
-                    'from_contentobject_version',
-                    'contentclassattribute_id',
-                    'to_contentobject_id',
-                    'relation_type',
-                )
-            )->from( 'ezcontentobject_link' )
-            ->where( 'id = 1')
+                ->createSelectQuery()
+                ->select(
+                    array(
+                        'id',
+                        'from_contentobject_id',
+                        'from_contentobject_version',
+                        'contentclassattribute_id',
+                        'to_contentobject_id',
+                        'relation_type',
+                    )
+                )->from( 'ezcontentobject_link' )
+                ->where( 'id = 1' )
         );
     }
 
@@ -1571,6 +1601,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
      *
      * @param int $fromId
      * @param int $toId
+     *
      * @return int
      */
     protected function countContentRelations( $fromId = null, $toId = null )
@@ -1602,6 +1633,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
      * Counts the number of fields
      *
      * @param int $contentId
+     *
      * @return int
      */
     protected function countContentFields( $contentId = null )
@@ -1627,6 +1659,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
      * Counts the number of versions
      *
      * @param int $contentId
+     *
      * @return int
      */
     protected function countContentVersions( $contentId = null )
@@ -1652,6 +1685,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
      * Counts the number of content names
      *
      * @param int $contentId
+     *
      * @return int
      */
     protected function countContentNames( $contentId = null )
@@ -1677,6 +1711,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
      * Counts the number of content objects
      *
      * @param int $contentId
+     *
      * @return int
      */
     protected function countContent( $contentId = null )
@@ -1703,6 +1738,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
      *
      * @param string $file
      * @param mixed $fixture
+     *
      * @return void
      */
     protected function storeFixture( $file, $fixture )

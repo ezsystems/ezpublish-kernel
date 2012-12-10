@@ -53,7 +53,7 @@ class SectionIncludingContentMetadataUpdateStruct extends ValueObjectVisitor
         }
         $generator->endObjectElement( 'Owner' );
 
-        // TODO: Add missing elements
+        // @todo: Add missing elements
 
         $generator->endObjectElement( 'ContentUpdate' );
     }

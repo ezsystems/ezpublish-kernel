@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\BinaryFile;
-use eZ\Publish\Core\FieldType\BinaryBase\Type as BaseType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\SPI\Persistence\Content\FieldValue;
+
+use eZ\Publish\Core\FieldType\BinaryBase\Type as BaseType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 /**
  * The TextLine field type.
@@ -20,7 +21,7 @@ use eZ\Publish\Core\FieldType\BinaryBase\Type as BaseType,
 class Type extends BaseType
 {
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -44,6 +45,7 @@ class Type extends BaseType
      * Creates a specific value of the derived class from $inputValue
      *
      * @param array $inputValue
+     *
      * @return Value
      */
     protected function createValue( array $inputValue )
@@ -78,6 +80,7 @@ class Type extends BaseType
      * Attempts to complete the data in $value
      *
      * @param Value $value
+     *
      * @return void
      */
     protected function completeValue( $value )

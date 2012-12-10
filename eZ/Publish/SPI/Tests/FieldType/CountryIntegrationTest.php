@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
-use eZ\Publish\Core\Persistence\Legacy,
-    eZ\Publish\Core\FieldType,
-    eZ\Publish\SPI\Persistence\Content;
+
+use eZ\Publish\Core\Persistence\Legacy;
+use eZ\Publish\Core\FieldType;
+use eZ\Publish\SPI\Persistence\Content;
 
 /**
  * Integration test for legacy storage field types
@@ -89,11 +90,18 @@ class CountryIntegrationTest extends BaseIntegrationTest
             // The ezcountry field type does not have any special field definition
             // properties
             array( 'fieldType', 'ezcountry' ),
-            array( 'fieldTypeConstraints', new Content\FieldTypeConstraints( array(
-                'fieldSettings' => new FieldType\FieldSettings( array(
-                    'isMultiple' => false
-                ) ),
-            ) ) ),
+            array(
+                'fieldTypeConstraints',
+                new Content\FieldTypeConstraints(
+                    array(
+                        'fieldSettings' => new FieldType\FieldSettings(
+                            array(
+                                'isMultiple' => false
+                            )
+                        ),
+                    )
+                )
+            ),
         );
     }
 
@@ -104,11 +112,13 @@ class CountryIntegrationTest extends BaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => array( 'BE' ),
-            'externalData' => null,
-            'sortKey'      => "Belgium",
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => array( 'BE' ),
+                'externalData' => null,
+                'sortKey'      => "Belgium",
+            )
+        );
     }
 
     /**
@@ -120,10 +130,12 @@ class CountryIntegrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => array( 'FR' ),
-            'externalData' => null,
-            'sortKey'      => "France",
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => array( 'FR' ),
+                'externalData' => null,
+                'sortKey'      => "France",
+            )
+        );
     }
 }

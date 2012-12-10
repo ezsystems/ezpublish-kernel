@@ -23,8 +23,8 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
  * @property-read int $id the id of the content type
  * @property-read int $status the status of the content type. One of ContentType::STATUS_DEFINED|ContentType::STATUS_DRAFT|ContentType::STATUS_MODIFIED
  * @property-read string $identifier the identifier of the content type
- * @property-read DateTime $creationDate the date of the creation of this content type
- * @property-read DateTime $modificationDate the date of the last modification of this content type
+ * @property-read \DateTime $creationDate the date of the creation of this content type
+ * @property-read \DateTime $modificationDate the date of the last modification of this content type
  * @property-read int $creatorId the user id of the creator of this content type
  * @property-read int $modifierId the user id of the user which has last modified this content type
  * @property-read string $remoteId a global unique id of the content object
@@ -79,7 +79,7 @@ class ContentTypeStub extends ContentType
     /**
      * Creation date of the content type
      *
-     * @var DateTime
+     * @var \DateTime
      */
     // parent::
     // protected $creationDate;
@@ -87,7 +87,7 @@ class ContentTypeStub extends ContentType
     /**
      * Modification date of the content type
      *
-     * @var DateTime
+     * @var \DateTime
      */
     // parent::
     // protected $modificationDate;
@@ -158,7 +158,7 @@ class ContentTypeStub extends ContentType
     // protected $mainLanguageCode;
 
     /**
-     * if an instance of acontent type is created the always available flag is set
+     * If an instance of a content type is created the always available flag is set
      * by default this this value.
      *
      * @var boolean
@@ -189,21 +189,21 @@ class ContentTypeStub extends ContentType
     /**
      * Contains the content type groups this content type is assigned to
      *
-     * @var array an array of {@link ContentTypeGroup}
+     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
     protected $contentTypeGroups;
 
     /**
      * Contains the content type field definitions from this type
      *
-     * @var array an array of {@link FieldDefinition}
+     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
     protected $fieldDefinitions;
 
     /**
      * Field definitions indexed by identifier
      *
-     * @var array an array of {@link FieldDefinition}
+     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
     private $fieldDefinitionsByIdentifier;
 
@@ -236,9 +236,10 @@ class ContentTypeStub extends ContentType
     }
 
     /**
+     * This method returns the name of the content type in the given language
      *
-     * this method returns the name of the content type in the given language
      * @param string $languageCode
+     *
      * @return string the name for the given language or null if none existis.
      */
     public function getName( $languageCode )
@@ -247,7 +248,7 @@ class ContentTypeStub extends ContentType
     }
 
     /**
-     *  This method returns the human readable description of the content type
+     * This method returns the human readable description of the content type
      *
      * The structure of this field is:
      * <code>
@@ -262,8 +263,10 @@ class ContentTypeStub extends ContentType
     }
 
     /**
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
+     *
      * @param string $languageCode
+     *
      * @return string the description for the given language or null if none existis.
      */
     public function getDescription( $languageCode )
@@ -273,7 +276,8 @@ class ContentTypeStub extends ContentType
 
     /**
      * This method returns the content type groups this content type is assigned to
-     * @return array an array of {@link ContentTypeGroup}
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
     public function getContentTypeGroups()
     {
@@ -283,7 +287,7 @@ class ContentTypeStub extends ContentType
     /**
      * This method returns the content type field definitions from this type
      *
-     * @return array an array of {@link FieldDefinition}
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
     public function getFieldDefinitions()
     {
@@ -291,10 +295,11 @@ class ContentTypeStub extends ContentType
     }
 
     /**
+     * This method returns the field definition for the given identifier
      *
-     * this method returns the field definition for the given identifier
-     * @param $fieldDefinitionIdentifier
-     * @return FieldDefinition
+     * @param string $fieldDefinitionIdentifier
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
     public function getFieldDefinition( $fieldDefinitionIdentifier )
     {

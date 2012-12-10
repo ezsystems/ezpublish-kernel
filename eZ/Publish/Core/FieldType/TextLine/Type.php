@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\FieldType\TextLine;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\FieldType\ValidationError,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * The TextLine field type.
@@ -141,7 +142,7 @@ class Type extends FieldType
     }
 
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -184,7 +185,8 @@ class Type extends FieldType
      * Returns if the given $value is considered empty by the field type
      *
      * @param mixed $value
-     * @return bool
+     *
+     * @return boolean
      */
     public function isEmptyValue( $value )
     {
@@ -238,6 +240,7 @@ class Type extends FieldType
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
      * @todo String normalization should occur here.
+     *
      * @return array
      */
     protected function getSortInfo( $value )
@@ -284,7 +287,7 @@ class Type extends FieldType
     /**
      * Returns whether the field type is searchable
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {

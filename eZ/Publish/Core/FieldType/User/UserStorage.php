@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\User;
-use eZ\Publish\Core\FieldType\GatewayBasedStorage,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field;
+
+use eZ\Publish\Core\FieldType\GatewayBasedStorage;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Description of UserStorage
@@ -77,6 +78,7 @@ class UserStorage extends GatewayBasedStorage
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     *
      * @return null|true
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
@@ -92,6 +94,7 @@ class UserStorage extends GatewayBasedStorage
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     *
      * @return void
      */
     public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
@@ -104,7 +107,8 @@ class UserStorage extends GatewayBasedStorage
      * @param VersionInfo $versionInfo
      * @param array $fieldIds Array of field Ids
      * @param array $context
-     * @return bool
+     *
+     * @return boolean
      */
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
@@ -114,7 +118,7 @@ class UserStorage extends GatewayBasedStorage
     /**
      * Checks if field type has external data to deal with
      *
-     * @return bool
+     * @return boolean
      */
     public function hasFieldData()
     {
@@ -127,7 +131,7 @@ class UserStorage extends GatewayBasedStorage
      */
     public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
     {
-        // @TODO: How to call this function? Yet undefined.
+        // @todo: How to call this function? Yet undefined.
         echo __METHOD__, PHP_EOL;
         var_dump( func_get_args() );
     }

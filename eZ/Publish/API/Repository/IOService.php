@@ -12,7 +12,6 @@ namespace eZ\Publish\API\Repository;
 use eZ\Publish\API\Repository\Values\IO\BinaryFile;
 use eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct;
 
-
 /**
  * The io service for managing binary files
  *

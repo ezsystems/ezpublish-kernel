@@ -47,6 +47,7 @@ class FieldNameGenerator
      * @param string $name
      * @param string $field
      * @param string $type
+     *
      * @return string
      */
     public function getName( $name, $field = null, $type = null )
@@ -67,6 +68,7 @@ class FieldNameGenerator
      *
      * @param string $name
      * @param FieldType $type
+     *
      * @return string
      */
     public function getTypedName( $name, FieldType $type )

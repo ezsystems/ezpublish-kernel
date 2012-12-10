@@ -26,6 +26,7 @@ interface Parser
      *
      * @param string $fileName A valid file name
      * @param string $fileContent
+     *
      * @return array A plain array structure of configuration data where array clearing
      *         is marked with {@link Configuration::TEMP_INI_UNSET_VAR} and php variables are plain
      *         php values(numbers, floats, true and false). In addition strings are rtrimmed to

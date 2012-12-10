@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Validator;
-use eZ\Publish\Core\FieldType\Validator,
-    eZ\Publish\Core\FieldType\ValidationError,
-    eZ\Publish\Core\FieldType\Value as BaseValue;
+
+use eZ\Publish\Core\FieldType\Validator;
+use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * Validate ranges of integer value.
@@ -80,7 +81,8 @@ class IntegerValueValidator extends Validator
      * $errors array.
      *
      * @param \eZ\Publish\Core\FieldType\Integer\Value $value
-     * @return bool
+     *
+     * @return boolean
      */
     public function validate( BaseValue $value )
     {

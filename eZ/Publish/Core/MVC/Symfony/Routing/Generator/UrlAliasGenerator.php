@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 
-use eZ\Publish\Core\MVC\Symfony\Routing\Generator,
-    Symfony\Component\Routing\RouterInterface;
+use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * URL generator for UrlAlias based links
@@ -49,6 +49,7 @@ class UrlAliasGenerator extends Generator
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param array $parameters
+     *
      * @return string
      */
     public function doGenerate( $location, array $parameters )

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot\SlotFactory;
+
 use eZ\Publish\Core\SignalSlot\SlotFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -33,7 +34,9 @@ class ContainerSlotFactory extends SlotFactory
      * Returns a Slot with the given $slotIdentifier
      *
      * @param string $slotIdentifier
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException When no slot is found
+     *
      * @return \eZ\Publish\Core\SignalSlot\Slot
      */
     public function getSlot( $slotIdentifier )

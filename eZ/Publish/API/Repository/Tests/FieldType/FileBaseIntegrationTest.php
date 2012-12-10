@@ -9,6 +9,10 @@
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
+use FileSystemIterator;
+
 /**
  * Integration test for use field type
  *
@@ -34,7 +38,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     /**
      * If storage data should not be cleaned up
      *
-     * @var bool
+     * @var boolean
      */
     protected static $leaveStorageData = false;
 
@@ -94,13 +98,12 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
      */
     protected static function getStorageDirIterator()
     {
-        return new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator(
+        return new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(
                 self::$installDir . '/' . self::$storageDir,
-                \FileSystemIterator::KEY_AS_PATHNAME | \FileSystemIterator::SKIP_DOTS | \ FilesystemIterator::CURRENT_AS_FILEINFO
-
+                FileSystemIterator::KEY_AS_PATHNAME | FileSystemIterator::SKIP_DOTS | FilesystemIterator::CURRENT_AS_FILEINFO
             ),
-            \RecursiveIteratorIterator::CHILD_FIRST
+            RecursiveIteratorIterator::CHILD_FIRST
         );
     }
 
@@ -108,6 +111,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
      * Removes the given directory path recursively
      *
      * @param string $dir
+     *
      * @return void
      */
     protected static function cleanupStorageDir()

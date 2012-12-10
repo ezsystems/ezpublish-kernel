@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications,
-    eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
+
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * A criterion that will match content based on its ContentTypeGroup id.
@@ -27,7 +28,7 @@ class ContentTypeGroupId extends Criterion implements CriterionInterface
      *
      * Content will be matched if it matches one of the contentTypeGroupId in $value
      *
-     * @param integer|integer[] $value One or more contentTypeGroupId that must be matched
+     * @param int|int[] $value One or more contentTypeGroupId that must be matched
      *
      * @throws \InvalidArgumentException if the parameters don't match what the criterion expects
      */

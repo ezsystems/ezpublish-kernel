@@ -9,8 +9,8 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess,
-    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 
 class ConfigResolverTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,6 +34,7 @@ class ConfigResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $defaultNS
      * @param int $undefinedStrategy
+     *
      * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver
      */
     private function getResolver( $defaultNS = 'ezsettings', $undefinedStrategy = ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION, array $groupsBySiteAccess = array() )
@@ -129,14 +130,12 @@ class ConfigResolverTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'hasParameter' )
             ->with( $globalScopeParameter )
-            ->will( $this->returnValue( true ) )
-        ;
+            ->will( $this->returnValue( true ) );
         $this->containerMock
             ->expects( $this->once() )
             ->method( 'getParameter' )
             ->with( $globalScopeParameter )
-            ->will( $this->returnValue( $expectedValue ) )
-        ;
+            ->will( $this->returnValue( $expectedValue ) );
 
         $this->assertSame( $expectedValue, $this->getResolver()->getParameter( $paramName ) );
     }
@@ -159,14 +158,12 @@ class ConfigResolverTest extends \PHPUnit_Framework_TestCase
                 )
             )
             // First call is for "global" scope, second is the right one
-            ->will( $this->onConsecutiveCalls( false, true ) )
-        ;
+            ->will( $this->onConsecutiveCalls( false, true ) );
         $this->containerMock
             ->expects( $this->once() )
             ->method( 'getParameter' )
             ->with( $relativeScopeParameter )
-            ->will( $this->returnValue( $expectedValue ) )
-        ;
+            ->will( $this->returnValue( $expectedValue ) );
 
         $this->assertSame( $expectedValue, $this->getResolver()->getParameter( $paramName ) );
     }
@@ -184,20 +181,18 @@ class ConfigResolverTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->exactly( 2 ) )
             ->method( 'hasParameter' )
             ->with(
-            $this->logicalOr(
-                "ezsettings.global.$paramName",
-                $relativeScopeParameter
+                $this->logicalOr(
+                    "ezsettings.global.$paramName",
+                    $relativeScopeParameter
+                )
             )
-        )
         // First call is for "global" scope, second is the right one
-            ->will( $this->onConsecutiveCalls( false, true ) )
-        ;
+            ->will( $this->onConsecutiveCalls( false, true ) );
         $this->containerMock
             ->expects( $this->once() )
             ->method( 'getParameter' )
             ->with( $relativeScopeParameter )
-            ->will( $this->returnValue( $expectedValue ) )
-        ;
+            ->will( $this->returnValue( $expectedValue ) );
 
         $this->assertSame(
             $expectedValue,
@@ -225,14 +220,12 @@ class ConfigResolverTest extends \PHPUnit_Framework_TestCase
                 )
             )
             // First call is for "global" scope, second is the right one
-            ->will( $this->onConsecutiveCalls( false, false, true ) )
-        ;
+            ->will( $this->onConsecutiveCalls( false, false, true ) );
         $this->containerMock
             ->expects( $this->once() )
             ->method( 'getParameter' )
             ->with( $defaultScopeParameter )
-            ->will( $this->returnValue( $expectedValue ) )
-        ;
+            ->will( $this->returnValue( $expectedValue ) );
 
         $this->assertSame( $expectedValue, $this->getResolver()->getParameter( $paramName ) );
     }
@@ -267,8 +260,7 @@ class ConfigResolverTest extends \PHPUnit_Framework_TestCase
                     "ezsettings.default.$paramName"
                 )
             )
-            ->will( $this->onConsecutiveCalls( $defaultMatch, $scopeMatch, $globalMatch ) )
-        ;
+            ->will( $this->onConsecutiveCalls( $defaultMatch, $scopeMatch, $globalMatch ) );
 
         $this->assertSame( $expectedResult, $this->getResolver()->hasParameter( $paramName ) );
     }
@@ -292,8 +284,7 @@ class ConfigResolverTest extends \PHPUnit_Framework_TestCase
                     "$namespace.default.$paramName"
                 )
             )
-            ->will( $this->onConsecutiveCalls( $defaultMatch, $scopeMatch, $globalMatch ) )
-        ;
+            ->will( $this->onConsecutiveCalls( $defaultMatch, $scopeMatch, $globalMatch ) );
 
         $this->assertSame( $expectedResult, $this->getResolver()->hasParameter( $paramName, $namespace, $scope ) );
     }

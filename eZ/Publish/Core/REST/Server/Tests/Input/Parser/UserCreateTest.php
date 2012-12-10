@@ -491,7 +491,7 @@ class UserCreateTest extends BaseTest
      */
     protected function getUserServiceMock()
     {
-        $userServiceMock =  $this->getMock(
+        $userServiceMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\UserService',
             array(),
             array(),
@@ -513,7 +513,7 @@ class UserCreateTest extends BaseTest
                 $this->returnValue(
                     new UserCreateStruct(
                         array(
-                            'contentType' =>  $contentType,
+                            'contentType' => $contentType,
                             'mainLanguageCode' => 'eng-US'
                         )
                     )
@@ -560,9 +560,9 @@ class UserCreateTest extends BaseTest
                 'fieldDefinitions' => array(
                     new FieldDefinition(
                         array(
-                             'id' => 42,
-                             'identifier' => 'name',
-                             'fieldTypeIdentifier' => 'ezstring'
+                            'id' => 42,
+                            'identifier' => 'name',
+                            'fieldTypeIdentifier' => 'ezstring'
                         )
                     )
                 )

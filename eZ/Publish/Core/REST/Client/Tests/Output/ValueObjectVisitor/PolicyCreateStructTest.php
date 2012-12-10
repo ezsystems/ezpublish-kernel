@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
@@ -51,6 +52,7 @@ class PolicyCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains PolicyCreate element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPolicyCreateElement( $result )
@@ -73,6 +75,7 @@ class PolicyCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains PolicyCreate attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPolicyCreateAttributes( $result )
@@ -94,6 +97,7 @@ class PolicyCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains module value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsModuleValueElement( $result )
@@ -102,7 +106,6 @@ class PolicyCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'module',
                 'content'  => 'content',
-
             ),
             $result,
             'Invalid or non-existing <PolicyCreate> module value element.',
@@ -114,6 +117,7 @@ class PolicyCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains function value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsFunctionValueElement( $result )
@@ -122,7 +126,6 @@ class PolicyCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'function',
                 'content'  => 'delete',
-
             ),
             $result,
             'Invalid or non-existing <PolicyCreate> function value element.',
@@ -134,6 +137,7 @@ class PolicyCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains limitations element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLimitationsElement( $result )
@@ -152,6 +156,7 @@ class PolicyCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains limitations attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLimitationsAttributes( $result )

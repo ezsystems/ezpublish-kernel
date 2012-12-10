@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 class Location extends APILocation
 {
     /**
-     * content info of the content object of this location
+     * Content info of the content object of this location
      *
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
@@ -29,7 +29,7 @@ class Location extends APILocation
     protected $path;
 
     /**
-     * returns the content info of the content object of this location
+     * Returns the content info of the content object of this location
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
@@ -68,11 +68,15 @@ class Location extends APILocation
                 return $this->contentInfo->id;
             case 'path':
                 if ( $this->path !== null )
+                {
                     return $this->path;
-                else if ( isset( $this->pathString[1] ) && $this->pathString[0] === '/' )
+                }
+                if ( isset( $this->pathString[1] ) && $this->pathString[0] === '/' )
+                {
                     return $this->path = explode( '/', trim( $this->pathString, '/' ) );
-                else
-                    return $this->path = array();
+                }
+
+                return $this->path = array();
         }
 
         return parent::__get( $property );
@@ -83,7 +87,7 @@ class Location extends APILocation
      *
      * @param string $property
      *
-     * @return bool
+     * @return boolean
      */
     public function __isset( $property )
     {

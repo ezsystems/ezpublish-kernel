@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications,
-    eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
+
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * A criterion that matches Content based on Url aliases.
@@ -30,7 +31,7 @@ class UrlAlias extends Criterion implements CriterionInterface
      *        Possible values:
      *        - Operator::IN, requires an array of subtree id as the $value
      *        - Operator::EQ, requires a single subtree id as the $value
-     * @param integer[] $value an array of subtree ids
+     * @param int[] $value an array of subtree ids
      *
      * @throws \InvalidArgumentException if a non numeric id is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator

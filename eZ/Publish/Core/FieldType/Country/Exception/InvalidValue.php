@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Country\Exception;
+
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**

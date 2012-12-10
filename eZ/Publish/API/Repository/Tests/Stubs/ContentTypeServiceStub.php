@@ -23,15 +23,15 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\ContentServiceStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeDraftStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeCreateStructStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\ContentServiceStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeDraftStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeCreateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
 /**
  * @example Examples/contenttype.php
@@ -168,6 +168,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * Sets the group internally
      *
      * @param \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub $group
+     *
      * @return void
      */
     protected function setGroup( ContentTypeGroupStub $group )
@@ -219,7 +220,7 @@ class ContentTypeServiceStub implements ContentTypeService
     /**
      * Get all Content Type Groups
      *
-     * @return aray an array of {@link ContentTypeGroup}
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
     public function loadContentTypeGroups()
     {
@@ -293,7 +294,8 @@ class ContentTypeServiceStub implements ContentTypeService
      * Checks of $contentTypeGroup has types assigned
      *
      * @param ContentTypeGroup $contentTypeGroup
-     * @return bool
+     *
+     * @return boolean
      */
     protected function groupHasTypes( ContentTypeGroup $contentTypeGroup )
     {
@@ -348,7 +350,7 @@ class ContentTypeServiceStub implements ContentTypeService
 
         $data['contentTypeGroups'] = $contentTypeGroups;
 
-        // FIXME: Set status to draft
+        // @todo FIXME: Set status to draft
         $data['id'] = $this->nextTypeId++;
 
         return $this->setContentTypeDraft( $data );
@@ -361,6 +363,7 @@ class ContentTypeServiceStub implements ContentTypeService
      *         or there is a dublicate field identifier
      *
      * @param ContentTypeCreateStruct $contentTypeCreateStruct
+     *
      * @return void
      */
     protected function checkContentTypeCreate( ContentTypeCreateStruct $contentTypeCreateStruct )
@@ -393,6 +396,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * Creates a FieldDefinition from $fieldDefinitionCreate
      *
      * @param FieldDefinitionCreateStruct $fieldDefinitionCreate
+     *
      * @return FieldDefinition
      */
     protected function createFieldDefinition( FieldDefinitionCreateStruct $fieldDefinitionCreate )
@@ -462,6 +466,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * Returns the properties of $contentType in form of an array
      *
      * @param ContentType $contentType
+     *
      * @return array
      */
     protected function getTypeAsArray( ContentType $contentType )
@@ -496,6 +501,7 @@ class ContentTypeServiceStub implements ContentTypeService
      *         or there is a dublicate field identifier
      *
      * @param ContentTypeCreateStruct $contentTypeCreateStruct
+     *
      * @return void
      */
     protected function checkContentTypeUpdate( ContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct )
@@ -591,6 +597,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * Creates and sets a new ContentTypeDraft from $data
      *
      * @param array $data
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentTypeDraft
      */
     protected function setContentTypeDraft( array $data )
@@ -652,6 +659,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * @param ContentTypeDraft $contentTypeDraft
      * @param FieldDefinition $fieldDefinition
      * @param FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
+     *
      * @return void
      */
     protected function checkFieldDefinitionUpdate( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct )
@@ -678,6 +686,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * Returns the data of $fieldDefinition as an array
      *
      * @param FieldDefinition $fieldDefinition
+     *
      * @return array
      */
     protected function getFieldDefinitionAsArray( FieldDefinition $fieldDefinition )
@@ -791,7 +800,7 @@ class ContentTypeServiceStub implements ContentTypeService
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      *
-     * @return array an array of {@link ContentType} which have status DEFINED
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[] Which have status DEFINED
      */
     public function loadContentTypes( ContentTypeGroup $contentTypeGroup )
     {
@@ -891,7 +900,6 @@ class ContentTypeServiceStub implements ContentTypeService
         $contentTypeData['creatorId'] = $user ? $user->id : $contentTypeData['creatorId'];
         $contentTypeData['modifierId'] = $user ? $user->id : $contentTypeData['modifierId'];
 
-
         $newFieldDefinitions = array();
         foreach ( $contentTypeData['fieldDefinitions'] as $fieldDefinition )
         {
@@ -907,7 +915,7 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
-     * assign a content type to a content type group.
+     * Assigns a content type to a content type group.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to unlink a content type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the content type is already assigned the given group
@@ -978,7 +986,7 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
-     * instanciates a new content type group create class
+     * Instantiates a new content type group create class
      *
      * @param string $identifier
      *
@@ -992,7 +1000,7 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
-     * instanciates a new content type create class
+     * Instantiates a new content type create class
      *
      * @param string $identifier
      *
@@ -1006,7 +1014,7 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
-     * instanciates a new content type update struct
+     * Instantiates a new content type update struct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct
      */
@@ -1016,7 +1024,7 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
-     * instanciates a new content type update struct
+     * Instantiates a new content type update struct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct
      */
@@ -1026,9 +1034,9 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
-     * instanciates a field definition create struct
+     * Instantiates a field definition create struct
      *
-     * @param string $fieldTypeIdentifier the required  field type identifier
+     * @param string $fieldTypeIdentifier the required field type identifier
      * @param string $identifier the required identifier for the field definition
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct
@@ -1044,7 +1052,7 @@ class ContentTypeServiceStub implements ContentTypeService
     }
 
     /**
-     * instanciates a field definition update class
+     * Instantiates a field definition update class
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct
      */

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
+
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Values;
@@ -180,7 +181,6 @@ class Location extends RestController
     /**
      * Moves a subtree to a new location
      *
-     *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException if the Destination header cannot be parsed as location or trash
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
@@ -249,7 +249,7 @@ class Location extends RestController
     {
         $values = $this->urlHandler->parse( 'location', $this->request->path );
 
-        $locationId = $this->extractLocationIdFromPath($values['location']);
+        $locationId = $this->extractLocationIdFromPath( $values['location'] );
         $location = $this->locationService->loadLocation( $locationId );
 
         $destinationValues = $this->urlHandler->parse( 'location', $this->request->destination );
@@ -380,6 +380,7 @@ class Location extends RestController
      * Extracts and returns an item id from a path, e.g. /1/2/58 => 58
      *
      * @param string $path
+     *
      * @return mixed
      */
     private function extractLocationIdFromPath( $path )

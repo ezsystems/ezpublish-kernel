@@ -49,7 +49,7 @@ class Type extends FieldType
     {
         $validationResult = array();
 
-        foreach( array_keys( $fieldSettings ) as $setting )
+        foreach ( array_keys( $fieldSettings ) as $setting )
         {
             if ( !in_array( $setting, array_keys( $this->settingsSchema ) ) )
             {
@@ -82,7 +82,7 @@ class Type extends FieldType
     }
 
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -135,7 +135,7 @@ class Type extends FieldType
             $inputValue = new Value( $inputValue->id );
         }
         // content id
-        elseif ( is_integer( $inputValue ) || is_string( $inputValue ) )
+        else if ( is_integer( $inputValue ) || is_string( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
         }
@@ -150,7 +150,7 @@ class Type extends FieldType
 
         if ( !is_integer( $inputValue->destinationContentId ) && !is_string( $inputValue->destinationContentId ) && $inputValue->destinationContentId !== null )
         {
-           throw new InvalidArgumentType(
+            throw new InvalidArgumentType(
                 '$inputValue->destinationContentId',
                 'string|int',
                 $inputValue->destinationContentId
@@ -165,6 +165,7 @@ class Type extends FieldType
      * For this FieldType, the related object's name is returned.
      *
      * @todo Repository needs to be provided to be able to get Content Relation name(s), and it is in ctor
+     *
      * @return array
      */
     protected function getSortInfo( $value )
@@ -199,7 +200,7 @@ class Type extends FieldType
     /**
      * Returns whether the field type is searchable
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {

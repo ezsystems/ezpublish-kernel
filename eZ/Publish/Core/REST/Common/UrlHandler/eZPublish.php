@@ -18,7 +18,7 @@ class eZPublish extends Pattern
      * Map of URL types to their URL patterns
      *
      * @var array
-     * @TODO: Add sensible missing names
+     * @todo: Add sensible missing names
      */
     protected $map = array(
         'root'                      => '/',

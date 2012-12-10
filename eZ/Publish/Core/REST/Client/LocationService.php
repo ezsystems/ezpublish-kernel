@@ -8,16 +8,16 @@
  */
 namespace eZ\Publish\Core\REST\Client;
 
-
+use eZ\Publish\API\Repository\LocationService as APILocationService;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
-use \eZ\Publish\Core\REST\Common\UrlHandler;
-use \eZ\Publish\Core\REST\Common\Input;
-use \eZ\Publish\Core\REST\Common\Output;
-use \eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input\Dispatcher;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Common\Message;
 
 /**
  * Location service, used for complex subtree operations
@@ -26,7 +26,7 @@ use \eZ\Publish\Core\REST\Common\Message;
  *
  * @package eZ\Publish\API\Repository
  */
-class LocationService implements \eZ\Publish\API\Repository\LocationService, Sessionable
+class LocationService implements APILocationService, Sessionable
 {
     /**
      * @var \eZ\Publish\Core\REST\Client\HttpClient
@@ -54,7 +54,7 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
@@ -68,6 +68,7 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      * Only for testing
      *
      * @param mixed $id
+     *
      * @private
      */
     public function setSession( $id )
@@ -128,7 +129,7 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
      *
-     * @param integer $locationId
+     * @param int $locationId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
@@ -232,7 +233,7 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
     }
 
     /**
-     * Load children which are readable by the current user of a location object sorted by sortField and sortOrder
+     * Loads children which are readable by the current user of a location object sorted by sortField and sortOrder
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
@@ -264,7 +265,7 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      */
     public function getLocationChildCount( Location $location )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -277,7 +278,7 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      */
     public function swapLocation( Location $location1,  Location $location2 )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -291,7 +292,7 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      */
     public function hideLocation( Location $location )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -308,7 +309,7 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      */
     public function unhideLocation( Location $location )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -320,7 +321,7 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      */
     public function deleteLocation( Location $location )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -341,7 +342,7 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      */
     public function copySubtree( Location $subtree,  Location $targetParentLocation )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -357,6 +358,6 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      */
     public function moveSubtree( Location $location, Location $newParentLocation )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 }

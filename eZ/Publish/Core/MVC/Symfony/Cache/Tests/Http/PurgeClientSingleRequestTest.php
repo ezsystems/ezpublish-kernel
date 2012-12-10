@@ -23,16 +23,14 @@ class PurgeClientSingleRequestTest extends HttpBasedPurgeClientTest
             ->expects( $this->once() )
             ->method( 'getParameter' )
             ->with( 'http_cache.purge_servers' )
-            ->will( $this->returnValue( array( $purgeServer ) ) )
-        ;
+            ->will( $this->returnValue( array( $purgeServer ) ) );
 
         $locations = array( 123, 456, 789 );
 
         $this->httpBrowser
             ->expects( $this->once() )
             ->method( 'call' )
-            ->with( $purgeServer, 'PURGE', array( 'X-Group-Location-Id' => implode( '; ', $locations ) ) )
-        ;
+            ->with( $purgeServer, 'PURGE', array( 'X-Group-Location-Id' => implode( '; ', $locations ) ) );
 
         $purgeClient = new PurgeClientSingleRequest( $this->configResolver, $this->httpBrowser );
         $purgeClient->purge( $locations );

@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper,
-    eZ\Publish\SPI\Persistence\Content\Language,
-    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper;
+use eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 
 /**
  * Test case for Mapper
@@ -19,8 +20,9 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
 class MapperTest extends TestCase
 {
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper::createLanguageFromCreateStruct
+     *
+     * @return void
      */
     public function testCreateLanguageFromCreateStruct()
     {
@@ -38,8 +40,9 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper::extractLanguagesFromRows
+     *
+     * @return void
      */
     public function testExtractLanguagesFromRows()
     {
@@ -63,8 +66,8 @@ class MapperTest extends TestCase
     protected function getRowsFixture()
     {
         return array(
-            array( 'disabled'=>'0', 'id'=>'2', 'locale'=>'eng-US', 'name'=>'English (American)' ),
-            array( 'disabled'=>'0', 'id'=>'4', 'locale'=>'eng-GB', 'name'=>'English (United Kingdom)' )
+            array( 'disabled' => '0', 'id' => '2', 'locale' => 'eng-US', 'name' => 'English (American)' ),
+            array( 'disabled' => '0', 'id' => '4', 'locale' => 'eng-GB', 'name' => 'English (United Kingdom)' )
         );
     }
 
@@ -93,7 +96,7 @@ class MapperTest extends TestCase
     /**
      * Returns a Language CreateStruct fixture
      *
-     * @return eZ\Publish\SPI\Persistence\Content\Language\CreateStruct
+     * @return \eZ\Publish\SPI\Persistence\Content\Language\CreateStruct
      */
     protected function getCreateStructFixture()
     {
@@ -109,7 +112,7 @@ class MapperTest extends TestCase
     /**
      * Returns a Language fixture
      *
-     * @return eZ\Publish\SPI\Persistence\Content\Language
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     protected function getLanguageFixture()
     {

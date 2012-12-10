@@ -8,13 +8,14 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash;
-use eZ\Publish\SPI\Persistence\Content\Location\Trashed,
-    eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as BaseTrashHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
+
+use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
+use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as BaseTrashHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 
 /**
  * The Location Handler interface defines operations on Location elements in the storage engine.
@@ -77,8 +78,10 @@ class Handler implements BaseTrashHandler
      * $id is the same as original location (which has been previously trashed)
      *
      * @param int $id
-     * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed
      */
     public function loadTrashItem( $id )
     {
@@ -95,8 +98,9 @@ class Handler implements BaseTrashHandler
      *
      * @param mixed $locationId
      *
-     * @return null|\eZ\Publish\SPI\Persistence\Content\Location\Trashed null if location was deleted, otherwise Trashed object
      * @todo Handle field types actions
+     *
+     * @return null|\eZ\Publish\SPI\Persistence\Content\Location\Trashed null if location was deleted, otherwise Trashed object
      */
     public function trashSubtree( $locationId )
     {
@@ -159,6 +163,7 @@ class Handler implements BaseTrashHandler
      *
      * @param mixed $trashedId
      * @param mixed $newParentId
+     *
      * @return int Newly restored location id
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If $newParentId is invalid
      * @todo Handle field types actions
@@ -177,6 +182,7 @@ class Handler implements BaseTrashHandler
      * @param int $offset Offset to start listing from, 0 by default
      * @param int $limit Limit for the listing. Null by default (no limit)
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed[]
      */
     public function findTrashItems( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null )
@@ -215,6 +221,7 @@ class Handler implements BaseTrashHandler
      * Associated content has to be deleted
      *
      * @param int $trashedId
+     *
      * @return void
      */
     public function deleteTrashItem( $trashedId )
@@ -227,6 +234,7 @@ class Handler implements BaseTrashHandler
      * If there is no more locations for corresponding content, then it will be deleted as well.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Trashed $trashItem
+     *
      * @return void
      */
     protected function delete( Trashed $trashItem )

@@ -9,6 +9,7 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content;
+
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
@@ -24,7 +25,6 @@ class ObjectState extends ValueObject
     public $id;
 
     /**
-     *
      * The identifier for the object state group
      *
      * @var string

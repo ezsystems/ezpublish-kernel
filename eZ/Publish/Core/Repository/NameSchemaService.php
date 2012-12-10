@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\API\Repository\Values\Content\Content,
-    eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
 /**
  * NameSchemaService is internal service for resolving content name and url alias patterns.
@@ -67,7 +67,8 @@ class NameSchemaService
     public function __construct( RepositoryInterface $repository, array $settings = array() )
     {
         $this->repository = $repository;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             'limit' => 150,
             'sequence' => '...',
         );
@@ -83,9 +84,9 @@ class NameSchemaService
     public function resolveUrlAliasSchema( Content $content )
     {
         return $this->resolve(
-            strlen( $content->contentType->urlAliasSchema ) === 0
-                ? $content->contentType->nameSchema
-                : $content->contentType->urlAliasSchema,
+            strlen( $content->contentType->urlAliasSchema ) === 0 ?
+                $content->contentType->nameSchema :
+                $content->contentType->urlAliasSchema,
             $content->contentType,
             $content->fields,
             $content->versionInfo->languageCodes
@@ -148,7 +149,7 @@ class NameSchemaService
     }
 
     /**
-     * Return the real name for a content name pattern
+     * Returns the real name for a content name pattern
      *
      * @param string $nameSchema
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
@@ -233,6 +234,7 @@ class NameSchemaService
      * </code>
      *
      * @param string $nameSchema
+     *
      * @return array
      */
     protected function extractTokens( $nameSchema )
@@ -254,7 +256,7 @@ class NameSchemaService
      * @param string $token
      * @param array $titles
      *
-     * @param $groupLookupTable
+     * @param array $groupLookupTable
      *
      * @return string
      */
@@ -283,7 +285,6 @@ class NameSchemaService
                     );
                 }
 
-
                 // We want to stop after the first matching token part / identifier is found
                 // <id1|id2> if id1 has a value, id2 will not be used.
                 // In this case id1 or id1 is a token group.
@@ -308,6 +309,7 @@ class NameSchemaService
      * Checks whether $identifier is a placeholder for a token group.
      *
      * @param string $identifier
+     *
      * @return boolean
      */
     protected function isTokenGroup( $identifier )
@@ -321,7 +323,7 @@ class NameSchemaService
     }
 
     /**
-     * Return the different constituents of $token in an array.
+     * Returns the different constituents of $token in an array.
      * The normal case here is that the different identifiers within one token
      * will be tokenized and returned.
      *
@@ -331,6 +333,7 @@ class NameSchemaService
      * </code>
      *
      * @param string $token
+     *
      * @return array
      */
     protected function tokenParts( $token )
@@ -347,6 +350,7 @@ class NameSchemaService
      * tokens.
      *
      * @param string $nameSchema
+     *
      * @return string
      */
     protected function filterNameSchema( $nameSchema )
@@ -382,6 +386,7 @@ class NameSchemaService
      * Returns all identifiers from all tokens in the name schema.
      *
      * @param string $schemaString
+     *
      * @return array
      */
     protected function getIdentifiers( $schemaString )

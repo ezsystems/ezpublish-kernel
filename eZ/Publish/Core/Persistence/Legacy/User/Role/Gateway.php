@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\User\Role;
-use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
-    eZ\Publish\SPI\Persistence\User\Policy,
-    eZ\Publish\SPI\Persistence\User\Role;
+
+use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
+use eZ\Publish\SPI\Persistence\User\Policy;
+use eZ\Publish\SPI\Persistence\User\Role;
 
 /**
  * Base class for content type gateways.
@@ -21,37 +22,41 @@ abstract class Gateway
      * Create new role
      *
      * @param Role $role
+     *
      * @return Role
      */
     abstract public function createRole( Role $role );
 
     /**
-     * Load a specified role by $roleId
+     * Loads a specified role by $roleId
      *
      * @param mixed $roleId
+     *
      * @return array
      */
     abstract public function loadRole( $roleId );
 
     /**
-     * Load a specified role by $identifier
+     * Loads a specified role by $identifier
      *
      * @param string $identifier
+     *
      * @return array
      */
     abstract public function loadRoleByIdentifier( $identifier );
 
     /**
-     * Load all roles
+     * Loads all roles
      *
      * @return array
      */
     abstract public function loadRoles();
 
     /**
-     * Load all roles associated with the given content objects
+     * Loads all roles associated with the given content objects
      *
      * @param array $contentIds
+     *
      * @return array
      */
     abstract public function loadRolesForContentObjects( $contentIds );
@@ -60,7 +65,7 @@ abstract class Gateway
      * Loads role assignments for specified content ID
      *
      * @param mixed $groupId
-     * @param bool $inherited
+     * @param boolean $inherited
      *
      * @return array
      */
@@ -70,6 +75,7 @@ abstract class Gateway
      * Returns the user policies associated with the user
      *
      * @param mixed $userId
+     *
      * @return UserPolicy[]
      */
     abstract public function loadPoliciesByUserId( $userId );
@@ -93,15 +99,17 @@ abstract class Gateway
      *
      * @param mixed $roleId
      * @param Policy $policy
+     *
      * @return void
      */
     abstract public function addPolicy( $roleId, Policy $policy );
 
     /**
-     * Add limitations to an existing policy
+     * Adds limitations to an existing policy
      *
      * @param int $policyId
      * @param array $limitations
+     *
      * @return void
      */
     abstract public function addPolicyLimitations( $policyId, array $limitations );
@@ -110,6 +118,7 @@ abstract class Gateway
      * Removes a policy from a role
      *
      * @param mixed $policyId
+     *
      * @return void
      */
     abstract public function removePolicy( $policyId );
@@ -118,6 +127,7 @@ abstract class Gateway
      * Removes a policy from a role
      *
      * @param mixed $policyId
+     *
      * @return void
      */
     abstract public function removePolicyLimitations( $policyId );

@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\Content;
 
-use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\Content\VersionInfo}
@@ -26,7 +26,7 @@ class VersionInfoStub extends VersionInfo
     protected $repository;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $contentId;
 
@@ -41,11 +41,11 @@ class VersionInfoStub extends VersionInfo
     {
         parent::__construct( $properties );
 
-        if ( $properties['status'] > 2 ) {
+        if ( $properties['status'] > 2 )
+        {
             $trace = debug_backtrace();
         }
     }
-
 
     /**
      * Content of the content this version belongs to.
@@ -58,7 +58,6 @@ class VersionInfoStub extends VersionInfo
     }
 
     /**
-     *
      * Returns the names computed from the name schema in the available languages.
      *
      * @return string[]
@@ -69,7 +68,6 @@ class VersionInfoStub extends VersionInfo
     }
 
     /**
-     *
      * Returns the name computed from the name schema in the given language.
      * If no language is given the name in initial language of the version if present, otherwise null.
      *

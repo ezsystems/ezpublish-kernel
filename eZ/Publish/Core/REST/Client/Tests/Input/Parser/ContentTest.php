@@ -39,7 +39,7 @@ class ContentTest extends BaseTest
     {
         $relationParser = $this->getParser();
 
-        $inputArray = array (
+        $inputArray = array(
             '_media-type' => 'application/vnd.ez.api.Version+json',
             '_href' => '/content/objects/10/versions/2',
             'VersionInfo' => array(),
@@ -127,12 +127,14 @@ class ContentTest extends BaseTest
     {
         $this->assertEquals(
             // Mocked result
-            new Values\Content\Field( array(
-                'id' => 19,
-                'fieldDefIdentifier' => 'first_name',
-                'languageCode' => 'eng-US',
-                'value' => 'MockedValue',
-            ) ),
+            new Values\Content\Field(
+                array(
+                    'id' => 19,
+                    'fieldDefIdentifier' => 'first_name',
+                    'languageCode' => 'eng-US',
+                    'value' => 'MockedValue',
+                )
+            ),
             $parsedContent->getField( 'first_name', 'eng-US' )
         );
     }
@@ -144,12 +146,14 @@ class ContentTest extends BaseTest
     {
         $this->assertEquals(
             // Mocked result
-            new Values\Content\Field( array(
-                'id' => 20,
-                'fieldDefIdentifier' => 'last_name',
-                'languageCode' => 'eng-US',
-                'value' => 'MockedValue',
-            ) ),
+            new Values\Content\Field(
+                array(
+                    'id' => 20,
+                    'fieldDefIdentifier' => 'last_name',
+                    'languageCode' => 'eng-US',
+                    'value' => 'MockedValue',
+                )
+            ),
             $parsedContent->getField( 'last_name', 'eng-US' )
         );
     }

@@ -358,7 +358,7 @@ Caching mechanisms
 ==================
 
 It is highly recommended to take care for caching mechanisms on the client, as
-well as on the server side. Therefore, 
+well as on the server side. Therefore,
 
 Custom HTTP methods
 ===================
@@ -529,12 +529,12 @@ Content
 - ``/content/objects``
 
   - Method ``GET``
-    
+
     - Should typically only reference objects
     - `Resource embedding`_ should be considered
 
   - ``POST``
-    
+
     - Duplicate usage for
 
       - Create new content object
@@ -753,7 +753,7 @@ Content
       - New location is always a sub-ordinate of it's parent
 
     - What about this structure?
-     
+
       - ``/content/locations``
 
         - Search view on locations
@@ -774,7 +774,7 @@ Content
         - Should be a link (`Resource embedding`_?)
 
 - ``/content/trash/items``
-  
+
   - Why not ``/content/trash``?
 
 Content Types
@@ -790,7 +790,7 @@ Content Types
 - ``/content/typegroups/<ID>/types``
 
   - ``GET``
-    
+
     - Should be links to type groups (`Resource embedding`_?)
 
   - ``PUT``
@@ -802,7 +802,7 @@ Content Types
     - Should correspondingly delete the link
 
   - ``POST``
-  
+
     - Should not create a type (for this use ``/content/types``) but only
       assign a type to a group
 
@@ -829,7 +829,7 @@ Content Types
   - Should be a list of links to field definitions
 
 - ``/content/types/<ID>/groups``
-  
+
   - Duplication!
 
 Resource representations
@@ -877,5 +877,5 @@ detail, especially in respect to the Public API.
    Local Variables:
    mode: rst
    fill-column: 79
-   End: 
+   End:
    vim: et syn=rst tw=79

@@ -103,7 +103,7 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * loads a version info of the given content object.
+     * Loads a version info of the given content object.
      *
      * If no version number is given, the method returns the current version
      *
@@ -121,7 +121,7 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * loads a version info of the given content object id.
+     * Loads a version info of the given content object id.
      *
      * If no version number is given, the method returns the current version
      *
@@ -139,7 +139,7 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * loads content in a version for the given content info object.
+     * Loads content in a version for the given content info object.
      *
      * If no version number is given, the method returns the current version
      *
@@ -158,7 +158,7 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * loads content in the version given by version info.
+     * Loads content in the version given by version info.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
@@ -173,7 +173,7 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * loads content in a version of the given content object.
+     * Loads content in a version of the given content object.
      *
      * If no version number is given, the method returns the current version
      *
@@ -192,7 +192,7 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * loads content in a version for the content object reference by the given remote id.
+     * Loads content in a version for the content object reference by the given remote id.
      *
      * If no version is given, the method returns the current version
      *
@@ -228,7 +228,7 @@ class ContentService implements ContentServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing or is set to an empty value
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct $contentCreateStruct
-     * @param array $locationCreateStructs an array of {@link \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct} for each location parent under which a location should be created for the content
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationCreateStructs For each location parent under which a location should be created for the content
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
@@ -273,7 +273,7 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * deletes a content object including all its versions and locations including their subtrees.
+     * Deletes a content object including all its versions and locations including their subtrees.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete the content (in one of the locations of the given content object)
      *
@@ -293,7 +293,7 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * creates a draft from a published or archived version.
+     * Creates a draft from a published or archived version.
      *
      * If no version is given, the current published version is used.
      * 4.x: The draft is created with the initialLanguage code of the source version or if not present with the main language.
@@ -323,7 +323,7 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * Load drafts for a user.
+     * Loads drafts for a user.
      *
      * If no user is given the drafts for the authenticated user a returned
      *
@@ -454,7 +454,7 @@ class ContentService implements ContentServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] an array of {@link \eZ\Publish\API\Repository\Values\Content\VersionInfo} sorted by creation date
+     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] Sorted by creation date
      */
     public function loadVersions( ContentInfo $contentInfo )
     {
@@ -462,7 +462,7 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * copies the content to a new location. If no version is given,
+     * Copies the content to a new location. If no version is given,
      * all versions are copied, otherwise only the given version.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to copy the content to the given location
@@ -491,13 +491,13 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * load all outgoing relations for the given version
+     * Loads all outgoing relations for the given version
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read this version
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[] an array of {@link Relation}
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
     public function loadRelations( VersionInfo $versionInfo )
     {
@@ -513,7 +513,7 @@ class ContentService implements ContentServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[] an array of {@link Relation}
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
     public function loadReverseRelations( ContentInfo $contentInfo )
     {
@@ -575,7 +575,7 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * add translation information to the content object
+     * Adds translation information to the content object
      *
      * @example Examples/translation_5x.php
      *
@@ -601,9 +601,10 @@ class ContentService implements ContentServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param array $filter
+     *
      * @todo TBD - filter by source version, destination version and languages
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[] an array of {@link TranslationInfo}
+     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[]
      *
      * @since 5.0
      */

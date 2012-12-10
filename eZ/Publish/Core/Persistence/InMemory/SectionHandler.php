@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
-use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandlerInterface,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    LogicException;
+
+use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandlerInterface;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use LogicException;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
@@ -92,8 +93,10 @@ class SectionHandler implements SectionHandlerInterface
      * Get section data by identifier
      *
      * @param string $identifier
-     * @return \eZ\Publish\SPI\Persistence\Content\Section
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If section is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
     public function loadByIdentifier( $identifier )
     {
@@ -133,6 +136,7 @@ class SectionHandler implements SectionHandlerInterface
      * Number of content assignments a Section has
      *
      * @param mixed $sectionId
+     *
      * @return int
      */
     public function assignmentsCount( $sectionId )

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
+
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
@@ -50,6 +51,7 @@ class ObjectStateCreate extends Base
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
@@ -66,7 +68,7 @@ class ObjectStateCreate extends Base
             throw new Exceptions\Parser( "Missing 'priority' attribute for ObjectStateCreate." );
         }
 
-        $objectStateCreateStruct->priority = (int) $data['priority'];
+        $objectStateCreateStruct->priority = (int)$data['priority'];
 
         if ( !array_key_exists( 'defaultLanguageCode', $data ) )
         {

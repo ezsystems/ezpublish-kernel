@@ -268,7 +268,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[] an array of {@link ContentType} which have status DEFINED
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[] Which have status DEFINED
      */
     public function loadContentTypes( ContentTypeGroup $contentTypeGroup )
     {
@@ -376,7 +376,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * assign a content type to a content type group.
+     * Assigns a content type to a content type group.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to unlink a content type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the content type is already assigned the given group
@@ -459,10 +459,12 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         $returnValue = $this->service->removeFieldDefinition( $contentTypeDraft, $fieldDefinition );
         $this->signalDispatcher->emit(
-            new RemoveFieldDefinitionSignal( array(
-                'contentTypeDraftId' => $contentTypeDraft->id,
-                'fieldDefinitionId' => $fieldDefinition->id,
-            ) )
+            new RemoveFieldDefinitionSignal(
+                array(
+                    'contentTypeDraftId' => $contentTypeDraft->id,
+                    'fieldDefinitionId' => $fieldDefinition->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -563,7 +565,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * Instantiates a field definition create struct
      *
-     * @param string $fieldTypeIdentifier the required  field type identifier
+     * @param string $fieldTypeIdentifier the required field type identifier
      * @param string $identifier the required identifier for the field definition
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct

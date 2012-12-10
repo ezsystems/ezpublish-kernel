@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway,
-    eZ\Publish\SPI\Persistence\Content\Language;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
+use eZ\Publish\SPI\Persistence\Content\Language;
 
 /**
  * Language Handler
@@ -37,6 +38,7 @@ class ExceptionConversion extends Gateway
      * Inserts the given $language
      *
      * @param Language $language
+     *
      * @return int ID of the new language
      */
     public function insertLanguage( Language $language )
@@ -59,6 +61,7 @@ class ExceptionConversion extends Gateway
      * Updates the data of the given $language
      *
      * @param Language $language
+     *
      * @return void
      */
     public function updateLanguage( Language $language )
@@ -81,6 +84,7 @@ class ExceptionConversion extends Gateway
      * Loads data for the Language with $id
      *
      * @param int $id
+     *
      * @return string[][]
      */
     public function loadLanguageData( $id )
@@ -103,6 +107,7 @@ class ExceptionConversion extends Gateway
      * Loads data for the Language with Language Code (eg: eng-GB)
      *
      * @param string $languageCode
+     *
      * @return string[][]
      */
     public function loadLanguageDataByLanguageCode( $languageCode )
@@ -146,6 +151,7 @@ class ExceptionConversion extends Gateway
      * Deletes the language with $id
      *
      * @param int $id
+     *
      * @return void
      */
     public function deleteLanguage( $id )
@@ -169,7 +175,7 @@ class ExceptionConversion extends Gateway
      *
      * @param int $id
      *
-     * @return bool
+     * @return boolean
      */
     public function canDeleteLanguage( $id )
     {

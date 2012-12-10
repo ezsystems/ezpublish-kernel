@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
@@ -47,6 +48,7 @@ class LimitationTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains limitation element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLimitationElement( $result )
@@ -68,6 +70,7 @@ class LimitationTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains limitation attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLimitationAttributes( $result )
@@ -90,6 +93,7 @@ class LimitationTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains values element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsValuesElement( $result )

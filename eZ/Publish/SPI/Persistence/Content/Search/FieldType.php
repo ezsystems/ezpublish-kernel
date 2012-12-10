@@ -32,7 +32,7 @@ abstract class FieldType extends ValueObject
     /**
      * Whether highlighting should be performed for this field on result documents
      *
-     * @var bool
+     * @var boolean
      */
     public $highlight = false;
 
@@ -46,14 +46,14 @@ abstract class FieldType extends ValueObject
     /**
      * Whether the field supports multiple values
      *
-     * @var bool
+     * @var boolean
      */
     public $multiValue = false;
 
     /**
      * Whether the field should be a part of the resulting document
      *
-     * @var bool
+     * @var boolean
      */
     public $inResult = true;
 }

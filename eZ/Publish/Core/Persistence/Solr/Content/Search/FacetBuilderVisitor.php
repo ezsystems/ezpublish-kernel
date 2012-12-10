@@ -20,7 +20,8 @@ abstract class FacetBuilderVisitor
      * CHeck if visitor is applicable to current facet result
      *
      * @param string $field
-     * @return bool
+     *
+     * @return boolean
      */
     abstract public function canMap( $field );
 
@@ -29,6 +30,7 @@ abstract class FacetBuilderVisitor
      *
      * @param string $field
      * @param array $data
+     *
      * @return Facet
      */
     abstract public function map( $field, array $data );
@@ -37,7 +39,8 @@ abstract class FacetBuilderVisitor
      * CHeck if visitor is applicable to current facet builder
      *
      * @param FacetBuilder $facetBuilder
-     * @return bool
+     *
+     * @return boolean
      */
     abstract public function canVisit( FacetBuilder $facetBuilder );
 
@@ -45,6 +48,7 @@ abstract class FacetBuilderVisitor
      * Map field value to a proper Solr representation
      *
      * @param FacetBuilder $facetBuilder
+     *
      * @return void
      */
     abstract public function visit( FacetBuilder $facetBuilder );
@@ -53,6 +57,7 @@ abstract class FacetBuilderVisitor
      * Map Solr return array into a sane hash map
      *
      * @param array $data
+     *
      * @return array
      */
     protected function mapData( array $data )

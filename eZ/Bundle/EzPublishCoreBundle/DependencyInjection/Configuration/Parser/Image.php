@@ -9,9 +9,9 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser,
-    Symfony\Component\Config\Definition\Builder\NodeBuilder,
-    Symfony\Component\DependencyInjection\ContainerBuilder;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser;
+use Symfony\Component\Config\Definition\Builder\NodeBuilder;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Configuration parser handling all basic configuration (aka "Image")
@@ -36,28 +36,28 @@ class Image extends AbstractParser
                 ->info( 'Configuration for your image variations (aka "image aliases")' )
                 ->example(
                     array(
-                         'my_image_variation' => array(
-                             'reference'    => '~',
-                             'filters'      => array(
-                                 array(
-                                     'name'     => 'geometry/scaledownonly',
-                                     'params'   => array( 400, 350 )
-                                 )
-                             )
-                         ),
-                         'my_cropped_variation' => array(
-                             'reference'    => 'my_cropped_variation',
-                             'filters'      => array(
-                                 array(
-                                     'name'     => 'geometry/scalewidthdownonly',
-                                     'params'   => array( 300 )
-                                 ),
-                                 array(
-                                     'name'     => 'geometry/crop',
-                                     'params'   => array( 300, 300, 0, 0 )
-                                 )
-                             )
-                         )
+                        'my_image_variation' => array(
+                            'reference'    => '~',
+                            'filters'      => array(
+                                array(
+                                    'name'     => 'geometry/scaledownonly',
+                                    'params'   => array( 400, 350 )
+                                )
+                            )
+                        ),
+                        'my_cropped_variation' => array(
+                            'reference'    => 'my_cropped_variation',
+                            'filters'      => array(
+                                array(
+                                    'name'     => 'geometry/scalewidthdownonly',
+                                    'params'   => array( 300 )
+                                ),
+                                array(
+                                    'name'     => 'geometry/crop',
+                                    'params'   => array( 300, 300, 0, 0 )
+                                )
+                            )
+                        )
                     )
                 )
                 ->useAttributeAsKey( 'key' )
@@ -84,8 +84,7 @@ class Image extends AbstractParser
                         ->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 
     /**

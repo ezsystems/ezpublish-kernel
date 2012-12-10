@@ -9,11 +9,11 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection;
 
-use Symfony\Component\HttpKernel\DependencyInjection\Extension,
-    Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\Loader,
-    Symfony\Component\DependencyInjection\Loader\FileLoader,
-    Symfony\Component\Config\FileLocator;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Loader\FileLoader;
+use Symfony\Component\Config\FileLocator;
 
 class EzPublishCoreExtension extends Extension
 {
@@ -41,7 +41,7 @@ class EzPublishCoreExtension extends Extension
     /**
      * Loads a specific configuration.
      *
-     * @param array            $configs    An array of configuration values
+     * @param mixed[] $configs An array of configuration values
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container A ContainerBuilder instance
      *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
@@ -199,6 +199,7 @@ class EzPublishCoreExtension extends Extension
     /**
      * @param array $config
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
      * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration
      */
     public function getConfiguration( array $config, ContainerBuilder $container )
@@ -211,7 +212,7 @@ class EzPublishCoreExtension extends Extension
         if ( !isset( $config['siteaccess'] ) )
         {
             $config['siteaccess'] = array();
-            $config['siteaccess']['list'] = array( 'setup');
+            $config['siteaccess']['list'] = array( 'setup' );
             $config['siteaccess']['default_siteaccess'] = 'setup';
             $config['siteaccess']['groups'] = array();
             $config['siteaccess']['match'] = null;
@@ -335,7 +336,9 @@ class EzPublishCoreExtension extends Extension
                     break;
                 default:
                     if ( !$container->has( $config['http_cache']['purge_type'] ) )
+                    {
                         throw new \InvalidArgumentException( "Invalid ezpublish.http_cache.purge_type. Can be 'single', 'multiple' or a valid service identifier implementing PurgeClientInterface." );
+                    }
 
                     $purgeService = $config['http_cache']['purge_type'];
             }

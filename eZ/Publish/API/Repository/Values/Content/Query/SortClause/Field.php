@@ -11,8 +11,8 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget;
 
-use eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
  * Sets sort direction on a field value for a content query

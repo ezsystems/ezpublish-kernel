@@ -12,7 +12,6 @@ namespace eZ\Publish\API\Repository\Values\Translation;
 
 use eZ\Publish\API\Repository\Values\Translation;
 
-
 /**
  * Class for translatable messages, which may contain plural forms.
  *
@@ -68,6 +67,7 @@ class Plural extends Translation
      * @param string $singular
      * @param string $plural
      * @param array $values
+     *
      * @return void
      */
     public function __construct( $singular, $plural, array $values )
@@ -77,4 +77,3 @@ class Plural extends Translation
         $this->values   = $values;
     }
 }
-

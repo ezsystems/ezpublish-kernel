@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\TranslationValues as APITranslation
 class TranslationValues extends APITranslationValues
 {
     /**
-     * @var FieldCollection $fields
+     * @var FieldCollection
      */
     public $fields;
 
@@ -33,6 +33,6 @@ class TranslationValues extends APITranslationValues
      */
     public function setField( $fieldDefIdentifier, $value )
     {
-        // todo: implement
+        // @todo: implement
     }
 }

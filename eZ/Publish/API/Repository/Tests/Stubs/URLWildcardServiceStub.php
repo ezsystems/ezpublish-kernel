@@ -9,13 +9,13 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\URLWildcardService;
-use \eZ\Publish\API\Repository\Values\Content\URLWildcard;
-use \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
+use eZ\Publish\API\Repository\URLWildcardService;
+use eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
 /**
  * Url wold service stub implementation.
@@ -25,7 +25,7 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 class URLWildcardServiceStub implements URLWildcardService
 {
     /**
-     * @var integer
+     * @var int
      */
     private $id;
 
@@ -50,7 +50,7 @@ class URLWildcardServiceStub implements URLWildcardService
     }
 
     /**
-     * creates a new url wildcard
+     * Creates a new url wildcard
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the $sourceUrl pattern already exists
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create url wildcards
@@ -119,7 +119,7 @@ class URLWildcardServiceStub implements URLWildcardService
     }
 
     /**
-     * loads a url wild card
+     * Loads a url wild card
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
      *
@@ -137,7 +137,7 @@ class URLWildcardServiceStub implements URLWildcardService
     }
 
     /**
-     * loads all url wild card (paged)
+     * Loads all url wild card (paged)
      *
      * @param int $offset
      * @param int $limit
@@ -196,6 +196,7 @@ class URLWildcardServiceStub implements URLWildcardService
      *
      * @param string $url
      * @param \eZ\Publish\API\Repository\Values\Content\URLWildcard $wildcard
+     *
      * @return string|null
      */
     private function match( $url, URLWildcard $wildcard )
@@ -211,6 +212,7 @@ class URLWildcardServiceStub implements URLWildcardService
      * Compiles the given url pattern into a regular expression.
      *
      * @param string $sourceUrl
+     *
      * @return string
      */
     private function compile( $sourceUrl )
@@ -224,7 +226,9 @@ class URLWildcardServiceStub implements URLWildcardService
      *
      * @param string $destinationUrl
      * @param array $values
+     *
      * @throws \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub
+     *
      * @return string
      */
     private function substitute( $destinationUrl, array $values )

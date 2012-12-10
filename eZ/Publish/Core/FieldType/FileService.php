@@ -18,6 +18,7 @@ interface FileService
      *
      * @param string $sourcePath
      * @param string $storageIdentifier
+     *
      * @return string
      */
     public function storeFile( $sourcePath, $storageIdentifier );
@@ -32,6 +33,7 @@ interface FileService
      * );
      *
      * @param string $storageIdentifier
+     *
      * @return array
      * @todo This method should be extracted later into a dedicated class to
      *       handle meta data.
@@ -42,6 +44,7 @@ interface FileService
      * Returns the file size of the file identified by $storageIdentifier
      *
      * @param string $storageIdentifier
+     *
      * @return int
      */
     public function getFileSize( $storageIdentifier );
@@ -56,7 +59,8 @@ interface FileService
      * existing $storageIdentifier is silently ignored.
      *
      * @param string $storageIdentifier
-     * @param bool $recursive
+     * @param boolean $recursive
+     *
      * @return void
      * @throws \RuntimeException if children of $storageIdentifier exist and
      *                           $recursive is false
@@ -72,6 +76,7 @@ interface FileService
      * encapsulated by the file service.
      *
      * @param string $path
+     *
      * @return string
      */
     public function getStorageIdentifier( $path );
@@ -80,7 +85,8 @@ interface FileService
      * Returns is a file/directory with the given $storageIdentifier exists
      *
      * @param string $storageIdentifier
-     * @return bool
+     *
+     * @return boolean
      */
     public function exists( $storageIdentifier );
 }

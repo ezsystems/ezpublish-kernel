@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\FieldType\XmlText;
 
-use eZ\Publish\Core\FieldType\GatewayBasedStorage,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\Core\FieldType\GatewayBasedStorage;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
 
 class XmlTextStorage extends GatewayBasedStorage
 {
@@ -29,6 +29,7 @@ class XmlTextStorage extends GatewayBasedStorage
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     *
      * @return void
      */
     public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )

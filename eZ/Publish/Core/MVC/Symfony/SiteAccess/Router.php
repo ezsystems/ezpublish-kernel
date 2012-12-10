@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess,
-    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest,
-    eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+use eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException;
 
 class Router
 {
@@ -88,6 +88,7 @@ class Router
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
      *
      * @throws \eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException
+     *
      * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess
      */
     public function match( SimplifiedRequest $request )
@@ -165,6 +166,7 @@ class Router
 
     /**
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
+     *
      * @access private Only for unit tests use
      */
     public function setSiteAccess( SiteAccess $siteAccess = null )

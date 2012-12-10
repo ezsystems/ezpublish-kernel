@@ -9,8 +9,9 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
+
 use eZ\Publish\API\Repository\FieldTypeService;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\FieldTypeService}
@@ -46,6 +47,7 @@ class FieldTypeServiceStub implements FieldTypeService
      * Returns the FieldType registered with the given identifier
      *
      * @param string $identifier
+     *
      * @return \eZ\Publish\API\Repository\FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *         if there is no FieldType registered with $identifier
@@ -63,7 +65,8 @@ class FieldTypeServiceStub implements FieldTypeService
      * Returns if there is a FieldType registered under $identifier
      *
      * @param string $identifier
-     * @return bool
+     *
+     * @return boolean
      */
     public function hasFieldType( $identifier )
     {

@@ -221,7 +221,7 @@ interface ContentTypeService
     public function copyContentType( ContentType $contentType, User $user = null );
 
     /**
-     * assign a content type to a content type group.
+     * Assigns a content type to a content type group.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to unlink a content type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the content type is already assigned the given group
@@ -294,7 +294,7 @@ interface ContentTypeService
     public function publishContentTypeDraft( ContentTypeDraft $contentTypeDraft );
 
     /**
-     * instanciates a new content type group create class
+     * Instantiates a new content type group create class
      *
      * @param string $identifier
      *
@@ -303,7 +303,7 @@ interface ContentTypeService
     public function newContentTypeGroupCreateStruct( $identifier );
 
     /**
-     * instanciates a new content type create class
+     * Instantiates a new content type create class
      *
      * @param string $identifier
      *
@@ -319,16 +319,16 @@ interface ContentTypeService
     public function newContentTypeUpdateStruct();
 
     /**
-     * instanciates a new content type update struct
+     * Instantiates a new content type update struct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct
      */
     public function newContentTypeGroupUpdateStruct();
 
     /**
-     * instanciates a field definition create struct
+     * Instantiates a field definition create struct
      *
-     * @param string $fieldTypeIdentifier the required  field type identifier
+     * @param string $fieldTypeIdentifier the required field type identifier
      * @param string $identifier the required identifier for the field definition
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct
@@ -336,7 +336,7 @@ interface ContentTypeService
     public function newFieldDefinitionCreateStruct( $identifier, $fieldTypeIdentifier );
 
     /**
-     * instanciates a field definition update class
+     * Instantiates a field definition update class
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct
      */

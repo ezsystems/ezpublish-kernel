@@ -27,6 +27,7 @@ class FieldRegistry
      * COnstruct from optional Indexable type array
      *
      * @param array $types
+     *
      * @return void
      */
     public function __construct( array $types = array() )
@@ -42,6 +43,7 @@ class FieldRegistry
      *
      * @param string $name
      * @param Indexable $type
+     *
      * @return void
      */
     public function registerType( $name, Indexable $type )
@@ -53,6 +55,7 @@ class FieldRegistry
      * Get indexable type
      *
      * @param string $name
+     *
      * @return Indexable
      */
     public function getType( $name )

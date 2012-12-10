@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use \eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\User\User;
 
 /**
  * Test case for operations in the UserService using in memory storage.
@@ -234,7 +234,6 @@ class UserServiceTest extends BaseTest
             )
         );
     }
-
 
     /**
      * Test for the createUserGroup() method.
@@ -1273,6 +1272,7 @@ class UserServiceTest extends BaseTest
      * Test for the updateUser() method.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
@@ -1305,6 +1305,7 @@ class UserServiceTest extends BaseTest
      * Test for the updateUser() method.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser

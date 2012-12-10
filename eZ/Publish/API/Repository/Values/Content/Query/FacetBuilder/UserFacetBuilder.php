@@ -20,8 +20,8 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
  *
  * @package eZ\Publish\API\Repository\Values\Content\Query
  */
-class UserFacetBuilder extends FacetBuilder {
-
+class UserFacetBuilder extends FacetBuilder
+{
     /**
      * Owner user
      */
@@ -48,5 +48,4 @@ class UserFacetBuilder extends FacetBuilder {
      * @var string
      */
     public $type = UserFacetBuilder::OWNER;
-
 }

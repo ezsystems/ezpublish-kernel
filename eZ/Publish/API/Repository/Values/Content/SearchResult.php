@@ -34,7 +34,7 @@ class SearchResult extends ValueObject
     /**
      * The found items by the search
      *
-     * @var array an array of {@link ValueObject}
+     * @var \eZ\Publish\API\Repository\Values\ValueObject[]
      */
     public $items = array();
 }

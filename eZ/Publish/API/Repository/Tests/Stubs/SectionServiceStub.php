@@ -9,16 +9,16 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\SectionService;
-use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use \eZ\Publish\API\Repository\Values\Content\Section;
-use \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
-use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
+use eZ\Publish\API\Repository\SectionService;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Section;
+use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\SectionService}
@@ -34,7 +34,7 @@ class SectionServiceStub implements SectionService
     private $repository;
 
     /**
-     * @var integer
+     * @var int
      */
     private $nextId = 0;
 
@@ -218,7 +218,7 @@ class SectionServiceStub implements SectionService
     }
 
     /**
-     * assigns the content to the given section
+     * Assigns the content to the given section
      * this method overrides the current assigned section
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to view provided object
@@ -277,7 +277,7 @@ class SectionServiceStub implements SectionService
     }
 
     /**
-     * instanciates a new SectionCreateStruct
+     * Instantiates a new SectionCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
      */
@@ -287,7 +287,7 @@ class SectionServiceStub implements SectionService
     }
 
     /**
-     * instanciates a new SectionUpdateStruct
+     * Instantiates a new SectionUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
      */

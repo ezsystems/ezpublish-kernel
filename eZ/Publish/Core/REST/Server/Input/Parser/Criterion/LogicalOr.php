@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
+
 use eZ\Publish\Core\REST\Server\Input\Parser\Criterion as CriterionParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
@@ -26,6 +27,7 @@ class LogicalOr extends CriterionParser
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
@@ -36,7 +38,7 @@ class LogicalOr extends CriterionParser
         }
 
         $criteria = array();
-        foreach( $data["OR"] as $criterionName => $criterionData )
+        foreach ( $data["OR"] as $criterionName => $criterionData )
         {
             $criteria[] = $this->dispatchCriterion( $criterionName, $criterionData, $parsingDispatcher );
         }

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content\Type;
+
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
@@ -84,7 +85,7 @@ class UpdateStruct extends ValueObject
     /**
      * Determines if the type is a container
      *
-     * @var bool
+     * @var boolean
      */
     public $isContainer;
 
@@ -116,7 +117,7 @@ class UpdateStruct extends ValueObject
     /**
      * @todo: Document.
      *
-     * @var bool
+     * @var boolean
      */
     public $defaultAlwaysAvailable;
 }

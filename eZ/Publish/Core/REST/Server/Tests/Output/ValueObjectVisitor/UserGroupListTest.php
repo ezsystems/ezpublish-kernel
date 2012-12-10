@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -51,6 +52,7 @@ class UserGroupListTest extends ValueObjectVisitorBaseTest
      * Test if result contains UserGroupList element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsUserGroupListElement( $result )
@@ -69,6 +71,7 @@ class UserGroupListTest extends ValueObjectVisitorBaseTest
      * Test if result contains UserGroupList element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsUserGroupListAttributes( $result )

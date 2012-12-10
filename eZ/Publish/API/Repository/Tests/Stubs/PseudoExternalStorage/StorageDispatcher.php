@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage;
-use \eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage;
 
-use \eZ\Publish\API\Repository\Values\Content\Field;
-use \eZ\Publish\API\Repository\Values\Content\Content;
-use \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage;
+
+use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 
 /**
  * Dispatcher for PseudoExternalStorage implementations.
@@ -44,6 +45,7 @@ class StorageDispatcher extends PseudoExternalStorage
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
      * @return void
      */
     public function handleCreate( FieldDefinition $fieldDefinition, Field $field, Content $content )
@@ -62,6 +64,7 @@ class StorageDispatcher extends PseudoExternalStorage
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
      * @return void
      */
     public function handleUpdate( FieldDefinition $fieldDefinition, Field $field, Content $content )
@@ -80,6 +83,7 @@ class StorageDispatcher extends PseudoExternalStorage
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
      * @return void
      */
     public function handleLoad( FieldDefinition $fieldDefinition, Field $field, Content $content )

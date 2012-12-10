@@ -26,6 +26,7 @@ class ContentObjectStates extends Base
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
      * @return \eZ\Publish\Core\REST\Common\Values\RestObjectState[]
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )

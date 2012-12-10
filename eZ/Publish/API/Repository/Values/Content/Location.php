@@ -89,7 +89,7 @@ abstract class Location extends ValueObject
     protected $remoteId;
 
     /**
-     * returns the content info of the content object of this location
+     * Returns the content info of the content object of this location
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */

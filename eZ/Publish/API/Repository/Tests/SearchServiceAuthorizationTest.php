@@ -9,15 +9,13 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use eZ\Publish\API\Repository\SearchService as SearchServiceInterface,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
-
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-
-    eZ\Publish\SPI\Persistence\Handler;
+use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\SPI\Persistence\Handler;
 
 /**
  * Test case for operations in the SearchService.

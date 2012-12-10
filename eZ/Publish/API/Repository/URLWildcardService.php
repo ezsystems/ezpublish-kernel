@@ -10,7 +10,7 @@
 
 namespace eZ\Publish\API\Repository;
 
-use \eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 
 /**
  * URLAlias service
@@ -21,8 +21,8 @@ use \eZ\Publish\API\Repository\Values\Content\URLWildcard;
  */
 interface URLWildcardService
 {
-     /**
-     * creates a new url wildcard
+    /**
+     * Creates a new url wildcard
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the $sourceUrl pattern already exists
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create url wildcards
@@ -39,7 +39,7 @@ interface URLWildcardService
     public function create( $sourceUrl, $destinationUrl, $forward = false );
 
     /**
-     * removes an url wildcard
+     * Removes an url wildcard
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to remove url wildcards
      *
@@ -48,8 +48,7 @@ interface URLWildcardService
     public function remove( URLWildcard $urlWildcard );
 
     /**
-     *
-     * loads a url wild card
+     * Loads a url wild card
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
      *
@@ -60,7 +59,7 @@ interface URLWildcardService
     public function load( $id );
 
     /**
-     * loads all url wild card (paged)
+     * Loads all url wild card (paged)
      *
      * @param int $offset
      * @param int $limit

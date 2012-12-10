@@ -9,10 +9,10 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess,
-    eZ\Publish\Core\MVC\Exception\ParameterNotFoundException,
-    Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * This class will help you get settings for a specific scope.
@@ -120,7 +120,7 @@ class ConfigResolver implements ConfigResolverInterface
      * @param string $scope The scope you need $paramName value for. It's typically the siteaccess name.
      *                      If null, the current siteaccess name will be used.
      *
-     * @return bool
+     * @return boolean
      */
     public function hasParameter( $paramName, $namespace = null, $scope = null )
     {
@@ -133,8 +133,7 @@ class ConfigResolver implements ConfigResolverInterface
         return
             $this->container->hasParameter( $defaultScopeParamName )
             || $this->container->hasParameter( $relativeScopeParamName )
-            || $this->container->hasParameter( $globalScopeParamName )
-        ;
+            || $this->container->hasParameter( $globalScopeParamName );
     }
 
     /**
@@ -146,6 +145,7 @@ class ConfigResolver implements ConfigResolverInterface
      *                      If null, the current siteaccess name will be used.
      *
      * @throws \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException
+     *
      * @return mixed
      */
     public function getParameter( $paramName, $namespace = null, $scope = null )

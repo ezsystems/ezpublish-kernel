@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Values\RestUser;
 
@@ -52,34 +53,41 @@ class RestUserTest extends ValueObjectVisitorBaseTest
     {
         return new RestUser(
             new Values\User\User(),
-            new Values\Content\ContentInfo( array(
-                'id' => 'content23',
-                'name' => 'Sindelfingen',
-                'sectionId' => 'section23',
-                'currentVersionNo' => 5,
-                'published' => true,
-                'ownerId' => 'user23',
-                'modificationDate' => new \DateTime( '2012-09-05 15:27 Europe/Berlin' ),
-                'publishedDate' => new \DateTime( '2012-09-05 15:27 Europe/Berlin' ),
-                'alwaysAvailable' => true,
-                'remoteId' => 'abc123',
-                'mainLanguageCode' => 'eng-US',
-                'mainLocationId' => 'location23',
-                'contentType' => new Values\ContentType\ContentType( array(
-                    'id' => 'contentType23',
-                    'fieldDefinitions' => array(),
-                ) )
-            ) ),
-            new Values\Content\Location( array(
-                'pathString' => '/1/2/23',
-                'path' => array( 1, 2, 23 )
-            ) ),
+            new Values\Content\ContentInfo(
+                array(
+                    'id' => 'content23',
+                    'name' => 'Sindelfingen',
+                    'sectionId' => 'section23',
+                    'currentVersionNo' => 5,
+                    'published' => true,
+                    'ownerId' => 'user23',
+                    'modificationDate' => new \DateTime( '2012-09-05 15:27 Europe/Berlin' ),
+                    'publishedDate' => new \DateTime( '2012-09-05 15:27 Europe/Berlin' ),
+                    'alwaysAvailable' => true,
+                    'remoteId' => 'abc123',
+                    'mainLanguageCode' => 'eng-US',
+                    'mainLocationId' => 'location23',
+                    'contentType' => new Values\ContentType\ContentType(
+                        array(
+                            'id' => 'contentType23',
+                            'fieldDefinitions' => array(),
+                        )
+                    )
+                )
+            ),
+            new Values\Content\Location(
+                array(
+                    'pathString' => '/1/2/23',
+                    'path' => array( 1, 2, 23 )
+                )
+            ),
             null
         );
     }
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testUserHrefCorrect( \DOMDocument $dom )
@@ -89,6 +97,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testUserIdCorrect( \DOMDocument $dom )
@@ -98,6 +107,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testUserMediaTypeWithoutVersionCorrect( \DOMDocument $dom )
@@ -107,6 +117,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testUserRemoteIdCorrect( \DOMDocument $dom )
@@ -116,6 +127,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testUserTypeHrefCorrect( \DOMDocument $dom )
@@ -125,6 +137,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testUserTypeMediaTypeCorrect( \DOMDocument $dom )
@@ -134,6 +147,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testNameCorrect( \DOMDocument $dom )
@@ -143,6 +157,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testVersionsHrefCorrect( \DOMDocument $dom )
@@ -152,6 +167,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testVersionsMediaTypeCorrect( \DOMDocument $dom )
@@ -161,6 +177,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testSectionHrefCorrect( \DOMDocument $dom )
@@ -170,6 +187,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testSectionMediaTypeCorrect( \DOMDocument $dom )
@@ -179,6 +197,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testMainLocationHrefCorrect( \DOMDocument $dom )
@@ -188,6 +207,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testMainLocationMediaTypeCorrect( \DOMDocument $dom )
@@ -197,6 +217,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testLocationsHrefCorrect( \DOMDocument $dom )
@@ -206,6 +227,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testLocationsMediaTypeCorrect( \DOMDocument $dom )
@@ -215,6 +237,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testOwnerHrefCorrect( \DOMDocument $dom )
@@ -224,6 +247,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testOwnerMediaTypeCorrect( \DOMDocument $dom )
@@ -233,6 +257,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testLastModificationDateCorrect( \DOMDocument $dom )
@@ -242,6 +267,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testMainLanguageCodeCorrect( \DOMDocument $dom )
@@ -251,6 +277,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testAlwaysAvailableCorrect( \DOMDocument $dom )
@@ -260,6 +287,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testUserGroupsHrefCorrect( \DOMDocument $dom )
@@ -269,6 +297,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testUserGroupsMediaTypeCorrect( \DOMDocument $dom )
@@ -278,6 +307,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testRolesHrefCorrect( \DOMDocument $dom )
@@ -287,6 +317,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitWithoutEmbeddedVersion
      */
     public function testRolesMediaTypeCorrect( \DOMDocument $dom )

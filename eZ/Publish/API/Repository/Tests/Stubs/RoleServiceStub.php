@@ -9,28 +9,28 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\RoleService;
-use \eZ\Publish\API\Repository\Values\Content\Content;
-use \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
-use \eZ\Publish\API\Repository\Values\User\Policy;
-use \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
-use \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
-use \eZ\Publish\API\Repository\Values\User\Role;
-use \eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
-use \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
-use \eZ\Publish\API\Repository\Values\User\User;
-use \eZ\Publish\API\Repository\Values\User\UserGroup;
+use eZ\Publish\API\Repository\RoleService;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
+use eZ\Publish\API\Repository\Values\User\Policy;
+use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
+use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\Role;
+use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
+use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\UserGroup;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyCreateStructStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyUpdateStructStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleCreateStructStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserRoleAssignmentStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupRoleAssignmentStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyCreateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyUpdateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleCreateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserRoleAssignmentStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupRoleAssignmentStub;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\RoleService}
@@ -41,7 +41,7 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupRoleAssignmentSt
 class RoleServiceStub implements RoleService
 {
     /**
-     * @var integer
+     * @var int
      */
     private $nextRoleId = 0;
 
@@ -63,12 +63,12 @@ class RoleServiceStub implements RoleService
     private $policies = array();
 
     /**
-     * @var integer
+     * @var int
      */
     private $policyNextId = 0;
 
     /**
-     * @var integer
+     * @var int
      */
     private $limitationId = 10000;
 
@@ -83,12 +83,12 @@ class RoleServiceStub implements RoleService
     private $userService;
 
     /**
-     * @var integer[integer[]]
+     * @var int[integer[]]
      */
     private $content2roles;
 
     /**
-     * @var integer[]
+     * @var int[]
      */
     private $role2policy;
 
@@ -188,7 +188,7 @@ class RoleServiceStub implements RoleService
     }
 
     /**
-     * adds a new policy to the role
+     * Adds a new policy to the role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to add  a policy
      *
@@ -326,7 +326,7 @@ class RoleServiceStub implements RoleService
     }
 
     /**
-     * loads a role for the given id
+     * Loads a role for the given id
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
@@ -349,7 +349,7 @@ class RoleServiceStub implements RoleService
     }
 
     /**
-     * loads a role for the given name
+     * Loads a role for the given name
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
@@ -372,11 +372,11 @@ class RoleServiceStub implements RoleService
     }
 
     /**
-     * loads all roles
+     * Loads all roles
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the roles
      *
-     * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\Role}
+     * @return \eZ\Publish\API\Repository\Values\User\Role[]
      */
     public function loadRoles()
     {
@@ -388,7 +388,7 @@ class RoleServiceStub implements RoleService
     }
 
     /**
-     * deletes the given role
+     * Deletes the given role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete this role
      *
@@ -409,13 +409,13 @@ class RoleServiceStub implements RoleService
     }
 
     /**
-     * loads all policies from roles which are assigned to a user or to user groups to which the user belongs
+     * Loads all policies from roles which are assigned to a user or to user groups to which the user belongs
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
      *
      * @param mixed $userId
      *
-     * @return array an array of {@link Policy}
+     * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
     public function loadPoliciesByUserId( $userId )
     {
@@ -489,7 +489,7 @@ class RoleServiceStub implements RoleService
     }
 
     /**
-     * assigns a role to the given user group
+     * Assigns a role to the given user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
      *
@@ -525,7 +525,7 @@ class RoleServiceStub implements RoleService
     }
 
     /**
-     * assigns a role to the given user
+     * Assigns a role to the given user
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
      *
@@ -563,13 +563,13 @@ class RoleServiceStub implements RoleService
     }
 
     /**
-     * returns the assigned user and user groups to this role
+     * Returns the assigned user and user groups to this role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a role
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[] an array of {@link RoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[]
      */
     public function getRoleAssignments( Role $role )
     {
@@ -610,14 +610,14 @@ class RoleServiceStub implements RoleService
     }
 
     /**
-     * returns the roles assigned to the given user
+     * Returns the roles assigned to the given user
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param boolean $inherited
      *
-     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment[] an array of {@link UserRoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment[]
      */
     public function getRoleAssignmentsForUser( User $user, $inherited = false )
     {
@@ -626,7 +626,7 @@ class RoleServiceStub implements RoleService
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
-        $roleAssignments =  $this->getRoleAssignmentsForContent( $user );
+        $roleAssignments = $this->getRoleAssignmentsForContent( $user );
 
         if ( $inherited )
         {
@@ -640,17 +640,17 @@ class RoleServiceStub implements RoleService
             }
         }
 
-        return  $roleAssignments;
+        return $roleAssignments;
     }
 
     /**
-     * returns the roles assigned to the given user group
+     * Returns the roles assigned to the given user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user group
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment[] an array of {@link UserGroupRoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment[]
      */
     public function getRoleAssignmentsForUserGroup( UserGroup $userGroup )
     {
@@ -662,7 +662,7 @@ class RoleServiceStub implements RoleService
     }
 
     /**
-     * instanciates a role create class
+     * Instantiates a role create class
      *
      * @param string $name
      *
@@ -674,7 +674,7 @@ class RoleServiceStub implements RoleService
     }
 
     /**
-     * instanciates a policy create class
+     * Instantiates a policy create class
      *
      * @param string $module
      * @param string $function
@@ -687,7 +687,7 @@ class RoleServiceStub implements RoleService
     }
 
     /**
-     * instanciates a policy update class
+     * Instantiates a policy update class
      *
      * @return \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
      */
@@ -697,7 +697,7 @@ class RoleServiceStub implements RoleService
     }
 
     /**
-     * instanciates a policy update class
+     * Instantiates a policy update class
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct
      */
@@ -741,13 +741,13 @@ class RoleServiceStub implements RoleService
     }
 
     /**
-     * returns the roles assigned to the given user group
+     * Returns the roles assigned to the given user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user group
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[] an array of {@link UserGroupRoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[]
      */
     private function getRoleAssignmentsForContent( Content $content )
     {
@@ -767,7 +767,7 @@ class RoleServiceStub implements RoleService
 
             $roleAssignments = array_merge(
                 $roleAssignments,
-                    $this->getRoleAssignmentsForRoleAndContent(
+                $this->getRoleAssignmentsForRoleAndContent(
                     $this->loadRole( $roleId ),
                     $content->id
                 )
@@ -845,7 +845,7 @@ class RoleServiceStub implements RoleService
      * Returns list of role assignments for specific role and content.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param integer $contentId
+     * @param int $contentId
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[]
      */
@@ -924,8 +924,8 @@ class RoleServiceStub implements RoleService
     /**
      * Returns the associated limitation or <b>NULL</b>.
      *
-     * @param integer $roleId
-     * @param integer $contentId
+     * @param int $roleId
+     * @param int $contentId
      * @param string $limitationIdentifier
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation

@@ -43,6 +43,7 @@ class Message extends Translation
      *
      * @param string $message
      * @param array $values
+     *
      * @return void
      */
     public function __construct( $message, array $values = array() )

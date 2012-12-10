@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -48,6 +49,7 @@ class URLWildcardListTest extends ValueObjectVisitorBaseTest
      * Test if result contains UrlWildcardList element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsUrlWildcardListElement( $result )
@@ -66,6 +68,7 @@ class URLWildcardListTest extends ValueObjectVisitorBaseTest
      * Test if result contains UrlWildcardList element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsUrlWildcardListAttributes( $result )

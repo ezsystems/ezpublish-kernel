@@ -8,7 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\FileService;
+
 use eZ\Publish\Core\FieldType\FileService;
+use RuntimeException;
 
 class LocalFileService implements FileService
 {
@@ -49,6 +51,7 @@ class LocalFileService implements FileService
      * Returns the full path for $path
      *
      * @param string $path
+     *
      * @return string
      */
     protected function getFullPath( $path, $allowLocal = false )
@@ -66,6 +69,7 @@ class LocalFileService implements FileService
      *
      * @param string $sourcePath
      * @param string $storageIdentifier
+     *
      * @return string
      */
     public function storeFile( $sourcePath, $storageIdentifier )
@@ -87,7 +91,7 @@ class LocalFileService implements FileService
 
         if ( false === $copyResult )
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not copy "%s" to "%s"',
                     $fullSourcePath,
@@ -100,7 +104,7 @@ class LocalFileService implements FileService
 
         if ( false === $chmodResult )
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not change permissions of "%s" to "%s"',
                     $fullTargetPath,
@@ -122,7 +126,8 @@ class LocalFileService implements FileService
      * existing $storageIdentifier is silently ignored.
      *
      * @param string $storageIdentifier
-     * @param bool $recursive
+     * @param boolean $recursive
+     *
      * @return void
      * @throws \RuntimeException if children of $storageIdentifier exist and
      *                           $recursive is false
@@ -140,7 +145,8 @@ class LocalFileService implements FileService
      * Deletes $path, $recursive or not
      *
      * @param string $path
-     * @param bool $recursive
+     * @param boolean $recursive
+     *
      * @return void
      * @throws RuntimeException if $path is a non-empty directory and
      *                          $recursive is false
@@ -158,7 +164,7 @@ class LocalFileService implements FileService
             {
                 if ( !$recursive )
                 {
-                    throw new \RuntimeException(
+                    throw new RuntimeException(
                         sprintf(
                             'Cannot remove "%s", because directory is not empty.',
                             $path
@@ -171,7 +177,7 @@ class LocalFileService implements FileService
             $rmdirResult = @rmdir( $path );
             if ( false === $rmdirResult )
             {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     sprintf( 'Could not remove directory "%s"', $path )
                 );
             }
@@ -181,7 +187,7 @@ class LocalFileService implements FileService
             $unlinkResult = @unlink( $path );
             if ( false === $unlinkResult )
             {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     sprintf( 'Could not remove file "%s"', $path )
                 );
             }
@@ -196,6 +202,7 @@ class LocalFileService implements FileService
      * encapsulated by the file service.
      *
      * @param string $path
+     *
      * @return string
      */
     public function getStorageIdentifier( $path )
@@ -215,6 +222,7 @@ class LocalFileService implements FileService
      * );
      *
      * @param string $storageIdentifier
+     *
      * @return array
      */
     public function getMetaData( $storageIdentifier )
@@ -233,6 +241,7 @@ class LocalFileService implements FileService
      * Returns the file size of the file identified by $storageIdentifier
      *
      * @param string $storageIdentifier
+     *
      * @return int
      */
     public function getFileSize( $storageIdentifier )
@@ -246,7 +255,8 @@ class LocalFileService implements FileService
      * Returns is a file/directory with the given $storageIdentifier exists
      *
      * @param string $storageIdentifier
-     * @return bool
+     *
+     * @return boolean
      */
     public function exists( $storageIdentifier )
     {
@@ -257,8 +267,10 @@ class LocalFileService implements FileService
      * Creates the given directory recursively
      *
      * @param string $directory
-     * @return void
+     *
      * @throws RuntimeException if the $directory could not be created
+     *
+     * @return void
      */
     protected function createDirectoryRecursive( $directory )
     {
@@ -269,7 +281,7 @@ class LocalFileService implements FileService
 
         if ( $directory === '' )
         {
-            throw new \RuntimeException( "Unable to create empty directory!" );
+            throw new RuntimeException( "Unable to create empty directory!" );
         }
 
         $this->createDirectoryRecursive( dirname( $directory ) );
@@ -278,14 +290,14 @@ class LocalFileService implements FileService
 
         if ( false === $result )
         {
-            throw new  \RuntimeException( "Could not create directory '{$directory}'." );
+            throw new RuntimeException( "Could not create directory '{$directory}'." );
         }
 
         $chmodResult = @chmod( $directory, 0775 );
 
         if ( false === $chmodResult )
         {
-            throw new  \RuntimeException(
+            throw new RuntimeException(
                 "Could not set permissions 0775 on directory '{$directory}'."
             );
         }

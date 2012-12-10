@@ -121,7 +121,7 @@ class ObjectStateUpdateTest extends BaseTest
      */
     protected function getObjectStateServiceMock()
     {
-        $objectStateServiceMock =  $this->getMock(
+        $objectStateServiceMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\ObjectStateService',
             array(),
             array(),

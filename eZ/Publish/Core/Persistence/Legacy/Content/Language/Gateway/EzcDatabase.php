@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway,
-    eZ\Publish\SPI\Persistence\Content\Language,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    ezcQuery;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
+use eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use ezcQuery;
 
 /**
  * ezcDatabase based Language Gateway
@@ -39,6 +40,7 @@ class EzcDatabase extends Gateway
      * Inserts the given $language
      *
      * @param Language $language
+     *
      * @return int ID of the new language
      */
     public function insertLanguage( Language $language )
@@ -74,6 +76,7 @@ class EzcDatabase extends Gateway
      *
      * @param \ezcQuery $query
      * @param \eZ\Publish\SPI\Persistence\Content\Language $language
+     *
      * @return void
      */
     protected function setCommonLanguageColumns( ezcQuery $query, Language $language )
@@ -98,6 +101,7 @@ class EzcDatabase extends Gateway
      * Updates the data of the given $language
      *
      * @param Language $language
+     *
      * @return void
      */
     public function updateLanguage( Language $language )
@@ -121,6 +125,7 @@ class EzcDatabase extends Gateway
      * Loads data for the Language with $id
      *
      * @param int $id
+     *
      * @return string[][]
      */
     public function loadLanguageData( $id )
@@ -143,6 +148,7 @@ class EzcDatabase extends Gateway
      * Loads data for the Language with Language Code (eg: eng-GB)
      *
      * @param string $languageCode
+     *
      * @return string[][]
      */
     public function loadLanguageDataByLanguageCode( $languageCode )
@@ -199,6 +205,7 @@ class EzcDatabase extends Gateway
      * Deletes the language with $id
      *
      * @param int $id
+     *
      * @return void
      */
     public function deleteLanguage( $id )
@@ -221,13 +228,13 @@ class EzcDatabase extends Gateway
      *
      * @param int $id
      *
-     * @return bool
+     * @return boolean
      */
     public function canDeleteLanguage( $id )
     {
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcobj_state" )
         )->where(
@@ -251,7 +258,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcobj_state_group" )
         )->where(
@@ -275,7 +282,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcobj_state_group_language" )
         )->where(
@@ -293,7 +300,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcobj_state_language" )
         )->where(
@@ -311,7 +318,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcontentclass" )
         )->where(
@@ -335,7 +342,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcontentclass_name" )
         )->where(
@@ -353,7 +360,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcontentobject" )
         )->where(
@@ -377,7 +384,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcontentobject_attribute" )
         )->where(
@@ -395,7 +402,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcontentobject_name" )
         )->where(
@@ -413,7 +420,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezcontentobject_version" )
         )->where(
@@ -437,7 +444,7 @@ class EzcDatabase extends Gateway
 
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $query->alias( $query->expr->count( "*" ), "count")
+            $query->alias( $query->expr->count( "*" ), "count" )
         )->from(
             $this->dbHandler->quoteTable( "ezurlalias_ml" )
         )->where(

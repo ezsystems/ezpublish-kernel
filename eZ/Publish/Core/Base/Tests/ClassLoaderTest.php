@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Base\Tests;
-use eZ\Publish\Core\Base\ClassLoader,
-    PHPUnit_Framework_TestCase;
+
+use eZ\Publish\Core\Base\ClassLoader;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Test class

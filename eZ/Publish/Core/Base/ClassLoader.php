@@ -59,10 +59,11 @@ class ClassLoader
     }
 
     /**
-     * Load classes/interfaces following PSR-0 naming and class map
+     * Loads classes/interfaces following PSR-0 naming and class map
      *
      * @param string $className
-     * @param bool $returnFileName For testing, returns file name instead of loading it
+     * @param boolean $returnFileName For testing, returns file name instead of loading it
+     *
      * @return null|boolean|string Null if no match is found, bool if match and found/not found,
      *                             string if $returnFileName is true.
      */
@@ -88,7 +89,8 @@ class ClassLoader
             if ( strpos( $className, $prefix ) !== 0 )
                 continue;
 
-            if ( $pearMode ) // PSR-0 PEAR compatibility mode
+            // PSR-0 PEAR compatibility mode
+            if ( $pearMode )
             {
                 $lastNsPos = strripos( $className, '\\' );
                 $fileName = $path;
@@ -103,7 +105,8 @@ class ClassLoader
                 // Replacing '_' to '/' in className part and append '.php'
                 $fileName .= str_replace( '_', DIRECTORY_SEPARATOR, substr( $className, $lastNsPos + 1 ) ) . '.php';
             }
-            else // PSR-0 NS strict mode
+            // PSR-0 NS strict mode
+            else
             {
                 $fileName = $path .
                     str_replace( '\\', DIRECTORY_SEPARATOR, $className ) .

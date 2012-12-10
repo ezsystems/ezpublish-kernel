@@ -8,12 +8,13 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
-use eZ\Publish\Core\Persistence\Legacy,
-    eZ\Publish\Core\FieldType,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
-    eZ\Publish\SPI\Persistence\User;
+
+use eZ\Publish\Core\Persistence\Legacy;
+use eZ\Publish\Core\FieldType;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
+use eZ\Publish\SPI\Persistence\User;
 
 /**
  * Integration test for legacy storage field types
@@ -107,11 +108,13 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            'externalData' => array(),
-            'sortKey'      => 'user',
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                'externalData' => array(),
+                'sortKey'      => 'user',
+            )
+        );
     }
 
     /**
@@ -151,18 +154,20 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            'externalData' => array(
-                'login'              => 'change', // Change is intended to not get through
-                'email'              => 'change', // Change is intended to not get through
-                'passwordHash'      => 'change', // Change is intended to not get through
-                'passwordHashType' => 'change', // Change is intended to not get through
-                'enabled'         => 'changed', // Change is intended to not get through
-                'maxLogin'          => 'changed', // Change is intended to not get through
-            ),
-            'sortKey'      => 'user',
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                'externalData' => array(
+                    'login'            => 'change', // Change is intended to not get through
+                    'email'            => 'change', // Change is intended to not get through
+                    'passwordHash'     => 'change', // Change is intended to not get through
+                    'passwordHashType' => 'change', // Change is intended to not get through
+                    'enabled'          => 'changed', // Change is intended to not get through
+                    'maxLogin'         => 'changed', // Change is intended to not get through
+                ),
+                'sortKey'      => 'user',
+            )
+        );
     }
 
     /**
@@ -191,6 +196,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      *
      * @param Legacy\Handler $handler
      * @param Content $content
+     *
      * @return void
      */
     public function postCreationHook( Legacy\Handler $handler, Content $content )

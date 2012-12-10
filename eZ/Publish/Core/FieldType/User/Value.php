@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\User;
+
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
@@ -18,7 +19,7 @@ class Value extends BaseValue
     /**
      * Has stored login
      *
-     * @var bool
+     * @var boolean
      */
     public $hasStoredLogin;
 
@@ -60,7 +61,7 @@ class Value extends BaseValue
     /**
      * Is enabled
      *
-     * @var bool
+     * @var boolean
      */
     public $enabled;
 
@@ -76,7 +77,7 @@ class Value extends BaseValue
      */
     public function __toString()
     {
-        return (string) $this->login;
+        return (string)$this->login;
     }
 }
 

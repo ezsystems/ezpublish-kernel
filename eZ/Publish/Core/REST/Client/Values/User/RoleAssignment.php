@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\User;
 
-use \eZ\Publish\API\Repository\Values;
+use eZ\Publish\API\Repository\Values;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\User\RoleAssignment}
@@ -34,7 +34,7 @@ class RoleAssignment extends Values\User\RoleAssignment
     protected $role;
 
     /**
-     * returns the limitation of the user role assignment
+     * Returns the limitation of the user role assignment
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation
      */
@@ -44,7 +44,7 @@ class RoleAssignment extends Values\User\RoleAssignment
     }
 
     /**
-     * returns the role to which the user is assigned to
+     * Returns the role to which the user is assigned to
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */

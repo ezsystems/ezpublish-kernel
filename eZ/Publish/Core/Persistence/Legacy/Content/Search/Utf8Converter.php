@@ -23,6 +23,7 @@ class Utf8Converter
      * Convert character code to UTF-8 character
      *
      * @param int $charCode
+     *
      * @return string
      */
     public static function toUTF8Character( $charCode )
@@ -83,6 +84,7 @@ class Utf8Converter
      * Convert a single UTF-8 character into its decimal code point
      *
      * @param string $char
+     *
      * @return int
      */
     public static function toUnicodeCodepoint( $char )

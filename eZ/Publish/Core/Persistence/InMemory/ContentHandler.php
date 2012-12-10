@@ -8,16 +8,17 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
-use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandlerInterface,
-    eZ\Publish\SPI\Persistence\Content\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    RuntimeException,
-    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+
+use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandlerInterface;
+use eZ\Publish\SPI\Persistence\Content\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use RuntimeException;
+use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Handler
@@ -65,9 +66,9 @@ class ContentHandler implements ContentHandlerInterface
                 'ownerId' => $content->ownerId,
                 'status' => VersionInfo::STATUS_DRAFT,
                 'currentVersionNo' => 1,
-                'name' => isset( $content->name[$mainLanguageCode] )
-                    ? $content->name[$mainLanguageCode]
-                    : null,
+                'name' => isset( $content->name[$mainLanguageCode] ) ?
+                    $content->name[$mainLanguageCode] :
+                    null,
                 // Published and modified timestamps for drafts is 0
                 'modificationDate' => 0,
                 'publicationDate' => 0,
@@ -199,8 +200,9 @@ class ContentHandler implements ContentHandlerInterface
      * @param mixed $contentId
      * @param mixed|null $versionNo Copy all versions if left null
      *
-     * @return \eZ\Publish\SPI\Persistence\Content
      * @todo Language support
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content
      */
     public function copy( $contentId, $versionNo = null )
     {
@@ -358,6 +360,7 @@ class ContentHandler implements ContentHandlerInterface
      * Returns the metadata object for a content identified by $contentId.
      *
      * @param int|string $contentId
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
     public function loadContentInfo( $contentId )
@@ -472,7 +475,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function updateMetadata( $contentId, MetadataUpdateStruct $content )
     {
-        $updateData = (array) $content;
+        $updateData = (array)$content;
         $updateData["alwaysAvailable"] = $updateData["alwaysAvailable"];
         $updateData["mainLanguageCode"] = $this->handler->contentLanguageHandler()
             ->load( $content->mainLanguageId )->languageCode;
@@ -632,7 +635,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function trash( $contentId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        throw new RuntimeException( '@todo: Implement' );
     }
 
     /**
@@ -640,7 +643,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function untrash( $contentId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        throw new RuntimeException( '@todo: Implement' );
     }
 
     /**
@@ -673,7 +676,8 @@ class ContentHandler implements ContentHandlerInterface
      * Creates a relation between $sourceContentId in $sourceContentVersionNo
      * and $destinationContentId with a specific $type.
      *
-     * @param  \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $relation
+     * @param \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $relation
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation
      */
     public function addRelation( RelationCreateStruct $relation )
@@ -706,6 +710,7 @@ class ContentHandler implements ContentHandlerInterface
      * Removes a relation by relation Id.
      *
      * @param mixed $relationId
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if relation to be removed is not found.
      */
     public function removeRelation( $relationId )
@@ -727,6 +732,7 @@ class ContentHandler implements ContentHandlerInterface
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
     public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null )
@@ -818,7 +824,7 @@ class ContentHandler implements ContentHandlerInterface
                 {
                     $contentInfoUpdateData["alwaysAvailable"] = $propertyValue;
                 }
-                elseif ( $propertyName === "mainLanguageId" )
+                else if ( $propertyName === "mainLanguageId" )
                 {
                     $contentInfoUpdateData["mainLanguageCode"] =
                         $this->handler->contentLanguageHandler()->load( $propertyValue )->languageCode;
@@ -850,6 +856,7 @@ class ContentHandler implements ContentHandlerInterface
      * Returns last version number for content identified by $contentId
      *
      * @param int $contentId
+     *
      * @return int
      */
     private function getLastVersionNumber( $contentId )

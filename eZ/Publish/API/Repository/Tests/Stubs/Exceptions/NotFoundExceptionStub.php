@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
 
-use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Exceptions\NotFoundException}

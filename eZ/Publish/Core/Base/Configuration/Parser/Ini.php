@@ -10,11 +10,12 @@
  */
 
 namespace eZ\Publish\Core\Base\Configuration\Parser;
-use eZ\Publish\Core\Base\Configuration,
-    eZ\Publish\Core\Base\Configuration\Parser,
-    ezcConfiguration,
-    ezcConfigurationIniReader,
-    LogicException;
+
+use eZ\Publish\Core\Base\Configuration;
+use eZ\Publish\Core\Base\Configuration\Parser;
+use ezcConfiguration;
+use ezcConfigurationIniReader;
+use LogicException;
 
 /**
  * Configuration Ini Parser / writer
@@ -93,6 +94,7 @@ class Ini implements Parser
      *
      * @param string $fileName A valid file name
      * @param string $fileContent
+     *
      * @return array
      */
     public function parse( $fileName, $fileContent )
@@ -121,6 +123,7 @@ class Ini implements Parser
      * the ini files eZ Publish use because things like regex as ini variable and so on.
      *
      * @param string $fileContent
+     *
      * @return array|false Data structure for parsed ini file or false if it fails
      */
     protected function parseFilePhp( $fileContent )
@@ -168,6 +171,7 @@ class Ini implements Parser
      * @todo Change impl to use exceptions instead of trigger_error
      *
      * @param string $fileContent
+     *
      * @return array Data structure for parsed ini file
      */
     protected function parseFileEzc( $fileContent )
@@ -175,11 +179,15 @@ class Ini implements Parser
         // First some pre processing to normalize result with parse_ini_string result
         $fileContent = str_replace( array( "\r\n", "\r" ), "\n", $fileContent . "\n" );
         $fileContent = preg_replace( array( '/^<\?php[^\/]\/\*\s*/', '/\*\/[^\?]\?>/' ), '', $fileContent );
-        $fileContent = preg_replace_callback ( '/\n\[(\w+):[^\]]+\]\n/' , function( $matches )
-        {
-            // replace ':' in section names as it is not supported by ezcConfigurationIniReader
-            return str_replace( ':', '__EXT__', $matches[0] );
-        }, $fileContent );
+        $fileContent = preg_replace_callback(
+            '/\n\[(\w+):[^\]]+\]\n/',
+            function ( $matches )
+            {
+                // replace ':' in section names as it is not supported by ezcConfigurationIniReader
+                return str_replace( ':', '__EXT__', $matches[0] );
+            },
+            $fileContent
+        );
         $fileContent = $this->parserClearArraySupport( $fileContent );
 
         // Create ini dir if it does not exist
@@ -253,6 +261,7 @@ class Ini implements Parser
      * Injects constants which is later cleaned up in {@link parsePhpPostArrayFilter()}.
      *
      * @param string $fileContent
+     *
      * @return string
      */
     protected function parserPhpDimensionArraySupport( $fileContent )
@@ -321,6 +330,7 @@ class Ini implements Parser
      * Injects constants which is later cleaned up in {@link parsePhpPostArrayFilter()}.
      *
      * @param string $fileContent
+     *
      * @return string
      */
     protected function parserPhpQuoteSupport( $fileContent )
@@ -364,6 +374,7 @@ class Ini implements Parser
      * Marks array clearing, so post parser code in {@link Configuration::parse()} can detect it
      *
      * @param string $fileContent
+     *
      * @return string
      */
     protected function parserClearArraySupport( $fileContent )
@@ -383,6 +394,7 @@ class Ini implements Parser
      * are the same as with ezcConfigurationIniReader.
      *
      * @param mixed $iniValue
+     *
      * @return mixed
      */
     protected static function parsePhpPostFilter( $iniValue )
@@ -420,6 +432,7 @@ class Ini implements Parser
      * Deals specifically with post parse fixes for three dimensional arrays.
      *
      * @param array $array
+     *
      * @return array
      */
     protected static function parsePhpPostArrayFilter( array $array )

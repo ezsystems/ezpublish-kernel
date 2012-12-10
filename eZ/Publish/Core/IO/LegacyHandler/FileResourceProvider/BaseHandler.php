@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\IO\LegacyHandler\FileResourceProvider;
 
-use eZ\Publish\Core\MVC\Legacy\LegacyKernelAware,
-    eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
+use eZ\Publish\Core\MVC\Legacy\LegacyKernelAware;
+use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 
 abstract class BaseHandler implements LegacyKernelAware
 {
@@ -23,6 +23,7 @@ abstract class BaseHandler implements LegacyKernelAware
      * Injects the legacy kernel instance.
      *
      * @param \eZ\Publish\Core\MVC\Legacy\Kernel $legacyKernel
+     *
      * @return void
      */
     public function setLegacyKernel( LegacyKernel $legacyKernel )

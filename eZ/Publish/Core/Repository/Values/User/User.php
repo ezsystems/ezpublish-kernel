@@ -44,7 +44,7 @@ class User extends APIUser
     protected $content;
 
     /**
-     * returns the VersionInfo for this version
+     * Returns the VersionInfo for this version
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
@@ -54,7 +54,7 @@ class User extends APIUser
     }
 
     /**
-     * returns a field value for the given value
+     * Returns a field value for the given value
      * $version->fields[$fieldDefId][$languageCode] is an equivalent call
      * if no language is given on a translatable field this method returns
      * the value of the initial language of the version if present, otherwise null.
@@ -71,7 +71,7 @@ class User extends APIUser
     }
 
     /**
-     * returns the outgoing relations
+     * Returns the outgoing relations
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
@@ -139,7 +139,9 @@ class User extends APIUser
             case 'id':
                 $versionInfo = $this->getVersionInfo();
                 if ( empty( $versionInfo ) )
+                {
                     return null;
+                }
                 return $versionInfo->getContentInfo()->id;
 
             case 'versionInfo':
@@ -160,7 +162,7 @@ class User extends APIUser
      *
      * @param string $property
      *
-     * @return bool
+     * @return boolean
      */
     public function __isset( $property )
     {

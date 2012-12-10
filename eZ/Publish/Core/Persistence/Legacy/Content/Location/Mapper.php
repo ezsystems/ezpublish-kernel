@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location;
-use eZ\Publish\SPI\Persistence\Content\Location,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
+
+use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 
 /**
  * Mapper for Location objects
@@ -56,6 +57,7 @@ class Mapper
      *
      * @param array $rows
      * @param string $prefix
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location[]
      */
     public function createLocationsFromRows( array $rows, $prefix = '' )

@@ -78,11 +78,11 @@ class Exception extends ValueObjectVisitor
     public function __construct( UrlHandler $urlHandler, $debug = false )
     {
         parent::__construct( $urlHandler );
-        $this->debug = (bool) $debug;
+        $this->debug = (bool)$debug;
     }
 
     /**
-     * Return HTTP status code
+     * Returns HTTP status code
      *
      * @return int
      */

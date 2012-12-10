@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot\Signal\ContentService;
+
 use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
@@ -43,7 +44,6 @@ class CopyContentSignal extends Signal
      * @var int
      */
     public $dstVersionNo;
-
 
     /**
      * Destination Parent Location ID

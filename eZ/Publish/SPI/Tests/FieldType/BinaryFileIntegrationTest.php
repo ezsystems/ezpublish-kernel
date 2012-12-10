@@ -8,17 +8,21 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
-use eZ\Publish\Core\Persistence\Legacy,
-    eZ\Publish\Core\FieldType,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
+
+use eZ\Publish\Core\Persistence\Legacy;
+use eZ\Publish\Core\FieldType;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
+use FileSystemIterator;
 
 /**
  * Integration test for legacy storage field types
  *
  * This abstract base test case is supposed to be the base for field type
- * integration tests. It basically calls all involved methods in the field type 
+ * integration tests. It basically calls all involved methods in the field type
  * ``Converter`` and ``Storage`` implementations. Fo get it working implement
  * the abstract methods in a sensible way.
  *
@@ -147,17 +151,19 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            'externalData' => array(
-                'path' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
-                'fileName' => 'Ice-Flower-Binary.jpg',
-                'fileSize' => filesize( $path ),
-                'mimeType' => 'image/jpeg',
-                'downloadCount' => 0,
-            ),
-            'sortKey'      => '',
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                'externalData' => array(
+                    'path' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                    'fileName' => 'Ice-Flower-Binary.jpg',
+                    'fileSize' => filesize( $path ),
+                    'mimeType' => 'image/jpeg',
+                    'downloadCount' => 0,
+                ),
+                'sortKey'      => '',
+            )
+        );
     }
 
     /**
@@ -194,17 +200,19 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            'externalData' => array(
-                'path' => ( $path = __DIR__ . '/_fixtures/image.png' ),
-                'fileName' => 'Blueish-Blue-Binary.jpg',
-                'fileSize' => filesize( $path ),
-                'mimeType' => 'image/png',
-                'downloadCount' => 23,
-            ),
-            'sortKey'      => '',
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                'externalData' => array(
+                    'path' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                    'fileName' => 'Blueish-Blue-Binary.jpg',
+                    'fileSize' => filesize( $path ),
+                    'mimeType' => 'image/png',
+                    'downloadCount' => 23,
+                ),
+                'sortKey'      => '',
+            )
+        );
     }
 
     /**
@@ -245,17 +253,17 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
      * Can be overwritten to assert that additional data has been deleted
      *
      * @param Content $content
+     *
      * @return void
      */
     public function assertDeletedFieldDataCorrect( Content $content )
     {
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator(
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(
                 $this->getTempDir() . '/' . $this->getStorageDir(),
-                \FileSystemIterator::KEY_AS_PATHNAME | \FileSystemIterator::SKIP_DOTS | \ FilesystemIterator::CURRENT_AS_FILEINFO
-
+                FileSystemIterator::KEY_AS_PATHNAME | FileSystemIterator::SKIP_DOTS | FileSystemIterator::CURRENT_AS_FILEINFO
             ),
-            \RecursiveIteratorIterator::CHILD_FIRST
+            RecursiveIteratorIterator::CHILD_FIRST
         );
 
         foreach ( $iterator as $path => $fileInfo )
@@ -325,4 +333,3 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
         );
     }
 }
-

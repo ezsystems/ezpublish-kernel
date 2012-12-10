@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
-use eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger,
-    eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
+use eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger;
+use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
 
 class InstantCachePurger implements GatewayCachePurger
 {
@@ -28,6 +28,7 @@ class InstantCachePurger implements GatewayCachePurger
      * Instantly triggers the cache purge of given $cacheElements.
      *
      * @param mixed $cacheElements
+     *
      * @return mixed
      */
     public function purge( $cacheElements )

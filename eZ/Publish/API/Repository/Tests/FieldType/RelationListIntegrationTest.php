@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\API\Repository,
-    eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue,
-    eZ\Publish\Core\FieldType\RelationList\Type as RelationListType,
-    eZ\Publish\API\Repository\Values\Content\Field;
+
+use eZ\Publish\API\Repository;
+use eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue;
+use eZ\Publish\Core\FieldType\RelationList\Type as RelationListType;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type
@@ -63,8 +64,9 @@ class RelationListFieldTypeIntegrationTest extends BaseIntegrationTest
     /**
      * Get a valid $fieldSettings value
      *
+     * @todo Implement correctly
+     *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getValidFieldSettings()
     {
@@ -78,8 +80,9 @@ class RelationListFieldTypeIntegrationTest extends BaseIntegrationTest
     /**
      * Get a valid $validatorConfiguration
      *
+     * @todo Implement correctly
+     *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getValidValidatorConfiguration()
     {
@@ -89,8 +92,9 @@ class RelationListFieldTypeIntegrationTest extends BaseIntegrationTest
     /**
      * Get $fieldSettings value not accepted by the field type
      *
+     * @todo Implement correctly
+     *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getInvalidFieldSettings()
     {
@@ -100,8 +104,9 @@ class RelationListFieldTypeIntegrationTest extends BaseIntegrationTest
     /**
      * Get $validatorConfiguration not accepted by the field type
      *
+     * @todo Implement correctly
+     *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getInvalidValidatorConfiguration()
     {
@@ -125,6 +130,7 @@ class RelationListFieldTypeIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     public function assertFieldDataLoadedCorrect( Field $field)

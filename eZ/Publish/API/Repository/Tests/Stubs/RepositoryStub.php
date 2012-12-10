@@ -9,14 +9,14 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\Repository;
-use \eZ\Publish\API\Repository\Values\ValueObject;
-use \eZ\Publish\API\Repository\Values\Content\Content;
-use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use \eZ\Publish\API\Repository\Values\Content\Location;
-use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use \eZ\Publish\API\Repository\Values\User\User;
-use \eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\Limitation;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Repository}
@@ -32,7 +32,7 @@ class RepositoryStub implements Repository
     private $fixtureDir;
 
     /**
-     * @var integer
+     * @var int
      */
     private $version;
 
@@ -107,12 +107,12 @@ class RepositoryStub implements Repository
     private $fieldTypeService;
 
     /**
-     * @var integer
+     * @var int
      */
     private $transactionDepth = 0;
 
     /**
-     * @var integer
+     * @var int
      */
     private $permissionChecks = 0;
 
@@ -120,7 +120,7 @@ class RepositoryStub implements Repository
      * Instantiates the stubbed repository.
      *
      * @param string $fixtureDir
-     * @param integer $version
+     * @param int $version
      */
     public function __construct( $fixtureDir, $version )
     {
@@ -142,6 +142,7 @@ class RepositoryStub implements Repository
      * Sets the current user to the user with the given user id
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
      * @return void
      */
     public function setCurrentUser( User $user )
@@ -150,11 +151,10 @@ class RepositoryStub implements Repository
     }
 
     /**
-     *
-     *
      * @param string $module
      * @param string $function
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
      * @return boolean|\eZ\Publish\API\Repository\Values\User\Limitation[] if limitations are on this function an array of limitations is returned
      */
     public function hasAccess( $module, $function, User $user = null )
@@ -273,7 +273,7 @@ class RepositoryStub implements Repository
         {
             --$this->permissionChecks;
             return true;
-         }
+        }
 
         foreach ( $permissionSets as $permissionSet )
         {
@@ -428,7 +428,7 @@ class RepositoryStub implements Repository
      */
     public function getSearchService()
     {
-        throw new \RuntimeException( '@TODO: Implememt.' );
+        throw new \RuntimeException( '@todo: Implememt.' );
     }
 
     /**
@@ -657,6 +657,7 @@ class RepositoryStub implements Repository
      * Creates a \DateTime object for $timestamp in the current time zone
      *
      * @param int $timestamp
+     *
      * @return \DateTime
      */
     public function createDateTime( $timestamp = null )

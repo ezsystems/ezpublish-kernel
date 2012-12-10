@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Checkbox;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * Checkbox field type.
@@ -19,7 +20,7 @@ use eZ\Publish\Core\FieldType\FieldType,
 class Type extends FieldType
 {
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -97,7 +98,7 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
-        return (int) $value->bool;
+        return (int)$value->bool;
     }
 
     /**
@@ -127,7 +128,7 @@ class Type extends FieldType
     /**
      * Returns whether the field type is searchable
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {
@@ -138,10 +139,11 @@ class Type extends FieldType
      * Get index data for field data for search backend
      *
      * @param mixed $value
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
      */
     public function getIndexData( $value )
     {
-        throw new \RuntimeException( '@TODO: Implement' );
+        throw new \RuntimeException( '@todo: Implement' );
     }
 }

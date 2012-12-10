@@ -39,8 +39,10 @@ class Location extends Parser
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     *
      * @todo Error handling
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
@@ -50,13 +52,13 @@ class Location extends Parser
             array(
                 'contentInfo' => $content instanceof APIContent ? $content->getVersionInfo()->getContentInfo() : null,
                 'id' => $data['_href'],
-                'priority' => (int) $data['priority'],
+                'priority' => (int)$data['priority'],
                 'hidden' => $data['hidden'] === 'true' ? true : false,
                 'invisible' => $data['invisible'] === 'true' ? true : false,
                 'remoteId' => $data['remoteId'],
                 'parentLocationId' => $data['ParentLocation']['_href'],
                 'pathString' => $data['pathString'],
-                'depth' => (int) $data['depth'],
+                'depth' => (int)$data['depth'],
                 'sortField' => $this->parserTools->parseDefaultSortField( $data['sortField'] ),
                 'sortOrder' => $this->parserTools->parseDefaultSortOrder( $data['sortOrder'] ),
             )

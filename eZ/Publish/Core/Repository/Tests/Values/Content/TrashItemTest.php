@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Values\Content;
-use eZ\Publish\Core\Repository\Values\Content\TrashItem,
-    PHPUnit_Framework_TestCase;
+
+use eZ\Publish\Core\Repository\Values\Content\TrashItem;
+use PHPUnit_Framework_TestCase;
 
 /**
  *

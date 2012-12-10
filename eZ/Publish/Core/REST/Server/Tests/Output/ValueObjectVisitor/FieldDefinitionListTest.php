@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Values\FieldDefinitionList;
 
@@ -54,11 +55,13 @@ class FieldDefinitionListTest extends ValueObjectVisitorBaseTest
     protected function getBasicFieldDefinitionList()
     {
         return new Server\Values\FieldDefinitionList(
-            new Values\ContentType\ContentType( array(
-                'id' => 'contentTypeId',
-                'status' => Values\ContentType\ContentType::STATUS_DEFINED,
-                'fieldDefinitions' => array(),
-            ) ),
+            new Values\ContentType\ContentType(
+                array(
+                    'id' => 'contentTypeId',
+                    'status' => Values\ContentType\ContentType::STATUS_DEFINED,
+                    'fieldDefinitions' => array(),
+                )
+            ),
             array(
                 new Values\ContentType\FieldDefinition(
                     array( 'id' => 'fieldDefinitionId_1' )
@@ -85,6 +88,7 @@ class FieldDefinitionListTest extends ValueObjectVisitorBaseTest
     /**
      * @param string $xpath
      * @param \DOMDocument $dom
+     *
      * @depends testVisitFieldDefinitionList
      * @dataProvider provideXpathAssertions
      */

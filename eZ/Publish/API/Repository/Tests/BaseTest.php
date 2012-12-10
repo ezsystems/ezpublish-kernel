@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase;
 
-use \eZ\Publish\API\Repository\Values\ValueObject;
-use \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
-use \eZ\Publish\Core\REST\Client\Sessionable;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
+use eZ\Publish\Core\REST\Client\Sessionable;
 
 /**
  * Base class for api specific tests.
@@ -59,7 +59,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped(
                 'Cannot create a repository with predefined user. ' .
                 'Check the UserService or RoleService implementation. ' .
-                 PHP_EOL . PHP_EOL.
+                PHP_EOL . PHP_EOL .
                 'Exception: ' . $e
             );
         }
@@ -94,6 +94,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @param string $type
      * @param mixed $rawId
+     *
      * @return mixed
      */
     protected function generateId( $type, $rawId )
@@ -106,6 +107,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @param string $type
      * @param mixed $id
+     *
      * @return mixed
      */
     protected function parseId( $type, $id )
@@ -117,6 +119,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * Returns a config setting provided by the setup factory
      *
      * @param string $configKey
+     *
      * @return mixed
      */
     protected function getConfigValue( $configKey )
@@ -181,6 +184,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @param mixed[] $expectedValues
      * @param \eZ\Publish\API\Repository\Values\ValueObject $actualObject
+     *
      * @return void
      */
     protected function assertPropertiesCorrect( array $expectedValues, ValueObject $actualObject )
@@ -201,6 +205,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @param \eZ\Publish\API\Repository\Values\ValueObject $expectedValues
      * @param \eZ\Publish\API\Repository\Values\ValueObject $actualObject
      * @param array $propertyNames
+     *
      * @return void
      */
     protected function assertStructPropertiesCorrect( ValueObject $expectedValues, ValueObject $actualObject, array $additionalProperties = array() )
@@ -311,7 +316,6 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             )
         );
 
-
         // Instantiate a create struct with mandatory properties
         $userCreate = $userService->newUserCreateStruct(
             'user',
@@ -338,6 +342,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * Creates a \DateTime object for $timestamp in the current time zone
      *
      * @param int $timestamp
+     *
      * @return \DateTime
      */
     public function createDateTime( $timestamp = null )

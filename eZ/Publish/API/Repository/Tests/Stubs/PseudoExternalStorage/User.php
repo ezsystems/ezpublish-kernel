@@ -8,14 +8,15 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage;
-use \eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\FieldStub;
-use \eZ\Publish\API\Repository\Values\Content\Field;
-use \eZ\Publish\API\Repository\Values\Content\Content;
-use \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-use \eZ\Publish\Core\FieldType\User\Value;
+use eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage;
+
+use eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\FieldStub;
+use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\FieldType\User\Value;
 
 /**
  * Handles external storage of the "user" field type.
@@ -120,6 +121,7 @@ class User extends PseudoExternalStorage
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
      * @return void
      */
     public function handleCreate( FieldDefinition $fieldDefinition, Field $field, Content $content )
@@ -133,6 +135,7 @@ class User extends PseudoExternalStorage
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
      * @return void
      */
     public function handleUpdate( FieldDefinition $fieldDefinition, Field $field, Content $content )
@@ -162,6 +165,7 @@ class User extends PseudoExternalStorage
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
      * @return void
      */
     public function handleLoad( FieldDefinition $fieldDefinition, Field $field, Content $content )
@@ -177,7 +181,6 @@ class User extends PseudoExternalStorage
             return;
         }
 
-
         $value = $this->joinUserData(
             $this->fieldData[$content->id],
             $userData[$content->id]
@@ -191,6 +194,7 @@ class User extends PseudoExternalStorage
      *
      * @param array $data
      * @param array $userData
+     *
      * @return array
      */
     protected function joinUserData( $data, $userData )

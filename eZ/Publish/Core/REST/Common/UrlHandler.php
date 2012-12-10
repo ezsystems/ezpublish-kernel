@@ -19,6 +19,7 @@ interface UrlHandler
      *
      * @param string $type
      * @param string $url
+     *
      * @return array
      */
     public function parse( $type, $url );
@@ -28,6 +29,7 @@ interface UrlHandler
      *
      * @param string $type
      * @param array $values
+     *
      * @return string
      */
     public function generate( $type, array $values = array() );

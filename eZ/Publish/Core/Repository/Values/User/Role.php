@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\Values\User;
+
 use eZ\Publish\API\Repository\Values\User\Role as APIRole;
 
 /**
@@ -25,7 +26,7 @@ class Role extends APIRole
     protected $policies = array();
 
     /**
-     * returns the list of policies of this role
+     * Returns the list of policies of this role
      * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
     public function getPolicies()

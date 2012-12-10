@@ -19,7 +19,7 @@ namespace eZ\Publish\API\Repository;
 interface FieldType
 {
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -29,6 +29,7 @@ interface FieldType
      * Returns a human readable string representation from the given $value
      *
      * @param mixed $value
+     *
      * @return string
      */
     public function getName( $value );
@@ -98,7 +99,7 @@ interface FieldType
     /**
      * Indicates if the field type supports indexing and sort keys for searching
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable();
 
@@ -115,6 +116,7 @@ interface FieldType
      * This is the reverse operation to {@link toHash()}.
      *
      * @param mixed $hash
+     *
      * @return mixed
      */
     public function fromHash( $hash );
@@ -132,6 +134,7 @@ interface FieldType
      * Converts the given $fieldSettings to a simple hash format
      *
      * @param mixed $fieldSettings
+     *
      * @return array|hash|scalar|null
      */
     public function fieldSettingsToHash( $fieldSettings );
@@ -142,6 +145,7 @@ interface FieldType
      * This is the reverse operation of {@link fieldSettingsToHash()}.
      *
      * @param array|hash|scalar|null $fieldSettingsHash
+     *
      * @return mixed
      */
     public function fieldSettingsFromHash( $fieldSettingsHash );
@@ -150,6 +154,7 @@ interface FieldType
      * Converts the given $validatorConfiguration to a simple hash format
      *
      * @param mixed $validatorConfiguration
+     *
      * @return array|hash|scalar|null
      */
     public function validatorConfigurationToHash( $validatorConfiguration );
@@ -159,6 +164,7 @@ interface FieldType
      * configuration of the type
      *
      * @param array|hash|scalar|null $validatorConfigurationHash
+     *
      * @return mixed
      */
     public function validatorConfigurationFromHash( $validatorConfigurationHash );

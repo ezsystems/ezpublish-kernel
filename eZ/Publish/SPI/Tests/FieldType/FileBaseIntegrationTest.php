@@ -1,14 +1,18 @@
 <?php
 
 namespace eZ\Publish\SPI\Tests\FieldType;
+
 use eZ\Publish\Core\FieldType;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
+use FileSystemIterator;
 
 abstract class FileBaseIntegrationTest extends BaseIntegrationTest
 {
     /**
      * If the temporary directory should be removed after the tests.
      *
-     * @var bool
+     * @var boolean
      */
     protected static $removeTmpDir = false;
 
@@ -95,23 +99,23 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
      * Removes the given directory path recursively
      *
      * @param string $dir
+     *
      * @return void
      */
     protected static function removeRecursive( $dir )
     {
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator(
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(
                 $dir,
-                \FileSystemIterator::KEY_AS_PATHNAME | \FileSystemIterator::SKIP_DOTS | \ FilesystemIterator::CURRENT_AS_FILEINFO
-
+                FileSystemIterator::KEY_AS_PATHNAME | FileSystemIterator::SKIP_DOTS | FileSystemIterator::CURRENT_AS_FILEINFO
             ),
-            \RecursiveIteratorIterator::CHILD_FIRST
+            RecursiveIteratorIterator::CHILD_FIRST
         );
 
         foreach ( $iterator as $path => $fileInfo )
         {
             if ( $fileInfo->isDir() )
-            {;
+            {
                 rmdir( $path );
             }
             else

@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\FieldValue;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 /**
  * Test case for Content Handler
@@ -48,8 +49,9 @@ class StorageHandlerTest extends TestCase
     protected $versionInfoMock;
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler::storeFieldData
+     *
+     * @return void
      */
     public function testStoreFieldData()
     {
@@ -78,8 +80,9 @@ class StorageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler::getFieldData
+     *
+     * @return void
      */
     public function testGetFieldDataAvailable()
     {
@@ -111,8 +114,9 @@ class StorageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler::getFieldData
+     *
+     * @return void
      */
     public function testGetFieldDataNotAvailable()
     {
@@ -139,8 +143,9 @@ class StorageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler::deleteFieldData
+     *
+     * @return void
      */
     public function testDeleteFieldData()
     {

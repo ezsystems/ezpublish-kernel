@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandler;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search;
 
 /**
  * Test case for LocationHandlerTest
@@ -21,6 +22,7 @@ class TransformationProcessorPcreCompilerTest extends TestCase
      *
      * @param array $transformations
      * @param string $string
+     *
      * @return string
      */
     protected function applyTransformations( array $transformations, $string )

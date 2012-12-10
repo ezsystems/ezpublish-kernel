@@ -46,7 +46,7 @@ class ParsingDispatcher
     }
 
     /**
-     * Add another parser for the given Content Type
+     * Adds another parser for the given Content Type
      *
      * @param string $contentType
      * @param \eZ\Publish\Core\REST\Common\Input\Parser $parser
@@ -61,6 +61,7 @@ class ParsingDispatcher
      *
      * @param array $data
      * @param string $mediaType
+     *
      * @return \eZ\Publish\API\Repository\Values\ValueObject
      */
     public function parse( array $data, $mediaType )

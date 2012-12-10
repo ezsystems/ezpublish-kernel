@@ -39,13 +39,11 @@ abstract class HttpBasedPurgeClientTest extends PHPUnit_Framework_TestCase
         $this->httpBrowser = $this
             ->getMockBuilder( 'Buzz\\Browser' )
             ->setConstructorArgs( array( $this->httpClient ) )
-            ->getMock()
-        ;
+            ->getMock();
         $this->httpBrowser
             ->expects( $this->any() )
             ->method( 'getClient' )
-            ->will( $this->returnValue( $this->httpClient ) )
-        ;
+            ->will( $this->returnValue( $this->httpClient ) );
 
         $this->configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
     }

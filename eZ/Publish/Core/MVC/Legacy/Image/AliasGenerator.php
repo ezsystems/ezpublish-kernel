@@ -9,15 +9,15 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\Image;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface,
-    eZ\Publish\SPI\Variation\VariationHandler,
-    eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\API\Repository\Values\Content\VersionInfo,
-    eZ\Publish\SPI\Variation\Values\ImageVariation,
-    eZ\Publish\API\Repository\Exceptions\InvalidVariationException,
-    eZContentObjectAttribute,
-    eZImageAliasHandler,
-    Closure;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\SPI\Variation\VariationHandler;
+use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\SPI\Variation\Values\ImageVariation;
+use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
+use eZContentObjectAttribute;
+use eZImageAliasHandler;
+use Closure;
 
 class AliasGenerator implements VariationHandler
 {
@@ -63,6 +63,7 @@ class AliasGenerator implements VariationHandler
      * @param array $parameters
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidVariationException
+     *
      * @return \eZ\Publish\SPI\Variation\Values\ImageVariation
      */
     public function getVariation( Field $field, VersionInfo $versionInfo, $variationName, array $parameters = array() )
@@ -94,15 +95,15 @@ class AliasGenerator implements VariationHandler
 
                 $allVariations[$variationIdentifier] = new ImageVariation(
                     array(
-                         'name'         => $variationName,
-                         'fileName'     => $aliasArray['filename'],
-                         'dirPath'      => $aliasArray['dirpath'],
-                         'fileSize'     => isset( $aliasArray['filesize'] ) ? $aliasArray['filesize'] : 0,
-                         'mimeType'     => $aliasArray['mime_type'],
-                         'lastModified' => new \DateTime( '@' . $aliasArray['timestamp'] ),
-                         'uri'          => $aliasArray['url'],
-                         'width'        => $aliasArray['width'],
-                         'height'       => $aliasArray['height'],
+                        'name'         => $variationName,
+                        'fileName'     => $aliasArray['filename'],
+                        'dirPath'      => $aliasArray['dirpath'],
+                        'fileSize'     => isset( $aliasArray['filesize'] ) ? $aliasArray['filesize'] : 0,
+                        'mimeType'     => $aliasArray['mime_type'],
+                        'lastModified' => new \DateTime( '@' . $aliasArray['timestamp'] ),
+                        'uri'          => $aliasArray['url'],
+                        'width'        => $aliasArray['width'],
+                        'height'       => $aliasArray['height'],
                     )
                 );
 

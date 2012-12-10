@@ -9,10 +9,10 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Routing;
 
-use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter as BaseUrlAliasRouter,
-    Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\Routing\Exception\ResourceNotFoundException,
-    Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter as BaseUrlAliasRouter;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class UrlAliasRouter extends BaseUrlAliasRouter
 {

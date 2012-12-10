@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
-use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface,
-    eZ\Publish\Core\MVC\Symfony\Cache\Http\RequestAwarePurger,
-    Symfony\Component\HttpFoundation\Request;
+use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
+use eZ\Publish\Core\MVC\Symfony\Cache\Http\RequestAwarePurger;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * LocalPurgeClient emulates an Http PURGE request received by the cache store.
@@ -33,6 +33,7 @@ class LocalPurgeClient implements PurgeClientInterface
      * Triggers the cache purge $cacheElements.
      *
      * @param mixed $locationIds Cache resource(s) to purge (e.g. array of URI to purge in a reverse proxy)
+     *
      * @return void
      */
     public function purge( $locationIds )

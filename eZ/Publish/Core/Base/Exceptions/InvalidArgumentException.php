@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Base\Exceptions;
-use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException as APIInvalidArgumentException,
-    Exception;
+
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException as APIInvalidArgumentException;
+use Exception;
 
 /**
  * Invalid Argument Type Exception implementation

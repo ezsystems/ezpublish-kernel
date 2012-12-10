@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Base\Tests;
-use eZ\Publish\Core\Base\Configuration,
-    PHPUnit_Framework_TestCase;
+
+use eZ\Publish\Core\Base\Configuration;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Test class
@@ -17,12 +18,12 @@ use eZ\Publish\Core\Base\Configuration,
 class ConfigurationTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\Base\Configuration $configuration
+     * @var \eZ\Publish\Core\Base\Configuration
      */
     protected $configuration;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject $parserMock
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $parserMock;
 

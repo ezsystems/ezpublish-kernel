@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications,
-    eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
+
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * A criterion that matches content based on its ContentType id
@@ -26,7 +27,7 @@ class ContentTypeId extends Criterion implements CriterionInterface
      *
      * Content will be matched if it matches one of the contentTypeId in $value
      *
-     * @param integer|integer[] $value One or more content Id that must be matched
+     * @param int|int[] $value One or more content Id that must be matched
      *
      * @throws \InvalidArgumentException if a non numeric id is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator

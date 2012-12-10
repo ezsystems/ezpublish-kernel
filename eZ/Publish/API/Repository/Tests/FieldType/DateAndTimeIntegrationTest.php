@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\DateAndTime\Value as DateAndTimeValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+
+use eZ\Publish\Core\FieldType\DateAndTime\Value as DateAndTimeValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type
@@ -129,6 +130,7 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     public function assertFieldDataLoadedCorrect( Field $field)
@@ -241,7 +243,9 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
      *
      * @param mixed $failingValue
      * @param string $expectedException
+     *
      * @dataProvider provideInvalidUpdateFieldData
+     *
      * @return void
      */
     public function testUpdateContentFails( $failingValue, $expectedException )

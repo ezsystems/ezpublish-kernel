@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper,
-    eZ\Publish\SPI\Persistence\Content\Search\Field,
-    eZ\Publish\SPI\Persistence\Content\Search\FieldType;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
+use eZ\Publish\SPI\Persistence\Content\Search\Field;
+use eZ\Publish\SPI\Persistence\Content\Search\FieldType;
 
 /**
  * Maps raw document field values to something Solr can index.
@@ -22,6 +22,7 @@ class PriceMapper extends FieldValueMapper
      * Check if field can be mapped
      *
      * @param Field $field
+     *
      * @return void
      */
     public function canMap( Field $field )
@@ -33,11 +34,12 @@ class PriceMapper extends FieldValueMapper
      * Map field value to a proper Solr representation
      *
      * @param Field $field
+     *
      * @return void
      */
     public function map( Field $field )
     {
-        return (double) $field->value;
+        return (double)$field->value;
     }
 }
 

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
+
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
@@ -64,7 +65,7 @@ class Section extends RestController
     }
 
     /**
-     * Load section by identifier
+     * Loads section by identifier
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
@@ -166,6 +167,7 @@ class Section extends RestController
      * Needed since both structs are encoded into the same media type on input.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct $createStruct
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
      */
     protected function mapToUpdateStruct( SectionCreateStruct $createStruct )

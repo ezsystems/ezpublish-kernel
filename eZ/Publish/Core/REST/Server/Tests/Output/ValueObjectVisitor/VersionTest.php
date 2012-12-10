@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -109,6 +110,7 @@ class VersionTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsVersionChildren( $result )
@@ -129,6 +131,7 @@ class VersionTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultVersionAttributes( $result )
@@ -149,6 +152,7 @@ class VersionTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsFieldsChildren( $result )

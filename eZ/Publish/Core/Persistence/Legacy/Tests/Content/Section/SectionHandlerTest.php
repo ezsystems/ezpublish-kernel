@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Section;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\SPI\Persistence\Content\Section,
-    eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\SPI\Persistence\Content\Section;
+use eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler;
 
 /**
  * Test case for Section Handler
@@ -32,8 +33,9 @@ class SectionHandlerTest extends TestCase
     protected $gatewayMock;
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::create
+     *
+     * @return void
      */
     public function testCreate()
     {
@@ -62,8 +64,9 @@ class SectionHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::update
+     *
+     * @return void
      */
     public function testUpdate()
     {
@@ -222,8 +225,9 @@ class SectionHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::delete
+     *
+     * @return void
      */
     public function testDelete()
     {
@@ -268,8 +272,9 @@ class SectionHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::assign
+     *
+     * @return void
      */
     public function testAssign()
     {

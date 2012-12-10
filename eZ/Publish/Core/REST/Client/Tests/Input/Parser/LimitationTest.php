@@ -50,6 +50,7 @@ class LimitationTest extends BaseTest
      * Tests that the resulting policy is in fact an instance of Limitation class
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $result
+     *
      * @depends testParse
      */
     public function testResultIsLimitation( $result )
@@ -64,6 +65,7 @@ class LimitationTest extends BaseTest
      * Tests that the resulting policy contains the identifier
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $result
+     *
      * @depends testParse
      */
     public function testResultContainsIdentifier( $result )
@@ -78,6 +80,7 @@ class LimitationTest extends BaseTest
      * Tests that the resulting policy contains limitation values
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $result
+     *
      * @depends testParse
      */
     public function testResultContainsLimitationValues( $result )

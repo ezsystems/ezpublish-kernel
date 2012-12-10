@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
+
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Exceptions;
@@ -827,6 +828,7 @@ class User extends RestController
      * Extracts and returns an item id from a path, e.g. /1/2/58 => 58
      *
      * @param string $path
+     *
      * @return mixed
      */
     private function extractLocationIdFromPath( $path )
