@@ -547,12 +547,12 @@ abstract class ContentBase extends BaseServiceTest
      * @dataProvider testLoadContentByRemoteIdArgumentsProvider
      *
      * @param string $remoteId
-     * @param array $languages
+     * @param array|null $languages
      * @param int $versionNo
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function testLoadContentByRemoteId( $remoteId, array $languages, $versionNo )
+    public function testLoadContentByRemoteId( $remoteId, $languages, $versionNo )
     {
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
