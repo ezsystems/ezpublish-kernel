@@ -23,7 +23,7 @@ Upload
 --FILE--
 <?php
 
-chdir( '../../../../../../../' );
+chdir( __DIR__ . '/../../../../../../../' );
 
 require_once 'bootstrap.php';
 require_once 'PHPUnit/Autoload.php';
