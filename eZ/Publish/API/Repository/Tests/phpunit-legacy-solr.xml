@@ -24,6 +24,7 @@
             <file>SearchServiceTest.php</file>
             <file>SearchServiceAuthorizationTest.php</file>
             <file>LimitationTest.php</file>
+            <directory>Values/User/Limitation</directory>
         </testsuite>
     </testsuites>
     <filter>

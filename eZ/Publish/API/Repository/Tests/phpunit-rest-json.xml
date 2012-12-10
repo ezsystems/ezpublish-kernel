@@ -35,6 +35,7 @@
             <file>URLWildcardServiceAuthorizationTest.php</file>
             <file>ObjectStateServiceAuthorizationTest.php</file>
             <file>LimitationTest.php</file>
+            <directory>Values/User/Limitation</directory>
             <directory>FieldType/</directory>
         </testsuite>
     </testsuites>
