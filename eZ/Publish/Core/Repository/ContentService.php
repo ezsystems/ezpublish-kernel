@@ -1317,8 +1317,8 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        if ( !$this->repository->canUser( 'content', 'remove', $versionInfo ) )
-            throw new UnauthorizedException( 'content', 'remove' );
+        if ( !$this->repository->canUser( 'content', 'versionremove', $versionInfo ) )
+            throw new UnauthorizedException( 'content', 'versionremove' );
 
         $this->repository->beginTransaction();
         try
