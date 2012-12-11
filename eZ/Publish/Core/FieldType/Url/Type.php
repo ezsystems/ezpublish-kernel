@@ -42,7 +42,12 @@ class Type extends FieldType
      */
     public function getName( $value )
     {
-        throw new \RuntimeException( 'Implement this method' );
+        if ( $value === null )
+        {
+            return '';
+        }
+        $value = $this->acceptValue( $value );
+        return (string)$value->text;
     }
 
     /**

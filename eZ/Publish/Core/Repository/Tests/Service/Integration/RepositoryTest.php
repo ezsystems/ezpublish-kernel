@@ -27,33 +27,6 @@ abstract class RepositoryTest extends BaseServiceTest
 
     /**
      * Test repository method
-     * @covers \eZ\Publish\API\Repository\Repository::beginTransaction
-     */
-    public function testBeginTransaction()
-    {
-        self::markTestIncomplete( "Not implemented: " . __METHOD__ );
-    }
-
-    /**
-     * Test repository method
-     * @covers \eZ\Publish\API\Repository\Repository::commit
-     */
-    public function testCommit()
-    {
-        self::markTestIncomplete( "Not implemented: " . __METHOD__ );
-    }
-
-    /**
-     * Test repository method
-     * @covers \eZ\Publish\API\Repository\Repository::rollback
-     */
-    public function testRollback()
-    {
-        self::markTestIncomplete( "Not implemented: " . __METHOD__ );
-    }
-
-    /**
-     * Test repository method
      * @covers \eZ\Publish\API\Repository\Repository::canUser
      */
     public function testCanUser()

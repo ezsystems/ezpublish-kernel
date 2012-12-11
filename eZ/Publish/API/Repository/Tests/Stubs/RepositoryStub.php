@@ -173,7 +173,7 @@ class RepositoryStub implements Repository
         {
             $roleLimitation = $roleAssignment->getRoleLimitation();
             $permissionSet = array( 'limitation' => null, 'policies' => array() );
-            foreach ( $roleService->__getRolePolicies( $roleAssignment->getRole() ) as $policy )
+            foreach ( $roleService->getRolePolicies( $roleAssignment->getRole() ) as $policy )
             {
                 if ( $policy->module === '*' && $roleLimitation === null )
                 {
@@ -576,39 +576,39 @@ class RepositoryStub implements Repository
 
         if ( $this->contentService )
         {
-            $this->contentService->__rollback();
+            $this->contentService->rollback();
         }
         if ( $this->contentTypeService )
         {
-            $this->contentTypeService->__rollback();
+            $this->contentTypeService->rollback();
         }
         if ( $this->ioService )
         {
-            $this->ioService->__rollback();
+            $this->ioService->rollback();
         }
         if ( $this->languageService )
         {
-            $this->languageService->__rollback();
+            $this->languageService->rollback();
         }
         if ( $this->locationService )
         {
-            $this->locationService->__rollback();
+            $this->locationService->rollback();
         }
         if ( $this->roleService )
         {
-            $this->roleService->__rollback();
+            $this->roleService->rollback();
         }
         if ( $this->sectionService )
         {
-            $this->sectionService->__rollback();
+            $this->sectionService->rollback();
         }
         if ( $this->trashService )
         {
-            $this->trashService->__rollback();
+            $this->trashService->rollback();
         }
         if ( $this->userService )
         {
-            $this->userService->__rollback();
+            $this->userService->rollback();
         }
 
         --$this->transactionDepth;
