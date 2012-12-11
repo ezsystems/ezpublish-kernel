@@ -7,5 +7,4 @@ before_script:
     - composer install --dev
 script: phpunit -d memory_limit=-1
 notification:
-    email:
-        - dp@ez.no
+    email: false
