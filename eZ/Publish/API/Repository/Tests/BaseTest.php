@@ -73,9 +73,6 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->repository = null;
-
-        chdir( __DIR__ );
-
         parent::tearDown();
     }
 
@@ -144,12 +141,6 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     {
         if ( null === $this->repository )
         {
-            // Change working directory to project root. This is required by the
-            // current legacy implementation.
-            $count = substr_count( __NAMESPACE__, '\\' ) + 1;
-
-            chdir( realpath( str_repeat( '../', $count ) ) );
-
             $this->repository = $this->getSetupFactory()->getRepository();
         }
         return $this->repository;
