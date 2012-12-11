@@ -602,9 +602,13 @@ class URLAliasServiceStub implements URLAliasService
     /**
      * Internal helper method to emulate a rollback.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __rollback()
+    public function rollback()
     {
         $this->initFromFixture();
     }

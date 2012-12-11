@@ -1707,11 +1707,15 @@ class ContentServiceStub implements ContentService
      * Internal helper method that returns all ContentInfo objects for the given
      * <b>$contentType</b>.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      *
      * @return \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub[]
      */
-    public function __loadContentInfoByContentType( ContentType $contentType )
+    public function loadContentInfoByContentType( ContentType $contentType )
     {
         $result = array();
         foreach ( $this->contentInfo as $contentInfo )
@@ -1729,11 +1733,15 @@ class ContentServiceStub implements ContentService
      * Internal helper method used to load ContentInfo objects by their main
      * language code.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param string $languageCode
      *
      * @return \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub[]
      */
-    public function __loadContentInfoByLanguageCode( $languageCode )
+    public function loadContentInfoByLanguageCode( $languageCode )
     {
         $matches = array();
         foreach ( $this->contentInfo as $contentInfo )
@@ -1749,9 +1757,13 @@ class ContentServiceStub implements ContentService
     /**
      * Internal helper method to emulate a rollback.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __rollback()
+    public function rollback()
     {
         $this->initFromFixture();
     }

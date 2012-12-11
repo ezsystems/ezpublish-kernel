@@ -130,11 +130,15 @@ class LocationStub extends Location
     /**
      * FOR TEST USE ONLY!
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param int $parentLocationId
      *
      * @return void
      */
-    public function __setParentLocationId( $parentLocationId )
+    public function setParentLocationId( $parentLocationId )
     {
         $this->parentLocationId = $parentLocationId;
     }
@@ -142,9 +146,13 @@ class LocationStub extends Location
     /**
      * FOR TEST USE ONLY!
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __hide()
+    public function hide()
     {
         $this->hidden = true;
     }
@@ -152,9 +160,13 @@ class LocationStub extends Location
     /**
      * FOR TEST USE ONLY!
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __unhide()
+    public function unhide()
     {
         $this->hidden = false;
     }
@@ -162,9 +174,13 @@ class LocationStub extends Location
     /**
      * FOR TEST USE ONLY!
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __makeVisible()
+    public function makeVisible()
     {
         $this->invisible = false;
     }
@@ -172,9 +188,13 @@ class LocationStub extends Location
     /**
      * FOR TEST USE ONLY!
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __makeInvisible()
+    public function makeInvisible()
     {
         $this->invisible = true;
     }
@@ -182,11 +202,15 @@ class LocationStub extends Location
     /**
      * FOR TEST USE ONLY!
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $newContentInfo
      *
      * @return void
      */
-    public function __setContentInfo( ContentInfo $newContentInfo )
+    public function setContentInfo( ContentInfo $newContentInfo )
     {
         $this->contentInfo = $newContentInfo;
     }
@@ -194,11 +218,15 @@ class LocationStub extends Location
     /**
      * FOR TEST USE ONLY!
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param int $depth
      *
      * @return void
      */
-    public function __setDepth( $depth )
+    public function setDepth( $depth )
     {
         $this->depth = $depth;
     }
@@ -206,11 +234,15 @@ class LocationStub extends Location
     /**
      * FOR TEST USE ONLY!
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param string $pathString
      *
      * @return void
      */
-    public function __setPathString( $pathString )
+    public function setPathString( $pathString )
     {
         $this->pathString = $pathString;
     }

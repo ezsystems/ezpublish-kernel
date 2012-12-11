@@ -863,7 +863,7 @@ class ContentTypeServiceStub implements ContentTypeService
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
-        if ( $this->contentService->__loadContentInfoByContentType( $contentType ) )
+        if ( $this->contentService->loadContentInfoByContentType( $contentType ) )
         {
             throw new BadStateExceptionStub( 'What error code should be used?' );
         }
@@ -1064,9 +1064,13 @@ class ContentTypeServiceStub implements ContentTypeService
     /**
      * Internal helper method to emulate a rollback.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __rollback()
+    public function rollback()
     {
         $this->initFromFixture();
     }
