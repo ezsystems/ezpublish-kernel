@@ -44,6 +44,9 @@ The API is still very much work in progress, and so is documentation, hence why 
 * **eZ Publish 4 (aka *legacy*)**: Get the latest sources from [eZ Publish 4](https://github.com/ezsystems/ezpublish/).
   Rather clone it or directly [download the zip package from Github](https://github.com/ezsystems/ezpublish/zipball/master).
 
+##Status on http://travis-ci.org
+[![Build Status](https://travis-ci.org/ezsystems/ezp-next.png?branch=master)](https://travis-ci.org/ezsystems/ezp-next)
+
 ##How to get started
 * Clone this repo
 * Install dependencies with **Composer**: `php composer.phar install`
