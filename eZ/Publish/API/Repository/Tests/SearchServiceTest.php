@@ -377,7 +377,7 @@ class SearchServiceTest extends BaseTest
      *
      * @dataProvider getSearches
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFindContent( Query $query, $fixture )
     {
@@ -904,7 +904,7 @@ class SearchServiceTest extends BaseTest
             include $fixture,
             $result,
             "Search results do not match.",
-            .1 // Be quite generous regarding delat -- most important for scores
+            .1 // Be quite generous regarding delay -- most important for scores
         );
     }
 
@@ -928,8 +928,8 @@ class SearchServiceTest extends BaseTest
     /**
      * Simplify search result
      *
-     * This leads to saner comparisios of results, since we do not get the full
-     * content objhects every time.
+     * This leads to saner comparisons of results, since we do not get the full
+     * content objects every time.
      *
      * @param SearchResult $result
      *

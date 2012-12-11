@@ -30,9 +30,9 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
  * @property-read string $remoteId a global unique id of the content object
  * @property-read string $urlAliasSchema URL alias schema. If nothing is provided, $nameSchema will be used instead.
  * @property-read string $nameSchema  The name schema.
- * @property-read boolean $isContainer Determines if the type is allowd to have children
+ * @property-read boolean $isContainer Determines if the type is allowed to have children
  * @property-read string $mainLanguageCode the main language of the content type names and description used for fallback.
- * @property-read boolean $defaultAlwaysAvailable if an instance of acontent type is created the always available flag is set by default this this value.
+ * @property-read boolean $defaultAlwaysAvailable if an instance of a content type is created the always available flag is set by default this this value.
  * @property-read int $defaultSortField Specifies which property the child locations should be sorted on by default when created. Valid values are found at {@link Location::SORT_FIELD_*}
  * @property-read int $defaultSortOrder Specifies whether the sort order should be ascending or descending by default when created. Valid values are {@link Location::SORT_ORDER_*}
  */
@@ -240,7 +240,7 @@ class ContentTypeStub extends ContentType
      *
      * @param string $languageCode
      *
-     * @return string the name for the given language or null if none existis.
+     * @return string the name for the given language or null if none exists.
      */
     public function getName( $languageCode )
     {
@@ -267,7 +267,7 @@ class ContentTypeStub extends ContentType
      *
      * @param string $languageCode
      *
-     * @return string the description for the given language or null if none existis.
+     * @return string the description for the given language or null if none exists.
      */
     public function getDescription( $languageCode )
     {

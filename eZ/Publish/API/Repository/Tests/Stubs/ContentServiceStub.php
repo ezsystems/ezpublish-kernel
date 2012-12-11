@@ -48,7 +48,7 @@ class ContentServiceStub implements ContentService
     private $repository;
 
     /**
-     * Exmulation of external storages in the in-memory stub.
+     * Emulation of external storages in the in-memory stub.
      *
      * @var \eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage
      */
@@ -137,7 +137,7 @@ class ContentServiceStub implements ContentService
      *
      * To load fields use loadContent
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to create the content in the given location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the content in the given location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content with the given remote id does not exist
      *
      * @param string $remoteId
@@ -335,7 +335,7 @@ class ContentServiceStub implements ContentService
             {
                 if ( $fieldDefinition->identifier === $field->fieldDefIdentifier )
                 {
-                    // @todo: Refactore out of here for clarity!
+                    // @todo: Refactor out of here for clarity!
                     $this->pseudoExternalStorage->handleLoad(
                         $fieldDefinition,
                         $field,
@@ -659,7 +659,7 @@ class ContentServiceStub implements ContentService
             {
                 $structuredFields[$field->fieldDefIdentifier] = array();
             }
-            // Only one field of each type per langauge code
+            // Only one field of each type per language code
             $structuredFields[$field->fieldDefIdentifier][$languageCode] = $field;
         }
         return $structuredFields;
@@ -902,8 +902,8 @@ class ContentServiceStub implements ContentService
      *
      * (see {@link ContentMetadataUpdateStruct}) of a content object - to update fields use updateContent
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to update the content meta data
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the remoteId in $contentMetadataUpdateStruct is set but already existis
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update the content meta data
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the remoteId in $contentMetadataUpdateStruct is set but already exists
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct $contentMetadataUpdateStruct
@@ -946,7 +946,7 @@ class ContentServiceStub implements ContentService
     /**
      * Deletes a content object including all its versions and locations including their subtrees.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to delete the content (in one of the locations of the given content object)
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete the content (in one of the locations of the given content object)
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      */
@@ -1001,10 +1001,10 @@ class ContentServiceStub implements ContentService
     }
 
     /**
-     * Creates a draft from a publshed or archived version.
+     * Creates a draft from a published or archived version.
      *
      * If no version is given, the current published version is used.
-     * 4.x: The draft is created with the initialLanguge code of the source version or if not present with the main language.
+     * 4.x: The draft is created with the initialLanguage code of the source version or if not present with the main language.
      * It can be changed on updating the version.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the draft
@@ -1874,7 +1874,7 @@ class ContentServiceStub implements ContentService
      * @example Examples/translation_5x.php
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destiantioon version is not a draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destination version is not a draft
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
      *
