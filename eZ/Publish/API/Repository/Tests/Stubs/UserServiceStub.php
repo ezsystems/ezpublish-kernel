@@ -647,11 +647,15 @@ class UserServiceStub implements UserService
     /**
      * Internal helper method.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param mixed $userId
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
-    public function __loadUserGroupsByUserId( $userId )
+    public function loadUserGroupsByUserId( $userId )
     {
         if ( false === isset( $this->user2groups[$userId] ) )
         {
@@ -747,9 +751,13 @@ class UserServiceStub implements UserService
     /**
      * Internal helper method to emulate a rollback.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __rollback()
+    public function rollback()
     {
         $this->initFromFixture();
     }
