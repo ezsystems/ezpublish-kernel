@@ -97,7 +97,7 @@ class RepositoryStub implements Repository
     private $urlWildcardService;
 
     /**
-     * @var \eZ\Publish\API\Repository\Tests\Stubs\ObjectStateService
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\ObjectStateServiceStub
      */
     private $objectStateService;
 
