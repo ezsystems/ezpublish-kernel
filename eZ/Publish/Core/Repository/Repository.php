@@ -262,13 +262,13 @@ class Repository implements RepositoryInterface
                 if ( $spiPolicy->module === '*' && $spiRoleAssignment->limitationIdentifier === null )
                     return true;
 
-                if ( $spiPolicy->module !== $module )
+                if ( $spiPolicy->module !== $module && $spiPolicy->module !== "*" )
                     continue;
 
                 if ( $spiPolicy->function === '*' && $spiRoleAssignment->limitationIdentifier === null )
                     return true;
 
-                if ( $spiPolicy->function !== $function )
+                if ( $spiPolicy->function !== $function && $spiPolicy->function !== "*" )
                     continue;
 
                 if ( $spiPolicy->limitations === '*' && $spiRoleAssignment->limitationIdentifier === null )
