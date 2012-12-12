@@ -29,7 +29,7 @@ interface Indexable
     public function getIndexData( Field $field );
 
     /**
-     * Get index fied types for search backend
+     * Get index field types for search backend
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Search\FieldType[]
      */

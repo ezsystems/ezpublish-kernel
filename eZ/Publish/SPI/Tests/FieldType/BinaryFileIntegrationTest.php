@@ -61,7 +61,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
