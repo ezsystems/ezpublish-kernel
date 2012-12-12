@@ -203,7 +203,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    private function getStubbedUser( $id )
+    protected function getStubbedUser( $id )
     {
         return new User(
             array(
