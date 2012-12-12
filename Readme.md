@@ -103,6 +103,11 @@ Short:
   "Fixed EZP-20104: ContentController should return error status when content is not found"
 * If you want to contribute implementation specification proposals, place them in [doc/](/ezsystems/ezp-next/tree/master/doc/) folder.
 * Keep different changes in different commits in case cherry-pick is preferred instead of a merge later.
+  * A Pull Request should only cover one issue
+  * A commit should not contain code changes at the some time as doing coding standards/whitespace/typo fixes
+* TDD: Write/Change the test(s) for the change you do and commit it before you do the actual code change
+  * If a bug affects Public API, write or enhance a integration test to make sure the bug is covered.
+  * Unit tests should only use mocks/stubs and never test the full stack like integrations tests does.
 * Please test/check your commits before pushing even if we have automated checks in place on pull requests:
   * Run unit tests and integration test before commits
   * Make sure you follow our [coding standards](https://github.com/ezsystems/ezcs)
