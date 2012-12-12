@@ -38,7 +38,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 class RelationIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
