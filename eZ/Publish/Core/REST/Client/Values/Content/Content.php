@@ -32,11 +32,6 @@ class Content extends \eZ\Publish\API\Repository\Values\Content\Content
     protected $fields;
 
     /**
-     * @var string
-     */
-    protected $relationListId;
-
-    /**
      * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
     protected $versionInfo;
@@ -107,17 +102,6 @@ class Content extends \eZ\Publish\API\Repository\Values\Content\Content
         }
 
         return null;
-    }
-
-    /**
-     * Returns the outgoing relations
-     *
-     * @deprecated
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[] An array of {@link Relation}
-     */
-    public function getRelations()
-    {
-        return $this->contentService->loadRelationsByListId( $this->relationListId );
     }
 
     /**
