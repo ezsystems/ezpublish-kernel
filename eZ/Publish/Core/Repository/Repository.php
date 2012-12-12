@@ -219,19 +219,18 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * sets the current user to the user with the given user id
+     * Sets the current user to the given $user.
+     *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
-     * @return \eZ\Publish\API\Repository\Values\User\User
+     * @return void
      */
     public function setCurrentUser( User $user )
     {
         if ( !$user->id )
             throw new InvalidArgumentValue( '$user->id', $user->id );
 
-        $oldUser = $this->user;
         $this->user = $user;
-        return $oldUser;
     }
 
     /**
@@ -262,13 +261,13 @@ class Repository implements RepositoryInterface
                 if ( $spiPolicy->module === '*' && $spiRoleAssignment->limitationIdentifier === null )
                     return true;
 
-                if ( $spiPolicy->module !== $module )
+                if ( $spiPolicy->module !== $module && $spiPolicy->module !== '*' )
                     continue;
 
                 if ( $spiPolicy->function === '*' && $spiRoleAssignment->limitationIdentifier === null )
                     return true;
 
-                if ( $spiPolicy->function !== $function )
+                if ( $spiPolicy->function !== $function && $spiPolicy->function !== '*' )
                     continue;
 
                 if ( $spiPolicy->limitations === '*' && $spiRoleAssignment->limitationIdentifier === null )

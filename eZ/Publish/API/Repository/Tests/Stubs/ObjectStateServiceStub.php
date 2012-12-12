@@ -452,7 +452,7 @@ class ObjectStateServiceStub implements ObjectStateService
             throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
-        $objectState->_setPriority( $priority );
+        $objectState->setPriority( $priority );
 
         $this->renumberPriorities( $objectState->stateGroup );
     }
@@ -486,7 +486,7 @@ class ObjectStateServiceStub implements ObjectStateService
         $newPrio = 0;
         foreach ( $sortStates as $sortedState )
         {
-            $sortedState->_setPriority( $newPrio++ );
+            $sortedState->setPriority( $newPrio++ );
         }
     }
 

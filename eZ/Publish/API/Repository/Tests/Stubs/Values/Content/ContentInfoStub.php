@@ -52,11 +52,15 @@ class ContentInfoStub extends ContentInfo
     /**
      * Internal helper method to modify the $mainLocationId property
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param mixed $mainLocationId
      *
      * @return void
      */
-    public function __setMainLocationId( $mainLocationId )
+    public function setMainLocationId( $mainLocationId )
     {
         $this->mainLocationId = $mainLocationId;
     }

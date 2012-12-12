@@ -97,7 +97,7 @@ class RepositoryStub implements Repository
     private $urlWildcardService;
 
     /**
-     * @var \eZ\Publish\API\Repository\Tests\Stubs\ObjectStateService
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\ObjectStateServiceStub
      */
     private $objectStateService;
 
@@ -139,7 +139,7 @@ class RepositoryStub implements Repository
     }
 
     /**
-     * Sets the current user to the user with the given user id
+     * Sets the current user to the given $user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
@@ -173,7 +173,7 @@ class RepositoryStub implements Repository
         {
             $roleLimitation = $roleAssignment->getRoleLimitation();
             $permissionSet = array( 'limitation' => null, 'policies' => array() );
-            foreach ( $roleService->__getRolePolicies( $roleAssignment->getRole() ) as $policy )
+            foreach ( $roleService->getRolePolicies( $roleAssignment->getRole() ) as $policy )
             {
                 if ( $policy->module === '*' && $roleLimitation === null )
                 {
@@ -181,7 +181,7 @@ class RepositoryStub implements Repository
                     return true;
                 }
 
-                if ( $policy->module !== $module )
+                if ( $policy->module !== $module && $policy->module !== "*" )
                     continue;
 
                 if ( $policy->function === '*' && $roleLimitation === null )
@@ -190,7 +190,7 @@ class RepositoryStub implements Repository
                     return true;
                 }
 
-                if ( $policy->function !== $function )
+                if ( $policy->function !== $function && $policy->function !== "*" )
                     continue;
 
                 $permissionSet['policies'][] = $policy;
@@ -576,39 +576,39 @@ class RepositoryStub implements Repository
 
         if ( $this->contentService )
         {
-            $this->contentService->__rollback();
+            $this->contentService->rollback();
         }
         if ( $this->contentTypeService )
         {
-            $this->contentTypeService->__rollback();
+            $this->contentTypeService->rollback();
         }
         if ( $this->ioService )
         {
-            $this->ioService->__rollback();
+            $this->ioService->rollback();
         }
         if ( $this->languageService )
         {
-            $this->languageService->__rollback();
+            $this->languageService->rollback();
         }
         if ( $this->locationService )
         {
-            $this->locationService->__rollback();
+            $this->locationService->rollback();
         }
         if ( $this->roleService )
         {
-            $this->roleService->__rollback();
+            $this->roleService->rollback();
         }
         if ( $this->sectionService )
         {
-            $this->sectionService->__rollback();
+            $this->sectionService->rollback();
         }
         if ( $this->trashService )
         {
-            $this->trashService->__rollback();
+            $this->trashService->rollback();
         }
         if ( $this->userService )
         {
-            $this->userService->__rollback();
+            $this->userService->rollback();
         }
 
         --$this->transactionDepth;

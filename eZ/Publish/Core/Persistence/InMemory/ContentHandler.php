@@ -497,14 +497,11 @@ class ContentHandler implements ContentHandlerInterface
     {
         $versionInfo = $this->loadVersionInfo( $contentId, $versionNo );
         $versionLanguageIds = $versionInfo->languageIds;
-        $versionNames = $versionInfo->names;
-        foreach ( $versionNames as $languageCode => &$versionName )
-            if ( array_key_exists( $languageCode, $content->name ) ) $versionName = $content->name[$languageCode];
 
         $versionUpdateData = array(
             "creatorId" => $content->creatorId,
             "modificationDate" => $content->modificationDate,
-            "names" => $versionNames,
+            "names" => $content->name,
             "initialLanguageCode" => $this->handler->contentLanguageHandler()
                 ->load( $content->initialLanguageId )->languageCode
         );

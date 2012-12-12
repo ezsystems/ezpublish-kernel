@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ezsystems/ezp-next.png?branch=master)](https://travis-ci.org/ezsystems/ezp-next)
+
 #API
 Welcome to the new eZ Publish API, this code repository contains several layers of API, but this document will for the most part focus on the Public API.
 

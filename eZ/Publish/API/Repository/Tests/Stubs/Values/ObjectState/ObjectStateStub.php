@@ -113,11 +113,15 @@ class ObjectStateStub extends ObjectState
      *
      * ONLY FOR INTERNAL USE IN THE INTEGRATION TEST SUITE.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param int $priority
      *
      * @return void
      */
-    public function _setPriority( $priority )
+    public function setPriority( $priority )
     {
         $this->priority = $priority;
     }

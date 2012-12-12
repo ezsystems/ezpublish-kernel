@@ -126,7 +126,7 @@ class LocationServiceStub implements LocationService
         // Set main location if not set before.
         if ( null === $contentInfo->mainLocationId )
         {
-            $contentInfo->__setMainLocationId( $location->id );
+            $contentInfo->setMainLocationId( $location->id );
         }
 
         return $location;
@@ -466,8 +466,8 @@ class LocationServiceStub implements LocationService
         $contentInfo1 = $location1->getContentInfo();
         $contentInfo2 = $location2->getContentInfo();
 
-        $location1->__setContentInfo( $contentInfo2 );
-        $location2->__setContentInfo( $contentInfo1 );
+        $location1->setContentInfo( $contentInfo2 );
+        $location2->setContentInfo( $contentInfo1 );
     }
 
     /**
@@ -486,7 +486,7 @@ class LocationServiceStub implements LocationService
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
-        $location->__hide();
+        $location->hide();
 
         foreach ( $this->loadLocationChildren( $location )->locations as $child )
         {
@@ -505,7 +505,7 @@ class LocationServiceStub implements LocationService
      */
     protected function markInvisible( Location $location )
     {
-        $location->__makeInvisible();
+        $location->makeInvisible();
 
         foreach ( $this->loadLocationChildren( $location )->locations as $child )
         {
@@ -532,7 +532,7 @@ class LocationServiceStub implements LocationService
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
-        $location->__unhide();
+        $location->unhide();
 
         foreach ( $this->loadLocationChildren( $location )->locations as $child )
         {
@@ -558,7 +558,7 @@ class LocationServiceStub implements LocationService
             // Stop as soon as a hidden location is found
             return;
         }
-        $location->__makeVisible();
+        $location->makeVisible();
 
         foreach ( $this->loadLocationChildren( $location )->locations as $child )
         {
@@ -752,7 +752,7 @@ class LocationServiceStub implements LocationService
         );
 
         $newLocation = $this->locations[$location->id] = new LocationStub( $values );
-        $this->repository->getUrlAliasService()->_createAliasesForLocation( $newLocation );
+        $this->repository->getUrlAliasService()->createAliasesForLocation( $newLocation );
 
         foreach ( $this->loadLocationChildren( $location )->locations as $childLocation )
         {
@@ -766,19 +766,23 @@ class LocationServiceStub implements LocationService
     /**
      * Internal helper method used to trash a location tree.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param \eZ\Publish\API\Repository\Values\Content\Location[] $trashed
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[]
      */
-    public function __trashLocation( Location $location, array $trashed = array() )
+    public function trashLocation( Location $location, array $trashed = array() )
     {
         $this->repository->getUrlAliasService()->_removeAliasesForLocation( $location );
 
         $trashed[] = $location;
         foreach ( $this->loadLocationChildren( $location )->locations as $childLocation )
         {
-            $trashed = $this->__trashLocation( $childLocation, $trashed );
+            $trashed = $this->trashLocation( $childLocation, $trashed );
         }
 
         unset( $this->locations[$location->id] );
@@ -789,22 +793,26 @@ class LocationServiceStub implements LocationService
     /**
      * Internal helper method used to recover a location tree.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentlocation
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function __recoverLocation( Location $location, Location $newParentlocation = null )
+    public function recoverLocation( Location $location, Location $newParentlocation = null )
     {
         if ( $newParentlocation )
         {
-            $location->__setParentLocationId( $newParentlocation->id );
+            $location->setParentLocationId( $newParentlocation->id );
         }
 
-        $location->__setDepth(
+        $location->setDepth(
             $this->locations[$location->parentLocationId]->depth + 1
         );
-        $location->__setPathString(
+        $location->setPathString(
             $this->locations[$location->parentLocationId]->pathString . $location->id . "/"
         );
 
@@ -812,10 +820,10 @@ class LocationServiceStub implements LocationService
         // deleted
         if ( !isset( $this->locations[$location->getContentInfo()->mainLocationId] ) )
         {
-            $location->getContentInfo()->__setMainLocationId( $location->id );
+            $location->getContentInfo()->setMainLocationId( $location->id );
         }
 
-        $this->repository->getUrlAliasService()->_createAliasesForLocation( $location );
+        $this->repository->getUrlAliasService()->createAliasesForLocation( $location );
 
         return ( $this->locations[$location->id] = $location );
     }
@@ -823,9 +831,13 @@ class LocationServiceStub implements LocationService
     /**
      * Internal helper method to emulate a rollback.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __rollback()
+    public function rollback()
     {
         $this->initFromFixture();
     }
