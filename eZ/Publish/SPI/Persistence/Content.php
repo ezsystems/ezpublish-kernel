@@ -14,7 +14,6 @@ namespace eZ\Publish\SPI\Persistence;
  * This object aggregates the following:
  *  - Version metadata
  *  - Content metadata
- *  - Relations
  *  - Fields
  *  - Locations
  */
@@ -26,13 +25,6 @@ class Content extends ValueObject
      * @var \eZ\Publish\SPI\Persistence\Content\VersionInfo
      */
     public $versionInfo;
-
-    /**
-     * Relation objects for this content.
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\Relation
-     */
-    public $relations;
 
     /**
      * Field objects for this content.

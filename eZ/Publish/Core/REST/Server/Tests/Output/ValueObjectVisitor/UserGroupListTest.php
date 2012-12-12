@@ -109,7 +109,8 @@ class UserGroupListTest extends ValueObjectVisitorBaseTest
                         )
                     ),
                     new ContentInfo(),
-                    new Location()
+                    new Location(),
+                    array()
                 ),
                 new RestUserGroup(
                     new Content(
@@ -118,7 +119,8 @@ class UserGroupListTest extends ValueObjectVisitorBaseTest
                         )
                     ),
                     new ContentInfo(),
-                    new Location()
+                    new Location(),
+                    array()
                 ),
             ),
             '/some/path'

@@ -86,7 +86,7 @@ class Version extends ValueObjectVisitor
 
         $visitor->visitValueObject(
             new RelationListValue(
-                $content->getRelations(),
+                $data->relations,
                 $content->id,
                 $versionInfo->versionNo
             )

@@ -102,7 +102,7 @@ class RestUserGroup extends ValueObjectVisitor
         $generator->startValueElement( 'alwaysAvailable', $contentInfo->alwaysAvailable ? 'true' : 'false' );
         $generator->endValueElement( 'alwaysAvailable' );
 
-        $visitor->visitValueObject( new VersionValue( $data->content ) );
+        $visitor->visitValueObject( new VersionValue( $data->content, $data->relations ) );
 
         $generator->startObjectElement( 'ParentUserGroup', 'UserGroup' );
         $generator->startAttribute(

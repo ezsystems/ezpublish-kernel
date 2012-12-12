@@ -78,10 +78,10 @@ class VersionTest extends ValueObjectVisitorBaseTest
                                 'fieldDefIdentifier' => 'ezimage',
                             )
                         ),
-                    ),
-                    'relations' => array(),
+                    )
                 )
-            )
+            ),
+            array()
         );
 
         $this->fieldTypeSerializerMock->expects( $this->exactly( 2 ) )

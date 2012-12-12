@@ -31,7 +31,7 @@ class RestExecutedView extends ValueObjectVisitor
 
     protected $locationService;
 
-    public function __construct( UrlHandler $urlHandler, LocationService $locationService, ContentService $contentService)
+    public function __construct( UrlHandler $urlHandler, LocationService $locationService, ContentService $contentService )
     {
         $this->locationService = $locationService;
         $this->contentService = $contentService;
@@ -92,7 +92,8 @@ class RestExecutedView extends ValueObjectVisitor
             $restContent = new RestContentValue(
                 $contentInfo,
                 $this->locationService->loadLocation( $contentInfo->mainLocationId ),
-                $searchHit->valueObject
+                $searchHit->valueObject,
+                $this->contentService->loadRelations( $searchHit->valueObject->getVersionInfo() )
             );
             $visitor->visitValueObject( $restContent );
             $generator->endObjectElement( 'value' );

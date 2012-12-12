@@ -113,6 +113,7 @@ class Content extends RestController
         $mainLocation = $this->locationService->loadLocation( $contentInfo->mainLocationId );
 
         $contentVersion = null;
+        $relations = null;
         if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.content' )
         {
             $languages = null;
@@ -122,9 +123,10 @@ class Content extends RestController
             }
 
             $contentVersion = $this->contentService->loadContent( $urlValues['object'], $languages );
+            $relations = $this->contentService->loadRelations( $contentVersion->getVersionInfo() );
         }
 
-        return new Values\RestContent( $contentInfo, $mainLocation, $contentVersion, $this->request->path );
+        return new Values\RestContent( $contentInfo, $mainLocation, $contentVersion, $relations, $this->request->path );
     }
 
     /**
@@ -225,12 +227,14 @@ class Content extends RestController
             $languages = explode( ',', $this->request->variables['languages'] );
         }
 
+        $content = $this->contentService->loadContent(
+            $urlValues['object'],
+            $languages,
+            $urlValues['version']
+        );
         return new Values\Version(
-            $this->contentService->loadContent(
-                $urlValues['object'],
-                $languages,
-                $urlValues['version']
-            ),
+            $content,
+            $this->contentService->loadRelations( $content->getVersionInfo() ),
             $this->request->path
         );
     }
@@ -260,12 +264,21 @@ class Content extends RestController
             array( $contentCreate->locationCreateStruct )
         );
 
+        $contentValue = null;
+        $relations = null;
+        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.content' )
+        {
+            $contentValue = $content;
+            $relations = $this->contentService->loadRelations( $contentValue->getVersionInfo() );
+        }
+
         return new Values\CreatedContent(
             array(
                 'content' => new Values\RestContent(
                     $content->contentInfo,
                     null,
-                    $this->getMediaType( $this->request ) === 'application/vnd.ez.api.content' ? $content : null
+                    $contentValue,
+                    $relations
                 )
             )
         );
@@ -376,7 +389,8 @@ class Content extends RestController
         return new Values\CreatedVersion(
             array(
                 'version' => new Values\Version(
-                    $contentDraft
+                    $contentDraft,
+                    $this->contentService->loadRelations( $contentDraft->getVersionInfo() )
                 )
             )
         );
@@ -406,7 +420,8 @@ class Content extends RestController
         return new Values\CreatedVersion(
             array(
                 'version' => new Values\Version(
-                    $contentDraft
+                    $contentDraft,
+                    $this->contentService->loadRelations( $contentDraft->getVersionInfo() )
                 )
             )
         );
@@ -454,12 +469,15 @@ class Content extends RestController
         }
 
         // Reload the content to handle languages GET parameter
+        $content = $this->contentService->loadContent(
+            $urlValues['object'],
+            $languages,
+            $versionInfo->versionNo
+        );
+
         return new Values\Version(
-            $this->contentService->loadContent(
-                $urlValues['object'],
-                $languages,
-                $versionInfo->versionNo
-            ),
+            $content,
+            $this->contentService->loadRelations( $content->getVersionInfo() ),
             $this->request->path
         );
     }
