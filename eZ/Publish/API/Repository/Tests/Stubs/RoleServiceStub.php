@@ -273,7 +273,7 @@ class RoleServiceStub implements RoleService
 
     /**
      * Updates the limitations of a policy. The module and function cannot be changed and
-     * the limitaions are replaced by the ones in $roleUpdateStruct
+     * the limitations are replaced by the ones in $roleUpdateStruct
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to u�date a policy
      *

@@ -51,7 +51,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     protected $customFieldIdentifier = "data";
 
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */

@@ -320,7 +320,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * The content type is created in the state STATUS_DRAFT.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the identifier or remoteId in the content type create struct already exists
-     *         or there is a dublicate field identifier
+     *         or there is a duplicate field identifier
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
      * @param array $contentTypeGroups Required array of {@link ContentTypeGroup} to link type with (must contain one)
@@ -360,7 +360,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * Checks that the given $contentTypeCreateStruct is valid
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the identifier or remoteId in the content type create struct already exists
-     *         or there is a dublicate field identifier
+     *         or there is a duplicate field identifier
      *
      * @param ContentTypeCreateStruct $contentTypeCreateStruct
      *
@@ -498,7 +498,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * Checks that the given $contentTypeUpdateStruct is valid
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the identifier or remoteId in the content type create struct already exists
-     *         or there is a dublicate field identifier
+     *         or there is a duplicate field identifier
      *
      * @param ContentTypeCreateStruct $contentTypeCreateStruct
      *
@@ -824,7 +824,7 @@ class ContentTypeServiceStub implements ContentTypeService
      * Creates a draft from an existing content type.
      *
      * This is a complete copy of the content
-     * type wiich has the state STATUS_DRAFT.
+     * type which has the state STATUS_DRAFT.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If there is already a draft assigned to another user

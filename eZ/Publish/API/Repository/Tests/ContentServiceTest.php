@@ -3922,7 +3922,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // $contentId is the ID of the "Members" user group in an eZ Publish
         // demo installation
 
-        // $locationId is the ID of the "Adminstrator users" group location
+        // $locationId is the ID of the "Administrator users" group location
 
         // Get services
         $contentService = $repository->getContentService();

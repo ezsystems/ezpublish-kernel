@@ -234,7 +234,7 @@ interface ContentService
      * @example Examples/translation_5x.php
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destiantioon version is not a draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destination version is not a draft
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
      *

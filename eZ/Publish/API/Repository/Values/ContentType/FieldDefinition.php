@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read mixed $id the id of the field definition
  * @property-read string $identifier the identifier of the field definition
  * @property-read string $fieldGroup the field group name
- * @property-read int $position the position of the field definition in the content typr
+ * @property-read int $position the position of the field definition in the content type
  * @property-read string $fieldTypeIdentifier String identifier of the field type
  * @property-read boolean $isTranslatable indicates if fields of this definition are translatable
  * @property-read boolean $isRequired indicates if this field is required in the content object
@@ -61,7 +61,7 @@ abstract class FieldDefinition extends ValueObject
      *
      * @param string $languageCode
      *
-     * @return string the name for the given language or null if none existis.
+     * @return string the name for the given language or null if none exists.
      */
     abstract public function getName( $languageCode );
 
@@ -82,7 +82,7 @@ abstract class FieldDefinition extends ValueObject
      *
      * @param string $languageCode
      *
-     * @return string the description for the given language or null if none existis.
+     * @return string the description for the given language or null if none exists.
      */
     abstract public function getDescription( $languageCode );
 

@@ -1319,7 +1319,7 @@ class ObjectStateServiceTest extends BaseTest
      * @return void
      *
      * @see \eZ\Publish\API\Repository\ObjectStateService::getContentCount()
-     * @depens testLoadObjectState
+     * @depends testLoadObjectState
      */
     public function testGetContentCount()
     {
@@ -1344,7 +1344,7 @@ class ObjectStateServiceTest extends BaseTest
      * @return void
      *
      * @see \eZ\Publish\API\Repository\ObjectStateService::deleteObjectState()
-     * @depens testLoadObjectState
+     * @depends testLoadObjectState
      */
     public function testDeleteObjectState()
     {
@@ -1365,7 +1365,7 @@ class ObjectStateServiceTest extends BaseTest
 
         $lockedObjectState = $objectStateService->loadObjectState( $lockedObjectStateId );
 
-        // All objects transfered
+        // All objects transferred
         $this->assertEquals(
             18,
             $objectStateService->getContentCount( $lockedObjectState )
@@ -1378,7 +1378,7 @@ class ObjectStateServiceTest extends BaseTest
      * @return void
      *
      * @see \eZ\Publish\API\Repository\ObjectStateService::deleteObjectStateGroup()
-     * @depens testLoadObjectStateGroup
+     * @depends testLoadObjectStateGroup
      */
     public function testDeleteObjectStateGroup()
     {

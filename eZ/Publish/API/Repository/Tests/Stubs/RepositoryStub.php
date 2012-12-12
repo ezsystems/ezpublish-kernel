@@ -428,7 +428,7 @@ class RepositoryStub implements Repository
      */
     public function getSearchService()
     {
-        throw new \RuntimeException( '@todo: Implememt.' );
+        throw new \RuntimeException( '@todo: Implement.' );
     }
 
     /**

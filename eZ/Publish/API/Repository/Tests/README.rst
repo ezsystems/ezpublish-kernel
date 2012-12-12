@@ -17,7 +17,7 @@ a ``config.php`` file.
 Memory Back End
 ---------------
 
-To run the Integration Test Suite agains the Memory Back End, you just need to
+To run the Integration Test Suite against the Memory Back End, you just need to
 run ``phpunit`` inside this directory. This should result in a fully successful
 run of the suite.
 
