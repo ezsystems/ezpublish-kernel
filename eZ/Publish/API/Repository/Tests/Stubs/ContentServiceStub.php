@@ -1751,24 +1751,6 @@ class ContentServiceStub implements ContentService
     }
 
     /**
-     * Replaces an object internally.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $oldContent
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $newContent
-     *
-     * @return void
-     */
-    private function replaceContentObject( Content $oldContent, Content $newContent )
-    {
-        if ( false === ( $index = array_search( $oldContent, $this->content ) ) )
-        {
-            throw new \ErrorException( "Implementation error..." );
-        }
-
-        $this->content[$index] = $newContent;
-    }
-
-    /**
      * Copies a content object.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
