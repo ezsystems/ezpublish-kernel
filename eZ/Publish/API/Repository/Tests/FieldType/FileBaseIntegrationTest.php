@@ -29,7 +29,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     protected static $installDir;
 
     /**
-     * Storeage dir
+     * Storage dir
      *
      * @var string
      */

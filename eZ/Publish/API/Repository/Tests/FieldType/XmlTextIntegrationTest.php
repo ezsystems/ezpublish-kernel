@@ -54,7 +54,7 @@ EOT
     }
 
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -135,7 +135,7 @@ EOT
     public function getInvalidValidatorConfiguration()
     {
         return array(
-            'unkknown' => array( 'value' => 23 )
+            'unknown' => array( 'value' => 23 )
         );
     }
 

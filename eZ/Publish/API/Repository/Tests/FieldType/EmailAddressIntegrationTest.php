@@ -21,7 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 class EmailAddressIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -294,8 +294,8 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new EmailAddressValue( 'spam@exmaple.no' ),
-                'spam@exmaple.no',
+                new EmailAddressValue( 'spam@example.no' ),
+                'spam@example.no',
             ),
         );
     }
@@ -311,8 +311,8 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                'spam@exmaple.no',
-                new EmailAddressValue( 'spam@exmaple.no' )
+                'spam@example.no',
+                new EmailAddressValue( 'spam@example.no' )
             ),
         );
     }

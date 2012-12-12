@@ -38,7 +38,7 @@ abstract class ContentTypeCreateStruct extends ValueObject
     public $mainLanguageCode;
 
     /**
-     * The renote id
+     * The remote id
      *
      * @var string
      */
@@ -84,7 +84,7 @@ abstract class ContentTypeCreateStruct extends ValueObject
     public $defaultSortOrder = Location::SORT_ORDER_DESC;
 
     /**
-     * If an instance of acontent type is created the always available flag is set
+     * If an instance of a content type is created the always available flag is set
      * by default this this value.
      *
      * @var boolean

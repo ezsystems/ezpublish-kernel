@@ -21,7 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 class SelectionIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -108,7 +108,7 @@ class SelectionIntegrationTest extends BaseIntegrationTest
     public function getInvalidValidatorConfiguration()
     {
         return array(
-            'unkknown' => array( 'value' => 23 )
+            'unknown' => array( 'value' => 23 )
         );
     }
 

@@ -94,7 +94,7 @@ class User extends PseudoExternalStorage
      */
     protected function getUserData()
     {
-        // Retrieve user service without having it initialized explicitely
+        // Retrieve user service without having it initialized explicitly
         $userServiceProperty = new \ReflectionProperty( $this->repository, 'userService' );
         $userServiceProperty->setAccessible( true );
         if ( $service = $userServiceProperty->getValue( $this->repository ) )
