@@ -181,7 +181,7 @@ class RepositoryStub implements Repository
                     return true;
                 }
 
-                if ( $policy->module !== $module )
+                if ( $policy->module !== $module && $policy->module !== "*" )
                     continue;
 
                 if ( $policy->function === '*' && $roleLimitation === null )
@@ -190,7 +190,7 @@ class RepositoryStub implements Repository
                     return true;
                 }
 
-                if ( $policy->function !== $function )
+                if ( $policy->function !== $function && $policy->function !== "*" )
                     continue;
 
                 $permissionSet['policies'][] = $policy;
