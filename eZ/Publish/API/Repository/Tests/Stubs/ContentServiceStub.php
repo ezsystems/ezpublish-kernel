@@ -65,6 +65,11 @@ class ContentServiceStub implements ContentService
     private $content = array();
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\RelationStub[]
+     */
+    private $relation = array();
+
+    /**
      * @var \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub[]
      */
     private $contentInfo = array();
@@ -1509,8 +1514,16 @@ class ContentServiceStub implements ContentService
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
-        // @todo store relations differently
-        return array();//$this->loadContentByVersionInfo( $versionInfo )->getRelations();
+
+        $relations = array();
+        foreach ( $this->relation as $relation )
+        {
+            if ( $relation->getSourceContentInfo()->id === $versionInfo->contentId )
+            {
+                $relations[] = $relation;
+            }
+        }
+        return $relations;
     }
 
     /**
@@ -1533,16 +1546,13 @@ class ContentServiceStub implements ContentService
         }
 
         $relations = array();
-        /*foreach ( $this->content as $content )
+        foreach ( $this->relation as $relation )
         {
-            foreach ( $content->getRelations() as $relation )
+            if ( $relation->getDestinationContentInfo()->id === $contentInfo->id )
             {
-                if ( $relation->destinationContentInfo === $contentInfo )
-                {
-                    $relations[] = $relation;
-                }
+                $relations[] = $relation;
             }
-        }*/
+        }
         return $relations;
     }
 
@@ -1580,21 +1590,7 @@ class ContentServiceStub implements ContentService
             )
         );
 
-        $content = $this->loadContentByVersionInfo( $sourceVersion );
-
-        /*$this->replaceContentObject(
-            $content,
-            $this->copyContentObject(
-                $content,
-                array(
-                    'relations' => array_merge(
-                        $content->getRelations(),
-                        array( $relation )
-                    )
-                )
-            )
-        );*/
-
+        $this->relation = array_merge( $this->relation, array( $relation ) );
         return $relation;
     }
 
@@ -1619,14 +1615,15 @@ class ContentServiceStub implements ContentService
             throw new BadStateExceptionStub( 'What error code should be used?' );
         }
 
-        $content = $this->loadContentByVersionInfo( $sourceVersion );
-        $relations = $content->getRelations();
-
         $relationNotFound = true;
         $relationNoCommon = true;
-        foreach ( $relations as $i => $relation )
+        foreach ( $this->relation as $i => $relation )
         {
-            if ( $relation->destinationContentInfo !== $destinationContent )
+            if ( $relation->getDestinationContentInfo() !== $destinationContent )
+            {
+                continue;
+            }
+            if ( $relation->getSourceContentInfo() !== $sourceVersion->getContentInfo() )
             {
                 continue;
             }
@@ -1638,7 +1635,7 @@ class ContentServiceStub implements ContentService
             }
             $relationNoCommon = false;
 
-            unset( $relations[$i] );
+            unset( $this->relation[$i] );
             break;
         }
 
@@ -1646,16 +1643,6 @@ class ContentServiceStub implements ContentService
         {
             throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
-
-        /*$this->replaceContentObject(
-            $content,
-            $this->copyContentObject(
-                $content,
-                array(
-                    'relations' => $relations
-                )
-            )
-        );*/
     }
 
     /**
@@ -1794,7 +1781,6 @@ class ContentServiceStub implements ContentService
         $names = array(
             'id',
             'fields',
-            'relations',
             'contentTypeId',
             'versionNo',
             'repository'
@@ -1813,7 +1799,15 @@ class ContentServiceStub implements ContentService
             }
         }
 
-        return new ContentStub( $values );
+        $newContent = new ContentStub( $values );
+
+        // copy relations
+        $relations = $this->loadRelations( $content->getVersionInfo() );
+        foreach ( $relations as $relation )
+        {
+            $this->addRelation( $newContent->getVersionInfo(), $relation->getDestinationContentInfo() );
+        }
+        return $newContent;
     }
 
     /**

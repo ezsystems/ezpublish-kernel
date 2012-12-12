@@ -713,8 +713,6 @@ return array(
             )
         ),
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 1,
                 "repository" => $this,
             )
@@ -765,8 +763,6 @@ return array(
             )
         ),
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 2,
                 "repository" => $this,
             )
@@ -793,8 +789,6 @@ return array(
             )
         ),
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 2,
                 "repository" => $this,
             )
@@ -805,8 +799,6 @@ return array(
                 "contentTypeId" => 3,
                 "fields" => array(
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 1,
                 "repository" => $this,
             )
@@ -833,8 +825,6 @@ return array(
             )
         ),
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 1,
                 "repository" => $this,
             )
@@ -861,8 +851,6 @@ return array(
             )
         ),
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 1,
                 "repository" => $this,
             )
@@ -915,8 +903,6 @@ return array(
             )
         ),
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 4,
                 "repository" => $this,
             )
@@ -927,8 +913,6 @@ return array(
                 "contentTypeId" => 4,
                 "fields" => array(
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 3,
                 "repository" => $this,
             )
@@ -1000,8 +984,6 @@ return array(
             )
         ),
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 1,
                 "repository" => $this,
             )
@@ -1028,8 +1010,6 @@ return array(
             )
         ),
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 1,
                 "repository" => $this,
             )
@@ -1104,8 +1084,6 @@ return array(
             )
         ),
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 1,
                 "repository" => $this,
             )
@@ -1180,8 +1158,6 @@ return array(
             )
         ),
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 1,
                 "repository" => $this,
             )
@@ -1256,8 +1232,6 @@ return array(
             )
         ),
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 1,
                 "repository" => $this,
             )
@@ -1332,8 +1306,6 @@ return array(
             )
         ),
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 1,
                 "repository" => $this,
             )
@@ -1448,8 +1420,6 @@ return array(
             )
         ),
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 1,
                 "repository" => $this,
             )
@@ -1609,8 +1579,6 @@ keywords=cms, publish, e-commerce, content management, development framework",
             )
         ),
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 2,
                 "repository" => $this,
             )
@@ -1685,8 +1653,6 @@ keywords=cms, publish, e-commerce, content management, development framework",
             )
         ),
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 1,
                 "repository" => $this,
             )
@@ -1715,8 +1681,6 @@ keywords=cms, publish, e-commerce, content management, development framework",
             )
         ),
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 1,
                 "repository" => $this,
             )
@@ -1783,8 +1747,6 @@ keywords=cms, publish, e-commerce, content management, development framework",
             )
         ),
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 1,
                 "repository" => $this,
             )
@@ -1811,8 +1773,6 @@ keywords=cms, publish, e-commerce, content management, development framework",
             )
         ),
     ),
-                "relations" => array(
-                ),
                 "versionNo" => 1,
                 "repository" => $this,
             )
