@@ -30,7 +30,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
  *
  * 1) The find methods retrieve a recursive set of filters, which define which
  * content objects to retrieve from the database. Those may be combined using
- * boolean opeartors.
+ * boolean operators.
  *
  * 2) This recursive criterion definition is visited into a query, which limits
  * the content retrieved from the database. We might not be able to create

@@ -209,7 +209,7 @@ class EzcDatabase extends Gateway
     /**
      * Get sorted arrays of content IDs, which should be returned
      *
-     * @param \ezcQuerySelect ixed $query
+     * @param \ezcQuerySelect mixed $query
      * @param string $condition
      * @param mixed $sort
      * @param int $offset

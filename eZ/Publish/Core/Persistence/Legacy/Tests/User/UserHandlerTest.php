@@ -586,7 +586,7 @@ class UserHandlerTest extends TestCase
         return $handler->createRole( $role );
     }
 
-    public function testImplicitelyCreatePolicies()
+    public function testImplicitlyCreatePolicies()
     {
         $this->createRole();
 
