@@ -139,7 +139,7 @@ class RepositoryStub implements Repository
     }
 
     /**
-     * Sets the current user to the user with the given user id
+     * Sets the current user to the given $user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
