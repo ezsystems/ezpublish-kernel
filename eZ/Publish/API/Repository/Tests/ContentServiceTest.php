@@ -990,7 +990,7 @@ class ContentServiceTest extends BaseContentServiceTest
             ),
             array(
                 'fieldCount' => count( $draft->getFields() ),
-                'relationCount' => count( $draft->getRelations() )
+                'relationCount' => count( $this->getRepository()->getContentService()->loadRelations( $draft->getVersionInfo() ) )
             )
         );
     }
@@ -2611,28 +2611,31 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      *
-     * @return void
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      * @see \eZ\Publish\API\Repository\ContentService::addRelation()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
      */
     public function testAddRelationAddsRelationToContent( $content )
     {
-        $this->assertEquals( 1, count( $content->getRelations() ) );
+        $relations = $this->getRepository()->getContentService()->loadRelations( $content->getVersionInfo() );
+        $this->assertEquals(
+            1,
+            count( $relations )
+        );
+        return $relations;
     }
 
     /**
      * Test for the addRelation() method.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param \eZ\Publish\API\Repository\Values\Content\Relation[] $relations
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::addRelation()
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelationAddsRelationToContent
      */
-    public function testAddRelationSetsExpectedRelations( $content )
+    public function testAddRelationSetsExpectedRelations( $relations )
     {
-        $relations = $content->getRelations();
-
         $this->assertEquals(
             array(
                 'type' => Relation::COMMON,

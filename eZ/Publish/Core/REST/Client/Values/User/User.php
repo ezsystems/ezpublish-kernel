@@ -50,16 +50,6 @@ class User extends \eZ\Publish\API\Repository\Values\User\User
     }
 
     /**
-     * Returns the outgoing relations
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
-     */
-    public function getRelations()
-    {
-        return $this->content->getRelations();
-    }
-
-    /**
      * This method returns the complete fields collection
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field[]
@@ -101,9 +91,6 @@ class User extends \eZ\Publish\API\Repository\Values\User\User
 
             case 'fields':
                 return $this->getFields();
-
-            case 'relations':
-                return $this->getRelations();
         }
 
         return parent::__get( $property );

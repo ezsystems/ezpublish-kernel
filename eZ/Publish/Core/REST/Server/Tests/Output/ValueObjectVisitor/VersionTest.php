@@ -78,8 +78,7 @@ class VersionTest extends ValueObjectVisitorBaseTest
                                 'fieldDefIdentifier' => 'ezimage',
                             )
                         ),
-                    ),
-                    'relations' => array(),
+                    )
                 )
             )
         );

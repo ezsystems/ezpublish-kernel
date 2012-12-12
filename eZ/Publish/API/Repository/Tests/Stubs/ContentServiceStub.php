@@ -441,8 +441,6 @@ class ContentServiceStub implements ContentService
                 'id' => ++$this->contentNextId,
                 'contentTypeId' => $contentCreateStruct->contentType->id,
                 'fields' => $allFields,
-                'relations' => array(),
-
                 'versionNo' => 1,
                 'repository' => $this->repository
             )
@@ -1041,8 +1039,6 @@ class ContentServiceStub implements ContentService
             array(
                 'id' => $content->id,
                 'fields' => $content->getFields(),
-                'relations' => $content->getRelations(),
-
                 'contentTypeId' => $contentInfo->getContentType()->id,
                 'versionNo' => $versionNo + 1,
                 'repository' => $this->repository
@@ -1159,8 +1155,6 @@ class ContentServiceStub implements ContentService
             array(
                 'id' => $content->id,
                 'fields' => $allFields,
-                'relations' => $content->getRelations(),
-
                 'contentTypeId' => $content->contentTypeId,
                 'versionNo' => $versionInfo->versionNo,
                 'repository' => $this->repository
@@ -1515,7 +1509,8 @@ class ContentServiceStub implements ContentService
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
-        return $this->loadContentByVersionInfo( $versionInfo )->getRelations();
+        // @todo store relations differently
+        return array();//$this->loadContentByVersionInfo( $versionInfo )->getRelations();
     }
 
     /**
@@ -1538,7 +1533,7 @@ class ContentServiceStub implements ContentService
         }
 
         $relations = array();
-        foreach ( $this->content as $content )
+        /*foreach ( $this->content as $content )
         {
             foreach ( $content->getRelations() as $relation )
             {
@@ -1547,7 +1542,7 @@ class ContentServiceStub implements ContentService
                     $relations[] = $relation;
                 }
             }
-        }
+        }*/
         return $relations;
     }
 
@@ -1587,7 +1582,7 @@ class ContentServiceStub implements ContentService
 
         $content = $this->loadContentByVersionInfo( $sourceVersion );
 
-        $this->replaceContentObject(
+        /*$this->replaceContentObject(
             $content,
             $this->copyContentObject(
                 $content,
@@ -1598,7 +1593,7 @@ class ContentServiceStub implements ContentService
                     )
                 )
             )
-        );
+        );*/
 
         return $relation;
     }
@@ -1652,7 +1647,7 @@ class ContentServiceStub implements ContentService
             throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
 
-        $this->replaceContentObject(
+        /*$this->replaceContentObject(
             $content,
             $this->copyContentObject(
                 $content,
@@ -1660,7 +1655,7 @@ class ContentServiceStub implements ContentService
                     'relations' => $relations
                 )
             )
-        );
+        );*/
     }
 
     /**

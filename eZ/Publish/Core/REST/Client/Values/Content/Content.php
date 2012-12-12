@@ -21,7 +21,6 @@ use eZ\Publish\Core\REST\Client\ContentService;
  * @property-read mixed $id convenience getter for retrieving the contentId: $versionInfo->content->id
  * @property-read \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo calls getVersionInfo()
  * @property-read \eZ\Publish\API\Repository\Values\Content\Field[] $fields access fields, calls getFields()
- * @property-read \eZ\Publish\API\Repository\Values\Content\Relation[] $relations Calls getRelations()
  *
  * @todo Implement convenience property access!
  */
@@ -113,6 +112,7 @@ class Content extends \eZ\Publish\API\Repository\Values\Content\Content
     /**
      * Returns the outgoing relations
      *
+     * @deprecated
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[] An array of {@link Relation}
      */
     public function getRelations()
@@ -182,25 +182,5 @@ class Content extends \eZ\Publish\API\Repository\Values\Content\Content
         }
 
         return null;
-    }
-
-    public function __get( $propertyName )
-    {
-        switch( $propertyName )
-        {
-            case 'relations':
-                return $this->getRelations();
-        }
-        return parent::__get( $propertyName );
-    }
-
-    public function __isset( $propertyName )
-    {
-        switch( $propertyName )
-        {
-            case 'relations':
-                return true;
-        }
-        return parent::__isset( $propertyName );
     }
 }
