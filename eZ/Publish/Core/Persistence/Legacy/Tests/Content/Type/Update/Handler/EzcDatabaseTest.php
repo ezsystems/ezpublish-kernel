@@ -110,7 +110,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Returns an arra with 'from' and 'to' types
+     * Returns an array with 'from' and 'to' types
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type[]
      */

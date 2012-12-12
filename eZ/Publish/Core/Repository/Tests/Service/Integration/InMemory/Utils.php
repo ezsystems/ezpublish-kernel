@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Integration\InMemory;
 use RuntimeException;
 
 /**
- * Utils class for InMemory tesst
+ * Utils class for InMemory test
  */
 abstract class Utils
 {

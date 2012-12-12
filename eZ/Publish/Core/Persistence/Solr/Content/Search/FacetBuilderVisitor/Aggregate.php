@@ -82,7 +82,7 @@ class Aggregate extends FacetBuilderVisitor
             }
         }
 
-        throw new \OutOfRangeException( "No visitor avialable for: " . $field );
+        throw new \OutOfRangeException( "No visitor available for: " . $field );
     }
 
     /**
@@ -114,7 +114,7 @@ class Aggregate extends FacetBuilderVisitor
             }
         }
 
-        throw new NotImplementedException( "No visitor avialable for: " . get_class( $facetBuilder ) );
+        throw new NotImplementedException( "No visitor available for: " . get_class( $facetBuilder ) );
     }
 }
 
