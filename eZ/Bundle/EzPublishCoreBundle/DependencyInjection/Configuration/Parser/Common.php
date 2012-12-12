@@ -107,7 +107,7 @@ class Common extends AbstractParser
             $database = $container->getParameter( "ezsettings.$sa.database" );
             if ( !empty( $database ) )
             {
-                // DSN is prioritary to any other setting
+                // DSN has priority over any other setting
                 if ( isset( $database['dsn'] ) )
                 {
                     $container->setParameter( "ezsettings.$sa.database.params", $database['dsn'] );
