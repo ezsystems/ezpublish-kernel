@@ -89,8 +89,8 @@ Currently SPI consists of:
 * Install dependencies with **Composer**: `php composer.phar install`
 * Copy config.php-DEVELOPMENT to config.php
 * Execute `phpunit -vc phpunit*.xml` with one of:
-** phpunit.xml  *unit test xml configuration*
-** phpunit-integration-legacy.xml  *integration test xml configuration for running integration tests with Legacy Storage engine*
+  * phpunit.xml  *unit test xml configuration*
+  * phpunit-integration-legacy.xml  *integration test xml configuration for running integration tests with Legacy Storage engine*
 
 ## Issue tracker
 Submitting bugs, improvements and stories is possible on https://jira.ez.no/browse/EZP
@@ -104,8 +104,8 @@ Short:
 * If you want to contribute implementation specification proposals, place them in [doc/](/ezsystems/ezp-next/tree/master/doc/) folder.
 * Keep different changes in different commits in case cherry-pick is preferred instead of a merge later.
 * Please test/check your commits before pushing even if we have automated checks in place on pull requests:
-** Run unit tests and integration test before commits
-** Make sure you follow our [coding standards](https://github.com/ezsystems/ezcs)
+  * Run unit tests and integration test before commits
+  * Make sure you follow our [coding standards](https://github.com/ezsystems/ezcs)
 
 For further information please have a look at the [related guidance page](http://share.ez.no/get-involved/develop). You will, amongst other, learn how to make pull-requests. More on this here : ["How to contribute to eZ Publish using GIT"](http://share.ez.no/learn/ez-publish/how-to-contribute-to-ez-publish-using-git).
 
