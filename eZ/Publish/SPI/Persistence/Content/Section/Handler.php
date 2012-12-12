@@ -14,7 +14,7 @@ namespace eZ\Publish\SPI\Persistence\Content\Section;
 interface Handler
 {
     /**
-     * Creat a new section
+     * Create a new section
      *
      * @param string $name
      * @param string $identifier

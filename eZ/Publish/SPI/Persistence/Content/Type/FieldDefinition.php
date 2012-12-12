@@ -14,7 +14,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 /**
- * @todo Do we need a FieldDefitinitionCreateStruct?
+ * @todo Do we need a FieldDefinitionCreateStruct?
  * @todo What about the "serialized_data_text" field in legacy storage?
  */
 class FieldDefinition extends ValueObject

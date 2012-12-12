@@ -47,7 +47,7 @@ interface Handler
     public function loadGroup( $groupId );
 
     /**
-     * Loads Type Group by identifer
+     * Loads Type Group by identifier
      *
      * Legacy note: Uses name for identifier.
      *
@@ -209,7 +209,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type is not found
-     * @todo Add FieldDefintion\CreateStruct?
+     * @todo Add FieldDefinition\CreateStruct?
      */
     public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition );
 
@@ -244,7 +244,7 @@ interface Handler
      *
      * @return void
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If field is not found
-     * @todo Add FieldDefintion\UpdateStruct?
+     * @todo Add FieldDefinition\UpdateStruct?
      */
     public function updateFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition );
 

@@ -47,7 +47,7 @@ class CreateStruct extends ValueObject
      * Contains *all* fields of the object to be created.
      *
      * This attribute should contain *all* fields (in all language) of the
-     * object to be created. If a field is not translateable, it may only occur
+     * object to be created. If a field is not translatable, it may only occur
      * once. The storage layer will automatically take care that such fields
      * are assigned to each language version.
      *

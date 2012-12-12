@@ -39,7 +39,7 @@ use eZ\Publish\SPI\Persistence\User;
 class UserIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -94,7 +94,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     public function getFieldDefinitionData()
     {
         return array(
-            // The suer field type does not have any special field definition
+            // The user field type does not have any special field definition
             // properties
             array( 'fieldType', 'ezuser' ),
             array( 'fieldTypeConstraints', new Content\FieldTypeConstraints() ),
