@@ -396,7 +396,7 @@ abstract class LegacyStorage extends Gateway
     }
 
     /**
-     * Returns a map with the number of refereces each file from $files has
+     * Returns a map with the number of references each file from $files has
      *
      * @param array $files
      *

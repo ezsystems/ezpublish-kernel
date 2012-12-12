@@ -93,7 +93,7 @@ class H
     public function __construct( $notUsedArgument = null )
     {
         if ( $notUsedArgument !== null )
-            throw new \Exception( "\$notUsedArgument should be a vaue of null, got: " . $notUsedArgument );
+            throw new \Exception( "\$notUsedArgument should be a value of null, got: " . $notUsedArgument );
     }
 
     public function timesTwo( $hIntValue )

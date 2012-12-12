@@ -489,7 +489,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      *
      * @return void
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If field is not found
-     * @todo Add FieldDefintion\UpdateStruct?
+     * @todo Add FieldDefinition\UpdateStruct?
      */
     public function removeFieldDefinition( $contentTypeId, $status, $fieldDefinitionId )
     {

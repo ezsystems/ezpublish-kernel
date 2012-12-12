@@ -237,7 +237,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     /**
      * Assert query result as correct
      *
-     * Vuilds text representations of the asserted and fetched query result,
+     * Builds text representations of the asserted and fetched query result,
      * based on a ezcQuerySelect object. Compares them using classic diff for
      * maximum readability of the differences between expectations and real
      * results.

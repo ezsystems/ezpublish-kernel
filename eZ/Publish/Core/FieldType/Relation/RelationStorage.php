@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Converter for Relation field type external storage
- * @todo indroduce persistence layer (gateways)
+ * @todo introduce persistence layer (gateways)
  *
  */
 class RelationStorage extends GatewayBasedStorage
