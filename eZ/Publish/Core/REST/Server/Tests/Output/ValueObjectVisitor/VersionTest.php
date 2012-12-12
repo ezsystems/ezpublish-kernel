@@ -80,7 +80,8 @@ class VersionTest extends ValueObjectVisitorBaseTest
                         ),
                     )
                 )
-            )
+            ),
+            array()
         );
 
         $this->fieldTypeSerializerMock->expects( $this->exactly( 2 ) )

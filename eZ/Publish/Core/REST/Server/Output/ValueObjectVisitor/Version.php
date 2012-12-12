@@ -86,8 +86,7 @@ class Version extends ValueObjectVisitor
 
         $visitor->visitValueObject(
             new RelationListValue(
-                // @todo Inject relations or change spec to only generate link, old: $content->getRelations()
-                array(),
+                $data->relations,
                 $content->id,
                 $versionInfo->versionNo
             )
