@@ -42,6 +42,9 @@ These bundles are important parts of the eZ Publish 5.x kernel.
 * Legacy Bundle: Integrations with Legacy kernel, like fallbacks and code reuse across 5.x/Legacy Stack.
 * REST Bundle: Integration of REST API to 5.x (Symfony) Stack
 
+You can find these in [eZ/Bundle](/ezsystems/ezp-next/tree/master/eZ/Bundle/) and their lower level parts in:
+* [eZ/Publish/Core/REST](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/REST/)  *The REST API implementation*
+* [eZ/Publish/Core/MVC](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/MVC/)  *MVC implementation that integrate with Symfony and Legacy*
 
 
 #### Public API
@@ -54,6 +57,10 @@ By using Public API your code will be forward compatible to future releases base
 performant storage engines. It is also fully backwards compatible by using the included "Legacy" storage engine, which
 stores data in the way legacy kernel is used to finding it.
 
+Important parts of this layer is:
+* [eZ/Publish/API](/ezsystems/ezp-next/tree/master/eZ/Publish/API/)  *Public API Interfaces*
+* [eZ/Publish/Core/Repository](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/Repository/)  *Public API Repository implementation*
+
 #### (Private) SPI(Service Provider Interface)
 
 Service Provider Interfaces are interfaces that can contain one or several implementations, in some cases Public API
@@ -62,48 +69,48 @@ implementations; FieldTypes (former DataTypes), Limitations (permissions system)
 
 SPI layer is currently considered "private" as it will still undergo changes, it will be made "final" by the time we
 have a fully working NoSQL implementation of Persistence and scalable IO storage implementation like S3.
+Meaning you can make your own implementation if you want, but we don't guarantee that it will work across versions.
 
-##Directory Layout
-* [eZ/Publish/API](/ezsystems/ezp-next/tree/master/eZ/Publish/API/)  *Public API Interface (interfaces eZ Publish implements)*
-* [eZ/Publish/API/Repository/Examples](/ezsystems/ezp-next/tree/master/eZ/Publish/API/Repository/Examples/)  *Examples of Public API use*
-
-* [eZ/Publish/SPI](/ezsystems/ezp-next/tree/master/eZ/Publish/SPI/)  *Service provider interfaces (interfaces extensions can implement)*
-
-* [eZ/Publish/Core/Repository](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/Repository/)  *Public API Repository implementation*
-* [eZ/Publish/Core/Persistence/Legacy](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/Persistence/Legacy/)  *Legacy Storage-Engine aka Persistence-handler*
-* [eZ/Publish/Core/Persistence/InMemory](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/Persistence/InMemory/)  *InMemory  Storage-Engine aka Persistence-handler (for unit testing)*
-* [eZ/Publish/Core/IO/LegacyHandler.php](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/IO/)  *Legacy IO (file) Handler*
-* [eZ/Publish/Core/IO/InMemoryHandler.php](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/IO/)  *InMemory IO handler (for unit testing)*
-
-* [eZ/Publish/Core/MVC/Symfony](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/MVC/Symfony/)  *MVC components that integrate with Symfony*
-* [eZ/Publish/Core/MVC/Legacy](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/MVC/Legacy/)  *eZ Publish Legacy components integration*
-* [eZ/Bundle](/ezsystems/ezp-next/tree/master/eZ/Bundle/)  *Bundles that wrap eZ Publish components into Symfony*
-
-* [doc/](/ezsystems/ezp-next/tree/master/doc/)  *doc folder for specifications and bc doc*
-* phpunit.xml  *unit test xml configuration*
-* phpunit-integration-legacy.xml  *integration test xml configuration for running integration tests with Legacy Storage engine*
+Currently SPI consists of:
+* [eZ/Publish/SPI](/ezsystems/ezp-next/tree/master/eZ/Publish/SPI/)  *Service provider interfaces*
+* [eZ/Publish/Core/Persistence/Legacy](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/Persistence/Legacy/)  *Legacy Storage-Engine (Persistence-handler)*
+* [eZ/Publish/Core/Persistence/InMemory](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/Persistence/InMemory/)  *InMemory Storage-Engine (for unit testing)*
+* [eZ/Publish/Core/IO](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/IO/)  *IO (file) Handlers; Legacy, Dispatcher and InMemory (for unit testing)*
 
 
-##Dependencies
+## Dependencies
 * **Composer**: Just run `curl -s http://getcomposer.org/installer | php` to get **composer.phar**
 * **PHPUnit 3.6+**
 * **PHP 5 Modules**: php5_sqlite
 * **Database**: sqlite3 if not installed by above stage
 
-##How to run tests
+## How to run tests
 * Clone this repo
 * Install dependencies with **Composer**: `php composer.phar install`
 * Copy config.php-DEVELOPMENT to config.php
-* Execute `phpunit -vc phpunit*.xml`
+* Execute `phpunit -vc phpunit*.xml` with one of:
+** phpunit.xml  *unit test xml configuration*
+** phpunit-integration-legacy.xml  *integration test xml configuration for running integration tests with Legacy Storage engine*
 
-##Bug tracker
-Submitting bug reports is possible on https://jira.ez.no/browse/EZP
+## Issue tracker
+Submitting bugs, improvements and stories is possible on https://jira.ez.no/browse/EZP
 
-##Contributing
-eZ Publish 5.x is a fully open source, community-driven project. If you''d like to contribute, please have a look at the [related guidance page](http://share.ez.no/get-involved/develop). You will, amongst other, learn how to make pull-requests. More on this here : ["How to contribute to eZ Publish using GIT"](http://share.ez.no/learn/ez-publish/how-to-contribute-to-ez-publish-using-git).
+## Contributing
+eZ Publish 5.x is a fully open source, community-driven project, and code contributions are simply done via github pull requests.
 
-##Discussing/Exchanging##
+Short:
+* Remember to first create a issue in our issue tracker and refer to it in commits and pull requests headers, example:
+  "Fixed EZP-20104: ContentController should return error status when content is not found"
+* If you want to contribute implementation specification proposals, place them in [doc/](/ezsystems/ezp-next/tree/master/doc/) folder.
+* Keep different changes in different commits in case cherry-pick is preferred instead of a merge later.
+* Please test/check your commits before pushing even if we have automated checks in place on pull requests:
+** Run unit tests and integration test before commits
+** Make sure you follow our [coding standards](https://github.com/ezsystems/ezcs)
+
+For further information please have a look at the [related guidance page](http://share.ez.no/get-involved/develop). You will, amongst other, learn how to make pull-requests. More on this here : ["How to contribute to eZ Publish using GIT"](http://share.ez.no/learn/ez-publish/how-to-contribute-to-ez-publish-using-git).
+
+## Discussing/Exchanging
 A dedicated forum has been set-up to discuss all PHP API-related topics : http://share.ez.no/forums/new-php-api
 
-##Copyright & license
+## Copyright & license
 eZ Systems AS & GPL 2.0
