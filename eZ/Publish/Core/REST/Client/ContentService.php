@@ -597,22 +597,6 @@ class ContentService implements APIContentService, Sessionable
     }
 
     /**
-     * Loads relations by their relation list ID
-     *
-     * NOTE: This method is not part of the API!
-     *
-     * @param string $relationListId
-     *
-     * @access protected
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
-     */
-    public function loadRelationsByListId( $relationListId )
-    {
-        throw new \Exception( "@todo: Implement." );
-    }
-
-    /**
      * Loads all incoming relations for a content object.
      *
      * The relations come only

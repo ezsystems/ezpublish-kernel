@@ -27,7 +27,6 @@ class ContentTest extends PHPUnit_Framework_TestCase
         self::assertNotContains( 'internalFields', $properties, 'Internal property found ' );
         self::assertContains( 'id', $properties, 'Property not found ' );
         self::assertContains( 'fields', $properties, 'Property not found ' );
-        self::assertContains( 'relations', $properties, 'Property not found ' );
         self::assertContains( 'versionInfo', $properties, 'Property not found ' );
         self::assertContains( 'contentInfo', $properties, 'Property not found ' );
         self::assertContains( 'contentType', $properties, 'Property not found ' );

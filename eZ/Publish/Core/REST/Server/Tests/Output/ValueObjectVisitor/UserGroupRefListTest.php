@@ -43,7 +43,8 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
                             'pathString' => '/1/5/14',
                             'path' => array( 1, 5, 14 )
                         )
-                    )
+                    ),
+                    array()
                 ),
                 new RestUserGroup(
                     new UserGroup(),
@@ -53,7 +54,8 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
                             'pathString' => '/1/5/13',
                             'path' => array( 1, 5, 13 )
                         )
-                    )
+                    ),
+                    array()
                 )
             ),
             '/some/path',

@@ -47,11 +47,6 @@ class ContentStub extends Content
     protected $fields;
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Relation[]
-     */
-    protected $relations;
-
-    /**
      * Returns the VersionInfo for this version
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
@@ -99,16 +94,6 @@ class ContentStub extends Content
             return $field->value;
         }
         return null;
-    }
-
-    /**
-     * Returns the outgoing relations
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[] An array of {@link Relation}
-     */
-    public function getRelations()
-    {
-        return $this->relations;
     }
 
     /**
