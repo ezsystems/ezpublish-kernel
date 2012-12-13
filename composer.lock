@@ -1,5 +1,5 @@
 {
-    "hash": "1e77a308ed4fe550e7d8df6ab1320a93",
+    "hash": "3cda969ace6dc461c45ce18ff6a58fb1",
     "packages": [
         {
             "name": "doctrine/common",
@@ -1533,19 +1533,19 @@
         },
         {
             "name": "zetacomponents/webdav",
-            "version": "1.1rc1",
+            "version": "1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zetacomponents/Webdav.git",
-                "reference": "1.1rc1"
+                "reference": "1.1.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zetacomponents/Webdav/zipball/1.1rc1",
-                "reference": "1.1rc1",
+                "url": "https://github.com/zetacomponents/Webdav/zipball/1.1.3",
+                "reference": "1.1.3",
                 "shasum": ""
             },
-            "time": "2008-12-15 04:05:06",
+            "time": "2009-11-09 05:34:07",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1600,18 +1600,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezsystems/ezpublish.git",
-                "reference": "v5.1-ALPHA0"
+                "reference": "0cc032005ab01630c51ef84b89d7415f3238c28e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/ezsystems/ezpublish/archive/v5.1-ALPHA0.zip",
-                "reference": "v5.1-ALPHA0",
+                "url": "https://github.com/ezsystems/ezpublish/archive/0cc032005ab01630c51ef84b89d7415f3238c28e.zip",
+                "reference": "0cc032005ab01630c51ef84b89d7415f3238c28e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-12-13 13:28:14",
+            "time": "2012-12-13 20:49:10",
             "type": "library",
             "installation-source": "source",
             "notification-url": "https://packagist.org/downloads/",
@@ -1671,7 +1671,6 @@
         "zetacomponents/php-generator": 20,
         "zetacomponents/signal-slot": 20,
         "zetacomponents/system-information": 20,
-        "zetacomponents/webdav": 5,
         "kriswallsmith/buzz": 20,
         "ezsystems/ezpublish-legacy": 20
     }
