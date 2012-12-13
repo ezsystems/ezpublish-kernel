@@ -1,0 +1,49 @@
+ezpublish:
+    siteaccess:
+        # Available siteaccesses
+        list:
+            - ezdemo_site
+            - ezdemo_site_admin
+        # Siteaccess groups. Use them to group common settings.
+        groups:
+            ezdemo_group: [ezdemo_site, ezdemo_site_admin]
+        default_siteaccess: ezdemo_site
+        match:
+            Map\URI:
+                ezdemo_site: ezdemo_site
+                ezdemo_site_admin: ezdemo_site_admin
+            Map\Host:
+                ezpublish.dev: ezdemo_site
+                admin.ezpublish.dev: ezdemo_site_admin
+
+    # System settings, grouped by siteaccess and/or siteaccess group
+    system:
+        ezdemo_group:
+            database:
+                # This is set on purpose to force test to use $_ENV['DATABASE'] variable
+                dsn: mysql://root:pwd@localhost/ezdemo
+            languages: [eng-US, eng-GB, ger-DE]
+        ezdemo_site:
+            content:
+                view_cache: true
+                ttl_cache: true
+                default_ttl: 30
+            location_view:
+                full:
+                    smallFolder:
+                        template: eZDemoBundle:full:small_folder.html.twig
+                        match:
+                            Identifier\ContentType: small_folder
+                            Identifier\ParentContentType: [landing_page, frontpage]
+        ezdemo_site_admin:
+            # Bypass UrlAliasRouter to use the admin interface since everything needs to run via the legacy kernel
+            legacy_mode: true
+
+parameters:
+    secret: ThisTokenIsNotSoSecretChangeIt
+
+    # The session name.
+    # Using "{siteaccess_hash}" in the session name will make the session relative to the siteaccess.
+    session_name: "eZSESSID{siteaccess_hash}"
+
+    ezpublish_legacy.view.default_layout: eZDemoBundle::pagelayout.html.twig

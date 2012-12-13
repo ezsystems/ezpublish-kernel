@@ -28,10 +28,22 @@ class EzPublishLegacyExtension extends Extension
      */
     public function load( array $configs, ContainerBuilder $container )
     {
-        $configuration = new Configuration();
-        $config = $this->processConfiguration( $configuration, $configs );
+        // check if legacy dir is already set
+        if ( $container->hasParameter( 'ezpublish_legacy.root_dir' ) )
+        {
+            $config = array(
+                'enabled' => true,
+                'root_dir' => $container->getParameter( 'ezpublish_legacy.root_dir' ),
+            );
+        }
+        else
+        {
+            $configuration = new Configuration();
+            $config = $this->processConfiguration( $configuration, $configs );
+        }
 
         $container->setParameter( 'ezpublish_legacy.enabled', $config['enabled'] );
+
         if ( $config['enabled'] )
         {
             $loader = new Loader\YamlFileLoader(
