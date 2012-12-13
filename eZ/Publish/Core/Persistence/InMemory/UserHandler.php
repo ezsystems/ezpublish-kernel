@@ -284,7 +284,7 @@ class UserHandler implements UserHandlerInterface
      *
      * @param mixed $groupId In legacy storage engine this is the content object id roles are assigned to in ezuser_role.
      *                      By the nature of legacy this can currently also be used to get by $userId.
-     * @param boolean $inherit If true also return inherited role assigments from user groups.
+     * @param boolean $inherit If true also return inherited role assignments from user groups.
      *
      * @throws \LogicException Internal data corruption error
      * @uses getRoleAssignmentForContent()

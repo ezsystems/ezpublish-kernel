@@ -1431,7 +1431,7 @@ class UserServiceTest extends BaseTest
         $userUpdate->contentUpdateStruct = $contentUpdate;
 
         // This call will fail with a "ContentValidationException" because the
-        // mandary field "first_name" is set to an empty value.
+        // mandatory field "first_name" is set to an empty value.
         $userService->updateUser( $user, $userUpdate );
 
         /* END: Use Case */
@@ -1664,7 +1664,7 @@ class UserServiceTest extends BaseTest
         // eZ Publish demo installation
 
         // This call will fail with an "InvalidArgumentException", because the
-        // user is not assigned to the "Adminstrator" group
+        // user is not assigned to the "Administrator" group
         $userService->unAssignUserFromUserGroup(
             $user,
             $userService->loadUserGroup( $administratorGroupId )

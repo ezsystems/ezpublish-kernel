@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\IO\LegacyHandler\FileResourceProvider;
 use eZ\Publish\Core\IO\LegacyHandler\FileResourceProvider;
 
 /**
- * This class provides file resource functionnality for a cluster file
+ * This class provides file resource functionality for a cluster file
  */
 
 class eZFSFileHandler extends BaseHandler implements FileResourceProvider

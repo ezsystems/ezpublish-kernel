@@ -100,7 +100,7 @@ class RestUser extends ValueObjectVisitor
         $generator->startValueElement( 'alwaysAvailable', $contentInfo->alwaysAvailable ? 'true' : 'false' );
         $generator->endValueElement( 'alwaysAvailable' );
 
-        $visitor->visitValueObject( new VersionValue( $data->content ) );
+        $visitor->visitValueObject( new VersionValue( $data->content, $data->relations ) );
 
         $generator->startValueElement( 'login', $data->content->login );
         $generator->endValueElement( 'login' );

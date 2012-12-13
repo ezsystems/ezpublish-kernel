@@ -120,7 +120,7 @@ class FullText extends CriterionHandler
      * Get single word query expression
      *
      * Depending on the configuration of the full text search criterion
-     * converter wildcards are either transformed into the repsective LIKE
+     * converter wildcards are either transformed into the respective LIKE
      * queries, or everything is just compared using equal.
      *
      * @param \ezcQuerySelect $query

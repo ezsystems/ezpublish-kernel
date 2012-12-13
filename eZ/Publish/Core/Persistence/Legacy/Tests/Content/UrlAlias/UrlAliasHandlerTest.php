@@ -374,7 +374,7 @@ class UrlAliasHandlerTest extends TestCase
      * @depends testLookup
      * @group case-correction
      * @group location
-     * @todo refactor, only forward pretinent
+     * @todo refactor, only forward pertinent
      */
     public function testLookupLocationCaseCorrection(
         $url,

@@ -51,16 +51,6 @@ class UserGroup extends APIUserGroup
     }
 
     /**
-     * Returns the outgoing relations
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
-     */
-    public function getRelations()
-    {
-        return $this->content->getRelations();
-    }
-
-    /**
      * This method returns the complete fields collection
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field[]
@@ -129,9 +119,6 @@ class UserGroup extends APIUserGroup
 
             case 'fields':
                 return $this->getFields();
-
-            case 'relations':
-                return $this->getRelations();
         }
 
         return parent::__get( $property );
@@ -159,9 +146,6 @@ class UserGroup extends APIUserGroup
             return true;
 
         if ( $property === 'fields' )
-            return true;
-
-        if ( $property === 'relations' )
             return true;
 
         return parent::__isset( $property );

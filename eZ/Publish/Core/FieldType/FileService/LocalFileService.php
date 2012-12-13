@@ -120,9 +120,9 @@ class LocalFileService implements FileService
      * Removes the path identified by $storageIdentifier, potentially
      * $recursive.
      *
-     * Attemts to removed the path identified by $storageIdentifier. If
+     * Attempts to removed the path identified by $storageIdentifier. If
      * $storageIdentifier is a directory which is not empty and $recursive is
-     * set to false, an exception is thrown. Attemting to remove a non
+     * set to false, an exception is thrown. Attempting to remove a non
      * existing $storageIdentifier is silently ignored.
      *
      * @param string $storageIdentifier
@@ -150,7 +150,7 @@ class LocalFileService implements FileService
      * @return void
      * @throws RuntimeException if $path is a non-empty directory and
      *                          $recursive is false
-     * @throws RuntimeException if errors occure during removal
+     * @throws RuntimeException if error occurs during removal
      */
     protected function removePathInternal( $path, $recursive )
     {

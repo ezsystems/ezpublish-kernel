@@ -75,8 +75,6 @@ class Content extends Parser
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
-        $relationListUrl = $this->parserTools->parseObjectElement( $data['Relations'], $parsingDispatcher );
-
         $versionInfo = $this->versionInfoParser->parse(
             $data['VersionInfo'],
             $parsingDispatcher
@@ -87,8 +85,7 @@ class Content extends Parser
             $this->contentService,
             array(
                 'versionInfo' => $versionInfo,
-                'internalFields' => $fields,
-                'relationListId' => $data['Relations']['_href'],
+                'internalFields' => $fields
             )
         );
     }

@@ -371,7 +371,7 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Sets a location to be unhidden, and self + children to visible unless a parent is hidding the tree.
+     * Sets a location to be unhidden, and self + children to visible unless a parent is hiding the tree.
      * If not make sure only children down to first hidden node is marked visible.
      *
      * @param string $pathString
@@ -394,7 +394,7 @@ class EzcDatabase extends Gateway
             );
         $query->prepare()->execute();
 
-        // Check if any parent nodes are explicitely hidden
+        // Check if any parent nodes are explicitly hidden
         $query = $this->handler->createSelectQuery();
         $query
             ->select( $this->handler->quoteColumn( 'path_string' ) )

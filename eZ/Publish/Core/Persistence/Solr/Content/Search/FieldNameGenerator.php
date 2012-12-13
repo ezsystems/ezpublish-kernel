@@ -58,7 +58,7 @@ class FieldNameGenerator
     /**
      * Map field type
      *
-     * For Solr indexing the follwing scheme will always be used for names:
+     * For Solr indexing the following scheme will always be used for names:
      * {name}_{type}.
      *
      * Using dynamic fields this allows to define fields either depending on

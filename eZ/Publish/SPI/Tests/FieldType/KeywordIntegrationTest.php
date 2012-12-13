@@ -37,7 +37,7 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 class KeywordIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */

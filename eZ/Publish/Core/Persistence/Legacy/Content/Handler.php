@@ -108,12 +108,9 @@ class Handler implements BaseContentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct Content creation struct.
      * @param mixed $versionNo Used by self::copy() to maintain version numbers
      *
-     * @todo remove $copy param
-     * @param boolean $copy
-     *
      * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
-    protected function internalCreate( CreateStruct $struct, $versionNo = 1, $copy = false )
+    protected function internalCreate( CreateStruct $struct, $versionNo = 1 )
     {
         $content = new Content();
 
@@ -509,11 +506,7 @@ class Handler implements BaseContentHandler
         $createStruct = $this->mapper->createCreateStructFromContent(
             $this->load( $contentId, $currentVersionNo )
         );
-        $content = $this->internalCreate(
-            $createStruct,
-            $currentVersionNo,
-            true
-        );
+        $content = $this->internalCreate( $createStruct, $currentVersionNo );
 
         // If version was not passed also copy other versions
         if ( !isset( $versionNo ) )

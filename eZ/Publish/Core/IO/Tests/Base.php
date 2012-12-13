@@ -17,7 +17,7 @@ use finfo;
 abstract class Base extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Binary IoHanlder
+     * Binary IoHandler
      * @var \eZ\Publish\SPI\IO\Handler
      */
     protected $ioHandler;
@@ -262,7 +262,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\SPI\IO\Handler::load
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadNonExistinFile()
+    public function testLoadNonExistingFile()
     {
         $this->ioHandler->load( 'var/test/storage/loadNotFound.png' );
     }
@@ -288,9 +288,9 @@ abstract class Base extends \PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\SPI\IO\Handler::getFileResource
      * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
-    public function testGetFileResourceNonExistinFile()
+    public function testGetFileResourceNonExistingFile()
     {
-        $this->ioHandler->getFileResource( 'var/test/testGetFileResourceNonExistinFile.png' );
+        $this->ioHandler->getFileResource( 'var/test/testGetFileResourceNonExistingFile.png' );
     }
 
     /**

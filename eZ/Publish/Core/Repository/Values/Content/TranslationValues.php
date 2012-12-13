@@ -26,7 +26,7 @@ class TranslationValues extends APITranslationValues
     /**
      * Adds a translated field to the field collection in the given language
      * This method is also be implemented by ArrayAccess so that
-     * $fielfs[$fieldDefIdentifer] = $value is an equivalent call
+     * $fields[$fieldDefIdentifier] = $value is an equivalent call
      *
      * @param string $fieldDefIdentifier the identifier of the field definition
      * @param mixed $value Either a plain value which is understandable by the field type or an instance of a Value class provided by the field type

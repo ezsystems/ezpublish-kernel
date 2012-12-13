@@ -42,7 +42,8 @@ class UserRefListTest extends ValueObjectVisitorBaseTest
                             'id' => 14
                         )
                     ),
-                    new Location()
+                    new Location(),
+                    array()
                 )
             ),
             '/some/path'

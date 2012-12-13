@@ -15,7 +15,7 @@ use eZ\Publish\SPI\FieldType\FieldStorage;
  * Storage gateway base class to be used by FieldType storages
  *
  * This class gives a common basis to realized gateway based storage
- * dispatching. It is intened to deal as a base class for FieldType storages,
+ * dispatching. It is intended to deal as a base class for FieldType storages,
  * giving a common infrastructure to handle multiple gateways, based on the
  * context provided by the SPI.
  *
@@ -61,7 +61,7 @@ abstract class GatewayBasedStorage implements FieldStorage
     }
 
     /**
-     * Retrieve the fitting gateway, base on the identifer in $context
+     * Retrieve the fitting gateway, base on the identifier in $context
      *
      * @param array $context
      *

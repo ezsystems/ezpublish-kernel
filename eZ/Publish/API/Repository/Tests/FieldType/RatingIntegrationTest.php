@@ -21,7 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 class RatingIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -295,7 +295,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Emptyness for rating doesn't make sense, field is always considered as non empty.
+     * Emptiness for rating doesn't make sense, field is always considered as non empty.
      */
     public function testIsEmptyValue( $value = null )
     {

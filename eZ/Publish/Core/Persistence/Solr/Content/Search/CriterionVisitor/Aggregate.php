@@ -82,7 +82,7 @@ class Aggregate extends CriterionVisitor
             }
         }
 
-        throw new NotImplementedException( "No visitor avialable for: " . get_class( $criterion ) . ' with operator ' . $criterion->operator );
+        throw new NotImplementedException( "No visitor available for: " . get_class( $criterion ) . ' with operator ' . $criterion->operator );
     }
 }
 

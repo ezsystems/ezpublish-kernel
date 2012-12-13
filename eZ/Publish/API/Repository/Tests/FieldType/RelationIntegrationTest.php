@@ -22,7 +22,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */

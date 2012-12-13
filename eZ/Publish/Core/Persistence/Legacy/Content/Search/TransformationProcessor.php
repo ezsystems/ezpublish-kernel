@@ -86,7 +86,7 @@ abstract class TransformationProcessor
         {
             if ( !isset( $rules[$ruleName] ) )
             {
-                // Just continue on unknow rules, or should we throw an error
+                // Just continue on unknown rules, or should we throw an error
                 // here?
                 continue;
             }

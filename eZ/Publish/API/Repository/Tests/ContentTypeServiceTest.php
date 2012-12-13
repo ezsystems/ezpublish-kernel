@@ -380,7 +380,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $this->assertEquals(
             $expectedIdentifiers,
             $actualIdentifiers,
-            'Identifier missmatch in loeaded groups.'
+            'Identifier missmatch in loaded groups.'
         );
     }
 
@@ -1366,7 +1366,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
-     * @depens eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      */
     public function testRemoveFieldDefinition()
     {
@@ -2192,7 +2192,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     public function testCreateContentTypeDraftThrowsBadStateException()
     {
         $this->markTestIncomplete(
-            'Behavior to test is: If a draft *by a different user* exists, throw BadState. Cannot be tested on current fixture, since additional, previledged user is missing.'
+            'Behavior to test is: If a draft *by a different user* exists, throw BadState. Cannot be tested on current fixture, since additional, privileged user is missing.'
         );
 
         $repository = $this->getRepository();

@@ -19,7 +19,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read mixed $id convenience getter for retrieving the contentId: $versionInfo->contentInfo->id
  * @property-read \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo calls getVersionInfo()
  * @property-read array $fields access fields, calls getFields()
- * @property-read array $relations calls getRelations() ( @deprecated Use dedicated API to load relations instead )
  */
 abstract class Content extends ValueObject
 {
@@ -43,15 +42,6 @@ abstract class Content extends ValueObject
      * @return mixed a primitive type or a field type Value object depending on the field type.
      */
     abstract public function getFieldValue( $fieldDefIdentifier, $languageCode = null );
-
-    /**
-     * Returns the outgoing relations
-     *
-     * @deprecated Use dedicated API to load relations instead
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[] An array of {@link Relation}
-     */
-    abstract public function getRelations();
 
     /**
      * This method returns the complete fields collection

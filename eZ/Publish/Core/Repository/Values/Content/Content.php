@@ -20,7 +20,6 @@ use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
  * @property-read mixed $id convenience getter for retrieving the contentId: $versionInfo->content->id
  * @property-read \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo calls getVersionInfo()
  * @property-read \eZ\Publish\API\Repository\Values\Content\Field[] $fields Access fields, calls getFields()
- * @property-read \eZ\Publish\API\Repository\Values\Content\Relation[] $relations Calls getRelations()
  */
 class Content extends APIContent
 {
@@ -28,11 +27,6 @@ class Content extends APIContent
      * @var mixed[][] An array of array of field values like $fields[$fieldDefIdentifier][$languageCode]
      */
     protected $fields;
-
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Relation[]
-     */
-    protected $relations;
 
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
@@ -91,16 +85,6 @@ class Content extends APIContent
         }
 
         return null;
-    }
-
-    /**
-     * Returns the outgoing relations
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[] An array of {@link Relation}
-     */
-    public function getRelations()
-    {
-        return $this->relations;
     }
 
     /**

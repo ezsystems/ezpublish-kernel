@@ -52,16 +52,6 @@ class UserGroupStub extends UserGroup
     }
 
     /**
-     * Returns the outgoing relations
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
-     */
-    public function getRelations()
-    {
-        return $this->content->getRelations();
-    }
-
-    /**
      * This method returns the complete fields collection
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field[]
@@ -103,9 +93,6 @@ class UserGroupStub extends UserGroup
 
             case 'fields':
                 return $this->getFields();
-
-            case 'relations':
-                return $this->getRelations();
         }
 
         return parent::__get( $property );
