@@ -1,15 +1,9 @@
 {
-    "name": "ezsystems/ezpublish",
+    "name": "ezsystems/ezp-next",
     "description": "eZ Publish API and kernel. This is the heart of eZ Publish 5.",
-    "version": "5.0-dev",
+    "version": "5.1-dev",
     "homepage": "http://share.ez.no",
     "license": "GPL-2.0",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/ezsystems/ezpublish.git"
-        }
-    ],
     "require": {
         "php": ">=5.3.3",
         "zetacomponents/archive": "dev-master",
