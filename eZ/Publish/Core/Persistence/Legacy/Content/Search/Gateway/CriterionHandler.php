@@ -71,14 +71,13 @@ abstract class CriterionHandler
     abstract public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion );
 
     /**
-     * Returns a unique table name for the given table
+     * Returns a unique table name
      *
-     * @param string $table
      * @return string
      */
-    protected function getUniqueTableName( $table )
+    protected function getUniqueTableName()
     {
-        return $table . '_' . substr( md5( microtime() ), 0, 8 );
+        return uniqid();
     }
 }
 

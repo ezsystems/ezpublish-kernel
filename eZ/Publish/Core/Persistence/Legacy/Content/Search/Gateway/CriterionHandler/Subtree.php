@@ -42,7 +42,7 @@ class Subtree extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
     {
-        $table = $this->getUniqueTableName( 'ezcontentobject_tree' );
+        $table = $this->getUniqueTableName();
 
         $statements = array();
         foreach ( $criterion->value as $pattern )
