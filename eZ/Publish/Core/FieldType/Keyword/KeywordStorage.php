@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Keyword;
-use eZ\Publish\Core\FieldType\GatewayBasedStorage,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field;
+
+use eZ\Publish\Core\FieldType\GatewayBasedStorage;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Converter for Keyword field type external storage
@@ -45,29 +46,31 @@ class KeywordStorage extends GatewayBasedStorage
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     *
      * @return void
      */
     public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         $gateway = $this->getGateway( $context );
-        // @TODO: This should already retrieve the ContentType ID
+        // @todo: This should already retrieve the ContentType ID
         return $gateway->getFieldData( $field );
     }
 
     /**
      * @param array $fieldId
      * @param array $context
-     * @return bool
+     *
+     * @return boolean
      */
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldId, array $context )
     {
-        // @TODO: What about deleting keywords?
+        // @todo: What about deleting keywords?
     }
 
     /**
      * Checks if field type has external data to deal with
      *
-     * @return bool
+     * @return boolean
      */
     public function hasFieldData()
     {

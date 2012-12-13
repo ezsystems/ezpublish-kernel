@@ -33,6 +33,15 @@
     <testsuite name="eZ Publish legacy test suite">
         <directory>eZ/Publish/Core/MVC/Legacy</directory>
     </testsuite>
+    <testsuite name="eZ Publish REST test suite">
+        <directory>eZ/Publish/Core/REST</directory>
+    </testsuite>
+    <testsuite name="eZ Publish SPI test suite">
+        <directory>eZ/Publish/SPI</directory>
+    </testsuite>
+    <testsuite name="eZ Publish SignalSlot test suite">
+        <directory>eZ/Publish/Core/SignalSlot</directory>
+    </testsuite>
   </testsuites>
   <filter>
     <whitelist>
@@ -40,6 +49,8 @@
       <exclude>
           <directory>eZ/Publish/*/Tests</directory>
           <directory>eZ/Publish/*/*/Tests</directory>
+          <directory>eZ/Publish/*/*/*/Tests</directory>
+          <directory>eZ/Publish/*/*/*/*/Tests</directory>
           <directory>eZ/Bundle/*/Tests</directory>
           <directory>eZ/Bundle/*/_fixtures</directory>
           <directory>eZ/Publish/Core/Persistence/Legacy/docs</directory>

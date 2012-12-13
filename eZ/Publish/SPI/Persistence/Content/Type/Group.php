@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content\Type;
+
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
@@ -27,7 +28,7 @@ class Group extends ValueObject
      * @since 5.0
      * @var string[]
      */
-    public $name;
+    public $name = array();
 
     /**
      * Description

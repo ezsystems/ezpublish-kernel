@@ -8,17 +8,17 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
-use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\Relation,
-    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry,
-    eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo;
+
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\Relation;
+use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 /**
  * Mapper for Content Handler.
@@ -35,13 +35,6 @@ class Mapper
     protected $converterRegistry;
 
     /**
-     * Location mapper
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
-     */
-    protected $locationMapper;
-
-    /**
      * Caching language handler
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
@@ -51,14 +44,12 @@ class Mapper
     /**
      * Creates a new mapper.
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $converterRegistry
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      */
-    public function __construct( LocationMapper $locationMapper, Registry $converterRegistry, LanguageHandler $languageHandler )
+    public function __construct( Registry $converterRegistry, LanguageHandler $languageHandler )
     {
         $this->converterRegistry = $converterRegistry;
-        $this->locationMapper = $locationMapper;
         $this->languageHandler = $languageHandler;
     }
 
@@ -81,6 +72,9 @@ class Mapper
         $contentInfo->alwaysAvailable = $struct->alwaysAvailable;
         $contentInfo->remoteId = $struct->remoteId;
         $contentInfo->mainLanguageCode = $this->languageHandler->load( $struct->initialLanguageId )->languageCode;
+        $contentInfo->name = isset( $struct->name[$contentInfo->mainLanguageCode] )
+            ? $struct->name[$contentInfo->mainLanguageCode]
+            : "";
         // For drafts published and modified timestamps should be 0
         $contentInfo->publicationDate = 0;
         $contentInfo->modificationDate = 0;
@@ -180,13 +174,14 @@ class Mapper
      *      "$tableName_$columnName"
      *
      * @param array $rows
+     *
      * @return \eZ\Publish\SPI\Persistence\Content[]
      */
     public function extractContentFromRows( array $rows )
     {
         $contentInfos = array();
         $versionInfos = array();
-        $locations = array();
+
         $fields = array();
 
         foreach ( $rows as $row )
@@ -200,10 +195,6 @@ class Mapper
             {
                 $versionInfos[$contentId] = array();
             }
-            if ( !isset( $locations[$contentId] ) )
-            {
-                $locations[$contentId] = array();
-            }
 
             $versionId = (int)$row['ezcontentobject_version_id'];
             if ( !isset( $versionInfos[$contentId][$versionId] ) )
@@ -214,24 +205,11 @@ class Mapper
             {
                 $versionInfos[$contentId][$versionId]->names[$row['ezcontentobject_name_content_translation']] = $row['ezcontentobject_name_name'];
             }
-            if ( !isset( $locations[$contentId][$versionId] ) )
-            {
-                $locations[$contentId][$versionId] = array();
-            }
 
             $fieldId = (int)$row['ezcontentobject_attribute_id'];
             if ( !isset( $fields[$contentId][$versionId][$fieldId] ) )
             {
                 $fields[$contentId][$versionId][$fieldId] = $this->extractFieldFromRow( $row );
-            }
-
-            $locationId = (int)$row['ezcontentobject_tree_node_id'];
-            if ( isset( $row['ezcontentobject_tree_node_id'] ) && !isset( $locations[$contentId][$versionId][$locationId] ) )
-            {
-                $locations[$contentId][$versionId][$locationId] =
-                    $this->locationMapper->createLocationFromRow(
-                        $row, 'ezcontentobject_tree_'
-                    );
             }
         }
 
@@ -243,7 +221,6 @@ class Mapper
                 $content = new Content;
                 $content->versionInfo = $versionInfo;
                 $content->versionInfo->contentInfo = $contentInfo;
-                $content->locations = array_values( $locations[$contentId][$versionId] );
                 $content->fields = array_values( $fields[$contentId][$versionId] );
                 $results[] = $content;
             }
@@ -256,6 +233,7 @@ class Mapper
      *
      * @param array $row
      * @param string $prefix Prefix for row keys, which are initially mapped by ezcontentobject fields
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
     public function extractContentInfoFromRow( array $row, $prefix = '' )
@@ -345,7 +323,7 @@ class Mapper
     /**
      * @todo use langmask handler for this
      *
-     * @param $languageMask
+     * @param int $languageMask
      *
      * @return array
      */
@@ -370,6 +348,7 @@ class Mapper
      * Extracts a Field from $row
      *
      * @param array $row
+     *
      * @return Field
      */
     protected function extractFieldFromRow( array $row )
@@ -391,6 +370,7 @@ class Mapper
      *
      * @param array $row
      * @param string $type
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      *         if the necessary converter for $type could not be found.
@@ -424,6 +404,7 @@ class Mapper
      * Creates CreateStruct from $content
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\CreateStruct
      */
     public function createCreateStructFromContent( Content $content )

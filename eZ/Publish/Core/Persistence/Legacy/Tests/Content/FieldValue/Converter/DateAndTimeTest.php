@@ -8,20 +8,21 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use eZ\Publish\Core\FieldType\DateAndTime\Type as DateAndTimeType,
-    eZ\Publish\Core\FieldType\FieldSettings,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime as DateAndTimeConverter,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
-    PHPUnit_Framework_TestCase,
-    DateTime,
-    DateInterval,
-    SimpleXMLElement,
-    DOMDocument,
-    ReflectionObject;
+
+use eZ\Publish\Core\FieldType\DateAndTime\Type as DateAndTimeType;
+use eZ\Publish\Core\FieldType\FieldSettings;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime as DateAndTimeConverter;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
+use PHPUnit_Framework_TestCase;
+use DateTime;
+use DateInterval;
+use SimpleXMLElement;
+use DOMDocument;
+use ReflectionObject;
 
 /**
  * Test case for DateAndTime converter in Legacy storage
@@ -327,6 +328,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
      * Generates XML string from $dateInterval
      *
      * @param \DateInterval $dateInterval
+     *
      * @return string
      */
     private function getXMLStringFromDateInterval( DateInterval $dateInterval )

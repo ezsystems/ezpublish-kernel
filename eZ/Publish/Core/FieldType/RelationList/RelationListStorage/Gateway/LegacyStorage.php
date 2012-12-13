@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\FieldType\RelationList\RelationListStorage\Gateway;
-use eZ\Publish\Core\FieldType\Relation\RelationStorage\Gateway\LegacyStorage as RelationLegacyStorage,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\API\Repository\Values\Content\Relation as APIRelationValue;
+
+use eZ\Publish\Core\FieldType\Relation\RelationStorage\Gateway\LegacyStorage as RelationLegacyStorage;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Relation as APIRelationValue;
 
 /**
  * RelationList Legacy Gateway, extends RelationGateway

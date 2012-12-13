@@ -9,8 +9,8 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface,
-    eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
 
 class ChainConfigResolver implements ConfigResolverInterface
 {
@@ -79,6 +79,7 @@ class ChainConfigResolver implements ConfigResolverInterface
      * @param string $scope The scope you need $paramName value for.
      *
      * @throws \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException
+     *
      * @return mixed
      */
     public function getParameter( $paramName, $namespace = null, $scope = null )
@@ -106,7 +107,7 @@ class ChainConfigResolver implements ConfigResolverInterface
      * @param string $namespace If null, the default namespace should be used.
      * @param string $scope The scope you need $paramName value for.
      *
-     * @return bool
+     * @return boolean
      */
     public function hasParameter( $paramName, $namespace = null, $scope = null )
     {

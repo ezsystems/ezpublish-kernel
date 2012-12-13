@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\ObjectState;
+
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 
 /**
@@ -44,7 +44,6 @@ class ObjectStateStub extends ObjectState
     protected $stateGroup;
 
     /**
-     *
      * This method returns the human readable name in all provided languages
      * of the content type
      *
@@ -61,7 +60,7 @@ class ObjectStateStub extends ObjectState
     }
 
     /**
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
      *
      * @param string $languageCode
      *
@@ -88,11 +87,11 @@ class ObjectStateStub extends ObjectState
     }
 
     /**
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
      *
      * @param string $languageCode
      *
-     * @return string the description for the given language or null if none existis.
+     * @return string the description for the given language or null if none exists.
      */
     public function getDescription( $languageCode )
     {
@@ -102,7 +101,7 @@ class ObjectStateStub extends ObjectState
     /**
      * The object state group this object state belongs to
      *
-     * @return eZ\Publish\API\Repository\Values\Content\ObjectStateGroup
+     * @return \eZ\Publish\API\Repository\Values\Content\ObjectStateGroup
      */
     public function getObjectStateGroup()
     {
@@ -114,10 +113,15 @@ class ObjectStateStub extends ObjectState
      *
      * ONLY FOR INTERNAL USE IN THE INTEGRATION TEST SUITE.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param int $priority
+     *
      * @return void
      */
-    public function _setPriority( $priority )
+    public function setPriority( $priority )
     {
         $this->priority = $priority;
     }

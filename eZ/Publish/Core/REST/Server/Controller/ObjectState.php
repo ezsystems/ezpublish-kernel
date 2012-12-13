@@ -8,9 +8,8 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+
 use eZ\Publish\Core\REST\Common\Message;
-use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Common\Values\RestObjectState;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
@@ -20,6 +19,7 @@ use eZ\Publish\API\Repository\ContentService;
 
 use eZ\Publish\Core\REST\Common\Values\ContentObjectStates;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 
 /**
@@ -60,19 +60,25 @@ class ObjectState extends RestController
      */
     public function createObjectStateGroup()
     {
-        //@todo Error handling if identifier already exists
-        //Problem being, PAPI does not specify exception in that case
+        try
+        {
+            $createdStateGroup = $this->objectStateService->createObjectStateGroup(
+                $this->inputDispatcher->parse(
+                    new Message(
+                        array( 'Content-Type' => $this->request->contentType ),
+                        $this->request->body
+                    )
+                )
+            );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
 
         return new Values\CreatedObjectStateGroup(
             array(
-                'objectStateGroup' => $this->objectStateService->createObjectStateGroup(
-                    $this->inputDispatcher->parse(
-                        new Message(
-                            array( 'Content-Type' => $this->request->contentType ),
-                            $this->request->body
-                        )
-                    )
-                )
+                'objectStateGroup' => $createdStateGroup
             )
         );
     }
@@ -84,25 +90,31 @@ class ObjectState extends RestController
      */
     public function createObjectState()
     {
-        //@todo Error handling if identifier already exists
-        //Problem being, PAPI does not specify exception in that case
-
         $values = $this->urlHandler->parse( 'objectstates', $this->request->path );
 
         $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] );
 
+        try
+        {
+            $createdObjectState = $this->objectStateService->createObjectState(
+                $objectStateGroup,
+                $this->inputDispatcher->parse(
+                    new Message(
+                        array( 'Content-Type' => $this->request->contentType ),
+                        $this->request->body
+                    )
+                )
+            );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
+
         return new Values\CreatedObjectState(
             array(
                 'objectState' => new RestObjectState(
-                    $this->objectStateService->createObjectState(
-                        $objectStateGroup,
-                        $this->inputDispatcher->parse(
-                            new Message(
-                                array( 'Content-Type' => $this->request->contentType ),
-                                $this->request->body
-                            )
-                        )
-                    ),
+                    $createdObjectState,
                     $objectStateGroup->id
                 )
             )
@@ -165,7 +177,7 @@ class ObjectState extends RestController
     /**
      * The given object state group including the object states is deleted
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteObjectStateGroup()
     {
@@ -174,13 +186,13 @@ class ObjectState extends RestController
             $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] )
         );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
      * The given object state is deleted
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteObjectState()
     {
@@ -189,7 +201,7 @@ class ObjectState extends RestController
             $this->objectStateService->loadObjectState( $values['objectstate'] )
         );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
@@ -199,9 +211,6 @@ class ObjectState extends RestController
      */
     public function updateObjectStateGroup()
     {
-        //@todo Error handling if identifier already exists
-        //Problem being, PAPI does not specify exception in that case
-
         $values = $this->urlHandler->parse( 'objectstategroup', $this->request->path );
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
@@ -209,10 +218,18 @@ class ObjectState extends RestController
                 $this->request->body
             )
         );
-        return $this->objectStateService->updateObjectStateGroup(
-            $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] ),
-            $updateStruct
-        );
+
+        $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] );
+
+        try
+        {
+            $updatedStateGroup = $this->objectStateService->updateObjectStateGroup( $objectStateGroup, $updateStruct );
+            return $updatedStateGroup;
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
     }
 
     /**
@@ -222,9 +239,6 @@ class ObjectState extends RestController
      */
     public function updateObjectState()
     {
-        //@todo Error handling if identifier already exists
-        //Problem being, PAPI does not specify exception in that case
-
         $values = $this->urlHandler->parse( 'objectstate', $this->request->path );
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
@@ -232,13 +246,18 @@ class ObjectState extends RestController
                 $this->request->body
             )
         );
-        return new RestObjectState(
-            $this->objectStateService->updateObjectState(
-                $this->objectStateService->loadObjectState( $values['objectstate'] ),
-                $updateStruct
-            ),
-            $values['objectstategroup']
-        );
+
+        $objectState = $this->objectStateService->loadObjectState( $values['objectstate'] );
+
+        try
+        {
+            $updatedObjectState = $this->objectStateService->updateObjectState( $objectState, $updateStruct );
+            return new RestObjectState( $updatedObjectState, $values['objectstategroup'] );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
     }
 
     /**
@@ -258,7 +277,7 @@ class ObjectState extends RestController
         {
             try
             {
-                $state = $this->objectStateService->getObjectState( $contentInfo, $group );
+                $state = $this->objectStateService->getContentState( $contentInfo, $group );
                 $contentObjectStates[] = new RestObjectState( $state, $group->id );
             }
             catch ( NotFoundException $e )
@@ -289,7 +308,7 @@ class ObjectState extends RestController
         $countByGroups = array();
         foreach ( $newObjectStates as $newObjectState )
         {
-            $groupId = (int) $newObjectState->groupId;
+            $groupId = (int)$newObjectState->groupId;
             if ( array_key_exists( $groupId, $countByGroups ) )
             {
                 $countByGroups[$groupId]++;
@@ -314,8 +333,8 @@ class ObjectState extends RestController
         foreach ( $newObjectStates as $newObjectState )
         {
             $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $newObjectState->groupId );
-            $this->objectStateService->setObjectState( $contentInfo, $objectStateGroup, $newObjectState->objectState );
-            $contentObjectStates[(int) $objectStateGroup->id] = $newObjectState;
+            $this->objectStateService->setContentState( $contentInfo, $objectStateGroup, $newObjectState->objectState );
+            $contentObjectStates[(int)$objectStateGroup->id] = $newObjectState;
         }
 
         return new ContentObjectStates( $contentObjectStates );

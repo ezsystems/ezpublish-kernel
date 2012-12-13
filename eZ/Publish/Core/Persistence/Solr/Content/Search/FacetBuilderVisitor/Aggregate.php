@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor,
-    eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder,
-    eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
+use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
  * Visits the facet builder tree into a Solr query
@@ -29,6 +29,7 @@ class Aggregate extends FacetBuilderVisitor
      * COnstruct from optional visitor array
      *
      * @param array $visitors
+     *
      * @return void
      */
     public function __construct( array $visitors = array() )
@@ -40,9 +41,10 @@ class Aggregate extends FacetBuilderVisitor
     }
 
     /**
-     * Add visitor
+     * Adds visitor
      *
      * @param FieldValueVisitor $visitor
+     *
      * @return void
      */
     public function addVisitor( FacetBuilderVisitor $visitor )
@@ -54,7 +56,8 @@ class Aggregate extends FacetBuilderVisitor
      * CHeck if visitor is applicable to current facet result
      *
      * @param string $field
-     * @return bool
+     *
+     * @return boolean
      */
     public function canMap( $field )
     {
@@ -66,6 +69,7 @@ class Aggregate extends FacetBuilderVisitor
      *
      * @param string $field
      * @param array $data
+     *
      * @return Facet
      */
     public function map( $field, array $data )
@@ -78,14 +82,15 @@ class Aggregate extends FacetBuilderVisitor
             }
         }
 
-        throw new \OutOfRangeException( "No visitor avialable for: " . $field );
+        throw new \OutOfRangeException( "No visitor available for: " . $field );
     }
 
     /**
      * CHeck if visitor is applicable to current facet builder
      *
      * @param FacetBuilder $facetBuilder
-     * @return bool
+     *
+     * @return boolean
      */
     public function canVisit( FacetBuilder $facetBuilder )
     {
@@ -96,6 +101,7 @@ class Aggregate extends FacetBuilderVisitor
      * Map field value to a proper Solr representation
      *
      * @param FacetBuilder $facetBuilder
+     *
      * @return void
      */
     public function visit( FacetBuilder $facetBuilder )
@@ -108,7 +114,7 @@ class Aggregate extends FacetBuilderVisitor
             }
         }
 
-        throw new NotImplementedException( "No visitor avialable for: " . get_class( $facetBuilder ) );
+        throw new NotImplementedException( "No visitor available for: " . get_class( $facetBuilder ) );
     }
 }
 

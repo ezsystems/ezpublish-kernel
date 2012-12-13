@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\Repository\Values\User;
 
-use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupCreateStruct,
-    eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * This class is used to create a new user group in the repository

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -29,7 +30,7 @@ class SectionListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $sectionList = new SectionList( array() );
+        $sectionList = new SectionList( array(), '/content/sections' );
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -48,6 +49,7 @@ class SectionListTest extends ValueObjectVisitorBaseTest
      * Test if result contains SectionList element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSectionListElement( $result )
@@ -66,6 +68,7 @@ class SectionListTest extends ValueObjectVisitorBaseTest
      * Test if result contains SectionList element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSectionListAttributes( $result )
@@ -94,10 +97,13 @@ class SectionListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $sectionList = new SectionList( array(
-            new Content\Section(),
-            new Content\Section(),
-        ) );
+        $sectionList = new SectionList(
+            array(
+                new Content\Section(),
+                new Content\Section(),
+            ),
+            '/content/sections'
+        );
 
         $this->getVisitorMock()->expects( $this->exactly( 2 ) )
             ->method( 'visitValueObject' )

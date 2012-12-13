@@ -39,7 +39,7 @@ interface RoleService
     public function createRole( RoleCreateStruct $roleCreateStruct );
 
     /**
-     * Updates the name and (5.x) description of the role
+     * Updates the name of the role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
@@ -52,7 +52,7 @@ interface RoleService
     public function updateRole( Role $role, RoleUpdateStruct $roleUpdateStruct );
 
     /**
-     * adds a new policy to the role
+     * Adds a new policy to the role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to add  a policy
      *
@@ -89,7 +89,7 @@ interface RoleService
     public function updatePolicy( Policy $policy, PolicyUpdateStruct $policyUpdateStruct );
 
     /**
-     * loads a role for the given id
+     * Loads a role for the given id
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
@@ -101,7 +101,7 @@ interface RoleService
     public function loadRole( $id );
 
     /**
-     * loads a role for the given identifier
+     * Loads a role for the given identifier
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
@@ -113,16 +113,16 @@ interface RoleService
     public function loadRoleByIdentifier( $identifier );
 
     /**
-     * loads all roles
+     * Loads all roles
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the roles
      *
-     * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\Role}
+     * @return \eZ\Publish\API\Repository\Values\User\Role[]
      */
     public function loadRoles();
 
     /**
-     * deletes the given role
+     * Deletes the given role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete this role
      *
@@ -131,18 +131,18 @@ interface RoleService
     public function deleteRole( Role $role );
 
     /**
-     * loads all policies from roles which are assigned to a user or to user groups to which the user belongs
+     * Loads all policies from roles which are assigned to a user or to user groups to which the user belongs
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
      *
-     * @param $userId
+     * @param mixed $userId
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
     public function loadPoliciesByUserId( $userId );
 
     /**
-     * assigns a role to the given user group
+     * Assigns a role to the given user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
      *
@@ -164,7 +164,7 @@ interface RoleService
     public function unassignRoleFromUserGroup( Role $role, UserGroup $userGroup );
 
     /**
-     * assigns a role to the given user
+     * Assigns a role to the given user
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
      *
@@ -186,40 +186,40 @@ interface RoleService
     public function unassignRoleFromUser( Role $role, User $user );
 
     /**
-     * returns the assigned user and user groups to this role
+     * Returns the assigned user and user groups to this role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a role
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[] an array of {@link RoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[]
      */
     public function getRoleAssignments( Role $role );
 
     /**
-     * returns the roles assigned to the given user
+     * Returns the roles assigned to the given user
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
-     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment[] an array of {@link UserRoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment[]
      */
     public function getRoleAssignmentsForUser( User $user );
 
     /**
-     * returns the roles assigned to the given user group
+     * Returns the roles assigned to the given user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user group
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment[] an array of {@link UserGroupRoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment[]
      */
     public function getRoleAssignmentsForUserGroup( UserGroup $userGroup );
 
     /**
-     * instantiates a role create class
+     * Instantiates a role create class
      *
      * @param string $name
      *
@@ -228,7 +228,7 @@ interface RoleService
     public function newRoleCreateStruct( $name );
 
     /**
-     * instantiates a policy create class
+     * Instantiates a policy create class
      *
      * @param string $module
      * @param string $function
@@ -238,14 +238,14 @@ interface RoleService
     public function newPolicyCreateStruct( $module, $function );
 
     /**
-     * instantiates a policy update class
+     * Instantiates a policy update class
      *
      * @return \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
      */
     public function newPolicyUpdateStruct();
 
     /**
-     * instantiates a policy update class
+     * Instantiates a policy update class
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct
      */

@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Url\Type as UrlType,
-    eZ\Publish\Core\FieldType\Url\Value as UrlValue,
-    ReflectionObject;
+
+use eZ\Publish\Core\FieldType\Url\Type as UrlType;
+use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
+use ReflectionObject;
 
 /**
  * @group fieldType
@@ -61,7 +62,7 @@ class UrlTest extends StandardizedFieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return null;
+        return new UrlValue;
     }
 
     /**
@@ -135,7 +136,7 @@ class UrlTest extends StandardizedFieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new UrlValue,
             ),
             array(
                 'http://example.com/sindelfingen',

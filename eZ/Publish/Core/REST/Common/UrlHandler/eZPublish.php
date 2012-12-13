@@ -18,13 +18,15 @@ class eZPublish extends Pattern
      * Map of URL types to their URL patterns
      *
      * @var array
-     * @TODO: Add sensible missing names
+     * @todo: Add sensible missing names
      */
     protected $map = array(
         'root'                      => '/',
         'locations'                 => '/content/locations',
         'locationByRemote'          => '/content/locations?remoteId={location}',
+        'locationById'              => '/content/locations?id={location}',
         'locationChildren'          => '/content/locations{&location}/children',
+        'locationUrlAliases'        => '/content/locations{&location}/urlaliases',
         'location'                  => '/content/locations{&location}',
         'objects'                   => '/content/objects',
         'objectByRemote'            => '/content/objects?remoteId={object}',
@@ -64,6 +66,8 @@ class eZPublish extends Pattern
         'groupOfType'               => '/content/types/{type}/groups/{group}',
         'urlWildcards'              => '/content/urlwildcards',
         'urlWildcard'               => '/content/urlwildcards/{urlwildcard}',
+        'urlAliases'                => '/content/urlaliases',
+        'urlAlias'                  => '/content/urlaliases/{urlalias}',
         'views'                     => '/content/views',
         'view'                      => '/content/views/{view}',
         'viewResults'               => '/content/views/{view}/results',

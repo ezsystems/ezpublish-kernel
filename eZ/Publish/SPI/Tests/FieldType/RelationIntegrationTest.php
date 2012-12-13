@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
-use eZ\Publish\Core\Persistence\Legacy,
-    eZ\Publish\Core\FieldType,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
+
+use eZ\Publish\Core\Persistence\Legacy;
+use eZ\Publish\Core\FieldType;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 
 /**
  * Integration test for legacy storage field types
@@ -34,10 +35,10 @@ use eZ\Publish\Core\Persistence\Legacy,
  *
  * @group integration
  */
-class RelationIntergrationTest extends BaseIntegrationTest
+class RelationIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -80,11 +81,13 @@ class RelationIntergrationTest extends BaseIntegrationTest
     public function getTypeConstraints()
     {
         return new Content\FieldTypeConstraints(
-            array( 'fieldSettings' => array(
-                'selectionMethod' => 0,
-                'selectionRoot' => ''
+            array(
+                'fieldSettings' => array(
+                    'selectionMethod' => 0,
+                    'selectionRoot' => ''
+                )
             )
-        ) );
+        );
     }
 
     /**
@@ -114,11 +117,13 @@ class RelationIntergrationTest extends BaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => array( 'destinationContentId' => 1),
-            'externalData' => array( 'destinationContentId' => 1),
-            'sortKey'      => null,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => array( 'destinationContentId' => 1 ),
+                'externalData' => array( 'destinationContentId' => 1 ),
+                'sortKey'      => null,
+            )
+        );
     }
 
     /**
@@ -156,11 +161,13 @@ class RelationIntergrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => array( 'destinationContentId' => 2 ),
-            'externalData' => array( 'destinationContentId' => 2 ),
-            'sortKey'      => null,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => array( 'destinationContentId' => 2 ),
+                'externalData' => array( 'destinationContentId' => 2 ),
+                'sortKey'      => null,
+            )
+        );
     }
 
     /**
@@ -192,4 +199,3 @@ class RelationIntergrationTest extends BaseIntegrationTest
         );
     }
 }
-

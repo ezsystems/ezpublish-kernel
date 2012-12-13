@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Provider\Content;
 
-use eZ\Publish\Core\MVC\Symfony\View\Provider\Content as ContentViewProvider,
-    eZ\Publish\Core\MVC\Symfony\View\Provider\Configured as ProviderConfigured,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Content as ContentViewProvider;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Configured as ProviderConfigured;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class Configured extends ProviderConfigured implements ContentViewProvider
 {
@@ -20,6 +20,7 @@ class Configured extends ProviderConfigured implements ContentViewProvider
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param string $viewType Variation of display for your content
+     *
      * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|void
      */
     public function getView( ContentInfo $contentInfo, $viewType )

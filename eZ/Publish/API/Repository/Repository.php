@@ -27,18 +27,19 @@ interface Repository
     public function getCurrentUser();
 
     /**
+     * Sets the current user to the given $user.
      *
-     * sets the current user to the user with the given user id
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
+     * @return void
      */
     public function setCurrentUser( User $user );
 
     /**
-     *
-     *
      * @param string $module The module, aka controller identifier to check permissions on
      * @param string $function The function, aka the controller action to check permissions on
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
      * @return boolean|array if limitations are on this function an array of limitations is returned
      */
     public function hasAccess( $module, $function, User $user = null );
@@ -70,7 +71,6 @@ interface Repository
      * Get Content Service
      *
      * Get service object to perform operations on Content objects and it's aggregate members.
-     *
      *
      * @return \eZ\Publish\API\Repository\ContentService
      */
@@ -166,6 +166,8 @@ interface Repository
      * Get IO Service
      *
      * Get service object to perform operations on binary files
+     *
+     * @deprecated Will be removed in the future!
      *
      * @return \eZ\Publish\API\Repository\IOService
      */

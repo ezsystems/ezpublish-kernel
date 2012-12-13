@@ -14,13 +14,13 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 
 /**
- * Build a cirterion facet.
+ * Build a criterion facet.
  *
  * If provided the search service returns a CriterionFacet based on the criterion provided
  * in the FacetBuilder class.
  *
  * @package eZ\Publish\API\Repository\Values\Content\Query
  */
-class CritierionFacetBuilder extends FacetBuilder {
-
+class CriterionFacetBuilder extends FacetBuilder
+{
 }

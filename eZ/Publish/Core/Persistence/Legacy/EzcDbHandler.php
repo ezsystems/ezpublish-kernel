@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy;
-use ezcDbHandler as ezcDbHandlerWrapped,
-    ezcQuerySelect,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Sqlite,
-    ezcDbFactory;
+
+use ezcDbHandler as ezcDbHandlerWrapped;
+use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Sqlite;
+use ezcDbFactory;
 
 /**
  * Wrapper class for the zeta components database handler, providing some
@@ -23,7 +24,7 @@ use ezcDbHandler as ezcDbHandlerWrapped,
 class EzcDbHandler
 {
     /**
-     * Aggregated zeta compoenents database handler, which is target of the
+     * Aggregated zeta components database handler, which is target of the
      * method dispatching.
      *
      * @var \ezcDbHandler
@@ -57,16 +58,32 @@ class EzcDbHandler
      * For further information on the database setup, please refer to
      * {@see http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html#handler-usage}
      *
-     * @static
-     * @param $dsn
+     * @param string|mixed[]$dbParams
+     *
      * @return EzcDbHandler
      */
-    public static function create( $dsn )
+    public static function create( $dbParams )
     {
-        $connection = ezcDbFactory::create( $dsn );
-        $database = preg_replace( '(^([a-z]+).*)', '\\1', $dsn );
+        if ( !is_array( $dbParams ) )
+        {
+            $databaseType = preg_replace( '(^([a-z]+).*)', '\\1', $dbParams );
+        }
+        else
+        {
+            $databaseType = $dbParams['type'];
+            // PDOMySQL ignores the "charset" param until PHP 5.3.6.
+            // We then need to force it to use an init command.
+            // @link http://php.net/manual/en/ref.pdo-mysql.connection.php
+            if ( $databaseType === 'mysql' && $dbParams['charset'] === 'utf8' )
+            {
+                $dbParams['driver-opts'] += array(
+                    \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+                );
+            }
+        }
+        $connection = ezcDbFactory::create( $dbParams );
 
-        switch ( $database )
+        switch ( $databaseType )
         {
             case 'pgsql':
                 $dbHandler = new Pgsql( $connection );
@@ -87,6 +104,7 @@ class EzcDbHandler
      *
      * @param string $method
      * @param array $parameters
+     *
      * @return mixed
      */
     public function __call( $method, $parameters )
@@ -100,6 +118,7 @@ class EzcDbHandler
      * @param \ezcQuerySelect $query
      * @param string $columnName
      * @param string|null $tableName
+     *
      * @return string
      */
     public function aliasedColumn( ezcQuerySelect $query, $columnName, $tableName = null )
@@ -118,11 +137,12 @@ class EzcDbHandler
      *
      * @param string $columnName
      * @param string $tableName
+     *
      * @return string
      */
     public function quoteColumn( $columnName, $tableName = null )
     {
-        // @TODO: For oracle we need a mapping of table and column names to
+        // @todo: For oracle we need a mapping of table and column names to
         // their shortened variants here.
         return
             ( $tableName ? $this->quoteTable( $tableName ) . '.' : '' ) .
@@ -133,11 +153,12 @@ class EzcDbHandler
      * Returns a qualified identifier for $tableName.
      *
      * @param string $tableName
+     *
      * @return string
      */
     public function quoteTable( $tableName )
     {
-        // @TODO: For oracle we need a mapping of table and column names to
+        // @todo: For oracle we need a mapping of table and column names to
         // their shortened variants here.
         return $this->ezcDbHandler->quoteIdentifier( $tableName );
     }
@@ -151,6 +172,7 @@ class EzcDbHandler
      *
      * @param string $table
      * @param string $column
+     *
      * @return mixed
      */
     public function getAutoIncrementValue( $table, $column )
@@ -159,10 +181,11 @@ class EzcDbHandler
     }
 
     /**
-     * Return the name of the affected sequence
+     * Returns the name of the affected sequence
      *
      * @param string $table
      * @param string $column
+     *
      * @return string
      */
     public function getSequenceName( $table, $column )

@@ -16,7 +16,7 @@ class ContentTypeCreateStruct extends \eZ\Publish\API\Repository\Values\ContentT
     }
 
     /**
-     * adds a new field definition
+     * Adds a new field definition
      *
      * @param FieldDefinitionCreate $fieldDef
      */

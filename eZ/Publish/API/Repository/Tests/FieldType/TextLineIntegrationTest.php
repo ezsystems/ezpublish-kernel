@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+
+use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type
@@ -20,7 +21,7 @@ use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue,
 class TextLineIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -128,6 +129,7 @@ class TextLineIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     public function assertFieldDataLoadedCorrect( Field $field)
@@ -314,5 +316,24 @@ class TextLineIntegrationTest extends BaseIntegrationTest
             ),
         );
     }
-}
 
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array( new TextLineValue() ),
+            array( new TextLineValue( null ) ),
+            array( new TextLineValue( "" ) ),
+            array( new TextLineValue( "   " ) ),
+        );
+    }
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+            array( new TextLineValue( 0 ) ),
+            array( new TextLineValue( "0" ) ),
+        );
+    }
+}

@@ -44,6 +44,7 @@ class Field extends ValueObject
      * @param string $name
      * @param mixed $value
      * @param FieldType $type
+     *
      * @return void
      */
     public function __construct( $name, $value, FieldType $type )

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests\Image\PathGenerator;
+
 use eZ\Publish\Core\FieldType\Image\PathGenerator\LegacyPathGenerator;
 
 /**
@@ -20,8 +21,10 @@ class LegacyPathGeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @param mixed $data
      * @param mixed $expectedPath
-     * @return void
+     *
      * @dataProvider provideStoragePathForFieldData
+     *
+     * @return void
      */
     public function testGetStoragePathForField( $data, $expectedPath )
     {

@@ -1,34 +1,14 @@
 <?php
 
-use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\Location,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 $content = new Content();
 
-$content->locations = array(
-    new Location(
-        array(
-            "id" => "228",
-            "priority" => "0",
-            "hidden" => "0",
-            "invisible" => "0",
-            "remoteId" => "ee684db77223bb1a10300d7b250232cf",
-            "contentId" => "226",
-            "parentId" => "77",
-            "pathIdentificationString" => "solutions/something",
-            "pathString" => "/1/2/77/228/",
-            "modifiedSubLocation" => "1313061404",
-            "mainLocationId" => "228",
-            "depth" => "3",
-            "sortField" => "1",
-            "sortOrder" => "1"
-        )
-    )
-);
 $content->fields = array();
 
 $versionInfo = new VersionInfo();

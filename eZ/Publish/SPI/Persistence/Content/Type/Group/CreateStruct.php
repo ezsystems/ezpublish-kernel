@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content\Type\Group;
+
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
@@ -20,7 +21,7 @@ class CreateStruct extends ValueObject
      * @since 5.0
      * @var string[]
      */
-    public $name;
+    public $name = array();
 
     /**
      * Description

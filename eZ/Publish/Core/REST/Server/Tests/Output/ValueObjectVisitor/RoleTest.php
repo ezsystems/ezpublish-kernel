@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -32,6 +33,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
             array(
                 'id'         => 42,
                 'identifier' => 'some-role',
+                /* @todo uncomment when support for multilingual names and descriptions is added
                 'mainLanguageCode' => 'eng-GB',
                 'names' => array(
                     'eng-GB' => 'Role name EN',
@@ -41,6 +43,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
                     'eng-GB' => 'Role description EN',
                     'eng-US' => 'Role description EN US',
                 )
+                */
             )
         );
 
@@ -61,6 +64,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      * Test if result contains Role element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRoleElement( $result )
@@ -69,7 +73,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'Role',
                 'children' => array(
-                    'count' => 5
+                    'count' => 2
                 )
             ),
             $result,
@@ -82,6 +86,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      * Test if result contains Role element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRoleAttributes( $result )
@@ -104,6 +109,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      * Test if result contains identifier value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsIdentifierValueElement( $result )
@@ -123,10 +129,12 @@ class RoleTest extends ValueObjectVisitorBaseTest
      * Test if result contains mainLanguageCode value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsMainLanguageCodeValueElement( $result )
     {
+        $this->markTestSkipped( '@todo uncomment when support for multilingual names and descriptions is added' );
         $this->assertTag(
             array(
                 'tag'      => 'mainLanguageCode',
@@ -142,10 +150,12 @@ class RoleTest extends ValueObjectVisitorBaseTest
      * Test if result contains names element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsNamesElement( $result )
     {
+        $this->markTestSkipped( '@todo uncomment when support for multilingual names and descriptions is added' );
         $this->assertTag(
             array(
                 'tag'      => 'names',
@@ -163,10 +173,12 @@ class RoleTest extends ValueObjectVisitorBaseTest
      * Test if result contains descriptions element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsDescriptionsElement( $result )
     {
+        $this->markTestSkipped( '@todo uncomment when support for multilingual names and descriptions is added' );
         $this->assertTag(
             array(
                 'tag'      => 'descriptions',
@@ -184,6 +196,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      * Test if result contains Policies element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPoliciesElement( $result )
@@ -202,6 +215,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      * Test if result contains Policies element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPoliciesAttributes( $result )

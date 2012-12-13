@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\ContentUpdater\Action;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField,
-    eZ\Publish\SPI\Persistence\Content;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField;
+use eZ\Publish\SPI\Persistence\Content;
 
 /**
  * Test case for Content Type Updater.
@@ -33,13 +34,14 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * RemoveField action to test
      *
-     * @var eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField
      */
     protected $removeFieldAction;
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
+     *
+     * @return void
      */
     public function testCtor()
     {
@@ -58,8 +60,9 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
+     *
+     * @return void
      */
     public function testApply()
     {

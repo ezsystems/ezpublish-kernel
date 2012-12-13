@@ -1,8 +1,9 @@
 <?php
 
 namespace eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway;
-use eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway,
-    eZ\Publish\SPI\Persistence\Content\Field;
+
+use eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway;
+use eZ\Publish\SPI\Persistence\Content\Field;
 
 class LegacyStorage extends Gateway
 {
@@ -17,6 +18,7 @@ class LegacyStorage extends Gateway
      * Set database handler for this gateway
      *
      * @param mixed $dbHandler
+     *
      * @return void
      * @throws \RuntimeException if $dbHandler is not an instance of
      *         {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler}
@@ -38,8 +40,9 @@ class LegacyStorage extends Gateway
     /**
      * Returns the active connection
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      * @throws \RuntimeException if no connection has been set, yet.
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected function getConnection()
     {
@@ -58,23 +61,27 @@ class LegacyStorage extends Gateway
      */
     public function storeFieldData( Field $field, $contentTypeID )
     {
-        $existingKeywordMap = $this->getExistingKeywords( $field->value->externalData, $field->fieldDefinitionId );
-
-        $keywordsToInsert = $this->getKeywordsToInsert( $existingKeywordMap, $field->value->externalData );
-
-        $insertedKeywordMap = $this->insertKeywords( $keywordsToInsert, $contentTypeID );
+        $existingKeywordMap = $this->getExistingKeywords( $field->value->externalData, $contentTypeID );
 
         $this->deleteOldKeywordAssignements( $field );
 
-        $keywordsToAssignMap = array_merge( $existingKeywordMap, $insertedKeywordMap );
-
-        $this->assignKeywords( $field->id, $keywordsToAssignMap );
+        $this->assignKeywords(
+            $field->id,
+            $this->insertKeywords(
+                array_diff_key(
+                    array_fill_keys( $field->value->externalData, true ),
+                    $existingKeywordMap
+                ),
+                $contentTypeID
+            ) + $existingKeywordMap
+        );
     }
 
     /**
      * Sets the list of assigned keywords into $field->value->externalData
      *
      * @param Field $field
+     *
      * @return void
      */
     public function getFieldData( Field $field )
@@ -86,6 +93,7 @@ class LegacyStorage extends Gateway
      * Retrieve the ContentType ID for the given $field
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     *
      * @return mixed
      */
     public function getContentTypeID( Field $field )
@@ -97,6 +105,7 @@ class LegacyStorage extends Gateway
      * Returns a list of keywords assigned to $fieldId
      *
      * @param mixed $fieldId
+     *
      * @return string[]
      */
     protected function getAssignedKeywords( $fieldId )
@@ -126,11 +135,11 @@ class LegacyStorage extends Gateway
         return $statement->fetchAll( \PDO::FETCH_COLUMN, 0 );
     }
 
-
     /**
      * Retrieves the content type ID for the given $fieldDefinitionId
      *
      * @param mixed $fieldDefinitionId
+     *
      * @return mixed
      */
     protected function loadContentTypeID( $fieldDefinitionId )
@@ -173,6 +182,7 @@ class LegacyStorage extends Gateway
      *
      * @param string[] $keywordList
      * @param mixed $contentTypeID
+     *
      * @return mixed[]
      */
     protected function getExistingKeywords( $keywordList, $contentTypeID )
@@ -206,35 +216,6 @@ class LegacyStorage extends Gateway
     }
 
     /**
-     * Returns a list of keywords to insert.
-     *
-     * Returns an array in the following format:
-     * <code>
-     *  array(
-     *      '<keyword>' => true,
-     *      // ...
-     *  );
-     * </code>
-     *
-     * @param mixed[] $existingKeywords
-     * @param string[] $keywordList
-     * @return mixed[]
-     */
-    protected function getKeywordsToInsert( $existingKeywords, $keywordList )
-    {
-        $keywordsToInsert = array_fill_keys( $keywordList, true );
-
-        $keywordIds = array();
-
-        foreach ( $existingKeywords as $keyword => $id )
-        {
-            unset( $keywordsToInsert[$keyword] );
-        }
-
-        return $keywordsToInsert;
-    }
-
-    /**
      * Inserts $keywordsToInsert for $fieldDefinitionId and returns a map of
      * these keywords to their ID
      *
@@ -248,6 +229,7 @@ class LegacyStorage extends Gateway
      *
      * @param string[] $keywordsToInsert
      * @param mixed $fieldDefinitionId
+     *
      * @return mixed[]
      */
     protected function insertKeywords( array $keywordsToInsert, $contentTypeID )
@@ -304,7 +286,7 @@ class LegacyStorage extends Gateway
     }
 
     /**
-     * Assignes keywords from $keywordMap to the field with $fieldId
+     * Assigns keywords from $keywordMap to the field with $fieldId
      *
      * $keywordMap has the format:
      * <code>
@@ -316,6 +298,7 @@ class LegacyStorage extends Gateway
      *
      * @param mixed $fieldId
      * @param mixed[] $keywordMap
+     *
      * @return void
      */
     protected function assignKeywords( $fieldId, $keywordMap )

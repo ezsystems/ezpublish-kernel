@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\Checkbox\Value as CheckboxValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+
+use eZ\Publish\Core\FieldType\Checkbox\Value as CheckboxValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type
@@ -20,7 +21,7 @@ use eZ\Publish\Core\FieldType\Checkbox\Value as CheckboxValue,
 class CheckboxIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -110,6 +111,7 @@ class CheckboxIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     public function assertFieldDataLoadedCorrect( Field $field)
@@ -267,7 +269,7 @@ class CheckboxIntegrationTest extends BaseIntegrationTest
         return array(
             array(
                 new CheckboxValue( true ),
-               '1'
+                '1'
             ),
         );
     }
@@ -288,5 +290,25 @@ class CheckboxIntegrationTest extends BaseIntegrationTest
             ),
         );
     }
-}
 
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array( new CheckboxValue ),
+            array( new CheckboxValue( null ) ),
+            array( new CheckboxValue( false ) ),
+        );
+    }
+
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+            array(
+                new CheckboxValue( true )
+            ),
+        );
+    }
+}

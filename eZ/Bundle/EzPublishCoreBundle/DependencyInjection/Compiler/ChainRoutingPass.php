@@ -54,8 +54,8 @@ class ChainRoutingPass implements CompilerPassInterface
             $chainRouter->addMethodCall(
                 'add',
                 array(
-                     new Reference( $id ),
-                     $priority
+                    new Reference( $id ),
+                    $priority
                 )
             );
         }

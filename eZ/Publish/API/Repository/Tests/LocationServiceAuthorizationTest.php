@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
  * Test case for operations in the LocationService using in memory storage.
@@ -35,7 +35,7 @@ class LocationServiceAuthorizationTest extends BaseTest
 
         $editorsGroupId = $this->generateId( 'group', 13 );
 
-        /* BEGIN: Use Case */;
+        /* BEGIN: Use Case */
         $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
 
@@ -131,7 +131,7 @@ class LocationServiceAuthorizationTest extends BaseTest
 
         $editorsGroupId = $this->generateId( 'group', 13 );
 
-        /* BEGIN: Use Case */;
+        /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         $locationService = $repository->getLocationService();
@@ -152,7 +152,7 @@ class LocationServiceAuthorizationTest extends BaseTest
             $originalLocation,
             $locationUpdateStruct
         );
-        /* END: Use Case */;
+        /* END: Use Case */
     }
 
     /**

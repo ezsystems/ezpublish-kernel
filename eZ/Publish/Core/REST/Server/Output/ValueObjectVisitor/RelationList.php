@@ -13,7 +13,7 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
-use eZ\Publish\Core\REST\Server\Values\RestRelation;
+use eZ\Publish\Core\REST\Server\Values\RestRelation as ValuesRestRelation;
 
 /**
  * RelationList value object visitor
@@ -32,22 +32,25 @@ class RelationList extends ValueObjectVisitor
         $generator->startObjectElement( 'Relations', 'RelationList' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'RelationList' ) );
 
-        $generator->startAttribute(
-            'href',
-            $this->urlHandler->generate(
+        $path = $data->path;
+        if ( $path === null )
+        {
+            $path = $this->urlHandler->generate(
                 'objectVersionRelations',
                 array(
                     'object' => $data->contentId,
                     'version' => $data->versionNo
                 )
-            )
-        );
+            );
+        }
+
+        $generator->startAttribute( 'href', $path );
         $generator->endAttribute( 'href' );
 
         $generator->startList( 'Relation' );
         foreach ( $data->relations as $relation )
         {
-            $visitor->visitValueObject( new RestRelation( $relation, $data->contentId, $data->versionNo ) );
+            $visitor->visitValueObject( new ValuesRestRelation( $relation, $data->contentId, $data->versionNo ) );
         }
         $generator->endList( 'Relation' );
 

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content;
+
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
@@ -53,7 +54,7 @@ class Location extends ValueObject
     /**
      * Indicates that the Location entity has been explicitly marked as hidden.
      *
-     * @var bool
+     * @var boolean
      */
     public $hidden;
 
@@ -61,7 +62,7 @@ class Location extends ValueObject
      * Indicates that the Location is implicitly marked as hidden by a parent
      * location.
      *
-     * @var bool
+     * @var boolean
      */
     public $invisible;
 
@@ -103,13 +104,6 @@ class Location extends ValueObject
      * @var string
      */
     public $pathString;
-
-    /**
-     * Timestamp of the latest update of a content object in a sub location.
-     *
-     * @var int
-     */
-    public $modifiedSubLocation;
 
     /**
      * Identifier of the main location.

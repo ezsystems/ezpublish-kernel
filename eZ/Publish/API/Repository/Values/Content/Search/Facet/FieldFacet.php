@@ -16,8 +16,8 @@ use eZ\Publish\API\Repository\Values\Content\Search\Facet;
  * @author christianbacher
  *
  */
-class FieldFacet extends Facet {
-
+class FieldFacet extends Facet
+{
     /**
      * Number of documents not containing any terms in the queried fields
      *
@@ -40,7 +40,7 @@ class FieldFacet extends Facet {
     public $totalCount;
 
     /**
-     * an array of terms (key) and counts (value).
+     * An array of terms (key) and counts (value).
      *
      * @var array
      */

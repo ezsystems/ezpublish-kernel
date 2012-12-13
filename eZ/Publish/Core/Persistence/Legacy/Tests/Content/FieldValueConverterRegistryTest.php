@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
 
 /**
  * Test case for FieldValue Converter Registry
@@ -17,8 +18,9 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
 class FieldValueConverterRegistryTest extends TestCase
 {
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::register
+     *
+     * @return void
      */
     public function testRegister()
     {
@@ -35,8 +37,9 @@ class FieldValueConverterRegistryTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::getConverter
+     *
+     * @return void
      */
     public function testGetStorage()
     {

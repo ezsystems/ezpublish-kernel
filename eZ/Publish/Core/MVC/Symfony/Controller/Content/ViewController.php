@@ -9,14 +9,14 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
-use eZ\Publish\Core\MVC\Symfony\Controller\Controller,
-    eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager,
-    eZ\Publish\Core\MVC\Symfony\MVCEvents,
-    eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent,
-    eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute,
-    Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\Security\Core\Exception\AccessDeniedException,
-    \DateTime;
+use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
+use eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager;
+use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent;
+use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use DateTime;
 
 class ViewController extends Controller
 {
@@ -34,7 +34,8 @@ class ViewController extends Controller
      * Build the response so that depending on settings it's cacheable
      *
      * @param string $etag
-     * @param DateTime $lastModified
+     * @param \DateTime $lastModified
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function buildResponse( $etag, DateTime $lastModified )
@@ -54,7 +55,7 @@ class ViewController extends Controller
                 && $this->getParameter( 'content.ttl_cache' ) === true )
             {
                 $response->setVary( 'If-None-Match' );
-                $response->setMaxAge(
+                $response->setSharedMaxAge(
                     $this->getParameter( 'content.default_ttl' )
                 );
             }
@@ -70,11 +71,14 @@ class ViewController extends Controller
      *
      * @param int $locationId
      * @param string $viewType
+     * @param boolean $layout
+     *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @throws \Exception
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewLocation( $locationId, $viewType )
+    public function viewLocation( $locationId, $viewType, $layout = false )
     {
         if ( !$this->isGranted( new AuthorizationAttribute( 'content', 'read' ) ) )
             throw new AccessDeniedException();
@@ -83,14 +87,15 @@ class ViewController extends Controller
         {
             // Assume that location is cached by the repository
             $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
+            $contentInfo = $location->getContentInfo();
 
-            // TODO: Use a dedicated etag generator, generating a hash
+            // @todo: Use a dedicated etag generator, generating a hash
             // instead of plain text
             $response = $this->buildResponse(
-                "ezpublish-location-$locationId-$viewType",
-                $location->getContentInfo()->modificationDate
+                "ezpublish-location-$locationId-$contentInfo->currentVersionNo-$viewType-$layout",
+                $contentInfo->modificationDate
             );
-
+            $response->headers->set( 'X-Location-Id', $locationId );
 
             if ( $response->isNotModified( $this->getRequest() ) )
             {
@@ -98,7 +103,11 @@ class ViewController extends Controller
             }
 
             $response->setContent(
-                $this->viewManager->renderLocation( $location, $viewType )
+                $this->viewManager->renderLocation(
+                    $location,
+                    $viewType,
+                    array( 'noLayout' => !$layout )
+                )
             );
 
             return $response;
@@ -108,9 +117,9 @@ class ViewController extends Controller
             $event = new APIContentExceptionEvent(
                 $e,
                 array(
-                     'contentId'    => null,
-                     'locationId'   => $locationId,
-                     'viewType'     => $viewType
+                    'contentId'    => null,
+                    'locationId'   => $locationId,
+                    'viewType'     => $viewType
                 )
             );
             $this->getEventDispatcher()->dispatch( MVCEvents::API_CONTENT_EXCEPTION, $event );
@@ -135,12 +144,14 @@ class ViewController extends Controller
      *
      * @param int $contentId
      * @param string $viewType
-     * @param boolean $noLayout
+     * @param boolean $layout
+     *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @throws \Exception
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewContent( $contentId, $viewType, $noLayout )
+    public function viewContent( $contentId, $viewType, $layout = false )
     {
         if ( !$this->isGranted( new AuthorizationAttribute( 'content', 'read' ) ) )
             throw new AccessDeniedException();
@@ -149,10 +160,10 @@ class ViewController extends Controller
         {
             $content = $this->getRepository()->getContentService()->loadContent( $contentId );
 
-            // TODO: Use a dedicated etag generator, generating a hash
+            // @todo: Use a dedicated etag generator, generating a hash
             // instead of plain text
             $response = $this->buildResponse(
-                "ezpublish-content-$contentId-$viewType-$noLayout",
+                "ezpublish-content-$contentId-$viewType-$layout",
                 $content->contentInfo->modificationDate
             );
 
@@ -165,7 +176,7 @@ class ViewController extends Controller
                 $this->viewManager->renderContent(
                     $content,
                     $viewType,
-                    array( 'noLayout' => $noLayout )
+                    array( 'noLayout' => !$layout )
                 )
             );
 
@@ -176,9 +187,9 @@ class ViewController extends Controller
             $event = new APIContentExceptionEvent(
                 $e,
                 array(
-                     'contentId'    => $contentId,
-                     'locationId'   => null,
-                     'viewType'     => $viewType
+                    'contentId'    => $contentId,
+                    'locationId'   => null,
+                    'viewType'     => $viewType
                 )
             );
             $this->getEventDispatcher()->dispatch( MVCEvents::API_CONTENT_EXCEPTION, $event );

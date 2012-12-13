@@ -8,7 +8,6 @@
  * @package eZ\Publish\API\Repository
  */
 
-
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
 use eZ\Publish\API\Repository\ObjectStateService;
@@ -97,10 +96,11 @@ class ObjectStateServiceStub implements ObjectStateService
         $this->initFromFixture();
     }
 
-     /**
-     * creates a new object state group
+    /**
+     * Creates a new object state group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create an object state group
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the object state group with provided identifier already exists
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct $objectStateGroupCreateStruct
      *
@@ -111,6 +111,14 @@ class ObjectStateServiceStub implements ObjectStateService
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
             throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        foreach ( $this->groups as $group )
+        {
+            if ( $group->identifier == $objectStateGroupCreateStruct->identifier )
+            {
+                throw new Exceptions\InvalidArgumentExceptionStub( 'What error code should be used?' );
+            }
         }
 
         $groupData = array();
@@ -138,14 +146,19 @@ class ObjectStateServiceStub implements ObjectStateService
      *
      * @param string[] $names
      * @param string[] $descriptions
+     *
      * @return string[]
      */
     protected function determineLanguageCodes( $names, $descriptions )
     {
-        return array_unique( array_keys( array_merge(
-            $names ?: array(),
-            $descriptions ?: array()
-        ) ) );
+        return array_unique(
+            array_keys(
+                array_merge(
+                    $names ?: array(),
+                    $descriptions ?: array()
+                )
+            )
+        );
     }
 
     /**
@@ -161,11 +174,10 @@ class ObjectStateServiceStub implements ObjectStateService
     {
         if ( !isset( $this->groups[$objectStateGroupId] ) )
         {
-            throw new Exceptions\NotFoundExceptionStub( '@TODO: What error code should be used?' );
+            throw new Exceptions\NotFoundExceptionStub( '@todo: What error code should be used?' );
         }
         return $this->groups[$objectStateGroupId];
     }
-
 
     /**
      * Loads all object state groups
@@ -205,6 +217,7 @@ class ObjectStateServiceStub implements ObjectStateService
      * updates an object state group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update an object state group
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the object state group with provided identifier already exists
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct
@@ -216,6 +229,17 @@ class ObjectStateServiceStub implements ObjectStateService
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
             throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        if ( $objectStateGroupUpdateStruct->identifier !== null )
+        {
+            foreach ( $this->groups as $group )
+            {
+                if ( $group->identifier == $objectStateGroupUpdateStruct->identifier && $group->id != $objectStateGroup->id )
+                {
+                    throw new Exceptions\InvalidArgumentExceptionStub( 'What error code should be used?' );
+                }
+            }
         }
 
         $data = array(
@@ -273,12 +297,13 @@ class ObjectStateServiceStub implements ObjectStateService
     }
 
     /**
-     * creates a new object state in the given group.
+     * Creates a new object state in the given group.
      *
      * Note: in current kernel: If it is the first state all content objects will
      * set to this state.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create an object state
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the object state with provided identifier already exists in the same group
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct $objectStateCreateStruct
@@ -290,6 +315,15 @@ class ObjectStateServiceStub implements ObjectStateService
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
             throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        foreach ( $this->states as $state )
+        {
+            if ( $state->identifier == $objectStateCreateStruct->identifier
+                 && $state->stateGroup->id == $objectStateGroup->id )
+            {
+                throw new Exceptions\InvalidArgumentExceptionStub( 'What error code should be used?' );
+            }
         }
 
         $stateData = array();
@@ -315,6 +349,7 @@ class ObjectStateServiceStub implements ObjectStateService
      * Creates and sets an object state from $stateData.
      *
      * @param array $stateData
+     *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
     protected function createObjectStateFromArray( array $stateData )
@@ -330,7 +365,7 @@ class ObjectStateServiceStub implements ObjectStateService
     /**
      * Loads an object state
      *
-     * @param $stateId
+     * @param mixed $stateId
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the state was not found
      *
@@ -340,7 +375,7 @@ class ObjectStateServiceStub implements ObjectStateService
     {
         if ( !isset( $this->states[$stateId] ) )
         {
-            throw new Exceptions\NotFoundExceptionStub( '@TODO: What error code should be used?' );
+            throw new Exceptions\NotFoundExceptionStub( '@todo: What error code should be used?' );
         }
         return $this->states[$stateId];
     }
@@ -349,7 +384,9 @@ class ObjectStateServiceStub implements ObjectStateService
      * updates an object state
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update an object state
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the object state with provided identifier already exists in the same group
      *
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct $objectStateUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
@@ -359,6 +396,16 @@ class ObjectStateServiceStub implements ObjectStateService
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
             throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        foreach ( $this->states as $state )
+        {
+            if ( $state->identifier == $objectStateUpdateStruct->identifier
+                 && $state->stateGroup->id == $objectState->stateGroup->id
+                 && $state->id != $objectState->id )
+            {
+                throw new Exceptions\InvalidArgumentExceptionStub( 'What error code should be used?' );
+            }
         }
 
         $stateData = array(
@@ -391,7 +438,7 @@ class ObjectStateServiceStub implements ObjectStateService
     }
 
     /**
-     * changes the priority of the state
+     * Changes the priority of the state
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to change priority on an object state
      *
@@ -405,7 +452,7 @@ class ObjectStateServiceStub implements ObjectStateService
             throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
-        $objectState->_setPriority( $priority );
+        $objectState->setPriority( $priority );
 
         $this->renumberPriorities( $objectState->stateGroup );
     }
@@ -413,7 +460,8 @@ class ObjectStateServiceStub implements ObjectStateService
     /**
      * Renumbers priorities in the given $stateGroup
      *
-     * @param ObjectStateGroup $stateGroup
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $stateGroup
+     *
      * @return void
      */
     private function renumberPriorities( $stateGroup )
@@ -438,7 +486,7 @@ class ObjectStateServiceStub implements ObjectStateService
         $newPrio = 0;
         foreach ( $sortStates as $sortedState )
         {
-            $sortedState->_setPriority( $newPrio++ );
+            $sortedState->setPriority( $newPrio++ );
         }
     }
 
@@ -486,6 +534,7 @@ class ObjectStateServiceStub implements ObjectStateService
      * Returns the state with the lowest priority from $groupId
      *
      * @param mixed $groupId
+     *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
     protected function getLowestPriorityStateFromGroup( $groupId )
@@ -506,7 +555,6 @@ class ObjectStateServiceStub implements ObjectStateService
         return $selectedState;
     }
 
-
     /**
      * Sets the object-state of a state group to $state for the given content.
      *
@@ -518,7 +566,7 @@ class ObjectStateServiceStub implements ObjectStateService
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      *
      */
-    public function setObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState )
+    public function setContentState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState )
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
@@ -527,7 +575,7 @@ class ObjectStateServiceStub implements ObjectStateService
 
         if ( $objectState->getObjectStateGroup() != $objectStateGroup )
         {
-            throw new Exceptions\InvalidArgumentExceptionStub( '@TODO: What error code should be used?' );
+            throw new Exceptions\InvalidArgumentExceptionStub( '@todo: What error code should be used?' );
         }
         $this->objectStateMap[$contentInfo->id][$objectStateGroup->id] = $objectState->id;
     }
@@ -542,7 +590,7 @@ class ObjectStateServiceStub implements ObjectStateService
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function getObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup )
+    public function getContentState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup )
     {
         $contentId = $contentInfo->id;
         $groupId   = $objectStateGroup->id;
@@ -560,7 +608,7 @@ class ObjectStateServiceStub implements ObjectStateService
     }
 
     /**
-     * returns the number of objects which are in this state
+     * Returns the number of objects which are in this state
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      *
@@ -585,6 +633,7 @@ class ObjectStateServiceStub implements ObjectStateService
      * Instantiates a new Object State Group Create Struct and sets $identified in it.
      *
      * @param string $identifier
+     *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct
      */
     public function newObjectStateGroupCreateStruct( $identifier )
@@ -608,6 +657,7 @@ class ObjectStateServiceStub implements ObjectStateService
      * Instantiates a new Object State Create Struct and sets $identifier in it.
      *
      * @param string $identifier
+     *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct
      */
     public function newObjectStateCreateStruct( $identifier )

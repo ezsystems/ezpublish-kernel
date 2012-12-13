@@ -8,7 +8,12 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
+
 use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType;
+use eZ\Publish\Core\FieldType\XmlText\Input\EzXml;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use Exception;
+use DOMDocument;
 
 /**
  * @group fieldType
@@ -82,10 +87,34 @@ class XmlTextTest extends FieldTypeTest
      * @covers \eZ\Publish\Core\FieldType\Author\Type::acceptValue
      * @dataProvider providerForTestAcceptValueValidFormat
      */
-    public function testAcceptValueValidFormat( $text )
+    public function testAcceptValueValidFormat( $input )
     {
         $fieldType = new XmlTextType( $this->getValidatorServiceMock(), $this->getFieldTypeToolsMock() );
-        $fieldType->acceptValue( $text );
+        $fieldType->acceptValue( $input );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\Author\Type::acceptValue
+     * @dataProvider providerForTestAcceptValueInvalidFormat
+     */
+    public function testAcceptValueInvalidFormat( $input, $errorMessage )
+    {
+        try
+        {
+            $fieldType = new XmlTextType( $this->getValidatorServiceMock(), $this->getFieldTypeToolsMock() );
+            $fieldType->acceptValue( $input );
+            $this->fail( "An InvalidArgumentException was expected! None thrown." );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            $this->assertEquals( $errorMessage, $e->getMessage() );
+        }
+        catch ( Exception $e )
+        {
+            $this->fail(
+                "An InvalidArgumentException was expected! " . get_class( $e ) . " thrown with message: " . $e->getMessage()
+            );
+        }
     }
 
     /**
@@ -97,15 +126,88 @@ class XmlTextTest extends FieldTypeTest
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">Header 1</header></section>';
+        $xmlDoc = new DOMDocument;
+        $xmlDoc->loadXML( $xmlData );
         // @todo Do one per value class
         $ft = $this->getFieldType();
 
         $fieldValue = $ft->toPersistenceValue( $ft->acceptValue( $xmlData ) );
 
-        self::assertSame( $xmlData, $fieldValue->data );
+        self::assertInstanceOf( 'DOMDocument', $fieldValue->data );
+        self::assertSame( $xmlDoc->saveXML(), $fieldValue->data->saveXML() );
     }
 
     public static function providerForTestAcceptValueValidFormat()
+    {
+        return array(
+
+            array(
+                $xml = '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">This is a piece of text</header></section>',
+            ),
+            array( new EzXml( $xml ) ),
+
+            array(
+                $xml = '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
+            ),
+            array( new EzXml( $xml ) ),
+        );
+    }
+
+    public static function providerForTestAcceptValueInvalidFormat()
+    {
+        return array(
+
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section><h1>This is a piece of text</h1></section>',
+                "Argument 'xmlString' is invalid: Validation of XML content failed: Element 'h1': This element is not expected. Expected is one of ( section, paragraph, header )."
+            ),
+
+            array(
+                'This is not XML at all!',
+                "Argument 'xmlString' is invalid: Validation of XML content failed: Start tag expected, '<' not found\nThe document has no document element."
+            ),
+
+            array(
+                '<unknown><format /></unknown>',
+                "Argument 'xmlString' is invalid: Validation of XML content failed: Element 'unknown': No matching global declaration available for the validation root."
+            ),
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\XmlText\Type::getName
+     * @dataProvider providerForTestGetName
+     */
+    public function testGetNamePassingValue( $xml, $value )
+    {
+        $ft = $this->getFieldType();
+        $this->assertEquals(
+            $value,
+            $ft->getName( $ft->acceptValue( $xml ) )
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\XmlText\Type::getName
+     * @dataProvider providerForTestGetName
+     */
+    public function testGetNamePassingXML( $xml, $value )
+    {
+        $ft = $this->getFieldType();
+        $this->assertEquals(
+            $value,
+            $ft->getName( $xml )
+        );
+    }
+
+    public static function providerForTestGetName()
     {
         return array(
 
@@ -114,7 +216,59 @@ class XmlTextTest extends FieldTypeTest
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">This is a piece of text</header></section>',
-                "eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser\\Raw"
+                "This is a piece of text"
+            ),
+
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">This is a piece of <emphasize>text</emphasize></header></section>',
+                /** @todo FIXME: should probably be "This is a piece of text" */
+                "This is a piece of"
+            ),
+
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1"><strong>This is a piece</strong> of text</header></section>',
+                /** @todo FIXME: should probably be "This is a piece of text" */
+                "This is a piece"
+            ),
+
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1"><strong><emphasize>This is</emphasize> a piece</strong> of text</header></section>',
+                /** @todo FIXME: should probably be "This is a piece of text" */
+                "This is"
+            ),
+
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph><table class="default" border="0" width="100%" custom:summary="wai" custom:caption=""><tr><td><paragraph>First cell</paragraph></td><td><paragraph>Second cell</paragraph></td></tr><tr><td><paragraph>Third cell</paragraph></td><td><paragraph>Fourth cell</paragraph></td></tr></table></paragraph><paragraph>Text after table</paragraph></section>',
+                /** @todo FIXME: should probably be "First cell" */
+                "First cellSecond cell"
+            ),
+
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><ul><li><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">List item</paragraph></li></ul></paragraph></section>',
+                "List item"
+            ),
+
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><ul><li><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">List <emphasize>item</emphasize></paragraph></li></ul></paragraph></section>',
+                "List item"
             ),
 
             array(
@@ -122,12 +276,20 @@ class XmlTextTest extends FieldTypeTest
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
-                "eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser\\Raw"
+                ""
             ),
 
-            array( '<section>test</section>', "eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser\\Simplified" ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph><strong><emphasize>A simple</emphasize></strong> paragraph!</paragraph></section>',
+                "A simple"
+            ),
 
-            array( '<paragraph><a href="eznode://1">test</a><a href="ezobject://1">test</a></paragraph>', "eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser\\Simplified" ),
+            array( '<section><paragraph>test</paragraph></section>', "test" ),
+
+            array( '<section><paragraph><link node_id="1">test</link><link object_id="1">test</link></paragraph></section>', "test" ),
         );
     }
 }

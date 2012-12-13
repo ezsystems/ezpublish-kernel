@@ -55,7 +55,6 @@ abstract class Policy extends ValueObject
     protected $function;
 
     /**
-     *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
      */
     abstract public function getLimitations();

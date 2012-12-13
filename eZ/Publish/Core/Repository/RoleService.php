@@ -9,38 +9,34 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct,
-    eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct,
-    eZ\Publish\Core\Repository\Values\User\Policy,
-    eZ\Publish\API\Repository\Values\User\Policy as APIPolicy,
-    eZ\Publish\API\Repository\Values\User\RoleUpdateStruct,
-    eZ\Publish\Core\Repository\Values\User\PolicyCreateStruct,
-    eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct,
-    eZ\Publish\Core\Repository\Values\User\Role,
-    eZ\Publish\API\Repository\Values\User\Role as APIRole,
-    eZ\Publish\Core\Repository\Values\User\RoleCreateStruct,
-    eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct,
-    eZ\Publish\Core\Repository\Values\User\UserRoleAssignment,
-    eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment,
-    eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation,
-    eZ\Publish\API\Repository\Values\User\User,
-    eZ\Publish\API\Repository\Values\User\UserGroup,
-
-    eZ\Publish\SPI\Persistence\User\Policy as SPIPolicy,
-    eZ\Publish\SPI\Persistence\User\RoleAssignment as SPIRoleAssignment,
-    eZ\Publish\SPI\Persistence\User\Role as SPIRole,
-    eZ\Publish\SPI\Persistence\User\RoleUpdateStruct as SPIRoleUpdateStruct,
-
-    eZ\Publish\API\Repository\RoleService as RoleServiceInterface,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\SPI\Persistence\User\Handler,
-
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
-
-    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct;
+use eZ\Publish\Core\Repository\Values\User\Policy;
+use eZ\Publish\API\Repository\Values\User\Policy as APIPolicy;
+use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
+use eZ\Publish\Core\Repository\Values\User\PolicyCreateStruct;
+use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
+use eZ\Publish\Core\Repository\Values\User\Role;
+use eZ\Publish\API\Repository\Values\User\Role as APIRole;
+use eZ\Publish\Core\Repository\Values\User\RoleCreateStruct;
+use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
+use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
+use eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
+use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\UserGroup;
+use eZ\Publish\SPI\Persistence\User\Policy as SPIPolicy;
+use eZ\Publish\SPI\Persistence\User\RoleAssignment as SPIRoleAssignment;
+use eZ\Publish\SPI\Persistence\User\Role as SPIRole;
+use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct as SPIRoleUpdateStruct;
+use eZ\Publish\API\Repository\RoleService as RoleServiceInterface;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\SPI\Persistence\User\Handler;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 
 /**
  * This service provides methods for managing Roles and Policies
@@ -75,7 +71,8 @@ class RoleService implements RoleServiceInterface
     {
         $this->repository = $repository;
         $this->userHandler = $userHandler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             'limitationTypes' => array(),
             'limitationMap' => array(),
         );
@@ -95,15 +92,6 @@ class RoleService implements RoleServiceInterface
     {
         if ( !is_string( $roleCreateStruct->identifier ) || empty( $roleCreateStruct->identifier ) )
             throw new InvalidArgumentValue( "identifier", $roleCreateStruct->identifier, "RoleCreateStruct" );
-
-        if ( $roleCreateStruct->mainLanguageCode !== null && ( !is_string( $roleCreateStruct->mainLanguageCode ) || empty( $roleCreateStruct->mainLanguageCode ) ) )
-            throw new InvalidArgumentValue( "mainLanguageCode", $roleCreateStruct->mainLanguageCode, "RoleCreateStruct" );
-
-        if ( $roleCreateStruct->names !== null && ( !is_array( $roleCreateStruct->names ) || empty( $roleCreateStruct->names ) ) )
-            throw new InvalidArgumentValue( "names", $roleCreateStruct->names, "RoleCreateStruct" );
-
-        if ( $roleCreateStruct->descriptions !== null && ( !is_array( $roleCreateStruct->descriptions ) || empty( $roleCreateStruct->descriptions ) ) )
-            throw new InvalidArgumentValue( "descriptions", $roleCreateStruct->descriptions, "RoleCreateStruct" );
 
         if ( $this->repository->hasAccess( 'role', 'create' ) !== true )
             throw new UnauthorizedException( 'role', 'create' );
@@ -137,7 +125,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Updates the name and (5.x) description of the role
+     * Updates the name of the role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
@@ -154,15 +142,6 @@ class RoleService implements RoleServiceInterface
 
         if ( $roleUpdateStruct->identifier !== null && !is_string( $roleUpdateStruct->identifier ) )
             throw new InvalidArgumentValue( "identifier", $roleUpdateStruct->identifier, "RoleUpdateStruct" );
-
-        if ( $roleUpdateStruct->mainLanguageCode !== null && !is_string( $roleUpdateStruct->mainLanguageCode ) )
-            throw new InvalidArgumentValue( "mainLanguageCode", $roleUpdateStruct->mainLanguageCode, "RoleUpdateStruct" );
-
-        if ( $roleUpdateStruct->names !== null && !is_array( $roleUpdateStruct->names ) )
-            throw new InvalidArgumentValue( "names", $roleUpdateStruct->names, "RoleUpdateStruct" );
-
-        if ( $roleUpdateStruct->descriptions !== null && !is_array( $roleUpdateStruct->descriptions ) )
-            throw new InvalidArgumentValue( "descriptions", $roleUpdateStruct->descriptions, "RoleUpdateStruct" );
 
         if ( $this->repository->hasAccess( 'role', 'update' ) !== true )
             throw new UnauthorizedException( 'role', 'update' );
@@ -190,9 +169,7 @@ class RoleService implements RoleServiceInterface
                 new SPIRoleUpdateStruct(
                     array(
                         'id' => $loadedRole->id,
-                        'identifier' => $roleUpdateStruct->identifier ?: $role->identifier,
-                        'name' => $roleUpdateStruct->names ?: $role->getNames(),
-                        'description' => $roleUpdateStruct->descriptions ?: $role->getDescriptions()
+                        'identifier' => $roleUpdateStruct->identifier ?: $role->identifier
                     )
                 )
             );
@@ -208,7 +185,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * adds a new policy to the role
+     * Adds a new policy to the role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to add  a policy
      *
@@ -348,7 +325,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * loads a role for the given id
+     * Loads a role for the given id
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given id was not found
@@ -370,7 +347,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * loads a role for the given identifier
+     * Loads a role for the given identifier
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
@@ -392,7 +369,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * loads all roles
+     * Loads all roles
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the roles
      *
@@ -415,7 +392,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * deletes the given role
+     * Deletes the given role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete this role
      *
@@ -445,11 +422,11 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * loads all policies from roles which are assigned to a user or to user groups to which the user belongs
+     * Loads all policies from roles which are assigned to a user or to user groups to which the user belongs
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
      *
-     * @param $userId
+     * @param int $userId
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
@@ -473,7 +450,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * assigns a role to the given user group
+     * Assigns a role to the given user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
      *
@@ -551,7 +528,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * assigns a role to the given user
+     * Assigns a role to the given user
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
      *
@@ -629,7 +606,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * returns the assigned user and user groups to this role
+     * Returns the assigned user and user groups to this role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a role
      *
@@ -704,9 +681,8 @@ class RoleService implements RoleServiceInterface
     /**
      * Returns the roles assigned to the given user
      *
-     *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param bool $inherited
+     * @param boolean $inherited
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException If the current user is not allowed to read a role
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue On invalid User object
@@ -762,7 +738,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * instantiates a role create class
+     * Instantiates a role create class
      *
      * @param string $name
      *
@@ -779,7 +755,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * instantiates a policy create class
+     * Instantiates a policy create class
      *
      * @param string $module
      * @param string $function
@@ -798,7 +774,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * instantiates a policy update class
+     * Instantiates a policy update class
      *
      * @return \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
      */
@@ -812,7 +788,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * instantiates a policy update class
+     * Instantiates a policy update class
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct
      */
@@ -840,10 +816,6 @@ class RoleService implements RoleServiceInterface
             array(
                 'id' => (int)$role->id,
                 'identifier' => $role->identifier,
-                //@todo: add main language code
-                'mainLanguageCode' => null,
-                'names' => $role->name,
-                'descriptions' => $role->description,
                 'policies' => $rolePolicies
             )
         );
@@ -1019,9 +991,6 @@ class RoleService implements RoleServiceInterface
         return new SPIRole(
             array(
                 'identifier' => $roleCreateStruct->identifier,
-                //@todo: main language code ?
-                'name' => $roleCreateStruct->names,
-                'description' => $roleCreateStruct->descriptions,
                 'policies' => $policiesToCreate
             )
         );

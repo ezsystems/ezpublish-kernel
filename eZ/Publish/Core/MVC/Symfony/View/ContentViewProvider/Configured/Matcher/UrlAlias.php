@@ -9,33 +9,22 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued,
-    eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class UrlAlias extends MultipleValued
 {
     /**
-     * Array of language codes
-     *
-     * @var array
-     */
-    protected $languages;
-
-    public function __construct( array $languages = array() )
-    {
-        $this->languages = $languages ?: array( 'eng-GB' );
-    }
-
-    /**
      * Checks if a Location object matches.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @return bool
+     *
+     * @return boolean
      */
     public function matchLocation( Location $location )
     {
-        $locationUrls = $this->repository->getURLAliasService()->listLocationAliases( $location, true, $this->languages );
+        $locationUrls = $this->repository->getURLAliasService()->listLocationAliases( $location, true );
         foreach ( $this->values as $pattern => $val )
         {
             foreach ( $locationUrls as $urlAlias )
@@ -54,8 +43,10 @@ class UrlAlias extends MultipleValued
      * Not supported since UrlAlias is meaningful for location objects only.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     *
      * @throws \RuntimeException
-     * @return bool
+     *
+     * @return boolean
      */
     public function matchContentInfo( ContentInfo $contentInfo )
     {

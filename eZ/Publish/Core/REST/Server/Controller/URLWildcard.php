@@ -8,15 +8,14 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Common\Message;
-use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 
-use \eZ\Publish\API\Repository\URLWildcardService;
+use eZ\Publish\API\Repository\URLWildcardService;
 
 /**
  * URLWildcard controller
@@ -100,7 +99,7 @@ class URLWildcard extends RestController
     /**
      * The given URL wildcard is deleted
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteURLWildcard()
     {
@@ -109,6 +108,6 @@ class URLWildcard extends RestController
             $this->urlWildcardService->load( $values['urlwildcard'] )
         );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 }

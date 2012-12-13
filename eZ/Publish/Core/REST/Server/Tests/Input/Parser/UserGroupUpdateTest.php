@@ -256,7 +256,7 @@ class UserGroupUpdateTest extends BaseTest
      */
     protected function getUserServiceMock()
     {
-        $userServiceMock =  $this->getMock(
+        $userServiceMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\UserService',
             array(),
             array(),
@@ -280,7 +280,7 @@ class UserGroupUpdateTest extends BaseTest
      */
     protected function getLocationServiceMock()
     {
-        $userServiceMock =  $this->getMock(
+        $userServiceMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\LocationService',
             array(),
             array(),
@@ -295,11 +295,11 @@ class UserGroupUpdateTest extends BaseTest
                 $this->returnValue(
                     new Location(
                         array(
-                             'contentInfo' => new ContentInfo(
-                                 array(
-                                      'id' => 4
-                                 )
-                             )
+                            'contentInfo' => new ContentInfo(
+                                array(
+                                    'id' => 4
+                                )
+                            )
                         )
                     )
                 )
@@ -315,7 +315,7 @@ class UserGroupUpdateTest extends BaseTest
      */
     protected function getContentServiceMock()
     {
-        $contentServiceMock =  $this->getMock(
+        $contentServiceMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\ContentService',
             array(),
             array(),

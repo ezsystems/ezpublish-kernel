@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\BinaryBase\PathGenerator;
-use eZ\Publish\Core\FieldType\BinaryBase\PathGenerator,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field;
+
+use eZ\Publish\Core\FieldType\BinaryBase\PathGenerator;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
 
 class LegacyPathGenerator extends PathGenerator
 {
@@ -27,6 +28,7 @@ class LegacyPathGenerator extends PathGenerator
      * Extracts the first part (before the '/') from the given $mimeType.
      *
      * @param string $mimeType
+     *
      * @return string
      */
     protected function getFirstPartOfMimeType( $mimeType )

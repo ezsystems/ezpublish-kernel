@@ -8,12 +8,13 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Image;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\FieldType\FileService,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\Core\FieldType\ValidationError,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\FieldValue;
+
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\FieldType\FileService;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 /**
  * The Image field type
@@ -50,7 +51,7 @@ class Type extends FieldType
     }
 
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -77,50 +78,32 @@ class Type extends FieldType
     }
 
     /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
      * @return \eZ\Publish\Core\FieldType\Image\Value
      */
     public function getEmptyValue()
     {
-        return null;
+        return new Value;
     }
 
     /**
-     * Potentially builds and checks the type and structure of the $inputValue.
-     *
-     * This method first inspects $inputValue, if it needs to convert it, e.g.
-     * into a dedicated value object. An example would be, that the field type
-     * uses values of MyCustomFieldTypeValue, but can also accept strings as
-     * the input. In that case, $inputValue first needs to be converted into a
-     * MyCustomFieldTypeClass instance.
-     *
-     * After that, the (possibly converted) value is checked for structural
-     * validity. Note that this does not include validation after the rules
-     * from validators, but only plausibility checks for the general data
-     * format.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
+     * Implements the core of {@see acceptValue()}.
      *
      * @param mixed $inputValue
      *
-     * @return mixed The potentially converted and structurally plausible value.
+     * @return \eZ\Publish\Core\FieldType\Image\Value The potentially converted and structurally plausible value.
      */
-    public function acceptValue( $inputValue )
+    protected function internalAcceptValue( $inputValue )
     {
-        // null is the empty value for this type
-        if ( $inputValue === null )
-        {
-            return $this->getEmptyValue();
-        }
-
         // default construction from array
         if ( is_array( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
         }
-
         // just given the file path as a string
-        if ( is_string( $inputValue ) )
+        else if ( is_string( $inputValue ) )
         {
             $inputValue = Value::fromString( $inputValue );
         }
@@ -134,7 +117,7 @@ class Type extends FieldType
             );
         }
 
-        // Required paramater $path
+        // Required parameter $path
         if ( !isset( $inputValue->path ) || !$this->fileExists( $inputValue->path ) )
         {
             throw new InvalidArgumentType(
@@ -177,11 +160,24 @@ class Type extends FieldType
     }
 
     /**
+     * Returns if the given $value is considered empty by the field type
+     *
+     * @param mixed $value
+     *
+     * @return boolean
+     */
+    public function isEmptyValue( $value )
+    {
+        return $value === null || $value->fileName === null;
+    }
+
+    /**
      * Returns if the given $path exists on the local disc or in the file
      * storage
      *
      * @param string $path
-     * @return bool
+     *
+     * @return boolean
      */
     protected function fileExists( $path )
     {
@@ -288,8 +284,9 @@ class Type extends FieldType
 
     /**
      * @see \eZ\Publish\Core\FieldType::getSortInfo()
-     * @return bool
      * @todo Correct?
+     *
+     * @return boolean
      */
     protected function getSortInfo( $value )
     {
@@ -305,7 +302,7 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
-        if( $hash === null )
+        if ( $hash === null )
         {
             // empty value
             return null;
@@ -323,7 +320,7 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
-        if ( $value === null )
+        if ( $this->isEmptyValue( $value ) )
         {
             return null;
         }

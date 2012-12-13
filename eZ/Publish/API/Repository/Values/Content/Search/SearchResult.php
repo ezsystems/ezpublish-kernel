@@ -13,10 +13,9 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class represents a search result
- *
  */
-class SearchResult extends ValueObject {
-
+class SearchResult extends ValueObject
+{
     /**
      * The facets for this search
      *
@@ -32,7 +31,7 @@ class SearchResult extends ValueObject {
     public $searchHits = array();
 
     /**
-     * If spellcheck is on this field contains a collated query suggestion where in the aprropriate
+     * If spellcheck is on this field contains a collated query suggestion where in the appropriate
      * criterions the wrong spelled value is replaced by a corrected one (TBD).
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion
@@ -40,7 +39,7 @@ class SearchResult extends ValueObject {
     public $spellSuggestion;
 
     /**
-     * The duration of the search procesing in ms
+     * The duration of the search processing in ms
      *
      * @var int
      */
@@ -66,5 +65,4 @@ class SearchResult extends ValueObject {
      * @var int
      */
     public $totalCount;
-
 }

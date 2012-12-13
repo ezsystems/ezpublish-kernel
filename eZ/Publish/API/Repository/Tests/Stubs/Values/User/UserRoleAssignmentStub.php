@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\User;
 
-use \eZ\Publish\API\Repository\Values\User\UserRoleAssignment;
+use eZ\Publish\API\Repository\Values\User\UserRoleAssignment;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\User\UserRoleAssignment}
@@ -35,7 +35,7 @@ class UserRoleAssignmentStub extends UserRoleAssignment
     protected $limitation;
 
     /**
-     * returns the limitation of the role assignment
+     * Returns the limitation of the role assignment
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation
      */
@@ -45,7 +45,7 @@ class UserRoleAssignmentStub extends UserRoleAssignment
     }
 
     /**
-     * returns the role to which the user or user group is assigned to
+     * Returns the role to which the user or user group is assigned to
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
     public function getRole()
@@ -54,7 +54,7 @@ class UserRoleAssignmentStub extends UserRoleAssignment
     }
 
     /**
-     * returns the user to which the role is assigned to
+     * Returns the user to which the role is assigned to
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */

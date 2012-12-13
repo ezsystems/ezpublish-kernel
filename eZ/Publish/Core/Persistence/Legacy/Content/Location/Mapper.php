@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location;
-use eZ\Publish\SPI\Persistence\Content\Location,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
+
+use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 
 /**
  * Mapper for Location objects
@@ -42,13 +43,37 @@ class Mapper
         $location->parentId = $data[$prefix . 'parent_node_id'];
         $location->pathIdentificationString = $data[$prefix . 'path_identification_string'];
         $location->pathString = $data[$prefix . 'path_string'];
-        $location->modifiedSubLocation = $data[$prefix . 'modified_subnode'];
         $location->mainLocationId = $data[$prefix . 'main_node_id'];
         $location->depth = $data[$prefix . 'depth'];
         $location->sortField = $data[$prefix . 'sort_field'];
         $location->sortOrder = $data[$prefix . 'sort_order'];
 
         return $location;
+    }
+
+    /**
+     * Creates Location objects from the given $rows, optionally with key
+     * $prefix
+     *
+     * @param array $rows
+     * @param string $prefix
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location[]
+     */
+    public function createLocationsFromRows( array $rows, $prefix = '' )
+    {
+        $locations = array();
+
+        foreach ( $rows as $row )
+        {
+            $id = $row[$prefix . 'node_id'];
+            if ( !isset( $locations[$id] ) )
+            {
+                $locations[$id] = $this->createLocationFromRow( $row, $prefix );
+            }
+        }
+
+        return array_values( $locations );
     }
 
     /**

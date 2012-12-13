@@ -8,16 +8,17 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
-use eZ\Publish\Core\Persistence\Legacy,
-    eZ\Publish\Core\FieldType,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Field;
+
+use eZ\Publish\Core\Persistence\Legacy;
+use eZ\Publish\Core\FieldType;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Integration test for legacy storage field types
  *
  * This abstract base test case is supposed to be the base for field type
- * integration tests. It basically calls all involved methods in the field type 
+ * integration tests. It basically calls all involved methods in the field type
  * ``Converter`` and ``Storage`` implementations. Fo get it working implement
  * the abstract methods in a sensible way.
  *
@@ -36,7 +37,7 @@ use eZ\Publish\Core\Persistence\Legacy,
 class KeywordIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -105,11 +106,13 @@ class KeywordIntegrationTest extends BaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            'externalData' => array( 'foo', 'bar', 'sindelfingen' ),
-            'sortKey'      => null,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                'externalData' => array( 'foo', 'bar', 'sindelfingen' ),
+                'sortKey'      => null,
+            )
+        );
     }
 
     /**
@@ -137,6 +140,7 @@ class KeywordIntegrationTest extends BaseIntegrationTest
      *
      * @param array $expectedKeywords
      * @param array $actualKeywords
+     *
      * @return void
      */
     protected function assertKeywordSetsEqual( $expectedKeywords, $actualKeywords )
@@ -157,7 +161,7 @@ class KeywordIntegrationTest extends BaseIntegrationTest
         }
 
         // Assert no additional keywords have been loaded
-        if ( count( $actualKeywords ) !== 0 )
+        if ( !empty( $actualKeywords ) )
         {
             $this->fail(
                 sprintf(
@@ -177,11 +181,13 @@ class KeywordIntegrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            'externalData' => array( 'sindelfingen', 'baz' ),
-            'sortKey'      => null,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                'externalData' => array( 'sindelfingen', 'baz' ),
+                'sortKey'      => null,
+            )
+        );
     }
 
     /**

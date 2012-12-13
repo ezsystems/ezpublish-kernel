@@ -287,7 +287,7 @@ class UserUpdateTest extends BaseTest
      */
     protected function getUserServiceMock()
     {
-        $userServiceMock =  $this->getMock(
+        $userServiceMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\UserService',
             array(),
             array(),
@@ -311,7 +311,7 @@ class UserUpdateTest extends BaseTest
      */
     protected function getContentServiceMock()
     {
-        $contentServiceMock =  $this->getMock(
+        $contentServiceMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\ContentService',
             array(),
             array(),

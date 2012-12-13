@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\User;
 
-use \eZ\Publish\API\Repository\Values;
+use eZ\Publish\API\Repository\Values;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\User\RoleCreateStruct}
@@ -25,7 +25,7 @@ class RoleCreateStruct extends \eZ\Publish\API\Repository\Values\User\RoleCreate
     private $policies = array();
 
     /**
-     * instanciates a role create class
+     * Instantiates a role create class
      *
      * @param string $name
      */

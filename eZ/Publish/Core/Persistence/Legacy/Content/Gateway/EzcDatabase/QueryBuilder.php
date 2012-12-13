@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase;
+
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 
 class QueryBuilder
@@ -22,7 +23,7 @@ class QueryBuilder
     /**
      * Creates a new query builder.
      *
-     * @param EzcDbHandler $dbHandler
+     * @param \EzcDbHandler $dbHandler
      */
     public function __construct( ezcDbHandler $dbHandler )
     {
@@ -36,6 +37,7 @@ class QueryBuilder
      * content object. Does not apply any WHERE conditions.
      *
      * @param string[] $translations
+     *
      * @return \ezcQuerySelect
      */
     public function createFindQuery( array $translations = null )
@@ -79,26 +81,11 @@ class QueryBuilder
             $this->dbHandler->aliasedColumn( $query, 'data_text', 'ezcontentobject_attribute' ),
             $this->dbHandler->aliasedColumn( $query, 'sort_key_int', 'ezcontentobject_attribute' ),
             $this->dbHandler->aliasedColumn( $query, 'sort_key_string', 'ezcontentobject_attribute' ),
-            // Content object locations
-            $this->dbHandler->aliasedColumn( $query, 'contentobject_id', 'ezcontentobject_tree' ),
-            $this->dbHandler->aliasedColumn( $query, 'contentobject_is_published', 'ezcontentobject_tree' ),
-            $this->dbHandler->aliasedColumn( $query, 'contentobject_version', 'ezcontentobject_tree' ),
-            $this->dbHandler->aliasedColumn( $query, 'depth', 'ezcontentobject_tree' ),
-            $this->dbHandler->aliasedColumn( $query, 'is_hidden', 'ezcontentobject_tree' ),
-            $this->dbHandler->aliasedColumn( $query, 'is_invisible', 'ezcontentobject_tree' ),
-            $this->dbHandler->aliasedColumn( $query, 'main_node_id', 'ezcontentobject_tree' ),
-            $this->dbHandler->aliasedColumn( $query, 'modified_subnode', 'ezcontentobject_tree' ),
-            $this->dbHandler->aliasedColumn( $query, 'node_id', 'ezcontentobject_tree' ),
-            $this->dbHandler->aliasedColumn( $query, 'parent_node_id', 'ezcontentobject_tree' ),
-            $this->dbHandler->aliasedColumn( $query, 'path_identification_string', 'ezcontentobject_tree' ),
-            $this->dbHandler->aliasedColumn( $query, 'path_string', 'ezcontentobject_tree' ),
-            $this->dbHandler->aliasedColumn( $query, 'priority', 'ezcontentobject_tree' ),
-            $this->dbHandler->aliasedColumn( $query, 'remote_id', 'ezcontentobject_tree' ),
-            $this->dbHandler->aliasedColumn( $query, 'sort_field', 'ezcontentobject_tree' ),
-            $this->dbHandler->aliasedColumn( $query, 'sort_order', 'ezcontentobject_tree' ),
             // Content object names
             $this->dbHandler->aliasedColumn( $query, 'name', 'ezcontentobject_name' ),
-            $this->dbHandler->aliasedColumn( $query, 'content_translation', 'ezcontentobject_name' )
+            $this->dbHandler->aliasedColumn( $query, 'content_translation', 'ezcontentobject_name' ),
+            // Content object locations
+            $this->dbHandler->aliasedColumn( $query, 'main_node_id', 'ezcontentobject_tree' )
         )->from(
             $this->dbHandler->quoteTable( 'ezcontentobject' )
         )->leftJoin(
@@ -131,9 +118,10 @@ class QueryBuilder
                     $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' )
                 )
             )
+        )
         // @todo: Joining with ezcontentobject_name is probably a VERY bad way to gather that information
         // since it creates an additional cartesian product with translations.
-        )->leftJoin(
+        ->leftJoin(
             $this->dbHandler->quoteTable( 'ezcontentobject_name' ),
             $query->expr->lAnd(
                 // ezcontentobject_name.content_translation is also part of the PK but can't be
@@ -251,9 +239,10 @@ class QueryBuilder
                     $this->dbHandler->quoteColumn( 'node_id', 'ezcontentobject_tree' )
                 )
             )
+        )
         // @todo: Joining with ezcontentobject_name is probably a VERY bad way to gather that information
         // since it creates an additional cartesian product with translations.
-        )->leftJoin(
+        ->leftJoin(
             $this->dbHandler->quoteTable( 'ezcontentobject_name' ),
             $query->expr->lAnd(
                 // ezcontentobject_name.content_translation is also part of the PK but can't be

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -83,6 +84,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testContentTypeHref( \DOMDocument $dom )
@@ -92,6 +94,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testContentTypeMediaTyp( \DOMDocument $dom )
@@ -101,6 +104,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testId( \DOMDocument $dom )
@@ -110,6 +114,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testStatus( \DOMDocument $dom )
@@ -119,6 +124,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testIdentifier( \DOMDocument $dom )
@@ -128,6 +134,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testFirstName( \DOMDocument $dom )
@@ -137,6 +144,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testSecondName( \DOMDocument $dom )
@@ -146,6 +154,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testFirstDescription( \DOMDocument $dom )
@@ -155,6 +164,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testSecondDescription( \DOMDocument $dom )
@@ -164,6 +174,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testCreationDate( \DOMDocument $dom )
@@ -173,6 +184,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testModificationDate( \DOMDocument $dom )
@@ -182,6 +194,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testCreatorHref( \DOMDocument $dom )
@@ -191,6 +204,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testCreatorMediaType( \DOMDocument $dom )
@@ -200,6 +214,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testModifierHref( \DOMDocument $dom )
@@ -209,6 +224,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testModifierMediaType( \DOMDocument $dom )
@@ -218,6 +234,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testRemoteId( \DOMDocument $dom )
@@ -227,6 +244,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testUrlAliasSchema( \DOMDocument $dom )
@@ -236,6 +254,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testNameSchema( \DOMDocument $dom )
@@ -245,6 +264,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testIsContainer( \DOMDocument $dom )
@@ -254,6 +274,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testMainLanguageCode( \DOMDocument $dom )
@@ -263,6 +284,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testDefaultAlwaysAvailable( \DOMDocument $dom )
@@ -272,6 +294,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testDefaultSortField( \DOMDocument $dom )
@@ -281,6 +304,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisitDefinedType
      */
     public function testDefaultSortOrder( \DOMDocument $dom )

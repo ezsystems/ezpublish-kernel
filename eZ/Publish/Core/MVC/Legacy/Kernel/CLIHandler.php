@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\Kernel;
 
-use ezpKernelHandler,
-    eZScript,
-    RuntimeException,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use ezpKernelHandler;
+use eZScript;
+use eZINI;
+use RuntimeException;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class CLIHandler implements ezpKernelHandler
 {
@@ -22,13 +24,33 @@ class CLIHandler implements ezpKernelHandler
     protected $script;
 
     /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    protected $container;
+
+    /**
      * Constructor
      *
      * @param array $settings Settings to pass to \eZScript constructor.
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
-    public function __construct( array $settings = array(), SiteAccess $siteAccess = null )
+    public function __construct( array $settings = array(), SiteAccess $siteAccess = null, ContainerInterface $container = null )
     {
+        $this->container = $container;
+        if ( isset( $settings['injected-settings'] ) )
+        {
+            $injectedSettings = array();
+            foreach ( $settings["injected-settings"] as $keySetting => $injectedSetting )
+            {
+                list( $file, $section, $setting ) = explode( "/", $keySetting );
+                $injectedSettings[$file][$section][$setting] = $injectedSetting;
+            }
+            // those settings override anything else in local .ini files and
+            // their overrides
+            eZINI::injectSettings( $injectedSettings );
+        }
+
         $this->script = eZScript::instance( $settings );
         $this->script->startup();
         if ( isset( $siteAccess ) )
@@ -52,7 +74,7 @@ class CLIHandler implements ezpKernelHandler
      * This is useful to run eZ Publish 4.x code from a non-related context (like eZ Publish 5)
      *
      * @param \Closure $callback
-     * @param bool $postReinitialize Default is true.
+     * @param boolean $postReinitialize Default is true.
      *                               If set to false, the kernel environment will not be reinitialized.
      *                               This can be useful to optimize several calls to the kernel within the same context.
      * @return mixed The result of the callback
@@ -70,7 +92,8 @@ class CLIHandler implements ezpKernelHandler
     /**
      * Not supported by CLIHandler
      *
-     * @param bool $useExceptions
+     * @param boolean $useExceptions
+     *
      * @throws \RuntimeException
      */
     public function setUseExceptions( $useExceptions )
@@ -91,11 +114,11 @@ class CLIHandler implements ezpKernelHandler
      * Checks whether the kernel handler has the Symfony Dependency Injection
      * container or not.
      *
-     * @return bool
+     * @return boolean
      */
     public function hasServiceContainer()
     {
-        return false;
+        return isset( $this->container );
     }
 
     /**
@@ -106,6 +129,6 @@ class CLIHandler implements ezpKernelHandler
      */
     public function getServiceContainer()
     {
-        return null;
+        return $this->container;
     }
 }

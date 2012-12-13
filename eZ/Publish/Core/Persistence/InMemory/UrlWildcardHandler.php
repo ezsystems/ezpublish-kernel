@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the SectionHandler implementation
+ * File containing the UrlWildcard Handler implementation
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
-use eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler as UrlWildcardHandlerInterface,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+
+use eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler as UrlWildcardHandlerInterface;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
@@ -40,7 +41,7 @@ class UrlWildcardHandler implements UrlWildcardHandlerInterface
     }
 
     /**
-     * creates a new url wildcard
+     * Creates a new url wildcard
      *
      * @param string $sourceUrl
      * @param string $destinationUrl
@@ -50,11 +51,17 @@ class UrlWildcardHandler implements UrlWildcardHandlerInterface
      */
     public function create( $sourceUrl, $destinationUrl, $forward = false )
     {
-      throw new NotImplementedException( __METHOD__ );
+        return $this->backend->create(
+            'Content\\UrlWildcard',
+            array(
+                'sourceUrl' => $sourceUrl,
+                'destinationUrl' => $destinationUrl,
+                'forward' => (bool)$forward
+            )
+        );
     }
 
     /**
-     *
      * removes an url wildcard
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
@@ -63,34 +70,38 @@ class UrlWildcardHandler implements UrlWildcardHandlerInterface
      */
     public function remove( $id )
     {
-      throw new NotImplementedException( __METHOD__ );
+        $this->backend->delete( 'Content\\UrlWildcard', $id );
     }
 
     /**
-     *
-     * loads a url wild card
+     * Loads a url wild card
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
      *
-     * @param $id
+     * @param mixed $id
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard
      */
     public function load( $id )
     {
-      throw new NotImplementedException( __METHOD__ );
+        return $this->backend->load( 'Content\\UrlWildcard', $id );
     }
 
     /**
-     * loads all url wild card (paged)
+     * Loads all url wild card (paged)
      *
-     * @param $offset
-     * @param $limit
+     * @param int $offset
+     * @param int $limit
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard[]
      */
     public function loadAll( $offset = 0, $limit = -1 )
     {
-      throw new NotImplementedException( __METHOD__ );
+        $list = $this->backend->find( 'Content\\UrlWildcard' );
+
+        if ( empty( $list ) || ( $offset === 0 && $limit === -1 ) )
+            return $list;
+
+        return array_slice( $list, $offset, ( $limit === -1 ? null : $limit ) );
     }
 }

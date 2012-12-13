@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Values\ContentType;
+
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
@@ -18,7 +19,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read mixed $id the id of the field definition
  * @property-read string $identifier the identifier of the field definition
  * @property-read string $fieldGroup the field group name
- * @property-read int $position the position of the field definition in the content typr
+ * @property-read int $position the position of the field definition in the content type
  * @property-read string $fieldTypeIdentifier String identifier of the field type
  * @property-read boolean $isTranslatable indicates if fields of this definition are translatable
  * @property-read boolean $isRequired indicates if this field is required in the content object
@@ -56,15 +57,16 @@ abstract class FieldDefinition extends ValueObject
     abstract public function getNames();
 
     /**
+     * This method returns the name of the field in the given language
      *
-     * this method returns the name of the field in the given language
      * @param string $languageCode
-     * @return string the name for the given language or null if none existis.
+     *
+     * @return string the name for the given language or null if none exists.
      */
     abstract public function getName( $languageCode );
 
     /**
-     *  This method returns the human readable description of the field
+     * This method returns the human readable description of the field
      *
      * The structure of this field is:
      * <code>
@@ -76,9 +78,11 @@ abstract class FieldDefinition extends ValueObject
     abstract public function getDescriptions();
 
     /**
-     * this method returns the name of the field in the given language
+     * This method returns the name of the field in the given language
+     *
      * @param string $languageCode
-     * @return string the description for the given language or null if none existis.
+     *
+     * @return string the description for the given language or null if none exists.
      */
     abstract public function getDescription( $languageCode );
 
@@ -125,14 +129,14 @@ abstract class FieldDefinition extends ValueObject
     protected $isInfoCollector;
 
     /**
-     * this method returns the validator configuration of this field definition supported by the field type
+     * This method returns the validator configuration of this field definition supported by the field type
      *
      * @return mixed
      */
     abstract public function getValidatorConfiguration();
 
     /**
-     * this method returns settings for the field definition supported by the field type
+     * This method returns settings for the field definition supported by the field type
      *
      * @return mixed
      */

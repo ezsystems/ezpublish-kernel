@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState;
 
-use eZ\Publish\SPI\Persistence\Content\ObjectState,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
+use eZ\Publish\SPI\Persistence\Content\ObjectState;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 
 /**
  * ObjectState Gateway
@@ -21,14 +21,26 @@ abstract class Gateway
      * Loads data for an object state
      *
      * @param mixed $stateId
+     *
      * @return array
      */
     abstract public function loadObjectStateData( $stateId );
 
     /**
+     * Loads data for an object state by identifier
+     *
+     * @param string $identifier
+     * @param mixed $groupId
+     *
+     * @return array
+     */
+    abstract public function loadObjectStateDataByIdentifier( $identifier, $groupId );
+
+    /**
      * Loads data for all object states belonging to group with $groupId ID
      *
      * @param mixed $groupId
+     *
      * @return array
      */
     abstract public function loadObjectStateListData( $groupId );
@@ -37,15 +49,26 @@ abstract class Gateway
      * Loads data for an object state group
      *
      * @param mixed $groupId
+     *
      * @return array
      */
     abstract public function loadObjectStateGroupData( $groupId );
+
+    /**
+     * Loads data for an object state group by identifier
+     *
+     * @param string $identifier
+     *
+     * @return array
+     */
+    abstract public function loadObjectStateGroupDataByIdentifier( $identifier );
 
     /**
      * Loads data for all object state groups, filtered by $offset and $limit
      *
      * @param int $offset
      * @param int $limit
+     *
      * @return array
      */
     abstract public function loadObjectStateGroupListData( $offset, $limit );
@@ -115,7 +138,7 @@ abstract class Gateway
      * @param mixed $groupId
      * @param mixed $stateId
      */
-    abstract public function setObjectState( $contentId, $groupId, $stateId );
+    abstract public function setContentState( $contentId, $groupId, $stateId );
 
     /**
      * Loads object state data for $contentId content from $stateGroupId state group
@@ -131,6 +154,7 @@ abstract class Gateway
      * Returns the number of objects which are in this state
      *
      * @param mixed $stateId
+     *
      * @return int
      */
     abstract public function getContentCount( $stateId );

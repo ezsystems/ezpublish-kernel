@@ -8,35 +8,36 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy;
-use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type,
-    eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler as ContentFieldHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as TypeHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as TypeMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler as TrashHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler as ObjectStateHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper as ObjectStateMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler as UrlAliasHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper as UrlAliasMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase as UrlAliasGateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\ExceptionConversion as UrlAliasExceptionConversionGateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler as UrlWildcardHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper as UrlWildcardMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase as UrlWildcardGateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler,
-    eZ\Publish\Core\Persistence\Legacy\User\Mapper as UserMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as ConverterRegistry,
-    ezcDbTransactionException,
-    RuntimeException;
+
+use eZ\Publish\SPI\Persistence\Handler as HandlerInterface;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type;
+use eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler as ContentFieldHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as TypeHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as TypeMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler as TrashHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler as ObjectStateHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper as ObjectStateMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler as UrlAliasHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper as UrlAliasMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase as UrlAliasGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\ExceptionConversion as UrlAliasExceptionConversionGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler as UrlWildcardHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper as UrlWildcardMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase as UrlWildcardGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler;
+use eZ\Publish\Core\Persistence\Legacy\User\Mapper as UserMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as ConverterRegistry;
+use ezcDbTransactionException;
+use RuntimeException;
 
 /**
  * The repository handler for the legacy storage engine
@@ -254,7 +255,7 @@ class Handler implements HandlerInterface
     /**
      * Transform Processor
      *
-     * @var Content\Search\TransformationProcessor
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor
      */
     protected $transformationProcessor;
 
@@ -271,7 +272,7 @@ class Handler implements HandlerInterface
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler The database handler
      * @param Content\FieldValue\ConverterRegistry $converterRegistry Should contain Field Type converters
      * @param Content\StorageRegistry $storageRegistry Should contain Field Type external storage handlers
-     * @param Content\Search\TransformationProcessor $transformationProcessor Search Text Transformation processor
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor $transformationProcessor Search Text Transformation processor
      * @param array $config List of optional configuration flags:
      *                      The flag 'defer_type_update' defines if content types should be
      *                      published immediately (false), when the
@@ -296,6 +297,7 @@ class Handler implements HandlerInterface
 
     /**
      * @internal LocationHandler is injected into property to avoid circular dependency
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function contentHandler()
@@ -323,7 +325,6 @@ class Handler implements HandlerInterface
         if ( !isset( $this->contentMapper ) )
         {
             $this->contentMapper = new ContentMapper(
-                $this->getLocationMapper(),
                 $this->converterRegistry,
                 $this->contentLanguageHandler()
             );
@@ -459,6 +460,12 @@ class Handler implements HandlerInterface
                                     $db,
                                     $this->converterRegistry
                                 ),
+                                new CriterionHandler\ObjectStateId( $db ),
+                                new CriterionHandler\LanguageCode(
+                                    $db,
+                                    $this->getLanguageMaskGenerator()
+                                ),
+                                new CriterionHandler\Visibility( $db ),
                             )
                         ),
                         new Content\Search\Gateway\SortClauseConverter(
@@ -737,6 +744,7 @@ class Handler implements HandlerInterface
         if ( !isset( $this->trashHandler ) )
         {
             $this->trashHandler = new TrashHandler(
+                $this->locationHandler(),
                 $this->getLocationGateway(),
                 $this->getLocationMapper(),
                 $this->contentHandler()
@@ -756,8 +764,8 @@ class Handler implements HandlerInterface
             $this->urlAliasHandler = new UrlAliasHandler(
                 $this->getUrlAliasGateway(),
                 $this->getUrlAliasMapper(),
+                $this->getLocationGateway(),
                 $this->contentLanguageHandler(),
-                $this->getLanguageMaskGenerator(),
                 $this->transformationProcessor
             );
         }
@@ -793,7 +801,9 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->urlAliasMapper ) )
         {
-            $this->urlAliasMapper = new UrlAliasMapper();
+            $this->urlAliasMapper = new UrlAliasMapper(
+                $this->getLanguageMaskGenerator()
+            );
         }
         return $this->urlAliasMapper;
     }

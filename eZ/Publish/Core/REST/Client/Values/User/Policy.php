@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\User;
 
-
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\User\Policy}
  * class.
@@ -24,7 +23,6 @@ class Policy extends \eZ\Publish\API\Repository\Values\User\Policy
     protected $limitations = array();
 
     /**
-     *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
      */
     public function getLimitations()

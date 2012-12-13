@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\Rating\Value as RatingValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+
+use eZ\Publish\Core\FieldType\Rating\Value as RatingValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type
@@ -20,7 +21,7 @@ use eZ\Publish\Core\FieldType\Rating\Value as RatingValue,
 class RatingIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -110,6 +111,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     public function assertFieldDataLoadedCorrect( Field $field)
@@ -291,5 +293,25 @@ class RatingIntegrationTest extends BaseIntegrationTest
             ),
         );
     }
-}
 
+    /**
+     * Emptiness for rating doesn't make sense, field is always considered as non empty.
+     */
+    public function testIsEmptyValue( $value = null )
+    {
+    }
+
+    public function providerForTestIsEmptyValue()
+    {
+    }
+
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+            array( new RatingValue ),
+        );
+    }
+}

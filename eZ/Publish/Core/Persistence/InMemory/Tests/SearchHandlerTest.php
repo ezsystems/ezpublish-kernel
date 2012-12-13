@@ -8,14 +8,17 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
-use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * Test case for SearchHandler using in memory storage.
@@ -28,7 +31,6 @@ class SearchHandlerTest extends HandlerTest
     protected $content;
 
     /**
-     *
      * @var int
      */
     protected $contentId;
@@ -95,9 +97,13 @@ class SearchHandlerTest extends HandlerTest
      */
     public function testFindContent()
     {
-        $result = $this->persistenceHandler->searchHandler()->findContent( new Query( array(
-            'criterion' => new ContentId( $this->content->versionInfo->contentInfo->id ),
-        ) ) );
+        $result = $this->persistenceHandler->searchHandler()->findContent(
+            new Query(
+                array(
+                    'criterion' => new ContentId( $this->content->versionInfo->contentInfo->id ),
+                )
+            )
+        );
 
         $this->assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchResult', $result );
         $this->assertEquals( 1, $result->totalCount );
@@ -127,12 +133,55 @@ class SearchHandlerTest extends HandlerTest
     /**
      * Test finding content by location remote ID
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\SearchHandler::find
+     * @covers eZ\Publish\Core\Persistence\InMemory\SearchHandler::findSingle
      */
     public function testFindByLocationRemoteId()
     {
         $content = $this->persistenceHandler->searchHandler()->findSingle( new LocationRemoteId( 'f3e90596361e31d496d4026eb624c983' ) );
         $this->assertTrue( $content instanceof Content );
         $this->assertEquals( 1, $content->versionInfo->contentInfo->id );
+    }
+
+    /**
+     * Test finding content by object state ID
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\SearchHandler::findContent
+     */
+    public function testFindByObjectStateId()
+    {
+        $searchResult = $this->persistenceHandler->searchHandler()->findContent(
+            new Query(
+                array(
+                    'criterion' => new ObjectStateId( 1 )
+                )
+            )
+        );
+        $this->assertEquals( 9, $searchResult->totalCount );
+    }
+
+    /**
+     * Test finding content by language code
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\SearchHandler::findContent
+     */
+    public function testFindByLanguageCode()
+    {
+        $searchResult = $this->persistenceHandler->searchHandler()->findContent(
+            new Query(
+                array(
+                    'criterion' => new LanguageCode( 'eng-US' )
+                )
+            )
+        );
+
+        $contentIds = array_map(
+            function( $searchHit )
+            {
+                return $searchHit->valueObject->versionInfo->contentInfo->id;
+            },
+            $searchResult->searchHits
+        );
+
+        $this->assertEquals( array( 4, 11, 42, 41, 51 ), $contentIds );
     }
 }

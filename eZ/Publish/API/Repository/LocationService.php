@@ -30,15 +30,13 @@ interface LocationService
      * Only the items on which the user has read access are copied.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed copy the subtree to the given parent location
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException  if the target location is a sub location of the given location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user does not have read access to the whole source subtree
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the target location is a sub location of the given location
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $subtree - the subtree denoted by the location to copy
      * @param \eZ\Publish\API\Repository\Values\Content\Location $targetParentLocation - the target parent location for the copy operation
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location The newly created location of the copied subtree
-     *
-     * @todo enhancement - this method should return a result structure containing the new location and a list
-     *       of locations which are not copied due to permission denials.
      */
     public function copySubtree( Location $subtree, Location $targetParentLocation );
 
@@ -48,7 +46,7 @@ interface LocationService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
      *
-     * @param integer $locationId
+     * @param int $locationId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
@@ -82,22 +80,30 @@ interface LocationService
     public function loadLocations( ContentInfo $contentInfo, Location $rootLocation = null );
 
     /**
-     * Load children which are readable by the current user of a location object sorted by sortField and sortOrder
+     * Loads children which are readable by the current user of a location object sorted by sortField and sortOrder
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     *
      * @param int $offset the start offset for paging
      * @param int $limit the number of locations returned. If $limit = -1 all children starting at $offset are returned
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location[] Of {@link Location}
+     * @return \eZ\Publish\API\Repository\Values\Content\LocationList
      */
     public function loadLocationChildren( Location $location, $offset = 0, $limit = -1 );
 
     /**
+     * Returns the number of children which are readable by the current user of a location object
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     *
+     * @return int
+     */
+    public function getLocationChildCount( Location $location );
+
+    /**
      * Creates the new $location in the content repository for the given content
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException  if the content is already below the specified parent
-     *                                        or the parent is a sub location of the location the content
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the content is already below the specified parent
+     *                                        or the parent is a sub location of the location of the content
      *                                        or if set the remoteId exists already
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
@@ -123,7 +129,7 @@ interface LocationService
     public function updateLocation( Location $location, LocationUpdateStruct $locationUpdateStruct );
 
     /**
-     * Swaps the contents hold by the $location1 and $location2
+     * Swaps the contents held by $location1 and $location2
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to swap content
      *
@@ -164,6 +170,7 @@ interface LocationService
      * he can do it regardless of an existing descendant on which the user has no permission.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to move this location to the target
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user does not have read access to the whole source subtree
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation

@@ -37,7 +37,7 @@ ezpublish:
                             Identifier\ParentContentType: [landing_page, frontpage]
         ezdemo_site_admin:
             # Bypass UrlAliasRouter to use the admin interface since everything needs to run via the legacy kernel
-            url_alias_router: false
+            legacy_mode: true
 
 parameters:
     secret: ThisTokenIsNotSoSecretChangeIt

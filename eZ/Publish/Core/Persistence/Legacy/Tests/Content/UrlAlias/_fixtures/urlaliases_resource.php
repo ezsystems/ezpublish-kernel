@@ -48,7 +48,7 @@ return array (
             'id' => '4',
             'is_alias' => '1',
             'is_original' => '1',
-            'lang_mask' => '4',
+            'lang_mask' => '2',
             'link' => '4',
             'parent' => '3',
             'text' => 'search',

@@ -20,16 +20,14 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 abstract class UserGroup extends Content
 {
     /**
-     *
      * the parent id of the user group
      * @var mixed
      */
     protected $parentId;
 
     /**
-     *
      * The number of sub groups
-     * @var integer
+     * @var int
      */
     protected $subGroupCount;
 }

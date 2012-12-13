@@ -9,12 +9,12 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\View\Provider;
 
-use eZ\Publish\Core\MVC\Legacy\View\Provider,
-    eZ\Publish\Core\MVC\Symfony\View\Provider\Content as ContentViewProviderInterface,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo,
-    eZ\Publish\Core\MVC\Symfony\View\ContentView,
-    eZContentObject,
-    eZTemplate;
+use eZ\Publish\Core\MVC\Legacy\View\Provider;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Content as ContentViewProviderInterface;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZContentObject;
+use eZTemplate;
 
 class Content extends Provider implements ContentViewProviderInterface
 {
@@ -23,6 +23,7 @@ class Content extends Provider implements ContentViewProviderInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param string $viewType Variation of display for your content
+     *
      * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|void
      */
     public function getView( ContentInfo $contentInfo, $viewType )

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Values\User;
+
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
@@ -21,32 +22,4 @@ class RoleUpdateStruct extends ValueObject
      * @var string
      */
     public $identifier;
-
-    /**
-     * the main language code
-     *
-     * @since 5.0
-     *
-     * @var string
-     */
-    public $mainLanguageCode;
-
-   /**
-     * An array of names with languageCode keys
-     *
-     * @since 5.0
-     *
-     * @var array an array of string
-     */
-    public $names;
-
-    /**
-     * An array of descriptions with languageCode keys
-     *
-     * @since 5.0
-     *
-     * @var array an array of string
-     */
-    public $descriptions;
-
 }

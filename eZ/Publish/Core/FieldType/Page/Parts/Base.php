@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\FieldType\Page\Parts;
 
-use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException,
-    eZ\Publish\Core\FieldType\Page\Service as PageService;
+use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
+use eZ\Publish\Core\FieldType\Page\Service as PageService;
 
 class Base
 {
@@ -41,8 +41,8 @@ class Base
     /**
      * Sets property $value for a given $name
      *
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @param mixed $value
      */
     public function __set( $name, $value )
     {
@@ -52,8 +52,10 @@ class Base
     /**
      * Returns property value for a given $name
      *
-     * @param $name
+     * @param string $name
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
+     *
      * @return null
      */
     public function __get( $name )
@@ -67,8 +69,9 @@ class Base
     /**
      * Checks whether property for given $name exists
      *
-     * @param $name
-     * @return bool
+     * @param string $name
+     *
+     * @return boolean
      */
     public function __isset( $name )
     {

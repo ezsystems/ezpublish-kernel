@@ -8,9 +8,14 @@
  */
 
 namespace eZ\Publish\Core\FieldType\XmlText;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\Core\FieldType\ValidationError;
+
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\FieldType\XmlText\Input;
+use eZ\Publish\Core\FieldType\XmlText\Input\EzXml;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use DOMDocument;
 
 /**
  * XmlText field type.
@@ -46,7 +51,7 @@ class Type extends FieldType
     );
 
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -67,7 +72,27 @@ class Type extends FieldType
      */
     public function getName( $value )
     {
-        throw new \RuntimeException( 'Implement this method' );
+        $value = $this->acceptValue( $value );
+
+        $result = null;
+        if ( $section = $value->xml->documentElement->firstChild )
+        {
+            $textDom = $section->firstChild;
+
+            if ( $textDom && $textDom->hasChildNodes() )
+            {
+                $result = $textDom->firstChild->textContent;
+            }
+            else if ( $textDom )
+            {
+                $result = $textDom->textContent;
+            }
+        }
+
+        if ( $result === null )
+            $result = $value->xml->documentElement->textContent;
+
+        return trim( $result );
     }
 
     /**
@@ -78,44 +103,47 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value( <<<EOF
-<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />
-EOF
-        );
+        return new Value;
     }
 
     /**
-     * Potentially builds and checks the type and structure of the $inputValue.
+     * Returns if the given $value is considered empty by the field type
      *
-     * This method first inspects $inputValue, if it needs to convert it, e.g.
-     * into a dedicated value object. An example would be, that the field type
-     * uses values of MyCustomFieldTypeValue, but can also accept strings as
-     * the input. In that case, $inputValue first needs to be converted into a
-     * MyCustomFieldTypeClass instance.
+     * @param mixed $value
      *
-     * After that, the (possibly converted) value is checked for structural
-     * validity. Note that this does not include validation after the rules
-     * from validators, but only plausibility checks for the general data
-     * format.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
-     *
-     * @param \eZ\Publish\Core\FieldType\XmlText\Value|string $inputValue
-     *
-     * @return mixed The potentially converted and structurally plausible value.
+     * @return boolean
      */
-    public function acceptValue( $inputValue )
+    public function isEmptyValue( $value )
+    {
+        if ( $value === null || $value->xml === null )
+            return true;
+
+        return !$value->xml->documentElement->hasChildNodes();
+    }
+
+    /**
+     * Implements the core of {@see acceptValue()}.
+     *
+     * @param \eZ\Publish\Core\FieldType\XmlText\Value|\eZ\Publish\Core\FieldType\XmlText\Input|string $inputValue
+     *
+     * @return \eZ\Publish\Core\FieldType\XmlText\Value The potentially converted and structurally plausible value.
+     */
+    protected function internalAcceptValue( $inputValue )
     {
         if ( is_string( $inputValue ) )
         {
-            $inputValue = new Value( $inputValue );
+            if ( empty( $inputValue ) )
+                $inputValue = Value::EMPTY_VALUE;
+            $inputValue = new EzXml( $inputValue );
         }
 
-        if ( !$inputValue instanceof Value )
+        if ( $inputValue instanceof Input )
+        {
+            $doc = new DOMDocument;
+            $doc->loadXML( $inputValue->getInternalRepresentation() );
+            $inputValue = new Value( $doc );
+        }
+        else if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
                 '$inputValue',
@@ -142,7 +170,9 @@ EOF
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
+     * $hash accepts the following keys:
+     *  - xml (XML string which complies internal format)
      *
      * @param mixed $hash
      *
@@ -150,7 +180,9 @@ EOF
      */
     public function fromHash( $hash )
     {
-        return new Value( $hash );
+        $doc = new DOMDocument;
+        $doc->loadXML( $hash['xml'] );
+        return new Value( $doc );
     }
 
     /**
@@ -162,13 +194,42 @@ EOF
      */
     public function toHash( $value )
     {
-        return $value->text;
+        return array( 'xml' => (string)$value );
+    }
+
+    /**
+     * Creates a new Value object from persistence data.
+     * $fieldValue->data is supposed to be a DOMDocument object.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
+     *
+     * @return Value
+     */
+    public function fromPersistenceValue( FieldValue $fieldValue )
+    {
+        return new Value( $fieldValue->data );
+    }
+
+    /**
+     * @param Value $value
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
+     */
+    public function toPersistenceValue( $value )
+    {
+        return new FieldValue(
+            array(
+                'data'         => $value->xml,
+                'externalData' => null,
+                'sortKey'      => $this->getSortInfo( $value )
+            )
+        );
     }
 
     /**
      * Returns whether the field type is searchable
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {

@@ -9,27 +9,43 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\View\Provider;
 
-use eZ\Publish\Core\MVC\Legacy\View\Provider,
-    eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProviderInterface,
-    eZ\Publish\API\Repository\Values\Content\Location as APILocation,
-    eZ\Publish\Core\MVC\Symfony\View\ContentView,
-    eZModule;
+use eZ\Publish\Core\MVC\Legacy\View\Provider;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProviderInterface;
+use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZModule;
+use Symfony\Component\HttpFoundation\Request;
 
 class Location extends Provider implements LocationViewProviderInterface
 {
+    /**
+     * @var \Symfony\Component\HttpFoundation\Request
+     */
+    protected $request;
+
+    public function setRequest( Request $request )
+    {
+        $this->request = $request;
+    }
+
     /**
      * Returns a ContentView object corresponding to $location.
      * Will basically run content/view legacy module with appropriate parameters.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $viewType Variation of display for your content.
+     *
      * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|void
      */
     public function getView( APILocation $location, $viewType )
     {
         $legacyKernel = $this->getLegacyKernel();
         $logger = $this->logger;
-        $legacyContentClosure = function ( array $params ) use ( $location, $viewType, $legacyKernel, $logger )
+        $viewParameters = array();
+        if ( isset( $this->request ) )
+            $viewParameters = $this->request->attributes->get( 'viewParameters', array() );
+
+        $legacyContentClosure = function ( array $params ) use ( $location, $viewType, $legacyKernel, $logger, $viewParameters )
         {
             // Additional parameters (aka user parameters in legacy) are expected to be scalar
             foreach ( $params as $paramName => $param )
@@ -45,6 +61,10 @@ class Location extends Provider implements LocationViewProviderInterface
                 }
             }
 
+            // viewbaseLayout is useless in legacy views
+            unset( $params['viewbaseLayout'] );
+            $params += $viewParameters;
+
             return $legacyKernel->runCallback(
                 function () use ( $location, $viewType, $params )
                 {
@@ -55,7 +75,7 @@ class Location extends Provider implements LocationViewProviderInterface
                         false,
                         $params
                     );
-                    // TODO: What about persistent variable & css/js added from ezjscore ? We ideally want to handle that as well
+                    // @todo: What about persistent variable & css/js added from ezjscore ? We ideally want to handle that as well
                     return $moduleResult['content'];
                 },
                 false

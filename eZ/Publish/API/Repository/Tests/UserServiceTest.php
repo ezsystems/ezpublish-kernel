@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use \eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\User\User;
 
 /**
  * Test case for operations in the UserService using in memory storage.
@@ -234,7 +234,6 @@ class UserServiceTest extends BaseTest
             )
         );
     }
-
 
     /**
      * Test for the createUserGroup() method.
@@ -959,6 +958,46 @@ class UserServiceTest extends BaseTest
     /**
      * Test for the createUser() method.
      *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::createUser()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     */
+    public function testCreateUserThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+
+        $editorsGroupId = $this->generateId( 'group', 13 );
+        /* BEGIN: Use Case */
+        // $editorsGroupId is the ID of the "Editors" user group in an eZ
+        // Publish demo installation
+
+        $userService = $repository->getUserService();
+
+        // Instantiate a create struct with mandatory properties
+        $userCreate = $userService->newUserCreateStruct(
+            // admin is an existing login
+            'admin',
+            'user@example.com',
+            'secret',
+            'eng-US'
+        );
+
+        $userCreate->setField( 'first_name', 'Example' );
+        $userCreate->setField( 'last_name', 'User' );
+
+        // Load parent group for the user
+        $group = $userService->loadUserGroup( $editorsGroupId );
+
+        // This call will fail with a "InvalidArgumentException", because the
+        // user with "admin" login already exists.
+        $userService->createUser( $userCreate, array( $group ) );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the createUser() method.
+     *
      * @return \eZ\Publish\API\Repository\Values\User\User
      * @see \eZ\Publish\API\Repository\UserService::createUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
@@ -1233,6 +1272,7 @@ class UserServiceTest extends BaseTest
      * Test for the updateUser() method.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
@@ -1265,6 +1305,7 @@ class UserServiceTest extends BaseTest
      * Test for the updateUser() method.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
@@ -1390,7 +1431,7 @@ class UserServiceTest extends BaseTest
         $userUpdate->contentUpdateStruct = $contentUpdate;
 
         // This call will fail with a "ContentValidationException" because the
-        // mandary field "first_name" is set to an empty value.
+        // mandatory field "first_name" is set to an empty value.
         $userService->updateUser( $user, $userUpdate );
 
         /* END: Use Case */
@@ -1532,6 +1573,34 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test for the assignUserToUserGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::assignUserToUserGroup()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testAssignUserToUserGroup
+     */
+    public function testAssignUserToUserGroupThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $editorsGroupId = $this->generateId( 'group', 13 );
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+        // $editorsGroupId is the ID of the "Editors" group in an
+        // eZ Publish demo installation
+
+        // This call will fail with an "InvalidArgumentException", because the
+        // user is already assigned to the "Editors" group
+        $userService->assignUserToUserGroup(
+            $user,
+            $userService->loadUserGroup( $editorsGroupId )
+        );
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the unAssignUssrFromUserGroup() method.
      *
      * @return void
@@ -1595,7 +1664,7 @@ class UserServiceTest extends BaseTest
         // eZ Publish demo installation
 
         // This call will fail with an "InvalidArgumentException", because the
-        // user is not assigned to the "Adminstrator" group
+        // user is not assigned to the "Administrator" group
         $userService->unAssignUserFromUserGroup(
             $user,
             $userService->loadUserGroup( $administratorGroupId )

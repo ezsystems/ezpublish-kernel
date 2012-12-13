@@ -23,6 +23,7 @@ interface Location
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $viewType Variation of display for your content.
+     *
      * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|void
      */
     public function getView( APIContentLocation $location, $viewType );

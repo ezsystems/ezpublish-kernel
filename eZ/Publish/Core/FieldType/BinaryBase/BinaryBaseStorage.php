@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\FieldType\BinaryBase;
-use eZ\Publish\Core\FieldType\GatewayBasedStorage,
-    eZ\Publish\Core\FieldType\FileService,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field;
+
+use eZ\Publish\Core\FieldType\GatewayBasedStorage;
+use eZ\Publish\Core\FieldType\FileService;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Storage for binary files
@@ -111,6 +112,7 @@ class BinaryBaseStorage extends GatewayBasedStorage
      * @param mixed $fieldId
      * @param string $versionNo
      * @param array $context
+     *
      * @return void
      */
     protected function removeOldFile( $fieldId, $versionNo, array $context )
@@ -160,7 +162,8 @@ class BinaryBaseStorage extends GatewayBasedStorage
     /**
      * @param array $fieldIds
      * @param array $context
-     * @return bool
+     *
+     * @return boolean
      */
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
@@ -184,7 +187,7 @@ class BinaryBaseStorage extends GatewayBasedStorage
     /**
      * Checks if field type has external data to deal with
      *
-     * @return bool
+     * @return boolean
      */
     public function hasFieldData()
     {

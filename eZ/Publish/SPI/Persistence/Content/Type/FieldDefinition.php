@@ -8,12 +8,13 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content\Type;
-use eZ\Publish\SPI\Persistence\ValueObject,
-    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
-    eZ\Publish\SPI\Persistence\Content\FieldValue;
+
+use eZ\Publish\SPI\Persistence\ValueObject;
+use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 /**
- * @todo Do we need a FieldDefitinitionCreateStruct?
+ * @todo Do we need a FieldDefinitionCreateStruct?
  * @todo What about the "serialized_data_text" field in legacy storage?
  */
 class FieldDefinition extends ValueObject

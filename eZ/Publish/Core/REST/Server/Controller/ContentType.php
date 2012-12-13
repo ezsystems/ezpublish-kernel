@@ -8,11 +8,10 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 use eZ\Publish\API\Repository\Exceptions\BadStateException;
 use eZ\Publish\Core\REST\Common\Message;
-use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
@@ -108,7 +107,7 @@ class ContentType extends RestController
     /**
      * The given content type group is deleted
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteContentTypeGroup()
     {
@@ -124,7 +123,7 @@ class ContentType extends RestController
 
         $this->contentTypeService->deleteContentTypeGroup( $contentTypeGroup );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
@@ -190,47 +189,57 @@ class ContentType extends RestController
     }
 
     /**
-     * Loads a content type by its identifier
+     * Returns a list of content types
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeList|\eZ\Publish\Core\REST\Server\Values\ContentTypeInfoList
      */
-    public function loadContentTypeByIdentifier()
+    public function listContentTypes()
     {
-        // Serves only to verify that the URI is correct
-        $this->urlHandler->parse( 'typeByIdentifier', $this->request->path );
+        $contentTypes = array();
 
-        $contentType = $this->contentTypeService->loadContentTypeByIdentifier(
-            $this->request->variables['identifier']
-        );
+        if ( isset( $this->request->variables['identifier'] ) )
+        {
+            $contentTypes = array(
+                $this->loadContentTypeByIdentifier()
+            );
+        }
+        else if ( isset( $this->request->variables['remoteId'] ) )
+        {
+            $contentTypes = array(
+                $this->loadContentTypeByRemoteId()
+            );
+        }
 
         if ( $this->getMediaType( $this->request ) == 'application/vnd.ez.api.contenttypelist' )
         {
-            return new Values\ContentTypeList( array( $contentType ), $this->request->path );
+            return new Values\ContentTypeList( $contentTypes, $this->request->path );
         }
 
-        return new Values\ContentTypeInfoList( array( $contentType ), $this->request->path );
+        return new Values\ContentTypeInfoList( $contentTypes, $this->request->path );
+    }
+
+    /**
+     * Loads a content type by its identifier
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     */
+    public function loadContentTypeByIdentifier()
+    {
+        return $this->contentTypeService->loadContentTypeByIdentifier(
+            $this->request->variables['identifier']
+        );
     }
 
     /**
      * Loads a content type by its remote ID
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeList|\eZ\Publish\Core\REST\Server\Values\ContentTypeInfoList
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     public function loadContentTypeByRemoteId()
     {
-        // Serves only to verify that the URI is correct
-        $this->urlHandler->parse( 'typeByRemoteId', $this->request->path );
-
-        $contentType = $this->contentTypeService->loadContentTypeByRemoteId(
+        return $this->contentTypeService->loadContentTypeByRemoteId(
             $this->request->variables['remoteId']
         );
-
-        if ( $this->getMediaType( $this->request ) == 'application/vnd.ez.api.contenttypelist' )
-        {
-            return new Values\ContentTypeList( array( $contentType ), $this->request->path );
-        }
-
-        return new Values\ContentTypeInfoList( array( $contentType ), $this->request->path );
     }
 
     /**
@@ -246,20 +255,26 @@ class ContentType extends RestController
             $questionMarkPosition !== false ? substr( $this->request->path, 0, $questionMarkPosition ) : $this->request->path
         );
 
-        //@todo Throw forbidden exception if content type identifier already exists
-        //Cannot be caught as PAPI throws same InvalidArgumentException for couple of situations
+        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $urlValues['typegroup'] );
 
-        $contentTypeDraft = $this->contentTypeService->createContentType(
-            $this->inputDispatcher->parse(
-                new Message(
-                    array(
-                        'Content-Type' => $this->request->contentType,
-                    ),
-                    $this->request->body
-                )
-            ),
-            array( $this->contentTypeService->loadContentTypeGroup( $urlValues['typegroup'] ) )
-        );
+        try
+        {
+            $contentTypeDraft = $this->contentTypeService->createContentType(
+                $this->inputDispatcher->parse(
+                    new Message(
+                        array(
+                            'Content-Type' => $this->request->contentType,
+                        ),
+                        $this->request->body
+                    )
+                ),
+                array( $contentTypeGroup )
+            );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
 
         if ( isset( $this->request->variables['publish'] ) && $this->request->variables['publish'] === 'true' )
         {
@@ -313,12 +328,18 @@ class ContentType extends RestController
     public function createContentTypeDraft()
     {
         $urlValues = $this->urlHandler->parse( 'type', $this->request->path );
+        $contentType = $this->contentTypeService->loadContentType( $urlValues['type'] );
 
-        // @TODO Throw ForbiddenException if the content type already has a draft
-
-        $contentTypeDraft = $this->contentTypeService->createContentTypeDraft(
-            $this->contentTypeService->loadContentType( $urlValues['type'] )
-        );
+        try
+        {
+            $contentTypeDraft = $this->contentTypeService->createContentTypeDraft(
+                $contentType
+            );
+        }
+        catch ( BadStateException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
 
         $contentTypeUpdateStruct = $this->inputDispatcher->parse(
             new Message(
@@ -329,13 +350,17 @@ class ContentType extends RestController
             )
         );
 
-        // @TODO Throw ForbiddenException if the content type with the identifier already exists
-        // PAPI throws same exception for various situations
-
-        $this->contentTypeService->updateContentTypeDraft(
-            $contentTypeDraft,
-            $contentTypeUpdateStruct
-        );
+        try
+        {
+            $this->contentTypeService->updateContentTypeDraft(
+                $contentTypeDraft,
+                $contentTypeUpdateStruct
+            );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
 
         return new Values\CreatedContentType(
             array(
@@ -358,8 +383,6 @@ class ContentType extends RestController
     {
         $urlValues = $this->urlHandler->parse( 'typeDraft', $this->request->path );
 
-        // @TODO Throw NotFoundException if the content type does not have a draft for the current user
-
         $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
 
         return new Values\RestContentType(
@@ -377,8 +400,6 @@ class ContentType extends RestController
     {
         $urlValues = $this->urlHandler->parse( 'typeDraft', $this->request->path );
 
-        // @TODO Throw NotFoundException if the content type does not have a draft
-
         $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
         $contentTypeUpdateStruct = $this->inputDispatcher->parse(
             new Message(
@@ -389,13 +410,17 @@ class ContentType extends RestController
             )
         );
 
-        // @TODO Throw ForbiddenException if the content type with the identifier already exists
-        // PAPI throws same exception for various situations
-
-        $this->contentTypeService->updateContentTypeDraft(
-            $contentTypeDraft,
-            $contentTypeUpdateStruct
-        );
+        try
+        {
+            $this->contentTypeService->updateContentTypeDraft(
+                $contentTypeDraft,
+                $contentTypeUpdateStruct
+            );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
 
         return new Values\RestContentType(
             // Reload the content type draft to get the updated values
@@ -571,14 +596,18 @@ class ContentType extends RestController
             throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->path}'." );
         }
 
-        //@TODO Throw ForbiddenException if identifier already exists
-        // PAPI throws same type of exception for various cases
-
-        $this->contentTypeService->updateFieldDefinition(
-            $contentTypeDraft,
-            $fieldDefinition,
-            $fieldDefinitionUpdate
-        );
+        try
+        {
+            $this->contentTypeService->updateFieldDefinition(
+                $contentTypeDraft,
+                $fieldDefinition,
+                $fieldDefinitionUpdate
+            );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
 
         $updatedDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
         foreach ( $updatedDraft->getFieldDefinitions() as $fieldDef )
@@ -597,13 +626,11 @@ class ContentType extends RestController
     /**
      * The given field definition is deleted
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function removeFieldDefinition()
     {
         $urlValues = $this->urlHandler->parse( 'typeFieldDefinitionDraft', $this->request->path );
-
-        // @TODO Throw NotFoundException if the content type does not have a draft for the current user
 
         $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
 
@@ -626,7 +653,7 @@ class ContentType extends RestController
             $fieldDefinition
         );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
@@ -637,8 +664,6 @@ class ContentType extends RestController
     public function publishContentTypeDraft()
     {
         $urlValues = $this->urlHandler->parse( 'typeDraft', $this->request->path );
-
-        // @TODO Throw NotFoundException if the content type does not have a draft for the current user
 
         $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
 
@@ -660,7 +685,7 @@ class ContentType extends RestController
     /**
      * The given content type is deleted
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteContentType()
     {
@@ -677,7 +702,22 @@ class ContentType extends RestController
             throw new ForbiddenException( $e->getMessage() );
         }
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
+    }
+
+    /**
+     * The given content type draft is deleted
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
+     */
+    public function deleteContentTypeDraft()
+    {
+        $urlValues = $this->urlHandler->parse( 'typeDraft', $this->request->path );
+
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
+        $this->contentTypeService->deleteContentType( $contentTypeDraft );
+
+        return new Values\NoContent();
     }
 
     /**
@@ -800,6 +840,7 @@ class ContentType extends RestController
      * Converts the provided ContentTypeGroupCreateStruct to ContentTypeGroupUpdateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct $createStruct
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct
      */
     private function mapToGroupUpdateStruct( ContentTypeGroupCreateStruct $createStruct )

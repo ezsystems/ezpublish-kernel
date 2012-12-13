@@ -9,15 +9,14 @@
  */
 
 namespace eZ\Publish\Core\Repository;
-use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
 
-    eZ\Publish\SPI\Persistence\Handler,
-    eZ\Publish\SPI\FieldType\FieldType as SPIFieldType,
-
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Repository\Values\ContentType\FieldType;
+use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\SPI\Persistence\Handler;
+use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Repository\Values\ContentType\FieldType;
 
 /**
  * An implementation of this class provides access to FieldTypes
@@ -85,6 +84,7 @@ class FieldTypeService implements FieldTypeServiceInterface
      * Returns the FieldType registered with the given identifier
      *
      * @param string $identifier
+     *
      * @return \eZ\Publish\API\Repository\FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *         if there is no FieldType registered with $identifier
@@ -104,7 +104,7 @@ class FieldTypeService implements FieldTypeServiceInterface
      *
      * @param string $identifier
      *
-     * @return bool
+     * @return boolean
      */
     public function hasFieldType( $identifier )
     {
@@ -114,10 +114,14 @@ class FieldTypeService implements FieldTypeServiceInterface
     /**
      * Instantiates a FieldType\Type object
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $type not priorly setup
+     * @todo Move this to a internal service provided to services that needs this (including this)
+     *
+     * @access private This function is for internal use only.
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $type not properly setup
      *         with settings injected to service
      *
      * @param string $identifier
+     *
      * @return \eZ\Publish\SPI\FieldType\FieldType
      */
     public function buildFieldType( $identifier )

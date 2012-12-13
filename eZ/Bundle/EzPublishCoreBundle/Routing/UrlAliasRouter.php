@@ -9,11 +9,10 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Routing;
 
-use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter as BaseUrlAliasRouter,
-    eZ\Bundle\EzPublishCoreBundle\SiteAccess,
-    Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\Routing\Exception\ResourceNotFoundException,
-    Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter as BaseUrlAliasRouter;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class UrlAliasRouter extends BaseUrlAliasRouter
 {
@@ -34,16 +33,6 @@ class UrlAliasRouter extends BaseUrlAliasRouter
     {
         return $this->container->get( 'ezpublish.config.resolver' );
     }
-
-    /**
-     * @return string
-     */
-    protected function getTopLanguage()
-    {
-        $languages = $this->getConfigResolver()->getParameter( 'languages' );
-        return !empty( $languages ) ? $languages[0] : 'eng-GB';
-    }
-
 
     public function matchRequest( Request $request )
     {

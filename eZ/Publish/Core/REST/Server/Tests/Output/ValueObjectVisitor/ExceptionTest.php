@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -54,6 +55,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
      * Test if result contains ErrorMessage element and error code
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsErrorCode( $result )
@@ -63,7 +65,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
                 'tag'      => 'ErrorMessage',
                 'descendant' => array(
                     'tag'     => 'errorCode',
-                    'content' => (string) $this->getExpectedStatusCode(),
+                    'content' => (string)$this->getExpectedStatusCode(),
                 )
             ),
             $result,
@@ -76,6 +78,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
      * Test if result contains ErrorMessage element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsErrorMessage( $result )
@@ -98,6 +101,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
      * Test if result contains ErrorMessage element and description
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsErrorDescription( $result )
@@ -119,6 +123,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
      * Test if ErrorMessage element contains required attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsExceptionAttributes( $result )

@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState;
-use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler,
-    eZ\Publish\SPI\Persistence\Content\ObjectState,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\Group,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler;
+use eZ\Publish\SPI\Persistence\Content\ObjectState;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
 
 /**
  * Test case for Object state Handler
@@ -41,8 +42,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     protected $mapperMock;
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::createGroup
+     *
+     * @return void
      */
     public function testCreateGroup()
     {
@@ -69,8 +71,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadGroup
+     *
+     * @return void
      */
     public function testLoadGroup()
     {
@@ -115,8 +118,56 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadGroupByIdentifier
+     *
      * @return void
+     */
+    public function testLoadGroupByIdentifier()
+    {
+        $handler = $this->getObjectStateHandler();
+        $mapperMock = $this->getMapperMock();
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadObjectStateGroupDataByIdentifier' )
+            ->with( $this->equalTo( 'ez_lock' ) )
+            ->will( $this->returnValue( array( array() ) ) );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'createObjectStateGroupFromData' )
+            ->with( $this->equalTo( array( array() ) ) )
+            ->will( $this->returnValue( $this->getObjectStateGroupFixture() ) );
+
+        $result = $handler->loadGroupByIdentifier( 'ez_lock' );
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Group',
+            $result
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadGroupByIdentifier
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadGroupByIdentifierThrowsNotFoundException()
+    {
+        $handler = $this->getObjectStateHandler();
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadObjectStateGroupDataByIdentifier' )
+            ->with( $this->equalTo( 'unknown' ) )
+            ->will( $this->returnValue( array() ) );
+
+        $handler->loadGroupByIdentifier( 'unknown' );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadAllGroups
+     *
+     * @return void
      */
     public function testLoadAllGroups()
     {
@@ -146,8 +197,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadObjectStates
+     *
+     * @return void
      */
     public function testLoadObjectStates()
     {
@@ -177,8 +229,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::updateGroup
+     *
+     * @return void
      */
     public function testUpdateGroup()
     {
@@ -214,8 +267,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::deleteGroup
+     *
+     * @return void
      */
     public function testDeleteGroup()
     {
@@ -231,10 +285,14 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $mapperMock->expects( $this->once() )
             ->method( 'createObjectStateListFromData' )
             ->with( $this->equalTo( array( array() ) ) )
-            ->will( $this->returnValue( array(
-                    new ObjectState( array( 'id' => 1 ) ),
-                    new ObjectState( array( 'id' => 2 ) )
-            ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        new ObjectState( array( 'id' => 1 ) ),
+                        new ObjectState( array( 'id' => 2 ) )
+                    )
+                )
+            );
 
         $gatewayMock->expects( $this->exactly( 2 ) )
             ->method( 'deleteObjectStateLinks' );
@@ -266,8 +324,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::create
+     *
+     * @return void
      */
     public function testCreate()
     {
@@ -294,8 +353,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::load
+     *
+     * @return void
      */
     public function testLoad()
     {
@@ -340,8 +400,56 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadByIdentifier
+     *
      * @return void
+     */
+    public function testLoadByIdentifier()
+    {
+        $handler = $this->getObjectStateHandler();
+        $mapperMock = $this->getMapperMock();
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadObjectStateDataByIdentifier' )
+            ->with( $this->equalTo( 'not_locked' ), $this->equalTo( 2 ) )
+            ->will( $this->returnValue( array( array() ) ) );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'createObjectStateFromData' )
+            ->with( $this->equalTo( array( array() ) ) )
+            ->will( $this->returnValue( $this->getObjectStateFixture() ) );
+
+        $result = $handler->loadByIdentifier( 'not_locked', 2 );
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState',
+            $result
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadByIdentifier
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadByIdentifierThrowsNotFoundException()
+    {
+        $handler = $this->getObjectStateHandler();
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadObjectStateDataByIdentifier' )
+            ->with( $this->equalTo( 'unknown' ), $this->equalTo( 2 ) )
+            ->will( $this->returnValue( array() ) );
+
+        $handler->loadByIdentifier( 'unknown', 2 );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::update
+     *
+     * @return void
      */
     public function testUpdate()
     {
@@ -377,8 +485,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::setPriority
+     *
+     * @return void
      */
     public function testSetPriority()
     {
@@ -404,10 +513,14 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $mapperMock->expects( $this->any() )
             ->method( 'createObjectStateListFromData' )
             ->with( $this->equalTo( array( array() ) ) )
-            ->will( $this->returnValue( array(
-                    new ObjectState( array( 'id' => 1, 'groupId' => 2 ) ),
-                    new ObjectState( array( 'id' => 2, 'groupId' => 2 ) )
-                ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        new ObjectState( array( 'id' => 1, 'groupId' => 2 ) ),
+                        new ObjectState( array( 'id' => 2, 'groupId' => 2 ) )
+                    )
+                )
+            );
 
         $gatewayMock->expects( $this->exactly( 2 ) )
             ->method( 'updateObjectStatePriority' );
@@ -424,8 +537,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::delete
+     *
+     * @return void
      */
     public function testDelete()
     {
@@ -487,28 +601,30 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::setContentState
+     *
      * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::setObjectState
      */
-    public function testSetObjectState()
+    public function testSetContentState()
     {
         $handler = $this->getObjectStateHandler();
         $gatewayMock = $this->getGatewayMock();
 
         $gatewayMock->expects( $this->once() )
-            ->method( 'setObjectState' )
+            ->method( 'setContentState' )
             ->with( $this->equalTo( 42 ), $this->equalTo( 2 ), $this->equalTo( 2 ) );
 
-        $result = $handler->setObjectState( 42, 2, 2 );
+        $result = $handler->setContentState( 42, 2, 2 );
 
         $this->assertEquals( true, $result );
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::getContentState
+     *
      * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::getObjectState
      */
-    public function testGetObjectState()
+    public function testGetContentState()
     {
         $handler = $this->getObjectStateHandler();
         $mapperMock = $this->getMapperMock();
@@ -524,7 +640,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
             ->with( $this->equalTo( array( array() ) ) )
             ->will( $this->returnValue( $this->getObjectStateFixture() ) );
 
-        $result = $handler->getObjectState( 42, 2 );
+        $result = $handler->getContentState( 42, 2 );
 
         $this->assertInstanceOf(
             'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState',
@@ -533,8 +649,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::getContentCount
+     *
+     * @return void
      */
     public function testGetContentCount()
     {

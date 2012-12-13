@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the EMailAddressValidator class
+ * File containing the EmailAddressValidator class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Validator;
-use eZ\Publish\Core\FieldType\Validator,
-    eZ\Publish\Core\FieldType\ValidationError,
-    eZ\Publish\Core\FieldType\Value as BaseValue;
+
+use eZ\Publish\Core\FieldType\Validator;
+use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * Validator for checking validity of email addresses. Both form and MX record validity checking are provided
@@ -25,7 +26,7 @@ class EmailAddressValidator extends Validator
     );
 
     protected $constraintsSchema = array(
-        "Extent" => array (
+        "Extent" => array(
             "type" => "string",
             "default" => "regex"
         )

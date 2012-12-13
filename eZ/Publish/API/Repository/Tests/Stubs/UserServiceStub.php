@@ -9,21 +9,21 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\UserService;
-use \eZ\Publish\API\Repository\Values\User\User;
-use \eZ\Publish\API\Repository\Values\User\UserCreateStruct;
-use \eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
-use \eZ\Publish\API\Repository\Values\User\UserGroup;
-use \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
-use \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
+use eZ\Publish\API\Repository\UserService;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
+use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\UserGroup;
+use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
+use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserCreateStructStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupCreateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserCreateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupCreateStructStub;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\UserService}
@@ -150,7 +150,7 @@ class UserServiceStub implements UserService
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
-     * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\UserGroup}
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
      */
@@ -164,7 +164,7 @@ class UserServiceStub implements UserService
         $subUserGroups = array();
         foreach ( $this->userGroups as $group )
         {
-            if ( (string) $group->parentId === (string) $userGroup->id )
+            if ( (string)$group->parentId === (string)$userGroup->id )
             {
                 $subUserGroups[] = $group;
             }
@@ -249,7 +249,7 @@ class UserServiceStub implements UserService
      * Updates the group profile with fields and meta data
      *
      * 4.x: If the versionUpdateStruct is set in $userGroupUpdateStruct, this method internally creates a content draft, updates ts with the provided data
-     * and publishes the draft. If a draft is explititely required, the user group can be updated via the content service methods.
+     * and publishes the draft. If a draft is explicitly required, the user group can be updated via the content service methods.
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      * @param \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct $userGroupUpdateStruct
@@ -315,12 +315,21 @@ class UserServiceStub implements UserService
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user group was not found
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a user with provided login already exists
      */
     public function createUser( UserCreateStruct $userCreateStruct, array $parentGroups )
     {
         if ( false === $this->repository->hasAccess( 'content', 'create' ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        foreach ( $this->users as $user )
+        {
+            if ( $user->login == $userCreateStruct->login )
+            {
+                throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
+            }
         }
 
         $contentService = $this->repository->getContentService();
@@ -375,7 +384,7 @@ class UserServiceStub implements UserService
     /**
      * Loads a user
      *
-     * @param integer $userId
+     * @param int $userId
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
@@ -394,6 +403,7 @@ class UserServiceStub implements UserService
      * Loads anonymous user
      *
      * @uses loadUser()
+     *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
     public function loadAnonymousUser()
@@ -460,7 +470,7 @@ class UserServiceStub implements UserService
      * Updates a user
      *
      * 4.x: If the versionUpdateStruct is set in the user update structure, this method internally creates a content draft, updates ts with the provided data
-     * and publishes the draft. If a draft is explititely required, the user group can be updated via the content service methods.
+     * and publishes the draft. If a draft is explicitly required, the user group can be updated via the content service methods.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct
@@ -522,7 +532,8 @@ class UserServiceStub implements UserService
                     $this->createHash(
                         $user->login,
                         $userUpdateStruct->password,
-                        $user->hashAlgorithm ) : $user->passwordHash,
+                        $user->hashAlgorithm
+                    ) : $user->passwordHash,
 
                 'content' => $content,
             )
@@ -534,12 +545,11 @@ class UserServiceStub implements UserService
     /**
      * Assigns a new user group to the user
      *
-     * If the user is already in the given user group this method does nothing.
-     *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign the user group to the user
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the user is already in the given user group
      */
     public function assignUserToUserGroup( User $user, UserGroup $userGroup )
     {
@@ -547,6 +557,11 @@ class UserServiceStub implements UserService
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
+        if ( true === isset( $this->user2groups[$user->id][$userGroup->id] ) )
+        {
+            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
+        }
+
         if ( false === isset( $this->user2groups[$user->id] ) )
         {
             $this->user2groups[$user->id] = array();
@@ -577,7 +592,7 @@ class UserServiceStub implements UserService
     }
 
     /**
-     * Loads the user groups ther user belongs to
+     * Loads the user groups the user belongs to
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed read the user or user group
      *
@@ -601,7 +616,7 @@ class UserServiceStub implements UserService
     }
 
     /**
-     * loads the users of a user group
+     * Loads the users of a user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the users or user group
      *
@@ -632,11 +647,15 @@ class UserServiceStub implements UserService
     /**
      * Internal helper method.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param mixed $userId
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
-    public function __loadUserGroupsByUserId( $userId )
+    public function loadUserGroupsByUserId( $userId )
     {
         if ( false === isset( $this->user2groups[$userId] ) )
         {
@@ -645,7 +664,7 @@ class UserServiceStub implements UserService
 
         $groupIds = array_keys( $this->user2groups[$userId] );
         $userGroups = array();
-        while ( count( $groupIds ) > 0 )
+        while ( !empty( $groupIds ) )
         {
             $groupId = array_pop( $groupIds );
 
@@ -661,7 +680,7 @@ class UserServiceStub implements UserService
     /**
      * Instantiate a user create class
      *
-     * @paramb string $login the login of the new user
+     * @param string $login the login of the new user
      * @param string $email the email of the new user
      * @param string $password the plain password of the new user
      * @param string $mainLanguageCode the main language for the underlying content object
@@ -732,9 +751,13 @@ class UserServiceStub implements UserService
     /**
      * Internal helper method to emulate a rollback.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __rollback()
+    public function rollback()
     {
         $this->initFromFixture();
     }

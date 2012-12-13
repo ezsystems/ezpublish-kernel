@@ -9,12 +9,12 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\IOService;
-use \eZ\Publish\API\Repository\Values\IO\BinaryFile;
-use \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct;
+use eZ\Publish\API\Repository\IOService;
+use eZ\Publish\API\Repository\Values\IO\BinaryFile;
+use eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 
 /**
  * Service used to handle io operations.
@@ -34,7 +34,7 @@ class IOServiceStub implements IOService
     private $content = array();
 
     /**
-     * @var integer
+     * @var int
      */
     private $binaryId = 0;
 
@@ -210,9 +210,13 @@ class IOServiceStub implements IOService
     /**
      * Internal helper method to emulate a rollback.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __rollback()
+    public function rollback()
     {
         $this->binary = array();
         $this->binaryId = 0;

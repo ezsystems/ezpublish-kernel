@@ -8,13 +8,14 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway,
-    eZ\Publish\SPI\Persistence\Content\Type,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\Group,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
+use eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\Group;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 /**
  * Base class for content type gateways.
@@ -42,6 +43,7 @@ class ExceptionConversion extends Gateway
      * Inserts the given $group.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Group $group
+     *
      * @return mixed Group ID
      */
     public function insertGroup( Group $group )
@@ -64,6 +66,7 @@ class ExceptionConversion extends Gateway
      * Updates a group with data in $group.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct $group
+     *
      * @return void
      */
     public function updateGroup( GroupUpdateStruct $group )
@@ -86,6 +89,7 @@ class ExceptionConversion extends Gateway
      * Returns the number of types in a certain group.
      *
      * @param int $groupId
+     *
      * @return int
      */
     public function countTypesInGroup( $groupId )
@@ -109,6 +113,7 @@ class ExceptionConversion extends Gateway
      *
      * @param int $typeId
      * @param int $status
+     *
      * @return int
      */
     public function countGroupsForType( $typeId, $status )
@@ -131,6 +136,7 @@ class ExceptionConversion extends Gateway
      * Deletes the Group with the given $groupId.
      *
      * @param int $groupId
+     *
      * @return void
      */
     public function deleteGroup( $groupId )
@@ -153,6 +159,7 @@ class ExceptionConversion extends Gateway
      * Returns an array with data about the Group with $groupId.
      *
      * @param int $groupId
+     *
      * @return array
      */
     public function loadGroupData( $groupId )
@@ -175,6 +182,7 @@ class ExceptionConversion extends Gateway
      * Returns an array with data about the Group with $identifier.
      *
      * @param int $identifier
+     *
      * @return array
      */
     public function loadGroupDataByIdentifier( $identifier )
@@ -219,6 +227,7 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $groupId
      * @param int $status
+     *
      * @return string[][]
      */
     public function loadTypesDataForGroup( $groupId, $status )
@@ -267,6 +276,7 @@ class ExceptionConversion extends Gateway
      * @param mixed $typeId
      * @param int $status
      * @param mixed $groupId
+     *
      * @return void
      */
     public function insertGroupAssignment( $typeId, $status, $groupId )
@@ -291,6 +301,7 @@ class ExceptionConversion extends Gateway
      * @param mixed $groupId
      * @param mixed $typeId
      * @param int $status
+     *
      * @return void
      */
     public function deleteGroupAssignment( $groupId, $typeId, $status )
@@ -368,6 +379,7 @@ class ExceptionConversion extends Gateway
      * @param mixed $typeId
      * @param int $status
      * @param mixed $fieldDefinitionId
+     *
      * @return void
      */
     public function deleteFieldDefinition( $typeId, $status, $fieldDefinitionId )
@@ -393,6 +405,7 @@ class ExceptionConversion extends Gateway
      * @param int $status
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
+     *
      * @return void
      */
     public function updateFieldDefinition(
@@ -420,6 +433,7 @@ class ExceptionConversion extends Gateway
      * @param mixed $typeId
      * @param int $status
      * @param \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $updateStruct
+     *
      * @return void
      */
     public function updateType( $typeId, $status, UpdateStruct $updateStruct )
@@ -443,6 +457,7 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $typeId
      * @param int $status
+     *
      * @return array Data rows.
      */
     public function loadTypeData( $typeId, $status )
@@ -467,6 +482,7 @@ class ExceptionConversion extends Gateway
      *
      * @param string $identifier
      * @param int $status
+     *
      * @return array(int=>array(string=>mixed)) Data rows.
      */
     public function loadTypeDataByIdentifier( $identifier, $status )
@@ -491,6 +507,7 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $remoteId
      * @param int $status
+     *
      * @return array(int=>array(string=>mixed)) Data rows.
      */
     public function loadTypeDataByRemoteId( $remoteId, $status )
@@ -513,6 +530,7 @@ class ExceptionConversion extends Gateway
      * Counts the number of instances that exists of the identified type.
      *
      * @param int $typeId
+     *
      * @return int
      */
     public function countInstancesOfType( $typeId )
@@ -536,6 +554,7 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $typeId
      * @param int $status
+     *
      * @return void
      */
     public function delete( $typeId, $status )
@@ -559,6 +578,7 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $typeId
      * @param int $status
+     *
      * @return void
      */
     public function deleteFieldDefinitionsForType( $typeId, $status )
@@ -584,6 +604,7 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $typeId
      * @param int $status
+     *
      * @return void
      */
     public function deleteType( $typeId, $status )
@@ -607,6 +628,7 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $typeId
      * @param int $status
+     *
      * @return void
      */
     public function deleteGroupAssignmentsForType( $typeId, $status )
@@ -632,6 +654,7 @@ class ExceptionConversion extends Gateway
      * @param int $typeId
      * @param int $sourceStatus
      * @param int $targetStatus
+     *
      * @return void
      */
     public function publishTypeAndFields( $typeId, $sourceStatus, $targetStatus )

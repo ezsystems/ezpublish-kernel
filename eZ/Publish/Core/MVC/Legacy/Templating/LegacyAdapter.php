@@ -69,27 +69,22 @@ class LegacyAdapter implements LegacyCompatible
      * Returns true if object supports attribute $name
      *
      * @param string $name
-     * @return bool
+     *
+     * @return boolean
      */
     public function hasAttribute( $name )
     {
-        if (
-            isset( $this->properties[$name] )
-            || isset( $this->getters['get' . ucfirst( $name )] )
-        )
-        {
-            return true;
-        }
-
-        return false;
+        return isset( $this->properties[$name] ) || isset( $this->getters['get' . ucfirst( $name )] );
     }
 
     /**
      * Returns the value of attribute $name.
      *
      * @param string $name
-     * @return mixed
+     *
      * @throws \InvalidArgumentException If $name is not supported by aggregated object
+     *
+     * @return mixed
      */
     public function attribute( $name )
     {

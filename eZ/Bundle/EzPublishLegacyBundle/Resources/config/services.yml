@@ -1,5 +1,5 @@
 parameters:
-    # Below default parameters, to be defined in app/config/config.yml
+    # Below default parameters, to be defined in ezpublish/config/config.yml
     #ezpublish_legacy.enabled: false
     #ezpublish_legacy.root_dir: ~
 
@@ -11,15 +11,31 @@ parameters:
     ezpublish_legacy.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\LegacyKernelController
     ezpublish_legacy.treemenu.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\LegacyTreeMenuController
     ezpublish_legacy.treemenu.controller.options: {}
+    ezpublish_legacy.setup.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\LegacySetupController
+
+    ezpublish_legacy.kernel_handler.cli.class: eZ\Publish\Core\MVC\Legacy\Kernel\CLIHandler
+    ezpublish_legacy.kernel_handler.cli.options: {}
 
     ezpublish_legacy.router.class: eZ\Bundle\EzPublishLegacyBundle\Routing\FallbackRouter
     ezpublish_legacy.url_generator.class: eZ\Bundle\EzPublishLegacyBundle\Routing\UrlGenerator
     ezpublish_legacy.siteaccess_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess
     ezpublish_legacy.session_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Session
     ezpublish_legacy.configuration_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Configuration
+    ezpublish_legacy.configuration_mapper.options:
+        imagemagick_enabled: %ezpublish.image.imagemagick.enabled%
+        imagemagick_executable_path: %ezpublish.image.imagemagick.executable_path%
+        imagemagick_executable: %ezpublish.image.imagemagick.executable%
+        imagemagick_filters: %ezpublish.image.imagemagick.filters%
     ezpublish_legacy.content_exception_handler.class: eZ\Publish\Core\MVC\Legacy\EventListener\APIContentExceptionListener
     ezpublish_legacy.config.resolver.class: eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver
     ezpublish_legacy.config.default_scope: site
+    ezpublish_legacy.setup_wizard.configuration_converter.class: eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfigurationConverter
+    ezpublish_legacy.setup_wizard.configuration_dumper.class: eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfigurationDumper
+    # Environments to pre-generate config file for
+    ezpublish_legacy.setup_wizard.configuration_dumper.environments: [dev, prod]
+    # Non-supported packages will have url_alias_router to false
+    ezpublish_legacy.setup_wizard.supported_packages: [ezdemo_site, ezdemo_site_clean]
+    ezpublish_legacy.fieldType.ezimage.variation_service.class: eZ\Publish\Core\MVC\Legacy\Image\AliasGenerator
 
 services:
     ezpublish_legacy.kernel:
@@ -50,6 +66,12 @@ services:
         factory_method: buildLegacyKernelHandlerTreeMenu
         arguments: [@service_container]
 
+    ezpublish_legacy.kernel_handler.cli:
+        class: %ezpublish_legacy.kernel_handler.cli.class%
+        factory_service: ezpublish_legacy.kernel.lazy_loader
+        factory_method: buildLegacyKernelHandlerCLI
+        arguments: [@service_container]
+
     ezpublish_legacy.kernel_handler:
         alias: ezpublish_legacy.kernel_handler.web
 
@@ -65,6 +87,11 @@ services:
             - %ezpublish_legacy.treemenu.controller.options%
         parent: ezpublish.controller.base
         scope: request
+
+    ezpublish_legacy.setup.controller:
+        class: %ezpublish_legacy.setup.controller.class%
+        parent: ezpublish.controller.base
+        arguments: [@ezpublish_legacy.kernel, @ezpublish_legacy.config.resolver]
 
     ezpublish_legacy.router:
         class: %ezpublish_legacy.router.class%
@@ -91,7 +118,10 @@ services:
 
     ezpublish_legacy.configuration_mapper:
         class: %ezpublish_legacy.configuration_mapper.class%
-        arguments: [@ezpublish.config.resolver]
+        arguments:
+            - @ezpublish.config.resolver.core
+            - @ezpublish.http_cache.purger
+            - %ezpublish_legacy.configuration_mapper.options%
         tags:
             - { name: kernel.event_subscriber }
 
@@ -106,3 +136,19 @@ services:
         arguments: [@ezpublish_legacy.kernel, %ezpublish_legacy.config.default_scope%]
         tags:
             - { name: ezpublish.config.resolver, priority: -255 }
+
+    ezpublish_legacy.setup_wizard.configuration_converter:
+        class: %ezpublish_legacy.setup_wizard.configuration_converter.class%
+        arguments: [@ezpublish_legacy.config.resolver, @ezpublish_legacy.kernel, %ezpublish_legacy.setup_wizard.supported_packages%]
+
+    ezpublish_legacy.setup_wizard.configuration_dumper:
+        class: %ezpublish_legacy.setup_wizard.configuration_dumper.class%
+        arguments: [@filesystem, %ezpublish_legacy.setup_wizard.configuration_dumper.environments%, %kernel.root_dir%, %kernel.cache_dir%]
+
+    # Image alias generator using legacy
+    ezpublish_legacy.fieldType.ezimage.variation_service:
+        class: %ezpublish_legacy.fieldType.ezimage.variation_service.class%
+        arguments: [@ezpublish_legacy.kernel]
+
+    ezpublish.fieldType.ezimage.variation_service:
+        alias: ezpublish_legacy.fieldType.ezimage.variation_service

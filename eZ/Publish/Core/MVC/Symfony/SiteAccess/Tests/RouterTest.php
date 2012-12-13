@@ -8,12 +8,19 @@
  */
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
-use PHPUnit_Framework_TestCase,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\Router,
-    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+
+use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 
 class RouterTest extends PHPUnit_Framework_TestCase
 {
+    protected function tearDown()
+    {
+        putenv( 'EZPUBLISH_SITEACCESS' );
+        parent::tearDown();
+    }
+
     /**
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::__construct
      */
@@ -37,7 +44,8 @@ class RouterTest extends PHPUnit_Framework_TestCase
                     83 => "first_sa",
                     85 => "first_sa",
                 ),
-            )
+            ),
+            array( 'first_sa', 'second_sa', 'third_sa', 'fourth_sa', 'headerbased_sa' )
         );
     }
 
@@ -56,6 +64,19 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $sa = $router->match( $request );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa );
         $this->assertSame( $siteAccess, $sa->name );
+        $router->setSiteAccess();
+    }
+
+    /**
+     * @depends testConstruct
+     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::match
+     * @expectedException \eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException
+     */
+    public function testMatchWithEnvFail( $router )
+    {
+        $saName = 'foobar_sa';
+        putenv( "EZPUBLISH_SITEACCESS=$saName" );
+        $router->match( new SimplifiedRequest() );
     }
 
     /**
@@ -64,19 +85,19 @@ class RouterTest extends PHPUnit_Framework_TestCase
      */
     public function testMatchWithEnv( $router )
     {
-        $saName = 'foobar_sa';
+        $saName = 'first_sa';
         putenv( "EZPUBLISH_SITEACCESS=$saName" );
         $sa = $router->match( new SimplifiedRequest() );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa );
         $this->assertSame( $saName, $sa->name );
         $this->assertSame( 'env', $sa->matchingType );
-        putenv( 'EZPUBLISH_SITEACCESS' );
+        $router->setSiteAccess();
     }
 
     /**
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router $router
      *
-     * @depends testContruct
+     * @depends testConstruct
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::match
      */
     public function testMatchWithRequestHeader( $router )
@@ -85,13 +106,14 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $sa = $router->match(
             new SimplifiedRequest(
                 array(
-                     'X-Siteaccess' => $saName
+                    'headers' => array( 'X-Siteaccess' => $saName )
                 )
             )
         );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa );
         $this->assertSame( $saName, $sa->name );
         $this->assertSame( 'header', $sa->matchingType );
+        $router->setSiteAccess();
     }
 
     public function matchProvider()

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -28,10 +29,7 @@ class PermanentRedirectTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $redirect = new Values\PermanentRedirect(
-            '/some/redirect/uri',
-            'Version'
-        );
+        $redirect = new Values\PermanentRedirect( '/some/redirect/uri' );
 
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'setStatus' )

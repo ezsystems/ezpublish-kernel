@@ -9,16 +9,16 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View;
 
-use eZ\Publish\API\Repository\Values\Content\Content,
-    eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\Core\MVC\Symfony\View\Provider\Content as ContentViewProvider,
-    eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProvider,
-    eZ\Publish\Core\MVC\Symfony\MVCEvents,
-    eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent,
-    eZ\Publish\Core\Repository\Repository,
-    Symfony\Component\Templating\EngineInterface,
-    Symfony\Component\HttpKernel\Log\LoggerInterface,
-    Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Content as ContentViewProvider;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProvider;
+use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
+use eZ\Publish\API\Repository\Repository;
+use Symfony\Component\Templating\EngineInterface;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Manager
 {
@@ -60,7 +60,7 @@ class Manager
     protected $sortedLocationViewProviders;
 
     /**
-     * @var \eZ\Publish\Core\Repository\Repository
+     * @var \eZ\Publish\API\Repository\Repository
      */
     protected $repository;
 
@@ -176,6 +176,7 @@ class Manager
      *        render the view. By default, it's empty. 'content' entry is
      *        reserved for the Content that is rendered.
      * @throws \RuntimeException
+     *
      * @return string
      */
     public function renderContent( Content $content, $viewType = self::VIEW_TYPE_FULL, $parameters = array() )
@@ -205,6 +206,7 @@ class Manager
      *        entries are reserved for the Location (and its Content) that is
      *        viewed.
      * @throws \RuntimeException
+     *
      * @return string
      */
     public function renderLocation( Location $location, $viewType = self::VIEW_TYPE_FULL, $parameters = array() )
@@ -229,6 +231,7 @@ class Manager
      *
      * @param \eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface $view
      * @param array $defaultParams
+     *
      * @return string
      */
     public function renderContentView( ContentViewInterface $view, array $defaultParams = array() )

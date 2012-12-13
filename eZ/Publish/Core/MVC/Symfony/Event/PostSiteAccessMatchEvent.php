@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Event;
 
-use Symfony\Component\EventDispatcher\Event,
-    Symfony\Component\HttpFoundation\Request,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\HttpFoundation\Request;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 
 /**
  * This event is triggered after SiteAccess matching process and allows further control on it and the associated request.

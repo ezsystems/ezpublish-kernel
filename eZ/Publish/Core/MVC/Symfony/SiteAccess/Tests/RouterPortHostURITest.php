@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
-use PHPUnit_Framework_TestCase,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\Router,
-    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+
+use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 
 class RouterPortHostURITest extends PHPUnit_Framework_TestCase
 {
@@ -39,7 +40,8 @@ class RouterPortHostURITest extends PHPUnit_Framework_TestCase
                     "first_sa" => "first_sa",
                     "second_sa" => "second_sa",
                 ),
-            )
+            ),
+            array( 'first_sa', 'second_sa', 'third_sa', 'fourth_sa', 'fifth_sa' )
         );
     }
 
@@ -61,6 +63,7 @@ class RouterPortHostURITest extends PHPUnit_Framework_TestCase
         $sa = $router->match( $request );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa );
         $this->assertSame( $siteAccess, $sa->name );
+        $router->setSiteAccess();
     }
 
     public function matchProvider()

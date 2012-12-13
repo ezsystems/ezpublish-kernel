@@ -9,22 +9,19 @@
  */
 
 namespace eZ\Publish\Core\Repository;
-use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface,
-    eZ\Publish\SPI\Persistence\Content\Language\Handler,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
 
-    eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Language as SPILanguage,
-    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct,
-
-    eZ\Publish\API\Repository\Values\Content\Language,
-
-    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
-
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
-    LogicException;
+use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Language as SPILanguage;
+use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use LogicException;
 
 /**
  * Language service, used for language operations
@@ -59,8 +56,9 @@ class LanguageService implements LanguageServiceInterface
     {
         $this->repository = $repository;
         $this->languageHandler = $languageHandler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
-            'languages' => array( 'eng-GB' ),// @todo This setting overlaps with UrlAliasService prioritizedLanguageList
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
+            'languages' => array( 'eng-GB' ),
         );
     }
 
@@ -171,7 +169,7 @@ class LanguageService implements LanguageServiceInterface
     }
 
     /**
-     * enables a language
+     * Enables a language
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
@@ -214,7 +212,7 @@ class LanguageService implements LanguageServiceInterface
     }
 
     /**
-     * disables a language
+     * Disables a language
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
@@ -310,7 +308,7 @@ class LanguageService implements LanguageServiceInterface
         if ( !is_numeric( $languageId ) )
             throw new InvalidArgumentValue( "languageId", $languageId );
 
-        $language = $this->languageHandler->load( (int) $languageId );
+        $language = $this->languageHandler->load( (int)$languageId );
 
         return $this->buildDomainObject( $language );
     }
@@ -354,7 +352,7 @@ class LanguageService implements LanguageServiceInterface
     }
 
     /**
-     * returns a configured default language code
+     * Returns a configured default language code
      *
      * @return string
      */
@@ -364,7 +362,19 @@ class LanguageService implements LanguageServiceInterface
     }
 
     /**
-     * instantiates an object to be used for creating languages
+     * Returns a configured list of prioritized languageCodes
+     *
+     * @access private This is currently only for internal use in Services
+     *
+     * @return string[]
+     */
+    public function getPrioritizedLanguageCodeList()
+    {
+        return $this->settings['languages'];
+    }
+
+    /**
+     * Instantiates an object to be used for creating languages
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
      */

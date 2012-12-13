@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound;
 
 class ConverterRegistry
 {
@@ -44,6 +45,7 @@ class ConverterRegistry
      *
      * @param string $typeName
      * @param mixed $converter Callable or converter instance
+     *
      * @return void
      */
     public function register( $typeName, $converter )
@@ -56,7 +58,7 @@ class ConverterRegistry
      *
      * @param string $typeName
      *
-     * @throws eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
+     * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      * @throws \RuntimeException When type is neither Converter instance or callable factory
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter
@@ -79,8 +81,10 @@ class ConverterRegistry
 
             if ( !$this->converterMap[$typeName] instanceof Converter )
             {
-                throw new \RuntimeException( "Converter '$typeName' callable did not return a converter, instead: "
-                    . gettype( $this->converterMap[$typeName] ) );
+                throw new \RuntimeException(
+                    "Converter '$typeName' callable did not return a converter, instead: "
+                    . gettype( $this->converterMap[$typeName] )
+                );
             }
         }
         return $this->converterMap[$typeName];

@@ -38,7 +38,7 @@ class UserGroupRoleAssignment extends APIUserGroupRoleAssignment
     protected $userGroup;
 
     /**
-     * returns the limitation of the role assignment
+     * Returns the limitation of the role assignment
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation|null
      */
@@ -48,7 +48,7 @@ class UserGroupRoleAssignment extends APIUserGroupRoleAssignment
     }
 
     /**
-     * returns the role to which the user group is assigned to
+     * Returns the role to which the user group is assigned to
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
@@ -58,7 +58,7 @@ class UserGroupRoleAssignment extends APIUserGroupRoleAssignment
     }
 
     /**
-     * returns the user group to which the role is assigned to
+     * Returns the user group to which the role is assigned to
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      */

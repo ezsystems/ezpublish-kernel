@@ -8,27 +8,31 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Country\Type as Country,
-    eZ\Publish\Core\FieldType\Country\Value as CountryValue,
-    ReflectionObject;
+
+use eZ\Publish\Core\FieldType\Country\Type as Country;
+use eZ\Publish\Core\FieldType\Country\Value as CountryValue;
+use ReflectionObject;
 
 /**
  * @group fieldType
  * @group ezcountry
- * @todo Migrate to StandardizedFieldTypeTest
  */
-class CountryTest extends FieldTypeTest
+class CountryTest extends StandardizedFieldTypeTest
 {
     /**
-     * @var \eZ\Publish\Core\FieldType\Country\Type
+     * Returns the field type under test.
+     *
+     * This method is used by all test cases to retrieve the field type under
+     * test. Just create the FieldType instance using mocks from the provided
+     * get*Mock() methods and/or custom get*Mock() implementations. You MUST
+     * NOT take care for test case wide caching of the field type, just return
+     * a new instance from this method!
+     *
+     * @return FieldType
      */
-    protected $ft;
-
-    public function setUp()
+    protected function createFieldTypeUnderTest()
     {
-        $this->markTestIncomplete( 'Country FieldType needs clarification and potentially refactoring.' );
-        parent::setUp();
-        $this->ft = new Country(
+        return new Country(
             array(
                 "BE" => array(
                     "Name" => "Belgium",
@@ -71,167 +75,321 @@ class CountryTest extends FieldTypeTest
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
-     */
-    public function testValidatorConfigurationSchema()
-    {
-        self::assertSame(
-            array(),
-            $this->ft->getValidatorConfigurationSchema(),
-            "The validator configuration schema does not match what is expected."
-        );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
-     */
-    public function testSettingsSchema()
-    {
-        self::assertSame(
-            array(),
-            $this->ft->getValidatorConfigurationSchema(),
-            "The settings schema does not match what is expected."
-        );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Country\Type::acceptValue
-     */
-    public function testAcceptValueValidFormatSingle()
-    {
-        $ref = new ReflectionObject( $this->ft );
-        $refMethod = $ref->getMethod( "acceptValue" );
-        $refMethod->setAccessible( true );
-
-        $value = new CountryValue( array( "Belgium" ) );
-        self::assertSame( $value, $refMethod->invoke( $this->ft, $value ) );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Country\Type::acceptValue
-     */
-    public function testAcceptValueValidFormatMultiple()
-    {
-        $ref = new ReflectionObject( $this->ft );
-        $refMethod = $ref->getMethod( "acceptValue" );
-        $refMethod->setAccessible( true );
-
-        $value = new CountryValue( array( "Belgium", "Norway" ) );
-        self::assertSame( $value, $refMethod->invoke( $this->ft, $value ) );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Country\Type::toPersistenceValue
-     */
-    public function testToPersistenceValue()
-    {
-        $countries = array( "Belgium", "Norway" );
-        $fieldValue = $this->ft->toPersistenceValue( new CountryValue( $countries ) );
-
-        self::assertSame( $countries, $fieldValue->data );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Country\Value::__construct
-     */
-    public function testBuildFieldValueWithParam()
-    {
-        $countries = array( "Belgium", "Norway" );
-        $countriesData = array(
-            "BE" => array(
-                "Name" => "Belgium",
-                "Alpha2" => "BE",
-                "Alpha3" => "BEL",
-                "IDC" => 32,
-            ),
-            "NO" => array(
-                "Name" => "Norway",
-                "Alpha2" => "NO",
-                "Alpha3" => "NOR",
-                "IDC" => 47,
-            ),
-        );
-        $value = new CountryValue( $countries, $countriesData );
-        self::assertSame(
-            $countries,
-            $value->values
-        );
-        self::assertSame(
-            $countriesData,
-            $value->data
-        );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Country\Value::__toString
-     */
-    public function testFieldValueToString()
-    {
-        $country = "Belgium";
-        $value = new CountryValue( (array)$country );
-        self::assertSame( $country, (string)$value );
-
-        $value2 = new CountryValue( (array)((string)$value) );
-        self::assertSame(
-            array( "Belgium" ),
-            $value2->values,
-            "fromString() and __toString() must be compatible"
-        );
-    }
-
-    /**
-     * Tests creating countries
+     * Returns the validator configuration schema expected from the field type.
      *
-     * @dataProvider providerForConstructorOK
-     * @covers \eZ\Publish\Core\FieldType\Country\Type::buildValue
+     * @return array
      */
-    public function testConstructorCorrectValues( $value )
+    protected function getValidatorConfigurationSchemaExpectation()
     {
-        $this->assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\Country\\Value", $this->ft->buildValue( $value ) );
+        return array();
     }
 
-    public function providerForConstructorOK()
+    /**
+     * Returns the settings schema expected from the field type.
+     *
+     * @return array
+     */
+    protected function getSettingsSchemaExpectation()
     {
         return array(
-            array( null ),
-            array( array() ),
-            array( "Belgium" ),
-            array( array( "Belgium" ) ),
-            array( array( "BE" ) ),
-            array( array( "BEL" ) ),
-            array( array( "Belgium", "Norway", "France" ) ),
-            array( array( "BE", "NO", "FR" ) ),
-            array( array( "BEL", "NOR", "FRA" ) ),
+            "isMultiple" => array(
+                "type" => "boolean",
+                "default" => false
+            )
+        );
+    }
+
+    /**
+     * Returns the empty value expected from the field type.
+     *
+     * @return \eZ\Publish\Core\FieldType\Checkbox\Value
+     */
+    protected function getEmptyValueExpectation()
+    {
+        return new CountryValue;
+    }
+
+    /**
+     * Data provider for invalid input to acceptValue().
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The invalid
+     * input to acceptValue(), 2. The expected exception type as a string. For
+     * example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          new \stdClass(),
+     *          'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+     *      ),
+     *      array(
+     *          array(),
+     *          'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInvalidInputForAcceptValue()
+    {
+        return array(
             array(
-                array(
-                    "Korea, Democratic People's Republic of",
-                    "French Southern Territories",
-                    "Central African Republic",
+                "LegoLand",
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+            array(
+                array( "Norway", "France", "LegoLand" ),
+                'eZ\\Publish\\Core\\FieldType\\Country\\Exception\\InvalidValue',
+            ),
+            array(
+                array( "FR", "BE", "LE" ),
+                'eZ\\Publish\\Core\\FieldType\\Country\\Exception\\InvalidValue',
+            ),
+            array(
+                array( "FRE", "BEL", "LEG" ),
+                'eZ\\Publish\\Core\\FieldType\\Country\\Exception\\InvalidValue',
+            ),
+        );
+    }
+
+    /**
+     * Data provider for valid input to acceptValue().
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The valid
+     * input to acceptValue(), 2. The expected return value from acceptValue().
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          null,
+     *          null
+     *      ),
+     *      array(
+     *          __FILE__,
+     *          new BinaryFileValue( array(
+     *              'path' => __FILE__,
+     *              'fileName' => basename( __FILE__ ),
+     *              'fileSize' => filesize( __FILE__ ),
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'text/plain',
+     *          ) )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideValidInputForAcceptValue()
+    {
+        return array(
+            array(
+                array( "BE", "FR" ),
+                new CountryValue(
+                    array(
+                        "BE" => array(
+                            "Name" => "Belgium",
+                            "Alpha2" => "BE",
+                            "Alpha3" => "BEL",
+                            "IDC" => 32,
+                        ),
+                        "FR" => array(
+                            "Name" => "France",
+                            "Alpha2" => "FR",
+                            "Alpha3" => "FRA",
+                            "IDC" => 33,
+                        )
+                    )
+                )
+            ),
+            array(
+                array( "Belgium" ),
+                new CountryValue(
+                    array(
+                        "BE" => array(
+                            "Name" => "Belgium",
+                            "Alpha2" => "BE",
+                            "Alpha3" => "BEL",
+                            "IDC" => 32,
+                        )
+                    )
+                )
+            ),
+            array(
+                array( "BE" ),
+                new CountryValue(
+                    array(
+                        "BE" => array(
+                            "Name" => "Belgium",
+                            "Alpha2" => "BE",
+                            "Alpha3" => "BEL",
+                            "IDC" => 32,
+                        )
+                    )
+                )
+            ),
+            array(
+                array( "BEL" ),
+                new CountryValue(
+                    array(
+                        "BE" => array(
+                            "Name" => "Belgium",
+                            "Alpha2" => "BE",
+                            "Alpha3" => "BEL",
+                            "IDC" => 32,
+                        )
+                    )
                 )
             ),
         );
     }
 
     /**
-     * Tests validating a wrong value
+     * Provide input for the toHash() method
      *
-     * @dataProvider providerForConstructorKO
-     * @expectedException \eZ\Publish\Core\FieldType\Country\Exception\InvalidValue
-     * @expectedExceptionMessage is not a valid value country identifier
-     * @covers \eZ\Publish\Core\FieldType\Country\Type::buildValue
+     * Returns an array of data provider sets with 2 arguments: 1. The valid
+     * input to toHash(), 2. The expected return value from toHash().
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          null,
+     *          null
+     *      ),
+     *      array(
+     *          new BinaryFileValue( array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ) ),
+     *          array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
      */
-    public function testConstructorWrongValues( $value )
-    {
-        $this->assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\Country\\Value", $this->ft->buildValue( $value ) );
-    }
-
-    public function providerForConstructorKO()
+    public function provideInputForToHash()
     {
         return array(
-            array( "LegoLand" ),
-            array( array( "Norway", "France", "LegoLand" ) ),
-            array( array( "FR", "BE", "LE" ) ),
-            array( array( "FRE", "BEL", "LEG" ) ),
+            array(
+                new CountryValue(
+                    array(
+                        "BE" => array(
+                            "Name" => "Belgium",
+                            "Alpha2" => "BE",
+                            "Alpha3" => "BEL",
+                            "IDC" => 32,
+                        )
+                    )
+                ),
+                array( "BE" ),
+            ),
+            array(
+                new CountryValue(
+                    array(
+                        "BE" => array(
+                            "Name" => "Belgium",
+                            "Alpha2" => "BE",
+                            "Alpha3" => "BEL",
+                            "IDC" => 32,
+                        ),
+                        "FR" => array(
+                            "Name" => "France",
+                            "Alpha2" => "FR",
+                            "Alpha3" => "FRA",
+                            "IDC" => 33,
+                        )
+                    )
+                ),
+                array( "BE", "FR" ),
+            ),
+        );
+    }
+
+    /**
+     * Provide input to fromHash() method
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The valid
+     * input to fromHash(), 2. The expected return value from fromHash().
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          null,
+     *          null
+     *      ),
+     *      array(
+     *          array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ),
+     *          new BinaryFileValue( array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ) )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInputForFromHash()
+    {
+        return array(
+            array(
+                array( "BE" ),
+                new CountryValue(
+                    array(
+                        "BE" => array(
+                            "Name" => "Belgium",
+                            "Alpha2" => "BE",
+                            "Alpha3" => "BEL",
+                            "IDC" => 32,
+                        )
+                    )
+                ),
+            ),
+            array(
+                array( "BE", "FR" ),
+                new CountryValue(
+                    array(
+                        "BE" => array(
+                            "Name" => "Belgium",
+                            "Alpha2" => "BE",
+                            "Alpha3" => "BEL",
+                            "IDC" => 32,
+                        ),
+                        "FR" => array(
+                            "Name" => "France",
+                            "Alpha2" => "FR",
+                            "Alpha3" => "FRA",
+                            "IDC" => 33,
+                        )
+                    )
+                ),
+            ),
         );
     }
 }

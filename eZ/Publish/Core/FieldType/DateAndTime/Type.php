@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\FieldType\DateAndTime;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    DateTime,
-    eZ\Publish\Core\FieldType\ValidationError;
+
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use DateTime;
+use eZ\Publish\Core\FieldType\ValidationError;
 
 class Type extends FieldType
 {
@@ -43,7 +44,7 @@ class Type extends FieldType
     );
 
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -80,37 +81,18 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return null;
+        return new Value;
     }
 
     /**
-     * Potentially builds and checks the type and structure of the $inputValue.
-     *
-     * This method first inspects $inputValue, if it needs to convert it, e.g.
-     * into a dedicated value object. An example would be, that the field type
-     * uses values of MyCustomFieldTypeValue, but can also accept strings as
-     * the input. In that case, $inputValue first needs to be converted into a
-     * MyCustomFieldTypeClass instance.
-     *
-     * After that, the (possibly converted) value is checked for structural
-     * validity. Note that this does not include validation after the rules
-     * from validators, but only plausibility checks for the general data
-     * format.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
+     * Implements the core of {@see acceptValue()}.
      *
      * @param mixed $inputValue
      *
-     * @return mixed The potentially converted and structurally plausible value.
+     * @return \eZ\Publish\Core\FieldType\DateAndTime\Value The potentially converted and structurally plausible value.
      */
-    public function acceptValue( $inputValue )
+    protected function internalAcceptValue( $inputValue )
     {
-        if ( $inputValue === null )
-        {
-            return null;
-        }
-
         if ( is_string( $inputValue ) )
         {
             $inputValue = Value::fromString( $inputValue );
@@ -123,8 +105,7 @@ class Type extends FieldType
         {
             $inputValue = new Value( $inputValue );
         }
-
-        if ( !$inputValue instanceof Value )
+        else if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
                 '$inputValue',
@@ -154,7 +135,7 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
-        if ( $value === null )
+        if ( $value === null || $value->value === null )
         {
             return null;
         }
@@ -192,7 +173,7 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
-        if ( $value === null )
+        if ( $this->isEmptyValue( $value ) )
         {
             return null;
         }
@@ -214,7 +195,7 @@ class Type extends FieldType
     /**
      * Returns whether the field type is searchable
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {
@@ -283,7 +264,7 @@ class Type extends FieldType
                                     )
                                 );
                             }
-                            elseif ( !( $value instanceof \DateInterval ) )
+                            else if ( !( $value instanceof \DateInterval ) )
                             {
                                 $validationErrors[] = new ValidationError(
                                     "Setting '%setting%' value must be an instance of 'DateInterval' class",
@@ -317,9 +298,10 @@ class Type extends FieldType
      *
      * This is the default implementation, which just returns the given
      * $fieldSettings, assuming they are already in a hash format. Overwrite
-     * this in your specific implementation, if neccessary.
+     * this in your specific implementation, if necessary.
      *
      * @param mixed $fieldSettings
+     *
      * @return array|hash|scalar|null
      */
     public function fieldSettingsToHash( $fieldSettings )
@@ -344,9 +326,10 @@ class Type extends FieldType
      * This is the default implementation, which just returns the given
      * $fieldSettingsHash, assuming the supported field settings are already in
      * a hash format. Overwrite this in your specific implementation, if
-     * neccessary.
+     * necessary.
      *
      * @param array|hash|scalar|null $fieldSettingsHash
+     *
      * @return mixed
      */
     public function fieldSettingsFromHash( $fieldSettingsHash )

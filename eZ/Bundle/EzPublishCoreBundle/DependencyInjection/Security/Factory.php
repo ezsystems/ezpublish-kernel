@@ -9,11 +9,11 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security;
 
-use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractFactory,
-    Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\Reference,
-    Symfony\Component\DependencyInjection\DefinitionDecorator,
-    Symfony\Component\Config\Definition\Builder\NodeDefinition;
+use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractFactory;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 
 class Factory extends AbstractFactory
 {
@@ -25,9 +25,9 @@ class Factory extends AbstractFactory
      * AuthenticationProviderInterface.
      *
      * @param ContainerBuilder $container
-     * @param string           $id             The unique id of the firewall
-     * @param array            $config         The options array for this listener
-     * @param string           $userProviderId The id of the user provider
+     * @param string $id The unique id of the firewall
+     * @param array $config The options array for this listener
+     * @param string $userProviderId The id of the user provider
      *
      * @return string never null, the id of the authentication provider
      */
@@ -37,8 +37,7 @@ class Factory extends AbstractFactory
         $container
             ->setDefinition( $providerId, new DefinitionDecorator( self::AUTHENTICATION_PROVIDER_ID ) )
             ->replaceArgument( 0, new Reference( $userProviderId ) )
-            ->addArgument( $id )
-        ;
+            ->addArgument( $id );
 
         return $providerId;
     }
@@ -49,8 +48,7 @@ class Factory extends AbstractFactory
         $listenerId = "$parentListenerId.$id";
         $container
             ->setDefinition( $listenerId, new DefinitionDecorator( $parentListenerId ) )
-            ->replaceArgument( 2, $id )
-        ;
+            ->replaceArgument( 2, $id );
 
         return $listenerId;
     }

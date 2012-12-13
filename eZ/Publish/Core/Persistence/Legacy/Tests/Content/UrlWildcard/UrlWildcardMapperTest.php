@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlWildcard;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper,
-    eZ\Publish\SPI\Persistence\Content\UrlWildcard;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper;
+use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 
 /**
  * Test case for UrlWildcard Mapper
@@ -36,8 +37,8 @@ class UrlWildcardMapperTest extends TestCase
             new UrlWildcard(
                 array(
                     "id" => null,
-                    "sourceUrl" => "pancake/*",
-                    "destinationUrl" => "cake/{1}",
+                    "sourceUrl" => "/pancake/*",
+                    "destinationUrl" => "/cake/{1}",
                     "forward" => true
                 )
             ),
@@ -66,8 +67,8 @@ class UrlWildcardMapperTest extends TestCase
             new UrlWildcard(
                 array(
                     "id" => 42,
-                    "sourceUrl" => "faq/*",
-                    "destinationUrl" => "42",
+                    "sourceUrl" => "/faq/*",
+                    "destinationUrl" => "/42",
                     "forward" => true
                 )
             ),
@@ -105,16 +106,16 @@ class UrlWildcardMapperTest extends TestCase
                 new UrlWildcard(
                     array(
                         "id" => 24,
-                        "sourceUrl" => "contact-information",
-                        "destinationUrl" => "contact",
+                        "sourceUrl" => "/contact-information",
+                        "destinationUrl" => "/contact",
                         "forward" => false
                     )
                 ),
                 new UrlWildcard(
                     array(
                         "id" => 42,
-                        "sourceUrl" => "faq/*",
-                        "destinationUrl" => "42",
+                        "sourceUrl" => "/faq/*",
+                        "destinationUrl" => "/42",
                         "forward" => true
                     )
                 )

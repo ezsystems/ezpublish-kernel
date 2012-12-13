@@ -8,14 +8,15 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
-use eZ\Publish\SPI\Persistence\Content\Type,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\Type\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+
+use eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * Test case for SectionHandler using in memory storage.
@@ -252,7 +253,7 @@ class ContentTypeHandlerTest extends HandlerTest
     {
         $handler = $this->persistenceHandler->ContentTypeHandler();
         $struct = $this->getTypeCreateStruct();
-        $struct->fieldDefinitions[] = $field =$this->getTypeFieldDefinition();
+        $struct->fieldDefinitions[] = $field = $this->getTypeFieldDefinition();
 
         $obj = $handler->create( $struct );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type', $obj );
@@ -392,7 +393,7 @@ class ContentTypeHandlerTest extends HandlerTest
         $this->assertEquals( $userId, $obj->modifierId );
         $this->assertGreaterThanOrEqual( $time, $obj->created );
         $this->assertGreaterThanOrEqual( $time, $obj->modified );
-        $this->assertEquals( Type::STATUS_DRAFT, $obj->status );
+        $this->assertEquals( Type::STATUS_DEFINED, $obj->status );
         $this->assertGreaterThan( $original->created, $obj->created );
         $this->assertEquals( 3, count( $obj->fieldDefinitions ) );
         $this->assertEquals( 'Name', $obj->fieldDefinitions[0]->name['eng-GB'] );
@@ -705,12 +706,14 @@ class ContentTypeHandlerTest extends HandlerTest
     {
         $handler = $this->persistenceHandler->ContentTypeHandler();
         $type = $handler->copy( 10, 1, Type::STATUS_DEFINED );
-        $handler->publish( $type->id );
-        try {
+        try
+        {
             $handler->load( $type->id, Type::STATUS_DRAFT );
             $this->fail( "Draft of Type still exists after publish()" );
         }
-        catch ( \Exception $e ){}
+        catch ( \Exception $e )
+        {
+        }
         $type = $handler->load( $type->id, Type::STATUS_DEFINED );
 
         $this->assertEquals( 10, $type->creatorId );

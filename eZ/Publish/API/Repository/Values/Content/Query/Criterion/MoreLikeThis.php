@@ -8,14 +8,14 @@
  */
 
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications,
-eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
+
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * A more like this criterion is matched by content which contains similar terms
  * found in the given content, text or url fetch
- *
  */
 class MoreLikeThis extends Criterion implements CriterionInterface
 {
@@ -33,7 +33,7 @@ class MoreLikeThis extends Criterion implements CriterionInterface
     /**
      * Creates a new more like this criterion
      *
-     * @param integer $type the type (one of CONTENT,TEXT,URL)
+     * @param int $type the type (one of CONTENT,TEXT,URL)
      * @param mixed $value the value depending on the type
      *
      * @throws \InvalidArgumentException if the value type doesn't match the expected type
@@ -57,5 +57,4 @@ class MoreLikeThis extends Criterion implements CriterionInterface
     {
         return new self( $value );
     }
-
 }

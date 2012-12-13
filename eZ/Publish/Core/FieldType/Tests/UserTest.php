@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\User\Type as UserType,
-    eZ\Publish\Core\FieldType\User\Value as UserValue,
-    ReflectionObject;
+
+use eZ\Publish\Core\FieldType\User\Type as UserType;
+use eZ\Publish\Core\FieldType\User\Value as UserValue;
+use ReflectionObject;
 
 /**
  * @group fieldType
@@ -61,7 +62,7 @@ class UserTest extends StandardizedFieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return null;
+        return new UserValue;
     }
 
     /**
@@ -131,7 +132,7 @@ class UserTest extends StandardizedFieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new UserValue,
             ),
             array(
                 array(),
@@ -142,7 +143,7 @@ class UserTest extends StandardizedFieldTypeTest
                 new UserValue( array( 'login' => 'sindelfingen' ) ),
             ),
             array(
-                ( $userData = array(
+                $userData = array(
                     'hasStoredLogin' => true,
                     'contentId' => 23,
                     'login' => 'sindelfingen',
@@ -151,20 +152,22 @@ class UserTest extends StandardizedFieldTypeTest
                     'passwordHashType' => 'md5',
                     'enabled' => true,
                     'maxLogin' => 1000,
-                ) ),
+                ),
                 new UserValue( $userData ),
             ),
             array(
-                new UserValue( $userData = array(
-                    'hasStoredLogin' => true,
-                    'contentId' => 23,
-                    'login' => 'sindelfingen',
-                    'email' => 'sindelfingen@example.com',
-                    'passwordHash' => '1234567890abcdef',
-                    'passwordHashType' => 'md5',
-                    'enabled' => true,
-                    'maxLogin' => 1000,
-                ) ),
+                new UserValue(
+                    $userData = array(
+                        'hasStoredLogin' => true,
+                        'contentId' => 23,
+                        'login' => 'sindelfingen',
+                        'email' => 'sindelfingen@example.com',
+                        'passwordHash' => '1234567890abcdef',
+                        'passwordHashType' => 'md5',
+                        'enabled' => true,
+                        'maxLogin' => 1000,
+                    )
+                ),
                 new UserValue( $userData ),
             ),
         );
@@ -184,13 +187,15 @@ class UserTest extends StandardizedFieldTypeTest
      *          null
      *      ),
      *      array(
-     *          new BinaryFileValue( array(
-     *              'path' => 'some/file/here',
-     *              'fileName' => 'sindelfingen.jpg',
-     *              'fileSize' => 2342,
-     *              'downloadCount' => 0,
-     *              'mimeType' => 'image/jpeg',
-     *          ) ),
+     *          new BinaryFileValue(
+     *              array(
+     *                  'path' => 'some/file/here',
+     *                  'fileName' => 'sindelfingen.jpg',
+     *                  'fileSize' => 2342,
+     *                  'downloadCount' => 0,
+     *                  'mimeType' => 'image/jpeg',
+     *              )
+     *          ),
      *          array(
      *              'path' => 'some/file/here',
      *              'fileName' => 'sindelfingen.jpg',
@@ -213,16 +218,18 @@ class UserTest extends StandardizedFieldTypeTest
                 null
             ),
             array(
-                new UserValue( $userData = array(
-                    'hasStoredLogin' => true,
-                    'contentId' => 23,
-                    'login' => 'sindelfingen',
-                    'email' => 'sindelfingen@example.com',
-                    'passwordHash' => '1234567890abcdef',
-                    'passwordHashType' => 'md5',
-                    'enabled' => true,
-                    'maxLogin' => 1000,
-                ) ),
+                new UserValue(
+                    $userData = array(
+                        'hasStoredLogin' => true,
+                        'contentId' => 23,
+                        'login' => 'sindelfingen',
+                        'email' => 'sindelfingen@example.com',
+                        'passwordHash' => '1234567890abcdef',
+                        'passwordHashType' => 'md5',
+                        'enabled' => true,
+                        'maxLogin' => 1000,
+                    )
+                ),
                 $userData,
             ),
         );
@@ -249,13 +256,15 @@ class UserTest extends StandardizedFieldTypeTest
      *              'downloadCount' => 0,
      *              'mimeType' => 'image/jpeg',
      *          ),
-     *          new BinaryFileValue( array(
-     *              'path' => 'some/file/here',
-     *              'fileName' => 'sindelfingen.jpg',
-     *              'fileSize' => 2342,
-     *              'downloadCount' => 0,
-     *              'mimeType' => 'image/jpeg',
-     *          ) )
+     *          new BinaryFileValue(
+     *              array(
+     *                  'path' => 'some/file/here',
+     *                  'fileName' => 'sindelfingen.jpg',
+     *                  'fileSize' => 2342,
+     *                  'downloadCount' => 0,
+     *                  'mimeType' => 'image/jpeg',
+     *              )
+     *          )
      *      ),
      *      // ...
      *  );
@@ -271,7 +280,7 @@ class UserTest extends StandardizedFieldTypeTest
                 null
             ),
             array(
-                ( $userData = array(
+                $userData = array(
                     'hasStoredLogin' => true,
                     'contentId' => 23,
                     'login' => 'sindelfingen',
@@ -280,7 +289,7 @@ class UserTest extends StandardizedFieldTypeTest
                     'passwordHashType' => 'md5',
                     'enabled' => true,
                     'maxLogin' => 1000,
-                ) ),
+                ),
                 new UserValue( $userData ),
             ),
         );

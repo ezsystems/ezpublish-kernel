@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue,
-    eZ\Publish\Core\FieldType\Validator\StringLengthValidator;
+
+use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
+use eZ\Publish\Core\FieldType\Validator\StringLengthValidator;
 
 /**
  * @group fieldType

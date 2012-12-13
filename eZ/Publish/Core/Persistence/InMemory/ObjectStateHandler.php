@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\Persistence\InMemory;
 
-use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandlerInterface,
-    eZ\Publish\SPI\Persistence\Content\ObjectState,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandlerInterface;
+use eZ\Publish\SPI\Persistence\Content\ObjectState;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * The Object State Handler class provides managing of object states and groups
@@ -66,6 +66,26 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
     public function loadGroup( $groupId )
     {
         return $this->backend->load( 'Content\\ObjectState\\Group', $groupId );
+    }
+
+    /**
+     * Loads a object state group by identifier
+     *
+     * @param string $identifier
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the group was not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
+     */
+    public function loadGroupByIdentifier( $identifier )
+    {
+        $objectStateGroups = $this->backend->find( 'Content\\ObjectState\\Group', array( 'identifier' => $identifier ) );
+        if ( empty( $objectStateGroups ) )
+        {
+            throw new NotFound( "Content\\ObjectState\\Group", array( "identifier" => $identifier ) );
+        }
+
+        return reset( $objectStateGroups );
     }
 
     /**
@@ -158,7 +178,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
             $newPriority = $objectStates[count( $objectStates ) - 1]->priority + 1;
         }
 
-        $inputData["groupId"] = (int) $groupId;
+        $inputData["groupId"] = (int)$groupId;
         $inputData["priority"] = $newPriority;
 
         $createdState = $this->backend->create( 'Content\\ObjectState', $inputData );
@@ -195,6 +215,34 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
     }
 
     /**
+     * Loads an object state by identifier and group it belongs to
+     *
+     * @param string $identifier
+     * @param mixed $groupId
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the state was not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
+     */
+    public function loadByIdentifier( $identifier, $groupId )
+    {
+        $objectStates = $this->backend->find(
+            'Content\\ObjectState',
+            array(
+                'identifier' => $identifier,
+                'groupId' => $groupId
+            )
+        );
+
+        if ( empty( $objectStates ) )
+        {
+            throw new NotFound( "Content\\ObjectState", array( "identifier" => $identifier, "groupId" => $groupId ) );
+        }
+
+        return reset( $objectStates );
+    }
+
+    /**
      * Updates an object state
      *
      * @param mixed $stateId
@@ -225,7 +273,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
             $priorityList[$groupState->id] = $index;
         }
 
-        $priorityList[$objectState->id] = (int) $priority;
+        $priorityList[$objectState->id] = (int)$priority;
         asort( $priorityList );
 
         foreach ( array_keys( $priorityList ) as $objectStatePriority => $objectStateId )
@@ -278,9 +326,10 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
      * @param mixed $contentId
      * @param mixed $groupId
      * @param mixed $stateId
+     *
      * @return boolean
      */
-    public function setObjectState( $contentId, $groupId, $stateId )
+    public function setContentState( $contentId, $groupId, $stateId )
     {
         $groupStateIds = $this->getGroupStateList( $groupId );
         if ( empty( $groupStateIds ) || !in_array( $stateId, $groupStateIds ) )
@@ -290,7 +339,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
 
         // If the content was in one of the group states,
         // find all content for the old state and update the old state with excluded $contentId
-        $existingStateIds = array_values( array_intersect( $groupStateIds, $contentToStateMap[(int) $contentId] ) );
+        $existingStateIds = array_values( array_intersect( $groupStateIds, $contentToStateMap[(int)$contentId] ) );
         if ( !empty( $existingStateIds ) )
         {
             $oldStateContentList = $this->getObjectStateContentList( $existingStateIds[0] );
@@ -320,13 +369,13 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
-    public function getObjectState( $contentId, $stateGroupId )
+    public function getContentState( $contentId, $stateGroupId )
     {
         $groupStateIds = $this->getGroupStateList( $stateGroupId );
         if ( empty( $groupStateIds ) )
             throw new NotFound( "Content\\ObjectState", array( "groupId" => $stateGroupId ) );
 
-        $contentId = (int) $contentId;
+        $contentId = (int)$contentId;
 
         $contentToStateMap = $this->getContentToStateMap();
         if ( !isset( $contentToStateMap[$contentId] ) )
@@ -343,6 +392,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
      * Returns the number of objects which are in this state
      *
      * @param mixed $stateId
+     *
      * @return int
      */
     public function getContentCount( $stateId )
@@ -359,7 +409,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
      */
     protected function getInputData( InputStruct $input )
     {
-        $inputData = (array) $input;
+        $inputData = (array)$input;
         $inputData["languageCodes"] = array_keys( $input->name );
         return $inputData;
     }
@@ -394,6 +444,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
      * Returns all content IDs that belong to $stateId
      *
      * @param int $stateId
+     *
      * @return array
      */
     protected function getObjectStateContentList( $stateId )
@@ -412,12 +463,14 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
      * Returns all state IDs that belong to $groupId
      *
      * @param int $groupId
+     *
      * @return array
      */
     protected function getGroupStateList( $groupId )
     {
         $groupStates = $this->loadObjectStates( $groupId );
-        return array_map( function( ObjectState $objectState )
+        return array_map(
+            function ( ObjectState $objectState )
             {
                 return $objectState->id;
             },

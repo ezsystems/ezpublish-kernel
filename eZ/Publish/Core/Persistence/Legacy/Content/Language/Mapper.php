@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
-use eZ\Publish\SPI\Persistence\Content\Language,
-    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
+
+use eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 
 /**
  * Language Mapper
@@ -20,6 +21,7 @@ class Mapper
      * Creates a Language from $struct
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Language\CreateStruct $struct
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     public function createLanguageFromCreateStruct( CreateStruct $struct )
@@ -37,6 +39,7 @@ class Mapper
      * Extracts Language objects from $rows
      *
      * @param array $rows
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Language[]
      */
     public function extractLanguagesFromRows( array $rows )

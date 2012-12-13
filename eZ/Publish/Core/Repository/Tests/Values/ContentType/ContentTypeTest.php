@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Values\ContentType;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType,
-    PHPUnit_Framework_TestCase;
+
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use PHPUnit_Framework_TestCase;
 
 /**
  *
@@ -17,7 +18,6 @@ use eZ\Publish\Core\Repository\Values\ContentType\ContentType,
 class ContentTypeTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \eZ\Publish\Core\Repository\Values\ContentType\ContentType::getIterator
      * @covers \eZ\Publish\Core\Repository\Values\ContentType\ContentType::getProperties
      */
     public function testObjectProperties()

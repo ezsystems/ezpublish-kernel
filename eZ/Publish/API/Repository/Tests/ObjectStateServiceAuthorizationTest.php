@@ -293,14 +293,14 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
     }
 
     /**
-     * Test for the setObjectState() method.
+     * Test for the setContentState() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ObjectStateService::setObjectState()
+     * @see \eZ\Publish\API\Repository\ObjectStateService::setContentState()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testSetObjectState
+     * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testSetContentState
      */
-    public function testSetObjectStateThrowsUnauthorizedException()
+    public function testSetContentStateThrowsUnauthorizedException()
     {
         $repository = $this->getRepository();
 
@@ -328,7 +328,7 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
 
         // Throws unauthorized exception, since the anonymous user must not
         // set object state
-        $objectStateService->setObjectState(
+        $objectStateService->setContentState(
             $contentInfo,
             $ezLockObjectStateGroup,
             $lockedObjectState

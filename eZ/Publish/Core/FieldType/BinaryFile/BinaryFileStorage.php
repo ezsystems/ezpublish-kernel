@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\BinaryFile;
+
 use eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage;
 
 /**

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
+
 use eZ\Publish\Core\FieldType\MapLocation;
 
 class MapLocationTest extends StandardizedFieldTypeTest
@@ -56,7 +57,7 @@ class MapLocationTest extends StandardizedFieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return null;
+        return new MapLocation\Value;
     }
 
     /**
@@ -98,24 +99,30 @@ class MapLocationTest extends StandardizedFieldTypeTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                new MapLocation\Value( array(
-                    'latitude' => 'foo',
-                ) ),
+                new MapLocation\Value(
+                    array(
+                        'latitude' => 'foo',
+                    )
+                ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                new MapLocation\Value( array(
-                    'latitude' => 23.42,
-                    'longitude' => 'bar',
-                ) ),
+                new MapLocation\Value(
+                    array(
+                        'latitude' => 23.42,
+                        'longitude' => 'bar',
+                    )
+                ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                new MapLocation\Value( array(
-                    'latitude' => 23.42,
-                    'longitude' => 42.23,
-                    'address' => array(),
-                ) ),
+                new MapLocation\Value(
+                    array(
+                        'latitude' => 23.42,
+                        'longitude' => 42.23,
+                        'address' => array(),
+                    )
+                ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
@@ -155,7 +162,7 @@ class MapLocationTest extends StandardizedFieldTypeTest
         return array(
             array(
                 null,
-                null
+                new MapLocation\Value
             ),
             array(
                 array(
@@ -163,23 +170,29 @@ class MapLocationTest extends StandardizedFieldTypeTest
                     'longitude' => 42.23,
                     'address' => 'Nowhere',
                 ),
-                new MapLocation\Value( array(
-                    'latitude' => 23.42,
-                    'longitude' => 42.23,
-                    'address' => 'Nowhere',
-                ) ),
+                new MapLocation\Value(
+                    array(
+                        'latitude' => 23.42,
+                        'longitude' => 42.23,
+                        'address' => 'Nowhere',
+                    )
+                ),
             ),
             array(
-                new MapLocation\Value( array(
-                    'latitude' => 23.42,
-                    'longitude' => 42.23,
-                    'address' => 'Nowhere',
-                ) ),
-                new MapLocation\Value( array(
-                    'latitude' => 23.42,
-                    'longitude' => 42.23,
-                    'address' => 'Nowhere',
-                ) ),
+                new MapLocation\Value(
+                    array(
+                        'latitude' => 23.42,
+                        'longitude' => 42.23,
+                        'address' => 'Nowhere',
+                    )
+                ),
+                new MapLocation\Value(
+                    array(
+                        'latitude' => 23.42,
+                        'longitude' => 42.23,
+                        'address' => 'Nowhere',
+                    )
+                ),
             )
         );
     }
@@ -227,11 +240,13 @@ class MapLocationTest extends StandardizedFieldTypeTest
                 null,
             ),
             array(
-                new MapLocation\Value( array(
-                    'latitude' => 23.42,
-                    'longitude' => 42.23,
-                    'address' => 'Nowhere',
-                ) ),
+                new MapLocation\Value(
+                    array(
+                        'latitude' => 23.42,
+                        'longitude' => 42.23,
+                        'address' => 'Nowhere',
+                    )
+                ),
                 array(
                     'latitude' => 23.42,
                     'longitude' => 42.23,
@@ -262,13 +277,15 @@ class MapLocationTest extends StandardizedFieldTypeTest
      *              'downloadCount' => 0,
      *              'mimeType' => 'image/jpeg',
      *          ),
-     *          new BinaryFileValue( array(
-     *              'path' => 'some/file/here',
-     *              'fileName' => 'sindelfingen.jpg',
-     *              'fileSize' => 2342,
-     *              'downloadCount' => 0,
-     *              'mimeType' => 'image/jpeg',
-     *          ) )
+     *          new BinaryFileValue(
+     *              array(
+     *                  'path' => 'some/file/here',
+     *                  'fileName' => 'sindelfingen.jpg',
+     *                  'fileSize' => 2342,
+     *                  'downloadCount' => 0,
+     *                  'mimeType' => 'image/jpeg',
+     *              )
+     *          )
      *      ),
      *      // ...
      *  );
@@ -289,11 +306,13 @@ class MapLocationTest extends StandardizedFieldTypeTest
                     'longitude' => 42.23,
                     'address' => 'Nowhere',
                 ),
-                new MapLocation\Value( array(
-                    'latitude' => 23.42,
-                    'longitude' => 42.23,
-                    'address' => 'Nowhere',
-                ) ),
+                new MapLocation\Value(
+                    array(
+                        'latitude' => 23.42,
+                        'longitude' => 42.23,
+                        'address' => 'Nowhere',
+                    )
+                ),
             ),
         );
     }

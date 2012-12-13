@@ -8,15 +8,16 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * Base class for content gateways
@@ -90,6 +91,7 @@ class ExceptionConversion extends Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
+     *
      * @return int ID
      */
     public function insertVersion( VersionInfo $versionInfo, array $fields )
@@ -113,6 +115,7 @@ class ExceptionConversion extends Gateway
      *
      * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $struct
+     *
      * @return void
      */
     public function updateContent( $contentId, MetadataUpdateStruct $struct )
@@ -137,6 +140,7 @@ class ExceptionConversion extends Gateway
      * @param int $contentId
      * @param int $versionNo
      * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $struct
+     *
      * @return void
      */
     public function updateVersion( $contentId, $versionNo, UpdateStruct $struct )
@@ -159,7 +163,7 @@ class ExceptionConversion extends Gateway
      * Updates "always available" flag for content identified by $contentId, in respect to $alwaysAvailable.
      *
      * @param int $contentId
-     * @param bool $newAlwaysAvailable New "always available" value
+     * @param boolean $newAlwaysAvailable New "always available" value
      */
     public function updateAlwaysAvailableFlag( $contentId, $newAlwaysAvailable )
     {
@@ -185,6 +189,7 @@ class ExceptionConversion extends Gateway
      * @param int $contentId
      * @param int $version
      * @param int $status
+     *
      * @return boolean
      */
     public function setStatus( $contentId, $version, $status )
@@ -213,6 +218,7 @@ class ExceptionConversion extends Gateway
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
+     *
      * @return int ID
      */
     public function insertNewField( Content $content, Field $field, StorageFieldValue $value )
@@ -239,6 +245,7 @@ class ExceptionConversion extends Gateway
      * @param Content $content
      * @param Field $field
      * @param StorageFieldValue $value
+     *
      * @return void
      */
     public function insertExistingField( Content $content, Field $field, StorageFieldValue $value )
@@ -264,6 +271,7 @@ class ExceptionConversion extends Gateway
      *
      * @param Field $field
      * @param StorageFieldValue $value
+     *
      * @return void
      */
     public function updateField( Field $field, StorageFieldValue $value )
@@ -288,6 +296,7 @@ class ExceptionConversion extends Gateway
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
      * @param int $contentId
+     *
      * @return void
      */
     public function updateNonTranslatableField(
@@ -310,13 +319,14 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Load data for a content object
+     * Loads data for a content object
      *
      * Returns an array with the relevant data.
      *
      * @param mixed $contentId
      * @param mixed $version
      * @param string[] $translations
+     *
      * @return array
      */
     public function load( $contentId, $version, $translations = null )
@@ -342,8 +352,10 @@ class ExceptionConversion extends Gateway
      *  - main_language_code => Language code for main (initial) language. E.g. "eng-GB"
      *
      * @param int $contentId
-     * @return array
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     *
+     * @return array
      */
     public function loadContentInfo( $contentId )
     {
@@ -392,7 +404,7 @@ class ExceptionConversion extends Gateway
     /**
      * Returns data for all versions with given status created by the given $userId
      *
-     * @param $userId
+     * @param int $userId
      * @param int $status
      *
      * @return string[][]
@@ -417,6 +429,7 @@ class ExceptionConversion extends Gateway
      * Returns all version data for the given $contentId
      *
      * @param mixed $contentId
+     *
      * @return string[][]
      */
     public function listVersions( $contentId )
@@ -462,6 +475,7 @@ class ExceptionConversion extends Gateway
      * Returns all IDs for locations that refer to $contentId
      *
      * @param int $contentId
+     *
      * @return int[]
      */
     public function getAllLocationIds( $contentId )
@@ -535,6 +549,7 @@ class ExceptionConversion extends Gateway
      *
      * @param int $fieldId
      * @param int $version
+     *
      * @return void
      */
     public function deleteField( $fieldId, $version )
@@ -635,6 +650,7 @@ class ExceptionConversion extends Gateway
      * @param int $version
      * @param string $name
      * @param string $language
+     *
      * @return void
      */
     public function setName( $contentId, $version, $name, $language )
@@ -657,6 +673,7 @@ class ExceptionConversion extends Gateway
      * Deletes the actual content object referred to by $contentId
      *
      * @param int $contentId
+     *
      * @return void
      */
     public function deleteContent( $contentId )
@@ -680,6 +697,7 @@ class ExceptionConversion extends Gateway
      * $contentId
      *
      * @param mixed $contentId
+     *
      * @return array
      */
     public function loadLatestPublishedData( $contentId )
@@ -727,7 +745,7 @@ class ExceptionConversion extends Gateway
      * Loads data of related to/from $contentId
      *
      * @param int $contentId
-     * @param bool $reverse Reverse relation, default false
+     * @param boolean $reverse Reverse relation, default false
      * @param int $contentVersionNo
      * @param int $relationType
      *

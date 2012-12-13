@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\User\UserStorage;
+
 use eZ\Publish\Core\FieldType\StorageGateway;
 
 abstract class Gateway extends StorageGateway
@@ -32,6 +33,7 @@ abstract class Gateway extends StorageGateway
      *
      * @param mixed $fieldId
      * @param mixed $userId
+     *
      * @return array
      */
     abstract public function getFieldData( $fieldId, $userId = null );

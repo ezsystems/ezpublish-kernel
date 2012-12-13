@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\Content\Location;
-use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
-use \eZ\Publish\API\Repository\Exceptions;
-use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
+use eZ\Publish\API\Repository\Exceptions;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for operations in the ContentTypeService using in memory storage.
@@ -65,7 +65,9 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'identifier' => 'new-group',
                 'creatorId' => null,
                 'creationDate' => null,
+                /* @todo uncomment when support for multilingual names and descriptions is added
                 'mainLanguageCode' => null,
+                */
             ),
             $createStruct
         );
@@ -91,9 +93,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         );
         $groupCreate->creatorId = $repository->getCurrentUser()->id;
         $groupCreate->creationDate = $this->createDateTime();
+        /* @todo uncomment when support for multilingual names and descriptions is added
         $groupCreate->mainLanguageCode = 'ger-DE';
         $groupCreate->names = array( 'eng-GB' => 'A name.' );
         $groupCreate->descriptions = array( 'eng-GB' => 'A description.' );
+        */
 
         $group = $contentTypeService->createContentTypeGroup( $groupCreate );
         /* END: Use Case */
@@ -153,8 +157,10 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         $this->assertStructPropertiesCorrect(
             $createStruct,
-            $group,
+            $group
+            /* @todo uncomment when support for multilingual names and descriptions is added
             array( 'names', 'descriptions', 'mainLanguageCode' )
+            */
         );
     }
 
@@ -374,7 +380,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $this->assertEquals(
             $expectedIdentifiers,
             $actualIdentifiers,
-            'Identifier missmatch in loeaded groups.'
+            'Identifier missmatch in loaded groups.'
         );
     }
 
@@ -423,6 +429,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $groupUpdate->identifier = 'Teardown';
         $groupUpdate->modifierId = $modifierId;
         $groupUpdate->modificationDate = $this->createDateTime();
+        /* @todo uncomment when support for multilingual names and descriptions is added
         $groupUpdate->mainLanguageCode = 'eng-GB';
 
         $groupUpdate->names = array(
@@ -433,6 +440,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             'eng-GB' => 'A description',
             'eng-US' => 'A description',
         );
+        */
 
         $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
         /* END: Use Case */
@@ -490,9 +498,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             'modificationDate' => $data['updateStruct']->modificationDate,
             'creatorId' => $data['originalGroup']->creatorId,
             'modifierId' => $data['updateStruct']->modifierId,
+            /* @todo uncomment when support for multilingual names and descriptions is added
             'mainLanguageCode' => $data['updateStruct']->mainLanguageCode,
             'names' => $data['updateStruct']->names,
             'descriptions' => $data['updateStruct']->descriptions,
+            */
         );
 
         $this->assertPropertiesCorrect(
@@ -653,7 +663,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the newFieldDefinitionCreateStruct() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\FieldDefinitionService::newFieldDefinitionCreateStruct()
+     * @see \eZ\Publish\API\Repository\ContentTypeService::newFieldDefinitionCreateStruct()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewFieldDefinitionCreateStruct
      */
     public function testNewFieldDefinitionCreateStructValues( $createStruct )
@@ -860,6 +870,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @param \eZ\Publish\API\Repository\Values\FieldDefinitionCreateStruct[] $expectedDefinitionCreates
      * @param \eZ\Publish\API\Repository\Values\FieldDefinition[] $actualDefinitions
+     *
      * @return void
      */
     protected function assertFieldDefinitionsCorrect( array $expectedDefinitionCreates, array $actualDefinitions )
@@ -895,6 +906,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @param \eZ\Publish\API\Repository\Values\FieldDefinitionCreateStruct $expectedDefinitionCreate
      * @param \eZ\Publish\API\Repository\Values\FieldDefinition $actualDefinition
+     *
      * @return void
      */
     protected function assertFieldDefinitionsEqual( $expectedCreate, $actualDefinition )
@@ -913,6 +925,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $expectedGroups
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $actualGroups
+     *
      * @return void
      */
     protected function assertContentTypeGroupsCorrect( $expectedGroups, $actualGroups )
@@ -1353,7 +1366,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
-     * @depens eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      */
     public function testRemoveFieldDefinition()
     {
@@ -1717,8 +1730,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'names' => array(
                     'eng-US' => 'User group',
                 ),
-                'descriptions' => array(
-                ),
+                'descriptions' => array(),
                 'nameSchema' => '<name>',
                 'isContainer' => true,
                 'mainLanguageCode' => 'eng-US',
@@ -1758,8 +1770,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'names' => array(
                     'eng-US' => 'Name',
                 ),
-                'descriptions' => array(
-                ),
+                'descriptions' => array(),
             ),
             'description' => array(
                 'identifier' => 'description',
@@ -1774,8 +1785,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'names' => array(
                     'eng-US' => 'Description',
                 ),
-                'descriptions' => array(
-                ),
+                'descriptions' => array(),
             )
         );
 
@@ -1897,6 +1907,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the loadContentTypeByIdentifier() method.
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeByIdentifier()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
@@ -2181,7 +2192,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     public function testCreateContentTypeDraftThrowsBadStateException()
     {
         $this->markTestIncomplete(
-            'Behavior to test is: If a draft *by a different user* exists, throw BadState. Cannot be tested on current fixture, since additional, previledged user is missing.'
+            'Behavior to test is: If a draft *by a different user* exists, throw BadState. Cannot be tested on current fixture, since additional, privileged user is missing.'
         );
 
         $repository = $this->getRepository();
@@ -2222,7 +2233,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             $contentTypeService->loadContentType( $commentType->id );
             $this->fail( 'Content type could be loaded after delete.' );
         }
-        catch( Exceptions\NotFoundException $e )
+        catch ( Exceptions\NotFoundException $e )
         {
             // All fine
         }
@@ -2568,7 +2579,9 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         // Get create struct and set language property
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct( 'new-group' );
+        /* @todo uncomment when support for multilingual names and descriptions is added
         $groupCreate->mainLanguageCode = 'eng-GB';
+        */
 
         // Start a new transaction
         $repository->beginTransaction();
@@ -2620,7 +2633,9 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         // Get create struct and set language property
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct( 'new-group' );
+        /* @todo uncomment when support for multilingual names and descriptions is added
         $groupCreate->mainLanguageCode = 'eng-GB';
+        */
 
         // Start a new transaction
         $repository->beginTransaction();
@@ -2887,6 +2902,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'title', 'ezstring'
             );
             $titleFieldCreate->names = array( 'eng-GB' => 'Title' );
+            $titleFieldCreate->position = 1;
             $typeCreate->addFieldDefinition( $titleFieldCreate );
 
             $groups = array(
@@ -2956,6 +2972,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'title', 'ezstring'
             );
             $titleFieldCreate->names = array( 'eng-GB' => 'Title' );
+            $titleFieldCreate->position = 1;
             $typeCreate->addFieldDefinition( $titleFieldCreate );
 
             $groups = array(

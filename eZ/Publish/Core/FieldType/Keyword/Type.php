@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Keyword;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * Keyword field types
@@ -20,7 +21,7 @@ use eZ\Publish\Core\FieldType\FieldType,
 class Type extends FieldType
 {
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -58,34 +59,19 @@ class Type extends FieldType
     }
 
     /**
-     * Potentially builds and checks the type and structure of the $inputValue.
-     *
-     * This method first inspects $inputValue, if it needs to convert it, e.g.
-     * into a dedicated value object. An example would be, that the field type
-     * uses values of MyCustomFieldTypeValue, but can also accept strings as
-     * the input. In that case, $inputValue first needs to be converted into a
-     * MyCustomFieldTypeClass instance.
-     *
-     * After that, the (possibly converted) value is checked for structural
-     * validity. Note that this does not include validation after the rules
-     * from validators, but only plausibility checks for the general data
-     * format.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
+     * Implements the core of {@see acceptValue()}.
      *
      * @param mixed $inputValue
      *
-     * @return mixed The potentially converted and structurally plausible value.
+     * @return \eZ\Publish\Core\FieldType\Keyword\Value The potentially converted and structurally plausible value.
      */
-    public function acceptValue( $inputValue )
+    protected function internalAcceptValue( $inputValue )
     {
-        if ( is_null( $inputValue ) || is_array( $inputValue ) || is_string( $inputValue ) )
+        if ( is_array( $inputValue ) || is_string( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
         }
-
-        if ( !( $inputValue instanceof Value ) )
+        else if ( !( $inputValue instanceof Value ) )
         {
             throw new InvalidArgumentType(
                 '$inputValue',
@@ -145,7 +131,7 @@ class Type extends FieldType
     /**
      * Returns whether the field type is searchable
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {
@@ -156,11 +142,12 @@ class Type extends FieldType
      * Get index data for field data for search backend
      *
      * @param mixed $value
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
      */
     public function getIndexData( $value )
     {
-        throw new \RuntimeException( '@TODO: Implement' );
+        throw new \RuntimeException( '@todo: Implement' );
     }
 
     /**

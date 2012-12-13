@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Rating\Type as Rating,
-    eZ\Publish\Core\FieldType\Rating\Value as RatingValue,
-    ReflectionObject;
+
+use eZ\Publish\Core\FieldType\Rating\Type as Rating;
+use eZ\Publish\Core\FieldType\Rating\Value as RatingValue;
+use ReflectionObject;
 
 /**
  * @group fieldType
@@ -61,7 +62,7 @@ class RatingTest extends FieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return new Value();
+        return new RatingValue();
     }
 
     /**

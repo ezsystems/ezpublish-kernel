@@ -3,12 +3,11 @@
 {# Following variables are passed:
  # - \eZ\Publish\API\Repository\Values\Content\Field field the field to display
  # - \eZ\Publish\API\Repository\Values\Content\ContentInfo contentInfo the contentInfo to which the field belongs to
+ # - \eZ\Publish\API\Repository\Values\Content\VersionInfo versionInfo the versionInfo to which the field belongs to
  # - mixed fieldSettings settings of the field (depends on the fieldtype)
  # - array parameters options passed to ez_render_field under the parameters key
  # - array attr the attributes to add the generate HTML, contains at least a "class" entry
  #              containing <fieldtypeidentifier>-field
- # - bool editMode not used for now
- # - array editMeta not used for now
  #}
 
 {% block ezstring_field %}
@@ -27,7 +26,7 @@
 
 {% block ezxmltext_field %}
 {% spaceless %}
-    {% set field_value = field.value.text|xmltext_to_html5 %}
+    {% set field_value = field.value.xml|xmltext_to_html5 %}
     {{ block( 'simple_block_field' ) }}
 {% endspaceless %}
 {% endblock %}
@@ -44,7 +43,25 @@
 {% endspaceless %}
 {% endblock %}
 
-{# TODO: add translate filter #}
+{% block ezcountry_field %}
+{% spaceless %}
+    {% if fieldSettings.isMultiple and field.value.countries|length > 0 %}
+        <ul {{ block( 'field_attributes' ) }}>
+            {% for country in field.value.countries %}
+                <li>{{ country['Name'] }}</li>
+            {% endfor %}
+        </ul>
+    {% elseif field.value.countries|length() == 1 %}
+        <p {{ block( 'field_attributes' ) }}>
+        {% for country in field.value.countries %}
+            {{ country['Name'] }}
+        {% endfor %}
+        </p>
+    {% endif %}
+{% endspaceless %}
+{% endblock %}
+
+{# @todo: add translate filter #}
 {% block ezboolean_field %}
 {% spaceless %}
     {% set field_value = field.value.bool ? 'Yes' : 'No' %}
@@ -52,7 +69,7 @@
 {% endspaceless %}
 {% endblock %}
 
-{# TODO:
+{# @todo:
  # - handle default format
  # - handle eztime
  # - handle ezdate
@@ -82,7 +99,7 @@
 {% endspaceless %}
 {% endblock %}
 
-{# TODO: handle localization #}
+{# @todo: handle localization #}
 {% block ezfloat_field %}
 {% spaceless %}
     {% if field.value %}
@@ -95,7 +112,7 @@
 {% block ezurl_field %}
 {% spaceless %}
     {% if field.value %}
-        <a href="{{ field.value.link|escape( 'url' ) }}"
+        <a href="{{ field.value.link }}"
             {{ block( 'field_attributes' ) }}>{{ field.value.text ? field.value.text : field.value.link }}</a>
     {% endif %}
 {% endspaceless %}
@@ -128,7 +145,7 @@
 {% endspaceless %}
 {% endblock %}
 
-{# TODO:
+{# @todo:
  # - add translate filter
  # - legacy used to dump is_locked attribute
  #}
@@ -147,7 +164,7 @@
 {% endspaceless %}
 {% endblock %}
 
-{# TODO: handle the unit of the fileSize (si operator in legacy template engine) #}
+{# @todo: handle the unit of the fileSize (si operator in legacy template engine) #}
 {% block ezbinaryfile_field %}
 {% spaceless %}
     {% if field.value %}
@@ -158,6 +175,64 @@
             {{ block( 'field_attributes' ) }}">{{ field.value.fileName }}</a>&nbsp;({{ field.value.fileSize }})
     {% endif %}
 {% endspaceless %}
+{% endblock %}
+
+{% block ezmedia_field %}
+{% if field.value %}
+{% spaceless %}
+    {% set type = fieldSettings.mediaType %}
+    {% set value = field.value %}
+    {% set uri = 'content/download/' ~ contentInfo.id ~ '/' ~ field.id
+                    ~ '/' ~ value.fileName|escape( 'url' ) %}
+    {% set download = path( 'ez_legacy', {'module_uri': uri } ) %}
+    {% set width = value.width > 0 ? 'width="' ~ value.width ~ '"' : "" %}
+    {% set height = value.height > 0 ? 'height="' ~ value.height ~ '"' : "" %}
+    <div {{ block( 'field_attributes' ) }}>
+    {% autoescape false %}
+    {% if type == "html5_video"
+        or type == "quick_time"
+        or type == "windows_media_player"
+        or type == "real_player" %}
+        <video src="{{ download }}" {{ width }} {{ height }}
+            {{ value.autoplay ? 'autoplay="autoplay"' : "" }}
+            {{ value.hasController ? 'controls="controls"' : "" }}
+            {{ value.loop ? 'loop="loop"' : "" }}>
+            Your browser does not support html5 video.
+        </video>
+    {% elseif type == "html5_audio" %}
+        <audio src="{{ download }}"
+            {{ value.autoplay ? 'autoplay="autoplay"' : "" }}
+            {{ value.hasController ? 'controls="controls"' : "" }}
+            {{ value.loop ? 'loop="loop"' : "" }}
+            preload="none">
+            Your browser does not support html5 audio.
+        </audio>
+    {% elseif type == 'flash' %}
+        <object type="application/x-shockwave-flash" {{ width }} {{ height }} data="{{ download }}">
+            <param name="movie" value="{{ download }}" />
+            <param name="play" value="{{ value.autoplay ? 'true' : 'false' }}" />
+            <param name="loop" value="{{ value.loop ? 'true' : 'false' }}" />
+            <param name="quality" value="{{ value.quality }}" />
+        </object>
+    {% elseif type == 'silverlight' %}
+        <script type="text/javascript">
+            function onErrorHandler(sender, args) { }
+            function onResizeHandler(sender, args) { }
+        </script>
+        <object data="data:application/x-silverlight," type="application/x-silverlight-2" {{ width }} {{ height }}>
+            <param name="source" value="{{ download }}" />
+            <param name="onError" value="onErrorHandler" />
+            <param name="onResize" value="onResizeHandler" />
+            <a href="http://go.microsoft.com/fwlink/?LinkID=108182">
+                <img src="http://go.microsoft.com/fwlink/?LinkId=108181" alt="Get Microsoft Silverlight" />
+            </a>
+        </object>
+        <iframe style="visibility: hidden; height: 0; width: 0; border: 0px;"></iframe>
+    {% endif %}
+    {% endautoescape %}
+    </div>
+{% endspaceless %}
+{% endif %}
 {% endblock %}
 
 {% block ezobjectrelationlist_field %}
@@ -174,7 +249,7 @@
 {% endspaceless %}
 {% endblock %}
 
-{# TODO:
+{# @todo:
  # - include Gmaps JS only once if the field is used several times in the page
  # - add translate filter
  #}
@@ -276,12 +351,17 @@
 {% endspaceless %}
 {% endblock %}
 
+{# This field accepts the following parameters:
+ #   - alias (image variation name). Defaults to "original" (e.g. image originally uploaded)
+ #}
 {% block ezimage_field %}
 {% spaceless %}
-{# TODO: Handle image variations #}
+{% if field.value %}
 <figure {{ block( 'field_attributes' ) }}>
-    <img src="{{ asset( field.value.path ) }}" alt="{{ field.value.alternativeText }}" />
+    {% set imageAlias = ez_image_alias( field, versionInfo, parameters.alias|default( 'original' ) ) %}
+    <img src="{{ asset( imageAlias.uri ) }}" width="{{ imageAlias.width }}" height="{{ imageAlias.height }}" alt="{{ field.value.alternativeText }}" />
 </figure>
+{% endif %}
 {% endspaceless %}
 {% endblock %}
 
@@ -318,9 +398,6 @@
 {% block field_attributes %}
 {% spaceless %}
     {% set attr = attr|default( {} ) %}
-    {% set editMeta = editMeta|default( {} ) %}
     {% for attrname, attrvalue in attr %}{{ attrname }}="{{ attrvalue }}" {% endfor %}
-    {# Rendering metadata for editorial interface, if available #}
-    {% for metaName, metaValue in editMeta %}{{ 'data-ez-' ~ metaName }}="{{ metaValue }}" {% endfor %}
 {% endspaceless %}
 {% endblock %}

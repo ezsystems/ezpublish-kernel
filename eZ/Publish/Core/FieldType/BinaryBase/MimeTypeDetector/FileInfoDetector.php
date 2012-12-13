@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\BinaryBase\MimeTypeDetector;
+
 use eZ\Publish\Core\FieldType\BinaryBase\MimeTypeDetector;
 
 class FileInfoDetector implements MimeTypeDetector
@@ -36,6 +37,7 @@ class FileInfoDetector implements MimeTypeDetector
      * Returns the MIME type of the file identified by $path
      *
      * @param string $path
+     *
      * @return string
      */
     public function getMimeType( $path )

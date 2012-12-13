@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Null;
+
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**

@@ -8,7 +8,8 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Values;
-use \eZ\Publish\API\Repository\Values\ValueObject;
+
+use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * Struct representing a freshly created location.
@@ -18,7 +19,7 @@ class CreatedLocation extends ValueObject
     /**
      * The created location
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
+     * @var \eZ\Publish\Core\REST\Server\Values\RestLocation
      */
-    public $location;
+    public $restLocation;
 }

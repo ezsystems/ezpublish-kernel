@@ -8,12 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    DOMDocument;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+use DOMDocument;
 
 class Author implements Converter
 {
@@ -22,7 +23,6 @@ class Author implements Converter
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @static
      * @return Author
      */
     public static function create()
@@ -92,6 +92,7 @@ class Author implements Converter
      * Generates XML string from $authorValue to be stored in storage engine
      *
      * @param array $authorValue
+     *
      * @return string The generated XML string
      */
     private function generateXmlString( array $authorValue )
@@ -121,6 +122,7 @@ class Author implements Converter
      * Restores an author Value object from $xmlString
      *
      * @param string $xmlString XML String stored in storage engine
+     *
      * @return \eZ\Publish\Core\FieldType\Author\Value
      */
     private function restoreValueFromXmlString( $xmlString )

@@ -9,12 +9,12 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Console;
 
-use eZ\Bundle\EzPublishCoreBundle\SiteAccess,
-    Symfony\Component\HttpKernel\KernelInterface,
-    Symfony\Bundle\FrameworkBundle\Console\Application as BaseApplication,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Output\OutputInterface,
-    Symfony\Component\Console\Input\InputOption;
+use eZ\Bundle\EzPublishCoreBundle\SiteAccess;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Bundle\FrameworkBundle\Console\Application as BaseApplication;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputOption;
 
 /**
  * eZ Publish console application.
@@ -49,6 +49,12 @@ class Application extends BaseApplication
         $this->siteAccessName = $this->siteAccessName ?: $container->getParameter( 'ezpublish.siteaccess.default' );
         $siteAccess = new SiteAccess( $this->siteAccessName, 'cli' );
         $container->set( 'ezpublish.siteaccess', $siteAccess );
+
+        // Replacing legacy kernel handler web by the CLI one
+        // @todo: this should be somewhat done in the legacy bundle
+        $legacyHandlerCLI = $container->get( 'ezpublish_legacy.kernel_handler.cli' );
+        $container->set( 'ezpublish_legacy.kernel_handler', $legacyHandlerCLI );
+        $container->set( 'ezpublish_legacy.kernel_handler.web', $legacyHandlerCLI );
     }
 
 }

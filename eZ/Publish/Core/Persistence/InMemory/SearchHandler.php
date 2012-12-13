@@ -9,29 +9,31 @@
 
 namespace eZ\Publish\Core\Persistence\InMemory;
 
-use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandlerInterface,
-    eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit,
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\RemoteId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\SectionId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\UserMetadata,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    Exception;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandlerInterface;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\RemoteId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\SectionId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\UserMetadata;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use Exception;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -78,13 +80,13 @@ class SearchHandler extends SearchHandlerInterface
         $this->backend = $backend;
     }
 
-     /**
-     * finds content objects for the given query.
+    /**
+     * Finds content objects for the given query.
      *
-     * @TODO define structs for the field filters
+     * @todo define structs for the field filters
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array  $fieldFilters - a map of filters for the returned fields.
+     * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
@@ -93,7 +95,7 @@ class SearchHandler extends SearchHandlerInterface
     {
         // Only some criteria are supported as getting full support for all in InMemory engine is not a priority
         $match = array();
-        self::generateMatchByCriteria( array( $query->criterion ), $match );
+        $this->generateMatchByCriteria( array( $query->criterion ), $match );
 
         if ( empty( $match ) )
         {
@@ -106,7 +108,8 @@ class SearchHandler extends SearchHandlerInterface
             array(
                 'locations' => array(
                     'type' => 'Content\\Location',
-                    'match' => array( 'contentId' => 'id' )
+                    'match' => array( 'contentId' => 'id' ),
+                    'skip' => true
                 ),
                 'versionInfo' => array(
                     'type' => 'Content\\VersionInfo',
@@ -120,6 +123,11 @@ class SearchHandler extends SearchHandlerInterface
                         ),
                     )
                 ),
+                'objectStates' => array(
+                    'type' => 'Content\\ObjectState',
+                    'match' => array( '_contentId' => 'id' ),
+                    'skip' => true
+                )
             )
         );
 
@@ -142,6 +150,15 @@ class SearchHandler extends SearchHandlerInterface
                     )
                 );
 
+                $locations = $this->backend->find(
+                    'Content\\Location',
+                    array( 'contentId' => $item->versionInfo->contentInfo->id )
+                );
+                if ( !empty( $locations ) )
+                {
+                    $item->versionInfo->contentInfo->mainLocationId = $locations[0]->mainLocationId;
+                }
+
                 $resultList[] = $item;
             }
         }
@@ -160,9 +177,11 @@ class SearchHandler extends SearchHandlerInterface
         $result->searchHits = array_map(
             function ( $content )
             {
-                return new SearchHit( array(
-                    'valueObject' => $content,
-                ) );
+                return new SearchHit(
+                    array(
+                        'valueObject' => $content,
+                    )
+                );
             },
             $result->searchHits
         );
@@ -176,18 +195,16 @@ class SearchHandler extends SearchHandlerInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
-     * @TODO define structs for the field filters
+     * @todo define structs for the field filters
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array  $fieldFilters - a map of filters for the returned fields.
+     * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
     public function findSingle( Criterion $criterion, array $fieldFilters = array() )
     {
-        $list = $this->findContent( new Query( array(
-            'criterion' => $criterion,
-        ) ) );
+        $list = $this->findContent( new Query( array( 'criterion' => $criterion ) ) );
 
         if ( !$list->totalCount )
             throw new NotFound( 'Content', var_export( $criterion, true ) );
@@ -201,7 +218,7 @@ class SearchHandler extends SearchHandlerInterface
      * Suggests a list of values for the given prefix
      *
      * @param string $prefix
-     * @param string[] $fieldpath
+     * @param string[] $fieldPaths
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
@@ -223,15 +240,16 @@ class SearchHandler extends SearchHandlerInterface
      *
      * @param array $criteria
      * @param array $match
+     *
      * @return void
      */
-    protected static function generateMatchByCriteria( array $criteria, array &$match )
+    protected function generateMatchByCriteria( array $criteria, array &$match )
     {
         foreach ( $criteria as $criterion )
         {
             if ( $criterion instanceof LogicalAnd )
             {
-                self::generateMatchByCriteria( $criterion->criteria, $match );
+                $this->generateMatchByCriteria( $criterion->criteria, $match );
             }
             else if ( $criterion instanceof ContentId && !isset( $match['id'] ) )
             {
@@ -253,6 +271,23 @@ class SearchHandler extends SearchHandlerInterface
             {
                 $match['locations']['remoteId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
             }
+            else if ( $criterion instanceof ObjectStateId && !isset( $match['objectStates']['id'] ) )
+            {
+                $match['objectStates']['id'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
+            }
+            else if ( $criterion instanceof LanguageCode && !isset( $match['versionInfo']['languageIds'] ) )
+            {
+                $languageHandler = $this->handler->contentLanguageHandler();
+                $languageIds = array_map(
+                    function( $languageCode ) use ( $languageHandler )
+                    {
+                        return $languageHandler->loadByLanguageCode( $languageCode )->id;
+                    },
+                    $criterion->value
+                );
+
+                $match['versionInfo']['languageIds'] = $criterion->operator === Operator::IN ? $languageIds : $languageIds[0];
+            }
             else if ( $criterion instanceof SectionId && !isset( $match['versionInfo']['contentInfo']['sectionId'] ) )
             {
                 $match['versionInfo']['contentInfo']['sectionId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
@@ -272,7 +307,6 @@ class SearchHandler extends SearchHandlerInterface
                         break;
                     default:
                         throw new Exception( "Unsupported StatusCriterion->value[0]: " . $criterion->value[0] );
-
                 }
             }
             else if ( $criterion instanceof ParentLocationId && !isset( $match['locations']['parentId'] ) )

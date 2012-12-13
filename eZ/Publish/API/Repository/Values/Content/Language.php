@@ -43,7 +43,7 @@ class Language extends ValueObject
     protected $name;
 
     /**
-     * indicates if the language is enabled or not.
+     * Indicates if the language is enabled or not.
      *
      * @var boolean
      */

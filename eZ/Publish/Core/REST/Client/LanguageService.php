@@ -9,12 +9,13 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
-use \eZ\Publish\API\Repository\Values\Content\Language;
-use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
+use eZ\Publish\API\Repository\LanguageService as APILanguageService;
+use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 
-use \eZ\Publish\Core\REST\Common\UrlHandler;
-use \eZ\Publish\Core\REST\Common\Input;
-use \eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input\Dispatcher;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\LanguageService}
@@ -22,7 +23,7 @@ use \eZ\Publish\Core\REST\Common\Output;
  *
  * @see \eZ\Publish\API\Repository\LanguageService
  */
-class LanguageService implements \eZ\Publish\API\Repository\LanguageService, Sessionable
+class LanguageService implements APILanguageService, Sessionable
 {
     /**
      * @var \eZ\Publish\Core\REST\Client\ContentService
@@ -60,7 +61,7 @@ class LanguageService implements \eZ\Publish\API\Repository\LanguageService, Ses
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( ContentService $contentService, $defaultLanguageCode, HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( ContentService $contentService, $defaultLanguageCode, HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->contentService      = $contentService;
         $this->defaultLanguageCode = $defaultLanguageCode;
@@ -76,8 +77,10 @@ class LanguageService implements \eZ\Publish\API\Repository\LanguageService, Ses
      * Only for testing
      *
      * @param mixed tringid
-     * @return void
+     *
      * @private
+     *
+     * @return void
      */
     public function setSession( $id )
     {
@@ -99,7 +102,7 @@ class LanguageService implements \eZ\Publish\API\Repository\LanguageService, Ses
      */
     public function createLanguage( LanguageCreateStruct $languageCreateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -114,11 +117,11 @@ class LanguageService implements \eZ\Publish\API\Repository\LanguageService, Ses
      */
     public function updateLanguageName( Language $language, $newName )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * enables a language
+     * Enables a language
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
@@ -126,11 +129,11 @@ class LanguageService implements \eZ\Publish\API\Repository\LanguageService, Ses
      */
     public function enableLanguage( Language $language )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * disables a language
+     * Disables a language
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
@@ -138,7 +141,7 @@ class LanguageService implements \eZ\Publish\API\Repository\LanguageService, Ses
      */
     public function disableLanguage( Language $language )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -152,17 +155,17 @@ class LanguageService implements \eZ\Publish\API\Repository\LanguageService, Ses
      */
     public function loadLanguage( $languageCode )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
      * Loads all Languages
      *
-     * @return array an aray of {@link  \eZ\Publish\API\Repository\Values\Content\Language}
+     * @return \eZ\Publish\API\Repository\Values\Content\Language[]
      */
     public function loadLanguages()
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -176,7 +179,7 @@ class LanguageService implements \eZ\Publish\API\Repository\LanguageService, Ses
      */
     public function loadLanguageById( $languageId )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -191,26 +194,26 @@ class LanguageService implements \eZ\Publish\API\Repository\LanguageService, Ses
      */
     public function deleteLanguage( Language $language )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * returns a configured default language code
+     * Returns a configured default language code
      *
      * @return string
      */
     public function getDefaultLanguageCode()
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * instanciates an object to be used for creating languages
-     * 
+     * Instantiates an object to be used for creating languages
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
      */
     public function newLanguageCreateStruct()
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 }

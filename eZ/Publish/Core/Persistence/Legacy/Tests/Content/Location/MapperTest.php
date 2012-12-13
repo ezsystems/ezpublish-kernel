@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper,
-    eZ\Publish\SPI\Persistence\Content\Location\Trashed;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper;
+use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 
 /**
  * Test case for Location\Mapper
@@ -55,7 +56,6 @@ class LocationHandlerTest extends TestCase
         'parentId' => 2,
         'pathIdentificationString' => 'solutions',
         'pathString' => '/1/2/77/',
-        'modifiedSubLocation' => 1311065017,
         'mainLocationId' => 77,
         'depth' => 2,
         'sortField' => 2,
@@ -105,6 +105,33 @@ class LocationHandlerTest extends TestCase
             $this->locationValues,
             $location
         );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationsFromRows
+     */
+    public function testCreateLocationsFromRows()
+    {
+        $inputRows = array();
+        for ( $i = 0; $i < 3; $i++ )
+        {
+            $row = $this->locationRow;
+            $row['node_id'] += $i;
+            $inputRows[] = $row;
+        }
+
+        $mapper = new Mapper();
+
+        $locations = $mapper->createLocationsFromRows( $inputRows );
+
+        $this->assertCount( 3, $locations );
+        foreach ( $locations as $location )
+        {
+            $this->assertInstanceOf(
+                'eZ\\Publish\\SPI\\Persistence\\Content\\Location',
+                $location
+            );
+        }
     }
 
     /**

@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
-use PHPUnit_Framework_TestCase,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\Router,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Regex\URI as RegexMatcher,
-    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+
+use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Regex\URI as RegexMatcher;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 
 class RouterURIRegexTest extends PHPUnit_Framework_TestCase
 {
@@ -34,7 +35,8 @@ class RouterURIRegexTest extends PHPUnit_Framework_TestCase
                     "first_sa" => "first_sa",
                     "first_siteaccess" => "first_sa",
                 ),
-            )
+            ),
+            array( 'first_sa', 'second_sa', 'foowoobar', 'test' )
         );
     }
 
@@ -55,6 +57,7 @@ class RouterURIRegexTest extends PHPUnit_Framework_TestCase
         $sa = $router->match( $request );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa );
         $this->assertSame( $siteAccess, $sa->name );
+        $router->setSiteAccess();
     }
 
     public function matchProvider()

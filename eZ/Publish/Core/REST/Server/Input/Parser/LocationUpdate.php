@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
+
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
@@ -35,7 +36,6 @@ class LocationUpdate extends Base
      */
     protected $parserTools;
 
-
     /**
      * Construct
      *
@@ -55,6 +55,7 @@ class LocationUpdate extends Base
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\RestLocationUpdateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
@@ -63,7 +64,7 @@ class LocationUpdate extends Base
 
         if ( array_key_exists( 'priority', $data ) )
         {
-            $locationUpdateStruct->priority = (int) $data['priority'];
+            $locationUpdateStruct->priority = (int)$data['priority'];
         }
 
         if ( array_key_exists( 'remoteId', $data ) )

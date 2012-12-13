@@ -30,6 +30,11 @@ class RestUser extends RestValue
     public $contentInfo;
 
     /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Relation[]
+     */
+    public $relations;
+
+    /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location
      */
     public $mainLocation;
@@ -40,11 +45,13 @@ class RestUser extends RestValue
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\Location $mainLocation
+     * @param \eZ\Publish\API\Repository\Values\Content\Relation[] $relations
      */
-    public function __construct( Content $content, ContentInfo $contentInfo, Location $mainLocation )
+    public function __construct( Content $content, ContentInfo $contentInfo, Location $mainLocation, array $relations )
     {
         $this->content = $content;
         $this->contentInfo = $contentInfo;
         $this->mainLocation = $mainLocation;
+        $this->relations = $relations;
     }
 }

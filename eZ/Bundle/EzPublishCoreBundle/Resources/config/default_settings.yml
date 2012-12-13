@@ -11,18 +11,22 @@ parameters:
     ezsettings.default.content_view: {}
 
     # Common settings
-    ezsettings.default.database.dsn: ~
+    ezsettings.default.database.params: ~
     ezsettings.default.session_name: "eZSESSID{siteaccess_hash}"    # Using "{siteaccess_hash}" in session name makes it unique per siteaccess
+    ezsettings.default.legacy_mode: false
     ezsettings.default.url_alias_router: true                       # Use UrlAliasRouter by default
-    ezsettings.default.languages: ["eng-GB"]
-    ezsettings.default.var_dir: "var"
-    ezsettings.default.storage_dir: "storage"
+    ezsettings.default.languages: []
+    ezsettings.default.var_dir: "var"                   # The root directory where all log files, cache files and other stored files are created
+    ezsettings.default.storage_dir: "storage"           # Where to place new files for storage, it's relative to var directory
     ezsettings.default.binary_dir: "original"
 
     # Content settings
     ezsettings.default.content.view_cache: true         # Whether to use content view cache or not (Etag/Last-Modified based)
     ezsettings.default.content.ttl_cache: false         # Whether to use TTL Cache for content (i.e. Max-Age response header)
     ezsettings.default.content.default_ttl: 60          # Default TTL cache value for content
+
+    # Cache settings
+    ezsettings.default.http_cache.purge_servers: ["http://localhost/"]   # Server(s) URL(s) that will be used for purging HTTP cache with PURGE requests.
 
     # Treemenu settings (admin interface)
     ezsettings.default.treemenu.http_cache: true        # Whether to use HttpCache or not for admin tree menu
@@ -31,6 +35,97 @@ parameters:
     # Templates to use while rendering fields
     ezsettings.default.field_templates:
         - {template: EzPublishCoreBundle::content_fields.html.twig, priority: 0}
+
+    # Image settings
+    ezsettings.default.image.temporary_dir: imagetmp
+    ezsettings.default.image.published_images_dir: images
+    ezsettings.default.image.versioned_images_dir: images-versioned
+    ezsettings.default.image_variations:
+        reference:
+            reference: ~
+            filters:
+                - {name: geometry/scaledownonly, params: [600, 600]}
+        small:
+            reference: reference
+            filters:
+                - {name: geometry/scaledownonly, params: [100, 100]}
+        tiny:
+            reference: reference
+            filters:
+                - {name: geometry/scaledownonly, params: [30, 30]}
+        medium:
+            reference: reference
+            filters:
+                - {name: geometry/scaledownonly, params: [200, 200]}
+        large:
+            reference: reference
+            filters:
+                - {name: geometry/scaledownonly, params: [300, 300]}
+        rss:
+            reference: reference
+            filters:
+                - {name: geometry/scale, params: [88, 31]}
+        campaign:
+            reference: ~
+            filters:
+                - {name: geometry/scalewidthdownonly, params: [770]}
+                - {name: geometry/crop, params: [770, 390, 0, 0]}
+        backgroundimage:
+            reference: ~
+            filters:
+                - {name: geometry/scalewidthdownonly, params: [770]}
+                - {name: geometry/crop, params: [770, 390, 0, 0]}
+        highlighted:
+            reference: ~
+            filters:
+                - {name: geometry/scalewidthdownonly, params: [300]}
+                - {name: geometry/crop, params: [300, 300, 0, 0]}
+        galleryfull:
+            reference: ~
+            filters:
+                - {name: geometry/scalewidthdownonly, params: [770]}
+        contentgrid:
+            reference: ~
+            filters:
+                - {name: geometry/scalewidthdownonly, params: [770]}
+                - {name: geometry/crop, params: [370, 160, 0, 0]}
+        gallery:
+            reference: ~
+            filters:
+                - {name: geometry/scalewidthdownonly, params: [770]}
+                - {name: geometry/crop, params: [770, 390, 0, 0]}
+        imagefull:
+            reference: ~
+            filters:
+                - {name: geometry/scalewidthdownonly, params: [770]}
+
+    # ImageMagick
+    ezpublish.image.imagemagick.enabled: false
+    ezpublish.image.imagemagick.executable_path:
+    ezpublish.image.imagemagick.executable: convert
+    ezsettings.default.imagemagick.pre_parameters:
+    ezsettings.default.imagemagick.post_parameters:
+    ezpublish.image.imagemagick.filters:
+        geometry/scale: "-geometry {1}x{2}"
+        geometry/scalewidth: "-geometry {1}"
+        geometry/scaleheight: "-geometry x{1}"
+        geometry/scaledownonly: "-geometry {1}x{2}>"
+        geometry/scalewidthdownonly: "-geometry {1}>"
+        geometry/scaleheightdownonly: "-geometry x{1}>"
+        geometry/scaleexact: "-geometry {1}x{2}!"
+        geometry/scalepercent: "-geometry {1}x{2}%"
+        geometry/crop: "-crop {1}x{2}+{3}+{4}"
+        filter/noise: "-noise {1}"
+        filter/swirl: "-swirl {1}"
+        colorspace/gray: "-colorspace GRAY"
+        colorspace/transparent: "-colorspace Transparent"
+        colorspace: "-colorspace {1}"
+        border: "-border {1}x{2}"
+        border/color: "-bordercolor rgb({1},{2},{3})"
+        border/width: "-borderwidth {1}"
+        flatten: "-flatten"
+        resize: "-resize {1}"
+        optimize: "-strip"
 
     ###
     # Internal settings

@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\Selection\Value as SelectionValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+
+use eZ\Publish\Core\FieldType\Selection\Value as SelectionValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type
@@ -20,7 +21,7 @@ use eZ\Publish\Core\FieldType\Selection\Value as SelectionValue,
 class SelectionIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -107,7 +108,7 @@ class SelectionIntegrationTest extends BaseIntegrationTest
     public function getInvalidValidatorConfiguration()
     {
         return array(
-            'unkknown' => array( 'value' => 23 )
+            'unknown' => array( 'value' => 23 )
         );
     }
 
@@ -128,6 +129,7 @@ class SelectionIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     public function assertFieldDataLoadedCorrect( Field $field)
@@ -310,5 +312,24 @@ class SelectionIntegrationTest extends BaseIntegrationTest
             ),
         );
     }
-}
 
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array( new SelectionValue ),
+            array( new SelectionValue( array() ) ),
+        );
+    }
+
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+            array(
+                new SelectionValue( array( 0 ) )
+            ),
+        );
+    }
+}

@@ -9,18 +9,19 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
-use \Twig_Extension;
-use \Twig_Environment;
-use \Twig_Function_Method;
-use \Twig_Filter_Method;
-use \Twig_Template;
-use \Symfony\Component\DependencyInjection\ContainerInterface;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use \SplObjectStorage;
-use \InvalidArgumentException;
-use \LogicException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Twig_Extension;
+use Twig_Environment;
+use Twig_Function_Method;
+use Twig_Filter_Method;
+use Twig_Template;
+use SplObjectStorage;
+use InvalidArgumentException;
+use LogicException;
 
 /**
  * Twig content extension for eZ Publish specific usage.
@@ -61,7 +62,7 @@ class ContentExtension extends Twig_Extension
     /**
      * Converter used to transform XmlText content in HTML5
      *
-     * @var eZ\Publish\Core\FieldType\XmlText\Converter\Output\Html5
+     * @var \eZ\Publish\Core\FieldType\XmlText\Converter\Html5
      */
     protected $xmlTextConverter;
 
@@ -73,16 +74,15 @@ class ContentExtension extends Twig_Extension
     protected $fieldTypeIdentifiers = array();
 
     /**
+     * @var \eZ\Publish\SPI\Variation\VariationHandler
+     */
+    protected $imageVariationService;
+
+    /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
     protected $container;
 
-    /**
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $resolver
-     * @return type
-     */
     public function __construct( ContainerInterface $container, ConfigResolverInterface $resolver )
     {
         $this->resources = $resolver->getParameter( 'field_templates' );
@@ -120,7 +120,20 @@ class ContentExtension extends Twig_Extension
                 $this,
                 'renderField',
                 array( 'is_safe' => array( 'html' ) )
-            )
+            ),
+            'ez_image_alias' => new Twig_Function_Method( $this, 'getImageVariation' )
+        );
+    }
+
+    /**
+     * Returns a list of filters to add to the existing list
+     *
+     * @return array
+     */
+    public function getFilters()
+    {
+        return array(
+            'xmltext_to_html5' => new Twig_Filter_Method( $this, 'xmltextToHtml5' ),
         );
     }
 
@@ -135,6 +148,52 @@ class ContentExtension extends Twig_Extension
     }
 
     /**
+     * Generates the array of parameter to pass to the field template.
+     *
+     * @param \eZ\Publish\Core\Repository\Values\Content\Content $content
+     * @param \eZ\Publish\Core\Repository\Values\Content\Field $field the Field to display
+     * @param array $params An array of parameters to pass to the field view
+     *
+     * @return array
+     */
+    protected function getRenderFieldBlockParameters(
+        Content $content, Field $field, array $params = array()
+    )
+    {
+        // Merging passed parameters to default ones
+        $params += array(
+            'parameters' => array(), // parameters dedicated to template processing
+            'attr' => array() // attributes to add on the enclosing HTML tags
+        );
+
+        $versionInfo = $content->getVersionInfo();
+        $contentInfo = $versionInfo->getContentInfo();
+        $contentType = $contentInfo->getContentType();
+        // Adding Field, FieldSettings and ContentInfo objects to
+        // parameters to be passed to the template
+        $params += array(
+            'field' => $field,
+            'contentInfo' => $contentInfo,
+            'versionInfo' => $versionInfo,
+            'fieldSettings' => $contentType
+                ->getFieldDefinition( $field->fieldDefIdentifier )
+                ->getFieldSettings()
+        );
+
+        // make sure we can easily add class="<fieldtypeidentifier>-field" to the
+        // generated HTML
+        if ( isset( $params['attr']['class'] ) )
+        {
+            $params['attr']['class'] .= ' ' . $this->getFieldTypeIdentifier( $content, $field ) . '-field';
+        }
+        else
+        {
+            $params['attr']['class'] = $this->getFieldTypeIdentifier( $content, $field ) . '-field';
+        }
+        return $params;
+    }
+
+    /**
      * Renders the HTML for a given field.
      *
      * @param \eZ\Publish\Core\Repository\Values\Content\Content $content
@@ -145,46 +204,18 @@ class ContentExtension extends Twig_Extension
      */
     public function renderField( Content $content, $fieldIdentifier, array $params = array() )
     {
-        // Merging passed parameters to default ones
-        $params += array(
-            'lang' => null,
-            'editMode' => false,
-            'parameters' => array(), // parameters dedicated to template processing
-            'attr' => array() // attributes to add on the enclosing HTML tags
-        );
-
-        $field = $content->getField( $fieldIdentifier, $params['lang'] );
+        $lang = null;
+        if ( isset( $params['lang'] ) )
+        {
+            $lang = $params['lang'];
+            unset( $params['lang'] );
+        }
+        $field = $content->getField( $fieldIdentifier, $lang );
         if ( !$field instanceof Field )
-            throw new InvalidArgumentException( "Invalid field identifier '$fieldIdentifier' for content #{$content->contentInfo->id}" );
-
-        $contentInfo = $content->getVersionInfo()->getContentInfo();
-        $contentType = $contentInfo->getContentType();
-        // Adding Field, FieldSettings and ContentInfo objects to
-        // parameters to be passed to the template
-        $params += array(
-            'field' => $field,
-            'contentInfo' => $contentInfo,
-            'fieldSettings' => $contentType->getFieldDefinition( $fieldIdentifier )->getFieldSettings()
-        );
-
-        // Ensure that not edit metadata has been injected from the template
-        unset( $params['editMeta'] );
-        if ( $params['editMode'] ?: $this->isInEditMode() )
         {
-            $params += array(
-                'editMeta' => $this->getEditMetadata( $content, $field )
+            throw new InvalidArgumentException(
+                "Invalid field identifier '$fieldIdentifier' for content #{$content->contentInfo->id}"
             );
-        }
-
-        // make we can easily add class="<fieldtypeidentifier>-field" to the
-        // generated HTML
-        if ( isset( $params['attr']['class'] ) )
-        {
-            $params['attr']['class'] .= ' ' . $this->getFieldTypeIdentifier( $content, $field ) . '-field';
-        }
-        else
-        {
-            $params['attr']['class'] = $this->getFieldTypeIdentifier( $content, $field ) . '-field';
         }
 
         $localTemplate = null;
@@ -195,6 +226,8 @@ class ContentExtension extends Twig_Extension
             $localTemplate = $params['template'];
             unset( $params['template'] );
         }
+
+        $params = $this->getRenderFieldBlockParameters( $content, $field, $params );
 
         // Getting instance of Twig_Template that will be used to render blocks
         if ( !$this->template instanceof Twig_Template )
@@ -210,15 +243,8 @@ class ContentExtension extends Twig_Extension
         );
     }
 
-    public function getFilters()
-    {
-        return array(
-            'xmltext_to_html5' => new Twig_Filter_Method( $this, 'xmltextToHtml5' ),
-        );
-    }
-
     /**
-     * @return eZ\Publish\Core\FieldType\XmlText\Converter\Output\Html5
+     * @return \eZ\Publish\Core\FieldType\XmlText\Converter\Html5
      */
     protected function getXmlTextConverter()
     {
@@ -232,6 +258,7 @@ class ContentExtension extends Twig_Extension
      * Implements the "xmltext_to_html5" filter
      *
      * @param string $xmlData
+     *
      * @return string
      */
     public function xmltextToHtml5( $xmlData )
@@ -240,12 +267,30 @@ class ContentExtension extends Twig_Extension
     }
 
     /**
+     * Returns the image variant object for $field/$versionInfo
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Field $field
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param string $variationName
+     *
+     * @return \eZ\Publish\API\Repository\Values\File\ImageVariant
+     */
+    public function getImageVariation( Field $field, VersionInfo $versionInfo, $variationName )
+    {
+        if ( !isset( $this->imageVariationService ) )
+            $this->imageVariationService = $this->container->get( 'ezpublish.fieldType.ezimage.variation_service' );
+
+        return $this->imageVariationService->getVariation( $field, $versionInfo, $variationName );
+    }
+
+    /**
      * Returns the block named $blockName in the given template. If it's not
      * found, returns null.
      *
      * @param string $blockName
-     * @param Twig_Template $tpl
-     * @return array
+     * @param \Twig_Template $tpl
+     *
+     * @return array|null
      */
     protected function searchBlock( $blockName, Twig_Template $tpl )
     {
@@ -275,8 +320,10 @@ class ContentExtension extends Twig_Extension
      * @param Content $content
      * @param Field $field
      * @param null|string $localTemplate a file where to look for the block first
-     * @return array
+     *
      * @throws \LogicException If no template block can be found for $field
+     *
+     * @return array
      */
     protected function getBlocksByField( Content $content, Field $field, $localTemplate = null )
     {
@@ -324,6 +371,7 @@ class ContentExtension extends Twig_Extension
      *
      * @param \eZ\Publish\Core\Repository\Values\Content\Content $content
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
+     *
      * @return string
      */
     protected function getFieldBlockName( Content $content, Field $field )
@@ -336,6 +384,7 @@ class ContentExtension extends Twig_Extension
      *
      * @param \eZ\Publish\Core\Repository\Values\Content\Content $content
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
+     *
      * @return string
      */
     protected function getFieldTypeIdentifier( Content $content, Field $field )
@@ -351,40 +400,5 @@ class ContentExtension extends Twig_Extension
         }
 
         return $this->fieldTypeIdentifiers[$field->fieldDefIdentifier];
-    }
-
-    /**
-     * Checks if we are in edit mode or not (editorial interface).
-     *
-     * @todo Needs to check in the session and via the API if current user has access to edit mode
-     * @return bool
-     */
-    protected function isInEditMode()
-    {
-        return false;
-    }
-
-    /**
-     * Returns metadata needed for edition while using the editorial interface.
-     * These will basically be rendered as HTML data attributes, prefixed by "data-ez".
-     * Example: data-ez-field-id="12345"
-     *
-     * @param \eZ\Publish\Core\Repository\Values\Content\Content $content
-     * @param \eZ\Publish\API\Repository\Values\Content\Field $field
-     * @return array
-     * @todo It would make sense to also ask for additional metadata supported by the field type
-     */
-    protected function getEditMetadata( Content $content, Field $field )
-    {
-        $versionInfo = $content->getVersionInfo();
-
-        return array(
-            'field-id'                  => $field->id,
-            'field-identifier'          => $field->fieldDefIdentifier,
-            'field-type-identifier'     => $this->getFieldTypeIdentifier( $content, $field ),
-            'content-id'                => $versionInfo->getContentInfo()->id,
-            'version'                   => $versionInfo->versionNo,
-            'locale-code'               => $field->languageCode
-        );
     }
 }

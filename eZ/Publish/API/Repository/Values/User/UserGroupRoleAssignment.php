@@ -16,7 +16,7 @@ namespace eZ\Publish\API\Repository\Values\User;
 abstract class UserGroupRoleAssignment extends RoleAssignment
 {
     /**
-     * returns the user group to which the role is assigned to
+     * Returns the user group to which the role is assigned to
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      */

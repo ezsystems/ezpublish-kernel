@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
@@ -51,6 +52,7 @@ class PolicyUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains PolicyUpdate element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPolicyUpdateElement( $result )
@@ -72,6 +74,7 @@ class PolicyUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains PolicyUpdate attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPolicyUpdateAttributes( $result )
@@ -93,6 +96,7 @@ class PolicyUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains limitations element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLimitationsElement( $result )
@@ -111,6 +115,7 @@ class PolicyUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains limitations attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLimitationsAttributes( $result )

@@ -18,8 +18,8 @@ use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use \eZ\Publish\API\Repository\Values\User\User;
-use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 
 /**
  * This class provides service methods for managing content
@@ -59,7 +59,7 @@ interface ContentService
     public function loadContentInfoByRemoteId( $remoteId );
 
     /**
-     * loads a version info of the given content object.
+     * Loads a version info of the given content object.
      *
      * If no version number is given, the method returns the current version
      *
@@ -74,7 +74,7 @@ interface ContentService
     public function loadVersionInfo( ContentInfo $contentInfo, $versionNo = null );
 
     /**
-     * loads a version info of the given content object id.
+     * Loads a version info of the given content object id.
      *
      * If no version number is given, the method returns the current version
      *
@@ -89,7 +89,7 @@ interface ContentService
     public function loadVersionInfoById( $contentId, $versionNo = null );
 
     /**
-     * loads content in a version for the given content info object.
+     * Loads content in a version for the given content info object.
      *
      * If no version number is given, the method returns the current version
      *
@@ -105,7 +105,7 @@ interface ContentService
     public function loadContentByContentInfo( ContentInfo $contentInfo, array $languages = null, $versionNo = null );
 
     /**
-     * loads content in the version given by version info.
+     * Loads content in the version given by version info.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
@@ -117,7 +117,7 @@ interface ContentService
     public function loadContentByVersionInfo( VersionInfo $versionInfo, array $languages = null );
 
     /**
-     * loads content in a version of the given content object.
+     * Loads content in a version of the given content object.
      *
      * If no version number is given, the method returns the current version
      *
@@ -133,7 +133,7 @@ interface ContentService
     public function loadContent( $contentId, array $languages = null, $versionNo = null );
 
     /**
-     * loads content in a version for the content object reference by the given remote id.
+     * Loads content in a version for the content object reference by the given remote id.
      *
      * If no version is given, the method returns the current version
      *
@@ -166,7 +166,7 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing or is set to an empty value
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct $contentCreateStruct
-     * @param array $locationCreateStructs an array of {@link \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct} for each location parent under which a location should be created for the content
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationCreateStructs an array of {@link \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct} for each location parent under which a location should be created for the content
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
@@ -188,7 +188,7 @@ interface ContentService
     public function updateContentMetadata( ContentInfo $contentInfo, ContentMetadataUpdateStruct $contentMetadataUpdateStruct );
 
     /**
-     * deletes a content object including all its versions and locations including their subtrees.
+     * Deletes a content object including all its versions and locations including their subtrees.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete the content (in one of the locations of the given content object)
      *
@@ -197,7 +197,7 @@ interface ContentService
     public function deleteContent( ContentInfo $contentInfo );
 
     /**
-     * creates a draft from a published or archived version.
+     * Creates a draft from a published or archived version.
      *
      * If no version is given, the current published version is used.
      * 4.x: The draft is created with the initialLanguage code of the source version or if not present with the main language.
@@ -214,7 +214,7 @@ interface ContentService
     public function createContentDraft( ContentInfo $contentInfo, VersionInfo $versionInfo = null, User $user = null );
 
     /**
-     * Load drafts for a user.
+     * Loads drafts for a user.
      *
      * If no user is given the drafts for the authenticated user a returned
      *
@@ -234,7 +234,7 @@ interface ContentService
      * @example Examples/translation_5x.php
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destiantioon version is not a draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destination version is not a draft
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
      *
@@ -298,7 +298,7 @@ interface ContentService
     public function loadVersions( ContentInfo $contentInfo );
 
     /**
-     * copies the content to a new location. If no version is given,
+     * Copies the content to a new location. If no version is given,
      * all versions are copied, otherwise only the given version.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to copy the content to the given location
@@ -312,13 +312,13 @@ interface ContentService
     public function copyContent( ContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, VersionInfo $versionInfo = null);
 
     /**
-     * load all outgoing relations for the given version
+     * Loads all outgoing relations for the given version
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read this version
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[] an array of {@link Relation}
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
     public function loadRelations( VersionInfo $versionInfo );
 
@@ -331,7 +331,7 @@ interface ContentService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[] an array of {@link Relation}
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
     public function loadReverseRelations( ContentInfo $contentInfo );
 
@@ -364,7 +364,7 @@ interface ContentService
     public function deleteRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent );
 
     /**
-     * add translation information to the content object
+     * Adds translation information to the content object
      *
      * @example Examples/translation_5x.php
      *
@@ -383,9 +383,10 @@ interface ContentService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param array $filter
+     *
      * @todo TBD - filter by sourceversion destination version and languages
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[] an array of {@link TranslationInfo}
+     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[]
      *
      * @since 5.0
      */

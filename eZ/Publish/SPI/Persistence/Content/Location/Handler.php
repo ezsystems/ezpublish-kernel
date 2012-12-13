@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content\Location;
-use eZ\Publish\SPI\Persistence\Content\Location,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
+
+use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 
 /**
  * The Location Handler interface defines operations on Location elements in the storage engine.
@@ -21,10 +22,34 @@ interface Handler
      * Loads the data for the location identified by $locationId.
      *
      * @param int $locationId
-     * @return \eZ\Publish\SPI\Persistence\Content\Location
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     public function load( $locationId );
+
+    /**
+     * Loads the data for the location identified by $remoteId.
+     *
+     * @param string $remoteId
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location
+     */
+    public function loadByRemoteId( $remoteId );
+
+    /**
+     * Loads all locations for $contentId, optionally limited to a sub tree
+     * identified by $rootLocationId
+     *
+     * @param int $contentId
+     * @param int $rootLocationId
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location[]
+     */
+    public function loadLocationsByContent( $contentId, $rootLocationId = null );
 
     /**
      * Copy location object identified by $sourceId, into destination identified by $destinationParentId.
@@ -36,8 +61,10 @@ interface Handler
      *
      * @param mixed $sourceId
      * @param mixed $destinationParentId
-     * @return Location the newly created Location.
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $sourceId or $destinationParentId are invalid
+     *
+     * @return Location the newly created Location.
      */
     public function copySubtree( $sourceId, $destinationParentId );
 
@@ -50,6 +77,7 @@ interface Handler
      *
      * @param mixed $sourceId
      * @param mixed $destinationParentId
+     *
      * @return boolean
      */
     public function move( $sourceId, $destinationParentId );
@@ -62,6 +90,7 @@ interface Handler
      *
      * @param int|string $locationId
      * @param int $timestamp
+     *
      * @return void
      */
     public function markSubtreeModified( $locationId, $timestamp = null );
@@ -74,7 +103,7 @@ interface Handler
     public function hide( $id );
 
     /**
-     * Sets a location to be unhidden, and self + children to visible unless a parent is hidding the tree.
+     * Sets a location to be unhidden, and self + children to visible unless a parent is hiding the tree.
      * If not make sure only children down to first hidden node is marked visible.
      *
      * @param mixed $id
@@ -89,6 +118,7 @@ interface Handler
      *
      * @param mixed $locationId1
      * @param mixed $locationId2
+     *
      * @return boolean
      */
     public function swap( $locationId1, $locationId2 );
@@ -98,6 +128,7 @@ interface Handler
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId
+     *
      * @return boolean
      */
     public function update( UpdateStruct $location, $locationId );
@@ -106,6 +137,7 @@ interface Handler
      * Creates a new location rooted at $location->parentId.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $location
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     public function create( CreateStruct $location );
@@ -120,6 +152,7 @@ interface Handler
      * new main Location.
      *
      * @param mixed $locationId
+     *
      * @return boolean
      */
     public function removeSubtree( $locationId );

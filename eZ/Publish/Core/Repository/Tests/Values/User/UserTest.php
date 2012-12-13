@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Values\User;
-use eZ\Publish\Core\Repository\Values\User\User,
-    PHPUnit_Framework_TestCase;
+
+use eZ\Publish\Core\Repository\Values\User\User;
+use PHPUnit_Framework_TestCase;
 
 /**
  *
@@ -17,21 +18,13 @@ use eZ\Publish\Core\Repository\Values\User\User,
 class UserTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \eZ\Publish\Core\Repository\Values\User\User::getIterator
      * @covers \eZ\Publish\Core\Repository\Values\User\User::getProperties
      */
     public function testObjectProperties()
     {
-        self::markTestIncomplete( "Design issues in User, awaiting changes regarding it extending Content" );
         $object = new User;
         $properties = $object->attributes();
         self::assertNotContains( 'internalFields', $properties, 'Internal property found ' );
-        self::assertContains( 'id', $properties, 'Property not found' );
-        self::assertContains( 'fields', $properties, 'Property not found' );
-        self::assertContains( 'relations', $properties, 'Property not found' );
-        self::assertContains( 'versionInfo', $properties, 'Property not found' );
-        self::assertContains( 'contentInfo', $properties, 'Property not found' );
-        self::assertContains( 'contentType', $properties, 'Property not found' );
         self::assertContains( 'login', $properties, 'Property not found' );
         self::assertContains( 'email', $properties, 'Property not found' );
         self::assertContains( 'passwordHash', $properties, 'Property not found' );

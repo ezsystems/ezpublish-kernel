@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Values;
+
 use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**

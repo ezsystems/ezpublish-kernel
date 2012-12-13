@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\User;
 
-use \eZ\Publish\API\Repository\Values\User\Limitation;
-use \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
+use eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct}
@@ -43,18 +43,19 @@ class PolicyCreateStructStub extends PolicyCreateStruct
      */
     public function getLimitations()
     {
-        // TODO: Implement getLimitations() method.
+        // @todo: Implement getLimitations() method.
     }
 
     /**
      * Adds a limitation with the given identifier and list of values
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
+     *
      * @return void
      */
     public function addLimitation( Limitation $limitation )
     {
-        // TODO: Implement addLimitation() method.
+        // @todo: Implement addLimitation() method.
     }
 
 }

@@ -12,9 +12,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
-use eZ\Publish\Core\REST\Server\Values\RestFieldDefinition;
-
-use eZ\Publish\API\Repository\Values;
+use eZ\Publish\Core\REST\Server\Values\RestFieldDefinition as ValuesRestFieldDefinition;
 
 /**
  * FieldDefinitionList value object visitor
@@ -37,7 +35,7 @@ class FieldDefinitionList extends RestContentTypeBase
 
         $generator->startObjectElement( 'FieldDefinitions', 'FieldDefinitionList' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'FieldDefinitionList' ) );
-        //@TODO Needs refactoring, disabling certain headers should not be done this way
+        //@todo Needs refactoring, disabling certain headers should not be done this way
         $visitor->setHeader( 'Accept-Patch', false );
 
         $generator->startAttribute(
@@ -55,7 +53,7 @@ class FieldDefinitionList extends RestContentTypeBase
         foreach ( $fieldDefinitionList->fieldDefinitions as $fieldDefinition )
         {
             $visitor->visitValueObject(
-                new RestFieldDefinition( $contentType, $fieldDefinition )
+                new ValuesRestFieldDefinition( $contentType, $fieldDefinition )
             );
         }
         $generator->endList( 'FieldDefinition' );

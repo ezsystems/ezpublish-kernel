@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
-use PHPUnit_Framework_TestCase,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\Router,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement as URIElementMatcher,
-    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+
+use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement as URIElementMatcher;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 
 class RouterURIElement2Test extends PHPUnit_Framework_TestCase
 {
@@ -32,7 +33,8 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
                     "first_sa" => "first_sa",
                     "first_siteaccess" => "first_sa",
                 ),
-            )
+            ),
+            array( 'first_sa', 'second_sa', 'third_sa', 'fourth_sa', 'fifth_sa', 'foo_baz', 'test_foo', 'first_sa_foo', 'second_sa_foo' )
         );
     }
 
@@ -54,6 +56,7 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
         $sa = $router->match( $request );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa );
         $this->assertSame( $siteAccess, $sa->name );
+        $router->setSiteAccess();
     }
 
     public function matchProvider()
@@ -108,16 +111,18 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $uri
-     * @param $expectedFixedUpURI
+     * @param int $level
+     * @param string $uri
+     * @param string $expectedFixedUpURI
+     *
      * @dataProvider analyseProvider
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::analyseURI
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::setRequest
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::getURIElements
      */
-    public function testAnalyseURI( $uri, $expectedFixedUpURI )
+    public function testAnalyseURI( $level, $uri, $expectedFixedUpURI )
     {
-        $matcher = new URIElementMatcher( 2 );
+        $matcher = new URIElementMatcher( $level );
         $matcher->setRequest(
             new SimplifiedRequest( array( 'pathinfo' => $uri ) )
         );
@@ -125,14 +130,16 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $fullUri
-     * @param $linkUri
+     * @param int $level
+     * @param string $fullUri
+     * @param string $linkUri
+     *
      * @dataProvider analyseProvider
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::analyseLink
      */
-    public function testAnalyseLink( $fullUri, $linkUri )
+    public function testAnalyseLink( $level, $fullUri, $linkUri )
     {
-        $matcher = new URIElementMatcher( 2 );
+        $matcher = new URIElementMatcher( $level );
         $matcher->setRequest(
             new SimplifiedRequest( array( 'pathinfo' => $fullUri ) )
         );
@@ -142,8 +149,18 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
     public function analyseProvider()
     {
         return array(
-            array( '/my/siteaccess/foo/bar', '/foo/bar' ),
-            array( '/vive/le/sucre/en-poudre', '/sucre/en-poudre' )
+            array( 2, '/my/siteaccess/foo/bar', '/foo/bar' ),
+            array( 2, '/vive/le/sucre/en-poudre', '/sucre/en-poudre' ),
+            // Issue https://jira.ez.no/browse/EZP-20125
+            array( 1, '/fre/content/edit/104/1/fre-FR', '/content/edit/104/1/fre-FR' ),
+            array( 1, '/fre/utf8-with-accent/é/fre/à/à/fre/é', '/utf8-with-accent/é/fre/à/à/fre/é' ),
+            array( 2, '/é/fre/utf8-with-accent/é/fre/à/à/fre/é', '/utf8-with-accent/é/fre/à/à/fre/é' ),
+            array( 2, '/prefix/fre/url/alias/prefix/fre/prefix/fre/url', '/url/alias/prefix/fre/prefix/fre/url' ),
+            // regression after the first fix of EZP-20125
+            array( 1, '/sitaccess', '' ),
+            array( 1, '/sitaccess/', '/' ),
+            array( 2, '/prefix/siteaccess', '' ),
+            array( 2, '/prefix/siteaccess/', '/' ),
         );
     }
 }

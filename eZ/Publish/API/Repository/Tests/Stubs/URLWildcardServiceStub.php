@@ -9,13 +9,13 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\URLWildcardService;
-use \eZ\Publish\API\Repository\Values\Content\URLWildcard;
-use \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
+use eZ\Publish\API\Repository\URLWildcardService;
+use eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
 /**
  * Url wold service stub implementation.
@@ -25,7 +25,7 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 class URLWildcardServiceStub implements URLWildcardService
 {
     /**
-     * @var integer
+     * @var int
      */
     private $id;
 
@@ -50,21 +50,20 @@ class URLWildcardServiceStub implements URLWildcardService
     }
 
     /**
-     * creates a new url wildcard
+     * Creates a new url wildcard
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the $sourceUrl pattern already exists
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create url wildcards
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if the number of "*" patterns in $sourceUrl and
-     *          the number of {\d} placeholders in $destinationUrl doesn't match or
-     *          if the placeholders aren't a valid number sequence({1}/{2}/{3}), starting with 1.
+     *         the numbers in {\d} placeholders in $destinationUrl does not match.
      *
      * @param string $sourceUrl
      * @param string $destinationUrl
-     * @param boolean $foreward
+     * @param boolean $forward
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
      */
-    public function create( $sourceUrl, $destinationUrl, $foreward = false )
+    public function create( $sourceUrl, $destinationUrl, $forward = false )
     {
         if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
         {
@@ -82,15 +81,10 @@ class URLWildcardServiceStub implements URLWildcardService
         preg_match_all( '(\\*)', $sourceUrl, $patterns );
         preg_match_all( '(\{(\d+)\})', $destinationUrl, $placeholders );
 
-        if ( count( $patterns[0] ) !== count( $placeholders[1] ) )
-        {
-            throw new ContentValidationExceptionStub( 'What error code should be used?' );
-        }
-
+        $patterns = array_map( 'intval', $patterns[0] );
         $placeholders = array_map( 'intval', $placeholders[1] );
-        sort( $placeholders );
 
-        if ( array_keys( array_fill( 1, count( $placeholders ), null ) ) !== $placeholders  )
+        if ( count( $placeholders ) > 0 && max( $placeholders ) > count( $patterns ) )
         {
             throw new ContentValidationExceptionStub( 'What error code should be used?' );
         }
@@ -100,7 +94,7 @@ class URLWildcardServiceStub implements URLWildcardService
                 'id' => ++$this->id,
                 'sourceUrl' => $sourceUrl,
                 'destinationUrl' => $destinationUrl,
-                'forward' => $foreward
+                'forward' => $forward
             )
         );
 
@@ -125,7 +119,7 @@ class URLWildcardServiceStub implements URLWildcardService
     }
 
     /**
-     * loads a url wild card
+     * Loads a url wild card
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
      *
@@ -143,7 +137,7 @@ class URLWildcardServiceStub implements URLWildcardService
     }
 
     /**
-     * loads all url wild card (paged)
+     * Loads all url wild card (paged)
      *
      * @param int $offset
      * @param int $limit
@@ -158,7 +152,7 @@ class URLWildcardServiceStub implements URLWildcardService
     /**
      * translates an url to an existing uri resource based on the
      * source/destination patterns of the url wildcard. If the resulting
-     * url is an alias it will be transltated to the system uri.
+     * url is an alias it will be translated to the system uri.
      *
      * This method runs also configured url translations and filter
      *
@@ -191,14 +185,7 @@ class URLWildcardServiceStub implements URLWildcardService
             }
         }
 
-        $alias = $this->repository->getURLAliasService()->lookUp( $url );
-
-        return new URLWildcardTranslationResult(
-            array(
-                'uri' => $alias->path,
-                'forward' => $alias->forward
-            )
-        );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
@@ -209,6 +196,7 @@ class URLWildcardServiceStub implements URLWildcardService
      *
      * @param string $url
      * @param \eZ\Publish\API\Repository\Values\Content\URLWildcard $wildcard
+     *
      * @return string|null
      */
     private function match( $url, URLWildcard $wildcard )
@@ -224,6 +212,7 @@ class URLWildcardServiceStub implements URLWildcardService
      * Compiles the given url pattern into a regular expression.
      *
      * @param string $sourceUrl
+     *
      * @return string
      */
     private function compile( $sourceUrl )
@@ -237,7 +226,9 @@ class URLWildcardServiceStub implements URLWildcardService
      *
      * @param string $destinationUrl
      * @param array $values
+     *
      * @throws \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub
+     *
      * @return string
      */
     private function substitute( $destinationUrl, array $values )

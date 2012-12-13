@@ -9,12 +9,12 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlAlias\Gateway;
 
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase as LanguageGateway;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase as LanguageGateway;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase.
@@ -48,7 +48,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the loadUrlAliasData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadUrlAliasData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::loadUrlAliasData
      */
     public function testLoadUrlaliasDataNonExistent()
     {
@@ -63,7 +63,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the loadUrlAliasData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadUrlAliasData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::loadUrlAliasData
      */
     public function testLoadUrlaliasData()
     {
@@ -80,20 +80,22 @@ class EzcDatabaseTest extends TestCase
                 "ezurlalias_ml0_alias_redirects" => "1",
                 "ezurlalias_ml0_is_original" => "1",
                 "ezurlalias_ml0_action" => "eznode:314",
+                "ezurlalias_ml0_action_type" => "eznode",
                 "ezurlalias_ml0_lang_mask" => "2",
                 "ezurlalias_ml0_text" => "jedan",
                 "ezurlalias_ml0_parent" => "0",
                 "ezurlalias_ml0_text_md5" => "6896260129051a949051c3847c34466f",
-                "ezurlalias_ml1_id" => "3",
-                "ezurlalias_ml1_link" => "3",
-                "ezurlalias_ml1_is_alias" => "0",
-                "ezurlalias_ml1_alias_redirects" => "1",
-                "ezurlalias_ml1_is_original" => "1",
-                "ezurlalias_ml1_action" => "eznode:315",
-                "ezurlalias_ml1_lang_mask" => "3",
-                "ezurlalias_ml1_text" => "dva",
-                "ezurlalias_ml1_parent" => "2",
-                "ezurlalias_ml1_text_md5" => "c67ed9a09ab136fae610b6a087d82e21",
+                "id" => "3",
+                "link" => "3",
+                "is_alias" => "0",
+                "alias_redirects" => "1",
+                "is_original" => "1",
+                "action" => "eznode:315",
+                "action_type" => "eznode",
+                "lang_mask" => "3",
+                "text" => "dva",
+                "parent" => "2",
+                "text_md5" => "c67ed9a09ab136fae610b6a087d82e21",
             ),
             $row
         );
@@ -104,7 +106,7 @@ class EzcDatabaseTest extends TestCase
      *
      * Test with fixture containing language mask with multiple languages.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadUrlAliasData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::loadUrlAliasData
      */
     public function testLoadUrlaliasDataMultipleLanguages()
     {
@@ -121,25 +123,30 @@ class EzcDatabaseTest extends TestCase
                 "ezurlalias_ml0_alias_redirects" => "1",
                 "ezurlalias_ml0_is_original" => "1",
                 "ezurlalias_ml0_action" => "eznode:314",
+                "ezurlalias_ml0_action_type" => "eznode",
                 "ezurlalias_ml0_lang_mask" => "3",
                 "ezurlalias_ml0_text" => "jedan",
                 "ezurlalias_ml0_parent" => "0",
                 "ezurlalias_ml0_text_md5" => "6896260129051a949051c3847c34466f",
-                "ezurlalias_ml1_id" => "3",
-                "ezurlalias_ml1_link" => "3",
-                "ezurlalias_ml1_is_alias" => "0",
-                "ezurlalias_ml1_alias_redirects" => "1",
-                "ezurlalias_ml1_is_original" => "1",
-                "ezurlalias_ml1_action" => "eznode:315",
-                "ezurlalias_ml1_lang_mask" => "6",
-                "ezurlalias_ml1_text" => "dva",
-                "ezurlalias_ml1_parent" => "2",
-                "ezurlalias_ml1_text_md5" => "c67ed9a09ab136fae610b6a087d82e21",
+                "id" => "3",
+                "link" => "3",
+                "is_alias" => "0",
+                "alias_redirects" => "1",
+                "is_original" => "1",
+                "action" => "eznode:315",
+                "action_type" => "eznode",
+                "lang_mask" => "6",
+                "text" => "dva",
+                "parent" => "2",
+                "text_md5" => "c67ed9a09ab136fae610b6a087d82e21",
             ),
             $row
         );
     }
 
+    /**
+     * @return array
+     */
     public function providerForTestLoadPathData()
     {
         return array(
@@ -147,7 +154,7 @@ class EzcDatabaseTest extends TestCase
                 2,
                 array(
                     array(
-                        array( "id" => "2", "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
+                        array( "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
                     ),
                 )
             ),
@@ -155,11 +162,11 @@ class EzcDatabaseTest extends TestCase
                 3,
                 array(
                     array(
-                        array( "id" => "2", "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
+                        array( "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
                     ),
                     array(
-                        array( "id" => "3", "parent" => "2", "lang_mask" => "5", "text" => "two" ),
-                        array( "id" => "3", "parent" => "2", "lang_mask" => "3", "text" => "dva" ),
+                        array( "parent" => "2", "lang_mask" => "5", "text" => "two" ),
+                        array( "parent" => "2", "lang_mask" => "3", "text" => "dva" ),
                     ),
                 )
             ),
@@ -167,16 +174,16 @@ class EzcDatabaseTest extends TestCase
                 4,
                 array(
                     array(
-                        array( "id" => "2", "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
+                        array( "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
                     ),
                     array(
-                        array( "id" => "3", "parent" => "2", "lang_mask" => "5", "text" => "two" ),
-                        array( "id" => "3", "parent" => "2", "lang_mask" => "3", "text" => "dva" ),
+                        array( "parent" => "2", "lang_mask" => "5", "text" => "two" ),
+                        array( "parent" => "2", "lang_mask" => "3", "text" => "dva" ),
                     ),
                     array(
-                        array( "id" => "4", "parent" => "3", "lang_mask" => "9", "text" => "drei" ),
-                        array( "id" => "4", "parent" => "3", "lang_mask" => "5", "text" => "three" ),
-                        array( "id" => "4", "parent" => "3", "lang_mask" => "3", "text" => "tri" ),
+                        array( "parent" => "3", "lang_mask" => "9", "text" => "drei" ),
+                        array( "parent" => "3", "lang_mask" => "5", "text" => "three" ),
+                        array( "parent" => "3", "lang_mask" => "3", "text" => "tri" ),
                     ),
                 )
             ),
@@ -186,7 +193,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the loadPathData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadPathData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::loadPathData
      * @dataProvider providerForTestLoadPathData
      */
     public function testLoadPathData( $id, $pathData )
@@ -202,6 +209,9 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function providerForTestLoadPathDataMultipleLanguages()
     {
         return array(
@@ -209,7 +219,7 @@ class EzcDatabaseTest extends TestCase
                 2,
                 array(
                     array(
-                        array( "id" => "2", "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
+                        array( "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
                     ),
                 )
             ),
@@ -217,10 +227,10 @@ class EzcDatabaseTest extends TestCase
                 3,
                 array(
                     array(
-                        array( "id" => "2", "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
+                        array( "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
                     ),
                     array(
-                        array( "id" => "3", "parent" => "2", "lang_mask" => "6", "text" => "dva" ),
+                        array( "parent" => "2", "lang_mask" => "6", "text" => "dva" ),
                     ),
                 )
             ),
@@ -228,14 +238,14 @@ class EzcDatabaseTest extends TestCase
                 4,
                 array(
                     array(
-                        array( "id" => "2", "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
+                        array( "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
                     ),
                     array(
-                        array( "id" => "3", "parent" => "2", "lang_mask" => "6", "text" => "dva" ),
+                        array( "parent" => "2", "lang_mask" => "6", "text" => "dva" ),
                     ),
                     array(
-                        array( "id" => "4", "parent" => "3", "lang_mask" => "4", "text" => "three" ),
-                        array( "id" => "4", "parent" => "3", "lang_mask" => "2", "text" => "tri" ),
+                        array( "parent" => "3", "lang_mask" => "4", "text" => "three" ),
+                        array( "parent" => "3", "lang_mask" => "2", "text" => "tri" ),
                     ),
                 )
             ),
@@ -245,7 +255,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the loadPathData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadPathData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::loadPathData
      * @dataProvider providerForTestLoadPathDataMultipleLanguages
      */
     public function testLoadPathDataMultipleLanguages( $id, $pathData )
@@ -261,7 +271,10 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
-    public function providerForTestDowngradeMarksAsHistory()
+    /**
+     * @return array
+     */
+    public function providerForTestCleanupAfterPublishHistorize()
     {
         return array(
             array(
@@ -280,28 +293,33 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * Test for the downgrade() method.
+     * Test for the cleanupAfterPublish() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::downgrade
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::markAsHistory
-     * @dataProvider providerForTestDowngradeMarksAsHistory
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::cleanupAfterPublish
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::historize
+     * @dataProvider providerForTestCleanupAfterPublishHistorize
      */
-    public function testDowngradeMarksAsHistory( $action, $languageId, $parentId, $textMD5 )
+    public function testCleanupAfterPublishHistorize( $action, $languageId, $parentId, $textMD5 )
     {
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_downgrade.php" );
         $gateway = $this->getGateway();
 
         $loadedRow = $gateway->loadRow( $parentId, $textMD5 );
 
-        $gateway->downgrade( $action, $languageId, $parentId, "jabberwocky" );
+        $gateway->cleanupAfterPublish( $action, $languageId, 42, $parentId, "jabberwocky" );
 
         $reloadedRow = $gateway->loadRow( $parentId, $textMD5 );
         $loadedRow["is_original"] = "0";
+        $loadedRow["link"] = 42;
+        $loadedRow["id"] = 6;
 
         self::assertEquals( $reloadedRow, $loadedRow );
     }
 
-    public function providerForTestDowngradeRemovesLanguage()
+    /**
+     * @return array
+     */
+    public function providerForTestCleanupAfterPublishRemovesLanguage()
     {
         return array(
             array(
@@ -320,20 +338,20 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * Test for the downgrade() method.
+     * Test for the cleanupAfterPublish() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::downgrade
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::removeLanguage
-     * @dataProvider providerForTestDowngradeRemovesLanguage
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::cleanupAfterPublish
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::removeTranslation
+     * @dataProvider providerForTestCleanupAfterPublishRemovesLanguage
      */
-    public function testDowngradeRemovesLanguage( $action, $languageId, $parentId, $textMD5 )
+    public function testCleanupAfterPublishRemovesLanguage( $action, $languageId, $parentId, $textMD5 )
     {
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_downgrade.php" );
         $gateway = $this->getGateway();
 
         $loadedRow = $gateway->loadRow( $parentId, $textMD5 );
 
-        $gateway->downgrade( $action, $languageId, $parentId, "jabberwocky" );
+        $gateway->cleanupAfterPublish( $action, $languageId, 42, $parentId, "jabberwocky" );
 
         $reloadedRow = $gateway->loadRow( $parentId, $textMD5 );
         $loadedRow["lang_mask"] = $loadedRow["lang_mask"] & ~$languageId;
@@ -342,110 +360,87 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * Test for the relink() method.
+     * Test for the reparent() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::relink
+     * @todo document
+     *
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::reparent
      */
-    public function testRelinkUpdatesLink()
+    public function testReparent()
     {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_relink.php" );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_simple.php" );
         $gateway = $this->getGateway();
 
-        $gateway->relink( "eznode:314", 2, 4, 0, "banderdash" );
-
-        self::assertEquals(
-            array(
-                "action" => "eznode:314",
-                "action_type" => "eznode",
-                "alias_redirects" => "1",
-                "id" => "2",
-                "is_alias" => "0",
-                "is_original" => "0",
-                "lang_mask" => "2",
-                "link" => "4",
-                "parent" => "0",
-                "text" => "history",
-                "text_md5" => "3cd15f8f2940aff879df34df4e5c2cd1"
-            ),
-            $gateway->loadRow( 0, "3cd15f8f2940aff879df34df4e5c2cd1" )
-        );
-    }
-
-    /**
-     * Test for the relink() method.
-     *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::relink
-     * @depends testRelinkUpdatesLink
-     */
-    public function testRelinkUpdatesWithNextId()
-    {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_relink.php" );
-        $gateway = $this->getGateway();
-
-        $gateway->relink( "eznode:315", 2, 3, 0, "banderdash" );
+        $gateway->reparent( 2, 42 );
 
         self::assertEquals(
             array(
                 "action" => "eznode:315",
                 "action_type" => "eznode",
                 "alias_redirects" => "1",
-                "id" => "5",
+                "id" => "3",
                 "is_alias" => "0",
-                "is_original" => "0",
-                "lang_mask" => "2",
+                "is_original" => "1",
+                "lang_mask" => "3",
                 "link" => "3",
-                "parent" => "0",
-                "text" => "reused-history",
-                "text_md5" => "51e775a611265b7b0cde62a413c91cdc"
+                "parent" => "42",
+                "text" => "dva",
+                "text_md5" => "c67ed9a09ab136fae610b6a087d82e21"
             ),
-            $gateway->loadRow( 0, "51e775a611265b7b0cde62a413c91cdc" )
+            $gateway->loadRow( 42, "c67ed9a09ab136fae610b6a087d82e21" )
         );
     }
 
     /**
-     * Test for the reparent() method.
+     * Test for the removeByAction() method.
      *
-     * @todo document
-     *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::reparent
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::removeByAction
      */
-    public function testReparent()
+    public function testRemoveByAction()
     {
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_reparent.php" );
         $gateway = $this->getGateway();
 
-        $gateway->reparent( "eznode:315", 2, 3, 2, "new-location" );
+        $gateway->removeByAction( "eznode:315" );
 
         self::assertEquals(
             array(
-                "action" => "eznode:316",
-                "action_type" => "eznode",
+                "action" => "nop:",
+                "action_type" => "nop",
                 "alias_redirects" => "1",
-                "id" => "5",
+                "id" => "3",
                 "is_alias" => "0",
-                "is_original" => "1",
-                "lang_mask" => "2",
-                "link" => "5",
-                "parent" => "3",
-                "text" => "to-be-reparented",
-                "text_md5" => "97d0d0299c217478587ca24fcc5bdb2e"
+                "is_original" => "0",
+                "lang_mask" => "1",
+                "link" => "3",
+                "parent" => "2",
+                "text" => "new-location",
+                "text_md5" => "1cdf796099b4596aed1c1c86c102526f"
             ),
-            $gateway->loadRow( 3, "97d0d0299c217478587ca24fcc5bdb2e" )
+            $gateway->loadRow( 2, "1cdf796099b4596aed1c1c86c102526f" )
+        );
+        self::assertEquals(
+            array(
+                "action" => "nop:",
+                "action_type" => "nop",
+                "alias_redirects" => "1",
+                "id" => "6",
+                "is_alias" => "0",
+                "is_original" => "0",
+                "lang_mask" => "1",
+                "link" => "6",
+                "parent" => "0",
+                "text" => "old-location-historized",
+                "text_md5" => "e504bfae32f8c3ecd2922bcd1b9a8b6a"
+            ),
+            $gateway->loadRow( 0, "e504bfae32f8c3ecd2922bcd1b9a8b6a" )
         );
     }
-
-
-
-
-
-
-
-
 
     /**
      * Test for the getNewId() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::getNextId
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::getNextId
      */
     public function testGetNextId()
     {

@@ -8,12 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\Core\FieldType\FieldSettings;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\Core\FieldType\FieldSettings;
 
 class Country implements Converter
 {
@@ -22,7 +23,6 @@ class Country implements Converter
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @static
      * @return Country
      */
     public static function create()
@@ -38,7 +38,7 @@ class Country implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataText = $value->data;
+        $storageFieldValue->dataText = empty( $value->data ) ? "" : implode( ",", $value->data );
         $storageFieldValue->sortKeyString = $value->sortKey;
     }
 
@@ -50,7 +50,8 @@ class Country implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = $value->dataText;
+        $fieldValue->data = empty( $value->dataText ) ? null : explode( ",", $value->dataText );
+        $fieldValue->sortKey = $value->sortKeyString;
     }
 
     /**
@@ -66,7 +67,9 @@ class Country implements Converter
             $storageDef->dataInt1 = (int)$fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"];
         }
 
-        $storageDef->dataText5 = $fieldDef->defaultValue->data;
+        $storageDef->dataText5 = $fieldDef->defaultValue->data === null
+            ? ""
+            : implode( ",", $fieldDef->defaultValue->data );
     }
 
     /**
@@ -83,7 +86,9 @@ class Country implements Converter
             )
         );
 
-        $fieldDef->defaultValue->data = !empty( $storageDef->dataText5 ) ? $storageDef->dataText5 : null;
+        $fieldDef->defaultValue->data = empty( $storageDef->dataText5 )
+            ? null
+            : explode( ",", $storageDef->dataText5 );
     }
 
     /**
@@ -99,5 +104,4 @@ class Country implements Converter
     {
         return "sort_key_string";
     }
-
 }

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
+
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
@@ -50,6 +51,7 @@ class RoleInput extends Base
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
      * @return \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
@@ -66,21 +68,6 @@ class RoleInput extends Base
         }
 
         $roleCreateStruct = $this->roleService->newRoleCreateStruct( $roleIdentifier );
-
-        if ( array_key_exists( 'mainLanguageCode', $data ) )
-        {
-            $roleCreateStruct->mainLanguageCode = $data['mainLanguageCode'];
-        }
-
-        if ( array_key_exists( 'names', $data ) && is_array( $data['names'] ) )
-        {
-            $roleCreateStruct->names = $this->parserTools->parseTranslatableList( $data['names'] );
-        }
-
-        if ( array_key_exists( 'descriptions', $data ) && is_array( $data['descriptions'] ) )
-        {
-            $roleCreateStruct->descriptions = $this->parserTools->parseTranslatableList( $data['descriptions'] );
-        }
 
         return $roleCreateStruct;
     }

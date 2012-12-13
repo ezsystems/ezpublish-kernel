@@ -23,12 +23,12 @@ class Relation extends Parser
     /**
      * Content Service
      *
-     * @var eZ\Publish\Core\REST\Input\ContentService
+     * @var \eZ\Publish\Core\REST\Input\ContentService
      */
     protected $contentService;
 
     /**
-     * @param eZ\Publish\Core\REST\Input\ContentService $contentService
+     * @param \eZ\Publish\Core\REST\Input\ContentService $contentService
      */
     public function __construct( ContentService $contentService )
     {
@@ -40,6 +40,7 @@ class Relation extends Parser
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
      * @return \eZ\Publish\API\Repository\Values\Relation\Version
      * @todo Error handling
      * @todo Should the related ContentInfo structs really be loaded here or do
@@ -57,7 +58,7 @@ class Relation extends Parser
                     $data['DestinationContent']['_href']
                 ),
                 'type' => $this->convertRelationType( $data['RelationType'] ),
-                // TODO: Handle SourceFieldDefinitionIdentifier
+                // @todo: Handle SourceFieldDefinitionIdentifier
             )
         );
     }
@@ -66,6 +67,7 @@ class Relation extends Parser
      * Converts the string representation of the relation type to its constant
      *
      * @param string $stringType
+     *
      * @return int
      */
     protected function convertRelationType( $stringType )

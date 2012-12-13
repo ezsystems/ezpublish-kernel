@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\User;
 
-
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\User\UserGroup}
  * class.
@@ -24,7 +23,7 @@ class UserGroup extends \eZ\Publish\API\Repository\Values\User\UserGroup
     protected $content;
 
     /**
-     * returns the VersionInfo for this version
+     * Returns the VersionInfo for this version
      *
      * @return VersionInfo
      */
@@ -34,7 +33,7 @@ class UserGroup extends \eZ\Publish\API\Repository\Values\User\UserGroup
     }
 
     /**
-     * returns a field value for the given value
+     * Returns a field value for the given value
      * $version->fields[$fieldDefId][$languageCode] is an equivalent call
      * if no language is given on a translatable field this method returns
      * the value of the initial language of the version if present, otherwise null.
@@ -51,19 +50,9 @@ class UserGroup extends \eZ\Publish\API\Repository\Values\User\UserGroup
     }
 
     /**
-     * returns the outgoing relations
-     *
-     * @return array an array of {@link Relation}
-     */
-    public function getRelations()
-    {
-        return $this->content->getRelations();
-    }
-
-    /**
      * This method returns the complete fields collection
      *
-     * @return array an array of {@link Field}
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[]
      */
     public function getFields()
     {
@@ -77,7 +66,7 @@ class UserGroup extends \eZ\Publish\API\Repository\Values\User\UserGroup
      *
      * @param string $languageCode
      *
-     * @return array an array of {@link Field} with field identifier as keys
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[] With field identifier as keys
      */
     public function getFieldsByLanguage( $languageCode = null )
     {
@@ -102,9 +91,6 @@ class UserGroup extends \eZ\Publish\API\Repository\Values\User\UserGroup
 
             case 'fields':
                 return $this->getFields();
-
-            case 'relations':
-                return $this->getRelations();
         }
 
         return parent::__get( $property );

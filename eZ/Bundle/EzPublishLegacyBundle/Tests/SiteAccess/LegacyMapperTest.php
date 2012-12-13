@@ -9,17 +9,17 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Tests\SiteAccess;
 
-use eZ\Publish\Core\MVC\Legacy\Tests\LegacyBasedTestCase,
-    eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess as LegacyMapper,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess,
-    eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent;
+use eZ\Publish\Core\MVC\Legacy\Tests\LegacyBasedTestCase;
+use eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess as LegacyMapper;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent;
 
 class LegacyMapperTest extends LegacyBasedTestCase
 {
     /**
      * @dataProvider siteAccessMatchProvider
      * @covers \eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess::__construct
-     * @covers \eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess::onSiteAccessMatch
+     * @covers \eZ\Bundle\EzPublishCoreBundle\EventListener\SiteAccessListener::onSiteAccessMatch
      */
     public function testOnSiteAccessMatch( $pathinfo, $semanticPathinfo, SiteAccess $siteaccess, $expectedAccess )
     {
@@ -205,7 +205,8 @@ class LegacyMapperTest extends LegacyBasedTestCase
     }
 
     /**
-     * @param $methodsToMock
+     * @param array $methodsToMock
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\HttpFoundation\Request
      */
     private function getRequestMock( array $methodsToMock = array() )
@@ -217,7 +218,8 @@ class LegacyMapperTest extends LegacyBasedTestCase
     }
 
     /**
-     * @param $methodsToMock
+     * @param array $methodsToMock
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\DependencyInjection\ContainerInterface
      */
     private function getContainerMock( array $methodsToMock = array() )

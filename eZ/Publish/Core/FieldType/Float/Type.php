@@ -8,11 +8,11 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Float;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\FieldType\ValidationError,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * Float field types
@@ -139,7 +139,7 @@ class Type extends FieldType
     }
 
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -162,7 +162,7 @@ class Type extends FieldType
     {
         $value = $this->acceptValue( $value );
 
-        return (string) $value->value;
+        return (string)$value->value;
     }
 
     /**
@@ -173,37 +173,30 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return null;
+        return new Value;
     }
 
     /**
-     * Potentially builds and checks the type and structure of the $inputValue.
+     * Returns if the given $value is considered empty by the field type
      *
-     * This method first inspects $inputValue, if it needs to convert it, e.g.
-     * into a dedicated value object. An example would be, that the field type
-     * uses values of MyCustomFieldTypeValue, but can also accept strings as
-     * the input. In that case, $inputValue first needs to be converted into a
-     * MyCustomFieldTypeClass instance.
+     * @param mixed $value
      *
-     * After that, the (possibly converted) value is checked for structural
-     * validity. Note that this does not include validation after the rules
-     * from validators, but only plausibility checks for the general data
-     * format.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
+     * @return boolean
+     */
+    public function isEmptyValue( $value )
+    {
+        return $value === null || $value->value === null;
+    }
+
+    /**
+     * Implements the core of {@see acceptValue()}.
      *
      * @param mixed $inputValue
      *
-     * @return mixed The potentially converted and structurally plausible value.
+     * @return \eZ\Publish\Core\FieldType\Float\Value The potentially converted and structurally plausible value.
      */
-    public function acceptValue( $inputValue )
+    protected function internalAcceptValue( $inputValue )
     {
-        if ( $inputValue === null )
-        {
-            return null;
-        }
-
         if ( is_int( $inputValue ) )
         {
             $inputValue = (float)$inputValue;
@@ -212,8 +205,7 @@ class Type extends FieldType
         {
             $inputValue = new Value( $inputValue );
         }
-
-        if ( !$inputValue instanceof Value )
+        else if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
                 '$inputValue',
@@ -238,6 +230,7 @@ class Type extends FieldType
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
      * @todo Sort seems to not be supported by this FieldType, is this handled correctly?
+     *
      * @return array
      */
     protected function getSortInfo( $value )
@@ -270,7 +263,7 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
-        if ( $value === null )
+        if ( $this->isEmptyValue( $value ) )
         {
             return null;
         }

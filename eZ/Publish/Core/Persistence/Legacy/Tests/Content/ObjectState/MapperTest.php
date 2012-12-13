@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState;
-use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper,
-    eZ\Publish\SPI\Persistence\Content\ObjectState,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\Group,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper;
+use eZ\Publish\SPI\Persistence\Content\ObjectState;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
 
 /**
  * Test case for Mapper
@@ -20,8 +21,9 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
 class MapperTest extends LanguageAwareTestCase
 {
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateFromData
+     *
+     * @return void
      */
     public function testCreateObjectStateFromData()
     {
@@ -39,8 +41,9 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateListFromData
+     *
+     * @return void
      */
     public function testCreateObjectStateListFromData()
     {
@@ -58,8 +61,9 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateGroupFromData
+     *
+     * @return void
      */
     public function testCreateObjectStateGroupFromData()
     {
@@ -77,8 +81,9 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateGroupListFromData
+     *
+     * @return void
      */
     public function testCreateObjectStateGroupListFromData()
     {
@@ -96,8 +101,9 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateFromInputStruct
+     *
+     * @return void
      */
     public function testCreateObjectStateFromInputStruct()
     {
@@ -115,8 +121,9 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateGroupFromInputStruct
+     *
+     * @return void
      */
     public function testCreateObjectStateGroupFromInputStruct()
     {

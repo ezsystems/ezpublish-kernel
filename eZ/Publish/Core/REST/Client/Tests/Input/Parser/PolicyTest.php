@@ -39,6 +39,7 @@ class PolicyTest extends BaseTest
      * Tests that the resulting policy is in fact an instance of Policy class
      *
      * @param \eZ\Publish\API\Repository\Values\User\Policy $result
+     *
      * @depends testParse
      */
     public function testResultIsPolicy( $result )
@@ -53,6 +54,7 @@ class PolicyTest extends BaseTest
      * Tests that the resulting policy contains the ID
      *
      * @param \eZ\Publish\API\Repository\Values\User\Policy $result
+     *
      * @depends testParse
      */
     public function testResultContainsId( $result )
@@ -67,6 +69,7 @@ class PolicyTest extends BaseTest
      * Tests that the resulting policy contains module
      *
      * @param \eZ\Publish\API\Repository\Values\User\Policy $result
+     *
      * @depends testParse
      */
     public function testResultContainsModule( $result )
@@ -81,6 +84,7 @@ class PolicyTest extends BaseTest
      * Tests that the resulting policy contains function
      *
      * @param \eZ\Publish\API\Repository\Values\User\Policy $result
+     *
      * @depends testParse
      */
     public function testResultContainsFunction( $result )

@@ -41,12 +41,10 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->any() )
             ->method( 'get' )
             ->with( 'templating' )
-            ->will( $this->returnValue( $this->templateEngineMock ) )
-        ;
+            ->will( $this->returnValue( $this->templateEngineMock ) );
     }
     /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\Controller::setTemplateEngine
-     * @covers \eZ\Publish\Core\MVC\Symfony\Controller::render
+     * @covers \eZ\Publish\Core\MVC\Symfony\Controller\Controller::render
      */
     public function testRender()
     {
@@ -57,8 +55,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'render' )
             ->with( $view, $params )
-            ->will( $this->returnValue( $tplResult ) )
-        ;
+            ->will( $this->returnValue( $tplResult ) );
         $response = $this->controller->render( $view, $params );
         self::assertInstanceOf( 'Symfony\\Component\\HttpFoundation\\Response', $response );
         self::assertSame( $tplResult, $response->getContent() );
@@ -74,8 +71,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'render' )
             ->with( $view, $params )
-            ->will( $this->returnValue( $tplResult ) )
-        ;
+            ->will( $this->returnValue( $tplResult ) );
 
         self::assertSame( $response, $this->controller->render( $view, $params, $response ) );
         self::assertSame( $tplResult, $response->getContent() );

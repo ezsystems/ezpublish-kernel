@@ -12,8 +12,6 @@ namespace eZ\Publish\Core\REST\Client\Tests;
 use eZ\Publish\Core\REST\Client\ObjectCache;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
-class TestValueObject extends ValueObject {}
-
 class ObjectCacheTest extends \PHPUnit_Framework_TestCase
 {
     public function testStoreRestore()

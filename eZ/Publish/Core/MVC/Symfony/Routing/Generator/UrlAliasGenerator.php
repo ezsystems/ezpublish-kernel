@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 
-use eZ\Publish\Core\MVC\Symfony\Routing\Generator,
-    Symfony\Component\Routing\RouterInterface;
+use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * URL generator for UrlAlias based links
@@ -49,16 +49,12 @@ class UrlAliasGenerator extends Generator
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param array $parameters
+     *
      * @return string
      */
     public function doGenerate( $location, array $parameters )
     {
-        $urlAliases = $this->getRepository()->getURLAliasService()->listLocationAliases(
-            $location,
-            false,
-            // TODO : Don't hardcode language. Build the Repository with configured prioritized languages instead.
-            'eng-GB'
-        );
+        $urlAliases = $this->getRepository()->getURLAliasService()->listLocationAliases( $location, false );
 
         $queryString = '';
         if ( !empty( $parameters ) )

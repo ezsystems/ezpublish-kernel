@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -29,7 +30,7 @@ class RoleListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $roleList = new RoleList( array() );
+        $roleList = new RoleList( array(), '/user/roles' );
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -48,6 +49,7 @@ class RoleListTest extends ValueObjectVisitorBaseTest
      * Test if result contains RoleList element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRoleListElement( $result )
@@ -66,6 +68,7 @@ class RoleListTest extends ValueObjectVisitorBaseTest
      * Test if result contains RoleList element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRoleListAttributes( $result )
@@ -94,10 +97,13 @@ class RoleListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $roleList = new RoleList( array(
-            new User\Role(),
-            new User\Role(),
-        ) );
+        $roleList = new RoleList(
+            array(
+                new User\Role(),
+                new User\Role(),
+            ),
+            '/user/roles'
+        );
 
         $this->getVisitorMock()->expects( $this->exactly( 2 ) )
             ->method( 'visitValueObject' )

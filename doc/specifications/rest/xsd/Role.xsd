@@ -13,12 +13,6 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="mainLanguageCode" type="xsd:string"
-        minOccurs="0" />
-      <xsd:element name="names" type="multiLanguageValuesType"
-        minOccurs="0" />
-      <xsd:element name="descriptions" type="multiLanguageValuesType"
-        minOccurs="0" />
     </xsd:all>
   </xsd:complexType>
 
@@ -33,12 +27,6 @@
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="mainLanguageCode" type="xsd:string"
-            minOccurs="0" />
-          <xsd:element name="names" type="multiLanguageValuesType"
-            minOccurs="0" />
-          <xsd:element name="descriptions" type="multiLanguageValuesType"
-            minOccurs="0" />
           <xsd:element name="Policies" type="ref" />
         </xsd:all>
       </xsd:extension>
@@ -82,7 +70,7 @@
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
-  
+
   <xsd:element name="RoleInput" type="vnd.ez.api.RoleInput"/>
   <xsd:element name="Role" type="vnd.ez.api.Role"/>
   <xsd:element name="RoleAssignInput" type="vnd.ez.api.RoleAssignInput"/>

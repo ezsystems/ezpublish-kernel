@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
-use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct,
-    eZ\Publish\API\Repository\Exceptions\NotFoundException;
+
+use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for ObjectStateHandler using in memory storage.
@@ -80,6 +81,32 @@ class ObjectStateHandlerTest extends HandlerTest
     public function testLoadGroupThrowsNotFoundException()
     {
         $this->handler->loadGroup( PHP_INT_MAX );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::loadGroupByIdentifier
+     */
+    public function testLoadGroupByIdentifier()
+    {
+        $group = $this->handler->loadGroupByIdentifier( 'ez_lock' );
+
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Group', $group );
+
+        $this->assertEquals( 2, $group->id );
+        $this->assertEquals( 'ez_lock', $group->identifier );
+        $this->assertEquals( 'eng-US', $group->defaultLanguage );
+        $this->assertEquals( array( 'eng-US' ), $group->languageCodes );
+        $this->assertEquals( array( 'eng-US' => 'Lock' ), $group->name );
+        $this->assertEquals( array( 'eng-US' => '' ), $group->description );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::loadGroupByIdentifier
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadGroupByIdentifierThrowsNotFoundException()
+    {
+        $this->handler->loadGroup( 'unknown' );
     }
 
     /**
@@ -162,7 +189,7 @@ class ObjectStateHandlerTest extends HandlerTest
             $this->handler->loadGroup( 2 );
             $this->fail( 'Successfully loaded deleted object state group' );
         }
-        catch( NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             // Do nothing
         }
@@ -172,7 +199,7 @@ class ObjectStateHandlerTest extends HandlerTest
             $this->handler->load( 1 );
             $this->fail( 'Successfully loaded one of the states from deleted object state group' );
         }
-        catch( NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             // Do nothing
         }
@@ -182,7 +209,7 @@ class ObjectStateHandlerTest extends HandlerTest
             $this->handler->load( 2 );
             $this->fail( 'Successfully loaded one of the states from deleted object state group' );
         }
-        catch( NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             // Do nothing
         }
@@ -226,7 +253,7 @@ class ObjectStateHandlerTest extends HandlerTest
         $this->assertEquals( array( 'eng-US' => 'Test description' ), $createdState->description );
         $this->assertEquals( 0, $createdState->priority );
 
-        $this->assertEquals( 7, $this->handler->getContentCount( $createdState->id ) );
+        $this->assertEquals( $this->handler->getContentCount( 1 ), $this->handler->getContentCount( $createdState->id ) );
     }
 
     /**
@@ -255,6 +282,34 @@ class ObjectStateHandlerTest extends HandlerTest
     public function testLoadThrowsNotFoundException()
     {
         $this->handler->load( PHP_INT_MAX );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::loadByIdentifier
+     */
+    public function testLoadByIdentifier()
+    {
+        $state = $this->handler->loadByIdentifier( 'not_locked', 2 );
+
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState', $state );
+
+        $this->assertEquals( 1, $state->id );
+        $this->assertEquals( 2, $state->groupId );
+        $this->assertEquals( 'not_locked', $state->identifier );
+        $this->assertEquals( 'eng-US', $state->defaultLanguage );
+        $this->assertEquals( array( 'eng-US' ), $state->languageCodes );
+        $this->assertEquals( array( 'eng-US' => 'Not locked' ), $state->name );
+        $this->assertEquals( array( 'eng-US' => '' ), $state->description );
+        $this->assertEquals( 0, $state->priority );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::loadByIdentifier
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadByIdentifierThrowsNotFoundException()
+    {
+        $this->handler->loadByIdentifier( 'unknown', 2 );
     }
 
     /**
@@ -295,20 +350,20 @@ class ObjectStateHandlerTest extends HandlerTest
      */
     public function testDelete()
     {
+        $expectedCount = $this->handler->getContentCount( 1 );
         $this->handler->delete( 1 );
-
         try
         {
             $this->handler->load( 1 );
             $this->fail( 'Successfully loaded deleted object state' );
         }
-        catch( NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             // Do nothing
         }
 
         $this->assertEquals( 0, $this->handler->getContentCount( 1 ) );
-        $this->assertEquals( 7, $this->handler->getContentCount( 2 ) );
+        $this->assertEquals( $expectedCount, $this->handler->getContentCount( 2 ) );
     }
 
     /**
@@ -321,24 +376,24 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::setObjectState
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::setContentState
      */
-    public function testSetObjectState()
+    public function testSetContentState()
     {
-        $returnValue = $this->handler->setObjectState( 14, 2, 2 );
+        $returnValue = $this->handler->setContentState( 14, 2, 2 );
         $this->assertEquals( true, $returnValue );
 
-        $newObjectState = $this->handler->getObjectState( 14, 2 );
+        $newObjectState = $this->handler->getContentState( 14, 2 );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState', $newObjectState );
         $this->assertEquals( 2, $newObjectState->id );
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::getObjectState
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::getContentState
      */
-    public function testGetObjectState()
+    public function testGetContentState()
     {
-        $objectState = $this->handler->getObjectState( 14, 2 );
+        $objectState = $this->handler->getContentState( 14, 2 );
 
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState', $objectState );
         $this->assertEquals( 1, $objectState->id );
@@ -351,8 +406,8 @@ class ObjectStateHandlerTest extends HandlerTest
     {
         $count = $this->handler->getContentCount( 1 );
 
-        // 7 is the count of objects in test fixtures
-        $this->assertEquals( 7, $count );
+        // 9 is the count of objects in test fixtures as of writing
+        $this->assertGreaterThanOrEqual( 9, $count );
     }
 
     /**

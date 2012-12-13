@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
+
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Client\ContentTypeService;
 
@@ -50,36 +51,40 @@ class FieldDefinition extends Parser
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
+     *
      * @todo Error handling
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
-        return new Values\ContentType\FieldDefinition( array(
-            'id' => $data['_href'],
-            'identifier' => $data['identifier'],
-            'fieldTypeIdentifier' => $data['fieldType'],
-            'fieldGroup' => $data['fieldGroup'],
-            'position' => (int)$data['position'],
-            'isTranslatable' => $this->parserTools->parseBooleanValue( $data['isTranslatable'] ),
-            'isRequired' => $this->parserTools->parseBooleanValue( $data['isRequired'] ),
-            'isInfoCollector' => $this->parserTools->parseBooleanValue( $data['isInfoCollector'] ),
-            'isSearchable' => $this->parserTools->parseBooleanValue( $data['isSearchable'] ),
-            'names' => $this->parserTools->parseTranslatableList( $data['names'] ),
-            'descriptions' => $this->parserTools->parseTranslatableList( $data['descriptions'] ),
+        return new Values\ContentType\FieldDefinition(
+            array(
+                'id' => $data['_href'],
+                'identifier' => $data['identifier'],
+                'fieldTypeIdentifier' => $data['fieldType'],
+                'fieldGroup' => $data['fieldGroup'],
+                'position' => (int)$data['position'],
+                'isTranslatable' => $this->parserTools->parseBooleanValue( $data['isTranslatable'] ),
+                'isRequired' => $this->parserTools->parseBooleanValue( $data['isRequired'] ),
+                'isInfoCollector' => $this->parserTools->parseBooleanValue( $data['isInfoCollector'] ),
+                'isSearchable' => $this->parserTools->parseBooleanValue( $data['isSearchable'] ),
+                'names' => $this->parserTools->parseTranslatableList( $data['names'] ),
+                'descriptions' => $this->parserTools->parseTranslatableList( $data['descriptions'] ),
 
-            'defaultValue' => $this->fieldTypeParser->parseValue(
-                $data['fieldType'],
-                $data['defaultValue']
-            ),
-            'fieldSettings' => $this->fieldTypeParser->parseFieldSettings(
-                $data['fieldType'],
-                $data['fieldSettings']
-            ),
-            'validators' => $this->fieldTypeParser->parseValidatorConfiguration(
-                $data['fieldType'],
-                $data['validatorConfiguration']
-            ),
-        ) );
+                'defaultValue' => $this->fieldTypeParser->parseValue(
+                    $data['fieldType'],
+                    $data['defaultValue']
+                ),
+                'fieldSettings' => $this->fieldTypeParser->parseFieldSettings(
+                    $data['fieldType'],
+                    $data['fieldSettings']
+                ),
+                'validators' => $this->fieldTypeParser->parseValidatorConfiguration(
+                    $data['fieldType'],
+                    $data['validatorConfiguration']
+                ),
+            )
+        );
     }
 }

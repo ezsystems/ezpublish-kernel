@@ -11,11 +11,9 @@ return array(
                 "contentInfo" => null,
                 "parentLocationId" => 1,
                 "pathString" => "/1/",
-                "modifiedSubLocationDate" => $this->createDateTime( 1343140542 ),
                 "depth" => 0,
                 "sortField" => 1,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         2 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -28,11 +26,9 @@ return array(
                 "contentInfo" => $this->getContentService()->loadContentInfo( 57 ),
                 "parentLocationId" => 1,
                 "pathString" => "/1/2/",
-                "modifiedSubLocationDate" => $this->createDateTime( 1343140541 ),
                 "depth" => 1,
                 "sortField" => 8,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         5 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -45,11 +41,9 @@ return array(
                 "contentInfo" => $this->getContentService()->loadContentInfo( 4 ),
                 "parentLocationId" => 1,
                 "pathString" => "/1/5/",
-                "modifiedSubLocationDate" => $this->createDateTime( 1343140542 ),
                 "depth" => 1,
                 "sortField" => 1,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         12 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -62,11 +56,9 @@ return array(
                 "contentInfo" => $this->getContentService()->loadContentInfo( 11 ),
                 "parentLocationId" => 5,
                 "pathString" => "/1/5/12/",
-                "modifiedSubLocationDate" => $this->createDateTime( 1343140542 ),
                 "depth" => 2,
                 "sortField" => 1,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         13 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -79,11 +71,9 @@ return array(
                 "contentInfo" => $this->getContentService()->loadContentInfo( 12 ),
                 "parentLocationId" => 5,
                 "pathString" => "/1/5/13/",
-                "modifiedSubLocationDate" => $this->createDateTime( 1343140540 ),
                 "depth" => 2,
                 "sortField" => 1,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         14 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -96,11 +86,9 @@ return array(
                 "contentInfo" => $this->getContentService()->loadContentInfo( 13 ),
                 "parentLocationId" => 5,
                 "pathString" => "/1/5/14/",
-                "modifiedSubLocationDate" => $this->createDateTime( 1081860719 ),
                 "depth" => 2,
                 "sortField" => 1,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         15 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -113,11 +101,9 @@ return array(
                 "contentInfo" => $this->getContentService()->loadContentInfo( 14 ),
                 "parentLocationId" => 13,
                 "pathString" => "/1/5/13/15/",
-                "modifiedSubLocationDate" => $this->createDateTime( 1343140540 ),
                 "depth" => 3,
                 "sortField" => 1,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         43 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -130,11 +116,9 @@ return array(
                 "contentInfo" => $this->getContentService()->loadContentInfo( 41 ),
                 "parentLocationId" => 1,
                 "pathString" => "/1/43/",
-                "modifiedSubLocationDate" => $this->createDateTime( 1081860720 ),
                 "depth" => 1,
                 "sortField" => 9,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         44 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -147,11 +131,9 @@ return array(
                 "contentInfo" => $this->getContentService()->loadContentInfo( 42 ),
                 "parentLocationId" => 5,
                 "pathString" => "/1/5/44/",
-                "modifiedSubLocationDate" => $this->createDateTime( 1081860719 ),
                 "depth" => 2,
                 "sortField" => 9,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         45 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -164,11 +146,9 @@ return array(
                 "contentInfo" => $this->getContentService()->loadContentInfo( 10 ),
                 "parentLocationId" => 44,
                 "pathString" => "/1/5/44/45/",
-                "modifiedSubLocationDate" => $this->createDateTime( 1081860719 ),
                 "depth" => 3,
                 "sortField" => 9,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         48 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -181,11 +161,9 @@ return array(
                 "contentInfo" => $this->getContentService()->loadContentInfo( 45 ),
                 "parentLocationId" => 1,
                 "pathString" => "/1/48/",
-                "modifiedSubLocationDate" => $this->createDateTime( 1184592117 ),
                 "depth" => 1,
                 "sortField" => 9,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         51 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -198,11 +176,9 @@ return array(
                 "contentInfo" => $this->getContentService()->loadContentInfo( 49 ),
                 "parentLocationId" => 43,
                 "pathString" => "/1/43/51/",
-                "modifiedSubLocationDate" => $this->createDateTime( 1081860720 ),
                 "depth" => 2,
                 "sortField" => 9,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         52 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -215,11 +191,9 @@ return array(
                 "contentInfo" => $this->getContentService()->loadContentInfo( 50 ),
                 "parentLocationId" => 43,
                 "pathString" => "/1/43/52/",
-                "modifiedSubLocationDate" => $this->createDateTime( 1081860720 ),
                 "depth" => 2,
                 "sortField" => 9,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         53 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -232,11 +206,9 @@ return array(
                 "contentInfo" => $this->getContentService()->loadContentInfo( 51 ),
                 "parentLocationId" => 43,
                 "pathString" => "/1/43/53/",
-                "modifiedSubLocationDate" => $this->createDateTime( 1081860720 ),
                 "depth" => 2,
                 "sortField" => 9,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         54 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -249,11 +221,9 @@ return array(
                 "contentInfo" => $this->getContentService()->loadContentInfo( 52 ),
                 "parentLocationId" => 48,
                 "pathString" => "/1/48/54/",
-                "modifiedSubLocationDate" => $this->createDateTime( 1184592117 ),
                 "depth" => 2,
                 "sortField" => 1,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         56 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -266,11 +236,9 @@ return array(
                 "contentInfo" => $this->getContentService()->loadContentInfo( 54 ),
                 "parentLocationId" => 58,
                 "pathString" => "/1/58/56/",
-                "modifiedSubLocationDate" => $this->createDateTime( 1343140541 ),
                 "depth" => 2,
                 "sortField" => 1,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         58 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -283,11 +251,9 @@ return array(
                 "contentInfo" => $this->getContentService()->loadContentInfo( 56 ),
                 "parentLocationId" => 1,
                 "pathString" => "/1/58/",
-                "modifiedSubLocationDate" => $this->createDateTime( 1343140541 ),
                 "depth" => 1,
                 "sortField" => 2,
                 "sortOrder" => 0,
-                "childCount" => null,
             )
         ),
         60 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -300,11 +266,9 @@ return array(
                 "contentInfo" => $this->getContentService()->loadContentInfo( 58 ),
                 "parentLocationId" => 2,
                 "pathString" => "/1/2/60/",
-                "modifiedSubLocationDate" => $this->createDateTime( 1343140539 ),
                 "depth" => 2,
                 "sortField" => 8,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         61 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -317,11 +281,9 @@ return array(
                 "contentInfo" => $this->getContentService()->loadContentInfo( 59 ),
                 "parentLocationId" => 5,
                 "pathString" => "/1/5/61/",
-                "modifiedSubLocationDate" => $this->createDateTime( 1343140541 ),
                 "depth" => 2,
                 "sortField" => 1,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
     ),

@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\Keyword\Value as KeywordValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+
+use eZ\Publish\Core\FieldType\Keyword\Value as KeywordValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type
@@ -20,7 +21,7 @@ use eZ\Publish\Core\FieldType\Keyword\Value as KeywordValue,
 class KeywordIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -89,7 +90,7 @@ class KeywordIntegrationTest extends BaseIntegrationTest
     public function getInvalidValidatorConfiguration()
     {
         return array(
-            'unkknown' => array( 'value' => 23 )
+            'unknown' => array( 'value' => 23 )
         );
     }
 
@@ -110,6 +111,7 @@ class KeywordIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     public function assertFieldDataLoadedCorrect( Field $field)
@@ -119,12 +121,9 @@ class KeywordIntegrationTest extends BaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
-            'values' => array( 'foo', 'bar', 'sindelfingen' ),
-        );
-        $this->assertPropertiesCorrect(
-            $expectedData,
-            $field->value
+        $this->assertEquals(
+            array( 'foo' => true, 'bar' => true, 'sindelfingen' => true ),
+            array_fill_keys( $field->value->values, true )
         );
     }
 
@@ -187,12 +186,9 @@ class KeywordIntegrationTest extends BaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
-            'values' => array( 'bielefeld' ),
-        );
-        $this->assertPropertiesCorrect(
-            $expectedData,
-            $field->value
+        $this->assertEquals(
+            array( 'bielefeld' => true ),
+            array_fill_keys( $field->value->values, true )
         );
     }
 
@@ -237,12 +233,9 @@ class KeywordIntegrationTest extends BaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
-            'values' => array( 'foo', 'bar', 'sindelfingen' ),
-        );
-        $this->assertPropertiesCorrect(
-            $expectedData,
-            $field->value
+        $this->assertEquals(
+            array( 'foo' => true, 'bar' => true, 'sindelfingen' => true ),
+            array_fill_keys( $field->value->values, true )
         );
     }
 
@@ -292,5 +285,25 @@ class KeywordIntegrationTest extends BaseIntegrationTest
             ),
         );
     }
-}
 
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array( new KeywordValue ),
+            array( new KeywordValue( null ) ),
+            array( new KeywordValue( array() ) ),
+        );
+    }
+
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+            array(
+                new KeywordValue( array( "0" ) )
+            ),
+        );
+    }
+}

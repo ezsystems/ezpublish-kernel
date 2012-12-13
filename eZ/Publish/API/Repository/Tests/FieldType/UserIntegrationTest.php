@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\User\Value as UserValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+
+use eZ\Publish\Core\FieldType\User\Value as UserValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type
@@ -27,7 +28,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     protected $customFieldIdentifier = "user_account";
 
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -96,7 +97,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     public function getInvalidValidatorConfiguration()
     {
         return array(
-            'unkknown' => array( 'value' => 23 )
+            'unknown' => array( 'value' => 23 )
         );
     }
 
@@ -107,7 +108,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getValidCreationFieldData()
     {
-        return new UserValue();
+        return new UserValue( array( "login" => "hans" ) );
     }
 
     /**
@@ -117,6 +118,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     public function assertFieldDataLoadedCorrect( Field $field )
@@ -181,13 +183,15 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getValidUpdateFieldData()
     {
-        return new UserValue( array(
-            'login'            => 'change', // Change is intended to not get through
-            'email'            => 'change', // Change is intended to not get through
-            'passwordHash'     => 'change', // Change is intended to not get through
-            'passwordHashType' => 'change', // Change is intended to not get through
-            'enabled'        => 'change', // Change is intended to not get through
-        ) );
+        return new UserValue(
+            array(
+                'login'            => 'change', // Change is intended to not get through
+                'email'            => 'change', // Change is intended to not get through
+                'passwordHash'     => 'change', // Change is intended to not get through
+                'passwordHashType' => 'change', // Change is intended to not get through
+                'enabled'        => 'change', // Change is intended to not get through
+            )
+        );
     }
 
     /**
@@ -231,7 +235,7 @@ class UserIntegrationTest extends BaseIntegrationTest
                 null,
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentValidationException'
             ),
-            // TODO: Define more failure cases ...
+            // @todo: Define more failure cases ...
         );
     }
 
@@ -265,7 +269,6 @@ class UserIntegrationTest extends BaseIntegrationTest
             $expectedData,
             $field->value
         );
-        return ;
     }
 
     /**
@@ -341,6 +344,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      * Overwrite normal content creation
      *
      * @param mixed $fieldData
+     *
      * @return void
      */
     protected function createContent( $fieldData, $contentType = null )
@@ -371,5 +375,21 @@ class UserIntegrationTest extends BaseIntegrationTest
         $contentService = $repository->getContentService();
         return $contentService->createContentDraft( $user->content->contentInfo, $user->content->versionInfo );
     }
-}
 
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array( new UserValue ),
+            array( new UserValue( array() ) ),
+        );
+    }
+
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+        );
+    }
+}

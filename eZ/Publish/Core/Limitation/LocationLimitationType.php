@@ -13,8 +13,10 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation as APILocationLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
@@ -35,11 +37,11 @@ class LocationLimitationType implements SPILimitationTypeInterface
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
      * @param \eZ\Publish\API\Repository\Repository $repository
      *
-     * @return bool
+     * @return boolean
      */
     public function acceptValue( APILimitationValue $limitationValue, Repository $repository )
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( 'acceptValue' );
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
     }
 
     /**
@@ -71,43 +73,72 @@ class LocationLimitationType implements SPILimitationTypeInterface
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
      * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
      *
-     * @return bool
+     * @return boolean
      */
     public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null )
     {
         if ( !$value instanceof APILocationLimitation )
+        {
             throw new InvalidArgumentException( '$value', 'Must be of type: APILocationLimitation' );
+        }
 
         if ( $object instanceof Content )
+        {
             $object = $object->getVersionInfo()->getContentInfo();
+        }
         else if ( $object instanceof VersionInfo )
+        {
             $object = $object->getContentInfo();
-        else if ( !$object instanceof ContentInfo )
-            throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
+        }
+        else if ( $object instanceof ContentCreateStruct )
+        {
+            // If target is null return false as user does not have access to content w/o location with this limitation
+            if ( $target === null )
+                return false;
 
-        if ( $target !== null  && !$target instanceof Location )
+            if ( !$target instanceof LocationCreateStruct )
+            {
+                throw new InvalidArgumentException(
+                    '$object',
+                    'Cannot be ContentCreateStruct unless $target is LocationCreateStruct'
+                );
+            }
+        }
+        else if ( !$object instanceof ContentInfo )
+        {
+            throw new InvalidArgumentException(
+                '$object',
+                'Must be of type: ContentCreateStruct, Content, VersionInfo or ContentInfo'
+            );
+        }
+
+        if ( $target !== null && !$target instanceof Location && !$target instanceof LocationCreateStruct )
+        {
             throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
+        }
 
         if ( empty( $value->limitationValues ) )
+        {
             return false;
+        }
 
         /**
          * Use $target if provided, optionally used to check the specific location instead of all
          * e.g.: 'remove' in the context of removal of a specific location, or in case of 'create'
-         *
-         * @var \eZ\Publish\API\Repository\Values\Content\Location $target
          */
         if ( $target instanceof Location )
         {
-            if ( in_array( $target->id, $value->limitationValues ) )
-                return true;
-            return false;
+            return in_array( $target->id, $value->limitationValues );
+        }
+        if ( $target instanceof LocationCreateStruct )
+        {
+            return in_array( $target->parentLocationId, $value->limitationValues );
         }
 
         /**
          * Check all locations if no placement was provided
          *
-         * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $object
+         * @var $object ContentInfo
          */
         $locations = $repository->getLocationService()->loadLocations( $object );
         foreach ( $locations as $location )
@@ -119,7 +150,7 @@ class LocationLimitationType implements SPILimitationTypeInterface
     }
 
     /**
-     * Return Criterion for use in find() query
+     * Returns Criterion for use in find() query
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -139,7 +170,7 @@ class LocationLimitationType implements SPILimitationTypeInterface
     }
 
     /**
-     * Return info on valid $limitationValues
+     * Returns info on valid $limitationValues
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      *

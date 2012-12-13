@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\User;
 
-use \eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\User;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\User\User}
@@ -25,7 +25,7 @@ class UserStub extends User
     protected $content;
 
     /**
-     * returns the VersionInfo for this version
+     * Returns the VersionInfo for this version
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
@@ -35,7 +35,7 @@ class UserStub extends User
     }
 
     /**
-     * returns a field value for the given value
+     * Returns a field value for the given value
      * $version->fields[$fieldDefId][$languageCode] is an equivalent call
      * if no language is given on a translatable field this method returns
      * the value of the initial language of the version if present, otherwise null.
@@ -52,19 +52,9 @@ class UserStub extends User
     }
 
     /**
-     * returns the outgoing relations
-     *
-     * @return array an array of {@link Relation}
-     */
-    public function getRelations()
-    {
-        return $this->content->getRelations();
-    }
-
-    /**
      * This method returns the complete fields collection
      *
-     * @return array an array of {@link Field}
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[]
      */
     public function getFields()
     {
@@ -78,7 +68,7 @@ class UserStub extends User
      *
      * @param string $languageCode
      *
-     * @return array an array of {@link Field} with field identifier as keys
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[] With field identifier as keys
      */
     public function getFieldsByLanguage( $languageCode = null )
     {
@@ -103,9 +93,6 @@ class UserStub extends User
 
             case 'fields':
                 return $this->getFields();
-
-            case 'relations':
-                return $this->getRelations();
         }
 
         return parent::__get( $property );

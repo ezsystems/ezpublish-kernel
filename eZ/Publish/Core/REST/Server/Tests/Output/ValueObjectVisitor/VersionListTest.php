@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -49,6 +50,7 @@ class VersionListTest extends ValueObjectVisitorBaseTest
      * Test if result contains VersionList element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsVersionListElement( $result )
@@ -67,6 +69,7 @@ class VersionListTest extends ValueObjectVisitorBaseTest
      * Test if result contains VersionList element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsVersionListAttributes( $result )
@@ -103,7 +106,8 @@ class VersionListTest extends ValueObjectVisitorBaseTest
                             array(
                                 'id' => 42
                             )
-                        )
+                        ),
+                        'versionNo' => 1
                     )
                 ),
                 new VersionInfo(
@@ -112,7 +116,8 @@ class VersionListTest extends ValueObjectVisitorBaseTest
                             array(
                                 'id' => 42
                             )
-                        )
+                        ),
+                        'versionNo' => 2
                     )
                 )
             ),
@@ -121,7 +126,7 @@ class VersionListTest extends ValueObjectVisitorBaseTest
 
         $this->getVisitorMock()->expects( $this->exactly( 2 ) )
             ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Server\\Values\\Version' ) );
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo' ) );
 
         $visitor->visit(
             $this->getVisitorMock(),

@@ -18,10 +18,11 @@ interface ObjectConverter
     /**
      * Converts $object to make it compatible with eZTemplate API.
      *
-     * @abstract
-     * @param $object
-     * @return mixed|\eZ\Publish\Core\MVC\Legacy\Templating\LegacyCompatible
+     * @param object $object
+     *
      * @throws \InvalidArgumentException If $object is actually not an object
+     *
+     * @return mixed|\eZ\Publish\Core\MVC\Legacy\Templating\LegacyCompatible
      */
     public function convert( $object );
 }

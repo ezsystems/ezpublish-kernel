@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Media\Type as MediaType,
-    eZ\Publish\Core\FieldType\Media\Value as MediaValue;
+
+use eZ\Publish\Core\FieldType\Media\Type as MediaType;
+use eZ\Publish\Core\FieldType\Media\Value as MediaValue;
 
 /**
  * @group fieldType
@@ -34,6 +35,11 @@ class MediaTest extends BinaryBaseTest
             $this->getFileServiceMock(),
             $this->getMimeTypeDetectorMock()
         );
+    }
+
+    protected function getEmptyValueExpectation()
+    {
+        return new MediaValue;
     }
 
     protected function getSettingsSchemaExpectation()
@@ -87,154 +93,172 @@ class MediaTest extends BinaryBaseTest
         return array(
             array(
                 null,
-                null
+                new MediaValue
             ),
             array(
                 __FILE__,
-                new MediaValue( array(
-                    'path' => __FILE__,
-                    'fileName' => basename( __FILE__ ),
-                    'fileSize' => filesize( __FILE__ ),
-                    'mimeType' => 'text/plain',
-                    'hasController' => false,
-                    'autoplay' => false,
-                    'loop' => false,
-                    'width' => 0,
-                    'height' => 0,
-                ) )
+                new MediaValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
+                        'mimeType' => 'text/plain',
+                        'hasController' => false,
+                        'autoplay' => false,
+                        'loop' => false,
+                        'width' => 0,
+                        'height' => 0,
+                    )
+                )
             ),
             array(
                 array( 'path' => __FILE__ ),
-                new MediaValue( array(
-                    'path' => __FILE__,
-                    'fileName' => basename( __FILE__ ),
-                    'fileSize' => filesize( __FILE__ ),
-                    'mimeType' => 'text/plain',
-                    'hasController' => false,
-                    'autoplay' => false,
-                    'loop' => false,
-                    'width' => 0,
-                    'height' => 0,
-                ) )
+                new MediaValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
+                        'mimeType' => 'text/plain',
+                        'hasController' => false,
+                        'autoplay' => false,
+                        'loop' => false,
+                        'width' => 0,
+                        'height' => 0,
+                    )
+                )
             ),
             array(
                 array(
                     'path' => __FILE__,
                     'fileSize' => 23,
                 ),
-                new MediaValue( array(
-                    'path' => __FILE__,
-                    'fileName' => basename( __FILE__ ),
-                    'fileSize' => 23,
-                    'mimeType' => 'text/plain',
-                    'hasController' => false,
-                    'autoplay' => false,
-                    'loop' => false,
-                    'width' => 0,
-                    'height' => 0,
-                ) )
+                new MediaValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => basename( __FILE__ ),
+                        'fileSize' => 23,
+                        'mimeType' => 'text/plain',
+                        'hasController' => false,
+                        'autoplay' => false,
+                        'loop' => false,
+                        'width' => 0,
+                        'height' => 0,
+                    )
+                )
             ),
             array(
                 array(
                     'path' => __FILE__,
                     'mimeType' => 'application/text+php',
                 ),
-                new MediaValue( array(
-                    'path' => __FILE__,
-                    'fileName' => basename( __FILE__ ),
-                    'fileSize' => filesize( __FILE__ ),
-                    'mimeType' => 'application/text+php',
-                    'hasController' => false,
-                    'autoplay' => false,
-                    'loop' => false,
-                    'width' => 0,
-                    'height' => 0,
-                ) )
+                new MediaValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
+                        'mimeType' => 'application/text+php',
+                        'hasController' => false,
+                        'autoplay' => false,
+                        'loop' => false,
+                        'width' => 0,
+                        'height' => 0,
+                    )
+                )
             ),
             array(
                 array(
                     'path' => __FILE__,
                     'hasController' => true,
                 ),
-                new MediaValue( array(
-                    'path' => __FILE__,
-                    'fileName' => basename( __FILE__ ),
-                    'fileSize' => filesize( __FILE__ ),
-                    'mimeType' => 'text/plain',
-                    'hasController' => true,
-                    'autoplay' => false,
-                    'loop' => false,
-                    'width' => 0,
-                    'height' => 0,
-                ) )
+                new MediaValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
+                        'mimeType' => 'text/plain',
+                        'hasController' => true,
+                        'autoplay' => false,
+                        'loop' => false,
+                        'width' => 0,
+                        'height' => 0,
+                    )
+                )
             ),
             array(
                 array(
                     'path' => __FILE__,
                     'autoplay' => true,
                 ),
-                new MediaValue( array(
-                    'path' => __FILE__,
-                    'fileName' => basename( __FILE__ ),
-                    'fileSize' => filesize( __FILE__ ),
-                    'mimeType' => 'text/plain',
-                    'hasController' => false,
-                    'autoplay' => true,
-                    'loop' => false,
-                    'width' => 0,
-                    'height' => 0,
-                ) )
+                new MediaValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
+                        'mimeType' => 'text/plain',
+                        'hasController' => false,
+                        'autoplay' => true,
+                        'loop' => false,
+                        'width' => 0,
+                        'height' => 0,
+                    )
+                )
             ),
             array(
                 array(
                     'path' => __FILE__,
                     'loop' => true,
                 ),
-                new MediaValue( array(
-                    'path' => __FILE__,
-                    'fileName' => basename( __FILE__ ),
-                    'fileSize' => filesize( __FILE__ ),
-                    'mimeType' => 'text/plain',
-                    'hasController' => false,
-                    'autoplay' => false,
-                    'loop' => true,
-                    'width' => 0,
-                    'height' => 0,
-                ) )
+                new MediaValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
+                        'mimeType' => 'text/plain',
+                        'hasController' => false,
+                        'autoplay' => false,
+                        'loop' => true,
+                        'width' => 0,
+                        'height' => 0,
+                    )
+                )
             ),
             array(
                 array(
                     'path' => __FILE__,
                     'width' => 23,
                 ),
-                new MediaValue( array(
-                    'path' => __FILE__,
-                    'fileName' => basename( __FILE__ ),
-                    'fileSize' => filesize( __FILE__ ),
-                    'mimeType' => 'text/plain',
-                    'hasController' => false,
-                    'autoplay' => false,
-                    'loop' => false,
-                    'width' => 23,
-                    'height' => 0,
-                ) )
+                new MediaValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
+                        'mimeType' => 'text/plain',
+                        'hasController' => false,
+                        'autoplay' => false,
+                        'loop' => false,
+                        'width' => 23,
+                        'height' => 0,
+                    )
+                )
             ),
             array(
                 array(
                     'path' => __FILE__,
                     'height' => 42,
                 ),
-                new MediaValue( array(
-                    'path' => __FILE__,
-                    'fileName' => basename( __FILE__ ),
-                    'fileSize' => filesize( __FILE__ ),
-                    'mimeType' => 'text/plain',
-                    'hasController' => false,
-                    'autoplay' => false,
-                    'loop' => false,
-                    'width' => 0,
-                    'height' => 42,
-                ) )
+                new MediaValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
+                        'mimeType' => 'text/plain',
+                        'hasController' => false,
+                        'autoplay' => false,
+                        'loop' => false,
+                        'width' => 0,
+                        'height' => 42,
+                    )
+                )
             ),
         );
     }
@@ -253,13 +277,15 @@ class MediaTest extends BinaryBaseTest
      *          null
      *      ),
      *      array(
-     *          new BinaryFileValue( array(
-     *              'path' => 'some/file/here',
-     *              'fileName' => 'sindelfingen.jpg',
-     *              'fileSize' => 2342,
-     *              'downloadCount' => 0,
-     *              'mimeType' => 'image/jpeg',
-     *          ) ),
+     *          new BinaryFileValue(
+     *                  array(
+     *                  'path' => 'some/file/here',
+     *                  'fileName' => 'sindelfingen.jpg',
+     *                  'fileSize' => 2342,
+     *                  'downloadCount' => 0,
+     *                  'mimeType' => 'image/jpeg',
+     *              )
+     *          ),
      *          array(
      *              'path' => 'some/file/here',
      *              'fileName' => 'sindelfingen.jpg',
@@ -282,17 +308,19 @@ class MediaTest extends BinaryBaseTest
                 null
             ),
             array(
-                new MediaValue( array(
-                    'path' => __FILE__,
-                    'fileName' => basename( __FILE__ ),
-                    'fileSize' => filesize( __FILE__ ),
-                    'mimeType' => 'text/plain',
-                    'hasController' => false,
-                    'autoplay' => false,
-                    'loop' => true,
-                    'width' => 0,
-                    'height' => 0,
-                ) ),
+                new MediaValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
+                        'mimeType' => 'text/plain',
+                        'hasController' => false,
+                        'autoplay' => false,
+                        'loop' => true,
+                        'width' => 0,
+                        'height' => 0,
+                    )
+                ),
                 array(
                     'path' => __FILE__,
                     'fileName' => basename( __FILE__ ),
@@ -329,13 +357,15 @@ class MediaTest extends BinaryBaseTest
      *              'downloadCount' => 0,
      *              'mimeType' => 'image/jpeg',
      *          ),
-     *          new BinaryFileValue( array(
-     *              'path' => 'some/file/here',
-     *              'fileName' => 'sindelfingen.jpg',
-     *              'fileSize' => 2342,
-     *              'downloadCount' => 0,
-     *              'mimeType' => 'image/jpeg',
-     *          ) )
+     *          new BinaryFileValue(
+     *                  array(
+     *                  'path' => 'some/file/here',
+     *                  'fileName' => 'sindelfingen.jpg',
+     *                  'fileSize' => 2342,
+     *                  'downloadCount' => 0,
+     *                  'mimeType' => 'image/jpeg',
+     *              )
+     *          )
      *      ),
      *      // ...
      *  );
@@ -362,19 +392,21 @@ class MediaTest extends BinaryBaseTest
                     'width' => 0,
                     'height' => 0,
                 ),
-                new MediaValue( array(
-                    'path' => __FILE__,
-                    'fileName' => basename( __FILE__ ),
-                    'fileSize' => filesize( __FILE__ ),
-                    'mimeType' => 'text/plain',
-                    'hasController' => false,
-                    'autoplay' => false,
-                    'loop' => true,
-                    'width' => 0,
-                    'height' => 0,
-                ) ),
+                new MediaValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
+                        'mimeType' => 'text/plain',
+                        'hasController' => false,
+                        'autoplay' => false,
+                        'loop' => true,
+                        'width' => 0,
+                        'height' => 0,
+                    )
+                ),
             ),
-            // TODO: Test for REST upload hash
+            // @todo: Test for REST upload hash
         );
     }
 

@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\Matcher\Id;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ParentLocation as ParentLocationIdMatcher,
-    eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo,
-    eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest,
-    eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ParentLocation as ParentLocationIdMatcher;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
+use eZ\Publish\API\Repository\Repository;
 
 class ParentLocationTest extends BaseTest
 {
@@ -33,9 +33,9 @@ class ParentLocationTest extends BaseTest
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ParentLocation::matchLocation
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
      *
-     * @param $matchingConfig
+     * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param $expectedResult
+     * @param boolean $expectedResult
      */
     public function testMatchLocation( $matchingConfig, Location $location, $expectedResult )
     {
@@ -75,9 +75,10 @@ class ParentLocationTest extends BaseTest
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
      * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
      *
-     * @param $matchingConfig
+     * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param $expectedResult
+     * @param boolean $expectedResult
+     *
      * @return void
      */
     public function testMatchContentInfo( $matchingConfig, Repository $repository, $expectedResult )
@@ -119,7 +120,8 @@ class ParentLocationTest extends BaseTest
     /**
      * Returns a Repository mock configured to return the appropriate Location object with given parent location Id
      *
-     * @param $parentLocationId
+     * @param int $parentLocationId
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function generateRepositoryMockForParentLocationId( $parentLocationId )
@@ -127,8 +129,7 @@ class ParentLocationTest extends BaseTest
         $locationServiceMock = $this
             ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\LocationService' )
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
         $locationServiceMock->expects( $this->once() )
             ->method( 'loadLocation' )
             ->with( 42 )
@@ -136,15 +137,13 @@ class ParentLocationTest extends BaseTest
                 $this->returnValue(
                     $this->getLocationMock( array( 'parentLocationId' => $parentLocationId ) )
                 )
-            )
-        ;
+            );
 
         $repository = $this->getRepositoryMock();
         $repository
             ->expects( $this->once() )
             ->method( 'getLocationService' )
-            ->will( $this->returnValue( $locationServiceMock ) )
-        ;
+            ->will( $this->returnValue( $locationServiceMock ) );
 
         return $repository;
     }

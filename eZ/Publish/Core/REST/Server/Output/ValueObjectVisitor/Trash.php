@@ -30,23 +30,14 @@ class Trash extends ValueObjectVisitor
         $generator->startObjectElement( 'Trash' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Trash' ) );
 
-        $generator->startAttribute(
-            'href',
-            $this->urlHandler->generate( 'trashItems' )
-        );
+        $generator->startAttribute( 'href', $data->path );
         $generator->endAttribute( 'href' );
 
         $generator->startList( 'TrashItem' );
 
         foreach ( $data->trashItems as $trashItem )
         {
-            $generator->startObjectElement( 'TrashItem' );
-            $generator->startAttribute(
-                'href',
-                $this->urlHandler->generate( 'trash', array( 'trash' => $trashItem->id ) )
-            );
-            $generator->endAttribute( 'href' );
-            $generator->endObjectElement( 'TrashItem' );
+            $visitor->visitValueObject( $trashItem );
         }
 
         $generator->endList( 'TrashItem' );

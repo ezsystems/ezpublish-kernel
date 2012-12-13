@@ -8,10 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase,
 
-    eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase;
+use eZ\Publish\SPI\Persistence\Content\Language;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase.
@@ -21,7 +21,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Database gateway to test.
      *
-     * @var eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase
      */
     protected $databaseGateway;
 
@@ -40,8 +40,9 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::__construct
+     *
+     * @return void
      */
     public function testCtor()
     {
@@ -183,8 +184,9 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::deleteLanguage
+     *
+     * @return void
      */
     public function testDeleteLanguage()
     {
@@ -219,14 +221,14 @@ class EzcDatabaseTest extends TestCase
     /**
      * Returns a ready to test EzcDatabase gateway
      *
-     * @return eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase
      */
     protected function getDatabaseGateway()
     {
         if ( !isset( $this->databaseGateway ) )
         {
             $this->databaseGateway = new EzcDatabase(
-                 $this->getDatabaseHandler()
+                $this->getDatabaseHandler()
             );
         }
         return $this->databaseGateway;

@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\Content;
 
-use \eZ\Publish\API\Repository\Values\Content\Field;
-use \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct}
@@ -33,7 +33,7 @@ class ContentUpdateStructStub extends ContentUpdateStruct
      *
      * @param string $fieldDefIdentifier the identifier of the field definition
      * @param mixed $value Either a plain value which is understandable by the field type or an instance of a Value class provided by the field type
-     * @param bool|string $languageCode If not given on a translatable field the initial language is used,
+     * @param boolean|string $languageCode If not given on a translatable field the initial language is used,
      */
     public function setField( $fieldDefIdentifier, $value, $languageCode = null )
     {

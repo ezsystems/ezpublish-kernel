@@ -8,13 +8,15 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\Type,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 
 /**
  * Integration test for the legacy storage
@@ -24,9 +26,9 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
 abstract class BaseIntegrationTest extends TestCase
 {
     /**
-     * Property indicating wether the DB already has been set up
+     * Property indicating whether the DB already has been set up
      *
-     * @var bool
+     * @var boolean
      */
     protected static $setUp = false;
 
@@ -62,7 +64,7 @@ abstract class BaseIntegrationTest extends TestCase
      * Returns the Handler with all necessary objects registered
      *
      * Returns an instance of the Persistence Handler where the
-     * FieldTypy\Storage has been registered.
+     * FieldType\Storage has been registered.
      *
      * @return \eZ\Publish\SPI\Persistence\Handler
      */
@@ -147,6 +149,7 @@ abstract class BaseIntegrationTest extends TestCase
      *
      * @param Legacy\Handler $handler
      * @param Content $content
+     *
      * @return void
      */
     public function postCreationHook( Legacy\Handler $handler, Content $content )
@@ -158,6 +161,7 @@ abstract class BaseIntegrationTest extends TestCase
      * Can be overwritten to assert that additional data has been deleted
      *
      * @param Content $content
+     *
      * @return void
      */
     public function assertDeletedFieldDataCorrect( Content $content )
@@ -179,7 +183,7 @@ abstract class BaseIntegrationTest extends TestCase
         if ( !self::$setUp )
         {
             parent::setUp();
-            $this->insertDatabaseFixture( __DIR__ . '/../../../Core/Repository/Tests/Service/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
+            $this->insertDatabaseFixture( __DIR__ . '/../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
             self::$setUp = $this->handler;
         }
         else
@@ -206,38 +210,44 @@ abstract class BaseIntegrationTest extends TestCase
      */
     protected function createContentType()
     {
-        $createStruct = new Content\Type\CreateStruct( array(
-            'name'              => array( 'eng-GB' => 'Test' ),
-            'identifier'        => 'test-' . $this->getTypeName(),
-            'status'            => 0,
-            'creatorId'         => 14,
-            'created'           => time(),
-            'modifierId'        => 14,
-            'modified'          => time(),
-            'initialLanguageId' => 2,
-            'remoteId'          => 'abcdef',
-        ) );
+        $createStruct = new Content\Type\CreateStruct(
+            array(
+                'name'              => array( 'eng-GB' => 'Test' ),
+                'identifier'        => 'test-' . $this->getTypeName(),
+                'status'            => 0,
+                'creatorId'         => 14,
+                'created'           => time(),
+                'modifierId'        => 14,
+                'modified'          => time(),
+                'initialLanguageId' => 2,
+                'remoteId'          => 'abcdef',
+            )
+        );
 
         $createStruct->fieldDefinitions = array(
-            new Content\Type\FieldDefinition( array(
-                'name'           => array( 'eng-GB' => 'Name' ),
-                'identifier'     => 'name',
-                'fieldGroup'     => 'main',
-                'position'       => 1,
-                'fieldType'      => 'ezstring',
-                'isTranslatable' => false,
-                'isRequired'     => true,
-            ) ),
-            new Content\Type\FieldDefinition( array(
-                'name'           => array( 'eng-GB' => 'Data' ),
-                'identifier'     => 'data',
-                'fieldGroup'     => 'main',
-                'position'       => 2,
-                'fieldType'      => $this->getTypeName(),
-                'isTranslatable' => false,
-                'isRequired'     => true,
-                'fieldTypeConstraints' => $this->getTypeConstraints(),
-            ) ),
+            new Content\Type\FieldDefinition(
+                array(
+                    'name'           => array( 'eng-GB' => 'Name' ),
+                    'identifier'     => 'name',
+                    'fieldGroup'     => 'main',
+                    'position'       => 1,
+                    'fieldType'      => 'ezstring',
+                    'isTranslatable' => false,
+                    'isRequired'     => true,
+                )
+            ),
+            new Content\Type\FieldDefinition(
+                array(
+                    'name'           => array( 'eng-GB' => 'Data' ),
+                    'identifier'     => 'data',
+                    'fieldGroup'     => 'main',
+                    'position'       => 2,
+                    'fieldType'      => $this->getTypeName(),
+                    'isTranslatable' => false,
+                    'isRequired'     => true,
+                    'fieldTypeConstraints' => $this->getTypeConstraints(),
+                )
+            ),
         );
 
         $handler            = $this->getCustomHandler();
@@ -317,40 +327,53 @@ abstract class BaseIntegrationTest extends TestCase
      * @param Type $contentType
      * @param mixed $fieldValue
      * @param string $languageCode
+     *
      * @return Content
      */
     protected function createContent( Type $contentType, $fieldValue, $languageCode = 'eng-GB' )
     {
-        $createStruct = new Content\CreateStruct( array(
-            'name'              => array( $languageCode => 'Test object' ),
-            'typeId'            => $contentType->id,
-            'sectionId'         => 1,
-            'ownerId'           => 14,
-            'locations'         => array( new Content\Location\CreateStruct( array(
-                'parentId' => 2,
-                'remoteId' => 'sindelfingen',
-            ) ) ),
-            'initialLanguageId' => 2,
-            'remoteId'          => microtime(),
-            'modified'          => time(),
-            'fields'            => array(
-                new Content\Field( array(
-                    'type'              => 'ezstring',
-                    'languageCode'      => $languageCode,
-                    'fieldDefinitionId' => $contentType->fieldDefinitions[0]->id,
-                    'value'             => new Content\FieldValue( array(
-                        'data'    => 'This is just a test object',
-                        'sortKey' => 'this is just a test object',
-                    ) ),
-                ) ),
-                new Content\Field( array(
-                    'type'              => $this->getTypeName(),
-                    'languageCode'      => $languageCode,
-                    'fieldDefinitionId' => $contentType->fieldDefinitions[1]->id,
-                    'value'             => $fieldValue,
-                ) ),
-            ),
-        ) );
+        $createStruct = new Content\CreateStruct(
+            array(
+                'name'              => array( $languageCode => 'Test object' ),
+                'typeId'            => $contentType->id,
+                'sectionId'         => 1,
+                'ownerId'           => 14,
+                'locations'         => array(
+                    new Content\Location\CreateStruct(
+                        array(
+                            'parentId' => 2,
+                            'remoteId' => 'sindelfingen',
+                        )
+                    )
+                ),
+                'initialLanguageId' => 2,
+                'remoteId'          => microtime(),
+                'modified'          => time(),
+                'fields'            => array(
+                    new Content\Field(
+                        array(
+                            'type'              => 'ezstring',
+                            'languageCode'      => $languageCode,
+                            'fieldDefinitionId' => $contentType->fieldDefinitions[0]->id,
+                            'value'             => new Content\FieldValue(
+                                array(
+                                    'data'    => 'This is just a test object',
+                                    'sortKey' => 'this is just a test object',
+                                )
+                            ),
+                        )
+                    ),
+                    new Content\Field(
+                        array(
+                            'type'              => $this->getTypeName(),
+                            'languageCode'      => $languageCode,
+                            'fieldDefinitionId' => $contentType->fieldDefinitions[1]->id,
+                            'value'             => $fieldValue,
+                        )
+                    ),
+                ),
+            )
+        );
 
         $handler = $this->getCustomHandler();
         $contentHandler = $handler->contentHandler();
@@ -418,6 +441,7 @@ abstract class BaseIntegrationTest extends TestCase
      * @param mixed $contentId
      * @param mixed $contentVersion
      * @param Field $field
+     *
      * @return Content
      */
     protected function updateContent( $contentId, $contentVersion, Field $field )
@@ -425,14 +449,16 @@ abstract class BaseIntegrationTest extends TestCase
         $handler = $this->getCustomHandler();
 
         $field->value = $this->getUpdatedValue();
-        $updateStruct = new \eZ\Publish\SPI\Persistence\Content\UpdateStruct( array(
-            'creatorId' => 14,
-            'modificationDate' => time(),
-            'initialLanguageId' => 2,
-            'fields' => array(
-                $field,
+        $updateStruct = new UpdateStruct(
+            array(
+                'creatorId' => 14,
+                'modificationDate' => time(),
+                'initialLanguageId' => 2,
+                'fields' => array(
+                    $field,
+                )
             )
-        ) );
+        );
 
         $contentHandler = $handler->contentHandler();
         return $contentHandler->updateContent( $contentId, $contentVersion, $updateStruct );
@@ -482,6 +508,7 @@ abstract class BaseIntegrationTest extends TestCase
      * Deletes the given $content
      *
      * @param Content $content
+     *
      * @return void
      */
     protected function deleteContent( Content $content )
@@ -512,7 +539,7 @@ abstract class BaseIntegrationTest extends TestCase
                 array()
             ),
             $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Search\\TransformationProcessor',
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Search\\TransformationProcessor\\DefinitionBased',
                 array(),
                 array(),
                 '',

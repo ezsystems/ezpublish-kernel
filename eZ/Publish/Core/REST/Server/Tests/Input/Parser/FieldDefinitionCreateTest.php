@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 use eZ\Publish\Core\REST\Server\Input\Parser\FieldDefinitionCreate;
 
 /**
- * @TODO Test with fieldSettings and validatorConfiguration when specified
+ * @todo Test with fieldSettings and validatorConfiguration when specified
  */
 class FieldDefinitionCreateTest extends BaseTest
 {

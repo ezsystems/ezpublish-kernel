@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the RoleService class
+ * File containing the URLAliasService class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,19 +9,20 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
+use eZ\Publish\API\Repository\URLAliasService as APIURLAliasService;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
-use \eZ\Publish\Core\REST\Common\UrlHandler;
-use \eZ\Publish\Core\REST\Common\Input;
-use \eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input\Dispatcher;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
- * Implementation of the {@link \eZ\Publish\API\Repository\RoleService}
+ * Implementation of the {@link \eZ\Publish\API\Repository\URLAliasService}
  * interface.
  *
- * @see \eZ\Publish\API\Repository\RoleService
+ * @see \eZ\Publish\API\Repository\URLAliasService
  */
-class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Sessionable
+class URLAliasService implements APIURLAliasService, Sessionable
 {
     /**
      * @var \eZ\Publish\Core\REST\Client\HttpClient
@@ -49,7 +50,7 @@ class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Ses
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
@@ -62,8 +63,8 @@ class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Ses
      *
      * Only for testing
      *
-     * @param mixed tringid
-     * @return void
+     * @param mixed $id
+     *
      * @private
      */
     public function setSession( $id )
@@ -74,7 +75,7 @@ class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Ses
         }
     }
 
-     /**
+    /**
      * Create a user chosen $alias pointing to $location in $languageCode.
      *
      * This method runs URL filters and transformers before storing them.
@@ -83,8 +84,8 @@ class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Ses
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $path
-     * @param boolean $forward if true a redirect is performed
      * @param string $languageCode the languageCode for which this alias is valid
+     * @param boolean $forwarding if true a redirect is performed
      * @param boolean $alwaysAvailable
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
@@ -93,11 +94,11 @@ class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Ses
      */
     public function createUrlAlias( Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
-     /**
-     * Create a user chosen $alias pointing to a resource in $languageName.
+    /**
+     * Create a user chosen $alias pointing to a resource in $languageCode.
      *
      * This method does not handle location resources - if a user enters a location target
      * the createCustomUrlAlias method has to be used.
@@ -106,35 +107,34 @@ class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Ses
      *
      * $alwaysAvailable makes the alias available in all languages.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given
+     *         language or if resource is not valid
+     *
      * @param string $resource
      * @param string $path
+     * @param string $languageCode
      * @param boolean $forwarding
-     * @param string $languageName
      * @param boolean $alwaysAvailable
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function createGlobalUrlAlias( $resource, $path, $languageCode, $forward = false, $alwaysAvailable = false )
+    public function createGlobalUrlAlias( $resource, $path, $languageCode, $forwarding = false, $alwaysAvailable = false )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
-     /**
+    /**
      * List of url aliases pointing to $location.
      *
-     * @todo may be there is a need for a function which returns one URL Alias based on a prioritized language
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param $custom if true the user generated aliases are listed otherwise the autogenerated
+     * @param boolean $custom if true the user generated aliases are listed otherwise the autogenerated
      * @param string $languageCode filters those which are valid for the given language
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias[]
      */
     public function listLocationAliases( Location $location, $custom = true, $languageCode = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -148,26 +148,28 @@ class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Ses
      */
     public function listGlobalAliases( $languageCode = null, $offset = 0, $limit = -1 )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
-
 
     /**
      * Removes urls aliases.
      *
      * This method does not remove autogenerated aliases for locations.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if alias list contains
+     *         autogenerated alias
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\URLAlias[] $aliasList
-     * @return boolean
+     *
+     * @return void
      */
     public function removeAliases( array $aliasList )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
      * looks up the URLAlias for the given url.
-     *
      *
      * @param string $url
      * @param string $languageCode
@@ -176,8 +178,39 @@ class URLAliasService implements \eZ\Publish\API\Repository\URLAliasService, Ses
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function lookUp( $url, $languageCode = null )
+    public function lookup( $url, $languageCode = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
+    }
+
+    /**
+     * Returns the URL alias for the given location in the given language.
+     *
+     * If $languageCode is null the method returns the url alias in the most prioritized language.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if no url alias exist for the given language
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     */
+    public function reverseLookup( Location $location, $languageCode = null )
+    {
+        throw new \Exception( "@todo: Implement." );
+    }
+
+    /**
+     * Loads URL alias by given $id
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @param string $id
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     */
+    public function load( $id )
+    {
+        throw new \Exception( "@todo: Implement." );
     }
 }

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\API\Repository\Values\ObjectState;
@@ -52,6 +53,7 @@ class ObjectStateGroupCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains names element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsNamesElement( $result )
@@ -73,6 +75,7 @@ class ObjectStateGroupCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains descriptions element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsDescriptionsElement( $result )
@@ -94,6 +97,7 @@ class ObjectStateGroupCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains identifier value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsIdentifierValueElement( $result )
@@ -102,7 +106,6 @@ class ObjectStateGroupCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'identifier',
                 'content'  => 'some-group',
-
             ),
             $result,
             'Invalid or non-existing <ObjectStateGroupCreate> identifier value element.',
@@ -114,6 +117,7 @@ class ObjectStateGroupCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains defaultLanguageCode value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsDefaultLanguageCodeValueElement( $result )
@@ -122,7 +126,6 @@ class ObjectStateGroupCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'defaultLanguageCode',
                 'content'  => 'eng-GB',
-
             ),
             $result,
             'Invalid or non-existing <ObjectStateGroupCreate> defaultLanguageCode value element.',

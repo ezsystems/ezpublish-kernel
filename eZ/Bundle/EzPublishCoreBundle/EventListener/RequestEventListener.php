@@ -9,15 +9,15 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    Symfony\Component\HttpKernel\KernelEvents,
-    Symfony\Component\HttpKernel\Event\GetResponseEvent,
-    Symfony\Component\HttpKernel\HttpKernelInterface,
-    Symfony\Bundle\FrameworkBundle\HttpKernel,
-    Symfony\Component\HttpKernel\Log\LoggerInterface,
-    Symfony\Component\HttpFoundation\RedirectResponse,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 
 class RequestEventListener implements EventSubscriberInterface
 {
@@ -31,20 +31,61 @@ class RequestEventListener implements EventSubscriberInterface
      */
     private $logger;
 
-    public function __construct( HttpKernel $httpKernel, LoggerInterface $logger = null )
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    private $container;
+
+    /**
+     * @var \Symfony\Component\Routing\RouterInterface
+     */
+    private $router;
+
+    public function __construct( ContainerInterface $container, LoggerInterface $logger = null )
     {
-        $this->httpKernel = $httpKernel;
+        $this->httpKernel = $container->get( 'http_kernel' );
+        $this->container = $container;
         $this->logger = $logger;
+        $this->router = $container->get( 'router' );
     }
 
     public static function getSubscribedEvents()
     {
         return array(
             KernelEvents::REQUEST => array(
+                array( 'onKernelRequestSetup', 190 ),
                 array( 'onKernelRequestForward', 10 ),
                 array( 'onKernelRequestRedirect', 0 )
             )
         );
+    }
+
+    /**
+     * Checks if it's needed to redirect to setup wizard
+     *
+     * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+     */
+    public function onKernelRequestSetup( GetResponseEvent $event )
+    {
+        if (
+            $event->getRequestType() == HttpKernelInterface::MASTER_REQUEST
+            && $this->container->hasParameter( 'ezpublish.siteaccess.default' )
+        )
+        {
+            if ( $this->container->getParameter( 'ezpublish.siteaccess.default' ) !== 'setup' )
+                return;
+
+            $request = $event->getRequest();
+            $requestContext = $this->container->get( 'router.request_context' );
+            $requestContext->fromRequest( $request );
+            $this->router->setContext( $requestContext );
+            $setupURI = $this->router->generate( 'ezpublishSetup' );
+
+            if ( ( $requestContext->getBaseUrl() . $request->getPathInfo() ) === $setupURI )
+                return;
+
+            $event->setResponse( new RedirectResponse( $setupURI ) );
+        }
     }
 
     /**
@@ -79,6 +120,7 @@ class RequestEventListener implements EventSubscriberInterface
      * Note: The event propagation will be stopped to ensure that no response can be set later and override the redirection.
      *
      * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+     *
      * @see \eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter
      */
     public function onKernelRequestRedirect( GetResponseEvent $event )

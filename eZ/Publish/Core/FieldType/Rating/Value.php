@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Rating;
+
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
@@ -18,14 +19,14 @@ class Value extends BaseValue
     /**
      * Is rating disabled
      *
-     * @var bool
+     * @var boolean
      */
     public $isDisabled = false;
 
     /**
      * Construct a new Value object and initialize it with its $isDisabled state
      *
-     * @param bool $isDisabled
+     * @param boolean $isDisabled
      */
     public function __construct( $isDisabled = false )
     {

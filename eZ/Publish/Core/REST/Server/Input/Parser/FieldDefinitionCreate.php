@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
+
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
@@ -52,6 +53,7 @@ class FieldDefinitionCreate extends Base
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
@@ -71,7 +73,7 @@ class FieldDefinitionCreate extends Base
             $data['fieldType']
         );
 
-        // @TODO XSD says that descriptions is mandatory, but content type can be created without it
+        // @todo XSD says that descriptions is mandatory, but content type can be created without it
         if ( array_key_exists( 'names', $data ) )
         {
             if ( !is_array( $data['names'] ) || !array_key_exists( 'value', $data['names'] ) || !is_array( $data['names']['value'] ) )
@@ -82,7 +84,7 @@ class FieldDefinitionCreate extends Base
             $fieldDefinitionCreate->names = $this->parserTools->parseTranslatableList( $data['names'] );
         }
 
-        // @TODO XSD says that descriptions is mandatory, but content type can be created without it
+        // @todo XSD says that descriptions is mandatory, but content type can be created without it
         if ( array_key_exists( 'descriptions', $data ) )
         {
             if ( !is_array( $data['descriptions'] ) || !array_key_exists( 'value', $data['descriptions'] ) || !is_array( $data['descriptions']['value'] ) )
@@ -93,50 +95,50 @@ class FieldDefinitionCreate extends Base
             $fieldDefinitionCreate->descriptions = $this->parserTools->parseTranslatableList( $data['descriptions'] );
         }
 
-        // @TODO XSD says that fieldGroup is mandatory, but content type can be created without it
+        // @todo XSD says that fieldGroup is mandatory, but content type can be created without it
         if ( array_key_exists( 'fieldGroup', $data ) )
         {
             $fieldDefinitionCreate->fieldGroup = $data['fieldGroup'];
         }
 
-        // @TODO XSD says that position is mandatory, but content type can be created without it
+        // @todo XSD says that position is mandatory, but content type can be created without it
         if ( array_key_exists( 'position', $data ) )
         {
-            $fieldDefinitionCreate->position = (int) $data['position'];
+            $fieldDefinitionCreate->position = (int)$data['position'];
         }
 
-        // @TODO XSD says that isTranslatable is mandatory, but content type can be created without it
+        // @todo XSD says that isTranslatable is mandatory, but content type can be created without it
         if ( array_key_exists( 'isTranslatable', $data ) )
         {
             $fieldDefinitionCreate->isTranslatable = $this->parserTools->parseBooleanValue( $data['isTranslatable'] );
         }
 
-        // @TODO XSD says that isRequired is mandatory, but content type can be created without it
+        // @todo XSD says that isRequired is mandatory, but content type can be created without it
         if ( array_key_exists( 'isRequired', $data ) )
         {
             $fieldDefinitionCreate->isRequired = $this->parserTools->parseBooleanValue( $data['isRequired'] );
         }
 
-        // @TODO XSD says that isInfoCollector is mandatory, but content type can be created without it
+        // @todo XSD says that isInfoCollector is mandatory, but content type can be created without it
         if ( array_key_exists( 'isInfoCollector', $data ) )
         {
             $fieldDefinitionCreate->isInfoCollector = $this->parserTools->parseBooleanValue( $data['isInfoCollector'] );
         }
 
-        // @TODO XSD says that isSearchable is mandatory, but content type can be created without it
+        // @todo XSD says that isSearchable is mandatory, but content type can be created without it
         if ( array_key_exists( 'isSearchable', $data ) )
         {
             $fieldDefinitionCreate->isSearchable = $this->parserTools->parseBooleanValue( $data['isSearchable'] );
         }
 
-        // @TODO XSD says that defaultValue is mandatory, but content type can be created without it
+        // @todo XSD says that defaultValue is mandatory, but content type can be created without it
         if ( array_key_exists( 'defaultValue', $data ) )
         {
             $fieldDefinitionCreate->defaultValue = $data['defaultValue'];
         }
 
-        //@TODO fieldSettings - Not specified
-        //@TODO validatorConfiguration - Not specified
+        //@todo fieldSettings - Not specified
+        //@todo validatorConfiguration - Not specified
 
         return $fieldDefinitionCreate;
     }

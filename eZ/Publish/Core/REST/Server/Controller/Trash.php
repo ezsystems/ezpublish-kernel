@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
-use eZ\Publish\Core\REST\Common\UrlHandler;
-use eZ\Publish\Core\REST\Common\Input;
+
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 
@@ -60,10 +59,29 @@ class Trash extends RestController
      */
     public function loadTrashItems()
     {
-        return new Values\Trash(
+        $offset = isset( $this->request->variables['offset'] ) ? (int)$this->request->variables['offset'] : 0;
+        $limit = isset( $this->request->variables['limit'] ) ? (int)$this->request->variables['limit'] : -1;
+
+        $query = new Query();
+        $query->offset = $offset >= 0 ? $offset : null;
+        $query->limit = $limit >= 0 ? $limit : null;
+
+        $trashItems = array();
+
+        foreach (
             $this->trashService->findTrashItems(
-                new Query()
-            )->items,
+                $query
+            )->items as $trashItem
+        )
+        {
+            $trashItems[] = new Values\RestTrashItem(
+                $trashItem,
+                $this->locationService->getLocationChildCount( $trashItem )
+            );
+        }
+
+        return new Values\Trash(
+            $trashItems,
             $this->request->path
         );
     }
@@ -71,30 +89,35 @@ class Trash extends RestController
     /**
      * Returns the trash item given by id
      *
+     * @return \eZ\Publish\Core\REST\Server\Values\RestTrashItem
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
     public function loadTrashItem()
     {
         $values = $this->urlHandler->parse( 'trash', $this->request->path );
-        return $this->trashService->loadTrashItem( $values['trash'] );
+        return new Values\RestTrashItem(
+            $trashItem = $this->trashService->loadTrashItem( $values['trash'] ),
+            $this->locationService->getLocationChildCount( $trashItem )
+        );
     }
 
     /**
      * Empties the trash
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function emptyTrash()
     {
         $this->trashService->emptyTrash();
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
      * Deletes the given trash item
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteTrashItem()
     {
@@ -103,7 +126,7 @@ class Trash extends RestController
             $this->trashService->loadTrashItem( $values['trash'] )
         );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**

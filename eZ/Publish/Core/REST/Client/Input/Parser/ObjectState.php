@@ -35,8 +35,10 @@ class ObjectState extends Parser
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
+     *
      * @todo Error handling
+     *
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
@@ -50,7 +52,7 @@ class ObjectState extends Parser
             array(
                 'id' => $data['_href'],
                 'identifier' => $data['identifier'],
-                'priority' => (int) $data['priority'],
+                'priority' => (int)$data['priority'],
                 'defaultLanguageCode' => $data['defaultLanguageCode'],
                 'languageCodes' => explode( ',', $data['languageCodes'] ),
                 'names' => $names,

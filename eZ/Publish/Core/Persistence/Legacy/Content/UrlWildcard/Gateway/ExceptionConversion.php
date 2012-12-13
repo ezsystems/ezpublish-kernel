@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway,
-    eZ\Publish\SPI\Persistence\Content\UrlWildcard,
-    ezcDbException,
-    PDOException;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
+use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
+use ezcDbException;
+use PDOException;
 
 /**
  * UrlAlias Handler
@@ -22,7 +22,7 @@ class ExceptionConversion extends Gateway
     /**
      * The wrapped gateway
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway
      */
     protected $innerGateway;
 
@@ -83,8 +83,6 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     *
-     *
      * @param mixed $parentId
      *
      * @return array
@@ -93,7 +91,7 @@ class ExceptionConversion extends Gateway
     {
         try
         {
-            return $this->innerGateway->loadLocationAliasDataByParentId( $parentId );
+            return $this->innerGateway->loadUrlWildcardData( $parentId );
         }
         catch ( ezcDbException $e )
         {

@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Media;
-use eZ\Publish\Core\FieldType\BinaryBase\Type as BaseType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\Core\FieldType\ValidationError;
+
+use eZ\Publish\Core\FieldType\BinaryBase\Type as BaseType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * The TextLine field type.
@@ -56,13 +57,24 @@ class Type extends BaseType
     );
 
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
     public function getFieldTypeIdentifier()
     {
         return "ezmedia";
+    }
+
+    /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return \eZ\Publish\Core\FieldType\Media\Value
+     */
+    public function getEmptyValue()
+    {
+        return new Value;
     }
 
     /**
@@ -115,6 +127,7 @@ class Type extends BaseType
      * Creates a specific value of the derived class from $inputValue
      *
      * @param array $inputValue
+     *
      * @return Value
      */
     protected function createValue( array $inputValue )
@@ -123,35 +136,15 @@ class Type extends BaseType
     }
 
     /**
-     * Potentially builds and checks the type and structure of the $inputValue.
-     *
-     * This method first inspects $inputValue, if it needs to convert it, e.g.
-     * into a dedicated value object. An example would be, that the field type
-     * uses values of MyCustomFieldTypeValue, but can also accept strings as
-     * the input. In that case, $inputValue first needs to be converted into a
-     * MyCustomFieldTypeClass instance.
-     *
-     * After that, the (possibly converted) value is checked for structural
-     * validity. Note that this does not include validation after the rules
-     * from validators, but only plausibility checks for the general data
-     * format.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
+     * Implements the core of {@see acceptValue()}.
      *
      * @param mixed $inputValue
      *
-     * @return mixed The potentially converted and structurally plausible value.
+     * @return \eZ\Publish\Core\FieldType\Media\Value The potentially converted and structurally plausible value.
      */
-    public function acceptValue( $inputValue )
+    protected function internalAcceptValue( $inputValue )
     {
-        $inputValue = parent::acceptValue( $inputValue );
-
-        if ( $inputValue === null )
-        {
-            // Empty value
-            return null;
-        }
+        $inputValue = parent::internalAcceptValue( $inputValue );
 
         if ( !$inputValue instanceof Value )
         {
@@ -211,6 +204,7 @@ class Type extends BaseType
      * Attempts to complete the data in $value
      *
      * @param Value $value
+     *
      * @return void
      */
     protected function completeValue( $value )

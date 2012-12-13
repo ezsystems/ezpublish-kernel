@@ -8,17 +8,21 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
-use eZ\Publish\Core\Persistence\Legacy,
-    eZ\Publish\Core\FieldType,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
+
+use eZ\Publish\Core\Persistence\Legacy;
+use eZ\Publish\Core\FieldType;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
+use FileSystemIterator;
 
 /**
  * Integration test for legacy storage field types
  *
  * This abstract base test case is supposed to be the base for field type
- * integration tests. It basically calls all involved methods in the field type 
+ * integration tests. It basically calls all involved methods in the field type
  * ``Converter`` and ``Storage`` implementations. Fo get it working implement
  * the abstract methods in a sensible way.
  *
@@ -34,7 +38,7 @@ use eZ\Publish\Core\Persistence\Legacy,
  *
  * @group integration
  */
-class MediaIntergrationTest extends FileBaseIntegrationTest
+class MediaIntegrationTest extends FileBaseIntegrationTest
 {
     /**
      * Returns the storage dir used by the file service
@@ -57,7 +61,7 @@ class MediaIntergrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -108,9 +112,11 @@ class MediaIntergrationTest extends FileBaseIntegrationTest
                         'maxFileSize' => 2 * 1024 * 1024, // 2 MB
                     )
                 ),
-                'fieldSettings' => new FieldType\FieldSettings( array(
-                    'mediaType' => FieldType\Media\Type::TYPE_SILVERLIGHT,
-                ) )
+                'fieldSettings' => new FieldType\FieldSettings(
+                    array(
+                        'mediaType' => FieldType\Media\Type::TYPE_SILVERLIGHT,
+                    )
+                )
             )
         );
     }
@@ -135,9 +141,11 @@ class MediaIntergrationTest extends FileBaseIntegrationTest
                                 'maxFileSize' => 2 * 1024 * 1024, // 2 MB
                             )
                         ),
-                        'fieldSettings' => new FieldType\FieldSettings( array(
-                            'mediaType' => FieldType\Media\Type::TYPE_SILVERLIGHT,
-                        ) )
+                        'fieldSettings' => new FieldType\FieldSettings(
+                            array(
+                                'mediaType' => FieldType\Media\Type::TYPE_SILVERLIGHT,
+                            )
+                        )
                     )
                 )
             ),
@@ -151,21 +159,23 @@ class MediaIntergrationTest extends FileBaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            'externalData' => array(
-                'path' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
-                'fileName' => 'Ice-Flower-Media.jpg',
-                'fileSize' => filesize( $path ),
-                'mimeType' => 'image/jpeg',
-                'hasController' => true,
-                'autoplay' => true,
-                'loop' => true,
-                'width' => 23,
-                'height' => 42,
-            ),
-            'sortKey'      => '',
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                'externalData' => array(
+                    'path' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                    'fileName' => 'Ice-Flower-Media.jpg',
+                    'fileSize' => filesize( $path ),
+                    'mimeType' => 'image/jpeg',
+                    'hasController' => true,
+                    'autoplay' => true,
+                    'loop' => true,
+                    'width' => 23,
+                    'height' => 42,
+                ),
+                'sortKey'      => '',
+            )
+        );
     }
 
     /**
@@ -206,21 +216,23 @@ class MediaIntergrationTest extends FileBaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => null,
-            'externalData' => array(
-                'path' => ( $path = __DIR__ . '/_fixtures/image.png' ),
-                'fileName' => 'Blueish-Blue-Media.jpg',
-                'fileSize' => filesize( $path ),
-                'mimeType' => 'image/png',
-                'hasController' => false,
-                'autoplay' => false,
-                'loop' => false,
-                'width' => 0,
-                'height' => 0,
-            ),
-            'sortKey'      => '',
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => null,
+                'externalData' => array(
+                    'path' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                    'fileName' => 'Blueish-Blue-Media.jpg',
+                    'fileSize' => filesize( $path ),
+                    'mimeType' => 'image/png',
+                    'hasController' => false,
+                    'autoplay' => false,
+                    'loop' => false,
+                    'width' => 0,
+                    'height' => 0,
+                ),
+                'sortKey'      => '',
+            )
+        );
     }
 
     /**
@@ -265,17 +277,17 @@ class MediaIntergrationTest extends FileBaseIntegrationTest
      * Can be overwritten to assert that additional data has been deleted
      *
      * @param Content $content
+     *
      * @return void
      */
     public function assertDeletedFieldDataCorrect( Content $content )
     {
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator(
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(
                 $this->getTempDir() . '/' . $this->getStorageDir(),
-                \FileSystemIterator::KEY_AS_PATHNAME | \FileSystemIterator::SKIP_DOTS | \ FilesystemIterator::CURRENT_AS_FILEINFO
-
+                FileSystemIterator::KEY_AS_PATHNAME | FileSystemIterator::SKIP_DOTS | FileSystemIterator::CURRENT_AS_FILEINFO
             ),
-            \RecursiveIteratorIterator::CHILD_FIRST
+            RecursiveIteratorIterator::CHILD_FIRST
         );
 
         foreach ( $iterator as $path => $fileInfo )
@@ -294,7 +306,7 @@ class MediaIntergrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * @dep_ends \eZ\Publish\SPI\Tests\FieldType\MediaIntergrationTest::testCreateContentType
+     * @dep_ends \eZ\Publish\SPI\Tests\FieldType\MediaIntegrationTest::testCreateContentType
      */
     public function testMediasNotDeletedIfReferencesStillExist()
     {

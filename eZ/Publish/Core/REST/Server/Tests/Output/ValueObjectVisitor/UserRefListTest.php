@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\Repository\Values\User\User;
 
@@ -38,10 +39,11 @@ class UserRefListTest extends ValueObjectVisitorBaseTest
                     new User(),
                     new ContentInfo(
                         array(
-                             'id' => 14
+                            'id' => 14
                         )
                     ),
-                    new Location()
+                    new Location(),
+                    array()
                 )
             ),
             '/some/path'
@@ -65,6 +67,7 @@ class UserRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testUserRefListHrefCorrect( \DOMDocument $dom )
@@ -74,6 +77,7 @@ class UserRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testUserRefListMediaTypeCorrect( \DOMDocument $dom )
@@ -83,6 +87,7 @@ class UserRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testUserHrefCorrect( \DOMDocument $dom )
@@ -92,6 +97,7 @@ class UserRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testUserMediaTypeCorrect( \DOMDocument $dom )

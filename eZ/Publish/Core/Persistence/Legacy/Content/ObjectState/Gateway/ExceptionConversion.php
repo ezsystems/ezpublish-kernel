@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway,
-    eZ\Publish\SPI\Persistence\Content\ObjectState,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
+use eZ\Publish\SPI\Persistence\Content\ObjectState;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 
 /**
  * ObjectState Gateway
@@ -38,6 +39,7 @@ class ExceptionConversion extends Gateway
      * Loads data for an object state
      *
      * @param mixed $stateId
+     *
      * @return array
      */
     public function loadObjectStateData( $stateId )
@@ -57,9 +59,34 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * Loads data for an object state by identifier
+     *
+     * @param string $identifier
+     * @param mixed $groupId
+     *
+     * @return array
+     */
+    public function loadObjectStateDataByIdentifier( $identifier, $groupId )
+    {
+        try
+        {
+            return $this->innerGateway->loadObjectStateDataByIdentifier( $identifier, $groupId );
+        }
+        catch ( \ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( \PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
      * Loads data for all object states belonging to group with $groupId ID
      *
      * @param mixed $groupId
+     *
      * @return array
      */
     public function loadObjectStateListData( $groupId )
@@ -82,6 +109,7 @@ class ExceptionConversion extends Gateway
      * Loads data for an object state group
      *
      * @param mixed $groupId
+     *
      * @return array
      */
     public function loadObjectStateGroupData( $groupId )
@@ -101,10 +129,34 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * Loads data for an object state group by identifier
+     *
+     * @param string $identifier
+     *
+     * @return array
+     */
+    public function loadObjectStateGroupDataByIdentifier( $identifier )
+    {
+        try
+        {
+            return $this->innerGateway->loadObjectStateGroupDataByIdentifier( $identifier );
+        }
+        catch ( \ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( \PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
      * Loads data for all object state groups, filtered by $offset and $limit
      *
      * @param int $offset
      * @param int $limit
+     *
      * @return array
      */
     public function loadObjectStateGroupListData( $offset, $limit )
@@ -300,11 +352,11 @@ class ExceptionConversion extends Gateway
      * @param mixed $groupId
      * @param mixed $stateId
      */
-    public function setObjectState( $contentId, $groupId, $stateId )
+    public function setContentState( $contentId, $groupId, $stateId )
     {
         try
         {
-            return $this->innerGateway->setObjectState( $contentId, $groupId, $stateId );
+            return $this->innerGateway->setContentState( $contentId, $groupId, $stateId );
         }
         catch ( \ezcDbException $e )
         {
@@ -344,6 +396,7 @@ class ExceptionConversion extends Gateway
      * Returns the number of objects which are in this state
      *
      * @param mixed $stateId
+     *
      * @return int
      */
     public function getContentCount( $stateId )

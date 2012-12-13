@@ -37,5 +37,4 @@ class Prefixed extends EzPublishUrlHandler
         return parent::parse( $type, $url );
     }
 
-
 }

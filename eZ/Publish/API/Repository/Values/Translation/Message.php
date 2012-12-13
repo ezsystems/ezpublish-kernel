@@ -24,7 +24,7 @@ class Message extends Translation
 {
     /**
      * Message string. Might use replacements like %foo%, which are replaced by
-     * the values specfied in the values array.
+     * the values specified in the values array.
      *
      * @var string
      */
@@ -43,6 +43,7 @@ class Message extends Translation
      *
      * @param string $message
      * @param array $values
+     *
      * @return void
      */
     public function __construct( $message, array $values = array() )

@@ -8,16 +8,15 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+
 use eZ\Publish\Core\REST\Common\Message;
-use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use eZ\Publish\API\Repository\SectionService;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
-use eZ\Publish\Core\REST\Server\Values\ResourceDeleted;
+use eZ\Publish\Core\REST\Server\Values\NoContent;
 
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
@@ -51,25 +50,30 @@ class Section extends RestController
      */
     public function listSections()
     {
-        return new Values\SectionList(
-            $this->sectionService->loadSections()
-        );
+        if ( isset( $this->request->variables['identifier'] ) )
+        {
+            $sections = array(
+                $this->loadSectionByIdentifier()
+            );
+        }
+        else
+        {
+            $sections = $this->sectionService->loadSections();
+        }
+
+        return new Values\SectionList( $sections, $this->request->path );
     }
 
     /**
-     * Load section by identifier
+     * Loads section by identifier
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\SectionList
+     * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
     public function loadSectionByIdentifier()
     {
-        return new Values\SectionList(
-            array(
-                $this->sectionService->loadSectionByIdentifier(
-                    // GET variable
-                    $this->request->variables['identifier']
-                )
-            )
+        return $this->sectionService->loadSectionByIdentifier(
+            // GET variable
+            $this->request->variables['identifier']
         );
     }
 
@@ -145,7 +149,7 @@ class Section extends RestController
     /**
      * Delete a section by ID
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteSection()
     {
@@ -154,7 +158,7 @@ class Section extends RestController
             $this->sectionService->loadSection( $values['section'] )
         );
 
-        return new ResourceDeleted();
+        return new NoContent();
     }
 
     /**
@@ -163,6 +167,7 @@ class Section extends RestController
      * Needed since both structs are encoded into the same media type on input.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct $createStruct
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
      */
     protected function mapToUpdateStruct( SectionCreateStruct $createStruct )

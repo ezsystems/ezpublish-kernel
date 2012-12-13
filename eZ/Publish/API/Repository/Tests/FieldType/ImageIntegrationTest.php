@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\Image\Value as ImageValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+
+use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type
@@ -53,7 +54,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -157,6 +158,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     public function assertFieldDataLoadedCorrect( Field $field )
@@ -217,16 +219,20 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
             array(
-                new ImageValue( array(
-                    'path' => __DIR__ . '/_fixtures/image.jpg',
-                ) ),
+                new ImageValue(
+                    array(
+                        'path' => __DIR__ . '/_fixtures/image.jpg',
+                    )
+                ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
             array(
-                new ImageValue( array(
-                    'path' => __DIR__ . '/_fixtures/image.jpg',
-                    'fileName' => __DIR__ . '/_fixtures/image.jpg',
-                ) ),
+                new ImageValue(
+                    array(
+                        'path' => __DIR__ . '/_fixtures/image.jpg',
+                        'fileName' => __DIR__ . '/_fixtures/image.jpg',
+                    )
+                ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
         );
@@ -390,7 +396,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $updatedDraft = $contentService->updateContent( $draft->versionInfo, $updateStruct );
 
         $paths = array();
-        foreach( $updatedDraft->getFields() as $field )
+        foreach ( $updatedDraft->getFields() as $field )
         {
             if ( $field->fieldDefIdentifier === 'data' )
             {
@@ -406,5 +412,20 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
 
         $contentService->deleteContent( $updatedDraft->contentInfo );
     }
-}
 
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array( new ImageValue ),
+        );
+    }
+
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+        );
+    }
+}

@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase,
-    eZ\Publish\SPI\Persistence\Content\ObjectState,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase;
+use eZ\Publish\SPI\Persistence\Content\ObjectState;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase.
@@ -21,7 +22,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * Database gateway to test.
      *
-     * @var eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase
      */
     protected $databaseGateway;
 
@@ -51,8 +52,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::__construct
+     *
+     * @return void
      */
     public function testCtor()
     {
@@ -67,8 +69,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateData
+     *
+     * @return void
      */
     public function testLoadObjectStateData()
     {
@@ -95,8 +98,38 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateDataByIdentifier
+     *
      * @return void
+     */
+    public function testLoadObjectStateDataByIdentifier()
+    {
+        $gateway = $this->getDatabaseGateway();
+
+        $result = $gateway->loadObjectStateDataByIdentifier( 'not_locked', 2 );
+
+        $this->assertEquals(
+            array(
+                array(
+                    'ezcobj_state_default_language_id' => 2,
+                    'ezcobj_state_group_id' => 2,
+                    'ezcobj_state_id' => 1,
+                    'ezcobj_state_identifier' => 'not_locked',
+                    'ezcobj_state_language_mask' => 3,
+                    'ezcobj_state_priority' => 0,
+                    'ezcobj_state_language_description' => '',
+                    'ezcobj_state_language_language_id' => 3,
+                    'ezcobj_state_language_name' => 'Not locked'
+                )
+            ),
+            $result
+        );
+    }
+
+    /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateListData
+     *
+     * @return void
      */
     public function testLoadObjectStateListData()
     {
@@ -118,8 +151,8 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                         'ezcobj_state_language_language_id' => 3,
                         'ezcobj_state_language_name' => 'Not locked'
                     )
-                 ),
-                 array(
+                ),
+                array(
                     array(
                         'ezcobj_state_default_language_id' => 2,
                         'ezcobj_state_group_id' => 2,
@@ -138,8 +171,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateGroupData
+     *
+     * @return void
      */
     public function testLoadObjectStateGroupData()
     {
@@ -165,8 +199,37 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateGroupDataByIdentifier
+     *
      * @return void
+     */
+    public function testLoadObjectStateGroupDataByIdentifier()
+    {
+        $gateway = $this->getDatabaseGateway();
+
+        $result = $gateway->loadObjectStateGroupDataByIdentifier( 'ez_lock' );
+
+        $this->assertEquals(
+            array(
+                array(
+                    'ezcobj_state_group_default_language_id' => 2,
+                    'ezcobj_state_group_id' => 2,
+                    'ezcobj_state_group_identifier' => 'ez_lock',
+                    'ezcobj_state_group_language_mask' => 3,
+                    'ezcobj_state_group_language_description' => '',
+                    'ezcobj_state_group_language_language_id' => 3,
+                    'ezcobj_state_group_language_real_language_id' => 2,
+                    'ezcobj_state_group_language_name' => 'Lock'
+                )
+            ),
+            $result
+        );
+    }
+
+    /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateGroupListData
+     *
+     * @return void
      */
     public function testLoadObjectStateGroupListData()
     {
@@ -187,15 +250,16 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                         'ezcobj_state_group_language_real_language_id' => 2,
                         'ezcobj_state_group_language_name' => 'Lock'
                     )
-                 )
+                )
             ),
             $result
         );
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::insertObjectState
+     *
+     * @return void
      */
     public function testInsertObjectState()
     {
@@ -225,8 +289,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::insertObjectState
+     *
+     * @return void
      */
     public function testInsertObjectStateInEmptyGroup()
     {
@@ -264,8 +329,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::updateObjectState
+     *
+     * @return void
      */
     public function testUpdateObjectState()
     {
@@ -295,8 +361,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::deleteObjectState
+     *
+     * @return void
      */
     public function testDeleteObjectState()
     {
@@ -311,8 +378,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::updateObjectStateLinks
+     *
+     * @return void
      */
     public function testUpdateObjectStateLinks()
     {
@@ -351,8 +419,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::deleteObjectStateLinks
+     *
+     * @return void
      */
     public function testDeleteObjectStateLinks()
     {
@@ -376,8 +445,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::insertObjectStateGroup
+     *
+     * @return void
      */
     public function testInsertObjectStateGroup()
     {
@@ -405,8 +475,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::updateObjectStateGroup
+     *
+     * @return void
      */
     public function testUpdateObjectStateGroup()
     {
@@ -435,8 +506,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::deleteObjectStateGroup
+     *
+     * @return void
      */
     public function testDeleteObjectStateGroup()
     {
@@ -451,14 +523,15 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::setContentState
+     *
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::setObjectState
      */
-    public function testSetObjectState()
+    public function testSetContentState()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $gateway->setObjectState( 42, 2, 2 );
+        $gateway->setContentState( 42, 2, 2 );
 
         $this->assertQueryResult(
             array(
@@ -475,8 +548,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateDataForContent
+     *
+     * @return void
      */
     public function testLoadObjectStateDataForContent()
     {
@@ -503,8 +577,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::getContentCount
+     *
+     * @return void
      */
     public function testGetContentCount()
     {
@@ -517,8 +592,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::updateObjectStatePriority
+     *
+     * @return void
      */
     public function testUpdateObjectStatePriority()
     {
@@ -583,7 +659,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * Returns a ready to test EzcDatabase gateway
      *
-     * @return eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase
      */
     protected function getDatabaseGateway()
     {

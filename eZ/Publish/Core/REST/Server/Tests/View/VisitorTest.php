@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\View;
+
 use eZ\Publish\Core\REST\Server\Tests\BaseTest;
 
 use eZ\Publish\Core\REST\Server\View;
@@ -31,14 +32,16 @@ class VisitorTest extends BaseTest
         $viewVisitor = new View\Visitor( $this->getVisitorMock() );
 
         $request = new RMF\Request();
-        $result  = new Values\SectionList( array() );
+        $result  = new Values\SectionList( array(), '/content/sections' );
 
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'visit' )
             ->with( $result )
-            ->will( $this->returnValue(
-                new Message( array(), 'Foo Bar' )
-        ) );
+            ->will(
+                $this->returnValue(
+                    new Message( array(), 'Foo Bar' )
+                )
+            );
 
         ob_start();
 

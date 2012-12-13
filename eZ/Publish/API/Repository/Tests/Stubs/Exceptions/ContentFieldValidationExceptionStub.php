@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
 
-use \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
+use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException}

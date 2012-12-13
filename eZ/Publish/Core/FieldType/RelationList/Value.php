@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\RelationList;
+
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**

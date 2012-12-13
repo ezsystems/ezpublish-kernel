@@ -9,12 +9,8 @@
 
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
-use eZ\Publish\Core\REST\Common\UrlHandler,
-    eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor,
-    eZ\Publish\Core\REST\Common\Output\Generator,
-    eZ\Publish\Core\REST\Common\Output\Visitor,
-
-    eZ\Publish\API\Repository\Values;
+use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
+use eZ\Publish\API\Repository\Values;
 
 /**
  * Base for RestContentType related value object visitors
@@ -26,6 +22,7 @@ abstract class RestContentTypeBase extends ValueObjectVisitor
      * $contentTypeStatus.
      *
      * @param int $contentTypeStatus
+     *
      * @return string
      */
     protected function getUrlTypeSuffix( $contentTypeStatus )
@@ -43,5 +40,29 @@ abstract class RestContentTypeBase extends ValueObjectVisitor
         }
 
         return '';
+    }
+
+    /**
+     * Serializes the given $contentTypeStatus to a string representation
+     *
+     * @param int $contentTypeStatus
+     *
+     * @return string
+     */
+    protected function serializeStatus( $contentTypeStatus )
+    {
+        switch ( $contentTypeStatus )
+        {
+            case Values\ContentType\ContentType::STATUS_DEFINED:
+                return 'DEFINED';
+
+            case Values\ContentType\ContentType::STATUS_DRAFT:
+                return 'DRAFT';
+
+            case Values\ContentType\ContentType::STATUS_MODIFIED:
+                return 'MODIFIED';
+        }
+
+        throw new \RuntimeException( "Unknown content type status: '{$contentTypeStatus}'." );
     }
 }

@@ -12,14 +12,15 @@ namespace eZ\Publish\Core\IO\LegacyHandler\FileResourceProvider;
 use eZ\Publish\Core\IO\LegacyHandler\FileResourceProvider;
 
 /**
- * This class provides file resource functionnality for a cluster file
+ * This class provides file resource functionality for a cluster file
  */
 
 class eZFSFileHandler extends BaseHandler implements FileResourceProvider
 {
     /**
      * Returns a read file resource for $clusterFile
-     * @param eZClusterFileHandlerInterface $clusterFile Note: no hinting as not all handlers implement the interface
+     * @param \eZClusterFileHandlerInterface $clusterFile Note: no hinting as not all handlers implement the interface
+     *
      * @return resource
      */
     public function getResource( $file )

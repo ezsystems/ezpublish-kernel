@@ -11,8 +11,6 @@ namespace eZ\Publish\API\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
 
-use eZ\Publish\API\Repository\Values\Content\Location;
-
 /**
  * This class represents a queried location list holding a totalCount and a partial list of locations
  * (by offset/limit parameters and permission filters)

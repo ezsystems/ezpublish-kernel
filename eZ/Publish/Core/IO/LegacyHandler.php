@@ -9,16 +9,16 @@
 
 namespace eZ\Publish\Core\IO;
 
-use eZ\Publish\SPI\IO\Handler as IoHandlerInterface,
-    eZ\Publish\SPI\IO\BinaryFile,
-    eZ\Publish\SPI\IO\BinaryFileCreateStruct,
-    eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel,
-    eZClusterFileHandler,
-    DateTime,
-    finfo;
+use eZ\Publish\SPI\IO\Handler as IoHandlerInterface;
+use eZ\Publish\SPI\IO\BinaryFile;
+use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
+use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
+use eZClusterFileHandler;
+use DateTime;
+use finfo;
 
 /**
  * Legacy Io/Storage handler, based on eZ Cluster
@@ -239,7 +239,7 @@ class LegacyHandler implements IoHandlerInterface
         }
         else
         {
-            $file->mimeType = self::getMimeTypeFromPath( $path );
+            $file->mimeType = $this->getMimeTypeFromLocalFile( $path );
         }
 
         $file->uri = $file->path;
@@ -289,8 +289,9 @@ class LegacyHandler implements IoHandlerInterface
     /**
      * Returns the appropriate FileResourceProvider depending on the cluster handler in use
      *
-     * @return \eZ\Publish\Core\IO\LegacyHandler\FileResourceProvider
      * @throws \Exception
+     *
+     * @return \eZ\Publish\Core\IO\LegacyHandler\FileResourceProvider
      */
     private function getFileResourceProvider()
     {
@@ -330,22 +331,35 @@ class LegacyHandler implements IoHandlerInterface
     }
 
     /**
-     * Returns a mimeType from a file path, using fileinfo
+     * Returns a mimeType from a local file, using fileinfo
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If file does not exist
+     *
+     * @todo If legacy path is made available then this function can use that to skip executing legacy kernel
      *
      * @param string $path
      *
      * @return string
      */
-    protected static function getMimeTypeFromPath( $path )
+    protected function getMimeTypeFromLocalFile( $path )
     {
-        if ( !is_file( $path ) )
+        $returnValue = $this->legacyKernel->runCallback(
+            function () use ( $path )
+            {
+                if ( !is_file( $path ) )
+                    return null;
+
+                $fileInfo = new finfo( FILEINFO_MIME_TYPE );
+                return $fileInfo->file( $path );
+            },
+            false
+        );
+
+        if ( $returnValue === null )
         {
             throw new NotFoundException( 'BinaryFile', $path );
         }
 
-        $finfo = new finfo( FILEINFO_MIME_TYPE );
-        return $finfo->file( $path );
+        return $returnValue;
     }
 }

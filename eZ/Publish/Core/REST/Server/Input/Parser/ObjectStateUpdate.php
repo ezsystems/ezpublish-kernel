@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
+
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
@@ -16,8 +17,6 @@ use eZ\Publish\API\Repository\ObjectStateService;
 
 /**
  * Parser for ObjectStateUpdate
- * @todo There's a clear mismatch between XSD and PAPI specs for updating object states
- * @todo XSD says some fields are not mandatory, while PAPI says they are
  */
 class ObjectStateUpdate extends Base
 {
@@ -52,37 +51,37 @@ class ObjectStateUpdate extends Base
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
         $objectStateUpdateStruct = $this->objectStateService->newObjectStateUpdateStruct();
 
-        if ( !array_key_exists( 'identifier', $data ) )
+        if ( array_key_exists( 'identifier', $data ) )
         {
-            throw new Exceptions\Parser( "Missing 'identifier' attribute for ObjectStateUpdate." );
+            $objectStateUpdateStruct->identifier = $data['identifier'];
         }
 
-        $objectStateUpdateStruct->identifier = $data['identifier'];
-
-        if ( !array_key_exists( 'defaultLanguageCode', $data ) )
+        if ( array_key_exists( 'defaultLanguageCode', $data ) )
         {
-            throw new Exceptions\Parser( "Missing 'defaultLanguageCode' attribute for ObjectStateUpdate." );
+            $objectStateUpdateStruct->defaultLanguageCode = $data['defaultLanguageCode'];
         }
 
-        $objectStateUpdateStruct->defaultLanguageCode = $data['defaultLanguageCode'];
-
-        if ( !array_key_exists( 'names', $data ) || !is_array( $data['names'] ) )
+        if ( array_key_exists( 'names', $data ) )
         {
-            throw new Exceptions\Parser( "Missing or invalid 'names' element for ObjectStateUpdate." );
-        }
+            if ( !is_array( $data['names'] ) )
+            {
+                throw new Exceptions\Parser( "Missing or invalid 'names' element for ObjectStateUpdate." );
+            }
 
-        if ( !array_key_exists( 'value', $data['names'] ) || !is_array( $data['names']['value'] ) )
-        {
-            throw new Exceptions\Parser( "Missing or invalid 'names' element for ObjectStateUpdate." );
-        }
+            if ( !array_key_exists( 'value', $data['names'] ) || !is_array( $data['names']['value'] ) )
+            {
+                throw new Exceptions\Parser( "Missing or invalid 'names' element for ObjectStateUpdate." );
+            }
 
-        $objectStateUpdateStruct->names = $this->parserTools->parseTranslatableList( $data['names'] );
+            $objectStateUpdateStruct->names = $this->parserTools->parseTranslatableList( $data['names'] );
+        }
 
         if ( array_key_exists( 'descriptions', $data ) && is_array( $data['descriptions'] ) )
         {

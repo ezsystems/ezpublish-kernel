@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\View;
+
 use eZ\Publish\Core\REST\Common;
 
 use Qafoo\RMF;

@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Float\Type as Float,
-    eZ\Publish\Core\FieldType\Float\Value as FloatValue,
-    ReflectionObject;
+
+use eZ\Publish\Core\FieldType\Float\Type as Float;
+use eZ\Publish\Core\FieldType\Float\Value as FloatValue;
+use ReflectionObject;
 
 /**
  * @group fieldType
@@ -72,7 +73,7 @@ class FloatTest extends StandardizedFieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return null;
+        return new FloatValue;
     }
 
     /**
@@ -150,7 +151,7 @@ class FloatTest extends StandardizedFieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new FloatValue,
             ),
             array(
                 42.23,
@@ -341,7 +342,7 @@ class FloatTest extends StandardizedFieldTypeTest
     /**
      * Provide data sets with validator configurations which are considered
      * invalid by the {@link validateValidatorConfiguration()} method. The
-     * method must return a non-empty array of valiation errors when receiving
+     * method must return a non-empty array of validation errors when receiving
      * one of the provided values.
      *
      * Returns an array of data provider sets with a single argument: A valid

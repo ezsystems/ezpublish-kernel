@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\FacetBuider\SubtreeFacetBuilder class.
+ * File containing the eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder\SubtreeFacetBuilder class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -19,16 +19,16 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
  * If provided the search service returns a LocationFacet
  * which contains the counts for all content objects below the child locations.
  *
- * TODO: check hierarchical facets
+ * @todo: check hierarchical facets
  *
  * @package eZ\Publish\API\Repository\Values\Content\Query
  */
-class LocationFacetBuilder extends FacetBuilder {
+class LocationFacetBuilder extends FacetBuilder
+{
     /**
      * The parent location
      *
-     * @var eZ\Publish\API\Repository\Values\Content\Location
+     * @var \eZ\Publish\API\Repository\Values\Content\Location
      */
     public $location;
-
 }

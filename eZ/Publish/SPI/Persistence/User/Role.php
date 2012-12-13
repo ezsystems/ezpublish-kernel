@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\User;
+
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
@@ -49,7 +50,7 @@ class Role extends ValueObject
     /**
      * Policies associated with the role
      *
-     * @var Policy[]
+     * @var \eZ\Publish\SPI\Persistence\User\Policy[]
      */
     public $policies = array();
 

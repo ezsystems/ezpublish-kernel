@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\TextBlock\Type as TextBlockType,
-    eZ\Publish\Core\FieldType\TextBlock\Value as TextBlockValue,
-    ReflectionObject;
+
+use eZ\Publish\Core\FieldType\TextBlock\Type as TextBlockType;
+use eZ\Publish\Core\FieldType\TextBlock\Value as TextBlockValue;
+use ReflectionObject;
 
 /**
  * @group fieldType
@@ -51,7 +52,7 @@ class TextBlockTest extends StandardizedFieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-       return array(
+        return array(
             'textRows' => array(
                 'type' => 'int',
                 'default' => 10,
@@ -66,7 +67,7 @@ class TextBlockTest extends StandardizedFieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return null;
+        return new TextBlockValue;
     }
 
     /**
@@ -140,11 +141,11 @@ class TextBlockTest extends StandardizedFieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new TextBlockValue,
             ),
             array(
                 '',
-                null,
+                new TextBlockValue,
             ),
             array(
                 'sindelfingen',
@@ -156,11 +157,11 @@ class TextBlockTest extends StandardizedFieldTypeTest
             ),
             array(
                 new TextBlockValue( '' ),
-                null,
+                new TextBlockValue,
             ),
             array(
                 new TextBlockValue( null ),
-                null,
+                new TextBlockValue,
             ),
         );
     }

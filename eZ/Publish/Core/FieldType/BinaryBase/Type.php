@@ -8,12 +8,13 @@
  */
 
 namespace eZ\Publish\Core\FieldType\BinaryBase;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\FieldType\FileService,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\Core\FieldType\ValidationError,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\FieldValue;
+
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\FieldType\FileService;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 /**
  * Base FileType class for Binary field types (i.e. BinaryBase & Media)
@@ -62,6 +63,7 @@ abstract class Type extends FieldType
      * Creates a specific value of the derived class from $inputValue
      *
      * @param array $inputValue
+     *
      * @return Value
      */
     abstract protected function createValue( array $inputValue );
@@ -84,45 +86,14 @@ abstract class Type extends FieldType
     }
 
     /**
-     * Returns the fallback default value of field type when no such default
-     * value is provided in the field definition in content types.
-     *
-     * @return null
-     */
-    public function getEmptyValue()
-    {
-        return null;
-    }
-
-    /**
-     * Potentially builds and checks the type and structure of the $inputValue.
-     *
-     * This method first inspects $inputValue, if it needs to convert it, e.g.
-     * into a dedicated value object. An example would be, that the field type
-     * uses values of MyCustomFieldTypeValue, but can also accept strings as
-     * the input. In that case, $inputValue first needs to be converted into a
-     * MyCustomFieldTypeClass instance.
-     *
-     * After that, the (possibly converted) value is checked for structural
-     * validity. Note that this does not include validation after the rules
-     * from validators, but only plausibility checks for the general data
-     * format.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
+     * Implements the core of {@see acceptValue()}.
      *
      * @param mixed $inputValue
      *
-     * @return mixed The potentially converted and structurally plausible value.
+     * @return \eZ\Publish\Core\FieldType\BinaryBase\Value The potentially converted and structurally plausible value.
      */
-    public function acceptValue( $inputValue )
+    protected function internalAcceptValue( $inputValue )
     {
-        // null is the empty value for this type
-        if ( $inputValue === null )
-        {
-            return $this->getEmptyValue();
-        }
-
         // construction only from path
         if ( is_string( $inputValue ) )
         {
@@ -144,7 +115,7 @@ abstract class Type extends FieldType
             );
         }
 
-        // Required paramater $path
+        // Required parameter $path
         if ( !isset( $inputValue->path ) || !$this->fileExists( $inputValue->path ) )
         {
             throw new InvalidArgumentType(
@@ -183,6 +154,7 @@ abstract class Type extends FieldType
      * Attempts to complete the data in $value
      *
      * @param Value $value
+     *
      * @return void
      */
     protected function completeValue( $value )
@@ -206,7 +178,7 @@ abstract class Type extends FieldType
     /**
      * BinaryBase does not support sorting
      *
-     * @return bool
+     * @return boolean
      */
     protected function getSortInfo( $value )
     {
@@ -222,7 +194,7 @@ abstract class Type extends FieldType
      */
     public function fromHash( $hash )
     {
-        if( $hash === null )
+        if ( $hash === null )
         {
             // empty value
             return null;
@@ -240,7 +212,7 @@ abstract class Type extends FieldType
      */
     public function toHash( $value )
     {
-        if ( $value === null )
+        if ( $this->isEmptyValue( $value ) )
         {
             return null;
         }
@@ -330,7 +302,8 @@ abstract class Type extends FieldType
      * storage
      *
      * @param string $path
-     * @return bool
+     *
+     * @return boolean
      */
     protected function fileExists( $path )
     {
@@ -438,7 +411,7 @@ abstract class Type extends FieldType
     /**
      * Returns whether the field type is searchable
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {

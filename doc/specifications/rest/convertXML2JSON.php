@@ -3,7 +3,7 @@
 /**
  * pretty prints a json string
  *
- * @param $json
+ * @param string $json
  */
 function indent($json)
 {
@@ -68,7 +68,7 @@ function indent($json)
 /**
  * converts a DOMElement to an array representation
  *
- * @param DOMElement $root
+ * @param \DOMElement $root
  */
 function dom_to_array($root)
 {
@@ -127,7 +127,7 @@ function dom_to_array($root)
 /**
  * takes a file name of an xml document and returns an json representation
  *
- * @param $fileName
+ * @param string $fileName
  */
 function convert($fileName)
 {

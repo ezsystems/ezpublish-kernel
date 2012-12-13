@@ -10,26 +10,20 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\TrashService as TrashServiceInterface,
-
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\SPI\Persistence\Handler,
-
-    eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\Core\Repository\Values\Content\TrashItem,
-    eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem,
-    eZ\Publish\API\Repository\Values\Content\Query,
-
-    eZ\Publish\SPI\Persistence\Content\Location\Trashed,
-
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
-
-    eZ\Publish\API\Repository\Values\Content\SearchResult,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId,
-    eZ\Publish\API\Repository\Values\Content\Query\SortClause,
-    DateTime;
+use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\SPI\Persistence\Handler;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\Values\Content\TrashItem;
+use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\Values\Content\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use DateTime;
 
 /**
  * Trash service, used for managing trashed content
@@ -56,7 +50,7 @@ class TrashService implements TrashServiceInterface
     /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
-     * @param \eZ\Publish\API\Repository\Repository  $repository
+     * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
      * @param array $settings
      */
@@ -64,7 +58,8 @@ class TrashService implements TrashServiceInterface
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
     }
@@ -77,7 +72,7 @@ class TrashService implements TrashServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the trashed location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the location with the given id does not exist
      *
-     * @param integer $trashItemId
+     * @param int $trashItemId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
@@ -106,7 +101,7 @@ class TrashService implements TrashServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
+     * @return null|\eZ\Publish\API\Repository\Values\Content\TrashItem null if location was deleted, otherwise TrashItem
      */
     public function trash( Location $location )
     {
@@ -119,7 +114,7 @@ class TrashService implements TrashServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $spiTrashItem = $this->persistenceHandler->trashHandler()->trash( $location->id );
+            $spiTrashItem = $this->persistenceHandler->trashHandler()->trashSubtree( $location->id );
             $this->persistenceHandler->urlAliasHandler()->locationDeleted( $location->id );
             $this->repository->commit();
         }
@@ -129,7 +124,9 @@ class TrashService implements TrashServiceInterface
             throw $e;
         }
 
-        return $this->buildDomainTrashItemObject( $spiTrashItem );
+        return isset( $spiTrashItem )
+            ? $this->buildDomainTrashItemObject( $spiTrashItem )
+            : null;
     }
 
     /**
@@ -167,24 +164,10 @@ class TrashService implements TrashServiceInterface
                 $newParentLocationId
             );
 
-            // There is a possibility for content to loose main location when one of its locations is recovered
-            // from trash, so we need to check for it and set the newly recovered location to be the main one
-            $contentService = $this->repository->getContentService();
-
-            $content = $contentService->loadContent( $trashItem->contentId );
-            if ( !is_numeric( $content->contentInfo->mainLocationId ) )
-            {
-                $contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
-                $contentMetadataUpdateStruct->mainLocationId = $newLocationId;
-
-                $contentService->updateContentMetadata(
-                    $content->contentInfo,
-                    $contentMetadataUpdateStruct
-                );
-            }
+            $content = $this->repository->getContentService()->loadContent( $trashItem->contentId );
+            $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
 
             // Publish URL aliases for recovered location
-            $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
             foreach ( $urlAliasNames as $languageCode => $name )
             {
                 $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
@@ -298,8 +281,8 @@ class TrashService implements TrashServiceInterface
 
         $spiTrashItems = $this->persistenceHandler->trashHandler()->findTrashItems(
             $query->criterion !== null ? $query->criterion : null,
-            $query->offset !== null && $query->offset > 0 ? (int) $query->offset : 0,
-            $query->limit !== null && $query->limit >= 1 ? (int) $query->limit : null,
+            $query->offset !== null && $query->offset > 0 ? (int)$query->offset : 0,
+            $query->limit !== null && $query->limit >= 1 ? (int)$query->limit : null,
             $query->sortClauses !== null ? $query->sortClauses : null
         );
 
@@ -326,33 +309,19 @@ class TrashService implements TrashServiceInterface
      */
     protected function buildDomainTrashItemObject( Trashed $spiTrashItem )
     {
-        $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiTrashItem->contentId );
-
-        $trashedChildren = array_filter(
-            $this->persistenceHandler->trashHandler()->findTrashItems(
-                new ParentLocationId( $spiTrashItem->id )
-            ),
-            function( $trashedChild ) use ( $spiTrashItem )
-            {
-                return $trashedChild->parentId === $spiTrashItem->id;
-            }
-        );
-
         return new TrashItem(
             array(
-                'contentInfo' => $contentInfo,
-                'id' => (int) $spiTrashItem->id,
-                'priority' => (int) $spiTrashItem->priority,
-                'hidden' => (bool) $spiTrashItem->hidden,
-                'invisible' => (bool) $spiTrashItem->invisible,
+                'contentInfo' => $this->repository->getContentService()->loadContentInfo( $spiTrashItem->contentId ),
+                'id' => (int)$spiTrashItem->id,
+                'priority' => (int)$spiTrashItem->priority,
+                'hidden' => (bool)$spiTrashItem->hidden,
+                'invisible' => (bool)$spiTrashItem->invisible,
                 'remoteId' => $spiTrashItem->remoteId,
-                'parentLocationId' => (int) $spiTrashItem->parentId,
+                'parentLocationId' => (int)$spiTrashItem->parentId,
                 'pathString' => $spiTrashItem->pathString,
-                'modifiedSubLocationDate' => $this->getDateTime( $spiTrashItem->modifiedSubLocation ),
-                'depth' => (int) $spiTrashItem->depth,
-                'sortField' => (int) $spiTrashItem->sortField,
-                'sortOrder' => (int) $spiTrashItem->sortOrder,
-                'childCount' => count( $trashedChildren )
+                'depth' => (int)$spiTrashItem->depth,
+                'sortField' => (int)$spiTrashItem->sortField,
+                'sortOrder' => (int)$spiTrashItem->sortOrder,
             )
         );
     }

@@ -8,17 +8,18 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\FieldType\DateAndTime\Type as DateAndTimeType,
-    eZ\Publish\Core\FieldType\FieldSettings,
-    DateTime,
-    DateInterval,
-    DOMDocument,
-    SimpleXMLElement;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+use eZ\Publish\Core\FieldType\DateAndTime\Type as DateAndTimeType;
+use eZ\Publish\Core\FieldType\FieldSettings;
+use DateTime;
+use DateInterval;
+use DOMDocument;
+use SimpleXMLElement;
 
 class DateAndTime implements Converter
 {
@@ -27,7 +28,6 @@ class DateAndTime implements Converter
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @static
      * @return DateAndTime
      */
     public static function create()
@@ -43,7 +43,7 @@ class DateAndTime implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        // @TODO: One should additionally store the timezone here. This could
+        // @todo: One should additionally store the timezone here. This could
         // be done in a backwards compatible way, I think…
         $storageFieldValue->dataInt = ( $value->data !== null ? $value->data['timestamp'] : null );
         $storageFieldValue->sortKeyInt = $value->sortKey;
@@ -155,6 +155,7 @@ class DateAndTime implements Converter
      * Generates the internal XML structure for $dateInterval, used for date adjustment
      *
      * @param \DateInterval $dateInterval
+     *
      * @return string The generated XML string
      */
     protected function generateDateIntervalXML( DateInterval $dateInterval )
@@ -201,6 +202,7 @@ class DateAndTime implements Converter
      * Generates a DateInterval object from $xmlText
      *
      * @param string $xmlText
+     *
      * @return \DateInterval
      */
     protected function getDateIntervalFromXML( $xmlText )

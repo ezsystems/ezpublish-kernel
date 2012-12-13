@@ -8,16 +8,17 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
-use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
-    eZ\Publish\SPI\Persistence\User,
-    eZ\Publish\SPI\Persistence\User\Role,
-    eZ\Publish\SPI\Persistence\User\RoleAssignment,
-    eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
-    eZ\Publish\SPI\Persistence\User\Policy,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    LogicException;
+
+use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface;
+use eZ\Publish\SPI\Persistence\User;
+use eZ\Publish\SPI\Persistence\User\Role;
+use eZ\Publish\SPI\Persistence\User\RoleAssignment;
+use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
+use eZ\Publish\SPI\Persistence\User\Policy;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use LogicException;
 
 /**
  * Storage Engine handler for user module
@@ -53,8 +54,10 @@ class UserHandler implements UserHandlerInterface
      * to reference the user.
      *
      * @param \eZ\Publish\SPI\Persistence\User $user
-     * @return \eZ\Publish\SPI\Persistence\User
+     *
      * @throws LogicException If no id was provided or if it already exists
+     *
+     * @return \eZ\Publish\SPI\Persistence\User
      */
     public function create( User $user )
     {
@@ -63,9 +66,10 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
-     * Load user with user ID.
+     * Loads user with user ID.
      *
      * @param mixed $userId
+     *
      * @return \eZ\Publish\SPI\Persistence\User
      */
     public function load( $userId )
@@ -74,7 +78,7 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
-     * Load user with user login / email.
+     * Loads user with user login / email.
      *
      * @param string $login
      * @param boolean $alsoMatchEmail Also match user email, caller must verify that $login is a valid email address.
@@ -125,6 +129,7 @@ class UserHandler implements UserHandlerInterface
      * Delete user with the given ID.
      *
      * @param mixed $userId
+     *
      * @todo Throw on missing user?
      */
     public function delete( $userId )
@@ -137,18 +142,13 @@ class UserHandler implements UserHandlerInterface
      * Create new role
      *
      * @param \eZ\Publish\SPI\Persistence\User\Role $role
+     *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
     public function createRole( Role $role )
     {
         if ( !$role->identifier )
             throw new InvalidArgumentValue( '$role->identifier', $role->identifier );
-
-        if ( !is_array( $role->name ) )
-            throw new InvalidArgumentValue( '$role->name', $role->name );
-
-        if ( !is_array( $role->description ) )
-            throw new InvalidArgumentValue( '$role->description', $role->description );
 
         $roleArr = (array)$role;
         $roleArr['policies'] = array();
@@ -161,11 +161,13 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
-     * Load a specified role by id
+     * Loads a specified role by id
      *
      * @param mixed $roleId
-     * @return \eZ\Publish\SPI\Persistence\User\Role
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role
      */
     public function loadRole( $roleId )
     {
@@ -186,11 +188,13 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
-     * Load a specified role by $identifier
+     * Loads a specified role by $identifier
      *
      * @param string $identifier
-     * @return \eZ\Publish\SPI\Persistence\User\Role
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role
      */
     public function loadRoleByIdentifier( $identifier )
     {
@@ -211,7 +215,7 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
-     * Load all roles
+     * Loads all roles
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role[]
      */
@@ -230,9 +234,10 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
-     * Load roles assigned to a user/group
+     * Loads roles assigned to a user/group
      *
      * @param mixed $groupId
+     *
      * @return \eZ\Publish\SPI\Persistence\User\Role[]
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user (it's content object atm) is not found
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group is not of user_group Content Type
@@ -259,7 +264,7 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
-     * Load roles assignments Role
+     * Loads roles assignments Role
      *
      * Role Assignments with same roleId and limitationIdentifier will be merged together into one.
      *
@@ -273,16 +278,17 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
-     * Load roles assignments to a user/group
+     * Loads roles assignments to a user/group
      *
      * Role Assignments with same roleId and limitationIdentifier will be merged together into one.
      *
      * @param mixed $groupId In legacy storage engine this is the content object id roles are assigned to in ezuser_role.
      *                      By the nature of legacy this can currently also be used to get by $userId.
-     * @param bool $inherit If true also return inherited role assigments from user groups.
+     * @param boolean $inherit If true also return inherited role assignments from user groups.
      *
      * @throws \LogicException Internal data corruption error
      * @uses getRoleAssignmentForContent()
+     *
      * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
      */
     public function loadRoleAssignmentsByGroupId( $groupId, $inherit = false )
@@ -290,29 +296,13 @@ class UserHandler implements UserHandlerInterface
         if ( $inherit === false )
             return $this->getRoleAssignmentForContent( array( $groupId ) );
 
-
         $contentIds = array( $groupId );
-        $list = $this->backend->find(
-            'Content',
-            array( 'id' => $groupId ),
-            array(
-                'locations' => array(
-                    'type' => 'Content\\Location',
-                    'match' => array( 'contentId' => 'id' )
-                ),
-                /*'contentInfo' => array(
-                    'type' => 'Content\\ContentInfo',
-                    'match' => array( 'id' => 'id' ),
-                    'single' => true
-                )*/
-            )
-        );
-
-        if ( empty( $list ) )
+        $locations = $this->handler->locationHandler()->loadLocationsByContent( $groupId );
+        if ( empty( $locations ) )
             return array();
 
         // crawl up path on all locations
-        foreach ( $list[0]->locations as $location )
+        foreach ( $locations as $location )
         {
             $parentIds = array_reverse( explode( '/', trim( $location->pathString, '/' ) ) );
             foreach ( $parentIds as $parentId )
@@ -320,14 +310,11 @@ class UserHandler implements UserHandlerInterface
                 if ( $parentId == $location->id )
                     continue;
 
+                $location = $this->backend->load( 'Content\\Location', $parentId );
                 $list = $this->backend->find(
                     'Content',
-                    array( 'locations' => array( 'id' => $parentId ) ),
+                    array( 'id' => $location->contentId ),
                     array(
-                        'locations' => array(
-                            'type' => 'Content\\Location',
-                            'match' => array( 'contentId' => 'id' )
-                        ),
                         'versionInfo' => array(
                             'type' => 'Content\\VersionInfo',
                             'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
@@ -397,7 +384,8 @@ class UserHandler implements UserHandlerInterface
                     $new->values = array( $new->values );
                     $data[$new->role->id][$new->contentId][$new->limitationIdentifier] = $new;
                 }
-                else // merge limitation values
+                // merge limitation values
+                else
                 {
                     $data[$new->role->id][$new->contentId][$new->limitationIdentifier]->values[] = $new->values;
                 }
@@ -434,12 +422,6 @@ class UserHandler implements UserHandlerInterface
         if ( !$role->identifier )
             throw new InvalidArgumentValue( '$role->identifier', $role->identifier );
 
-        if ( !is_array( $role->name ) )
-            throw new InvalidArgumentValue( '$role->name', $role->name );
-
-        if ( !is_array( $role->description ) )
-            throw new InvalidArgumentValue( '$role->description', $role->description );
-
         $roleArr = (array)$role;
         $this->backend->update( 'User\\Role', $roleArr['id'], $roleArr );
     }
@@ -461,6 +443,7 @@ class UserHandler implements UserHandlerInterface
      *
      * @param mixed $roleId
      * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
+     *
      * @return \eZ\Publish\SPI\Persistence\User\Policy
      * @todo Throw on invalid Role Id?
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If $policy->limitation is empty (null, empty string/array..)
@@ -480,6 +463,7 @@ class UserHandler implements UserHandlerInterface
      * Replaces limitations values with new values.
      *
      * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If $policy->limitation is empty (null, empty string/array..)
      */
     public function updatePolicy( Policy $policy )
@@ -496,8 +480,10 @@ class UserHandler implements UserHandlerInterface
      *
      * @param mixed $roleId
      * @param mixed $policyId
-     * @return void
+     *
      * @todo Throw exception on missing role / policy?
+     *
+     * @return void
      */
     public function removePolicy( $roleId, $policyId )
     {
@@ -508,6 +494,7 @@ class UserHandler implements UserHandlerInterface
      * Returns the user policies associated with the user (including inherited policies from user groups)
      *
      * @param mixed $userId
+     *
      * @return \eZ\Publish\SPI\Persistence\User\Policy[]
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user (it's content object atm) is not found
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user is not of user Content Type
@@ -518,10 +505,6 @@ class UserHandler implements UserHandlerInterface
             'Content',
             array( 'id' => $userId ),
             array(
-                'locations' => array(
-                    'type' => 'Content\\Location',
-                    'match' => array( 'contentId' => 'id' )
-                ),
                 'versionInfo' => array(
                     'type' => 'Content\\VersionInfo',
                     'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
@@ -544,7 +527,10 @@ class UserHandler implements UserHandlerInterface
         $this->getPermissionsForObject( $list[0], 4, $policies );
 
         // crawl up path on all locations
-        foreach ( $list[0]->locations as $location )
+        $locations = $this->handler->locationHandler()->loadLocationsByContent(
+            $list[0]->versionInfo->contentInfo->id
+        );
+        foreach ( $locations as $location )
         {
             $parentIds = array_reverse( explode( '/', trim( $location->pathString, '/' ) ) );
             foreach ( $parentIds as $parentId )
@@ -552,14 +538,11 @@ class UserHandler implements UserHandlerInterface
                 if ( $parentId == $location->id )
                     continue;
 
+                $location = $this->backend->load( 'Content\\Location', $parentId );
                 $list2 = $this->backend->find(
                     'Content',
-                    array( 'locations' => array( 'id' => $parentId ) ),
+                    array( 'id' => $location->contentId ),
                     array(
-                        'locations' => array(
-                            'type' => 'Content\\Location',
-                            'match' => array( 'contentId' => 'id' )
-                        ),
                         'versionInfo' => array(
                             'type' => 'Content\\VersionInfo',
                             'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
@@ -590,6 +573,7 @@ class UserHandler implements UserHandlerInterface
      * @param array $policies
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $content is not type $typeId
+     *
      * @return void
      */
     protected function getPermissionsForObject( Content $content, $typeId, array &$policies )
@@ -621,7 +605,7 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
-     * Assign role to a user or user group with given limitations
+     * Assigns role to a user or user group with given limitations
      *
      * The limitation array looks like:
      * <code>
@@ -641,6 +625,7 @@ class UserHandler implements UserHandlerInterface
      * @param mixed $contentId The groupId or userId to assign the role to.
      * @param mixed $roleId
      * @param array $limitation
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or role is not found
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group is not of user_group Content Type
      */
@@ -695,6 +680,7 @@ class UserHandler implements UserHandlerInterface
      *
      * @param mixed $contentId The user or user group Id to un-assign the role from.
      * @param mixed $roleId
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or role is not found
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group is not of user[_group] Content Type
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If group does not contain role

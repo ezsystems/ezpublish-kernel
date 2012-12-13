@@ -8,15 +8,16 @@
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
-use eZ\Publish\Core\Persistence\Legacy,
-    eZ\Publish\Core\FieldType,
-    eZ\Publish\SPI\Persistence\Content;
+
+use eZ\Publish\Core\Persistence\Legacy;
+use eZ\Publish\Core\FieldType;
+use eZ\Publish\SPI\Persistence\Content;
 
 /**
  * Integration test for legacy storage field types
  *
  * This abstract base test case is supposed to be the base for field type
- * integration tests. It basically calls all involved methods in the field type 
+ * integration tests. It basically calls all involved methods in the field type
  * ``Converter`` and ``Storage`` implementations. Fo get it working implement
  * the abstract methods in a sensible way.
  *
@@ -35,7 +36,7 @@ use eZ\Publish\Core\Persistence\Legacy,
 class DateAndTimeIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -89,13 +90,20 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
             // The ezdate field type does not have any special field definition
             // properties
             array( 'fieldType', 'ezdate' ),
-            array( 'fieldTypeConstraints', new Content\FieldTypeConstraints( array(
-                'fieldSettings' => new FieldType\FieldSettings( array(
-                    'defaultType'  => 0,
-                    'useSeconds'   => false,
-                    'dateInterval' => null,
-                ) ),
-            ) ) ),
+            array(
+                'fieldTypeConstraints',
+                new Content\FieldTypeConstraints(
+                    array(
+                        'fieldSettings' => new FieldType\FieldSettings(
+                            array(
+                                'defaultType'  => 0,
+                                'useSeconds'   => false,
+                                'dateInterval' => null,
+                            )
+                        ),
+                    )
+                )
+            ),
         );
     }
 
@@ -106,14 +114,16 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
      */
     public function getInitialValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => array(
-                'timestamp' => 123456,
-                'rfc850'    => null,
-            ),
-            'externalData' => null,
-            'sortKey'      => 42,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => array(
+                    'timestamp' => 123456,
+                    'rfc850'    => null,
+                ),
+                'externalData' => null,
+                'sortKey'      => 42,
+            )
+        );
     }
 
     /**
@@ -125,14 +135,15 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        return new Content\FieldValue( array(
-            'data'         => array(
-                'timestamp' => 12345678,
-                'rfc850'    => null,
-            ),
-            'externalData' => null,
-            'sortKey'      => 23,
-        ) );
+        return new Content\FieldValue(
+            array(
+                'data'         => array(
+                    'timestamp' => 12345678,
+                    'rfc850'    => null,
+                ),
+                'externalData' => null,
+                'sortKey'      => 23,
+            )
+        );
     }
 }
-

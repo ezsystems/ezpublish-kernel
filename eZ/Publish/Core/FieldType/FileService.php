@@ -13,10 +13,12 @@ interface FileService
 {
     /**
      * Store the local file identified by $sourcePath in a location that corresponds
-     * to $storageIdentifier. Returns an $storageIdentifier again.
+     * to $storageIdentifier. Returns a storage identifier used inside the
+     * storage (might differ from the incoming $storageIdentifier).
      *
      * @param string $sourcePath
      * @param string $storageIdentifier
+     *
      * @return string
      */
     public function storeFile( $sourcePath, $storageIdentifier );
@@ -31,7 +33,10 @@ interface FileService
      * );
      *
      * @param string $storageIdentifier
+     *
      * @return array
+     * @todo This method should be extracted later into a dedicated class to
+     *       handle meta data.
      */
     public function getMetaData( $storageIdentifier );
 
@@ -39,6 +44,7 @@ interface FileService
      * Returns the file size of the file identified by $storageIdentifier
      *
      * @param string $storageIdentifier
+     *
      * @return int
      */
     public function getFileSize( $storageIdentifier );
@@ -47,13 +53,14 @@ interface FileService
      * Removes the path identified by $storageIdentifier, potentially
      * $recursive.
      *
-     * Attemts to removed the path identified by $storageIdentifier. If
+     * Attempts to removed the path identified by $storageIdentifier. If
      * $storageIdentifier is a directory which is not empty and $recursive is
-     * set to false, an exception is thrown. Attemting to remove a non
+     * set to false, an exception is thrown. Attempting to remove a non
      * existing $storageIdentifier is silently ignored.
      *
      * @param string $storageIdentifier
-     * @param bool $recursive
+     * @param boolean $recursive
+     *
      * @return void
      * @throws \RuntimeException if children of $storageIdentifier exist and
      *                           $recursive is false
@@ -69,6 +76,7 @@ interface FileService
      * encapsulated by the file service.
      *
      * @param string $path
+     *
      * @return string
      */
     public function getStorageIdentifier( $path );
@@ -77,7 +85,8 @@ interface FileService
      * Returns is a file/directory with the given $storageIdentifier exists
      *
      * @param string $storageIdentifier
-     * @return bool
+     *
+     * @return boolean
      */
     public function exists( $storageIdentifier );
 }

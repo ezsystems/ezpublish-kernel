@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content;
+
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
@@ -35,7 +36,7 @@ class CreateStruct extends ValueObject
     public $ownerId;
 
     /**
-     * contentId, contentVersion and mainLocationId are allowed to be left empty
+     * ContentId, contentVersion and mainLocationId are allowed to be left empty
      * when used on with this struct as these values are created by the create method.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct[]
@@ -46,7 +47,7 @@ class CreateStruct extends ValueObject
      * Contains *all* fields of the object to be created.
      *
      * This attribute should contain *all* fields (in all language) of the
-     * object to be created. If a field is not translateable, it may only occur
+     * object to be created. If a field is not translatable, it may only occur
      * once. The storage layer will automatically take care that such fields
      * are assigned to each language version.
      *

@@ -13,11 +13,11 @@ namespace eZ\Publish\SPI\FieldType;
  * Abstract base class for FieldType events
  *
  * An instance of a derived class is given to {@link
- * eZ\Publish\SPI\FieldType\FieldType::handleEvent()}. The derived class name
+ * eZ\Publish\SPI\FieldType\EventListener::handleEvent()}. The derived class name
  * identified the occurred event. The properties of the class give the needed
  * event context.
  *
- * @TODO Add VersionInfo parameter
+ * @todo Add VersionInfo parameter
  */
 abstract class Event
 {
@@ -38,7 +38,9 @@ abstract class Event
     /**
      * VersionInfo of the Content the affected field belongs to
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
+     * Value is null in case of pre create events!
+     *
+     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo|null
      */
     public $versionInfo;
 }

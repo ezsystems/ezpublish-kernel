@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
-use PHPUnit_Framework_TestCase,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\Router,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Port as PortMatcher,
-    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+
+use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Port as PortMatcher;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 
 class RouterSpecialPortsTest extends PHPUnit_Framework_TestCase
 {
@@ -40,7 +41,8 @@ class RouterSpecialPortsTest extends PHPUnit_Framework_TestCase
                     85 => "first_sa",
                     443 => "fourth_sa",
                 ),
-            )
+            ),
+            array( 'first_sa', 'second_sa', 'third_sa', 'fourth_sa', 'fifth_sa' )
         );
     }
 
@@ -59,6 +61,7 @@ class RouterSpecialPortsTest extends PHPUnit_Framework_TestCase
         $sa = $router->match( $request );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa );
         $this->assertSame( $siteAccess, $sa->name );
+        $router->setSiteAccess();
     }
 
     public function matchProvider()

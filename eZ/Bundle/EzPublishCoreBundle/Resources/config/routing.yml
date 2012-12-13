@@ -31,7 +31,7 @@ services:
 
     ezpublish.urlalias_router:
         class: %ezpublish.urlalias_router.class%
-        arguments: [@ezpublish.api.repository.lazy, @ezpublish.urlalias_generator, %ezsettings.default.languages%, @?router.request_context, @?logger]
+        arguments: [@ezpublish.api.repository.lazy, @ezpublish.urlalias_generator, @?router.request_context, @?logger]
         calls:
             - [setContainer, [@service_container]]
         tags:
@@ -44,7 +44,11 @@ services:
 
     ezpublish.siteaccess_router:
         class: %ezpublish.siteaccess_router.class%
-        arguments: [%ezpublish.siteaccess.default%, %ezpublish.siteaccess.match_config%, %ezpublish.siteaccess.class%]
+        arguments:
+            - %ezpublish.siteaccess.default%
+            - %ezpublish.siteaccess.match_config%
+            - %ezpublish.siteaccess.list%
+            - %ezpublish.siteaccess.class%
 
     ezpublish.siteaccess_listener:
         class: %ezpublish.siteaccess_listener.class%
@@ -54,6 +58,6 @@ services:
 
     ezpublish.request_redirect_listener:
         class: %ezpublish.request_redirect_listener.class%
-        arguments: [@http_kernel, @?logger]
+        arguments: [@service_container, @?logger]
         tags:
             - { name: kernel.event_subscriber }

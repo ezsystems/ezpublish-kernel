@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Country\Exception;
+
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
@@ -23,7 +24,7 @@ class InvalidValue extends InvalidArgumentException
     public function __construct( $value )
     {
         parent::__construct(
-            '$value', "is not a valid value country identifier"
+            '$value', "'" . var_export( $value, true ) . "' is not a valid country identifier"
         );
     }
 }

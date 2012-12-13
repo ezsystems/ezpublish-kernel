@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
 use eZ\Publish\Core\REST\Server\Input\Parser\FieldDefinitionUpdate;
 
 /**
- * @TODO Test with fieldSettings and validatorConfiguration when specified
+ * @todo Test with fieldSettings and validatorConfiguration when specified
  */
 class FieldDefinitionUpdateTest extends BaseTest
 {

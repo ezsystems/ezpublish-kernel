@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Float;
+
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
@@ -20,14 +21,14 @@ class Value extends BaseValue
      *
      * @var float
      */
-    public $value = 0.0;
+    public $value;
 
     /**
      * Construct a new Value object and initialize with $value
      *
-     * @param float $value
+     * @param float|null $value
      */
-    public function __construct( $value )
+    public function __construct( $value = null )
     {
         $this->value = $value;
     }

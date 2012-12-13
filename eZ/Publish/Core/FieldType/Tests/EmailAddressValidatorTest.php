@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue,
-    eZ\Publish\Core\FieldType\Validator\EmailAddressValidator;
+
+use eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue;
+use eZ\Publish\Core\FieldType\Validator\EmailAddressValidator;
 
 /**
  *
@@ -21,7 +22,7 @@ class EmailAddressValidatorTest extends FieldTypeTest
 {
 
     /**
-     * This test ensure an EMailAddressValidator can be created
+     * This test ensure an EmailAddressValidator can be created
      */
     public function testConstructor()
     {
@@ -83,7 +84,6 @@ class EmailAddressValidatorTest extends FieldTypeTest
         $this->assertSame( $constraints["Extent"], $validator->Extent );
     }
 
-
     public function testValidateCorrectEmailAddresses()
     {
         $validator = new EmailAddressValidator;
@@ -97,11 +97,8 @@ class EmailAddressValidatorTest extends FieldTypeTest
 
     }
 
-
-
     /**
      * Tests validating a wrong value
-     *
      *
      * @covers \eZ\Publish\Core\FieldType\Validator\EmailAddressValidator::validate
      */
@@ -115,6 +112,4 @@ class EmailAddressValidatorTest extends FieldTypeTest
             $this->assertFalse( $validator->validate( new EmailAddressValue( $value ) ) );
         }
     }
-
-
 }

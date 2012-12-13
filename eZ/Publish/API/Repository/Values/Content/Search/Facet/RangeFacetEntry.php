@@ -11,8 +11,8 @@ namespace eZ\Publish\API\Repository\Values\Content\Search\Facet;
 /**
  * This class holds statistical data for value ranges
  */
-class RangeFacetEntry {
-
+class RangeFacetEntry
+{
     /**
      * The lower bound of the range
      *
@@ -54,5 +54,4 @@ class RangeFacetEntry {
      * @var float
      */
     public $mean;
-
 }

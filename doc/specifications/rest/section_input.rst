@@ -38,5 +38,5 @@ SectionInput
    Local Variables:
    mode: rst
    fill-column: 79
-   End: 
+   End:
    vim: et syn=rst tw=79

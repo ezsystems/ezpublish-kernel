@@ -76,13 +76,6 @@ class LocationStub extends Location
     // protected $pathString;
 
     /**
-     * Date of the latest update of a content object in a sub location.
-     *
-     * @var \DateTime
-     */
-    // protected $modifiedSubLocationDate;
-
-    /**
      * Identifier of the main location.
      *
      * If the content object in this location has multiple locations,
@@ -118,13 +111,6 @@ class LocationStub extends Location
     // protected $sortOrder;
 
     /**
-     * the number of children visible to the authenticated user which has loaded this instance.
-     *
-     * @var integer
-     */
-    // protected $childCount;
-
-    /**
      * ContentInfo
      *
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
@@ -132,7 +118,7 @@ class LocationStub extends Location
     protected $contentInfo;
 
     /**
-     * returns the content info of the content object of this location
+     * Returns the content info of the content object of this location
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
@@ -144,21 +130,15 @@ class LocationStub extends Location
     /**
      * FOR TEST USE ONLY!
      *
-     * @param int $childCount
-     * @return void
-     */
-    public function __setChildCount( $childCount )
-    {
-        $this->childCount = $childCount;
-    }
-
-    /**
-     * FOR TEST USE ONLY!
+     * @access private
+     *
+     * @internal
      *
      * @param int $parentLocationId
+     *
      * @return void
      */
-    public function __setParentLocationId( $parentLocationId )
+    public function setParentLocationId( $parentLocationId )
     {
         $this->parentLocationId = $parentLocationId;
     }
@@ -166,9 +146,13 @@ class LocationStub extends Location
     /**
      * FOR TEST USE ONLY!
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __hide()
+    public function hide()
     {
         $this->hidden = true;
     }
@@ -176,9 +160,13 @@ class LocationStub extends Location
     /**
      * FOR TEST USE ONLY!
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __unhide()
+    public function unhide()
     {
         $this->hidden = false;
     }
@@ -186,9 +174,13 @@ class LocationStub extends Location
     /**
      * FOR TEST USE ONLY!
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __makeVisible()
+    public function makeVisible()
     {
         $this->invisible = false;
     }
@@ -196,9 +188,13 @@ class LocationStub extends Location
     /**
      * FOR TEST USE ONLY!
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __makeInvisible()
+    public function makeInvisible()
     {
         $this->invisible = true;
     }
@@ -206,10 +202,15 @@ class LocationStub extends Location
     /**
      * FOR TEST USE ONLY!
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $newContentInfo
+     *
      * @return void
      */
-    public function __setContentInfo( ContentInfo $newContentInfo )
+    public function setContentInfo( ContentInfo $newContentInfo )
     {
         $this->contentInfo = $newContentInfo;
     }
@@ -217,10 +218,15 @@ class LocationStub extends Location
     /**
      * FOR TEST USE ONLY!
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param int $depth
+     *
      * @return void
      */
-    public function __setDepth( $depth )
+    public function setDepth( $depth )
     {
         $this->depth = $depth;
     }
@@ -228,10 +234,15 @@ class LocationStub extends Location
     /**
      * FOR TEST USE ONLY!
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param string $pathString
+     *
      * @return void
      */
-    public function __setPathString( $pathString )
+    public function setPathString( $pathString )
     {
         $this->pathString = $pathString;
     }

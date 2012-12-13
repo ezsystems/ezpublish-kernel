@@ -9,8 +9,8 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser,
-    Symfony\Component\DependencyInjection\ContainerBuilder;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Provides helpers to deal with array settings. This abstract class mainly
@@ -50,7 +50,7 @@ abstract class AbstractParser implements Parser
     /**
      * Sets the base key of this parser.
      *
-     * @param string $key 
+     * @param string $key
      */
     public function setBaseKey( $key )
     {
@@ -64,6 +64,7 @@ abstract class AbstractParser implements Parser
      * @param ContainerBuilder $container
      * @param string $id
      * @param mixed $default
+     *
      * @return mixed
      */
     protected function getContainerParameter( ContainerBuilder $container, $id, $default = null )
@@ -81,7 +82,8 @@ abstract class AbstractParser implements Parser
      * @param array $groups array of group name
      * @param string $id id of the setting array under ezpublish.<base_key>.<group_name>
      * @param array $config the full configuration array
-     * @param bool $options only self::MERGE_FROM_SECOND_LEVEL is recognized
+     * @param int $options only self::MERGE_FROM_SECOND_LEVEL or self::UNIQUE are recognized
+     *
      * @return array
      */
     protected function groupsArraySetting( array $groups, $id, array $config, $options = 0 )
@@ -103,7 +105,7 @@ abstract class AbstractParser implements Parser
                         else
                         {
                             // array_merge() has to be used because we don't
-                            // know wether we have a hash or a plain array
+                            // know whether we have a hash or a plain array
                             $groupsSettings[$key] = array_merge(
                                 $groupsSettings[$key],
                                 $config[$this->baseKey][$group][$id][$key]
@@ -114,7 +116,7 @@ abstract class AbstractParser implements Parser
                 else
                 {
                     // array_merge() has to be used because we don't
-                    // know wether we have a hash or a plain array
+                    // know whether we have a hash or a plain array
                     $groupsSettings = array_merge(
                         $groupsSettings,
                         $config[$this->baseKey][$group][$id]
@@ -203,7 +205,7 @@ abstract class AbstractParser implements Parser
             if ( $options & self::MERGE_FROM_SECOND_LEVEL )
             {
                 // array_merge() has to be used because we don't
-                // know wether we have a hash or a plain array
+                // know whether we have a hash or a plain array
                 $keys1 = array_unique(
                     array_merge(
                         array_keys( $defaultSettings ),

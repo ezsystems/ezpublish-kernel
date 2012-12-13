@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 
 /**
@@ -29,6 +30,7 @@ class Sqlite extends EzcDbHandler
      *
      * @param string $table
      * @param string $column
+     *
      * @return mixed
      */
     public function getAutoIncrementValue( $table, $column )

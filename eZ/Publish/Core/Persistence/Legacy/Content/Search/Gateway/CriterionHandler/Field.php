@@ -8,14 +8,15 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
-    ezcQuerySelect,
-    RuntimeException;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use ezcQuerySelect;
+use RuntimeException;
 
 /**
  * Field criterion handler
@@ -52,7 +53,8 @@ class Field extends CriterionHandler
      * Check if this criterion handler accepts to handle the given criterion.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion$criterion
-     * @return bool
+     *
+     * @return boolean
      */
     public function accept( Criterion $criterion )
     {
@@ -67,6 +69,7 @@ class Field extends CriterionHandler
      *
      * @caching
      * @param string $fieldIdentifier
+     *
      * @return array
      */
     protected function getFieldInformation( $fieldIdentifier )
@@ -105,8 +108,10 @@ class Field extends CriterionHandler
 
                 if ( !$converter instanceof Converter )
                 {
-                    throw new RuntimeException( "getConverter({$row['data_type_string']}) did not return a converter, got: " .
-                        gettype( $converter ) );
+                    throw new RuntimeException(
+                        "getConverter({$row['data_type_string']}) did not return a converter, got: " .
+                        gettype( $converter )
+                    );
                 }
 
                 $fieldMapArray[ $row['data_type_string'] ] = array(
@@ -127,6 +132,7 @@ class Field extends CriterionHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter$converter
      * @param \ezcQuerySelect $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion$criterion
+     *
      * @return \ezcQueryExpression
      */
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )

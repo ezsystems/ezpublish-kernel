@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\BinaryBase\Type as BinaryBaseType,
-    eZ\Publish\Core\FieldType\BinaryBase\Value as BinaryBaseValue;
+
+use eZ\Publish\Core\FieldType\BinaryBase\Type as BinaryBaseType;
+use eZ\Publish\Core\FieldType\BinaryBase\Value as BinaryBaseValue;
 
 /**
  * Base class for binary field types
@@ -44,11 +45,6 @@ abstract class BinaryBaseTest extends StandardizedFieldTypeTest
     protected function getSettingsSchemaExpectation()
     {
         return array();
-    }
-
-    protected function getEmptyValueExpectation()
-    {
-        return null;
     }
 
     public function provideInvalidInputForAcceptValue()
@@ -123,7 +119,7 @@ abstract class BinaryBaseTest extends StandardizedFieldTypeTest
     /**
      * Provide data sets with validator configurations which are considered
      * invalid by the {@link validateValidatorConfiguration()} method. The
-     * method must return a non-empty array of valiation errors when receiving
+     * method must return a non-empty array of validation errors when receiving
      * one of the provided values.
      *
      * Returns an array of data provider sets with a single argument: A valid

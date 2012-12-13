@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\HttpClient\Authentication;
+
 use eZ\Publish\Core\REST\Client\HttpClient;
 use eZ\Publish\Core\REST\Client\Sessionable;
 use eZ\Publish\Core\REST\Common\Message;
@@ -62,6 +63,7 @@ class IntegrationTestAuthenticator implements HttpClient, Sessionable
      * @param string $method
      * @param string $path
      * @param \eZ\Publish\Core\REST\Common\Message $message
+     *
      * @return \eZ\Publish\Core\REST\Common\Message
      */
     public function request( $method, $path, Message $message = null )

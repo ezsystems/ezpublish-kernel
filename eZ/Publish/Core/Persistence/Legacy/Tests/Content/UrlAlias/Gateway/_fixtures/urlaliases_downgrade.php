@@ -68,4 +68,21 @@ return array (
             'text_md5' => '538dca05643d220317ad233cd7be7a0a',
         ),
     ),
+    'ezurlalias_ml_incr' => array (
+        0 => array (
+            'id' => '1',
+        ),
+        1 => array (
+            'id' => '2',
+        ),
+        2 => array (
+            'id' => '3',
+        ),
+        3 => array (
+            'id' => '4',
+        ),
+        4 => array (
+            'id' => '5',
+        ),
+    ),
 );

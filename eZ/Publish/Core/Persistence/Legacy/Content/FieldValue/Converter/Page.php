@@ -7,16 +7,17 @@
  * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\FieldType\FieldSettings,
-    eZ\Publish\Core\FieldType\Page\Parts,
-    eZ\Publish\Core\FieldType\Page\Service,
-    DOMDocument,
-    DOMElement;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+use eZ\Publish\Core\FieldType\FieldSettings;
+use eZ\Publish\Core\FieldType\Page\Parts;
+use eZ\Publish\Core\FieldType\Page\Service;
+use DOMDocument;
+use DOMElement;
 
 class Page implements Converter
 {
@@ -84,9 +85,11 @@ class Page implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings( array(
+        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
+            array(
                 'defaultLayout' => $storageDef->dataText1,
-        ) );
+            )
+        );
     }
 
     /**
@@ -103,18 +106,18 @@ class Page implements Converter
         return false;
     }
 
-
     /**
      * Generates XML string from $page object to be stored in storage engine
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Page $page
+     *
      * @return string
      */
     public function generateXmlString( $page )
     {
         $dom = new DOMDocument( '1.0', 'utf-8' );
         $dom->formatOutput = true;
-        $success = $dom->loadXML('<page />');
+        $success = $dom->loadXML( '<page />' );
 
         $pageNode = $dom->documentElement;
 
@@ -148,6 +151,7 @@ class Page implements Converter
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Zone $zone
      * @param \DOMDocument $dom
+     *
      * @return \DOMElement
      */
     protected function generateZoneXmlString( $zone, DOMDocument $dom )
@@ -186,6 +190,7 @@ class Page implements Converter
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Block $block
      * @param \DOMDocument $dom
+     *
      * @return \DOMElement
      */
     protected function generateBlockXmlString( $block, DOMDocument $dom )
@@ -242,7 +247,8 @@ class Page implements Converter
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Item $item
      * @param \DOMDocument $dom
-     * @return bool|\DOMElement
+     *
+     * @return boolean|\DOMElement
      */
     protected function generateItemXmlString( $item, DOMDocument $dom )
     {
@@ -279,6 +285,7 @@ class Page implements Converter
      * Restores value from XML string
      *
      * @param string $xmlString
+     *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Page
      */
     public function restoreValueFromXmlString( $xmlString )
@@ -297,7 +304,7 @@ class Page implements Converter
                 {
                    $page->addZone( $this->restoreZoneFromXml( $node ) );
                 }
-                elseif ( $node->nodeType == XML_ELEMENT_NODE )
+                else if ( $node->nodeType == XML_ELEMENT_NODE )
                 {
                     $page->{$node->nodeName} = $node->nodeValue;
                 }
@@ -319,6 +326,7 @@ class Page implements Converter
      * Restores value for a given Zone $node
      *
      * @param \DOMElement $node
+     *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Zone
      */
     protected function restoreZoneFromXml( DOMElement $node )
@@ -347,7 +355,7 @@ class Page implements Converter
             {
                 $zone->addBlock( $this->restoreBlockFromXml( $node ) );
             }
-            elseif ( $node->nodeType == XML_ELEMENT_NODE )
+            else if ( $node->nodeType == XML_ELEMENT_NODE )
             {
                 $zone->{$node->nodeName} = $node->nodeValue;
             }
@@ -360,6 +368,7 @@ class Page implements Converter
      * Restores value for a given Block $node
      *
      * @param \DOMElement $node
+     *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Block
      */
     protected function restoreBlockFromXml( DOMElement $node )
@@ -388,26 +397,30 @@ class Page implements Converter
             {
                 $block->addItem( $this->restoreItemFromXml( $node ) );
             }
-            elseif ( $node->nodeType == XML_ELEMENT_NODE && $node->nodeName == 'rotation' )
+            else if ( $node->nodeType == XML_ELEMENT_NODE && $node->nodeName == 'rotation' )
             {
                 $attrValue = array();
 
                 foreach ( $node->childNodes as $subNode )
                 {
                     if ( $subNode->nodeType == XML_ELEMENT_NODE )
+                    {
                         $attrValue[$subNode->nodeName] = $subNode->nodeValue;
+                    }
                 }
 
                 $block->{$node->nodeName} = $attrValue;
             }
-            elseif ( $node->nodeType == XML_ELEMENT_NODE && $node->nodeName == 'custom_attributes' )
+            else if ( $node->nodeType == XML_ELEMENT_NODE && $node->nodeName == 'custom_attributes' )
             {
                 $attrValue = array();
 
                 foreach ( $node->childNodes as $subNode )
                 {
                     if ( $subNode->nodeType == XML_ELEMENT_NODE )
+                    {
                         $attrValue[$subNode->nodeName] = $subNode->nodeValue;
+                    }
                 }
 
                 $block->{$node->nodeName} = $attrValue;
@@ -415,7 +428,9 @@ class Page implements Converter
             else
             {
                 if ( $node->nodeType == XML_ELEMENT_NODE )
+                {
                     $block->{$node->nodeName} = $node->nodeValue;
+                }
             }
         }
 
@@ -426,6 +441,7 @@ class Page implements Converter
      * Restores value for a given Item $node
      *
      * @param \DOMElement $node
+     *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Item
      */
     protected function restoreItemFromXml( DOMElement $node )
@@ -443,7 +459,9 @@ class Page implements Converter
         foreach ( $node->childNodes as $node )
         {
             if ( $node->nodeType == XML_ELEMENT_NODE )
+            {
                 $item->{$node->nodeName} = $node->nodeValue;
+            }
         }
 
         return $item;

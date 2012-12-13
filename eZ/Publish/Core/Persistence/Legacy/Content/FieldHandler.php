@@ -8,12 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
-use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Type,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway as TypeGateway;
+
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway as TypeGateway;
 
 /**
  * Field Handler.
@@ -72,6 +73,7 @@ class FieldHandler
      * Creates new fields in the database from $content
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
+     *
      * @return void
      */
     public function createNewFields( Content $content )
@@ -86,6 +88,7 @@ class FieldHandler
      * Creates existing fields in a new version for $content
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
+     *
      * @return void
      */
     public function createExistingFieldsInNewVersion( Content $content )
@@ -133,6 +136,7 @@ class FieldHandler
      *
      * @param Field $field
      * @param Content $content
+     *
      * @return void
      */
     public function createExistingFieldInNewVersion( Field $field, Content $content )
@@ -161,6 +165,7 @@ class FieldHandler
      * Performs external loads for the fields in $content
      *
      * @param Content $content
+     *
      * @return void
      */
     public function loadExternalFieldData( Content $content )
@@ -213,7 +218,8 @@ class FieldHandler
      * Deletes the fields for $contentId in $versionInfo from the database
      *
      * @param int $contentId
-     * @param eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     *
      * @return void
      */
     public function deleteFields( $contentId, VersionInfo $versionInfo )

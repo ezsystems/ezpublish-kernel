@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for operations in the LanguageService using in memory storage.
@@ -142,8 +142,6 @@ class LanguageServiceTest extends BaseTest
 
     /**
      * Test for the loadLanguageById() method.
-     *
-     *
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LanguageService::loadLanguageById()
@@ -482,8 +480,9 @@ class LanguageServiceTest extends BaseTest
     /**
      * Test for the getDefaultLanguageCode() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LanguageService::getDefaultLanguageCode()
+     *
+     * @return void
      */
     public function testGetDefaultLanguageCode()
     {

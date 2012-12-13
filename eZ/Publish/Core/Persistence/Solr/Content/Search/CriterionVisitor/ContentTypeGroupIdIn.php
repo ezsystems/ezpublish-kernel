@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**
  * Visits the ContentTypeGroupId criterion
@@ -22,7 +22,8 @@ class ContentTypeGroupIdIn extends CriterionVisitor
      * CHeck if visitor is applicable to current criterion
      *
      * @param Criterion $criterion
-     * @return bool
+     *
+     * @return boolean
      */
     public function canVisit( Criterion $criterion )
     {
@@ -37,6 +38,7 @@ class ContentTypeGroupIdIn extends CriterionVisitor
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
+     *
      * @return void
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
@@ -49,7 +51,7 @@ class ContentTypeGroupIdIn extends CriterionVisitor
                     {
                         return 'group_id:"' . $value . '"';
                     },
-                    (array) $criterion->value
+                    (array)$criterion->value
                 )
             ) .
             ')';

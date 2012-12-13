@@ -55,10 +55,16 @@ class ImageProcessor extends BinaryInputProcessor
      * $outgoingValueHash.
      *
      * @param mixed $outgoingValueHash
+     *
      * @return mixed Post processed hash
      */
     public function postProcessHash( $outgoingValueHash )
     {
+        if ( !is_array( $outgoingValueHash ) )
+        {
+            return $outgoingValueHash;
+        }
+
         $outgoingValueHash['variants'] = array();
         foreach ( $this->variants as $variant => $mimeType )
         {
@@ -79,6 +85,7 @@ class ImageProcessor extends BinaryInputProcessor
      *
      * @param string $path
      * @param string $variant
+     *
      * @return string
      */
     protected function generateUrl( $path, $variant )

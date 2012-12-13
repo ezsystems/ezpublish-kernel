@@ -11,10 +11,8 @@ namespace eZ\Publish\Core\FieldType\RelationList;
 
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceFieldValue;
 use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
-use eZ\Publish\SPI\FieldType\Event;
 
 /**
  * The RelationList field type.
@@ -59,7 +57,7 @@ class Type extends FieldType
     {
         $validationResult = array();
 
-        foreach( array_keys( $fieldSettings ) as $setting )
+        foreach ( array_keys( $fieldSettings ) as $setting )
         {
             if ( !in_array( $setting, array_keys( $this->settingsSchema ) ) )
             {
@@ -100,7 +98,7 @@ class Type extends FieldType
     }
 
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -143,9 +141,9 @@ class Type extends FieldType
      *
      * @param mixed $inputValue A ContentInfo, content ID or list of content ID's to build from, or a RelationList\Value
      *
-     * @return \eZ\Publish\Core\FieldType\RelationList\Value
+     * @return \eZ\Publish\Core\FieldType\RelationList\Value The potentially converted and structurally plausible value.
      */
-    public function acceptValue( $inputValue )
+    protected function internalAcceptValue( $inputValue )
     {
         // ContentInfo
         if ( $inputValue instanceof ContentInfo )
@@ -153,17 +151,16 @@ class Type extends FieldType
             $inputValue = new Value( array( $inputValue->id ) );
         }
         // content id
-        elseif ( is_integer( $inputValue ) || is_string( $inputValue ) )
+        else if ( is_integer( $inputValue ) || is_string( $inputValue ) )
         {
             $inputValue = new Value( array( $inputValue ) );
         }
         // content id's
-        elseif ( is_array( $inputValue ) )
+        else if ( is_array( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
         }
-
-        if ( !$inputValue instanceof Value )
+        else if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
                 '$inputValue',
@@ -176,10 +173,10 @@ class Type extends FieldType
         {
             if ( !is_integer( $destinationContentId ) && !is_string( $destinationContentId ) )
             {
-               throw new InvalidArgumentType(
+                throw new InvalidArgumentType(
                     "\$inputValue->destinationContentIds[$key]",
                     'string|int',
-                   $destinationContentId
+                    $destinationContentId
                 );
             }
         }
@@ -192,6 +189,7 @@ class Type extends FieldType
      * For this FieldType, the related object's name is returned.
      *
      * @todo What to do here?
+     *
      * @return array
      */
     protected function getSortInfo( $value )
@@ -226,7 +224,7 @@ class Type extends FieldType
     /**
      * Returns whether the field type is searchable
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {

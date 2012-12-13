@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests\FileService;
+
 use eZ\Publish\Core\FieldType\FileService\LocalFileService;
 
 /**
@@ -90,8 +91,7 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator(
                 $this->getTempDir(),
-                \FileSystemIterator::KEY_AS_PATHNAME | \FileSystemIterator::SKIP_DOTS | \ FilesystemIterator::CURRENT_AS_FILEINFO
-
+                \FileSystemIterator::KEY_AS_PATHNAME | \FileSystemIterator::SKIP_DOTS | \FilesystemIterator::CURRENT_AS_FILEINFO
             ),
             \RecursiveIteratorIterator::CHILD_FIRST
         );

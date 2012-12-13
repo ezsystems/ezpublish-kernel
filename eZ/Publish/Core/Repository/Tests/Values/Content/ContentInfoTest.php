@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Values\Content;
-use eZ\Publish\Core\Repository\Values\Content\ContentInfo,
-    PHPUnit_Framework_TestCase;
+
+use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use PHPUnit_Framework_TestCase;
 
 /**
  *
@@ -17,7 +18,6 @@ use eZ\Publish\Core\Repository\Values\Content\ContentInfo,
 class ContentInfoTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \eZ\Publish\Core\Repository\Values\Content\ContentInfo::getIterator
      * @covers \eZ\Publish\Core\Repository\Values\Content\ContentInfo::getProperties
      */
     public function testObjectProperties()

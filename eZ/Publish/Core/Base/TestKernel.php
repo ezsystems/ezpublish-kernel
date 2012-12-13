@@ -9,15 +9,15 @@
 
 namespace eZ\Publish\Core\Base;
 
-use eZ\Bundle\EzPublishCoreBundle\EzPublishCoreBundle,
-    eZ\Bundle\EzPublishLegacyBundle\EzPublishLegacyBundle,
-    eZ\Bundle\EzPublishRestBundle\EzPublishRestBundle,
-    Symfony\Component\HttpKernel\Kernel,
-    Symfony\Bundle\FrameworkBundle\FrameworkBundle,
-    Symfony\Bundle\SecurityBundle\SecurityBundle,
-    Symfony\Bundle\TwigBundle\TwigBundle,
-    Symfony\Component\Config\Loader\LoaderInterface,
-    eZ\Publish\API\Container;
+use eZ\Bundle\EzPublishCoreBundle\EzPublishCoreBundle;
+use eZ\Bundle\EzPublishLegacyBundle\EzPublishLegacyBundle;
+use eZ\Bundle\EzPublishRestBundle\EzPublishRestBundle;
+use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\SecurityBundle\SecurityBundle;
+use Symfony\Bundle\TwigBundle\TwigBundle;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use eZ\Publish\API\Container;
 
 
 

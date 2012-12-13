@@ -34,8 +34,10 @@ class ObjectStateGroup extends Parser
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
+     *
      * @todo Error handling
+     *
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {

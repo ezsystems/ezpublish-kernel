@@ -15,7 +15,8 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * This class represents a SearchHit matching the query
  *
  */
-class SearchHit extends ValueObject {
+class SearchHit extends ValueObject
+{
     /**
      * The value found by the search
      *

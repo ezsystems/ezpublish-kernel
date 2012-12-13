@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
+
 use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
 
 /**
@@ -24,5 +25,4 @@ class PropertyReadOnlyExceptionStub extends PropertyReadOnlyException
         );
     }
 }
-
 

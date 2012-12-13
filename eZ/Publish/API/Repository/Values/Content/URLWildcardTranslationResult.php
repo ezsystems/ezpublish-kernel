@@ -28,7 +28,7 @@ class URLWildcardTranslationResult extends ValueObject
     protected $uri;
 
     /**
-     * indicates if the url is redirected or not
+     * Indicates if the url is redirected or not
      *
      * @var boolean
      */

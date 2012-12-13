@@ -9,16 +9,17 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
-use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use \eZ\Publish\API\Repository\Values\Content\Section;
-use \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
-use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
+use eZ\Publish\API\Repository\SectionService as APISectionService;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Section;
+use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 
-use \eZ\Publish\Core\REST\Common\UrlHandler;
-use \eZ\Publish\Core\REST\Common\Input;
-use \eZ\Publish\Core\REST\Common\Output;
-use \eZ\Publish\Core\REST\Common\Message;
-use \eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input\Dispatcher;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\SectionService}
@@ -26,7 +27,7 @@ use \eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
  *
  * @see \eZ\Publish\API\Repository\SectionService
  */
-class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessionable
+class SectionService implements APISectionService, Sessionable
 {
     /**
      * @var \eZ\Publish\Core\REST\Client\HttpClient
@@ -54,7 +55,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
@@ -68,8 +69,10 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
      * Only for testing
      *
      * @param mixed $id
-     * @return void
+     *
      * @private
+     *
+     * @return void
      */
     public function setSession( $id )
     {
@@ -205,17 +208,18 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
      */
     public function countAssignedContents( Section $section )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * assigns the content to the given section
+     * Assigns the content to the given section
      * this method overrides the current assigned section
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to view provided object
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
+     *
      * @todo In order to make the integration test for this method running, the
      *       countAssignedContents() method must be implemented. Otherwise this
      *       should work fine.
@@ -237,7 +241,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
         );
 
         // Will throw exception on error, no return value for method
-        // TODO: Deactivated due to missing implementation of visitor for
+        // @todo: Deactivated due to missing implementation of visitor for
         // content on the server side.
         // $result = $this->inputDispatcher->parse( $response );
     }
@@ -258,7 +262,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
             'DELETE',
             $section->id,
             new Message(
-                // TODO: What media-type should we set here? Actually, it should be
+                // @todo: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "Section" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
@@ -271,7 +275,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
     }
 
     /**
-     * instantiates a new SectionCreateStruct
+     * Instantiates a new SectionCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
      */
@@ -281,7 +285,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
     }
 
     /**
-     * instantiates a new SectionUpdateStruct
+     * Instantiates a new SectionUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
      */
