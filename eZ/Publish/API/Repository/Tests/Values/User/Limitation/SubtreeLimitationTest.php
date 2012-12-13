@@ -35,74 +35,16 @@ class SubtreeLimitationTest extends BaseLimitationTest
      * @see eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
      * @see eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation
      * @see eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation
-     * @throws \ErrorException
      */
     public function testSubtreeLimitationAllow()
     {
         $repository = $this->getRepository();
 
         $userGroupId = $this->generateId( 'content', 13 );
-
-        $userTypeId = $this->generateId( 'contentType', 4 );
-        $groupTypeId = $this->generateId( 'contentType', 3 );
-
-        $standardSectionId = $this->generateId( 'section', 1 );
-        $userSectionId = $this->generateId( 'section', 2 );
         /* BEGIN: Use Case */
-        $user = $this->createUserVersion1();
+        $subtree = '/1/5/';
 
-        $roleService = $repository->getRoleService();
-
-        $role = $roleService->loadRoleByIdentifier( 'Editor' );
-
-        $editPolicy = null;
-        foreach ( $role->getPolicies() as $policy )
-        {
-            if ( 'content' != $policy->module || 'read' != $policy->function )
-            {
-                continue;
-            }
-            $editPolicy = $policy;
-            break;
-        }
-
-        if ( null === $editPolicy )
-        {
-            throw new \ErrorException( 'No content:read policy found.' );
-        }
-
-        // Give read access for the user section
-        $policyUpdate = $roleService->newPolicyUpdateStruct();
-        $policyUpdate->addLimitation(
-            new SectionLimitation(
-                array(
-                    'limitationValues' => array(
-                        $standardSectionId,
-                        $userSectionId
-                    )
-                )
-            )
-        );
-        $roleService->updatePolicy( $editPolicy, $policyUpdate );
-
-        // Allow subtree access and user+user-group edit
-        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'edit' );
-        $policyCreate->addLimitation(
-            new ContentTypeLimitation(
-                array( 'limitationValues' => array( $userTypeId, $groupTypeId ) )
-            )
-        );
-        $roleService->addPolicy( $role, $policyCreate );
-
-        $roleService->assignRoleToUser(
-            $role,
-            $user,
-            new SubtreeLimitation(
-                array( 'limitationValues' => array( '/1/5/' ) )
-            )
-        );
-
-        $repository->setCurrentUser( $user );
+        $this->prepareLimitation( $subtree );
 
         $userService = $repository->getUserService();
         $contentService = $repository->getContentService();
@@ -134,7 +76,6 @@ class SubtreeLimitationTest extends BaseLimitationTest
      * @see eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
      * @see eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation
      * @see eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation
-     * @throws \ErrorException
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testSubtreeLimitationForbid()
@@ -143,12 +84,36 @@ class SubtreeLimitationTest extends BaseLimitationTest
 
         $userGroupId = $this->generateId( 'content', 13 );
 
+        /* BEGIN: Use Case */
+        $subtree = '/1/5/14/';
+
+        $this->prepareLimitation( $subtree );
+
+        $userService = $repository->getUserService();
+
+        // This call will fail with an UnauthorizedException
+        $userService->loadUserGroup( $userGroupId );
+        /* END: Use Case */
+    }
+
+    /**
+     * Prepares the Subtree limitation for the test user.
+     *
+     * @param string $subtree
+     * @return void
+     * @throws \ErrorException
+     */
+    protected function prepareLimitation( $subtree )
+    {
+        $repository = $this->getRepository();
+
         $userTypeId = $this->generateId( 'contentType', 4 );
         $groupTypeId = $this->generateId( 'contentType', 3 );
 
         $standardSectionId = $this->generateId( 'section', 1 );
         $userSectionId = $this->generateId( 'section', 2 );
-        /* BEGIN: Use Case */
+
+        /* BEGIN: Inline */
         $user = $this->createUserVersion1();
 
         $roleService = $repository->getRoleService();
@@ -198,20 +163,11 @@ class SubtreeLimitationTest extends BaseLimitationTest
             $role,
             $user,
             new SubtreeLimitation(
-                array( 'limitationValues' => array( '/1/5/14/' ) )
+                array( 'limitationValues' => array( $subtree ) )
             )
         );
 
         $repository->setCurrentUser( $user );
-
-        $userService = $repository->getUserService();
-        $contentService = $repository->getContentService();
-
-        $contentUpdate = $contentService->newContentUpdateStruct();
-        $contentUpdate->setField( 'name', 'eZ Editors' );
-
-        // This call will fail with an UnauthorizedException
-        $userService->loadUserGroup( $userGroupId );
-        /* END: Use Case */
+        /* END: Inline */
     }
 }
