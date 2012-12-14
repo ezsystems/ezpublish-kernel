@@ -361,11 +361,15 @@ class URLAliasServiceStub implements URLAliasService
      * ATTENTION: This method is not part of the Public API but is only used
      * internally in this implementation.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param Location $location
      *
      * @return void
      */
-    public function _removeAliasesForLocation( Location $location )
+    public function removeAliasesForLocation( Location $location )
     {
         $this->removeAliases( $this->listLocationAliases( $location ) );
     }
