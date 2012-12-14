@@ -18,7 +18,6 @@ branches:
 
 # setup requirements for running unit tests
 before_script:
-    - cp config.php-DEVELOPMENT config.php
     - composer install --dev
 
 # execute phpunit as the script command
