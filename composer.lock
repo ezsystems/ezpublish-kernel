@@ -1,5 +1,5 @@
 {
-    "hash": "3cda969ace6dc461c45ce18ff6a58fb1",
+    "hash": "4471b9cc9ab6df12004d23edce09c2b6",
     "packages": [
         {
             "name": "doctrine/common",
@@ -11,7 +11,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/common/archive/bb0aebbf234db52df476a2b473d434745b34221c.zip",
+                "url": "https://github.com/doctrine/common/zipball/bb0aebbf234db52df476a2b473d434745b34221c",
                 "reference": "bb0aebbf234db52df476a2b473d434745b34221c",
                 "shasum": ""
             },
@@ -31,7 +31,6 @@
                     "Doctrine\\Common": "lib/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -99,7 +98,6 @@
                     "Buzz": "lib/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -139,7 +137,6 @@
                     "Qafoo\\RMF": "src/main/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "description": "Very simple VC framework which makes it easy to build HTTP applications / REST webservices"
         },
         {
@@ -149,12 +146,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony-cmf/Routing",
-                "reference": "39e2546a0144800a8928c31f46850ae580711781"
+                "reference": "ad024d9d3125a1ee30c391d4d12e33bf534ac684"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony-cmf/Routing/archive/39e2546a0144800a8928c31f46850ae580711781.zip",
-                "reference": "39e2546a0144800a8928c31f46850ae580711781",
+                "url": "https://github.com/symfony-cmf/Routing/zipball/ad024d9d3125a1ee30c391d4d12e33bf534ac684",
+                "reference": "ad024d9d3125a1ee30c391d4d12e33bf534ac684",
                 "shasum": ""
             },
             "require": {
@@ -162,7 +159,7 @@
                 "symfony/routing": ">=2.1,<2.3-dev",
                 "symfony/http-kernel": ">=2.1,<2.3-dev"
             },
-            "time": "2012-12-11 20:40:24",
+            "time": "2012-10-26 18:29:35",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -175,7 +172,6 @@
                     "Symfony\\Cmf\\Component\\Routing": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -194,16 +190,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.1.3",
+            "version": "v2.1.4",
             "source": {
                 "type": "git",
                 "url": "git://github.com/symfony/symfony.git",
-                "reference": "v2.1.3"
+                "reference": "v2.1.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/symfony/archive/v2.1.3.zip",
-                "reference": "v2.1.3",
+                "url": "https://github.com/symfony/symfony/archive/v2.1.4.zip",
+                "reference": "v2.1.4",
                 "shasum": ""
             },
             "require": {
@@ -252,7 +248,7 @@
                 "propel/propel1": "dev-master",
                 "monolog/monolog": "1.*"
             },
-            "time": "2012-10-30 01:14:14",
+            "time": "2012-11-29 11:56:19",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -346,7 +342,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zetacomponents/Archive/archive/4b2c4a1c24b1e1f831b015c8ff72181aece7b421.zip",
+                "url": "https://github.com/zetacomponents/Archive/zipball/4b2c4a1c24b1e1f831b015c8ff72181aece7b421",
                 "reference": "4b2c4a1c24b1e1f831b015c8ff72181aece7b421",
                 "shasum": ""
             },
@@ -364,7 +360,6 @@
                     "src"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -413,7 +408,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zetacomponents/Authentication/archive/c422670d09967491c1c8c98f9334f1a738617bd0.zip",
+                "url": "https://github.com/zetacomponents/Authentication/zipball/c422670d09967491c1c8c98f9334f1a738617bd0",
                 "reference": "c422670d09967491c1c8c98f9334f1a738617bd0",
                 "shasum": ""
             },
@@ -431,7 +426,6 @@
                     "src"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -480,7 +474,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zetacomponents/Base/archive/642f63a8a72c32996f1aaf8a317fdf746bc32ce7.zip",
+                "url": "https://github.com/zetacomponents/Base/zipball/642f63a8a72c32996f1aaf8a317fdf746bc32ce7",
                 "reference": "642f63a8a72c32996f1aaf8a317fdf746bc32ce7",
                 "shasum": ""
             },
@@ -495,7 +489,6 @@
                     "src"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -544,7 +537,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zetacomponents/Cache/archive/34fa794d0b5aeef67fee609c52c5d24fa4604bbd.zip",
+                "url": "https://github.com/zetacomponents/Cache/zipball/34fa794d0b5aeef67fee609c52c5d24fa4604bbd",
                 "reference": "34fa794d0b5aeef67fee609c52c5d24fa4604bbd",
                 "shasum": ""
             },
@@ -562,7 +555,6 @@
                     "src"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -614,7 +606,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zetacomponents/Configuration/archive/10ae09f42768d4657b2d1a66226ee63cbd8754b2.zip",
+                "url": "https://github.com/zetacomponents/Configuration/zipball/10ae09f42768d4657b2d1a66226ee63cbd8754b2",
                 "reference": "10ae09f42768d4657b2d1a66226ee63cbd8754b2",
                 "shasum": ""
             },
@@ -632,7 +624,6 @@
                     "src"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -681,7 +672,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zetacomponents/ConsoleTools/archive/90156abef01e4215fda8b9740f77c322f126fb02.zip",
+                "url": "https://github.com/zetacomponents/ConsoleTools/zipball/90156abef01e4215fda8b9740f77c322f126fb02",
                 "reference": "90156abef01e4215fda8b9740f77c322f126fb02",
                 "shasum": ""
             },
@@ -699,7 +690,6 @@
                     "src"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -748,7 +738,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zetacomponents/Database/archive/0e8ddef8ce616bc18365efa2eef2161de3d7f74f.zip",
+                "url": "https://github.com/zetacomponents/Database/zipball/0e8ddef8ce616bc18365efa2eef2161de3d7f74f",
                 "reference": "0e8ddef8ce616bc18365efa2eef2161de3d7f74f",
                 "shasum": ""
             },
@@ -766,7 +756,6 @@
                     "src"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -824,7 +813,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zetacomponents/Debug/archive/0d8cc8fae2765c22f3f1930e4cf738304fbadbaf.zip",
+                "url": "https://github.com/zetacomponents/Debug/zipball/0d8cc8fae2765c22f3f1930e4cf738304fbadbaf",
                 "reference": "0d8cc8fae2765c22f3f1930e4cf738304fbadbaf",
                 "shasum": ""
             },
@@ -842,7 +831,6 @@
                     "src"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -891,7 +879,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zetacomponents/Feed/archive/e0190e90caf6f49771410b485fc43ff09a62b725.zip",
+                "url": "https://github.com/zetacomponents/Feed/zipball/e0190e90caf6f49771410b485fc43ff09a62b725",
                 "reference": "e0190e90caf6f49771410b485fc43ff09a62b725",
                 "shasum": ""
             },
@@ -909,7 +897,6 @@
                     "src"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -958,7 +945,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zetacomponents/ImageAnalysis/archive/634a30042a0a76fc509ae933fced2c30bacd38b4.zip",
+                "url": "https://github.com/zetacomponents/ImageAnalysis/zipball/634a30042a0a76fc509ae933fced2c30bacd38b4",
                 "reference": "634a30042a0a76fc509ae933fced2c30bacd38b4",
                 "shasum": ""
             },
@@ -976,7 +963,6 @@
                     "src"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -1025,7 +1011,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zetacomponents/ImageConversion/archive/aed8cf2e3a17b049add7578fa199c02e3af903c1.zip",
+                "url": "https://github.com/zetacomponents/ImageConversion/zipball/aed8cf2e3a17b049add7578fa199c02e3af903c1",
                 "reference": "aed8cf2e3a17b049add7578fa199c02e3af903c1",
                 "shasum": ""
             },
@@ -1044,7 +1030,6 @@
                     "src"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -1093,7 +1078,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zetacomponents/Mail/archive/e0120aad96efb41bdfac5583d9cb3863bc2823e7.zip",
+                "url": "https://github.com/zetacomponents/Mail/zipball/e0120aad96efb41bdfac5583d9cb3863bc2823e7",
                 "reference": "e0120aad96efb41bdfac5583d9cb3863bc2823e7",
                 "shasum": ""
             },
@@ -1111,7 +1096,6 @@
                     "src"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -1169,7 +1153,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zetacomponents/MvcAuthenticationTiein/archive/9bae3a7313e2ef7f53ef1f394276acc3fde0f80e.zip",
+                "url": "https://github.com/zetacomponents/MvcAuthenticationTiein/zipball/9bae3a7313e2ef7f53ef1f394276acc3fde0f80e",
                 "reference": "9bae3a7313e2ef7f53ef1f394276acc3fde0f80e",
                 "shasum": ""
             },
@@ -1181,7 +1165,6 @@
                     "src"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "apache2"
             ],
@@ -1215,7 +1198,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zetacomponents/MvcTools/archive/6f2c1eb079faee98f37643d212cec0aa925313b2.zip",
+                "url": "https://github.com/zetacomponents/MvcTools/zipball/6f2c1eb079faee98f37643d212cec0aa925313b2",
                 "reference": "6f2c1eb079faee98f37643d212cec0aa925313b2",
                 "shasum": ""
             },
@@ -1233,7 +1216,6 @@
                     "src"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -1270,7 +1252,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zetacomponents/PersistentObject/archive/a4c8b95157919d71db0b380ea7c6375be117eca2.zip",
+                "url": "https://github.com/zetacomponents/PersistentObject/zipball/a4c8b95157919d71db0b380ea7c6375be117eca2",
                 "reference": "a4c8b95157919d71db0b380ea7c6375be117eca2",
                 "shasum": ""
             },
@@ -1288,7 +1270,6 @@
                     "src"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -1340,7 +1321,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zetacomponents/PhpGenerator/archive/b51935ec5b763e5bad2182d810e1b752fcc83903.zip",
+                "url": "https://github.com/zetacomponents/PhpGenerator/zipball/b51935ec5b763e5bad2182d810e1b752fcc83903",
                 "reference": "b51935ec5b763e5bad2182d810e1b752fcc83903",
                 "shasum": ""
             },
@@ -1358,7 +1339,6 @@
                     "src"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -1407,7 +1387,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zetacomponents/SignalSlot/archive/74deb412339a9e9af5937a5d8726f8246b6a9ccc.zip",
+                "url": "https://github.com/zetacomponents/SignalSlot/zipball/74deb412339a9e9af5937a5d8726f8246b6a9ccc",
                 "reference": "74deb412339a9e9af5937a5d8726f8246b6a9ccc",
                 "shasum": ""
             },
@@ -1425,7 +1405,6 @@
                     "src"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -1474,7 +1453,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zetacomponents/SystemInformation/archive/674336286f189d222a275bec32be9123d9faf477.zip",
+                "url": "https://github.com/zetacomponents/SystemInformation/zipball/674336286f189d222a275bec32be9123d9faf477",
                 "reference": "674336286f189d222a275bec32be9123d9faf477",
                 "shasum": ""
             },
@@ -1492,7 +1471,6 @@
                     "src"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -1593,63 +1571,7 @@
             "homepage": "https://github.com/zetacomponents"
         }
     ],
-    "packages-dev": [
-        {
-            "name": "ezsystems/ezpublish-legacy",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ezsystems/ezpublish.git",
-                "reference": "0cc032005ab01630c51ef84b89d7415f3238c28e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/ezsystems/ezpublish/archive/0cc032005ab01630c51ef84b89d7415f3238c28e.zip",
-                "reference": "0cc032005ab01630c51ef84b89d7415f3238c28e",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "time": "2012-12-13 20:49:10",
-            "type": "library",
-            "installation-source": "source",
-            "notification-url": "https://packagist.org/downloads/",
-            "description": "eZ Publish LegacyStack (4.x)",
-            "homepage": "http://share.ez.no"
-        },
-        {
-            "name": "mikey179/vfsStream",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mikey179/vfsStream",
-                "reference": "v1.1.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/mikey179/vfsStream/zipball/v1.1.0",
-                "reference": "v1.1.0",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "time": "2012-08-25 05:49:29",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-0": {
-                    "org\\bovigo\\vfs": "src/main/php"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD"
-            ],
-            "homepage": "http://vfs.bovigo.org/"
-        }
-    ],
+    "packages-dev": null,
     "aliases": [
 
     ],
