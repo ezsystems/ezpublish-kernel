@@ -87,7 +87,7 @@ class ContentTypeLimitationTest extends BaseLimitationTest
 
         $this->assertEquals(
             'Your wiki page',
-            $updateContent->getFieldValue('title')->text
+            $updateContent->getFieldValue( 'title' )->text
         );
     }
 

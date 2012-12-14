@@ -67,7 +67,7 @@ class ParentContentTypeLimitationTest extends BaseLimitationTest
 
         $this->assertEquals(
             'An awesome wiki page',
-            $draft->getFieldValue('title')->text
+            $draft->getFieldValue( 'title' )->text
         );
     }
 
