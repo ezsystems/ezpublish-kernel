@@ -703,6 +703,8 @@ CREATE INDEX ezcontent_language_name ON ezcontent_language USING btree (name);
 
 CREATE INDEX ezcontentclass_version ON ezcontentclass USING btree ("version");
 
+CREATE INDEX ezcontentclass_identifier ON ezcontentclass USING btree (identifier, "version");
+
 CREATE INDEX ezcontentclass_attr_ccid ON ezcontentclass_attribute USING btree (contentclass_id);
 
 CREATE INDEX ezcontentobject_classid ON ezcontentobject USING btree (contentclass_id);
@@ -755,6 +757,8 @@ CREATE INDEX ezcobj_trash_path ON ezcontentobject_trash USING btree (path_string
 
 CREATE INDEX ezcobj_trash_path_ident ON ezcontentobject_trash USING btree (path_identification_string);
 
+CREATE INDEX ezcontentobject_tree_remote_id ON ezcontentobject_tree USING btree (remote_id);
+
 CREATE INDEX ezcontentobject_tree_co_id ON ezcontentobject_tree USING btree (contentobject_id);
 
 CREATE INDEX ezcontentobject_tree_depth ON ezcontentobject_tree USING btree (depth);
@@ -773,6 +777,8 @@ CREATE INDEX ezcobj_version_status ON ezcontentobject_version USING btree (statu
 
 CREATE INDEX idx_object_version_objver ON ezcontentobject_version USING btree (contentobject_id, "version");
 
+CREATE INDEX ezcontentobject_version_object_status ON ezcontentobject_version USING btree (contentobject_id, status);
+
 CREATE INDEX eznode_assignment_co_id ON eznode_assignment USING btree (contentobject_id);
 
 CREATE INDEX eznode_assignment_co_version ON eznode_assignment USING btree (contentobject_version);
@@ -785,9 +791,13 @@ CREATE INDEX eznode_assignment_parent_node ON eznode_assignment USING btree (par
 
 CREATE INDEX ezpolicy_original_id ON ezpolicy USING btree (original_id);
 
+CREATE INDEX ezpolicy_role_id ON ezpolicy USING btree (role_id);
+
 CREATE INDEX policy_id ON ezpolicy_limitation USING btree (policy_id);
 
 CREATE INDEX ezpolicy_limitation_value_val ON ezpolicy_limitation_value USING btree (value);
+
+CREATE INDEX ezpolicy_limitation_value_limitation_id ON ezpolicy_limitation_value USING btree (limitation_id);
 
 CREATE INDEX ezsearch_object_word_link_frequency ON ezsearch_object_word_link USING btree (frequency);
 
