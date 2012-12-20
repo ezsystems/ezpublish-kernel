@@ -13,6 +13,7 @@
         "zetacomponents/console-tools": "dev-master",
         "zetacomponents/database": "dev-master",
         "zetacomponents/debug": "dev-master",
+        "zetacomponents/event-log": "1.4",
         "zetacomponents/feed": "dev-master",
         "zetacomponents/image-conversion": "dev-master",
         "zetacomponents/mail": "dev-master",
