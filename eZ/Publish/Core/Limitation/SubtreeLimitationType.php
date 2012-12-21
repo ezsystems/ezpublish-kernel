@@ -79,7 +79,7 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
     {
         if ( !$value instanceof APISubtreeLimitation )
         {
-            throw new InvalidArgumentException( '$value', 'Must be of type: APIParentContentTypeLimitation' );
+            throw new InvalidArgumentException( '$value', 'Must be of type: APISubtreeLimitation' );
         }
 
         if ( $object instanceof Content )
@@ -114,7 +114,8 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
 
         if ( $target !== null && !$target instanceof Location && !$target instanceof LocationCreateStruct )
         {
-            throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
+            // Since this limitation is used as role limitation, "wrong" $target simply returns false
+            return false;
         }
 
         if ( empty( $value->limitationValues ) )
