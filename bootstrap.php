@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the bootstrapping of eZ Publish API
+ * File containing the bootstrapping of eZ Publish API for unit test use
  *
  * Setups class loading.
  *
@@ -9,35 +9,25 @@
  * @version //autogentag//
  */
 
-
-use eZ\Publish\Core\Base\ClassLoader;
 use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 use eZ\Publish\Core\MVC\Legacy\Kernel\CLIHandler as LegacyKernelCLI;
 
 // Get globl config.php settings
 if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
 {
-    throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
+    throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php & customize to your needs!' );
 }
 
 // Setup class loader
-require_once __DIR__ . '/eZ/Publish/Core/Base/ClassLoader.php';
+require_once "./vendor/autoload.php";
 
-$classLoader = new ClassLoader(
-    include $settings['base']['ClassLoader']['NamespaceMap'],
-    include $settings['base']['ClassLoader']['ClassMap'],
-    $settings['service']['parameters']['legacy_dir']
-);
-spl_autoload_register( array( $classLoader, 'load' ) );
-
-$classLoader = require_once __DIR__ . "/vendor/autoload.php";
-
-if ( $classLoader instanceof Composer\Autoload\ClassLoader )
-    $classLoader->register();
 
 // Bootstrap eZ Publish legacy kernel if configured
 if ( !empty( $settings['service']['parameters']['legacy_dir'] ) )
 {
+    define( 'EZCBASE_ENABLED', false );
+    require_once $settings['service']['parameters']['legacy_dir'] . '/autoload.php';
+
     // Define $legacyKernelHandler to whatever you need before loading this bootstrap file.
     // CLI handler is used by defaut, but you must use \ezpKernelWeb if not in CLI context (i.e. REST server)
     // $legacyKernelHandler can be a closure returning the appropriate kernel handler (to avoid autoloading issues)

@@ -13,19 +13,12 @@
  */
 
 // Optional: only for development, comment in production
-error_reporting ( E_ALL | E_STRICT );
+error_reporting( E_ALL | E_STRICT );
 
 // Required: Settings bellow are runtime settings that needs to be set here, you can
 // optionally also override any other setting here.
 return array(
     'base' => array(
-        'ClassLoader' => array(
-            // Reference to file that contain composer namespace mapping
-            'NamespaceMap' => __DIR__ . '/vendor/composer/autoload_namespaces.php',
-
-            // Reference to file that contain composer class name mapping
-            'ClassMap' => __DIR__ . '/vendor/composer/autoload_classmap.php',
-        ),
         'Configuration' => array(
             // Disable cache, default false
             'UseCache' => false,
@@ -50,10 +43,10 @@ return array(
 
             // Paths and scopes to read ini settings from
             'Paths' => array(
-                 'base' => array( 'settings/' ),
-                 'modules' => array( __DIR__ . '/eZ/Publish/Core/settings/' ),
-                 'access' => array(),
-                 'global' => array( 'settings/override/' ),
+                'base' => array( 'settings/' ),
+                'modules' => array( __DIR__ . '/eZ/Publish/Core/settings/' ),
+                'access' => array(),
+                'global' => array( 'settings/override/' ),
             ),
         ),
     ),
@@ -62,8 +55,12 @@ return array(
             // The installation directory
             'install_dir' => __DIR__,
 
-            // The Legacy Kernel installation directory
-            'legacy_dir' =>  __DIR__ . '/vendor/ezsystems/ezpublish-legacy'
+            // The Legacy Kernel installation directory, detect legacy location
+            'legacy_dir' => (
+                is_dir( './ezpublish_legacy' ) ?
+                getcwd() . '/ezpublish_legacy' :
+                __DIR__ . '/vendor/ezsystems/ezpublish-legacy'
+            ),
         )
     )
 );
