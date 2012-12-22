@@ -213,7 +213,7 @@ class ServiceContainer implements Container
 
         if ( !empty( $settings['method'] ) )
         {
-            $list = $this->recursivlyLookupArguments( $settings['method'] );
+            $list = $this->recursivelyLookupArguments( $settings['method'] );
             foreach ( $list as $methodName => $arguments )
             {
                 foreach ( $arguments as $argumentKey => $argumentValue )
@@ -231,14 +231,14 @@ class ServiceContainer implements Container
      * 2. Exists loop when it encounters optional non existing service dependencies
      *
      * @uses getServiceArgument()
-     * @uses recursivlyLookupArguments()
+     * @uses recursivelyLookupArguments()
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If undefined variable is used.
      * @param array $arguments
-     * @param boolean $recursivly
+     * @param boolean $recursively
      *
      * @return array
      */
-    protected function lookupArguments( array $arguments, $recursivly = false )
+    protected function lookupArguments( array $arguments, $recursively = false )
     {
         $builtArguments = array();
         foreach ( $arguments as $argument )
@@ -251,9 +251,9 @@ class ServiceContainer implements Container
 
                 $builtArguments[] = $serviceObject;
             }
-            else if ( $recursivly && is_array( $argument ) )
+            else if ( $recursively && is_array( $argument ) )
             {
-                $builtArguments[] = $this->recursivlyLookupArguments( $argument );
+                $builtArguments[] = $this->recursivelyLookupArguments( $argument );
             }
             // Scalar values
             else
@@ -271,13 +271,13 @@ class ServiceContainer implements Container
      * 2. Does not exit loop on optional non existing service dependencies
      *
      * @uses getServiceArgument()
-     * @uses recursivlyLookupArguments()
+     * @uses recursivelyLookupArguments()
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If undefined variable is used.
      * @param array $arguments
      *
      * @return array
      */
-    protected function recursivlyLookupArguments( array $arguments )
+    protected function recursivelyLookupArguments( array $arguments )
     {
         $builtArguments = array();
         foreach ( $arguments as $key => $argument )
@@ -290,7 +290,7 @@ class ServiceContainer implements Container
             }
             else if ( is_array( $argument ) )
             {
-                $builtArguments[$key] = $this->recursivlyLookupArguments( $argument );
+                $builtArguments[$key] = $this->recursivelyLookupArguments( $argument );
             }
             // Scalar values
             else
@@ -303,7 +303,7 @@ class ServiceContainer implements Container
 
     /**
      * @uses getListOfExtendedServices()
-     * @uses recursivlyLookupArguments()
+     * @uses recursivelyLookupArguments()
      * @param string $argument
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
@@ -321,7 +321,7 @@ class ServiceContainer implements Container
         // expand extended services
         if ( ( $argument[0] === '%' || $argument[0] === '@' ) && $argument[1] === ':' )
         {
-            return $this->recursivlyLookupArguments( $this->getListOfExtendedServices( $argument, $function ) );
+            return $this->recursivelyLookupArguments( $this->getListOfExtendedServices( $argument, $function ) );
         }
         // lazy loaded services
         else if ( $argument[0] === '%' )
