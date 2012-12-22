@@ -34,8 +34,6 @@ class UserGroupLimitationTest extends BaseLimitationTest
      */
     public function testUserGroupLimitationAllow()
     {
-        $this->fail( 'Fails due to endless loop in UserGroupLimitationType::evaluate()' );
-
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
         /* BEGIN: Use Case */
@@ -66,8 +64,6 @@ class UserGroupLimitationTest extends BaseLimitationTest
      */
     public function testUserGroupLimitationForbid()
     {
-        $this->fail( 'Fails due to endless loop in UserGroupLimitationType::evaluate()' );
-
         $repository = $this->getRepository();
 
         $userService = $repository->getUserService();
