@@ -42,6 +42,26 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers \eZ\Publish\Core\Base\ServiceContainer::get
+     */
+    public function testSimpleAliasService()
+    {
+        $sc = new ServiceContainer(
+            array(
+                'BService' => array(
+                    'alias' => 'BServiceXHandler',
+                ),
+                'BServiceXHandler' => array(
+                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\B',
+                )
+            )
+        );
+        $b = $sc->get( 'BService' );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\B', $b );
+        self::assertFalse( $b->factoryExecuted );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Base\ServiceContainer::get
      * @covers \eZ\Publish\Core\Base\ServiceContainer::lookupArguments
      */
     public function testArgumentsService()

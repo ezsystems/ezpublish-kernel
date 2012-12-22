@@ -152,19 +152,22 @@ class ServiceContainer implements Container
      */
     public function get( $serviceName )
     {
-        $serviceKey = "@{$serviceName}";
-
-        // Return directly if it already exists
-        if ( isset( $this->dependencies[$serviceKey] ) )
+        // If you have endless loop here; Congrats, you have recursive aliases!
+        do
         {
-            return $this->dependencies[$serviceKey];
-        }
+            // Return directly if it already exists
+            if ( isset( $this->dependencies["@{$serviceName}"] ) )
+                return $this->dependencies["@{$serviceName}"];
 
-        // Validate settings
-        if ( empty( $this->settings[$serviceName] ) )
-        {
-            throw new BadConfiguration( "service\\[{$serviceName}]", "no settings exist for '{$serviceName}'" );
+            // Validate settings
+            if ( empty( $this->settings[$serviceName] ) )
+                throw new BadConfiguration( "service\\[{$serviceName}]", "no settings exist for '{$serviceName}'" );
+
+            $origServiceName = $serviceName;
+            if ( isset( $this->settings[$serviceName]['alias'] ) )
+                $serviceName = $this->settings[$serviceName]['alias'];
         }
+        while ( $origServiceName !== $serviceName );
 
         $settings = $this->settings[$serviceName] + array( 'shared' => true );
         if ( empty( $settings['class'] ) )
@@ -209,7 +212,7 @@ class ServiceContainer implements Container
         }
 
         if ( $settings['shared'] )
-            $this->dependencies[$serviceKey] = $serviceObject;
+            $this->dependencies["@{$serviceName}"] = $serviceObject;
 
         if ( !empty( $settings['method'] ) )
         {

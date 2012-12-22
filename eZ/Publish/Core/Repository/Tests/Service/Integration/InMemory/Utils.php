@@ -26,8 +26,8 @@ abstract class Utils
      * @return \eZ\Publish\Core\Base\ServiceContainer
      */
     protected static function getServiceContainer(
-        $persistenceHandler = '@persistence_handler_inmemory',
-        $ioHandler = '@io_handler_inmemory',
+        $persistenceHandler = 'persistence_handler_inmemory',
+        $ioHandler = 'io_handler_inmemory',
         $dsn = 'sqlite://:memory:'
     )
     {
@@ -38,8 +38,8 @@ abstract class Utils
         }
 
         $settings['base']['Configuration']['UseCache'] = false;
-        $settings['service']['inner_repository']['arguments']['persistence_handler'] = $persistenceHandler;
-        $settings['service']['inner_repository']['arguments']['io_handler'] = $ioHandler;
+        $settings['persistence_handler']['alias'] = $persistenceHandler;
+        $settings['io_handler']['alias'] = $ioHandler;
         $settings['service']['parameters']['legacy_dsn'] = $dsn;
 
         // Return Service Container
