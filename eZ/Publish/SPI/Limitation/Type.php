@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\SPI\Limitation;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\API\Repository\Values\User\Limitation as LimitationValue;
-use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\ValueObject as APIValueObject;
+use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
+use eZ\Publish\API\Repository\Values\User\User as APIUser;
 
 /**
  * This interface represent the Limitation Type
@@ -34,16 +34,15 @@ interface Type
      * is valid according to valueSchema().
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
-     * @param \eZ\Publish\API\Repository\Repository $repository
      *
      * @return boolean
      */
-    public function acceptValue( LimitationValue $limitationValue, Repository $repository );
+    public function acceptValue( APILimitationValue $limitationValue );
 
     /**
      * Create the Limitation Value
      *
-     * The is the api to create values as Limitation type needs value knowledge anyway in acceptValue,
+     * The is the method to create values as Limitation type needs value knowledge anyway in acceptValue,
      * the reverse relation is provided by means of identifier lookup (Value has identifier, and so does RoleService).
      *
      * @param mixed[] $limitationValues
@@ -55,46 +54,36 @@ interface Type
     /**
      * Evaluate permission against content and placement
      *
-     * NOTE: Repository is provided because not everything is available via the value object(s),
-     * but use of repository in limitation functions should be avoided for performance reasons
-     * if possible, especially when using un-cached parts of the api.
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
      *         Example: If LimitationValue is instance of ContentTypeLimitationValue, and Type is SectionLimitationType.
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
      *         Example if OwnerLimitationValue->limitationValues[0] is not one of: [ 1,  2 ]
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
+     * @param \eZ\Publish\API\Repository\Values\ValueObject|null $target The location, parent or "assignment" value object
      *
      * @return boolean
      */
-    public function evaluate( LimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null );
+    public function evaluate( APILimitationValue $value, APIUser $currentUser, APIValueObject $object, APIValueObject $target = null );
 
     /**
      * Returns Criterion for use in find() query
      *
-     * NOTE: Repository is provided because not everything is available via the limitation value,
-     * but use of repository in limitation functions should be avoided for performance reasons
-     * if possible, especially when using un-cached parts of the api.
-     *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
      */
-    public function getCriterion( LimitationValue $value, Repository $repository );
+    public function getCriterion( APILimitationValue $value, APIUser $currentUser );
 
     /**
      * Returns info on valid $limitationValues
-     *
-     * @param \eZ\Publish\API\Repository\Repository $repository
      *
      * @return mixed[]|int In case of array, a hash with key as valid limitations value and value as human readable name
      *                     of that option, in case of int on of VALUE_SCHEMA_* constants.
      *                     Note: The hash might be an instance of Traversable, and not a native php array.
      */
-    public function valueSchema( Repository $repository );
+    public function valueSchema();
 }

@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\Limitation;
 
-use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
@@ -18,8 +18,9 @@ use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\ParentOwnerLimitation as APIParentOwnerLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
-use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
+use eZ\Publish\SPI\Persistence\Handler as SPIPersistenceHandler;
 
 /**
  * ParentOwnerLimitation is a Content limitation
@@ -27,17 +28,29 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 class ParentOwnerLimitationType implements SPILimitationTypeInterface
 {
     /**
+     * @var \eZ\Publish\SPI\Persistence\Handler
+     */
+    protected $persistence;
+
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Handler $persistence
+     */
+    public function __construct( SPIPersistenceHandler $persistence )
+    {
+        $this->persistence = $persistence;
+    }
+
+    /**
      * Accepts a Limitation value
      *
      * Makes sure LimitationValue object is of correct type and that ->limitationValues
      * is valid according to valueSchema().
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
-     * @param \eZ\Publish\API\Repository\Repository $repository
      *
      * @return boolean
      */
-    public function acceptValue( APILimitationValue $limitationValue, Repository $repository )
+    public function acceptValue( APILimitationValue $limitationValue )
     {
         throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
     }
@@ -57,17 +70,13 @@ class ParentOwnerLimitationType implements SPILimitationTypeInterface
     /**
      * Evaluate permission against content & target(placement/parent/assignment)
      *
-     * NOTE: Repository is provided because not everything is available via the value object(s),
-     * but use of repository in limitation functions should be avoided for performance reasons
-     * if possible, especially when using un-cached parts of the api.
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
      *         Example: If LimitationValue is instance of ContentTypeLimitationValue, and Type is SectionLimitationType.
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
      *         Example if OwnerLimitationValue->limitationValues[0] is not one of: [ 1,  2 ]
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
      * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
      *
@@ -75,7 +84,7 @@ class ParentOwnerLimitationType implements SPILimitationTypeInterface
      *
      * @todo Add support for $limitationValues[0] == 2 when session values can be injected somehow
      */
-    public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null )
+    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, ValueObject $target = null )
     {
         if ( !$value instanceof APIParentOwnerLimitation )
             throw new InvalidArgumentException( '$value', 'Must be of type: APIParentOwnerLimitation' );
@@ -89,28 +98,32 @@ class ParentOwnerLimitationType implements SPILimitationTypeInterface
         }
 
         if ( $target instanceof LocationCreateStruct )
-            $target = $repository->getLocationService()->loadLocation( $target->parentLocationId );
-        else if ( $target !== null && !$target instanceof Location )
-            throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
+        {
+            $spiLocation = $this->persistence->locationHandler()->load( $target->parentLocationId );
+            $spiContentInfo = $this->persistence->contentHandler()->loadContentInfo( $spiLocation->contentId );
+            return $spiContentInfo->ownerId === $currentUser->id;
+        }
 
-        if ( $target === null )
+        if ( $target !== null && !$target instanceof Location )
+            throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
+        else if ( $target === null )
             return false;
 
         /**
          * @var $target Location
          */
-        return $target->getContentInfo()->ownerId === $repository->getCurrentUser()->id;
+        return $target->getContentInfo()->ownerId === $currentUser->id;
     }
 
     /**
      * Returns Criterion for use in find() query
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
      */
-    public function getCriterion( APILimitationValue $value, Repository $repository )
+    public function getCriterion( APILimitationValue $value, APIUser $currentUser )
     {
         throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
     }
@@ -118,12 +131,10 @@ class ParentOwnerLimitationType implements SPILimitationTypeInterface
     /**
      * Returns info on valid $limitationValues
      *
-     * @param \eZ\Publish\API\Repository\Repository $repository
-     *
      * @return mixed[]|int In case of array, a hash with key as valid limitations value and value as human readable name
      *                     of that option, in case of int on of VALUE_SCHEMA_ constants.
      */
-    public function valueSchema( Repository $repository )
+    public function valueSchema()
     {
         throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
     }

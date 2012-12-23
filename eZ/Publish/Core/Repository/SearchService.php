@@ -188,6 +188,7 @@ class SearchService implements SearchServiceInterface
          * If RoleAssignment has limitation then policy OR conditions are wrapped in a AND condition with the
          * role limitation, otherwise it will be merged into RoleAssignment's OR condition.
          */
+        $currentUser = $this->repository->getCurrentUser();
         $roleAssignmentOrCriteria = array();
         $roleService = $this->repository->getRoleService();
         foreach ( $permissionSets as $permissionSet )
@@ -206,7 +207,7 @@ class SearchService implements SearchServiceInterface
                 foreach ( $limitations as $limitation )
                 {
                     $type = $roleService->getLimitationType( $limitation->getIdentifier() );
-                    $limitationsAndCriteria[] = $type->getCriterion( $limitation, $this->repository );
+                    $limitationsAndCriteria[] = $type->getCriterion( $limitation, $currentUser );
                 }
                 $policyOrCriteria[] = isset( $limitationsAndCriteria[1] ) ?
                     new Criterion\LogicalAnd( $limitationsAndCriteria ) :
@@ -225,7 +226,7 @@ class SearchService implements SearchServiceInterface
                 $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
                 $roleAssignmentOrCriteria[] = new Criterion\LogicalAnd(
                     array(
-                        $type->getCriterion( $permissionSet['limitation'], $this->repository ),
+                        $type->getCriterion( $permissionSet['limitation'], $currentUser ),
                         isset( $policyOrCriteria[1] ) ? new Criterion\LogicalOr( $policyOrCriteria ) : $policyOrCriteria[0]
                     )
                 );

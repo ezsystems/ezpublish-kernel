@@ -87,7 +87,7 @@ class Limitation extends Parser
                 return new \eZ\Publish\API\Repository\Values\User\Limitation\SiteaccessLimitation();
 
             case APILimitation::STATE:
-                return new \eZ\Publish\API\Repository\Values\User\Limitation\StateLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation();
 
             case APILimitation::SUBTREE:
                 return new \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation();
