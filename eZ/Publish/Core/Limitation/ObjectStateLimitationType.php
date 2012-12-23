@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\Values\User\Limitation\StateLimitation class.
+ * File containing the eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -17,16 +17,16 @@ use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
-use eZ\Publish\API\Repository\Values\User\Limitation\StateLimitation as APIStateLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation as APIObjectStateLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 use eZ\Publish\SPI\Persistence\Handler as SPIPersistenceHandler;
 
 /**
- * StateLimitation is a Content limitation
+ * ObjectStateLimitation is a Content limitation
  */
-class StateLimitationType implements SPILimitationTypeInterface
+class ObjectStateLimitationType implements SPILimitationTypeInterface
 {
     /**
      * @var \eZ\Publish\SPI\Persistence\Handler
@@ -65,7 +65,7 @@ class StateLimitationType implements SPILimitationTypeInterface
      */
     public function buildValue( array $limitationValues )
     {
-        return new APIStateLimitation( array( 'limitationValues' => $limitationValues ) );
+        return new APIObjectStateLimitation( array( 'limitationValues' => $limitationValues ) );
     }
 
     /**
@@ -85,9 +85,9 @@ class StateLimitationType implements SPILimitationTypeInterface
      */
     public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, ValueObject $target = null )
     {
-        if ( !$value instanceof APIStateLimitation )
+        if ( !$value instanceof APIObjectStateLimitation )
         {
-            throw new InvalidArgumentException( '$value', 'Must be of type: APIStateLimitation' );
+            throw new InvalidArgumentException( '$value', 'Must be of type: APIObjectStateLimitation' );
         }
 
         if ( $object instanceof Content )

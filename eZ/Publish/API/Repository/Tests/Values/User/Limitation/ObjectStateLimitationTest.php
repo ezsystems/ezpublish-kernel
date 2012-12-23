@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the StateLimitationTest class
+ * File containing the ObjectStateLimitationTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,28 +10,28 @@
 namespace eZ\Publish\API\Repository\Tests\Values\User\Limitation;
 
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use eZ\Publish\API\Repository\Values\User\Limitation\StateLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation;
 use eZ\Publish\API\Repository\Tests\Values\User\Limitation\BaseLimitationTest;
 
 /**
- * Test case for the {@link \eZ\Publish\API\Repository\Values\User\Limitation\StateLimitation}
+ * Test case for the {@link \eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation}
  * class.
  *
  * @see eZ\Publish\API\Repository\Values\User\Limitation
- * @see eZ\Publish\API\Repository\Values\User\Limitation\StateLimitation
+ * @see eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation
  * @group integration
  * @group limitation
  */
-class StateLimitationTest extends BaseLimitationTest
+class ObjectStateLimitationTest extends BaseLimitationTest
 {
     /**
-     * Tests a StateLimitation
+     * Tests a ObjectStateLimitation
      *
      * @return void
-     * @see eZ\Publish\API\Repository\Values\User\Limitation\StateLimitation
+     * @see eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation
      * @throws \ErrorException
      */
-    public function testStateLimitationAllow()
+    public function testObjectStateLimitationAllow()
     {
         $repository = $this->getRepository();
 
@@ -62,7 +62,7 @@ class StateLimitationTest extends BaseLimitationTest
         // Only allow Draft deletes
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
-            new StateLimitation(
+            new ObjectStateLimitation(
                 array(
                     'limitationValues' => array(
                         VersionInfo::STATUS_DRAFT
@@ -90,14 +90,14 @@ class StateLimitationTest extends BaseLimitationTest
     }
 
     /**
-     * Tests a StateLimitation
+     * Tests a ObjectStateLimitation
      *
      * @return void
-     * @see eZ\Publish\API\Repository\Values\User\Limitation\StateLimitation
+     * @see eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation
      * @throws \ErrorException
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testStateLimitationForbid()
+    public function testObjectStateLimitationForbid()
     {
         $repository = $this->getRepository();
 
@@ -128,7 +128,7 @@ class StateLimitationTest extends BaseLimitationTest
         // Only allow Draft deletes
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
-            new StateLimitation(
+            new ObjectStateLimitation(
                 array(
                     'limitationValues' => array(
                         VersionInfo::STATUS_ARCHIVED

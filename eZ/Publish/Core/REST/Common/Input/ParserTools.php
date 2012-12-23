@@ -258,7 +258,7 @@ class ParserTools
                 return new \eZ\Publish\API\Repository\Values\User\Limitation\SiteaccessLimitation();
 
             case Values\User\Limitation::STATE:
-                return new \eZ\Publish\API\Repository\Values\User\Limitation\StateLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation();
 
             case Values\User\Limitation::SUBTREE:
                 return new \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation();
