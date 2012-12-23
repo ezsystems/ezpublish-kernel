@@ -59,13 +59,14 @@ class ObjectStateLimitationTest extends BaseLimitationTest
             throw new \ErrorException( 'No content:versionremove policy found.' );
         }
 
-        // Only allow Draft deletes
+        // Only allow deletion of content with default state
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new ObjectStateLimitation(
                 array(
                     'limitationValues' => array(
-                        VersionInfo::STATUS_DRAFT
+                        // 'not_locked' state
+                        2
                     )
                 )
             )
@@ -125,13 +126,14 @@ class ObjectStateLimitationTest extends BaseLimitationTest
             throw new \ErrorException( 'No content:versionremove policy found.' );
         }
 
-        // Only allow Draft deletes
+        // Only allow deletion of content with default state
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new ObjectStateLimitation(
                 array(
                     'limitationValues' => array(
-                        VersionInfo::STATUS_ARCHIVED
+                        // 'locked' state
+                        1
                     )
                 )
             )
