@@ -34,6 +34,8 @@
             <file>eZ/Publish/API/Repository/Tests/TrashServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/URLWildcardServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/ObjectStateServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/LimitationTest.php</file>
+            <directory>eZ/Publish/API/Repository/Tests/Values/User/Limitation</directory>
             <directory>eZ/Publish/API/Repository/Tests/FieldType/</directory>
         </testsuite>
     </testsuites>

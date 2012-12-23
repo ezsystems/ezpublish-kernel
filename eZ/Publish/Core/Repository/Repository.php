@@ -318,6 +318,7 @@ class Repository implements RepositoryInterface
         }
 
         $roleService = $this->getRoleService();
+        $currentUser = $this->getCurrentUser();
         foreach ( $permissionSets as $permissionSet )
         {
             /**
@@ -326,7 +327,7 @@ class Repository implements RepositoryInterface
             if ( $permissionSet['limitation'] instanceof Limitation )
             {
                 $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
-                if ( !$type->evaluate( $permissionSet['limitation'], $this, $object, $target ) )
+                if ( !$type->evaluate( $permissionSet['limitation'], $currentUser, $object, $target ) )
                     continue;
             }
 
@@ -343,7 +344,7 @@ class Repository implements RepositoryInterface
                 foreach ( $limitations as $limitation )
                 {
                     $type = $roleService->getLimitationType( $limitation->getIdentifier() );
-                    if ( !$type->evaluate( $limitation, $this, $object, $target ) )
+                    if ( !$type->evaluate( $limitation, $currentUser, $object, $target ) )
                     {
                         $limitationsPass = false;
                         break;// Break to next policy, all limitations must pass
