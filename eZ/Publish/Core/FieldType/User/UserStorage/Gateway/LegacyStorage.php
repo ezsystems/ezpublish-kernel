@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\User\UserStorage\Gateway;
+
 use eZ\Publish\Core\FieldType\User\UserStorage\Gateway;
 
 class LegacyStorage extends Gateway
@@ -45,7 +46,11 @@ class LegacyStorage extends Gateway
         return array(
             'has_stored_login' => array(
                 'name' => 'hasStoredlogin',
-                'cast' => function ( $input ) { return ( $input == "1" ); },
+                'cast' =>
+                    function ( $input )
+                    {
+                        return ( $input == "1" );
+                    },
             ),
             'contentobject_id' => array(
                 'name' => 'contentId',
@@ -69,7 +74,11 @@ class LegacyStorage extends Gateway
             ),
             'is_enabled' => array(
                 'name' => 'enabled',
-                'cast' => function ( $input ) { return ( $input == "1" ); }
+                'cast' =>
+                    function ( $input )
+                    {
+                        return ( $input == "1" );
+                    }
             ),
             'max_login' => array(
                 'name' => 'maxLogin',
@@ -82,6 +91,7 @@ class LegacyStorage extends Gateway
      * Set dbHandler for gateway
      *
      * @param mixed $dbHandler
+     *
      * @return void
      */
     public function setConnection( $dbHandler )
@@ -114,6 +124,7 @@ class LegacyStorage extends Gateway
      *
      * @param mixed $fieldId
      * @param mixed $userId
+     *
      * @return array
      */
     public function getFieldData( $fieldId, $userId = null )
@@ -142,6 +153,7 @@ class LegacyStorage extends Gateway
      * Converts the given database values to properties
      *
      * @param array $databaseValues
+     *
      * @return array
      */
     protected function convertColumnsToProperties( array $databaseValues )
@@ -163,6 +175,7 @@ class LegacyStorage extends Gateway
      * Fetch basic user data
      *
      * @param mixed $fieldId
+     *
      * @return array
      */
     protected function fetchUserId( $fieldId )
@@ -190,6 +203,7 @@ class LegacyStorage extends Gateway
      * Fetch user data
      *
      * @param mixed $userId
+     *
      * @return array
      */
     protected function fetchUserData( $userId )
@@ -225,6 +239,7 @@ class LegacyStorage extends Gateway
      * ezcDatabase nor by databases like SQLite
      *
      * @param mixed $userId
+     *
      * @return array
      */
     protected function fetchUserSettings( $userId )

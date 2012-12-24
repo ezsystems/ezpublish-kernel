@@ -31,7 +31,6 @@ class Field extends ValueObject
     protected $id;
 
     /**
-     *
      * The field definition identifier
      *
      * @var string
@@ -39,7 +38,7 @@ class Field extends ValueObject
     protected $fieldDefIdentifier;
 
     /**
-     * a field type value or a value type which can be converted by the corresponding field type
+     * A field type value or a value type which can be converted by the corresponding field type
      *
      * @var mixed
      */

@@ -9,12 +9,12 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Output\OutputInterface,
-    Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption,
-    eZ\Publish\Core\MVC\Symfony\ConfigDumperInterface;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
+use eZ\Publish\Core\MVC\Symfony\ConfigDumperInterface;
 
 class LegacyConfigurationCommand extends ContainerAwareCommand
 {
@@ -30,13 +30,14 @@ class LegacyConfigurationCommand extends ContainerAwareCommand
                 )
             )
             ->setDescription( 'Creates the ezpublish 5 configuration based on an existing ezpublish_legacy' )
-            ->setHelp( <<<EOT
+            ->setHelp(
+                <<<EOT
 The command <info>%command.name%</info> creates the ezpublish 5 configuration,
 based on an existing ezpublish_legacy installation.
 
 Settings will be picked based on the default siteaccess.
 EOT
-        );
+            );
     }
 
     protected function execute( InputInterface $input, OutputInterface $output )

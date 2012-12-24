@@ -8,15 +8,16 @@
  */
 
 namespace eZ\Publish\Core\IO\Tests;
-use eZ\Publish\SPI\IO\BinaryFileCreateStruct,
-    eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
-    DateTime,
-    finfo;
+
+use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
+use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
+use DateTime;
+use finfo;
 
 abstract class Base extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Binary IoHanlder
+     * Binary IoHandler
      * @var \eZ\Publish\SPI\IO\Handler
      */
     protected $ioHandler;
@@ -38,7 +39,6 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @abstract
      * @return \eZ\Publish\SPI\IO\Handler
      */
     abstract protected function getIoHandler();
@@ -61,7 +61,6 @@ abstract class Base extends \PHPUnit_Framework_TestCase
         $repositoryPath = 'var/test/storage/images/ezplogo.gif';
         $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
         $binaryFile = $this->ioHandler->create( $struct );
-
 
         self::assertInstanceOf( 'eZ\\Publish\\SPI\\IO\\BinaryFile', $binaryFile );
         self::assertEquals( $repositoryPath, $binaryFile->path );
@@ -263,7 +262,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\SPI\IO\Handler::load
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadNonExistinFile()
+    public function testLoadNonExistingFile()
     {
         $this->ioHandler->load( 'var/test/storage/loadNotFound.png' );
     }
@@ -289,9 +288,9 @@ abstract class Base extends \PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\SPI\IO\Handler::getFileResource
      * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
-    public function testGetFileResourceNonExistinFile()
+    public function testGetFileResourceNonExistingFile()
     {
-        $this->ioHandler->getFileResource( 'var/test/testGetFileResourceNonExistinFile.png' );
+        $this->ioHandler->getFileResource( 'var/test/testGetFileResourceNonExistingFile.png' );
     }
 
     /**
@@ -321,6 +320,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
      * @throws \Exception When given a non existing / unreadable file
      * @param string $localFile Path to local file
      * @param string $repositoryPath The path the file must be stored as
+     *
      * @return \eZ\Publish\SPI\IO\BinaryFileCreateStruct
      */
     protected function getCreateStructFromLocalFile( $localFile, $repositoryPath )
@@ -347,6 +347,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
      *
      * @throws \Exception If file does not exist
      * @param string $path
+     *
      * @return string
      */
     protected static function getMimeTypeFromPath( $path )

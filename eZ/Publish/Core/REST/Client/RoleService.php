@@ -9,29 +9,30 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
-use \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
-use \eZ\Publish\API\Repository\Values\User\Policy as APIPolicy;
-use \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
-use \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct;
-use \eZ\Publish\API\Repository\Values\User\Role as APIRole;
-use \eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
-use \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
-use \eZ\Publish\API\Repository\Values\User\User;
-use \eZ\Publish\API\Repository\Values\User\UserGroup;
+use eZ\Publish\API\Repository\RoleService as APIRoleService;
+use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
+use eZ\Publish\API\Repository\Values\User\Policy as APIPolicy;
+use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
+use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\Role as APIRole;
+use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
+use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\UserGroup;
 
-use \eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
-use \eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
+use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
+use eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
 
-use \eZ\Publish\Core\REST\Client\Values\User\PolicyCreateStruct;
-use \eZ\Publish\Core\REST\Client\Values\User\PolicyUpdateStruct;
-use \eZ\Publish\Core\REST\Client\Values\User\Role;
-use \eZ\Publish\Core\REST\Client\Values\User\Policy;
-use \eZ\Publish\Core\REST\Client\Values\User\RoleAssignment;
+use eZ\Publish\Core\REST\Client\Values\User\PolicyCreateStruct;
+use eZ\Publish\Core\REST\Client\Values\User\PolicyUpdateStruct;
+use eZ\Publish\Core\REST\Client\Values\User\Role;
+use eZ\Publish\Core\REST\Client\Values\User\Policy;
+use eZ\Publish\Core\REST\Client\Values\User\RoleAssignment;
 
-use \eZ\Publish\Core\REST\Common\UrlHandler;
-use \eZ\Publish\Core\REST\Common\Input;
-use \eZ\Publish\Core\REST\Common\Output;
-use \eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input\Dispatcher;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Common\Message;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\RoleService}
@@ -39,7 +40,7 @@ use \eZ\Publish\Core\REST\Common\Message;
  *
  * @see \eZ\Publish\API\Repository\RoleService
  */
-class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
+class RoleService implements APIRoleService, Sessionable
 {
     /**
      * @var \eZ\Publish\Core\REST\Client\UserService
@@ -73,7 +74,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( UserService $userService, HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( UserService $userService, HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->userService     = $userService;
         $this->client          = $client;
@@ -88,8 +89,10 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      * Only for testing
      *
      * @param mixed $id
-     * @return void
+     *
      * @private
+     *
+     * @return void
      */
     public function setSession( $id )
     {
@@ -185,7 +188,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
     }
 
     /**
-     * adds a new policy to the role
+     * Adds a new policy to the role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to add  a policy
      *
@@ -253,7 +256,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
                 )
             ),
             new Message(
-                // TODO: What media-type should we set here? Actually, it should be
+                // @todo: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "Section" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
@@ -301,7 +304,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
     }
 
     /**
-     * loads a role for the given id
+     * Loads a role for the given id
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
@@ -341,7 +344,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
     }
 
     /**
-     * loads a role for the given name
+     * Loads a role for the given name
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
@@ -365,11 +368,11 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
     }
 
     /**
-     * loads all roles
+     * Loads all roles
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the roles
      *
-     * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\Role}
+     * @return \eZ\Publish\API\Repository\Values\User\Role[]
      */
     public function loadRoles()
     {
@@ -385,7 +388,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
     }
 
     /**
-     * deletes the given role
+     * Deletes the given role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete this role
      *
@@ -397,7 +400,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
             'DELETE',
             $role->id,
             new Message(
-                // TODO: What media-type should we set here? Actually, it should be
+                // @todo: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "Section" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
@@ -410,13 +413,13 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
     }
 
     /**
-     * loads all policies from roles which are assigned to a user or to user groups to which the user belongs
+     * Loads all policies from roles which are assigned to a user or to user groups to which the user belongs
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
      *
      * @param mixed $userId
      *
-     * @return array an array of {@link Policy}
+     * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
     public function loadPoliciesByUserId( $userId )
     {
@@ -433,7 +436,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
     }
 
     /**
-     * assigns a role to the given user group
+     * Assigns a role to the given user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
      *
@@ -483,7 +486,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
             'DELETE',
             $this->urlHandler->generate( 'groupRoleAssignment', array( 'group' => $userGroupId, 'role' => $roleId ) ),
             new Message(
-                // TODO: What media-type should we set here? Actually, it should be
+                // @todo: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "Section" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
@@ -496,7 +499,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
     }
 
     /**
-     * assigns a role to the given user
+     * Assigns a role to the given user
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
      *
@@ -548,7 +551,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
             'DELETE',
             $this->urlHandler->generate( 'userRoleAssignment', array( 'user' => $userId, 'role' => $roleId ) ),
             new Message(
-                // TODO: What media-type should we set here? Actually, it should be
+                // @todo: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "Section" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
@@ -561,27 +564,27 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
     }
 
     /**
-     * returns the assigned user and user groups to this role
+     * Returns the assigned user and user groups to this role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a role
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[] an array of {@link RoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[]
      */
     public function getRoleAssignments( APIRole $role )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
-     * returns the roles assigned to the given user
+     * Returns the roles assigned to the given user
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
-     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment[] an array of {@link UserRoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment[]
      */
     public function getRoleAssignmentsForUser( User $user )
     {
@@ -611,13 +614,13 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
     }
 
     /**
-     * returns the roles assigned to the given user group
+     * Returns the roles assigned to the given user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user group
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment[] an array of {@link UserGroupRoleAssignment}
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment[]
      */
     public function getRoleAssignmentsForUserGroup( UserGroup $userGroup )
     {

@@ -8,20 +8,22 @@
  */
 
 namespace eZ\Publish\Core\REST\Client;
-use eZ\Publish\API,
-    eZ\Publish\Core\REST\Common\Exceptions;
 
-class FieldTypeService implements API\Repository\FieldTypeService
+use eZ\Publish\API\Repository\FieldTypeService as APIFieldTypeService;
+use eZ\Publish\Core\REST\Common\Exceptions;
+
+class FieldTypeService implements APIFieldTypeService
 {
     /**
      * FieldTypes by identifier
      *
-     * @var eZ\Publish\Core\REST\Client\FieldType[] $fieldTypes
+     * @var \eZ\Publish\Core\REST\Client\FieldType[]
      */
     protected $fieldTypes = array();
 
     /**
-     * @param eZ\Publish\Core\REST\Client\FieldType[] $fieldTypes
+     * @param \eZ\Publish\Core\REST\Client\FieldType[] $fieldTypes
+     *
      * @return void
      */
     public function __construct( array $fieldTypes = array() )
@@ -38,8 +40,10 @@ class FieldTypeService implements API\Repository\FieldTypeService
      * Note, this is not an API method and not meant to be used directly!
      *
      * @param FieldType $fieldType
-     * @return void
+     *
      * @access protected
+     *
+     * @return void
      */
     public function addFieldType( FieldType $fieldType )
     {
@@ -60,6 +64,7 @@ class FieldTypeService implements API\Repository\FieldTypeService
      * Returns the FieldType registered with the given identifier
      *
      * @param string $identifier
+     *
      * @return \eZ\Publish\API\Repository\FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *         if there is no FieldType registered with $identifier
@@ -83,7 +88,8 @@ class FieldTypeService implements API\Repository\FieldTypeService
      * Returns if there is a FieldType registered under $identifier
      *
      * @param string $identifier
-     * @return bool
+     *
+     * @return boolean
      */
     public function hasFieldType( $identifier )
     {

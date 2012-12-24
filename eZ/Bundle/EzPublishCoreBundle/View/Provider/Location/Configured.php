@@ -9,10 +9,10 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\View\Provider\Location;
 
-use eZ\Publish\Core\MVC\Symfony\View\Provider\Location\Configured as BaseConfigured,
-    eZ\Publish\Core\MVC\ConfigResolverInterface,
-    eZ\Publish\API\Repository\Repository,
-    Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Location\Configured as BaseConfigured;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\API\Repository\Repository;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Configured extends BaseConfigured
 {
@@ -40,6 +40,7 @@ class Configured extends BaseConfigured
      * Returns the matcher object either from a service identifier or from a class.
      *
      * @param string $matcherIdentifier If it is a service identifier, the matcher will be built with the service container.
+     *
      * @return \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher
      */
     protected function getMatcher( $matcherIdentifier )

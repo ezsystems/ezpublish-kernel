@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Page;
+
 use eZ\Publish\Core\FieldType\Page\Parts\Page;
 
 class Service
@@ -29,8 +30,8 @@ class Service
     /**
      * Constructor
      *
-     * @param $zoneDefinition
-     * @param $blockDefinition
+     * @param array $zoneDefinition
+     * @param array $blockDefinition
      */
     public function __construct( array $zoneDefinition = array(), array $blockDefinition = array() )
     {

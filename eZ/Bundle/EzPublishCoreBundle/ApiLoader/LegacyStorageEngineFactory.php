@@ -9,10 +9,10 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
-    Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LegacyStorageEngineFactory
 {
@@ -45,7 +45,8 @@ class LegacyStorageEngineFactory
      * Builds the Legacy Storage Engine
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbhandler
-     * @param $deferTypeUpdate
+     * @param boolean $deferTypeUpdate
+     *
      * @return \eZ\Publish\Core\Persistence\Legacy\Handler
      */
     public function buildLegacyEngine( EzcDbHandler $dbhandler, $deferTypeUpdate )
@@ -59,7 +60,7 @@ class LegacyStorageEngineFactory
             ),
             $this->container->get( 'ezpublish.api.storage_engine.legacy.transformation_processor' ),
             array(
-                 'defer_type_update'            => (bool)$deferTypeUpdate,
+                'defer_type_update' => (bool)$deferTypeUpdate,
             )
         );
     }

@@ -17,14 +17,14 @@ use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
 class TrashItem extends APITrashItem
 {
     /**
-     * content info of the content object of this trash item
+     * Content info of the content object of this trash item
      *
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
     protected $contentInfo;
 
     /**
-     * returns the content info of the content object of this trash item
+     * Returns the content info of the content object of this trash item
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
@@ -63,22 +63,26 @@ class TrashItem extends APITrashItem
                 return $this->contentInfo->id;
             case 'path':
                 if ( $this->path !== null )
+                {
                     return $this->path;
-                else if ( isset( $this->pathString[1] ) && $this->pathString[0] === '/' )
+                }
+                if ( isset( $this->pathString[1] ) && $this->pathString[0] === '/' )
+                {
                     return $this->path = explode( '/', trim( $this->pathString, '/' ) );
-                else
-                    return $this->path = array();
+                }
+
+                return $this->path = array();
         }
 
         return parent::__get( $property );
     }
 
     /**
-     * Magic isset for singaling existence of convenience properties
+     * Magic isset for signaling existence of convenience properties
      *
      * @param string $property
      *
-     * @return bool
+     * @return boolean
      */
     public function __isset( $property )
     {

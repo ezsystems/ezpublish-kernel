@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -59,6 +60,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      * Test if result contains UrlAlias element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsUrlAliasElement( $result )
@@ -81,6 +83,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      * Test if result contains UrlAlias element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsUrlAliasAttributes( $result )
@@ -105,6 +108,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      * Test if result contains url value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsUrlValueElement( $result )
@@ -113,7 +117,6 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'resource',
                 'content'  => '/destination/url',
-
             ),
             $result,
             'Invalid or non-existing <UrlAlias> url value element.',
@@ -125,6 +128,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      * Test if result contains path value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPathValueElement( $result )
@@ -133,7 +137,6 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'path',
                 'content'  => '/some/path',
-
             ),
             $result,
             'Invalid or non-existing <UrlAlias> path value element.',
@@ -145,6 +148,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      * Test if result contains languageCodes value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLanguageCodesValueElement( $result )
@@ -153,7 +157,6 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'languageCodes',
                 'content'  => 'eng-GB,eng-US',
-
             ),
             $result,
             'Invalid or non-existing <UrlAlias> languageCodes value element.',
@@ -165,6 +168,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      * Test if result contains alwaysAvailable value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsAlwaysAvailableValueElement( $result )
@@ -173,7 +177,6 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'alwaysAvailable',
                 'content'  => 'true',
-
             ),
             $result,
             'Invalid or non-existing <UrlAlias> alwaysAvailable value element.',
@@ -185,6 +188,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      * Test if result contains isHistory value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsIsHistoryValueElement( $result )
@@ -193,7 +197,6 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'isHistory',
                 'content'  => 'true',
-
             ),
             $result,
             'Invalid or non-existing <UrlAlias> isHistory value element.',
@@ -205,6 +208,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      * Test if result contains forward value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsForwardValueElement( $result )
@@ -213,7 +217,6 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'forward',
                 'content'  => 'false',
-
             ),
             $result,
             'Invalid or non-existing <UrlAlias> forward value element.',
@@ -225,6 +228,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      * Test if result contains custom value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsCustomValueElement( $result )
@@ -233,7 +237,6 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'custom',
                 'content'  => 'false',
-
             ),
             $result,
             'Invalid or non-existing <UrlAlias> custom value element.',

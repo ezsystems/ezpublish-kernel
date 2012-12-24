@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\FacetBuider\DateRangeFacetBuilder class.
+ * File containing the eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder\DateRangeFacetBuilder class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -23,10 +23,10 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
  *
  * @package eZ\Publish\API\Repository\Values\Content\Query
  */
-abstract class FieldRangeFacetBuilder extends FacetBuilder {
-
+abstract class FieldRangeFacetBuilder extends FacetBuilder
+{
     /**
-     * The field path starts with a field indentifier and a sub path (for complex types)
+     * The field path starts with a field identifier and a sub path (for complex types)
      *
      * @var string
      */
@@ -37,7 +37,7 @@ abstract class FieldRangeFacetBuilder extends FacetBuilder {
      *
      * @param mixed $to
      */
-    public abstract function addUnboundedFrom($to);
+    public abstract function addUnboundedFrom( $to );
 
     /**
      * Adds a range
@@ -45,14 +45,12 @@ abstract class FieldRangeFacetBuilder extends FacetBuilder {
      * @param mixed $from
      * @param mixed $to
      */
-    public abstract function addRange($from, $to);
+    public abstract function addRange( $from, $to );
 
     /**
      * Adds a range entry with explicit from and unbounded to.
      *
      * @param mixed $from
      */
-    public abstract function addUnboundedTo($from);
-
-
+    public abstract function addUnboundedTo( $from );
 }

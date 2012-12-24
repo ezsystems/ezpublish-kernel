@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    InvalidArgumentException;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use InvalidArgumentException;
 
 /**
  *

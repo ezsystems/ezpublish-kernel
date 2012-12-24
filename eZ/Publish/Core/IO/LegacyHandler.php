@@ -9,16 +9,16 @@
 
 namespace eZ\Publish\Core\IO;
 
-use eZ\Publish\SPI\IO\Handler as IoHandlerInterface,
-    eZ\Publish\SPI\IO\BinaryFile,
-    eZ\Publish\SPI\IO\BinaryFileCreateStruct,
-    eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel,
-    eZClusterFileHandler,
-    DateTime,
-    finfo;
+use eZ\Publish\SPI\IO\Handler as IoHandlerInterface;
+use eZ\Publish\SPI\IO\BinaryFile;
+use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
+use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
+use eZClusterFileHandler;
+use DateTime;
+use finfo;
 
 /**
  * Legacy Io/Storage handler, based on eZ Cluster
@@ -289,8 +289,9 @@ class LegacyHandler implements IoHandlerInterface
     /**
      * Returns the appropriate FileResourceProvider depending on the cluster handler in use
      *
-     * @return \eZ\Publish\Core\IO\LegacyHandler\FileResourceProvider
      * @throws \Exception
+     *
+     * @return \eZ\Publish\Core\IO\LegacyHandler\FileResourceProvider
      */
     private function getFileResourceProvider()
     {

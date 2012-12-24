@@ -8,12 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    ezcQuerySelect;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use ezcQuerySelect;
 
 /**
  * Full text criterion handler
@@ -75,6 +76,7 @@ class FullText extends CriterionHandler
      * Construct from full text search configuration
      *
      * @param array $configuration
+     *
      * @return void
      */
     public function __construct( EzcDbHandler $dbHandler, TransformationProcessor $processor, array $configuration = array() )
@@ -89,7 +91,8 @@ class FullText extends CriterionHandler
      * Check if this criterion handler accepts to handle the given criterion.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion$criterion
-     * @return bool
+     *
+     * @return boolean
      */
     public function accept( Criterion $criterion )
     {
@@ -100,6 +103,7 @@ class FullText extends CriterionHandler
      * Tokenize String
      *
      * @param string $string
+     *
      * @return array
      */
     protected function tokenizeString( $string )
@@ -116,11 +120,12 @@ class FullText extends CriterionHandler
      * Get single word query expression
      *
      * Depending on the configuration of the full text search criterion
-     * converter wildcards are either transformed into the repsective LIKE
+     * converter wildcards are either transformed into the respective LIKE
      * queries, or everything is just compared using equal.
      *
      * @param \ezcQuerySelect $query
      * @param string $token
+     *
      * @return \ezcQueryExpression
      */
     protected function getWordExpression( ezcQuerySelect $query, $token )
@@ -153,6 +158,7 @@ class FullText extends CriterionHandler
      * Get subquery to select relevant word IDs
      *
      * @param string $string
+     *
      * @return \ezcQuerySelect
      */
     protected function getWordIdSubquery( $query, $string )
@@ -188,6 +194,7 @@ class FullText extends CriterionHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter$converter
      * @param \ezcQuerySelect $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion$criterion
+     *
      * @return \ezcQueryExpression
      */
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )

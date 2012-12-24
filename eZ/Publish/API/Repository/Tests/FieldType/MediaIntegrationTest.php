@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\Media\Value as MediaValue,
-    eZ\Publish\Core\FieldType\Media\Type as MediaType,
-    eZ\Publish\API\Repository\Values\Content\Field;
+
+use eZ\Publish\Core\FieldType\Media\Value as MediaValue;
+use eZ\Publish\Core\FieldType\Media\Type as MediaType;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type
@@ -172,6 +173,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     public function assertFieldDataLoadedCorrect( Field $field )
@@ -238,9 +240,11 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
             array(
-                new MediaValue( array(
-                    'path' => '/foo/bar/sindelfingen.pdf',
-                ) ),
+                new MediaValue(
+                    array(
+                        'path' => '/foo/bar/sindelfingen.pdf',
+                    )
+                ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
         );

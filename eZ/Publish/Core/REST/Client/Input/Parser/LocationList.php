@@ -22,8 +22,10 @@ class LocationList extends Parser
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     *
      * @todo Error handling
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {

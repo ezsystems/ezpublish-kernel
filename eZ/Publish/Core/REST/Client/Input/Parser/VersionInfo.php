@@ -48,8 +48,10 @@ class VersionInfo extends Parser
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
+     *
      * @todo Error handling
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
@@ -76,6 +78,7 @@ class VersionInfo extends Parser
      * Converts the given $statusString to its constant representation
      *
      * @param string $statusString
+     *
      * @return int
      */
     protected function convertVersionStatus( $statusString )

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="bootstrap.php"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         colors="true"
+         >
+    <php>
+        <env name="setupFactory" value="eZ\Publish\API\Repository\Tests\SetupFactory\Memory" />
+        <env name="backendVersion" value="5" />
+    </php>
+    <testsuites>
+        <testsuite name="eZ\Publish\API\Repository">
+            <file>eZ/Publish/API/Repository/Tests/RepositoryTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/SectionServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/LanguageServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/ContentTypeServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/ContentServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/LocationServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/UserServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/RoleServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/TrashServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/IOServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/IOServiceTest/testNewBinaryCreateStructFromUploadedFile.phpt</file>
+            <file>eZ/Publish/API/Repository/Tests/URLAliasServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/URLWildcardServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/ObjectStateServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/SectionServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/LanguageServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/ContentTypeServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/ContentServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/LocationServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/UserServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/RoleServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/TrashServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/URLWildcardServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/ObjectStateServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/LimitationTest.php</file>
+            <directory>eZ/Publish/API/Repository/Tests/Values/User/Limitation</directory>
+            <directory>eZ/Publish/API/Repository/Tests/FieldType/</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">eZ/Publish/API/Repository/</directory>
+            <directory>eZ/Publish/API/Repository/Tests/Stubs</directory>
+            <exclude>
+                <directory>eZ/Publish/API/Repository/Tests</directory>
+                <directory>eZ/Publish/API/Repository/Tutorials</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>

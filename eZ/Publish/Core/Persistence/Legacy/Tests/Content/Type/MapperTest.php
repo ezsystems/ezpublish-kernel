@@ -8,20 +8,20 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry,
 
-    // Needed for $sortOrder and $sortField properties
-    eZ\Publish\SPI\Persistence\Content\Location,
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
+// Needed for $sortOrder and $sortField properties
+use eZ\Publish\SPI\Persistence\Content\Location;
 
-    eZ\Publish\SPI\Persistence\Content\Type,
-    eZ\Publish\SPI\Persistence\Content\Type\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
+use eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
-    eZ\Publish\SPI\Persistence\Content\Type\Group,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\Group;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
 
 /**
  * Test case for Mapper.
@@ -29,8 +29,9 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
 class MapperTest extends TestCase
 {
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createGroupFromCreateStruct
+     *
+     * @return void
      */
     public function testCreateGroupFromCreateStruct()
     {
@@ -84,8 +85,9 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createTypeFromCreateStruct
+     *
+     * @return void
      */
     public function testTypeFromCreateStruct()
     {
@@ -149,8 +151,9 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createCreateStructFromType
+     *
+     * @return void
      */
     public function testCreateStructFromType()
     {
@@ -217,8 +220,9 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractGroupsFromRows
+     *
+     * @return void
      */
     public function testExtractGroupsFromRows()
     {

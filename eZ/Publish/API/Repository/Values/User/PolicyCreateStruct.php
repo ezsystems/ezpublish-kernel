@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Values\User;
+
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
@@ -41,8 +42,7 @@ abstract class PolicyCreateStruct extends ValueObject
     abstract public function getLimitations();
 
     /**
-     *
-     * adds a limitation with the given identifier and list of values
+     * Adds a limitation with the given identifier and list of values
      * @param Limitation $limitation
      */
     abstract public function addLimitation( Limitation $limitation );

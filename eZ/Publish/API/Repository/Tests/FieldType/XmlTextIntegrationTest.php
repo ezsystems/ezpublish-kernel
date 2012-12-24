@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\XmlText\Value as XmlTextValue,
-    eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType,
-    eZ\Publish\API\Repository\Values\Content\Field,
-    DOMDocument;
+
+use eZ\Publish\Core\FieldType\XmlText\Value as XmlTextValue;
+use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType;
+use eZ\Publish\API\Repository\Values\Content\Field;
+use DOMDocument;
 
 /**
  * Integration test for use field type
@@ -53,7 +54,7 @@ EOT
     }
 
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -134,7 +135,7 @@ EOT
     public function getInvalidValidatorConfiguration()
     {
         return array(
-            'unkknown' => array( 'value' => 23 )
+            'unknown' => array( 'value' => 23 )
         );
     }
 
@@ -164,6 +165,7 @@ EOT
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     public function assertFieldDataLoadedCorrect( Field $field)
@@ -327,7 +329,7 @@ EOT
         return array(
             array(
                 new XmlTextValue( $xml ),
-                array ( 'xml' => $xml->saveXML() ),
+                array( 'xml' => $xml->saveXML() ),
             ),
         );
     }
@@ -356,7 +358,7 @@ EOT
 
     /**
      * @dataProvider provideFromHashData
-     * @TODO: Requires correct registered FieldTypeService, needs to be
+     * @todo: Requires correct registered FieldTypeService, needs to be
      *        maintained!
      */
     public function testFromHash( $hash, $expectedValue = null )

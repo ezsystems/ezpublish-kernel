@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
-use eZ\Publish\SPI\Persistence\Content\Language,
-    eZ\Publish\SPI\Persistence\Content\Language\Handler as BaseLanguageHandler,
-    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
+
+use eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as BaseLanguageHandler;
+use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 
 /**
  * Language Handler
@@ -34,7 +35,7 @@ class CachingHandler implements BaseLanguageHandler
     /**
      * If the cache has already been initialized
      *
-     * @var bool
+     * @var boolean
      */
     protected $isCacheInitialized = false;
 
@@ -71,6 +72,7 @@ class CachingHandler implements BaseLanguageHandler
      * Create a new language
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Language\CreateStruct $struct
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     public function create( CreateStruct $struct )
@@ -97,8 +99,10 @@ class CachingHandler implements BaseLanguageHandler
      * Get language by id
      *
      * @param mixed $id
-     * @return \eZ\Publish\SPI\Persistence\Content\Language
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If language could not be found by $id
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     public function load( $id )
     {
@@ -110,8 +114,10 @@ class CachingHandler implements BaseLanguageHandler
      * Get language by Language Code (eg: eng-GB)
      *
      * @param string $languageCode
-     * @return \eZ\Publish\SPI\Persistence\Content\Language
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If language could not be found by $languageCode
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     public function loadByLanguageCode( $languageCode )
     {

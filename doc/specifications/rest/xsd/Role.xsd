@@ -70,7 +70,7 @@
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
-  
+
   <xsd:element name="RoleInput" type="vnd.ez.api.RoleInput"/>
   <xsd:element name="Role" type="vnd.ez.api.Role"/>
   <xsd:element name="RoleAssignInput" type="vnd.ez.api.RoleAssignInput"/>

@@ -34,7 +34,6 @@ class LocationTest extends BaseTest
                 '_href' => '/content/locations/1/2/21'
             ),
             'pathString' => '/1/2/21/42',
-            'subLocationModificationDate' => '1970-01-01T01:00+01:00',
             'depth' => '3',
             'Content' => array(
                 '_href' => '/content/objects/42'
@@ -54,6 +53,7 @@ class LocationTest extends BaseTest
      * Tests that the resulting location is in fact an instance of Location class
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
+     *
      * @depends testParse
      */
     public function testResultIsLocation( $result )
@@ -68,6 +68,7 @@ class LocationTest extends BaseTest
      * Tests that the resulting location contains the ID
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
+     *
      * @depends testParse
      */
     public function testResultContainsId( $result )
@@ -82,6 +83,7 @@ class LocationTest extends BaseTest
      * Tests that the resulting location contains the priority
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
+     *
      * @depends testParse
      */
     public function testResultContainsPriority( $result )
@@ -96,6 +98,7 @@ class LocationTest extends BaseTest
      * Tests that the resulting location contains hidden property
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
+     *
      * @depends testParse
      */
     public function testResultContainsHidden( $result )
@@ -110,6 +113,7 @@ class LocationTest extends BaseTest
      * Tests that the resulting location contains invisible property
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
+     *
      * @depends testParse
      */
     public function testResultContainsInvisible( $result )
@@ -124,6 +128,7 @@ class LocationTest extends BaseTest
      * Tests that the resulting location contains remote ID
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
+     *
      * @depends testParse
      */
     public function testResultContainsRemoteId( $result )
@@ -138,6 +143,7 @@ class LocationTest extends BaseTest
      * Tests that the resulting location contains parent location ID
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
+     *
      * @depends testParse
      */
     public function testResultContainsParentLocationId( $result )
@@ -152,6 +158,7 @@ class LocationTest extends BaseTest
      * Tests that the resulting location contains path string
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
+     *
      * @depends testParse
      */
     public function testResultContainsPathString( $result )
@@ -163,23 +170,10 @@ class LocationTest extends BaseTest
     }
 
     /**
-     * Tests that the resulting location contains the modification date
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $result
-     * @depends testParse
-     */
-    public function testResultContainsModificationDate( $result )
-    {
-        $this->assertInstanceOf(
-            '\\DateTime',
-            $result->modifiedSubLocationDate
-        );
-    }
-
-    /**
      * Tests that the resulting location contains depth
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
+     *
      * @depends testParse
      */
     public function testResultContainsDepth( $result )
@@ -194,6 +188,7 @@ class LocationTest extends BaseTest
      * Tests that the resulting location contains sort field
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
+     *
      * @depends testParse
      */
     public function testResultContainsSortField( $result )
@@ -208,6 +203,7 @@ class LocationTest extends BaseTest
      * Tests that the resulting location contains sort order
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
+     *
      * @depends testParse
      */
     public function testResultContainsSortOrder( $result )

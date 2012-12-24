@@ -21,6 +21,7 @@ class AddFieldTypePass implements CompilerPassInterface
 
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
      * @throws \LogicException
      */
     public function process( ContainerBuilder $container )
@@ -40,9 +41,9 @@ class AddFieldTypePass implements CompilerPassInterface
             $repositoryFactoryDef->addMethodCall(
                 'registerFieldType',
                 array(
-                     // Only pass the service Id since field types will be lazy loaded via the service container
-                     $id,
-                     $attributes[0]['alias']
+                    // Only pass the service Id since field types will be lazy loaded via the service container
+                    $id,
+                    $attributes[0]['alias']
                 )
             );
         }
@@ -95,8 +96,8 @@ class AddFieldTypePass implements CompilerPassInterface
                 $storageHandlerDef->addMethodCall(
                     'addGateway',
                     array(
-                         $externalStorageGateways[$attributes[0]['alias']]['identifier'],
-                         new Reference( $externalStorageGateways[$attributes[0]['alias']]['id'] )
+                        $externalStorageGateways[$attributes[0]['alias']]['identifier'],
+                        new Reference( $externalStorageGateways[$attributes[0]['alias']]['id'] )
                     )
                 );
             }
@@ -104,9 +105,9 @@ class AddFieldTypePass implements CompilerPassInterface
             $repositoryFactoryDef->addMethodCall(
                 'registerExternalStorageHandler',
                 array(
-                     // Only pass the service Id since field types will be lazy loaded via the service container
-                     $id,
-                     $attributes[0]['alias']
+                    // Only pass the service Id since field types will be lazy loaded via the service container
+                    $id,
+                    $attributes[0]['alias']
                 )
             );
         }

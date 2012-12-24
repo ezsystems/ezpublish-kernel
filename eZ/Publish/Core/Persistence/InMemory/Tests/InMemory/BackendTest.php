@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests\InMemory;
-use PHPUnit_Framework_TestCase,
-    stdClass,
-    eZ\Publish\Core\Persistence\InMemory\Backend;
+
+use PHPUnit_Framework_TestCase;
+use stdClass;
+use eZ\Publish\Core\Persistence\InMemory\Backend;
 
 /**
  * Test case for Handler using in memory storage.
@@ -50,6 +51,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      * Test creating content with a wrong type.
      *
      * @param mixed $type Wrong type to create
+     *
      * @expectedException eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      * @dataProvider providerForWrongType
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::create
@@ -63,6 +65,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      * Test loading content with a wrong type.
      *
      * @param mixed $type Wrong type to load
+     *
      * @expectedException eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      * @dataProvider providerForWrongType
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::load
@@ -76,6 +79,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      * Test finding content with a wrong type.
      *
      * @param mixed $type Wrong type to find
+     *
      * @expectedException eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      * @dataProvider providerForWrongType
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::find
@@ -89,6 +93,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      * Test counting content with a wrong type.
      *
      * @param mixed $type Wrong type to count
+     *
      * @expectedException eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      * @dataProvider providerForWrongType
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::count
@@ -102,6 +107,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      * Test updating content with a wrong type.
      *
      * @param mixed $type Wrong type to update
+     *
      * @expectedException eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      * @dataProvider providerForWrongType
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::update
@@ -115,6 +121,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      * Test deleting content with a wrong type.
      *
      * @param mixed $type Wrong type to delete
+     *
      * @expectedException eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      * @dataProvider providerForWrongType
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::delete
@@ -144,7 +151,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateMultiple()
     {
-        for ( $i = 1; $i <= 10; ++$i)
+        for ( $i = 1; $i <= 10; ++$i )
         {
             $content = $this->backend->create( "Content\\ContentInfo", array( "sectionId" => 2 ), true );
             $this->assertEquals( $i, $content->id );

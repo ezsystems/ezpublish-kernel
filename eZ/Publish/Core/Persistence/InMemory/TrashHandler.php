@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
-use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as TrashHandlerInterface,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+
+use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as TrashHandlerInterface;
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
@@ -90,12 +91,6 @@ class TrashHandler implements TrashHandlerInterface
             }
         }
 
-        if ( isset( $parentLocationId ) )
-        {
-            $parentLocation = $this->handler->locationHandler()->load( $parentLocationId );
-            $this->updateSubtreeModificationTime( $parentLocation->pathString );
-        }
-
         return $isLocationRemoved ? null : $this->loadTrashItem( $locationId );
     }
 
@@ -172,19 +167,5 @@ class TrashHandler implements TrashHandlerInterface
         $vo = $this->loadTrashItem( $trashedId );
         $this->handler->contentHandler()->deleteContent( $vo->contentId );
         $this->backend->delete( 'Content\\Location\\Trashed', $trashedId );
-    }
-
-    /**
-     * Updates subtree modification time for all locations starting from $startPathString
-     * @param string $pathString
-     */
-    private function updateSubtreeModificationTime( $pathString )
-    {
-        $locationIdList = array_filter( explode( '/', $pathString ) );
-        $this->backend->updateByMatch(
-            'Content\\Location',
-            array( 'id' => $locationIdList ),
-            array( 'modifiedSubLocation' => time() )
-        );
     }
 }

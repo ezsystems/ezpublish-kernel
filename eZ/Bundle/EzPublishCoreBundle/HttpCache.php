@@ -9,11 +9,11 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle;
 
-use eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore,
-    eZ\Publish\Core\MVC\Symfony\Cache\Http\RequestAwarePurger,
-    Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache as BaseHttpCache,
-    Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\HttpFoundation\Request;
+use eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore;
+use eZ\Publish\Core\MVC\Symfony\Cache\Http\RequestAwarePurger;
+use Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache as BaseHttpCache;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class HttpCache extends BaseHttpCache
 {
@@ -27,7 +27,8 @@ abstract class HttpCache extends BaseHttpCache
      * All non-allowed PURGE requests will receive an HTTP 405
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param bool $catch
+     * @param boolean $catch
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function invalidate( Request $request, $catch = false )
@@ -71,7 +72,8 @@ abstract class HttpCache extends BaseHttpCache
      * This method can be overridden to extend the allowance test.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return bool
+     *
+     * @return boolean
      */
     protected function isPurgeRequestAllowed( Request $request )
     {
@@ -87,7 +89,8 @@ abstract class HttpCache extends BaseHttpCache
      * @todo Check subnets
      *
      * @param string $ip
-     * @return bool
+     *
+     * @return boolean
      */
     protected function isPurgeIPAllowed( $ip )
     {

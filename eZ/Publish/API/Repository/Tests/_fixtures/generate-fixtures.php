@@ -43,7 +43,7 @@ function generateContentTypeGroupFixture( array $fixture )
             'id' => $data['id'],
             'identifier' => $data['name'],
             'creationDate' => dateCreateCall( $data['created'] ),
-            'modificationDate' =>  dateCreateCall( $data['modified'] ),
+            'modificationDate' => dateCreateCall( $data['modified'] ),
             'creatorId' => $data['creator_id'],
             'modifierId' => $data['modifier_id']
         );
@@ -99,18 +99,18 @@ function generateContentTypeFixture( array $fixture )
             'creatorId' => $data['creator_id'],
             'modifierId' => $data['modifier_id'],
             'remoteId' => $data['remote_id'],
-            // TODO: How do we build the userAliasSchema?
+            // @todo: How do we build the userAliasSchema?
             //'urlAliasSchema' => $data[]
             'names' => $typeNames[$data['id']],
             'descriptions' => array(),
             'nameSchema' => $data['contentobject_name'],
-            'isContainer' => (boolean) $data['is_container'],
+            'isContainer' => (boolean)$data['is_container'],
             'mainLanguageCode' => $languageCodes[$data['initial_language_id']],
-            'defaultAlwaysAvailable' => (boolean) $data['always_available'],
+            'defaultAlwaysAvailable' => (boolean)$data['always_available'],
             'defaultSortField' => $data['sort_field'],
             'defaultSortOrder' => $data['sort_order'],
 
-            'fieldDefinitions' => trim ( generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub', isset( $fieldDef[$data['id']] ) ? $fieldDef[$data['id']] : array() ) ),
+            'fieldDefinitions' => trim( generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub', isset( $fieldDef[$data['id']] ) ? $fieldDef[$data['id']] : array() ) ),
             'contentTypeGroups' => isset( $typeGroups[$data['id']] ) ? $typeGroups[$data['id']] : array(),
         );
 
@@ -140,15 +140,15 @@ function getContentTypeFieldDefinition( array $fixture )
         $description = filterTranslatedArray( unserialize( $data['serialized_description_list'] ) );
 
         $fieldDef[$data['contentclass_id']][$data['id']] = array(
-            'id' => (int) $data['id'],
+            'id' => (int)$data['id'],
             'identifier' => $data['identifier'],
             'fieldGroup' => $data['category'],
-            'position' => (int) $data['placement'],
+            'position' => (int)$data['placement'],
             'fieldTypeIdentifier' => $data['data_type_string'],
-            'isTranslatable' => (boolean) $data['can_translate'],
-            'isRequired' => (boolean) $data['is_required'],
-            'isInfoCollector' => (boolean) $data['is_information_collector'],
-            'isSearchable' => (boolean) $data['is_searchable'],
+            'isTranslatable' => (boolean)$data['can_translate'],
+            'isRequired' => (boolean)$data['is_required'],
+            'isInfoCollector' => (boolean)$data['is_information_collector'],
+            'isSearchable' => (boolean)$data['is_searchable'],
             'defaultValue' => null,
 
             'names' => $names,
@@ -203,13 +203,13 @@ function generateSectionFixture( array $fixture )
 
     foreach ( getFixtureTable( 'ezcontentobject', $fixture ) as $data )
     {
-        $sectionId = (int) $data['section_id'];
+        $sectionId = (int)$data['section_id'];
 
         if ( !isset( $assignedContents[$sectionId] ) )
         {
             $assignedContents[$sectionId] = array();
         }
-        $assignedContents[$sectionId][(int) $data['id']] = true;
+        $assignedContents[$sectionId][(int)$data['id']] = true;
     }
 
     return generateReturnArray(
@@ -265,7 +265,7 @@ function generateContentInfoFixture( array $fixture )
             'ownerId' => $data['owner_id'],
             'modificationDate' => dateCreateCall( $data['modified'] ),
             'publishedDate' => dateCreateCall( $data['published'] ),
-            'alwaysAvailable' => (boolean) ( $data['language_mask'] & 1 ),
+            'alwaysAvailable' => (boolean)( $data['language_mask'] & 1 ),
             'remoteId' => $data['remote_id'],
             'mainLanguageCode' => $languageCodes[$data['initial_language_id']],
             'repository' => '$this',
@@ -355,7 +355,7 @@ function generateContentInfoFixture( array $fixture )
             'creatorId' => $data['creator_id'],
             'creationDate' => dateCreateCall( $data['created'] ),
             'initialLanguageCode' => $languageCodes[$data['initial_language_id']],
-            'languageCodes' => array(), // TODO: Extract language codes from fields
+            'languageCodes' => array(), // @todo: Extract language codes from fields
             'repository' => '$this',
             'names' => $names[$data['contentobject_id']][$data['version']],
         );
@@ -385,8 +385,6 @@ function generateContentInfoFixture( array $fixture )
             'id' => $data['contentobject_id'],
             'contentTypeId' => $contentInfos[$data['contentobject_id']]['contentTypeId'],
             'fields' => $contentFields,
-            'relations' => array(),
-
             'versionNo' => $data['version'],
             'repository' => '$this'
         );
@@ -402,23 +400,29 @@ function generateContentInfoFixture( array $fixture )
         $indexMap[$contentId]['contentId'][$contentId] = $contentId;
     }
 
-    uasort( $versionInfo, function( $versionInfo1, $versionInfo2 ) {
-        if ( $versionInfo1['contentId'] === $versionInfo2['contentId'] )
+    uasort(
+        $versionInfo,
+        function( $versionInfo1, $versionInfo2 )
         {
-            return $versionInfo2['versionNo'] - $versionInfo1['versionNo'];
+            if ( $versionInfo1['contentId'] === $versionInfo2['contentId'] )
+            {
+                return $versionInfo2['versionNo'] - $versionInfo1['versionNo'];
+            }
+            return $versionInfo1['contentId'] - $versionInfo2['contentId'];
         }
-        return $versionInfo1['contentId'] - $versionInfo2['contentId'];
-    } );
+    );
 
-    uasort( $content, function( $content1, $content2 ) {
-        if ( $content1['id'] === $content2['id'] )
+    uasort(
+        $content,
+        function( $content1, $content2 )
         {
-            return $content2['versionNo'] - $content1['versionNo'];
+            if ( $content1['id'] === $content2['id'] )
+            {
+                return $content2['versionNo'] - $content1['versionNo'];
+            }
+            return $content1['id'] - $content2['id'];
         }
-        return $content1['id'] - $content2['id'];
-    } );
-
-
+    );
 
     return generateReturnArray(
         generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub', $contentInfos ),
@@ -440,8 +444,8 @@ function generateLocationFixture( array $fixture )
         $locations[$data['node_id']] = array(
             'id' => $data['node_id'],
             'priority' => $data['priority'],
-            'hidden' => (bool) $data['is_hidden'],
-            'invisible' => (bool) $data['is_invisible'],
+            'hidden' => (bool)$data['is_hidden'],
+            'invisible' => (bool)$data['is_invisible'],
             'remoteId' => $data['remote_id'],
             'contentInfo' => ( $data['node_id'] == 1 ? null :createRepoCall(
                 'ContentService',
@@ -450,7 +454,6 @@ function generateLocationFixture( array $fixture )
             ) ),
             'parentLocationId' => $data['parent_node_id'],
             'pathString' => $data['path_string'],
-            'modifiedSubLocationDate' => dateCreateCall( $data['modified_subnode'] ),
             'depth' => $data['depth'],
             'sortField' => $data['sort_field'],
             'sortOrder' => $data['sort_order'],
@@ -588,7 +591,6 @@ function generateUserGroupFixture( array $fixture )
         }
     }
 
-
     return generateReturnArray(
         generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub', $groups )
     );
@@ -700,11 +702,7 @@ function generateURLAliasFixture( array $fixture )
                 break;
 
             case 'eznode':
-                $destination = createRepoCall(
-                    'LocationService',
-                    'loadLocation',
-                    array( substr( $data['action'], 7 ) )
-                );
+                $destination = substr( $data['action'], 7 );
                 break;
 
             case 'module':
@@ -782,7 +780,7 @@ function generateObjectStateFixture( array $fixture )
         $states[$data['id']] = array(
             'id'                  => $data['id'],
             'identifier'          => $data['identifier'],
-            'priority'            => (int) $data['priority'],
+            'priority'            => (int)$data['priority'],
             'defaultLanguageCode' => $languageCodes[$data['default_language_id']],
             'languageCodes'       => resolveLanguageMask( $languageCodes, $data['language_mask'] ),
             'stateGroup'          => '$scopeValues["groups"][' . valueToString( $data['group_id'] ) . ']',
@@ -802,7 +800,7 @@ function generateObjectStateFixture( array $fixture )
         $stateGroupMap[$data['id']] = $groupId;
     }
 
-    foreach ( getFixtureTable( 'ezcobj_state_language', $fixture ) as $data );
+    foreach ( getFixtureTable( 'ezcobj_state_language', $fixture ) as $data )
     {
         $stateId  = $data['contentobject_state_id'];
         // Set lowest bit to 0 (always_available)
@@ -828,7 +826,7 @@ function generateObjectStateFixture( array $fixture )
 
     return generateReturnArray(
         generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ObjectState\ObjectStateStub', $states ),
-        var_export( $groupStateMap , true ),
+        var_export( $groupStateMap, true ),
         var_export( $objectStateMap, true ),
         $nextId
     );
@@ -865,7 +863,7 @@ function getUser2GroupMapping( array $fixture )
     $users = array();
     foreach ( getFixtureTable( 'ezuser', $fixture ) as $data )
     {
-        $users[] = (int) $data['contentobject_id'];
+        $users[] = (int)$data['contentobject_id'];
     }
 
     $nodes = array();

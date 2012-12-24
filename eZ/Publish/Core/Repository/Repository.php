@@ -8,15 +8,16 @@
  */
 
 namespace eZ\Publish\Core\Repository;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\SPI\IO\Handler as IoHandler,
-    eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\API\Repository\Values\ValueObject,
-    eZ\Publish\API\Repository\Values\User\User,
-    eZ\Publish\API\Repository\Values\User\Limitation,
-    Exception,
-    RuntimeException;
+
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\SPI\IO\Handler as IoHandler;
+use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\Limitation;
+use Exception;
+use RuntimeException;
 
 /**
  * Repository class
@@ -218,19 +219,18 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Sets the current user to the given $user.
      *
-     * sets the current user to the user with the given user id
      * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @return \eZ\Publish\API\Repository\Values\User\User
+     *
+     * @return void
      */
     public function setCurrentUser( User $user )
     {
         if ( !$user->id )
             throw new InvalidArgumentValue( '$user->id', $user->id );
 
-        $oldUser = $this->user;
         $this->user = $user;
-        return $oldUser;
     }
 
     /**
@@ -261,13 +261,13 @@ class Repository implements RepositoryInterface
                 if ( $spiPolicy->module === '*' && $spiRoleAssignment->limitationIdentifier === null )
                     return true;
 
-                if ( $spiPolicy->module !== $module )
+                if ( $spiPolicy->module !== $module && $spiPolicy->module !== '*' )
                     continue;
 
                 if ( $spiPolicy->function === '*' && $spiRoleAssignment->limitationIdentifier === null )
                     return true;
 
-                if ( $spiPolicy->function !== $function )
+                if ( $spiPolicy->function !== $function && $spiPolicy->function !== '*' )
                     continue;
 
                 if ( $spiPolicy->limitations === '*' && $spiRoleAssignment->limitationIdentifier === null )
@@ -275,7 +275,6 @@ class Repository implements RepositoryInterface
 
                 $permissionSet['policies'][] = $roleService->buildDomainPolicyObject( $spiPolicy );
             }
-
 
             if ( !empty( $permissionSet['policies'] ) )
             {
@@ -319,6 +318,7 @@ class Repository implements RepositoryInterface
         }
 
         $roleService = $this->getRoleService();
+        $currentUser = $this->getCurrentUser();
         foreach ( $permissionSets as $permissionSet )
         {
             /**
@@ -327,7 +327,7 @@ class Repository implements RepositoryInterface
             if ( $permissionSet['limitation'] instanceof Limitation )
             {
                 $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
-                if ( !$type->evaluate( $permissionSet['limitation'], $this, $object, $target ) )
+                if ( !$type->evaluate( $permissionSet['limitation'], $currentUser, $object, $target ) )
                     continue;
             }
 
@@ -344,7 +344,7 @@ class Repository implements RepositoryInterface
                 foreach ( $limitations as $limitation )
                 {
                     $type = $roleService->getLimitationType( $limitation->getIdentifier() );
-                    if ( !$type->evaluate( $limitation, $this, $object, $target ) )
+                    if ( !$type->evaluate( $limitation, $currentUser, $object, $target ) )
                     {
                         $limitationsPass = false;
                         break;// Break to next policy, all limitations must pass
@@ -545,6 +545,8 @@ class Repository implements RepositoryInterface
      *
      * Get service object to perform operations on binary files
      *
+     * @deprecated Will be removed in the future!
+     *
      * @return \eZ\Publish\API\Repository\IOService
      */
     public function getIOService()
@@ -679,6 +681,7 @@ class Repository implements RepositoryInterface
      * Creates a \DateTime object for $timestamp in the current time zone
      *
      * @param int $timestamp
+     *
      * @return \DateTime
      */
     public function createDateTime( $timestamp = null )

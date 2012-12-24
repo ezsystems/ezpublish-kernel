@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
+
 use eZ\Publish\API\Repository\Tests\SetupFactory;
 use eZ\Publish\API\Repository\Tests\IdManager;
 
@@ -37,7 +38,7 @@ class Legacy extends SetupFactory
     /**
      * Service container
      *
-     * @var ServiceContainer
+     * @var \eZ\Publish\Core\Base\ServiceContainer
      */
     protected static $serviceContainer;
 
@@ -45,11 +46,12 @@ class Legacy extends SetupFactory
      * Global settings of eZ Publish setup
      *
      * @var mixed
-     * @todo This might change, if ezp-next starts using anothe DI mechanism
+     * @todo This might change, if ezp-next starts using another DI mechanism
      */
     protected static $globalSettings;
 
     /**
+     * @var \eZ\Publish\Core\Base\ConfigurationManager
      * Configuration manager
      */
     protected static $configurationManager;
@@ -57,7 +59,7 @@ class Legacy extends SetupFactory
     /**
      * If the DB schema has already been initialized
      *
-     * @var bool
+     * @var boolean
      */
     protected static $schemaInitialized = false;
 
@@ -75,14 +77,17 @@ class Legacy extends SetupFactory
      */
     public function __construct()
     {
-        self::$dsn = ( isset( $_ENV['DATABASE'] ) && $_ENV['DATABASE'] ) ? $_ENV['DATABASE'] : 'sqlite://:memory:';
+        self::$dsn = getenv( "DATABASE" );
+        if ( !self::$dsn )
+            self::$dsn = "sqlite://:memory:";
+
         self::$db = preg_replace( '(^([a-z]+).*)', '\\1', self::$dsn );
     }
 
     /**
      * Returns a configured repository for testing.
      *
-     * @param bool $initializeFromScratch if the back end should be initialized
+     * @param boolean $initializeFromScratch if the back end should be initialized
      *                                    from scratch or re-used
      * @return \eZ\Publish\API\Repository\Repository
      */
@@ -105,8 +110,10 @@ class Legacy extends SetupFactory
      * Returns a config value for $configKey.
      *
      * @param string $configKey
-     * @return mixed
+     *
      * @throws Exception if $configKey could not be found.
+     *
+     * @return mixed
      */
     public function getConfigValue( $configKey )
     {
@@ -133,7 +140,7 @@ class Legacy extends SetupFactory
         $data = $this->getInitialData();
         $handler = $this->getDatabaseHandler();
 
-        // FIXME: Needs to be in fixture
+        // @todo FIXME: Needs to be in fixture
         $data['ezcontentobject_trash'] = array();
         $data['ezurlwildcard'] = array();
 
@@ -210,7 +217,7 @@ class Legacy extends SetupFactory
     }
 
     /**
-     * Returns the inital database data
+     * Returns the initial database data
      *
      * @return array
      */
@@ -218,7 +225,7 @@ class Legacy extends SetupFactory
     {
         if ( !isset( self::$initialData ) )
         {
-            self::$initialData = include __DIR__ . '/../../../../Core/Repository/Tests/Service/Legacy/_fixtures/clean_ezdemo_47_dump.php';
+            self::$initialData = include __DIR__ . '/../../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php';
             // self::$initialData = include __DIR__ . '/../../../../Core/Repository/Tests/Service/Legacy/_fixtures/full_dump.php';
         }
         return self::$initialData;
@@ -234,7 +241,7 @@ class Legacy extends SetupFactory
         if ( !self::$schemaInitialized )
         {
             $dbHandler = $this->getDatabaseHandler();
-            $statements = $this->getSchemaStatemets();
+            $statements = $this->getSchemaStatements();
 
             $this->applyStatements( $statements );
         }
@@ -246,6 +253,7 @@ class Legacy extends SetupFactory
      * Applies the given SQL $statements to the database in use
      *
      * @param array $statements
+     *
      * @return void
      */
     protected function applyStatements( array $statements )
@@ -263,7 +271,7 @@ class Legacy extends SetupFactory
      *
      * @return string[]
      */
-    protected function getSchemaStatemets()
+    protected function getSchemaStatements()
     {
         $schemaPath = __DIR__ . '/../../../../Core/Persistence/Legacy/Tests/_fixtures/schema.' . self::$db . '.sql';
 
@@ -305,7 +313,7 @@ class Legacy extends SetupFactory
     /**
      * Returns the configuration manager
      *
-     * @return ConfigurationManager
+     * @return \eZ\Publish\Core\Base\ConfigurationManager
      */
     protected function getConfigurationManager()
     {
@@ -349,8 +357,9 @@ class Legacy extends SetupFactory
     /**
      * Returns the service container used for initialization of the repository
      *
-     * @return ServiceContainer
      * @todo Getting service container statically, too, would be nice
+     *
+     * @return \eZ\Publish\Core\Base\ServiceContainer
      */
     protected function getServiceContainer()
     {
@@ -358,10 +367,10 @@ class Legacy extends SetupFactory
         {
             $configManager = $this->getConfigurationManager();
 
-            $serviceSettings = $configManager->getConfiguration('service')->getAll();
+            $serviceSettings = $configManager->getConfiguration( 'service' )->getAll();
 
-            $serviceSettings['inner_repository']['arguments']['persistence_handler'] = '@persistence_handler_legacy';
-            $serviceSettings['inner_repository']['arguments']['io_handler'] = '@io_handler_legacy';
+            $serviceSettings['persistence_handler']['alias'] = 'persistence_handler_legacy';
+            $serviceSettings['io_handler']['alias'] = 'io_handler_legacy';
 
             // Needed for URLAliasService tests
             $serviceSettings['inner_repository']['arguments']['service_settings']['language']['languages'][] = 'eng-US';

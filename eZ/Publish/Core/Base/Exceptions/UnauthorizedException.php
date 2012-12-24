@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Base\Exceptions;
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException,
-    Exception;
+
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException;
+use Exception;
 
 /**
  * UnauthorizedException Exception implementation

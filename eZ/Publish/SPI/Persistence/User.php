@@ -53,7 +53,7 @@ class User extends ValueObject
      *
      * User can not login if false
      *
-     * @var bool
+     * @var boolean
      */
     public $isEnabled = false;
 

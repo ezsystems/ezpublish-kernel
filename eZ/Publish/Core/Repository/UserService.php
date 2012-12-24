@@ -10,40 +10,36 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
-    eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruct,
-    eZ\Publish\API\Repository\Values\User\UserUpdateStruct,
-    eZ\Publish\Core\Repository\Values\User\User,
-    eZ\Publish\API\Repository\Values\User\User as APIUser,
-    eZ\Publish\Core\Repository\Values\User\UserGroup,
-    eZ\Publish\API\Repository\Values\User\UserGroup as APIUserGroup,
-    eZ\Publish\Core\Repository\Values\User\UserGroupCreateStruct,
-    eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupCreateStruct,
-    eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct,
-    eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\API\Repository\Values\Content\Content as APIContent,
-
-    eZ\Publish\SPI\Persistence\User\Handler,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\API\Repository\UserService as UserServiceInterface,
-
-    eZ\Publish\SPI\Persistence\User as SPIUser,
-    eZ\Publish\Core\FieldType\User\Value as UserValue,
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId as CriterionLocationId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus,
-
-    eZ\Publish\Core\Base\Exceptions\ContentValidationException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\BadStateException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
-
-    ezcMailTools;
+use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
+use eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruct;
+use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
+use eZ\Publish\Core\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\User as APIUser;
+use eZ\Publish\Core\Repository\Values\User\UserGroup;
+use eZ\Publish\API\Repository\Values\User\UserGroup as APIUserGroup;
+use eZ\Publish\Core\Repository\Values\User\UserGroupCreateStruct;
+use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupCreateStruct;
+use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
+use eZ\Publish\SPI\Persistence\User\Handler;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\UserService as UserServiceInterface;
+use eZ\Publish\SPI\Persistence\User as SPIUser;
+use eZ\Publish\Core\FieldType\User\Value as UserValue;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId as CriterionLocationId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus;
+use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use ezcMailTools;
 
 /**
  * This service provides methods for managing users and user groups
@@ -72,7 +68,7 @@ class UserService implements UserServiceInterface
     /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
-     * @param \eZ\Publish\API\Repository\Repository  $repository
+     * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
      * @param array $settings
      */
@@ -80,7 +76,8 @@ class UserService implements UserServiceInterface
     {
         $this->repository = $repository;
         $this->userHandler = $userHandler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             'anonymousUserID' => 10,
             'defaultUserPlacement' => 12,
             'userClassID' => 4,// @todo Rename this settings to swap out "Class" for "Type"
@@ -226,8 +223,8 @@ class UserService implements UserServiceInterface
     {
         $searchQuery = new Query();
 
-        $searchQuery->offset = $offset >= 0 ? (int) $offset : 0;
-        $searchQuery->limit = $limit  >= 0 ? (int) $limit  : null;
+        $searchQuery->offset = $offset >= 0 ? (int)$offset : 0;
+        $searchQuery->limit = $limit >= 0 ? (int)$limit  : null;
 
         $searchQuery->criterion = new CriterionLogicalAnd(
             array(
@@ -546,7 +543,7 @@ class UserService implements UserServiceInterface
     /**
      * Loads a user
      *
-     * @param integer $userId
+     * @param int $userId
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
@@ -557,14 +554,41 @@ class UserService implements UserServiceInterface
         if ( !is_numeric( $userId ) )
             throw new InvalidArgumentValue( "userId", $userId );
 
-        $spiUser = $this->userHandler->load( $userId );
-        return $this->buildDomainUserObject( $spiUser );
+        /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
+        $content = $this->repository->getContentService()->internalLoadContent( $userId );
+        // Get spiUser value from Field Value
+        foreach ( $content->getFields() as $field )
+        {
+            if ( !$field->value instanceof UserValue )
+                continue;
+
+            /** @var \eZ\Publish\Core\FieldType\User\Value $value */
+            $value = $field->value;
+            $spiUser = new SPIUser();
+            $spiUser->id = $value->contentId;
+            $spiUser->login = $value->login;
+            $spiUser->email = $value->email;
+            $spiUser->hashAlgorithm = $value->passwordHashType;
+            $spiUser->passwordHash = $value->passwordHash;
+            $spiUser->isEnabled = $value->enabled;
+            $spiUser->maxLogin = $value->maxLogin;
+            break;
+        }
+
+        // If for some reason not found, load it
+        if ( !isset( $spiUser ) )
+        {
+            $spiUser = $this->userHandler->load( $userId );
+        }
+
+        return $this->buildDomainUserObject( $spiUser, $content );
     }
 
     /**
      * Loads anonymous user
      *
      * @uses loadUser()
+     *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
     public function loadAnonymousUser()
@@ -590,6 +614,9 @@ class UserService implements UserServiceInterface
 
         if ( !is_string( $password ) || empty( $password ) )
             throw new InvalidArgumentValue( "password", $password );
+
+        // Randomize login time to protect against timing attacks
+        usleep( mt_rand( 0, 30000 ) );
 
         $spiUsers = $this->userHandler->loadByLogin( $login );
 
@@ -745,7 +772,7 @@ class UserService implements UserServiceInterface
                             $loadedUser->passwordHash,
                         'hashAlgorithm' => $this->settings['hashType'],
                         'isEnabled' => $userUpdateStruct->enabled !== null ? $userUpdateStruct->enabled : $loadedUser->enabled,
-                        'maxLogin' => $userUpdateStruct->maxLogin !== null ? (int) $userUpdateStruct->maxLogin : $loadedUser->maxLogin
+                        'maxLogin' => $userUpdateStruct->maxLogin !== null ? (int)$userUpdateStruct->maxLogin : $loadedUser->maxLogin
                     )
                 )
             );
@@ -922,7 +949,7 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * loads the users of a user group
+     * Loads the users of a user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the users or user group
      *
@@ -953,8 +980,8 @@ class UserService implements UserServiceInterface
             )
         );
 
-        $searchQuery->offset = $offset > 0 ? (int) $offset : 0;
-        $searchQuery->limit = $limit >= 1 ? (int) $limit : null;
+        $searchQuery->offset = $offset > 0 ? (int)$offset : 0;
+        $searchQuery->limit = $limit >= 1 ? (int)$limit : null;
 
         $searchQuery->sortClauses = array(
             $this->getSortClauseBySortField( $mainGroupLocation->sortField, $mainGroupLocation->sortOrder )

@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\REST\Common\Input;
-use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher,
-    eZ\Publish\API\Repository\Values,
-    eZ\Publish\Core\REST\Common\Exceptions,
-    RuntimeException;
+
+use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use eZ\Publish\API\Repository\Values;
+use eZ\Publish\Core\REST\Common\Exceptions;
+use RuntimeException;
 
 /**
  * Tools object to be used in Input Parsers
@@ -23,6 +24,7 @@ class ParserTools
      *
      * @param array $objectElement
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     *
      * @return mixed
      */
     public function parseObjectElement( array $objectElement, ParsingDispatcher $parsingDispatcher )
@@ -42,7 +44,8 @@ class ParserTools
      * a reference
      *
      * @param array $objectElement
-     * @return bool
+     *
+     * @return boolean
      */
     public function isEmbeddedObject( array $objectElement )
     {
@@ -61,6 +64,7 @@ class ParserTools
      * Parses a translatable list, like names or descriptions
      *
      * @param array $listElement
+     *
      * @return array
      */
     public function parseTranslatableList( array $listElement )
@@ -77,7 +81,8 @@ class ParserTools
      * Parses a boolean from $stringValue
      *
      * @param string $stringValue
-     * @return bool
+     *
+     * @return boolean
      */
     public function parseBooleanValue( $stringValue )
     {
@@ -96,6 +101,7 @@ class ParserTools
      * Parses the content types status from $contentTypeStatus
      *
      * @param string $contentTypeStatus
+     *
      * @return int
      */
     public function parseStatus( $contentTypeStatus )
@@ -117,6 +123,7 @@ class ParserTools
      * Parses the default sort field from the given $defaultSortFieldString
      *
      * @param string $defaultSortFieldString
+     *
      * @return int
      */
     public function parseDefaultSortField( $defaultSortFieldString )
@@ -156,6 +163,7 @@ class ParserTools
      * Parses the default sort order from the given $defaultSortOrderString
      *
      * @param string $defaultSortOrderString
+     *
      * @return int
      */
     public function parseDefaultSortOrder( $defaultSortOrderString )
@@ -175,6 +183,7 @@ class ParserTools
      * Parses the input structure to Limitation object
      *
      * @param array $limitation
+     *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation
      */
     public function parseLimitation( array $limitation )
@@ -212,6 +221,7 @@ class ParserTools
      * @param string $identifier
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation
      *
      * @todo Use dependency injection system
@@ -248,7 +258,7 @@ class ParserTools
                 return new \eZ\Publish\API\Repository\Values\User\Limitation\SiteaccessLimitation();
 
             case Values\User\Limitation::STATE:
-                return new \eZ\Publish\API\Repository\Values\User\Limitation\StateLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation();
 
             case Values\User\Limitation::SUBTREE:
                 return new \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation();

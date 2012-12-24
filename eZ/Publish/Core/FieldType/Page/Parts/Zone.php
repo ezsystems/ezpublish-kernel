@@ -15,6 +15,7 @@ class Zone extends Base
      * Adds new $block to Zone object
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Block $block
+     *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Block
      */
     public function addBlock( Block $block )

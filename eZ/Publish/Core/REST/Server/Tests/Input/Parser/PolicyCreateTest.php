@@ -251,7 +251,7 @@ class PolicyCreateTest extends BaseTest
      */
     protected function getRoleServiceMock()
     {
-        $roleServiceMock =  $this->getMock(
+        $roleServiceMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\RoleService',
             array(),
             array(),
@@ -269,7 +269,7 @@ class PolicyCreateTest extends BaseTest
                 $this->returnValue(
                     new PolicyCreateStruct(
                         array(
-                            'module' =>  'content',
+                            'module' => 'content',
                             'function' => 'delete'
                         )
                     )

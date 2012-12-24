@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory;
-use eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler as UrlWildcardHandlerInterface,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+
+use eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler as UrlWildcardHandlerInterface;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
@@ -40,7 +41,7 @@ class UrlWildcardHandler implements UrlWildcardHandlerInterface
     }
 
     /**
-     * creates a new url wildcard
+     * Creates a new url wildcard
      *
      * @param string $sourceUrl
      * @param string $destinationUrl
@@ -61,7 +62,6 @@ class UrlWildcardHandler implements UrlWildcardHandlerInterface
     }
 
     /**
-     *
      * removes an url wildcard
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
@@ -74,12 +74,11 @@ class UrlWildcardHandler implements UrlWildcardHandlerInterface
     }
 
     /**
-     *
-     * loads a url wild card
+     * Loads a url wild card
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
      *
-     * @param $id
+     * @param mixed $id
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard
      */
@@ -89,10 +88,10 @@ class UrlWildcardHandler implements UrlWildcardHandlerInterface
     }
 
     /**
-     * loads all url wild card (paged)
+     * Loads all url wild card (paged)
      *
-     * @param $offset
-     * @param $limit
+     * @param int $offset
+     * @param int $limit
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard[]
      */

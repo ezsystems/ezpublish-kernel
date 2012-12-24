@@ -9,33 +9,33 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\ContentService;
-use \eZ\Publish\API\Repository\Values\Content\Field;
-use \eZ\Publish\API\Repository\Values\Content\Content;
-use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
-use \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
-use \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
-use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
-use \eZ\Publish\API\Repository\Values\Content\Relation;
-use \eZ\Publish\API\Repository\Values\Content\TranslationInfo;
-use \eZ\Publish\API\Repository\Values\Content\TranslationValues;
-use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use \eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
+use eZ\Publish\API\Repository\Values\Content\TranslationValues;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\User\User;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentCreateStructStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentUpdateStructStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\RelationStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\FieldStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentCreateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentUpdateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\RelationStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\FieldStub;
 
 /**
  * @example Examples/contenttype.php
@@ -48,14 +48,14 @@ class ContentServiceStub implements ContentService
     private $repository;
 
     /**
-     * Exmulation of external storages in the in-memory stub.
+     * Emulation of external storages in the in-memory stub.
      *
      * @var \eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage
      */
     private $pseudoExternalStorage;
 
     /**
-     * @var integer
+     * @var int
      */
     private $contentNextId = 0;
 
@@ -63,6 +63,11 @@ class ContentServiceStub implements ContentService
      * @var \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub[]
      */
     private $content = array();
+
+    /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\RelationStub[]
+     */
+    private $relation = array();
 
     /**
      * @var \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub[]
@@ -75,12 +80,12 @@ class ContentServiceStub implements ContentService
     private $versionInfo = array();
 
     /**
-     * @var integer
+     * @var int
      */
     private $versionNextId = 0;
 
     /**
-     * @var integer
+     * @var int
      */
     private $fieldNextId = 0;
 
@@ -137,7 +142,7 @@ class ContentServiceStub implements ContentService
      *
      * To load fields use loadContent
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to create the content in the given location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the content in the given location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content with the given remote id does not exist
      *
      * @param string $remoteId
@@ -162,7 +167,7 @@ class ContentServiceStub implements ContentService
     }
 
     /**
-     * loads a version info of the given content object.
+     * Loads a version info of the given content object.
      *
      * If no version number is given, the method returns the current version
      *
@@ -180,7 +185,7 @@ class ContentServiceStub implements ContentService
     }
 
     /**
-     * loads a version info of the given content object id.
+     * Loads a version info of the given content object id.
      *
      * If no version number is given, the method returns the current version
      *
@@ -227,7 +232,7 @@ class ContentServiceStub implements ContentService
     }
 
     /**
-     * loads content in a version for the given content info object.
+     * Loads content in a version for the given content info object.
      *
      * If no version number is given, the method returns the current version
      *
@@ -246,7 +251,7 @@ class ContentServiceStub implements ContentService
     }
 
     /**
-     * loads content in the version given by version info.
+     * Loads content in the version given by version info.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
@@ -265,7 +270,7 @@ class ContentServiceStub implements ContentService
     }
 
     /**
-     * loads content in a version of the given content object.
+     * Loads content in a version of the given content object.
      *
      * If no version number is given, the method returns the current version
      *
@@ -311,7 +316,7 @@ class ContentServiceStub implements ContentService
             return $this->filterFieldsByLanguages( $contents[VersionInfo::STATUS_DRAFT], $languages );
         }
 
-        throw new NotFoundExceptionStub( '@TODO: What error code should be used? ID(' . $contentId . ')' );
+        throw new NotFoundExceptionStub( '@todo: What error code should be used? ID(' . $contentId . ')' );
     }
 
     /**
@@ -335,7 +340,7 @@ class ContentServiceStub implements ContentService
             {
                 if ( $fieldDefinition->identifier === $field->fieldDefIdentifier )
                 {
-                    // @TODO: Refactore out of here for clarity!
+                    // @todo: Refactor out of here for clarity!
                     $this->pseudoExternalStorage->handleLoad(
                         $fieldDefinition,
                         $field,
@@ -370,7 +375,7 @@ class ContentServiceStub implements ContentService
     }
 
     /**
-     * loads content in a version for the content object reference by the given remote id.
+     * Loads content in a version for the content object reference by the given remote id.
      *
      * If no version is given, the method returns the current version
      *
@@ -441,8 +446,6 @@ class ContentServiceStub implements ContentService
                 'id' => ++$this->contentNextId,
                 'contentTypeId' => $contentCreateStruct->contentType->id,
                 'fields' => $allFields,
-                'relations' => array(),
-
                 'versionNo' => 1,
                 'repository' => $this->repository
             )
@@ -518,9 +521,10 @@ class ContentServiceStub implements ContentService
      *
      * @param ContentType $contentType
      * @param array $fields
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if any of the fake rules are violated
+     *
      * @return void
-     * @throws ContentFieldValidationException if any of the fake rules are
-     *         violated
      */
     private function fakeFieldValidation( ContentType $contentType, array $fields )
     {
@@ -572,6 +576,7 @@ class ContentServiceStub implements ContentService
      * Creates locations on publish, which had been specified on content create
      *
      * @param ContentInfo $contentInfo
+     *
      * @return void
      */
     private function createLocationsOnFirstPublish( ContentInfo $contentInfo )
@@ -600,6 +605,7 @@ class ContentServiceStub implements ContentService
      *
      * @param array $fields
      * @param string $mainLanguageCode
+     *
      * @return string[]
      */
     private function getLanguageCodes( array $fields, $mainLanguageCode = null )
@@ -627,9 +633,10 @@ class ContentServiceStub implements ContentService
      * @param ContentType $contentType
      * @param array $fields
      * @param string $mainLanguageCode
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Field[]
      *
-     * @throw Exceptions\ContentValidationException if the language code for a
+     * @throws Exceptions\ContentValidationException if the language code for a
      *        field could not be determined.
      */
     private function getFieldsByTypeAndLanguageCode( ContentType $contentType, array $fields, $mainLanguageCode = null )
@@ -645,7 +652,7 @@ class ContentServiceStub implements ContentService
                 && $contentType->getFieldDefinition( $field->fieldDefIdentifier )->isTranslatable )
             {
                 throw new Exceptions\ContentValidationExceptionStub(
-                    '@TODO: What error code should be used?'
+                    '@todo: What error code should be used?'
                 );
             }
 
@@ -655,7 +662,7 @@ class ContentServiceStub implements ContentService
             {
                 $structuredFields[$field->fieldDefIdentifier] = array();
             }
-            // Only one field of each type per langauge code
+            // Only one field of each type per language code
             $structuredFields[$field->fieldDefIdentifier][$languageCode] = $field;
         }
         return $structuredFields;
@@ -667,6 +674,7 @@ class ContentServiceStub implements ContentService
      *
      * @param Field $field
      * @param array $overrides
+     *
      * @return Field
      */
     private function cloneField( Field $field, array $overrides = array() )
@@ -687,6 +695,7 @@ class ContentServiceStub implements ContentService
      * Returns $originalFieldId if not null, otherwise a new field ID
      *
      * @param mixed $originalFieldId
+     *
      * @return void
      */
     private function getFieldId( $originalFieldId = null )
@@ -709,6 +718,7 @@ class ContentServiceStub implements ContentService
      * @param array $fields
      * @param array $languageCodes
      * @param string $mainLanguageCode
+     *
      * @return void
      */
     private function checkRequiredFields( ContentType $contentType, array $fields, array $languageCodes, $mainLanguageCode )
@@ -727,7 +737,7 @@ class ContentServiceStub implements ContentService
                     if ( !isset( $fields[$fieldDefinition->identifier][$languageCode] ) || empty( $fields[$fieldDefinition->identifier][$languageCode]->value ) )
                     {
                         throw new ContentValidationExceptionStub(
-                            '@TODO: What error code should be used? ' . $fieldDefinition->identifier . ' ' . $languageCode
+                            '@todo: What error code should be used? ' . $fieldDefinition->identifier . ' ' . $languageCode
                         );
                     }
                 }
@@ -737,7 +747,7 @@ class ContentServiceStub implements ContentService
                 if ( !isset( $fields[$fieldDefinition->identifier][$mainLanguageCode] ) || empty( $fields[$fieldDefinition->identifier][$mainLanguageCode]->value ) )
                 {
                     throw new ContentValidationExceptionStub(
-                        '@TODO: What error code should be used? ' . $fieldDefinition->identifier
+                        '@todo: What error code should be used? ' . $fieldDefinition->identifier
                     );
                 }
             }
@@ -752,6 +762,7 @@ class ContentServiceStub implements ContentService
      * @param array $fields
      * @param array $languageCodes
      * @param string $mainLanguageCode
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Field[]
      */
     private function createCompleteFields( ContentType $contentType, array $fields, array $languageCodes, $mainLanguageCode )
@@ -823,13 +834,14 @@ class ContentServiceStub implements ContentService
             }
         }
         return $allFields;
-     }
+    }
 
     /**
      * Generates the names based on the given $contentType and $fields
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param \eZ\Publish\API\Repository\Values\Content\Field[] $fields
+     *
      * @return string[]
      */
     private function generateNames( ContentType $contentType, array $fields )
@@ -880,6 +892,7 @@ class ContentServiceStub implements ContentService
      * Parses a name template ala "<short_name|long_name>".
      *
      * @param string $nameTemplate
+     *
      * @return string[]
      */
     private function parseNameTemplate( $nameTemplate )
@@ -892,8 +905,8 @@ class ContentServiceStub implements ContentService
      *
      * (see {@link ContentMetadataUpdateStruct}) of a content object - to update fields use updateContent
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to update the content meta data
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the remoteId in $contentMetadataUpdateStruct is set but already existis
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update the content meta data
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the remoteId in $contentMetadataUpdateStruct is set but already exists
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct $contentMetadataUpdateStruct
@@ -934,9 +947,9 @@ class ContentServiceStub implements ContentService
     }
 
     /**
-     * deletes a content object including all its versions and locations including their subtrees.
+     * Deletes a content object including all its versions and locations including their subtrees.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to delete the content (in one of the locations of the given content object)
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete the content (in one of the locations of the given content object)
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      */
@@ -974,7 +987,7 @@ class ContentServiceStub implements ContentService
 
         unset( $this->contentInfo[$contentInfo->id] );
 
-        // @HACK: See Asana TODO -- drafts and locations are not handled
+        // @HACK: See Asana @todo -- drafts and locations are not handled
         // correctly
         if ( ( $versionInfo->status === VersionInfo::STATUS_DRAFT ) &&
              ( $versionInfo->versionNo === 1 ) )
@@ -991,10 +1004,10 @@ class ContentServiceStub implements ContentService
     }
 
     /**
-     * creates a draft from a publshed or archived version.
+     * Creates a draft from a published or archived version.
      *
      * If no version is given, the current published version is used.
-     * 4.x: The draft is created with the initialLanguge code of the source version or if not present with the main language.
+     * 4.x: The draft is created with the initialLanguage code of the source version or if not present with the main language.
      * It can be changed on updating the version.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the draft
@@ -1031,8 +1044,6 @@ class ContentServiceStub implements ContentService
             array(
                 'id' => $content->id,
                 'fields' => $content->getFields(),
-                'relations' => $content->getRelations(),
-
                 'contentTypeId' => $contentInfo->getContentType()->id,
                 'versionNo' => $versionNo + 1,
                 'repository' => $this->repository
@@ -1063,7 +1074,7 @@ class ContentServiceStub implements ContentService
     }
 
     /**
-     * Load drafts for a user.
+     * Loads drafts for a user.
      *
      * If no user is given the drafts for the authenticated user a returned
      *
@@ -1149,8 +1160,6 @@ class ContentServiceStub implements ContentService
             array(
                 'id' => $content->id,
                 'fields' => $allFields,
-                'relations' => $content->getRelations(),
-
                 'contentTypeId' => $content->contentTypeId,
                 'versionNo' => $versionInfo->versionNo,
                 'repository' => $this->repository
@@ -1300,7 +1309,7 @@ class ContentServiceStub implements ContentService
         $this->contentInfo[$contentInfo->id] = $publishedContentInfo;
         $this->versionInfo[$versionInfo->id] = $publishedVersionInfo;
 
-        $this->repository->getUrlAliasService()->_createAliasesForVersion(
+        $this->repository->getUrlAliasService()->createAliasesForVersion(
             $publishedVersionInfo
         );
 
@@ -1387,7 +1396,7 @@ class ContentServiceStub implements ContentService
     }
 
     /**
-     * copies the content to a new location. If no version is given,
+     * Copies the content to a new location. If no version is given,
      * all versions are copied, otherwise only the given version.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to copy the content to the given location
@@ -1485,19 +1494,19 @@ class ContentServiceStub implements ContentService
             $destinationLocationCreateStruct
         );
 
-        $this->repository->getUrlAliasService()->_createAliasesForLocation( $location );
+        $this->repository->getUrlAliasService()->createAliasesForLocation( $location );
 
         return $this->loadContent( $this->contentNextId );
     }
 
     /**
-     * load all outgoing relations for the given version
+     * Loads all outgoing relations for the given version
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read this version
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[] an array of {@link Relation}
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
     public function loadRelations( VersionInfo $versionInfo )
     {
@@ -1505,7 +1514,16 @@ class ContentServiceStub implements ContentService
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
-        return $this->loadContentByVersionInfo( $versionInfo )->getRelations();
+
+        $relations = array();
+        foreach ( $this->relation as $relation )
+        {
+            if ( $relation->getSourceContentInfo()->id === $versionInfo->contentId )
+            {
+                $relations[] = $relation;
+            }
+        }
+        return $relations;
     }
 
     /**
@@ -1518,7 +1536,7 @@ class ContentServiceStub implements ContentService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[] an array of {@link Relation}
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
     public function loadReverseRelations( ContentInfo $contentInfo )
     {
@@ -1528,14 +1546,11 @@ class ContentServiceStub implements ContentService
         }
 
         $relations = array();
-        foreach ( $this->content as $content )
+        foreach ( $this->relation as $relation )
         {
-            foreach ( $content->getRelations() as $relation )
+            if ( $relation->getDestinationContentInfo()->id === $contentInfo->id )
             {
-                if ( $relation->destinationContentInfo === $contentInfo )
-                {
-                    $relations[] = $relation;
-                }
+                $relations[] = $relation;
             }
         }
         return $relations;
@@ -1575,21 +1590,7 @@ class ContentServiceStub implements ContentService
             )
         );
 
-        $content = $this->loadContentByVersionInfo( $sourceVersion );
-
-        $this->replaceContentObject(
-            $content,
-            $this->copyContentObject(
-                $content,
-                array(
-                    'relations' => array_merge(
-                        $content->getRelations(),
-                        array( $relation )
-                    )
-                )
-            )
-        );
-
+        $this->relation = array_merge( $this->relation, array( $relation ) );
         return $relation;
     }
 
@@ -1614,14 +1615,15 @@ class ContentServiceStub implements ContentService
             throw new BadStateExceptionStub( 'What error code should be used?' );
         }
 
-        $content = $this->loadContentByVersionInfo( $sourceVersion );
-        $relations = $content->getRelations();
-
         $relationNotFound = true;
         $relationNoCommon = true;
-        foreach ( $relations as $i => $relation )
+        foreach ( $this->relation as $i => $relation )
         {
-            if ( $relation->destinationContentInfo !== $destinationContent )
+            if ( $relation->getDestinationContentInfo() !== $destinationContent )
+            {
+                continue;
+            }
+            if ( $relation->getSourceContentInfo() !== $sourceVersion->getContentInfo() )
             {
                 continue;
             }
@@ -1633,7 +1635,7 @@ class ContentServiceStub implements ContentService
             }
             $relationNoCommon = false;
 
-            unset( $relations[$i] );
+            unset( $this->relation[$i] );
             break;
         }
 
@@ -1641,16 +1643,6 @@ class ContentServiceStub implements ContentService
         {
             throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
-
-        $this->replaceContentObject(
-            $content,
-            $this->copyContentObject(
-                $content,
-                array(
-                    'relations' => $relations
-                )
-            )
-        );
     }
 
     /**
@@ -1697,11 +1689,15 @@ class ContentServiceStub implements ContentService
      * Internal helper method that returns all ContentInfo objects for the given
      * <b>$contentType</b>.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      *
      * @return \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub[]
      */
-    public function __loadContentInfoByContentType( ContentType $contentType )
+    public function loadContentInfoByContentType( ContentType $contentType )
     {
         $result = array();
         foreach ( $this->contentInfo as $contentInfo )
@@ -1719,11 +1715,15 @@ class ContentServiceStub implements ContentService
      * Internal helper method used to load ContentInfo objects by their main
      * language code.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param string $languageCode
      *
      * @return \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub[]
      */
-    public function __loadContentInfoByLanguageCode( $languageCode )
+    public function loadContentInfoByLanguageCode( $languageCode )
     {
         $matches = array();
         foreach ( $this->contentInfo as $contentInfo )
@@ -1739,28 +1739,15 @@ class ContentServiceStub implements ContentService
     /**
      * Internal helper method to emulate a rollback.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __rollback()
+    public function rollback()
     {
         $this->initFromFixture();
-    }
-
-    /**
-     * Replaces an object internally.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $oldContent
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $newContent
-     * @return void
-     */
-    private function replaceContentObject( Content $oldContent, Content $newContent )
-    {
-        if ( false === ( $index = array_search( $oldContent, $this->content ) ) )
-        {
-            throw new \ErrorException( "Implementation error..." );
-        }
-
-        $this->content[$index] = $newContent;
     }
 
     /**
@@ -1768,6 +1755,7 @@ class ContentServiceStub implements ContentService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param string[] $overwrites
+     *
      * @return Values\Content\ContentStub
      */
     private function copyContentObject( Content $content, array $overwrites = array() )
@@ -1775,7 +1763,6 @@ class ContentServiceStub implements ContentService
         $names = array(
             'id',
             'fields',
-            'relations',
             'contentTypeId',
             'versionNo',
             'repository'
@@ -1794,7 +1781,15 @@ class ContentServiceStub implements ContentService
             }
         }
 
-        return new ContentStub( $values );
+        $newContent = new ContentStub( $values );
+
+        // copy relations
+        $relations = $this->loadRelations( $content->getVersionInfo() );
+        foreach ( $relations as $relation )
+        {
+            $this->addRelation( $newContent->getVersionInfo(), $relation->getDestinationContentInfo() );
+        }
+        return $newContent;
     }
 
     /**
@@ -1850,7 +1845,7 @@ class ContentServiceStub implements ContentService
      * @example Examples/translation_5x.php
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destiantioon version is not a draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destination version is not a draft
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
      *
@@ -1864,11 +1859,11 @@ class ContentServiceStub implements ContentService
      */
     public function translateVersion( TranslationInfo $translationInfo, TranslationValues $translationValues, User $user = null )
     {
-        // TODO: Implement translateVersion() method.
+        // @todo: Implement translateVersion() method.
     }
 
     /**
-     * add translation information to the content object
+     * Adds translation information to the content object
      *
      * @example Examples/translation_5x.php
      *
@@ -1880,7 +1875,7 @@ class ContentServiceStub implements ContentService
      */
     public function addTranslationInfo( TranslationInfo $translationInfo )
     {
-        // TODO: Implement addTranslationInfo() method.
+        // @todo: Implement addTranslationInfo() method.
     }
 
     /**
@@ -1890,15 +1885,16 @@ class ContentServiceStub implements ContentService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param array $filter
+     *
      * @todo TBD - filter by sourceversion destination version and languages
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[] an array of {@link TranslationInfo}
+     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[]
      *
      * @since 5.0
      */
     public function loadTranslationInfos( ContentInfo $contentInfo, array $filter = array() )
     {
-        // TODO: Implement loadTranslationInfos() method.
+        // @todo: Implement loadTranslationInfos() method.
     }
 
     /**
@@ -1907,7 +1903,7 @@ class ContentServiceStub implements ContentService
      */
     public function newTranslationInfo()
     {
-        // TODO: Implement newTranslationInfo() method.
+        // @todo: Implement newTranslationInfo() method.
     }
 
     /**
@@ -1916,7 +1912,7 @@ class ContentServiceStub implements ContentService
      */
     public function newTranslationValues()
     {
-        // TODO: Implement newTranslationValues() method.
+        // @todo: Implement newTranslationValues() method.
     }
 
     // @codeCoverageIgnoreEnd

@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Event;
 
-use Symfony\Component\EventDispatcher\Event,
-    eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface;
+use Symfony\Component\EventDispatcher\Event;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface;
 
 /**
  * The PreContentViewEvent allows you to inject additional parameters to a content view template.

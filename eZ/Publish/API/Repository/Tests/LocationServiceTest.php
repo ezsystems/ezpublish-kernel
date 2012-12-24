@@ -9,19 +9,17 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\Content\Location;
-use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
 
-use \eZ\Publish\API\Repository\Exceptions;
+use eZ\Publish\API\Repository\Exceptions;
 
 /**
  * Test case for operations in the LocationService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\LocationService
  * @group location
- *
- * @TODO: Tests for Location::$modifiedSubLocationDate property behavior.
  */
 class LocationServiceTest extends BaseTest
 {
@@ -37,7 +35,7 @@ class LocationServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         $parentLocationId = $this->generateId( 'location', 1 );
-        /* BEGIN: Use Case */;
+        /* BEGIN: Use Case */
         // $parentLocationId is the ID of an existing location
         $locationService = $repository->getLocationService();
 
@@ -92,7 +90,7 @@ class LocationServiceTest extends BaseTest
 
         $contentId = $this->generateId( 'object', 41 );
         $parentLocationId = $this->generateId( 'location', 5 );
-        /* BEGIN: Use Case */;
+        /* BEGIN: Use Case */
         // $contentId is the ID of an existing content object
         // $parentLocationId is the ID of an existing location
         $contentService = $repository->getContentService();
@@ -157,7 +155,6 @@ class LocationServiceTest extends BaseTest
         );
 
         $this->assertNotNull( $createdLocation->id );
-        $this->assertInstanceOf( 'DateTime', $createdLocation->modifiedSubLocationDate );
     }
 
     /**
@@ -365,8 +362,6 @@ class LocationServiceTest extends BaseTest
                 'remoteId' => '3f6d92f8044aed134f32153517850f5a',
                 'parentLocationId' => $this->generateId( 'location', 1 ),
                 'pathString' => '/1/5/',
-                // @todo: Fix date handling in tests
-                'modifiedSubLocationDate' => $this->createDateTime( 1343140542 ),
                 'depth' => 1,
                 'sortField' => 1,
                 'sortOrder' => 1,
@@ -416,7 +411,7 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */;
+        /* BEGIN: Use Case */
         $locationService = $repository->getLocationService();
 
         $location = $locationService->loadLocationByRemoteId(
@@ -442,7 +437,7 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */;
+        /* BEGIN: Use Case */
         $locationService = $repository->getLocationService();
 
         // Throws exception, since Location with remote ID does not exist
@@ -464,7 +459,7 @@ class LocationServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         $contentId = $this->generateId( 'object', 4 );
-        /* BEGIN: Use Case */;
+        /* BEGIN: Use Case */
         // $contentId contains the ID of an existing content object
         $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
@@ -472,7 +467,7 @@ class LocationServiceTest extends BaseTest
         $contentInfo = $contentService->loadContentInfo( $contentId );
 
         $locations = $locationService->loadLocations( $contentInfo );
-        /* END: Use Case */;
+        /* END: Use Case */
 
         $this->assertInternalType(
             'array', $locations
@@ -535,7 +530,7 @@ class LocationServiceTest extends BaseTest
         $originalLocationId = $this->generateId( 'location', 54 );
         $originalParentLocationId = $this->generateId( 'location', 48 );
         $newParentLocationId = $this->generateId( 'location', 43 );
-        /* BEGIN: Use Case */;
+        /* BEGIN: Use Case */
         // $originalLocationId is the ID of an existing location
         // $originalParentLocationId is the ID of the parent location of
         //     $originalLocationId
@@ -560,7 +555,7 @@ class LocationServiceTest extends BaseTest
             $originalLocation->contentInfo,
             $findRootLocation
         );
-        /* END: Use Case */;
+        /* END: Use Case */
 
         $this->assertInternalType(
             'array', $locations
@@ -572,6 +567,7 @@ class LocationServiceTest extends BaseTest
      * Test for the loadLocations() method.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location[] $locations
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationsLimitedSubtree
@@ -598,7 +594,7 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */;
+        /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
         $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
@@ -674,7 +670,7 @@ class LocationServiceTest extends BaseTest
         $location = $locationService->loadLocation( $locationId );
 
         $childLocations = $locationService->loadLocationChildren( $location );
-        /* END: Use Case */;
+        /* END: Use Case */
 
         $this->assertInstanceOf(
             "\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationList", $childLocations
@@ -766,7 +762,7 @@ class LocationServiceTest extends BaseTest
         $childLocations = $locationService->loadLocationChildren(
             $location, 2
         );
-        /* END: Use Case */;
+        /* END: Use Case */
 
         $this->assertInstanceOf(
             "\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationList", $childLocations
@@ -784,6 +780,7 @@ class LocationServiceTest extends BaseTest
      * Test for the loadLocationChildren() method.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\LocationList $locations
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset)
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildrenWithOffset
@@ -838,7 +835,7 @@ class LocationServiceTest extends BaseTest
         $childLocations = $locationService->loadLocationChildren(
             $location, 2, 2
         );
-        /* END: Use Case */;
+        /* END: Use Case */
 
         $this->assertInstanceOf(
             "\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationList", $childLocations
@@ -900,11 +897,11 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */;
+        /* BEGIN: Use Case */
         $locationService = $repository->getLocationService();
 
         $updateStruct = $locationService->newLocationUpdateStruct();
-        /* END: Use Case */;
+        /* END: Use Case */
 
         $this->assertInstanceOf(
             '\eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct',
@@ -924,7 +921,7 @@ class LocationServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         $originalLocationId = $this->generateId( 'location', 5 );
-        /* BEGIN: Use Case */;
+        /* BEGIN: Use Case */
         // $originalLocationId is the ID of an existing location
         $locationService = $repository->getLocationService();
 
@@ -939,7 +936,7 @@ class LocationServiceTest extends BaseTest
         $updatedLocation = $locationService->updateLocation(
             $originalLocation, $updateStruct
         );
-        /* END: Use Case */;
+        /* END: Use Case */
 
         $this->assertInstanceOf(
             '\eZ\Publish\API\Repository\Values\Content\Location',
@@ -982,8 +979,6 @@ class LocationServiceTest extends BaseTest
             ),
             $updatedLocation
         );
-
-        $this->assertInstanceOf( 'DateTime', $updatedLocation->modifiedSubLocationDate );
     }
 
     /**
@@ -1013,7 +1008,7 @@ class LocationServiceTest extends BaseTest
         $locationService->updateLocation(
             $originalLocation, $updateStruct
         );
-        /* END: Use Case */;
+        /* END: Use Case */
     }
 
     /**
@@ -1108,6 +1103,7 @@ class LocationServiceTest extends BaseTest
      *
      * @param array $expectedValues
      * @param Location $location
+     *
      * @return void
      */
     protected function assertSubtreeProperties( array $expectedValues, Location $location, $stopId = null )
@@ -1229,7 +1225,7 @@ class LocationServiceTest extends BaseTest
         $this->assertTrue(
             $stillHiddenLocation->hidden,
             sprintf(
-                'Hidden sub-location with ID %s accedentally unhidden.',
+                'Hidden sub-location with ID %s accidentally unhidden.',
                 $stillHiddenLocation->id
             )
         );
@@ -1269,7 +1265,9 @@ class LocationServiceTest extends BaseTest
             $locationService->loadLocation( $mediaLocationId );
             $this->fail( "Location $mediaLocationId not deleted." );
         }
-        catch ( Exceptions\NotFoundException $e ) {}
+        catch ( Exceptions\NotFoundException $e )
+        {
+        }
 
         // The following IDs are IDs of child locations of $mediaLocationId location
         // ( Media/Images, Media/Files, Media/Multimedia respectively )
@@ -1280,7 +1278,9 @@ class LocationServiceTest extends BaseTest
                 $locationService->loadLocation( $this->generateId( 'location', $childLocationId ) );
                 $this->fail( "Location $childLocationId not deleted." );
             }
-            catch ( Exceptions\NotFoundException $e ) {}
+            catch ( Exceptions\NotFoundException $e )
+            {
+            }
         }
 
         // The following IDs are IDs of content below $mediaLocationId location
@@ -1293,7 +1293,9 @@ class LocationServiceTest extends BaseTest
                 $contentService->loadContentInfo( $this->generateId( 'object', $childContentId ) );
                 $this->fail( "Content $childContentId not deleted." );
             }
-            catch ( Exceptions\NotFoundException $e ) {}
+            catch ( Exceptions\NotFoundException $e )
+            {
+            }
         }
     }
 
@@ -1453,7 +1455,7 @@ class LocationServiceTest extends BaseTest
                 $properties['pathString']
             );
             $this->assertStringEndsWith(
-                "/" . $this->parseId( 'location' , $properties['id'] ) . "/",
+                "/" . $this->parseId( 'location', $properties['id'] ) . "/",
                 $properties['pathString']
             );
         }
@@ -1582,7 +1584,7 @@ class LocationServiceTest extends BaseTest
             array(
                 'depth' => $newParentLocation->depth + 1,
                 'parentLocationId' => $newParentLocation->id,
-                'pathString' => "{$newParentLocation->pathString}" . $this->parseId( 'location' , $movedLocation->id ) . "/"
+                'pathString' => "{$newParentLocation->pathString}" . $this->parseId( 'location', $movedLocation->id ) . "/"
             ),
             $movedLocation
         );
@@ -1768,6 +1770,7 @@ class LocationServiceTest extends BaseTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param array $properties
+     *
      * @return array
      */
     private function loadSubtreeProperties( Location $location, array $properties = array() )
@@ -1789,6 +1792,7 @@ class LocationServiceTest extends BaseTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param mixed[] $overwrite
+     *
      * @return array
      */
     private function loadLocationProperties( Location $location, array $overwrite = array() )

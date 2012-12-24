@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor,
-    eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder,
-    eZ\Publish\API\Repository\Values\Content\Search\Facet;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
+use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
+use eZ\Publish\API\Repository\Values\Content\Search\Facet;
 
 /**
  * Visits the User facet builder
@@ -22,7 +22,8 @@ class User extends FacetBuilderVisitor
      * CHeck if visitor is applicable to current facet result
      *
      * @param string $field
-     * @return bool
+     *
+     * @return boolean
      */
     public function canMap( $field )
     {
@@ -34,21 +35,25 @@ class User extends FacetBuilderVisitor
      *
      * @param string $field
      * @param array $data
+     *
      * @return Facet
      */
     public function map( $field, array $data )
     {
-        return new Facet\UserFacet( array(
-            'name'    => 'creator',
-            'entries' => $this->mapData( $data ),
-        ) );
+        return new Facet\UserFacet(
+            array(
+                'name'    => 'creator',
+                'entries' => $this->mapData( $data ),
+            )
+        );
     }
 
     /**
      * Check if visitor is applicable to current facet builder
      *
      * @param FacetBuilder $facetBuilder
-     * @return bool
+     *
+     * @return boolean
      */
     public function canVisit( FacetBuilder $facetBuilder )
     {
@@ -59,15 +64,17 @@ class User extends FacetBuilderVisitor
      * Map field value to a proper Solr representation
      *
      * @param FacetBuilder $facetBuilder;
+     *
      * @return void
      */
     public function visit( FacetBuilder $facetBuilder )
     {
-        return http_build_query( array(
-            'facet.field'                => 'creator_id',
-            'f.creator_id.facet.limit'    => $facetBuilder->limit,
-            'f.creator_id.facet.mincount' => $facetBuilder->minCount,
-        ) );
+        return http_build_query(
+            array(
+                'facet.field'                => 'creator_id',
+                'f.creator_id.facet.limit'    => $facetBuilder->limit,
+                'f.creator_id.facet.mincount' => $facetBuilder->minCount,
+            )
+        );
     }
 }
-

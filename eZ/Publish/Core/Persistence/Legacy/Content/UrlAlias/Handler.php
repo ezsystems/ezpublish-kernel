@@ -9,14 +9,14 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
-use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
-    eZ\Publish\SPI\Persistence\Content\UrlAlias,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\ForbiddenException,
-    RuntimeException;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\ForbiddenException;
+use RuntimeException;
 
 /**
  * The UrlAlias Handler provides nice urls management.
@@ -72,6 +72,51 @@ class Handler implements UrlAliasHandlerInterface
                 "commands" => array(),
                 "cleanupMethod" => "url_cleanup_iri",
             ),
+            "urlalias_compat" => array(
+                "commands" => array(
+                    //normalize
+                    "space_normalize",
+                    "hyphen_normalize",
+                    "apostrophe_normalize",
+                    "doublequote_normalize",
+                    "greek_normalize",
+                    "endline_search_normalize",
+                    "tab_search_normalize",
+                    "specialwords_search_normalize",
+                    "punctuation_normalize",
+
+                    //transform
+                    "apostrophe_to_doublequote",
+                    "math_to_ascii",
+                    "inverted_to_normal",
+
+                    //decompose
+                    "special_decompose",
+                    "latin_search_decompose",
+
+                    //transliterate
+                    "cyrillic_transliterate_ascii",
+                    "greek_transliterate_ascii",
+                    "hebrew_transliterate_ascii",
+                    "latin1_transliterate_ascii",
+                    "latin-exta_transliterate_ascii",
+
+                    //diacritical
+                    "cyrillic_diacritical",
+                    "greek_diacritical",
+                    "latin1_diacritical",
+                    "latin-exta_diacritical",
+
+                    //lowercase
+                    "ascii_lowercase",
+                    "cyrillic_lowercase",
+                    "greek_lowercase",
+                    "latin1_lowercase",
+                    "latin-exta_lowercase",
+                    "latin_lowercase",
+                ),
+                "cleanupMethod" => "url_cleanup_compat",
+            ),
         ),
         "reservedNames" => array(
             "class",
@@ -106,7 +151,7 @@ class Handler implements UrlAliasHandlerInterface
     /**
      * UrlAlias Gateway
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway $gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway
      */
     protected $gateway;
 
@@ -120,7 +165,7 @@ class Handler implements UrlAliasHandlerInterface
     /**
      * UrlAlias Mapper
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper $mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper
      */
     protected $mapper;
 
@@ -178,10 +223,18 @@ class Handler implements UrlAliasHandlerInterface
      * @param string $name the new name computed by the name schema or url alias schema
      * @param string $languageCode
      * @param boolean $alwaysAvailable
+     * @param boolean $isLanguageMain used only for legacy storage for updating ezcontentobject_tree.path_identification_string
      *
      * @return void
      */
-    public function publishUrlAliasForLocation( $locationId, $parentLocationId, $name, $languageCode, $alwaysAvailable = false )
+    public function publishUrlAliasForLocation(
+        $locationId,
+        $parentLocationId,
+        $name,
+        $languageCode,
+        $alwaysAvailable = false,
+        $isLanguageMain = false
+    )
     {
         $parentId = $this->getRealAliasId( $parentLocationId );
         $uniqueCounter = $this->getUniqueCounterValue( $name, $parentId );
@@ -282,6 +335,15 @@ class Handler implements UrlAliasHandlerInterface
             $uniqueCounter += 1;
         }
 
+        if ( $isLanguageMain )
+        {
+            $this->locationGateway->updatePathIdentificationString(
+                $locationId,
+                $parentLocationId,
+                $this->convertToAlias( $newText, "node_", "urlalias_compat" )
+            );
+        }
+
         /** @var $newId */
         /** @var $newTextMD5 */
         // Note: cleanup does not touch custom and global entries
@@ -352,9 +414,9 @@ class Handler implements UrlAliasHandlerInterface
      *
      * @param string $action
      * @param string $path
-     * @param bool $forward
+     * @param boolean $forward
      * @param string|null $languageCode
-     * @param bool $alwaysAvailable
+     * @param boolean $alwaysAvailable
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
@@ -426,7 +488,7 @@ class Handler implements UrlAliasHandlerInterface
         // Row exists, check if it is reusable. There are 2 cases when this is possible:
         // 1. NOP entry
         // 2. history entry
-        elseif ( $row["action"] == "nop:" || $row["is_original"] == 0 )
+        else if ( $row["action"] == "nop:" || $row["is_original"] == 0 )
         {
             $data["lang_mask"] = $languageId | (int)$alwaysAvailable;
             // If history is reused move link to id
@@ -521,7 +583,7 @@ class Handler implements UrlAliasHandlerInterface
         {
             if ( $urlAlias->isCustom )
             {
-                list( $parentId, $textMD5 ) = explode( "-" , $urlAlias->id );
+                list( $parentId, $textMD5 ) = explode( "-", $urlAlias->id );
                 if ( !$this->gateway->removeCustomAlias( $parentId, $textMD5 ) )
                 {
                     return false;
@@ -646,14 +708,15 @@ class Handler implements UrlAliasHandlerInterface
      *
      * @return void
      */
-    public function locationCopied( $locationId, $oldParentId, $newParentId )
+    public function locationCopied( $locationId, $newLocationId, $newParentId )
     {
-        $newParentAliasId = $this->getRealAliasId( $newParentId );
-        $oldParentAliasId = $this->getRealAliasId( $oldParentId );
+        $newParentAliasId = $this->getRealAliasId( $newLocationId );
+        $oldParentAliasId = $this->getRealAliasId( $locationId );
+
+        $actionMap = $this->getCopiedLocationsMap( $locationId, $newLocationId );
 
         $this->copySubtree(
-            $oldParentId,
-            $newParentId,
+            $actionMap,
             $oldParentAliasId,
             $newParentAliasId,
             $locationId
@@ -692,52 +755,33 @@ class Handler implements UrlAliasHandlerInterface
     /**
      * Recursively copies aliases from old parent under new parent.
      *
-     * @param mixed $oldParentId
-     * @param mixed $newParentId
+     * @param array $actionMap
      * @param mixed $oldParentAliasId
      * @param mixed $newParentAliasId
-     * @param mixed|null $locationId
      *
      * @return void
      */
-    protected function copySubtree( $oldParentId, $newParentId, $oldParentAliasId, $newParentAliasId, $locationId = null )
+    protected function copySubtree( $actionMap, $oldParentAliasId, $newParentAliasId )
     {
-        if ( isset( $locationId ) )
-        {
-            $rows = array( $this->gateway->loadAutogeneratedEntry( "eznode:" . $locationId, $oldParentAliasId ) );
-        }
-        else
-        {
-            $rows = $this->gateway->loadAutogeneratedEntries( $oldParentAliasId );
-        }
-
-        $copyMap = $this->getCopiedLocationsMap( $oldParentId, $newParentId );
+        $rows = $this->gateway->loadAutogeneratedEntries( $oldParentAliasId );
         $newIdsMap = array();
-
         foreach ( $rows as $row )
         {
-            $originalAction = explode( ":", $row["action"] );
-            $originalActionLocationId = end( $originalAction );
-            if ( !isset( $copyMap[$originalActionLocationId] ) )
-            {
-                continue;
-            }
-
-            $copiedActionLocationId = $copyMap[$originalActionLocationId];
             $oldParentAliasId = $row["id"];
+
+            // Ensure that same action entries remain grouped by the same id
             if ( !isset( $newIdsMap[$oldParentAliasId] ) )
             {
                 $newIdsMap[$oldParentAliasId] = $this->gateway->getNextId();
             }
 
-            $row["action"] = "eznode:" . $copiedActionLocationId;
+            $row["action"] = $actionMap[$row["action"]];
             $row["parent"] = $newParentAliasId;
             $row["id"] = $row["link"] = $newIdsMap[$oldParentAliasId];
-
             $this->gateway->insertRow( $row );
+
             $this->copySubtree(
-                $originalActionLocationId,
-                $copiedActionLocationId,
+                $actionMap,
                 $oldParentAliasId,
                 $row["id"]
             );
@@ -745,8 +789,6 @@ class Handler implements UrlAliasHandlerInterface
     }
 
     /**
-     *
-     *
      * @param mixed $oldParentId
      * @param mixed $newParentId
      *
@@ -754,19 +796,13 @@ class Handler implements UrlAliasHandlerInterface
      */
     protected function getCopiedLocationsMap( $oldParentId, $newParentId )
     {
+        $originalLocations = $this->locationGateway->getSubtreeContent( $oldParentId );
+        $copiedLocations = $this->locationGateway->getSubtreeContent( $newParentId );
+
         $map = array();
-        $originalLocations = $this->locationGateway->getChildren( $oldParentId );
-        $copiedLocations = $this->locationGateway->getChildren( $newParentId );
-
-        $originalLocationsMap = array();
-        foreach ( $originalLocations as $originalLocation )
+        foreach ( $originalLocations as $index => $originalLocation )
         {
-            $originalLocationsMap[$originalLocation["contentobject_id"]] = $originalLocation["node_id"];
-        }
-
-        foreach ( $copiedLocations as $copiedLocation )
-        {
-            $map[$originalLocationsMap[$copiedLocation["contentobject_id"]]] = $copiedLocation["node_id"];
+            $map["eznode:" . $originalLocation["node_id"]] = "eznode:" . $copiedLocations[$index]["node_id"];
         }
 
         return $map;
@@ -775,7 +811,7 @@ class Handler implements UrlAliasHandlerInterface
     /**
      * Notifies the underlying engine that a location was deleted or moved to trash
      *
-     * @param $locationId
+     * @param mixed $locationId
      */
     public function locationDeleted( $locationId )
     {
@@ -821,12 +857,18 @@ class Handler implements UrlAliasHandlerInterface
      * 'øæå' => 'oeaeaa'
      *
      * @param string $text
-     * @param $defaultValue
+     * @param string $defaultValue
+     * @param string|null $transformation
      *
      * @return string
      */
-    protected function convertToAlias( $text, $defaultValue = "_1" )
+    protected function convertToAlias( $text, $defaultValue = "_1", $transformation = null )
     {
+        if ( !isset( $transformation ) )
+        {
+            $transformation = $this->configuration["transformation"];
+        }
+
         if ( strlen( $text ) === 0 )
         {
             $text = $defaultValue;
@@ -835,8 +877,9 @@ class Handler implements UrlAliasHandlerInterface
         return $this->cleanupText(
             $this->transformationProcessor->transform(
                 $text,
-                $this->configuration["transformationGroups"][$this->configuration["transformation"]]["commands"]
-            )
+                $this->configuration["transformationGroups"][$transformation]["commands"]
+            ),
+            $this->configuration["transformationGroups"][$transformation]["cleanupMethod"]
         );
     }
 
@@ -888,12 +931,13 @@ class Handler implements UrlAliasHandlerInterface
      * Cleans up
      *
      * @param string $text
+     * @param string $method
      *
      * @return string
      */
-    protected function cleanupText( $text )
+    protected function cleanupText( $text, $method )
     {
-        switch ( $this->configuration["transformationGroups"][$this->configuration["transformation"]]["cleanupMethod"] )
+        switch ( $method )
         {
             case "url_cleanup":
                 $sep = $this->getWordSeparator();
@@ -947,6 +991,21 @@ class Handler implements UrlAliasHandlerInterface
                     $text
                 );
                 break;
+            case "url_cleanup_compat":
+                // Old style of url alias with lowercase only and underscores for separators
+                $text = strtolower( $text );
+                $text = preg_replace(
+                    array(
+                        "#[^a-z0-9]+#",
+                        "#^_+|_+$#"
+                    ),
+                    array(
+                        "_",
+                        ""
+                    ),
+                    $text
+                );
+                break;
             default:
                 // Nothing
         }
@@ -963,9 +1022,12 @@ class Handler implements UrlAliasHandlerInterface
     {
         switch ( $this->configuration["wordSeparatorName"] )
         {
-            case "dash": return "-";
-            case "underscore": return "_";
-            case "space": return " ";
+            case "dash":
+                return "-";
+            case "underscore":
+                return "_";
+            case "space":
+                return " ";
         }
 
         return "-";

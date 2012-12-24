@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\View;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface,
-    eZ\Publish\Core\MVC\Symfony\View\ContentView,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    Twig_Environment;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface;
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use Twig_Environment;
 
 class TwigContentViewLayoutDecorator implements ContentViewInterface
 {
@@ -51,6 +51,7 @@ class TwigContentViewLayoutDecorator implements ContentViewInterface
      * Must throw a \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType exception if $templateIdentifier is invalid.
      *
      * @param \Closure $templateIdentifier
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
      */
     public function setTemplateIdentifier( $templateIdentifier )
@@ -64,8 +65,9 @@ class TwigContentViewLayoutDecorator implements ContentViewInterface
     /**
      * Returns the registered template identifier.
      *
-     * @return \Closure
      * @throws \RuntimeException
+     *
+     * @return \Closure
      */
     public function getTemplateIdentifier()
     {
@@ -91,7 +93,7 @@ EOT;
             return $twig->render(
                 $twigContentTemplate,
                 array(
-                     'viewResult' => $contentViewClosure( $params )
+                    'viewResult' => $contentViewClosure( $params )
                 )
             );
         };
@@ -132,7 +134,8 @@ EOT;
      * Checks if $parameterName exists.
      *
      * @param string $parameterName
-     * @return bool
+     *
+     * @return boolean
      */
     public function hasParameter( $parameterName )
     {
@@ -144,8 +147,10 @@ EOT;
      * Throws an \InvalidArgumentException if $parameterName is not set.
      *
      * @param string $parameterName
-     * @return mixed
+     *
      * @throws \InvalidArgumentException
+     *
+     * @return mixed
      */
     public function getParameter( $parameterName )
     {

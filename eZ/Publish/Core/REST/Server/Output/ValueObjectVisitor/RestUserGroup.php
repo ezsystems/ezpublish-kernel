@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
-use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor,
-    eZ\Publish\Core\REST\Common\Output\Generator,
-    eZ\Publish\Core\REST\Common\Output\Visitor,
-    eZ\Publish\Core\REST\Server\Values\Version as VersionValue;
+use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Common\Output\Generator;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Values\Version as VersionValue;
 
 /**
  * RestUserGroup value object visitor
@@ -102,7 +102,7 @@ class RestUserGroup extends ValueObjectVisitor
         $generator->startValueElement( 'alwaysAvailable', $contentInfo->alwaysAvailable ? 'true' : 'false' );
         $generator->endValueElement( 'alwaysAvailable' );
 
-        $visitor->visitValueObject( new VersionValue( $data->content ) );
+        $visitor->visitValueObject( new VersionValue( $data->content, $data->relations ) );
 
         $generator->startObjectElement( 'ParentUserGroup', 'UserGroup' );
         $generator->startAttribute(

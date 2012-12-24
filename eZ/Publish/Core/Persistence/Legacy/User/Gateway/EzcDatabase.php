@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\User\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\User\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\SPI\Persistence\User;
+
+use eZ\Publish\Core\Persistence\Legacy\User\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\SPI\Persistence\User;
 
 /**
  * User gateway implementation using the zeta database component.
@@ -27,7 +28,7 @@ class EzcDatabase extends Gateway
     /**
      * Construct from database handler
      *
-     * @param EzcDbHandler $handler
+     * @param \EzcDbHandler $handler
      */
     public function __construct( EzcDbHandler $handler )
     {
@@ -38,6 +39,7 @@ class EzcDatabase extends Gateway
      * Create user
      *
      * @param user $user
+     *
      * @return mixed
      */
     public function createUser( User $user )
@@ -99,9 +101,10 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Load user with user ID.
+     * Loads user with user ID.
      *
      * @param mixed $userId
+     *
      * @return array
      */
     public function load( $userId )
@@ -137,10 +140,11 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Load user with user ID.
+     * Loads user with user ID.
      *
      * @param string $login
      * @param string|null $email
+     *
      * @return array
      */
     public function loadByLoginOrMail( $login, $email = null )
@@ -235,7 +239,7 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Assign role to user with given limitation
+     * Assigns role to user with given limitation
      *
      * @param mixed $contentId
      * @param mixed $roleId

@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\User;
 
-use \eZ\Publish\API\Repository\Values\User\Role;
+use eZ\Publish\API\Repository\Values\User\Role;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\User\Role}
@@ -38,7 +38,7 @@ class RoleStub extends Role
     }
 
     /**
-     * returns the list of policies of this role
+     * Returns the list of policies of this role
      * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
     public function getPolicies()

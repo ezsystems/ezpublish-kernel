@@ -30,6 +30,7 @@ class FieldTypeHashGenerator
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Generator\Json\ArrayObject|\eZ\Publish\Core\REST\Common\Output\Generator\Json\Object $parent
      * @param mixed $value
+     *
      * @return mixed
      */
     protected function generateValue( $parent, $value )
@@ -64,6 +65,7 @@ class FieldTypeHashGenerator
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Generator\Json\ArrayObject|\eZ\Publish\Core\REST\Common\Output\Generator\Json\Object $parent
      * @param array $value
+     *
      * @return \eZ\Publish\Core\REST\Common\Output\Generator\Json\ArrayObject|\eZ\Publish\Core\REST\Common\Output\Generator\Json\Object
      */
     protected function generateArrayValue( $parent, array $value )
@@ -83,6 +85,7 @@ class FieldTypeHashGenerator
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Generator\Json\ArrayObject|\eZ\Publish\Core\REST\Common\Output\Generator\Json\Object $parent
      * @param array $listArray
+     *
      * @return \eZ\Publish\Core\REST\Common\Output\Generator\Json\ArrayObject
      */
     protected function generateListArray( $parent, array $listArray )
@@ -100,6 +103,7 @@ class FieldTypeHashGenerator
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Generator\Json\ArrayObject|\eZ\Publish\Core\REST\Common\Output\Generator\Json\Object $parent
      * @param array $hashArray
+     *
      * @return \eZ\Publish\Core\REST\Common\Output\Generator\Json\Object
      */
     protected function generateHashArray( $parent, array $hashArray )
@@ -116,7 +120,8 @@ class FieldTypeHashGenerator
      * Checks if the given $value is a purely numeric array
      *
      * @param array $value
-     * @return bool
+     *
+     * @return boolean
      */
     protected function isNumericArray( array $value )
     {

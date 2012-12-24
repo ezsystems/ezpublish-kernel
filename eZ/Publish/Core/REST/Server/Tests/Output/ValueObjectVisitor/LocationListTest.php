@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -47,6 +48,7 @@ class LocationListTest extends ValueObjectVisitorBaseTest
      * Test if result contains LocationList element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLocationListElement( $result )
@@ -65,6 +67,7 @@ class LocationListTest extends ValueObjectVisitorBaseTest
      * Test if result contains LocationList element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLocationListAttributes( $result )

@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Integer\Type as Integer,
-    eZ\Publish\Core\FieldType\Integer\Value as IntegerValue,
-    ReflectionObject;
+
+use eZ\Publish\Core\FieldType\Integer\Type as Integer;
+use eZ\Publish\Core\FieldType\Integer\Value as IntegerValue;
+use ReflectionObject;
 
 /**
  * @group fieldType
@@ -341,7 +342,7 @@ class IntegerTest extends StandardizedFieldTypeTest
     /**
      * Provide data sets with validator configurations which are considered
      * invalid by the {@link validateValidatorConfiguration()} method. The
-     * method must return a non-empty array of valiation errors when receiving
+     * method must return a non-empty array of validation errors when receiving
      * one of the provided values.
      *
      * Returns an array of data provider sets with a single argument: A valid

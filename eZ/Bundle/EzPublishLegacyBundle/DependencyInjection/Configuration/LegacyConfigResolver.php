@@ -9,9 +9,9 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface,
-    eZ\Publish\Core\MVC\Exception\ParameterNotFoundException,
-    eZINI;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
+use eZINI;
 
 /**
  * Configuration resolver for eZ Publish legacy.
@@ -66,6 +66,7 @@ class LegacyConfigResolver implements ConfigResolverInterface
      * @param string $scope A specific siteaccess to look into. Defaults to the current siteaccess.
      *
      * @throws \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException
+     *
      * @return mixed
      */
     public function getParameter( $paramName, $namespace = null, $scope = null )
@@ -105,6 +106,7 @@ class LegacyConfigResolver implements ConfigResolverInterface
      * @throws \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException
      *
      * @todo Implement in ConfigResolver interface
+     *
      * @return array
      */
     public function getGroup( $groupName, $namespace = null, $scope = null )
@@ -140,7 +142,7 @@ class LegacyConfigResolver implements ConfigResolverInterface
      * @param string $namespace If null, the default namespace should be used.
      * @param string $scope The scope you need $paramName value for.
      *
-     * @return bool
+     * @return boolean
      */
     public function hasParameter( $paramName, $namespace = null, $scope = null )
     {

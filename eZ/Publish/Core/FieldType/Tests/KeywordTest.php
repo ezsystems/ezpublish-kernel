@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Keyword\Type as KeywordType,
-    eZ\Publish\Core\FieldType\Keyword\Value as KeywordValue,
-    ReflectionObject;
+
+use eZ\Publish\Core\FieldType\Keyword\Type as KeywordType;
+use eZ\Publish\Core\FieldType\Keyword\Value as KeywordValue;
+use ReflectionObject;
 
 /**
  * @group fieldType

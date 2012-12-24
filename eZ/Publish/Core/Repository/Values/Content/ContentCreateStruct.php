@@ -9,19 +9,19 @@
 
 namespace eZ\Publish\Core\Repository\Values\Content;
 
-use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct as APIContentCreateStruct,
-    eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct as APIContentCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * This class is used for creating a new content object
- * @property-write array $fields an array of {@link Field}
+ * @property-write \eZ\Publish\API\Repository\Values\Content\Field[] $fields
  */
 class ContentCreateStruct extends APIContentCreateStruct
 {
     /**
      * Field collection
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\Field[] $fields an array of {@link Field}
+     * @var \eZ\Publish\API\Repository\Values\Content\Field[] $fields
      */
     public $fields = array();
 

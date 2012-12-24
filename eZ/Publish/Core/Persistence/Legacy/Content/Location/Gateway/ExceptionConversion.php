@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway,
-    eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
+use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 
 /**
  * Base class for location gateways.
@@ -40,8 +41,9 @@ class ExceptionConversion extends Gateway
      * We might want to cache this, since this method is used by about every
      * method in the location handler.
      *
-     * @optimze
+     * @todo optimize
      * @param mixed $nodeId
+     *
      * @return array
      */
     public function getBasicNodeData( $nodeId )
@@ -63,8 +65,9 @@ class ExceptionConversion extends Gateway
     /**
      * Returns an array with basic node data for the node with $remoteId
      *
-     * @optimze
+     * @todo optimize
      * @param mixed $remoteId
+     *
      * @return array
      */
     public function getBasicNodeDataByRemoteId( $remoteId )
@@ -89,6 +92,7 @@ class ExceptionConversion extends Gateway
      *
      * @param int $contentId
      * @param int $rootLocationId
+     *
      * @return array
      */
     public function loadLocationDataByContent( $contentId, $rootLocationId = null )
@@ -111,6 +115,7 @@ class ExceptionConversion extends Gateway
      * Find all content in the given subtree
      *
      * @param mixed $sourceId
+     *
      * @return array
      */
     public function getSubtreeContent( $sourceId )
@@ -133,6 +138,7 @@ class ExceptionConversion extends Gateway
      * Returns data for the first level children of the location identified by given $locationId
      *
      * @param mixed $locationId
+     *
      * @return array
      */
     public function getChildren( $locationId )
@@ -157,9 +163,10 @@ class ExceptionConversion extends Gateway
      * This query can likely be optimized to use some more advanced string
      * operations, which then depend on the respective database.
      *
-     * @optimize
+     * @todo optimize
      * @param string $fromPathString
      * @param string $toPathString
+     *
      * @return void
      */
     public function moveSubtreeNodes( $fromPathString, $toPathString )
@@ -209,6 +216,7 @@ class ExceptionConversion extends Gateway
      * @param int $oldParent
      * @param int $newParent
      * @param int $opcode
+     *
      * @return void
      */
     public function updateNodeAssignment( $contentObjectId, $oldParent, $newParent, $opcode )
@@ -234,6 +242,7 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $contentId
      * @param mixed $versionNo
+     *
      * @return void
      */
     public function createLocationsFromNodeAssignments( $contentId, $versionNo )
@@ -298,7 +307,7 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Sets a location to be unhidden, and self + children to visible unless a parent is hidding the tree.
+     * Sets a location to be unhidden, and self + children to visible unless a parent is hiding the tree.
      * If not make sure only children down to first hidden node is marked visible.
      *
      * @param string $pathString
@@ -327,6 +336,7 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $locationId1
      * @param mixed $locationId2
+     *
      * @return boolean
      */
     public function swap( $locationId1, $locationId2 )
@@ -350,6 +360,7 @@ class ExceptionConversion extends Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
      * @param array $parentNode
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     public function create( CreateStruct $createStruct, array $parentNode )
@@ -374,6 +385,7 @@ class ExceptionConversion extends Gateway
      * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
      * @param mixed $parentNodeId
      * @param int $type
+     *
      * @return void
      */
     public function createNodeAssignment( CreateStruct $createStruct, $parentNodeId, $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP )
@@ -421,6 +433,7 @@ class ExceptionConversion extends Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId
+     *
      * @return boolean
      */
     public function update( UpdateStruct $location, $locationId )
@@ -428,6 +441,31 @@ class ExceptionConversion extends Gateway
         try
         {
             return $this->innerGateway->update( $location, $locationId );
+        }
+        catch ( \ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( \PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
+     * Updates path identification string for given $locationId.
+     *
+     * @param mixed $locationId
+     * @param mixed $parentLocationId
+     * @param string $text
+     *
+     * @return void
+     */
+    public function updatePathIdentificationString( $locationId, $parentLocationId, $text )
+    {
+        try
+        {
+            return $this->innerGateway->updatePathIdentificationString( $locationId, $parentLocationId, $text );
         }
         catch ( \ezcDbException $e )
         {
@@ -523,6 +561,7 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $locationId
      * @param mixed $newParentId
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     public function untrashLocation( $locationId, $newParentId = null )
@@ -542,9 +581,10 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Load trash data specified by location ID
+     * Loads trash data specified by location ID
      *
      * @param mixed $locationId
+     *
      * @return array
      */
     public function loadTrashByLocation( $locationId )
@@ -594,6 +634,7 @@ class ExceptionConversion extends Gateway
      * @param int $offset
      * @param int $limit
      * @param array $sort
+     *
      * @return array
      */
     public function listTrashed( $offset, $limit, array $sort = null )
@@ -617,6 +658,7 @@ class ExceptionConversion extends Gateway
      * Will NOT remove associated content object nor attributes.
      *
      * @param int $id The trashed location Id
+     *
      * @return void
      */
     public function removeElementFromTrash( $id )
@@ -640,6 +682,7 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $pathString
      * @param mixed $sectionId
+     *
      * @return boolean
      */
     public function setSectionForSubtree( $pathString, $sectionId )
@@ -662,6 +705,7 @@ class ExceptionConversion extends Gateway
      * Returns how many locations given content object identified by $contentId has
      *
      * @param int $contentId
+     *
      * @return int
      */
     public function countLocationsByContentId( $contentId )

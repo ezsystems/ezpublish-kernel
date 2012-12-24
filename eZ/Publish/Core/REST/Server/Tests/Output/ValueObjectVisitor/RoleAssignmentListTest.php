@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -48,6 +49,7 @@ class RoleAssignmentListTest extends ValueObjectVisitorBaseTest
      * Test if result contains RoleAssignmentList element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRoleListElement( $result )
@@ -66,6 +68,7 @@ class RoleAssignmentListTest extends ValueObjectVisitorBaseTest
      * Test if result contains RoleAssignmentList element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRoleAssignmentListAttributes( $result )

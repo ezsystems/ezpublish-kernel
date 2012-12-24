@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\SignalSlot;
 
-use \eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
+use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
 
 /**
  * FieldTypeService class
@@ -60,6 +60,7 @@ class FieldTypeService implements FieldTypeServiceInterface
      * Returns the FieldType registered with the given identifier
      *
      * @param string $identifier
+     *
      * @return \eZ\Publish\API\Repository\FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *         if there is no FieldType registered with $identifier
@@ -73,7 +74,8 @@ class FieldTypeService implements FieldTypeServiceInterface
      * Returns if there is a FieldType registered under $identifier
      *
      * @param string $identifier
-     * @return bool
+     *
+     * @return boolean
      */
     public function hasFieldType( $identifier )
     {

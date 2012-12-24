@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor,
-    RuntimeException;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+use RuntimeException;
 
 /**
  * Parser for transformation specifications
@@ -57,6 +57,7 @@ class Parser
      * Construct
      *
      * @param string $installDir Base dir for rule loading
+     *
      * @return void
      */
     public function __construct( $installDir )
@@ -70,14 +71,17 @@ class Parser
             TransformationProcessor::T_WHITESPACE => '(\\A\\s+)',
             TransformationProcessor::T_SECTION => '(\\A(?P<section>[a-z0-9_-]+):\s*$)m',
             TransformationProcessor::T_MAP => '(\\A(?P<src>' . $character . ')\\s*=\\s*(?P<dest>' .  $character . '))',
-            TransformationProcessor::T_REPLACE => '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
+            TransformationProcessor::T_REPLACE =>
+                '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
                 '(?P<srcEnd>'   . $character . ')\\s*=\\s*' .
                 '(?P<dest>'    .  $character . '))',
-            TransformationProcessor::T_TRANSPOSE => '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
+            TransformationProcessor::T_TRANSPOSE =>
+                '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
                 '(?P<srcEnd>'   . $character . ')\\s*' .
                 '(?P<op>[+-])\\s*' .
                 '(?P<dest>' .     $character . '))',
-            TransformationProcessor::T_TRANSPOSE_MODULO => '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
+            TransformationProcessor::T_TRANSPOSE_MODULO =>
+                '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
                 '(?P<srcEnd>'   . $character . ')\\s*%\\s*' .
                 '(?P<modulo>'   . $character . ')\\s*' .
                 '(?P<op>[+-])\\s*' .
@@ -89,19 +93,23 @@ class Parser
      * Parse the specified transformation file into an AST
      *
      * @param string $file
+     *
      * @return array
      */
     public function parse( $file )
     {
-        return $this->parseString( file_get_contents(
-            $this->installDir . '/' . $file
-        ) );
+        return $this->parseString(
+            file_get_contents(
+                $this->installDir . '/' . $file
+            )
+        );
     }
 
     /**
      * Parse the given string into an AST
      *
      * @param string $string
+     *
      * @return array
      */
     public function parseString( $string )
@@ -144,6 +152,7 @@ class Parser
      * Returns an array of tokens
      *
      * @param string $string
+     *
      * @return array
      */
     protected function tokenize( $string )
@@ -185,6 +194,7 @@ class Parser
      * Filter out numeric array keys
      *
      * @param array $data
+     *
      * @return array
      */
     protected function filterValues( array $data )
@@ -200,4 +210,3 @@ class Parser
         return $data;
     }
 }
-

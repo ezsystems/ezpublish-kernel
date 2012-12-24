@@ -85,6 +85,7 @@ class RestListener implements EventSubscriberInterface
      * @param \Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent $event
      *
      * @throws \Exception
+     *
      * @return void
      */
     public function onKernelExceptionView( GetResponseForExceptionEvent $event )
@@ -103,7 +104,7 @@ class RestListener implements EventSubscriberInterface
 
     public function onKernelRequest( GetResponseEvent $event )
     {
-	    if ( $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
+        if ( $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
             return;
 
         if ( !$this->isRestRequest( $event->getRequest() ) )
@@ -112,7 +113,7 @@ class RestListener implements EventSubscriberInterface
         /**  @var \eZ\Publish\Core\REST\Server\Request $request */
         $request = $this->container->get( 'ezpublish_rest.request' );
         if ( !isset( $request->testUser ) )
-	        return;
+            return;
 
         /**  @var \eZ\Publish\API\Repository\Repository $repository */
         $repository = $this->container->get( 'ezpublish.api.repository' );
@@ -124,7 +125,8 @@ class RestListener implements EventSubscriberInterface
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return bool
+     *
+     * @return boolean
      */
     protected function isRestRequest( Request $request )
     {
@@ -132,7 +134,8 @@ class RestListener implements EventSubscriberInterface
     }
 
     /**
-     * @param $result
+     * @param mixed $result
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function visitResult( $result )

@@ -9,15 +9,15 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\TrashService;
-use \eZ\Publish\API\Repository\Values\Content\Query;
-use \eZ\Publish\API\Repository\Values\Content\Location;
-use \eZ\Publish\API\Repository\Values\Content\SearchResult;
-use \eZ\Publish\API\Repository\Values\Content\TrashItem;
+use eZ\Publish\API\Repository\TrashService;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\TrashItem;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\TrashItemStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\Content\TrashItemStub;
 
 /**
  * Trash service used for content/location trash handling.
@@ -56,10 +56,10 @@ class TrashServiceStub implements TrashService
      *
      * Note that $id is identical to original location, which has been previously trashed
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to read the trashed location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the trashed location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the location with the given id does not exist
      *
-     * @param integer $trashItemId
+     * @param int $trashItemId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
@@ -81,7 +81,7 @@ class TrashServiceStub implements TrashService
      *
      * Content is left untouched.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to trash the given location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to trash the given location
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
@@ -95,7 +95,7 @@ class TrashServiceStub implements TrashService
         }
 
         // Trash all children
-        foreach ( $this->locationService->__trashLocation( $location ) as $trashedLocation )
+        foreach ( $this->locationService->trashLocation( $location ) as $trashedLocation )
         {
             $this->trashItems[$trashedLocation->id] = $this->trashItemFromLocation( $trashedLocation );
         }
@@ -108,6 +108,7 @@ class TrashServiceStub implements TrashService
      * Creates a TrashItem for the given $location.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
     protected function trashItemFromLocation( Location $location )
@@ -118,7 +119,6 @@ class TrashServiceStub implements TrashService
                 'depth' => $location->depth,
                 'hidden' => $location->hidden,
                 'invisible' => $location->invisible,
-                'modifiedSubLocationDate' => $location->modifiedSubLocationDate,
                 'parentLocationId' => $location->parentLocationId,
                 'pathString' => $location->pathString,
                 'priority' => $location->priority,
@@ -150,7 +150,7 @@ class TrashServiceStub implements TrashService
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
-        $location = $this->locationService->__recoverLocation(
+        $location = $this->locationService->recoverLocation(
             $trashItem->location,
             $newParentLocation
         );
@@ -169,7 +169,7 @@ class TrashServiceStub implements TrashService
      * All locations contained in the trash will be removed. Content objects will be removed
      * if all locations of the content are gone.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to empty the trash
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to empty the trash
      */
     public function emptyTrash()
     {
@@ -186,7 +186,7 @@ class TrashServiceStub implements TrashService
      *
      * The corresponding content object will be removed
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to delete this trash item
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete this trash item
      *
      * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
      */
@@ -226,9 +226,13 @@ class TrashServiceStub implements TrashService
     /**
      * Internal helper method to emulate a rollback.
      *
+     * @access private
+     *
+     * @internal
+     *
      * @return void
      */
-    public function __rollback()
+    public function rollback()
     {
         $this->emptyTrash();
     }

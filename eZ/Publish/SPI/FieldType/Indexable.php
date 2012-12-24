@@ -23,12 +23,13 @@ interface Indexable
      * Get index data for field for search backend
      *
      * @param Field $field
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
      */
     public function getIndexData( Field $field );
 
     /**
-     * Get index fied types for search backend
+     * Get index field types for search backend
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Search\FieldType[]
      */

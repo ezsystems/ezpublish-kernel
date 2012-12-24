@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\SPI\Variation;
 
-use eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 /**
  * Interface for Variant services.

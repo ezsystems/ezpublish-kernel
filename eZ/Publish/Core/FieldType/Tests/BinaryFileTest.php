@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\BinaryFile\Type as BinaryFileType,
-    eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue;
+
+use eZ\Publish\Core\FieldType\BinaryFile\Type as BinaryFileType;
+use eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue;
 
 /**
  * @group fieldType
@@ -66,62 +67,72 @@ class BinaryFileTest extends BinaryBaseTest
             ),
             array(
                 __FILE__,
-                new BinaryFileValue( array(
-                    'path' => __FILE__,
-                    'fileName' => basename( __FILE__ ),
-                    'fileSize' => filesize( __FILE__ ),
-                    'downloadCount' => 0,
-                    'mimeType' => 'text/plain',
-                ) )
+                new BinaryFileValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
+                        'downloadCount' => 0,
+                        'mimeType' => 'text/plain',
+                    )
+                )
             ),
             array(
                 array( 'path' => __FILE__ ),
-                new BinaryFileValue( array(
-                    'path' => __FILE__,
-                    'fileName' => basename( __FILE__ ),
-                    'fileSize' => filesize( __FILE__ ),
-                    'downloadCount' => 0,
-                    'mimeType' => 'text/plain',
-                ) )
+                new BinaryFileValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
+                        'downloadCount' => 0,
+                        'mimeType' => 'text/plain',
+                    )
+                )
             ),
             array(
                 array(
                     'path' => __FILE__,
                     'fileSize' => 23,
                 ),
-                new BinaryFileValue( array(
-                    'path' => __FILE__,
-                    'fileName' => basename( __FILE__ ),
-                    'fileSize' => 23,
-                    'downloadCount' => 0,
-                    'mimeType' => 'text/plain',
-                ) )
+                new BinaryFileValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => basename( __FILE__ ),
+                        'fileSize' => 23,
+                        'downloadCount' => 0,
+                        'mimeType' => 'text/plain',
+                    )
+                )
             ),
             array(
                 array(
                     'path' => __FILE__,
                     'downloadCount' => 42,
                 ),
-                new BinaryFileValue( array(
-                    'path' => __FILE__,
-                    'fileName' => basename( __FILE__ ),
-                    'fileSize' => filesize( __FILE__ ),
-                    'downloadCount' => 42,
-                    'mimeType' => 'text/plain',
-                ) )
+                new BinaryFileValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
+                        'downloadCount' => 42,
+                        'mimeType' => 'text/plain',
+                    )
+                )
             ),
             array(
                 array(
                     'path' => __FILE__,
                     'mimeType' => 'application/text+php',
                 ),
-                new BinaryFileValue( array(
-                    'path' => __FILE__,
-                    'fileName' => basename( __FILE__ ),
-                    'fileSize' => filesize( __FILE__ ),
-                    'downloadCount' => 0,
-                    'mimeType' => 'application/text+php',
-                ) )
+                new BinaryFileValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
+                        'downloadCount' => 0,
+                        'mimeType' => 'application/text+php',
+                    )
+                )
             ),
         );
     }
@@ -169,13 +180,15 @@ class BinaryFileTest extends BinaryBaseTest
                 null
             ),
             array(
-                new BinaryFileValue( array(
-                    'path' => 'some/file/here',
-                    'fileName' => 'sindelfingen.jpg',
-                    'fileSize' => 2342,
-                    'downloadCount' => 0,
-                    'mimeType' => 'image/jpeg',
-                ) ),
+                new BinaryFileValue(
+                    array(
+                        'path' => 'some/file/here',
+                        'fileName' => 'sindelfingen.jpg',
+                        'fileSize' => 2342,
+                        'downloadCount' => 0,
+                        'mimeType' => 'image/jpeg',
+                    )
+                ),
                 array(
                     'path' => 'some/file/here',
                     'fileName' => 'sindelfingen.jpg',
@@ -238,15 +251,17 @@ class BinaryFileTest extends BinaryBaseTest
                     'downloadCount' => 0,
                     'mimeType' => 'image/jpeg',
                 ),
-                new BinaryFileValue( array(
-                    'path' => 'some/file/here',
-                    'fileName' => 'sindelfingen.jpg',
-                    'fileSize' => 2342,
-                    'downloadCount' => 0,
-                    'mimeType' => 'image/jpeg',
-                ) )
+                new BinaryFileValue(
+                    array(
+                        'path' => 'some/file/here',
+                        'fileName' => 'sindelfingen.jpg',
+                        'fileSize' => 2342,
+                        'downloadCount' => 0,
+                        'mimeType' => 'image/jpeg',
+                    )
+                )
             ),
-            // TODO: Provide upload struct (via REST)!
+            // @todo: Provide upload struct (via REST)!
         );
     }
 }

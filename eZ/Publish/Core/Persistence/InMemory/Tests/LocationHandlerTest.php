@@ -8,13 +8,14 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
-use eZ\Publish\SPI\Persistence\Content\Location as LocationValue,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\CreateStruct as ContentCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\API\Repository\Values\Content\Location;
+
+use eZ\Publish\SPI\Persistence\Content\Location as LocationValue;
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\CreateStruct as ContentCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
  * Test case for Location Handler using in memory storage.
@@ -74,7 +75,7 @@ class LocationHandlerTest extends HandlerTest
         parent::setUp();
 
         $this->lastLocationId = 2;
-        for ( $i = 0 ; $i < $this->entriesGenerated; ++$i )
+        for ( $i = 0; $i < $this->entriesGenerated; ++$i )
         {
             $this->contents[] = $content = $this->persistenceHandler->contentHandler()->create(
                 new ContentCreateStruct(
@@ -285,7 +286,7 @@ class LocationHandlerTest extends HandlerTest
         // Copy the last location created in setUp
         $newLocation = $this->persistenceHandler->locationHandler()->copySubtree( $this->lastLocationId, 2 );
         $this->assertTrue( $newLocation instanceof LocationValue );
-        $this->assertEquals( $this->lastLocationId + 1 , $newLocation->id );
+        $this->assertEquals( $this->lastLocationId + 1, $newLocation->id );
         $this->assertEquals( $this->lastContentId + 1, $newLocation->contentId );
         $this->assertEquals( 2, $newLocation->depth );
         $this->assertEquals( Location::SORT_FIELD_NAME, $newLocation->sortField );
@@ -312,7 +313,7 @@ class LocationHandlerTest extends HandlerTest
         // Copy the grand parent of the last location created in setUp
         $newLocation = $this->persistenceHandler->locationHandler()->copySubtree( $this->lastLocationId - 2, 2 );
         $this->assertTrue( $newLocation instanceof LocationValue );
-        $this->assertEquals( $this->lastLocationId + 1 , $newLocation->id );
+        $this->assertEquals( $this->lastLocationId + 1, $newLocation->id );
         $this->assertEquals( $this->lastContentId + 1, $newLocation->contentId );
         $this->assertEquals( 2, $newLocation->depth );
         $this->assertEquals( Location::SORT_FIELD_NAME, $newLocation->sortField );
@@ -326,15 +327,7 @@ class LocationHandlerTest extends HandlerTest
             )->locations[0] as $property => $value
         )
         {
-            switch ( $property )
-            {
-                case 'modifiedSubLocation' :
-                    self::assertGreaterThanOrEqual( $newLocation->$property, $value, "Location does not match" );
-                    break;
-
-                default:
-                    self::assertEquals( $newLocation->$property, $value, "Location does not match" );
-            }
+            self::assertEquals( $newLocation->$property, $value, "Location does not match" );
         }
 
         // Verifying the direct child is present
@@ -345,15 +338,7 @@ class LocationHandlerTest extends HandlerTest
             )->locations[0] as $property => $value
         )
         {
-            switch ( $property )
-            {
-                case 'modifiedSubLocation' :
-                    self::assertGreaterThanOrEqual( $loc->$property, $value, "Location does not match" );
-                    break;
-
-                default:
-                    self::assertEquals( $loc->$property, $value, "Location does not match" );
-            }
+            self::assertEquals( $loc->$property, $value, "Location does not match" );
         }
         unset( $loc );
 
@@ -365,15 +350,7 @@ class LocationHandlerTest extends HandlerTest
             )->locations[0] as $property => $value
         )
         {
-            switch ( $property )
-            {
-                case 'modifiedSubLocation' :
-                    self::assertGreaterThanOrEqual( $loc->$property, $value, "Location does not match" );
-                    break;
-
-                default:
-                    self::assertEquals( $loc->$property, $value, "Location does not match" );
-            }
+            self::assertEquals( $loc->$property, $value, "Location does not match" );
         }*/
     }
 

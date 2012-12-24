@@ -32,6 +32,7 @@ interface TranslationService
      *
      * @param Translation $translation
      * @param string $locale
+     *
      * @return string
      */
     public function translate( Translation $translation, $locale );
@@ -44,6 +45,7 @@ interface TranslationService
      *
      * @param string $translation
      * @param string $locale
+     *
      * @return string
      */
     public function translateString( $translation, $locale );

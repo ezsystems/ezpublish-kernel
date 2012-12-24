@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\Content;
 
-use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\Content\ContentInfo}
@@ -26,7 +26,7 @@ class ContentInfoStub extends ContentInfo
     protected $repository;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $contentTypeId;
 
@@ -52,10 +52,15 @@ class ContentInfoStub extends ContentInfo
     /**
      * Internal helper method to modify the $mainLocationId property
      *
+     * @access private
+     *
+     * @internal
+     *
      * @param mixed $mainLocationId
+     *
      * @return void
      */
-    public function __setMainLocationId( $mainLocationId )
+    public function setMainLocationId( $mainLocationId )
     {
         $this->mainLocationId = $mainLocationId;
     }

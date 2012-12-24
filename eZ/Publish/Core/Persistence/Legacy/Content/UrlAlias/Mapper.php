@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
-use eZ\Publish\SPI\Persistence\Content\UrlAlias,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 
 /**
  * UrlAlias Mapper
@@ -37,7 +37,7 @@ class Mapper
     /**
      * Creates a UrlAlias object from database row data
      *
-     * @param $data
+     * @param mixed[] $data
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
@@ -80,8 +80,6 @@ class Mapper
     }
 
     /**
-     *
-     *
      * @throws \RuntimeException
      *
      * @param string $action
@@ -113,13 +111,13 @@ class Mapper
                     break;
 
                 default:
-                    // @TODO log message
+                    // @todo log message
                     throw new \RuntimeException( "Action type '{$actionType}' is unknown" );
             }
         }
         else
         {
-            // @TODO log message
+            // @todo log message
             throw new \RuntimeException( "Action '{$action}' is not valid" );
         }
 
@@ -127,8 +125,6 @@ class Mapper
     }
 
     /**
-     *
-     *
      * @param array $pathData
      *
      * @return array
@@ -151,8 +147,6 @@ class Mapper
     }
 
     /**
-     *
-     *
      * @param array $pathElementData
      * @param array $row
      *
@@ -169,7 +163,7 @@ class Mapper
                 $pathElementData["translations"][$languageCode] = $row["text"];
             }
         }
-        elseif ( $pathElementData["always-available"] )
+        else if ( $pathElementData["always-available"] )
         {
             // NOP entry, lang_mask == 1
             $pathElementData["translations"]["always-available"] = $row["text"];

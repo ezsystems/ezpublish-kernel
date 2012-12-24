@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper,
-    eZ\Publish\SPI\Persistence\Content\Location\Trashed;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper;
+use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 
 /**
  * Test case for Location\Mapper
@@ -55,7 +56,6 @@ class LocationHandlerTest extends TestCase
         'parentId' => 2,
         'pathIdentificationString' => 'solutions',
         'pathString' => '/1/2/77/',
-        'modifiedSubLocation' => 1311065017,
         'mainLocationId' => 77,
         'depth' => 2,
         'sortField' => 2,

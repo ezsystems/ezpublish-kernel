@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content\Type;
-use eZ\Publish\SPI\Persistence\Content\Type,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
+
+use eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 
 /**
  */
@@ -18,6 +19,7 @@ interface Handler
 {
     /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct $group
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
      */
     public function createGroup( GroupCreateStruct $group );
@@ -29,6 +31,7 @@ interface Handler
 
     /**
      * @param mixed $groupId
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type group contains types
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type group with id is not found
      */
@@ -36,19 +39,23 @@ interface Handler
 
     /**
      * @param mixed $groupId
-     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type group with id is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
      */
     public function loadGroup( $groupId );
 
     /**
-     * Load Type Group by identifer
+     * Loads Type Group by identifier
      *
      * Legacy note: Uses name for identifier.
      *
      * @param string $identifier
-     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type group with id is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
      */
     public function loadGroupByIdentifier( $identifier );
 
@@ -60,35 +67,42 @@ interface Handler
     /**
      * @param mixed $groupId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Type[]
      */
     public function loadContentTypes( $groupId, $status = Type::STATUS_DEFINED );
 
     /**
-     * Load a content type by id and status
+     * Loads a content type by id and status
      *
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type with provided status is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     public function load( $contentTypeId, $status = Type::STATUS_DEFINED );
 
     /**
-     * Load a (defined) content type by identifier
+     * Loads a (defined) content type by identifier
      *
      * @param string $identifier
-     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If defined type is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     public function loadByIdentifier( $identifier );
 
     /**
-     * Load a (defined) content type by remote id
+     * Loads a (defined) content type by remote id
      *
      * @param mixed $remoteId
-     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If defined type is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     public function loadByRemoteId( $remoteId );
 
@@ -109,6 +123,7 @@ interface Handler
     /**
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is defined and still has content
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type is not found
      */
@@ -121,8 +136,10 @@ interface Handler
      *
      * @param mixed $modifierId
      * @param mixed $contentTypeId
-     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type with defined status is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     public function createDraft( $modifierId, $contentTypeId );
 
@@ -135,8 +152,10 @@ interface Handler
      * @param mixed $userId
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user or type with provided status is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     public function copy( $userId, $contentTypeId, $status );
 
@@ -146,6 +165,7 @@ interface Handler
      * @param mixed $groupId
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or type with provided status is not found
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If $groupId is last group on $contentTypeId or
      *                                                                 not a group assigned to type
@@ -158,6 +178,7 @@ interface Handler
      * @param mixed $groupId
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or type with provided status is not found
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is already part of group
      */
@@ -185,9 +206,10 @@ interface Handler
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type is not found
-     * @todo Add FieldDefintion\CreateStruct?
+     * @todo Add FieldDefinition\CreateStruct?
      */
     public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition );
 
@@ -201,8 +223,10 @@ interface Handler
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param mixed $fieldDefinitionId
-     * @return void
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If field is not found
+     *
+     * @return void
      */
     public function removeFieldDefinition( $contentTypeId, $status, $fieldDefinitionId );
 
@@ -217,9 +241,10 @@ interface Handler
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     *
      * @return void
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If field is not found
-     * @todo Add FieldDefintion\UpdateStruct?
+     * @todo Add FieldDefinition\UpdateStruct?
      */
     public function updateFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition );
 
@@ -234,8 +259,10 @@ interface Handler
      * Flags the content type as updated.
      *
      * @param mixed $contentTypeId
-     * @return void
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type with $contentTypeId and Type::STATUS_DRAFT is not found
+     *
+     * @return void
      */
     public function publish( $contentTypeId );
 }

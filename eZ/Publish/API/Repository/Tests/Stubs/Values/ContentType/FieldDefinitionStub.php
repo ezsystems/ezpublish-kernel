@@ -20,9 +20,9 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
  * @property-read int $id the id of the field definition
  * @property-read string $identifier the identifier of the field definition
  * @property-read string $fieldGroup the field group name
- * @property-read int $position the position of the field definition in the content typr
+ * @property-read int $position the position of the field definition in the content type
  * @property-read string $fieldType String identifier of the field type
- * @property-read boolean $isTranslatable indicatats if fields of this definition are translatable
+ * @property-read boolean $isTranslatable indicates if fields of this definition are translatable
  * @property-read boolean $isRequired indicates if this field is required in the content object
  * @property-read boolean $isSearchable indicates if the field is searchable
  * @property-read boolean $isInfoCollector indicates if this field is used for information collection
@@ -70,7 +70,7 @@ class FieldDefinitionStub extends FieldDefinition
     // protected $fieldGroup;
 
     /**
-     * the position of the field definition in the content typr
+     * the position of the field definition in the content type
      *
      * @var int
      */
@@ -112,7 +112,7 @@ class FieldDefinitionStub extends FieldDefinition
     /**
      * Contains the validatorConfiguration of this field definition supported by the field type#
      *
-     * @var array an array of {@link Validator}
+     * @var \eZ\Publish\Core\FieldType\Validator[]
      */
     protected $validatorConfiguration;
 
@@ -164,10 +164,11 @@ class FieldDefinitionStub extends FieldDefinition
     }
 
     /**
+     * This method returns the name of the field in the given language
      *
-     * this method returns the name of the field in the given language
      * @param string $languageCode
-     * @return string the name for the given language or null if none existis.
+     *
+     * @return string the name for the given language or null if none exists.
      */
     public function getName( $languageCode )
     {
@@ -175,7 +176,7 @@ class FieldDefinitionStub extends FieldDefinition
     }
 
     /**
-     *  This method returns the human readable description of the field
+     * This method returns the human readable description of the field
      *
      * The structure of this field is:
      * <code>
@@ -190,9 +191,11 @@ class FieldDefinitionStub extends FieldDefinition
     }
 
     /**
-     * this method returns the name of the field in the given language
+     * This method returns the name of the field in the given language
+     *
      * @param string $languageCode
-     * @return string the description for the given language or null if none existis.
+     *
+     * @return string the description for the given language or null if none exists.
      */
     public function getDescription( $languageCode )
     {
@@ -200,7 +203,7 @@ class FieldDefinitionStub extends FieldDefinition
     }
 
     /**
-     * this method returns the validator configuration of this field definition supported by the field type
+     * This method returns the validator configuration of this field definition supported by the field type
      *
      * @return mixed
      */
@@ -210,7 +213,7 @@ class FieldDefinitionStub extends FieldDefinition
     }
 
     /**
-     * this method returns settings for the field definition supported by the field type
+     * This method returns settings for the field definition supported by the field type
      *
      * @return mixed
      */

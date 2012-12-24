@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlWildcard;
 
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper,
-    eZ\Publish\SPI\Persistence\Content\UrlWildcard;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper;
+use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 
 /**
  * Test case for UrlWildcard Handler

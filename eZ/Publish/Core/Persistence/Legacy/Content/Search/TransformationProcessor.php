@@ -61,7 +61,7 @@ abstract class TransformationProcessor
     }
 
     /**
-     * Load rules
+     * Loads rules
      *
      * @return array
      */
@@ -75,6 +75,7 @@ abstract class TransformationProcessor
      *
      * @param string $string
      * @param array $ruleNames
+     *
      * @return string
      */
     public function transform( $string, array $ruleNames = null )
@@ -85,7 +86,7 @@ abstract class TransformationProcessor
         {
             if ( !isset( $rules[$ruleName] ) )
             {
-                // Just continue on unknow rules, or should we throw an error
+                // Just continue on unknown rules, or should we throw an error
                 // here?
                 continue;
             }

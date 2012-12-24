@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
+
 use eZ\Publish\API\Repository\Tests\SetupFactory;
 use eZ\Publish\API\Repository\Tests\IdManager;
 use eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub;
@@ -21,7 +22,7 @@ class Memory extends SetupFactory
     /**
      * Returns a configured repository for testing.
      *
-     * @param bool $initializeFromScratch if the back end should be initialized
+     * @param boolean $initializeFromScratch if the back end should be initialized
      *                                    from scratch or re-used
      * @return \eZ\Publish\API\Repository\Repository
      */
@@ -29,7 +30,7 @@ class Memory extends SetupFactory
     {
         $repository = new RepositoryStub(
             __DIR__ . '/../_fixtures',
-            ( isset( $_ENV['backendVersion'] ) ? (int) $_ENV['backendVersion'] : 5 )
+            ( isset( $_ENV['backendVersion'] ) ? (int)$_ENV['backendVersion'] : 5 )
         );
 
         $repository->setCurrentUser(
@@ -61,8 +62,10 @@ class Memory extends SetupFactory
      * Returns a config value for $configKey.
      *
      * @param string $configKey
-     * @return mixed
+     *
      * @throws Exception if $configKey could not be found.
+     *
+     * @return mixed
      */
     public function getConfigValue( $configKey )
     {

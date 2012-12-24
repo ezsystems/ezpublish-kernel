@@ -198,7 +198,7 @@ class ObjectStateService implements ObjectStateServiceInterface
     /**
      * Loads an object state
      *
-     * @param $stateId
+     * @param mixed $stateId
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the state was not found
      *
@@ -332,6 +332,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      * Instantiates a new Object State Group Create Struct and sets $identified in it.
      *
      * @param string $identifier
+     *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct
      */
     public function newObjectStateGroupCreateStruct( $identifier )
@@ -353,6 +354,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      * Instantiates a new Object State Create Struct and sets $identifier in it.
      *
      * @param string $identifier
+     *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct
      */
     public function newObjectStateCreateStruct( $identifier )

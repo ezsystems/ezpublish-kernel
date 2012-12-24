@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\API\Repository\Values\ObjectState;
@@ -53,6 +54,7 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains names element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsNamesElement( $result )
@@ -74,6 +76,7 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains descriptions element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsDescriptionsElement( $result )
@@ -95,6 +98,7 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains identifier value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsIdentifierValueElement( $result )
@@ -103,7 +107,6 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'identifier',
                 'content'  => 'some-state',
-
             ),
             $result,
             'Invalid or non-existing <ObjectStateCreate> identifier value element.',
@@ -115,6 +118,7 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains priority value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPriorityValueElement( $result )
@@ -123,7 +127,6 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'priority',
                 'content'  => '0',
-
             ),
             $result,
             'Invalid or non-existing <ObjectStateCreate> priority value element.',
@@ -135,6 +138,7 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains defaultLanguageCode value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsDefaultLanguageCodeValueElement( $result )
@@ -143,7 +147,6 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'defaultLanguageCode',
                 'content'  => 'eng-GB',
-
             ),
             $result,
             'Invalid or non-existing <ObjectStateCreate> defaultLanguageCode value element.',

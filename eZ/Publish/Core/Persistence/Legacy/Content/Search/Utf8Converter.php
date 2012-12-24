@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
 use RuntimeException;
 
 /**
- * Class for converting UTF-8 charecters to their decimal code points and vice
+ * Class for converting UTF-8 characters to their decimal code points and vice
  * versa.
  *
  * The code originates from the eZUTF8Codec class available in lib/ezi18n/classes/ezutf8codec.php
@@ -23,6 +23,7 @@ class Utf8Converter
      * Convert character code to UTF-8 character
      *
      * @param int $charCode
+     *
      * @return string
      */
     public static function toUTF8Character( $charCode )
@@ -83,6 +84,7 @@ class Utf8Converter
      * Convert a single UTF-8 character into its decimal code point
      *
      * @param string $char
+     *
      * @return int
      */
     public static function toUnicodeCodepoint( $char )

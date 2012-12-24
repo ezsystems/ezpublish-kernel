@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\SPI\Persistence\Content\ObjectState,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\SPI\Persistence\Content\ObjectState;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 
 /**
  * ObjectState ezcDatabase Gateway
@@ -49,6 +50,7 @@ class EzcDatabase extends Gateway
      * Loads data for an object state
      *
      * @param mixed $stateId
+     *
      * @return array
      */
     public function loadObjectStateData( $stateId )
@@ -72,6 +74,7 @@ class EzcDatabase extends Gateway
      *
      * @param string $identifier
      * @param mixed $groupId
+     *
      * @return array
      */
     public function loadObjectStateDataByIdentifier( $identifier, $groupId )
@@ -100,6 +103,7 @@ class EzcDatabase extends Gateway
      * Loads data for all object states belonging to group with $groupId ID
      *
      * @param mixed $groupId
+     *
      * @return array
      */
     public function loadObjectStateListData( $groupId )
@@ -128,6 +132,7 @@ class EzcDatabase extends Gateway
      * Loads data for an object state group
      *
      * @param mixed $groupId
+     *
      * @return array
      */
     public function loadObjectStateGroupData( $groupId )
@@ -150,6 +155,7 @@ class EzcDatabase extends Gateway
      * Loads data for an object state group by identifier
      *
      * @param string $identifier
+     *
      * @return array
      */
     public function loadObjectStateGroupDataByIdentifier( $identifier )
@@ -173,6 +179,7 @@ class EzcDatabase extends Gateway
      *
      * @param int $offset
      * @param int $limit
+     *
      * @return array
      */
     public function loadObjectStateGroupListData( $offset, $limit )
@@ -217,8 +224,8 @@ class EzcDatabase extends Gateway
 
         $maxPriority = $statement->fetchColumn();
 
-        $objectState->priority = $maxPriority === null ? 0 : (int) $maxPriority + 1;
-        $objectState->groupId = (int) $groupId;
+        $objectState->priority = $maxPriority === null ? 0 : (int)$maxPriority + 1;
+        $objectState->groupId = (int)$groupId;
 
         $query = $this->dbHandler->createInsertQuery();
         $query->insertInto(
@@ -248,7 +255,7 @@ class EzcDatabase extends Gateway
 
         $query->prepare()->execute();
 
-        $objectState->id = (int) $this->dbHandler->lastInsertId(
+        $objectState->id = (int)$this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName( 'ezcobj_state', 'id' )
         );
 
@@ -398,7 +405,7 @@ class EzcDatabase extends Gateway
 
         $query->prepare()->execute();
 
-        $objectStateGroup->id = (int) $this->dbHandler->lastInsertId(
+        $objectStateGroup->id = (int)$this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName( 'ezcobj_state_group', 'id' )
         );
 
@@ -586,6 +593,7 @@ class EzcDatabase extends Gateway
      * Returns the number of objects which are in this state
      *
      * @param mixed $stateId
+     *
      * @return int
      */
     public function getContentCount( $stateId )
@@ -607,7 +615,7 @@ class EzcDatabase extends Gateway
 
         $count = $statement->fetchColumn();
 
-        return $count !== null ? (int) $count : 0;
+        return $count !== null ? (int)$count : 0;
     }
 
     /**
@@ -816,6 +824,7 @@ class EzcDatabase extends Gateway
      * Also sets always available bit
      *
      * @param array $languageCodes
+     *
      * @return int
      */
     protected function generateLanguageMask( array $languageCodes )

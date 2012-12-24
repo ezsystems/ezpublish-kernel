@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor,
-    eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
  * Visits the sortClause tree into a Solr query
@@ -21,7 +21,8 @@ class LocationPathString extends SortClauseVisitor
      * CHeck if visitor is applicable to current sortClause
      *
      * @param SortClause $sortClause
-     * @return bool
+     *
+     * @return boolean
      */
     public function canVisit( SortClause $sortClause )
     {
@@ -32,6 +33,7 @@ class LocationPathString extends SortClauseVisitor
      * Map field value to a proper Solr representation
      *
      * @param SortClause $sortClause
+     *
      * @return void
      */
     public function visit( SortClause $sortClause )

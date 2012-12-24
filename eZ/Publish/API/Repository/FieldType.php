@@ -14,16 +14,25 @@ namespace eZ\Publish\API\Repository;
  * Interface that FieldTypes expose to the public API
  *
  * @package eZ\Publish\API\Repository
- * @see eZ\Publish\API\Repository\FieldType
+ * @see eZ\Publish\SPI\FieldType\FieldType For implementer doc
  */
 interface FieldType
 {
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
     public function getFieldTypeIdentifier();
+
+    /**
+     * Returns a human readable string representation from the given $value
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
+    public function getName( $value );
 
     /**
      * Returns a schema for the settings expected by the FieldType
@@ -33,7 +42,7 @@ interface FieldType
      *
      * Explanation: There are no possible generic schemas for defining settings
      * input, which is why no schema for the return value of this method is
-     * defined. It is up to the implementor to define and document a schema for
+     * defined. It is up to the implementer to define and document a schema for
      * the return value and document it. In addition, it is necessary that all
      * consumers of this interface (e.g. Public API, REST API, GUIs, ...)
      * provide plugin mechanisms to hook adapters for the specific FieldType
@@ -54,7 +63,7 @@ interface FieldType
      *
      * Explanation: There are no possible generic schemas for defining settings
      * input, which is why no schema for the return value of this method is
-     * defined. It is up to the implementor to define and document a schema for
+     * defined. It is up to the implementer to define and document a schema for
      * the return value and document it. In addition, it is necessary that all
      * consumers of this interface (e.g. Public API, REST API, GUIs, ...)
      * provide plugin mechanisms to hook adapters for the specific FieldType
@@ -88,23 +97,14 @@ interface FieldType
     public function getValidatorConfigurationSchema();
 
     /**
-     * Returns a human readable string representation from the given $value
-     *
-     * @param mixed $value
-     * @return string
-     */
-    public function getName( $value );
-
-    /**
      * Indicates if the field type supports indexing and sort keys for searching
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable();
 
     /**
-     * Returns the fallback default value of field type when no such default
-     * value is provided in the field definition in content types.
+     * Returns the empty value for this field type.
      *
      * @return mixed
      */
@@ -113,6 +113,8 @@ interface FieldType
     /**
      * Converts an $hash to the Value defined by the field type
      *
+     * This is the reverse operation to {@link toHash()}.
+     *
      * @param mixed $hash
      *
      * @return mixed
@@ -120,7 +122,7 @@ interface FieldType
     public function fromHash( $hash );
 
     /**
-     * Converts a Value to a hash
+     * Converts the given $value into a plain hash format
      *
      * @param mixed $value
      *
@@ -132,6 +134,7 @@ interface FieldType
      * Converts the given $fieldSettings to a simple hash format
      *
      * @param mixed $fieldSettings
+     *
      * @return array|hash|scalar|null
      */
     public function fieldSettingsToHash( $fieldSettings );
@@ -142,6 +145,7 @@ interface FieldType
      * This is the reverse operation of {@link fieldSettingsToHash()}.
      *
      * @param array|hash|scalar|null $fieldSettingsHash
+     *
      * @return mixed
      */
     public function fieldSettingsFromHash( $fieldSettingsHash );
@@ -150,6 +154,7 @@ interface FieldType
      * Converts the given $validatorConfiguration to a simple hash format
      *
      * @param mixed $validatorConfiguration
+     *
      * @return array|hash|scalar|null
      */
     public function validatorConfigurationToHash( $validatorConfiguration );
@@ -159,6 +164,7 @@ interface FieldType
      * configuration of the type
      *
      * @param array|hash|scalar|null $validatorConfigurationHash
+     *
      * @return mixed
      */
     public function validatorConfigurationFromHash( $validatorConfigurationHash );

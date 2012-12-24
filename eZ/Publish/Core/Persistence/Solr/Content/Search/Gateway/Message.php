@@ -15,14 +15,14 @@ namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway;
 class Message
 {
     /**
-     * Reponse headers
+     * Response headers
      *
      * @var array
      */
     public $headers;
 
     /**
-     * Reponse body
+     * Response body
      *
      * @var string
      */
@@ -33,6 +33,7 @@ class Message
      *
      * @param array $headers
      * @param string $body
+     *
      * @return void
      */
     public function __construct( array $headers = array(), $body = '' )

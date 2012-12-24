@@ -9,17 +9,16 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search;
 
-use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler,
-    eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler,
-    eZ\Publish\SPI\Persistence\Content\Search\Field,
-    eZ\Publish\SPI\Persistence\Content\Search\FieldType,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query,
-
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
+use eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler;
+use eZ\Publish\SPI\Persistence\Content\Search\Field;
+use eZ\Publish\SPI\Persistence\Content\Search\FieldType;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -88,13 +87,13 @@ class Handler extends BaseSearchHandler
         $this->objectStateHandler = $objectStateHandler;
     }
 
-     /**
-     * finds content objects for the given query.
+    /**
+     * Finds content objects for the given query.
      *
-     * @TODO define structs for the field filters
+     * @todo define structs for the field filters
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array  $fieldFilters - a map of filters for the returned fields.
+     * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
@@ -110,9 +109,9 @@ class Handler extends BaseSearchHandler
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
-     * @TODO define structs for the field filters
+     * @todo define structs for the field filters
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array  $fieldFilters - a map of filters for the returned fields.
+     * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
@@ -144,13 +143,14 @@ class Handler extends BaseSearchHandler
      */
     public function suggest( $prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null )
     {
-        throw new \Exception( "@TODO: Not implemented yet." );
+        throw new \Exception( "@todo: Not implemented yet." );
     }
 
     /**
      * Indexes a content object
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
+     *
      * @return void
      */
     public function indexContent( Content $content )
@@ -165,6 +165,7 @@ class Handler extends BaseSearchHandler
      * A document is an array of fields
      *
      * @param Content $content
+     *
      * @return array
      */
     protected function mapContent( Content $content )
@@ -325,11 +326,10 @@ class Handler extends BaseSearchHandler
         return $document;
     }
 
-
     /**
      * Purges all contents from the index
      *
-     * @TODO: Make this public API?
+     * @todo: Make this public API?
      *
      * @return void
      */

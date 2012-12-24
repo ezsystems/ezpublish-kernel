@@ -18,12 +18,13 @@ class eZPublish extends Pattern
      * Map of URL types to their URL patterns
      *
      * @var array
-     * @TODO: Add sensible missing names
+     * @todo: Add sensible missing names
      */
     protected $map = array(
         'root'                      => '/',
         'locations'                 => '/content/locations',
         'locationByRemote'          => '/content/locations?remoteId={location}',
+        'locationById'              => '/content/locations?id={location}',
         'locationChildren'          => '/content/locations{&location}/children',
         'locationUrlAliases'        => '/content/locations{&location}/urlaliases',
         'location'                  => '/content/locations{&location}',

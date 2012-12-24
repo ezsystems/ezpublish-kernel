@@ -9,8 +9,8 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration;
 
-use Symfony\Component\Config\Definition\Builder\NodeBuilder,
-    Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\Definition\Builder\NodeBuilder;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 interface Parser
 {
@@ -18,6 +18,7 @@ interface Parser
      * Adds semantic configuration definition.
      *
      * @param \Symfony\Component\Config\Definition\Builder\NodeBuilder $nodeBuilder Node just under ezpublish.system.<siteaccess>
+     *
      * @return void
      */
     public function addSemanticConfig( NodeBuilder $nodeBuilder );
@@ -27,6 +28,7 @@ interface Parser
      *
      * @param array $config
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
      * @return void
      */
     public function registerInternalConfig( array $config, ContainerBuilder $container );

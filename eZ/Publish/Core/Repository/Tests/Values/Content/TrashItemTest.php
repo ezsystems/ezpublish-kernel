@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Values\Content;
-use eZ\Publish\Core\Repository\Values\Content\TrashItem,
-    PHPUnit_Framework_TestCase;
+
+use eZ\Publish\Core\Repository\Values\Content\TrashItem;
+use PHPUnit_Framework_TestCase;
 
 /**
  *
@@ -17,7 +18,6 @@ use eZ\Publish\Core\Repository\Values\Content\TrashItem,
 class TrashItemTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \eZ\Publish\Core\Repository\Values\Content\TrashItem::getIterator
      * @covers \eZ\Publish\Core\Repository\Values\Content\TrashItem::getProperties
      */
     public function testObjectProperties()
@@ -35,7 +35,6 @@ class TrashItemTest extends PHPUnit_Framework_TestCase
         self::assertContains( 'parentLocationId', $properties, 'Property not found' );
         self::assertContains( 'pathString', $properties, 'Property not found' );
         self::assertContains( 'path', $properties, 'Property not found' );
-        self::assertContains( 'modifiedSubLocationDate', $properties, 'Property not found' );
         self::assertContains( 'depth', $properties, 'Property not found' );
         self::assertContains( 'sortField', $properties, 'Property not found' );
         self::assertContains( 'sortOrder', $properties, 'Property not found' );

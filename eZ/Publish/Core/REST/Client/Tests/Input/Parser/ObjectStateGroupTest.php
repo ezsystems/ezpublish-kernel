@@ -65,6 +65,7 @@ class ObjectStateGroupTest extends BaseTest
      * Tests that the resulting ObjectStateGroup is in fact an instance of ObjectStateGroup class
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $result
+     *
      * @depends testParse
      */
     public function testResultIsObjectStateGroup( $result )
@@ -79,6 +80,7 @@ class ObjectStateGroupTest extends BaseTest
      * Tests that the resulting ObjectStateGroup contains the ID
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $result
+     *
      * @depends testParse
      */
     public function testResultContainsId( $result )
@@ -93,6 +95,7 @@ class ObjectStateGroupTest extends BaseTest
      * Tests that the resulting ObjectStateGroup contains identifier
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $result
+     *
      * @depends testParse
      */
     public function testResultContainsIdentifier( $result )
@@ -107,6 +110,7 @@ class ObjectStateGroupTest extends BaseTest
      * Tests that the resulting ObjectStateGroup contains defaultLanguageCode
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $result
+     *
      * @depends testParse
      */
     public function testResultContainsDefaultLanguageCode( $result )
@@ -121,6 +125,7 @@ class ObjectStateGroupTest extends BaseTest
      * Tests that the resulting ObjectStateGroup contains languageCodes
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $result
+     *
      * @depends testParse
      */
     public function testResultContainsDefaultLanguageCodes( $result )
@@ -135,6 +140,7 @@ class ObjectStateGroupTest extends BaseTest
      * Tests that the resulting ObjectStateGroup contains names
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $result
+     *
      * @depends testParse
      */
     public function testResultContainsNames( $result )
@@ -152,6 +158,7 @@ class ObjectStateGroupTest extends BaseTest
      * Tests that the resulting ObjectStateGroup contains descriptions
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $result
+     *
      * @depends testParse
      */
     public function testResultContainsDescriptions( $result )

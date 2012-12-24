@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher,
-    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 
 class HostElement implements Matcher
 {
@@ -57,6 +57,7 @@ class HostElement implements Matcher
      * Injects the request object to match against.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
+     *
      * @return void
      */
     public function setRequest( SimplifiedRequest $request )

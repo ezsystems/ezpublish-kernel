@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Values\User;
+
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
@@ -35,7 +36,7 @@ abstract class Role extends ValueObject
     protected $identifier;
 
     /**
-     * returns the list of policies of this role
+     * Returns the list of policies of this role
      * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
     abstract public function getPolicies();

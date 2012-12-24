@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
@@ -52,6 +53,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains LocationUpdate element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLocationUpdateElement( $result )
@@ -73,6 +75,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains LocationUpdate attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLocationUpdateAttributes( $result )
@@ -94,6 +97,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains priority value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPriorityValueElement( $result )
@@ -102,7 +106,6 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'priority',
                 'content'  => '0',
-
             ),
             $result,
             'Invalid or non-existing <LocationUpdate> priority value element.',
@@ -114,6 +117,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains remoteId value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRemoteIdValueElement( $result )
@@ -122,7 +126,6 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'remoteId',
                 'content'  => 'remote-id',
-
             ),
             $result,
             'Invalid or non-existing <LocationUpdate> hidden value element.',
@@ -134,6 +137,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains sortField value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSortFieldValueElement( $result )
@@ -142,7 +146,6 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'sortField',
                 'content'  => 'PATH',
-
             ),
             $result,
             'Invalid or non-existing <LocationUpdate> sortField value element.',
@@ -154,6 +157,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains sortOrder value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSortOrderValueElement( $result )
@@ -162,7 +166,6 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'sortOrder',
                 'content'  => 'ASC',
-
             ),
             $result,
             'Invalid or non-existing <LocationUpdate> sortOrder value element.',

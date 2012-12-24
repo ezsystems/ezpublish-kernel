@@ -9,11 +9,11 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
-use eZ\Publish\Core\MVC\Symfony\MVCEvents,
-    eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer,
-    Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * SiteAccess match listener.
@@ -75,7 +75,8 @@ class SiteAccessListener implements EventSubscriberInterface
      * Extracts view parameters from $pathinfo.
      * In the pathinfo, view parameters are in the form /(param_name)/param_value.
      *
-     * @param $pathinfo
+     * @param string $pathinfo
+     *
      * @return array First element is the cleaned up pathinfo (without the view parameters string).
      *               Second element is the view parameters hash.
      *               Third element is the view parameters string (e.g. /(foo)/bar)
@@ -94,7 +95,9 @@ class SiteAccessListener implements EventSubscriberInterface
         for ( $i = 0, $iMax = count( $vpSegments ); $i < $iMax; ++$i )
         {
             if ( !isset( $vpSegments[$i] ) )
+            {
                 continue;
+            }
 
             // View parameter name.
             // We extract it + the value from the following segment (next element in $vpSegments array)

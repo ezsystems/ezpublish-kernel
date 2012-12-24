@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter;
 
-use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface,
-    Symfony\Component\Security\Core\Authentication\Token\TokenInterface,
-    eZ\Publish\API\Repository\Repository,
-    eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute,
-    eZ\Publish\Core\MVC\Symfony\Security\User;
+use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
+use eZ\Publish\Core\MVC\Symfony\Security\User;
 
 class CoreVoter implements VoterInterface
 {
@@ -66,9 +66,9 @@ class CoreVoter implements VoterInterface
      * This method must return one of the following constants:
      * ACCESS_GRANTED, ACCESS_DENIED, or ACCESS_ABSTAIN.
      *
-     * @param TokenInterface $token      A TokenInterface instance
-     * @param object         $object     The object to secure
-     * @param array          $attributes An array of attributes associated with the method being invoked
+     * @param TokenInterface $token A TokenInterface instance
+     * @param object $object The object to secure
+     * @param array $attributes An array of attributes associated with the method being invoked
      *
      * @return integer either ACCESS_GRANTED, ACCESS_ABSTAIN, or ACCESS_DENIED
      */
@@ -81,7 +81,7 @@ class CoreVoter implements VoterInterface
             {
                 if ( $this->supportsAttribute( $attribute ) )
                 {
-                    // TODO: add limitation when available in the repository
+                    // @todo: add limitation when available in the repository
                     if ( $this->getRepository()->hasAccess( $attribute->module, $attribute->function ) === false )
                         return VoterInterface::ACCESS_DENIED;
 

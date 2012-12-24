@@ -10,27 +10,26 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\ObjectStateService as ObjectStateServiceInterface,
-    eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\Handler,
-
-    eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct,
-    eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct,
-    eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct,
-    eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo,
-    eZ\Publish\API\Repository\Values\ObjectState\ObjectState as APIObjectState,
-    eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup as APIObjectStateGroup,
-    eZ\Publish\Core\Repository\Values\ObjectState\ObjectState,
-    eZ\Publish\Core\Repository\Values\ObjectState\ObjectStateGroup,
-    eZ\Publish\SPI\Persistence\Content\ObjectState as SPIObjectState,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\Group as SPIObjectStateGroup,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\ObjectStateService as ObjectStateServiceInterface;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectState as APIObjectState;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup as APIObjectStateGroup;
+use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
+use eZ\Publish\Core\Repository\Values\ObjectState\ObjectStateGroup;
+use eZ\Publish\SPI\Persistence\Content\ObjectState as SPIObjectState;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Group as SPIObjectStateGroup;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 
 /**
  * ObjectStateService service
@@ -67,7 +66,8 @@ class ObjectStateService implements ObjectStateServiceInterface
     {
         $this->repository = $repository;
         $this->objectStateHandler = $objectStateHandler;
-        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
     }
@@ -329,7 +329,7 @@ class ObjectStateService implements ObjectStateServiceInterface
             {
                 $this->objectStateHandler->setPriority(
                     $spiObjectState->id,
-                    (int) $objectStateCreateStruct->priority
+                    (int)$objectStateCreateStruct->priority
                 );
 
                 // Reload the object state to have the updated priority,
@@ -351,7 +351,7 @@ class ObjectStateService implements ObjectStateServiceInterface
     /**
      * Loads an object state
      *
-     * @param $stateId
+     * @param mixed $stateId
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the state was not found
      *
@@ -463,7 +463,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         {
             $this->objectStateHandler->setPriority(
                 $loadedObjectState->id,
-                (int) $priority
+                (int)$priority
             );
             $this->repository->commit();
         }
@@ -598,6 +598,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      * Instantiates a new Object State Group Create Struct and sets $identified in it.
      *
      * @param string $identifier
+     *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct
      */
     public function newObjectStateGroupCreateStruct( $identifier )
@@ -622,6 +623,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      * Instantiates a new Object State Create Struct and sets $identifier in it.
      *
      * @param string $identifier
+     *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct
      */
     public function newObjectStateCreateStruct( $identifier )
@@ -656,9 +658,9 @@ class ObjectStateService implements ObjectStateServiceInterface
 
         return new ObjectState(
             array(
-                'id' => (int) $spiObjectState->id,
+                'id' => (int)$spiObjectState->id,
                 'identifier' => $spiObjectState->identifier,
-                'priority' => (int) $spiObjectState->priority,
+                'priority' => (int)$spiObjectState->priority,
                 'defaultLanguageCode' => $spiObjectState->defaultLanguage,
                 'languageCodes' => $spiObjectState->languageCodes,
                 'names' => $spiObjectState->name,
@@ -679,7 +681,7 @@ class ObjectStateService implements ObjectStateServiceInterface
     {
         return new ObjectStateGroup(
             array(
-                'id' => (int) $spiObjectStateGroup->id,
+                'id' => (int)$spiObjectStateGroup->id,
                 'identifier' => $spiObjectStateGroup->identifier,
                 'defaultLanguageCode' => $spiObjectStateGroup->defaultLanguage,
                 'languageCodes' => $spiObjectStateGroup->languageCodes,

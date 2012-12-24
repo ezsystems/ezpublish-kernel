@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor,
-    RuntimeException;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+use RuntimeException;
 
 /**
  * Compiles the AST of parsed transformation rules into a set of PCRE replace
@@ -44,6 +44,7 @@ class PcreCompiler
      * strings to executed the transformations.
      *
      * @param array $ast
+     *
      * @return array
      */
     public function compile( array $ast )
@@ -65,6 +66,7 @@ class PcreCompiler
      * Compiles a single rule
      *
      * @param array $rule
+     *
      * @return array
      */
     protected function compileRule( array $rule )
@@ -92,6 +94,7 @@ class PcreCompiler
      * Compile map rule
      *
      * @param array $rule
+     *
      * @return array
      */
     protected function compileMap( array $rule )
@@ -106,12 +109,14 @@ class PcreCompiler
      * Compile replace rule
      *
      * @param array $rule
+     *
      * @return array
      */
     protected function compileReplace( array $rule )
     {
         return array(
-            'regexp' => '([' .
+            'regexp' =>
+                '([' .
                 preg_quote( $this->compileCharacter( $rule['data']['srcStart'] ) ) . '-' .
                 preg_quote( $this->compileCharacter( $rule['data']['srcEnd'] ) ) .
                 '])us',
@@ -123,12 +128,14 @@ class PcreCompiler
      * Compile transpose rule
      *
      * @param array $rule
+     *
      * @return array
      */
     protected function compileTranspose( array $rule )
     {
         return array(
-            'regexp' => '([' .
+            'regexp' =>
+                '([' .
                 preg_quote( $this->compileCharacter( $rule['data']['srcStart'] ) ) . '-' .
                 preg_quote( $this->compileCharacter( $rule['data']['srcEnd'] ) ) .
                 '])us',
@@ -140,12 +147,14 @@ class PcreCompiler
      * Compile transpose modulo rule
      *
      * @param array $rule
+     *
      * @return array
      */
     protected function compileTransposeModulo( array $rule )
     {
         return array(
-            'regexp' => '([' .
+            'regexp' =>
+                '([' .
                 preg_quote(
                     $this->getModuloCharRange(
                         $this->compileCharacter( $rule['data']['srcStart'] ),
@@ -168,6 +177,7 @@ class PcreCompiler
      * @param string $start
      * @param string $end
      * @param string $modulo
+     *
      * @return string
      */
     protected function getModuloCharRange( $start, $end, $modulo )
@@ -186,11 +196,12 @@ class PcreCompiler
     }
 
     /**
-     * Return a closure which modifies the provided character by the given
+     * Returns a closure which modifies the provided character by the given
      * value
      *
      * @param string $operator
      * @param string $value
+     *
      * @return callback
      */
     protected function getTransposeClosure( $operator, $value )
@@ -210,6 +221,7 @@ class PcreCompiler
      * preg_replace_callback
      *
      * @param string $char
+     *
      * @return callback
      */
     protected function compileTargetCharacter( $char )
@@ -257,6 +269,7 @@ class PcreCompiler
      *  - xx: Ascii value in hexadecimal
      *
      * @param string $char
+     *
      * @return string
      */
     protected function compileCharacter( $char )

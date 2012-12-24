@@ -9,13 +9,13 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\Content\Field;
-use \eZ\Publish\API\Repository\Values\Content\Location;
-use \eZ\Publish\API\Repository\Values\Content\URLAlias;
-use \eZ\Publish\API\Repository\Values\Content\Relation;
-use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\URLAlias;
+use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
-use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for operations in the ContentService using in memory storage.
@@ -327,7 +327,6 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentThrowsContentValidationException()
     {
-
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -439,7 +438,6 @@ class ContentServiceTest extends BaseContentServiceTest
         );
         /* END: Use Case */
     }
-
 
     /**
      * Test for the loadContentInfo() method.
@@ -992,7 +990,7 @@ class ContentServiceTest extends BaseContentServiceTest
             ),
             array(
                 'fieldCount' => count( $draft->getFields() ),
-                'relationCount' => count( $draft->getRelations() )
+                'relationCount' => count( $this->getRepository()->getContentService()->loadRelations( $draft->getVersionInfo() ) )
             )
         );
     }
@@ -1325,7 +1323,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // Now create an update struct and modify some fields
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
         // The name field does not accept a stdClass object as its input
-        $contentUpdateStruct->setField( 'name', new\stdClass(), 'eng-US' );
+        $contentUpdateStruct->setField( 'name', new \stdClass(), 'eng-US' );
 
         // Throws an InvalidArgumentException, since the value for field "name"
         // is not accepted
@@ -2050,13 +2048,16 @@ class ContentServiceTest extends BaseContentServiceTest
                 )
             );
         }
-        usort( $actual, function ( $field1, $field2 ) {
-            if ( 0 === ( $return = strcasecmp( $field1->fieldDefIdentifier, $field2->fieldDefIdentifier ) ) )
-            {
-                return strcasecmp( $field1->languageCode, $field2->languageCode );
+        usort(
+            $actual,
+            function ( $field1, $field2 ) {
+                if ( 0 === ( $return = strcasecmp( $field1->fieldDefIdentifier, $field2->fieldDefIdentifier ) ) )
+                {
+                    return strcasecmp( $field1->languageCode, $field2->languageCode );
+                }
+                return $return;
             }
-            return $return;
-        } );
+        );
 
         $expected = array(
             new Field(
@@ -2288,7 +2289,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         $draft = $this->createMultipleLanguageDraftVersion1();
 
-        $contentService->publishVersion($draft->versionInfo);
+        $contentService->publishVersion( $draft->versionInfo );
 
         // This draft contains those fields localized with "eng-GB"
         $draftLocalized = $contentService->loadContentByRemoteId(
@@ -2602,36 +2603,37 @@ class ContentServiceTest extends BaseContentServiceTest
             $relation
         );
 
-        return $contentService->loadContent( $draft->id );
+        return $contentService->loadRelations( $draft->getVersionInfo() );
     }
 
     /**
      * Test for the addRelation() method.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param \eZ\Publish\API\Repository\Values\Content\Relation[] $relations
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::addRelation()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
      */
-    public function testAddRelationAddsRelationToContent( $content )
+    public function testAddRelationAddsRelationToContent( $relations )
     {
-        $this->assertEquals( 1, count( $content->getRelations() ) );
+        $this->assertEquals(
+            1,
+            count( $relations )
+        );
     }
 
     /**
      * Test for the addRelation() method.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param \eZ\Publish\API\Repository\Values\Content\Relation[] $relations
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::addRelation()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
      */
-    public function testAddRelationSetsExpectedRelations( $content )
+    public function testAddRelationSetsExpectedRelations( $relations )
     {
-        $relations = $content->getRelations();
-
         $this->assertEquals(
             array(
                 'type' => Relation::COMMON,
@@ -2720,12 +2722,15 @@ class ContentServiceTest extends BaseContentServiceTest
         $relations = $contentService->loadRelations( $draft->getVersionInfo() );
         /* END: Use Case */
 
-        usort( $relations, function( $rel1, $rel2 ) {
-            return strcasecmp(
-                $rel2->getDestinationContentInfo()->remoteId,
-                $rel1->getDestinationContentInfo()->remoteId
-            );
-        } );
+        usort(
+            $relations,
+            function( $rel1, $rel2 ) {
+                return strcasecmp(
+                    $rel2->getDestinationContentInfo()->remoteId,
+                    $rel1->getDestinationContentInfo()->remoteId
+                );
+            }
+        );
 
         $this->assertEquals(
             array(
@@ -2811,12 +2816,15 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals( 0, count( $relations ) );
         $this->assertEquals( 2, count( $reverseRelations ) );
 
-        usort( $reverseRelations, function( $rel1, $rel2 ) {
-            return strcasecmp(
-                $rel2->getSourceContentInfo()->remoteId,
-                $rel1->getSourceContentInfo()->remoteId
-            );
-        } );
+        usort(
+            $reverseRelations,
+            function( $rel1, $rel2 ) {
+                return strcasecmp(
+                    $rel2->getSourceContentInfo()->remoteId,
+                    $rel1->getSourceContentInfo()->remoteId
+                );
+            }
+        );
 
         $this->assertEquals(
             array(
@@ -3915,7 +3923,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // $contentId is the ID of the "Members" user group in an eZ Publish
         // demo installation
 
-        // $locationId is the ID of the "Adminstrator users" group location
+        // $locationId is the ID of the "Administrator users" group location
 
         // Get services
         $contentService = $repository->getContentService();
@@ -3985,7 +3993,7 @@ class ContentServiceTest extends BaseContentServiceTest
             array(
                 '/Design/Plain-site/An-awesome-forum' => array(
                     'type' => URLAlias::LOCATION,
-                    'destination' => $location,
+                    'destination' => $location->id,
                     'path' => '/Design/Plain-site/An-awesome-forum',
                     'languageCodes' => array( 'eng-US' ),
                     'isHistory' => false,
@@ -4026,7 +4034,7 @@ class ContentServiceTest extends BaseContentServiceTest
             array(
                 '/Design/Plain-site/An-awesome-forum2' => array(
                     'type' => URLAlias::LOCATION,
-                    'destination' => $location,
+                    'destination' => $location->id,
                     'path' => '/Design/Plain-site/An-awesome-forum2',
                     'languageCodes' => array( 'eng-US' ),
                     'isHistory' => false,
@@ -4035,7 +4043,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 ),
                 '/Design/Plain-site/An-awesome-forum23' => array(
                     'type' => URLAlias::LOCATION,
-                    'destination' => $location,
+                    'destination' => $location->id,
                     'path' => '/Design/Plain-site/An-awesome-forum23',
                     'languageCodes' => array( 'eng-GB' ),
                     'isHistory' => false,
@@ -4097,7 +4105,7 @@ class ContentServiceTest extends BaseContentServiceTest
             array(
                 '/my/fancy/story-about-ez-publish' => array(
                     'type' => URLAlias::LOCATION,
-                    'destination' => $location,
+                    'destination' => $location->id,
                     'path' => '/my/fancy/story-about-ez-publish',
                     'languageCodes' => array( 'eng-US' ),
                     'isHistory' => false,
@@ -4141,6 +4149,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @param array $expectedAliasProperties
      * @param array $actualAliases
+     *
      * @return void
      */
     private function assertAliasesCorrect( array $expectedAliasProperties, array $actualAliases )
@@ -4190,6 +4199,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * Asserts that the given fields are equal to the default fields fixture.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Field[] $fields
+     *
      * @return void
      */
     private function assertAllFieldsEquals( array $fields )
@@ -4235,6 +4245,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * specific FieldType, which is tested in a dedicated integration test.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Field[] $fields
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Field[]
      */
     private function normalizeFields( array $fields )
@@ -4251,13 +4262,16 @@ class ContentServiceTest extends BaseContentServiceTest
                 )
             );
         }
-        usort( $normalized, function ( $field1, $field2 ) {
-            if ( 0 === ( $return = strcasecmp( $field1->fieldDefIdentifier, $field2->fieldDefIdentifier ) ) )
-            {
-                return strcasecmp( $field1->languageCode, $field2->languageCode );
+        usort(
+            $normalized,
+            function ( $field1, $field2 ) {
+                if ( 0 === ( $return = strcasecmp( $field1->fieldDefIdentifier, $field2->fieldDefIdentifier ) ) )
+                {
+                    return strcasecmp( $field1->languageCode, $field2->languageCode );
+                }
+                return $return;
             }
-            return $return;
-        } );
+        );
 
         return $normalized;
     }

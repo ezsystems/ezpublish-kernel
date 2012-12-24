@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
@@ -47,6 +48,7 @@ class ContentObjectStatesTest extends ValueObjectVisitorBaseTest
      * Test if result contains ContentObjectStates element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsContentObjectStatesElement( $result )
@@ -65,6 +67,7 @@ class ContentObjectStatesTest extends ValueObjectVisitorBaseTest
      * Test if result contains ContentObjectStates element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsContentObjectStatesAttributes( $result )

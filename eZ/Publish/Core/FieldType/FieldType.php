@@ -8,10 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType;
-use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\SPI\FieldType\Event;
+
+use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 
 /**
  * Base class for field types, the most basic storage unit of data inside eZ Publish.
@@ -54,15 +54,6 @@ abstract class FieldType implements FieldTypeInterface
      * @var mixed
      */
     protected $validatorConfigurationSchema = array();
-
-    /**
-     * This method is called on occurring events. Implementations can perform corresponding actions
-     *
-     * @param \eZ\Publish\SPI\FieldType\Event $event
-     */
-    public function handleEvent( Event $event )
-    {
-    }
 
     /**
      * Returns a schema for the settings expected by the FieldType
@@ -195,6 +186,7 @@ abstract class FieldType implements FieldTypeInterface
      * value in either sort_key_string or sort_key_int.
      *
      * @param mixed $value
+     *
      * @return mixed
      */
     protected function getSortInfo( $value )
@@ -238,7 +230,7 @@ abstract class FieldType implements FieldTypeInterface
     /**
      * Returns whether the field type is searchable
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {
@@ -253,7 +245,8 @@ abstract class FieldType implements FieldTypeInterface
      * type, if necessary.
      *
      * @param mixed $value
-     * @return bool
+     *
+     * @return boolean
      */
     public function isEmptyValue( $value )
     {
@@ -305,9 +298,10 @@ abstract class FieldType implements FieldTypeInterface
      *
      * This is the default implementation, which just returns the given
      * $fieldSettings, assuming they are already in a hash format. Overwrite
-     * this in your specific implementation, if neccessary.
+     * this in your specific implementation, if necessary.
      *
      * @param mixed $fieldSettings
+     *
      * @return array|hash|scalar|null
      */
     public function fieldSettingsToHash( $fieldSettings )
@@ -323,9 +317,10 @@ abstract class FieldType implements FieldTypeInterface
      * This is the default implementation, which just returns the given
      * $fieldSettingsHash, assuming the supported field settings are already in
      * a hash format. Overwrite this in your specific implementation, if
-     * neccessary.
+     * necessary.
      *
      * @param array|hash|scalar|null $fieldSettingsHash
+     *
      * @return mixed
      */
     public function fieldSettingsFromHash( $fieldSettingsHash )
@@ -341,6 +336,7 @@ abstract class FieldType implements FieldTypeInterface
      * internal field types. Overwrite this method, if necessary.
      *
      * @param mixed $validatorConfiguration
+     *
      * @return array|hash|scalar|null
      */
     public function validatorConfigurationToHash( $validatorConfiguration )
@@ -358,6 +354,7 @@ abstract class FieldType implements FieldTypeInterface
      * if necessary.
      *
      * @param array|hash|scalar|null $validatorConfigurationHash
+     *
      * @return mixed
      */
     public function validatorConfigurationFromHash( $validatorConfigurationHash )

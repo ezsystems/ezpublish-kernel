@@ -10,9 +10,10 @@
  */
 
 namespace eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator,
-    InvalidArgumentException;
+
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
+use InvalidArgumentException;
 
 /**
  * @package eZ\Publish\API\Repository\Values\Content\Query
@@ -117,6 +118,7 @@ abstract class Criterion
     /**
      * Returns a callback that checks the values types depending on the operator specifications
      * @param int $valueTypes The accepted values, as a bit field of Specifications::TYPE_* constants
+     *
      * @return \Closure
      */
     private function getValueTypeCheckCallback( $valueTypes )

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot\Slot;
+
 use eZ\Publish\Core\SignalSlot\Slot;
 use Closure;
 use ezpKernelHandler;

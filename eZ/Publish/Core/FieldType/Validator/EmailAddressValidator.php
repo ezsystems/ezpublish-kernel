@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Validator;
-use eZ\Publish\Core\FieldType\Validator,
-    eZ\Publish\Core\FieldType\ValidationError,
-    eZ\Publish\Core\FieldType\Value as BaseValue;
+
+use eZ\Publish\Core\FieldType\Validator;
+use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * Validator for checking validity of email addresses. Both form and MX record validity checking are provided
@@ -25,7 +26,7 @@ class EmailAddressValidator extends Validator
     );
 
     protected $constraintsSchema = array(
-        "Extent" => array (
+        "Extent" => array(
             "type" => "string",
             "default" => "regex"
         )

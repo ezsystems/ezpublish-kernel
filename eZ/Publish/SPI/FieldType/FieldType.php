@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\SPI\FieldType;
 
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\FieldType\Event;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\FieldType\Event;
 
 /**
  * The field type interface which all field types have to implement.
@@ -33,12 +33,12 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
 interface FieldType
 {
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
-     * This identifier should be globally unique and the implementor of a
+     * This identifier should be globally unique and the implementer of a
      * FieldType must take care for the uniqueness. It is therefore recommended
      * to prefix the field-type identifier by a unique string that identifies
-     * the implementor. A good identifier could for example take your companies main
+     * the implementer. A good identifier could for example take your companies main
      * domain name as a prefix in reverse order.
      *
      * @return string
@@ -46,17 +46,7 @@ interface FieldType
     public function getFieldTypeIdentifier();
 
     /**
-     * This method is called on occurring events.
-     *
-     * This method is called on occurring events in the Core to allow
-     * FieldTypes to react to such events.
-     *
-     * @param \eZ\Publish\SPI\FieldType\Event $event
-     */
-    public function handleEvent( Event $event );
-
-    /**
-     * Returns the name of the given field value.
+     * Returns a human readable string representation from the given $value
      *
      * It will be used to generate content name and url alias if current field
      * is designated to be used in the content name/urlAlias pattern.
@@ -65,7 +55,8 @@ interface FieldType
      * acceptValue()}.
      *
      * @param mixed $value
-     * @return mixed
+     *
+     * @return string
      */
     public function getName( $value );
 
@@ -172,7 +163,7 @@ interface FieldType
     /**
      * Indicates if the field type supports indexing and sort keys for searching
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable();
 
@@ -196,7 +187,8 @@ interface FieldType
      * been processed by {@link acceptValue()}.
      *
      * @param mixed $value
-     * @return bool
+     *
+     * @return boolean
      */
     public function isEmptyValue( $value );
 
@@ -232,6 +224,7 @@ interface FieldType
      * necessary. See the class description for more details on a hash format.
      *
      * @param mixed $hash
+     *
      * @return mixed
      */
     public function fromHash( $hash );
@@ -246,7 +239,7 @@ interface FieldType
      *
      * @param mixed $value
      *
-     * @return null|array|scalar
+     * @return mixed
      */
     public function toHash( $value );
 
@@ -256,6 +249,7 @@ interface FieldType
      * See the class description for more details on a hash format.
      *
      * @param mixed $fieldSettings
+     *
      * @return array|hash|scalar|null
      */
     public function fieldSettingsToHash( $fieldSettings );
@@ -267,6 +261,7 @@ interface FieldType
      * See the class description for more details on a hash format.
      *
      * @param array|hash|scalar|null $fieldSettingsHash
+     *
      * @return mixed
      */
     public function fieldSettingsFromHash( $fieldSettingsHash );
@@ -277,6 +272,7 @@ interface FieldType
      * See the class description for more details on a hash format.
      *
      * @param mixed $validatorConfiguration
+     *
      * @return array|hash|scalar|null
      */
     public function validatorConfigurationToHash( $validatorConfiguration );
@@ -288,6 +284,7 @@ interface FieldType
      * See the class description for more details on a hash format.
      *
      * @param array|hash|scalar|null $validatorConfigurationHash
+     *
      * @return mixed
      */
     public function validatorConfigurationFromHash( $validatorConfigurationHash );
@@ -327,4 +324,3 @@ interface FieldType
      */
     public function fromPersistenceValue( FieldValue $fieldValue );
 }
-

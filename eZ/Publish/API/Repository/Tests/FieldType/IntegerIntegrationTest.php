@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\Integer\Value as IntegerValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+
+use eZ\Publish\Core\FieldType\Integer\Value as IntegerValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type
@@ -20,7 +21,7 @@ use eZ\Publish\Core\FieldType\Integer\Value as IntegerValue,
 class IntegerIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -128,6 +129,7 @@ class IntegerIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     public function assertFieldDataLoadedCorrect( Field $field)

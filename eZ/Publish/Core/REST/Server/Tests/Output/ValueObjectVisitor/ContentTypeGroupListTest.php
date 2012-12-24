@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -48,6 +49,7 @@ class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
      * Test if result contains ContentTypeGroupList element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsContentTypeGroupListElement( $result )
@@ -66,6 +68,7 @@ class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
      * Test if result contains ContentTypeGroupList element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsContentTypeGroupListAttributes( $result )
@@ -94,10 +97,12 @@ class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $contentTypeGroupList = new ContentTypeGroupList( array(
-            new ContentType\ContentTypeGroup(),
-            new ContentType\ContentTypeGroup(),
-        ) );
+        $contentTypeGroupList = new ContentTypeGroupList(
+            array(
+                new ContentType\ContentTypeGroup(),
+                new ContentType\ContentTypeGroup(),
+            )
+        );
 
         $this->getVisitorMock()->expects( $this->exactly( 2 ) )
             ->method( 'visitValueObject' )

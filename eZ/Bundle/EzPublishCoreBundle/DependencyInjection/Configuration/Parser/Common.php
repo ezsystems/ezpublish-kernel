@@ -9,9 +9,9 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser,
-    Symfony\Component\Config\Definition\Builder\NodeBuilder,
-    Symfony\Component\DependencyInjection\ContainerBuilder;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser;
+use Symfony\Component\Config\Definition\Builder\NodeBuilder;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Configuration parser handling all basic configuration (aka "common")
@@ -22,6 +22,7 @@ class Common extends AbstractParser
      * Adds semantic configuration definition.
      *
      * @param \Symfony\Component\Config\Definition\Builder\NodeBuilder $nodeBuilder Node just under ezpublish.system.<siteaccess>
+     *
      * @return void
      */
     public function addSemanticConfig( NodeBuilder $nodeBuilder )
@@ -84,8 +85,7 @@ class Common extends AbstractParser
                         ->prototype( 'scalar' )->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 
     /**
@@ -93,6 +93,7 @@ class Common extends AbstractParser
      *
      * @param array $config
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
      * @return void
      */
     public function registerInternalConfig( array $config, ContainerBuilder $container )
@@ -106,7 +107,7 @@ class Common extends AbstractParser
             $database = $container->getParameter( "ezsettings.$sa.database" );
             if ( !empty( $database ) )
             {
-                // DSN is prioritary to any other setting
+                // DSN has priority over any other setting
                 if ( isset( $database['dsn'] ) )
                 {
                     $container->setParameter( "ezsettings.$sa.database.params", $database['dsn'] );

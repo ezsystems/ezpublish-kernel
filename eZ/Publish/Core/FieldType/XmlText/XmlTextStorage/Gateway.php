@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\FieldType\XmlText\XmlTextStorage;
 
-use eZ\Publish\Core\FieldType\StorageGateway,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\Core\FieldType\StorageGateway;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 /**
  * Abstract gateway class for XmlText type.
@@ -32,7 +32,7 @@ abstract class Gateway extends StorageGateway
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      *
-     * @return bool
+     * @return boolean
      */
     abstract public function storeFieldData( VersionInfo $versionInfo, Field $field );
 }

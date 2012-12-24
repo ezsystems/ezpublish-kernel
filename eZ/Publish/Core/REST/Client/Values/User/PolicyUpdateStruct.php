@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\User;
 
-use \eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\API\Repository\Values\User\Limitation;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct}
@@ -39,6 +39,7 @@ class PolicyUpdateStruct extends \eZ\Publish\API\Repository\Values\User\PolicyUp
      * the existing limitation is replaced
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
+     *
      * @return void
      */
     public function addLimitation( Limitation $limitation )

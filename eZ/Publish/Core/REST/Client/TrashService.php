@@ -9,14 +9,15 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
+use eZ\Publish\API\Repository\TrashService as APITrashService;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 
 use eZ\Publish\Core\REST\Common\UrlHandler;
-use eZ\Publish\Core\REST\Common\Input;
-use eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\Input\Dispatcher;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Common\Message;
 
 /**
@@ -24,7 +25,7 @@ use eZ\Publish\Core\REST\Common\Message;
  *
  * @package eZ\Publish\API\Repository
  */
-class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionable
+class TrashService implements APITrashService, Sessionable
 {
     /**
      * @var \eZ\Publish\Core\REST\Client\LocationService
@@ -58,7 +59,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( LocationService $locationService, HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( LocationService $locationService, HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler )
     {
         $this->locationService = $locationService;
         $this->client          = $client;
@@ -90,7 +91,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the trashed location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the location with the given id does not exist
      *
-     * @param integer $trashItemId
+     * @param int $trashItemId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
@@ -121,7 +122,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
      */
     public function trash( Location $location )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -138,7 +139,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
      */
     public function recover( APITrashItem $trashItem, Location $newParentLocation = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        throw new \Exception( "@todo: Implement." );
     }
 
     /**
@@ -155,7 +156,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
             'DELETE',
             $this->urlHandler->generate( 'trashItems' ),
             new Message(
-                // TODO: What media-type should we set here? Actually, it should be
+                // @todo: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "Location" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
@@ -182,7 +183,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
             'DELETE',
             $trashItem->id,
             new Message(
-                // TODO: What media-type should we set here? Actually, it should be
+                // @todo: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "Location" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
@@ -242,8 +243,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
                 'remoteId' => $location->remoteId,
                 'parentLocationId' => $location->parentLocationId,
                 'pathString' => $location->pathString,
-                'modifiedSubLocationDate' => $location->modifiedSubLocationDate,
-                'depth' => (int) $location->depth,
+                'depth' => (int)$location->depth,
                 'sortField' => $location->sortField,
                 'sortOrder' => $location->sortOrder,
             )

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client;
+
 use eZ\Publish\Core\REST\Common\Message;
 
 /**
@@ -23,6 +24,7 @@ interface HttpClient
      * @param string $method
      * @param string $path
      * @param Message $message
+     *
      * @return Message
      */
     public function request( $method, $path, Message $message = null );

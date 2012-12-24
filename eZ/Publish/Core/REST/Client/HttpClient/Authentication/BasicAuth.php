@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\HttpClient\Authentication;
+
 use eZ\Publish\Core\REST\Client\HttpClient;
 use eZ\Publish\Core\REST\Common\Message;
 
@@ -61,6 +62,7 @@ class BasicAuth implements HttpClient
      * @param string $method
      * @param string $path
      * @param \eZ\Publish\Core\REST\Common\Message $message
+     *
      * @return \eZ\Publish\Core\REST\Common\Message
      */
     public function request( $method, $path, Message $message = null )
@@ -71,11 +73,13 @@ class BasicAuth implements HttpClient
         }
         $message->headers['Authorization'] = sprintf(
             'Basic %s',
-            base64_encode( sprintf(
-                '%s:%s',
-                $this->username,
-                $this->password
-            ) )
+            base64_encode(
+                sprintf(
+                    '%s:%s',
+                    $this->username,
+                    $this->password
+                )
+            )
         );
         return $this->innerClient->request( $method, $path, $message );
     }

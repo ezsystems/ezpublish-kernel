@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\API\Repository,
-    eZ\Publish\Core\FieldType\Relation\Value as RelationValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+
+use eZ\Publish\API\Repository;
+use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type
@@ -21,7 +22,7 @@ use eZ\Publish\API\Repository,
 class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -58,8 +59,9 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
     /**
      * Get a valid $fieldSettings value
      *
+     * @todo Implement correctly
+     *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getValidFieldSettings()
     {
@@ -69,8 +71,9 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
     /**
      * Get a valid $validatorConfiguration
      *
+     * @todo Implement correctly
+     *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getValidValidatorConfiguration()
     {
@@ -80,8 +83,9 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
     /**
      * Get $fieldSettings value not accepted by the field type
      *
+     * @todo Implement correctly
+     *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getInvalidFieldSettings()
     {
@@ -91,8 +95,9 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
     /**
      * Get $validatorConfiguration not accepted by the field type
      *
+     * @todo Implement correctly
+     *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getInvalidValidatorConfiguration()
     {
@@ -116,6 +121,7 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     public function assertFieldDataLoadedCorrect( Field $field)

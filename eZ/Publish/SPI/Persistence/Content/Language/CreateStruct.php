@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content\Language;
+
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
@@ -32,7 +33,7 @@ class CreateStruct extends ValueObject
     /**
      * Indicates if language is enabled or not
      *
-     * @var bool
+     * @var boolean
      */
     public $isEnabled = true;
 }

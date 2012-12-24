@@ -76,10 +76,11 @@ class SimplifiedRequest extends ValueObject
     /**
      * Constructs a SimplifiedRequest object from a standard URL (http://www.example.com/foo/bar?queryParam=value)
      *
-     * @static
-     * @param $url
-     * @return \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest
+     * @param string $url
+     *
      * @internal
+     *
+     * @return \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest
      */
     public static function fromUrl( $url )
     {

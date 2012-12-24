@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
-use eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo;
+
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 /**
  * Handler for external storages
@@ -47,6 +48,7 @@ class StorageHandler
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param Field $field
+     *
      * @return void
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field )
@@ -59,6 +61,7 @@ class StorageHandler
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param Field $field
+     *
      * @return void
      */
     public function getFieldData( VersionInfo $versionInfo, Field $field )
@@ -74,8 +77,9 @@ class StorageHandler
      * Deletes data for field $ids from external storage of $fieldType
      *
      * @param string $fieldType
-     * @param eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param mixed[] $ids
+     *
      * @return void
      */
     public function deleteFieldData( $fieldType, VersionInfo $versionInfo, array $ids )

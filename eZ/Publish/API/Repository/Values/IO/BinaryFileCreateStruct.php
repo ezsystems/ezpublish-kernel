@@ -41,7 +41,6 @@ class BinaryFileCreateStruct extends ValueObject
     public $size;
 
     /**
-     *
      * the input stream
      * @var resource
      */

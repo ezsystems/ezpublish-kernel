@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Values;
+
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**

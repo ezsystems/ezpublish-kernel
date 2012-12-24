@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
+
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 
@@ -88,8 +89,9 @@ class Trash extends RestController
     /**
      * Returns the trash item given by id
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      * @return \eZ\Publish\Core\REST\Server\Values\RestTrashItem
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
     public function loadTrashItem()
     {

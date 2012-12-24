@@ -8,23 +8,24 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo,
-    ezcQueryUpdate;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
+use ezcQueryUpdate;
 
 /**
  * ezcDatabase based content gateway
@@ -171,6 +172,7 @@ class EzcDatabase extends Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
      * @param boolean $alwaysAvailable
+     *
      * @return int
      */
     protected function generateLanguageMask( array $fields, $alwaysAvailable )
@@ -196,6 +198,7 @@ class EzcDatabase extends Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
+     *
      * @return int ID
      */
     public function insertVersion( VersionInfo $versionInfo, array $fields )
@@ -255,6 +258,7 @@ class EzcDatabase extends Gateway
      *
      * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $struct
+     *
      * @return void
      */
     public function updateContent( $contentId, MetadataUpdateStruct $struct )
@@ -326,6 +330,7 @@ class EzcDatabase extends Gateway
      * @param int $contentId
      * @param int $versionNo
      * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $struct
+     *
      * @return void
      */
     public function updateVersion( $contentId, $versionNo, UpdateStruct $struct )
@@ -367,7 +372,7 @@ class EzcDatabase extends Gateway
      * Updates "always available" flag for content identified by $contentId, in respect to $alwaysAvailable.
      *
      * @param int $contentId
-     * @param bool $newAlwaysAvailable New "always available" value
+     * @param boolean $newAlwaysAvailable New "always available" value
      */
     public function updateAlwaysAvailableFlag( $contentId, $newAlwaysAvailable )
     {
@@ -386,9 +391,9 @@ class EzcDatabase extends Gateway
             ->update( $this->dbHandler->quoteTable( 'ezcontentobject' ) )
             ->set(
                 $this->dbHandler->quoteColumn( 'language_mask' ),
-                $newAlwaysAvailable
-                    ? $q->expr->bitOr( $this->dbHandler->quoteColumn( 'language_mask' ), 1 )
-                    : $q->expr->bitAnd( $this->dbHandler->quoteColumn( 'language_mask' ), -2 )
+                $newAlwaysAvailable ?
+                    $q->expr->bitOr( $this->dbHandler->quoteColumn( 'language_mask' ), 1 ) :
+                    $q->expr->bitAnd( $this->dbHandler->quoteColumn( 'language_mask' ), -2 )
             )
             ->where(
                 $q->expr->eq(
@@ -405,9 +410,9 @@ class EzcDatabase extends Gateway
             ->update( $this->dbHandler->quoteTable( 'ezcontentobject_name' ) )
             ->set(
                 $this->dbHandler->quoteColumn( 'language_id' ),
-                $newAlwaysAvailable
-                    ? $qName->expr->bitOr( $this->dbHandler->quoteColumn( 'language_id' ), 1 )
-                    : $qName->expr->bitAnd( $this->dbHandler->quoteColumn( 'language_id' ), -2 )
+                $newAlwaysAvailable ?
+                    $qName->expr->bitOr( $this->dbHandler->quoteColumn( 'language_id' ), 1 ) :
+                    $qName->expr->bitAnd( $this->dbHandler->quoteColumn( 'language_id' ), -2 )
             )
             ->where(
                 $qName->expr->lAnd(
@@ -434,9 +439,9 @@ class EzcDatabase extends Gateway
             ->update( $this->dbHandler->quoteTable( 'ezcontentobject_attribute' ) )
             ->set(
                 $this->dbHandler->quoteColumn( 'language_id' ),
-                $newAlwaysAvailable
-                    ? $qAttr->expr->bitOr( $this->dbHandler->quoteColumn( 'language_id' ), 1 )
-                    : $qAttr->expr->bitAnd( $this->dbHandler->quoteColumn( 'language_id' ), -2 )
+                $newAlwaysAvailable ?
+                    $qAttr->expr->bitOr( $this->dbHandler->quoteColumn( 'language_id' ), 1 ) :
+                    $qAttr->expr->bitAnd( $this->dbHandler->quoteColumn( 'language_id' ), -2 )
             )
             ->where(
                 $qAttr->expr->lAnd(
@@ -465,6 +470,7 @@ class EzcDatabase extends Gateway
      * @param int $contentId
      * @param int $version
      * @param int $status
+     *
      * @return boolean
      */
     public function setStatus( $contentId, $version, $status )
@@ -533,6 +539,7 @@ class EzcDatabase extends Gateway
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
+     *
      * @return int ID
      */
     public function insertNewField( Content $content, Field $field, StorageFieldValue $value )
@@ -562,6 +569,7 @@ class EzcDatabase extends Gateway
      * @param Content $content
      * @param Field $field
      * @param StorageFieldValue $value
+     *
      * @return void
      */
     public function insertExistingField( Content $content, Field $field, StorageFieldValue $value )
@@ -585,6 +593,7 @@ class EzcDatabase extends Gateway
      * @param Field $field
      * @param StorageFieldValue $value
      * @param mixed $newFieldId
+     *
      * @return int|null Maybe a new field ID
      */
     protected function setInsertFieldValues( \ezcQueryInsert $q, Content $content, Field $field, StorageFieldValue $value )
@@ -668,6 +677,7 @@ class EzcDatabase extends Gateway
      *
      * @param \ezcQueryUpdate $q
      * @param StorageFieldValue $value
+     *
      * @return void
      */
     protected function setFieldUpdateValues( ezcQueryUpdate $q, StorageFieldValue $value  )
@@ -698,6 +708,7 @@ class EzcDatabase extends Gateway
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
      * @param int $contentId
+     *
      * @return void
      */
     public function updateNonTranslatableField(
@@ -729,13 +740,14 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Load data for a content object
+     * Loads data for a content object
      *
      * Returns an array with the relevant data.
      *
      * @param mixed $contentId
      * @param mixed $version
      * @param string[] $translations
+     *
      * @return array
      */
     public function load( $contentId, $version, $translations = null )
@@ -764,6 +776,7 @@ class EzcDatabase extends Gateway
      * $contentId
      *
      * @param mixed $contentId
+     *
      * @return array
      */
     public function loadLatestPublishedData( $contentId )
@@ -794,8 +807,10 @@ class EzcDatabase extends Gateway
      *  - main_language_code => Language code for main (initial) language. E.g. "eng-GB"
      *
      * @param int $contentId
-     * @return array
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     *
+     * @return array
      */
     public function loadContentInfo( $contentId )
     {
@@ -872,7 +887,7 @@ class EzcDatabase extends Gateway
     /**
      * Returns data for all versions with given status created by the given $userId
      *
-     * @param $userId
+     * @param int $userId
      * @param int $status
      *
      * @return string[][]
@@ -905,6 +920,7 @@ class EzcDatabase extends Gateway
      * Returns all version data for the given $contentId
      *
      * @param mixed $contentId
+     *
      * @return string[][]
      */
     public function listVersions( $contentId )
@@ -937,7 +953,8 @@ class EzcDatabase extends Gateway
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $query->expr->max( $this->dbHandler->quoteColumn( 'version' ) )
-        )->from( $this->dbHandler->quoteTable( 'ezcontentobject_version' )
+        )->from(
+            $this->dbHandler->quoteTable( 'ezcontentobject_version' )
         )->where(
             $query->expr->eq(
                 $this->dbHandler->quoteColumn( 'contentobject_id' ),
@@ -955,6 +972,7 @@ class EzcDatabase extends Gateway
      * Returns all IDs for locations that refer to $contentId
      *
      * @param int $contentId
+     *
      * @return int[]
      */
     public function getAllLocationIds( $contentId )
@@ -1081,6 +1099,7 @@ class EzcDatabase extends Gateway
      *
      * @param int $fieldId
      * @param int $version
+     *
      * @return void
      */
     public function deleteField( $fieldId, $version )
@@ -1210,6 +1229,7 @@ class EzcDatabase extends Gateway
      * @param int $version
      * @param string $name
      * @param string $language
+     *
      * @return void
      */
     public function setName( $contentId, $version, $name, $language )
@@ -1218,8 +1238,10 @@ class EzcDatabase extends Gateway
 
         // Is it an insert or an update ?
         $qSelect = $this->dbHandler->createSelectQuery();
-        $qSelect->select(
-            $qSelect->alias( $qSelect->expr->count( '*' ), 'count' ) )
+        $qSelect
+            ->select(
+                $qSelect->alias( $qSelect->expr->count( '*' ), 'count' )
+            )
             ->from( $this->dbHandler->quoteTable( 'ezcontentobject_name' ) )
             ->where(
                 $qSelect->expr->lAnd(
@@ -1243,12 +1265,12 @@ class EzcDatabase extends Gateway
             $q = $this->dbHandler->createUpdateQuery();
             $q->update( $this->dbHandler->quoteTable( 'ezcontentobject_name' ) )
                 ->where(
-                $q->expr->lAnd(
-                    $q->expr->eq( $this->dbHandler->quoteColumn( 'contentobject_id' ), $q->bindValue( $contentId ) ),
-                    $q->expr->eq( $this->dbHandler->quoteColumn( 'content_version' ), $q->bindValue( $version ) ),
-                    $q->expr->eq( $this->dbHandler->quoteColumn( 'content_translation' ), $q->bindValue( $language->languageCode ) )
-                )
-            );
+                    $q->expr->lAnd(
+                        $q->expr->eq( $this->dbHandler->quoteColumn( 'contentobject_id' ), $q->bindValue( $contentId ) ),
+                        $q->expr->eq( $this->dbHandler->quoteColumn( 'content_version' ), $q->bindValue( $version ) ),
+                        $q->expr->eq( $this->dbHandler->quoteColumn( 'content_translation' ), $q->bindValue( $language->languageCode ) )
+                    )
+                );
         }
 
         $q->set(
@@ -1277,6 +1299,7 @@ class EzcDatabase extends Gateway
      * Deletes the actual content object referred to by $contentId
      *
      * @param int $contentId
+     *
      * @return void
      */
     public function deleteContent( $contentId )

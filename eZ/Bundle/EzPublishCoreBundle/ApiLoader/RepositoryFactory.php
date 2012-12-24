@@ -9,12 +9,12 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
-use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
-    eZ\Publish\SPI\IO\Handler as IoHandler,
-    eZ\Publish\SPI\Limitation\Type as SPILimitationType,
-    eZ\Publish\API\Repository\Repository,
-    Symfony\Component\DependencyInjection\ContainerInterface,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\SPI\IO\Handler as IoHandler;
+use eZ\Publish\SPI\Limitation\Type as SPILimitationType;
+use eZ\Publish\API\Repository\Repository;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 class RepositoryFactory
 {
@@ -57,6 +57,7 @@ class RepositoryFactory
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\SPI\IO\Handler $ioHandler
+     *
      * @return \eZ\Publish\API\Repository\Repository
      */
     public function buildRepository( PersistenceHandler $persistenceHandler, IoHandler $ioHandler )
@@ -156,8 +157,10 @@ class RepositoryFactory
      * Returns a service based on a name string (content => contentService, etc)
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param $serviceName
+     * @param string $serviceName
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     *
      * @return mixed
      */
     public function buildService( Repository $repository, $serviceName )

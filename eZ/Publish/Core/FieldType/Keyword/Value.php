@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Keyword;
+
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**

@@ -31,13 +31,12 @@ class RestExecutedView extends ValueObjectVisitor
 
     protected $locationService;
 
-    public function __construct( UrlHandler $urlHandler, LocationService $locationService, ContentService $contentService)
+    public function __construct( UrlHandler $urlHandler, LocationService $locationService, ContentService $contentService )
     {
         $this->locationService = $locationService;
         $this->contentService = $contentService;
         parent::__construct( $urlHandler );
     }
-
 
     /**
      * Visit struct returned by controllers
@@ -77,7 +76,7 @@ class RestExecutedView extends ValueObjectVisitor
         $generator->startHashElement( 'searchHits' );
         $generator->startList( 'searchHit' );
 
-        foreach( $data->searchResults->searchHits as $searchHit )
+        foreach ( $data->searchResults->searchHits as $searchHit )
         {
             $generator->startObjectElement( 'searchHit' );
 
@@ -93,7 +92,8 @@ class RestExecutedView extends ValueObjectVisitor
             $restContent = new RestContentValue(
                 $contentInfo,
                 $this->locationService->loadLocation( $contentInfo->mainLocationId ),
-                $searchHit->valueObject
+                $searchHit->valueObject,
+                $this->contentService->loadRelations( $searchHit->valueObject->getVersionInfo() )
             );
             $visitor->visitValueObject( $restContent );
             $generator->endObjectElement( 'value' );

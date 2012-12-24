@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\Content\URLWildcard;
-use \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
+use eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
 
 /**
  * Test case for operations in the URLWildcardService.
@@ -50,6 +50,7 @@ class URLWildcardServiceTest extends BaseTest
      * Test for the create() method.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\URLWildcard $urlWildcard
+     *
      * @return void
      *
      * @see \eZ\Publish\API\Repository\URLWildcardService::create()
@@ -64,6 +65,7 @@ class URLWildcardServiceTest extends BaseTest
      * Test for the create() method.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\URLWildcard $urlWildcard
+     *
      * @return void
      *
      * @see \eZ\Publish\API\Repository\URLWildcardService::create()
@@ -208,6 +210,7 @@ class URLWildcardServiceTest extends BaseTest
      * Test for the load() method.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\URLWildcard $urlWildcard
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\URLWildcardService::load()
      * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testLoad
@@ -228,6 +231,7 @@ class URLWildcardServiceTest extends BaseTest
      * Test for the load() method.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\URLWildcard $urlWildcard
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\URLWildcardService::load()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
@@ -409,6 +413,7 @@ class URLWildcardServiceTest extends BaseTest
      * Test for the translate() method.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult $result
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\URLWildcardService::translate()
      * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testTranslate

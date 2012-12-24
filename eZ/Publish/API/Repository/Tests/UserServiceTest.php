@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use \eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\User\User;
 
 /**
  * Test case for operations in the UserService using in memory storage.
@@ -234,7 +234,6 @@ class UserServiceTest extends BaseTest
             )
         );
     }
-
 
     /**
      * Test for the createUserGroup() method.
@@ -1273,6 +1272,7 @@ class UserServiceTest extends BaseTest
      * Test for the updateUser() method.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
@@ -1305,6 +1305,7 @@ class UserServiceTest extends BaseTest
      * Test for the updateUser() method.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
@@ -1430,7 +1431,7 @@ class UserServiceTest extends BaseTest
         $userUpdate->contentUpdateStruct = $contentUpdate;
 
         // This call will fail with a "ContentValidationException" because the
-        // mandary field "first_name" is set to an empty value.
+        // mandatory field "first_name" is set to an empty value.
         $userService->updateUser( $user, $userUpdate );
 
         /* END: Use Case */
@@ -1663,7 +1664,7 @@ class UserServiceTest extends BaseTest
         // eZ Publish demo installation
 
         // This call will fail with an "InvalidArgumentException", because the
-        // user is not assigned to the "Adminstrator" group
+        // user is not assigned to the "Administrator" group
         $userService->unAssignUserFromUserGroup(
             $user,
             $userService->loadUserGroup( $administratorGroupId )

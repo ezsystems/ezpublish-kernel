@@ -9,6 +9,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
+
 use eZ\Publish\API\Repository\FieldType;
 
 /**
@@ -30,6 +31,7 @@ class FieldTypeStub implements FieldType
      * Creates a FieldTypeStub with the given $identifier.
      *
      * @param mixed $identifier
+     *
      * @return void
      */
     public function __construct( $identifier )
@@ -38,7 +40,7 @@ class FieldTypeStub implements FieldType
     }
 
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      */
@@ -118,7 +120,7 @@ class FieldTypeStub implements FieldType
     /**
      * Indicates if the field type supports indexing and sort keys for searching
      *
-     * @return bool
+     * @return boolean
      */
     public function isSearchable()
     {
@@ -176,6 +178,7 @@ class FieldTypeStub implements FieldType
      * See the class description for more details on a hash format.
      *
      * @param mixed $fieldSettings
+     *
      * @return array|hash|scalar|null
      */
     public function fieldSettingsToHash( $fieldSettings )
@@ -190,6 +193,7 @@ class FieldTypeStub implements FieldType
      * See the class description for more details on a hash format.
      *
      * @param array|hash|scalar|null $fieldSettingsHash
+     *
      * @return mixed
      */
     public function fieldSettingsFromHash( $fieldSettingsHash )
@@ -203,6 +207,7 @@ class FieldTypeStub implements FieldType
      * See the class description for more details on a hash format.
      *
      * @param mixed $validatorConfiguration
+     *
      * @return array|hash|scalar|null
      */
     public function validatorConfigurationToHash( $validatorConfiguration )
@@ -217,6 +222,7 @@ class FieldTypeStub implements FieldType
      * See the class description for more details on a hash format.
      *
      * @param array|hash|scalar|null $validatorConfigurationHash
+     *
      * @return mixed
      */
     public function validatorConfigurationFromHash( $validatorConfigurationHash )

@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
+
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 
 /**
@@ -36,6 +37,7 @@ class MaskGenerator
      * Generates a language mask from the keys of $languages
      *
      * @param array $languages
+     *
      * @return int
      */
     public function generateLanguageMask( array $languages )
@@ -60,12 +62,12 @@ class MaskGenerator
      *
      * @param string $languageCode
      * @param boolean $alwaysAvailable
+     *
      * @return int
      */
     public function generateLanguageIndicator( $languageCode, $alwaysAvailable )
     {
-        return $this->languageHandler->loadByLanguageCode( $languageCode )->id
-            | ( $alwaysAvailable ? 1 : 0 );
+        return $this->languageHandler->loadByLanguageCode( $languageCode )->id | ( $alwaysAvailable ? 1 : 0 );
     }
 
     /**
@@ -73,7 +75,8 @@ class MaskGenerator
      *
      * @param string $language
      * @param array $languages
-     * @return bool
+     *
+     * @return boolean
      */
     public function isLanguageAlwaysAvailable( $language, array $languages )
     {
@@ -86,7 +89,8 @@ class MaskGenerator
      * Checks if $languageMask contains the alwaysAvailable bit field
      *
      * @param int $languageMask
-     * @return bool
+     *
+     * @return boolean
      */
     public function isAlwaysAvailable( $languageMask )
     {
@@ -97,6 +101,7 @@ class MaskGenerator
      * Removes the alwaysAvailable flag from $languageId and returns cleaned up $languageId
      *
      * @param int $languageId
+     *
      * @return int
      */
     public function removeAlwaysAvailableFlag( $languageId )
@@ -108,6 +113,7 @@ class MaskGenerator
      * Extracts every language Ids contained in $languageMask
      *
      * @param int $languageMask
+     *
      * @return array Array of language Id
      */
     public function extractLanguageIdsFromMask( $languageMask )

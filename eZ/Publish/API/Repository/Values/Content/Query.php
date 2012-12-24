@@ -45,14 +45,14 @@ class Query extends ValueObject
     /**
      * Query offset
      *
-     * @var integer
+     * @var int
      */
     public $offset = 0;
 
     /**
      * Query limit
      *
-     * @var integer
+     * @var int
      */
     public $limit;
 

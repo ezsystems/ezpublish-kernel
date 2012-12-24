@@ -90,7 +90,7 @@ interface SectionService
     public function countAssignedContents( Section $section );
 
     /**
-     * assigns the content to the given section
+     * Assigns the content to the given section
      * this method overrides the current assigned section
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to view provided object
@@ -99,7 +99,6 @@ interface SectionService
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      */
     public function assignSection( ContentInfo $contentInfo, Section $section );
-
 
     /**
      * Deletes $section from content repository
@@ -114,14 +113,14 @@ interface SectionService
     public function deleteSection( Section $section );
 
     /**
-     * instantiates a new SectionCreateStruct
+     * Instantiates a new SectionCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
      */
     public function newSectionCreateStruct();
 
     /**
-     * instantiates a new SectionUpdateStruct
+     * Instantiates a new SectionUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
      */

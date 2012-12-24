@@ -8,12 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
-use eZ\Publish\SPI\Persistence\User,
-    eZ\Publish\SPI\Persistence\User\Role,
-    eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
-    eZ\Publish\SPI\Persistence\User\Policy,
-    eZ\Publish\SPI\Persistence\User\RoleAssignment,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+
+use eZ\Publish\SPI\Persistence\User;
+use eZ\Publish\SPI\Persistence\User\Role;
+use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
+use eZ\Publish\SPI\Persistence\User\Policy;
+use eZ\Publish\SPI\Persistence\User\RoleAssignment;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * Test case for SectionHandler using in memory storage.
@@ -322,9 +323,16 @@ class UserHandlerTest extends HandlerTest
         $handler->assignRole( 4, $obj->id );// 4: Users
 
         // add a policy and check that it is part of returned permission after re fetch
-        $handler->addPolicy( $obj->id, new Policy( array( 'module' => 'Foo',
-                                                     'function' => 'Bar',
-                                                     'limitations' => array( 'Limit' => array( 'Test' ) ) ) ) );
+        $handler->addPolicy(
+            $obj->id,
+            new Policy(
+                array(
+                    'module' => 'Foo',
+                    'function' => 'Bar',
+                    'limitations' => array( 'Limit' => array( 'Test' ) )
+                )
+            )
+        );
         $list = $handler->loadRolesByGroupId( 4 );
         $this->assertEquals( 1, count( $list ) );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $list[0] );
@@ -374,9 +382,9 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * Test loadRoleAssignments function
+     * Test loadRoleAssignmentsByGroupId function
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignmentsByGroupId
      */
     public function testLoadRoleAssignmentsByGroupId()
     {
@@ -397,23 +405,22 @@ class UserHandlerTest extends HandlerTest
         );
     }
 
-
     /**
-     * Test loadRoleAssignments function
+     * Test loadRoleAssignmentsByGroupId function
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignmentsByGroupId
      */
     public function testLoadRoleAssignmentsNotFound()
     {
         $handler = $this->persistenceHandler->userHandler();
-        $list =  $handler->loadRoleAssignmentsByGroupId( 999 );
+        $list = $handler->loadRoleAssignmentsByGroupId( 999 );
         $this->assertEquals( array(), $list );
     }
 
     /**
-     * Test loadRoleAssignments function
+     * Test loadRoleAssignmentsByGroupId function
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignmentsByGroupId
      */
     public function testLoadRoleAssignmentsInherited()
     {
@@ -431,9 +438,16 @@ class UserHandlerTest extends HandlerTest
         $this->assertEquals( 1, count( $list ) );
 
         // add a policy and check that it is part of returned permission after re fetch
-        $handler->addPolicy( $obj->id, new Policy( array( 'module' => 'Foo',
-                                                     'function' => 'Bar',
-                                                     'limitations' => array( 'Limit' => array( 'Test' ) ) ) ) );
+        $handler->addPolicy(
+            $obj->id,
+            new Policy(
+                array(
+                    'module' => 'Foo',
+                    'function' => 'Bar',
+                    'limitations' => array( 'Limit' => array( 'Test' ) )
+                )
+            )
+        );
         $list = $handler->loadRoleAssignmentsByGroupId( 10, true );
         $this->assertEquals( 1, count( $list ) );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\RoleAssignment', $list[0] );
@@ -444,9 +458,9 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * Test loadRoleAssignments function
+     * Test loadRoleAssignmentsByGroupId function
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignmentsByGroupId
      */
     public function testLoadRoleAssignmentsInheritedDeep()
     {
@@ -477,9 +491,9 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * Test loadRoleAssignments function
+     * Test loadRoleAssignmentsByGroupId function
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignmentsByGroupId
      */
     public function testLoadRoleAssignmentsInheritedDuplicates()
     {
@@ -504,23 +518,23 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * Test loadRoleAssignments function
+     * Test loadRoleAssignmentsByGroupId function
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignmentsByGroupId
      */
     public function testLoadRoleAssignmentsInheritedNotFound()
     {
         $handler = $this->persistenceHandler->userHandler();
-        $list =  $handler->loadRoleAssignmentsByGroupId( 999, true );
+        $list = $handler->loadRoleAssignmentsByGroupId( 999, true );
         $this->assertEquals( array(), $list );
     }
 
     /**
-     * Test loadRoleAssignments function
+     * Test loadRoleAssignmentsByGroupId function
      *
      * Make sure several policies that have same values are not merged (when not same entity)
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignmentsByGroupId
      */
     public function testLoadRoleAssignmentsInheritedWithSameValueRoleAssignments()
     {
@@ -538,9 +552,13 @@ class UserHandlerTest extends HandlerTest
         // $role->description = array( 'eng-GB' => 'Test2 role' );
 
         $role->policies = array(
-            new Policy( array( 'module' => $obj->policies[2]->module,
-                               'function' => $obj->policies[2]->function,
-                               'limitations' => $obj->policies[2]->limitations, ) ),
+            new Policy(
+                array(
+                    'module' => $obj->policies[2]->module,
+                    'function' => $obj->policies[2]->function,
+                    'limitations' => $obj->policies[2]->limitations,
+                )
+            ),
         );
         $obj = $handler->createRole( $role );
         $handler->assignRole( 4, $obj->id );// 4: Users
@@ -611,9 +629,16 @@ class UserHandlerTest extends HandlerTest
         $this->assertEquals( 3, count( $obj->policies ) );
         $id = $obj->id;
 
-        $handler->addPolicy( $id, new Policy( array( 'module' => 'Foo',
-                                                     'function' => 'Bar',
-                                                     'limitations' => array( 'Limit' => array( 'Test' ) ) ) ) );
+        $handler->addPolicy(
+            $id,
+            new Policy(
+                array(
+                    'module' => 'Foo',
+                    'function' => 'Bar',
+                    'limitations' => array( 'Limit' => array( 'Test' ) )
+                )
+            )
+        );
         $obj = $handler->loadRole( $id );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 4, count( $obj->policies ) );
@@ -836,9 +861,16 @@ class UserHandlerTest extends HandlerTest
         $this->assertEquals( 3, count( $list ) );
 
         // add a policy and check that it is part of returned permission after re fetch
-        $handler->addPolicy( $obj->id, new Policy( array( 'module' => 'Foo',
-                                                     'function' => 'Bar',
-                                                     'limitations' => array( 'Limit' => array( 'Test' ) ) ) ) );
+        $handler->addPolicy(
+            $obj->id,
+            new Policy(
+                array(
+                    'module' => 'Foo',
+                    'function' => 'Bar',
+                    'limitations' => array( 'Limit' => array( 'Test' ) )
+                )
+            )
+        );
         $list = $handler->loadPoliciesByUserId( 10 );
         $this->assertEquals( 4, count( $list ) );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Policy', $list[3] );
@@ -945,9 +977,13 @@ class UserHandlerTest extends HandlerTest
         // $role->description = array( 'eng-GB' => 'Test2 role' );
 
         $role->policies = array(
-            new Policy( array( 'module' => $obj->policies[2]->module,
-                               'function' => $obj->policies[2]->function,
-                               'limitations' => $obj->policies[2]->limitations, ) ),
+            new Policy(
+                array(
+                    'module' => $obj->policies[2]->module,
+                    'function' => $obj->policies[2]->function,
+                    'limitations' => $obj->policies[2]->limitations,
+                )
+            ),
         );
         $obj = $handler->createRole( $role );
         $handler->assignRole( 4, $obj->id );// 4: Users
@@ -957,7 +993,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     *  Create Role with content/write/SubTree:/1/2/, content/read/* and user/*\/* policy
+     * Create Role with content/write/SubTree:/1/2/, content/read/* and user/*\/* policy
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
@@ -986,8 +1022,7 @@ class UserHandlerTest extends HandlerTest
     protected function clearRolesByGroupId( $groupId )
     {
         $handler = $this->persistenceHandler->userHandler();
-        $roles = $handler->loadRolesByGroupId( $groupId );
-        foreach ( $roles as $role )
+        foreach ( $handler->loadRolesByGroupId( $groupId ) as $role )
         {
             $handler->unAssignRole( $groupId, $role->id );
         }

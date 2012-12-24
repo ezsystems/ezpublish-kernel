@@ -95,7 +95,8 @@ class ContentView implements ContentViewInterface
      * Checks if $parameterName exists
      *
      * @param string $parameterName
-     * @return bool
+     *
+     * @return boolean
      */
     public function hasParameter( $parameterName )
     {
@@ -107,8 +108,10 @@ class ContentView implements ContentViewInterface
      * Throws an \InvalidArgumentException if $parameterName is not set.
      *
      * @param string $parameterName
-     * @return mixed
+     *
      * @throws \InvalidArgumentException
+     *
+     * @return mixed
      */
     public function getParameter( $parameterName )
     {
@@ -119,7 +122,8 @@ class ContentView implements ContentViewInterface
     }
 
     /**
-     * @param $templateIdentifier
+     * @param string|\Closure $templateIdentifier
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
      */
     public function setTemplateIdentifier( $templateIdentifier )

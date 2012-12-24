@@ -15,7 +15,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 class BadStateException extends Exception
 {
     /**
-     * Return HTTP status code
+     * Returns HTTP status code
      *
      * @return int
      */

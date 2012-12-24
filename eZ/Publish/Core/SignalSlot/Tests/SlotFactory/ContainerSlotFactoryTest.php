@@ -14,7 +14,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * @group signalSlot
- * @covers \eZ\Publish\Core\SignalSlot\SlotFactory\ContainerSlotFactory;
+ * @covers \eZ\Publish\Core\SignalSlot\SlotFactory\ContainerSlotFactory
  */
 class ContainerSlotFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -54,7 +54,9 @@ class ContainerSlotFactoryTest extends \PHPUnit_Framework_TestCase
                 $factory->getSlot( $slotIdentifier );
                 $this->fail( 'expected NotFoundException ' );
             }
-            catch ( NotFoundException $e ){}
+            catch ( NotFoundException $e )
+            {
+            }
         }
     }
 

@@ -39,7 +39,7 @@ class ContentTest extends BaseTest
     {
         $relationParser = $this->getParser();
 
-        $inputArray = array (
+        $inputArray = array(
             '_media-type' => 'application/vnd.ez.api.Version+json',
             '_href' => '/content/objects/10/versions/2',
             'VersionInfo' => array(),
@@ -58,19 +58,7 @@ class ContentTest extends BaseTest
                         'fieldValue' => 'User',
                     ),
                 ),
-            ),
-            'Relations' => array(
-                '_media-type' => 'application/vnd.ez.api.RelationList+json',
-                '_href'       => '/content/objects/10/relations',
-                'Relation' => array(
-                    0 => array(
-                        '_media-type' => 'application/vnd.ez.api.Relation+xml'
-                    ),
-                    1 => array(
-                        '_media-type' => 'application/vnd.ez.api.Relation+xml'
-                    ),
-                )
-            ),
+            )
         );
 
         $versionInfoMock = new \stdClass();
@@ -82,9 +70,6 @@ class ContentTest extends BaseTest
                 $this->equalTo( array() ),
                 $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher' )
             )->will( $this->returnValue( $versionInfoMock ) );
-
-        $this->getParsingDispatcherMock()->expects( $this->exactly( 1 ) )
-            ->method( 'parse' );
 
         $this->getFieldTypeParserMock()->expects( $this->exactly( 2 ) )
             ->method( 'parseFieldValue' )
@@ -112,27 +97,18 @@ class ContentTest extends BaseTest
     /**
      * @depends testParse
      */
-    public function testParsedRelationListId( $parsedContent )
-    {
-        $this->assertEquals(
-            '/content/objects/10/relations',
-            $parsedContent->relationListId
-        );
-    }
-
-    /**
-     * @depends testParse
-     */
     public function testParsedFirstNameField( $parsedContent )
     {
         $this->assertEquals(
             // Mocked result
-            new Values\Content\Field( array(
-                'id' => 19,
-                'fieldDefIdentifier' => 'first_name',
-                'languageCode' => 'eng-US',
-                'value' => 'MockedValue',
-            ) ),
+            new Values\Content\Field(
+                array(
+                    'id' => 19,
+                    'fieldDefIdentifier' => 'first_name',
+                    'languageCode' => 'eng-US',
+                    'value' => 'MockedValue',
+                )
+            ),
             $parsedContent->getField( 'first_name', 'eng-US' )
         );
     }
@@ -144,12 +120,14 @@ class ContentTest extends BaseTest
     {
         $this->assertEquals(
             // Mocked result
-            new Values\Content\Field( array(
-                'id' => 20,
-                'fieldDefIdentifier' => 'last_name',
-                'languageCode' => 'eng-US',
-                'value' => 'MockedValue',
-            ) ),
+            new Values\Content\Field(
+                array(
+                    'id' => 20,
+                    'fieldDefIdentifier' => 'last_name',
+                    'languageCode' => 'eng-US',
+                    'value' => 'MockedValue',
+                )
+            ),
             $parsedContent->getField( 'last_name', 'eng-US' )
         );
     }

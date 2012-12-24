@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\FieldType\Price;
 
-use eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\FieldType\Indexable,
-    eZ\Publish\SPI\Persistence\Content\Search;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\FieldType\Indexable;
+use eZ\Publish\SPI\Persistence\Content\Search;
 
 /**
  * Indexable definition for string field type
@@ -22,6 +22,7 @@ class SearchField implements Indexable
      * Get index data for field for search backend
      *
      * @param Field $field
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
      */
     public function getIndexData( Field $field )
@@ -29,7 +30,7 @@ class SearchField implements Indexable
         return array(
             new Search\Field(
                 'value',
-                // @TODO: Data is yet empty, this seems wrong, so we use the
+                // @todo: Data is yet empty, this seems wrong, so we use the
                 // sort field for now
                 $field->value->sortKey['sort_key_int'] / 1000,
                 new Search\FieldType\PriceField()
@@ -38,7 +39,7 @@ class SearchField implements Indexable
     }
 
     /**
-     * Get index fied types for search backend
+     * Get index field types for search backend
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Search\FieldType[]
      */

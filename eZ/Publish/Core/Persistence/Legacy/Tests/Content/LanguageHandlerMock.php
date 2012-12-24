@@ -1,9 +1,10 @@
 <?php
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
-use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler,
-    eZ\Publish\SPI\Persistence\Content\Language,
-    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
+
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 
 /**
  * Simple mock for a Language\Handler
@@ -34,6 +35,7 @@ class LanguageHandlerMock implements LanguageHandler
      * Create a new language
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Language\CreateStruct $struct
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     public function create( CreateStruct $struct )
@@ -55,8 +57,10 @@ class LanguageHandlerMock implements LanguageHandler
      * Get language by id
      *
      * @param mixed $id
-     * @return \eZ\Publish\SPI\Persistence\Content\Language
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If language could not be found by $id
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     public function load( $id )
     {
@@ -74,8 +78,10 @@ class LanguageHandlerMock implements LanguageHandler
      * Get language by Language Code (eg: eng-GB)
      *
      * @param string $languageCode
-     * @return \eZ\Publish\SPI\Persistence\Content\Language
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If language could not be found by $languageCode
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     public function loadByLanguageCode( $languageCode )
     {

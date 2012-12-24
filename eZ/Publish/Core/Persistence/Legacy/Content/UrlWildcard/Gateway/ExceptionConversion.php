@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway,
-    eZ\Publish\SPI\Persistence\Content\UrlWildcard,
-    ezcDbException,
-    PDOException;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
+use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
+use ezcDbException;
+use PDOException;
 
 /**
  * UrlAlias Handler
@@ -83,8 +83,6 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     *
-     *
      * @param mixed $parentId
      *
      * @return array

@@ -106,9 +106,10 @@ class ContentType extends APIContentType
     }
 
     /**
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
      *
      * @param string $languageCode
+     *
      * @return string the name for the given language or null if none exists.
      */
     public function getName( $languageCode )
@@ -122,7 +123,7 @@ class ContentType extends APIContentType
     }
 
     /**
-     *  This method returns the human readable description of the content type
+     * This method returns the human readable description of the content type
      *
      * The structure of this field is:
      * <code>
@@ -137,9 +138,10 @@ class ContentType extends APIContentType
     }
 
     /**
-     * this method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language
      *
      * @param string $languageCode
+     *
      * @return string the description for the given language or null if none exists.
      */
     public function getDescription( $languageCode )
@@ -173,9 +175,10 @@ class ContentType extends APIContentType
     }
 
     /**
-     * this method returns the field definition for the given identifier
+     * This method returns the field definition for the given identifier
      *
      * @param string $fieldDefinitionIdentifier
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
     public function getFieldDefinition( $fieldDefinitionIdentifier )
@@ -189,9 +192,10 @@ class ContentType extends APIContentType
     }
 
     /**
-     * this method returns the field definition for the given id
+     * This method returns the field definition for the given id
      *
      * @param mixed $fieldDefinitionId
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
     public function getFieldDefinitionById( $fieldDefinitionId )

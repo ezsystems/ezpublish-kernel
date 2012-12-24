@@ -9,10 +9,10 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
-use eZ\Publish\Core\MVC\Symfony\MVCEvents,
-    eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent,
-    Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Initializes the session id by looking at a POST variable named like the

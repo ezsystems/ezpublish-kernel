@@ -9,6 +9,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Image\PathGenerator;
+
 use eZ\Publish\Core\FieldType\Image\PathGenerator;
 
 class LegacyPathGenerator extends PathGenerator
@@ -20,8 +21,9 @@ class LegacyPathGenerator extends PathGenerator
      *
      * @param mixed $fieldId
      * @param int $versionNo
-     * @param strung $languageCode
+     * @param string $languageCode
      * @param string $nodePathString
+     *
      * @return string
      */
     public function getStoragePathForField( $fieldId, $versionNo, $languageCode, $nodePathString )

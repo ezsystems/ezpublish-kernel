@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy;
-use ezcDbHandler as ezcDbHandlerWrapped,
-    ezcQuerySelect,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Sqlite,
-    ezcDbFactory;
+
+use ezcDbHandler as ezcDbHandlerWrapped;
+use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Sqlite;
+use ezcDbFactory;
 
 /**
  * Wrapper class for the zeta components database handler, providing some
@@ -23,7 +24,7 @@ use ezcDbHandler as ezcDbHandlerWrapped,
 class EzcDbHandler
 {
     /**
-     * Aggregated zeta compoenents database handler, which is target of the
+     * Aggregated zeta components database handler, which is target of the
      * method dispatching.
      *
      * @var \ezcDbHandler
@@ -57,8 +58,8 @@ class EzcDbHandler
      * For further information on the database setup, please refer to
      * {@see http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html#handler-usage}
      *
-     * @static
-     * @param $dbParams
+     * @param string|mixed[]$dbParams
+     *
      * @return EzcDbHandler
      */
     public static function create( $dbParams )
@@ -103,6 +104,7 @@ class EzcDbHandler
      *
      * @param string $method
      * @param array $parameters
+     *
      * @return mixed
      */
     public function __call( $method, $parameters )
@@ -116,6 +118,7 @@ class EzcDbHandler
      * @param \ezcQuerySelect $query
      * @param string $columnName
      * @param string|null $tableName
+     *
      * @return string
      */
     public function aliasedColumn( ezcQuerySelect $query, $columnName, $tableName = null )
@@ -134,11 +137,12 @@ class EzcDbHandler
      *
      * @param string $columnName
      * @param string $tableName
+     *
      * @return string
      */
     public function quoteColumn( $columnName, $tableName = null )
     {
-        // @TODO: For oracle we need a mapping of table and column names to
+        // @todo: For oracle we need a mapping of table and column names to
         // their shortened variants here.
         return
             ( $tableName ? $this->quoteTable( $tableName ) . '.' : '' ) .
@@ -149,11 +153,12 @@ class EzcDbHandler
      * Returns a qualified identifier for $tableName.
      *
      * @param string $tableName
+     *
      * @return string
      */
     public function quoteTable( $tableName )
     {
-        // @TODO: For oracle we need a mapping of table and column names to
+        // @todo: For oracle we need a mapping of table and column names to
         // their shortened variants here.
         return $this->ezcDbHandler->quoteIdentifier( $tableName );
     }
@@ -167,6 +172,7 @@ class EzcDbHandler
      *
      * @param string $table
      * @param string $column
+     *
      * @return mixed
      */
     public function getAutoIncrementValue( $table, $column )
@@ -175,10 +181,11 @@ class EzcDbHandler
     }
 
     /**
-     * Return the name of the affected sequence
+     * Returns the name of the affected sequence
      *
      * @param string $table
      * @param string $column
+     *
      * @return string
      */
     public function getSequenceName( $table, $column )

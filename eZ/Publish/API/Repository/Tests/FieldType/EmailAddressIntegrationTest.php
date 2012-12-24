@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue,
-    eZ\Publish\API\Repository\Values\Content\Field;
+
+use eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type
@@ -20,7 +21,7 @@ use eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue,
 class EmailAddressIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
@@ -116,6 +117,7 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
+     *
      * @return void
      */
     public function assertFieldDataLoadedCorrect( Field $field)
@@ -292,8 +294,8 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new EmailAddressValue( 'spam@exmaple.no' ),
-                'spam@exmaple.no',
+                new EmailAddressValue( 'spam@example.no' ),
+                'spam@example.no',
             ),
         );
     }
@@ -309,8 +311,8 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                'spam@exmaple.no',
-                new EmailAddressValue( 'spam@exmaple.no' )
+                'spam@example.no',
+                new EmailAddressValue( 'spam@example.no' )
             ),
         );
     }

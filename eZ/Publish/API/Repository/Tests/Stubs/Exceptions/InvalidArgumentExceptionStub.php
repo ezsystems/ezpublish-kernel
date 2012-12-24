@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 
 /**
  *
- * This exception is throen if a service method is called with an illegal or non appriprite value
+ * This exception is thrown if a service method is called with an illegal or non appropriate value
  */
 class InvalidArgumentExceptionStub extends InvalidArgumentException
 {

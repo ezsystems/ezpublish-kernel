@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\URLAliasRefList;
@@ -57,6 +58,7 @@ class URLAliasRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testUrlAliasRefListHrefCorrect( \DOMDocument $dom )
@@ -66,6 +68,7 @@ class URLAliasRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testUrlAliasRefListMediaTypeCorrect( \DOMDocument $dom )
@@ -75,6 +78,7 @@ class URLAliasRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testUrlAliasHrefCorrect( \DOMDocument $dom )
@@ -84,6 +88,7 @@ class URLAliasRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
+     *
      * @depends testVisit
      */
     public function testUrlAliasMediaTypeCorrect( \DOMDocument $dom )

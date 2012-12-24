@@ -24,7 +24,7 @@ class UserGroup extends APIUserGroup
     protected $content;
 
     /**
-     * returns the VersionInfo for this version
+     * Returns the VersionInfo for this version
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
@@ -34,7 +34,7 @@ class UserGroup extends APIUserGroup
     }
 
     /**
-     * returns a field value for the given value
+     * Returns a field value for the given value
      * $version->fields[$fieldDefId][$languageCode] is an equivalent call
      * if no language is given on a translatable field this method returns
      * the value of the initial language of the version if present, otherwise null.
@@ -48,16 +48,6 @@ class UserGroup extends APIUserGroup
     public function getFieldValue( $fieldDefIdentifier, $languageCode = null )
     {
         return $this->content->getFieldValue( $fieldDefIdentifier, $languageCode );
-    }
-
-    /**
-     * returns the outgoing relations
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
-     */
-    public function getRelations()
-    {
-        return $this->content->getRelations();
     }
 
     /**
@@ -119,7 +109,9 @@ class UserGroup extends APIUserGroup
             case 'id':
                 $versionInfo = $this->getVersionInfo();
                 if ( empty( $versionInfo ) )
+                {
                     return null;
+                }
                 return $versionInfo->getContentInfo()->id;
 
             case 'versionInfo':
@@ -127,9 +119,6 @@ class UserGroup extends APIUserGroup
 
             case 'fields':
                 return $this->getFields();
-
-            case 'relations':
-                return $this->getRelations();
         }
 
         return parent::__get( $property );
@@ -140,7 +129,7 @@ class UserGroup extends APIUserGroup
      *
      * @param string $property
      *
-     * @return bool
+     * @return boolean
      */
     public function __isset( $property )
     {
@@ -157,9 +146,6 @@ class UserGroup extends APIUserGroup
             return true;
 
         if ( $property === 'fields' )
-            return true;
-
-        if ( $property === 'relations' )
             return true;
 
         return parent::__isset( $property );

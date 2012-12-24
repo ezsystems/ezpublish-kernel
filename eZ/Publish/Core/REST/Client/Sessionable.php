@@ -23,8 +23,10 @@ interface Sessionable
      * Only for testing
      *
      * @param mixed tringid
-     * @return void
+     *
      * @private
+     *
+     * @return void
      */
     public function setSession( $id );
 }

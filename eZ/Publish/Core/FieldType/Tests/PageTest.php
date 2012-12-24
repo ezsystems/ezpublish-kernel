@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Page\Type as PageType,
-    eZ\Publish\Core\FieldType\Page\Value as PageValue,
-    eZ\Publish\Core\FieldType\Page\Parts\Page as Page;
+
+use eZ\Publish\Core\FieldType\Page\Type as PageType;
+use eZ\Publish\Core\FieldType\Page\Value as PageValue;
+use eZ\Publish\Core\FieldType\Page\Parts\Page as Page;
 
 /**
  * @group fieldType
@@ -124,10 +125,6 @@ class PageTest extends StandardizedFieldTypeTest
                 new \stdClass(),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException'
             ),
-            array(
-                null,
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException'
-            ),
         );
     }
 
@@ -163,6 +160,10 @@ class PageTest extends StandardizedFieldTypeTest
     public function provideValidInputForAcceptValue()
     {
         return array(
+            array(
+                null,
+                new PageValue()
+            ),
             array(
                 new PageValue(),
                 new PageValue()

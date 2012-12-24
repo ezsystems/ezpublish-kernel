@@ -24,6 +24,7 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $matchingConfig
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getPartiallyMockedLocationViewProvider( array $matchingConfig = array() )
@@ -37,8 +38,7 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
                 )
             )
             ->setMethods( array( 'getMatcher' ) )
-            ->getMock()
-        ;
+            ->getMock();
     }
 
     /**
@@ -49,12 +49,12 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
         return $this
             ->getMockBuilder( 'eZ\\Publish\\API\\Repository\Repository' )
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
     }
 
     /**
      * @param array $properties
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getLocationMock( array $properties = array() )
@@ -62,12 +62,12 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
         return $this
             ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' )
             ->setConstructorArgs( array( $properties ) )
-            ->getMockForAbstractClass()
-        ;
+            ->getMockForAbstractClass();
     }
 
     /**
      * @param array $properties
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getContentInfoMock( array $properties = array() )
@@ -75,7 +75,6 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
         return $this->
             getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' )
             ->setConstructorArgs( array( $properties ) )
-            ->getMockForAbstractClass()
-        ;
+            ->getMockForAbstractClass();
     }
 }

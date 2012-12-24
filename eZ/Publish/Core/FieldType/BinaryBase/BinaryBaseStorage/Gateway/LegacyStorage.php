@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway;
-use eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway;
+
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway;
 
 abstract class LegacyStorage extends Gateway
 {
@@ -61,6 +62,7 @@ abstract class LegacyStorage extends Gateway
      * @param \ezcQuerySelect $selectQuery
      * @param int $fieldId
      * @param int $versionNo
+     *
      * @return void
      */
     protected function setFetchColumns( \ezcQuerySelect $selectQuery, $fieldId, $versionNo )
@@ -84,6 +86,7 @@ abstract class LegacyStorage extends Gateway
      * @param \ezcQueryInsert $insertQuery
      * @param VersionInfo $versionInfo
      * @param Field $field
+     *
      * @return void
      */
     protected function setInsertColumns( \ezcQueryInsert $insertQuery, VersionInfo $versionInfo, Field $field )
@@ -114,6 +117,7 @@ abstract class LegacyStorage extends Gateway
      * Set database handler for this gateway
      *
      * @param mixed $dbHandler
+     *
      * @return void
      * @throws \RuntimeException if $dbHandler is not an instance of
      *         {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler}
@@ -135,8 +139,9 @@ abstract class LegacyStorage extends Gateway
     /**
      * Returns the active connection
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      * @throws \RuntimeException if no connection has been set, yet.
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected function getConnection()
     {
@@ -152,6 +157,7 @@ abstract class LegacyStorage extends Gateway
      *
      * @param VersionInfo $versionInfo
      * @param Field $field
+     *
      * @return void
      */
     public function storeFileReference( VersionInfo $versionInfo, Field $field )
@@ -174,8 +180,10 @@ abstract class LegacyStorage extends Gateway
      * Removes the prepended mime-type directory from $path for legacy storage.
      *
      * @param string $path
-     * @return string
+     *
      * @protected
+     *
+     * @return string
      */
     public function removeMimeFromPath( $path )
     {
@@ -188,6 +196,7 @@ abstract class LegacyStorage extends Gateway
      *
      * @param mixed $fieldId
      * @param int $versionNo
+     *
      * @return array|void
      */
     public function getFileReferenceData( $fieldId, $versionNo )
@@ -242,6 +251,7 @@ abstract class LegacyStorage extends Gateway
      * Returns the property name for the given $columnName
      *
      * @param string $columnName
+     *
      * @return string
      */
     protected function toPropertyName( $columnName )
@@ -255,6 +265,7 @@ abstract class LegacyStorage extends Gateway
      *
      * @param mixed $value
      * @param string $columnName
+     *
      * @return mixed
      */
     protected function castToPropertyValue( $value, $columnName )
@@ -269,8 +280,10 @@ abstract class LegacyStorage extends Gateway
      *
      * @param string $path
      * @param string $mimeType
-     * @return string
+     *
      * @protected
+     *
+     * @return string
      */
     public function prependMimeToPath( $path, $mimeType )
     {
@@ -282,6 +295,7 @@ abstract class LegacyStorage extends Gateway
      * Removes all file references for the given $fieldIds
      *
      * @param array $fieldIds
+     *
      * @return void
      */
     public function removeFileReferences( array $fieldIds, $versionNo )
@@ -312,6 +326,7 @@ abstract class LegacyStorage extends Gateway
      *
      * @param mixed $fieldId
      * @param int $versionNo
+     *
      * @return void
      */
     public function removeFileReference( $fieldId, $versionNo )
@@ -341,6 +356,7 @@ abstract class LegacyStorage extends Gateway
      * Returns a set o file references, referenced by the given $fieldIds.
      *
      * @param array $fieldIds
+     *
      * @return array
      */
     public function getReferencedFiles( array $fieldIds, $versionNo )
@@ -380,9 +396,10 @@ abstract class LegacyStorage extends Gateway
     }
 
     /**
-     * Returns a map with the number of refereces each file from $files has
+     * Returns a map with the number of references each file from $files has
      *
      * @param array $files
+     *
      * @return array
      */
     public function countFileReferences( array $files )

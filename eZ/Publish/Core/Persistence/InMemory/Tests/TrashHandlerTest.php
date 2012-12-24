@@ -8,12 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
-use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\CreateStruct as ContentCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\API\Repository\Values\Content\Location;
+
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\CreateStruct as ContentCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
  * Test case for Location Handler using in memory storage.
@@ -79,7 +80,7 @@ class TrashHandlerTest extends HandlerTest
 
         $this->trashHandler = $this->persistenceHandler->trashHandler();
         $this->lastLocationId = 2;
-        for ( $i = 0 ; $i < $this->entriesGenerated; ++$i )
+        for ( $i = 0; $i < $this->entriesGenerated; ++$i )
         {
             $this->contents[] = $content = $this->persistenceHandler->contentHandler()->create(
                 new ContentCreateStruct(
@@ -182,10 +183,7 @@ class TrashHandlerTest extends HandlerTest
         self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trashed', $trashed );
         foreach ( $this->locations[0] as $property => $value )
         {
-            if ( $property === 'modifiedSubLocation' )
-                continue;
-
-            self::assertEquals( $value, $trashed->$property, "Property {$property} did not match");
+            self::assertEquals( $value, $trashed->$property, "Property {$property} did not match" );
         }
     }
 

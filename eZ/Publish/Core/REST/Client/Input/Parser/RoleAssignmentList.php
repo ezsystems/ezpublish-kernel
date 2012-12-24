@@ -22,8 +22,10 @@ class RoleAssignmentList extends Parser
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[]
+     *
      * @todo Error handling
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[]
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {

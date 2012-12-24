@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="bootstrap.php"
+         processIsolation="false"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true">
+    <php>
+        <env name="setupFactory" value="eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr" />
+        <env name="backendVersion" value="5" />
+        <env name="fixtureDir" value="Solr" />
+        <env name="solrServer" value="http://localhost:8983/" />
+    </php>
+    <testsuites>
+        <testsuite name="eZ\Publish\API\Repository">
+            <file>RepositoryTest.php</file>
+            <!-- Only the Solr Search tests differ from the other tests, so we
+                 are skipping everything else
+
+                 @todo: Search service is used all over the place, so we must test
+                        all services here.
+            -->
+            <file>eZ/Publish/API/Repository/Tests/SearchServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/SearchServiceAuthorizationTest.php</file>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">eZ/Publish/API/Repository</directory>
+            <directory>eZ/Publish/API/Repository/Tests/Stubs</directory>
+            <exclude>
+                <directory>eZ/Publish/API/Repository/Tests</directory>
+                <directory>eZ/Publish/API/Repository/Tutorials</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>

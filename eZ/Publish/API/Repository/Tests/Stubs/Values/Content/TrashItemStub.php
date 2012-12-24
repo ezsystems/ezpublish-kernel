@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\Content;
 
-use \eZ\Publish\API\Repository\Values\Content\TrashItem;
+use eZ\Publish\API\Repository\Values\Content\TrashItem;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\Content\TrashItem}
@@ -25,7 +25,7 @@ class TrashItemStub extends TrashItem
     protected $location;
 
     /**
-     * returns the content info of the content object of this location
+     * Returns the content info of the content object of this location
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
@@ -43,6 +43,4 @@ class TrashItemStub extends TrashItem
         }
         return parent::__get( $property );
     }
-
-
 }

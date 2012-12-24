@@ -8,16 +8,17 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
-use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\Relation,
-    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry,
-    eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo;
+
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\Relation;
+use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 /**
  * Mapper for Content Handler.
@@ -173,6 +174,7 @@ class Mapper
      *      "$tableName_$columnName"
      *
      * @param array $rows
+     *
      * @return \eZ\Publish\SPI\Persistence\Content[]
      */
     public function extractContentFromRows( array $rows )
@@ -231,6 +233,7 @@ class Mapper
      *
      * @param array $row
      * @param string $prefix Prefix for row keys, which are initially mapped by ezcontentobject fields
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
     public function extractContentInfoFromRow( array $row, $prefix = '' )
@@ -320,7 +323,7 @@ class Mapper
     /**
      * @todo use langmask handler for this
      *
-     * @param $languageMask
+     * @param int $languageMask
      *
      * @return array
      */
@@ -345,6 +348,7 @@ class Mapper
      * Extracts a Field from $row
      *
      * @param array $row
+     *
      * @return Field
      */
     protected function extractFieldFromRow( array $row )
@@ -366,6 +370,7 @@ class Mapper
      *
      * @param array $row
      * @param string $type
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      *         if the necessary converter for $type could not be found.
@@ -399,6 +404,7 @@ class Mapper
      * Creates CreateStruct from $content
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\CreateStruct
      */
     public function createCreateStructFromContent( Content $content )

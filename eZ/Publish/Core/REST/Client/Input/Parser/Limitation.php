@@ -24,8 +24,10 @@ class Limitation extends Parser
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\API\Repository\Values\User\Limitation
+     *
      * @todo Error handling
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\Limitation
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
@@ -48,6 +50,7 @@ class Limitation extends Parser
      * @param string $identifier
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation
      *
      * @todo Use dependency injection system
@@ -84,7 +87,7 @@ class Limitation extends Parser
                 return new \eZ\Publish\API\Repository\Values\User\Limitation\SiteaccessLimitation();
 
             case APILimitation::STATE:
-                return new \eZ\Publish\API\Repository\Values\User\Limitation\StateLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation();
 
             case APILimitation::SUBTREE:
                 return new \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation();

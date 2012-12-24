@@ -9,11 +9,11 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 
-use eZ\Publish\Core\MVC\Symfony\Controller\Controller,
-    eZ\Publish\Core\MVC\Legacy\Kernel\Loader,
-    ezpKernelTreeMenu,
-    Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\OptionsResolver\OptionsResolver;
+use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
+use eZ\Publish\Core\MVC\Legacy\Kernel\Loader;
+use ezpKernelTreeMenu;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LegacyTreeMenuController extends Controller
 {
@@ -32,10 +32,11 @@ class LegacyTreeMenuController extends Controller
      * Action rendering the tree menu for admin interface.
      * Note that parameters are not used at all since the request is entirely forwarded to the legacy kernel.
      *
-     * @param $nodeId
-     * @param $modified
-     * @param $expiry
-     * @param $perm
+     * @param int $nodeId
+     * @param int $modified
+     * @param int $expiry
+     * @param string $perm
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function viewMenu( $nodeId, $modified, $expiry, $perm )

@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications,
-    eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
+
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * A criterion that matches content based on its parent location id
@@ -26,7 +27,7 @@ class ParentLocationId extends Criterion implements CriterionInterface
     /**
      * Creates a new ParentLocationId criterion
      *
-     * @param integer|integer[] $value One or more locationId parent locations must be matched against
+     * @param int|int[] $value One or more locationId parent locations must be matched against
      *
      * @throws \InvalidArgumentException if a non numeric id is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator

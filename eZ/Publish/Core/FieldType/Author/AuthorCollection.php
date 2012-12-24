@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Author;
-use eZ\Publish\Core\FieldType\Author\Author,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    ArrayObject;
+
+use eZ\Publish\Core\FieldType\Author\Author;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use ArrayObject;
 
 /**
  * Author collection.

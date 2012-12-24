@@ -57,15 +57,6 @@
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="subLocationModificationDate"
-            type="xsd:dateTime">
-            <xsd:annotation>
-              <xsd:documentation>
-                Timestamp of the latest update of a
-                content object in a sub location.
-              </xsd:documentation>
-            </xsd:annotation>
-          </xsd:element>
           <xsd:element name="depth" type="xsd:int">
             <xsd:annotation>
               <xsd:documentation>

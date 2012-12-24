@@ -8,16 +8,17 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location;
-use eZ\Publish\SPI\Persistence\Content\Location,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Location\Handler as BaseLocationHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler as UrlAliasHandler,
-    eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
+
+use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as BaseLocationHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler as UrlAliasHandler;
+use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
 
 /**
  * The Location Handler interface defines operations on Location elements in the storage engine.
@@ -76,9 +77,10 @@ class Handler implements BaseLocationHandler
     }
 
     /**
-     * Return parent path string for a path string
+     * Returns parent path string for a path string
      *
      * @param string $pathString
+     *
      * @return string
      */
     protected function getParentPathString( $pathString )
@@ -90,6 +92,7 @@ class Handler implements BaseLocationHandler
      * Loads the data for the location identified by $locationId.
      *
      * @param int $locationId
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     public function load( $locationId )
@@ -102,8 +105,10 @@ class Handler implements BaseLocationHandler
      * Loads the data for the location identified by $remoteId.
      *
      * @param string $remoteId
-     * @return \eZ\Publish\SPI\Persistence\Content\Location
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     public function loadByRemoteId( $remoteId )
     {
@@ -117,6 +122,7 @@ class Handler implements BaseLocationHandler
      *
      * @param int $contentId
      * @param int $rootLocationId
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location[]
      */
     public function loadLocationsByContent( $contentId, $rootLocationId = null )
@@ -143,20 +149,21 @@ class Handler implements BaseLocationHandler
     public function copySubtree( $sourceId, $destinationParentId )
     {
         $children = $this->locationGateway->getSubtreeContent( $sourceId );
-        $parentData = $this->locationGateway->getBasicNodeData( $destinationParentId );
+        $destinationParentData = $this->locationGateway->getBasicNodeData( $destinationParentId );
         $contentMap = array();
         $locationMap = array(
             $children[0]["parent_node_id"] => array(
                 "id" => $destinationParentId,
-                "hidden" => (boolean)$parentData["is_hidden"],
-                "invisible" => (boolean)$parentData["is_invisible"]
+                "hidden" => (boolean)$destinationParentData["is_hidden"],
+                "invisible" => (boolean)$destinationParentData["is_invisible"],
+                "path_identification_string" => $destinationParentData["path_identification_string"]
             )
         );
 
         $locations = array();
         foreach ( $children as $child )
         {
-            $locations[$child["contentobject_id"]][] = $child["node_id"];
+            $locations[$child["contentobject_id"]][$child["node_id"]] = true;
         }
 
         $time = time();
@@ -164,6 +171,7 @@ class Handler implements BaseLocationHandler
         $mainLocationsUpdate = array();
         foreach ( $children as $index => $child )
         {
+            // Copy content
             if ( !isset( $contentMap[$child["contentobject_id"]] ) )
             {
                 $content = $this->contentHandler->copy(
@@ -187,10 +195,14 @@ class Handler implements BaseLocationHandler
 
             $createStruct = $this->locationMapper->getLocationCreateStruct( $child );
             $createStruct->contentId = $contentMap[$child["contentobject_id"]];
-            $createStruct->parentId = $locationMap[$child["parent_node_id"]]["id"];
-            $createStruct->invisible = $createStruct->hidden ||
-                $locationMap[$child["parent_node_id"]]["hidden"] ||
-                $locationMap[$child["parent_node_id"]]["invisible"];
+            $parentData = $locationMap[$child["parent_node_id"]];
+            $createStruct->parentId = $parentData["id"];
+            $createStruct->invisible = $createStruct->hidden || $parentData["hidden"] || $parentData["invisible"];
+            $pathString = explode( "/", $child["path_identification_string"] );
+            $pathString = end( $pathString );
+            $createStruct->pathIdentificationString = strlen( $pathString ) > 0
+                ? $parentData["path_identification_string"] . "/" . $pathString
+                : null;
 
             // Use content main location if already set, otherwise create location as main
             if ( isset( $mainLocations[$child["contentobject_id"]] ) )
@@ -204,7 +216,7 @@ class Handler implements BaseLocationHandler
 
                 // If needed mark for update
                 if (
-                    in_array( $child["main_node_id"], $locations[$child["contentobject_id"]] ) &&
+                    isset( $locations[$child["contentobject_id"]][$child["main_node_id"]] ) &&
                     count( $locations[$child["contentobject_id"]] ) > 1 &&
                     $child["node_id"] !== $child["main_node_id"]
                 )
@@ -218,9 +230,13 @@ class Handler implements BaseLocationHandler
             $locationMap[$child["node_id"]] = array(
                 "id" => $newLocation->id,
                 "hidden" => $newLocation->hidden,
-                "invisible" => $newLocation->invisible
+                "invisible" => $newLocation->invisible,
+                "path_identification_string" => $newLocation->pathIdentificationString
             );
-            if ( $index === 0 ) $copiedSubtreeRootLocation = $newLocation;
+            if ( $index === 0 )
+            {
+                $copiedSubtreeRootLocation = $newLocation;
+            }
         }
 
         // Update main locations
@@ -234,6 +250,7 @@ class Handler implements BaseLocationHandler
 
         // If subtree root is main location for its content, update subtree section to the one of the
         // parent location content
+        /** @var $copiedSubtreeRootLocation */
         if ( $copiedSubtreeRootLocation->mainLocationId === $copiedSubtreeRootLocation->id )
         {
             $this->setSectionForSubtree(
@@ -254,6 +271,7 @@ class Handler implements BaseLocationHandler
      *
      * @param mixed $sourceId
      * @param mixed $destinationParentId
+     *
      * @return boolean
      */
     public function move( $sourceId, $destinationParentId )
@@ -262,8 +280,8 @@ class Handler implements BaseLocationHandler
         $destinationNodeData = $this->locationGateway->getBasicNodeData( $destinationParentId );
 
         $this->locationGateway->moveSubtreeNodes(
-            $sourceNodeData['path_string'],
-            $destinationNodeData['path_string']
+            $sourceNodeData,
+            $destinationNodeData
         );
 
         $this->locationGateway->updateNodeAssignment(
@@ -282,6 +300,7 @@ class Handler implements BaseLocationHandler
      *
      * @param int|string $locationId
      * @param int $timestamp
+     *
      * @return void
      */
     public function markSubtreeModified( $locationId, $timestamp = null )
@@ -324,6 +343,7 @@ class Handler implements BaseLocationHandler
      *
      * @param mixed $locationId1
      * @param mixed $locationId2
+     *
      * @return boolean
      */
     public function swap( $locationId1, $locationId2 )
@@ -336,6 +356,7 @@ class Handler implements BaseLocationHandler
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId
+     *
      * @return boolean
      */
     public function update( UpdateStruct $location, $locationId )
@@ -347,6 +368,7 @@ class Handler implements BaseLocationHandler
      * Creates a new location rooted at $location->parentId.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     public function create( CreateStruct $createStruct )
@@ -372,6 +394,7 @@ class Handler implements BaseLocationHandler
      * new main Location.
      *
      * @param mixed $locationId
+     *
      * @return boolean
      */
     public function removeSubtree( $locationId )

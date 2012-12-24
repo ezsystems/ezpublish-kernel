@@ -80,7 +80,7 @@ class FieldDefinitionCreateStruct extends ValueObject
     public $isRequired;
 
     /**
-     * indicates if this attribute is used for information collection
+     * Indicates if this attribute is used for information collection
      *
      * @var boolean
      */

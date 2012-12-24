@@ -9,9 +9,8 @@
 
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
-use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor,
-
-    eZ\Publish\API\Repository\Values;
+use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
+use eZ\Publish\API\Repository\Values;
 
 /**
  * Base for RestContentType related value object visitors
@@ -23,6 +22,7 @@ abstract class RestContentTypeBase extends ValueObjectVisitor
      * $contentTypeStatus.
      *
      * @param int $contentTypeStatus
+     *
      * @return string
      */
     protected function getUrlTypeSuffix( $contentTypeStatus )
@@ -46,6 +46,7 @@ abstract class RestContentTypeBase extends ValueObjectVisitor
      * Serializes the given $contentTypeStatus to a string representation
      *
      * @param int $contentTypeStatus
+     *
      * @return string
      */
     protected function serializeStatus( $contentTypeStatus )

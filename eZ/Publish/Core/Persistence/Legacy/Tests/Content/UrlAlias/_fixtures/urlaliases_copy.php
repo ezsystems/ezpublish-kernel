@@ -93,6 +93,19 @@ return array (
             'text' => 'sub2',
             'text_md5' => '5fbef65269a99bddc2106251dd89b1dc',
         ),
+        8 => array (
+            'action' => 'eznode:400',
+            'action_type' => 'eznode',
+            'alias_redirects' => '0',
+            'id' => '9',
+            'is_alias' => '0',
+            'is_original' => '1',
+            'lang_mask' => '4',
+            'link' => '9',
+            'parent' => '2',
+            'text' => 'move-this',
+            'text_md5' => '93dc83851ede7c440fe00c29e7487d1b',
+        ),
     ),
     'ezurlalias_ml_incr' => array (
         0 => array (
@@ -119,6 +132,9 @@ return array (
         7 => array (
             'id' => '8',
         ),
+        8 => array (
+            'id' => '9',
+        ),
     ),
     'ezcontent_language' => array (
         0 => array(
@@ -138,55 +154,55 @@ return array (
         0 => array(
             'node_id' => 1,
             'parent_node_id' => 1,
-            'path_string' => '',
+            'path_string' => '/1/',
             'remote_id' => '',
         ),
         1 => array(
             'node_id' => 2,
             'parent_node_id' => 1,
-            'path_string' => '',
+            'path_string' => '/1/2/',
             'remote_id' => '',
         ),
         2 => array(
             'node_id' => 3,
             'parent_node_id' => 2,
-            'path_string' => '',
+            'path_string' => '/1/2/3/',
             'remote_id' => '',
         ),
         3 => array(
             'node_id' => 4,
             'parent_node_id' => 2,
-            'path_string' => '',
+            'path_string' => '/1/2/4/',
             'remote_id' => '',
         ),
         4 => array(
             'node_id' => 5,
             'parent_node_id' => 4,
-            'path_string' => '',
+            'path_string' => '/1/2/4/5/',
             'remote_id' => '',
         ),
         5 => array(
             'node_id' => 6,
             'parent_node_id' => 5,
-            'path_string' => '',
+            'path_string' => '/1/2/4/5/6/',
             'remote_id' => '',
         ),
         6 => array(
             'node_id' => 400,
             'parent_node_id' => 3,
-            'path_string' => '',
+            'path_string' => '/1/2/3/400/',
             'remote_id' => '',
         ),
         7 => array(
             'node_id' => 500,
             'parent_node_id' => 400,
-            'path_string' => '',
+            'path_string' => '/1/2/3/400/500/',
             'remote_id' => '',
         ),
         8 => array(
             'node_id' => 600,
             'parent_node_id' => 500,
-            'path_string' => '',
+            'path_string' => '/1/2/3/400/500/600/',
             'remote_id' => '',
         ),
     ),

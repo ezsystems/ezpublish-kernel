@@ -18,7 +18,7 @@ namespace eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage\User;
 class ContentServiceMock
 {
     /**
-     * Load content.
+     * Loads content.
      *
      * @return void
      */

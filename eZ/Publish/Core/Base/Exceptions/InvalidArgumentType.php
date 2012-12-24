@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Base\Exceptions;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    Exception;
+
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use Exception;
 
 /**
  * Invalid Argument Type Exception implementation
@@ -23,7 +24,7 @@ class InvalidArgumentType extends InvalidArgumentException
      *
      * @param string $argumentName
      * @param string $expectedType
-     * @param mixed|null $value Optionally to output the type that was recived
+     * @param mixed|null $value Optionally to output the type that was received
      * @param \Exception|null $previous
      */
     public function __construct( $argumentName, $expectedType, $value = null, Exception $previous = null )

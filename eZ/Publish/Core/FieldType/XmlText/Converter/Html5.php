@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\FieldType\XmlText\Converter;
 
-use eZ\Publish\Core\FieldType\XmlText\Converter,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    DOMDocument,
-    XSLTProcessor;
+use eZ\Publish\Core\FieldType\XmlText\Converter;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use DOMDocument;
+use XSLTProcessor;
 
 /**
  * Converts internal XmlText representation to HTML5
@@ -62,6 +62,7 @@ class Html5 implements Converter
      * Convert $xmlDoc from internal representation DOMDocument to HTML5
      *
      * @param \DOMDocument $xmlDoc
+     *
      * @return string
      */
     public function convert( DOMDocument $xmlDoc )

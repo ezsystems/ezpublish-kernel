@@ -9,25 +9,25 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\EventListener;
 
-use eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent,
-    eZ\Publish\Core\MVC\Symfony\MVCEvents,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound as ConverterNotFound,
-    eZ\Publish\Core\Repository\Values\Content\Location,
-    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
-    eZ\Publish\Core\MVC\Legacy\View\Provider\Content as LegacyContentViewProvider,
-    eZ\Publish\Core\MVC\Legacy\View\Provider\Location as LegacyLocationViewProvider,
-    Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    Symfony\Component\HttpKernel\Log\LoggerInterface;
+use eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent;
+use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound as ConverterNotFound;
+use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Legacy\View\Provider\Content as LegacyContentViewProvider;
+use eZ\Publish\Core\MVC\Legacy\View\Provider\Location as LegacyLocationViewProvider;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 class APIContentExceptionListener implements EventSubscriberInterface
 {
     /**
-     * @var eZ\Publish\Core\MVC\Legacy\View\Provider\Content
+     * @var \eZ\Publish\Core\MVC\Legacy\View\Provider\Content
      */
     protected $legacyCVP;
 
     /**
-     * @var eZ\Publish\Core\MVC\Legacy\View\Provider\Location
+     * @var \eZ\Publish\Core\MVC\Legacy\View\Provider\Location
      */
     protected $legacyLVP;
 

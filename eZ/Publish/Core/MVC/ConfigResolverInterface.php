@@ -38,7 +38,7 @@ interface ConfigResolverInterface
      * @param string $namespace If null, the default namespace should be used.
      * @param string $scope The scope you need $paramName value for.
      *
-     * @return bool
+     * @return boolean
      */
     public function hasParameter( $paramName, $namespace = null, $scope = null );
 

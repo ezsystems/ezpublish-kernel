@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\SPI\Persistence\Content\Location,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase
@@ -130,19 +131,29 @@ class EzpDatabaseTest extends TestCase
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->moveSubtreeNodes( '/1/2/69/', '/1/2/77/' );
+        $handler->moveSubtreeNodes(
+            array(
+                'path_string' => '/1/2/69/',
+                'path_identification_string' => 'products'
+            ),
+            array(
+                'path_string' => '/1/2/77/',
+                'path_identification_string' => 'solutions'
+            )
+        );
 
+        /** @var $query \ezcQuerySelect */
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
             array(
-                array( 65, '/1/2/', 1, 1 ),
-                array( 67, '/1/2/77/69/', 77, 3 ),
-                array( 69, '/1/2/77/69/70/71/', 70, 5 ),
-                array( 73, '/1/2/77/69/72/75/', 72, 5 ),
-                array( 75, '/1/2/77/', 2, 2 ),
+                array( 65, '/1/2/', '', 1, 1 ),
+                array( 67, '/1/2/77/69/', 'solutions/products', 77, 3 ),
+                array( 69, '/1/2/77/69/70/71/', 'solutions/products/software/os_type_i', 70, 5 ),
+                array( 73, '/1/2/77/69/72/75/', 'solutions/products/boxes/cd_dvd_box_iii', 72, 5 ),
+                array( 75, '/1/2/77/', 'solutions', 2, 2 ),
             ),
             $query
-                ->select( 'contentobject_id', 'path_string', 'parent_node_id', 'depth' )
+                ->select( 'contentobject_id', 'path_string', 'path_identification_string', 'parent_node_id', 'depth' )
                 ->from( 'ezcontentobject_tree' )
                 ->where( $query->expr->in( 'node_id', array( 69, 71, 75, 77, 2 ) ) )
                 ->orderBy( 'contentobject_id' )
@@ -399,7 +410,7 @@ class EzpDatabaseTest extends TestCase
     {
         return array(
             array( 'contentobject_id', 68 ),
-            array( 'contentobject_is_published', 0 ),
+            array( 'contentobject_is_published', 1 ),
             array( 'contentobject_version', 1 ),
             array( 'depth', 3 ),
             array( 'is_hidden', 0 ),
@@ -688,8 +699,9 @@ class EzpDatabaseTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::deleteNodeAssignment
+     *
+     * @return void
      */
     public function testDeleteNodeAssignment()
     {
@@ -705,16 +717,17 @@ class EzpDatabaseTest extends TestCase
                 ->select( 'count(*)' )
                 ->from( 'eznode_assignment' )
                 ->where(
-                $query->expr->lAnd(
-                    $query->expr->eq( 'contentobject_id', 11 )
+                    $query->expr->lAnd(
+                        $query->expr->eq( 'contentobject_id', 11 )
+                    )
                 )
-            )
         );
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::deleteNodeAssignment
+     *
+     * @return void
      */
     public function testDeleteNodeAssignmentWithSecondArgument()
     {
@@ -726,13 +739,13 @@ class EzpDatabaseTest extends TestCase
             ->select( 'count(*)' )
             ->from( 'eznode_assignment' )
             ->where(
-            $query->expr->lAnd(
-                $query->expr->eq( 'contentobject_id', 11 )
-            )
-        );
+                $query->expr->lAnd(
+                    $query->expr->eq( 'contentobject_id', 11 )
+                )
+            );
         $statement = $query->prepare();
         $statement->execute();
-        $nodeAssignmentsCount = (int) $statement->fetchColumn();
+        $nodeAssignmentsCount = (int)$statement->fetchColumn();
 
         $handler->deleteNodeAssignment( 11, 1 );
 
@@ -743,10 +756,10 @@ class EzpDatabaseTest extends TestCase
                 ->select( 'count(*)' )
                 ->from( 'eznode_assignment' )
                 ->where(
-                $query->expr->lAnd(
-                    $query->expr->eq( 'contentobject_id', 11 )
+                    $query->expr->lAnd(
+                        $query->expr->eq( 'contentobject_id', 11 )
+                    )
                 )
-            )
         );
     }
 
@@ -782,10 +795,12 @@ class EzpDatabaseTest extends TestCase
             $query
                 ->select( 'path_string' )
                 ->from( 'ezcontentobject_tree' )
-                ->where( $query->expr->lAnd(
-                    $query->expr->eq( 'contentobject_id', 68 ),
-                    $query->expr->eq( 'parent_node_id', 77 )
-                ) )
+                ->where(
+                    $query->expr->lAnd(
+                        $query->expr->eq( 'contentobject_id', 68 ),
+                        $query->expr->eq( 'parent_node_id', 77 )
+                    )
+                )
         );
     }
 
@@ -821,10 +836,12 @@ class EzpDatabaseTest extends TestCase
             $query
                 ->select( 'op_code' )
                 ->from( 'eznode_assignment' )
-                ->where( $query->expr->lAnd(
-                    $query->expr->eq( 'contentobject_id', 68 ),
-                    $query->expr->eq( 'parent_node', 77 )
-                ) )
+                ->where(
+                    $query->expr->lAnd(
+                        $query->expr->eq( 'contentobject_id', 68 ),
+                        $query->expr->eq( 'parent_node', 77 )
+                    )
+                )
         );
     }
 
@@ -881,10 +898,10 @@ class EzpDatabaseTest extends TestCase
         $gateway = $this->getLocationGateway();
 
         $gateway->changeMainLocation(
-            10,// content id
-            228,// new main location id
-            2,// content version number
-            227// new main location parent id
+            10, // content id
+            228, // new main location id
+            2, // content version number
+            227 // new main location parent id
         );
 
         $query = $this->handler->createSelectQuery();

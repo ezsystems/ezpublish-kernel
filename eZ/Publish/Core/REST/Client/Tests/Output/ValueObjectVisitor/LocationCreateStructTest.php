@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
@@ -54,6 +55,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains LocationCreate element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLocationCreateElement( $result )
@@ -75,6 +77,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains LocationCreate attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsLocationCreateAttributes( $result )
@@ -96,6 +99,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains ParentLocation element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsParentLocationElement( $result )
@@ -114,6 +118,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains ParentLocation attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsParentLocationAttributes( $result )
@@ -136,6 +141,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains priority value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPriorityValueElement( $result )
@@ -144,7 +150,6 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'priority',
                 'content'  => '0',
-
             ),
             $result,
             'Invalid or non-existing <LocationCreate> priority value element.',
@@ -156,6 +161,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains hidden value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsHiddenValueElement( $result )
@@ -164,7 +170,6 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'hidden',
                 'content'  => 'false',
-
             ),
             $result,
             'Invalid or non-existing <LocationCreate> hidden value element.',
@@ -176,6 +181,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains sortField value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSortFieldValueElement( $result )
@@ -184,7 +190,6 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'sortField',
                 'content'  => 'PATH',
-
             ),
             $result,
             'Invalid or non-existing <LocationCreate> sortField value element.',
@@ -196,6 +201,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      * Tests that the result contains sortOrder value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSortOrderValueElement( $result )
@@ -204,7 +210,6 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'sortOrder',
                 'content'  => 'ASC',
-
             ),
             $result,
             'Invalid or non-existing <LocationCreate> sortOrder value element.',

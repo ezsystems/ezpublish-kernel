@@ -48,7 +48,7 @@ class URLAlias extends ValueObjectVisitor
             $generator->startObjectElement( 'location', 'Location' );
             $generator->startAttribute(
                 'href',
-                $this->urlHandler->generate( 'location', array( 'location' => rtrim( $data->destination->pathString, '/' ) ) )
+                $this->urlHandler->generate( 'locationById', array( 'location' => $data->destination ) )
             );
             $generator->endAttribute( 'href' );
             $generator->endObjectElement( 'location' );
@@ -84,6 +84,7 @@ class URLAlias extends ValueObjectVisitor
      * Serializes the given $urlAliasType to a string representation
      *
      * @param int $urlAliasType
+     *
      * @return string
      */
     protected function serializeType( $urlAliasType )

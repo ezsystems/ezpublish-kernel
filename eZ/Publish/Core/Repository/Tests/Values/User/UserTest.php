@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Values\User;
-use eZ\Publish\Core\Repository\Values\User\User,
-    PHPUnit_Framework_TestCase;
+
+use eZ\Publish\Core\Repository\Values\User\User;
+use PHPUnit_Framework_TestCase;
 
 /**
  *
@@ -17,7 +18,6 @@ use eZ\Publish\Core\Repository\Values\User\User,
 class UserTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \eZ\Publish\Core\Repository\Values\User\User::getIterator
      * @covers \eZ\Publish\Core\Repository\Values\User\User::getProperties
      */
     public function testObjectProperties()

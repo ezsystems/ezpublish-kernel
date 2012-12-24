@@ -42,7 +42,7 @@ class DelegatingConverter implements MultipleObjectConverter
      * Registers $converter for classes contained in $classes
      *
      * @param \eZ\Publish\Core\MVC\Legacy\Templating\Converter\ObjectConverter $converter
-     * @param $class Class the converter is for
+     * @param string $class Class the converter is for
      */
     public function addConverter( ObjectConverter $converter, $class )
     {
@@ -55,8 +55,10 @@ class DelegatingConverter implements MultipleObjectConverter
      *
      * @param mixed $object
      * @param string $alias
-     * @return void
+     *
      * @throws \InvalidArgumentException If $object is not an object
+     *
+     * @return void
      */
     public function register( $object, $alias )
     {
@@ -109,9 +111,11 @@ class DelegatingConverter implements MultipleObjectConverter
     /**
      * Converts $object to make it compatible with eZTemplate API.
      *
-     * @param $object
-     * @return mixed|\eZ\Publish\Core\MVC\Legacy\Templating\LegacyCompatible
+     * @param object $object
+     *
      * @throws \InvalidArgumentException If $object is actually not an object
+     *
+     * @return mixed|\eZ\Publish\Core\MVC\Legacy\Templating\LegacyCompatible
      */
     public function convert( $object )
     {

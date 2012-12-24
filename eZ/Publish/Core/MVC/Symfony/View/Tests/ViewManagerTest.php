@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests;
 
-use eZ\Publish\Core\MVC\Symfony\View\Manager,
-    eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZ\Publish\Core\MVC\Symfony\View\Manager;
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 
 /**
  * @group mvc
@@ -39,7 +39,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
 
     private $viewBaseLayout = 'EzPublishCoreBundle::viewbase.html.twig';
 
-    protected  function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->templateEngineMock = $this->getMock( 'Symfony\\Component\\Templating\\EngineInterface' );
@@ -129,13 +129,11 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
         $content
             ->expects( $this->once() )
             ->method( 'getVersionInfo' )
-            ->will( $this->returnValue( $versionInfo ) )
-        ;
+            ->will( $this->returnValue( $versionInfo ) );
         $versionInfo
             ->expects( $this->once() )
             ->method( 'getContentInfo' )
-            ->will( $this->returnValue( $contentInfo ) )
-        ;
+            ->will( $this->returnValue( $contentInfo ) );
 
         // Configuring view provider behaviour
         $templateIdentifier = 'foo:bar:baz';
@@ -148,8 +146,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
                 $this->returnValue(
                     new ContentView( $templateIdentifier, $params )
                 )
-            )
-        ;
+            );
 
         // Configuring template engine behaviour
         $expectedTemplateResult = 'This is content rendering';
@@ -157,8 +154,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'render' )
             ->with( $templateIdentifier, $params + array( 'content' => $content, 'viewbaseLayout' => $this->viewBaseLayout ) )
-            ->will( $this->returnValue( $expectedTemplateResult ) )
-        ;
+            ->will( $this->returnValue( $expectedTemplateResult ) );
 
         self::assertSame( $expectedTemplateResult, $this->viewManager->renderContent( $content, 'customViewType' ) );
     }
@@ -179,13 +175,11 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
         $content
             ->expects( $this->once() )
             ->method( 'getVersionInfo' )
-            ->will( $this->returnValue( $versionInfo ) )
-        ;
+            ->will( $this->returnValue( $versionInfo ) );
         $versionInfo
             ->expects( $this->once() )
             ->method( 'getContentInfo' )
-            ->will( $this->returnValue( $contentInfo ) )
-        ;
+            ->will( $this->returnValue( $contentInfo ) );
 
         // Configuring view provider behaviour
         $closure = function ( $params )
@@ -198,19 +192,17 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
             ->method( 'getView' )
             ->with( $contentInfo )
             ->will(
-            $this->returnValue(
-                new ContentView( $closure, $params )
-            )
-        )
-        ;
+                $this->returnValue(
+                    new ContentView( $closure, $params )
+                )
+            );
 
         // Configuring template engine behaviour
         $params += array( 'content' => $content, 'viewbaseLayout' => $this->viewBaseLayout );
         $expectedTemplateResult = serialize( array_keys( $params ) );
         $this->templateEngineMock
             ->expects( $this->never() )
-            ->method( 'render' )
-        ;
+            ->method( 'render' );
 
         self::assertSame( $expectedTemplateResult, $this->viewManager->renderContent( $content ) );
     }
@@ -236,11 +228,10 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
             ->method( 'getView' )
             ->with( $location, 'customViewType' )
             ->will(
-            $this->returnValue(
-                new ContentView( $templateIdentifier, $params )
-            )
-        )
-        ;
+                $this->returnValue(
+                    new ContentView( $templateIdentifier, $params )
+                )
+            );
 
         $contentService = $this->getMockBuilder( "eZ\\Publish\\Core\\Repository\\ContentService" )
             ->disableOriginalConstructor()
@@ -272,8 +263,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'render' )
             ->with( $templateIdentifier, $params + array( 'location' => $location, 'content' => $content, 'viewbaseLayout' => $this->viewBaseLayout ) )
-            ->will( $this->returnValue( $expectedTemplateResult ) )
-        ;
+            ->will( $this->returnValue( $expectedTemplateResult ) );
 
         self::assertSame( $expectedTemplateResult, $this->viewManager->renderLocation( $location, 'customViewType' ) );
     }
@@ -302,11 +292,10 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
             ->method( 'getView' )
             ->with( $location )
             ->will(
-            $this->returnValue(
-                new ContentView( $closure, $params )
-            )
-        )
-        ;
+                $this->returnValue(
+                    new ContentView( $closure, $params )
+                )
+            );
 
         $contentService = $this->getMockBuilder( "eZ\\Publish\\Core\\Repository\\ContentService" )
             ->disableOriginalConstructor()
@@ -337,8 +326,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
         $expectedTemplateResult = serialize( array_keys( $params ) );
         $this->templateEngineMock
             ->expects( $this->never() )
-            ->method( 'render' )
-        ;
+            ->method( 'render' );
 
         self::assertSame( $expectedTemplateResult, $this->viewManager->renderLocation( $location ) );
     }

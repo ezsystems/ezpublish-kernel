@@ -9,9 +9,9 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Routing;
 
-use Symfony\Bundle\FrameworkBundle\Routing\Router,
-    Symfony\Component\Routing\Matcher\RequestMatcherInterface,
-    Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Extension of Symfony default router implementing RequestMatcherInterface

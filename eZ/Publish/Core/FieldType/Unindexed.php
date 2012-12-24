@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\FieldType;
 
-use eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\FieldType\Indexable;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\FieldType\Indexable;
 
 /**
  * Indexable definition for string field type
@@ -21,6 +21,7 @@ class Unindexed implements Indexable
      * Get index data for field for search backend
      *
      * @param Field $field
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
      */
     public function getIndexData( Field $field )
@@ -29,7 +30,7 @@ class Unindexed implements Indexable
     }
 
     /**
-     * Get index fied types for search backend
+     * Get index field types for search backend
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Search\FieldType[]
      */

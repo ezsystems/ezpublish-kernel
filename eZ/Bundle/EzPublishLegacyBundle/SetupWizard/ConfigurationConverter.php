@@ -9,10 +9,10 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\SetupWizard;
 
 use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel,
-    eZINI,
-    eZSiteAccess;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
+use eZINI;
+use eZSiteAccess;
 
 /**
  * Handles conversionlegacy eZ Publish 4 parameters from a set of settings to a configuration array
@@ -21,7 +21,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
 class ConfigurationConverter
 {
     /**
-     * @var eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver
+     * @var \eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver
      */
     protected $legacyResolver;
 
@@ -46,8 +46,10 @@ class ConfigurationConverter
      * Converts from legacy settings to an array dumpable to ezpublish.yml
      * @param string $sitePackage Name of the chosen install package
      * @param string $adminSiteaccess Name of the admin siteaccess
-     * @return array
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     *
+     * @return array
      */
     public function fromLegacy( $sitePackage, $adminSiteaccess )
     {
@@ -109,6 +111,12 @@ class ConfigurationConverter
             $settings['ezpublish']['system'][$adminSiteaccess] += array( 'legacy_mode' => true );
         }
 
+        $languages = $this->getLanguages( $siteList, $groupName );
+        foreach ( $languages as $siteaccess => $langSettings )
+        {
+            $settings['ezpublish']['system'][$siteaccess]['languages'] = $langSettings;
+        }
+
         // FileSettings
         $settings['ezpublish']['system'][$groupName]['var_dir'] =
             $this->getParameter( 'FileSettings', 'VarDir', 'site.ini', $defaultSiteaccess );
@@ -117,7 +125,6 @@ class ConfigurationConverter
         $storageDir = $this->getParameter( 'FileSettings', 'StorageDir', 'site.ini', $defaultSiteaccess );
         if ( $storageDir !== 'storage' )
             $settings['ezpublish']['system'][$groupName]['storage_dir'] = $storageDir;
-
 
         // ImageMagick settings
         $imageMagickEnabled = $this->getParameter( 'ImageMagick', 'IsEnabled', 'image.ini', $defaultSiteaccess );
@@ -133,13 +140,97 @@ class ConfigurationConverter
             $settings['ezpublish']['imagemagick']['enabled'] = false;
         }
 
-        // image variations settings
-        $settings['ezpublish']['system'][$defaultSiteaccess]['image_variations'] = array();
-        $imageAliasesList = $this->getGroup( 'AliasSettings', 'image.ini', $defaultSiteaccess );
-        foreach( $imageAliasesList['AliasList'] as $imageAliasIdentifier )
+        $variations = $this->getImageVariations( $siteList, $groupName );
+
+        foreach ( $variations as $siteaccess => $imgSettings )
+        {
+            $settings['ezpublish']['system'][$siteaccess]['image_variations'] = $imgSettings;
+        }
+
+        // Explicitly set Http cache purge type to "local"
+        $settings['ezpublish']['http_cache']['purge_type'] = 'local';
+
+        return $settings;
+    }
+
+    /**
+     * Returns the languages list for all siteaccess unless it's the same for
+     * each one, in this case, it returns the languages list for the group.
+     *
+     * @param array $siteList
+     * @param string $groupName
+     *
+     * @return array
+     */
+    protected function getLanguages( array $siteList, $groupName )
+    {
+        $result = array();
+        $allSame = true;
+        $previousSA = null;
+        foreach ( $siteList as $siteaccess )
+        {
+            $result[$siteaccess] = $this->getParameter(
+                'RegionalSettings', 'SiteLanguageList', 'site.ini', $siteaccess
+            );
+            if ( $allSame && $previousSA !== null )
+            {
+                $allSame = ( $result[$previousSA] === $result[$siteaccess] );
+            }
+            $previousSA = $siteaccess;
+        }
+        if ( $allSame )
+        {
+            return array( $groupName => $result[$previousSA] );
+        }
+        return $result;
+    }
+
+    /**
+     * Returns the image variations settings for all siteaccess unless it's the
+     * same for each one, in this case, it returns the variations settings for
+     * the group. This avoids to duplicate the image variations settings
+     *
+     * @param array $siteList
+     * @param string $groupName
+     *
+     * @return array
+     */
+    protected function getImageVariations( array $siteList, $groupName )
+    {
+        $result = array();
+        $allSame = true;
+        $previousSA = null;
+        foreach ( $siteList as $siteaccess )
+        {
+            $result[$siteaccess] = $this->getImageVariationsForSiteaccess( $siteaccess );
+            if ( $allSame && $previousSA !== null )
+            {
+                $allSame = ( $result[$previousSA] === $result[$siteaccess] );
+            }
+            $previousSA = $siteaccess;
+        }
+        if ( $allSame )
+        {
+            return array( $groupName => $result[$previousSA] );
+        }
+        return $result;
+    }
+
+    /**
+     * Returns the image variation settings for the siteaccess
+     *
+     * @param string $siteaccess
+     *
+     * @return array
+     */
+    protected function getImageVariationsForSiteaccess( $siteaccess )
+    {
+        $variations = array();
+        $imageAliasesList = $this->getGroup( 'AliasSettings', 'image.ini', $siteaccess );
+        foreach ( $imageAliasesList['AliasList'] as $imageAliasIdentifier )
         {
             $variationSettings = array( 'reference' => null, 'filters' => array() );
-            $aliasSettings = $this->getGroup( $imageAliasIdentifier, 'image.ini', $defaultSiteaccess );
+            $aliasSettings = $this->getGroup( $imageAliasIdentifier, 'image.ini', $siteaccess );
             if ( isset( $aliasSettings['Reference'] ) && $aliasSettings['Reference'] != '' )
             {
                 $variationSettings['reference'] = $aliasSettings['Reference'];
@@ -147,7 +238,7 @@ class ConfigurationConverter
             if ( isset( $aliasSettings['Filters'] ) && is_array( $aliasSettings['Filters'] ) )
             {
                 // parse filters. Format: filtername=param1;param2...paramN
-                foreach( $aliasSettings['Filters'] as $filterString )
+                foreach ( $aliasSettings['Filters'] as $filterString )
                 {
                     $filteringSettings = array();
 
@@ -157,10 +248,14 @@ class ConfigurationConverter
                         $filterParams = explode( ';', $filterParams );
 
                         // make sure integers are actually integers, not strings
-                        array_walk( $filterParams, function( &$value ) {
-                            if ( preg_match( '/^[0-9]+$/', $value ) )
-                                $value = (int)$value;
-                        } );
+                        array_walk(
+                            $filterParams,
+                            function( &$value )
+                            {
+                                if ( preg_match( '/^[0-9]+$/', $value ) )
+                                    $value = (int)$value;
+                            }
+                        );
 
                         $filteringSettings['params'] = $filterParams;
                     }
@@ -172,14 +267,9 @@ class ConfigurationConverter
                     $variationSettings['filters'][] = $filteringSettings;
                 }
             }
-
-            $settings['ezpublish']['system'][$defaultSiteaccess]['image_variations'][$imageAliasIdentifier] = $variationSettings;
+            $variations[$imageAliasIdentifier] = $variationSettings;
         }
-
-        // Explicitely set Http cache purge type to "local"
-        $settings['ezpublish']['http_cache']['purge_type'] = 'local';
-
-        return $settings;
+        return $variations;
     }
 
     protected function mapDatabaseType( $databaseType )
@@ -213,7 +303,7 @@ class ConfigurationConverter
         return $this->legacyKernel->runCallback(
             function () use ( $file, $groupName, $siteaccess )
             {
-                // TODO: do reset injected settings everytime
+                // @todo: do reset injected settings everytime
                 // and make sure to restore the previous injected settings
                 eZINI::injectSettings( array() );
                 return eZSiteAccess::getIni( $siteaccess, $file )->group( $groupName );
@@ -244,7 +334,7 @@ class ConfigurationConverter
         return $this->legacyKernel->runCallback(
             function () use ( $file, $groupName, $parameterName, $siteaccess )
             {
-                // TODO: do reset injected settings everytime
+                // @todo: do reset injected settings everytime
                 // and make sure to restore the previous injected settings
                 eZINI::injectSettings( array() );
                 return eZSiteAccess::getIni( $siteaccess, $file )
@@ -258,7 +348,7 @@ class ConfigurationConverter
         $siteaccessSettings = $this->getGroup( 'SiteAccessSettings' );
 
         $matching = array(); $match = false;
-        foreach( explode( ';', $siteaccessSettings['MatchOrder'] ) as $matchMethod )
+        foreach ( explode( ';', $siteaccessSettings['MatchOrder'] ) as $matchMethod )
         {
             switch( $matchMethod )
             {
@@ -280,7 +370,6 @@ class ConfigurationConverter
             {
                 $matching = $match + $matching;
             }
-
         }
         return $matching;
     }
@@ -308,10 +397,11 @@ class ConfigurationConverter
 
     /**
      * Parses Legacy HostMatching settings to a matching array
-     * @param $siteaccessSettings
+     * @param mixed[] $siteaccessSettings
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      *
      * @return array|bool
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
     protected function resolveHostMatching( $siteaccessSettings )
     {

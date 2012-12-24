@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway,
-    eZ\Publish\SPI\Persistence\Content\ObjectState,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
+use eZ\Publish\SPI\Persistence\Content\ObjectState;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 
 /**
  * ObjectState Gateway
@@ -38,6 +39,7 @@ class ExceptionConversion extends Gateway
      * Loads data for an object state
      *
      * @param mixed $stateId
+     *
      * @return array
      */
     public function loadObjectStateData( $stateId )
@@ -61,6 +63,7 @@ class ExceptionConversion extends Gateway
      *
      * @param string $identifier
      * @param mixed $groupId
+     *
      * @return array
      */
     public function loadObjectStateDataByIdentifier( $identifier, $groupId )
@@ -83,6 +86,7 @@ class ExceptionConversion extends Gateway
      * Loads data for all object states belonging to group with $groupId ID
      *
      * @param mixed $groupId
+     *
      * @return array
      */
     public function loadObjectStateListData( $groupId )
@@ -105,6 +109,7 @@ class ExceptionConversion extends Gateway
      * Loads data for an object state group
      *
      * @param mixed $groupId
+     *
      * @return array
      */
     public function loadObjectStateGroupData( $groupId )
@@ -127,6 +132,7 @@ class ExceptionConversion extends Gateway
      * Loads data for an object state group by identifier
      *
      * @param string $identifier
+     *
      * @return array
      */
     public function loadObjectStateGroupDataByIdentifier( $identifier )
@@ -150,6 +156,7 @@ class ExceptionConversion extends Gateway
      *
      * @param int $offset
      * @param int $limit
+     *
      * @return array
      */
     public function loadObjectStateGroupListData( $offset, $limit )
@@ -389,6 +396,7 @@ class ExceptionConversion extends Gateway
      * Returns the number of objects which are in this state
      *
      * @param mixed $stateId
+     *
      * @return int
      */
     public function getContentCount( $stateId )

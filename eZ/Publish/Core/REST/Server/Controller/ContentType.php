@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
+
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 use eZ\Publish\API\Repository\Exceptions\BadStateException;
 use eZ\Publish\Core\REST\Common\Message;
@@ -335,7 +336,7 @@ class ContentType extends RestController
                 $contentType
             );
         }
-        catch( BadStateException $e )
+        catch ( BadStateException $e )
         {
             throw new ForbiddenException( $e->getMessage() );
         }
@@ -839,6 +840,7 @@ class ContentType extends RestController
      * Converts the provided ContentTypeGroupCreateStruct to ContentTypeGroupUpdateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct $createStruct
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct
      */
     private function mapToGroupUpdateStruct( ContentTypeGroupCreateStruct $createStruct )

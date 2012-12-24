@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\User;
 
-use \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
-use \eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
+use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
+use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\User\RoleCreateStruct}
@@ -26,7 +26,7 @@ class RoleCreateStructStub extends RoleCreateStruct
     private $policies = array();
 
     /**
-     * instanciates a role create class
+     * Instantiates a role create class
      *
      * @param string $name
      */

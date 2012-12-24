@@ -9,9 +9,9 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser,
-    Symfony\Component\Config\Definition\Builder\NodeBuilder,
-    Symfony\Component\DependencyInjection\ContainerBuilder;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
+use Symfony\Component\Config\Definition\Builder\NodeBuilder;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Configuration parser handling content related config
@@ -22,6 +22,7 @@ class Content implements Parser
      * Adds semantic configuration definition.
      *
      * @param \Symfony\Component\Config\Definition\Builder\NodeBuilder $nodeBuilder Node just under ezpublish.system.<siteaccess>
+     *
      * @return void
      */
     public function addSemanticConfig( NodeBuilder $nodeBuilder )
@@ -34,8 +35,7 @@ class Content implements Parser
                     ->booleanNode( 'ttl_cache' )->defaultValue( false )->end()
                     ->scalarNode( 'default_ttl' )->info( 'Default value for TTL cache, in seconds' )->defaultValue( 60 )->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 
     /**
@@ -43,6 +43,7 @@ class Content implements Parser
      *
      * @param array $config
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
      * @return mixed
      */
     public function registerInternalConfig( array $config, ContainerBuilder $container )

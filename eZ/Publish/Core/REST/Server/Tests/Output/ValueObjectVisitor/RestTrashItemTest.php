@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -40,7 +41,6 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
                     'remoteId' => 'remote-id',
                     'parentLocationId' => 21,
                     'pathString' => '/1/2/21/42/',
-                    'modifiedSubLocationDate' => new \DateTime( '2012-09-05 15:27 Europe/Zagreb' ),
                     'depth' => 3,
                     'contentInfo' => new ContentInfo(
                         array(
@@ -72,6 +72,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      * Test if result contains TrashItem element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsTrashItemElement( $result )
@@ -80,7 +81,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'TrashItem',
                 'children' => array(
-                    'count' => 13
+                    'count' => 12
                 )
             ),
             $result,
@@ -93,6 +94,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      * Test if result contains TrashItem element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsTrashItemAttributes( $result )
@@ -115,6 +117,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      * Test if result contains id value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsIdValueElement( $result )
@@ -134,6 +137,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      * Test if result contains priority value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPriorityValueElement( $result )
@@ -153,6 +157,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      * Test if result contains hidden value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsHiddenValueElement( $result )
@@ -172,6 +177,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      * Test if result contains invisible value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsInvisibleValueElement( $result )
@@ -191,6 +197,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      * Test if result contains remoteId value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRemoteIdValueElement( $result )
@@ -210,6 +217,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      * Test if result contains ParentLocation element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsParentLocationElement( $result )
@@ -228,6 +236,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      * Test if result contains ParentLocation element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsParentLocationAttributes( $result )
@@ -250,6 +259,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      * Test if result contains pathString value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPathStringValueElement( $result )
@@ -266,28 +276,10 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains modified date value element
-     *
-     * @param string $result
-     * @depends testVisit
-     */
-    public function testResultContainsModifiedDateValueElement( $result )
-    {
-        $this->assertTag(
-            array(
-                'tag'      => 'subLocationModificationDate',
-                'content'  => '2012-09-05T15:27:00+02:00'
-            ),
-            $result,
-            'Invalid or non-existing <TrashItem> subLocationModificationDate value element.',
-            false
-        );
-    }
-
-    /**
      * Test if result contains depth value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsDepthValueElement( $result )
@@ -307,6 +299,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      * Test if result contains childCount value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsChildCountValueElement( $result )
@@ -326,6 +319,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      * Test if result contains Content element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsContentElement( $result )
@@ -344,6 +338,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      * Test if result contains Content element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsContentAttributes( $result )
@@ -366,6 +361,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      * Test if result contains sortField value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSortFieldValueElement( $result )
@@ -385,6 +381,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      * Test if result contains sortOrder value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsSortOrderValueElement( $result )

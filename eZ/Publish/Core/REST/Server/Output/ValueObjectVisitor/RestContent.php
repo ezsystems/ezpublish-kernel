@@ -43,9 +43,9 @@ class RestContent extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $data->path === null
-                ? $this->urlHandler->generate( 'object', array( 'object' => $contentInfo->id ) )
-                : $data->path
+            $data->path === null ?
+                $this->urlHandler->generate( 'object', array( 'object' => $contentInfo->id ) ) :
+                $data->path
         );
         $generator->endAttribute( 'href' );
 
@@ -89,7 +89,12 @@ class RestContent extends ValueObjectVisitor
         // Embed current version, if available
         if ( $currentVersion !== null )
         {
-            $visitor->visitValueObject( new VersionValue( $currentVersion ) );
+            $visitor->visitValueObject(
+                new VersionValue(
+                    $currentVersion,
+                    $restContent->relations
+                )
+            );
         }
 
         $generator->endObjectElement( 'CurrentVersion' );

@@ -36,7 +36,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $handler = $this->getHandler();
 
         $this->assertSame(
-              array(
+            array(
                 'Field' => array(
                     'fieldValue' => array(
                         array(

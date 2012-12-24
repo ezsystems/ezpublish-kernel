@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
-use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface,
-    eZ\Publish\Core\MVC\ConfigResolverInterface,
-    Buzz\Browser,
-    Buzz\Client\BatchClientInterface;
+use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Buzz\Browser;
+use Buzz\Client\BatchClientInterface;
 
 class PurgeClient implements PurgeClientInterface
 {
@@ -46,6 +46,7 @@ class PurgeClient implements PurgeClientInterface
      * Triggers the cache purge $cacheElements.
      *
      * @param mixed $locationIds Cache resource(s) to purge (array of locationId to purge in the reverse proxy)
+     *
      * @return void
      */
     public function purge( $locationIds )
@@ -57,7 +58,7 @@ class PurgeClient implements PurgeClientInterface
             $locationIds = array( $locationIds );
 
         // Purging all HTTP gateways
-        foreach ($this->purgeServers as $server)
+        foreach ( $this->purgeServers as $server )
         {
             $this->doPurge( $server, $locationIds );
 
@@ -74,6 +75,7 @@ class PurgeClient implements PurgeClientInterface
      *
      * @param string $server Current purge server (e.g. http://localhost/foo/bar)
      * @param array $locationIds Location Ids to purge
+     *
      * @return void
      */
     protected function doPurge( $server, array $locationIds )

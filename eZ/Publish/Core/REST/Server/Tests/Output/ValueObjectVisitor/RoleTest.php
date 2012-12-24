@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -63,6 +64,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      * Test if result contains Role element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRoleElement( $result )
@@ -84,6 +86,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      * Test if result contains Role element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsRoleAttributes( $result )
@@ -106,6 +109,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      * Test if result contains identifier value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsIdentifierValueElement( $result )
@@ -125,6 +129,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      * Test if result contains mainLanguageCode value element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsMainLanguageCodeValueElement( $result )
@@ -145,6 +150,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      * Test if result contains names element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsNamesElement( $result )
@@ -167,6 +173,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      * Test if result contains descriptions element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsDescriptionsElement( $result )
@@ -189,6 +196,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      * Test if result contains Policies element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPoliciesElement( $result )
@@ -207,6 +215,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      * Test if result contains Policies element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsPoliciesAttributes( $result )

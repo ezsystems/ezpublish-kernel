@@ -8,10 +8,11 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Relation\RelationStorage\Gateway;
-use eZ\Publish\Core\FieldType\Relation\RelationStorage\Gateway,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\API\Repository\Values\Content\Relation as APIRelationValue;
+
+use eZ\Publish\Core\FieldType\Relation\RelationStorage\Gateway;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Relation as APIRelationValue;
 
 /**
  *
@@ -31,6 +32,7 @@ class LegacyStorage extends Gateway
      * Set database handler for this gateway
      *
      * @param mixed $dbHandler
+     *
      * @return void
      * @throws \RuntimeException if $dbHandler is not an instance of
      *         {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler}
@@ -52,8 +54,9 @@ class LegacyStorage extends Gateway
     /**
      * Returns the active connection
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      * @throws \RuntimeException if no connection has been set, yet.
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected function getConnection()
     {

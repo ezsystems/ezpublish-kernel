@@ -10,23 +10,23 @@
 
 namespace eZ\Publish\API\Repository;
 
-use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use \eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query;
 
 /**
  * Search service
  *
  * @package eZ\Publish\API\Repository
  */
-interface SearchService {
-
+interface SearchService
+{
     /**
      * Finds content objects for the given query.
      *
-     * @TODO define structs for the field filters
+     * @todo define structs for the field filters
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array  $fieldFilters - a map of filters for the returned fields.
+     * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
@@ -40,9 +40,9 @@ interface SearchService {
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
-     * @TODO define structs for the field filters
+     * @todo define structs for the field filters
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array  $fieldFilters - a map of filters for the returned fields.
+     * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
@@ -59,6 +59,5 @@ interface SearchService {
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
     public function suggest( $prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null );
-
 }
 

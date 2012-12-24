@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot\SlotFactory;
+
 use eZ\Publish\Core\SignalSlot\SlotFactory;
 
 class NullSlotFactory extends SlotFactory
@@ -16,6 +17,7 @@ class NullSlotFactory extends SlotFactory
      * Returns a Slot with the given $slotIdentifier
      *
      * @param string $slotIdentifier
+     *
      * @return \eZ\Publish\Core\SignalSlot\Slot
      */
     public function getSlot( $slotIdentifier )

@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue,
-    eZ\Publish\Core\FieldType\Validator\FileSizeValidator,
-    eZ\Publish\API\Repository\Values\IO\BinaryFile;
+
+use eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue;
+use eZ\Publish\Core\FieldType\Validator\FileSizeValidator;
+use eZ\Publish\API\Repository\Values\IO\BinaryFile;
 
 /**
  * @group fieldType
@@ -132,6 +133,8 @@ class FileSizeValidatorTest extends FieldTypeTest
     /**
      * Tests validating a correct value
      *
+     * @param int $size
+     *
      * @dataProvider providerForValidateOK
      * @covers \eZ\Publish\Core\FieldType\Validator\FileSizeValidator::validate
      * @covers \eZ\Publish\Core\FieldType\Validator::getMessage
@@ -146,7 +149,7 @@ class FileSizeValidatorTest extends FieldTypeTest
     }
 
     /**
-     * @param $size
+     * @param int $size
      *
      * @return \eZ\Publish\Core\FieldType\BinaryFile\Value
      */

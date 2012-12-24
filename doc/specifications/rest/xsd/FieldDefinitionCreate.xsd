@@ -77,7 +77,7 @@
       <xsd:element name="descriptions" type="multiLanguageValuesType" />
     </xsd:all>
   </xsd:complexType>
-  
+
   <xsd:element name="FieldDefinitionInput" type="vnd.ez.api.FieldDefinitionCreate" />
 </xsd:schema>
 

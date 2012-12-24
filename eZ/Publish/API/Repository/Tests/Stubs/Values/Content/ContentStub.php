@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\Content;
 
-use \eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Content;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\Content\Content}
@@ -27,17 +27,17 @@ class ContentStub extends Content
     protected $repository;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $id;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $contentTypeId;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $versionNo;
 
@@ -47,12 +47,7 @@ class ContentStub extends Content
     protected $fields;
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Relation[]
-     */
-    protected $relations;
-
-    /**
-     * returns the VersionInfo for this version
+     * Returns the VersionInfo for this version
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
@@ -65,7 +60,7 @@ class ContentStub extends Content
     }
 
     /**
-     * returns a field value for the given value
+     * Returns a field value for the given value
      * $version->fields[$fieldDefId][$languageCode] is an equivalent call
      * if no language is given on a translatable field this method returns
      * the value of the initial language of the version if present, otherwise null.
@@ -102,16 +97,6 @@ class ContentStub extends Content
     }
 
     /**
-     * returns the outgoing relations
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[] An array of {@link Relation}
-     */
-    public function getRelations()
-    {
-        return $this->relations;
-    }
-
-    /**
      * This method returns the complete fields collection
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field}
@@ -132,7 +117,7 @@ class ContentStub extends Content
      */
     public function getFieldsByLanguage( $languageCode = null )
     {
-        // TODO: Implement getFieldsByLanguage() method.
+        // @todo: Implement getFieldsByLanguage() method.
     }
 
     /**

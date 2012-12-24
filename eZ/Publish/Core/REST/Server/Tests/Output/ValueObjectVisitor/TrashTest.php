@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -49,6 +50,7 @@ class TrashTest extends ValueObjectVisitorBaseTest
      * Test if result contains Trash element
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsTrashElement( $result )
@@ -67,6 +69,7 @@ class TrashTest extends ValueObjectVisitorBaseTest
      * Test if result contains Trash element attributes
      *
      * @param string $result
+     *
      * @depends testVisit
      */
     public function testResultContainsTrashAttributes( $result )

@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway;
 
-use eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlStorage,
-    DOMDocument;
+use eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlStorage;
+use DOMDocument;
 
 class LegacyStorage extends Gateway
 {
@@ -23,6 +23,7 @@ class LegacyStorage extends Gateway
      * Set database handler for this gateway
      *
      * @param mixed $dbHandler
+     *
      * @return void
      * @throws \RuntimeException if $dbHandler is not an instance of
      *         {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler}
@@ -44,8 +45,9 @@ class LegacyStorage extends Gateway
     /**
      * Returns the active connection
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      * @throws \RuntimeException if no connection has been set, yet.
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected function getConnection()
     {
@@ -91,6 +93,7 @@ class LegacyStorage extends Gateway
      * Returns as hash with URL id as key and corresponding URL as value.
      *
      * @param array $linkIds
+     *
      * @return array
      */
     private function getLinksUrl( array $linkIds )
@@ -100,13 +103,12 @@ class LegacyStorage extends Gateway
         $q
             ->select( "id", "url" )
             ->from( UrlStorage::URL_TABLE )
-            ->where( $q->expr->in( 'id', $linkIds ) )
-        ;
+            ->where( $q->expr->in( 'id', $linkIds ) );
 
         $statement = $q->prepare();
         $statement->execute();
         $linkUrls = array();
-        foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row)
+        foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
         {
             $linkUrls[$row['id']] = $row['url'];
         }
@@ -120,7 +122,7 @@ class LegacyStorage extends Gateway
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      *
-     * @return bool
+     * @return boolean
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field )
     {
@@ -170,6 +172,7 @@ class LegacyStorage extends Gateway
      * Returns as hash with URL as key and corresponding URL id as value.
      *
      * @param array $linksUrls
+     *
      * @return array
      */
     private function getLinksId( array $linksUrls )
@@ -179,8 +182,7 @@ class LegacyStorage extends Gateway
         $q
             ->select( "id", "url" )
             ->from( UrlStorage::URL_TABLE )
-            ->where( $q->expr->in( 'url', $linksUrls ) )
-        ;
+            ->where( $q->expr->in( 'url', $linksUrls ) );
 
         $statement = $q->prepare();
         $statement->execute();

@@ -9,9 +9,9 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface,
-    Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * This compiler pass will register eZ Publish field types.
@@ -21,6 +21,7 @@ class RegisterLimitationTypePass implements CompilerPassInterface
 
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
      * @throws \LogicException
      */
     public function process( ContainerBuilder $container )
@@ -40,8 +41,8 @@ class RegisterLimitationTypePass implements CompilerPassInterface
             $repositoryFactoryDef->addMethodCall(
                 'registerLimitationType',
                 array(
-                     $attributes[0]['alias'],
-                     new Reference( $id )
+                    $attributes[0]['alias'],
+                    new Reference( $id )
                 )
             );
         }

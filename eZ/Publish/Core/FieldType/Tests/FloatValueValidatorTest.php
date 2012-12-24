@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Float\Value as FloatValue,
-    eZ\Publish\Core\FieldType\Validator\FloatValueValidator;
+
+use eZ\Publish\Core\FieldType\Float\Value as FloatValue;
+use eZ\Publish\Core\FieldType\Validator\FloatValueValidator;
 
 /**
  * @group fieldType
@@ -22,7 +23,7 @@ class FloatValueValidatorTest extends FieldTypeTest
      */
     protected function getMinFloatValue()
     {
-        return 10/7;
+        return 10 / 7;
     }
 
     /**
@@ -30,7 +31,7 @@ class FloatValueValidatorTest extends FieldTypeTest
      */
     protected function getMaxFloatValue()
     {
-        return 11/7;
+        return 11 / 7;
     }
 
     /**
@@ -54,7 +55,7 @@ class FloatValueValidatorTest extends FieldTypeTest
     {
         $constraints = array(
             "minFloatValue" => 0.5,
-            "maxFloatValue" => 22/7,
+            "maxFloatValue" => 22 / 7,
         );
         $validator = new FloatValueValidator;
         $validator->initializeWithConstraints(
@@ -95,7 +96,7 @@ class FloatValueValidatorTest extends FieldTypeTest
     {
         $constraints = array(
             "minFloatValue" => 0.5,
-            "maxFloatValue" => 22/7,
+            "maxFloatValue" => 22 / 7,
         );
         $validator = new FloatValueValidator;
         $validator->minFloatValue = $constraints["minFloatValue"];
@@ -155,8 +156,8 @@ class FloatValueValidatorTest extends FieldTypeTest
     public function testValidateCorrectValues( $value )
     {
         $validator = new FloatValueValidator;
-        $validator->minFloatValue = 10/7;
-        $validator->maxFloatValue = 11/7;
+        $validator->minFloatValue = 10 / 7;
+        $validator->maxFloatValue = 11 / 7;
         $this->assertTrue( $validator->validate( new FloatValue( $value ) ) );
         $this->assertSame( array(), $validator->getMessage() );
     }
@@ -164,11 +165,11 @@ class FloatValueValidatorTest extends FieldTypeTest
     public function providerForValidateOK()
     {
         return array(
-            array( 100/70 ),
-            array( 101/70 ),
-            array( 105/70 ),
-            array( 109/70 ),
-            array( 110/70 ),
+            array( 100 / 70 ),
+            array( 101 / 70 ),
+            array( 105 / 70 ),
+            array( 109 / 70 ),
+            array( 110 / 70 ),
         );
     }
 
@@ -207,10 +208,10 @@ class FloatValueValidatorTest extends FieldTypeTest
     public function providerForValidateKO()
     {
         return array(
-            array( -10/7, "The value can not be lower than %size%.", array( "size" => $this->getMinFloatValue() ) ),
+            array( -10 / 7, "The value can not be lower than %size%.", array( "size" => $this->getMinFloatValue() ) ),
             array( 0, "The value can not be lower than %size%.", array( "size" => $this->getMinFloatValue() ) ),
-            array( 99/70, "The value can not be lower than %size%.", array( "size" => $this->getMinFloatValue() ) ),
-            array( 111/70, "The value can not be higher than %size%.", array( "size" => $this->getMaxFloatValue() ) ),
+            array( 99 / 70, "The value can not be lower than %size%.", array( "size" => $this->getMinFloatValue() ) ),
+            array( 111 / 70, "The value can not be higher than %size%.", array( "size" => $this->getMaxFloatValue() ) ),
         );
     }
 

@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher,
-    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 
 class URIElement implements Matcher, URILexer
 {
@@ -56,8 +56,9 @@ class URIElement implements Matcher, URILexer
 
     /**
      * Returns URI elements as an array.
-     * @return array
      * @throws \LogicException
+     *
+     * @return array
      */
     protected function getURIElements()
     {
@@ -89,6 +90,7 @@ class URIElement implements Matcher, URILexer
      * Injects the request object to match against.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
+     *
      * @return void
      */
     public function setRequest( SimplifiedRequest $request )
@@ -100,12 +102,20 @@ class URIElement implements Matcher, URILexer
      * Analyses $uri and removes the siteaccess part, if needed.
      *
      * @param string $uri The original URI
+     *
      * @return string The modified URI
      */
     public function analyseURI( $uri )
     {
-        $uriElements = implode( '/', $this->getURIElements() );
-        $uri = str_replace( "/$uriElements", '', $uri );
+        $uriElements = '/' . implode( '/', $this->getURIElements() );
+        if ( $uri == $uriElements )
+        {
+            $uri = '';
+        }
+        else if ( strpos( $uri, $uriElements ) === 0 )
+        {
+            sscanf( $uri, "$uriElements%s", $uri );
+        }
         return $uri;
     }
 
@@ -113,6 +123,7 @@ class URIElement implements Matcher, URILexer
      * Analyses $linkUri when generating a link to a route, in order to have the siteaccess part back in the URI.
      *
      * @param string $linkUri
+     *
      * @return string The modified link URI
      */
     public function analyseLink( $linkUri )

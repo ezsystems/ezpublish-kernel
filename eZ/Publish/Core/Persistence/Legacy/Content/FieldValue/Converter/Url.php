@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 class Url implements Converter
 {
@@ -21,7 +22,6 @@ class Url implements Converter
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @static
      * @return Url
      */
     public static function create()
@@ -78,7 +78,7 @@ class Url implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        // TODO: Is it possible to store a default value in the DB?
+        // @todo: Is it possible to store a default value in the DB?
         $fieldDef->defaultValue = new FieldValue();
         $fieldDef->defaultValue->data = array( 'text' => null );
     }

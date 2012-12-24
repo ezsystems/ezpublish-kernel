@@ -8,9 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\EmailAddress\Type as EmailAddressType,
-    eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue,
-    ReflectionObject;
+
+use eZ\Publish\Core\FieldType\EmailAddress\Type as EmailAddressType;
+use eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue;
+use ReflectionObject;
 
 /**
  * @group fieldType
@@ -308,7 +309,7 @@ class EmailAddressTest extends StandardizedFieldTypeTest
     /**
      * Provide data sets with validator configurations which are considered
      * invalid by the {@link validateValidatorConfiguration()} method. The
-     * method must return a non-empty array of valiation errors when receiving
+     * method must return a non-empty array of validation errors when receiving
      * one of the provided values.
      *
      * Returns an array of data provider sets with a single argument: A valid

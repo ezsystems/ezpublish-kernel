@@ -9,21 +9,21 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase as EzcDatabaseLocation,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase as LanguageGateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased\Parser,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PcreCompiler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter,
-    eZ\Publish\SPI\Persistence\Content\UrlAlias,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase as EzcDatabaseLocation;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase as LanguageGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased\Parser;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PcreCompiler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * Test case for UrlAliasHandler.
@@ -374,7 +374,7 @@ class UrlAliasHandlerTest extends TestCase
      * @depends testLookup
      * @group case-correction
      * @group location
-     * @todo refactor, only forward pretinent
+     * @todo refactor, only forward pertinent
      */
     public function testLookupLocationCaseCorrection(
         $url,
@@ -1226,7 +1226,7 @@ class UrlAliasHandlerTest extends TestCase
                     $urlAlias2->languageCodes
                 );
             }
-            elseif ( $propertyName === "pathData" )
+            else if ( $propertyName === "pathData" )
             {
                 self::assertEquals(
                     array(
@@ -1663,6 +1663,25 @@ class UrlAliasHandlerTest extends TestCase
             $customUrlAliasChanged,
             $customUrlAliasHistory
         );
+    }
+
+    /**
+     * Test for the publishUrlAliasForLocation() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::publishUrlAliasForLocation
+     */
+    public function testPublishUrlAliasForLocationUpdatesLocationPathIdentificationString()
+    {
+        $handler = $this->getHandler();
+        $locationGateway = $this->getLocationGateway();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/publish_base.php" );
+
+        // Publishes the alias indicating that language is main, triggering updating of path_identification_string
+        $handler->publishUrlAliasForLocation( 316, 315, "TEST TEST TEST", "eng-GB", false, true );
+
+        $locationData = $locationGateway->getBasicNodeData( 316 );
+
+        self::assertEquals( "path314/path315/test_test_test", $locationData["path_identification_string"] );
     }
 
     /**
@@ -2150,15 +2169,6 @@ class UrlAliasHandlerTest extends TestCase
         );
     }
 
-
-
-
-
-
-
-
-
-
     /**
      * Test for the locationDeleted() method.
      *
@@ -2520,11 +2530,11 @@ class UrlAliasHandlerTest extends TestCase
     public function testLocationCopiedCopiedLocationAliasIsValid()
     {
         $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_move.php" );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_copy.php" );
 
         $urlAlias = $handler->lookup( "move-this" );
 
-        $handler->locationCopied( 4, 2, 3 );
+        $handler->locationCopied( 4, 400, 3 );
 
         self::assertEquals(
             $urlAlias,
@@ -2545,7 +2555,7 @@ class UrlAliasHandlerTest extends TestCase
 
         $urlAlias = $handler->lookup( "move-this/sub1/sub2" );
 
-        $handler->locationCopied( 4, 2, 3 );
+        $handler->locationCopied( 4, 400, 3 );
 
         self::assertEquals(
             $urlAlias,
@@ -2564,7 +2574,7 @@ class UrlAliasHandlerTest extends TestCase
         $handler = $this->getHandler();
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_copy.php" );
 
-        $handler->locationCopied( 4, 2, 3 );
+        $handler->locationCopied( 4, 400, 3 );
 
         $handler->lookup( "move-here/move-this-history" );
     }
@@ -2580,7 +2590,7 @@ class UrlAliasHandlerTest extends TestCase
         $handler = $this->getHandler();
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_copy.php" );
 
-        $handler->locationCopied( 4, 2, 3 );
+        $handler->locationCopied( 4, 400, 3 );
 
         $handler->lookup( "move-here/move-this/sub1/sub2-history" );
     }
@@ -2597,10 +2607,10 @@ class UrlAliasHandlerTest extends TestCase
 
         $countBeforeCopying = $this->countRows();
 
-        $handler->locationCopied( 4, 2, 3 );
+        $handler->locationCopied( 4, 400, 3 );
 
         self::assertEquals(
-            $countBeforeCopying + 3,
+            $countBeforeCopying + 2,
             $this->countRows()
         );
 
@@ -2806,7 +2816,7 @@ class UrlAliasHandlerTest extends TestCase
      */
     protected function countRows()
     {
-        /** @var \ezcQuerySelect $query  */
+        /** @var \ezcQuerySelect $query */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $query->expr->count( "*" )
@@ -2825,7 +2835,7 @@ class UrlAliasHandlerTest extends TestCase
      */
     protected function dump()
     {
-        /** @var \ezcQuerySelect $query  */
+        /** @var \ezcQuerySelect $query */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             "*"
@@ -2843,6 +2853,11 @@ class UrlAliasHandlerTest extends TestCase
      * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected $dbHandler;
+
+    /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
+     */
+    protected $locationGateway;
 
     /**
      * @param array $methods
@@ -2901,16 +2916,33 @@ class UrlAliasHandlerTest extends TestCase
             $this->dbHandler,
             $languageMaskGenerator
         );
-        $locationGateway = new EzcDatabaseLocation( $this->dbHandler );
         $mapper = new Mapper( $languageMaskGenerator );
 
         return new Handler(
             $gateway,
             $mapper,
-            $locationGateway,
+            $this->getLocationGateway(),
             $languageHandler,
             $this->getProcessor()
         );
+    }
+
+    /**
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
+     */
+    protected function getLocationGateway()
+    {
+        if ( !isset( $this->dbHandler) )
+        {
+            $this->dbHandler = $this->getDatabaseHandler();
+        }
+
+        if ( !isset( $this->locationGateway ) )
+        {
+            $this->locationGateway = new EzcDatabaseLocation( $this->dbHandler );
+        }
+
+        return $this->locationGateway;
     }
 
     /**

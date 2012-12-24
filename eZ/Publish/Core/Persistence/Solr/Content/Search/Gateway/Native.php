@@ -9,16 +9,16 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway,
-    eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler,
-    eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit,
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator,
-    eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor,
-    eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor,
-    eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor,
-    eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway;
+use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
 
 /**
  * The Content Search Gateway provides the implementation for one database to
@@ -84,6 +84,7 @@ class Native extends Gateway
      * @param FacetBuilderVisitor $facetBuilderVisitor
      * @param FieldValueMapper $fieldValueMapper
      * @param ContentHandler $contentHandler
+     *
      * @return void
      */
     public function __construct( HttpClient $client, CriterionVisitor $criterionVisitor, SortClauseVisitor $sortClauseVisitor, FacetBuilderVisitor $facetBuilderVisitor, FieldValueMapper $fieldValueMapper, ContentHandler $contentHandler, FieldNameGenerator $nameGenerator )
@@ -97,54 +98,66 @@ class Native extends Gateway
         $this->nameGenerator       = $nameGenerator;
     }
 
-     /**
-     * finds content objects for the given query.
+    /**
+     * Finds content objects for the given query.
      *
-     * @TODO define structs for the field filters
+     * @todo define structs for the field filters
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array  $fieldFilters - a map of filters for the returned fields.
+     * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
     public function findContent( Query $query, array $fieldFilters = array() )
     {
-        // @TODO: Extract method
+        // @todo: Extract method
         $response = $this->client->request(
             'GET',
             '/solr/select?' .
-                http_build_query( array(
+            http_build_query(
+                array(
                     'q'    => $this->criterionVisitor->visit( $query->criterion ),
-                    'sort' => implode( ', ', array_map(
-                        array( $this->sortClauseVisitor, 'visit' ),
-                        $query->sortClauses
-                    ) ),
+                    'sort' => implode(
+                        ', ',
+                        array_map(
+                            array( $this->sortClauseVisitor, 'visit' ),
+                            $query->sortClauses
+                        )
+                    ),
                     'fl'   => '*,score',
                     'wt'   => 'json',
-                ) ) .
-                ( count( $query->facetBuilders ) ? '&facet=true&facet.sort=count&' : '' ) .
-                implode( '&', array_map(
+                )
+            ) .
+            ( count( $query->facetBuilders ) ? '&facet=true&facet.sort=count&' : '' ) .
+            implode(
+                '&',
+                array_map(
                     array( $this->facetBuilderVisitor, 'visit' ),
                     $query->facetBuilders
-                ) )
+                )
+            )
         );
-        // @TODO: Error handling?
+        // @todo: Error handling?
         $data = json_decode( $response->body );
 
-        // @TODO: Extract method
-        $result = new SearchResult( array(
-            'time'       => $data->responseHeader->QTime / 1000,
-            'maxScore'   => $data->response->maxScore,
-            'totalCount' => $data->response->numFound,
-        ) );
+        // @todo: Extract method
+        $result = new SearchResult(
+            array(
+                'time'       => $data->responseHeader->QTime / 1000,
+                'maxScore'   => $data->response->maxScore,
+                'totalCount' => $data->response->numFound,
+            )
+        );
 
         foreach ( $data->response->docs as $doc )
         {
-            $searchHit = new SearchHit( array(
-                'score'       => $doc->score,
-                'valueObject' => $this->contentHandler->load( $doc->id, $doc->version_id )
-            ) );
+            $searchHit = new SearchHit(
+                array(
+                    'score'       => $doc->score,
+                    'valueObject' => $this->contentHandler->load( $doc->id, $doc->version_id )
+                )
+            );
             $result->searchHits[] = $searchHit;
         }
 
@@ -162,7 +175,8 @@ class Native extends Gateway
     /**
      * Indexes a content object
      *
-     * @param eZ\Publish\SPI\Persistence\Content\Search\Field[] $document
+     * @param \eZ\Publish\SPI\Persistence\Content\Search\Field[] $document
+     *
      * @return void
      */
     public function indexContent( array $document )
@@ -179,7 +193,7 @@ class Native extends Gateway
             )
         );
 
-        // @TODO: Add error handling
+        // @todo: Add error handling
     }
 
     /**
@@ -205,6 +219,7 @@ class Native extends Gateway
      * Create document update XML
      *
      * @param array $document
+     *
      * @return string
      */
     protected function createUpdate( array $document )
@@ -216,8 +231,7 @@ class Native extends Gateway
 
         foreach ( $document as $field )
         {
-            $values = (array) $this->fieldValueMapper->map( $field );
-            foreach ( $values as $value )
+            foreach ( (array)$this->fieldValueMapper->map( $field ) as $value )
             {
                 $xml->startElement( 'field' );
                 $xml->writeAttribute(
@@ -235,4 +249,3 @@ class Native extends Gateway
         return $xml->outputMemory( true );
     }
 }
-

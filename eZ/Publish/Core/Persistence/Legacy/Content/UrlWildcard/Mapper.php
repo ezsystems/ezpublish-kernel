@@ -56,8 +56,6 @@ class Mapper
     }
 
     /**
-     *
-     *
      * @param string $url
      *
      * @return string

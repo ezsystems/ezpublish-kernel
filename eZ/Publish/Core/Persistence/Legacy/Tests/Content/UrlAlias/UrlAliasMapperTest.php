@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlAlias;
 
-use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
-    eZ\Publish\SPI\Persistence\Content\UrlAlias,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 
 /**
  * Test case for UrlAliasMapper
@@ -202,7 +202,7 @@ class UrlAliasMapperTest extends LanguageAwareTestCase
     /**
      * Test for the extractUrlAliasFromData() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::extractUrlAliasFromData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper::extractUrlAliasFromData
      * @dataProvider providerForTestExtractUrlAliasFromData
      */
     public function testExtractUrlAliasFromData( $index )
@@ -221,7 +221,7 @@ class UrlAliasMapperTest extends LanguageAwareTestCase
     /**
      * Test for the extractUrlAliasListFromData() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::extractUrlAliasListFromData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper::extractUrlAliasListFromData
      * @depends testExtractUrlAliasFromData
      */
     public function testExtractUrlAliasListFromData()

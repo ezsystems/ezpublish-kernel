@@ -8,20 +8,21 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
-use eZ\Publish\SPI\Persistence\Content\Type,
-    eZ\Publish\SPI\Persistence\Content\Type\Handler as BaseContentTypeHandler,
-    eZ\Publish\SPI\Persistence\Content\Type\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\Type\Group,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler as UpdateHandler,
-    eZ\Publish\Core\Persistence\Legacy\Exception,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\BadStateException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+
+use eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as BaseContentTypeHandler;
+use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\Type\Group;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler as UpdateHandler;
+use eZ\Publish\Core\Persistence\Legacy\Exception;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  */
@@ -65,6 +66,7 @@ class Handler implements BaseContentTypeHandler
 
     /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct $createStruct
+     *
      * @return Group
      */
     public function createGroup( GroupCreateStruct $createStruct )
@@ -82,6 +84,7 @@ class Handler implements BaseContentTypeHandler
 
     /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct $struct
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
      */
     public function updateGroup( GroupUpdateStruct $struct )
@@ -94,6 +97,7 @@ class Handler implements BaseContentTypeHandler
 
     /**
      * @param mixed $groupId
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type group contains types
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type group with id is not found
      */
@@ -108,8 +112,10 @@ class Handler implements BaseContentTypeHandler
 
     /**
      * @param mixed $groupId
-     * @return Group
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type group with $groupId is not found
+     *
+     * @return Group
      */
     public function loadGroup( $groupId )
     {
@@ -127,8 +133,10 @@ class Handler implements BaseContentTypeHandler
 
     /**
      * @param string $identifier
-     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type group with $identifier is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
      */
     public function loadGroupByIdentifier( $identifier )
     {
@@ -157,6 +165,7 @@ class Handler implements BaseContentTypeHandler
     /**
      * @param mixed $groupId
      * @param int $status
+     *
      * @return Type[]
      */
     public function loadContentTypes( $groupId, $status = 0 )
@@ -169,6 +178,7 @@ class Handler implements BaseContentTypeHandler
     /**
      * @param int $contentTypeId
      * @param int $status
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     public function load( $contentTypeId, $status = Type::STATUS_DEFINED )
@@ -183,11 +193,13 @@ class Handler implements BaseContentTypeHandler
     }
 
     /**
-     * Load a (defined) content type by identifier
+     * Loads a (defined) content type by identifier
      *
      * @param string $identifier
-     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If defined type is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     public function loadByIdentifier( $identifier )
     {
@@ -198,11 +210,13 @@ class Handler implements BaseContentTypeHandler
     }
 
     /**
-     * Load a (defined) content type by remote id
+     * Loads a (defined) content type by remote id
      *
      * @param mixed $remoteId
-     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If defined type is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     public function loadByRemoteId( $remoteId )
     {
@@ -221,6 +235,7 @@ class Handler implements BaseContentTypeHandler
      * @param array $rows
      * @param mixed $typeIdentifier
      * @param int $status
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     protected function loadFromRows( array $rows, $typeIdentifier, $status )
@@ -304,6 +319,7 @@ class Handler implements BaseContentTypeHandler
      * @param mixed $typeId
      * @param int $status
      * @param \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $contentType
+     *
      * @return Type
      */
     public function update( $typeId, $status, UpdateStruct $contentType )
@@ -317,8 +333,6 @@ class Handler implements BaseContentTypeHandler
     }
 
     /**
-     *
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is defined and still has content
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type is not found
      *
@@ -352,7 +366,7 @@ class Handler implements BaseContentTypeHandler
             $contentTypeId, $status
         );
 
-        // FIXME: Return true only if deletion happened
+        // @todo FIXME: Return true only if deletion happened
         return true;
     }
 
@@ -363,8 +377,10 @@ class Handler implements BaseContentTypeHandler
      *
      * @param mixed $modifierId
      * @param mixed $contentTypeId
-     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type with defined status is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     public function createDraft( $modifierId, $contentTypeId )
     {
@@ -382,6 +398,7 @@ class Handler implements BaseContentTypeHandler
      * @param mixed $userId
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     *
      * @return Type
      */
     public function copy( $userId, $contentTypeId, $status )
@@ -408,6 +425,7 @@ class Handler implements BaseContentTypeHandler
      * @param mixed $groupId
      * @param mixed $contentTypeId
      * @param int $status
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or type with provided status is not found
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If $groupId is last group on $contentTypeId or
      *                                                                 not a group assigned to type
@@ -428,7 +446,7 @@ class Handler implements BaseContentTypeHandler
         $this->contentTypeGateway->deleteGroupAssignment(
             $groupId, $contentTypeId, $status
         );
-        // FIXME: What is to be returned?
+        // @todo FIXME: What is to be returned?
         return true;
     }
 
@@ -437,6 +455,7 @@ class Handler implements BaseContentTypeHandler
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or type with provided status is not found
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is already part of group
      * @todo Above throws are not implemented
@@ -446,10 +465,9 @@ class Handler implements BaseContentTypeHandler
         $this->contentTypeGateway->insertGroupAssignment(
             $groupId, $contentTypeId, $status
         );
-        // FIXME: What is to be returned?
+        // @todo FIXME: What is to be returned?
         return true;
     }
-
 
     /**
      * Returns field definition for the given field definition id
@@ -489,6 +507,7 @@ class Handler implements BaseContentTypeHandler
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     *
      * @return void
      */
     public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
@@ -511,6 +530,7 @@ class Handler implements BaseContentTypeHandler
      *
      * @param mixed $contentTypeId
      * @param mixed $fieldDefinitionId
+     *
      * @return boolean
      */
     public function removeFieldDefinition( $contentTypeId, $status, $fieldDefinitionId )
@@ -518,7 +538,7 @@ class Handler implements BaseContentTypeHandler
         $this->contentTypeGateway->deleteFieldDefinition(
             $contentTypeId, $status, $fieldDefinitionId
         );
-        // FIXME: Return true only if deletion happened
+        // @todo FIXME: Return true only if deletion happened
         return true;
     }
 
@@ -532,6 +552,7 @@ class Handler implements BaseContentTypeHandler
      *
      * @param mixed $contentTypeId
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     *
      * @return void
      */
     public function updateFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
@@ -556,6 +577,7 @@ class Handler implements BaseContentTypeHandler
      * Flags the content type as updated.
      *
      * @param mixed $contentTypeId
+     *
      * @return void
      */
     public function publish( $contentTypeId )

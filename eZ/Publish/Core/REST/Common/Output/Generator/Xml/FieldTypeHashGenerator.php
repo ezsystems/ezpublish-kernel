@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Common\Output\Generator\Xml;
+
 use eZ\Publish\Core\REST\Common\Output\Generator\Xml as XmlWriter;
 
 class FieldTypeHashGenerator
@@ -132,7 +133,8 @@ class FieldTypeHashGenerator
      * Checks if the given $value is a purely numeric array
      *
      * @param array $value
-     * @return bool
+     *
+     * @return boolean
      */
     protected function isNumericArray( array $value )
     {
@@ -157,7 +159,7 @@ class FieldTypeHashGenerator
     {
         $writer->startElement( $elementName );
         $this->generateKeyAttribute( $writer, $key );
-        // TODO: xsi:type?
+        // @todo: xsi:type?
         $writer->endElement();
     }
 
@@ -165,7 +167,7 @@ class FieldTypeHashGenerator
      * Generates a boolean value
      *
      * @param \XmlWriter $writer
-     * @param bool $value
+     * @param boolean $value
      * @param string|null $key
      * @param string $elementName
      */
@@ -181,7 +183,7 @@ class FieldTypeHashGenerator
      * Generates a integer value
      *
      * @param \XmlWriter $writer
-     * @param integer $value
+     * @param int $value
      * @param string|null $key
      * @param string $elementName
      */
