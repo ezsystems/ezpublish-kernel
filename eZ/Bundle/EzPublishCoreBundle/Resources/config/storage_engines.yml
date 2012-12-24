@@ -77,9 +77,6 @@ parameters:
     ezpublish.fieldType.eznull.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
 
 services:
-    ezpublish.spi.persistence_handler:
-        alias: ezpublish.api.storage_engine.legacy
-
     ezpublish.api.storage_engine.in_memory:
         class: %ezpublish.api.storage_engine.in_memory.class%
         tags:

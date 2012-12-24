@@ -27,7 +27,7 @@ services:
 
     ezpublish.api.role.limitation_type.location:
         class: %ezpublish.api.role.limitation_type.location.class%
-        arguments: [@ezpublish.spi.persistence_handler]
+        arguments: [@ezpublish.api.persistence_handler]
         tags:
             - {name: ezpublish.limitationType, alias: Node}
 
@@ -38,25 +38,25 @@ services:
 
     ezpublish.api.role.limitation_type.parent_content_type:
         class: %ezpublish.api.role.limitation_type.parent_content_type.class%
-        arguments: [@ezpublish.spi.persistence_handler]
+        arguments: [@ezpublish.api.persistence_handler]
         tags:
             - {name: ezpublish.limitationType, alias: ParentClass}
 
     ezpublish.api.role.limitation_type.parent_depth:
         class: %ezpublish.api.role.limitation_type.parent_depth.class%
-        arguments: [@ezpublish.spi.persistence_handler]
+        arguments: [@ezpublish.api.persistence_handler]
         tags:
             - {name: ezpublish.limitationType, alias: ParentDepth}
 
     ezpublish.api.role.limitation_type.parent_owner:
         class: %ezpublish.api.role.limitation_type.parent_owner.class%
-        arguments: [@ezpublish.spi.persistence_handler]
+        arguments: [@ezpublish.api.persistence_handler]
         tags:
             - {name: ezpublish.limitationType, alias: ParentOwner}
 
     ezpublish.api.role.limitation_type.parent_group:
         class: %ezpublish.api.role.limitation_type.parent_group.class%
-        arguments: [@ezpublish.spi.persistence_handler]
+        arguments: [@ezpublish.api.persistence_handler]
         tags:
             - {name: ezpublish.limitationType, alias: ParentGroup}
 
@@ -77,18 +77,18 @@ services:
 
     ezpublish.api.role.limitation_type.state:
         class: %ezpublish.api.role.limitation_type.state.class%
-        arguments: [@ezpublish.spi.persistence_handler]
+        arguments: [@ezpublish.api.persistence_handler]
         tags:
             - {name: ezpublish.limitationType, alias: State}
 
     ezpublish.api.role.limitation_type.subtree:
         class: %ezpublish.api.role.limitation_type.subtree.class%
-        arguments: [@ezpublish.spi.persistence_handler]
+        arguments: [@ezpublish.api.persistence_handler]
         tags:
             - {name: ezpublish.limitationType, alias: Subtree}
 
     ezpublish.api.role.limitation_type.user_group:
         class: %ezpublish.api.role.limitation_type.user_group.class%
-        arguments: [@ezpublish.spi.persistence_handler]
+        arguments: [@ezpublish.api.persistence_handler]
         tags:
             - {name: ezpublish.limitationType, alias: UserGroup}
