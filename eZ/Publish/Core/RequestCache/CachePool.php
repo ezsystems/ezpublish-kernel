@@ -32,11 +32,11 @@ class CachePool extends ArrayObject
     public function __construct( array $input = null, $cacheItemLimit = 100 )
     {
         $this->limit = $cacheItemLimit;
-        parent::__construct( $input );
+        parent::__construct( $input === null ? array() : $input );
     }
 
     /**
-     * Set a value
+     * Set a value, remove if value is null
      *
      * @param mixed $key
      * @param mixed $value
@@ -44,8 +44,14 @@ class CachePool extends ArrayObject
      */
     public function set( $key, $value )
     {
+        if ( $value === null )
+        {
+            if ( $this->offsetExists( $key ) )
+                $this->offsetUnset( $key );
+            return $value;
+        }
         // Check if we have reached the limit of cache items
-        if ( $value !== null && !$this->offsetExists( $key ) && $this->count() >= $this->limit )
+        if ( !$this->offsetExists( $key ) && $this->count() >= $this->limit )
             $this->reducePool();
 
         $this->offsetSet( $key, $value );
