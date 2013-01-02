@@ -40,16 +40,15 @@ class CachePool extends ArrayObject
      *
      * @param mixed $key
      * @param mixed $value
+     *
      * @return mixed The $value provided as param
      */
     public function set( $key, $value )
     {
+        // Simply remove if $value is null, and return null
         if ( $value === null )
-        {
-            if ( $this->offsetExists( $key ) )
-                $this->offsetUnset( $key );
-            return $value;
-        }
+            return $this->remove( $key );
+
         // Check if we have reached the limit of cache items
         if ( !$this->offsetExists( $key ) && $this->count() >= $this->limit )
             $this->reducePool();
@@ -92,11 +91,15 @@ class CachePool extends ArrayObject
      * Remove a value
      *
      * @param mixed $key
+     *
+     * @return null
      */
     public function remove( $key )
     {
         if ( $this->offsetExists( $key ) )
             $this->offsetUnset( $key );
+
+        return null;
     }
 
     /**
