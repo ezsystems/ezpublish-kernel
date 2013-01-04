@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\FileService;
 
-use eZ\Publish\Core\FieldType\FileService;
+use eZ\Publish\SPI\FieldType\FileService;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use RuntimeException;
 
@@ -39,7 +39,8 @@ class LocalFileService implements FileService
 
     /**
      * @param string $installDir
-     * @param string $siteName
+     * @param        $storageDir
+     * @param string $identifierPrefix
      */
     public function __construct( $installDir, $storageDir, $identifierPrefix = '' )
     {
@@ -52,6 +53,7 @@ class LocalFileService implements FileService
      * Returns the full path for $path
      *
      * @param string $path
+     * @param bool $allowLocal
      *
      * @return string
      */

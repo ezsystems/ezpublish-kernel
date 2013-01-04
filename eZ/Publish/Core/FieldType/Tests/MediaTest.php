@@ -109,7 +109,8 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                     )
-                )
+                ),
+                array( 'getFileSize' => filesize( __FILE__ ) )
             ),
             array(
                 array( 'path' => __FILE__ ),
@@ -125,7 +126,8 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                     )
-                )
+                ),
+                array( 'getFileSize' => filesize( __FILE__ ) )
             ),
             array(
                 array(
@@ -163,7 +165,8 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                     )
-                )
+                ),
+                array( 'getFileSize' => filesize( __FILE__ ) )
             ),
             array(
                 array(
@@ -182,7 +185,8 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                     )
-                )
+                ),
+                array( 'getFileSize' => filesize( __FILE__ ) )
             ),
             array(
                 array(
@@ -201,7 +205,8 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                     )
-                )
+                ),
+                array( 'getFileSize' => filesize( __FILE__ ) )
             ),
             array(
                 array(
@@ -220,7 +225,8 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                     )
-                )
+                ),
+                array( 'getFileSize' => filesize( __FILE__ ) )
             ),
             array(
                 array(
@@ -239,7 +245,8 @@ class MediaTest extends BinaryBaseTest
                         'width' => 23,
                         'height' => 0,
                     )
-                )
+                ),
+                array( 'getFileSize' => filesize( __FILE__ ) )
             ),
             array(
                 array(
@@ -258,7 +265,8 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 42,
                     )
-                )
+                ),
+                array( 'getFileSize' => filesize( __FILE__ ) )
             ),
         );
     }

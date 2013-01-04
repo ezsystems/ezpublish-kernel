@@ -15,6 +15,7 @@ parameters:
     ezpublish.fieldType.ezimage.pathGenerator.class: eZ\Publish\Core\FieldType\Image\PathGenerator\LegacyPathGenerator
     ezpublish.fieldType.ezimage.fileService.class: eZ\Publish\Core\MVC\Symfony\File\ConfiguredLocalImageService
     ezpublish.fieldType.ezimage.externalStorage.class: eZ\Publish\Core\FieldType\Image\ImageStorage
+    ezpublish.fieldType.ezimage.mimeTypeDetector.class: eZ\Publish\Core\FieldType\BinaryBase\MimeTypeDetector\FileInfoDetector
     ezpublish.fieldType.ezkeyword.class: eZ\Publish\Core\FieldType\Keyword\Type
     ezpublish.fieldType.ezkeyword.externalStorage.class: eZ\Publish\Core\FieldType\Keyword\KeywordStorage
     ezpublish.fieldType.ezmedia.class: eZ\Publish\Core\FieldType\Media\Type
@@ -367,9 +368,12 @@ services:
     ezpublish.fieldType.ezimage:
         class: %ezpublish.fieldType.ezimage.class%
         parent: ezpublish.fieldType
-        arguments: [@ezpublish.fieldType.ezbinaryfile.fileService]
+        arguments: [ @ezpublish.fieldType.ezimage.fileService, @ezpublish.fieldType.ezimage.mimeTypeDetector ]
         tags:
             - {name: ezpublish.fieldType, alias: ezimage}
+
+    ezpublish.fieldType.ezimage.mimeTypeDetector:
+        class: %ezpublish.fieldType.ezimage.mimeTypeDetector.class%
 
     ezpublish.fieldType.ezimage.fileService:
         class: %ezpublish.fieldType.ezimage.fileService.class%

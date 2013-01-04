@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType;
+namespace eZ\Publish\SPI\FieldType;
 
 interface FileService
 {
