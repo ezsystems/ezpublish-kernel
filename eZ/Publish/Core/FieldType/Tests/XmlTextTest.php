@@ -14,12 +14,13 @@ use eZ\Publish\Core\FieldType\XmlText\Input\EzXml;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use Exception;
 use DOMDocument;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @group fieldType
  * @group ezxmltext
  */
-class XmlTextTest extends FieldTypeTest
+class XmlTextTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Normally this should be enough:

@@ -20,7 +20,7 @@ use stdClass;
  * @group fieldType
  * @group ezdatetime
  */
-class DateAndTimeTest extends StandardizedFieldTypeTest
+class DateAndTimeTest extends FieldTypeTest
 {
     /**
      * Returns the field type under test.

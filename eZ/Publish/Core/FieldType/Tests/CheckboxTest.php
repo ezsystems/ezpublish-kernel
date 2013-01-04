@@ -17,7 +17,7 @@ use ReflectionObject;
  * @group fieldType
  * @group ezboolean
  */
-class CheckboxTest extends StandardizedFieldTypeTest
+class CheckboxTest extends FieldTypeTest
 {
 
     /**

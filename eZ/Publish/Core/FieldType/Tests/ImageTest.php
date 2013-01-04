@@ -17,38 +17,11 @@ use ReflectionObject;
  * @group fieldType
  * @group ezfloat
  */
-class ImageTest extends StandardizedFieldTypeTest
+class ImageTest extends BinaryBaseTest
 {
-    /**
-     * FileService mock
-     *
-     * @var \PHPUnit_Framework_Mock
-     */
-    private $fileServiceMock;
-
     public function getImagePath()
     {
         return __DIR__ . '/squirrel-developers.jpg';
-    }
-
-    /**
-     * Returns a mock for the FileService
-     *
-     * @return \eZ\Publish\Core\FieldType\FileService
-     */
-    protected function getFileServiceMock()
-    {
-        if ( !isset( $this->fileServiceMock ) )
-        {
-            $this->fileServiceMock = $this->getMock(
-                'eZ\\Publish\\Core\\FieldType\\FileService',
-                array(),
-                array(),
-                '',
-                false
-            );
-        }
-        return $this->fileServiceMock;
     }
 
     /**
@@ -65,7 +38,8 @@ class ImageTest extends StandardizedFieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         return new ImageType(
-            $this->getFileServiceMock()
+            $this->getFileServiceMock(),
+            $this->getMimeTypeDetectorMock()
         );
     }
 
@@ -229,8 +203,11 @@ class ImageTest extends StandardizedFieldTypeTest
                         'fileName' => basename( $this->getImagePath() ),
                         'fileSize' => filesize( $this->getImagePath() ),
                         'alternativeText' => null,
+                        'mimeType' => 'image/jpeg',
                     )
                 ),
+                array( 'getFileSize' => filesize( $this->getImagePath() ) ),
+                array( 'getMimeType' => 'image/jpeg' )
             ),
             array(
                 array(
@@ -238,6 +215,7 @@ class ImageTest extends StandardizedFieldTypeTest
                     'fileName' => 'Sindelfingen-Squirrels.jpg',
                     'fileSize' => 23,
                     'alternativeText' => 'This is so Sindelfingen!',
+                    'mimeType' => 'image/jpeg',
                 ),
                 new ImageValue(
                     array(
@@ -245,6 +223,7 @@ class ImageTest extends StandardizedFieldTypeTest
                         'fileName' => 'Sindelfingen-Squirrels.jpg',
                         'fileSize' => 23,
                         'alternativeText' => 'This is so Sindelfingen!',
+                        'mimeType' => 'image/jpeg',
                     )
                 ),
             ),
@@ -299,6 +278,7 @@ class ImageTest extends StandardizedFieldTypeTest
                         'path' => $this->getImagePath(),
                         'fileName' => 'Sindelfingen-Squirrels.jpg',
                         'fileSize' => 23,
+                        'mimeType' => 'image/jpeg',
                         'alternativeText' => 'This is so Sindelfingen!',
                     )
                 ),
@@ -307,6 +287,7 @@ class ImageTest extends StandardizedFieldTypeTest
                     'fileName' => 'Sindelfingen-Squirrels.jpg',
                     'fileSize' => 23,
                     'alternativeText' => 'This is so Sindelfingen!',
+                    'mimeType' => 'image/jpeg'
                 ),
             ),
         );
