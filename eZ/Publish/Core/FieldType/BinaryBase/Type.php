@@ -138,8 +138,9 @@ abstract class Type extends FieldType
         // Required parameter $path
         if ( !isset( $inputValue->path ) || !$this->fileExists( $inputValue->path ) )
         {
-            throw new InvalidArgumentValue(
+            throw new InvalidArgumentType(
                 '$inputValue->path',
+                'Path to an existing file',
                 $inputValue->path
             );
         }
