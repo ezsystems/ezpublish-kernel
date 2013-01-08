@@ -1,5 +1,5 @@
 {
-    "hash": "174e0af8e7ef34bc0a4b896ee746df3e",
+    "hash": "d3f0bb10ca8807645b07f0968ae363e5",
     "packages": [
         {
             "name": "doctrine/common",
@@ -198,12 +198,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/symfony/symfony.git",
-                "reference": "4bee2e9d3a043f2f720d84e8d94f70f91e364c80"
+                "reference": "114bbce806fe7745a7e21c78e6ceb92e99897a30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/symfony/archive/4bee2e9d3a043f2f720d84e8d94f70f91e364c80.zip",
-                "reference": "4bee2e9d3a043f2f720d84e8d94f70f91e364c80",
+                "url": "https://github.com/symfony/symfony/archive/114bbce806fe7745a7e21c78e6ceb92e99897a30.zip",
+                "reference": "114bbce806fe7745a7e21c78e6ceb92e99897a30",
                 "shasum": ""
             },
             "require": {
@@ -252,7 +252,7 @@
                 "propel/propel1": "dev-master",
                 "monolog/monolog": "1.*"
             },
-            "time": "2012-12-20 07:21:29",
+            "time": "2013-01-02 21:19:05",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -282,23 +282,120 @@
             ]
         },
         {
+            "name": "tedivm/stash",
+            "version": "v0.9.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tedivm/Stash.git",
+                "reference": "v0.9.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/tedivm/Stash/archive/v0.9.5.zip",
+                "reference": "v0.9.5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "time": "2012-03-09 10:00:53",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-0": {
+                    "Stash": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Robert Hafner",
+                    "email": "tedivm@tedivm.com"
+                },
+                {
+                    "name": "Josh Hall-Bachner",
+                    "email": "charlequin@gmail.com"
+                }
+            ],
+            "description": "A place to keep your cache",
+            "homepage": "http://github.com/tedivm/Stash",
+            "keywords": [
+                "cache",
+                "caching"
+            ]
+        },
+        {
+            "name": "tedivm/stash-bundle",
+            "version": "dev-master",
+            "target-dir": "Tedivm/StashBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tedivm/TedivmStashBundle",
+                "reference": "b4f2b39149d15fdf9435786d0abb16aeec5ccfcd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/tedivm/TedivmStashBundle/archive/b4f2b39149d15fdf9435786d0abb16aeec5ccfcd.zip",
+                "reference": "b4f2b39149d15fdf9435786d0abb16aeec5ccfcd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "tedivm/stash": "0.9.*",
+                "symfony/framework-bundle": "2.1.*",
+                "symfony/yaml": "2.1.*"
+            },
+            "time": "2012-11-30 00:08:45",
+            "type": "symfony-bundle",
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "Tedivm\\StashBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Robert Hafner",
+                    "email": "tedivm@tedivm.com"
+                },
+                {
+                    "name": "Josh Hall-Bachner",
+                    "email": "jhallbachner@gmail.com"
+                }
+            ],
+            "description": "Incorporates the Stash caching library into Symfony.",
+            "homepage": "http://github.com/tedivm/TedivmStashBundle",
+            "keywords": [
+                "symfony",
+                "caching",
+                "sessions"
+            ]
+        },
+        {
             "name": "twig/twig",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "f095f3a1777431412954e478f92e8a10cb7b6495"
+                "reference": "037b5be972bd64900a6a287ee56661782090ca00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/archive/f095f3a1777431412954e478f92e8a10cb7b6495.zip",
-                "reference": "f095f3a1777431412954e478f92e8a10cb7b6495",
+                "url": "https://github.com/fabpot/Twig/archive/037b5be972bd64900a6a287ee56661782090ca00.zip",
+                "reference": "037b5be972bd64900a6a287ee56661782090ca00",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2012-12-18 10:01:32",
+            "time": "2013-01-02 16:15:41",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1656,18 +1753,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezsystems/ezpublish.git",
-                "reference": "c7597b880abe2609faec7b379308e09df3c99856"
+                "reference": "756cdabbfee3ccf590ff5b7a2ecc9d9aefb38ebe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/ezsystems/ezpublish/archive/c7597b880abe2609faec7b379308e09df3c99856.zip",
-                "reference": "c7597b880abe2609faec7b379308e09df3c99856",
+                "url": "https://github.com/ezsystems/ezpublish/archive/756cdabbfee3ccf590ff5b7a2ecc9d9aefb38ebe.zip",
+                "reference": "756cdabbfee3ccf590ff5b7a2ecc9d9aefb38ebe",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-12-18 13:25:42",
+            "time": "2013-01-02 12:41:58",
             "type": "library",
             "installation-source": "source",
             "notification-url": "https://packagist.org/downloads/",
@@ -1728,6 +1825,7 @@
         "zetacomponents/signal-slot": 20,
         "zetacomponents/system-information": 20,
         "kriswallsmith/buzz": 20,
+        "tedivm/stash-bundle": 20,
         "ezsystems/ezpublish-legacy": 20
     }
 }

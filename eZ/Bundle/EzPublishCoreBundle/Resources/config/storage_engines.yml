@@ -1,4 +1,9 @@
 parameters:
+    ezpublish.spi.persistence.cache.class: eZ\Publish\Core\Persistence\Cache\Handler
+    ezpublish.spi.persistence.lazy_factory.class: eZ\Publish\Core\Persistence\Factory
+    ezpublish.spi.persistence.default_id: synthetical-parameter-set-in-RegisterStorageEnginePass
+
+    # storage engines
     ezpublish.api.storage_engine.in_memory.class: eZ\Publish\Core\Persistence\InMemory\Handler
     ezpublish.api.storage_engine.legacy.class: eZ\Publish\Core\Persistence\Legacy\Handler
     ezpublish.api.storage_engine.legacy.dbhandler.class: eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
@@ -77,6 +82,19 @@ parameters:
     ezpublish.fieldType.eznull.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
 
 services:
+    # Persistence cache & Lazy loaded storage engine factory
+    ezpublish.spi.persistence.cache:
+        class: %ezpublish.spi.persistence.cache.class%
+        arguments:
+            - @ezpublish.spi.persistence.lazy_factory
+
+    ezpublish.spi.persistence.lazy_factory:
+        class: %ezpublish.spi.persistence.lazy_factory.class%
+        arguments:
+            - @service_container
+            - %ezpublish.spi.persistence.default_id%
+
+    # InMemory storage engine for unit test use
     ezpublish.api.storage_engine.in_memory:
         class: %ezpublish.api.storage_engine.in_memory.class%
         tags:
