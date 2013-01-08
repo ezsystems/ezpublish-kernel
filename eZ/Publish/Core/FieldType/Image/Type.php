@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Image;
 
-use eZ\Publish\Core\FieldType\BinaryBase\Type as BinaryBaseType;
+use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\SPI\FieldType\FileService;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\ValidationError;
@@ -19,7 +19,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
 /**
  * The Image field type
  */
-class Type extends BinaryBaseType
+class Type extends FieldType
 {
     /**
      * @see eZ\Publish\Core\FieldType::$validatorConfigurationSchema
@@ -32,6 +32,23 @@ class Type extends BinaryBaseType
             )
         )
     );
+
+    /**
+     * File service
+     *
+     * @var FileService
+     */
+    protected $fileService;
+
+    /**
+     * Creates a new Image FieldType
+     *
+     * @param FileService $fileService
+     */
+    public function __construct( FileService $fileService )
+    {
+        $this->fileService = $fileService;
+    }
 
     /**
      * Returns the field type identifier for this field type
@@ -61,18 +78,6 @@ class Type extends BinaryBaseType
     }
 
     /**
-     * Creates a specific value of the derived class from $inputValue
-     *
-     * @param array $inputValue
-     *
-     * @return Value
-     */
-    protected function createValue( array $inputValue )
-    {
-        return new Value( $inputValue );
-    }
-
-    /**
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
@@ -89,28 +94,65 @@ class Type extends BinaryBaseType
      * @param mixed $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\Image\Value The potentially converted and structurally plausible value.
-     *
-     * @throws InvalidArgumentType If $inputValue isn't structurally acceptable
      */
     protected function internalAcceptValue( $inputValue )
     {
-        $inputValue = parent::internalAcceptValue( $inputValue );
-
-        if ( !is_string( $inputValue->alternativeText ) )
+        // default construction from array
+        if ( is_array( $inputValue ) )
         {
-            throw new InvalidArgumentType(
-                '$inputValue->alternativeText',
-                'string',
-                $inputValue->alternativeText
-            );
+            $inputValue = new Value( $inputValue );
+        }
+        // just given the file path as a string
+        else if ( is_string( $inputValue ) )
+        {
+            $inputValue = Value::fromString( $inputValue );
         }
 
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
                 '$inputValue',
-                'eZ\\Publish\\Core\\FieldType\\BinaryFile\\Value',
+                'eZ\\Publish\\Core\\FieldType\\Image\\Value',
                 $inputValue
+            );
+        }
+
+        // Required parameter $path
+        if ( !isset( $inputValue->path ) || !$this->fileExists( $inputValue->path ) )
+        {
+            throw new InvalidArgumentType(
+                '$inputValue->path',
+                'Existing fileName',
+                $inputValue->path
+            );
+        }
+        // Required parameter $fileName
+        if ( !isset( $inputValue->fileName ) || !is_string( $inputValue->fileName ) )
+        {
+            throw new InvalidArgumentType(
+                '$inputValue->fileName',
+                'string',
+                $inputValue->fileName
+            );
+        }
+
+        // Required parameter $fileSize
+        if ( !isset( $inputValue->fileSize ) || !is_int( $inputValue->fileSize ) )
+        {
+            throw new InvalidArgumentType(
+                '$inputValue->fileSize',
+                'string',
+                $inputValue->fileSize
+            );
+        }
+
+        // Optional parameter $alternativeText
+        if ( isset( $inputValue->alternativeText ) && !is_string( $inputValue->alternativeText ) )
+        {
+            throw new InvalidArgumentType(
+                '$inputValue->alternativeText',
+                'string',
+                $inputValue->alternativeText
             );
         }
 
@@ -278,15 +320,17 @@ class Type extends BinaryBaseType
      */
     public function toHash( $value )
     {
-        $hash = parent::toHash( $value );
-
-        if ( $hash === null )
+        if ( $this->isEmptyValue( $value ) )
         {
-            return $hash;
+            return null;
         }
 
-        $hash['alternativeText'] = $value->alternativeText;
-        return $hash;
+        return array(
+            'alternativeText' => $value->alternativeText,
+            'fileName' => $value->fileName,
+            'fileSize' => $value->fileSize,
+            'path' => $value->path,
+        );
     }
 
     /**
@@ -313,22 +357,34 @@ class Type extends BinaryBaseType
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      *
-     * @return \eZ\Publish\Core\FieldType\BinaryBase\Value
+     * @return mixed
      */
     public function fromPersistenceValue( FieldValue $fieldValue )
     {
-        $result = parent::fromPersistenceValue( $fieldValue );
-
-        if ( $result === null )
+        if ( $fieldValue->data === null )
         {
             // empty value
             return null;
         }
 
-        $result->alternativeText = ( isset( $fieldValue->externalData['alternativeText'] )
-            ? $fieldValue->externalData['alternativeText']
-            : '' );
-
+        // Restored data comes in $data, since it has already been processed
+        // there might be more data in the persistence value than needed here
+        $result = $this->fromHash(
+            array(
+                'alternativeText' => ( isset( $fieldValue->data['alternativeText'] )
+                    ? $fieldValue->data['alternativeText']
+                    : null ),
+                'fileName' => ( isset( $fieldValue->data['fileName'] )
+                    ? $fieldValue->data['fileName']
+                    : null ),
+                'fileSize' => ( isset( $fieldValue->data['fileSize'] )
+                    ? $fieldValue->data['fileSize']
+                    : null ),
+                'path' => ( isset( $fieldValue->data['path'] )
+                    ? $fieldValue->data['path']
+                    : null ),
+            )
+        );
         return $result;
     }
 

@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Image;
 
-use eZ\Publish\Core\FieldType\BinaryBase\Value as BaseValue;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
 
@@ -30,7 +30,55 @@ class Value extends BaseValue
      *
      * @var string
      */
-    public $alternativeText = '';
+    public $alternativeText;
+
+    /**
+     * Display file name of the image
+     *
+     * @var string
+     * @required
+     */
+    public $fileName;
+
+    /**
+     * Size of the image file
+     *
+     * @var int
+     * @required
+     */
+    public $fileSize;
+
+    /**
+     * Path string, where the image is located
+     *
+     * @var string
+     * @required
+     */
+    public $path;
+
+    /**
+     * Construct a new Value object.
+     *
+     * @param array $fileData
+     */
+    public function __construct( array $imageData = array() )
+    {
+        foreach ( $imageData as $key => $value )
+        {
+            try
+            {
+                $this->$key = $value;
+            }
+            catch ( PropertyNotFoundException $e )
+            {
+                throw new InvalidArgumentType(
+                    sprintf( '$imageData->%s', $key ),
+                    'Property not found',
+                    $value
+                );
+            }
+        }
+    }
 
     /**
      * Creates a value only from a file path
@@ -49,7 +97,6 @@ class Value extends BaseValue
                 $path
             );
         }
-
         return new static(
             array(
                 'path' => $path,
@@ -60,6 +107,19 @@ class Value extends BaseValue
         );
     }
 
+    /**
+     * Returns the image file size in byte
+     *
+     * @return integer
+     */
+    public function getFileSize()
+    {
+        return $this->fileSize;
+    }
+
+    /**
+     * @see \eZ\Publish\Core\FieldType\Value
+     */
     public function __toString()
     {
         return (string)$this->fileName;
