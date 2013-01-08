@@ -17,11 +17,56 @@ use ReflectionObject;
  * @group fieldType
  * @group ezfloat
  */
-class ImageTest extends BinaryBaseTest
+class ImageTest extends FieldTypeTest
 {
+    /**
+     * FileService mock
+     *
+     * @var \PHPUnit_Framework_Mock
+     */
+    private $fileServiceMock;
+
     public function getImagePath()
     {
         return __DIR__ . '/squirrel-developers.jpg';
+    }
+
+    /**
+     * Returns a mock for the FileService
+     *
+     * @return \eZ\Publish\SPI\FieldType\FileService
+     */
+    protected function getFileServiceMock()
+    {
+        if ( !isset( $this->fileServiceMock ) )
+        {
+            $this->fileServiceMock = $this->getMock(
+                'eZ\\Publish\\SPI\\FieldType\\FileService',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->fileServiceMock;
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\FieldType\BinaryBase\MimeTypeDetector
+     */
+    protected function getMimeTypeDetectorMock()
+    {
+        if ( !isset( $this->mimeTypeDetectorMock ) )
+        {
+            $this->mimeTypeDetectorMock = $this->getMock(
+                'eZ\\Publish\\SPI\\FieldType\\BinaryBase\\MimeTypeDetector',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->mimeTypeDetectorMock;
     }
 
     /**
@@ -203,11 +248,8 @@ class ImageTest extends BinaryBaseTest
                         'fileName' => basename( $this->getImagePath() ),
                         'fileSize' => filesize( $this->getImagePath() ),
                         'alternativeText' => null,
-                        'mimeType' => 'image/jpeg',
                     )
                 ),
-                array( 'getFileSize' => filesize( $this->getImagePath() ) ),
-                array( 'getMimeType' => 'image/jpeg' )
             ),
             array(
                 array(
@@ -215,7 +257,6 @@ class ImageTest extends BinaryBaseTest
                     'fileName' => 'Sindelfingen-Squirrels.jpg',
                     'fileSize' => 23,
                     'alternativeText' => 'This is so Sindelfingen!',
-                    'mimeType' => 'image/jpeg',
                 ),
                 new ImageValue(
                     array(
@@ -223,7 +264,6 @@ class ImageTest extends BinaryBaseTest
                         'fileName' => 'Sindelfingen-Squirrels.jpg',
                         'fileSize' => 23,
                         'alternativeText' => 'This is so Sindelfingen!',
-                        'mimeType' => 'image/jpeg',
                     )
                 ),
             ),
@@ -278,7 +318,6 @@ class ImageTest extends BinaryBaseTest
                         'path' => $this->getImagePath(),
                         'fileName' => 'Sindelfingen-Squirrels.jpg',
                         'fileSize' => 23,
-                        'mimeType' => 'image/jpeg',
                         'alternativeText' => 'This is so Sindelfingen!',
                     )
                 ),
@@ -287,7 +326,6 @@ class ImageTest extends BinaryBaseTest
                     'fileName' => 'Sindelfingen-Squirrels.jpg',
                     'fileSize' => 23,
                     'alternativeText' => 'This is so Sindelfingen!',
-                    'mimeType' => 'image/jpeg'
                 ),
             ),
         );
