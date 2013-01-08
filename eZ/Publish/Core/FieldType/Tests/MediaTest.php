@@ -110,7 +110,8 @@ class MediaTest extends BinaryBaseTest
                         'height' => 0,
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) )
+                array( 'getFileSize' => filesize( __FILE__ ) ),
+                array( 'getMimeType' => 'text/plain' )
             ),
             array(
                 array( 'path' => __FILE__ ),
@@ -127,7 +128,8 @@ class MediaTest extends BinaryBaseTest
                         'height' => 0,
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) )
+                array( 'getFileSize' => filesize( __FILE__ ) ),
+                array( 'getMimeType' => 'text/plain' )
             ),
             array(
                 array(
@@ -146,7 +148,9 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                     )
-                )
+                ),
+                array(),
+                array( 'getMimeType' => 'text/plain' )
             ),
             array(
                 array(
@@ -186,7 +190,8 @@ class MediaTest extends BinaryBaseTest
                         'height' => 0,
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) )
+                array( 'getFileSize' => filesize( __FILE__ ) ),
+                array( 'getMimeType' => 'text/plain' )
             ),
             array(
                 array(
@@ -206,7 +211,8 @@ class MediaTest extends BinaryBaseTest
                         'height' => 0,
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) )
+                array( 'getFileSize' => filesize( __FILE__ ) ),
+                array( 'getMimeType' => 'text/plain' )
             ),
             array(
                 array(
@@ -226,7 +232,8 @@ class MediaTest extends BinaryBaseTest
                         'height' => 0,
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) )
+                array( 'getFileSize' => filesize( __FILE__ ) ),
+                array( 'getMimeType' => 'text/plain' )
             ),
             array(
                 array(
@@ -246,7 +253,8 @@ class MediaTest extends BinaryBaseTest
                         'height' => 0,
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) )
+                array( 'getFileSize' => filesize( __FILE__ ) ),
+                array( 'getMimeType' => 'text/plain' )
             ),
             array(
                 array(
@@ -266,7 +274,8 @@ class MediaTest extends BinaryBaseTest
                         'height' => 42,
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) )
+                array( 'getFileSize' => filesize( __FILE__ ) ),
+                array( 'getMimeType' => 'text/plain' )
             ),
         );
     }
