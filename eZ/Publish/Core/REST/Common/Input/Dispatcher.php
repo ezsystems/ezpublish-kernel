@@ -78,7 +78,8 @@ class Dispatcher
             throw new Exceptions\Parser( 'Missing Content-Type header in message.' );
         }
 
-        $contentTypeParts = explode( '+', $message->headers['Content-Type'] );
+        $mediaTypeParts = explode( ';', $message->headers['Content-Type'] );
+        $contentTypeParts = explode( '+', $mediaTypeParts[0] );
         if ( count( $contentTypeParts ) !== 2 )
         {
             throw new Exceptions\Parser( "No format specification in content type. Missing '+(json|xml|…)' in '{$message->headers['Content-Type']}'." );
