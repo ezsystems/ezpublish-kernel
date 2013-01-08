@@ -76,7 +76,8 @@ class BinaryFileTest extends BinaryBaseTest
                         'mimeType' => 'text/plain',
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) )
+                array( 'getFileSize' => filesize( __FILE__ ) ),
+                array( 'getMimeType' => 'text/plain' )
             ),
             array(
                 array( 'path' => __FILE__ ),
@@ -89,7 +90,8 @@ class BinaryFileTest extends BinaryBaseTest
                         'mimeType' => 'text/plain',
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) )
+                array( 'getFileSize' => filesize( __FILE__ ) ),
+                array( 'getMimeType' => 'text/plain' )
             ),
             array(
                 array(
@@ -104,7 +106,9 @@ class BinaryFileTest extends BinaryBaseTest
                         'downloadCount' => 0,
                         'mimeType' => 'text/plain',
                     )
-                )
+                ),
+                array(),
+                array( 'getMimeType' => 'text/plain' )
             ),
             array(
                 array(
@@ -120,7 +124,8 @@ class BinaryFileTest extends BinaryBaseTest
                         'mimeType' => 'text/plain',
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) )
+                array( 'getFileSize' => filesize( __FILE__ ) ),
+                array( 'getMimeType' => 'text/plain' )
             ),
             array(
                 array(
