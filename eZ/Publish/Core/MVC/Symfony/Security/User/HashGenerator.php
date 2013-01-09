@@ -9,10 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Security\User;
 
-use eZ\Publish\SPI\HashGenerator as HashGeneratorInterface,
-    eZ\Publish\API\Repository\Repository,
-    eZ\Publish\Core\MVC\ConfigResolverInterface,
-    eZ\Publish\SPI\User\Identity;
+use eZ\Publish\SPI\HashGenerator as HashGeneratorInterface;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\SPI\User\Identity;
 
 /**
  * User hash generator.
@@ -31,16 +30,10 @@ class HashGenerator implements HashGeneratorInterface
      */
     protected $repository;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
-
-    public function __construct( Identity $userIdentity, Repository $repository, ConfigResolverInterface $configResolver )
+    public function __construct( Identity $userIdentity, Repository $repository )
     {
         $this->userIdentity = $userIdentity;
         $this->repository = $repository;
-        $this->configResolver = $configResolver;
     }
 
     /**
