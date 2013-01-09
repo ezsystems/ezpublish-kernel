@@ -133,7 +133,7 @@ class PersistenceHandlerTest extends HandlerTest
     {
         $handler = $this->persistenceHandler->sectionHandler();
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler', $handler );
-        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\SectionHandler', $handler );
+        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Cache\\SectionHandler', $handler );
     }
 
     /**

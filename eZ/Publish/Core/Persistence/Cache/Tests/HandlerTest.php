@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
 use eZ\Publish\Core\Persistence\Cache\Handler as CacheHandler;
+use eZ\Publish\Core\Persistence\Cache\SectionHandler as CacheSectionHandler;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -49,8 +50,17 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
             false
         );
 
+        $this->cacheMock = $this->getMock(
+            "Tedivm\\StashBundle\\Service\\CacheService",
+            array(),
+            array(),
+            '',
+            false
+        );
+
         $this->persistenceHandler = new CacheHandler(
-            $this->persistenceFactoryMock
+            $this->persistenceFactoryMock,
+            new CacheSectionHandler( $this->cacheMock, $this->persistenceFactoryMock )
         );
     }
 
