@@ -85,6 +85,12 @@ class Configuration implements EventSubscriberInterface
             'site.ini/FileSettings/StorageDir'  => $this->configResolver->getParameter( 'storage_dir' )
         );
 
+        // Root Location
+        $settings += array( 'site.ini/SiteSettings/IndexPage' => "/content/view/full/" . $this->configResolver->getParameter( 'root_location' ) );
+
+        // Path Prefix
+        $settings += array( 'site.ini/SiteAccessSettings/PathPrefix' => $this->configResolver->getParameter( 'path_prefix' ) );
+
         $event->getParameters()->set(
             "injected-settings",
             $settings + (array)$event->getParameters()->get( "injected-settings" )

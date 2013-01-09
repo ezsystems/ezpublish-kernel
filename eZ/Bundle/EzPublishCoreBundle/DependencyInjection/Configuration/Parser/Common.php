@@ -85,6 +85,14 @@ class Common extends AbstractParser
                         ->prototype( 'scalar' )->end()
                     ->end()
                 ->end()
+            ->end()
+            ->scalarNode( 'root_location' )
+                ->info( 'Root Location settings' )
+                ->defaultValue( 2 )
+                ->example(  array( 2 ) )
+            ->end()
+            ->scalarNode( 'path_prefix' )
+                ->info( 'Hides this part from the start of the url alias' )
             ->end();
     }
 
@@ -140,6 +148,10 @@ class Common extends AbstractParser
                 $container->setParameter( "ezsettings.$sa.session_name", $settings['session_name'] );
             if ( isset( $settings['http_cache']['purge_servers'] ) )
                 $container->setParameter( "ezsettings.$sa.http_cache.purge_servers", $settings['http_cache']['purge_servers'] );
+            if ( isset( $settings['root_location'] ) )
+                $container->setParameter( "ezsettings.$sa.root_location", $settings['root_location'] );
+            if( isset( $settings['path_prefix'] ) )
+                $container->setParameter( "ezsettings.$sa.path_prefix", $settings['path_prefix'] );
         }
     }
 }
