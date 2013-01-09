@@ -25,7 +25,6 @@
                     "dev-master": "2.3.x-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\Common": "lib/"
@@ -93,7 +92,6 @@
             },
             "time": "2012-08-17 12:23:33",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Buzz": "lib/"
@@ -133,7 +131,6 @@
             },
             "time": "2012-09-03 11:24:11",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Qafoo\\RMF": "src/main/"
@@ -169,7 +166,6 @@
                     "dev-master": "1.0-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Cmf\\Component\\Routing": ""
@@ -198,12 +194,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/symfony/symfony.git",
-                "reference": "114bbce806fe7745a7e21c78e6ceb92e99897a30"
+                "reference": "b33d5bc352f7a97b6771e61fa1a0d8b087a7145d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/symfony/archive/114bbce806fe7745a7e21c78e6ceb92e99897a30.zip",
-                "reference": "114bbce806fe7745a7e21c78e6ceb92e99897a30",
+                "url": "https://github.com/symfony/symfony/archive/b33d5bc352f7a97b6771e61fa1a0d8b087a7145d.zip",
+                "reference": "b33d5bc352f7a97b6771e61fa1a0d8b087a7145d",
                 "shasum": ""
             },
             "require": {
@@ -250,11 +246,10 @@
                 "doctrine/orm": ">=2.2.3,<2.4-dev",
                 "doctrine/data-fixtures": "1.0.*",
                 "propel/propel1": "dev-master",
-                "monolog/monolog": "1.*"
+                "monolog/monolog": ">=1.0,<1.3-dev"
             },
-            "time": "2013-01-02 21:19:05",
+            "time": "2013-01-09 08:51:07",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Symfony": "src/",
@@ -300,7 +295,6 @@
             },
             "time": "2012-03-09 10:00:53",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Stash": "src/"
@@ -334,12 +328,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tedivm/TedivmStashBundle",
-                "reference": "b4f2b39149d15fdf9435786d0abb16aeec5ccfcd"
+                "reference": "ce4fbb2e580bd4d234910648853027d230ee440b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/tedivm/TedivmStashBundle/archive/b4f2b39149d15fdf9435786d0abb16aeec5ccfcd.zip",
-                "reference": "b4f2b39149d15fdf9435786d0abb16aeec5ccfcd",
+                "url": "https://github.com/tedivm/TedivmStashBundle/archive/ce4fbb2e580bd4d234910648853027d230ee440b.zip",
+                "reference": "ce4fbb2e580bd4d234910648853027d230ee440b",
                 "shasum": ""
             },
             "require": {
@@ -348,9 +342,8 @@
                 "symfony/framework-bundle": "2.1.*",
                 "symfony/yaml": "2.1.*"
             },
-            "time": "2012-11-30 00:08:45",
+            "time": "2013-01-08 18:53:22",
             "type": "symfony-bundle",
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Tedivm\\StashBundle": ""
@@ -384,25 +377,24 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "037b5be972bd64900a6a287ee56661782090ca00"
+                "reference": "3111e1265db1026323c589a5bd2d152871d7bbab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/archive/037b5be972bd64900a6a287ee56661782090ca00.zip",
-                "reference": "037b5be972bd64900a6a287ee56661782090ca00",
+                "url": "https://github.com/fabpot/Twig/archive/3111e1265db1026323c589a5bd2d152871d7bbab.zip",
+                "reference": "3111e1265db1026323c589a5bd2d152871d7bbab",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2013-01-02 16:15:41",
+            "time": "2013-01-08 16:56:12",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "1.12-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Twig_": "lib/"
@@ -450,7 +442,6 @@
             },
             "time": "2012-05-21 09:54:03",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src"
@@ -517,7 +508,6 @@
             },
             "time": "2012-05-21 09:55:21",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src"
@@ -581,7 +571,6 @@
             },
             "time": "2012-05-21 11:21:36",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src"
@@ -648,7 +637,6 @@
             },
             "time": "2012-05-21 09:55:29",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src"
@@ -718,7 +706,6 @@
             },
             "time": "2012-05-21 09:55:32",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src"
@@ -785,7 +772,6 @@
             },
             "time": "2012-05-21 09:55:34",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src"
@@ -852,7 +838,6 @@
             },
             "time": "2012-05-21 09:55:40",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src"
@@ -928,7 +913,6 @@
             },
             "time": "2012-05-21 09:55:45",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src"
@@ -989,7 +973,6 @@
             },
             "time": "2009-06-29 03:55:08",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "classmap": [
                     "src"
@@ -1056,7 +1039,6 @@
             },
             "time": "2012-05-21 09:55:58",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src"
@@ -1123,7 +1105,6 @@
             },
             "time": "2012-05-21 09:56:09",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src"
@@ -1191,7 +1172,6 @@
             },
             "time": "2012-05-28 07:48:05",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src"
@@ -1258,7 +1238,6 @@
             },
             "time": "2012-05-21 09:56:15",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src"
@@ -1328,7 +1307,6 @@
             },
             "time": "2012-05-21 09:46:53",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src"
@@ -1380,7 +1358,6 @@
             },
             "time": "2012-05-21 09:56:22",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src"
@@ -1435,7 +1412,6 @@
             },
             "time": "2012-05-21 09:56:25",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src"
@@ -1505,7 +1481,6 @@
             },
             "time": "2012-05-21 09:56:30",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src"
@@ -1572,7 +1547,6 @@
             },
             "time": "2012-05-21 14:06:23",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src"
@@ -1639,7 +1613,6 @@
             },
             "time": "2012-05-21 09:56:41",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "classmap": [
                     "src"
@@ -1700,7 +1673,6 @@
             },
             "time": "2009-11-09 05:34:07",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "classmap": [
                     "src"
@@ -1753,20 +1725,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezsystems/ezpublish.git",
-                "reference": "756cdabbfee3ccf590ff5b7a2ecc9d9aefb38ebe"
+                "reference": "01f529b2ee8afef8fbe723bd3313794c97ea9f93"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/ezsystems/ezpublish/archive/756cdabbfee3ccf590ff5b7a2ecc9d9aefb38ebe.zip",
-                "reference": "756cdabbfee3ccf590ff5b7a2ecc9d9aefb38ebe",
+                "url": "https://github.com/ezsystems/ezpublish/archive/01f529b2ee8afef8fbe723bd3313794c97ea9f93.zip",
+                "reference": "01f529b2ee8afef8fbe723bd3313794c97ea9f93",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2013-01-02 12:41:58",
+            "time": "2013-01-08 08:09:52",
             "type": "library",
-            "installation-source": "source",
             "notification-url": "https://packagist.org/downloads/",
             "description": "eZ Publish LegacyStack (4.x)",
             "homepage": "http://share.ez.no"
@@ -1790,7 +1761,6 @@
             },
             "time": "2012-08-25 05:49:29",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "org\\bovigo\\vfs": "src/main/php"
