@@ -15,6 +15,9 @@ use Tedivm\StashBundle\Service\CacheService;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
+ *
+ * @todo Consider loadAll & loadByIdentifier cache, however then loadAll() must be used
+ *       by all (incl create) but update & delete to avoid doing several cache lookups.
  */
 class SectionHandler implements SectionHandlerInterface
 {

@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
 use eZ\Publish\Core\Persistence\Cache\Handler as CacheHandler;
 use eZ\Publish\Core\Persistence\Cache\SectionHandler as CacheSectionHandler;
+use eZ\Publish\Core\Persistence\Cache\ContentTypeHandler as CacheContentTypeHandler;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -60,7 +61,8 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
 
         $this->persistenceHandler = new CacheHandler(
             $this->persistenceFactoryMock,
-            new CacheSectionHandler( $this->cacheMock, $this->persistenceFactoryMock )
+            new CacheSectionHandler( $this->cacheMock, $this->persistenceFactoryMock ),
+            new CacheContentTypeHandler( $this->cacheMock, $this->persistenceFactoryMock )
         );
     }
 

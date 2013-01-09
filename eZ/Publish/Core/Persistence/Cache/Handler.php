@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Persistence\Cache;
 use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandlerInterface;
 use eZ\Publish\Core\Persistence\Cache\SectionHandler as CacheSectionHandler;
+use eZ\Publish\Core\Persistence\Cache\ContentTypeHandler as CacheContentTypeHandler;
 
 /**
  * Persistence Cache Handler class
@@ -29,18 +30,26 @@ class Handler implements PersistenceHandlerInterface
     protected $sectionHandler;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler
+     */
+    protected $contentTypeHandler;
+
+    /**
      * Construct the class
      *
      * @param \eZ\Publish\Core\Persistence\Factory $persistenceFactory Must be factory for inner persistence, ie: legacy
      * @param \eZ\Publish\Core\Persistence\Cache\SectionHandler $sectionHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler $contentTypeHandler
      */
     public function __construct(
         PersistenceFactory $persistenceFactory,
-        CacheSectionHandler $sectionHandler
+        CacheSectionHandler $sectionHandler,
+        CacheContentTypeHandler $contentTypeHandler
     )
     {
         $this->persistenceFactory = $persistenceFactory;
         $this->sectionHandler = $sectionHandler;
+        $this->contentTypeHandler = $contentTypeHandler;
     }
 
     /**
@@ -64,7 +73,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function contentTypeHandler()
     {
-        return $this->persistenceFactory->getContentTypeHandler();
+        return $this->contentTypeHandler;
     }
 
     /**

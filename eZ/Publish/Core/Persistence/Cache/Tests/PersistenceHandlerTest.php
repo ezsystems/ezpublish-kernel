@@ -85,7 +85,7 @@ class PersistenceHandlerTest extends HandlerTest
     {
         $handler = $this->persistenceHandler->contentTypeHandler();
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler', $handler );
-        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\ContentTypeHandler', $handler );
+        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Cache\\ContentTypeHandler', $handler );
     }
 
     /**
