@@ -8,7 +8,5 @@ _ezpublishLocation:
 
 _ezpublishUserHash:
     pattern: /_ez_user
-    defaults:
-        _controller: ezpublish.controller.user.authentication:getUserHash
     requirements:
         method: AUTHENTICATE

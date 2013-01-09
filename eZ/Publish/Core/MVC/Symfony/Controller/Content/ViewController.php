@@ -50,7 +50,13 @@ class ViewController extends Controller
                 $response->setEtag( $etag );
             }
 
-            if ( $this->getParameter( 'content.ttl_cache' ) === true )
+            // Make the response vary against X-User-Hash header ensures that an HTTP
+            // reverse proxy caches the different possible variations of the
+            // response as it can depend on user role for instance.
+            if (
+                $request->headers->has( 'X-User-Hash' )
+                && $this->getParameter( 'content.ttl_cache' ) === true
+            )
             {
                 $response->setVary( 'X-User-Hash' );
                 $response->setSharedMaxAge(

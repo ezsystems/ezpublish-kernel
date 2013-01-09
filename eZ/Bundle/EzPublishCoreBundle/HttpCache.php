@@ -14,29 +14,44 @@ use eZ\Publish\Core\MVC\Symfony\Cache\Http\RequestAwarePurger;
 use Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache as BaseHttpCache;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 abstract class HttpCache extends BaseHttpCache
 {
+    /**
+     * Hash for anonymous user.
+     */
+    const ANONYMOUS_HASH = '917f736fbbbb1ae450a40be4c1dce175';
+
     public function handle( Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true )
+    {
+        // Forbid direct AUTHENTICATE requests to get user hash
+        if ( $request->isMethod( 'AUTHENTICATE' ) && $request->headers->has( 'X-User-Hash' ) )
+            return new Response( '', 405 );
+
+        $request->headers->set( 'X-User-Hash', $this->generateUserHash( $request ) );
+        return parent::handle( $request, $type, $catch );
+    }
+
+    /**
+     * Generates current user hash
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return string
+     */
+    private function generateUserHash( Request $request )
     {
         // X-User-Hash is purely internal and should never be used from outside
         if ( $request->headers->has( 'X-User-Hash' ) )
             $request->headers->remove( 'X-User-Hash' );
 
-        if ( $request->cookies->has( 'user_hash' ) )
-        {
-            $request->headers->set( 'X-User-Hash', $request->cookies->get( 'user_hash' ) );
-        }
-        else
-        {
-            // Forward the request to the kernel to generate the user hash
-            $forwardReq = Request::create( '/_ez_user', 'AUTHENTICATE', array(), $request->cookies->all(), array(), $request->server->all() );
-            $forwardReq->headers->set( 'X-User-Hash', '' );
-            $resp = $this->forward( $forwardReq );
-            $request->headers->set( 'X-User-Hash', $resp->headers->get( 'X-User-Hash' ) );
-        }
+        if ( !$request->cookies->has( 'is_logged_in' ) )
+            return static::ANONYMOUS_HASH;
 
-        return parent::handle( $request, $type, $catch );
+        // Forward the request to the kernel to generate the user hash
+        $forwardReq = Request::create( '/_ez_user', 'AUTHENTICATE', array(), $request->cookies->all(), array(), $request->server->all() );
+        $forwardReq->headers->set( 'X-User-Hash', '' );
+        return $this->forward( $forwardReq )->getContent();
     }
 
     protected function createStore()
@@ -61,7 +76,7 @@ abstract class HttpCache extends BaseHttpCache
         }
 
         // Reject all non-authorized clients
-        if ( !$this->isPurgeRequestAllowed( $request ) )
+        if ( !$this->isInternalRequestAllowed( $request ) )
         {
             return new Response( '', 405 );
         }
@@ -97,9 +112,9 @@ abstract class HttpCache extends BaseHttpCache
      *
      * @return boolean
      */
-    protected function isPurgeRequestAllowed( Request $request )
+    protected function isInternalRequestAllowed( Request $request )
     {
-        if ( !$this->isPurgeIPAllowed( $request->getClientIp() ) )
+        if ( !$this->isInternalIPAllowed( $request->getClientIp() ) )
             return false;
 
         return true;
@@ -114,9 +129,9 @@ abstract class HttpCache extends BaseHttpCache
      *
      * @return boolean
      */
-    protected function isPurgeIPAllowed( $ip )
+    protected function isInternalIPAllowed( $ip )
     {
-        $allowedIps = array_fill_keys( $this->getPurgeAllowedIPs(), true );
+        $allowedIps = array_fill_keys( $this->getInternalAllowedIPs(), true );
         if ( !isset( $allowedIps[$ip] ) )
             return false;
 
@@ -128,7 +143,7 @@ abstract class HttpCache extends BaseHttpCache
      *
      * @return array
      */
-    protected function getPurgeAllowedIPs()
+    protected function getInternalAllowedIPs()
     {
         return array( '127.0.0.1', '::1' );
     }

@@ -16,6 +16,8 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 
@@ -55,7 +57,8 @@ class RequestEventListener implements EventSubscriberInterface
             KernelEvents::REQUEST => array(
                 array( 'onKernelRequestSetup', 190 ),
                 array( 'onKernelRequestForward', 10 ),
-                array( 'onKernelRequestRedirect', 0 )
+                array( 'onKernelRequestRedirect', 0 ),
+                array( 'onKernelRequestUserHash', 7 ),
             )
         );
     }
@@ -156,5 +159,40 @@ class RequestEventListener implements EventSubscriberInterface
                     );
             }
         }
+    }
+
+    /**
+     * Returns a Response containing the current user hash if needed.
+     *
+     * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+     */
+    public function onKernelRequestUserHash( GetResponseEvent $event )
+    {
+        $request = $event->getRequest();
+
+        if ( !$request->isMethod( 'AUTHENTICATE' ) || !$request->headers->has( 'X-User-Hash' ) )
+            return;
+
+        // We must have a session at that point since we're supposed to be connected
+        if ( !$request->hasSession() )
+            return;
+
+        $session = $request->getSession();
+        if ( $session->has( 'ez_user_hash' ) )
+        {
+            $userHash = $request->getSession()->get( 'ez_user_hash' );
+        }
+        else
+        {
+            /** @var $hashGenerator \eZ\Publish\SPI\HashGenerator */
+            $hashGenerator = $this->container->get( 'ezpublish.user.hash_generator' );
+            $userHash = $hashGenerator->generate();
+            // Store the user hash in session to avoid its generation for each single request
+            // TODO: Ensure to remove this session variable when logging out!
+            $session->set( 'ez_user_hash', $userHash );
+        }
+
+        $event->setResponse( new Response( $userHash ) );
+        $event->stopPropagation();
     }
 }
