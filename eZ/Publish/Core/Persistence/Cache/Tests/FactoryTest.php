@@ -180,7 +180,6 @@ class FactoryTest extends PHPUnit_Framework_TestCase
         $this->persistenceFactory->getUserHandler();
     }
 
-
     /**
      * Test that instance is of correct type
      *
@@ -192,7 +191,6 @@ class FactoryTest extends PHPUnit_Framework_TestCase
         $this->persistenceMock->expects( $this->once() )->method( 'urlAliasHandler' );
         $this->persistenceFactory->getUrlAliasHandler();
     }
-
 
     /**
      * Test that instance is of correct type
