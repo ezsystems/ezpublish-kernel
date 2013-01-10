@@ -86,7 +86,7 @@ Currently SPI consists of:
 
 ## How to run tests
 * Clone this repo
-* Install dependencies with **Composer**: `php composer.phar install`
+* Install dependencies with **Composer**: `php composer.phar install --prefer-dist`
 * Copy config.php-DEVELOPMENT to config.php
 * Execute `phpunit -vc phpunit*.xml` with one of:
   * phpunit.xml  *unit test xml configuration*
