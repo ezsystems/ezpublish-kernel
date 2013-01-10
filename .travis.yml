@@ -30,4 +30,4 @@ notification:
 
 # reduce depth (history) of git checkout
 git:
-  depth: 30
+    depth: 30
