@@ -179,8 +179,9 @@ class SectionHandlerTest extends HandlerTest
             ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Section' ) );
 
         $cacheItemMock
-            ->expects( $this->never() )
-            ->method( 'get' );
+            ->expects( $this->once() )
+            ->method( 'get' )
+            ->will( $this->returnValue( null ) );
 
         $handler = $this->persistenceHandler->sectionHandler();
         $handler->load( 33 );

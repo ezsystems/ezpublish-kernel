@@ -112,10 +112,9 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
 
         // Get cache for published content types
         $cache = $this->cache->get( 'contentType', $contentTypeId );
+        $type = $cache->get();
         if ( $cache->isMiss() )
             $cache->set( $type = $this->persistenceFactory->getContentTypeHandler()->load( $contentTypeId, $status ) );
-        else
-            $type = $cache->get();
 
         return $type;
     }

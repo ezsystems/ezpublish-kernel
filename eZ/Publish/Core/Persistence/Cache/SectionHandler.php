@@ -70,10 +70,9 @@ class SectionHandler implements SectionHandlerInterface
     public function load( $id )
     {
         $cache = $this->cache->get( 'section', $id );
+        $section = $cache->get();
         if ( $cache->isMiss() )
             $cache->set( $section = $this->persistenceFactory->getSectionHandler()->load( $id ) );
-        else
-            $section = $cache->get();
 
         return $section;
     }

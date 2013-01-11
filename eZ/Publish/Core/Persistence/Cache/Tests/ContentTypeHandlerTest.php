@@ -269,8 +269,9 @@ class ContentTypeHandlerTest extends HandlerTest
             ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type' ) );
 
         $cacheItemMock
-            ->expects( $this->never() )
-            ->method( 'get' );
+            ->expects( $this->once() )
+            ->method( 'get' )
+            ->will( $this->returnValue( null ) );
 
         $handler = $this->persistenceHandler->contentTypeHandler();
         $handler->load( 55 );
