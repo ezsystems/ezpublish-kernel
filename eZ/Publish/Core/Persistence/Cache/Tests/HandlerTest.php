@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Cache\Tests\HandlerTest class
+ * File contains Test class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -11,11 +11,12 @@ namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
 use eZ\Publish\Core\Persistence\Cache\Handler as CacheHandler;
 use eZ\Publish\Core\Persistence\Cache\SectionHandler as CacheSectionHandler;
+use eZ\Publish\Core\Persistence\Cache\LocationHandler as CacheLocationHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentTypeHandler as CacheContentTypeHandler;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Test case for Handler using in memory storage.
+ * Abstract test case for spi cache impl
  */
 abstract class HandlerTest extends PHPUnit_Framework_TestCase
 {
@@ -62,6 +63,7 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
         $this->persistenceHandler = new CacheHandler(
             $this->persistenceFactoryMock,
             new CacheSectionHandler( $this->cacheMock, $this->persistenceFactoryMock ),
+            new CacheLocationHandler( $this->cacheMock, $this->persistenceFactoryMock ),
             new CacheContentTypeHandler( $this->cacheMock, $this->persistenceFactoryMock )
         );
     }
