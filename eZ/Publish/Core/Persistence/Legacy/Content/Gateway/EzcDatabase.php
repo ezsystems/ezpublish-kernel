@@ -1527,7 +1527,7 @@ class EzcDatabase extends Gateway
             $query->prepare()->execute();
         }
         // If relation type is composite update bitmask
-        elseif ( $loadedRelationType & $type )
+        else if ( $loadedRelationType & $type )
         {
             /** @var $query \ezcQueryUpdate */
             $query = $this->dbHandler->createUpdateQuery();

@@ -1222,7 +1222,7 @@ EOT;
             $relations,
             function ( $a, $b )
             {
-                if( $a->type == $b->type )
+                if ( $a->type == $b->type )
                 {
                     return $a->destinationContentInfo->id < $b->destinationContentInfo->id ? 1 : -1;
                 }
@@ -1460,7 +1460,7 @@ EOT;
             $relations,
             function ( $a, $b )
             {
-                if( $a->type == $b->type )
+                if ( $a->type == $b->type )
                 {
                     return $a->destinationContentInfo->id < $b->destinationContentInfo->id ? 1 : -1;
                 }

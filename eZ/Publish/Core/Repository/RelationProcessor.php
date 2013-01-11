@@ -109,7 +109,7 @@ class RelationProcessor
             }
             // Using bitwise AND as Legacy Stack stores COMMON, LINK and EMBED relation types
             // in the same entry using bitmask
-            elseif ( $relationType & Relation::LINK || $relationType & Relation::EMBED )
+            else if ( $relationType & Relation::LINK || $relationType & Relation::EMBED )
             {
                 if ( !isset( $relations[$relationType] ) )
                 {
@@ -213,7 +213,7 @@ class RelationProcessor
                     }
                 }
             }
-            elseif ( $relationType === Relation::LINK || $relationType === Relation::EMBED )
+            else if ( $relationType === Relation::LINK || $relationType === Relation::EMBED )
             {
                 foreach ( array_keys( $relationData ) as $destinationContentId )
                 {
@@ -255,7 +255,7 @@ class RelationProcessor
                     }
                 }
             }
-            elseif ( $relationType === Relation::LINK || $relationType === Relation::EMBED )
+            else if ( $relationType === Relation::LINK || $relationType === Relation::EMBED )
             {
                 foreach ( $relationData as $relation )
                 {
