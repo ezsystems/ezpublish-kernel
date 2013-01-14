@@ -177,19 +177,23 @@ class LegacyStorage extends Gateway
      */
     private function getLinksId( array $linksUrls )
     {
-        /** @var $q \ezcQuerySelect */
-        $q = $this->getConnection()->createSelectQuery();
-        $q
-            ->select( "id", "url" )
-            ->from( UrlStorage::URL_TABLE )
-            ->where( $q->expr->in( 'url', $linksUrls ) );
-
-        $statement = $q->prepare();
-        $statement->execute();
         $linkIds = array();
-        foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
+
+        if ( !empty( $linksUrls ) )
         {
-            $linkIds[$row['url']] = $row['id'];
+            /** @var $q \ezcQuerySelect */
+            $q = $this->getConnection()->createSelectQuery();
+            $q
+                ->select( "id", "url" )
+                ->from( UrlStorage::URL_TABLE )
+                ->where( $q->expr->in( 'url', $linksUrls ) );
+
+            $statement = $q->prepare();
+            $statement->execute();
+            foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
+            {
+                $linkIds[$row['url']] = $row['id'];
+            }
         }
 
         return $linkIds;
