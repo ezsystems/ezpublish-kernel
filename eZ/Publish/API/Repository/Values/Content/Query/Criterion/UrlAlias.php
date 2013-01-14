@@ -29,11 +29,11 @@ class UrlAlias extends Criterion implements CriterionInterface
      *
      * @param string $operator
      *        Possible values:
-     *        - Operator::IN, requires an array of subtree id as the $value
-     *        - Operator::EQ, requires a single subtree id as the $value
-     * @param int[] $value an array of subtree ids
+     *        - Operator::IN, requires an array of url alias as the $value
+     *        - Operator::EQ, requires a single url alias as the $value
+     *        - Operator::LIKE, requires a single url alias as the $value. Wilcards allowed
+     * @param string|string[] $value an array of url alias
      *
-     * @throws \InvalidArgumentException if a non numeric id is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator
      */
     public function __construct( $operator, $value )
