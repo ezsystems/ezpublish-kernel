@@ -319,6 +319,7 @@ class RestContentTest extends ValueObjectVisitorBaseTest
                 'internalFields' => array()
             )
         );
+        $restContent->relations = array();
 
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'visitValueObject' )

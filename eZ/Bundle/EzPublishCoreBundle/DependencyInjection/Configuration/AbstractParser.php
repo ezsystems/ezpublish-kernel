@@ -105,7 +105,7 @@ abstract class AbstractParser implements Parser
                         else
                         {
                             // array_merge() has to be used because we don't
-                            // know wether we have a hash or a plain array
+                            // know whether we have a hash or a plain array
                             $groupsSettings[$key] = array_merge(
                                 $groupsSettings[$key],
                                 $config[$this->baseKey][$group][$id][$key]
@@ -116,7 +116,7 @@ abstract class AbstractParser implements Parser
                 else
                 {
                     // array_merge() has to be used because we don't
-                    // know wether we have a hash or a plain array
+                    // know whether we have a hash or a plain array
                     $groupsSettings = array_merge(
                         $groupsSettings,
                         $config[$this->baseKey][$group][$id]
@@ -205,7 +205,7 @@ abstract class AbstractParser implements Parser
             if ( $options & self::MERGE_FROM_SECOND_LEVEL )
             {
                 // array_merge() has to be used because we don't
-                // know wether we have a hash or a plain array
+                // know whether we have a hash or a plain array
                 $keys1 = array_unique(
                     array_merge(
                         array_keys( $defaultSettings ),

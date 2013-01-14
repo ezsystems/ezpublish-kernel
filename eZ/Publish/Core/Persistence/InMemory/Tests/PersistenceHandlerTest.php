@@ -32,9 +32,21 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testContentHandler()
     {
-        $contentHandler = $this->persistenceHandler->contentHandler();
-        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Handler', $contentHandler );
-        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\ContentHandler', $contentHandler );
+        $handler = $this->persistenceHandler->contentHandler();
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Handler', $handler );
+        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\ContentHandler', $handler );
+    }
+
+    /**
+     * Test that instance is of correct type
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\SearchHandler::__construct
+     */
+    public function testSearchHandler()
+    {
+        $handler = $this->persistenceHandler->searchHandler();
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Search\\Handler', $handler );
+        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\SearchHandler', $handler );
     }
 
     /**
@@ -56,9 +68,9 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testContentTypeHandler()
     {
-        $contentHandler = $this->persistenceHandler->contentTypeHandler();
-        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler', $contentHandler );
-        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\ContentTypeHandler', $contentHandler );
+        $handler = $this->persistenceHandler->contentTypeHandler();
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler', $handler );
+        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\ContentTypeHandler', $handler );
     }
 
     /**
@@ -68,9 +80,33 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testContentLocationHandler()
     {
-        $contentHandler = $this->persistenceHandler->locationHandler();
-        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler', $contentHandler );
-        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\LocationHandler', $contentHandler );
+        $handler = $this->persistenceHandler->locationHandler();
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler', $handler );
+        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\LocationHandler', $handler );
+    }
+
+    /**
+     * Test that instance is of correct type
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\TrashHandler::__construct
+     */
+    public function testTrashHandler()
+    {
+        $handler = $this->persistenceHandler->trashHandler();
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler', $handler );
+        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\TrashHandler', $handler );
+    }
+
+    /**
+     * Test that instance is of correct type
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::__construct
+     */
+    public function testObjectStateHandler()
+    {
+        $handler = $this->persistenceHandler->objectStateHandler();
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler', $handler );
+        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\ObjectStateHandler', $handler );
     }
 
     /**
@@ -80,20 +116,44 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testSectionHandler()
     {
-        $sectionHandler = $this->persistenceHandler->sectionHandler();
-        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler', $sectionHandler );
-        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\SectionHandler', $sectionHandler );
+        $handler = $this->persistenceHandler->sectionHandler();
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler', $handler );
+        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\SectionHandler', $handler );
     }
 
     /**
      * Test that instance is of correct type
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\SectionHandler::__construct
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::__construct
      */
     public function testUserHandler()
     {
-        $sectionHandler = $this->persistenceHandler->userHandler();
-        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler', $sectionHandler );
-        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\UserHandler', $sectionHandler );
+        $handler = $this->persistenceHandler->userHandler();
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler', $handler );
+        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\UserHandler', $handler );
+    }
+
+    /**
+     * Test that instance is of correct type
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\UrlAliasHandler::__construct
+     */
+    public function testUrlAliasHandler()
+    {
+        $handler = $this->persistenceHandler->urlAliasHandler();
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler', $handler );
+        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\UrlAliasHandler', $handler );
+    }
+
+    /**
+     * Test that instance is of correct type
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\UrlWildcardHandler::__construct
+     */
+    public function testUrlWildcardHandler()
+    {
+        $handler = $this->persistenceHandler->urlWildcardHandler();
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlWildcard\\Handler', $handler );
+        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\UrlWildcardHandler', $handler );
     }
 }

@@ -1472,7 +1472,20 @@ class ContentService implements ContentServiceInterface
         if ( !$this->repository->canUser( 'content', 'versionread', $versionInfo ) )
             throw new UnauthorizedException( 'content', 'versionread' );
 
-        $relations = $this->internalLoadRelations( $versionInfo );
+        $contentInfo = $versionInfo->getContentInfo();
+        $spiRelations = $this->persistenceHandler->contentHandler()->loadRelations(
+            $contentInfo->id,
+            $versionInfo->versionNo
+        );
+
+        $relations = array();
+        foreach ( $spiRelations as $spiRelation )
+        {
+            $relations[] = $this->buildRelationDomainObject(
+                $spiRelation,
+                $contentInfo
+            );
+        }
         foreach ( $relations as $relation )
         {
             if ( !$this->repository->canUser( 'content', 'read', $relation->getDestinationContentInfo() ) )
@@ -1480,34 +1493,6 @@ class ContentService implements ContentServiceInterface
         }
 
         return $relations;
-    }
-
-    /**
-     * Loads all outgoing relations for the given version
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
-     */
-    protected function internalLoadRelations( APIVersionInfo $versionInfo )
-    {
-        $contentInfo = $versionInfo->getContentInfo();
-
-        $spiRelations = $this->persistenceHandler->contentHandler()->loadRelations(
-            $contentInfo->id,
-            $versionInfo->versionNo
-        );
-
-        $returnArray = array();
-        foreach ( $spiRelations as $spiRelation )
-        {
-            $returnArray[] = $this->buildRelationDomainObject(
-                $spiRelation,
-                $contentInfo
-            );
-        }
-
-        return $returnArray;
     }
 
     /**
@@ -1779,7 +1764,6 @@ class ContentService implements ContentServiceInterface
             array(
                 "internalFields" => $this->buildDomainFields( $spiContent->fields ),
                 "versionInfo" => $versionInfo,
-                "relations" => $this->internalLoadRelations( $versionInfo ),
             )
         );
     }

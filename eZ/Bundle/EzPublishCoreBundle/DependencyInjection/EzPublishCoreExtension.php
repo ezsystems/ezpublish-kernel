@@ -59,7 +59,7 @@ class EzPublishCoreExtension extends Extension
         // Workaround for http://jira.ez.no/browse/EZP-20107
         $this->fixUpConfiguration( $configs );
 
-        // Note: this is where the transormation occurs
+        // Note: this is where the transformation occurs
         $config = $this->processConfiguration( $configuration, $configs );
 
         // Workaround for http://jira.ez.no/browse/EZP-20107
@@ -71,7 +71,7 @@ class EzPublishCoreExtension extends Extension
         $loader->load( 'security.yml' );
         // Default settings
         $loader->load( 'default_settings.yml' );
-        $this->registerSiteAcccessConfiguration( $config, $container );
+        $this->registerSiteAccessConfiguration( $config, $container );
         $this->registerImageMagickConfiguration( $config, $container );
 
         // Routing
@@ -171,7 +171,7 @@ class EzPublishCoreExtension extends Extension
     }
 
     /**
-     * Recursively scans through an n dimension array of keys, ending up with a true value, and for thoser keys,
+     * Recursively scans through an n dimension array of keys, ending up with a true value, and for those keys,
      * cancels the changes done by {@see fixedUpConfiguration}. The method pops the keys out of $keyReferenceArray
      * in order to dive into $configReference until it finds out the modified value, and restores it when found
      *
@@ -207,7 +207,7 @@ class EzPublishCoreExtension extends Extension
         return new Configuration( $this->configParsers );
     }
 
-    private function registerSiteAcccessConfiguration( array $config, ContainerBuilder $container )
+    private function registerSiteAccessConfiguration( array $config, ContainerBuilder $container )
     {
         if ( !isset( $config['siteaccess'] ) )
         {

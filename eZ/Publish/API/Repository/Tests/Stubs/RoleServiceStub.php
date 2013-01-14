@@ -209,7 +209,8 @@ class RoleServiceStub implements RoleService
                 'id' => $this->policyNextId,
                 'roleId' => $role->id,
                 'module' => $policyCreateStruct->module,
-                'function' => $policyCreateStruct->function
+                'function' => $policyCreateStruct->function,
+                'limitations' => $policyCreateStruct->getLimitations()
             )
         );
 
@@ -273,7 +274,7 @@ class RoleServiceStub implements RoleService
 
     /**
      * Updates the limitations of a policy. The module and function cannot be changed and
-     * the limitaions are replaced by the ones in $roleUpdateStruct
+     * the limitations are replaced by the ones in $roleUpdateStruct
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to u�date a policy
      *
@@ -616,6 +617,7 @@ class RoleServiceStub implements RoleService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param boolean $inherited
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment[]
      */

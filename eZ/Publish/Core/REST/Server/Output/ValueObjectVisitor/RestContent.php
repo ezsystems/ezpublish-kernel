@@ -89,7 +89,12 @@ class RestContent extends ValueObjectVisitor
         // Embed current version, if available
         if ( $currentVersion !== null )
         {
-            $visitor->visitValueObject( new VersionValue( $currentVersion ) );
+            $visitor->visitValueObject(
+                new VersionValue(
+                    $currentVersion,
+                    $restContent->relations
+                )
+            );
         }
 
         $generator->endObjectElement( 'CurrentVersion' );

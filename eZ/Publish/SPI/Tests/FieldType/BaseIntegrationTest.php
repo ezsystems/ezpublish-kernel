@@ -26,7 +26,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 abstract class BaseIntegrationTest extends TestCase
 {
     /**
-     * Property indicating wether the DB already has been set up
+     * Property indicating whether the DB already has been set up
      *
      * @var boolean
      */
@@ -64,7 +64,7 @@ abstract class BaseIntegrationTest extends TestCase
      * Returns the Handler with all necessary objects registered
      *
      * Returns an instance of the Persistence Handler where the
-     * FieldTypy\Storage has been registered.
+     * FieldType\Storage has been registered.
      *
      * @return \eZ\Publish\SPI\Persistence\Handler
      */

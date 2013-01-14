@@ -31,7 +31,7 @@ class Value extends BaseValue
     public $longitude;
 
     /**
-     * Diaplay address for the location
+     * Display address for the location
      *
      * @var string
      */

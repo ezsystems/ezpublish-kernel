@@ -24,7 +24,7 @@ class Message extends Translation
 {
     /**
      * Message string. Might use replacements like %foo%, which are replaced by
-     * the values specfied in the values array.
+     * the values specified in the values array.
      *
      * @var string
      */

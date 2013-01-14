@@ -40,7 +40,7 @@ class Router
      *         "ezpublish.dev" => "ezdemo_site",
      *         "ezpublish.admin.dev" => "ezdemo_site_admin",
      *     ),
-     *     // Using a custom matcher (class must begin with a '\', as a full qualifed class name).
+     *     // Using a custom matcher (class must begin with a '\', as a full qualified class name).
      *     // The custom matcher must implement eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher interface.
      *     "\\My\\Custom\\Matcher" => array(
      *         "something_to_match_against" => "siteaccess_name"

@@ -152,7 +152,7 @@ class URLWildcardServiceStub implements URLWildcardService
     /**
      * translates an url to an existing uri resource based on the
      * source/destination patterns of the url wildcard. If the resulting
-     * url is an alias it will be transltated to the system uri.
+     * url is an alias it will be translated to the system uri.
      *
      * This method runs also configured url translations and filter
      *

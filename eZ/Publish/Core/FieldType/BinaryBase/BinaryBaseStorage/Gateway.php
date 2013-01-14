@@ -66,7 +66,7 @@ abstract class Gateway extends StorageGateway
     abstract public function getReferencedFiles( array $fieldIds, $versionNo );
 
     /**
-     * Returns a map with the number of refereces each file from $files has
+     * Returns a map with the number of references each file from $files has
      *
      * @param array $files
      *

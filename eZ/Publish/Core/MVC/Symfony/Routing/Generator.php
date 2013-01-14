@@ -32,7 +32,7 @@ abstract class Generator
     /**
      * Triggers URL generation for $urlResource and $parameters.
      *
-     * @param mixed $urlResource Type can be anything, depending on the context. It's up to the router to pass the appropriate value to the implemento.r
+     * @param mixed $urlResource Type can be anything, depending on the context. It's up to the router to pass the appropriate value to the implementor.
      * @param array $parameters
      * @param boolean $absolute
      *

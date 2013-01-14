@@ -298,7 +298,7 @@ class Type extends FieldType
      *
      * This is the default implementation, which just returns the given
      * $fieldSettings, assuming they are already in a hash format. Overwrite
-     * this in your specific implementation, if neccessary.
+     * this in your specific implementation, if necessary.
      *
      * @param mixed $fieldSettings
      *
@@ -326,7 +326,7 @@ class Type extends FieldType
      * This is the default implementation, which just returns the given
      * $fieldSettingsHash, assuming the supported field settings are already in
      * a hash format. Overwrite this in your specific implementation, if
-     * neccessary.
+     * necessary.
      *
      * @param array|hash|scalar|null $fieldSettingsHash
      *

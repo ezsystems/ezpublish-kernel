@@ -13,7 +13,7 @@ use eZ\Publish\Core\Repository\Tests\Service\Integration\InMemory\Utils as InMem
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 
 /**
- * Utils class for InMemory tesst
+ * Utils class for InMemory test
  */
 abstract class Utils extends InMemoryUtils
 {
@@ -24,8 +24,8 @@ abstract class Utils extends InMemoryUtils
     {
         // Override to set legacy handlers
         $sc = self::getServiceContainer(
-            '@persistence_handler_legacy',
-            '@io_handler_legacy',
+            'persistence_handler_legacy',
+            'io_handler_legacy',
             ( $dsn = getenv( "DATABASE" ) ) ? $dsn : "sqlite://:memory:"
         );
 

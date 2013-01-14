@@ -37,6 +37,11 @@ class RestContent extends RestValue
     public $currentVersion;
 
     /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Relation[]
+     */
+    public $relations;
+
+    /**
      * Path that was used to load this content
      *
      * @var string
@@ -47,15 +52,17 @@ class RestContent extends RestValue
      * Construct
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $mainLocation
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $currentVersion
+     * @param \eZ\Publish\API\Repository\Values\Content\Location|null $mainLocation
+     * @param \eZ\Publish\API\Repository\Values\Content\Content|null $currentVersion
+     * @param \eZ\Publish\API\Repository\Values\Content\Relation[]|null $relations Can only be null if $currentVersion is
      * @param string $path
      */
-    public function __construct( ContentInfo $contentInfo, Location $mainLocation = null, Content $currentVersion = null, $path = null )
+    public function __construct( ContentInfo $contentInfo, Location $mainLocation = null, Content $currentVersion = null, array $relations = null, $path = null )
     {
         $this->contentInfo = $contentInfo;
         $this->currentVersion = $currentVersion;
         $this->mainLocation = $mainLocation;
+        $this->relations = $relations;
         $this->path = $path;
     }
 }

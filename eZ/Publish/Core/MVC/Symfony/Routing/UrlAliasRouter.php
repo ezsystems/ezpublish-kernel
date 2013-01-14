@@ -142,8 +142,6 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
         {
             throw new ResourceNotFoundException( $e->getMessage(), $e->getCode(), $e );
         }
-
-        throw new ResourceNotFoundException( "Could not match UrlAlias" );
     }
 
     /**

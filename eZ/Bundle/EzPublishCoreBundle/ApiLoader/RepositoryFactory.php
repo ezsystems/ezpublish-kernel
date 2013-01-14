@@ -79,28 +79,6 @@ class RepositoryFactory
     }
 
     /**
-     * Returns a closure which returns ezpublish.api.repository when called.
-     *
-     * To be used when lazy loading is needed.
-     *
-     * @return \Closure
-     */
-    public function buildLazyRepository()
-    {
-        $container = $this->container;
-        return function () use ( $container )
-        {
-            static $repository;
-            if ( !$repository instanceof Repository )
-            {
-                $repository = $container->get( 'ezpublish.api.repository' );
-            }
-
-            return $repository;
-        };
-    }
-
-    /**
      * Registers an eZ Publish field type.
      * Field types are being registered as a closure so that they will be lazy loaded.
      *

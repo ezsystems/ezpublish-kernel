@@ -1225,7 +1225,7 @@ class LocationServiceTest extends BaseTest
         $this->assertTrue(
             $stillHiddenLocation->hidden,
             sprintf(
-                'Hidden sub-location with ID %s accedentally unhidden.',
+                'Hidden sub-location with ID %s accidentally unhidden.',
                 $stillHiddenLocation->id
             )
         );

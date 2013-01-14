@@ -580,7 +580,7 @@ class LocationServiceStub implements LocationService
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
-        $this->repository->getUrlAliasService()->_removeAliasesForLocation( $location );
+        $this->repository->getUrlAliasService()->removeAliasesForLocation( $location );
 
         $contentService = $this->repository->getContentService();
 
@@ -777,7 +777,7 @@ class LocationServiceStub implements LocationService
      */
     public function trashLocation( Location $location, array $trashed = array() )
     {
-        $this->repository->getUrlAliasService()->_removeAliasesForLocation( $location );
+        $this->repository->getUrlAliasService()->removeAliasesForLocation( $location );
 
         $trashed[] = $location;
         foreach ( $this->loadLocationChildren( $location )->locations as $childLocation )

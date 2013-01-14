@@ -81,7 +81,7 @@ class RestUserGroupTest extends ValueObjectVisitorBaseTest
                     'path' => array( 1, 2, 23 )
                 )
             ),
-            null
+            array()
         );
     }
 

@@ -23,6 +23,11 @@ class Version extends RestValue
     public $content;
 
     /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Relation[]
+     */
+    public $relations;
+
+    /**
      * Path used to load this content
      *
      * @var string
@@ -33,11 +38,13 @@ class Version extends RestValue
      * Construct
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param \eZ\Publish\API\Repository\Values\Content\Relation[] $relations
      * @param string $path
      */
-    public function __construct( Content $content, $path = null )
+    public function __construct( Content $content, array $relations, $path = null )
     {
         $this->content = $content;
+        $this->relations = $relations;
         $this->path = $path;
     }
 }

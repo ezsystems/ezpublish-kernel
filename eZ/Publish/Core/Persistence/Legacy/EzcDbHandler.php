@@ -24,7 +24,7 @@ use ezcDbFactory;
 class EzcDbHandler
 {
     /**
-     * Aggregated zeta compoenents database handler, which is target of the
+     * Aggregated zeta components database handler, which is target of the
      * method dispatching.
      *
      * @var \ezcDbHandler

@@ -73,7 +73,7 @@ class ContentUpdater
     }
 
     /**
-     * Determines the neccessary update actions
+     * Determines the necessary update actions
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $fromType
      * @param \eZ\Publish\SPI\Persistence\Content\Type $toType

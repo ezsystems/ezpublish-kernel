@@ -97,7 +97,7 @@ class RepositoryStub implements Repository
     private $urlWildcardService;
 
     /**
-     * @var \eZ\Publish\API\Repository\Tests\Stubs\ObjectStateService
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\ObjectStateServiceStub
      */
     private $objectStateService;
 
@@ -139,7 +139,7 @@ class RepositoryStub implements Repository
     }
 
     /**
-     * Sets the current user to the user with the given user id
+     * Sets the current user to the given $user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
@@ -181,7 +181,7 @@ class RepositoryStub implements Repository
                     return true;
                 }
 
-                if ( $policy->module !== $module )
+                if ( $policy->module !== $module && $policy->module !== "*" )
                     continue;
 
                 if ( $policy->function === '*' && $roleLimitation === null )
@@ -190,7 +190,7 @@ class RepositoryStub implements Repository
                     return true;
                 }
 
-                if ( $policy->function !== $function )
+                if ( $policy->function !== $function && $policy->function !== "*" )
                     continue;
 
                 $permissionSet['policies'][] = $policy;
@@ -428,7 +428,7 @@ class RepositoryStub implements Repository
      */
     public function getSearchService()
     {
-        throw new \RuntimeException( '@todo: Implememt.' );
+        throw new \RuntimeException( '@todo: Implement.' );
     }
 
     /**

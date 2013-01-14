@@ -109,7 +109,8 @@ class UserListTest extends ValueObjectVisitorBaseTest
                         )
                     ),
                     new ContentInfo(),
-                    new Location()
+                    new Location(),
+                    array()
                 ),
                 new RestUser(
                     new Content(
@@ -118,7 +119,8 @@ class UserListTest extends ValueObjectVisitorBaseTest
                         )
                     ),
                     new ContentInfo(),
-                    new Location()
+                    new Location(),
+                    array()
                 ),
             ),
             '/some/path'

@@ -286,7 +286,7 @@ class LegacyStorage extends Gateway
     }
 
     /**
-     * Assignes keywords from $keywordMap to the field with $fieldId
+     * Assigns keywords from $keywordMap to the field with $fieldId
      *
      * $keywordMap has the format:
      * <code>

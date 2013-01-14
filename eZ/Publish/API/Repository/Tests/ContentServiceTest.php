@@ -990,7 +990,7 @@ class ContentServiceTest extends BaseContentServiceTest
             ),
             array(
                 'fieldCount' => count( $draft->getFields() ),
-                'relationCount' => count( $draft->getRelations() )
+                'relationCount' => count( $this->getRepository()->getContentService()->loadRelations( $draft->getVersionInfo() ) )
             )
         );
     }
@@ -2603,36 +2603,37 @@ class ContentServiceTest extends BaseContentServiceTest
             $relation
         );
 
-        return $contentService->loadContent( $draft->id );
+        return $contentService->loadRelations( $draft->getVersionInfo() );
     }
 
     /**
      * Test for the addRelation() method.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param \eZ\Publish\API\Repository\Values\Content\Relation[] $relations
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::addRelation()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
      */
-    public function testAddRelationAddsRelationToContent( $content )
+    public function testAddRelationAddsRelationToContent( $relations )
     {
-        $this->assertEquals( 1, count( $content->getRelations() ) );
+        $this->assertEquals(
+            1,
+            count( $relations )
+        );
     }
 
     /**
      * Test for the addRelation() method.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param \eZ\Publish\API\Repository\Values\Content\Relation[] $relations
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::addRelation()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
      */
-    public function testAddRelationSetsExpectedRelations( $content )
+    public function testAddRelationSetsExpectedRelations( $relations )
     {
-        $relations = $content->getRelations();
-
         $this->assertEquals(
             array(
                 'type' => Relation::COMMON,
@@ -3922,7 +3923,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // $contentId is the ID of the "Members" user group in an eZ Publish
         // demo installation
 
-        // $locationId is the ID of the "Adminstrator users" group location
+        // $locationId is the ID of the "Administrator users" group location
 
         // Get services
         $contentService = $repository->getContentService();

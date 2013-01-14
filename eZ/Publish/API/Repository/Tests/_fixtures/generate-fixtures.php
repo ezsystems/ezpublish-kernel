@@ -385,8 +385,6 @@ function generateContentInfoFixture( array $fixture )
             'id' => $data['contentobject_id'],
             'contentTypeId' => $contentInfos[$data['contentobject_id']]['contentTypeId'],
             'fields' => $contentFields,
-            'relations' => array(),
-
             'versionNo' => $data['version'],
             'repository' => '$this'
         );

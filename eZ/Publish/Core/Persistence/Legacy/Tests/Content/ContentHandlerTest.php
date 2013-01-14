@@ -102,7 +102,7 @@ class ContentHandlerTest extends TestCase
             'fieldHandler',
             $handler
         );
-        // @todo Assert missing ptoperties
+        // @todo Assert missing properties
     }
 
     /**

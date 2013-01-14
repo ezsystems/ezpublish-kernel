@@ -58,19 +58,7 @@ class ContentTest extends BaseTest
                         'fieldValue' => 'User',
                     ),
                 ),
-            ),
-            'Relations' => array(
-                '_media-type' => 'application/vnd.ez.api.RelationList+json',
-                '_href'       => '/content/objects/10/relations',
-                'Relation' => array(
-                    0 => array(
-                        '_media-type' => 'application/vnd.ez.api.Relation+xml'
-                    ),
-                    1 => array(
-                        '_media-type' => 'application/vnd.ez.api.Relation+xml'
-                    ),
-                )
-            ),
+            )
         );
 
         $versionInfoMock = new \stdClass();
@@ -82,9 +70,6 @@ class ContentTest extends BaseTest
                 $this->equalTo( array() ),
                 $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher' )
             )->will( $this->returnValue( $versionInfoMock ) );
-
-        $this->getParsingDispatcherMock()->expects( $this->exactly( 1 ) )
-            ->method( 'parse' );
 
         $this->getFieldTypeParserMock()->expects( $this->exactly( 2 ) )
             ->method( 'parseFieldValue' )
@@ -106,17 +91,6 @@ class ContentTest extends BaseTest
             // Mocked result
             'stdClass',
             $parsedContent->versionInfo
-        );
-    }
-
-    /**
-     * @depends testParse
-     */
-    public function testParsedRelationListId( $parsedContent )
-    {
-        $this->assertEquals(
-            '/content/objects/10/relations',
-            $parsedContent->relationListId
         );
     }
 
