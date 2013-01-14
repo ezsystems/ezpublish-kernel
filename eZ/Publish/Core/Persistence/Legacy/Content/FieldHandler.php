@@ -149,7 +149,7 @@ class FieldHandler
 
         foreach ( $contentType->fieldDefinitions as $fieldDefinition )
         {
-            foreach ( $languageCodes as $languageCode => $dummy )
+            foreach ( array_keys( $languageCodes ) as $languageCode )
             {
                 if ( isset( $fields[$fieldDefinition->id][$languageCode] ) )
                 {
@@ -333,7 +333,7 @@ class FieldHandler
 
         foreach ( $contentType->fieldDefinitions as $fieldDefinition )
         {
-            foreach ( $languageCodes as $languageCode => $dummy )
+            foreach ( array_keys( $languageCodes ) as $languageCode )
             {
                 if ( isset( $updateFieldMap[$fieldDefinition->id][$languageCode] ) )
                 {
