@@ -58,11 +58,7 @@ class RelationListIntegrationTest extends BaseIntegrationTest
 
         $handler->getStorageRegistry()->register(
             'ezobjectrelationlist',
-            new FieldType\Relation\RelationStorage(
-                array(
-                    'LegacyStorage' => new FieldType\RelationList\RelationListStorage\Gateway\LegacyStorage(),
-                )
-            )
+            new FieldType\NullStorage()
         );
         $handler->getFieldValueConverterRegistry()->register(
             'ezobjectrelationlist',
@@ -122,7 +118,7 @@ class RelationListIntegrationTest extends BaseIntegrationTest
         return new Content\FieldValue(
             array(
                 'data'         => array( 'destinationContentIds' => array( 4 ) ),
-                'externalData' => array( 'destinationContentIds' => array( 4 ) ),
+                'externalData' => null,
                 'sortKey'      => null,
             )
         );
@@ -166,7 +162,7 @@ class RelationListIntegrationTest extends BaseIntegrationTest
         return new Content\FieldValue(
             array(
                 'data'         => array( 'destinationContentIds' => array( 11 ) ),
-                'externalData' => array( 'destinationContentIds' => array( 11 ) ),
+                'externalData' => null,
                 'sortKey'      => null,
             )
         );
