@@ -566,15 +566,21 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Removes a relation by $relationId.
+     * Removes a relation by relation Id.
+     *
+     * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
      *
      * @param mixed $relationId
+     * @param int $type {@see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
      *
      * @return void
      */
-    public function removeRelation( $relationId )
+    public function removeRelation( $relationId, $type )
     {
-        $this->contentGateway->deleteRelation( $relationId );
+        $this->contentGateway->deleteRelation( $relationId, $type );
     }
 
     /**
@@ -586,6 +592,7 @@ class Handler implements BaseContentHandler
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
     public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null )

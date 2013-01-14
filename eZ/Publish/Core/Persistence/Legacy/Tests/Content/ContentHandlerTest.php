@@ -703,9 +703,9 @@ class ContentHandlerTest extends TestCase
 
         $gatewayMock->expects( $this->once() )
             ->method( 'deleteRelation' )
-            ->with( $this->equalTo( 1 ) );
+            ->with( $this->equalTo( 1, RelationValue::COMMON ) );
 
-        $result = $this->getContentHandler()->removeRelation( 1 );
+        $this->getContentHandler()->removeRelation( 1, RelationValue::COMMON );
     }
 
     protected function getRelationFixture()

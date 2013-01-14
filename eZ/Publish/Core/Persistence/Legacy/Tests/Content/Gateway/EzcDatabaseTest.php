@@ -1533,9 +1533,33 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         self::assertEquals( 4, $this->countContentRelations( 57 ) );
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->deleteRelation( 2 );
+        $gateway->deleteRelation( 2, RelationValue::COMMON );
 
         self::assertEquals( 3, $this->countContentRelations( 57 ) );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteRelation
+     */
+    public function testDeleteRelationWithCompositeBitmask()
+    {
+        $this->insertRelationFixture();
+
+        $gateway = $this->getDatabaseGateway();
+        $gateway->deleteRelation( 11, RelationValue::COMMON );
+
+        /** @var $query \ezcQuerySelect */
+        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( 'relation_type' => RelationValue::LINK, ), ),
+            $query->select(
+                array( 'relation_type', )
+            )->from(
+                'ezcontentobject_link'
+            )->where(
+                $query->expr->eq( 'id', 11 )
+            )
+        );
     }
 
     /**

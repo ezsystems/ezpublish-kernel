@@ -341,13 +341,17 @@ abstract class Gateway
     abstract public function loadReverseRelations( $contentId, $relationType = null );
 
     /**
-     * Deletes the relation with the given $relationId
+     * Deletes the relation with the given $relationId.
      *
      * @param int $relationId
+     * @param int $type {@see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
      *
      * @return void
      */
-    abstract public function deleteRelation( $relationId );
+    abstract public function deleteRelation( $relationId, $type );
 
     /**
      * Inserts a new relation database record
