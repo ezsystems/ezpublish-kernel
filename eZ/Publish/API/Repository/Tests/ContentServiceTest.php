@@ -1172,6 +1172,123 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the createContentDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     */
+    public function testCreateContentDraftProcessesFieldRelations()
+    {
+        $repository = $this->getRepository();
+
+        $sectionId = $this->generateId( 'section', 1 );
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
+
+        $contentCreateStruct->setField( 'name', 'Sindelfingen forum²' );
+        $descriptionXML =
+<<<EOT
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+    <paragraph><link node_id="58">link1</link></paragraph>
+    <paragraph><link object_id="54">link2</link></paragraph>
+    <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+        <embed view="embed" size="medium" node_id="60" custom:offset="0" custom:limit="5"/>
+        <embed view="embed" size="medium" object_id="56" custom:offset="0" custom:limit="5"/>
+    </paragraph>
+</section>
+EOT;
+        $contentCreateStruct->setField( 'description', $descriptionXML );
+
+        $contentCreateStruct->remoteId = 'abcdef0123456789abcdef0123456789';
+        // $sectionId contains the ID of section 1
+        $contentCreateStruct->sectionId = $sectionId;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+        /* END: Use Case */
+
+        $relations = $contentService->loadRelations( $content->versionInfo );
+        usort(
+            $relations,
+            function ( $a, $b )
+            {
+                if( $a->type == $b->type )
+                {
+                    return $a->destinationContentInfo->id < $b->destinationContentInfo->id ? 1 : -1;
+                }
+                return $a->type < $b->type ? 1 : -1;
+            }
+        );
+        $actual = array_map(
+            function ( $relation )
+            {
+                $newRelation = new \eZ\Publish\Core\Repository\Values\Content\Relation(
+                    array(
+                        "id" => 0,
+                        "sourceFieldDefinitionIdentifier" => $relation->sourceFieldDefinitionIdentifier,
+                        "type" => $relation->type,
+                        "sourceContentInfo" => $relation->sourceContentInfo,
+                        "destinationContentInfo" => $relation->destinationContentInfo
+                    )
+                );
+                return $newRelation;
+            },
+            $relations
+        );
+
+        $expected = array(
+            new \eZ\Publish\Core\Repository\Values\Content\Relation(
+                array(
+                    "id" => 0,
+                    "sourceFieldDefinitionIdentifier" => null,
+                    "type" => \eZ\Publish\Core\Repository\Values\Content\Relation::LINK,
+                    "sourceContentInfo" => $content->contentInfo,
+                    "destinationContentInfo" => $contentService->loadContentInfo( 56 )
+                )
+            ),
+            new \eZ\Publish\Core\Repository\Values\Content\Relation(
+                array(
+                    "id" => 0,
+                    "sourceFieldDefinitionIdentifier" => null,
+                    "type" => \eZ\Publish\Core\Repository\Values\Content\Relation::LINK,
+                    "sourceContentInfo" => $content->contentInfo,
+                    "destinationContentInfo" => $contentService->loadContentInfo( 54 )
+                )
+            ),
+            new \eZ\Publish\Core\Repository\Values\Content\Relation(
+                array(
+                    "id" => 0,
+                    "sourceFieldDefinitionIdentifier" => null,
+                    "type" => \eZ\Publish\Core\Repository\Values\Content\Relation::EMBED,
+                    "sourceContentInfo" => $content->contentInfo,
+                    "destinationContentInfo" => $contentService->loadContentInfo( 58 )
+                )
+            ),
+            new \eZ\Publish\Core\Repository\Values\Content\Relation(
+                array(
+                    "id" => 0,
+                    "sourceFieldDefinitionIdentifier" => null,
+                    "type" => \eZ\Publish\Core\Repository\Values\Content\Relation::EMBED,
+                    "sourceContentInfo" => $content->contentInfo,
+                    "destinationContentInfo" => $contentService->loadContentInfo( 56 )
+                )
+            ),
+        );
+
+        $this->assertEquals( $expected, $actual );
+    }
+
+    /**
      * Test for the newContentUpdateStruct() method.
      *
      * @return void
@@ -1263,6 +1380,127 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'name'
+                )
+            ),
+        );
+
+        $this->assertEquals( $expected, $actual );
+    }
+
+    /**
+     * Test for the updateContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @depends testCreateContentDraftProcessesFieldRelations
+     */
+    public function testUpdateContentProcessesRelations()
+    {
+        $repository = $this->getRepository();
+
+        $sectionId = $this->generateId( 'section', 1 );
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
+
+        $contentCreateStruct->setField( 'name', 'Sindelfingen forum²' );
+        $descriptionXML =
+<<<EOT
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+    <paragraph><link node_id="58">link1</link></paragraph>
+    <paragraph><link object_id="54">link2</link></paragraph>
+    <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+        <embed view="embed" size="medium" node_id="60" custom:offset="0" custom:limit="5"/>
+        <embed view="embed" size="medium" object_id="56" custom:offset="0" custom:limit="5"/>
+    </paragraph>
+</section>
+EOT;
+        $contentCreateStruct->setField( 'description', $descriptionXML );
+
+        $contentCreateStruct->remoteId = 'abcdef0123456789abcdef0123456789';
+        // $sectionId contains the ID of section 1
+        $contentCreateStruct->sectionId = $sectionId;
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Create a new content draft
+        $content = $contentService->createContent( $contentCreateStruct );
+
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->initialLanguageCode = 'eng-US';
+        $descriptionXML =
+<<<EOT
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+    <paragraph><link node_id="60">link1</link></paragraph>
+    <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+        <embed view="embed" size="medium" object_id="56" custom:offset="0" custom:limit="5"/>
+    </paragraph>
+</section>
+EOT;
+        $contentUpdateStruct->setField( 'description', $descriptionXML );
+
+        // Update created draft
+        $contentService->updateContent(
+            $content->getVersionInfo(),
+            $contentUpdateStruct
+        );
+
+        $relations = $contentService->loadRelations( $content->versionInfo );
+        usort(
+            $relations,
+            function ( $a, $b )
+            {
+                if( $a->type == $b->type )
+                {
+                    return $a->destinationContentInfo->id < $b->destinationContentInfo->id ? 1 : -1;
+                }
+                return $a->type < $b->type ? 1 : -1;
+            }
+        );
+        $actual = array_map(
+            function ( $relation )
+            {
+                $newRelation = new \eZ\Publish\Core\Repository\Values\Content\Relation(
+                    array(
+                        "id" => 0,
+                        "sourceFieldDefinitionIdentifier" => $relation->sourceFieldDefinitionIdentifier,
+                        "type" => $relation->type,
+                        "sourceContentInfo" => $relation->sourceContentInfo,
+                        "destinationContentInfo" => $relation->destinationContentInfo
+                    )
+                );
+                return $newRelation;
+            },
+            $relations
+        );
+
+        $expected = array(
+            new \eZ\Publish\Core\Repository\Values\Content\Relation(
+                array(
+                    "id" => 0,
+                    "sourceFieldDefinitionIdentifier" => null,
+                    "type" => \eZ\Publish\Core\Repository\Values\Content\Relation::LINK,
+                    "sourceContentInfo" => $content->contentInfo,
+                    "destinationContentInfo" => $contentService->loadContentInfo( 58 )
+                )
+            ),
+            new \eZ\Publish\Core\Repository\Values\Content\Relation(
+                array(
+                    "id" => 0,
+                    "sourceFieldDefinitionIdentifier" => null,
+                    "type" => \eZ\Publish\Core\Repository\Values\Content\Relation::EMBED,
+                    "sourceContentInfo" => $content->contentInfo,
+                    "destinationContentInfo" => $contentService->loadContentInfo( 56 )
                 )
             ),
         );
