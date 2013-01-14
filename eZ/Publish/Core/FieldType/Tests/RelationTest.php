@@ -9,10 +9,11 @@
 
 namespace eZ\Publish\Core\FieldType\Tests;
 
-use eZ\Publish\Core\FieldType\Relation\Type as Relation;
+use eZ\Publish\Core\FieldType\Relation\Type as RelationType;
 use eZ\Publish\Core\FieldType\Relation\Value;
 use eZ\Publish\Core\FieldType\Tests\FieldTypeTest;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 
 class RelationTest extends StandardizedFieldTypeTest
@@ -26,11 +27,11 @@ class RelationTest extends StandardizedFieldTypeTest
      * NOT take care for test case wide caching of the field type, just return
      * a new instance from this method!
      *
-     * @return FieldType
+     * @return \eZ\Publish\Core\FieldType\Relation\Type
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Relation();
+        return new RelationType();
     }
 
     /**
@@ -53,7 +54,7 @@ class RelationTest extends StandardizedFieldTypeTest
         return array(
             'selectionMethod' => array(
                 'type' => 'int',
-                'default' => Relation::SELECTION_BROWSE,
+                'default' => RelationType::SELECTION_BROWSE,
             ),
             'selectionRoot' => array(
                 'type' => 'string',
@@ -278,13 +279,13 @@ class RelationTest extends StandardizedFieldTypeTest
         return array(
             array(
                 array(
-                    'selectionMethod' => Relation::SELECTION_BROWSE,
+                    'selectionMethod' => RelationType::SELECTION_BROWSE,
                     'selectionRoot' => 42,
                 )
             ),
             array(
                 array(
-                    'selectionMethod' => Relation::SELECTION_DROPDOWN,
+                    'selectionMethod' => RelationType::SELECTION_DROPDOWN,
                     'selectionRoot' => 'some-key',
                 )
             ),
@@ -321,7 +322,7 @@ class RelationTest extends StandardizedFieldTypeTest
                 // Unknown key
                 array(
                     'unknownKey' => 23,
-                    'selectionMethod' => Relation::SELECTION_BROWSE,
+                    'selectionMethod' => RelationType::SELECTION_BROWSE,
                     'selectionRoot' => 42
                 )
             ),
@@ -334,7 +335,7 @@ class RelationTest extends StandardizedFieldTypeTest
             array(
                 // Missing selectionRoot
                 array(
-                    'selectionMethod' => Relation::SELECTION_BROWSE,
+                    'selectionMethod' => RelationType::SELECTION_BROWSE,
                 )
             ),
             array(
@@ -347,10 +348,24 @@ class RelationTest extends StandardizedFieldTypeTest
             array(
                 // Invalid selectionRoot
                 array(
-                    'selectionMethod' => Relation::SELECTION_DROPDOWN,
+                    'selectionMethod' => RelationType::SELECTION_DROPDOWN,
                     'selectionRoot' => array()
                 )
             ),
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\Relation\Type::getRelations
+     */
+    public function testGetRelations()
+    {
+        $ft = $this->createFieldTypeUnderTest();
+        $this->assertEquals(
+            array(
+                Relation::FIELD => array( 70 ),
+            ),
+            $ft->getRelations( $ft->acceptValue( 70 ) )
         );
     }
 }

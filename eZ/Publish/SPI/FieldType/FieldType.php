@@ -11,6 +11,7 @@ namespace eZ\Publish\SPI\FieldType;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use \eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\SPI\FieldType\Event;
 
 /**
@@ -323,4 +324,31 @@ interface FieldType
      * @return mixed
      */
     public function fromPersistenceValue( FieldValue $fieldValue );
+
+    /**
+     * Returns relation data extracted from value.
+     *
+     * Not intended for \eZ\Publish\API\Repository\Values\Content\Relation::COMMON type relations,
+     * there is an API for handling those.
+     *
+     * @param \eZ\Publish\Core\FieldType\Value $fieldValue
+     *
+     * @return array Hash with relation type as key and array of destination content ids as value.
+     *
+     * Example:
+     * <code>
+     *  array(
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::LINK => array(
+     *          "contentIds" => array( 12, 13, 14 ),
+     *          "locationIds" => array( 24 )
+     *      ),
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::EMBED => array(
+     *          "contentIds" => array( 12 ),
+     *          "locationIds" => array( 24, 45 )
+     *      ),
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::ATTRIBUTE => array( 12 )
+     *  )
+     * </code>
+     */
+    public function getRelations( BaseValue $fieldValue );
 }
