@@ -607,16 +607,41 @@ class LocationService implements LocationServiceInterface
 
         $loadedLocation1 = $this->loadLocation( $location1->id );
         $loadedLocation2 = $this->loadLocation( $location2->id );
+        $contentInfo1 = $loadedLocation1->getContentInfo();
+        $contentInfo2 = $loadedLocation2->getContentInfo();
 
-        if ( !$this->repository->canUser( 'content', 'edit', $loadedLocation1->getContentInfo(), $loadedLocation1 ) )
+        if ( !$this->repository->canUser( 'content', 'edit', $contentInfo1, $loadedLocation1 ) )
             throw new UnauthorizedException( 'content', 'edit' );
-        if ( !$this->repository->canUser( 'content', 'edit', $loadedLocation2->getContentInfo(), $loadedLocation2 ) )
+        if ( !$this->repository->canUser( 'content', 'edit', $contentInfo2, $loadedLocation2 ) )
             throw new UnauthorizedException( 'content', 'edit' );
+
+        /** @var $relationProcessor \eZ\Publish\Core\Repository\RelationProcessor */
+        $relationProcessor = $this->repository->getRelationProcessor();
+        $contentService = $this->repository->getContentService();
+
+        $fieldRelations1 = $relationProcessor->getFieldRelations( $contentInfo1 );
+        $fieldRelations2 = $relationProcessor->getFieldRelations( $contentInfo2 );
+        $existingRelations1 = $contentService->loadRelations( $contentService->loadVersionInfo( $contentInfo1 ) );
+        $existingRelations2 = $contentService->loadRelations( $contentService->loadVersionInfo( $contentInfo2 ) );
 
         $this->repository->beginTransaction();
         try
         {
             $this->persistenceHandler->locationHandler()->swap( $loadedLocation1->id, $loadedLocation2->id );
+            $relationProcessor->processFieldRelations(
+                $fieldRelations1,
+                $contentInfo1->id,
+                $contentInfo1->currentVersionNo,
+                $contentInfo1->contentType,
+                $existingRelations1
+            );
+            $relationProcessor->processFieldRelations(
+                $fieldRelations2,
+                $contentInfo2->id,
+                $contentInfo2->currentVersionNo,
+                $contentInfo2->contentType,
+                $existingRelations2
+            );
             $this->repository->commit();
         }
         catch ( \Exception $e )
