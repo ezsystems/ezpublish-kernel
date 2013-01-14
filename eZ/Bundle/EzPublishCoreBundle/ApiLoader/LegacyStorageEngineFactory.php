@@ -22,6 +22,11 @@ class LegacyStorageEngineFactory
      */
     protected $container;
 
+    /**
+     * Collection of converters with identifier as key and FQN class name as value
+     *
+     * @var array
+     */
     protected $converters = array();
 
     public function __construct( ContainerInterface $container )

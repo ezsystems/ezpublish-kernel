@@ -18,15 +18,21 @@ if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
     throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php & customize to your needs!' );
 }
 
-// Setup class loader
-require_once "./vendor/autoload.php";
+// Setup class loader, detect ezpublish5 repo context and use vendor files from there if that is the case
+$rootDir = __DIR__;
+if ( ( $vendorPathPos = strrpos( $rootDir, '/vendor/ezsystems/ezpublish' ) ) !== false )
+    $rootDir = substr( $rootDir, 0, $vendorPathPos );
+require_once $rootDir . "/vendor/autoload.php";
 
 
 // Bootstrap eZ Publish legacy kernel if configured
 if ( !empty( $settings['service']['parameters']['legacy_dir'] ) )
 {
-    define( 'EZCBASE_ENABLED', false );
-    require_once $settings['service']['parameters']['legacy_dir'] . '/autoload.php';
+    if ( !defined( 'EZCBASE_ENABLED' ) )
+    {
+        define( 'EZCBASE_ENABLED', false );
+        require_once $settings['service']['parameters']['legacy_dir'] . '/autoload.php';
+    }
 
     // Define $legacyKernelHandler to whatever you need before loading this bootstrap file.
     // CLI handler is used by defaut, but you must use \ezpKernelWeb if not in CLI context (i.e. REST server)
