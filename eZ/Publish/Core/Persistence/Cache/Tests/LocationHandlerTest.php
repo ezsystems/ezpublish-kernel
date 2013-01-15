@@ -23,6 +23,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testLoadCacheIsMiss()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
@@ -66,6 +67,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testLoadHasCache()
     {
+        $this->loggerMock->expects( $this->never() )->method( $this->anything() );
         $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
@@ -100,6 +102,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testLoadLocationsByContent()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -125,6 +128,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testLoadByRemoteId()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -150,6 +154,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testCopySubtree()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -175,6 +180,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testMove()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'clear' )
@@ -202,6 +208,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testMarkSubtreeModified()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -226,6 +233,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testHide()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'clear' )
@@ -253,6 +261,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testUnhide()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'clear' )
@@ -280,6 +289,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testSwap()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->exactly( 2 ) )
             ->method( 'clear' )
@@ -307,6 +317,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testUpdate()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
@@ -344,6 +355,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testCreate()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
@@ -381,6 +393,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testRemoveSubtree()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'clear' )
@@ -408,6 +421,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testSetSectionForSubtree()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -433,6 +447,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testChangeMainLocation()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'clear' )

@@ -14,6 +14,7 @@ use eZ\Publish\SPI\Persistence\Handler as PersistenceHandlerInterface;
 use eZ\Publish\Core\Persistence\Cache\SectionHandler as CacheSectionHandler;
 use eZ\Publish\Core\Persistence\Cache\LocationHandler as CacheLocationHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentTypeHandler as CacheContentTypeHandler;
+use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
 /**
  * Persistence Cache Handler class
@@ -26,39 +27,47 @@ class Handler implements PersistenceHandlerInterface
     protected $persistenceFactory;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Cache\SectionHandler
+     * @var SectionHandler
      */
     protected $sectionHandler;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler
+     * @var ContentTypeHandler
      */
     protected $contentTypeHandler;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Cache\LocationHandler
+     * @var LocationHandler
      */
     protected $locationHandler;
+
+    /**
+     * @var PersistenceLogger
+     */
+    protected $logger;
 
     /**
      * Construct the class
      *
      * @param \eZ\Publish\Core\Persistence\Factory $persistenceFactory Must be factory for inner persistence, ie: legacy
-     * @param \eZ\Publish\Core\Persistence\Cache\SectionHandler $sectionHandler
-     * @param \eZ\Publish\Core\Persistence\Cache\LocationHandler $locationHandler
-     * @param \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler $contentTypeHandler
+     * @param SectionHandler $sectionHandler
+     * @param LocationHandler $locationHandler
+     * @param ContentTypeHandler $contentTypeHandler
+     * @param PersistenceLogger $logger
      */
     public function __construct(
         PersistenceFactory $persistenceFactory,
         CacheSectionHandler $sectionHandler,
         CacheLocationHandler $locationHandler,
-        CacheContentTypeHandler $contentTypeHandler
+        CacheContentTypeHandler $contentTypeHandler,
+        PersistenceLogger $logger
     )
     {
         $this->persistenceFactory = $persistenceFactory;
         $this->sectionHandler = $sectionHandler;
         $this->locationHandler = $locationHandler;
         $this->contentTypeHandler = $contentTypeHandler;
+        $this->logger = $logger;
     }
 
     /**
@@ -66,6 +75,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function contentHandler()
     {
+        $this->logger->logCall( __METHOD__ );
         return $this->persistenceFactory->getContentHandler();
     }
 
@@ -74,6 +84,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function searchHandler()
     {
+        $this->logger->logCall( __METHOD__ );
         return $this->persistenceFactory->getSearchHandler();
     }
 
@@ -90,6 +101,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function contentLanguageHandler()
     {
+        $this->logger->logCall( __METHOD__ );
         return $this->persistenceFactory->getContentLanguageHandler();
     }
 
@@ -106,6 +118,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function objectStateHandler()
     {
+        $this->logger->logCall( __METHOD__ );
         return $this->persistenceFactory->getObjectStateHandler();
     }
 
@@ -114,6 +127,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function userHandler()
     {
+        $this->logger->logCall( __METHOD__ );
         return $this->persistenceFactory->getUserHandler();
     }
 
@@ -130,6 +144,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function trashHandler()
     {
+        $this->logger->logCall( __METHOD__ );
         return $this->persistenceFactory->getTrashHandler();
     }
 
@@ -138,6 +153,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function urlAliasHandler()
     {
+        $this->logger->logCall( __METHOD__ );
         return $this->persistenceFactory->getUrlAliasHandler();
     }
 
@@ -146,6 +162,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function urlWildcardHandler()
     {
+        $this->logger->logCall( __METHOD__ );
         return $this->persistenceFactory->getUrlWildcardHandler();
     }
 
@@ -157,6 +174,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function beginTransaction()
     {
+        $this->logger->logCall( __METHOD__ );
         $this->persistenceFactory->getPersistenceHandler()->beginTransaction();
     }
 
@@ -169,6 +187,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function commit()
     {
+        $this->logger->logCall( __METHOD__ );
         $this->persistenceFactory->getPersistenceHandler()->commit();
     }
 
@@ -181,6 +200,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function rollback()
     {
+        $this->logger->logCall( __METHOD__ );
         $this->persistenceFactory->getPersistenceHandler()->rollback();
     }
 }

@@ -47,6 +47,7 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testContentHandler()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $handler = $this->persistenceHandler->contentHandler();
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Handler', $handler );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\ContentHandler', $handler );
@@ -59,6 +60,7 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testSearchHandler()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $handler = $this->persistenceHandler->searchHandler();
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Search\\Handler', $handler );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\SearchHandler', $handler );
@@ -71,6 +73,7 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testLanguageHandler()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $handler = $this->persistenceHandler->contentLanguageHandler();
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler', $handler );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\LanguageHandler', $handler );
@@ -83,6 +86,7 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testContentTypeHandler()
     {
+        $this->loggerMock->expects( $this->never() )->method( $this->anything() );
         $handler = $this->persistenceHandler->contentTypeHandler();
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler', $handler );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Cache\\ContentTypeHandler', $handler );
@@ -95,6 +99,7 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testContentLocationHandler()
     {
+        $this->loggerMock->expects( $this->never() )->method( $this->anything() );
         $handler = $this->persistenceHandler->locationHandler();
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler', $handler );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Cache\\LocationHandler', $handler );
@@ -107,6 +112,7 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testTrashHandler()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $handler = $this->persistenceHandler->trashHandler();
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler', $handler );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\TrashHandler', $handler );
@@ -119,6 +125,7 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testObjectStateHandler()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $handler = $this->persistenceHandler->objectStateHandler();
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler', $handler );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\ObjectStateHandler', $handler );
@@ -131,6 +138,7 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testSectionHandler()
     {
+        $this->loggerMock->expects( $this->never() )->method( $this->anything() );
         $handler = $this->persistenceHandler->sectionHandler();
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler', $handler );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Cache\\SectionHandler', $handler );
@@ -143,6 +151,7 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testUserHandler()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $handler = $this->persistenceHandler->userHandler();
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler', $handler );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\UserHandler', $handler );
@@ -155,6 +164,7 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testUrlAliasHandler()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $handler = $this->persistenceHandler->urlAliasHandler();
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler', $handler );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\UrlAliasHandler', $handler );
@@ -167,6 +177,7 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testUrlWildcardHandler()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $handler = $this->persistenceHandler->urlWildcardHandler();
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlWildcard\\Handler', $handler );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\UrlWildcardHandler', $handler );

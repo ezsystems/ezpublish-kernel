@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Persistence\Cache;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandlerInterface;
 use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
 use Tedivm\StashBundle\Service\CacheService;
+use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
@@ -32,15 +33,25 @@ class SectionHandler implements SectionHandlerInterface
     protected $persistenceFactory;
 
     /**
+     * @var PersistenceLogger
+     */
+    protected $logger;
+
+    /**
      * Setups current handler with everything needed
      *
      * @param \Tedivm\StashBundle\Service\CacheService $cache
      * @param \eZ\Publish\Core\Persistence\Factory $persistenceFactory
+     * @param PersistenceLogger $logger
      */
-    public function __construct( CacheService $cache, PersistenceFactory $persistenceFactory )
+    public function __construct(
+        CacheService $cache,
+        PersistenceFactory $persistenceFactory,
+        PersistenceLogger $logger )
     {
         $this->cache = $cache;
         $this->persistenceFactory = $persistenceFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -48,6 +59,7 @@ class SectionHandler implements SectionHandlerInterface
      */
     public function create( $name, $identifier )
     {
+        $this->logger->logCall( __METHOD__, array( 'name' => $name, 'identifier' => $identifier ) );
         $section = $this->persistenceFactory->getSectionHandler()->create( $name, $identifier );
         $this->cache->get( 'section', $section->id )->set( $section );
         return $section;
@@ -58,6 +70,7 @@ class SectionHandler implements SectionHandlerInterface
      */
     public function update( $id, $name, $identifier )
     {
+        $this->logger->logCall( __METHOD__, array( 'section' => $id, 'name' => $name, 'identifier' => $identifier ) );
         $this->cache
             ->get( 'section', $id )
             ->set( $section = $this->persistenceFactory->getSectionHandler()->update( $id, $name, $identifier ) );
@@ -72,7 +85,10 @@ class SectionHandler implements SectionHandlerInterface
         $cache = $this->cache->get( 'section', $id );
         $section = $cache->get();
         if ( $cache->isMiss() )
+        {
+            $this->logger->logCall( __METHOD__, array( 'section' => $id ) );
             $cache->set( $section = $this->persistenceFactory->getSectionHandler()->load( $id ) );
+        }
 
         return $section;
     }
@@ -84,6 +100,7 @@ class SectionHandler implements SectionHandlerInterface
      */
     public function loadAll()
     {
+        $this->logger->logCall( __METHOD__ );
         return $this->persistenceFactory->getSectionHandler()->loadAll();
     }
 
@@ -98,6 +115,7 @@ class SectionHandler implements SectionHandlerInterface
      */
     public function loadByIdentifier( $identifier )
     {
+        $this->logger->logCall( __METHOD__, array( 'section' => $identifier ) );
         return $this->persistenceFactory->getSectionHandler()->loadByIdentifier( $identifier );
     }
 
@@ -106,6 +124,7 @@ class SectionHandler implements SectionHandlerInterface
      */
     public function delete( $id )
     {
+        $this->logger->logCall( __METHOD__, array( 'section' => $id ) );
         $return = $this->persistenceFactory->getSectionHandler()->delete( $id );
 
         $this->cache->clear( 'section', $id );
@@ -117,6 +136,7 @@ class SectionHandler implements SectionHandlerInterface
      */
     public function assign( $sectionId, $contentId )
     {
+        $this->logger->logCall( __METHOD__, array( 'section' => $sectionId, 'content' => $contentId ) );
         return $this->persistenceFactory->getSectionHandler()->assign( $sectionId, $contentId );
     }
 
@@ -129,6 +149,7 @@ class SectionHandler implements SectionHandlerInterface
      */
     public function assignmentsCount( $sectionId )
     {
+        $this->logger->logCall( __METHOD__, array( 'section' => $sectionId ) );
         return $this->persistenceFactory->getSectionHandler()->assignmentsCount( $sectionId );
     }
 }

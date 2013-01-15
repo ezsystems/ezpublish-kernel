@@ -21,6 +21,7 @@ class SectionHandlerTest extends HandlerTest
      */
     public function testAssign()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -46,6 +47,7 @@ class SectionHandlerTest extends HandlerTest
      */
     public function testAssignmentsCount()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -71,6 +73,7 @@ class SectionHandlerTest extends HandlerTest
      */
     public function testCreate()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
@@ -114,6 +117,7 @@ class SectionHandlerTest extends HandlerTest
      */
     public function testDelete()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'clear' )
@@ -143,6 +147,7 @@ class SectionHandlerTest extends HandlerTest
      */
     public function testLoadCacheIsMiss()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
@@ -192,6 +197,7 @@ class SectionHandlerTest extends HandlerTest
      */
     public function testLoadHasCache()
     {
+        $this->loggerMock->expects( $this->never() )->method( $this->anything() );
         $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
@@ -232,6 +238,7 @@ class SectionHandlerTest extends HandlerTest
      */
     public function testLoadAll()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -256,6 +263,7 @@ class SectionHandlerTest extends HandlerTest
      */
     public function testLoadByIdentifier()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -287,6 +295,7 @@ class SectionHandlerTest extends HandlerTest
      */
     public function testUpdate()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )

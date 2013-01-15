@@ -15,6 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
 use Tedivm\StashBundle\Service\CacheService;
+use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
@@ -32,15 +33,25 @@ class LocationHandler implements LocationHandlerInterface
     protected $persistenceFactory;
 
     /**
+     * @var PersistenceLogger
+     */
+    protected $logger;
+
+    /**
      * Setups current handler with everything needed
      *
      * @param \Tedivm\StashBundle\Service\CacheService $cache
      * @param \eZ\Publish\Core\Persistence\Factory $persistenceFactory
+     * @param PersistenceLogger $logger
      */
-    public function __construct( CacheService $cache, PersistenceFactory $persistenceFactory )
+    public function __construct(
+        CacheService $cache,
+        PersistenceFactory $persistenceFactory,
+        PersistenceLogger $logger )
     {
         $this->cache = $cache;
         $this->persistenceFactory = $persistenceFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -51,7 +62,10 @@ class LocationHandler implements LocationHandlerInterface
         $cache = $this->cache->get( 'location', $locationId );
         $location = $cache->get();
         if ( $cache->isMiss() )
+        {
+            $this->logger->logCall( __METHOD__, array( 'location' => $locationId ) );
             $cache->set( $location = $this->persistenceFactory->getLocationHandler()->load( $locationId ) );
+        }
 
         return $location;
     }
@@ -61,6 +75,7 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function loadLocationsByContent( $contentId, $rootLocationId = null )
     {
+        $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'root' => $rootLocationId ) );
         return $this->persistenceFactory->getLocationHandler()->loadLocationsByContent( $contentId, $rootLocationId );
     }
 
@@ -69,6 +84,7 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function loadByRemoteId( $remoteId )
     {
+        $this->logger->logCall( __METHOD__, array( 'location' => $remoteId ) );
         return $this->persistenceFactory->getLocationHandler()->loadByRemoteId( $remoteId );
     }
 
@@ -77,6 +93,7 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function copySubtree( $sourceId, $destinationParentId )
     {
+        $this->logger->logCall( __METHOD__, array( 'source' => $sourceId, 'destination' => $destinationParentId ) );
         return $this->persistenceFactory->getLocationHandler()->copySubtree( $sourceId, $destinationParentId );
     }
 
@@ -85,6 +102,7 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function move( $sourceId, $destinationParentId )
     {
+        $this->logger->logCall( __METHOD__, array( 'source' => $sourceId, 'destination' => $destinationParentId ) );
         $return = $this->persistenceFactory->getLocationHandler()->move( $sourceId, $destinationParentId );
 
         $this->cache->clear( 'location' );// path[Identification]String
@@ -97,15 +115,17 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function markSubtreeModified( $locationId, $timestamp = null )
     {
+        $this->logger->logCall( __METHOD__, array( 'location' => $locationId, 'time' => $timestamp ) );
         $this->persistenceFactory->getLocationHandler()->markSubtreeModified( $locationId, $timestamp );
     }
 
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::hide
      */
-    public function hide( $id )
+    public function hide( $locationId )
     {
-        $return = $this->persistenceFactory->getLocationHandler()->hide( $id );
+        $this->logger->logCall( __METHOD__, array( 'location' => $locationId ) );
+        $return = $this->persistenceFactory->getLocationHandler()->hide( $locationId );
 
         $this->cache->clear( 'location' );// visibility
 
@@ -115,9 +135,10 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::unhide
      */
-    public function unHide( $id )
+    public function unHide( $locationId )
     {
-        $return = $this->persistenceFactory->getLocationHandler()->unHide( $id );
+        $this->logger->logCall( __METHOD__, array( 'location' => $locationId ) );
+        $return = $this->persistenceFactory->getLocationHandler()->unHide( $locationId );
 
         $this->cache->clear( 'location' );// visibility
 
@@ -129,6 +150,7 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function swap( $locationId1, $locationId2 )
     {
+        $this->logger->logCall( __METHOD__, array( 'location1' => $locationId1, 'location2' => $locationId2 ) );
         $return = $this->persistenceFactory->getLocationHandler()->swap( $locationId1, $locationId2 );
 
         $this->cache->clear( 'location', $locationId1 );
@@ -142,6 +164,7 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function update( UpdateStruct $location, $locationId )
     {
+        $this->logger->logCall( __METHOD__, array( 'location' => $locationId, 'struct' => $location ) );
         $this->cache
             ->get( 'location', $locationId )
             ->set( $location = $this->persistenceFactory->getLocationHandler()->update( $location, $locationId ) );
@@ -154,6 +177,7 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function create( CreateStruct $locationStruct )
     {
+        $this->logger->logCall( __METHOD__, array( 'struct' => $locationStruct ) );
         $location = $this->persistenceFactory->getLocationHandler()->create( $locationStruct );
 
         $this->cache->get( 'location', $location->id )->set( $location );
@@ -166,6 +190,7 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function removeSubtree( $locationId )
     {
+        $this->logger->logCall( __METHOD__, array( 'location' => $locationId ) );
         $return = $this->persistenceFactory->getLocationHandler()->removeSubtree( $locationId );
 
         $this->cache->clear( 'location' );
@@ -178,6 +203,7 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function setSectionForSubtree( $locationId, $sectionId )
     {
+        $this->logger->logCall( __METHOD__, array( 'location' => $locationId, 'section' => $sectionId ) );
         $this->persistenceFactory->getLocationHandler()->setSectionForSubtree( $locationId, $sectionId );
     }
 
@@ -186,6 +212,7 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function changeMainLocation( $contentId, $locationId )
     {
+        $this->logger->logCall( __METHOD__, array( 'location' => $locationId, 'content' => $contentId ) );
         $this->persistenceFactory->getLocationHandler()->changeMainLocation( $contentId, $locationId );
         $this->cache->clear( 'location' );// ->mainLocationId
     }

@@ -18,6 +18,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStr
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
 use Tedivm\StashBundle\Service\CacheService;
+use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
 /**
  * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler
@@ -35,15 +36,25 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     protected $persistenceFactory;
 
     /**
+     * @var PersistenceLogger
+     */
+    protected $logger;
+
+    /**
      * Setups current handler with everything needed
      *
      * @param \Tedivm\StashBundle\Service\CacheService $cache
      * @param \eZ\Publish\Core\Persistence\Factory $persistenceFactory
+     * @param PersistenceLogger $logger
      */
-    public function __construct( CacheService $cache, PersistenceFactory $persistenceFactory )
+    public function __construct(
+        CacheService $cache,
+        PersistenceFactory $persistenceFactory,
+        PersistenceLogger $logger )
     {
         $this->cache = $cache;
         $this->persistenceFactory = $persistenceFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -51,6 +62,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function createGroup( GroupCreateStruct $group )
     {
+        $this->logger->logCall( __METHOD__, array( 'struct' => $group ) );
         return $this->persistenceFactory->getContentTypeHandler()->createGroup( $group );
     }
 
@@ -59,6 +71,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function updateGroup( GroupUpdateStruct $group )
     {
+        $this->logger->logCall( __METHOD__, array( 'struct' => $group ) );
         return $this->persistenceFactory->getContentTypeHandler()->updateGroup( $group );
     }
 
@@ -67,6 +80,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function deleteGroup( $groupId )
     {
+        $this->logger->logCall( __METHOD__, array( 'group' => $groupId ) );
         return $this->persistenceFactory->getContentTypeHandler()->deleteGroup( $groupId );
     }
 
@@ -75,6 +89,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function loadGroup( $groupId )
     {
+        $this->logger->logCall( __METHOD__, array( 'group' => $groupId ) );
         return $this->persistenceFactory->getContentTypeHandler()->loadGroup( $groupId );
     }
 
@@ -83,6 +98,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function loadGroupByIdentifier( $identifier )
     {
+        $this->logger->logCall( __METHOD__, array( 'group' => $identifier ) );
         return $this->persistenceFactory->getContentTypeHandler()->loadGroupByIdentifier( $identifier );
     }
 
@@ -91,6 +107,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function loadAllGroups()
     {
+        $this->logger->logCall( __METHOD__ );
         return $this->persistenceFactory->getContentTypeHandler()->loadAllGroups();
     }
 
@@ -99,22 +116,29 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function loadContentTypes( $groupId, $status = Type::STATUS_DEFINED )
     {
+        $this->logger->logCall( __METHOD__, array( 'group' => $groupId, 'status' => $status ) );
         return $this->persistenceFactory->getContentTypeHandler()->loadContentTypes( $groupId, $status );
     }
 
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::load
      */
-    public function load( $contentTypeId, $status = Type::STATUS_DEFINED )
+    public function load( $typeId, $status = Type::STATUS_DEFINED )
     {
         if ( $status !== Type::STATUS_DEFINED )
-            return $this->persistenceFactory->getContentTypeHandler()->load( $contentTypeId, $status );
+        {
+            $this->logger->logCall( __METHOD__, array( 'type' => $typeId, 'status' => $status ) );
+            return $this->persistenceFactory->getContentTypeHandler()->load( $typeId, $status );
+        }
 
         // Get cache for published content types
-        $cache = $this->cache->get( 'contentType', $contentTypeId );
+        $cache = $this->cache->get( 'contentType', $typeId );
         $type = $cache->get();
         if ( $cache->isMiss() )
-            $cache->set( $type = $this->persistenceFactory->getContentTypeHandler()->load( $contentTypeId, $status ) );
+        {
+            $this->logger->logCall( __METHOD__, array( 'type' => $typeId, 'status' => $status ) );
+            $cache->set( $type = $this->persistenceFactory->getContentTypeHandler()->load( $typeId, $status ) );
+        }
 
         return $type;
     }
@@ -124,6 +148,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function loadByIdentifier( $identifier )
     {
+        $this->logger->logCall( __METHOD__, array( 'type' => $identifier ) );
         return $this->persistenceFactory->getContentTypeHandler()->loadByIdentifier( $identifier );
     }
 
@@ -132,6 +157,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function loadByRemoteId( $remoteId )
     {
+        $this->logger->logCall( __METHOD__, array( 'type' => $remoteId ) );
         return $this->persistenceFactory->getContentTypeHandler()->loadByRemoteId( $remoteId );
     }
 
@@ -140,6 +166,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function create( CreateStruct $contentType )
     {
+        $this->logger->logCall( __METHOD__, array( 'struct' => $contentType ) );
         $type = $this->persistenceFactory->getContentTypeHandler()->create( $contentType );
 
         if ( $type->status === Type::STATUS_DEFINED )
@@ -151,14 +178,15 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::update
      */
-    public function update( $typeId, $status, UpdateStruct $contentType )
+    public function update( $typeId, $status, UpdateStruct $struct )
     {
+        $this->logger->logCall( __METHOD__, array( 'type' => $typeId, 'status' => $status, 'struct' => $struct ) );
         if ( $status !== Type::STATUS_DEFINED )
-            return $this->persistenceFactory->getContentTypeHandler()->update( $typeId, $status, $contentType );
+            return $this->persistenceFactory->getContentTypeHandler()->update( $typeId, $status, $struct );
 
         $this->cache
             ->get( 'contentType', $typeId )
-            ->set( $type = $this->persistenceFactory->getContentTypeHandler()->update( $typeId, $status, $contentType ) );
+            ->set( $type = $this->persistenceFactory->getContentTypeHandler()->update( $typeId, $status, $struct ) );
 
         return $type;
     }
@@ -166,12 +194,13 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::delete
      */
-    public function delete( $contentTypeId, $status )
+    public function delete( $typeId, $status )
     {
-        $return = $this->persistenceFactory->getContentTypeHandler()->delete( $contentTypeId, $status );
+        $this->logger->logCall( __METHOD__, array( 'type' => $typeId, 'status' => $status ) );
+        $return = $this->persistenceFactory->getContentTypeHandler()->delete( $typeId, $status );
 
         if ( $status === Type::STATUS_DEFINED )
-            $this->cache->clear( 'contentType', $contentTypeId );
+            $this->cache->clear( 'contentType', $typeId );
 
         return $return;
     }
@@ -179,28 +208,31 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::createDraft
      */
-    public function createDraft( $modifierId, $contentTypeId )
+    public function createDraft( $modifierId, $typeId )
     {
-        return $this->persistenceFactory->getContentTypeHandler()->createDraft( $modifierId, $contentTypeId );
+        $this->logger->logCall( __METHOD__, array( 'modifier' => $modifierId, 'type' => $typeId ) );
+        return $this->persistenceFactory->getContentTypeHandler()->createDraft( $modifierId, $typeId );
     }
 
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::copy
      */
-    public function copy( $userId, $contentTypeId, $status )
+    public function copy( $userId, $typeId, $status )
     {
-        return $this->persistenceFactory->getContentTypeHandler()->copy( $userId, $contentTypeId, $status );
+        $this->logger->logCall( __METHOD__, array( 'user' => $userId, 'type' => $typeId, 'status' => $status ) );
+        return $this->persistenceFactory->getContentTypeHandler()->copy( $userId, $typeId, $status );
     }
 
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::unlink
      */
-    public function unlink( $groupId, $contentTypeId, $status )
+    public function unlink( $groupId, $typeId, $status )
     {
-        $return = $this->persistenceFactory->getContentTypeHandler()->unlink( $groupId, $contentTypeId, $status );
+        $this->logger->logCall( __METHOD__, array( 'group' => $groupId, 'type' => $typeId, 'status' => $status ) );
+        $return = $this->persistenceFactory->getContentTypeHandler()->unlink( $groupId, $typeId, $status );
 
         if ( $status === Type::STATUS_DEFINED )
-            $this->cache->clear( 'contentType', $contentTypeId );
+            $this->cache->clear( 'contentType', $typeId );
 
         return $return;
     }
@@ -208,12 +240,13 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::link
      */
-    public function link( $groupId, $contentTypeId, $status )
+    public function link( $groupId, $typeId, $status )
     {
-        $return = $this->persistenceFactory->getContentTypeHandler()->link( $groupId, $contentTypeId, $status );
+        $this->logger->logCall( __METHOD__, array( 'group' => $groupId, 'type' => $typeId, 'status' => $status ) );
+        $return = $this->persistenceFactory->getContentTypeHandler()->link( $groupId, $typeId, $status );
 
         if ( $status === Type::STATUS_DEFINED )
-            $this->cache->clear( 'contentType', $contentTypeId );
+            $this->cache->clear( 'contentType', $typeId );
 
         return $return;
     }
@@ -223,22 +256,24 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function getFieldDefinition( $id, $status )
     {
+        $this->logger->logCall( __METHOD__, array( 'field' => $id, 'status' => $status ) );
         return $this->persistenceFactory->getContentTypeHandler()->getFieldDefinition( $id, $status );
     }
 
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::addFieldDefinition
      */
-    public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
+    public function addFieldDefinition( $typeId, $status, FieldDefinition $struct )
     {
+        $this->logger->logCall( __METHOD__, array( 'type' => $typeId, 'status' => $status, 'struct' => $struct ) );
         $return = $this->persistenceFactory->getContentTypeHandler()->addFieldDefinition(
-            $contentTypeId,
+            $typeId,
             $status,
-            $fieldDefinition
+            $struct
         );
 
         if ( $status === Type::STATUS_DEFINED )
-            $this->cache->clear( 'contentType', $contentTypeId );
+            $this->cache->clear( 'contentType', $typeId );
 
         return $return;
     }
@@ -246,39 +281,42 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::removeFieldDefinition
      */
-    public function removeFieldDefinition( $contentTypeId, $status, $fieldDefinitionId )
+    public function removeFieldDefinition( $typeId, $status, $fieldDefinitionId )
     {
+        $this->logger->logCall( __METHOD__, array( 'type' => $typeId, 'status' => $status, 'field' => $fieldDefinitionId ) );
         $this->persistenceFactory->getContentTypeHandler()->removeFieldDefinition(
-            $contentTypeId,
+            $typeId,
             $status,
             $fieldDefinitionId
         );
 
         if ( $status === Type::STATUS_DEFINED )
-            $this->cache->clear( 'contentType', $contentTypeId );
+            $this->cache->clear( 'contentType', $typeId );
     }
 
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::updateFieldDefinition
      */
-    public function updateFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
+    public function updateFieldDefinition( $typeId, $status, FieldDefinition $struct )
     {
+        $this->logger->logCall( __METHOD__, array( 'type' => $typeId, 'status' => $status, 'struct' => $struct ) );
         $this->persistenceFactory->getContentTypeHandler()->updateFieldDefinition(
-            $contentTypeId,
+            $typeId,
             $status,
-            $fieldDefinition
+            $struct
         );
 
         if ( $status === Type::STATUS_DEFINED )
-            $this->cache->clear( 'contentType', $contentTypeId );
+            $this->cache->clear( 'contentType', $typeId );
     }
 
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::publish
      */
-    public function publish( $contentTypeId )
+    public function publish( $typeId )
     {
-        $this->persistenceFactory->getContentTypeHandler()->publish( $contentTypeId );
-        $this->cache->clear( 'contentType', $contentTypeId );
+        $this->logger->logCall( __METHOD__, array( 'type' => $typeId ) );
+        $this->persistenceFactory->getContentTypeHandler()->publish( $typeId );
+        $this->cache->clear( 'contentType', $typeId );
     }
 }

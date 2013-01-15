@@ -27,6 +27,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testCreateGroup()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -52,6 +53,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testUpdateGroup()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -77,6 +79,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testDeleteGroup()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -102,6 +105,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLoadGroup()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -127,6 +131,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLoadGroupByIdentifier()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -152,6 +157,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLoadAllGroups()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -177,6 +183,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLoadContentTypes()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -202,6 +209,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLoadDraft()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -233,6 +241,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLoadCacheIsMiss()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
@@ -282,6 +291,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLoadHasCache()
     {
+        $this->loggerMock->expects( $this->never() )->method( $this->anything() );
         $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
@@ -322,6 +332,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLoadByIdentifier()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -347,6 +358,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLoadByRemoteId()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -372,6 +384,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testCreate()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
@@ -415,6 +428,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testCreateWithDraft()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -446,6 +460,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testUpdate()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
@@ -493,6 +508,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testUpdateDraft()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -528,6 +544,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testDelete()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'clear' )
@@ -557,6 +574,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testDeleteDraft()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -584,6 +602,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testCreateDraft()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -609,6 +628,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testCopy()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -634,6 +654,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLink()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'clear' )
@@ -663,6 +684,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLinkDraft()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -690,6 +712,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testUnlink()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'clear' )
@@ -719,6 +742,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testUnlinkDraft()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -746,6 +770,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testGetFieldDefinition()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -771,6 +796,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testAddFieldDefinition()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'clear' )
@@ -804,6 +830,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testAddFieldDefinitionDraft()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -835,6 +862,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testRemoveFieldDefinition()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'clear' )
@@ -868,6 +896,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testRemoveFieldDefinitionDraft()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -899,6 +928,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testUpdateFieldDefinition()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'clear' )
@@ -932,6 +962,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testUpdateFieldDefinitionDraft()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->never() )
             ->method( $this->anything() );
@@ -963,6 +994,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testPublish()
     {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'clear' )

@@ -21,7 +21,7 @@ use PHPUnit_Framework_TestCase;
 abstract class HandlerTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Stash\Pool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Tedivm\StashBundle\Service\CacheService|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $cacheMock;
 
@@ -34,6 +34,11 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
      * @var \eZ\Publish\Core\Persistence\Cache\Handler
      */
     protected $persistenceHandler;
+
+    /**
+     * @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
 
     /**
      * Setup the HandlerTest.
@@ -60,11 +65,14 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
             false
         );
 
+        $this->loggerMock = $this->getMock( "eZ\\Publish\\Core\\Persistence\\Cache\\PersistenceLogger" );
+
         $this->persistenceHandler = new CacheHandler(
             $this->persistenceFactoryMock,
-            new CacheSectionHandler( $this->cacheMock, $this->persistenceFactoryMock ),
-            new CacheLocationHandler( $this->cacheMock, $this->persistenceFactoryMock ),
-            new CacheContentTypeHandler( $this->cacheMock, $this->persistenceFactoryMock )
+            new CacheSectionHandler( $this->cacheMock, $this->persistenceFactoryMock, $this->loggerMock ),
+            new CacheLocationHandler( $this->cacheMock, $this->persistenceFactoryMock, $this->loggerMock ),
+            new CacheContentTypeHandler( $this->cacheMock, $this->persistenceFactoryMock, $this->loggerMock ),
+            $this->loggerMock
         );
     }
 
@@ -76,6 +84,7 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
         unset( $this->cacheMock );
         unset( $this->persistenceFactoryMock );
         unset( $this->persistenceHandler );
+        unset( $this->loggerMock );
         parent::tearDown();
     }
 }
