@@ -53,14 +53,6 @@ class NullStorage implements FieldStorage
     }
 
     /**
-     * @see \eZ\Publish\SPI\FieldType\FieldStorage::copyFieldData()
-     */
-    public function copyFieldData( VersionInfo $versionInfo, Field $field, array $context )
-    {
-        return;
-    }
-
-    /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage::getIndexData()
      */
     public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
