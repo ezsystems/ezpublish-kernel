@@ -25,6 +25,11 @@ class PersistenceLogger
     protected $calls = array();
 
     /**
+     * @var array
+     */
+    protected $unCachedHandlers = array();
+
+    /**
      * @param string $method
      * @param array $arguments
      */
@@ -36,6 +41,16 @@ class PersistenceLogger
             'arguments' => $arguments,
             //'microTime' => $microTime
         );
+    }
+
+    /**
+     * Log uncached handler being loaded
+     *
+     * @param string $handler
+     */
+    public function logUnCachedHandler( $handler )
+    {
+        $this->unCachedHandlers[] = $handler;
     }
 
     /**
@@ -60,5 +75,13 @@ class PersistenceLogger
     public function getCalls()
     {
         return $this->calls;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLoadedUnCachedHandlers()
+    {
+        return $this->unCachedHandlers;
     }
 }

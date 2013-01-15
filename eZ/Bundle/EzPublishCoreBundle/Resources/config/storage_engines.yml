@@ -108,21 +108,21 @@ services:
     ezpublish.spi.persistence.cache.sectionHandler:
         class: %ezpublish.spi.persistence.cache.sectionHandler.class%
         arguments:
-            - @stash.cache
+            - @cache
             - @ezpublish.spi.persistence.lazy_factory
             - @ezpublish.spi.persistence.cache.persistenceLogger
 
     ezpublish.spi.persistence.cache.locationHandler:
         class: %ezpublish.spi.persistence.cache.locationHandler.class%
         arguments:
-            - @stash.cache
+            - @cache
             - @ezpublish.spi.persistence.lazy_factory
             - @ezpublish.spi.persistence.cache.persistenceLogger
 
     ezpublish.spi.persistence.cache.contentTypeHandler:
         class: %ezpublish.spi.persistence.cache.contentTypeHandler.class%
         arguments:
-            - @stash.cache
+            - @cache
             - @ezpublish.spi.persistence.lazy_factory
             - @ezpublish.spi.persistence.cache.persistenceLogger
 

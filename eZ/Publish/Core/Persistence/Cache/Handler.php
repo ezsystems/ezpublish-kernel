@@ -75,7 +75,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function contentHandler()
     {
-        $this->logger->logCall( __METHOD__ );
+        $this->logger->logUnCachedHandler( __METHOD__ );
         return $this->persistenceFactory->getContentHandler();
     }
 
@@ -84,7 +84,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function searchHandler()
     {
-        $this->logger->logCall( __METHOD__ );
+        $this->logger->logUnCachedHandler( __METHOD__ );
         return $this->persistenceFactory->getSearchHandler();
     }
 
@@ -101,7 +101,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function contentLanguageHandler()
     {
-        $this->logger->logCall( __METHOD__ );
+        $this->logger->logUnCachedHandler( __METHOD__ );
         return $this->persistenceFactory->getContentLanguageHandler();
     }
 
@@ -118,7 +118,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function objectStateHandler()
     {
-        $this->logger->logCall( __METHOD__ );
+        $this->logger->logUnCachedHandler( __METHOD__ );
         return $this->persistenceFactory->getObjectStateHandler();
     }
 
@@ -127,7 +127,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function userHandler()
     {
-        $this->logger->logCall( __METHOD__ );
+        $this->logger->logUnCachedHandler( __METHOD__ );
         return $this->persistenceFactory->getUserHandler();
     }
 
@@ -144,7 +144,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function trashHandler()
     {
-        $this->logger->logCall( __METHOD__ );
+        $this->logger->logUnCachedHandler( __METHOD__ );
         return $this->persistenceFactory->getTrashHandler();
     }
 
@@ -153,7 +153,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function urlAliasHandler()
     {
-        $this->logger->logCall( __METHOD__ );
+        $this->logger->logUnCachedHandler( __METHOD__ );
         return $this->persistenceFactory->getUrlAliasHandler();
     }
 
@@ -162,7 +162,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function urlWildcardHandler()
     {
-        $this->logger->logCall( __METHOD__ );
+        $this->logger->logUnCachedHandler( __METHOD__ );
         return $this->persistenceFactory->getUrlWildcardHandler();
     }
 

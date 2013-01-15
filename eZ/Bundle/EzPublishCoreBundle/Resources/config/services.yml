@@ -6,6 +6,7 @@ parameters:
     ezpublish.config.default_scope: ezsettings
     ezpublish.controller.base.class: eZ\Publish\Core\MVC\Symfony\Controller\Controller
     ezpublish.controller.content.view.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController
+    ezpublish.data_collector.spi.persistence.class: eZ\Bundle\EzPublishCoreBundle\Collector\SPIPersistenceDataCollector
 
 services:
     # Siteaccess is injected in the container at runtime
@@ -41,3 +42,13 @@ services:
     # {% render "ez_content:viewLocation" with {"locationId": 123, "viewMode": "line"} %}
     ez_content:
         alias: ezpublish.controller.content.view
+
+    # SPI profiling
+    ezpublish.data_collector.spi.persistence:
+        class: %ezpublish.data_collector.spi.persistence.class%
+        arguments: [ @ezpublish.spi.persistence.cache.persistenceLogger ]
+        tags:
+            -
+                name: data_collector
+                template: "EzPublishCoreBundle:Profiler:layout"
+                id: "ezpublish.spi.persistence"
