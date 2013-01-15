@@ -67,4 +67,23 @@ class NullStorage implements FieldStorage
     {
         return false;
     }
+
+    /**
+     * This method is used exclusively by Legacy Storage to copy external data of existing field in main language to
+     * the untranslatable field not passed in create or update struct, but created implicitly in storage layer.
+     *
+     * By default the method falls back to the {@link \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()}.
+     * External storages implement this method as needed.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $originalField
+     * @param array $context
+     *
+     * @return null|boolean Same as {@link \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()}.
+     */
+    public function copyLegacyField( VersionInfo $versionInfo, Field $field, Field $originalField, array $context )
+    {
+        return;
+    }
 }
