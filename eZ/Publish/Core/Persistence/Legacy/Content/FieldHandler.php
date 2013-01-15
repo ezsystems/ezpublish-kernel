@@ -132,24 +132,42 @@ class FieldHandler
 
         foreach ( $contentType->fieldDefinitions as $fieldDefinition )
         {
-            foreach ( array_keys( $languageCodes ) as $languageCode )
+            foreach ( $languageCodes as $languageCode )
+            {
+                // Skip fields passed from struct to handle them separately later
+                if ( isset( $fields[$fieldDefinition->id][$languageCode] ) )
+                {
+                    continue;
+                }
+
+                // Copy only for untranslatable field and when field in main language exists
+                if ( !$fieldDefinition->isTranslatable
+                    && isset( $fields[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode] )
+                )
+                {
+                    $field = clone $fields[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
+                    $content->fields[] = $field;
+                    $this->copyLegacyField( $field, $languageCode, $content );
+                }
+                // In all other cases create empty field
+                else
+                {
+                    $field = $this->getEmptyField( $fieldDefinition, $languageCode );
+                    $content->fields[] = $field;
+                    $this->createNewField( $field, $content );
+                }
+            }
+        }
+
+        // Create fields passed from struct
+        foreach ( $contentType->fieldDefinitions as $fieldDefinition )
+        {
+            foreach ( $languageCodes as $languageCode )
             {
                 if ( isset( $fields[$fieldDefinition->id][$languageCode] ) )
                 {
                     $field = $fields[$fieldDefinition->id][$languageCode];
                     $this->createNewField( $field, $content );
-                }
-                else if ( $fieldDefinition->isTranslatable
-                    || !isset( $fields[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode] ) )
-                {
-                    $field = $this->getEmptyField( $fieldDefinition, $languageCode );
-                    $this->createNewField( $field, $content );
-                }
-                else
-                {
-                    // Use value from main language code
-                    $field = clone $fields[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
-                    $this->copyLegacyField( $field, $languageCode, $content );
                 }
             }
         }
@@ -351,7 +369,7 @@ class FieldHandler
 
         foreach ( $contentType->fieldDefinitions as $fieldDefinition )
         {
-            foreach ( array_keys( $languageCodes ) as $languageCode )
+            foreach ( $languageCodes as $languageCode )
             {
                 if ( isset( $updateFieldMap[$fieldDefinition->id][$languageCode] ) )
                 {
@@ -378,11 +396,18 @@ class FieldHandler
                     else
                     {
                         // Use value from main language code for untranslatable field
-                        $field = clone $contentFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
+                        if ( isset( $updateFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode] ) )
+                        {
+                            $field = clone $updateFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
+                        }
+                        else
+                        {
+                            $field = clone $contentFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
+                        }
                         $this->copyLegacyField( $field, $languageCode, $content );
                     }
                 }
-                // If existing language for untranslatable field, for which main language is updated,
+                // If field is not set for existing language and is untranslatable and main language is updated,
                 // also update copied field data
                 else if ( !$fieldDefinition->isTranslatable
                     && isset( $updateFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode] )
@@ -432,6 +457,11 @@ class FieldHandler
                 $languageCodes[$field->languageCode] = true;
             }
             $fieldMap[$field->fieldDefinitionId][$field->languageCode] = $field;
+        }
+
+        if ( isset( $languageCodes ) )
+        {
+            $languageCodes = array_keys( $languageCodes );
         }
 
         return $fieldMap;
