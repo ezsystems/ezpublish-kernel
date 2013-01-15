@@ -126,23 +126,6 @@ class FieldHandler
      */
     public function createNewFields( Content $content )
     {
-        $this->createCompleteFields( $content );
-
-        foreach ( $content->fields as $field )
-        {
-            $this->createNewField( $field, $content );
-        }
-    }
-
-    /**
-     * Adds missing fields to the given $content field collection.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
-     *
-     * @return void
-     */
-    protected function createCompleteFields( Content $content )
-    {
         $languageCodes = array();
         $fields = $this->getFieldMap( $content->fields, $languageCodes );
         $contentType = $this->typeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
@@ -153,20 +136,20 @@ class FieldHandler
             {
                 if ( isset( $fields[$fieldDefinition->id][$languageCode] ) )
                 {
-                    continue;
+                    $field = $fields[$fieldDefinition->id][$languageCode];
+                    $this->createNewField( $field, $content );
                 }
-
-                if ( $fieldDefinition->isTranslatable
+                else if ( $fieldDefinition->isTranslatable
                     || !isset( $fields[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode] ) )
                 {
-                    $content->fields[] = $this->getEmptyField( $fieldDefinition, $languageCode );
+                    $field = $this->getEmptyField( $fieldDefinition, $languageCode );
+                    $this->createNewField( $field, $content );
                 }
                 else
                 {
+                    // Use value from main language code
                     $field = clone $fields[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
-                    $field->id = null;
-                    $field->languageCode = $languageCode;
-                    $content->fields[] = $field;
+                    $this->copyLegacyField( $field, $languageCode, $content );
                 }
             }
         }
@@ -222,6 +205,41 @@ class FieldHandler
      */
     protected function createNewField( Field $field, Content $content )
     {
+        $field->versionNo = $content->versionInfo->versionNo;
+
+        $field->id = $this->contentGateway->insertNewField(
+            $content,
+            $field,
+            $this->mapper->convertToStorageValue( $field )
+        );
+
+        // If the storage handler returns true, it means that $field value has been modified
+        // So we need to update it in order to store those modifications
+        // Field converter is called once again via the Mapper
+        if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
+        {
+            $this->contentGateway->updateField(
+                $field,
+                $this->mapper->convertToStorageValue( $field )
+            );
+        }
+    }
+
+    /**
+     * Copies existing field to new field for given $languageCode.
+     *
+     * @todo from here call FieldStorage::copyLegacyField() when implemented
+     * Used by self::createNewFields() and self::updateFields()
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param string $languageCode
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     *
+     * @return void
+     */
+    protected function copyLegacyField( Field $field, $languageCode, Content $content )
+    {
+        $field->languageCode = $languageCode;
         $field->versionNo = $content->versionInfo->versionNo;
 
         $field->id = $this->contentGateway->insertNewField(
@@ -337,7 +355,7 @@ class FieldHandler
             {
                 if ( isset( $updateFieldMap[$fieldDefinition->id][$languageCode] ) )
                 {
-                    $field = $updateFieldMap[$fieldDefinition->id][$languageCode];
+                    $field = clone $updateFieldMap[$fieldDefinition->id][$languageCode];
                     $field->versionNo = $content->versionInfo->versionNo;
                     if ( isset( $field->id ) )
                     {
@@ -353,18 +371,26 @@ class FieldHandler
                 {
                     if ( $fieldDefinition->isTranslatable )
                     {
-                        // Use empty value
+                        // Use empty value for translatable field
                         $field = $this->getEmptyField( $fieldDefinition, $languageCode );
+                        $this->createNewField( $field, $content );
                     }
                     else
                     {
-                        // Use value from main language code
-                        $field = $contentFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
-                        $field->id = null;
-                        $field->languageCode = $languageCode;
+                        // Use value from main language code for untranslatable field
+                        $field = clone $contentFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
+                        $this->copyLegacyField( $field, $languageCode, $content );
                     }
-
-                    $this->createNewField( $field, $content );
+                }
+                // If existing language for untranslatable field, for which main language is updated,
+                // also update copied field data
+                else if ( !$fieldDefinition->isTranslatable
+                    && isset( $updateFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode] )
+                )
+                {
+                    // Use value from main language code
+                    $field = clone $updateFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
+                    $this->copyLegacyField( $field, $languageCode, $content );
                 }
             }
         }
