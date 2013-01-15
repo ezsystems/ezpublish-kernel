@@ -126,28 +126,29 @@ class FieldHandler
      */
     public function createNewFields( Content $content )
     {
+        $fieldsToCopy = array();
         $languageCodes = array();
         $fields = $this->getFieldMap( $content->fields, $languageCodes );
         $contentType = $this->typeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
 
         foreach ( $contentType->fieldDefinitions as $fieldDefinition )
         {
-            foreach ( $languageCodes as $languageCode )
+            foreach ( array_keys( $languageCodes ) as $languageCode )
             {
-                // Skip fields passed from struct to handle them separately later
+                // Create fields passed from struct
                 if ( isset( $fields[$fieldDefinition->id][$languageCode] ) )
                 {
-                    continue;
+                    $field = $fields[$fieldDefinition->id][$languageCode];
+                    $this->createNewField( $field, $content );
                 }
-
                 // Copy only for untranslatable field and when field in main language exists
-                if ( !$fieldDefinition->isTranslatable
+                // Only register here, process later as field copied should be already stored
+                else if ( !$fieldDefinition->isTranslatable
                     && isset( $fields[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode] )
                 )
                 {
-                    $field = clone $fields[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
-                    $content->fields[] = $field;
-                    $this->copyLegacyField( $field, $languageCode, $content );
+                    $fieldsToCopy[$fieldDefinition->id][$languageCode] =
+                        $fields[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
                 }
                 // In all other cases create empty field
                 else
@@ -159,18 +160,7 @@ class FieldHandler
             }
         }
 
-        // Create fields passed from struct
-        foreach ( $contentType->fieldDefinitions as $fieldDefinition )
-        {
-            foreach ( $languageCodes as $languageCode )
-            {
-                if ( isset( $fields[$fieldDefinition->id][$languageCode] ) )
-                {
-                    $field = $fields[$fieldDefinition->id][$languageCode];
-                    $this->createNewField( $field, $content );
-                }
-            }
-        }
+        $this->copyFields( $fieldsToCopy, $content );
     }
 
     /**
@@ -205,9 +195,38 @@ class FieldHandler
      */
     public function createExistingFieldsInNewVersion( Content $content )
     {
-        foreach ( $content->fields as $field )
+        $fieldsToCopy = array();
+        $languageCodes = $existingLanguageCodes = $this->getLanguageCodes( $content->versionInfo->languageIds );
+        $contentFieldMap = $this->getFieldMap( $content->fields );
+        $content->fields = array();
+        $contentType = $this->typeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
+
+        foreach ( $contentType->fieldDefinitions as $fieldDefinition )
         {
-            $this->createExistingFieldInNewVersion( $field, $content );
+            foreach ( array_keys( $languageCodes ) as $languageCode )
+            {
+                if ( $fieldDefinition->isTranslatable
+                    || $languageCode != $content->versionInfo->contentInfo->mainLanguageCode
+                )
+                {
+                    $field = $contentFieldMap[$fieldDefinition->id][$languageCode];
+                    $this->createExistingFieldInNewVersion( $field, $content );
+                    $content->fields[] = $field;
+                }
+                else
+                {
+                    $fieldsToCopy[$fieldDefinition->id][$languageCode] =
+                        $contentFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
+                }
+            }
+        }
+
+        foreach ( $fieldsToCopy as $languageFields )
+        {
+            foreach ( $languageFields as $languageCode => $field )
+            {
+                $content->fields[] = $this->copyExistingFieldInNewVersion( $field, $languageCode, $content );
+            }
         }
     }
 
@@ -244,19 +263,38 @@ class FieldHandler
     }
 
     /**
+     *
+     *
+     * @param array $fields
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     *
+     * @return void
+     */
+    public function copyFields( array $fields, Content $content )
+    {
+        foreach ( $fields as $languageFields )
+        {
+            foreach ( $languageFields as $languageCode => $field )
+            {
+                $this->copyField( $field, $languageCode, $content );
+            }
+        }
+    }
+
+    /**
      * Copies existing field to new field for given $languageCode.
      *
-     * @todo from here call FieldStorage::copyLegacyField() when implemented
      * Used by self::createNewFields() and self::updateFields()
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $originalField
      * @param string $languageCode
      * @param \eZ\Publish\SPI\Persistence\Content $content
      *
      * @return void
      */
-    protected function copyLegacyField( Field $field, $languageCode, Content $content )
+    protected function copyField( Field $originalField, $languageCode, Content $content )
     {
+        $field = clone $originalField;
         $field->languageCode = $languageCode;
         $field->versionNo = $content->versionInfo->versionNo;
 
@@ -269,13 +307,52 @@ class FieldHandler
         // If the storage handler returns true, it means that $field value has been modified
         // So we need to update it in order to store those modifications
         // Field converter is called once again via the Mapper
-        if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
+        if ( $this->storageHandler->copyFieldData( $content->versionInfo, $field, $originalField ) === true )
         {
             $this->contentGateway->updateField(
                 $field,
                 $this->mapper->convertToStorageValue( $field )
             );
         }
+
+        $content->fields[] = $field;
+    }
+
+    /**
+     * Copies existing field to new field for given $languageCode.
+     *
+     * Used by self::createNewFields() and self::updateFields()
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $originalField
+     * @param string $languageCode
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Field
+     */
+    protected function copyExistingFieldInNewVersion( Field $originalField, $languageCode, Content $content )
+    {
+        $field = clone $originalField;
+        $field->languageCode = $languageCode;
+        $field->versionNo = $content->versionInfo->versionNo;
+
+        $this->contentGateway->insertExistingField(
+            $content,
+            $field,
+            $this->mapper->convertToStorageValue( $field )
+        );
+
+        // If the storage handler returns true, it means that $field value has been modified
+        // So we need to update it in order to store those modifications
+        // Field converter is called once again via the Mapper
+        if ( $this->storageHandler->copyFieldData( $content->versionInfo, $field, $originalField ) === true )
+        {
+            $this->contentGateway->updateField(
+                $field,
+                $this->mapper->convertToStorageValue( $field )
+            );
+        }
+
+        return $field;
     }
 
     /**
@@ -362,6 +439,8 @@ class FieldHandler
      */
     public function updateFields( Content $content, UpdateStruct $updateStruct )
     {
+        $fieldsToCopy = array();
+        $mainLanguageCode = $content->versionInfo->contentInfo->mainLanguageCode;
         $languageCodes = $existingLanguageCodes = $this->getLanguageCodes( $content->versionInfo->languageIds );
         $contentFieldMap = $this->getFieldMap( $content->fields );
         $updateFieldMap = $this->getFieldMap( $updateStruct->fields, $languageCodes );
@@ -369,7 +448,7 @@ class FieldHandler
 
         foreach ( $contentType->fieldDefinitions as $fieldDefinition )
         {
-            foreach ( $languageCodes as $languageCode )
+            foreach ( array_keys( $languageCodes ) as $languageCode )
             {
                 if ( isset( $updateFieldMap[$fieldDefinition->id][$languageCode] ) )
                 {
@@ -396,29 +475,26 @@ class FieldHandler
                     else
                     {
                         // Use value from main language code for untranslatable field
-                        if ( isset( $updateFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode] ) )
-                        {
-                            $field = clone $updateFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
-                        }
-                        else
-                        {
-                            $field = clone $contentFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
-                        }
-                        $this->copyLegacyField( $field, $languageCode, $content );
+                        $fieldsToCopy[$fieldDefinition->id][$languageCode] =
+                            isset( $updateFieldMap[$fieldDefinition->id][$mainLanguageCode] )
+                                ? $updateFieldMap[$fieldDefinition->id][$mainLanguageCode]
+                                : $contentFieldMap[$fieldDefinition->id][$mainLanguageCode];
                     }
                 }
                 // If field is not set for existing language and is untranslatable and main language is updated,
                 // also update copied field data
                 else if ( !$fieldDefinition->isTranslatable
-                    && isset( $updateFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode] )
+                    && isset( $updateFieldMap[$fieldDefinition->id][$mainLanguageCode] )
                 )
                 {
                     // Use value from main language code
-                    $field = clone $updateFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
-                    $this->copyLegacyField( $field, $languageCode, $content );
+                    $fieldsToCopy[$fieldDefinition->id][$languageCode] =
+                        $updateFieldMap[$fieldDefinition->id][$mainLanguageCode];
                 }
             }
         }
+
+        $this->copyFields( $fieldsToCopy, $content );
     }
 
     /**
@@ -457,11 +533,6 @@ class FieldHandler
                 $languageCodes[$field->languageCode] = true;
             }
             $fieldMap[$field->fieldDefinitionId][$field->languageCode] = $field;
-        }
-
-        if ( isset( $languageCodes ) )
-        {
-            $languageCodes = array_keys( $languageCodes );
         }
 
         return $fieldMap;
