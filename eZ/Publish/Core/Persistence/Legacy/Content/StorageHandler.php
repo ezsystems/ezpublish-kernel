@@ -57,6 +57,25 @@ class StorageHandler
     }
 
     /**
+     *
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $originalField
+     *
+     * @return void
+     */
+    public function copyFieldData( VersionInfo $versionInfo, Field $field, Field $originalField )
+    {
+        return $this->storageRegistry->getStorage( $field->type )->copyLegacyField(
+            $versionInfo,
+            $field,
+            $originalField,
+            $this->context
+        );
+    }
+
+    /**
      * Fetches external data for $field from its corresponding external storage
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
