@@ -1,6 +1,10 @@
 parameters:
     ezpublish.spi.persistence.cache.class: eZ\Publish\Core\Persistence\Cache\Handler
     ezpublish.spi.persistence.lazy_factory.class: eZ\Publish\Core\Persistence\Factory
+    ezpublish.spi.persistence.cache.sectionHandler.class: eZ\Publish\Core\Persistence\Cache\SectionHandler
+    ezpublish.spi.persistence.cache.locationHandler.class: eZ\Publish\Core\Persistence\Cache\LocationHandler
+    ezpublish.spi.persistence.cache.contentTypeHandler.class: eZ\Publish\Core\Persistence\Cache\ContentTypeHandler
+    ezpublish.spi.persistence.cache.persistenceLogger.class: eZ\Publish\Core\Persistence\Cache\PersistenceLogger
     ezpublish.spi.persistence.default_id: synthetical-parameter-set-in-RegisterStorageEnginePass
 
     # storage engines
@@ -87,12 +91,40 @@ services:
         class: %ezpublish.spi.persistence.cache.class%
         arguments:
             - @ezpublish.spi.persistence.lazy_factory
+            - @ezpublish.spi.persistence.cache.sectionHandler
+            - @ezpublish.spi.persistence.cache.locationHandler
+            - @ezpublish.spi.persistence.cache.contentTypeHandler
+            - @ezpublish.spi.persistence.cache.persistenceLogger
 
     ezpublish.spi.persistence.lazy_factory:
         class: %ezpublish.spi.persistence.lazy_factory.class%
         arguments:
             - @service_container
             - %ezpublish.spi.persistence.default_id%
+
+    ezpublish.spi.persistence.cache.persistenceLogger:
+        class: %ezpublish.spi.persistence.cache.persistenceLogger.class%
+
+    ezpublish.spi.persistence.cache.sectionHandler:
+        class: %ezpublish.spi.persistence.cache.sectionHandler.class%
+        arguments:
+            - @stash.cache
+            - @ezpublish.spi.persistence.lazy_factory
+            - @ezpublish.spi.persistence.cache.persistenceLogger
+
+    ezpublish.spi.persistence.cache.locationHandler:
+        class: %ezpublish.spi.persistence.cache.locationHandler.class%
+        arguments:
+            - @stash.cache
+            - @ezpublish.spi.persistence.lazy_factory
+            - @ezpublish.spi.persistence.cache.persistenceLogger
+
+    ezpublish.spi.persistence.cache.contentTypeHandler:
+        class: %ezpublish.spi.persistence.cache.contentTypeHandler.class%
+        arguments:
+            - @stash.cache
+            - @ezpublish.spi.persistence.lazy_factory
+            - @ezpublish.spi.persistence.cache.persistenceLogger
 
     # InMemory storage engine for unit test use
     ezpublish.api.storage_engine.in_memory:

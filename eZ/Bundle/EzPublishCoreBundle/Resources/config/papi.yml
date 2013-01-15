@@ -82,6 +82,9 @@ services:
         arguments: [@service_container]
 
     ezpublish.api.persistence_handler:
+        alias: ezpublish.spi.persistence.cache
+
+    ezpublish.api.storage_engine:
         class: eZ\Publish\SPI\Persistence\Handler
         factory_service: ezpublish.api.storage_engine.factory
         factory_method: buildStorageEngine
