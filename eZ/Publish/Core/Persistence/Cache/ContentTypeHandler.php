@@ -60,19 +60,28 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::createGroup
      */
-    public function createGroup( GroupCreateStruct $group )
+    public function createGroup( GroupCreateStruct $struct )
     {
-        $this->logger->logCall( __METHOD__, array( 'struct' => $group ) );
-        return $this->persistenceFactory->getContentTypeHandler()->createGroup( $group );
+        $this->logger->logCall( __METHOD__, array( 'struct' => $struct ) );
+        $group = $this->persistenceFactory->getContentTypeHandler()->createGroup( $struct );
+
+        $this->cache->get( 'contentTypeGroup', $group->id )->set( $group );
+
+        return $group;
     }
 
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::updateGroup
      */
-    public function updateGroup( GroupUpdateStruct $group )
+    public function updateGroup( GroupUpdateStruct $struct )
     {
-        $this->logger->logCall( __METHOD__, array( 'struct' => $group ) );
-        return $this->persistenceFactory->getContentTypeHandler()->updateGroup( $group );
+        $this->logger->logCall( __METHOD__, array( 'struct' => $struct ) );
+
+        $this->cache
+            ->get( 'contentTypeGroup', $struct->id )
+            ->set( $group = $this->persistenceFactory->getContentTypeHandler()->updateGroup( $struct ) );
+
+        return $group;
     }
 
     /**
@@ -81,7 +90,10 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     public function deleteGroup( $groupId )
     {
         $this->logger->logCall( __METHOD__, array( 'group' => $groupId ) );
-        return $this->persistenceFactory->getContentTypeHandler()->deleteGroup( $groupId );
+        $return = $this->persistenceFactory->getContentTypeHandler()->deleteGroup( $groupId );
+
+        $this->cache->clear( 'contentTypeGroup', $groupId );
+        return $return;
     }
 
     /**
@@ -89,8 +101,15 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function loadGroup( $groupId )
     {
-        $this->logger->logCall( __METHOD__, array( 'group' => $groupId ) );
-        return $this->persistenceFactory->getContentTypeHandler()->loadGroup( $groupId );
+        $cache = $this->cache->get( 'contentTypeGroup', $groupId );
+        $group = $cache->get();
+        if ( $cache->isMiss() )
+        {
+            $this->logger->logCall( __METHOD__, array( 'group' => $groupId ) );
+            $cache->set( $group = $this->persistenceFactory->getContentTypeHandler()->loadGroup( $groupId ) );
+        }
+
+        return $group;
     }
 
     /**
