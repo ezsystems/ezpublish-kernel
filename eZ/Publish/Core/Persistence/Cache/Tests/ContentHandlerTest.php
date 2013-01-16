@@ -64,7 +64,6 @@ class ContentHandlerTest extends HandlerTest
             ->method( 'getContentHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
-
         $expects = $innerHandler
             ->expects( $this->once() )
             ->method( $method );
@@ -81,5 +80,4 @@ class ContentHandlerTest extends HandlerTest
         $handler = $this->persistenceHandler->contentHandler();
         call_user_func_array( array( $handler, $method ), $arguments );
     }
-
 }
