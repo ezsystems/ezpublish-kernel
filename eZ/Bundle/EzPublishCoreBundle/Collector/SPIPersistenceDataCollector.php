@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
-
 /**
  * Collects number of calls made to SPI Persistence as logged by eZ\Publish\Core\Persistence\Cache\*.
  */
