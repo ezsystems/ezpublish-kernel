@@ -61,15 +61,6 @@ class LegacyFileService implements FileService
         $this->installDir = $installDir;
         $this->storageDir = $storageDir;
         $this->identifierPrefix = $identifierPrefix;
-
-        echo __METHOD__ . "\n";
-        print_r(
-            array(
-                '$this->installDir' => $this->installDir,
-                '$this->storageDir' => $this->storageDir,
-                '$this->identifierPrefix' => $this->identifierPrefix,
-            )
-        );
     }
 
     /**
@@ -86,20 +77,38 @@ class LegacyFileService implements FileService
      *
      * @return \eZClusterFileHandler
      */
-    private function getClusterHandler()
+    private function getClusterHandler( $filePath = null )
     {
-        if ( $this->clusterHandler === null )
+        if ( $filePath )
         {
-            $this->clusterHandler = $this->getLegacyKernel()->runCallback(
-                function ()
-                {
-                    return \eZClusterFileHandler::instance();
-                },
-                false
-            );
+            if ( !isset( $this->clusterFileHandlers[$filePath ] ) )
+            {
+                $this->clusterFileHandlers[$filePath] = $this->getLegacyKernel()->runCallback(
+                    function () use ( $filePath )
+                    {
+                        return \eZClusterFileHandler::instance( $filePath );
+                    },
+                    false
+                );
+            }
+            $clusterHandler = $this->clusterFileHandlers[$filePath ];
+        }
+        else
+        {
+            if ( $this->clusterHandler === null )
+            {
+                $this->clusterHandler = $this->getLegacyKernel()->runCallback(
+                    function ()
+                    {
+                        return \eZClusterFileHandler::instance();
+                    },
+                    false
+                );
+            }
+            $clusterHandler = $this->clusterHandler;
         }
 
-        return $this->clusterHandler;
+        return $clusterHandler;
     }
 
     /**
@@ -142,7 +151,6 @@ class LegacyFileService implements FileService
      */
     public function storeFile( $sourcePath, $storageIdentifier )
     {
-        echo "Attempting to store file $sourcePath with storage id $storageIdentifier\n";
         $fullSourcePath = $this->getFullPath( $sourcePath, true );
         $targetPath = $this->getTargetPath( $storageIdentifier );
 
@@ -215,7 +223,6 @@ class LegacyFileService implements FileService
         $storageIdentifier = ( !empty( $this->identifierPrefix )
             ? $this->identifierPrefix . '/'
             : '' ) . $path;
-        echo "Converting path $path to storageIdentifier $storageIdentifier\n";
         return $storageIdentifier;
     }
 
@@ -234,8 +241,22 @@ class LegacyFileService implements FileService
      */
     public function getMetaData( $storageIdentifier )
     {
-        // Does not depend on GD
-        $metaData = getimagesize( $this->getFullPath( $storageIdentifier ) );
+        $clusterHandler = $this->getClusterHandler(
+            $this->getTargetPath( $storageIdentifier )
+        );
+
+        $metaData = $this->getLegacyKernel()->runCallback(
+            /** @var $clusterHandler \eZClusterFileHandlerInterface */
+            function() use( $clusterHandler )
+            {
+                $temporaryFileName = $clusterHandler->fetchUnique();
+                $metaData = getimagesize( $temporaryFileName );
+
+                $clusterHandler->fileDeleteLocal( $temporaryFileName );
+
+                return $metaData;
+            }
+        );
 
         return array(
             'width' => $metaData[0],
