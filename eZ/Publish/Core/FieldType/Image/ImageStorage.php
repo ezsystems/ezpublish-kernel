@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\FieldType\Image;
 
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
-use eZ\Publish\Core\FieldType\FileService;
+use eZ\Publish\SPI\FieldType\FileService;
 use eZ\Publish\Core\FieldType\GatewayBasedStorage;
 
 /**
@@ -75,21 +75,23 @@ class ImageStorage extends GatewayBasedStorage
             return true;
         }
 
-        if ( !$this->fileService->exists( $storedValue['path'] ) )
+        // Only store a new copy of the image, if it does not exist, yet
+        $nodePathString = $this->getGateway( $context )->getNodePathString( $versionInfo, $field->id );
+
+        $targetPath = $this->getFieldPath(
+            $field->id,
+            $versionInfo->versionNo,
+            $field->languageCode,
+            $nodePathString
+        ) . '/' . $storedValue['fileName'];
+
+        $storageIdentifier = $this->fileService->getStorageIdentifier( $targetPath );
+
+        if ( !$this->fileService->exists( $storageIdentifier ) )
         {
-            // Only store a new copy of the image, if it does not exist, yet
-            $nodePathString = $this->getGateway( $context )->getNodePathString( $versionInfo, $field->id );
-
-            $targetPath = $this->getFieldPath(
-                $field->id,
-                $versionInfo->versionNo,
-                $field->languageCode,
-                $nodePathString
-            ) . '/' . $storedValue['fileName'];
-
             $storedValue['path'] = $this->fileService->storeFile(
                 $storedValue['path'],
-                $this->fileService->getStorageIdentifier( $targetPath )
+                $storageIdentifier
             );
         }
 

@@ -17,7 +17,7 @@ use ReflectionObject;
  * @group fieldType
  * @group ezurl
  */
-class UserTest extends StandardizedFieldTypeTest
+class UserTest extends FieldTypeTest
 {
     /**
      * Returns the field type under test.

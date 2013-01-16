@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue;
 use eZ\Publish\Core\FieldType\Validator\EmailAddressValidator;
+use PHPUnit_Framework_TestCase;
 
 /**
  *
@@ -18,7 +19,7 @@ use eZ\Publish\Core\FieldType\Validator\EmailAddressValidator;
  * @group fieldType
  * @group validator
  */
-class EmailAddressValidatorTest extends FieldTypeTest
+class EmailAddressValidatorTest extends PHPUnit_Framework_TestCase
 {
 
     /**

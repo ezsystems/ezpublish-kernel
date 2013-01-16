@@ -17,7 +17,7 @@ use ReflectionObject;
  * @group fieldType
  * @group ezfloat
  */
-class FloatTest extends StandardizedFieldTypeTest
+class FloatTest extends FieldTypeTest
 {
     /**
      * Returns the field type under test.

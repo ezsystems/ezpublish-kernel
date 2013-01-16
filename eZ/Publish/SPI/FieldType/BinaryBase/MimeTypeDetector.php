@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\BinaryBase;
+namespace eZ\Publish\SPI\FieldType\BinaryBase;
 
 interface MimeTypeDetector
 {

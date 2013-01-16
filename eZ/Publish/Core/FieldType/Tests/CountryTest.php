@@ -17,7 +17,7 @@ use ReflectionObject;
  * @group fieldType
  * @group ezcountry
  */
-class CountryTest extends StandardizedFieldTypeTest
+class CountryTest extends FieldTypeTest
 {
     /**
      * Returns the field type under test.

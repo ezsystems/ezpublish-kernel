@@ -12,12 +12,13 @@ namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Rating\Type as Rating;
 use eZ\Publish\Core\FieldType\Rating\Value as RatingValue;
 use ReflectionObject;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @group fieldType
  * @group ezsrrating
  */
-class RatingTest extends FieldTypeTest
+class RatingTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Returns the field type under test.

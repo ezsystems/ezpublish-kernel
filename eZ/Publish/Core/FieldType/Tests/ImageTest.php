@@ -17,7 +17,7 @@ use ReflectionObject;
  * @group fieldType
  * @group ezfloat
  */
-class ImageTest extends StandardizedFieldTypeTest
+class ImageTest extends FieldTypeTest
 {
     /**
      * FileService mock
@@ -34,14 +34,14 @@ class ImageTest extends StandardizedFieldTypeTest
     /**
      * Returns a mock for the FileService
      *
-     * @return \eZ\Publish\Core\FieldType\FileService
+     * @return \eZ\Publish\SPI\FieldType\FileService
      */
     protected function getFileServiceMock()
     {
         if ( !isset( $this->fileServiceMock ) )
         {
             $this->fileServiceMock = $this->getMock(
-                'eZ\\Publish\\Core\\FieldType\\FileService',
+                'eZ\\Publish\\SPI\\FieldType\\FileService',
                 array(),
                 array(),
                 '',
@@ -49,6 +49,24 @@ class ImageTest extends StandardizedFieldTypeTest
             );
         }
         return $this->fileServiceMock;
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\FieldType\BinaryBase\MimeTypeDetector
+     */
+    protected function getMimeTypeDetectorMock()
+    {
+        if ( !isset( $this->mimeTypeDetectorMock ) )
+        {
+            $this->mimeTypeDetectorMock = $this->getMock(
+                'eZ\\Publish\\SPI\\FieldType\\BinaryBase\\MimeTypeDetector',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->mimeTypeDetectorMock;
     }
 
     /**
@@ -65,7 +83,8 @@ class ImageTest extends StandardizedFieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         return new ImageType(
-            $this->getFileServiceMock()
+            $this->getFileServiceMock(),
+            $this->getMimeTypeDetectorMock()
         );
     }
 
