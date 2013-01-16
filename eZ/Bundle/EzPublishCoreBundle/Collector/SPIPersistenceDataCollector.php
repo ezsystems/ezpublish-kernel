@@ -89,7 +89,9 @@ class SPIPersistenceDataCollector extends DataCollector
                 'namespace' => $namespace,
                 'class' => $class,
                 'method' => $method,
-                'arguments' => empty( $call['arguments'] ) ? '' : var_export( $call['arguments'], true )
+                'arguments' => empty( $call['arguments'] ) ?
+                    '' :
+                    preg_replace( array( '/^array\s\(\s/', '/,\s\)$/' ), '', var_export( $call['arguments'], true ) )
             );
         }
         return $calls;
@@ -102,11 +104,14 @@ class SPIPersistenceDataCollector extends DataCollector
      */
     public function getHandlers()
     {
+        $count = array();
         $handlers = array();
         foreach ( $this->data['handlers'] as $handler )
         {
             list( $class, $method ) = explode( '::', $handler );
-            $handlers[] = $method;
+
+            $count[$method] = ( isset($count[$method]) ? $count[$method] : 0 ) +1;
+            $handlers[$method] = $method . '(' . $count[$method] . ')';
         }
         return $handlers;
     }
