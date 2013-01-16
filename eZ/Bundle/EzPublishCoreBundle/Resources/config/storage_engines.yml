@@ -3,6 +3,8 @@ parameters:
     ezpublish.spi.persistence.lazy_factory.class: eZ\Publish\Core\Persistence\Factory
     ezpublish.spi.persistence.cache.sectionHandler.class: eZ\Publish\Core\Persistence\Cache\SectionHandler
     ezpublish.spi.persistence.cache.locationHandler.class: eZ\Publish\Core\Persistence\Cache\LocationHandler
+    ezpublish.spi.persistence.cache.contentHandler.class: eZ\Publish\Core\Persistence\Cache\ContentHandler
+    ezpublish.spi.persistence.cache.contentLanguageHandler.class: eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler
     ezpublish.spi.persistence.cache.contentTypeHandler.class: eZ\Publish\Core\Persistence\Cache\ContentTypeHandler
     ezpublish.spi.persistence.cache.persistenceLogger.class: eZ\Publish\Core\Persistence\Cache\PersistenceLogger
     ezpublish.spi.persistence.default_id: synthetical-parameter-set-in-RegisterStorageEnginePass
@@ -93,6 +95,8 @@ services:
             - @ezpublish.spi.persistence.lazy_factory
             - @ezpublish.spi.persistence.cache.sectionHandler
             - @ezpublish.spi.persistence.cache.locationHandler
+            - @ezpublish.spi.persistence.cache.contentHandler
+            - @ezpublish.spi.persistence.cache.contentLanguageHandler
             - @ezpublish.spi.persistence.cache.contentTypeHandler
             - @ezpublish.spi.persistence.cache.persistenceLogger
 
@@ -114,6 +118,20 @@ services:
 
     ezpublish.spi.persistence.cache.locationHandler:
         class: %ezpublish.spi.persistence.cache.locationHandler.class%
+        arguments:
+            - @cache
+            - @ezpublish.spi.persistence.lazy_factory
+            - @ezpublish.spi.persistence.cache.persistenceLogger
+
+    ezpublish.spi.persistence.cache.contentHandler:
+        class: %ezpublish.spi.persistence.cache.contentHandler.class%
+        arguments:
+            - @cache
+            - @ezpublish.spi.persistence.lazy_factory
+            - @ezpublish.spi.persistence.cache.persistenceLogger
+
+    ezpublish.spi.persistence.cache.contentLanguageHandler:
+        class: %ezpublish.spi.persistence.cache.contentLanguageHandler.class%
         arguments:
             - @cache
             - @ezpublish.spi.persistence.lazy_factory
