@@ -54,6 +54,34 @@ class ImageStorage extends GatewayBasedStorage
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage
      */
+    public function copyLegacyField( VersionInfo $versionInfo, Field $field, Field $originalField, array $context )
+    {
+        // Field copies don't store their own image, but store their own reference to it
+        $this->getGateway( $context )->storeImageReference( $originalField->value->data['path'], $field->id );
+
+        $contentMetaData = array(
+            'fieldId' => $field->id,
+            'versionNo' => $versionInfo->versionNo,
+            'languageCode' => $field->languageCode,
+        );
+
+        $storedValue = array_merge(
+            // Basic value data
+            $field->value->data,
+            // Image meta data
+            $this->fileService->getMetaData( $field->value->data['path'] ),
+            // Content meta data
+            $contentMetaData
+        );
+
+        $field->value->data = $storedValue;
+
+        return true;
+    }
+
+    /**
+     * @see \eZ\Publish\SPI\FieldType\FieldStorage
+     */
     public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         $storedValue = isset( $field->value->externalData )
@@ -89,19 +117,20 @@ class ImageStorage extends GatewayBasedStorage
 
         if ( !$this->fileService->exists( $storageIdentifier ) )
         {
-            $storedValue['path'] = $this->fileService->storeFile(
+            $this->fileService->storeFile(
                 $storedValue['path'],
                 $storageIdentifier
             );
         }
+        $storedValue['path'] = $storageIdentifier;
 
-        $this->getGateway( $context )->storeImageReference( $storedValue['path'], $field->id );
+        $this->getGateway( $context )->storeImageReference( $storageIdentifier, $field->id );
 
         $storedValue = array_merge(
             // Basic value data
             $storedValue,
             // Image meta data
-            $this->fileService->getMetaData( $storedValue['path'] ),
+            $this->fileService->getMetaData( $storageIdentifier ),
             // Content meta data
             $contentMetaData
         );

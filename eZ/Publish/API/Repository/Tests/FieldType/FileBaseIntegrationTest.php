@@ -122,18 +122,26 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
             return;
         }
 
-        $iterator = self::getStorageDirIterator();
-
-        foreach ( $iterator as $path => $fileInfo )
+        try
         {
-            if ( $fileInfo->isDir() )
+            $iterator = self::getStorageDirIterator();
+
+            foreach ( $iterator as $path => $fileInfo )
             {
-                rmdir( $path );
-            }
-            else
-            {
-                unlink( $path );
+                if ( $fileInfo->isDir() )
+                {
+                    rmdir( $path );
+                }
+                else
+                {
+                    unlink( $path );
+                }
             }
         }
+        catch ( \UnexpectedValueException $e )
+        {
+            // The directory to cleanup just doesn't exist
+        }
+
     }
 }
