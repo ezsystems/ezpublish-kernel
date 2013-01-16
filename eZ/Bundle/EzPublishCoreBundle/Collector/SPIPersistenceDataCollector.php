@@ -110,7 +110,7 @@ class SPIPersistenceDataCollector extends DataCollector
         {
             list( $class, $method ) = explode( '::', $handler );
 
-            $count[$method] = ( isset($count[$method]) ? $count[$method] : 0 ) +1;
+            $count[$method] = ( isset($count[$method]) ? $count[$method] : 0 ) + 1;
             $handlers[$method] = $method . '(' . $count[$method] . ')';
         }
         return $handlers;
