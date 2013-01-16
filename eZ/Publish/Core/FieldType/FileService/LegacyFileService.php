@@ -122,9 +122,9 @@ class LegacyFileService implements FileService
      *
      * @return string
      */
-    protected function getFullPath( $path, $allowLocal = false )
+    protected function getFullPath( $path )
     {
-        if ( $allowLocal && substr( $path, 0, 1 ) === '/' )
+        if ( substr( $path, 0, 1 ) === '/' )
         {
             return $path;
         }
@@ -155,7 +155,7 @@ class LegacyFileService implements FileService
                 $scope = 'todo';
                 $clusterHandler->fileStoreContents(
                     $targetPath,
-                    fread( $fullSourcePath, filesize( $fullSourcePath ) ),
+                    file_get_contents( $fullSourcePath ),
                     'application/todo',
                     $scope
                 );

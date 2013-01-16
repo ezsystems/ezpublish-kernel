@@ -9,20 +9,25 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\File;
 
-use eZ\Publish\Core\FieldType\FileService\LocalFileService;
+use eZ\Publish\Core\FieldType\FileService\LegacyFileService as BaseFileService;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 /**
- * Local file service for images.
+ * Configuration aware local file service for Image FieldType storage
  */
-class ConfiguredLocalImageService extends LocalFileService
+class ConfiguredLocalImageService extends BaseFileService
 {
-    public function __construct( ConfigResolverInterface $resolver, $installDir )
+    public function __construct( \Closure $kernelClosure, ConfigResolverInterface $resolver, $installDir )
     {
         parent::__construct(
+            $kernelClosure,
             $installDir,
             '',
-            $resolver->getParameter( 'var_dir' ) . '/' . $resolver->getParameter( 'storage_dir' ) . '/images'
+            sprintf(
+                '%s/%s/images',
+                $resolver->getParameter( 'var_dir' ),
+                $resolver->getParameter( 'storage_dir' )
+            )
         );
     }
 }

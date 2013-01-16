@@ -378,7 +378,7 @@ services:
 
     ezpublish.fieldType.ezimage.fileService:
         class: %ezpublish.fieldType.ezimage.fileService.class%
-        arguments: [@ezpublish.config.resolver, %webroot_dir%]
+        arguments: [@ezpublish_legacy.kernel, @ezpublish.config.resolver, %webroot_dir%]
 
     ezpublish.fieldType.ezimage.pathGenerator:
         class: %ezpublish.fieldType.ezimage.pathGenerator.class%
