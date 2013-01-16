@@ -656,7 +656,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ContentTypeId
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
-    public function testContentTypeFilter()
+    public function testContentTypeIdFilter()
     {
         $locator = $this->getContentSearchHandler();
 
