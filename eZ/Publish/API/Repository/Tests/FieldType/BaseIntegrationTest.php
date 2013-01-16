@@ -595,7 +595,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
     /**
      * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
-     * @dep_ends testCreateContent
+     * @depends testCreateContent
      */
     public function testLoadField()
     {
@@ -609,8 +609,10 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     /**
      * @depends testLoadField
      */
-    public function testLoadFieldType( $content )
+    public function testLoadFieldType()
     {
+        $content = $this->testCreateContent();
+
         foreach ( $content->getFields() as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
@@ -625,9 +627,9 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     /**
      * @depends testLoadFieldType
      */
-    public function testLoadExternalData( Field $field )
+    public function testLoadExternalData()
     {
-        $this->assertFieldDataLoadedCorrect( $field );
+        $this->assertFieldDataLoadedCorrect( $this->testLoadFieldType() );
     }
 
     /**

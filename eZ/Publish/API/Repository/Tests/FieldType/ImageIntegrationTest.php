@@ -28,7 +28,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     /**
      * Storage dir settings key
      */
-    protected static $storageDirConfigKey = 'image_storage_dir';
+    protected static $storageDirConfigKey = 'image_identifier_prefix';
 
     /**
      * Sets up fixture data.
@@ -180,7 +180,8 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         );
 
         $this->assertTrue(
-            file_exists( $this->getInstallDir() . '/' . $field->value->path )
+            file_exists( $this->getInstallDir() . '/' . $field->value->path ),
+            "Failed asserting that " . $this->getInstallDir() . '/' . $field->value->path . " exists."
         );
 
         self::$loadedImagePath = $field->value->path;
