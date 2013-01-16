@@ -60,8 +60,10 @@ abstract class CriterionHandler
     abstract public function accept( Criterion $criterion );
 
     /**
-     * Check if this criterion handler accepts to handle the given criterion.
+     * Generate query expression for a Criterion this handler accepts
      *
+     * accept() must be called before calling this method.
+     * 
      * @param CriteriaConverter $converter
      * @param \ezcQuerySelect $query
      * @param Criterion $criterion
