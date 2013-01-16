@@ -1743,10 +1743,14 @@ class ContentService implements ContentServiceInterface
      */
     public function buildContentDomainObject( SPIContent $spiContent )
     {
-        $versionInfo = $this->buildVersionInfoDomainObject( $spiContent->versionInfo );
+        $type = $this->repository->getContentTypeService()->loadContentType(
+            $spiContent->versionInfo->contentInfo->contentTypeId
+        );
+
+        $versionInfo = $this->buildVersionInfoDomainObject( $spiContent->versionInfo, $type );
         return new Content(
             array(
-                "internalFields" => $this->buildDomainFields( $spiContent->fields ),
+                "internalFields" => $this->buildDomainFields( $spiContent->fields, $type ),
                 "versionInfo" => $versionInfo,
             )
         );
@@ -1759,12 +1763,31 @@ class ContentService implements ContentServiceInterface
      *
      * @return array
      */
-    protected function buildDomainFields( array $spiFields )
+    protected function buildDomainFields( array $spiFields, ContentType $type = null )
     {
         $fields = array();
 
         foreach ( $spiFields as $spiField )
         {
+            if ( $type === null )
+            {
+                $identifier = $this->persistenceHandler->contentTypeHandler()->getFieldDefinition(
+                    $spiField->fieldDefinitionId,
+                    ContentType::STATUS_DEFINED
+                )->identifier;
+            }
+            else
+            {
+                foreach ( $type->fieldDefinitions as $fieldDefinitions )
+                {
+                    if ( $fieldDefinitions->id === $spiField->fieldDefinitionId )
+                    {
+                        $identifier = $fieldDefinitions->identifier;
+                        break;
+                    }
+                }
+            }
+
             $fields[] = new Field(
                 array(
                     "id" => $spiField->id,
@@ -1772,10 +1795,7 @@ class ContentService implements ContentServiceInterface
                         $spiField->type
                     )->fromPersistenceValue( $spiField->value ),
                     "languageCode" => $spiField->languageCode,
-                    "fieldDefIdentifier" => $this->persistenceHandler->contentTypeHandler()->getFieldDefinition(
-                        $spiField->fieldDefinitionId,
-                        ContentType::STATUS_DEFINED
-                    )->identifier
+                    "fieldDefIdentifier" => $identifier
                 )
             );
         }
@@ -1794,8 +1814,13 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\ContentInfo
      */
-    public function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo )
+    public function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo, ContentType $type = null )
     {
+        if ( $type === null )
+        {
+            $type = $this->repository->getContentTypeService()->loadContentType( $spiContentInfo->contentTypeId );
+        }
+
         return new ContentInfo(
             array(
                 "id" => $spiContentInfo->id,
@@ -1814,9 +1839,7 @@ class ContentService implements ContentServiceInterface
                 "remoteId" => $spiContentInfo->remoteId,
                 "mainLanguageCode" => $spiContentInfo->mainLanguageCode,
                 "mainLocationId" => $spiContentInfo->mainLocationId,
-                "contentType" => $this->repository->getContentTypeService()->loadContentType(
-                    $spiContentInfo->contentTypeId
-                )
+                "contentType" => $type
             )
         );
     }
@@ -1828,7 +1851,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return VersionInfo
      */
-    protected function buildVersionInfoDomainObject( SPIVersionInfo $spiVersionInfo )
+    protected function buildVersionInfoDomainObject( SPIVersionInfo $spiVersionInfo, ContentType $type = null )
     {
         $languageCodes = array();
         foreach ( $spiVersionInfo->languageIds as $languageId )
@@ -1849,7 +1872,7 @@ class ContentService implements ContentServiceInterface
                 "initialLanguageCode" => $spiVersionInfo->initialLanguageCode,
                 "languageCodes" => $languageCodes,
                 "names" => $spiVersionInfo->names,
-                "contentInfo" => $this->buildContentInfoDomainObject( $spiVersionInfo->contentInfo )
+                "contentInfo" => $this->buildContentInfoDomainObject( $spiVersionInfo->contentInfo, $type )
             )
         );
     }
