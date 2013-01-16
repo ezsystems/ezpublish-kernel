@@ -13,6 +13,8 @@ use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandlerInterface;
 use eZ\Publish\Core\Persistence\Cache\SectionHandler as CacheSectionHandler;
 use eZ\Publish\Core\Persistence\Cache\LocationHandler as CacheLocationHandler;
+use eZ\Publish\Core\Persistence\Cache\ContentHandler as CacheContentHandler;
+use eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler as CacheContentLanguageHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentTypeHandler as CacheContentTypeHandler;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
@@ -30,6 +32,16 @@ class Handler implements PersistenceHandlerInterface
      * @var SectionHandler
      */
     protected $sectionHandler;
+
+    /**
+     * @var ContentHandler
+     */
+    protected $contentHandler;
+
+    /**
+     * @var ContentLanguageHandler
+     */
+    protected $contentLanguageHandler;
 
     /**
      * @var ContentTypeHandler
@@ -52,6 +64,8 @@ class Handler implements PersistenceHandlerInterface
      * @param \eZ\Publish\Core\Persistence\Factory $persistenceFactory Must be factory for inner persistence, ie: legacy
      * @param SectionHandler $sectionHandler
      * @param LocationHandler $locationHandler
+     * @param ContentHandler $contentHandler
+     * @param ContentLanguageHandler $contentLanguageHandler
      * @param ContentTypeHandler $contentTypeHandler
      * @param PersistenceLogger $logger
      */
@@ -59,6 +73,8 @@ class Handler implements PersistenceHandlerInterface
         PersistenceFactory $persistenceFactory,
         CacheSectionHandler $sectionHandler,
         CacheLocationHandler $locationHandler,
+        CacheContentHandler $contentHandler,
+        CacheContentLanguageHandler $contentLanguageHandler,
         CacheContentTypeHandler $contentTypeHandler,
         PersistenceLogger $logger
     )
@@ -66,6 +82,8 @@ class Handler implements PersistenceHandlerInterface
         $this->persistenceFactory = $persistenceFactory;
         $this->sectionHandler = $sectionHandler;
         $this->locationHandler = $locationHandler;
+        $this->contentHandler = $contentHandler;
+        $this->contentLanguageHandler = $contentLanguageHandler;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->logger = $logger;
     }
@@ -75,8 +93,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function contentHandler()
     {
-        $this->logger->logUnCachedHandler( __METHOD__ );
-        return $this->persistenceFactory->getContentHandler();
+        return $this->contentHandler;
     }
 
     /**
@@ -101,8 +118,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function contentLanguageHandler()
     {
-        $this->logger->logUnCachedHandler( __METHOD__ );
-        return $this->persistenceFactory->getContentLanguageHandler();
+        return $this->contentLanguageHandler;
     }
 
     /**
