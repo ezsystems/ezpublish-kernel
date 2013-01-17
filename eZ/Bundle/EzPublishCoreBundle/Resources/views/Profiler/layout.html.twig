@@ -10,7 +10,7 @@
                 <b>SPI calls</b> <span class="sf-toolbar-status sf-toolbar-status-green">{{ collector.count }}</span>
         </div>
         <div class="sf-toolbar-info-piece">
-                <b>SPI handlers</b> <span class="sf-toolbar-status sf-toolbar-status-green">{{ collector.handlers|length }}</span>
+                <b>SPI handlers</b> <span class="sf-toolbar-status sf-toolbar-status-green">{{ collector.handlerscount }}</span>
         </div>
     {% endset %}
     {% include 'WebProfilerBundle:Profiler:toolbar_item.html.twig' with { 'link': profiler_url } %}
@@ -33,10 +33,12 @@
             <th>Total Uncached SPI calls:</th>
             <td>{{ collector.count }}</td>
         </tr>
+        {% if collector.handlerscount %}
         <tr>
             <th>Uncached SPI handlers(times loaded):</th>
             <td>{{ collector.handlers|join(', ') }}</td>
         </tr>
+        {% endif %}
     </table>
 
     <h3>Uncached SPI calls</h3>

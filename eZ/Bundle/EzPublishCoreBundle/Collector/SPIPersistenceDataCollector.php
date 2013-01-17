@@ -115,4 +115,19 @@ class SPIPersistenceDataCollector extends DataCollector
         }
         return $handlers;
     }
+
+    /**
+     * Returns un cached handlers being loaded
+     *
+     * @return array
+     */
+    public function getHandlersCount()
+    {
+        $count = array();
+        foreach ( $this->data['handlers'] as $handler )
+        {
+            $count[$handler] = ( isset($count[$handler]) ? $count[$handler] : 0 ) + 1;
+        }
+        return count( $count );
+    }
 }
