@@ -68,6 +68,19 @@ class FieldTypeRegistry
     }
 
     /**
+     * Register $fieldType with $identifier.
+     *
+     * @param $identifier
+     * @param mixed $fieldType Callable or FieldType instance.
+     *
+     * @return void
+     */
+    public function register( $identifier, $fieldType )
+    {
+        $this->settings[$identifier] = $fieldType;
+    }
+
+    /**
      * Instantiates a FieldType object.
      *
      * @throws \RuntimeException If field type for given $identifier is not found.
