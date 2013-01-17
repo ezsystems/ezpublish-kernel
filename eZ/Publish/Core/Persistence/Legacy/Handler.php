@@ -444,6 +444,7 @@ class Handler implements HandlerInterface
                                 new CriterionHandler\LogicalOr( $db ),
                                 new CriterionHandler\Subtree( $db ),
                                 new CriterionHandler\ContentTypeId( $db ),
+                                new CriterionHandler\ContentTypeIdentifier( $db ),
                                 new CriterionHandler\ContentTypeGroupId( $db ),
                                 new CriterionHandler\DateMetadata( $db ),
                                 new CriterionHandler\LocationId( $db ),
