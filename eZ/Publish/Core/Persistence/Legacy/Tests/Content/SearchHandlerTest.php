@@ -1585,3 +1585,4 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 }
+

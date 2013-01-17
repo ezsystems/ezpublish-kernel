@@ -62,3 +62,4 @@ class ContentTypeIdentifier extends CriterionHandler
         );
     }
 }
+
