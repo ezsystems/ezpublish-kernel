@@ -408,6 +408,7 @@ class Handler implements HandlerInterface
     {
         return $this->converterRegistry;
     }
+
     /**
      * Returns the storage registry
      *
@@ -416,6 +417,16 @@ class Handler implements HandlerInterface
     public function getStorageRegistry()
     {
         return $this->storageRegistry;
+    }
+
+    /**
+     * Returns the field type registry
+     *
+     * @return \eZ\Publish\Core\Persistence\FieldTypeRegistry
+     */
+    public function getFieldTypeRegistry()
+    {
+        return $this->fieldTypeRegistry;
     }
 
     /**
