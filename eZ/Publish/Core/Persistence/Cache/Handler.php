@@ -16,6 +16,7 @@ use eZ\Publish\Core\Persistence\Cache\LocationHandler as CacheLocationHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentHandler as CacheContentHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler as CacheContentLanguageHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentTypeHandler as CacheContentTypeHandler;
+use eZ\Publish\Core\Persistence\Cache\UserHandler as CacheUserHandler;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
 /**
@@ -54,6 +55,11 @@ class Handler implements PersistenceHandlerInterface
     protected $locationHandler;
 
     /**
+     * @var UserHandler
+     */
+    protected $userHandler;
+
+    /**
      * @var PersistenceLogger
      */
     protected $logger;
@@ -67,6 +73,7 @@ class Handler implements PersistenceHandlerInterface
      * @param ContentHandler $contentHandler
      * @param ContentLanguageHandler $contentLanguageHandler
      * @param ContentTypeHandler $contentTypeHandler
+     * @param UserHandler $userHandler
      * @param PersistenceLogger $logger
      */
     public function __construct(
@@ -76,6 +83,7 @@ class Handler implements PersistenceHandlerInterface
         CacheContentHandler $contentHandler,
         CacheContentLanguageHandler $contentLanguageHandler,
         CacheContentTypeHandler $contentTypeHandler,
+        CacheUserHandler $userHandler,
         PersistenceLogger $logger
     )
     {
@@ -85,6 +93,7 @@ class Handler implements PersistenceHandlerInterface
         $this->contentHandler = $contentHandler;
         $this->contentLanguageHandler = $contentLanguageHandler;
         $this->contentTypeHandler = $contentTypeHandler;
+        $this->userHandler = $userHandler;
         $this->logger = $logger;
     }
 
@@ -143,8 +152,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function userHandler()
     {
-        $this->logger->logUnCachedHandler( __METHOD__ );
-        return $this->persistenceFactory->getUserHandler();
+        return $this->userHandler;
     }
 
     /**

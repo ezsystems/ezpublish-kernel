@@ -151,10 +151,10 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testUserHandler()
     {
-        $this->loggerMock->expects( $this->once() )->method( 'logUnCachedHandler' );
+        $this->loggerMock->expects( $this->never() )->method( $this->anything() );
         $handler = $this->persistenceHandler->userHandler();
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler', $handler );
-        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\UserHandler', $handler );
+        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Cache\\UserHandler', $handler );
     }
 
     /**
