@@ -55,6 +55,10 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
+        $handler->getFieldTypeRegistry()->register(
+            'ezgmaplocation',
+            new FieldType\MapLocation\Type()
+        );
         $handler->getStorageRegistry()->register(
             'ezgmaplocation',
             new FieldType\MapLocation\MapLocationStorage(

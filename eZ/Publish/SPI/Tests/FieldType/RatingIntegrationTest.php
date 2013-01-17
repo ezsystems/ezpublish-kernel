@@ -54,6 +54,10 @@ class RatingIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
+        $handler->getFieldTypeRegistry()->register(
+            'ezsrrating',
+            new FieldType\Rating\Type()
+        );
         $handler->getStorageRegistry()->register(
             'ezsrrating',
             new FieldType\NullStorage()

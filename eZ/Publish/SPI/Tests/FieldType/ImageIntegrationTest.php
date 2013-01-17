@@ -78,6 +78,10 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     {
         $handler = $this->getHandler();
 
+        $handler->getFieldTypeRegistry()->register(
+            'ezimage',
+            new FieldType\Image\Type( $this->getFileService() )
+        );
         $handler->getStorageRegistry()->register(
             'ezimage',
             new FieldType\Image\ImageStorage(

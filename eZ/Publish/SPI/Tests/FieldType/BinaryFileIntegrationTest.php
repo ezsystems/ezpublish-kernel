@@ -79,6 +79,13 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     {
         $handler = $this->getHandler();
 
+        $handler->getFieldTypeRegistry()->register(
+            'ezauthor',
+            new FieldType\BinaryFile\Type(
+                $this->getFileService(),
+                $this->getMimeTypeDetector()
+            )
+        );
         $handler->getStorageRegistry()->register(
             'ezbinaryfile',
             new FieldType\BinaryFile\BinaryFileStorage(
