@@ -413,12 +413,25 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::loadByIdentifier
      */
-    public function testLoadByIdentifier()
+    public function testLoadByIdentifierIsMiss()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
+        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
         $this->cacheMock
-            ->expects( $this->never() )
-            ->method( $this->anything() );
+            ->expects( $this->once() )
+            ->method( 'get' )
+            ->with( 'contentType', 'identifier', 'forum' )
+            ->will( $this->returnValue( $cacheItemMock ) );
+
+        $cacheItemMock
+            ->expects( $this->once() )
+            ->method( 'get' )
+            ->will( $this->returnValue( null ) );
+
+        $cacheItemMock
+            ->expects( $this->once() )
+            ->method( 'isMiss' )
+            ->will( $this->returnValue( true ) );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler' );
         $this->persistenceFactoryMock
@@ -430,7 +443,75 @@ class ContentTypeHandlerTest extends HandlerTest
             ->expects( $this->once() )
             ->method( 'loadByIdentifier' )
             ->with( 'forum' )
-            ->will( $this->returnValue( null ) );
+            ->will( $this->returnValue( new SPIType( array( 'id' => 55, 'identifier' => 'forum' ) ) ) );
+
+        $cacheItemMock
+            ->expects( $this->once() )
+            ->method( 'set' )
+            ->with( 55 );
+
+        $handler = $this->persistenceHandler->contentTypeHandler();
+        $handler->loadByIdentifier( 'forum' );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Cache\ContentTypeHandler::loadByIdentifier
+     */
+    public function testLoadByIdentifierHasCache()
+    {
+        $this->loggerMock->expects( $this->never() )->method( $this->anything() );
+        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $this->cacheMock
+            ->expects( $this->at( 0 ) )
+            ->method( 'get' )
+            ->with( 'contentType', 'identifier', 'forum' )
+            ->will( $this->returnValue( $cacheItemMock ) );
+
+        $cacheItemMock
+            ->expects( $this->once() )
+            ->method( 'get' )
+            ->will( $this->returnValue( 55 ) );
+
+        $cacheItemMock
+            ->expects( $this->once() )
+            ->method( 'isMiss' )
+            ->will( $this->returnValue( false ) );
+
+        $this->persistenceFactoryMock
+            ->expects( $this->never() )
+            ->method( 'getContentTypeHandler' );
+
+        $cacheItemMock
+            ->expects( $this->never() )
+            ->method( 'set' );
+
+        // the code reuses load():
+        $cacheItemMock2 = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $this->cacheMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'get' )
+            ->with( 'contentType', 55 )
+            ->will( $this->returnValue( $cacheItemMock2 ) );
+
+        $cacheItemMock2
+            ->expects( $this->once() )
+            ->method( 'isMiss' )
+            ->will( $this->returnValue( false ) );
+
+        $cacheItemMock2
+            ->expects( $this->once() )
+            ->method( 'get' )
+            ->will(
+                $this->returnValue(
+                    new SPIType(
+                        array( 'id' => 55, 'name' => 'Forum', 'identifier' => 'forum'  )
+                    )
+                )
+            );
+
+        $cacheItemMock2
+            ->expects( $this->never() )
+            ->method( 'set' );
 
         $handler = $this->persistenceHandler->contentTypeHandler();
         $handler->loadByIdentifier( 'forum' );
@@ -470,10 +551,17 @@ class ContentTypeHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
         $this->cacheMock
-            ->expects( $this->once() )
+            ->expects( $this->at( 0 ) )
             ->method( 'get' )
             ->with( 'contentType', 55 )
             ->will( $this->returnValue( $cacheItemMock ) );
+
+        $cacheItemMock2 = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $this->cacheMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'get' )
+            ->with( 'contentType', 'identifier', 'forum' )
+            ->will( $this->returnValue( $cacheItemMock2 ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler' );
         $this->persistenceFactoryMock
@@ -499,6 +587,15 @@ class ContentTypeHandlerTest extends HandlerTest
             ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type' ) );
 
         $cacheItemMock
+            ->expects( $this->never() )
+            ->method( 'get' );
+
+        $cacheItemMock2
+            ->expects( $this->once() )
+            ->method( 'set' )
+            ->with( 55 );
+
+        $cacheItemMock2
             ->expects( $this->never() )
             ->method( 'get' );
 
@@ -546,10 +643,16 @@ class ContentTypeHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
         $this->cacheMock
-            ->expects( $this->once() )
+            ->expects( $this->at( 0 ) )
             ->method( 'get' )
             ->with( 'contentType', 55 )
             ->will( $this->returnValue( $cacheItemMock ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'clear' )
+            ->with( 'contentType', 'identifier' )
+            ->will( $this->returnValue( true ) );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler' );
         $this->persistenceFactoryMock
@@ -629,9 +732,15 @@ class ContentTypeHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
-            ->expects( $this->once() )
+            ->expects( $this->at( 0 ) )
             ->method( 'clear' )
             ->with( 'contentType', 44 )
+            ->will( $this->returnValue( true ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'clear' )
+            ->with( 'contentType', 'identifier' )
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler' );
@@ -1079,9 +1188,15 @@ class ContentTypeHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
-            ->expects( $this->once() )
+            ->expects( $this->at( 0 ) )
             ->method( 'clear' )
             ->with( 'contentType', 44 )
+            ->will( $this->returnValue( true ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'clear' )
+            ->with( 'contentType', 'identifier' )
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler' );

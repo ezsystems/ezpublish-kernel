@@ -167,8 +167,22 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function loadByIdentifier( $identifier )
     {
-        $this->logger->logCall( __METHOD__, array( 'type' => $identifier ) );
-        return $this->persistenceFactory->getContentTypeHandler()->loadByIdentifier( $identifier );
+        // Get identifier to id cache if there is one (avoids caching an object several times)
+        $cache = $this->cache->get( 'contentType', 'identifier', $identifier );
+        $typeId = $cache->get();
+        if ( $cache->isMiss() )
+        {
+            $this->logger->logCall( __METHOD__, array( 'type' => $identifier ) );
+            $type = $this->persistenceFactory->getContentTypeHandler()->loadByIdentifier( $identifier );
+            $cache->set( $type->id );
+        }
+        else
+        {
+            // Reuse load() if we have id
+            $type = $this->load( $typeId );
+        }
+
+        return $type;
     }
 
     /**
@@ -189,7 +203,11 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         $type = $this->persistenceFactory->getContentTypeHandler()->create( $contentType );
 
         if ( $type->status === Type::STATUS_DEFINED )
+        {
+            // Warm cache
             $this->cache->get( 'contentType', $type->id )->set( $type );
+            $this->cache->get( 'contentType', 'identifier', $type->identifier )->set( $type->id );
+        }
 
         return $type;
     }
@@ -203,9 +221,13 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         if ( $status !== Type::STATUS_DEFINED )
             return $this->persistenceFactory->getContentTypeHandler()->update( $typeId, $status, $struct );
 
+        // Warm cache
         $this->cache
             ->get( 'contentType', $typeId )
             ->set( $type = $this->persistenceFactory->getContentTypeHandler()->update( $typeId, $status, $struct ) );
+
+        // Clear identifier cache in case it was changed
+        $this->cache->clear( 'contentType', 'identifier' );
 
         return $type;
     }
@@ -219,7 +241,11 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         $return = $this->persistenceFactory->getContentTypeHandler()->delete( $typeId, $status );
 
         if ( $status === Type::STATUS_DEFINED )
+        {
+            // Clear type cache and all identifier cache (as we don't know the identifier)
             $this->cache->clear( 'contentType', $typeId );
+            $this->cache->clear( 'contentType', 'identifier' );
+        }
 
         return $return;
     }
@@ -336,6 +362,9 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     {
         $this->logger->logCall( __METHOD__, array( 'type' => $typeId ) );
         $this->persistenceFactory->getContentTypeHandler()->publish( $typeId );
+
+        // Clear type cache and all identifier cache (as we don't know the identifier)
         $this->cache->clear( 'contentType', $typeId );
+        $this->cache->clear( 'contentType', 'identifier' );
     }
 }
