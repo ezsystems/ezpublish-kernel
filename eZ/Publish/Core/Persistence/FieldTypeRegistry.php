@@ -100,15 +100,19 @@ class FieldTypeRegistry
             );
         }
 
-        if ( !$this->settings[$identifier] instanceof FieldTypeInterface
-            && !is_callable( $this->settings[$identifier] )
-        )
+        $fieldType = $this->settings[$identifier];
+
+        if ( !$this->settings[$identifier] instanceof FieldTypeInterface )
         {
-            throw new RuntimeException( "FieldType '$identifier' is not callable or instance" );
+            if ( !is_callable( $this->settings[$identifier] ) )
+            {
+                throw new RuntimeException( "FieldType '$identifier' is not callable or instance" );
+            }
+
+            /** @var $fieldType \Closure */
+            $fieldType = $fieldType();
         }
 
-        /** @var $closure \Closure */
-        $closure = $this->settings[$identifier];
-        return $closure();
+        return $fieldType;
     }
 }
