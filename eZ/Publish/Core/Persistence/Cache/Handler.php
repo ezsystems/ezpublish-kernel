@@ -17,6 +17,7 @@ use eZ\Publish\Core\Persistence\Cache\ContentHandler as CacheContentHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler as CacheContentLanguageHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentTypeHandler as CacheContentTypeHandler;
 use eZ\Publish\Core\Persistence\Cache\UserHandler as CacheUserHandler;
+use eZ\Publish\Core\Persistence\Cache\SearchHandler as CacheSearchHandler;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
 /**
@@ -60,6 +61,11 @@ class Handler implements PersistenceHandlerInterface
     protected $userHandler;
 
     /**
+     * @var SearchHandler
+     */
+    protected $searchHandler;
+
+    /**
      * @var PersistenceLogger
      */
     protected $logger;
@@ -74,6 +80,7 @@ class Handler implements PersistenceHandlerInterface
      * @param ContentLanguageHandler $contentLanguageHandler
      * @param ContentTypeHandler $contentTypeHandler
      * @param UserHandler $userHandler
+     * @param SearchHandler $searchHandler
      * @param PersistenceLogger $logger
      */
     public function __construct(
@@ -84,6 +91,7 @@ class Handler implements PersistenceHandlerInterface
         CacheContentLanguageHandler $contentLanguageHandler,
         CacheContentTypeHandler $contentTypeHandler,
         CacheUserHandler $userHandler,
+        CacheSearchHandler $searchHandler,
         PersistenceLogger $logger
     )
     {
@@ -94,6 +102,7 @@ class Handler implements PersistenceHandlerInterface
         $this->contentLanguageHandler = $contentLanguageHandler;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->userHandler = $userHandler;
+        $this->searchHandler = $searchHandler;
         $this->logger = $logger;
     }
 
@@ -110,8 +119,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function searchHandler()
     {
-        $this->logger->logUnCachedHandler( __METHOD__ );
-        return $this->persistenceFactory->getSearchHandler();
+        return $this->searchHandler;
     }
 
     /**

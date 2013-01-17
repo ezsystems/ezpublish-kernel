@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Policy;
 
 /**
- * Test case for Persistence\Cache\ContentHandler
+ * Test case for Persistence\Cache\UserHandler
  */
 class UserHandlerTest extends HandlerTest
 {

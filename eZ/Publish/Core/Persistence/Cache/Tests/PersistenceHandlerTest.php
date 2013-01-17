@@ -60,10 +60,10 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testSearchHandler()
     {
-        $this->loggerMock->expects( $this->once() )->method( 'logUnCachedHandler' );
+        $this->loggerMock->expects( $this->never() )->method( $this->anything() );
         $handler = $this->persistenceHandler->searchHandler();
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Search\\Handler', $handler );
-        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\SearchHandler', $handler );
+        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Cache\\SearchHandler', $handler );
     }
 
     /**
