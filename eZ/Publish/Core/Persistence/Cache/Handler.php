@@ -18,6 +18,7 @@ use eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler as CacheContentLang
 use eZ\Publish\Core\Persistence\Cache\ContentTypeHandler as CacheContentTypeHandler;
 use eZ\Publish\Core\Persistence\Cache\UserHandler as CacheUserHandler;
 use eZ\Publish\Core\Persistence\Cache\SearchHandler as CacheSearchHandler;
+use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
 /**
@@ -66,6 +67,11 @@ class Handler implements PersistenceHandlerInterface
     protected $searchHandler;
 
     /**
+     * @var UrlAliasHandler
+     */
+    protected $urlAliasHandler;
+
+    /**
      * @var PersistenceLogger
      */
     protected $logger;
@@ -81,6 +87,7 @@ class Handler implements PersistenceHandlerInterface
      * @param ContentTypeHandler $contentTypeHandler
      * @param UserHandler $userHandler
      * @param SearchHandler $searchHandler
+     * @param UrlAliasHandler $urlAliasHandler
      * @param PersistenceLogger $logger
      */
     public function __construct(
@@ -92,6 +99,7 @@ class Handler implements PersistenceHandlerInterface
         CacheContentTypeHandler $contentTypeHandler,
         CacheUserHandler $userHandler,
         CacheSearchHandler $searchHandler,
+        CacheUrlAliasHandler $urlAliasHandler,
         PersistenceLogger $logger
     )
     {
@@ -103,6 +111,7 @@ class Handler implements PersistenceHandlerInterface
         $this->contentTypeHandler = $contentTypeHandler;
         $this->userHandler = $userHandler;
         $this->searchHandler = $searchHandler;
+        $this->urlAliasHandler = $urlAliasHandler;
         $this->logger = $logger;
     }
 
@@ -185,8 +194,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function urlAliasHandler()
     {
-        $this->logger->logUnCachedHandler( __METHOD__ );
-        return $this->persistenceFactory->getUrlAliasHandler();
+        return $this->urlAliasHandler;
     }
 
     /**

@@ -17,6 +17,7 @@ use eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler as CacheContentLang
 use eZ\Publish\Core\Persistence\Cache\ContentTypeHandler as CacheContentTypeHandler;
 use eZ\Publish\Core\Persistence\Cache\UserHandler as CacheUserHandler;
 use eZ\Publish\Core\Persistence\Cache\SearchHandler as CacheSearchHandler;
+use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -80,6 +81,7 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
             new CacheContentTypeHandler( $this->cacheMock, $this->persistenceFactoryMock, $this->loggerMock ),
             new CacheUserHandler( $this->cacheMock, $this->persistenceFactoryMock, $this->loggerMock ),
             new CacheSearchHandler( $this->cacheMock, $this->persistenceFactoryMock, $this->loggerMock ),
+            new CacheUrlAliasHandler( $this->cacheMock, $this->persistenceFactoryMock, $this->loggerMock ),
             $this->loggerMock
         );
     }

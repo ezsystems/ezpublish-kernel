@@ -83,6 +83,7 @@ services:
 
     ezpublish.api.persistence_handler:
         alias: ezpublish.spi.persistence.cache
+        #alias: ezpublish.api.storage_engine
 
     ezpublish.api.storage_engine:
         class: eZ\Publish\SPI\Persistence\Handler

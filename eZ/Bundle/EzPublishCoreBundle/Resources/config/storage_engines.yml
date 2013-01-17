@@ -8,6 +8,7 @@ parameters:
     ezpublish.spi.persistence.cache.contentTypeHandler.class: eZ\Publish\Core\Persistence\Cache\ContentTypeHandler
     ezpublish.spi.persistence.cache.userHandler.class: eZ\Publish\Core\Persistence\Cache\UserHandler
     ezpublish.spi.persistence.cache.searchHandler.class: eZ\Publish\Core\Persistence\Cache\SearchHandler
+    ezpublish.spi.persistence.cache.urlAliasHandler.class: eZ\Publish\Core\Persistence\Cache\UrlAliasHandler
     ezpublish.spi.persistence.cache.persistenceLogger.class: eZ\Publish\Core\Persistence\Cache\PersistenceLogger
     ezpublish.spi.persistence.default_id: synthetical-parameter-set-in-RegisterStorageEnginePass
 
@@ -102,6 +103,7 @@ services:
             - @ezpublish.spi.persistence.cache.contentTypeHandler
             - @ezpublish.spi.persistence.cache.userHandler
             - @ezpublish.spi.persistence.cache.searchHandler
+            - @ezpublish.spi.persistence.cache.urlAliasHandler
             - @ezpublish.spi.persistence.cache.persistenceLogger
 
     ezpublish.spi.persistence.lazy_factory:
@@ -157,6 +159,13 @@ services:
 
     ezpublish.spi.persistence.cache.searchHandler:
         class: %ezpublish.spi.persistence.cache.searchHandler.class%
+        arguments:
+            - @cache
+            - @ezpublish.spi.persistence.lazy_factory
+            - @ezpublish.spi.persistence.cache.persistenceLogger
+
+    ezpublish.spi.persistence.cache.urlAliasHandler:
+        class: %ezpublish.spi.persistence.cache.urlAliasHandler.class%
         arguments:
             - @cache
             - @ezpublish.spi.persistence.lazy_factory

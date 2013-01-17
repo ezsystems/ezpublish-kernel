@@ -164,10 +164,10 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testUrlAliasHandler()
     {
-        $this->loggerMock->expects( $this->once() )->method( 'logUnCachedHandler' );
+        $this->loggerMock->expects( $this->never() )->method( $this->anything() );
         $handler = $this->persistenceHandler->urlAliasHandler();
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler', $handler );
-        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\UrlAliasHandler', $handler );
+        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Cache\\UrlAliasHandler', $handler );
     }
 
     /**
