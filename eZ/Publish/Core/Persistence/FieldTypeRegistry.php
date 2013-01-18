@@ -19,30 +19,33 @@ use RuntimeException;
 class FieldTypeRegistry
 {
     /**
-     * @var array Hash of SPI FieldTypes or callable callbacks to generate one.
+     * Map of FieldTypes where key is field type identifier and value is FieldType object complying
+     * to {@link \eZ\Publish\SPI\FieldType\FieldType} interface or callable callback to generate one.
+     *
+     * @var mixed
      */
-    protected $settings = array();
+    protected $coreFieldTypeMap = array();
 
     /**
-     * Map of FieldTypes.
+     * Map of FieldTypes where key is field type identifier and value is FieldType object.
      *
-     * @var \eZ\Publish\Core\Persistence\FieldType[]
+     * @var \eZ\Publish\SPI\Persistence\FieldType[]
      */
     protected $fieldTypeMap = array();
 
     /**
      * Creates FieldType registry.
      *
-     * In $settings a mapping of field type identifier to object / callable is
+     * In $fieldTypeMap a mapping of field type identifier to object / callable is
      * expected, in case of callable factory it should return the FieldType object.
-     * The FieldType object must comply to the {@link \eZ\Publish\SPI\Persistence\FieldType} interface.
+     * The FieldType object must comply to the {@link \eZ\Publish\SPI\FieldType\FieldType} interface.
      *
-     * @param array $settings A map where key is field type identifier and value is
+     * @param array $fieldTypeMap A map where key is field type identifier and value is
      *              a callable factory to get FieldType OR FieldType object.
      */
-    public function __construct( array $settings )
+    public function __construct( array $fieldTypeMap )
     {
-        $this->settings = $settings;
+        $this->coreFieldTypeMap = $fieldTypeMap;
     }
 
     /**
@@ -59,7 +62,7 @@ class FieldTypeRegistry
     {
         if ( !isset( $this->fieldTypeMap[$identifier] ) )
         {
-            $this->fieldTypeMap[$identifier] = new FieldType( $this->buildFieldType( $identifier ) );
+            $this->fieldTypeMap[$identifier] = new FieldType( $this->getCoreFieldType( $identifier ) );
         }
 
         return $this->fieldTypeMap[$identifier];
@@ -68,6 +71,10 @@ class FieldTypeRegistry
     /**
      * Register $fieldType with $identifier.
      *
+     * For $fieldType an object / callable is expected, in case of callable factory it should return
+     * the FieldType object.
+     * The FieldType object must comply to the {@link \eZ\Publish\SPI\FieldType\FieldType} interface.
+     *
      * @param $identifier
      * @param mixed $fieldType Callable or FieldType instance.
      *
@@ -75,7 +82,7 @@ class FieldTypeRegistry
      */
     public function register( $identifier, $fieldType )
     {
-        $this->settings[$identifier] = $fieldType;
+        $this->coreFieldTypeMap[$identifier] = $fieldType;
     }
 
     /**
@@ -88,21 +95,21 @@ class FieldTypeRegistry
      *
      * @return \eZ\Publish\SPI\FieldType\FieldType
      */
-    protected function buildFieldType( $identifier )
+    protected function getCoreFieldType( $identifier )
     {
-        if ( !isset( $this->settings[$identifier] ) )
+        if ( !isset( $this->coreFieldTypeMap[$identifier] ) )
         {
             throw new RuntimeException(
                 "Provided \$identifier is unknown: '{$identifier}', have: "
-                . var_export( array_keys( $this->settings ), true )
+                . var_export( array_keys( $this->coreFieldTypeMap ), true )
             );
         }
 
-        $fieldType = $this->settings[$identifier];
+        $fieldType = $this->coreFieldTypeMap[$identifier];
 
-        if ( !$this->settings[$identifier] instanceof FieldTypeInterface )
+        if ( !$this->coreFieldTypeMap[$identifier] instanceof FieldTypeInterface )
         {
-            if ( !is_callable( $this->settings[$identifier] ) )
+            if ( !is_callable( $this->coreFieldTypeMap[$identifier] ) )
             {
                 throw new RuntimeException( "FieldType '$identifier' is not callable or instance" );
             }

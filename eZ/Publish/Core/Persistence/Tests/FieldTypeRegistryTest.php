@@ -31,7 +31,7 @@ class FieldTypeRegistryTest extends TestCase
             array(
                 "some-type" => $fieldType,
             ),
-            "settings",
+            "coreFieldTypeMap",
             $registry
         );
     }
@@ -121,7 +121,7 @@ class FieldTypeRegistryTest extends TestCase
             array(
                 "some-type" => $fieldType,
             ),
-            "settings",
+            "coreFieldTypeMap",
             $registry
         );
     }
