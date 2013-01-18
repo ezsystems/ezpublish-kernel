@@ -12,19 +12,27 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use ReflectionClass;
 
 /**
  * This compiler pass will register eZ Publish field types.
  */
 class TwigTweaksPass implements CompilerPassInterface
 {
-
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process( ContainerBuilder $container )
     {
+        // Adding the global helper, as "ezpublish" global variable
+        $twigDef = $container->getDefinition( 'twig' );
+        $twigDef->addMethodCall(
+            'addGlobal',
+            array(
+                'ezpublish',
+                new Reference( 'ezpublish.twig.global_helper' )
+            )
+        );
+
         if ( !$container->hasDefinition( 'twig.loader.chain' ) )
             return;
 
@@ -34,6 +42,5 @@ class TwigTweaksPass implements CompilerPassInterface
         {
             $refChainLoader->addMethodCall( 'addLoader', array( new Reference( $id ) ) );
         }
-
     }
 }
