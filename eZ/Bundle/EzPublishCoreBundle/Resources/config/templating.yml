@@ -57,6 +57,7 @@ services:
 
     ezpublish.twig.global_helper.core:
         class: %ezpublish.twig.global_helper.core.class%
+        arguments: [@service_container]
 
     ezpublish.twig.global_helper:
         alias: ezpublish.twig.global_helper.core
