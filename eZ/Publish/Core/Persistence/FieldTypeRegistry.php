@@ -57,12 +57,10 @@ class FieldTypeRegistry
      */
     public function getFieldType( $identifier )
     {
-        if ( isset( $this->fieldTypeMap[$identifier] ) )
+        if ( !isset( $this->fieldTypeMap[$identifier] ) )
         {
-            return $this->fieldTypeMap[$identifier];
+            $this->fieldTypeMap[$identifier] = new FieldType( $this->buildFieldType( $identifier ) );
         }
-
-        $this->fieldTypeMap[$identifier] = new FieldType( $this->buildFieldType( $identifier ) );
 
         return $this->fieldTypeMap[$identifier];
     }
