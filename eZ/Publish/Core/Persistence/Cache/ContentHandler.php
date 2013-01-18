@@ -10,6 +10,8 @@
 namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandlerInterface;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
@@ -17,12 +19,14 @@ use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateSt
 use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
 use Tedivm\StashBundle\Service\CacheService;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
+use DOMDocument;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Handler
  */
 class ContentHandler implements ContentHandlerInterface
 {
+    const FIELD_VALUE_DOM_DOCUMENT_KEY = '§:DomDocument:§';
     /**
      * @var \Tedivm\StashBundle\Service\CacheService
      */
@@ -58,10 +62,11 @@ class ContentHandler implements ContentHandlerInterface
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Handler::create
      */
-    public function create( CreateStruct $content )
+    public function create( CreateStruct $struct )
     {
-        $this->logger->logCall( __METHOD__, array( 'struct' => $content ) );
-        return $this->persistenceFactory->getContentHandler()->create( $content );
+        // Cached on demand when published or loaded
+        $this->logger->logCall( __METHOD__, array( 'struct' => $struct ) );
+        return $this->persistenceFactory->getContentHandler()->create( $struct );
     }
 
     /**
@@ -85,10 +90,28 @@ class ContentHandler implements ContentHandlerInterface
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Handler::load
      */
-    public function load( $id, $version, $translations = null )
+    public function load( $contentId, $version, $translations = null )
     {
-        $this->logger->logCall( __METHOD__, array( 'content' => $id, 'version' => $version, 'translations' => $translations ) );
-        return $this->persistenceFactory->getContentHandler()->load( $id, $version, $translations );
+        if ( $translations !== null )
+        {
+            $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'version' => $version, 'translations' => $translations ) );
+            return $this->persistenceFactory->getContentHandler()->load( $contentId, $version, $translations );
+        }
+
+        $cache = $this->cache->get( 'content', $contentId, $version );
+        $content = $cache->get();
+        if ( $cache->isMiss() )
+        {
+            $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'version' => $version ) );
+            $content = $this->persistenceFactory->getContentHandler()->load( $contentId, $version );
+            $cache->set( $this->cloneAndSerializeXMLFields( $content ) );
+        }
+        else
+        {
+            $this->unSerializeXMLFields( $content );
+        }
+
+        return $content;
     }
 
     /**
@@ -96,8 +119,14 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function loadContentInfo( $contentId )
     {
-        $this->logger->logCall( __METHOD__, array( 'content' => $contentId ) );
-        return $this->persistenceFactory->getContentHandler()->loadContentInfo( $contentId );
+        $cache = $this->cache->get( 'content', 'info', $contentId );
+        $contentInfo = $cache->get();
+        if ( $cache->isMiss() )
+        {
+            $this->logger->logCall( __METHOD__, array( 'content' => $contentId ) );
+            $cache->set( $contentInfo = $this->persistenceFactory->getContentHandler()->loadContentInfo( $contentId ) );
+        }
+        return $contentInfo;
     }
 
     /**
@@ -124,25 +153,40 @@ class ContentHandler implements ContentHandlerInterface
     public function setStatus( $contentId, $status, $version )
     {
         $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'status' => $status, 'version' => $version ) );
-        return $this->persistenceFactory->getContentHandler()->setStatus( $contentId, $status, $version );
+        $return = $this->persistenceFactory->getContentHandler()->setStatus( $contentId, $status, $version );
+
+        $this->cache->clear( 'content', $contentId, $version );
+        if ( $status === VersionInfo::STATUS_PUBLISHED )
+            $this->cache->clear( 'content', 'info', $contentId );
+
+        return $return;
     }
 
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Handler::updateMetadata
      */
-    public function updateMetadata( $contentId, MetadataUpdateStruct $content )
+    public function updateMetadata( $contentId, MetadataUpdateStruct $struct )
     {
-        $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'struct' => $content ) );
-        return $this->persistenceFactory->getContentHandler()->updateMetadata( $contentId, $content );
+        $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'struct' => $struct ) );
+
+        $this->cache
+            ->get( 'content', 'info', $contentId )
+            ->set( $contentInfo = $this->persistenceFactory->getContentHandler()->updateMetadata( $contentId, $struct ) );
+
+        return $contentInfo;
     }
 
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Handler::updateContent
      */
-    public function updateContent( $contentId, $versionNo, UpdateStruct $content )
+    public function updateContent( $contentId, $versionNo, UpdateStruct $struct )
     {
-        $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'version' => $versionNo, 'struct' => $content ) );
-        return $this->persistenceFactory->getContentHandler()->updateContent( $contentId, $versionNo, $content );
+        $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'version' => $versionNo, 'struct' => $struct ) );
+        $content = $this->persistenceFactory->getContentHandler()->updateContent( $contentId, $versionNo, $struct );
+        $this->cache
+            ->get( 'content', $contentId, $versionNo )
+            ->set( $this->cloneAndSerializeXMLFields( $content ) );
+        return $content;
     }
 
     /**
@@ -151,7 +195,12 @@ class ContentHandler implements ContentHandlerInterface
     public function deleteContent( $contentId )
     {
         $this->logger->logCall( __METHOD__, array( 'content' => $contentId ) );
-        return $this->persistenceFactory->getContentHandler()->deleteContent( $contentId );
+        $return = $this->persistenceFactory->getContentHandler()->deleteContent( $contentId );
+
+        $this->cache->clear( 'content', $contentId );
+        $this->cache->clear( 'content', 'info', $contentId );
+
+        return $return;
     }
 
     /**
@@ -160,7 +209,12 @@ class ContentHandler implements ContentHandlerInterface
     public function deleteVersion( $contentId, $versionNo )
     {
         $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'version' => $versionNo ) );
-        return $this->persistenceFactory->getContentHandler()->deleteVersion( $contentId, $versionNo );
+        $return = $this->persistenceFactory->getContentHandler()->deleteVersion( $contentId, $versionNo );
+
+        $this->cache->clear( 'content', $contentId, $versionNo );
+        $this->cache->clear( 'content', 'info', $contentId );
+
+        return $return;
     }
 
     /**
@@ -221,6 +275,82 @@ class ContentHandler implements ContentHandlerInterface
     public function publish( $contentId, $versionNo, MetadataUpdateStruct $struct )
     {
         $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'version' => $versionNo, 'struct' => $struct ) );
-        return $this->persistenceFactory->getContentHandler()->publish( $contentId, $versionNo, $struct );
+        $content = $this->persistenceFactory->getContentHandler()->publish( $contentId, $versionNo, $struct );
+
+        $this->cache->clear( 'content', $contentId );
+
+        // warm up cache
+        $contentInfo = $content->versionInfo->contentInfo;
+        $this->cache
+            ->get( 'content', $contentInfo->id, $content->versionInfo->versionNo )
+            ->set( $this->cloneAndSerializeXMLFields( $content ) );
+        $this->cache->get( 'content', 'info', $contentInfo->id )->set( $contentInfo );
+
+        return $content;
+    }
+
+    /**
+     * Custom serializer for Content
+     *
+     * Needed for DomDocuments on field values as they can not be serialized directly.
+     *
+     * @param Content $content
+     * @return Content A serializable version of Content
+     */
+    protected function cloneAndSerializeXMLFields( Content $content )
+    {
+        $contentClone = clone $content;
+        foreach ( $contentClone->fields as $key => $field )
+        {
+            $contentClone->fields[$key] = $fieldClone = clone $field;
+            $fieldClone->value = clone $fieldClone->value;
+            if ( $fieldClone->value->data instanceof DOMDocument )
+            {
+                $fieldClone->value->data =
+                    self::FIELD_VALUE_DOM_DOCUMENT_KEY .
+                        $fieldClone->value->data->saveXML();
+            }
+
+            if ( $fieldClone->value->externalData instanceof DOMDocument )
+            {
+                $fieldClone->value->externalData =
+                    self::FIELD_VALUE_DOM_DOCUMENT_KEY .
+                        $fieldClone->value->externalData->saveXML();
+            }
+        }
+        return $contentClone;
+    }
+
+    /**
+     * Custom unSerializer for Content
+     *
+     * Needed for DomDocuments on field values as they can not be serialized directly.
+     *
+     * @param Content $content
+     * @return Content
+     */
+    protected function unSerializeXMLFields( Content $content )
+    {
+        foreach ( $content->fields as $field )
+        {
+            if ( !empty( $field->value->data ) &&
+                is_string( $field->value->data ) &&
+                strpos( $field->value->data, self::FIELD_VALUE_DOM_DOCUMENT_KEY ) === 0 )
+            {
+                $dom = new DOMDocument('1.0', 'UTF-8');
+                $dom->loadXML( substr( $field->value->data, strlen( self::FIELD_VALUE_DOM_DOCUMENT_KEY ) ) );
+                $field->value->data = $dom;
+            }
+
+            if ( !empty( $field->value->externalData ) &&
+                is_string( $field->value->externalData ) &&
+                strpos( $field->value->externalData, self::FIELD_VALUE_DOM_DOCUMENT_KEY ) === 0 )
+            {
+                $dom = new DOMDocument('1.0', 'UTF-8');
+                $dom->loadXML( substr( $field->value->externalData, strlen( self::FIELD_VALUE_DOM_DOCUMENT_KEY ) ) );
+                $field->value->externalData = $dom;
+            }
+        }
+        return $content;
     }
 }

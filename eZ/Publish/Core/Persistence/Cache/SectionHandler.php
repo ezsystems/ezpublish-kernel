@@ -137,7 +137,10 @@ class SectionHandler implements SectionHandlerInterface
     public function assign( $sectionId, $contentId )
     {
         $this->logger->logCall( __METHOD__, array( 'section' => $sectionId, 'content' => $contentId ) );
-        return $this->persistenceFactory->getSectionHandler()->assign( $sectionId, $contentId );
+        $return = $this->persistenceFactory->getSectionHandler()->assign( $sectionId, $contentId );
+
+        $this->cache->clear( 'content', 'info', $contentId );
+        return $return;
     }
 
     /**

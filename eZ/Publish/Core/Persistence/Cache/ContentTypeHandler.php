@@ -366,5 +366,8 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         // Clear type cache and all identifier cache (as we don't know the identifier)
         $this->cache->clear( 'contentType', $typeId );
         $this->cache->clear( 'contentType', 'identifier' );
+
+        // clear content cache
+        $this->cache->clear( 'content' );//TIMBER! (possible content changes)
     }
 }

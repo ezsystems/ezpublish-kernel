@@ -105,7 +105,7 @@ class LocationHandler implements LocationHandlerInterface
         $this->logger->logCall( __METHOD__, array( 'source' => $sourceId, 'destination' => $destinationParentId ) );
         $return = $this->persistenceFactory->getLocationHandler()->move( $sourceId, $destinationParentId );
 
-        $this->cache->clear( 'location' );// path[Identification]String
+        $this->cache->clear( 'location' );//TIMBER! (path[Identification]String)
 
         return $return;
     }
@@ -127,7 +127,7 @@ class LocationHandler implements LocationHandlerInterface
         $this->logger->logCall( __METHOD__, array( 'location' => $locationId ) );
         $return = $this->persistenceFactory->getLocationHandler()->hide( $locationId );
 
-        $this->cache->clear( 'location' );// visibility
+        $this->cache->clear( 'location' );//TIMBER! (visibility)
 
         return $return;
     }
@@ -140,7 +140,7 @@ class LocationHandler implements LocationHandlerInterface
         $this->logger->logCall( __METHOD__, array( 'location' => $locationId ) );
         $return = $this->persistenceFactory->getLocationHandler()->unHide( $locationId );
 
-        $this->cache->clear( 'location' );// visibility
+        $this->cache->clear( 'location' );//TIMBER! (visibility)
 
         return $return;
     }
@@ -193,7 +193,8 @@ class LocationHandler implements LocationHandlerInterface
         $this->logger->logCall( __METHOD__, array( 'location' => $locationId ) );
         $return = $this->persistenceFactory->getLocationHandler()->removeSubtree( $locationId );
 
-        $this->cache->clear( 'location' );
+        $this->cache->clear( 'location' );//TIMBER!
+        $this->cache->clear( 'content' );//TIMBER!
 
         return $return;
     }
@@ -205,6 +206,7 @@ class LocationHandler implements LocationHandlerInterface
     {
         $this->logger->logCall( __METHOD__, array( 'location' => $locationId, 'section' => $sectionId ) );
         $this->persistenceFactory->getLocationHandler()->setSectionForSubtree( $locationId, $sectionId );
+        $this->cache->clear( 'content', 'info' );
     }
 
     /**
@@ -214,6 +216,7 @@ class LocationHandler implements LocationHandlerInterface
     {
         $this->logger->logCall( __METHOD__, array( 'location' => $locationId, 'content' => $contentId ) );
         $this->persistenceFactory->getLocationHandler()->changeMainLocation( $contentId, $locationId );
-        $this->cache->clear( 'location' );// ->mainLocationId
+        $this->cache->clear( 'location' );//TIMBER! (->mainLocationId)
+        $this->cache->clear( 'content', 'info', $contentId );
     }
 }

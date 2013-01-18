@@ -106,6 +106,11 @@ class ContentLanguageHandlerTest extends HandlerTest
 
         $cacheItemMock
             ->expects( $this->once() )
+            ->method( 'get' )
+            ->will( $this->returnValue( null ) );
+
+        $cacheItemMock
+            ->expects( $this->once() )
             ->method( 'isMiss' )
             ->will( $this->returnValue( true ) );
 
@@ -132,11 +137,6 @@ class ContentLanguageHandlerTest extends HandlerTest
             ->method( 'set' )
             ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language' ) );
 
-        $cacheItemMock
-            ->expects( $this->once() )
-            ->method( 'get' )
-            ->will( $this->returnValue( null ) );
-
         $handler = $this->persistenceHandler->contentLanguageHandler();
         $handler->load( 2 );
     }
@@ -156,15 +156,6 @@ class ContentLanguageHandlerTest extends HandlerTest
 
         $cacheItemMock
             ->expects( $this->once() )
-            ->method( 'isMiss' )
-            ->will( $this->returnValue( false ) );
-
-        $this->persistenceFactoryMock
-            ->expects( $this->never() )
-            ->method( 'getContentLanguageHandler' );
-
-        $cacheItemMock
-            ->expects( $this->once() )
             ->method( 'get' )
             ->will(
                 $this->returnValue(
@@ -173,6 +164,15 @@ class ContentLanguageHandlerTest extends HandlerTest
                     )
                 )
             );
+
+        $cacheItemMock
+            ->expects( $this->once() )
+            ->method( 'isMiss' )
+            ->will( $this->returnValue( false ) );
+
+        $this->persistenceFactoryMock
+            ->expects( $this->never() )
+            ->method( 'getContentLanguageHandler' );
 
         $cacheItemMock
             ->expects( $this->never() )

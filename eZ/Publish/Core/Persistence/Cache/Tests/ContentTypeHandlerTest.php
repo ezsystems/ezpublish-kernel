@@ -1199,6 +1199,12 @@ class ContentTypeHandlerTest extends HandlerTest
             ->with( 'contentType', 'identifier' )
             ->will( $this->returnValue( true ) );
 
+        $this->cacheMock
+            ->expects( $this->at( 2 ) )
+            ->method( 'clear' )
+            ->with( 'content' )
+            ->will( $this->returnValue( true ) );
+
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler' );
         $this->persistenceFactoryMock
             ->expects( $this->once() )
