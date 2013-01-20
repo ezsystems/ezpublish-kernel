@@ -108,6 +108,9 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         new Content\Search\Gateway\CriterionHandler\ContentTypeId(
                             $this->getDatabaseHandler()
                         ),
+                        new Content\Search\Gateway\CriterionHandler\ContentTypeIdentifier(
+                            $this->getDatabaseHandler()
+                        ),
                         new Content\Search\Gateway\CriterionHandler\ContentTypeGroupId(
                             $this->getDatabaseHandler()
                         ),
@@ -653,7 +656,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ContentTypeId
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
-    public function testContentTypeFilter()
+    public function testContentTypeIdFilter()
     {
         $locator = $this->getContentSearchHandler();
 
@@ -670,6 +673,38 @@ class SearchHandlerTest extends LanguageAwareTestCase
 
         $this->assertEquals(
             array( 10, 14 ),
+            array_map(
+                function ( $hit )
+                {
+                    return $hit->valueObject->versionInfo->contentInfo->id;
+                },
+                $result->searchHits
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ContentTypeIdentifier
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testContentTypeIdentifierFilter()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->findContent(
+            new Query(
+                array(
+                    'criterion' => new Criterion\ContentTypeIdentifier(
+                        'folder'
+                    ),
+                    'limit' => 5,
+                )
+            )
+        );
+
+        $this->assertEquals(
+            array( 41, 45, 49, 50, 51 ),
             array_map(
                 function ( $hit )
                 {
@@ -1550,3 +1585,4 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 }
+
