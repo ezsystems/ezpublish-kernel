@@ -23,16 +23,6 @@ class TwigTweaksPass implements CompilerPassInterface
      */
     public function process( ContainerBuilder $container )
     {
-        // Adding the global helper, as "ezpublish" global variable
-        $twigDef = $container->getDefinition( 'twig' );
-        $twigDef->addMethodCall(
-            'addGlobal',
-            array(
-                'ezpublish',
-                new Reference( 'ezpublish.twig.global_helper' )
-            )
-        );
-
         if ( !$container->hasDefinition( 'twig.loader.chain' ) )
             return;
 
