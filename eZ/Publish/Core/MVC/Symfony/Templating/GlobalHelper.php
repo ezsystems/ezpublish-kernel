@@ -111,4 +111,17 @@ class GlobalHelper
             return $this->getRequestedUriString();
         }
     }
+
+    /**
+     * Returns the config resolver.
+     *
+     * @return \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    public function getConfigResolver()
+    {
+        if ( $this->container->has( 'ezpublish.config.resolver' ) )
+        {
+            return $this->container->get( 'ezpublish.config.resolver' );
+        }
+    }
 }
