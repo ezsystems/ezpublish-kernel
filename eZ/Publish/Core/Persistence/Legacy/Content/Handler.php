@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway as UrlAliasGateway;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
@@ -60,6 +62,20 @@ class Handler implements BaseContentHandler
     protected $fieldHandler;
 
     /**
+     * UrlAlias handler
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler
+     */
+    protected $urlAliasHandler;
+
+    /**
+     * UrlAlias gateway
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway
+     */
+    protected $urlAliasGateway;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
@@ -71,13 +87,17 @@ class Handler implements BaseContentHandler
         Gateway $contentGateway,
         LocationGateway $locationGateway,
         Mapper $mapper,
-        FieldHandler $fieldHandler
+        FieldHandler $fieldHandler,
+        UrlAliasHandler $urlAliasHandler,
+        UrlAliasGateway $urlAliasGateway
     )
     {
         $this->contentGateway = $contentGateway;
         $this->locationGateway = $locationGateway;
         $this->mapper = $mapper;
         $this->fieldHandler = $fieldHandler;
+        $this->urlAliasHandler = $urlAliasHandler;
+        $this->urlAliasGateway = $urlAliasGateway;
     }
 
     /**
@@ -365,7 +385,32 @@ class Handler implements BaseContentHandler
     public function updateMetadata( $contentId, MetadataUpdateStruct $content )
     {
         $this->contentGateway->updateContent( $contentId, $content );
-        return $this->loadContentInfo( $contentId );
+        $contentInfo = $this->loadContentInfo( $contentId );
+
+        if ( isset( $content->mainLanguageId ) )
+        {
+            $locationName = $this->urlAliasGateway->loadLocationEntries(
+                $contentInfo->mainLocationId,
+                false,
+                $content->mainLanguageId
+            );
+            if ( !empty( $locationName ) )
+            {
+                $locationName = $locationName[0]["text"];
+            }
+            $locationData = $this->locationGateway->getBasicNodeData( $contentInfo->mainLocationId );
+            $this->locationGateway->updatePathIdentificationString(
+                $contentInfo->mainLocationId,
+                $locationData["parent_node_id"],
+                $this->urlAliasHandler->convertToAlias(
+                    $locationName,
+                    "location_" . $contentInfo->mainLocationId,
+                    "urlalias_compat"
+                )
+            );
+        }
+
+        return $contentInfo;
     }
 
     /**
