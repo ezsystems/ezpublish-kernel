@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias;
 use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
@@ -20,6 +22,11 @@ use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
  */
 class UrlAliasHandler implements UrlAliasHandlerInterface
 {
+    /**
+     * Constant used for storing not found results for lookup()
+     */
+    const NOT_FOUND = 0;
+
     /**
      * @var \Tedivm\StashBundle\Service\CacheService
      */
@@ -68,6 +75,8 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
             )
         );
 
+        $this->cache->clear( 'urlAlias', 'location', $locationId  );
+
         $this->persistenceFactory->getUrlAliasHandler()->publishUrlAliasForLocation(
             $locationId, $parentLocationId, $name, $languageCode, $alwaysAvailable
         );
@@ -89,9 +98,13 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
             )
         );
 
-        return $this->persistenceFactory->getUrlAliasHandler()->createCustomUrlAlias(
+        $urlAlias = $this->persistenceFactory->getUrlAliasHandler()->createCustomUrlAlias(
             $locationId, $path, $forwarding, $languageCode, $alwaysAvailable
         );
+
+        $this->cache->get( 'urlAlias', $urlAlias->id )->set( $urlAlias );
+        $this->cache->clear( 'urlAlias', 'location', $urlAlias->destination, 'custom' );
+        return $urlAlias;
     }
 
     /**
@@ -110,9 +123,13 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
             )
         );
 
-        return $this->persistenceFactory->getUrlAliasHandler()->createGlobalUrlAlias(
+        $urlAlias = $this->persistenceFactory->getUrlAliasHandler()->createGlobalUrlAlias(
             $resource, $path, $forwarding, $languageCode, $alwaysAvailable
         );
+
+
+        $this->cache->get( 'urlAlias', $urlAlias->id )->set( $urlAlias );
+        return $urlAlias;
     }
 
     /**
@@ -129,17 +146,50 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      */
     public function listURLAliasesForLocation( $locationId, $custom = false )
     {
-        $this->logger->logCall( __METHOD__, array( 'location' => $locationId, 'custom' => $custom ) );
-        return $this->persistenceFactory->getUrlAliasHandler()->listURLAliasesForLocation( $locationId, $custom );
+        // Look for location to list of url alias id's cache
+        $cache = $this->cache->get( 'urlAlias', 'location', $locationId . ( $custom ? '/custom' : '' ) );
+        $urlAliasIds = $cache->get();
+        if ( $cache->isMiss() )
+        {
+            $this->logger->logCall( __METHOD__, array( 'location' => $locationId, 'custom' => $custom ) );
+            $urlAliases = $this->persistenceFactory->getUrlAliasHandler()->listURLAliasesForLocation( $locationId, $custom );
+
+            $urlAliasIds = array();
+            foreach ( $urlAliases as $urlAlias )
+                $urlAliasIds[] = $urlAlias->id;
+
+            $cache->set( $urlAliasIds );
+        }
+        else
+        {
+            // Reuse loadUrlAlias for the url alias object cache
+            $urlAliases = array();
+            foreach ( $urlAliasIds as $urlAliasId )
+                $urlAliases[] = $this->loadUrlAlias( $urlAliasId );
+        }
+
+        return $urlAliases;
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::removeURLAliases
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\UrlAlias[] $urlAliases
+     * @see \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::removeURLAliases
      */
     public function removeURLAliases( array $urlAliases )
     {
         $this->logger->logCall( __METHOD__, array( 'aliases' => $urlAliases ) );
-        return $this->persistenceFactory->getUrlAliasHandler()->removeURLAliases( $urlAliases );
+        $return = $this->persistenceFactory->getUrlAliasHandler()->removeURLAliases( $urlAliases );
+
+        $this->cache->clear( 'urlAlias', 'url' );//TIMBER! (no easy way to do reverse lookup of urls)
+        foreach ( $urlAliases as $urlAlias )
+        {
+            $this->cache->clear( 'urlAlias', $urlAlias->id );
+            if ( $urlAlias->type === URLAlias::LOCATION )
+                $this->cache->clear( 'urlAlias', 'location', $urlAlias->destination );
+        }
+
+        return $return;
     }
 
     /**
@@ -147,8 +197,36 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      */
     public function lookup( $url )
     {
-        $this->logger->logCall( __METHOD__, array( 'url' => $url ) );
-        return $this->persistenceFactory->getUrlAliasHandler()->lookup( $url );
+        // Look for url to url alias id cache
+        $cache = $this->cache->get( 'urlAlias', 'url', $url );//@todo escape slashes? at least remove the first one
+        $urlAliasUrlLookupCache = $cache->get();
+        if ( $cache->isMiss() )
+        {
+            // Also cache "not found" as this function is heavliy used and hance should be cached
+            try
+            {
+                $this->logger->logCall( __METHOD__, array( 'url' => $url ) );
+                $urlAlias = $this->persistenceFactory->getUrlAliasHandler()->lookup( $url );
+                $cache->set( $urlAlias->id );
+            }
+            catch ( APINotFoundException $e )
+            {
+                $cache->set( self::NOT_FOUND );
+                throw $e;
+            }
+        }
+        elseif ( $urlAliasUrlLookupCache === self::NOT_FOUND )
+        {
+            throw new NotFoundException( 'UrlAlias', $url );
+        }
+        else
+        {
+            /** @var $urlAliasUrlLookupCache int */
+            $urlAlias = $this->loadUrlAlias( $urlAliasUrlLookupCache );
+        }
+
+        return $urlAlias;
+
     }
 
     /**
@@ -156,8 +234,17 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      */
     public function loadUrlAlias( $id )
     {
-        $this->logger->logCall( __METHOD__, array( 'alias' => $id ) );
-        return $this->persistenceFactory->getUrlAliasHandler()->loadUrlAlias( $id );
+        // Look for url alias cache
+        $cache = $this->cache->get( 'urlAlias', $id );
+        $urlAlias = $cache->get();
+        if ( $cache->isMiss() )
+        {
+            $this->logger->logCall( __METHOD__, array( 'alias' => $id ) );
+            $urlAlias = $this->persistenceFactory->getUrlAliasHandler()->loadUrlAlias( $id );
+            $cache->set( $urlAlias );
+        }
+
+        return $urlAlias;
     }
 
     /**
@@ -174,7 +261,11 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
             )
         );
 
-        return $this->persistenceFactory->getUrlAliasHandler()->locationMoved( $locationId, $oldParentId, $newParentId );
+        $return = $this->persistenceFactory->getUrlAliasHandler()->locationMoved( $locationId, $oldParentId, $newParentId );
+
+        $this->cache->clear( 'urlAlias' );//TIMBER! (Will have to load url aliases for location to be able to clear specific entries)
+        //$this->cache->clear( 'urlAlias', 'location', $locationId );
+        return $return;
     }
 
     /**
@@ -200,6 +291,9 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
     public function locationDeleted( $locationId )
     {
         $this->logger->logCall( __METHOD__, array( 'location' => $locationId ) );
-        return $this->persistenceFactory->getUrlAliasHandler()->locationDeleted( $locationId );
+        $return = $this->persistenceFactory->getUrlAliasHandler()->locationDeleted( $locationId );
+
+        $this->cache->clear( 'urlAlias', 'location', $locationId );
+        return $return;
     }
 }
