@@ -40,7 +40,7 @@ class FieldHandler
     /**
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
      */
-    public $languageHandler;
+    protected $languageHandler;
 
     /**
      * Content Mapper
@@ -69,17 +69,20 @@ class FieldHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $mapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler $languageHandler
      * @param array $fieldTypes Hash of SPI FieldTypes or callable callbacks to generate one.
      */
     public function __construct(
         Gateway $contentGateway,
         Mapper $mapper,
         StorageHandler $storageHandler,
+        $languageHandler,
         array $fieldTypes )
     {
         $this->contentGateway = $contentGateway;
         $this->mapper = $mapper;
         $this->storageHandler = $storageHandler;
+        $this->languageHandler = $languageHandler;
         $this->fieldTypes = $fieldTypes;
     }
 
@@ -196,7 +199,7 @@ class FieldHandler
     public function createExistingFieldsInNewVersion( Content $content )
     {
         $fieldsToCopy = array();
-        $languageCodes = $existingLanguageCodes = $this->getLanguageCodes( $content->versionInfo->languageIds );
+        $languageCodes = $this->getLanguageCodes( $content->versionInfo->languageIds );
         $contentFieldMap = $this->getFieldMap( $content->fields );
         $content->fields = array();
         $contentType = $this->typeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
@@ -205,18 +208,18 @@ class FieldHandler
         {
             foreach ( array_keys( $languageCodes ) as $languageCode )
             {
-                if ( $fieldDefinition->isTranslatable
-                    || $languageCode != $content->versionInfo->contentInfo->mainLanguageCode
+                if ( !$fieldDefinition->isTranslatable
+                    && $languageCode != $content->versionInfo->contentInfo->mainLanguageCode
                 )
+                {
+                    $fieldsToCopy[$fieldDefinition->id][$languageCode] =
+                        $contentFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
+                }
+                else
                 {
                     $field = $contentFieldMap[$fieldDefinition->id][$languageCode];
                     $this->createExistingFieldInNewVersion( $field, $content );
                     $content->fields[] = $field;
-                }
-                else
-                {
-                    $fieldsToCopy[$fieldDefinition->id][$languageCode] =
-                        $contentFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
                 }
             }
         }
@@ -270,7 +273,7 @@ class FieldHandler
      *
      * @return void
      */
-    public function copyFields( array $fields, Content $content )
+    protected function copyFields( array $fields, Content $content )
     {
         foreach ( $fields as $languageFields )
         {
@@ -294,9 +297,9 @@ class FieldHandler
      */
     protected function copyField( Field $originalField, $languageCode, Content $content )
     {
+        $originalField->versionNo = $content->versionInfo->versionNo;
         $field = clone $originalField;
         $field->languageCode = $languageCode;
-        $field->versionNo = $content->versionInfo->versionNo;
 
         $field->id = $this->contentGateway->insertNewField(
             $content,
@@ -392,7 +395,7 @@ class FieldHandler
      *
      * @return void
      */
-    public function createExistingFieldInNewVersion( Field $field, Content $content )
+    protected function createExistingFieldInNewVersion( Field $field, Content $content )
     {
         $field->versionNo = $content->versionInfo->versionNo;
 
