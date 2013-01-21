@@ -40,10 +40,11 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $locationId
      * @param boolean $custom
+     * @param mixed $languageId
      *
      * @return array
      */
-    public function loadLocationEntries( $locationId, $custom = false )
+    public function loadLocationEntries( $locationId, $custom = false, $languageId = false )
     {
         try
         {

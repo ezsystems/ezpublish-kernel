@@ -19,10 +19,11 @@ abstract class Gateway
      *
      * @param mixed $locationId
      * @param boolean $custom
+     * @param mixed $languageId
      *
      * @return array
      */
-    abstract public function loadLocationEntries( $locationId, $custom = false );
+    abstract public function loadLocationEntries( $locationId, $custom = false, $languageId = false );
 
     /**
      * Loads paged list of global aliases.

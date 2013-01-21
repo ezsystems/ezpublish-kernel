@@ -81,10 +81,11 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $locationId
      * @param boolean $custom
+     * @param mixed $languageId
      *
      * @return array
      */
-    public function loadLocationEntries( $locationId, $custom = false )
+    public function loadLocationEntries( $locationId, $custom = false, $languageId = false )
     {
         /** @var $query \ezcQuerySelect */
         $query = $this->dbHandler->createSelectQuery();
@@ -96,6 +97,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( "lang_mask" ),
             $this->dbHandler->quoteColumn( "is_original" ),
             $this->dbHandler->quoteColumn( "parent" ),
+            $this->dbHandler->quoteColumn( "text" ),
             $this->dbHandler->quoteColumn( "text_md5" ),
             $this->dbHandler->quoteColumn( "action" )
         )->from(
@@ -119,6 +121,20 @@ class EzcDatabase extends Gateway
                 )
             )
         );
+
+        if ( $languageId !== false )
+        {
+            $query->where(
+                $query->expr->gt(
+                    $query->expr->bitAnd(
+                        $this->dbHandler->quoteColumn( "lang_mask" ),
+                        $query->bindValue( $languageId, null, \PDO::PARAM_INT )
+                    ),
+                    0
+                )
+            );
+        }
+
         $statement = $query->prepare();
         $statement->execute();
 
