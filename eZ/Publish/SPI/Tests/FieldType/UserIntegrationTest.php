@@ -57,6 +57,10 @@ class UserIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
+        $handler->getFieldTypeRegistry()->register(
+            'ezuser',
+            new FieldType\User\Type()
+        );
         $handler->getStorageRegistry()->register(
             'ezuser',
             new FieldType\User\UserStorage(

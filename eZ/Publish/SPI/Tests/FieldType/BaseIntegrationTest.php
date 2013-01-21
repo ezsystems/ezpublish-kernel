@@ -15,6 +15,7 @@ use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
+use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 
@@ -530,6 +531,11 @@ abstract class BaseIntegrationTest extends TestCase
     {
         return new Legacy\Handler(
             self::$setUp,
+            new FieldTypeRegistry(
+                array(
+                    'ezstring' => new \eZ\Publish\Core\FieldType\TextLine\Type(),
+                )
+            ),
             new ConverterRegistry(
                 array(
                     'ezstring' => new Legacy\Content\FieldValue\Converter\TextLine(),
