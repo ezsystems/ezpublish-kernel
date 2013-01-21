@@ -223,7 +223,7 @@ class Handler implements UrlAliasHandlerInterface
      * @param string $name the new name computed by the name schema or url alias schema
      * @param string $languageCode
      * @param boolean $alwaysAvailable
-     * @param boolean $isLanguageMain used only for legacy storage for updating ezcontentobject_tree.path_identification_string
+     * @param boolean $updatePathIdentificationString legacy storage specific for updating ezcontentobject_tree.path_identification_string
      *
      * @return void
      */
@@ -233,7 +233,7 @@ class Handler implements UrlAliasHandlerInterface
         $name,
         $languageCode,
         $alwaysAvailable = false,
-        $isLanguageMain = false
+        $updatePathIdentificationString = false
     )
     {
         $parentId = $this->getRealAliasId( $parentLocationId );
@@ -335,7 +335,7 @@ class Handler implements UrlAliasHandlerInterface
             $uniqueCounter += 1;
         }
 
-        if ( $isLanguageMain )
+        if ( $updatePathIdentificationString )
         {
             $this->locationGateway->updatePathIdentificationString(
                 $locationId,
@@ -862,7 +862,7 @@ class Handler implements UrlAliasHandlerInterface
      *
      * @return string
      */
-    protected function convertToAlias( $text, $defaultValue = "_1", $transformation = null )
+    public function convertToAlias( $text, $defaultValue = "_1", $transformation = null )
     {
         if ( !isset( $transformation ) )
         {
