@@ -132,6 +132,16 @@ class RepositoryFactory
     }
 
     /**
+     * Returns registered field types (as closures to be lazy loaded in the public API)
+     *
+     * @return \Closure[]
+     */
+    public function getFieldTypes()
+    {
+        return $this->fieldTypes;
+    }
+
+    /**
      * Returns a service based on a name string (content => contentService, etc)
      *
      * @param \eZ\Publish\API\Repository\Repository $repository

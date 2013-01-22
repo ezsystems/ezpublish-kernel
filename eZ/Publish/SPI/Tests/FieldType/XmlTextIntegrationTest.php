@@ -10,7 +10,7 @@
 namespace eZ\Publish\SPI\Tests\FieldType;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText as XmlTextConverter;
-use eZ\Publish\Core\FieldType\XmlText\XmlTextStorage;
+use eZ\Publish\Core\FieldType;
 use eZ\Publish\Core\FieldType\NullStorage;
 use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -59,9 +59,13 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
+        $handler->getFieldTypeRegistry()->register(
+            'ezxmltext',
+            new FieldType\XmlText\Type()
+        );
         $handler->getStorageRegistry()->register(
             'ezxmltext',
-            new XmlTextStorage(
+            new FieldType\XmlText\XmlTextStorage(
                 array(
                     'LegacyStorage' => new LegacyStorage()
                 )

@@ -874,11 +874,18 @@ class Handler implements UrlAliasHandlerInterface
             $text = $defaultValue;
         }
 
-        return $this->cleanupText(
-            $this->transformationProcessor->transform(
+        if ( isset( $this->configuration["transformationGroups"][$transformation]["commands"] )
+            && !empty( $this->configuration["transformationGroups"][$transformation]["commands"] )
+        )
+        {
+            $text = $this->transformationProcessor->transform(
                 $text,
                 $this->configuration["transformationGroups"][$transformation]["commands"]
-            ),
+            );
+        }
+
+        return $this->cleanupText(
+            $text,
             $this->configuration["transformationGroups"][$transformation]["cleanupMethod"]
         );
     }

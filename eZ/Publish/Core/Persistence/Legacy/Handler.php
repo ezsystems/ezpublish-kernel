@@ -36,6 +36,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase a
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler;
 use eZ\Publish\Core\Persistence\Legacy\User\Mapper as UserMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as ConverterRegistry;
+use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use ezcDbTransactionException;
 use RuntimeException;
 
@@ -253,6 +254,13 @@ class Handler implements HandlerInterface
     protected $storageRegistry;
 
     /**
+     * FieldType registry
+     *
+     * @var \eZ\Publish\Core\Persistence\FieldTypeRegistry
+     */
+    protected $fieldTypeRegistry;
+
+    /**
      * Transform Processor
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor
@@ -270,6 +278,7 @@ class Handler implements HandlerInterface
      * Creates a new repository handler.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler The database handler
+     * @param \eZ\Publish\Core\Persistence\FieldTypeRegistry $fieldTypeRegistry Should contain field types
      * @param Content\FieldValue\ConverterRegistry $converterRegistry Should contain Field Type converters
      * @param Content\StorageRegistry $storageRegistry Should contain Field Type external storage handlers
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor $transformationProcessor Search Text Transformation processor
@@ -282,6 +291,7 @@ class Handler implements HandlerInterface
      */
     public function __construct(
         EzcDbHandler $dbHandler,
+        FieldTypeRegistry $fieldTypeRegistry,
         ConverterRegistry $converterRegistry,
         StorageRegistry $storageRegistry,
         TransformationProcessor $transformationProcessor,
@@ -289,6 +299,7 @@ class Handler implements HandlerInterface
     )
     {
         $this->dbHandler = $dbHandler;
+        $this->fieldTypeRegistry = $fieldTypeRegistry;
         $this->converterRegistry = $converterRegistry;
         $this->storageRegistry = $storageRegistry;
         $this->transformationProcessor = $transformationProcessor;
@@ -399,6 +410,7 @@ class Handler implements HandlerInterface
     {
         return $this->converterRegistry;
     }
+
     /**
      * Returns the storage registry
      *
@@ -407,6 +419,16 @@ class Handler implements HandlerInterface
     public function getStorageRegistry()
     {
         return $this->storageRegistry;
+    }
+
+    /**
+     * Returns the field type registry
+     *
+     * @return \eZ\Publish\Core\Persistence\FieldTypeRegistry
+     */
+    public function getFieldTypeRegistry()
+    {
+        return $this->fieldTypeRegistry;
     }
 
     /**
@@ -446,6 +468,7 @@ class Handler implements HandlerInterface
                                 new CriterionHandler\LogicalOr( $db ),
                                 new CriterionHandler\Subtree( $db ),
                                 new CriterionHandler\ContentTypeId( $db ),
+                                new CriterionHandler\ContentTypeIdentifier( $db ),
                                 new CriterionHandler\ContentTypeGroupId( $db ),
                                 new CriterionHandler\DateMetadata( $db ),
                                 new CriterionHandler\LocationId( $db ),

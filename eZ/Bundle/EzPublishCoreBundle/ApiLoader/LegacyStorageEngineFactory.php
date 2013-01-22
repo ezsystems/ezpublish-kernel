@@ -11,12 +11,12 @@ namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
+use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LegacyStorageEngineFactory
 {
-
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
@@ -77,6 +77,9 @@ class LegacyStorageEngineFactory
         $legacyEngineClass = $this->container->getParameter( 'ezpublish.api.storage_engine.legacy.class' );
         return new $legacyEngineClass(
             $dbhandler,
+            new FieldTypeRegistry(
+                $this->container->get( 'ezpublish.api.repository.factory' )->getFieldTypes()
+            ),
             new ConverterRegistry( $this->converters ),
             new StorageRegistry(
                 $this->container->get( 'ezpublish.api.repository.factory' )->getExternalStorageHandlers()

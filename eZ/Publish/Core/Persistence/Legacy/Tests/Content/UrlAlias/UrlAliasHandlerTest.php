@@ -2951,7 +2951,7 @@ class UrlAliasHandlerTest extends TestCase
     public function getProcessor()
     {
         $rules = array();
-        foreach ( glob( __DIR__ . '/_fixtures/transformations/*.tr' ) as $file )
+        foreach ( glob( __DIR__ . '/../SearchHandler/_fixtures/transformations/*.tr' ) as $file )
         {
             $rules[] = str_replace( self::getInstallationDir(), '', $file );
         }
