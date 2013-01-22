@@ -79,6 +79,20 @@ class ContentHandlerTest extends TestCase
     protected $locationHandlerMock;
 
     /**
+     * Location handler mock
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler
+     */
+    protected $urlAliasHandlerMock;
+
+    /**
+     * Location handler mock
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway
+     */
+    protected $urlAliasGatewayMock;
+
+    /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::__construct
      *
      * @return void
@@ -583,6 +597,73 @@ class ContentHandlerTest extends TestCase
             $updateStruct
         );
         self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo', $resultContentInfo );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::updateMetadata
+     */
+    public function testUpdateMetadataUpdatesPathIdentificationString()
+    {
+        $handler = $this->getPartlyMockedHandler( array( 'load', 'loadContentInfo' ) );
+        $locationGatewayMock = $this->getLocationGatewayMock();
+        $urlAliasHandlerMock = $this->getUrlAliasHandlerMock();
+        $urlAliasGatewayMock = $this->getUrlAliasGatewayMock();
+        $gatewayMock = $this->getGatewayMock();
+        $updateStruct = new MetadataUpdateStruct( array( 'mainLanguageId' => 2 ) );
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'updateContent' )
+            ->with( 14, $updateStruct );
+
+        $locationGatewayMock->expects( $this->once() )
+            ->method( "loadLocationDataByContent" )
+            ->with( 14 )
+            ->will(
+                $this->returnValue(
+                    array(
+                        array(
+                            "node_id" => 100,
+                            "parent_node_id" => 200,
+                        )
+                    )
+                )
+            );
+
+        $urlAliasGatewayMock->expects( $this->once() )
+            ->method( "loadLocationEntries" )
+            ->with( 100, false, 2 )
+            ->will(
+                $this->returnValue(
+                    array(
+                        array(
+                            "text" => "slug",
+                        )
+                    )
+                )
+            );
+
+        $urlAliasHandlerMock->expects( $this->once() )
+            ->method( "convertToAlias" )
+            ->with( "slug", "node_100", "urlalias_compat" )
+            ->will( $this->returnValue( "transformed_slug" ) );
+
+        $locationGatewayMock->expects( $this->once() )
+            ->method( "updatePathIdentificationString" )
+            ->with( 100, 200, "transformed_slug" );
+
+        $handler->expects( $this->once() )
+            ->method( 'loadContentInfo' )
+            ->with( 14 )
+            ->will(
+                $this->returnValue(
+                    $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo' )
+                )
+            );
+
+        $handler->updateMetadata(
+            14, // ContentId
+            $updateStruct
+        );
     }
 
     /**
@@ -1229,7 +1310,9 @@ class ContentHandlerTest extends TestCase
                 $this->getGatewayMock(),
                 $this->getLocationGatewayMock(),
                 $this->getMapperMock(),
-                $this->getFieldHandlerMock()
+                $this->getFieldHandlerMock(),
+                $this->getUrlAliasHandlerMock(),
+                $this->getUrlAliasGatewayMock()
             );
             $this->contentHandler->locationHandler = $this->getLocationHandlerMock();
         }
@@ -1252,7 +1335,9 @@ class ContentHandlerTest extends TestCase
                 $this->getGatewayMock(),
                 $this->getLocationGatewayMock(),
                 $this->getMapperMock(),
-                $this->getFieldHandlerMock()
+                $this->getFieldHandlerMock(),
+                $this->getUrlAliasHandlerMock(),
+                $this->getUrlAliasGatewayMock()
             )
         );
         $mock->locationHandler = $this->getLocationHandlerMock();
@@ -1365,6 +1450,42 @@ class ContentHandlerTest extends TestCase
             );
         }
         return $this->gatewayMock;
+    }
+
+    /**
+     * Returns a mock object for the UrlAlias Handler.
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler
+     */
+    protected function getUrlAliasHandlerMock()
+    {
+        if ( !isset( $this->urlAliasHandlerMock ) )
+        {
+            $this->urlAliasHandlerMock = $this->getMock(
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\Handler',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->urlAliasHandlerMock;
+    }
+
+    /**
+     * Returns a mock object for the UrlAlias Gateway.
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway
+     */
+    protected function getUrlAliasGatewayMock()
+    {
+        if ( !isset( $this->urlAliasGatewayMock ) )
+        {
+            $this->urlAliasGatewayMock = $this->getMockForAbstractClass(
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\Gateway'
+            );
+        }
+        return $this->urlAliasGatewayMock;
     }
 
     /**
