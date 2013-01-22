@@ -55,7 +55,14 @@ class FieldHandlerTest extends LanguageAwareTestCase
     protected $storageHandlerMock;
 
     /**
-     * Storage handler mock
+     * Field type registry mock
+     *
+     * @var \eZ\Publish\Core\Persistence\FieldTypeRegistry
+     */
+    protected $fieldTypeRegistryMock;
+
+    /**
+     * Field type mock
      *
      * @var \eZ\Publish\SPI\FieldType\FieldType
      */
@@ -80,11 +87,6 @@ class FieldHandlerTest extends LanguageAwareTestCase
 
         $fieldTypeMock->expects( $this->exactly( 3 ) )
             ->method( "getEmptyValue" )
-            ->will( $this->returnValue( 42 ) );
-
-        $fieldTypeMock->expects( $this->exactly( 3 ) )
-            ->method( "toPersistenceValue" )
-            ->with( $this->equalTo( 42 ) )
             ->will( $this->returnValue( new FieldValue() ) );
 
         $contentGatewayMock->expects( $this->exactly( 6 ) )
@@ -345,11 +347,6 @@ class FieldHandlerTest extends LanguageAwareTestCase
 
         $fieldTypeMock->expects( $this->exactly( 1 ) )
             ->method( "getEmptyValue" )
-            ->will( $this->returnValue( 42 ) );
-
-        $fieldTypeMock->expects( $this->exactly( 1 ) )
-            ->method( "toPersistenceValue" )
-            ->with( $this->equalTo( 42 ) )
             ->will( $this->returnValue( new FieldValue() ) );
 
         $contentGatewayMock->expects( $this->exactly( 3 ) )
@@ -773,9 +770,7 @@ class FieldHandlerTest extends LanguageAwareTestCase
             $this->getMapperMock(),
             $this->getStorageHandlerMock(),
             $this->getLanguageHandler(),
-            array(
-                "some-type" => $this->getFieldTypeMock()
-            )
+            $this->getFieldTypeRegistryMock()
         );
         $mock->typeHandler = $this->getTypeHandlerMock();
 
@@ -856,6 +851,34 @@ class FieldHandlerTest extends LanguageAwareTestCase
             );
         }
         return $this->contentGatewayMock;
+    }
+
+    /**
+     * @return \eZ\Publish\Core\Persistence\FieldTypeRegistry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getFieldTypeRegistryMock()
+    {
+        if ( !isset( $this->fieldTypeRegistryMock ) )
+        {
+            $this->fieldTypeRegistryMock = $this->getMock(
+                'eZ\\Publish\\Core\\Persistence\\FieldTypeRegistry',
+                array(),
+                array(),
+                '',
+                false
+            );
+
+            $this->fieldTypeRegistryMock->expects(
+                $this->any()
+            )->method(
+                "getFieldType"
+            )->with(
+                $this->isType( "string" )
+            )->will(
+                $this->returnValue( $this->getFieldTypeMock() )
+            );
+        }
+        return $this->fieldTypeRegistryMock;
     }
 
     /**

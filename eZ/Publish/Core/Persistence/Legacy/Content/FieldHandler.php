@@ -16,7 +16,8 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Persistence\FieldTypeRegistry;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 
 /**
  * Field Handler.
@@ -57,6 +58,13 @@ class FieldHandler
     protected $storageHandler;
 
     /**
+     * FieldType registry
+     *
+     * @var \eZ\Publish\Core\Persistence\FieldTypeRegistry
+     */
+    protected $fieldTypeRegistry;
+
+    /**
      * Hash of SPI FieldTypes or callable callbacks to generate one.
      *
      * @var array
@@ -69,55 +77,21 @@ class FieldHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $mapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler $languageHandler
-     * @param array $fieldTypes Hash of SPI FieldTypes or callable callbacks to generate one.
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
+     * @param \eZ\Publish\Core\Persistence\FieldTypeRegistry $fieldTypeRegistry
      */
     public function __construct(
         Gateway $contentGateway,
         Mapper $mapper,
         StorageHandler $storageHandler,
-        $languageHandler,
-        array $fieldTypes )
+        LanguageHandler $languageHandler,
+        FieldTypeRegistry $fieldTypeRegistry )
     {
         $this->contentGateway = $contentGateway;
         $this->mapper = $mapper;
         $this->storageHandler = $storageHandler;
         $this->languageHandler = $languageHandler;
-        $this->fieldTypes = $fieldTypes;
-    }
-
-    /**
-     * Instantiates a FieldType\Type object
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $type not properly setup
-     *         with settings injected to service
-     *
-     * @param $identifier
-     *
-     * @return \eZ\Publish\SPI\FieldType\FieldType
-     */
-    protected function buildFieldType( $identifier )
-    {
-        if ( !isset( $this->fieldTypes[$identifier] ) )
-        {
-            throw new NotFoundException(
-                "FieldType",
-                "Provided \$identifier is unknown: '{$identifier}', has: " . var_export( array_keys( $this->fieldTypes ), true )
-            );
-        }
-
-        if ( $this->fieldTypes[$identifier] instanceof \eZ\Publish\SPI\FieldType\FieldType )
-        {
-            return $this->fieldTypes[$identifier];
-        }
-        else if ( !is_callable( $this->fieldTypes[$identifier] ) )
-        {
-            throw new InvalidArgumentException( "\$settings[$identifier]", 'must be instance of SPI\\FieldType\\FieldType or callback to generate it' );
-        }
-
-        /** @var $closure \Closure */
-        $closure = $this->fieldTypes[$identifier];
-        return $closure();
+        $this->fieldTypeRegistry = $fieldTypeRegistry;
     }
 
     /**
@@ -178,12 +152,12 @@ class FieldHandler
      */
     protected function getEmptyField( FieldDefinition $fieldDefinition, $languageCode )
     {
-        $fieldType = $this->buildFieldType( $fieldDefinition->fieldType );
+        $fieldType = $this->fieldTypeRegistry->getFieldType( $fieldDefinition->fieldType );
         return new Field(
             array(
                 "fieldDefinitionId" => $fieldDefinition->id,
                 "type" => $fieldDefinition->fieldType,
-                "value" => $fieldType->toPersistenceValue( $fieldType->getEmptyValue() ),
+                "value" => $fieldType->getEmptyValue(),
                 "languageCode" => $languageCode
             )
         );

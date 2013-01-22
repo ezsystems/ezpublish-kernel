@@ -378,7 +378,7 @@ class Handler implements HandlerInterface
                 $this->getContentMapper(),
                 $this->getStorageHandler(),
                 $this->contentLanguageHandler(),
-                $this->config["field_type"]
+                $this->getFieldTypeRegistry()
             );
             $this->fieldHandler->typeHandler = $this->contentTypeHandler();
         }
