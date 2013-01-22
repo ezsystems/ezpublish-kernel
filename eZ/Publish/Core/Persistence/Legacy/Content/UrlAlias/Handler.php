@@ -340,7 +340,7 @@ class Handler implements UrlAliasHandlerInterface
             $this->locationGateway->updatePathIdentificationString(
                 $locationId,
                 $parentLocationId,
-                $this->convertToAlias( $newText, "node_", "urlalias_compat" )
+                $this->convertToAlias( $newText, "node_" . $locationId, "urlalias_compat" )
             );
         }
 

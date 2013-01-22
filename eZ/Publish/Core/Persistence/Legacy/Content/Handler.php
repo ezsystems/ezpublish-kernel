@@ -409,7 +409,7 @@ class Handler implements BaseContentHandler
                     $row["parent_node_id"],
                     $this->urlAliasHandler->convertToAlias(
                         $locationName,
-                        "location_" . $row["node_id"],
+                        "node_" . $row["node_id"],
                         "urlalias_compat"
                     )
                 );
