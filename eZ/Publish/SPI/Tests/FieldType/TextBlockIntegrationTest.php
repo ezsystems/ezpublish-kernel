@@ -54,6 +54,10 @@ class TextBlockIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
+        $handler->getFieldTypeRegistry()->register(
+            'eztext',
+            new FieldType\TextBlock\Type()
+        );
         $handler->getStorageRegistry()->register(
             'eztext',
             new FieldType\NullStorage()

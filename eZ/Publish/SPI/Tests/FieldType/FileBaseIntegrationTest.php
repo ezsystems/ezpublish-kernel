@@ -52,6 +52,16 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     }
 
     /**
+     * Returns MIME type detector to be used.
+     *
+     * @return \eZ\Publish\Core\FieldType\BinaryBase\MimeTypeDetector
+     */
+    protected function getMimeTypeDetector()
+    {
+        return new FieldType\BinaryBase\MimeTypeDetector\FileInfoDetector();
+    }
+
+    /**
      * Returns the temporary directory to be used for file storage
      *
      * @return string

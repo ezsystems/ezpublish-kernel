@@ -147,6 +147,37 @@ class HandlerTest extends TestCase
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::getFieldTypeRegistry
+     *
+     * @return void
+     */
+    public function testGetFieldTypeRegistry()
+    {
+        $handler = $this->getHandlerFixture();
+        $registry = $handler->getFieldTypeRegistry();
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\Core\\Persistence\\FieldTypeRegistry',
+            $registry
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::getFieldTypeRegistry
+     *
+     * @return void
+     */
+    public function testGetFieldTypeRegistryTwice()
+    {
+        $handler = $this->getHandlerFixture();
+
+        $this->assertSame(
+            $handler->getFieldTypeRegistry(),
+            $handler->getFieldTypeRegistry()
+        );
+    }
+
+    /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::searchHandler
      *
      * @return void

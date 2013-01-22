@@ -54,6 +54,10 @@ class FloatIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
+        $handler->getFieldTypeRegistry()->register(
+            'ezfloat',
+            new FieldType\Float\Type()
+        );
         $handler->getStorageRegistry()->register(
             'ezfloat',
             new FieldType\NullStorage()
