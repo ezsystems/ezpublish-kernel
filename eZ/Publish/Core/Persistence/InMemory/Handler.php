@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\InMemory;
 
 use eZ\Publish\SPI\Persistence\Handler as HandlerInterface;
+use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\Core\Base\Exceptions\MissingClass;
 
 /**
@@ -32,21 +33,19 @@ class Handler implements HandlerInterface
     protected $backend;
 
     /**
-     * General configuration
+     * FieldType registry
      *
-     * @var array
+     * @var \eZ\Publish\Core\Persistence\FieldTypeRegistry
      */
-    protected $config;
+    protected $fieldTypeRegistry;
 
     /**
      * Setup instance with an instance of Backend class
      */
-    public function __construct( array $config = array() )
+    public function __construct( FieldTypeRegistry $fieldTypeRegistry = null )
     {
         $this->backend = new Backend( json_decode( file_get_contents( __DIR__ . '/data.json' ), true ) );
-        $this->config = $config + array(
-            "field_type" => array()
-        );
+        $this->fieldTypeRegistry = $fieldTypeRegistry;
     }
 
     /**
@@ -191,7 +190,7 @@ class Handler implements HandlerInterface
             switch ( $className )
             {
                 case 'eZ\\Publish\\Core\\Persistence\\InMemory\\ContentHandler':
-                    $handler = new $className( $this, $this->backend, $this->config["field_type"] );
+                    $handler = new $className( $this, $this->backend, $this->fieldTypeRegistry );
                     break;
                 default:
                     $handler = new $className( $this, $this->backend );
