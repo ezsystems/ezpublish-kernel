@@ -375,7 +375,10 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Updates a content object meta data, identified by $contentId
+     * Updates a content object meta data, identified by $contentId.
+     *
+     * This implementation also updates path identification string for locations of
+     * given $contentId if main language is set in update struct.
      *
      * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $content
@@ -385,32 +388,35 @@ class Handler implements BaseContentHandler
     public function updateMetadata( $contentId, MetadataUpdateStruct $content )
     {
         $this->contentGateway->updateContent( $contentId, $content );
-        $contentInfo = $this->loadContentInfo( $contentId );
 
         if ( isset( $content->mainLanguageId ) )
         {
-            $locationName = $this->urlAliasGateway->loadLocationEntries(
-                $contentInfo->mainLocationId,
-                false,
-                $content->mainLanguageId
-            );
-            if ( !empty( $locationName ) )
+            $contentLocationsRows = $this->locationGateway->loadLocationDataByContent( $contentId );
+            foreach ( $contentLocationsRows as $row )
             {
-                $locationName = $locationName[0]["text"];
+                $locationName = "";
+                $urlAliasRows = $this->urlAliasGateway->loadLocationEntries(
+                    $row["node_id"],
+                    false,
+                    $content->mainLanguageId
+                );
+                if ( !empty( $urlAliasRows ) )
+                {
+                    $locationName = $urlAliasRows[0]["text"];
+                }
+                $this->locationGateway->updatePathIdentificationString(
+                    $row["node_id"],
+                    $row["parent_node_id"],
+                    $this->urlAliasHandler->convertToAlias(
+                        $locationName,
+                        "location_" . $row["node_id"],
+                        "urlalias_compat"
+                    )
+                );
             }
-            $locationData = $this->locationGateway->getBasicNodeData( $contentInfo->mainLocationId );
-            $this->locationGateway->updatePathIdentificationString(
-                $contentInfo->mainLocationId,
-                $locationData["parent_node_id"],
-                $this->urlAliasHandler->convertToAlias(
-                    $locationName,
-                    "location_" . $contentInfo->mainLocationId,
-                    "urlalias_compat"
-                )
-            );
         }
 
-        return $contentInfo;
+        return $this->loadContentInfo( $contentId );
     }
 
     /**
