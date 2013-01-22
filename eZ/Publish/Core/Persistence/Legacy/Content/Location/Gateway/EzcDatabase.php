@@ -216,12 +216,12 @@ class EzcDatabase extends Gateway
      * operations, which then depend on the respective database.
      *
      * @todo optimize
-     * @param string $sourceNodeData
-     * @param string $destinationNodeData
+     * @param array $sourceNodeData
+     * @param array $destinationNodeData
      *
      * @return void
      */
-    public function moveSubtreeNodes( $sourceNodeData, $destinationNodeData )
+    public function moveSubtreeNodes( array $sourceNodeData, array $destinationNodeData )
     {
         $fromPathString = $sourceNodeData["path_string"];
 

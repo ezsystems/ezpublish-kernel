@@ -90,12 +90,12 @@ abstract class Gateway
      * operations, which then depend on the respective database.
      *
      * @todo optimize
-     * @param string $fromPathString
-     * @param string $toPathString
+     * @param array $fromPathString
+     * @param array $toPathString
      *
      * @return void
      */
-    abstract public function moveSubtreeNodes( $fromPathString, $toPathString );
+    abstract public function moveSubtreeNodes( array $fromPathString, array $toPathString );
 
     /**
      * Updated subtree modification time for all nodes on path
