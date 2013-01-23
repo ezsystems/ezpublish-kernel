@@ -11,7 +11,7 @@ parameters:
 services:
     ezpublish_legacy.view_provider:
         class: %ezpublish_legacy.view_provider.class%
-        arguments: [@ezpublish_legacy.kernel, @ezpublish_legacy.view_decorator, @?logger]
+        arguments: [@ezpublish_legacy.kernel, @ezpublish_legacy.view_decorator, @ezpublish_legacy.templating.legacy_helper, @?logger]
         abstract: true
 
     ezpublish_legacy.content_view_provider:

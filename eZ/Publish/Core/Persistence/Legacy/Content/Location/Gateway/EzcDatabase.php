@@ -791,15 +791,15 @@ class EzcDatabase extends Gateway
             ->from( $this->handler->quoteTable( 'eznode_assignment' ) )
             ->where(
                 $query->expr->lAnd(
-                    $query->expr->like(
+                    $query->expr->eq(
                         $this->handler->quoteColumn( 'contentobject_id' ),
                         $query->bindValue( $contentId, null, \PDO::PARAM_INT )
                     ),
-                    $query->expr->like(
+                    $query->expr->eq(
                         $this->handler->quoteColumn( 'contentobject_version' ),
                         $query->bindValue( $versionNo, null, \PDO::PARAM_INT )
                     ),
-                    $query->expr->like(
+                    $query->expr->eq(
                         $this->handler->quoteColumn( 'op_code' ),
                         $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_CREATE, null, \PDO::PARAM_INT )
                     )

@@ -32,7 +32,9 @@ class Visibility extends CriterionHandler
     }
 
     /**
-     * Check if this criterion handler accepts to handle the given criterion.
+     * Generate query expression for a Criterion this handler accepts
+     *
+     * accept() must be called before calling this method.
      *
      * @todo: Needs optimisation since this subselect can potentially be problematic
      * due to large number of contentobject_id values returned. One way to fix this

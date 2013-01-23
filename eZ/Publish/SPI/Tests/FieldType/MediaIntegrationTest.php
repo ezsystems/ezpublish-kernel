@@ -79,6 +79,13 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     {
         $handler = $this->getHandler();
 
+        $handler->getFieldTypeRegistry()->register(
+            'ezmedia',
+            new FieldType\Media\Type(
+                $this->getFileService(),
+                $this->getMimeTypeDetector()
+            )
+        );
         $handler->getStorageRegistry()->register(
             'ezmedia',
             new FieldType\Media\MediaStorage(

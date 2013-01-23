@@ -10,6 +10,9 @@ parameters:
     ezpublish.content_view.viewbase_layout: "EzPublishCoreBundle::viewbase_layout.html.twig"
     ezpublish.content_view.content_block_name: "content"
 
+    ezpublish.templating.global_helper.core.class: eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper
+    ezpublish.twig.extension.core.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\CoreExtension
+
 services:
     # Redefining twig loader to use the chain loader instead of only the file system loader.
     # This allows to add additional loading logic
@@ -52,3 +55,16 @@ services:
         arguments: [@ezpublish.config.resolver, @ezpublish.api.repository, @service_container]
         tags:
             - {name: ezpublish.location_view_provider, priority: 10}
+
+    ezpublish.templating.global_helper.core:
+        class: %ezpublish.templating.global_helper.core.class%
+        arguments: [@service_container]
+
+    ezpublish.templating.global_helper:
+        alias: ezpublish.templating.global_helper.core
+
+    ezpublish.twig.extension.core:
+        class: %ezpublish.twig.extension.core.class%
+        arguments: [@ezpublish.templating.global_helper]
+        tags:
+            - {name: twig.extension}
