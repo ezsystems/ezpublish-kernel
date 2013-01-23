@@ -79,11 +79,11 @@ class ContentHandlerTest extends TestCase
     protected $locationHandlerMock;
 
     /**
-     * Location handler mock
+     * Slug converter mock
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter
      */
-    protected $urlAliasHandlerMock;
+    protected $slugConverterMock;
 
     /**
      * Location handler mock
@@ -606,7 +606,7 @@ class ContentHandlerTest extends TestCase
     {
         $handler = $this->getPartlyMockedHandler( array( 'load', 'loadContentInfo' ) );
         $locationGatewayMock = $this->getLocationGatewayMock();
-        $urlAliasHandlerMock = $this->getUrlAliasHandlerMock();
+        $slugConverterMock = $this->getSlugConverterMock();
         $urlAliasGatewayMock = $this->getUrlAliasGatewayMock();
         $gatewayMock = $this->getGatewayMock();
         $updateStruct = new MetadataUpdateStruct( array( 'mainLanguageId' => 2 ) );
@@ -642,8 +642,8 @@ class ContentHandlerTest extends TestCase
                 )
             );
 
-        $urlAliasHandlerMock->expects( $this->once() )
-            ->method( "convertToAlias" )
+        $slugConverterMock->expects( $this->once() )
+            ->method( "convert" )
             ->with( "slug", "node_100", "urlalias_compat" )
             ->will( $this->returnValue( "transformed_slug" ) );
 
@@ -1311,7 +1311,7 @@ class ContentHandlerTest extends TestCase
                 $this->getLocationGatewayMock(),
                 $this->getMapperMock(),
                 $this->getFieldHandlerMock(),
-                $this->getUrlAliasHandlerMock(),
+                $this->getSlugConverterMock(),
                 $this->getUrlAliasGatewayMock()
             );
             $this->contentHandler->locationHandler = $this->getLocationHandlerMock();
@@ -1336,7 +1336,7 @@ class ContentHandlerTest extends TestCase
                 $this->getLocationGatewayMock(),
                 $this->getMapperMock(),
                 $this->getFieldHandlerMock(),
-                $this->getUrlAliasHandlerMock(),
+                $this->getSlugConverterMock(),
                 $this->getUrlAliasGatewayMock()
             )
         );
@@ -1455,21 +1455,21 @@ class ContentHandlerTest extends TestCase
     /**
      * Returns a mock object for the UrlAlias Handler.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter
      */
-    protected function getUrlAliasHandlerMock()
+    protected function getSlugConverterMock()
     {
-        if ( !isset( $this->urlAliasHandlerMock ) )
+        if ( !isset( $this->slugConverterMock ) )
         {
-            $this->urlAliasHandlerMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\Handler',
+            $this->slugConverterMock = $this->getMock(
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\SlugConverter',
                 array(),
                 array(),
                 '',
                 false
             );
         }
-        return $this->urlAliasHandlerMock;
+        return $this->slugConverterMock;
     }
 
     /**

@@ -13,6 +13,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase as EzcDatabaseLocation;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase as LanguageGateway;
@@ -2887,7 +2888,7 @@ class UrlAliasHandlerTest extends TestCase
                     false
                 ),
                 self::getMock(
-                    "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Search\\TransformationProcessor\\DefinitionBased",
+                    "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\SlugConverter",
                     array(),
                     array(),
                     '',
@@ -2917,13 +2918,14 @@ class UrlAliasHandlerTest extends TestCase
             $languageMaskGenerator
         );
         $mapper = new Mapper( $languageMaskGenerator );
+        $slugConverter = new SlugConverter( $this->getProcessor() );
 
         return new Handler(
             $gateway,
             $mapper,
             $this->getLocationGateway(),
             $languageHandler,
-            $this->getProcessor()
+            $slugConverter
         );
     }
 
