@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\MVC\Legacy\View;
 
 use eZ\Publish\Core\MVC\Legacy\View\TwigContentViewLayoutDecorator;
+use eZ\Publish\Core\MVC\Legacy\Templating\LegacyHelper;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Closure;
 
@@ -30,10 +31,16 @@ abstract class Provider
      */
     protected $decorator;
 
-    public function __construct( Closure $legacyKernelClosure, TwigContentViewLayoutDecorator $decorator, LoggerInterface $logger = null )
+    /**
+     * @var \eZ\Publish\Core\MVC\Legacy\Templating\LegacyHelper
+     */
+    protected $legacyHelper;
+
+    public function __construct( Closure $legacyKernelClosure, TwigContentViewLayoutDecorator $decorator, LegacyHelper $legacyHelper, LoggerInterface $logger = null )
     {
         $this->legacyKernelClosure = $legacyKernelClosure;
         $this->decorator = $decorator;
+        $this->legacyHelper = $legacyHelper;
         $this->logger = $logger;
     }
 

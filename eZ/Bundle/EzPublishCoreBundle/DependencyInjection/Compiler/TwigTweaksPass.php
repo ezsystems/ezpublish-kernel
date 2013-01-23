@@ -12,14 +12,12 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use ReflectionClass;
 
 /**
  * This compiler pass will register eZ Publish field types.
  */
 class TwigTweaksPass implements CompilerPassInterface
 {
-
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
@@ -34,6 +32,5 @@ class TwigTweaksPass implements CompilerPassInterface
         {
             $refChainLoader->addMethodCall( 'addLoader', array( new Reference( $id ) ) );
         }
-
     }
 }

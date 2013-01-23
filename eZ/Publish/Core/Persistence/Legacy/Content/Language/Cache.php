@@ -108,4 +108,14 @@ class Cache
     {
         return $this->mapByLocale;
     }
+
+    /**
+     * CLear language cache
+     *
+     * @return void
+     */
+    public function clearCache()
+    {
+        $this->mapByLocale = $this->mapById = array();
+    }
 }
