@@ -128,7 +128,8 @@ CREATE TABLE ezcontentclass (
   url_alias_name varchar(255) default NULL,
   version int(11) NOT NULL default '0',
   PRIMARY KEY  (id,version),
-  KEY ezcontentclass_version (version)
+  KEY ezcontentclass_version (version),
+  KEY ezcontentclass_identifier (identifier, version)
 ) ENGINE=InnoDB;
 
 
@@ -353,6 +354,7 @@ CREATE TABLE ezcontentobject_tree (
   sort_field int(11) default '1',
   sort_order int(11) default '1',
   PRIMARY KEY  (node_id),
+  KEY ezcontentobject_tree_remote_id (remote_id),
   KEY ezcontentobject_tree_co_id (contentobject_id),
   KEY ezcontentobject_tree_depth (depth),
   KEY ezcontentobject_tree_p_node_id (parent_node_id),
@@ -381,7 +383,8 @@ CREATE TABLE ezcontentobject_version (
   PRIMARY KEY  (id),
   KEY ezcobj_version_creator_id (creator_id),
   KEY ezcobj_version_status (status),
-  KEY idx_object_version_objver (contentobject_id,version)
+  KEY idx_object_version_objver (contentobject_id,version),
+  KEY ezcontentobject_version_object_status (contentobject_id, status)
 ) ENGINE=InnoDB;
 
 
@@ -420,7 +423,8 @@ CREATE TABLE ezpolicy (
   original_id int(11) NOT NULL default '0',
   role_id int(11) default NULL,
   PRIMARY KEY  (id),
-  KEY ezpolicy_original_id (original_id)
+  KEY ezpolicy_original_id (original_id),
+  KEY ezpolicy_role_id (role_id)
 ) ENGINE=InnoDB;
 
 
@@ -446,7 +450,8 @@ CREATE TABLE ezpolicy_limitation_value (
   limitation_id int(11) default NULL,
   value varchar(255) default NULL,
   PRIMARY KEY  (id),
-  KEY ezpolicy_limitation_value_val (value)
+  KEY ezpolicy_limitation_value_val (value),
+  KEY ezpolicy_limitation_value_limitation_id (limitation_id)
 ) ENGINE=InnoDB;
 
 

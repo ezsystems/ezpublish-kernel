@@ -12,10 +12,11 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content;
 use eZ\Publish\SPI\Persistence\Content as ContentObject;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
-use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine;
@@ -168,7 +169,11 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         ),
                     )
                 ),
-                new Content\Search\Gateway\SortClauseConverter(),
+                new Content\Search\Gateway\SortClauseConverter(
+                    array(
+                        new Content\Search\Gateway\SortClauseHandler\ContentId( $this->getDatabaseHandler() ),
+                    )
+                ),
                 new QueryBuilder( $this->getDatabaseHandler() ),
                 $this->getLanguageHandler(),
                 $this->getLanguageMaskGenerator()
@@ -735,15 +740,17 @@ class SearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
-            array( 4, 11, 12, 13, 42, 225, 10, 14 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            array( 4, 10, 11, 12, 13, 14, 42, 225 ),
+            $ids
         );
     }
 
@@ -769,15 +776,17 @@ class SearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
             array( 11, 225 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            $ids
         );
     }
 
@@ -803,15 +812,17 @@ class SearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
             array( 11, 14, 225 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            $ids
         );
     }
 
@@ -837,15 +848,17 @@ class SearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
             array( 11, 14, 225 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            $ids
         );
     }
 
@@ -871,15 +884,17 @@ class SearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
             array( 11, 14, 225 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            $ids
         );
     }
 
@@ -905,15 +920,17 @@ class SearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
-            array( 131, 66, 225 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            array( 66, 131, 225 ),
+            $ids
         );
     }
 
@@ -1065,15 +1082,17 @@ class SearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 42 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            $ids
         );
     }
 
@@ -1243,15 +1262,17 @@ class SearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
             array( 11, 69, 71, 72 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            $ids
         );
     }
 
@@ -1505,19 +1526,22 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         'eng-GB'
                     ),
                     'limit' => 10,
+                    'sortClauses' => array( new SortClause\ContentId ),
                 )
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            $ids
         );
     }
 
@@ -1537,19 +1561,22 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         'eng-US', 'eng-GB'
                     ),
                     'limit' => 10,
+                    'sortClauses' => array( new SortClause\ContentId ),
                 )
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            $ids
         );
     }
 

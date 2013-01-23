@@ -38,7 +38,7 @@ class RepositoryTest extends BaseTest
      * Test for the getContentLanguageService() method.
      *
      * @return void
-     * @group content-language
+     * @group language
      * @see \eZ\Publish\API\Repository\Repository::getContentLanguageService()
      */
     public function testGetContentLanguageService()

@@ -524,10 +524,12 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->contentTypeHandler ) )
         {
-            $this->contentTypeHandler = new TypeHandler(
-                $this->getContentTypeGateway(),
-                new TypeMapper( $this->converterRegistry ),
-                $this->getTypeUpdateHandler()
+            $this->contentTypeHandler = new Content\Type\MemoryCachingHandler(
+                new TypeHandler(
+                    $this->getContentTypeGateway(),
+                    new TypeMapper( $this->converterRegistry ),
+                    $this->getTypeUpdateHandler()
+                )
             );
         }
         return $this->contentTypeHandler;
@@ -590,9 +592,6 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->languageHandler ) )
         {
-            /**
-             * Caching language handler, not suitable for testing
-             *
             $this->languageHandler = new Content\Language\CachingHandler(
                 new Content\Language\Handler(
                     new Content\Language\Gateway\ExceptionConversion(
@@ -601,14 +600,6 @@ class Handler implements HandlerInterface
                     new LanguageMapper()
                 ),
                 $this->getLanguageCache()
-            );
-            */
-
-            $this->languageHandler = new Content\Language\Handler(
-                new Content\Language\Gateway\ExceptionConversion(
-                    new Content\Language\Gateway\EzcDatabase( $this->dbHandler )
-                ),
-                new LanguageMapper()
             );
         }
         return $this->languageHandler;
@@ -917,6 +908,13 @@ class Handler implements HandlerInterface
         try
         {
             $this->dbHandler->rollback();
+
+            // Clear all caches after rollback
+            if ( isset( $this->contentTypeHandler ) )
+                $this->contentTypeHandler->clearCache();
+
+            if ( isset( $this->languageHandler ) )
+                $this->languageHandler->clearCache();
         }
         catch ( ezcDbTransactionException $e )
         {
