@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler;
-use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway as UrlAliasGateway;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
@@ -62,11 +62,11 @@ class Handler implements BaseContentHandler
     protected $fieldHandler;
 
     /**
-     * UrlAlias handler
+     * URL slug converter.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter
      */
-    protected $urlAliasHandler;
+    protected $slugConverter;
 
     /**
      * UrlAlias gateway
@@ -82,13 +82,15 @@ class Handler implements BaseContentHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $locationGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $mapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler $fieldHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter $slugConverter
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway $urlAliasGateway
      */
     public function __construct(
         Gateway $contentGateway,
         LocationGateway $locationGateway,
         Mapper $mapper,
         FieldHandler $fieldHandler,
-        UrlAliasHandler $urlAliasHandler,
+        SlugConverter $slugConverter,
         UrlAliasGateway $urlAliasGateway
     )
     {
@@ -96,7 +98,7 @@ class Handler implements BaseContentHandler
         $this->locationGateway = $locationGateway;
         $this->mapper = $mapper;
         $this->fieldHandler = $fieldHandler;
-        $this->urlAliasHandler = $urlAliasHandler;
+        $this->slugConverter = $slugConverter;
         $this->urlAliasGateway = $urlAliasGateway;
     }
 
@@ -407,7 +409,7 @@ class Handler implements BaseContentHandler
                 $this->locationGateway->updatePathIdentificationString(
                     $row["node_id"],
                     $row["parent_node_id"],
-                    $this->urlAliasHandler->convertToAlias(
+                    $this->slugConverter->convert(
                         $locationName,
                         "node_" . $row["node_id"],
                         "urlalias_compat"
