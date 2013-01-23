@@ -235,27 +235,25 @@ class RelationProcessor
         // Remove relations not present in input set
         foreach ( $mappedRelations as $relationType => $relationData )
         {
-            if ( $relationType === Relation::FIELD )
+            foreach ( $relationData as $relationEntry )
             {
-                foreach ( $relationData as $relations )
+                switch ( $relationType )
                 {
-                    foreach ( $relations as $relation )
-                    {
+                    case Relation::FIELD:
+                        foreach ( $relationEntry as $relation )
+                        {
+                            $this->persistenceHandler->contentHandler()->removeRelation(
+                                $relation->id,
+                                $relationType
+                            );
+                        }
+                        break;
+                    case Relation::LINK:
+                    case Relation::EMBED:
                         $this->persistenceHandler->contentHandler()->removeRelation(
-                            $relation->id,
+                            $relationEntry->id,
                             $relationType
                         );
-                    }
-                }
-            }
-            else if ( $relationType === Relation::LINK || $relationType === Relation::EMBED )
-            {
-                foreach ( $relationData as $relation )
-                {
-                    $this->persistenceHandler->contentHandler()->removeRelation(
-                        $relation->id,
-                        $relationType
-                    );
                 }
             }
         }
