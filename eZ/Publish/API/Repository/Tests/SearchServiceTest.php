@@ -474,6 +474,17 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . '/SortNone.php',
+                // Result having the same sort level should be sorted between them to be system independent
+                function ( &$data )
+                {
+                    usort(
+                        $data->searchHits,
+                        function ( $a, $b )
+                        {
+                            return ( $a->valueObject["id"] < $b->valueObject["id"] ) ? -1 : 1;
+                        }
+                    );
+                },
             ),
             array(
                 new Query(
@@ -496,6 +507,31 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . '/SortLocationDepth.php',
+                // Result having the same sort level should be sorted between them to be system independent
+                function ( &$data )
+                {
+                    // Result with ids:
+                    //     4 has depth = 1
+                    //     11, 12, 13, 42, 59 have depth = 2
+                    //     10, 14 have depth = 3
+                    $map = array(
+                        4 => 0,
+                        11 => 1,
+                        12 => 2,
+                        13 => 3,
+                        42 => 4,
+                        59 => 5,
+                        10 => 6,
+                        14 => 7,
+                    );
+                    usort(
+                        $data->searchHits,
+                        function ( $a, $b ) use ( $map )
+                        {
+                            return ( $map[$a->valueObject["id"]] < $map[$b->valueObject["id"]] ) ? -1 : 1;
+                        }
+                    );
+                },
             ),
             array(
                 new Query(
@@ -619,9 +655,9 @@ class SearchServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
-    public function testFindAndSortContent( Query $query, $fixture )
+    public function testFindAndSortContent( Query $query, $fixture, $closure = null )
     {
-        $this->assertQueryFixture( $query, $fixture );
+        $this->assertQueryFixture( $query, $fixture, $closure );
     }
 
     public function getFacettedSearches()
@@ -867,7 +903,7 @@ class SearchServiceTest extends BaseTest
      *
      * @return void
      */
-    protected function assertQueryFixture( Query $query, $fixture )
+    protected function assertQueryFixture( Query $query, $fixture, $closure = null )
     {
         $repository    = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -898,6 +934,11 @@ class SearchServiceTest extends BaseTest
             {
                 $this->markTestIncomplete( "No fixture available. Set \$_ENV['ez_tests_record'] to generate it." );
             }
+        }
+
+        if ( $closure !== null )
+        {
+            $closure( $result );
         }
 
         $this->assertEquals(

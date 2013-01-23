@@ -147,4 +147,15 @@ class CachingHandler implements BaseLanguageHandler
         $this->innerHandler->delete( $id );
         $this->languageCache->remove( $id );
     }
+
+    /**
+     * Clear internal cache
+     *
+     * @return void
+     */
+    public function clearCache()
+    {
+        $this->isCacheInitialized = false;
+        $this->languageCache->clearCache();
+    }
 }

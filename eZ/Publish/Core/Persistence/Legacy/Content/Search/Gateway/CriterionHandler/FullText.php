@@ -189,7 +189,9 @@ class FullText extends CriterionHandler
     }
 
     /**
-     * Check if this criterion handler accepts to handle the given criterion.
+     * Generate query expression for a Criterion this handler accepts
+     *
+     * accept() must be called before calling this method.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter$converter
      * @param \ezcQuerySelect $query

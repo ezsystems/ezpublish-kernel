@@ -3,6 +3,9 @@ parameters:
     ezpublish_legacy.templating.api_content_converter.class: eZ\Publish\Core\MVC\Legacy\Templating\Converter\ApiContentConverter
     ezpublish_legacy.templating.delegating_converter.class: eZ\Publish\Core\MVC\Legacy\Templating\Converter\DelegatingConverter
     ezpublish_legacy.templating.generic_converter.class: eZ\Publish\Core\MVC\Legacy\Templating\Converter\GenericConverter
+    # Overriding base GlobalHelper
+    ezpublish.templating.global_helper.core.class: eZ\Publish\Core\MVC\Legacy\Templating\GlobalHelper
+    ezpublish_legacy.templating.legacy_helper.class: eZ\Publish\Core\MVC\Legacy\Templating\LegacyHelper
 
 services:
     ezpublish_legacy.twig.extension:
@@ -28,3 +31,5 @@ services:
             - {name: ezpublish_legacy.templating.converter, for: %ezpublish.api.content.class%}
             - {name: ezpublish_legacy.templating.converter, for: %ezpublish.api.location.class%}
 
+    ezpublish_legacy.templating.legacy_helper:
+        class: %ezpublish_legacy.templating.legacy_helper.class%

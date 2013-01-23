@@ -56,6 +56,10 @@ class RelationIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
+        $handler->getFieldTypeRegistry()->register(
+            'ezobjectrelation',
+            new FieldType\Relation\Type()
+        );
         $handler->getStorageRegistry()->register(
             'ezobjectrelation',
             new FieldType\Relation\RelationStorage(
