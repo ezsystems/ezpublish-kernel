@@ -18,7 +18,6 @@ use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
 use Tedivm\StashBundle\Service\CacheService;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
-
 /**
  * Cache handler for user module
  */
@@ -98,16 +97,26 @@ class UserHandler implements UserHandlerInterface
     public function delete( $userId )
     {
         $this->logger->logCall( __METHOD__, array( 'user' => $userId ) );
-        return $this->persistenceFactory->getUserHandler()->delete( $userId );
+        $return = $this->persistenceFactory->getUserHandler()->delete( $userId );
+
+        // user id == content id == group id
+        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', $userId );
+        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', 'inherited', $userId );
+
+        return $return;
     }
 
     /**
      * @see eZ\Publish\SPI\Persistence\User\Handler::createRole
      */
-    public function createRole( Role $role )
+    public function createRole( Role $struct )
     {
-        $this->logger->logCall( __METHOD__, array( 'struct' => $role ) );
-        return $this->persistenceFactory->getUserHandler()->createRole( $role );
+        $this->logger->logCall( __METHOD__, array( 'struct' => $struct ) );
+        $role = $this->persistenceFactory->getUserHandler()->createRole( $struct );
+
+        $this->cache->get( 'user', 'role', $role->id )->set( $role );
+
+        return $role;
     }
 
     /**
@@ -115,8 +124,16 @@ class UserHandler implements UserHandlerInterface
      */
     public function loadRole( $roleId )
     {
-        $this->logger->logCall( __METHOD__, array( 'role' => $roleId ) );
-        return $this->persistenceFactory->getUserHandler()->loadRole( $roleId );
+        $cache = $this->cache->get( 'user', 'role', $roleId );
+        $role = $cache->get();
+        if ( $cache->isMiss() )
+        {
+            $this->logger->logCall( __METHOD__, array( 'role' => $roleId ) );
+            $role = $this->persistenceFactory->getUserHandler()->loadRole( $roleId );
+            $cache->set( $role );
+        }
+
+        return $role;
     }
 
     /**
@@ -160,17 +177,38 @@ class UserHandler implements UserHandlerInterface
      */
     public function loadRoleAssignmentsByGroupId( $groupId, $inherit = false )
     {
-        $this->logger->logCall( __METHOD__, array( 'group' => $groupId, 'inherit' => $inherit ) );
-        return $this->persistenceFactory->getUserHandler()->loadRoleAssignmentsByGroupId( $groupId, $inherit );
+        $cacheKey = ( $inherit ? 'inherited/' : '' ) . $groupId;
+        $cache = $this->cache->get( 'user', 'role', 'assignments', 'byGroup', $cacheKey );
+        $cacheAssignments = $cache->get();
+        if ( $cache->isMiss() )
+        {
+            $this->logger->logCall( __METHOD__, array( 'group' => $groupId, 'inherit' => $inherit ) );
+            $assignments = $this->persistenceFactory->getUserHandler()->loadRoleAssignmentsByGroupId(
+                $groupId,
+                $inherit
+            );
+            $cache->set( $this->deCoupleRoleAssignments( $assignments ) );
+        }
+        else
+        {
+            // rebuild RoleAssignments to the known outside value
+            $assignments = $this->coupleRoleAssignments( $cacheAssignments );
+        }
+
+        return $assignments;
     }
 
     /**
      * @see eZ\Publish\SPI\Persistence\User\Handler::updateRole
      */
-    public function updateRole( RoleUpdateStruct $role )
+    public function updateRole( RoleUpdateStruct $struct )
     {
-        $this->logger->logCall( __METHOD__, array( 'struct' => $role ) );
-        return $this->persistenceFactory->getUserHandler()->updateRole( $role );
+        $this->logger->logCall( __METHOD__, array( 'struct' => $struct ) );
+        $role = $this->persistenceFactory->getUserHandler()->updateRole( $struct );
+
+        $this->cache->get( 'user', 'role', $role->id )->set( $role );
+
+        return $role;
     }
 
     /**
@@ -179,7 +217,12 @@ class UserHandler implements UserHandlerInterface
     public function deleteRole( $roleId )
     {
         $this->logger->logCall( __METHOD__, array( 'role' => $roleId ) );
-        return $this->persistenceFactory->getUserHandler()->deleteRole( $roleId );
+        $return = $this->persistenceFactory->getUserHandler()->deleteRole( $roleId );
+
+        $this->cache->clear( 'user', 'role', $roleId );
+        $this->cache->clear( 'user', 'role', 'assignments' );
+
+        return $return;
     }
 
     /**
@@ -188,7 +231,11 @@ class UserHandler implements UserHandlerInterface
     public function addPolicy( $roleId, Policy $policy )
     {
         $this->logger->logCall( __METHOD__, array( 'role' => $roleId, 'struct' => $policy ) );
-        return $this->persistenceFactory->getUserHandler()->addPolicy( $roleId, $policy );
+        $return = $this->persistenceFactory->getUserHandler()->addPolicy( $roleId, $policy );
+
+        $this->cache->clear( 'user', 'role', $roleId );
+
+        return $return;
     }
 
     /**
@@ -197,7 +244,11 @@ class UserHandler implements UserHandlerInterface
     public function updatePolicy( Policy $policy )
     {
         $this->logger->logCall( __METHOD__, array( 'struct' => $policy ) );
-        return $this->persistenceFactory->getUserHandler()->updatePolicy( $policy );
+        $return = $this->persistenceFactory->getUserHandler()->updatePolicy( $policy );
+
+        $this->cache->clear( 'user', 'role', $policy->roleId );
+
+        return $return;
     }
 
     /**
@@ -207,6 +258,8 @@ class UserHandler implements UserHandlerInterface
     {
         $this->logger->logCall( __METHOD__, array( 'role' => $roleId, 'policy' => $policyId ) );
         $this->persistenceFactory->getUserHandler()->removePolicy( $roleId, $policyId );
+
+        $this->cache->clear( 'user', 'role', $roleId );
     }
 
     /**
@@ -224,7 +277,13 @@ class UserHandler implements UserHandlerInterface
     public function assignRole( $contentId, $roleId, array $limitation = null )
     {
         $this->logger->logCall( __METHOD__, array( 'group' => $contentId, 'role' => $roleId, 'limitation' => $limitation ) );
-        return $this->persistenceFactory->getUserHandler()->assignRole( $contentId, $roleId, $limitation );
+        $return = $this->persistenceFactory->getUserHandler()->assignRole( $contentId, $roleId, $limitation );
+
+        $this->cache->clear( 'user', 'role', $roleId );
+        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', $contentId );
+        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', 'inherited' );
+
+        return $return;
     }
 
     /**
@@ -233,6 +292,47 @@ class UserHandler implements UserHandlerInterface
     public function unAssignRole( $contentId, $roleId )
     {
         $this->logger->logCall( __METHOD__, array( 'group' => $contentId, 'role' => $roleId ) );
-        return $this->persistenceFactory->getUserHandler()->unAssignRole( $contentId, $roleId );
+        $return = $this->persistenceFactory->getUserHandler()->unAssignRole( $contentId, $roleId );
+
+        $this->cache->clear( 'user', 'role', $roleId );
+        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', $contentId );
+        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', 'inherited' );
+
+        return $return;
+    }
+
+    /**
+     * Prepare RoleAssignments for cache swapping Role object for id and return result
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\RoleAssignment[] $assignments
+     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[] Cloned $assignments with role switched for Role ID
+     */
+    protected function deCoupleRoleAssignments( array $assignments )
+    {
+        $cacheAssignments = array();
+        foreach ( $assignments as $key => $assignment )
+        {
+            $cacheAssignments[$key] = clone $assignment;
+            $cacheAssignments[$key]->role = $assignment->role->id;
+        }
+        return $cacheAssignments;
+    }
+
+    /**
+     * Build proper RoleAssignments by swapping Role id's for Role objects, reversing deCoupleRoleAssignments()
+     *
+     * @uses loadRole()
+     * @param \eZ\Publish\SPI\Persistence\User\RoleAssignment[] $cacheAssignments
+     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
+     */
+    protected function coupleRoleAssignments( array $cacheAssignments )
+    {
+        $assignments = array();
+        foreach ( $cacheAssignments as $key => $cacheAssignment )
+        {
+            $assignments[$key] = clone $cacheAssignment;
+            $assignments[$key]->role = $this->loadRole( $cacheAssignment->role );
+        }
+        return $assignments;
     }
 }
