@@ -199,7 +199,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
     {
         // Look for url to url alias id cache
         $cache = $this->cache->get( 'urlAlias', 'url', $url );//@todo escape slashes? at least remove the first one
-        $urlAliasUrlLookupCache = $cache->get();
+        $urlAliasId = $cache->get();
         if ( $cache->isMiss() )
         {
             // Also cache "not found" as this function is heavliy used and hance should be cached
@@ -215,14 +215,14 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
                 throw $e;
             }
         }
-        elseif ( $urlAliasUrlLookupCache === self::NOT_FOUND )
+        elseif ( $urlAliasId === self::NOT_FOUND )
         {
             throw new NotFoundException( 'UrlAlias', $url );
         }
         else
         {
             /** @var $urlAliasUrlLookupCache int */
-            $urlAlias = $this->loadUrlAlias( $urlAliasUrlLookupCache );
+            $urlAlias = $this->loadUrlAlias( $urlAliasId );
         }
 
         return $urlAlias;
