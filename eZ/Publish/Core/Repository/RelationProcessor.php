@@ -168,18 +168,11 @@ class RelationProcessor
                 $fieldDefinitionId = $contentType->getFieldDefinition( $relation->sourceFieldDefinitionIdentifier )->id;
                 $mappedRelations[$relation->type][$fieldDefinitionId][$relation->destinationContentInfo->id] = $relation;
             }
-            else
+            // Using bitwise operators as Legacy Stack stores COMMON, LINK and EMBED relation types
+            // in the same entry using bitmask
+            else if ( $relation->type & ( Relation::LINK | Relation::EMBED ) )
             {
-                // Using bitwise AND as Legacy Stack stores COMMON, LINK and EMBED relation types
-                // in the same entry using bitmask
-                if ( $relation->type & Relation::LINK )
-                {
-                    $mappedRelations[$relation->type][$relation->destinationContentInfo->id] = $relation;
-                }
-                if ( $relation->type & Relation::EMBED )
-                {
-                    $mappedRelations[$relation->type][$relation->destinationContentInfo->id] = $relation;
-                }
+                $mappedRelations[$relation->type][$relation->destinationContentInfo->id] = $relation;
             }
         }
 
