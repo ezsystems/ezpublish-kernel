@@ -76,12 +76,7 @@ class SectionHandlerTest extends HandlerTest
     public function testCreate()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
-        $this->cacheMock
-            ->expects( $this->once() )
-            ->method( 'get' )
-            ->with( 'section', 33 )
-            ->will( $this->returnValue( $cacheItemMock ) );
+
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler' );
         $this->persistenceFactoryMock
@@ -100,6 +95,13 @@ class SectionHandlerTest extends HandlerTest
                     )
                 )
             );
+
+        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $this->cacheMock
+            ->expects( $this->once() )
+            ->method( 'get' )
+            ->with( 'section', 33 )
+            ->will( $this->returnValue( $cacheItemMock ) );
 
         $cacheItemMock
             ->expects( $this->once() )
@@ -120,11 +122,6 @@ class SectionHandlerTest extends HandlerTest
     public function testDelete()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $this->cacheMock
-            ->expects( $this->once() )
-            ->method( 'clear' )
-            ->with( 'section', 33 )
-            ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler' );
         $this->persistenceFactoryMock
@@ -139,6 +136,12 @@ class SectionHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue( true )
             );
+
+        $this->cacheMock
+            ->expects( $this->once() )
+            ->method( 'clear' )
+            ->with( 'section', 33 )
+            ->will( $this->returnValue( true ) );
 
         $handler = $this->persistenceHandler->sectionHandler();
         $handler->delete( 33 );
@@ -298,12 +301,6 @@ class SectionHandlerTest extends HandlerTest
     public function testUpdate()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
-        $this->cacheMock
-            ->expects( $this->once() )
-            ->method( 'get' )
-            ->with( 'section', 33 )
-            ->will( $this->returnValue( $cacheItemMock ) );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler' );
         $this->persistenceFactoryMock
@@ -322,6 +319,13 @@ class SectionHandlerTest extends HandlerTest
                     )
                 )
             );
+
+        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $this->cacheMock
+            ->expects( $this->once() )
+            ->method( 'get' )
+            ->with( 'section', 33 )
+            ->will( $this->returnValue( $cacheItemMock ) );
 
         $cacheItemMock
             ->expects( $this->once() )
