@@ -127,7 +127,6 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
             $resource, $path, $forwarding, $languageCode, $alwaysAvailable
         );
 
-
         $this->cache->get( 'urlAlias', $urlAlias->id )->set( $urlAlias );
         return $urlAlias;
     }
@@ -198,7 +197,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
     public function lookup( $url )
     {
         // Look for url to url alias id cache
-        $cache = $this->cache->get( 'urlAlias', 'url', $url );//@todo escape slashes? at least remove the first one
+        $cache = $this->cache->get( 'urlAlias', 'url', $url );
         $urlAliasId = $cache->get();
         if ( $cache->isMiss() )
         {
@@ -215,7 +214,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
                 throw $e;
             }
         }
-        elseif ( $urlAliasId === self::NOT_FOUND )
+        else if ( $urlAliasId === self::NOT_FOUND )
         {
             throw new NotFoundException( 'UrlAlias', $url );
         }

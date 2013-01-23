@@ -337,7 +337,7 @@ class ContentHandler implements ContentHandlerInterface
                 is_string( $field->value->data ) &&
                 strpos( $field->value->data, self::FIELD_VALUE_DOM_DOCUMENT_KEY ) === 0 )
             {
-                $dom = new DOMDocument('1.0', 'UTF-8');
+                $dom = new DOMDocument( '1.0', 'UTF-8' );
                 $dom->loadXML( substr( $field->value->data, strlen( self::FIELD_VALUE_DOM_DOCUMENT_KEY ) ) );
                 $field->value->data = $dom;
             }
@@ -346,7 +346,7 @@ class ContentHandler implements ContentHandlerInterface
                 is_string( $field->value->externalData ) &&
                 strpos( $field->value->externalData, self::FIELD_VALUE_DOM_DOCUMENT_KEY ) === 0 )
             {
-                $dom = new DOMDocument('1.0', 'UTF-8');
+                $dom = new DOMDocument( '1.0', 'UTF-8' );
                 $dom->loadXML( substr( $field->value->externalData, strlen( self::FIELD_VALUE_DOM_DOCUMENT_KEY ) ) );
                 $field->value->externalData = $dom;
             }

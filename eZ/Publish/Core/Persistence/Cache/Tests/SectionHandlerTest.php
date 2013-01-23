@@ -77,7 +77,6 @@ class SectionHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
-
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler' );
         $this->persistenceFactoryMock
             ->expects( $this->once() )
