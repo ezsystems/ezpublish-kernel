@@ -75,8 +75,28 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function loadLocationsByContent( $contentId, $rootLocationId = null )
     {
-        $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'root' => $rootLocationId ) );
-        return $this->persistenceFactory->getLocationHandler()->loadLocationsByContent( $contentId, $rootLocationId );
+        $rootKey = $rootLocationId ? '/root/' . $rootLocationId : '';
+        $cache = $this->cache->get( 'content', 'locations', $contentId . $rootKey );
+        $locationIds = $cache->get();
+        if ( $cache->isMiss() )
+        {
+            $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'root' => $rootLocationId ) );
+            $locations = $this->persistenceFactory->getLocationHandler()->loadLocationsByContent( $contentId, $rootLocationId );
+
+            $locationIds = array();
+            foreach ( $locations as $location )
+                $locationIds[] = $location->id;
+
+            $cache->set( $locationIds );
+        }
+        else
+        {
+            $locations = array();
+            foreach ( $locationIds as $locationId )
+                $locations[] = $this->load( $locationId );
+        }
+
+        return $locations;
     }
 
     /**
@@ -155,6 +175,7 @@ class LocationHandler implements LocationHandlerInterface
 
         $this->cache->clear( 'location', $locationId1 );
         $this->cache->clear( 'location', $locationId2 );
+        $this->cache->clear( 'content', 'locations' );
 
         return $return;
     }
@@ -162,12 +183,12 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::update
      */
-    public function update( UpdateStruct $location, $locationId )
+    public function update( UpdateStruct $struct, $locationId )
     {
-        $this->logger->logCall( __METHOD__, array( 'location' => $locationId, 'struct' => $location ) );
+        $this->logger->logCall( __METHOD__, array( 'location' => $locationId, 'struct' => $struct ) );
         $this->cache
             ->get( 'location', $locationId )
-            ->set( $location = $this->persistenceFactory->getLocationHandler()->update( $location, $locationId ) );
+            ->set( $location = $this->persistenceFactory->getLocationHandler()->update( $struct, $locationId ) );
 
         return $location;
     }
@@ -181,6 +202,7 @@ class LocationHandler implements LocationHandlerInterface
         $location = $this->persistenceFactory->getLocationHandler()->create( $locationStruct );
 
         $this->cache->get( 'location', $location->id )->set( $location );
+        $this->cache->clear( 'content', 'locations', $location->contentId );
 
         return $location;
     }
