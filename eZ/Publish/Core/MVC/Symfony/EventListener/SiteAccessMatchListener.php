@@ -16,6 +16,7 @@ use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * kernel.request listener, triggers SiteAccess matching.
@@ -44,6 +45,9 @@ class SiteAccessMatchListener
      */
     public function onKernelRequest( GetResponseEvent $event )
     {
+        if ( $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
+            return;
+
         $request = $event->getRequest();
 
         if ( !$request->attributes->has( 'siteaccess' ) )
