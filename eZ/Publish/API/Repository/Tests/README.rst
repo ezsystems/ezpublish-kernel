@@ -10,8 +10,8 @@ The Integration Test Suite ships with a memory back end, which can deal as a
 verification step that the test suite itself runs.
 
 In order to run any of the tests, you need to copy the
-``config.php-DEVELOPMENT`` configuration file in the ``ezp-next`` directory into
-a ``config.php`` file.
+``config.php-DEVELOPMENT`` configuration file in the ``ezpublish-kernel``
+directory into a ``config.php`` file.
 
 ---------------
 Memory Back End
@@ -28,7 +28,7 @@ Database Back End
 To run the test suite against the real world implementation, use the alternative
 ``phpunit-legacy.xml`` as the configuration for PHPUnit.
 Beware that you need to have set the correct path to your eZ Publish Legacy instance
-(from ``ezpublish5-integration`` branch) in ``config.php``.
+in ``config.php``.
 
 After that, use the following command to run the tests::
 
