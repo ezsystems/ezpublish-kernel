@@ -12,12 +12,12 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 use Buzz\Client\Curl as BaseCurl;
 use Buzz\Message\RequestInterface;
 use Buzz\Message\MessageInterface;
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 class Curl extends BaseCurl
 {
     /**
-     * @var \Symfony\Component\HttpKernel\Log\LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
