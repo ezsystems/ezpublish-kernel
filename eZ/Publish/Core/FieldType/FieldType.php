@@ -384,7 +384,7 @@ abstract class FieldType implements FieldTypeInterface
      *          "contentIds" => array( 12 ),
      *          "locationIds" => array( 24, 45 )
      *      ),
-     *      \eZ\Publish\API\Repository\Values\Content\Relation::ATTRIBUTE => array( 12 )
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::FIELD => array( 12 )
      *  )
      * </code>
      */
