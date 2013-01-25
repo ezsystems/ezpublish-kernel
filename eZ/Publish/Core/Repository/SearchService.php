@@ -201,7 +201,7 @@ class SearchService implements SearchServiceInterface
             foreach ( $permissionSet['policies'] as $policy )
             {
                 $limitations = $policy->getLimitations();
-                if ( $limitations === '*' )
+                if ( $limitations === '*' || empty( $limitations ) )
                     continue;
 
                 $limitationsAndCriteria = array();
@@ -210,6 +210,7 @@ class SearchService implements SearchServiceInterface
                     $type = $roleService->getLimitationType( $limitation->getIdentifier() );
                     $limitationsAndCriteria[] = $type->getCriterion( $limitation, $currentUser );
                 }
+
                 $policyOrCriteria[] = isset( $limitationsAndCriteria[1] ) ?
                     new Criterion\LogicalAnd( $limitationsAndCriteria ) :
                     $limitationsAndCriteria[0];
