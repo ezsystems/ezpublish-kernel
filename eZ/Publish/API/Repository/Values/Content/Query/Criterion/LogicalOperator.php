@@ -34,7 +34,7 @@ abstract class LogicalOperator extends Criterion
      */
     public function __construct( array $criteria )
     {
-        foreach ( $criteria as $criterion )
+        foreach ( $criteria as $key => $criterion )
         {
             if ( !$criterion instanceof Criterion )
             {
@@ -47,7 +47,9 @@ abstract class LogicalOperator extends Criterion
                 else
                     $type = gettype( $criterion ) . ", with value: '{$criterion}'";
 
-                throw new InvalidArgumentException( "Only Criterion objects are accepted, got: " . $type );
+                throw new InvalidArgumentException(
+                    "Only Criterion objects are accepted, at index '{$key}': " . $type
+                );
             }
             $this->criteria[] = $criterion;
         }
