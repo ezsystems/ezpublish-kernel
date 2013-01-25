@@ -81,7 +81,7 @@ abstract class Controller extends ContainerAware
     }
 
     /**
-     * @return \Symfony\Component\HttpKernel\Log\LoggerInterface|null
+     * @return \Psr\Log\LoggerInterface|null
      */
     public function getLogger()
     {

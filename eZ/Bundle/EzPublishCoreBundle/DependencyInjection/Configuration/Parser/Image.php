@@ -61,6 +61,7 @@ class Image extends AbstractParser
                     )
                 )
                 ->useAttributeAsKey( 'key' )
+                ->normalizeKeys( false )
                 ->prototype( 'array' )
                     ->children()
                         ->scalarNode( 'reference' )

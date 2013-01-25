@@ -17,7 +17,7 @@ use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
 use eZ\Publish\API\Repository\Repository;
 use Symfony\Component\Templating\EngineInterface;
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Manager
@@ -31,7 +31,7 @@ class Manager
     protected $templateEngine;
 
     /**
-     * @var \Symfony\Component\HttpKernel\Log\LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 

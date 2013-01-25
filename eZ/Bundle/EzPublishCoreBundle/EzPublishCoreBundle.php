@@ -15,7 +15,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterLimitatio
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainConfigResolverPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\TwigTweaksPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ContentViewPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LocationViewPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
@@ -36,7 +35,6 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new RegisterLimitationTypePass );
         $container->addCompilerPass( new RegisterStorageEnginePass );
         $container->addCompilerPass( new LegacyStorageEnginePass );
-        $container->addCompilerPass( new TwigTweaksPass );
         $container->addCompilerPass( new ContentViewPass );
         $container->addCompilerPass( new LocationViewPass );
 

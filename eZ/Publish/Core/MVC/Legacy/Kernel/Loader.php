@@ -16,7 +16,7 @@ use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent;
 use ezpKernelHandler;
 use eZURI;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
@@ -35,7 +35,7 @@ class Loader
     protected $webrootDir;
 
     /**
-     * @var \Symfony\Component\HttpKernel\Log\LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
