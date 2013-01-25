@@ -193,6 +193,7 @@ class SearchService implements SearchServiceInterface
         $roleService = $this->repository->getRoleService();
         foreach ( $permissionSets as $permissionSet )
         {
+            // $permissionSet is a RoleAssignment, but in the form of role limitation & role policies hash
             $policyOrCriteria = array();
             /**
              * @var \eZ\Publish\API\Repository\Values\User\Policy $policy
@@ -214,6 +215,7 @@ class SearchService implements SearchServiceInterface
                     $limitationsAndCriteria[0];
             }
 
+            // No policy to limit the criterion by, so continue to next assignment
             if ( empty( $policyOrCriteria ) )
                 continue;
 
@@ -223,6 +225,7 @@ class SearchService implements SearchServiceInterface
              */
             if ( $permissionSet['limitation'] instanceof Limitation )
             {
+                // We need to match both the limitation AND *one* of the policies, aka; roleLimit AND policies(OR)
                 $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
                 $roleAssignmentOrCriteria[] = new Criterion\LogicalAnd(
                     array(
@@ -234,6 +237,7 @@ class SearchService implements SearchServiceInterface
             // Otherwise merge $policyOrCriteria into $roleAssignmentOrCriteria
             else
             {
+                // There is no role limitation, so any of the policies can globally match in the returned OR criteria
                 $roleAssignmentOrCriteria = empty( $roleAssignmentOrCriteria ) ?
                     $policyOrCriteria :
                     array_merge( $roleAssignmentOrCriteria, $policyOrCriteria );
