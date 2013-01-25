@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
+use Symfony\Component\HttpKernel\HttpCache\Store;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Filesystem\Filesystem;
