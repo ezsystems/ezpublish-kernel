@@ -107,9 +107,9 @@ class RelationProcessor
                 }
                 $relations[$relationType][$fieldDefinitionId] += array_flip( $destinationIds );
             }
-            // Using bitwise AND as Legacy Stack stores COMMON, LINK and EMBED relation types
+            // Using bitwise operators as Legacy Stack stores COMMON, LINK and EMBED relation types
             // in the same entry using bitmask
-            else if ( $relationType & Relation::LINK || $relationType & Relation::EMBED )
+            else if ( $relationType & ( Relation::LINK | Relation::EMBED ) )
             {
                 if ( !isset( $relations[$relationType] ) )
                 {
@@ -168,11 +168,15 @@ class RelationProcessor
                 $fieldDefinitionId = $contentType->getFieldDefinition( $relation->sourceFieldDefinitionIdentifier )->id;
                 $mappedRelations[$relation->type][$fieldDefinitionId][$relation->destinationContentInfo->id] = $relation;
             }
-            // Using bitwise operators as Legacy Stack stores COMMON, LINK and EMBED relation types
+            // Using bitwise AND as Legacy Stack stores COMMON, LINK and EMBED relation types
             // in the same entry using bitmask
-            else if ( $relation->type & ( Relation::LINK | Relation::EMBED ) )
+            if ( $relation->type & Relation::LINK )
             {
-                $mappedRelations[$relation->type][$relation->destinationContentInfo->id] = $relation;
+                $mappedRelations[Relation::LINK][$relation->destinationContentInfo->id] = $relation;
+            }
+            if ( $relation->type & Relation::EMBED )
+            {
+                $mappedRelations[Relation::EMBED][$relation->destinationContentInfo->id] = $relation;
             }
         }
 
