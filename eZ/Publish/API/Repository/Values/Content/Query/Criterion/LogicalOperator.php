@@ -34,11 +34,22 @@ abstract class LogicalOperator extends Criterion
      */
     public function __construct( array $criteria )
     {
-        foreach ( $criteria as $criterion )
+        foreach ( $criteria as $key => $criterion )
         {
             if ( !$criterion instanceof Criterion )
             {
-                throw new InvalidArgumentException( "Only Criterion objects are accepted" );
+                if ( $criterion === null )
+                    $type = 'null';
+                else if ( is_object( $criterion ) )
+                    $type = get_class( $criterion );
+                else if ( is_array( $criterion ) )
+                    $type = "Array, with keys: " . join( ', ', array_keys( $criterion ) );
+                else
+                    $type = gettype( $criterion ) . ", with value: '{$criterion}'";
+
+                throw new InvalidArgumentException(
+                    "Only Criterion objects are accepted, at index '{$key}': " . $type
+                );
             }
             $this->criteria[] = $criterion;
         }

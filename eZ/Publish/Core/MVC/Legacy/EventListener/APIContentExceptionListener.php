@@ -17,7 +17,7 @@ use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\MVC\Legacy\View\Provider\Content as LegacyContentViewProvider;
 use eZ\Publish\Core\MVC\Legacy\View\Provider\Location as LegacyLocationViewProvider;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 class APIContentExceptionListener implements EventSubscriberInterface
 {
@@ -32,7 +32,7 @@ class APIContentExceptionListener implements EventSubscriberInterface
     protected $legacyLVP;
 
     /**
-     * @var \Symfony\Component\HttpKernel\Log\LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 

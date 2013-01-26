@@ -1,11 +1,11 @@
 # Internal legacy routes
 _ezpublishLegacyTreeMenu:
-    pattern: /content/treemenu/{nodeId}/{modified}/{expiry}/{perm}
+    path: /content/treemenu/{nodeId}/{modified}/{expiry}/{perm}
     defaults:
         _controller: ezpublish_legacy.treemenu.controller:viewMenu
         _format: json
 
 ezpublishSetup:
-    pattern: /ezsetup
+    path: /ezsetup
     defaults:
         _controller: ezpublish_legacy.setup.controller:init

@@ -1,33 +1,40 @@
 language: php
 
-# run tests on both php 5.3 and 5.4
+# run tests on php misc php versions
 php:
-#    - "5.4"
-    - "5.3"
+  - 5.3.3
+  - 5.3
+  - 5.4
+#  - 5.5
 
 # execute unit tests, integration test stubs and integration tests using legacy storage engine
 env:
-    - TEST_CONFIG="phpunit.xml"
-#    - TEST_CONFIG="phpunit-integration.xml"
-    - TEST_CONFIG="phpunit-integration-legacy.xml"
+  - TEST_CONFIG="phpunit.xml"
+  - TEST_CONFIG="phpunit-integration.xml"
+  - TEST_CONFIG="phpunit-integration-legacy.xml"
+
+#matrix:
+#  allow_failures:
+#    - php: 5.5
 
 # test only master (+ Pull requests)
 branches:
-    only:
-        - master
+  only:
+    - master
 
 # setup requirements for running unit tests
 before_script:
-    - cp config.php-DEVELOPMENT config.php
-    - composer install --dev --prefer-dist
+  - cp config.php-DEVELOPMENT config.php
+  - ./composer_install_github_key.sh
+  - COMPOSER_ROOT_VERSION=dev-master composer --dev --prefer-dist install
 
 # execute phpunit as the script command
 script: "phpunit -d memory_limit=-1 -c $TEST_CONFIG"
 
 # disable mail notifications
 notification:
-    email: false
+  email: false
 
 # reduce depth (history) of git checkout
 git:
-    depth: 30
+  depth: 30

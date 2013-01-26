@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\MVC\Legacy\View;
 
 use eZ\Publish\Core\MVC\Legacy\View\TwigContentViewLayoutDecorator;
 use eZ\Publish\Core\MVC\Legacy\Templating\LegacyHelper;
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use Closure;
 
 abstract class Provider
@@ -22,7 +22,7 @@ abstract class Provider
     private $legacyKernelClosure;
 
     /**
-     * @var \Symfony\Component\HttpKernel\Log\LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 

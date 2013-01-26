@@ -1,5 +1,5 @@
 {
-    "hash": "d3f0bb10ca8807645b07f0968ae363e5",
+    "hash": "12923ffdfd70314047821f7ed5b15fd9",
     "packages": [
         {
             "name": "doctrine/common",
@@ -76,12 +76,12 @@
             "source": {
                 "type": "git",
                 "url": "http://github.com/kriswallsmith/Buzz.git",
-                "reference": "988bf14201ffbed940f23b42f87302e6adec4c21"
+                "reference": "8ff1d1910b9e04ac571bcf6d639559e065093136"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/kriswallsmith/Buzz/archive/988bf14201ffbed940f23b42f87302e6adec4c21.zip",
-                "reference": "988bf14201ffbed940f23b42f87302e6adec4c21",
+                "url": "https://github.com/kriswallsmith/Buzz/archive/8ff1d1910b9e04ac571bcf6d639559e065093136.zip",
+                "reference": "8ff1d1910b9e04ac571bcf6d639559e065093136",
                 "shasum": ""
             },
             "require": {
@@ -90,7 +90,7 @@
             "suggest": {
                 "ext-curl": "*"
             },
-            "time": "2012-08-17 12:23:33",
+            "time": "2013-01-14 16:07:06",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -113,6 +113,44 @@
             "keywords": [
                 "curl",
                 "http client"
+            ]
+        },
+        {
+            "name": "psr/log",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log",
+                "reference": "1.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/php-fig/log/archive/1.0.0.zip",
+                "reference": "1.0.0",
+                "shasum": ""
+            },
+            "time": "2012-12-21 11:40:51",
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Psr\\Log\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
             ]
         },
         {
@@ -146,12 +184,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony-cmf/Routing",
-                "reference": "1.0.0-alpha3"
+                "reference": "72df1da07b3c4edf16df169fb7987f504070fe0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony-cmf/Routing/archive/1.0.0-alpha3.zip",
-                "reference": "1.0.0-alpha3",
+                "url": "https://github.com/symfony-cmf/Routing/archive/72df1da07b3c4edf16df169fb7987f504070fe0d.zip",
+                "reference": "72df1da07b3c4edf16df169fb7987f504070fe0d",
                 "shasum": ""
             },
             "require": {
@@ -159,7 +197,7 @@
                 "symfony/routing": ">=2.1,<2.3-dev",
                 "symfony/http-kernel": ">=2.1,<2.3-dev"
             },
-            "time": "2012-12-16 17:52:57",
+            "time": "2013-01-24 16:09:01",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -190,22 +228,23 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "2.1.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "git://github.com/symfony/symfony.git",
-                "reference": "b33d5bc352f7a97b6771e61fa1a0d8b087a7145d"
+                "reference": "163e607781e71338a1b8b08a8d635b327501f2b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/symfony/archive/b33d5bc352f7a97b6771e61fa1a0d8b087a7145d.zip",
-                "reference": "b33d5bc352f7a97b6771e61fa1a0d8b087a7145d",
+                "url": "https://github.com/symfony/symfony/archive/163e607781e71338a1b8b08a8d635b327501f2b6.zip",
+                "reference": "163e607781e71338a1b8b08a8d635b327501f2b6",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3",
                 "doctrine/common": ">2.2,<2.4-dev",
-                "twig/twig": ">=1.9.1,<2.0-dev"
+                "php": ">=5.3.3",
+                "twig/twig": ">=1.11.0,<2.0-dev",
+                "psr/log": ">=1.0,<2.0"
             },
             "replace": {
                 "symfony/doctrine-bridge": "self.version",
@@ -239,22 +278,35 @@
                 "symfony/templating": "self.version",
                 "symfony/translation": "self.version",
                 "symfony/validator": "self.version",
-                "symfony/yaml": "self.version"
+                "symfony/yaml": "self.version",
+                "symfony/stopwatch": "self.version",
+                "symfony/property-access": "self.version"
             },
             "require-dev": {
-                "doctrine/dbal": ">=2.2,<2.4-dev",
-                "doctrine/orm": ">=2.2.3,<2.4-dev",
                 "doctrine/data-fixtures": "1.0.*",
                 "propel/propel1": "dev-master",
-                "monolog/monolog": ">=1.0,<1.3-dev"
+                "doctrine/dbal": ">=2.2,<2.4-dev",
+                "doctrine/orm": ">=2.2.3,<2.4-dev",
+                "monolog/monolog": ">=1.3,<2.0"
             },
-            "time": "2013-01-09 08:51:07",
+            "suggest": {
+                "doctrine/data-fixtures": "1.0.*"
+            },
+            "time": "2013-01-25 16:50:23",
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.2-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
-                    "Symfony": "src/",
-                    "SessionHandlerInterface": "src/Symfony/Component/HttpFoundation/Resources/stubs"
-                }
+                    "Symfony\\": "src/"
+                },
+                "classmap": [
+                    "src/Symfony/Component/HttpFoundation/Resources/stubs",
+                    "src/Symfony/Component/Locale/Resources/stubs"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -323,53 +375,55 @@
         },
         {
             "name": "tedivm/stash-bundle",
-            "version": "dev-master",
+            "version": "dev-sf22",
             "target-dir": "Tedivm/StashBundle",
             "source": {
                 "type": "git",
-                "url": "https://github.com/tedivm/TedivmStashBundle",
-                "reference": "ce4fbb2e580bd4d234910648853027d230ee440b"
+                "url": "https://github.com/andrerom/TedivmStashBundle",
+                "reference": "21d93a9028cc211995dc1472270b19226cc8821e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/tedivm/TedivmStashBundle/archive/ce4fbb2e580bd4d234910648853027d230ee440b.zip",
-                "reference": "ce4fbb2e580bd4d234910648853027d230ee440b",
+                "url": "https://api.github.com/repos/andrerom/TedivmStashBundle/zipball/21d93a9028cc211995dc1472270b19226cc8821e",
+                "reference": "21d93a9028cc211995dc1472270b19226cc8821e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0",
                 "tedivm/stash": "0.9.*",
-                "symfony/framework-bundle": "2.1.*",
-                "symfony/yaml": "2.1.*"
+                "symfony/framework-bundle": "2.2.*",
+                "symfony/yaml": "2.2.*"
             },
-            "time": "2013-01-08 18:53:22",
+            "time": "2013-01-26 11:37:18",
             "type": "symfony-bundle",
             "autoload": {
                 "psr-0": {
                     "Tedivm\\StashBundle": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
             "authors": [
                 {
-                    "name": "Robert Hafner",
-                    "email": "tedivm@tedivm.com"
-                },
-                {
                     "name": "Josh Hall-Bachner",
                     "email": "jhallbachner@gmail.com"
+                },
+                {
+                    "name": "Robert Hafner",
+                    "email": "tedivm@tedivm.com"
                 }
             ],
             "description": "Incorporates the Stash caching library into Symfony.",
             "homepage": "http://github.com/tedivm/TedivmStashBundle",
             "keywords": [
-                "symfony",
                 "caching",
+                "symfony",
                 "sessions"
-            ]
+            ],
+            "support": {
+                "source": "https://github.com/andrerom/TedivmStashBundle/tree/sf22"
+            }
         },
         {
             "name": "twig/twig",
@@ -377,18 +431,18 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "3111e1265db1026323c589a5bd2d152871d7bbab"
+                "reference": "93c6a8dedc46c73ccdd61342de3d5e761e4412f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/archive/3111e1265db1026323c589a5bd2d152871d7bbab.zip",
-                "reference": "3111e1265db1026323c589a5bd2d152871d7bbab",
+                "url": "https://github.com/fabpot/Twig/archive/93c6a8dedc46c73ccdd61342de3d5e761e4412f6.zip",
+                "reference": "93c6a8dedc46c73ccdd61342de3d5e761e4412f6",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2013-01-08 16:56:12",
+            "time": "2013-01-18 09:58:04",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1725,18 +1779,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezsystems/ezpublish.git",
-                "reference": "01f529b2ee8afef8fbe723bd3313794c97ea9f93"
+                "reference": "21cb88520bbea64c23000b74e3379a530ed54f5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/ezsystems/ezpublish/archive/01f529b2ee8afef8fbe723bd3313794c97ea9f93.zip",
-                "reference": "01f529b2ee8afef8fbe723bd3313794c97ea9f93",
+                "url": "https://github.com/ezsystems/ezpublish/archive/21cb88520bbea64c23000b74e3379a530ed54f5e.zip",
+                "reference": "21cb88520bbea64c23000b74e3379a530ed54f5e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2013-01-08 08:09:52",
+            "time": "2013-01-23 16:56:20",
             "type": "library",
             "notification-url": "https://packagist.org/downloads/",
             "description": "eZ Publish LegacyStack (4.x)",
