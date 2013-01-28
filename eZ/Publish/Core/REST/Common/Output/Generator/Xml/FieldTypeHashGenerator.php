@@ -36,7 +36,7 @@ class FieldTypeHashGenerator
      */
     protected function generateValue( \XmlWriter $writer, $value, $key = null, $elementName = 'value' )
     {
-        switch( ( $hashValueType = gettype( $value ) ) )
+        switch ( ( $hashValueType = gettype( $value ) ) )
         {
             case 'NULL':
                 $this->generateNullValue( $writer, $key, $elementName );

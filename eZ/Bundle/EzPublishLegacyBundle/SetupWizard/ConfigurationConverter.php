@@ -350,7 +350,7 @@ class ConfigurationConverter
         $matching = array(); $match = false;
         foreach ( explode( ';', $siteaccessSettings['MatchOrder'] ) as $matchMethod )
         {
-            switch( $matchMethod )
+            switch ( $matchMethod )
             {
                 case 'uri':
                     $match = $this->resolveURIMatching( $siteaccessSettings );
@@ -376,7 +376,7 @@ class ConfigurationConverter
 
     protected function resolveUriMatching( $siteaccessSettings )
     {
-        switch( $siteaccessSettings['URIMatchType'] )
+        switch ( $siteaccessSettings['URIMatchType'] )
         {
             case 'disabled':
                 return false;
@@ -405,7 +405,7 @@ class ConfigurationConverter
      */
     protected function resolveHostMatching( $siteaccessSettings )
     {
-        switch( $siteaccessSettings['HostMatchType'] )
+        switch ( $siteaccessSettings['HostMatchType'] )
         {
             case 'disabled':
                 return false;
