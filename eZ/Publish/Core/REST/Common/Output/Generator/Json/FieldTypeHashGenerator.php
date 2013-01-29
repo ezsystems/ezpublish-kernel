@@ -35,7 +35,7 @@ class FieldTypeHashGenerator
      */
     protected function generateValue( $parent, $value )
     {
-        switch( ( $hashValueType = gettype( $value ) ) )
+        switch ( ( $hashValueType = gettype( $value ) ) )
         {
             case 'NULL':
             case 'boolean':
