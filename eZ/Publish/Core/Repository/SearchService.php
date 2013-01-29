@@ -216,10 +216,6 @@ class SearchService implements SearchServiceInterface
                     $limitationsAndCriteria[0];
             }
 
-            // No policy to limit the criterion by, so continue to next assignment
-            if ( empty( $policyOrCriteria ) )
-                continue;
-
             /**
              * Apply role limitations if there is one
              * @var \eZ\Publish\API\Repository\Values\User\Limitation[] $permissionSet
@@ -228,15 +224,22 @@ class SearchService implements SearchServiceInterface
             {
                 // We need to match both the limitation AND *one* of the policies, aka; roleLimit AND policies(OR)
                 $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
-                $roleAssignmentOrCriteria[] = new Criterion\LogicalAnd(
-                    array(
-                        $type->getCriterion( $permissionSet['limitation'], $currentUser ),
-                        isset( $policyOrCriteria[1] ) ? new Criterion\LogicalOr( $policyOrCriteria ) : $policyOrCriteria[0]
-                    )
-                );
+                if ( !empty( $policyOrCriteria )  )
+                {
+                    $roleAssignmentOrCriteria[] = new Criterion\LogicalAnd(
+                        array(
+                            $type->getCriterion( $permissionSet['limitation'], $currentUser ),
+                            isset( $policyOrCriteria[1] ) ? new Criterion\LogicalOr( $policyOrCriteria ) : $policyOrCriteria[0]
+                        )
+                    );
+                }
+                else
+                {
+                    $roleAssignmentOrCriteria[] = $type->getCriterion( $permissionSet['limitation'], $currentUser );
+                }
             }
             // Otherwise merge $policyOrCriteria into $roleAssignmentOrCriteria
-            else
+            else if ( !empty( $policyOrCriteria ) )
             {
                 // There is no role limitation, so any of the policies can globally match in the returned OR criteria
                 $roleAssignmentOrCriteria = empty( $roleAssignmentOrCriteria ) ?
@@ -244,6 +247,9 @@ class SearchService implements SearchServiceInterface
                     array_merge( $roleAssignmentOrCriteria, $policyOrCriteria );
             }
         }
+
+        if ( empty( $roleAssignmentOrCriteria ) )
+            return false;
 
         return isset( $roleAssignmentOrCriteria[1] ) ?
             new Criterion\LogicalOr( $roleAssignmentOrCriteria ) :
