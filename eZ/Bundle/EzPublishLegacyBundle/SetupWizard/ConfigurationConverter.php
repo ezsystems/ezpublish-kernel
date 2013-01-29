@@ -150,6 +150,17 @@ class ConfigurationConverter
         // Explicitly set Http cache purge type to "local"
         $settings['ezpublish']['http_cache']['purge_type'] = 'local';
 
+        foreach ( $siteList as $siteaccess )
+        {
+            if (
+                $this->getParameter( "Session", "SessionNameHandler", "site.ini", $siteaccess ) === "custom" &&
+                $this->getParameter( "Session", "SessionNamePerSiteAccess", "site.ini", $siteaccess ) !== "enabled"
+            )
+            {
+                $settings['ezpublish']['system'][$siteaccess]['session_name'] = $this->getParameter( "Session", "SessionNamePrefix", "site.ini" );
+            }
+        }
+
         return $settings;
     }
 
