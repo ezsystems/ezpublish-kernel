@@ -11,6 +11,7 @@ namespace eZ\Bundle\EzPublishLegacyBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Compiler\LegacyPass;
+use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Compiler\TwigPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class EzPublishLegacyBundle extends Bundle
@@ -31,5 +32,6 @@ class EzPublishLegacyBundle extends Bundle
     {
         parent::build( $container );
         $container->addCompilerPass( new LegacyPass() );
+        $container->addCompilerPass( new TwigPass() );
     }
 }
