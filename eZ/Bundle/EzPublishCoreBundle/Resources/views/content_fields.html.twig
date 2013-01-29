@@ -241,7 +241,7 @@
     <ul {{ block( 'field_attributes' ) }}>
         {% for contentId in field.value.destinationContentIds %}
         <li>
-            {% render "ez_content:viewContent" with {'contentId': contentId, 'viewType': 'embed', 'noLayout': 1} %}
+            {{ render( controller( "ez_content:viewContent", {'contentId': contentId, 'viewType': 'embed', 'noLayout': 1} ) ) }}
         </li>
         {% endfor %}
     </ul>
@@ -369,7 +369,7 @@
 {% spaceless %}
 {% if field.value.destinationContentId %}
     <div {{ block( 'field_attributes' ) }}>
-    {% render "ez_content:viewContent" with {'contentId': field.value.destinationContentId, 'viewType': 'text_linked', 'noLayout': 1} %}
+        {{ render( controller( "ez_content:viewContent", {'contentId': field.value.destinationContentId, 'viewType': 'text_linked', 'noLayout': 1} ) ) }}
     </div>
 {% endif %}
 {% endspaceless %}
