@@ -698,7 +698,7 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
      */
     protected function assertIsValidHashValue( $actualHash, $keyChain = array() )
     {
-        switch( ( $actualHashType = gettype( $actualHash ) ) )
+        switch ( ( $actualHashType = gettype( $actualHash ) ) )
         {
             case 'boolean':
             case 'integer':
