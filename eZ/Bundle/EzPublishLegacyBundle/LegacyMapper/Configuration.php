@@ -98,8 +98,10 @@ class Configuration implements EventSubscriberInterface
         );
 
         // Inject csrf protection settings to make sure legacy & symfony stack work together
-        if ( $this->container->hasParameter( 'form.type_extension.csrf.enabled' ) &&
-             $this->container->getParameter( 'form.type_extension.csrf.enabled' ) )
+        if (
+            $this->container->hasParameter( 'form.type_extension.csrf.enabled' ) &&
+            $this->container->getParameter( 'form.type_extension.csrf.enabled' )
+        )
         {
             ezxFormToken::setSecret( $this->container->getParameter( 'kernel.secret' ) );
             ezxFormToken::setFormField( $this->container->getParameter( 'form.type_extension.csrf.field_name' ) );
