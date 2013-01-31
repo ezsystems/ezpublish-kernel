@@ -224,7 +224,7 @@ class SearchService implements SearchServiceInterface
             {
                 // We need to match both the limitation AND *one* of the policies, aka; roleLimit AND policies(OR)
                 $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
-                if ( !empty( $policyOrCriteria )  )
+                if ( !empty( $policyOrCriteria ) )
                 {
                     $roleAssignmentOrCriteria[] = new Criterion\LogicalAnd(
                         array(
