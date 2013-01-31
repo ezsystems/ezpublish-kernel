@@ -388,10 +388,10 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
 
         // session name
         $element = $baseData;
-        $element[IDX_MOCK_PARAMETERS]['getParameter']['SessionNameHandler_eng'] = array ( 'Session', 'SessionNameHandler', 'site.ini', 'eng', 'custom');
-        $element[IDX_MOCK_PARAMETERS]['getParameter']['SessionNameHandler_demo'] = array ( 'Session', 'SessionNameHandler', 'site.ini', 'ezdemo_site', 'custom');
-        $element[IDX_MOCK_PARAMETERS]['getParameter']['SessionNamePerSiteAccess_eng'] = array ( 'Session', 'SessionNamePerSiteAccess', 'site.ini', 'eng', 'enabled');
-        $element[IDX_MOCK_PARAMETERS]['getParameter']['SessionNamePerSiteAccess_demo'] = array ( 'Session', 'SessionNamePerSiteAccess', 'site.ini', 'ezdemo_site', 'disabled');
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['SessionNameHandler_eng'] = array( 'Session', 'SessionNameHandler', 'site.ini', 'eng', 'custom' );
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['SessionNameHandler_demo'] = array( 'Session', 'SessionNameHandler', 'site.ini', 'ezdemo_site', 'custom' );
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['SessionNamePerSiteAccess_eng'] = array( 'Session', 'SessionNamePerSiteAccess', 'site.ini', 'eng', 'enabled' );
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['SessionNamePerSiteAccess_demo'] = array( 'Session', 'SessionNamePerSiteAccess', 'site.ini', 'ezdemo_site', 'disabled' );
         $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site']['session_name'] = 'eZSESSID';
         $data[] = $element;
 
