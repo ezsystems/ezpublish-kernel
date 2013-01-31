@@ -15,6 +15,8 @@ use Twig_Compiler;
 
 /**
  * Represents an ez_legacy_include node
+ *
+ * @deprecated since 5.1
  */
 class LegacyIncludeNode extends Twig_Node
 {
