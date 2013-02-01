@@ -77,11 +77,24 @@ class Configuration implements EventSubscriberInterface
                 "password" => "Password",
                 "database_name" => "Database",
                 "type" => "DatabaseImplementation",
+                "socket" => "Socket"
             ) as $key => $iniKey
         )
         {
             if ( isset( $databaseSettings[$key] ) )
+            {
                 $settings["site.ini/DatabaseSettings/$iniKey"] = $databaseSettings[$key];
+            }
+            // Some settings need specific values when not present.
+            else
+            {
+                switch ( $key )
+                {
+                    case "socket":
+                        $settings["site.ini/DatabaseSettings/$iniKey"] = "disabled";
+                        break;
+                }
+            }
         }
 
         // Image settings
