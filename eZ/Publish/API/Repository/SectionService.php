@@ -32,7 +32,7 @@ interface SectionService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section The newly create section
      */
-    public function createSection(SectionCreateStruct $sectionCreateStruct );
+    public function createSection( SectionCreateStruct $sectionCreateStruct );
 
     /**
      * Updates the given in the content repository

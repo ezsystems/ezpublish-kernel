@@ -13,6 +13,11 @@ use eZ\Publish\Core\MVC\Legacy\Templating\Twig\Node\LegacyIncludeNode;
 use Twig_Token;
 use Twig_Node_Expression_Array;
 
+/**
+ * Parser for ez_legacy_include tag.
+ *
+ * @deprecated since 5.1
+ */
 class LegacyIncludeParser extends \Twig_TokenParser
 {
 

@@ -193,6 +193,7 @@ class SearchService implements SearchServiceInterface
         $roleService = $this->repository->getRoleService();
         foreach ( $permissionSets as $permissionSet )
         {
+            // $permissionSet is a RoleAssignment, but in the form of role limitation & role policies hash
             $policyOrCriteria = array();
             /**
              * @var \eZ\Publish\API\Repository\Values\User\Policy $policy
@@ -200,7 +201,7 @@ class SearchService implements SearchServiceInterface
             foreach ( $permissionSet['policies'] as $policy )
             {
                 $limitations = $policy->getLimitations();
-                if ( $limitations === '*' )
+                if ( $limitations === '*' || empty( $limitations ) )
                     continue;
 
                 $limitationsAndCriteria = array();
@@ -209,13 +210,11 @@ class SearchService implements SearchServiceInterface
                     $type = $roleService->getLimitationType( $limitation->getIdentifier() );
                     $limitationsAndCriteria[] = $type->getCriterion( $limitation, $currentUser );
                 }
+
                 $policyOrCriteria[] = isset( $limitationsAndCriteria[1] ) ?
                     new Criterion\LogicalAnd( $limitationsAndCriteria ) :
                     $limitationsAndCriteria[0];
             }
-
-            if ( empty( $policyOrCriteria ) )
-                continue;
 
             /**
              * Apply role limitations if there is one
@@ -223,22 +222,34 @@ class SearchService implements SearchServiceInterface
              */
             if ( $permissionSet['limitation'] instanceof Limitation )
             {
+                // We need to match both the limitation AND *one* of the policies, aka; roleLimit AND policies(OR)
                 $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
-                $roleAssignmentOrCriteria[] = new Criterion\LogicalAnd(
-                    array(
-                        $type->getCriterion( $permissionSet['limitation'], $currentUser ),
-                        isset( $policyOrCriteria[1] ) ? new Criterion\LogicalOr( $policyOrCriteria ) : $policyOrCriteria[0]
-                    )
-                );
+                if ( !empty( $policyOrCriteria ) )
+                {
+                    $roleAssignmentOrCriteria[] = new Criterion\LogicalAnd(
+                        array(
+                            $type->getCriterion( $permissionSet['limitation'], $currentUser ),
+                            isset( $policyOrCriteria[1] ) ? new Criterion\LogicalOr( $policyOrCriteria ) : $policyOrCriteria[0]
+                        )
+                    );
+                }
+                else
+                {
+                    $roleAssignmentOrCriteria[] = $type->getCriterion( $permissionSet['limitation'], $currentUser );
+                }
             }
             // Otherwise merge $policyOrCriteria into $roleAssignmentOrCriteria
-            else
+            else if ( !empty( $policyOrCriteria ) )
             {
+                // There is no role limitation, so any of the policies can globally match in the returned OR criteria
                 $roleAssignmentOrCriteria = empty( $roleAssignmentOrCriteria ) ?
                     $policyOrCriteria :
                     array_merge( $roleAssignmentOrCriteria, $policyOrCriteria );
             }
         }
+
+        if ( empty( $roleAssignmentOrCriteria ) )
+            return false;
 
         return isset( $roleAssignmentOrCriteria[1] ) ?
             new Criterion\LogicalOr( $roleAssignmentOrCriteria ) :

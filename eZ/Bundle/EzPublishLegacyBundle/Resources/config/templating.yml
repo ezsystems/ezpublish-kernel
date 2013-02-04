@@ -3,11 +3,19 @@ parameters:
     ezpublish_legacy.templating.api_content_converter.class: eZ\Publish\Core\MVC\Legacy\Templating\Converter\ApiContentConverter
     ezpublish_legacy.templating.delegating_converter.class: eZ\Publish\Core\MVC\Legacy\Templating\Converter\DelegatingConverter
     ezpublish_legacy.templating.generic_converter.class: eZ\Publish\Core\MVC\Legacy\Templating\Converter\GenericConverter
+    # Overriding base GlobalHelper
+    ezpublish.templating.global_helper.core.class: eZ\Publish\Core\MVC\Legacy\Templating\GlobalHelper
+    ezpublish_legacy.templating.legacy_helper.class: eZ\Publish\Core\MVC\Legacy\Templating\LegacyHelper
+
+    # eZ Template as a real template engine
+    templating.engine.eztpl.class: eZ\Publish\Core\MVC\Legacy\Templating\LegacyEngine
+    assetic.eztpl_formula_loader.class: eZ\Publish\Core\MVC\Legacy\Templating\LegacyFormulaLoader
+    twig.class: eZ\Publish\Core\MVC\Legacy\Templating\Twig\Environment
 
 services:
     ezpublish_legacy.twig.extension:
         class: %ezpublish_legacy.twig.extension.class%
-        arguments: [@ezpublish_legacy.kernel, @ezpublish_legacy.templating.delegating_converter]
+        arguments: [@templating.engine.eztpl]
         tags:
             - {name: twig.extension}
 
@@ -28,3 +36,14 @@ services:
             - {name: ezpublish_legacy.templating.converter, for: %ezpublish.api.content.class%}
             - {name: ezpublish_legacy.templating.converter, for: %ezpublish.api.location.class%}
 
+    ezpublish_legacy.templating.legacy_helper:
+        class: %ezpublish_legacy.templating.legacy_helper.class%
+
+    templating.engine.eztpl:
+        class: %templating.engine.eztpl.class%
+        arguments: [@ezpublish_legacy.kernel, @ezpublish_legacy.templating.object_converter]
+
+    assetic.eztpl_formula_loader:
+        class: %assetic.eztpl_formula_loader.class%
+        tags:
+            - {name: assetic.formula_loader, alias: eztpl}
