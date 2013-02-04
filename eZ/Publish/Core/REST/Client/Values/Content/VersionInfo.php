@@ -90,7 +90,7 @@ class VersionInfo extends \eZ\Publish\API\Repository\Values\Content\VersionInfo
 
     public function __get( $propertyName )
     {
-        switch( $propertyName )
+        switch ( $propertyName )
         {
             case 'contentInfo':
                 return $this->getContentInfo();
@@ -100,7 +100,7 @@ class VersionInfo extends \eZ\Publish\API\Repository\Values\Content\VersionInfo
 
     public function __isset( $propertyName )
     {
-        switch( $propertyName )
+        switch ( $propertyName )
         {
             case 'contentInfo':
                 return true;

@@ -84,6 +84,7 @@ class Configuration implements ConfigurationInterface
                             )
                             ->isRequired()
                             ->useAttributeAsKey( 'key' )
+                            ->normalizeKeys( false )
                             ->prototype( 'array' )
                                 ->beforeNormalization()
                                     // Value passed to the matcher should always be an array.
@@ -102,6 +103,7 @@ class Configuration implements ConfigurationInterface
                                     )
                                 ->end()
                                 ->useAttributeAsKey( 'key' )
+                                ->normalizeKeys( false )
                                 ->prototype( 'variable' )->end()
                             ->end()
                         ->end()
