@@ -81,7 +81,7 @@ class Aggregate extends SortClauseVisitor
             }
         }
 
-        throw new NotImplementedException( "No visitor avialable for: " . get_class( $sortClause ) );
+        throw new NotImplementedException( "No visitor available for: " . get_class( $sortClause ) );
     }
 }
 
