@@ -38,8 +38,8 @@ abstract class Utils
         }
 
         $settings['base']['Configuration']['UseCache'] = false;
-        $settings['persistence_handler']['alias'] = $persistenceHandler;
-        $settings['io_handler']['alias'] = $ioHandler;
+        $settings['service']['persistence_handler']['alias'] = $persistenceHandler;
+        $settings['service']['io_handler']['alias'] = $ioHandler;
         $settings['service']['parameters']['legacy_dsn'] = $dsn;
 
         // Return Service Container
