@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository\Translatable;
  * present validation errors to the user. Thus we need plural form handling and
  * replacements of placeholders and so on.
  *
- * @package FieldTypeProviderInterface
+ * @package eZ\Publish\SPI\FieldType
  */
 interface ValidationError extends Translatable
 {

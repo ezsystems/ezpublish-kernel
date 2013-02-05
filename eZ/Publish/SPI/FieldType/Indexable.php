@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\Field;
  * The field type interface which all field types have to implement to be
  * indexable by search backends.
  *
- * @package FieldTypeProviderInterface
+ * @package eZ\Publish\SPI\FieldType
  */
 interface Indexable
 {
