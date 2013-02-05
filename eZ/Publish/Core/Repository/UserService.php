@@ -234,11 +234,9 @@ class UserService implements UserServiceInterface
             )
         );
 
-        $sortClause = null;
+        $searchQuery->sortClauses = array();
         if ( $sortField !== null )
-            $sortClause = array( $this->getSortClauseBySortField( $sortField, $sortOrder ) );
-
-        $searchQuery->sortClauses = $sortClause;
+            $searchQuery->sortClauses[] = $this->getSortClauseBySortField( $sortField, $sortOrder );
 
         return $this->repository->getSearchService()->findContent( $searchQuery, array(), false );
     }
