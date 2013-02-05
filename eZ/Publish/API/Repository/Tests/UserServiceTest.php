@@ -88,10 +88,9 @@ class UserServiceTest extends BaseTest
         foreach ( $subUserGroups as $subUserGroup )
         {
             // Do something with the $subUserGroup
+            $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroup', $subUserGroup );
         }
         /* END: Use Case */
-
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroup', $subUserGroup );
     }
 
     /**
