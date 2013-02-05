@@ -53,9 +53,9 @@ class ContentExtension extends Twig_Extension
     protected $environment;
 
     /**
-     * Template blocks, by field
+     * Template blocks
      *
-     * @var \SplObjectStorage
+     * @var array
      */
     protected $blocks;
 
@@ -94,7 +94,7 @@ class ContentExtension extends Twig_Extension
             }
         );
 
-        $this->blocks = new SplObjectStorage();
+        $this->blocks = array();
         $this->container = $container;
     }
 
@@ -338,8 +338,8 @@ class ContentExtension extends Twig_Extension
             }
         }
 
-        if ( $this->blocks->contains( $field ) )
-            return $this->blocks[$field];
+        if ( isset( $this->blocks[$fieldBlockName] ) )
+            return array( $fieldBlockName => $this->blocks[$fieldBlockName] );
 
         // Looping against available resources to find template blocks for $field
         $blocks = array();
@@ -353,17 +353,11 @@ class ContentExtension extends Twig_Extension
             $block = $this->searchBlock( $fieldBlockName, $tpl );
             if ( $block !== null )
             {
-                $blocks[$fieldBlockName] = $block;
-                break;
+                $this->blocks[$fieldBlockName] = $block;
+                return array( $fieldBlockName => $block );
             }
         }
-
-        if ( empty( $blocks ) )
-            throw new LogicException( "Cannot find '$fieldBlockName' template block field type." );
-
-        $this->blocks->attach( $field, $blocks );
-
-        return $blocks;
+        throw new LogicException( "Cannot find '$fieldBlockName' template block field type." );
     }
 
     /**
