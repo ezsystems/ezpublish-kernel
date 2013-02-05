@@ -48,7 +48,7 @@ class Location extends APILocation
      *
      * @return array
      */
-    protected function getProperties( $dynamicProperties = array( 'contentId'  ) )
+    protected function getProperties( $dynamicProperties = array( 'contentId' ) )
     {
         return parent::getProperties( $dynamicProperties );
     }
