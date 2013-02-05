@@ -473,7 +473,7 @@ class SearchServiceTest extends BaseTest
                         'sortClauses' => array()
                     )
                 ),
-                $fixtureDir . '/SortNone.php',
+                $fixtureDir . 'SortNone.php',
                 // Result having the same sort level should be sorted between them to be system independent
                 function ( &$data )
                 {
@@ -495,7 +495,7 @@ class SearchServiceTest extends BaseTest
                         'sortClauses' => array( new SortClause\LocationPathString( Query::SORT_DESC ) )
                     )
                 ),
-                $fixtureDir . '/SortPathString.php',
+                $fixtureDir . 'SortPathString.php',
             ),
             array(
                 new Query(
@@ -506,7 +506,7 @@ class SearchServiceTest extends BaseTest
                         'sortClauses' => array( new SortClause\LocationDepth( Query::SORT_ASC ) )
                     )
                 ),
-                $fixtureDir . '/SortLocationDepth.php',
+                $fixtureDir . 'SortLocationDepth.php',
                 // Result having the same sort level should be sorted between them to be system independent
                 function ( &$data )
                 {
@@ -545,7 +545,7 @@ class SearchServiceTest extends BaseTest
                         )
                     )
                 ),
-                $fixtureDir . '/SortMultiple.php',
+                $fixtureDir . 'SortMultiple.php',
             ),
             array(
                 new Query(
@@ -559,7 +559,7 @@ class SearchServiceTest extends BaseTest
                         )
                     )
                 ),
-                $fixtureDir . '/SortDesc.php',
+                $fixtureDir . 'SortDesc.php',
             ),
             array(
                 new Query(
@@ -573,7 +573,7 @@ class SearchServiceTest extends BaseTest
                         )
                     )
                 ),
-                $fixtureDir . '/SortDatePublished.php',
+                $fixtureDir . 'SortDatePublished.php',
             ),
             array(
                 new Query(
@@ -587,7 +587,7 @@ class SearchServiceTest extends BaseTest
                         )
                     )
                 ),
-                $fixtureDir . '/SortSectionIdentifier.php',
+                $fixtureDir . 'SortSectionIdentifier.php',
             ),
             array(
                 new Query(
@@ -601,7 +601,7 @@ class SearchServiceTest extends BaseTest
                         )
                     )
                 ),
-                $fixtureDir . '/SortSectionName.php',
+                $fixtureDir . 'SortSectionName.php',
             ),
             array(
                 new Query(
@@ -615,7 +615,7 @@ class SearchServiceTest extends BaseTest
                         )
                     )
                 ),
-                $fixtureDir . '/SortContentName.php',
+                $fixtureDir . 'SortContentName.php',
             ),
             array(
                 new Query(
@@ -629,7 +629,7 @@ class SearchServiceTest extends BaseTest
                         )
                     )
                 ),
-                $fixtureDir . '/SortFolderName.php',
+                $fixtureDir . 'SortFolderName.php',
             ),
             array(
                 new Query(
@@ -643,7 +643,7 @@ class SearchServiceTest extends BaseTest
                         )
                     )
                 ),
-                $fixtureDir . '/SortTemplateTitle.php',
+                $fixtureDir . 'SortTemplateTitle.php',
             ),
         );
     }
