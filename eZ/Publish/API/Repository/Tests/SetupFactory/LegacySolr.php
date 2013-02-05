@@ -145,6 +145,7 @@ class LegacySolr extends Legacy
                 $nameGenerator
             ),
             $fieldRegistry,
+            $persistenceHandler->locationHandler(),
             $persistenceHandler->contentTypeHandler(),
             $persistenceHandler->objectStateHandler()
         );
