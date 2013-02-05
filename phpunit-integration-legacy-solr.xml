@@ -14,13 +14,15 @@
     </php>
     <testsuites>
         <testsuite name="eZ\Publish\API\Repository">
-            <file>RepositoryTest.php</file>
             <!-- Only the Solr Search tests differ from the other tests, so we
                  are skipping everything else
 
                  @todo: Search service is used all over the place, so we must test
                         all services here.
             -->
+            <file>eZ/Publish/API/Repository/Tests/RepositoryTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/ContentTypeServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/UserServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceAuthorizationTest.php</file>
         </testsuite>
