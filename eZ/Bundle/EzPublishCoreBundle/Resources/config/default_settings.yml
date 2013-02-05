@@ -36,6 +36,11 @@ parameters:
     ezsettings.default.field_templates:
         - {template: EzPublishCoreBundle::content_fields.html.twig, priority: 0}
 
+    # Templates to use while rendering field definition settings
+    ezsettings.default.fielddefinition_settings_templates:
+        - {template: EzPublishCoreBundle::fielddefinition_settings.html.twig, priority: 0}
+
+
     # Image settings
     ezsettings.default.image.temporary_dir: imagetmp
     ezsettings.default.image.published_images_dir: images

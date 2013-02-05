@@ -11,7 +11,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser
 
 class FieldTemplates extends Templates
 {
-    const NODE_KEY = "field_templates";
-    const INFO = "Template settings for fields rendered by ez_render_field() Twig function";
-    const INFO_TEMPLATE_KEY = "Template file where to find block definition to display fields";
+    const NODE_KEY = "fielddefinition_settings_templates";
+    const INFO = "Template settings for field definition settings rendered by ez_render_fielddefinition_settings() Twig function";
+    const INFO_TEMPLATE_KEY = "Template file where to find block definition to display field definition settings";
 }

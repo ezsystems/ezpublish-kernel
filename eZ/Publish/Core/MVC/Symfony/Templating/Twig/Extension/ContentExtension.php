@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -30,13 +31,22 @@ use LogicException;
 class ContentExtension extends Twig_Extension
 {
     /**
-     * Array of Twig template resources.
+     * Array of Twig template resources for ez_render_field
      * Either the path to each template and its priority in a hash or its
      * \Twig_Template (compiled) counterpart
      *
      * @var array|\Twig_Template[]
      */
-    protected $resources;
+    protected $renderFieldRessources;
+
+    /**
+     * Array of Twig template resources for ez_render_fielddefinition_settings
+     * Either the path to each template and its priority in a hash or its
+     * \Twig_Template (compiled) counterpart
+     *
+     * @var array|\Twig_Template[]
+     */
+    protected $renderFieldDefinitionSettingsResources;
 
     /**
      * A \Twig_Template instance used to render template blocks.
@@ -85,14 +95,16 @@ class ContentExtension extends Twig_Extension
 
     public function __construct( ContainerInterface $container, ConfigResolverInterface $resolver )
     {
-        $this->resources = $resolver->getParameter( 'field_templates' );
-        usort(
-            $this->resources,
-            function ( $a, $b )
-            {
-                return $b['priority'] - $a['priority'];
-            }
+        $comp = function ( $a, $b )
+        {
+            return $b['priority'] - $a['priority'];
+        };
+        $this->renderFieldRessources = $resolver->getParameter( 'field_templates' );
+        $this->renderFieldDefinitionSettingsResources = $resolver->getParameter(
+            'fielddefinition_settings_templates'
         );
+        usort( $this->renderFieldRessources, $comp );
+        usort( $this->renderFieldDefinitionSettingsResources, $comp );
 
         $this->blocks = array();
         $this->container = $container;
@@ -119,6 +131,11 @@ class ContentExtension extends Twig_Extension
             'ez_render_field' => new Twig_Function_Method(
                 $this,
                 'renderField',
+                array( 'is_safe' => array( 'html' ) )
+            ),
+            'ez_render_fielddefinition_settings' => new Twig_Function_Method(
+                $this,
+                'renderFieldDefinitionSettings',
                 array( 'is_safe' => array( 'html' ) )
             ),
             'ez_image_alias' => new Twig_Function_Method( $this, 'getImageVariation' )
@@ -194,6 +211,32 @@ class ContentExtension extends Twig_Extension
     }
 
     /**
+     * Renders the HTML for the settings for the given field definition
+     * $definition
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $definition
+     * @return string
+     */
+    public function renderFieldDefinitionSettings( FieldDefinition $definition )
+    {
+        if ( !$this->template instanceof Twig_Template )
+        {
+            $tpl = reset( $this->renderFieldDefinitionSettingsResources );
+            $this->template = $this->environment->loadTemplate( $tpl['template'] );
+        }
+        $parameters = array(
+            'fielddefinition' => $definition,
+            'settings' => $definition->getFieldSettings(),
+        );
+
+        return $this->template->renderBlock(
+            $this->getRenderFieldDefinitionSettingsBlockName( $definition ),
+            $parameters,
+            $this->getBlockByFieldDefinition( $definition )
+        );
+    }
+
+    /**
      * Renders the HTML for a given field.
      *
      * @param \eZ\Publish\Core\Repository\Values\Content\Content $content
@@ -232,12 +275,12 @@ class ContentExtension extends Twig_Extension
         // Getting instance of Twig_Template that will be used to render blocks
         if ( !$this->template instanceof Twig_Template )
         {
-            $tpl = reset( $this->resources );
+            $tpl = reset( $this->renderFieldRessources );
             $this->template = $this->environment->loadTemplate( $tpl['template'] );
         }
 
         return $this->template->renderBlock(
-            $this->getFieldBlockName( $content, $field ),
+            $this->getRenderFieldBlockName( $content, $field ),
             $params,
             $this->getBlocksByField( $content, $field, $localTemplate )
         );
@@ -327,7 +370,7 @@ class ContentExtension extends Twig_Extension
      */
     protected function getBlocksByField( Content $content, Field $field, $localTemplate = null )
     {
-        $fieldBlockName = $this->getFieldBlockName( $content, $field );
+        $fieldBlockName = $this->getRenderFieldBlockName( $content, $field );
         if ( $localTemplate !== null )
         {
             $tpl = $this->environment->loadTemplate( $localTemplate );
@@ -337,27 +380,57 @@ class ContentExtension extends Twig_Extension
                 return array( $fieldBlockName => $block );
             }
         }
+        return $this->getBlockByName( $fieldBlockName, 'renderFieldRessources' );
+    }
 
-        if ( isset( $this->blocks[$fieldBlockName] ) )
-            return array( $fieldBlockName => $this->blocks[$fieldBlockName] );
+    /**
+     * Returns the template block for the settings of the field definition $definition.
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $definition
+     * @return array
+     */
+    protected function getBlockByFieldDefinition( FieldDefinition $definition )
+    {
+        return $this->getBlockByName(
+            $this->getRenderFieldDefinitionSettingsBlockName( $definition ),
+            'renderFieldDefinitionSettingsResources'
+        );
+    }
 
-        // Looping against available resources to find template blocks for $field
+    /**
+     * Returns the template block of the given $name available in the resources
+     * which name is $resourcesName
+     *
+     * @param string $name
+     * @param string $resourcesName
+     *
+     * @throws \LogicException If no template block can be found for $field
+     *
+     * @return array
+     */
+    protected function getBlockByName( $name, $resourcesName )
+    {
+        if ( isset( $this->blocks[$name] ) )
+        {
+            return array( $name => $this->blocks[$name] );
+        }
+
         $blocks = array();
-        foreach ( $this->resources as &$template )
+        foreach ( $this->{$resourcesName} as &$template )
         {
             if ( !$template instanceof Twig_Template )
                 $template = $this->environment->loadTemplate( $template['template'] );
 
             $tpl = $template;
 
-            $block = $this->searchBlock( $fieldBlockName, $tpl );
+            $block = $this->searchBlock( $name, $tpl );
             if ( $block !== null )
             {
-                $this->blocks[$fieldBlockName] = $block;
-                return array( $fieldBlockName => $block );
+                $this->blocks[$name] = $block;
+                return array( $name => $block );
             }
         }
-        throw new LogicException( "Cannot find '$fieldBlockName' template block field type." );
+        throw new LogicException( "Cannot find '$name' template block." );
     }
 
     /**
@@ -368,9 +441,21 @@ class ContentExtension extends Twig_Extension
      *
      * @return string
      */
-    protected function getFieldBlockName( Content $content, Field $field )
+    protected function getRenderFieldBlockName( Content $content, Field $field )
     {
         return $this->getFieldTypeIdentifier( $content, $field ) . '_field';
+    }
+
+    /**
+     * Returns the name of the block to render the settings of the field
+     * definition $definition
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $definition
+     * @return string
+     */
+    protected function getRenderFieldDefinitionSettingsBlockName( FieldDefinition $definition )
+    {
+        return $definition->fieldTypeIdentifier . '_settings';
     }
 
     /**
