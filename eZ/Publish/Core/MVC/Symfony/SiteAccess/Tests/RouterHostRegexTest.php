@@ -22,6 +22,7 @@ class RouterHostRegexTest extends PHPUnit_Framework_TestCase
     public function testConstruct()
     {
         return new Router(
+            $this->getMock( 'Psr\\Log\\LoggerInterface' ),
             "default_sa",
             array(
                 "Regex\\Host" => array(

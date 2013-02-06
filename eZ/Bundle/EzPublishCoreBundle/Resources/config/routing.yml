@@ -45,6 +45,7 @@ services:
     ezpublish.siteaccess_router:
         class: %ezpublish.siteaccess_router.class%
         arguments:
+            - @logger
             - %ezpublish.siteaccess.default%
             - %ezpublish.siteaccess.match_config%
             - %ezpublish.siteaccess.list%

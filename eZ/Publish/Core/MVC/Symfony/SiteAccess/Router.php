@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException;
+use Psr\Log\LoggerInterface;
 
 class Router
 {
@@ -67,15 +68,22 @@ class Router
     protected $siteAccessClass;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * Constructor.
      *
      * @param string $defaultSiteAccess
      * @param array $siteAccessesConfiguration
      * @param array $siteAccessList
-     * @param null $siteAccessClass
+     * @param string|null $siteAccessClass
+     * @param \Psr\Log\LoggerInterface|null $logger
      */
-    public function __construct( $defaultSiteAccess, array $siteAccessesConfiguration, array $siteAccessList, $siteAccessClass = null )
+    public function __construct( LoggerInterface $logger, $defaultSiteAccess, array $siteAccessesConfiguration, array $siteAccessList, $siteAccessClass = null )
     {
+        $this->logger = $logger;
         $this->defaultSiteAccess = $defaultSiteAccess;
         $this->siteAccessesConfiguration = $siteAccessesConfiguration;
         $this->siteAccessList = array_fill_keys( $siteAccessList, true );
