@@ -262,14 +262,4 @@ class MapperTest extends LanguageAwareTestCase
 
         return $inputStruct;
     }
-
-    /**
-     * Returns the test suite with all tests declared in this class.
-     *
-     * @return \PHPUnit_Framework_TestSuite
-     */
-    public static function suite()
-    {
-        return new \PHPUnit_Framework_TestSuite( __CLASS__ );
-    }
 }
