@@ -37,6 +37,7 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
             array(
                 new RestUserGroup(
                     new UserGroup(),
+                    $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" ),
                     new ContentInfo(),
                     new Location(
                         array(
@@ -48,6 +49,7 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
                 ),
                 new RestUserGroup(
                     new UserGroup(),
+                    $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" ),
                     new ContentInfo(),
                     new Location(
                         array(

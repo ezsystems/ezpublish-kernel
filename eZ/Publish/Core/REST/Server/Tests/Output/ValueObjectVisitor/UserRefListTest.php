@@ -37,6 +37,7 @@ class UserRefListTest extends ValueObjectVisitorBaseTest
             array(
                 new RestUser(
                     new User(),
+                    $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" ),
                     new ContentInfo(
                         array(
                             'id' => 14

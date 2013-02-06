@@ -53,6 +53,7 @@ class RestUserGroupTest extends ValueObjectVisitorBaseTest
     {
         return new RestUserGroup(
             new Values\User\UserGroup(),
+            $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" ),
             new Values\Content\ContentInfo(
                 array(
                     'id' => 'content23',
@@ -67,12 +68,7 @@ class RestUserGroupTest extends ValueObjectVisitorBaseTest
                     'remoteId' => 'abc123',
                     'mainLanguageCode' => 'eng-US',
                     'mainLocationId' => 'location23',
-                    'contentType' => new Values\ContentType\ContentType(
-                        array(
-                            'id' => 'contentType23',
-                            'fieldDefinitions' => array(),
-                        )
-                    )
+                    'contentTypeId' => 'contentType23',
                 )
             ),
             new Values\Content\Location(

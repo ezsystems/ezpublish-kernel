@@ -80,9 +80,6 @@ class User extends \eZ\Publish\API\Repository\Values\User\User
             case 'contentInfo':
                 return $this->content->contentInfo;
 
-            case 'contentType':
-                return $this->content->contentType;
-
             case 'id':
                 return $this->content->id;
 

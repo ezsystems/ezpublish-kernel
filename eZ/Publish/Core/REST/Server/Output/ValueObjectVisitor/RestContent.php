@@ -31,6 +31,7 @@ class RestContent extends ValueObjectVisitor
     {
         $restContent = $data;
         $contentInfo = $restContent->contentInfo;
+        $contentType = $restContent->contentType;
         $mainLocation = $restContent->mainLocation;
         $currentVersion = $restContent->currentVersion;
 
@@ -59,7 +60,7 @@ class RestContent extends ValueObjectVisitor
             'href',
             $this->urlHandler->generate(
                 'type',
-                array( 'type' => $contentInfo->getContentType()->id )
+                array( 'type' => $contentInfo->contentTypeId )
             )
         );
         $generator->endAttribute( 'href' );
@@ -92,6 +93,7 @@ class RestContent extends ValueObjectVisitor
             $visitor->visitValueObject(
                 new VersionValue(
                     $currentVersion,
+                    $contentType,
                     $restContent->relations
                 )
             );

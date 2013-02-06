@@ -108,6 +108,7 @@ class UserGroupListTest extends ValueObjectVisitorBaseTest
                             'internalFields' => array()
                         )
                     ),
+                    $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" ),
                     new ContentInfo(),
                     new Location(),
                     array()
@@ -118,6 +119,7 @@ class UserGroupListTest extends ValueObjectVisitorBaseTest
                             'internalFields' => array()
                         )
                     ),
+                    $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" ),
                     new ContentInfo(),
                     new Location(),
                     array()

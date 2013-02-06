@@ -50,8 +50,7 @@ class Version extends ValueObjectVisitor
         $content = $data->content;
 
         $versionInfo = $content->getVersionInfo();
-        $contentInfo = $versionInfo->getContentInfo();
-        $contentType = $contentInfo->getContentType();
+        $contentType = $data->contentType;
 
         $generator->startObjectElement( 'Version' );
 

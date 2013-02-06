@@ -43,6 +43,7 @@ class Visitor
      * @var array
      */
     protected $headers = array();
+
     /**
      * Mapping of status codes.
      *

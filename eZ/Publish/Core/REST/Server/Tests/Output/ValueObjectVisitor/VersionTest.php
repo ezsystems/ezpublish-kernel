@@ -53,12 +53,7 @@ class VersionTest extends ValueObjectVisitorBaseTest
                             'contentInfo' => new Values\Content\ContentInfo(
                                 array(
                                     'id' => 23,
-                                    'contentType' => new Values\ContentType\ContentType(
-                                        array(
-                                            'id' => 42,
-                                            'fieldDefinitions' => array(),
-                                        )
-                                    ),
+                                    'contentTypeId' => 42,
                                 )
                             ),
                         )
@@ -81,6 +76,7 @@ class VersionTest extends ValueObjectVisitorBaseTest
                     )
                 )
             ),
+            $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" ),
             array()
         );
 

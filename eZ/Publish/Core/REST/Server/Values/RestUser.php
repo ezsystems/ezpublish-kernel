@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\REST\Common\Value as RestValue;
@@ -23,6 +24,11 @@ class RestUser extends RestValue
      * @var \eZ\Publish\API\Repository\Values\Content\Content
      */
     public $content;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     */
+    public $contentType;
 
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
@@ -47,9 +53,10 @@ class RestUser extends RestValue
      * @param \eZ\Publish\API\Repository\Values\Content\Location $mainLocation
      * @param \eZ\Publish\API\Repository\Values\Content\Relation[] $relations
      */
-    public function __construct( Content $content, ContentInfo $contentInfo, Location $mainLocation, array $relations )
+    public function __construct( Content $content, ContentType $contentType, ContentInfo $contentInfo, Location $mainLocation, array $relations )
     {
         $this->content = $content;
+        $this->contentType = $contentType;
         $this->contentInfo = $contentInfo;
         $this->mainLocation = $mainLocation;
         $this->relations = $relations;

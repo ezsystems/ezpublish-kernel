@@ -66,12 +66,7 @@ class RestContentTest extends ValueObjectVisitorBaseTest
                     'remoteId' => 'abc123',
                     'mainLanguageCode' => 'eng-US',
                     'mainLocationId' => 'location23',
-                    'contentType' => new Values\ContentType\ContentType(
-                        array(
-                            'id' => 'contentType23',
-                            'fieldDefinitions' => array(),
-                        )
-                    )
+                    'contentTypeId' => 'contentType23',
                 )
             ),
             new Values\Content\Location(
@@ -320,6 +315,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
             )
         );
         $restContent->relations = array();
+        $restContent->contentType = $this->getMockForAbstractClass(
+            "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType"
+        );
 
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'visitValueObject' )
