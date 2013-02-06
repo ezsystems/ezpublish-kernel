@@ -82,9 +82,6 @@ class UserStub extends User
             case 'contentInfo':
                 return $this->content->contentInfo;
 
-            case 'contentType':
-                return $this->content->contentType;
-
             case 'id':
                 return $this->content->id;
 
