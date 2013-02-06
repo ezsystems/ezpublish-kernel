@@ -400,7 +400,6 @@ class ContentExtension extends Twig_Extension
 
         if ( !isset( $this->fieldTypeIdentifiers[$field->fieldDefIdentifier] ) )
         {
-            die();
             $this->fieldTypeIdentifiers[$field->fieldDefIdentifier] = $contentType
                 ->getFieldDefinition( $field->fieldDefIdentifier )
                 ->fieldTypeIdentifier;
