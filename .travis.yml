@@ -24,6 +24,10 @@ matrix:
       env: TEST_CONFIG="phpunit-integration-legacy.xml"
     - php: 5.5
       env: TEST_CONFIG="phpunit-integration-legacy-solr.xml"
+    - php: 5.3
+      env: TEST_CONFIG="phpunit-integration-legacy.xml"
+    - php: 5.3
+      env: TEST_CONFIG="phpunit-integration-legacy-solr.xml"
 
 # test only master (+ Pull requests)
 branches:
