@@ -24,7 +24,7 @@ class ContentType extends MultipleValued
      */
     public function matchLocation( APILocation $location )
     {
-        return isset( $this->values[$location->getContentInfo()->getContentType()->id] );
+        return isset( $this->values[$location->getContentInfo()->contentTypeId] );
     }
 
     /**
@@ -36,6 +36,6 @@ class ContentType extends MultipleValued
      */
     public function matchContentInfo( ContentInfo $contentInfo )
     {
-        return isset( $this->values[$contentInfo->getContentType()->id] );
+        return isset( $this->values[$contentInfo->contentTypeId] );
     }
 }

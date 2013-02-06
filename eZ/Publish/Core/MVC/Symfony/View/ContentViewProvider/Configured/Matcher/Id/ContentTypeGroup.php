@@ -36,7 +36,12 @@ class ContentTypeGroup extends MultipleValued
      */
     public function matchContentInfo( ContentInfo $contentInfo )
     {
-        foreach ( $contentInfo->getContentType()->getContentTypeGroups() as $group )
+        $contentTypeGroups = $this->repository
+            ->getContentTypeService()
+            ->loadContentType( $contentInfo->contentTypeId )
+            ->getContentTypeGroups();
+
+        foreach ( $contentTypeGroups as $group )
         {
             if ( isset( $this->values[$group->id] ) )
                 return true;

@@ -104,22 +104,7 @@ class ContentTypeTest extends BaseTest
      */
     private function generateContentInfoForContentType( $contentTypeId )
     {
-        $contentInfo = $this->getContentInfoMock();
-        $contentInfo
-            ->expects( $this->any() )
-            ->method( 'getContentType' )
-            ->will(
-                $this->returnValue(
-                    $this
-                        ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' )
-                        ->setConstructorArgs(
-                            array( array( 'id' => $contentTypeId ) )
-                        )
-                        ->getMockForAbstractClass()
-                )
-            );
-
-        return $contentInfo;
+        return $this->getContentInfoMock( array( "contentTypeId" => $contentTypeId ) );
     }
 
     /**

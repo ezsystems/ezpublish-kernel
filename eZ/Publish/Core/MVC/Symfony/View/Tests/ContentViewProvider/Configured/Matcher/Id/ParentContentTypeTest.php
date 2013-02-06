@@ -27,7 +27,7 @@ class ParentContentTypeTest extends BaseTest
     }
 
     /**
-     * Returns a Repository mock configured to return the appropriate Section object with given section identifier
+     * Returns a Repository mock configured to return the appropriate ContentType object with given id.
      *
      * @param int $contentTypeId
      *
@@ -35,21 +35,7 @@ class ParentContentTypeTest extends BaseTest
      */
     private function generateRepositoryMockForContentTypeId( $contentTypeId )
     {
-        $parentContentInfo = $this->getContentInfoMock();
-        $parentContentInfo->expects( $this->once() )
-            ->method( 'getContentType' )
-            ->will(
-                $this->returnValue(
-                    $this
-                        ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' )
-                        ->setConstructorArgs(
-                            array(
-                                array( 'id' => $contentTypeId )
-                            )
-                        )
-                        ->getMockForAbstractClass()
-                )
-            );
+        $parentContentInfo = $this->getContentInfoMock( array( "contentTypeId" => $contentTypeId ) );
         $parentLocation = $this->getLocationMock();
         $parentLocation->expects( $this->once() )
             ->method( 'getContentInfo' )
