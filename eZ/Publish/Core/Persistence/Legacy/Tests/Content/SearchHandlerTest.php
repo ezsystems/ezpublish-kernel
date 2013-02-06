@@ -527,16 +527,19 @@ class SearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $expectedContentIds = array( 4, 10, 12 );
+
         $this->assertEquals(
-            array( 4, 10, 12 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            count( $expectedContentIds ),
+            count( $result->searchHits )
         );
+        foreach ( $result->searchHits as $hit )
+        {
+            $this->assertContains(
+                $hit->valueObject->versionInfo->contentInfo->id,
+                $expectedContentIds
+            );
+        }
     }
 
     /**
