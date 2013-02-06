@@ -137,15 +137,22 @@ class Router
             return $this->siteAccess;
         }
 
+        return $this->doMatch( $request );
+    }
+
+    /**
+     * Returns the SiteAccess object matched against $request and the siteaccess configuration.
+     * If nothing could be matched, the default siteaccess is returned, with "default" as matching type.
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
+     *
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess
+     */
+    private function doMatch( SimplifiedRequest $request )
+    {
         foreach ( $this->siteAccessesConfiguration as $matchingClass => $matchingConfiguration )
         {
-            // If class begins with a '\' it means it's a FQ class name,
-            // otherwise it is relative to this namespace.
-            if ( $matchingClass[0] !== '\\' )
-                $matchingClass = __NAMESPACE__ . "\\Matcher\\$matchingClass";
-
-            $matcher = new $matchingClass( $matchingConfiguration );
-            $matcher->setRequest( $request );
+            $matcher = $this->buildMatcher( $matchingClass, $matchingConfiguration, $request );
 
             if ( ( $siteaccessName = $matcher->match() ) !== false )
             {
@@ -159,9 +166,34 @@ class Router
             }
         }
 
+        $this->logger->notice( 'Siteaccess not matched against configuration, returning default siteaccess.' );
         $this->siteAccess->name = $this->defaultSiteAccess;
         $this->siteAccess->matchingType = 'default';
         return $this->siteAccess;
+    }
+
+    /**
+     * Builds siteaccess matcher.
+     * In the siteaccess configuration, if the matcher class begins with a "\" (FQ class name), it will be used as is, passing the matching configuration in the constructor.
+     * Otherwise, given matching class will be relative to eZ\Publish\Core\MVC\Symfony\SiteAccess namespace.
+     *
+     * @param $matchingClass
+     * @param $matchingConfiguration
+     * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
+     *
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess
+     */
+    protected function buildMatcher( $matchingClass, $matchingConfiguration, SimplifiedRequest $request )
+    {
+        // If class begins with a '\' it means it's a FQ class name,
+        // otherwise it is relative to this namespace.
+        if ( $matchingClass[0] !== '\\' )
+            $matchingClass = __NAMESPACE__ . "\\Matcher\\$matchingClass";
+
+        $matcher = new $matchingClass( $matchingConfiguration );
+        $matcher->setRequest( $request );
+
+        return $matcher;
     }
 
     /**

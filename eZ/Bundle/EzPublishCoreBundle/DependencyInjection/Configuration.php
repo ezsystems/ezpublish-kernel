@@ -68,7 +68,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode( 'default_siteaccess' )->isRequired()->info( 'Name of the default siteaccess' )->end()
                         ->arrayNode( 'match' )
-                            ->info( 'Siteaccess match configuration. First key is the matcher class, value is passed to the matcher' )
+                            ->info( 'Siteaccess match configuration. First key is the matcher class, value is passed to the matcher. Key can be a service identifier (preprended by "@"), or a FQ class name (prepended by "\\")' )
                             ->example(
                                 array(
                                     'Map\\URI' => array(
@@ -79,6 +79,12 @@ class Configuration implements ConfigurationInterface
                                     'Map\\Host' => array(
                                         'ezpublish.dev' => 'ezdemo_site',
                                         'admin.ezpublish.dev' => 'ezdemo_site_admin'
+                                    ),
+                                    '\\My\\Custom\\Matcher' => array(
+                                        'some'  => 'configuration'
+                                    ),
+                                    '@my.custom.matcher' => array(
+                                        'some' => 'other_configuration'
                                     )
                                 )
                             )
