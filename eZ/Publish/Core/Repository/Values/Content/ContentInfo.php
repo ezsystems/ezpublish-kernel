@@ -14,7 +14,6 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo;
 /**
  * This class provides all version independent information of the content object.
  *
- * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType ( @deprecated Use $contentTypeId )
  * @property-read mixed $id The unique id of the content object
  * @property-read mixed $contentTypeId The unique id of the content type object this content is an instance of
  * @property-read string $name the computed name (via name schema) in the main language of the content object
@@ -32,23 +31,6 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo;
 class ContentInfo extends APIContentInfo
 {
     /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
-     */
-    protected $contentType;
-
-    /**
-     * The content type of this content object
-     *
-     * @deprecated Use $contentTypeId and ContentTypeService
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
-     */
-    public function getContentType()
-    {
-        return $this->contentType;
-    }
-
-    /**
      * Magic getter for retrieving convenience properties
      *
      * @param string $property The name of the property to retrieve
@@ -57,13 +39,6 @@ class ContentInfo extends APIContentInfo
      */
     public function __get( $property )
     {
-        switch ( $property )
-        {
-            case 'contentType':
-                return $this->contentType;
-            case 'contentTypeId':
-                return $this->contentType->id;
-        }
         return parent::__get( $property );
     }
 
@@ -76,9 +51,6 @@ class ContentInfo extends APIContentInfo
      */
     public function __isset( $property )
     {
-        if ( $property === 'contentType' || $property === 'contentTypeId' )
-            return true;
-
         return parent::__isset( $property );
     }
 }

@@ -1077,10 +1077,11 @@ class ContentService implements ContentServiceInterface
         $fields = array();
         $languageCodes = $content->versionInfo->languageCodes;
         $initialLanguageCode = $contentUpdateStruct->initialLanguageCode ?: $content->contentInfo->mainLanguageCode;
+        $contentType = $this->repository->getContentTypeService()->loadContentType( $content->contentInfo->contentTypeId );
 
         foreach ( $contentUpdateStruct->fields as $field )
         {
-            $fieldDefinition = $content->contentType->getFieldDefinition( $field->fieldDefIdentifier );
+            $fieldDefinition = $contentType->getFieldDefinition( $field->fieldDefIdentifier );
             if ( $fieldDefinition === null )
             {
                 throw new ContentValidationException(
@@ -1114,7 +1115,7 @@ class ContentService implements ContentServiceInterface
         $spiFields = array();
         $allFieldErrors = array();
 
-        foreach ( $content->contentType->getFieldDefinitions() as $fieldDefinition )
+        foreach ( $contentType->getFieldDefinitions() as $fieldDefinition )
         {
             /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
             $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
@@ -1201,7 +1202,12 @@ class ContentService implements ContentServiceInterface
 
         $spiContentUpdateStruct = new SPIContentUpdateStruct(
             array(
-                "name" => $this->repository->getNameSchemaService()->resolveNameSchema( $content, $fieldValues, $languageCodes ),
+                "name" => $this->repository->getNameSchemaService()->resolveNameSchema(
+                    $content,
+                    $fieldValues,
+                    $languageCodes,
+                    $contentType
+                ),
                 "creatorId" => $this->repository->getCurrentUser()->id,
                 "fields" => $spiFields,
                 "modificationDate" => time(),
@@ -1747,11 +1753,10 @@ class ContentService implements ContentServiceInterface
             $spiContent->versionInfo->contentInfo->contentTypeId
         );
 
-        $versionInfo = $this->buildVersionInfoDomainObject( $spiContent->versionInfo, $type );
         return new Content(
             array(
                 "internalFields" => $this->buildDomainFields( $spiContent->fields, $type ),
-                "versionInfo" => $versionInfo,
+                "versionInfo" => $this->buildVersionInfoDomainObject( $spiContent->versionInfo ),
             )
         );
     }
@@ -1814,16 +1819,12 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\ContentInfo
      */
-    public function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo, ContentType $type = null )
+    public function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo )
     {
-        if ( $type === null )
-        {
-            $type = $this->repository->getContentTypeService()->loadContentType( $spiContentInfo->contentTypeId );
-        }
-
         return new ContentInfo(
             array(
                 "id" => $spiContentInfo->id,
+                "contentTypeId" => $spiContentInfo->contentTypeId,
                 "name" => $spiContentInfo->name,
                 "sectionId" => $spiContentInfo->sectionId,
                 "currentVersionNo" => $spiContentInfo->currentVersionNo,
@@ -1838,8 +1839,7 @@ class ContentService implements ContentServiceInterface
                 "alwaysAvailable" => $spiContentInfo->alwaysAvailable,
                 "remoteId" => $spiContentInfo->remoteId,
                 "mainLanguageCode" => $spiContentInfo->mainLanguageCode,
-                "mainLocationId" => $spiContentInfo->mainLocationId,
-                "contentType" => $type
+                "mainLocationId" => $spiContentInfo->mainLocationId
             )
         );
     }
@@ -1851,7 +1851,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return VersionInfo
      */
-    protected function buildVersionInfoDomainObject( SPIVersionInfo $spiVersionInfo, ContentType $type = null )
+    protected function buildVersionInfoDomainObject( SPIVersionInfo $spiVersionInfo )
     {
         $languageCodes = array();
         foreach ( $spiVersionInfo->languageIds as $languageId )
@@ -1872,7 +1872,7 @@ class ContentService implements ContentServiceInterface
                 "initialLanguageCode" => $spiVersionInfo->initialLanguageCode,
                 "languageCodes" => $languageCodes,
                 "names" => $spiVersionInfo->names,
-                "contentInfo" => $this->buildContentInfoDomainObject( $spiVersionInfo->contentInfo, $type )
+                "contentInfo" => $this->buildContentInfoDomainObject( $spiVersionInfo->contentInfo )
             )
         );
     }
@@ -1933,9 +1933,10 @@ class ContentService implements ContentServiceInterface
         $sourceFieldDefinition = null;
         if ( $spiRelation->sourceFieldDefinitionId !== null )
         {
-            $sourceFieldDefinition = $sourceContentInfo->getContentType()->getFieldDefinitionById(
-                $spiRelation->sourceFieldDefinitionId
+            $contentType = $this->repository->getContentTypeService()->loadContentType(
+                $sourceContentInfo->contentTypeId
             );
+            $sourceFieldDefinition = $contentType->getFieldDefinitionById( $spiRelation->sourceFieldDefinitionId );
         }
 
         return new Relation(

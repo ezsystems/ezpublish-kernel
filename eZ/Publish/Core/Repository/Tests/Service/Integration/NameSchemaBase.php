@@ -34,11 +34,11 @@ abstract class NameSchemaBase extends BaseServiceTest
         /** @var $service \eZ\Publish\Core\Repository\NameSchemaService */
         $service = $this->repository->getNameSchemaService();
 
-        $content = $this->buildTestContent();
+        list( $content, $contentType ) = $this->buildTestObjects();
 
         $name = $service->resolve(
             $nameSchema,
-            $content->contentType,
+            $contentType,
             $content->fields,
             $content->versionInfo->languageCodes
         );
@@ -63,11 +63,11 @@ abstract class NameSchemaBase extends BaseServiceTest
             )
         );
 
-        $content = $this->buildTestContent();
+        list( $content, $contentType ) = $this->buildTestObjects();
 
         $name = $service->resolve(
             "Hello, <text1> and <text2> and then goodbye and hello again",
-            $content->contentType,
+            $contentType,
             $content->fields,
             $content->versionInfo->languageCodes
         );
@@ -266,7 +266,7 @@ abstract class NameSchemaBase extends BaseServiceTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    protected function buildTestContent( $nameSchema = "<name_schema>", $urlAliasSchema = "<urlalias_schema>" )
+    protected function buildTestObjects( $nameSchema = "<name_schema>", $urlAliasSchema = "<urlalias_schema>" )
     {
         $contentType = new ContentType(
             array(
@@ -275,24 +275,18 @@ abstract class NameSchemaBase extends BaseServiceTest
                 "fieldDefinitions" => $this->getFieldDefinitions()
             )
         );
-        $contentInfo = new ContentInfo(
+        $content = new Content(
             array(
-                "contentType" => $contentType
-            )
-        );
-        $versionInfo = new VersionInfo(
-            array(
-                "contentInfo" => $contentInfo,
-                "languageCodes" => array( "eng-GB", "cro-HR" )
+                "internalFields" => $this->getFields(),
+                "versionInfo" => new VersionInfo(
+                    array(
+                        "languageCodes" => array( "eng-GB", "cro-HR" )
+                    )
+                )
             )
         );
 
-        return new Content(
-            array(
-                "internalFields" => $this->getFields(),
-                "versionInfo" => $versionInfo
-            )
-        );
+        return array( $content, $contentType );
     }
 
     /**

@@ -29,7 +29,6 @@ class ContentTest extends PHPUnit_Framework_TestCase
         self::assertContains( 'fields', $properties, 'Property not found ' );
         self::assertContains( 'versionInfo', $properties, 'Property not found ' );
         self::assertContains( 'contentInfo', $properties, 'Property not found ' );
-        self::assertContains( 'contentType', $properties, 'Property not found ' );
 
         // check for duplicates and double check existence of property
         $propertiesHash = array();

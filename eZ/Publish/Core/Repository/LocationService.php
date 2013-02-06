@@ -877,13 +877,7 @@ class LocationService implements LocationServiceInterface
                     'name' => 'Top Level Nodes',
                     'sectionId' => 1,
                     'mainLocationId' => 1,
-                    'contentType' => new ContentType(
-                        array(
-                            'identifier' => 'folder',
-                            'isContainer' => true,
-                            'fieldDefinitions' => array()
-                        )
-                    )
+                    'contentTypeId' => 1,
                 )
             );
         else // @todo This should not be loaded separately, SPI need to change to fix this.

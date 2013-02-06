@@ -24,8 +24,8 @@ class ContentInfoTest extends PHPUnit_Framework_TestCase
     {
         $object = new ContentInfo;
         $properties = $object->attributes();
-        //self::assertNotContains( 'internalFields', $properties, 'Internal property found ' );
-        self::assertContains( 'contentType', $properties, 'Property not found' );
+        self::assertNotContains( 'internalFields', $properties, 'Internal property found ' );
+        self::assertContains( 'contentTypeId', $properties, 'Property not found' );
         self::assertContains( 'id', $properties, 'Property not found' );
         self::assertContains( 'name', $properties, 'Property not found' );
         self::assertContains( 'sectionId', $properties, 'Property not found' );
