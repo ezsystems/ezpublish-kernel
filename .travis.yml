@@ -5,7 +5,7 @@ php:
   - 5.3.3
   - 5.3
   - 5.4
-#  - 5.5
+  - 5.5
 
 # execute unit tests, integration test stubs and integration tests using legacy storage engine
 env:
@@ -14,9 +14,16 @@ env:
   - TEST_CONFIG="phpunit-integration-legacy.xml"
   - TEST_CONFIG="phpunit-integration-legacy-solr.xml"
 
-#matrix:
-#  allow_failures:
-#    - php: 5.5
+matrix:
+  allow_failures:
+    - php: 5.5
+  exclude:
+    - php: 5.5
+      env: TEST_CONFIG="phpunit-integration.xml"
+    - php: 5.5
+      env: TEST_CONFIG="phpunit-integration-legacy.xml"
+    - php: 5.5
+      env: TEST_CONFIG="phpunit-integration-legacy-solr.xml"
 
 # test only master (+ Pull requests)
 branches:
