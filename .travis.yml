@@ -12,6 +12,7 @@ env:
   - TEST_CONFIG="phpunit.xml"
   - TEST_CONFIG="phpunit-integration.xml"
   - TEST_CONFIG="phpunit-integration-legacy.xml"
+  - TEST_CONFIG="phpunit-integration-legacy-solr.xml"
 
 #matrix:
 #  allow_failures:
@@ -27,6 +28,7 @@ before_script:
   - cp config.php-DEVELOPMENT config.php
   - ./composer_install_github_key.sh
   - COMPOSER_ROOT_VERSION=dev-master composer --dev --prefer-dist install
+  - "if [ \"$TEST_CONFIG\" = \"phpunit-integration-legacy-solr.xml\" ] ; then curl https://raw.github.com/patrickallaert/travis-solr/master/travis-solr.sh | SOLR_VERSION=3.6.2 SOLR_CONFS=eZ/Publish/Core/Persistence/Solr/Content/Search/schema.xml bash ; fi"
 
 # execute phpunit as the script command
 script: "phpunit -d memory_limit=-1 -c $TEST_CONFIG"
