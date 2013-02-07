@@ -1,28 +1,27 @@
 <?php
 /**
- * File containing the Siteaccess Router class.
+ * File containing the Siteaccess MatcherBuilder class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
 namespace eZ\Bundle\EzPublishCoreBundle\SiteAccess;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router as BaseRouter;
-use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder as BaseMatcherBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use RuntimeException;
 
-class Router extends BaseRouter implements ContainerAwareInterface
+class MatcherBuilder extends BaseMatcherBuilder
 {
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
     protected $container;
 
-    public function setContainer( ContainerInterface $container = null )
+    public function __construct( ContainerInterface $container )
     {
         $this->container = $container;
     }
@@ -38,8 +37,9 @@ class Router extends BaseRouter implements ContainerAwareInterface
      * @return \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Matcher
      *
      * @throws \RuntimeException
+     *
      */
-    protected function buildMatcher( $matchingClass, $matchingConfiguration, SimplifiedRequest $request )
+    public function buildMatcher( $matchingClass, $matchingConfiguration, SimplifiedRequest $request )
     {
         if ( $matchingClass[0] === '@' )
         {

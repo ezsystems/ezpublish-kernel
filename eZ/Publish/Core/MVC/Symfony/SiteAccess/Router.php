@@ -73,16 +73,23 @@ class Router
     protected $logger;
 
     /**
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface
+     */
+    protected $matcherBuilder;
+
+    /**
      * Constructor.
      *
+     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface $matcherBuilder
+     * @param \Psr\Log\LoggerInterface $logger
      * @param string $defaultSiteAccess
      * @param array $siteAccessesConfiguration
      * @param array $siteAccessList
      * @param string|null $siteAccessClass
-     * @param \Psr\Log\LoggerInterface|null $logger
      */
-    public function __construct( LoggerInterface $logger, $defaultSiteAccess, array $siteAccessesConfiguration, array $siteAccessList, $siteAccessClass = null )
+    public function __construct( MatcherBuilderInterface $matcherBuilder, LoggerInterface $logger, $defaultSiteAccess, array $siteAccessesConfiguration, array $siteAccessList, $siteAccessClass = null )
     {
+        $this->matcherBuilder = $matcherBuilder;
         $this->logger = $logger;
         $this->defaultSiteAccess = $defaultSiteAccess;
         $this->siteAccessesConfiguration = $siteAccessesConfiguration;
@@ -152,7 +159,7 @@ class Router
     {
         foreach ( $this->siteAccessesConfiguration as $matchingClass => $matchingConfiguration )
         {
-            $matcher = $this->buildMatcher( $matchingClass, $matchingConfiguration, $request );
+            $matcher = $this->matcherBuilder->buildMatcher( $matchingClass, $matchingConfiguration, $request );
 
             if ( ( $siteaccessName = $matcher->match() ) !== false )
             {
@@ -170,30 +177,6 @@ class Router
         $this->siteAccess->name = $this->defaultSiteAccess;
         $this->siteAccess->matchingType = 'default';
         return $this->siteAccess;
-    }
-
-    /**
-     * Builds siteaccess matcher.
-     * In the siteaccess configuration, if the matcher class begins with a "\" (FQ class name), it will be used as is, passing the matching configuration in the constructor.
-     * Otherwise, given matching class will be relative to eZ\Publish\Core\MVC\Symfony\SiteAccess namespace.
-     *
-     * @param $matchingClass
-     * @param $matchingConfiguration
-     * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
-     *
-     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess
-     */
-    protected function buildMatcher( $matchingClass, $matchingConfiguration, SimplifiedRequest $request )
-    {
-        // If class begins with a '\' it means it's a FQ class name,
-        // otherwise it is relative to this namespace.
-        if ( $matchingClass[0] !== '\\' )
-            $matchingClass = __NAMESPACE__ . "\\Matcher\\$matchingClass";
-
-        $matcher = new $matchingClass( $matchingConfiguration );
-        $matcher->setRequest( $request );
-
-        return $matcher;
     }
 
     /**
