@@ -45,18 +45,12 @@ class ModifiedIn extends DateMetadata
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        return '(' .
-            implode(
-                ' OR ',
-                array_map(
-                    function( $value )
-                    {
-                        return 'modified_dt:"' . $this->getSolrTime( $value ) . '"';
-                    },
-                    $criterion->value
-                )
-            ) .
-            ')';
+        $values = array();
+        foreach ( $criterion->value as $value )
+        {
+            $values[] = 'modified_dt:"' . $this->getSolrTime( $value ) . '"';
+        }
+        return '(' . implode( ' OR ', $values ) . ')';
     }
 }
 
