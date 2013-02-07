@@ -206,20 +206,6 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Loads roles assigned to a user/group (not including inherited roles)
-     *
-     * @param mixed $groupId
-     *
-     * @return \eZ\Publish\SPI\Persistence\User\Role[]
-     */
-    public function loadRolesByGroupId( $groupId )
-    {
-        $data = $this->roleGateway->loadRolesForContentObjects( array( $groupId ) );
-
-        return $this->mapper->mapRoles( $data );
-    }
-
-    /**
      * Update role
      *
      * @param \eZ\Publish\SPI\Persistence\User\RoleUpdateStruct $role

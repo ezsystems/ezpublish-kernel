@@ -110,16 +110,6 @@ interface Handler
     public function loadRoles();
 
     /**
-     * Loads roles assigned to a user/group (not including inherited roles)
-     *
-     * @param mixed $groupId
-     *              In legacy storage engine this is the content object id a role is assigned to.
-     *              By the nature of legacy storage engine, it is therefor possible to use $userId as well here.
-     * @return \eZ\Publish\SPI\Persistence\User\Role[]
-     */
-    public function loadRolesByGroupId( $groupId );
-
-    /**
      * Loads roles assignments Role
      *
      * Role Assignments with same roleId and limitationIdentifier will be merged together into one.
