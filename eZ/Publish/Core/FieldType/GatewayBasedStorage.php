@@ -20,10 +20,7 @@ use eZ\Publish\SPI\FieldType\FieldStorage;
  * context provided by the SPI.
  *
  * The method {@link getGateway()} is used in derived classes to retrieve the
- * correct gateway implementation, based on the context. The method {@link
- * getPersistenceHandler()} can be used to retrieve the SPI persistence
- * handler. It is encouraged, to use this object to retrieve any eZ Publish
- * internal data objects, in order to allow caching.
+ * correct gateway implementation, based on the context.
  */
 abstract class GatewayBasedStorage implements FieldStorage
 {
