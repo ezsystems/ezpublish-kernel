@@ -455,14 +455,4 @@ class HandlerTest extends TestCase
 
         $this->assertTrue( $dbHandler instanceof $className, get_class( $dbHandler ) . " not of type $className." );
     }
-
-    /**
-     * Returns the test suite with all tests declared in this class.
-     *
-     * @return \PHPUnit_Framework_TestSuite
-     */
-    public static function suite()
-    {
-        return new \PHPUnit_Framework_TestSuite( __CLASS__ );
-    }
 }
