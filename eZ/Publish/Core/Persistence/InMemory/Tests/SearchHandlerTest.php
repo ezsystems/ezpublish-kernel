@@ -192,7 +192,7 @@ class SearchHandlerTest extends HandlerTest
     public function testFindSingle()
     {
         $content = $this->persistenceHandler->searchHandler()->findSingle( new ContentId( $this->content->versionInfo->contentInfo->id ) );
-        $this->assertInstanceOf( 'eZ\Publish\SPI\Persistence\Content', $content );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content', $content );
         $this->assertEquals( $this->contentId, $content->versionInfo->contentInfo->id );
         $this->assertEquals( 14, $content->versionInfo->contentInfo->ownerId );
         $this->assertEquals( array( 'eng-GB' => 'test' ), $content->versionInfo->names );

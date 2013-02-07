@@ -124,7 +124,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     public function assertFieldDataLoadedCorrect( Field $field )
     {
         $this->assertInstanceOf(
-            'eZ\Publish\Core\FieldType\User\Value',
+            'eZ\\Publish\\Core\\FieldType\\User\\Value',
             $field->value
         );
 
@@ -250,7 +250,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     public function assertCopiedFieldDataLoadedCorrectly( Field $field )
     {
         $this->assertInstanceOf(
-            'eZ\Publish\Core\FieldType\User\Value',
+            'eZ\\Publish\\Core\\FieldType\\User\\Value',
             $field->value
         );
 
