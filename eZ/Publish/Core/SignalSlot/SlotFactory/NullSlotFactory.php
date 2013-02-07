@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\SignalSlot\SlotFactory;
 
 use eZ\Publish\Core\SignalSlot\SlotFactory;
+use RuntimeException;
 
 class NullSlotFactory extends SlotFactory
 {
@@ -22,6 +23,6 @@ class NullSlotFactory extends SlotFactory
      */
     public function getSlot( $slotIdentifier )
     {
-        throw new \RuntimeException( "Slot creation not supported." );
+        throw new RuntimeException( "Slot creation not supported." );
     }
 }

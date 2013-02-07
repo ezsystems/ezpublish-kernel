@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\SignalSlot\SlotFactory;
 
 use eZ\Publish\Core\SignalSlot\SlotFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * Slot factory that is able to lookup slots based on identifier.
@@ -42,7 +43,7 @@ class ContainerSlotFactory extends SlotFactory
     public function getSlot( $slotIdentifier )
     {
         if ( !$this->container->has( $slotIdentifier ) )
-            throw new \eZ\Publish\Core\Base\Exceptions\NotFoundException( 'slot', $slotIdentifier );
+            throw new NotFoundException( 'slot', $slotIdentifier );
 
         return $this->container->get( $slotIdentifier );
     }
