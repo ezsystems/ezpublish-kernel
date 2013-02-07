@@ -128,11 +128,11 @@ interface FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
-     * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
+     * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field value for which an action is performed
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( FieldDefinition $fieldDef, $field );
+    public function validate( FieldDefinition $fieldDef, $fieldValue );
 
     /**
      * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
