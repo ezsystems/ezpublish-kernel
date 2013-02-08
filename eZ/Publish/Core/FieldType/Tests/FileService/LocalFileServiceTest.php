@@ -277,6 +277,18 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testRemoveEmptyPath()
+    {
+        $emptyPath = '';
+
+        $fileService = $this->getFileService();
+
+        $fileService->remove( $emptyPath );
+    }
+
     public function testGetFileSize()
     {
         $storedPath = $this->testStoreExternalFile();
