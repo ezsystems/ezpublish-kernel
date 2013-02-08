@@ -13,6 +13,7 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException;
 use Psr\Log\LoggerInterface;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\CompoundInterface;
 
 class Router
 {
