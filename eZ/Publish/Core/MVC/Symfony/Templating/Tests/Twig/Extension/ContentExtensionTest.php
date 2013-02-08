@@ -11,6 +11,11 @@ namespace eZ\Publish\Core\MVC\Symfony\Templating\Tests\Twig\Extension;
 
 use eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ContentExtension;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Field;
 use Twig_Test_IntegrationTestCase;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
@@ -136,6 +141,48 @@ class ContentExtensionIntegrationTest extends Twig_Test_IntegrationTestCase
         );
     }
 
+    protected function getContent( $contentTypeIdentifier, $fieldsInfo )
+    {
+        $fields = array();
+        $fieldDefinitions = array();
+        foreach ( $fieldsInfo as $type => $info )
+        {
+            $fields[] = new Field( $info );
+            $fieldDefinitions[] = new FieldDefinition(
+                array(
+                    'identifier' => $info['fieldDefIdentifier'],
+                    'id' => $info['id'],
+                    'fieldTypeIdentifier' => $type,
+                )
+            );
+        }
+        $content = new Content(
+            array(
+                'internalFields' => $fields,
+                'versionInfo' => new VersionInfo(
+                    array(
+                        'versionNo' => 64,
+                        'contentInfo' => new ContentInfo(
+                            array(
+                                'id' => 42,
+                                'mainLanguageCode' => 'fre-FR',
+                                'contentType' => new ContentType(
+                                    array(
+                                        'identifier' => $contentTypeIdentifier,
+                                        'fieldDefinitions' => $fieldDefinitions
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        return $content;
+
+    }
+
     private function getTemplatePath( $tpl )
     {
         return 'templates/' . $tpl;
@@ -155,7 +202,20 @@ class ContentExtensionIntegrationTest extends Twig_Test_IntegrationTestCase
                             'field_templates',
                             null,
                             null,
-                            array()
+                            array(
+                                array(
+                                    'template' => $this->getTemplatePath( 'fields_override1.html.twig' ),
+                                    'priority' => 10
+                                ),
+                                array(
+                                    'template' => $this->getTemplatePath( 'fields_default.html.twig' ),
+                                    'priority' => 0
+                                ),
+                                array(
+                                    'template' => $this->getTemplatePath( 'fields_override2.html.twig' ),
+                                    'priority' => 20
+                                ),
+                            )
                         ),
                         array(
                             'fielddefinition_settings_templates',
