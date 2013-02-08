@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
@@ -17,7 +18,7 @@ use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
  * Base for Compound siteaccess matchers.
  * All classes extending this one must implement a NAME class constant.
  */
-abstract class Compound implements CompoundInterface
+abstract class Compound implements CompoundInterface, URILexer
 {
     /**
      * @var array
@@ -79,6 +80,38 @@ abstract class Compound implements CompoundInterface
     public function setRequest( SimplifiedRequest $request )
     {
         $this->request = $request;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function analyseURI( $uri )
+    {
+        foreach ( $this->matchersMap as $matcher )
+        {
+            if ( $matcher instanceof URILexer )
+            {
+                $uri = $matcher->analyseURI( $uri );
+            }
+        }
+
+        return $uri;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function analyseLink( $linkUri )
+    {
+        foreach ( $this->matchersMap as $matcher )
+        {
+            if ( $matcher instanceof URILexer )
+            {
+                $linkUri = $matcher->analyseLink( $linkUri );
+            }
+        }
+
+        return $linkUri;
     }
 
     /**
