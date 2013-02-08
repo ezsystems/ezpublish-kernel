@@ -468,16 +468,15 @@ class ContentExtension extends Twig_Extension
      */
     protected function getFieldTypeIdentifier( Content $content, Field $field )
     {
-        if ( !isset( $this->fieldTypeIdentifiers[$field->fieldDefIdentifier] ) )
+        $contentType = $content->getVersionInfo()->getContentInfo()->getContentType();
+        $key = $contentType->identifier . '  ' . $field->fieldDefIdentifier;
+        if ( !isset( $this->fieldTypeIdentifiers[$key] ) )
         {
-            $this->fieldTypeIdentifiers[$field->fieldDefIdentifier] = $content
-                ->getVersionInfo()
-                ->getContentInfo()
-                ->getContentType()
+            $this->fieldTypeIdentifiers[$key] = $contentType
                 ->getFieldDefinition( $field->fieldDefIdentifier )
                 ->fieldTypeIdentifier;
         }
 
-        return $this->fieldTypeIdentifiers[$field->fieldDefIdentifier];
+        return $this->fieldTypeIdentifiers[$key];
     }
 }
