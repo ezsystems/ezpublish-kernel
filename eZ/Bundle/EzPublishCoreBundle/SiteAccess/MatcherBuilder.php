@@ -46,7 +46,7 @@ class MatcherBuilder extends BaseMatcherBuilder
             /** @var $matcher \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Matcher */
             $matcher = $this->container->get( substr( $matchingClass, 1 ) );
             if ( !$matcher instanceof Matcher )
-                throw new RuntimeException( 'A service based siteaccess matcher MUST implement eZ\\Bundle\\EzPublishCoreBundle\\SiteAccess\\Matcher interface.' );
+                throw new RuntimeException( 'A service based siteaccess matcher MUST implement ' . __NAMESPACE__ . '\\Matcher interface.' );
 
             $matcher->setMatchingConfiguration( $matchingConfiguration );
             $matcher->setRequest( $request );
