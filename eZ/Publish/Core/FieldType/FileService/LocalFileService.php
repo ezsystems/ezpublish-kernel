@@ -136,7 +136,7 @@ class LocalFileService implements FileService
      */
     public function remove( $storageIdentifier, $recursive = false )
     {
-        if( empty( $storageIdentifier ) )
+        if ( empty( $storageIdentifier ) )
         {
             throw new RuntimeException(
                 'First argument ($storageIdentifier) cannot be empty.'
