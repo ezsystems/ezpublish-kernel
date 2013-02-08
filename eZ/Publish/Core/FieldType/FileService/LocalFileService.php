@@ -136,6 +136,13 @@ class LocalFileService implements FileService
      */
     public function remove( $storageIdentifier, $recursive = false )
     {
+        if( empty( $storageIdentifier ) )
+        {
+            throw new RuntimeException(
+                'First argument ($storageIdentifier) cannot be empty.'
+            );
+        }
+
         $fullPath = $this->getFullPath( $storageIdentifier );
 
         $this->removePathInternal( $fullPath, $recursive );
