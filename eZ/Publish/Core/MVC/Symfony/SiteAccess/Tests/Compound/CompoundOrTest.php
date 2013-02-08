@@ -36,7 +36,7 @@ class CompoundOrTest extends \PHPUnit_Framework_TestCase
         return new LogicalOr(
             array(
                 'matchers'  => array(
-                    'Map\\Uri' => array( 'eng' => true ),
+                    'Map\\URI' => array( 'eng' => true ),
                     'Map\\Host' => array( 'fr.ezpublish.dev' => true )
                 ),
                 'match'     => 'fr_eng'
