@@ -2,10 +2,9 @@
 /**
  * File containing the eZ\Publish\Core\Persistence\FieldType class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package eZ\Publish\API\Repository
  */
 
 namespace eZ\Publish\Core\Persistence;
@@ -17,6 +16,7 @@ use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
  * This class represents a FieldType available to SPI users.
  *
  * @see \eZ\Publish\SPI\FieldType\FieldType
+ * @package \eZ\Publish\Core\Persistence\FieldType
  */
 class FieldType implements FieldTypeInterface
 {

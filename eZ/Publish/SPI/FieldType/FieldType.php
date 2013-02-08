@@ -2,7 +2,7 @@
 /**
  * File containing the FieldType interface
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -129,11 +129,11 @@ interface FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
-     * @param \eZ\Publish\API\Repository\Values\Content\Field $field The field for which an action is performed
+     * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field value for which an action is performed
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( FieldDefinition $fieldDef, $field );
+    public function validate( FieldDefinition $fieldDef, $fieldValue );
 
     /**
      * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
