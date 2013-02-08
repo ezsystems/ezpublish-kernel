@@ -160,6 +160,8 @@ class Router
         foreach ( $this->siteAccessesConfiguration as $matchingClass => $matchingConfiguration )
         {
             $matcher = $this->matcherBuilder->buildMatcher( $matchingClass, $matchingConfiguration, $request );
+            if ( $matcher instanceof CompoundInterface )
+                $matcher->setMatcherBuilder( $this->matcherBuilder );
 
             if ( ( $siteaccessName = $matcher->match() ) !== false )
             {
