@@ -20,7 +20,7 @@ interface MatcherBuilderInterface
      * @param mixed $matchingConfiguration Configuration to pass to the matcher. Can be anything the matcher supports.
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request The request to match against.
      *
-     * @return \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Matcher
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher
      *
      * @throws \RuntimeException
      */
