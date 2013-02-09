@@ -35,10 +35,10 @@ class Environment extends Twig_Environment
     public function loadTemplate( $name, $index = null )
     {
         // If legacy engine supports given template, delegate it.
-        if ( isset( $this->legacyTemplatesCache[$name] ) )
+        if ( is_string( $name ) && isset( $this->legacyTemplatesCache[$name] ) )
             return $this->legacyTemplatesCache[$name];
 
-        if ( $this->legacyEngine->supports( $name ) )
+        if ( is_string( $name ) && $this->legacyEngine->supports( $name ) )
         {
             $this->legacyTemplatesCache[$name] = new Template( $name, $this, $this->legacyEngine );
             return $this->legacyTemplatesCache[$name];
