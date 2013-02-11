@@ -68,7 +68,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode( 'default_siteaccess' )->isRequired()->info( 'Name of the default siteaccess' )->end()
                         ->arrayNode( 'match' )
-                            ->info( 'Siteaccess match configuration. First key is the matcher class, value is passed to the matcher. Key can be a service identifier (preprended by "@"), or a FQ class name (prepended by "\\")' )
+                            ->info( 'Siteaccess match configuration. First key is the matcher class, value is passed to the matcher. Key can be a service identifier (prepended by "@"), or a FQ class name (prepended by "\\")' )
                             ->example(
                                 array(
                                     'Map\\URI' => array(
