@@ -13,15 +13,29 @@ use PHPUnit_Framework_TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Port as PortMatcher;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
 
 class RouterSpecialPortsTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder
+     */
+    private $matcherBuilder;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->matcherBuilder = new MatcherBuilder;
+    }
+
     /**
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::__construct
      */
     public function testConstruct()
     {
         return new Router(
+            $this->matcherBuilder,
+            $this->getMock( 'Psr\\Log\\LoggerInterface' ),
             "default_sa",
             array(
                 "Map\\URI" => array(
