@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\FieldType\FileService;
 
 use eZ\Publish\Core\FieldType\FileService;
 use RuntimeException;
+use InvalidArgumentException;
 
 class LocalFileService implements FileService
 {
@@ -138,7 +139,7 @@ class LocalFileService implements FileService
     {
         if ( empty( $storageIdentifier ) )
         {
-            throw new RuntimeException(
+            throw new InvalidArgumentException(
                 'First argument ($storageIdentifier) cannot be empty.'
             );
         }
