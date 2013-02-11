@@ -11,6 +11,9 @@ namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound;
 
+/**
+ * Siteaccess matcher that allows a combination of matchers, with a logical OR
+ */
 class LogicalOr extends Compound
 {
     const NAME = 'logicalOr';

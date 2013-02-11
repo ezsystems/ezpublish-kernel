@@ -11,6 +11,9 @@ namespace eZ\Publish\Core\MVC\Symfony\SiteAccess;
 
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 
+/**
+ * Siteaccess matcher builder, based on class names.
+ */
 class MatcherBuilder implements MatcherBuilderInterface
 {
     /**

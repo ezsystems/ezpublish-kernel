@@ -14,6 +14,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use RuntimeException;
 
+/**
+ * Siteaccess matcher builder based on services.
+ */
 class MatcherBuilder extends BaseMatcherBuilder
 {
     /**
