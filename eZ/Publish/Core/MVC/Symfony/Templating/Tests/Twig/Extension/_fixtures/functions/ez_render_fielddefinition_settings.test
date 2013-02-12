@@ -1,0 +1,22 @@
+--TEST--
+"ez_render_fielddefinition_settings" function
+--TEMPLATE--
+{{ ez_render_fielddefinition_settings( nooverride ) }}
+{{ ez_render_fielddefinition_settings( overrides ) }}
+{{ ez_render_fielddefinition_settings( notdefault ) }}
+{{ ez_render_fielddefinition_settings( withdata ) }}
+--DATA--
+return array(
+    'nooverride' => $this->getFieldDefinition( 'eznooverride' ),
+    'overrides' => $this->getFieldDefinition( 'ezoverride' ),
+    'notdefault' => $this->getFieldDefinition( 'eznotdefaulttemplate' ),
+    'withdata' => $this->getFieldDefinition(
+        'ezwithdata', 42,
+        array( 'frameworks' => array( 'YUI3', 'jQuery' ) )
+    )
+)
+--EXPECT--
+default (no override)
+override2
+not default
+42 ezwithdata YUI3, jQuery

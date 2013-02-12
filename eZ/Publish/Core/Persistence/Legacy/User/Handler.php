@@ -2,7 +2,7 @@
 /**
  * File containing the UserHandler interface
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -201,20 +201,6 @@ class Handler implements BaseUserHandler
     public function loadRoles()
     {
         $data = $this->roleGateway->loadRoles();
-
-        return $this->mapper->mapRoles( $data );
-    }
-
-    /**
-     * Loads roles assigned to a user/group (not including inherited roles)
-     *
-     * @param mixed $groupId
-     *
-     * @return \eZ\Publish\SPI\Persistence\User\Role[]
-     */
-    public function loadRolesByGroupId( $groupId )
-    {
-        $data = $this->roleGateway->loadRolesForContentObjects( array( $groupId ) );
 
         return $this->mapper->mapRoles( $data );
     }
