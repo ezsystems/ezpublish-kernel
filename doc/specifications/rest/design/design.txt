@@ -257,6 +257,19 @@ tests. It loads the user for which the ID is provided in a special header. This
 is neccessary, since the test suite contains tests with different access
 permissions.
 
+
+Session & CSRF
+``````````````
+The session id and name is available using the session from Symfony.
+CSRF param is available via setting form.type_extension.csrf.field_name,
+and token is available by getting CsrfProvider service and calling
+->generateCsrfToken( $intention ). Intention should be 'rest' by default,
+but can be defined in a setting if documented that changes to it will force
+current REST users to have to log back in.
+
+Validation is done using CsrfProvider->isCsrfTokenValid( $intention, $token )
+
+
 Client
 ------
 
@@ -271,7 +284,7 @@ the IntegrationTestAuthenticator and BasicAuth have been implemented. The user
 must provide his credentials for these, if he wants to use the API via REST.
 
 If a user of the SDK wants to act as the anonymous user, he can use one of the
-HttpClient impelementations without authentication facilities.
+HttpClient implementations without authentication facilities.
 
 Extending Server And Client
 ===========================
