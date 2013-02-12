@@ -13,7 +13,7 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * This class provides all version independent information of the content object.
- * It is similar to {@link \eZ\Publish\Core\Repository\Values\Content\ContentInfo}, but for the persistence layer.
+ * It is similar to {@link \eZ\Publish\API\Repository\Values\Content\ContentInfo}, but for the persistence layer.
  * Thus it only contains raw data.
  */
 class ContentInfo extends ValueObject

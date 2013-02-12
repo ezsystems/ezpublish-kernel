@@ -15,6 +15,7 @@ use eZ\Publish\Core\REST\Server\Values\RestUser;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values;
 use eZ\Publish\Core\REST\Common;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class RestUserTest extends ValueObjectVisitorBaseTest
 {
@@ -54,7 +55,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
         return new RestUser(
             new Values\User\User(),
             $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" ),
-            new Values\Content\ContentInfo(
+            new ContentInfo(
                 array(
                     'id' => 'content23',
                     'name' => 'Sindelfingen',

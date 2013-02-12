@@ -28,7 +28,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read string $mainLanguageCode The main language code of the content. If the available flag is set to true the content is shown in this language if the requested language does not exist.
  * @property-read mixed $mainLocationId Identifier of the main location.
  */
-abstract class ContentInfo extends ValueObject
+class ContentInfo extends ValueObject
 {
     /**
      * The unique id of the content object

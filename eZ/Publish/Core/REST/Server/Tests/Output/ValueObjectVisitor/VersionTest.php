@@ -16,6 +16,7 @@ use eZ\Publish\Core\Repository\Values;
 use eZ\Publish\Core\REST\Server\Values\Version;
 use eZ\Publish\Core\REST\Common;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class VersionTest extends ValueObjectVisitorBaseTest
 {
@@ -50,7 +51,7 @@ class VersionTest extends ValueObjectVisitorBaseTest
                     'versionInfo' => new Values\Content\VersionInfo(
                         array(
                             'versionNo' => 5,
-                            'contentInfo' => new Values\Content\ContentInfo(
+                            'contentInfo' => new ContentInfo(
                                 array(
                                     'id' => 23,
                                     'contentTypeId' => 42,

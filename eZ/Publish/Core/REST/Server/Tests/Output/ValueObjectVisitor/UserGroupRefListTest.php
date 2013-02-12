@@ -15,7 +15,7 @@ use eZ\Publish\Core\Repository\Values\User\UserGroup;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\UserGroupRefList;
 use eZ\Publish\Core\REST\Server\Values\RestUserGroup;
-use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\REST\Common;
 
