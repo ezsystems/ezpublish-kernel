@@ -47,7 +47,7 @@ class ContentTypeGroupIdIn extends CriterionVisitor
             implode(
                 ' OR ',
                 array_map(
-                    function( $value )
+                    function ( $value )
                     {
                         return 'group_id:"' . $value . '"';
                     },

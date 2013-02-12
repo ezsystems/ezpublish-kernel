@@ -244,7 +244,7 @@ class SearchHandlerTest extends HandlerTest
         );
 
         $contentIds = array_map(
-            function( $searchHit )
+            function ( $searchHit )
             {
                 return $searchHit->valueObject->versionInfo->contentInfo->id;
             },

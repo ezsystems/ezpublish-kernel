@@ -31,7 +31,7 @@ class LegacyUnhideLocationSlot extends AbstractLegacySlot
 
         $kernel = $this->getLegacyKernel();
         $kernel->runCallback(
-            function() use( $signal )
+            function () use ( $signal )
             {
                 $node = \eZContentObjectTreeNode::fetch( $signal->locationId );
                 \eZContentObjectTreeNode::clearViewCacheForSubtree( $node );

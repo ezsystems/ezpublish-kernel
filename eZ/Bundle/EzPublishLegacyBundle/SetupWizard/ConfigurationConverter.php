@@ -261,7 +261,7 @@ class ConfigurationConverter
                         // make sure integers are actually integers, not strings
                         array_walk(
                             $filterParams,
-                            function( &$value )
+                            function ( &$value )
                             {
                                 if ( preg_match( '/^[0-9]+$/', $value ) )
                                     $value = (int)$value;

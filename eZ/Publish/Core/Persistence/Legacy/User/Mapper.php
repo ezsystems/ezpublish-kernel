@@ -222,7 +222,7 @@ class Mapper
         $roleAssignments = array();
         array_walk_recursive(
             $roleAssignmentData,
-            function( $roleAssignment ) use ( &$roleAssignments )
+            function ( $roleAssignment ) use ( &$roleAssignments )
             {
                 $roleAssignments[] = $roleAssignment;
             }

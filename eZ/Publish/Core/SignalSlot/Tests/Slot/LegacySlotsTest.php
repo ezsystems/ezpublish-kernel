@@ -42,7 +42,7 @@ class LegacySlotsTest extends \PHPUnit_Framework_TestCase
             array(),
             // ctor arguments
             array(
-                function() use( $ezpKernelHandlerMock )
+                function () use ( $ezpKernelHandlerMock )
                 {
                     return $ezpKernelHandlerMock;
                 }
@@ -89,7 +89,7 @@ class LegacySlotsTest extends \PHPUnit_Framework_TestCase
          * @var \eZ\Publish\Core\SignalSlot\Slot $slot
          */
         $slot = new $slotClassName(
-            function() use( $ezpKernelHandlerMock )
+            function () use ( $ezpKernelHandlerMock )
             {
                 return $ezpKernelHandlerMock;
             }
@@ -119,7 +119,7 @@ class LegacySlotsTest extends \PHPUnit_Framework_TestCase
          * @var \eZ\Publish\Core\SignalSlot\Slot $slot
          */
         $slot = new $slotClassName(
-            function() use( $ezpKernelHandlerMock )
+            function () use ( $ezpKernelHandlerMock )
             {
                 return $ezpKernelHandlerMock;
             }

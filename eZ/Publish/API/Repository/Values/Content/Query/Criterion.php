@@ -123,7 +123,7 @@ abstract class Criterion
      */
     private function getValueTypeCheckCallback( $valueTypes )
     {
-        $callback = function( $value )
+        $callback = function ( $value )
         {
             return false;
         };
@@ -131,21 +131,21 @@ abstract class Criterion
         // the callback code will return true as soon as an accepted value type is found
         if ( $valueTypes & Specifications::TYPE_INTEGER )
         {
-            $callback = function( $value ) use ( $callback )
+            $callback = function ( $value ) use ( $callback )
             {
                 return is_numeric( $value ) || $callback( $value );
             };
         }
         if ( $valueTypes & Specifications::TYPE_STRING )
         {
-            $callback = function( $value ) use ( $callback )
+            $callback = function ( $value ) use ( $callback )
             {
                 return is_string( $value ) || $callback( $value );
             };
         }
         if ( $valueTypes & Specifications::TYPE_BOOLEAN )
         {
-            $callback = function( $value ) use ( $callback )
+            $callback = function ( $value ) use ( $callback )
             {
                 return is_bool( $value ) || $callback( $value );
             };

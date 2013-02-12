@@ -90,7 +90,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
      */
     protected function convertMapToCallback( $callbackMap )
     {
-        return function() use ( $callbackMap )
+        return function () use ( $callbackMap )
         {
             foreach ( $callbackMap as $map )
             {
@@ -178,7 +178,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
 
         $exceptionType = 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException';
 
-//        $parameterNotFoundException = function()
+//        $parameterNotFoundException = function ()
 //        {
 //            throw new \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException( 'Test', 'test' );
 //        };
@@ -470,7 +470,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
             ->method( 'runCallback' )
             ->will( $this->returnValue( 'ezpKernelResult' ) );
 
-        $closureMock = function() use ( $legacyKernelMock )
+        $closureMock = function () use ( $legacyKernelMock )
         {
             return $legacyKernelMock;
         };

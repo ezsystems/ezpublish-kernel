@@ -881,7 +881,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             'Count of field definition creates did not match count of field definitions.'
         );
 
-        $sorter = function( $a, $b )
+        $sorter = function ( $a, $b )
         {
             return strcmp( $a->identifier, $b->identifier );
         };

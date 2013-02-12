@@ -2022,7 +2022,8 @@ class ContentServiceTest extends BaseContentServiceTest
         }
         usort(
             $actual,
-            function ( $field1, $field2 ) {
+            function ( $field1, $field2 )
+            {
                 if ( 0 === ( $return = strcasecmp( $field1->fieldDefIdentifier, $field2->fieldDefIdentifier ) ) )
                 {
                     return strcasecmp( $field1->languageCode, $field2->languageCode );
@@ -2696,7 +2697,8 @@ class ContentServiceTest extends BaseContentServiceTest
 
         usort(
             $relations,
-            function( $rel1, $rel2 ) {
+            function ( $rel1, $rel2 )
+            {
                 return strcasecmp(
                     $rel2->getDestinationContentInfo()->remoteId,
                     $rel1->getDestinationContentInfo()->remoteId
@@ -2790,7 +2792,8 @@ class ContentServiceTest extends BaseContentServiceTest
 
         usort(
             $reverseRelations,
-            function( $rel1, $rel2 ) {
+            function ( $rel1, $rel2 )
+            {
                 return strcasecmp(
                     $rel2->getSourceContentInfo()->remoteId,
                     $rel1->getSourceContentInfo()->remoteId
@@ -4236,7 +4239,8 @@ class ContentServiceTest extends BaseContentServiceTest
         }
         usort(
             $normalized,
-            function ( $field1, $field2 ) {
+            function ( $field1, $field2 )
+            {
                 if ( 0 === ( $return = strcasecmp( $field1->fieldDefIdentifier, $field2->fieldDefIdentifier ) ) )
                 {
                     return strcasecmp( $field1->languageCode, $field2->languageCode );

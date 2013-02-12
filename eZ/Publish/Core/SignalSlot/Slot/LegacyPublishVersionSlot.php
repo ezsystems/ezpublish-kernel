@@ -31,7 +31,7 @@ class LegacyPublishVersionSlot extends AbstractLegacySlot
 
         $kernel = $this->getLegacyKernel();
         $kernel->runCallback(
-            function() use( $signal )
+            function () use ( $signal )
             {
                 \eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
                 $object = \eZContentObject::fetch( $signal->contentId );

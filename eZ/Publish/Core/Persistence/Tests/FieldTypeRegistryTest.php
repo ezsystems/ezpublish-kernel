@@ -64,7 +64,7 @@ class FieldTypeRegistryTest extends TestCase
     public function testGetFieldTypeCallable()
     {
         $instance = $this->getFieldTypeMock();
-        $closure = function() use ( $instance )
+        $closure = function () use ( $instance )
         {
             return $instance;
         };

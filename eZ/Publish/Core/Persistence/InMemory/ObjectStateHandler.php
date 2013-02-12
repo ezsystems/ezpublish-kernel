@@ -119,7 +119,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
 
         usort(
             $objectStates,
-            function( ObjectState $first, ObjectState $second )
+            function ( ObjectState $first, ObjectState $second )
             {
                 if ( $first->priority == $second->priority )
                     return 0;
@@ -187,7 +187,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
         {
             $allContentInfos = $this->backend->find( "Content\\ContentInfo" );
             $allContentIds = array_map(
-                function( ContentInfo $contentInfo )
+                function ( ContentInfo $contentInfo )
                 {
                     return $contentInfo->id;
                 },

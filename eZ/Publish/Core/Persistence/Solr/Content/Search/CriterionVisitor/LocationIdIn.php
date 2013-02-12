@@ -47,7 +47,7 @@ class LocationIdIn extends CriterionVisitor
             implode(
                 ' OR ',
                 array_map(
-                    function( $value )
+                    function ( $value )
                     {
                         return 'location_id:"' . $value . '"';
                     },

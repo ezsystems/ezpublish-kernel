@@ -370,7 +370,7 @@ class UserHandler implements UserHandlerInterface
         $roleAssignments = array();
         array_walk_recursive(
             $data,
-            function( $roleAssignment ) use ( &$roleAssignments )
+            function ( $roleAssignment ) use ( &$roleAssignments )
             {
                 $roleAssignments[] = $roleAssignment;
             }

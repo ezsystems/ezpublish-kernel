@@ -31,7 +31,7 @@ class LegacyDeleteLocationSlot extends AbstractLegacySlot
 
         $kernel = $this->getLegacyKernel();
         $kernel->runCallback(
-            function() use( $signal )
+            function () use ( $signal )
             {
                 \eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
                 \eZSearch::removeNodes( array( $signal->locationId ) );

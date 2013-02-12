@@ -402,7 +402,7 @@ function generateContentInfoFixture( array $fixture )
 
     uasort(
         $versionInfo,
-        function( $versionInfo1, $versionInfo2 )
+        function ( $versionInfo1, $versionInfo2 )
         {
             if ( $versionInfo1['contentId'] === $versionInfo2['contentId'] )
             {
@@ -414,7 +414,7 @@ function generateContentInfoFixture( array $fixture )
 
     uasort(
         $content,
-        function( $content1, $content2 )
+        function ( $content1, $content2 )
         {
             if ( $content1['id'] === $content2['id'] )
             {

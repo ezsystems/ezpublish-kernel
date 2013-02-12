@@ -47,7 +47,7 @@ class ContentTypeIdIn extends CriterionVisitor
             implode(
                 ' OR ',
                 array_map(
-                    function( $value )
+                    function ( $value )
                     {
                         return 'type_id:"' . $value . '"';
                     },

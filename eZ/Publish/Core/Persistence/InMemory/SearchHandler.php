@@ -279,7 +279,7 @@ class SearchHandler extends SearchHandlerInterface
             {
                 $languageHandler = $this->handler->contentLanguageHandler();
                 $languageIds = array_map(
-                    function( $languageCode ) use ( $languageHandler )
+                    function ( $languageCode ) use ( $languageHandler )
                     {
                         return $languageHandler->loadByLanguageCode( $languageCode )->id;
                     },

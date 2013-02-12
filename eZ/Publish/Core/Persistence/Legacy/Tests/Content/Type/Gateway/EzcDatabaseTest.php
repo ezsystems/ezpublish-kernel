@@ -567,7 +567,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         $this->assertQueryResult(
             array_map(
-                function( $value )
+                function ( $value )
                 {
                     return array( $value );
                 },

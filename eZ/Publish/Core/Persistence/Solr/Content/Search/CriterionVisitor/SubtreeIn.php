@@ -47,7 +47,7 @@ class SubtreeIn extends CriterionVisitor
             implode(
                 ' OR ',
                 array_map(
-                    function( $value )
+                    function ( $value )
                     {
                         return 'path_id:' . $value . '*';
                     },
