@@ -188,14 +188,16 @@ class ContentExtensionIntegrationTest extends Twig_Test_IntegrationTestCase
         );
     }
 
+    public $fieldDefinitions = array();
+
     protected function getContent( $contentTypeIdentifier, $fieldsInfo )
     {
         $fields = array();
-        $fieldDefinitions = array();
         foreach ( $fieldsInfo as $type => $info )
         {
             $fields[] = new Field( $info );
-            $fieldDefinitions[] = new FieldDefinition(
+            // Save field definitions in property for mocking purposes
+            $this->fieldDefinitions[$contentTypeIdentifier][] = new FieldDefinition(
                 array(
                     'identifier' => $info['fieldDefIdentifier'],
                     'id' => $info['id'],
@@ -213,12 +215,8 @@ class ContentExtensionIntegrationTest extends Twig_Test_IntegrationTestCase
                             array(
                                 'id' => 42,
                                 'mainLanguageCode' => 'fre-FR',
-                                'contentType' => new ContentType(
-                                    array(
-                                        'identifier' => $contentTypeIdentifier,
-                                        'fieldDefinitions' => $fieldDefinitions
-                                    )
-                                )
+                                // Using as id as we don't really care to test the service here
+                                'contentTypeId' => $contentTypeIdentifier
                             )
                         )
                     )
@@ -294,6 +292,84 @@ class ContentExtensionIntegrationTest extends Twig_Test_IntegrationTestCase
         $mock = $this->getMock(
             'Symfony\\Component\\DependencyInjection\\ContainerInterface'
         );
+
+        $mock->expects( $this->any() )
+            ->method( "get" )
+            ->with(
+                $this->logicalOr(
+                    $this->equalTo( "ezpublish.api.repository" ),
+                    $this->equalTo( "ezpublish.fieldType.ezxmltext.converter.html5" ),
+                    $this->equalTo( "ezpublish.fieldType.ezimage.variation_service" )
+                )
+            )
+            ->will(
+                $this->returnCallback(
+                    array( $this, "containerMockCallback" )
+                )
+            );
+
+        return $mock;
+    }
+
+    /**
+     * Callback multiplexer for Container::get().
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function containerMockCallback( $id )
+    {
+        switch ( $id )
+        {
+            case "ezpublish.api.repository":
+                return $this->getRepositoryMock();
+
+            case "ezpublish.fieldType.ezxmltext.converter.html5":
+            case "ezpublish.fieldType.ezimage.variation_service":
+        }
+
+        return null;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getRepositoryMock()
+    {
+        $mock = $this->getMock( "eZ\\Publish\\API\\Repository\\Repository" );
+
+        $mock->expects( $this->any() )
+            ->method( "getContentTypeService" )
+            ->will( $this->returnValue( $this->getContentTypeServiceMock() ) );
+
+        return $mock;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getContentTypeServiceMock()
+    {
+        $mock = $this->getMock( "eZ\\Publish\\API\\Repository\\ContentTypeService" );
+
+        $context = $this;
+        $mock->expects( $this->any() )
+            ->method( "loadContentType" )
+            ->will(
+                $this->returnCallback(
+                    function ( $contentTypeId ) use ( $context )
+                    {
+                        return new ContentType(
+                            array(
+                                'identifier' => $contentTypeId,
+                                'fieldDefinitions' => $context->fieldDefinitions[$contentTypeId]
+                            )
+                        );
+                    }
+                )
+            );
+
         return $mock;
     }
 }
