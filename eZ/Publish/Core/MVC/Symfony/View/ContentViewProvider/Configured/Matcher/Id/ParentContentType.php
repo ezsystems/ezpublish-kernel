@@ -25,8 +25,7 @@ class ParentContentType extends MultipleValued
     public function matchLocation( APILocation $location )
     {
         $parent = $this->repository->getLocationService()->loadLocation( $location->parentLocationId );
-        $parentContentType = $parent->getContentInfo()->getContentType();
-        return isset( $this->values[$parentContentType->id] );
+        return isset( $this->values[$parent->getContentInfo()->contentTypeId] );
     }
 
     /**

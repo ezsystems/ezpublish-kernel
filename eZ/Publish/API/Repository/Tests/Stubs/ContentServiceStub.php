@@ -331,7 +331,7 @@ class ContentServiceStub implements ContentService
      */
     private function filterFieldsByLanguages( Content $content, array $languageCodes = null )
     {
-        $contentType = $content->contentType;
+        $contentType = $this->repository->getContentTypeService()->loadContentType( $content->contentTypeId );
 
         $fieldDefinitions = $contentType->getFieldDefinitions();
         foreach ( $content->getFields() as $field )
@@ -1044,7 +1044,7 @@ class ContentServiceStub implements ContentService
             array(
                 'id' => $content->id,
                 'fields' => $content->getFields(),
-                'contentTypeId' => $contentInfo->getContentType()->id,
+                'contentTypeId' => $contentInfo->contentTypeId,
                 'versionNo' => $versionNo + 1,
                 'repository' => $this->repository
             )
@@ -1135,7 +1135,7 @@ class ContentServiceStub implements ContentService
         }
 
         $content = $this->loadContentByVersionInfo( $versionInfo );
-        $contentType = $content->contentType;
+        $contentType = $this->repository->getContentTypeService()->loadContentType( $content->contentInfo->contentTypeId );
 
         $initialLanguageCode = $contentUpdateStruct->initialLanguageCode;
         $mainLanguageCode = $versionInfo->getContentInfo()->mainLanguageCode;
@@ -1253,7 +1253,7 @@ class ContentServiceStub implements ContentService
                 'publishedDate' => new \DateTime(),
                 'mainLocationId' => $contentInfo->mainLocationId,
 
-                'contentTypeId' => $contentInfo->getContentType()->id,
+                'contentTypeId' => $contentInfo->contentTypeId,
                 'repository' => $this->repository
             )
         );
@@ -1432,7 +1432,7 @@ class ContentServiceStub implements ContentService
                 'publishedDate' => new \DateTime(),
                 'mainLocationId' => $contentInfo->mainLocationId,
 
-                'contentTypeId' => $contentInfo->getContentType()->id,
+                'contentTypeId' => $contentInfo->contentTypeId,
                 'repository' => $this->repository
             )
         );
@@ -1702,7 +1702,7 @@ class ContentServiceStub implements ContentService
         $result = array();
         foreach ( $this->contentInfo as $contentInfo )
         {
-            if ( $contentInfo->contentType->id === $contentType->id )
+            if ( $contentInfo->contentTypeId === $contentType->id )
             {
                 $result[] = $contentInfo;
             }

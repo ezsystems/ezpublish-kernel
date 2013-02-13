@@ -73,7 +73,7 @@ class ContentStub extends Content
      */
     public function getFieldValue( $fieldDefIdentifier, $languageCode = null )
     {
-        $contentType = $this->getContentType();
+        $contentType = $this->repository->getContentTypeService()->loadContentType( $this->contentTypeId );
         $translatable = $contentType->getFieldDefinition( $fieldDefIdentifier )->isTranslatable;
 
         if ( null === $languageCode )
@@ -121,16 +121,6 @@ class ContentStub extends Content
     }
 
     /**
-     * Returns the underlying ContentType for this content object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
-     */
-    private function getContentType()
-    {
-        return $this->repository->getContentTypeService()->loadContentType( $this->contentTypeId );
-    }
-
-    /**
      * Returns the content info for this concrete content.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
@@ -144,9 +134,6 @@ class ContentStub extends Content
     {
         switch ( $property )
         {
-            case 'contentType':
-                return $this->getContentType();
-
             case 'contentInfo':
                 return $this->getContentInfo();
 
