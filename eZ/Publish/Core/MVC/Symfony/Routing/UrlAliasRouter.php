@@ -119,6 +119,18 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 
                     $request->attributes->set( 'locationId', $urlAlias->destination );
 
+                    if ( $urlAlias->isHistory === true )
+                    {
+                        $activeUrlAlias = $this->getRepository()->getURLAliasService()->reverseLookup(
+                            $this->getRepository()->getLocationService()->loadLocation(
+                                $urlAlias->destination
+                            )
+                        );
+
+                        $request->attributes->set( 'semanticPathinfo', $activeUrlAlias->path );
+                        $request->attributes->set( 'needsRedirect', true );
+                    }
+
                     if ( isset( $this->logger ) )
                         $this->logger->info( "UrlAlias matched location #{$urlAlias->destination}. Forwarding to ViewController" );
 
