@@ -854,9 +854,12 @@ class RoleServiceStub implements RoleService
     private function getRoleAssignmentsForRoleAndContent( Role $role, $contentId )
     {
         $contentService = $this->repository->getContentService();
+        $contentTypeService = $this->repository->getContentTypeService();
         $userService = $this->repository->getUserService();
 
-        $contentType = $contentService->loadContent( $contentId )->contentType;
+        $contentType = $contentTypeService->loadContentType(
+            $contentService->loadContent( $contentId )->contentTypeId
+        );
         if ( $contentType->identifier != 'user_group' && $contentType->identifier != 'user' )
         {
             throw new \ErrorException(

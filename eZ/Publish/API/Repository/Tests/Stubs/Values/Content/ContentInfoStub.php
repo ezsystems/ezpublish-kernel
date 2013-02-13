@@ -15,7 +15,6 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\Content\ContentInfo}
  * class.
  *
- * @property-read integer $contentTypeId
  * @see \eZ\Publish\API\Repository\Values\Content\ContentInfo
  */
 class ContentInfoStub extends ContentInfo
@@ -25,27 +24,8 @@ class ContentInfoStub extends ContentInfo
      */
     protected $repository;
 
-    /**
-     * @var int
-     */
-    protected $contentTypeId;
-
-    /**
-     * The content type of this content object
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
-     */
-    public function getContentType()
-    {
-        return $this->repository->getContentTypeService()->loadContentType( $this->contentTypeId );
-    }
-
     public function __get( $property )
     {
-        switch ( $property )
-        {
-            case 'contentType':
-                return $this->getContentType();
-        }
         return parent::__get( $property );
     }
 

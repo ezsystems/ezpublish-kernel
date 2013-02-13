@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Values\Content;
 
-use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -18,14 +18,14 @@ use PHPUnit_Framework_TestCase;
 class ContentInfoTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \eZ\Publish\Core\Repository\Values\Content\ContentInfo::getProperties
+     * @covers \eZ\Publish\API\Repository\Values\Content\ContentInfo::getProperties
      */
     public function testObjectProperties()
     {
         $object = new ContentInfo;
         $properties = $object->attributes();
-        //self::assertNotContains( 'internalFields', $properties, 'Internal property found ' );
-        self::assertContains( 'contentType', $properties, 'Property not found' );
+        self::assertNotContains( 'internalFields', $properties, 'Internal property found ' );
+        self::assertContains( 'contentTypeId', $properties, 'Property not found' );
         self::assertContains( 'id', $properties, 'Property not found' );
         self::assertContains( 'name', $properties, 'Property not found' );
         self::assertContains( 'sectionId', $properties, 'Property not found' );

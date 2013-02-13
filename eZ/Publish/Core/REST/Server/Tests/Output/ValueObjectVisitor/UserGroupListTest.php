@@ -14,7 +14,7 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\UserGroupList;
 use eZ\Publish\Core\REST\Server\Values\RestUserGroup;
-use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\REST\Common;
@@ -108,6 +108,7 @@ class UserGroupListTest extends ValueObjectVisitorBaseTest
                             'internalFields' => array()
                         )
                     ),
+                    $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" ),
                     new ContentInfo(),
                     new Location(),
                     array()
@@ -118,6 +119,7 @@ class UserGroupListTest extends ValueObjectVisitorBaseTest
                             'internalFields' => array()
                         )
                     ),
+                    $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" ),
                     new ContentInfo(),
                     new Location(),
                     array()

@@ -104,7 +104,7 @@ class User extends APIUser
      *
      * @return array
      */
-    protected function getProperties( $dynamicProperties = array( 'id', 'contentInfo', 'contentType' ) )
+    protected function getProperties( $dynamicProperties = array( 'id', 'contentInfo' ) )
     {
         return parent::getProperties( $dynamicProperties );
     }
@@ -122,9 +122,6 @@ class User extends APIUser
         {
             case 'contentInfo':
                 return $this->getVersionInfo()->getContentInfo();
-
-            case 'contentType':
-                return $this->getVersionInfo()->getContentInfo()->getContentType();
 
             case 'id':
                 $versionInfo = $this->getVersionInfo();
@@ -153,9 +150,6 @@ class User extends APIUser
      */
     public function __isset( $property )
     {
-        if ( $property === 'contentType' )
-            return true;
-
         if ( $property === 'contentInfo' )
             return true;
 

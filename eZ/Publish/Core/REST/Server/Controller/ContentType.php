@@ -850,9 +850,6 @@ class ContentType extends RestController
                 'identifier' => $createStruct->identifier,
                 'modifierId' => $createStruct->creatorId,
                 'modificationDate' => $createStruct->creationDate,
-                'mainLanguageCode' => $createStruct->mainLanguageCode,
-                'names' => $createStruct->names,
-                'descriptions' => $createStruct->descriptions
             )
         );
     }
