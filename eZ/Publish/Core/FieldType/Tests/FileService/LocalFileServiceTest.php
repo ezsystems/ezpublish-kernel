@@ -278,7 +278,7 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
     public function testRemoveEmptyPath()
     {
