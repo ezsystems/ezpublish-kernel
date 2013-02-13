@@ -46,7 +46,7 @@ class Legacy extends SetupFactory
      * Global settings of eZ Publish setup
      *
      * @var mixed
-     * @todo This might change, if ezp-next starts using another DI mechanism
+     * @todo This might change, if ezpublish-kernel starts using another DI mechanism
      */
     protected static $globalSettings;
 
@@ -304,7 +304,7 @@ class Legacy extends SetupFactory
     }
 
     /**
-     * Returns the global ezp-next settings
+     * Returns the global ezpublish-kernel settings
      *
      * @return mixed
      */

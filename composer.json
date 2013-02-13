@@ -1,5 +1,5 @@
 {
-    "name": "ezsystems/ezpublish",
+    "name": "ezsystems/ezpublish-kernel",
     "description": "eZ Publish API and kernel. This is the heart of eZ Publish 5.",
     "version": "5.1-dev",
     "homepage": "http://share.ez.no",
@@ -32,6 +32,9 @@
     "require-dev": {
         "ezsystems/ezpublish-legacy": "dev-master",
         "mikey179/vfsStream": "1.1.0"
+    },
+    "replace": {
+        "ezsystems/ezpublish": "*"
     },
     "autoload": {
         "psr-0": {
