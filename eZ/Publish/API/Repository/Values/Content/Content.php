@@ -15,7 +15,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * this class represents a content object in a specific version
  *
  * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo convenience getter for getVersionInfo()->getContentInfo()
- * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType convenience getter for getVersionInfo()->getContentInfo()->contentType ( @deprecated Use getVersionInfo()->getContentInfo()->contentTypeId )
  * @property-read mixed $id convenience getter for retrieving the contentId: $versionInfo->contentInfo->id
  * @property-read \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo calls getVersionInfo()
  * @property-read array $fields access fields, calls getFields()

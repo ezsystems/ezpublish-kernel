@@ -20,25 +20,25 @@ parameters:
     # # Transormation rules resources.
     # # @todo: Should they be somewhat configurable for the developer?
     ezpublish.api.storage_engine.legacy.transformation_rules.resources:
-        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/ascii.tr
-        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/basic.tr
-        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/cyrillic.tr
-        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/greek.tr
-        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/hebrew.tr
-        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/latin.tr
-        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/search.tr
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/ascii.tr
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/basic.tr
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/cyrillic.tr
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/greek.tr
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/hebrew.tr
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/latin.tr
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/search.tr
 
     # Using preprocessed files:
     #
     ezpublish.api.storage_engine.legacy.transformation_processor.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PreprocessedBased
     ezpublish.api.storage_engine.legacy.preprocessed_transformation_rules.resources:
-        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/ascii.tr.result
-        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/basic.tr.result
-        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/cyrillic.tr.result
-        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/greek.tr.result
-        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/hebrew.tr.result
-        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/latin.tr.result
-        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/search.tr.result
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/ascii.tr.result
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/basic.tr.result
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/cyrillic.tr.result
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/greek.tr.result
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/hebrew.tr.result
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/latin.tr.result
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/search.tr.result
 
     # Value converters
     ezpublish.fieldType.ezauthor.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Author

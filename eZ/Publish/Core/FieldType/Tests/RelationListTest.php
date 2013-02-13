@@ -15,7 +15,7 @@ use eZ\Publish\Core\FieldType\Tests\FieldTypeTest;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use PHPUnit_Framework_TestCase;
-use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class RelationListTest extends StandardizedFieldTypeTest
 {

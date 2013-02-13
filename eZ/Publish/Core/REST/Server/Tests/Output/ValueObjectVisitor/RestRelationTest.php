@@ -15,6 +15,7 @@ use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\Content;
 use eZ\Publish\Core\REST\Common;
 use eZ\Publish\Core\REST\Server\Values\RestRelation;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class RestRelationTest extends ValueObjectVisitorBaseTest
 {
@@ -34,12 +35,12 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
             new Content\Relation(
                 array(
                     'id' => 42,
-                    'sourceContentInfo' => new Content\ContentInfo(
+                    'sourceContentInfo' => new ContentInfo(
                         array(
                             'id' => 1,
                         )
                     ),
-                    'destinationContentInfo' => new Content\ContentInfo(
+                    'destinationContentInfo' => new ContentInfo(
                         array(
                             'id' => 2,
                         )

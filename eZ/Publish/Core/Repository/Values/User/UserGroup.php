@@ -84,7 +84,7 @@ class UserGroup extends APIUserGroup
      *
      * @return array
      */
-    protected function getProperties( $dynamicProperties = array( 'id', 'contentInfo', 'contentType' ) )
+    protected function getProperties( $dynamicProperties = array( 'id', 'contentInfo' ) )
     {
         return parent::getProperties( $dynamicProperties );
     }
@@ -102,9 +102,6 @@ class UserGroup extends APIUserGroup
         {
             case 'contentInfo':
                 return $this->getVersionInfo()->getContentInfo();
-
-            case 'contentType':
-                return $this->getVersionInfo()->getContentInfo()->getContentType();
 
             case 'id':
                 $versionInfo = $this->getVersionInfo();
@@ -133,9 +130,6 @@ class UserGroup extends APIUserGroup
      */
     public function __isset( $property )
     {
-        if ( $property === 'contentType' )
-            return true;
-
         if ( $property === 'contentInfo' )
             return true;
 

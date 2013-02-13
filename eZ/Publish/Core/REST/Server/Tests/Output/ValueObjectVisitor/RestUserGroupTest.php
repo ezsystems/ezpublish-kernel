@@ -15,6 +15,7 @@ use eZ\Publish\Core\REST\Server\Values\RestUserGroup;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values;
 use eZ\Publish\Core\REST\Common;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class RestUserGroupTest extends ValueObjectVisitorBaseTest
 {
@@ -53,7 +54,8 @@ class RestUserGroupTest extends ValueObjectVisitorBaseTest
     {
         return new RestUserGroup(
             new Values\User\UserGroup(),
-            new Values\Content\ContentInfo(
+            $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" ),
+            new ContentInfo(
                 array(
                     'id' => 'content23',
                     'name' => 'Sindelfingen',
@@ -67,12 +69,7 @@ class RestUserGroupTest extends ValueObjectVisitorBaseTest
                     'remoteId' => 'abc123',
                     'mainLanguageCode' => 'eng-US',
                     'mainLocationId' => 'location23',
-                    'contentType' => new Values\ContentType\ContentType(
-                        array(
-                            'id' => 'contentType23',
-                            'fieldDefinitions' => array(),
-                        )
-                    )
+                    'contentTypeId' => 'contentType23',
                 )
             ),
             new Values\Content\Location(

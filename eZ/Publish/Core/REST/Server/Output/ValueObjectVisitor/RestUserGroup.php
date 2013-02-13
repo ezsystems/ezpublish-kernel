@@ -48,8 +48,7 @@ class RestUserGroup extends ValueObjectVisitor
 
         $generator->startObjectElement( 'ContentType' );
 
-        $contentType = $contentInfo->getContentType();
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'type', array( 'type' => $contentType->id ) ) );
+        $generator->startAttribute( 'href', $this->urlHandler->generate( 'type', array( 'type' => $contentInfo->contentTypeId ) ) );
         $generator->endAttribute( 'href' );
 
         $generator->endObjectElement( 'ContentType' );
@@ -102,7 +101,13 @@ class RestUserGroup extends ValueObjectVisitor
         $generator->startValueElement( 'alwaysAvailable', $contentInfo->alwaysAvailable ? 'true' : 'false' );
         $generator->endValueElement( 'alwaysAvailable' );
 
-        $visitor->visitValueObject( new VersionValue( $data->content, $data->relations ) );
+        $visitor->visitValueObject(
+            new VersionValue(
+                $data->content,
+                $data->contentType,
+                $data->relations
+            )
+        );
 
         $generator->startObjectElement( 'ParentUserGroup', 'UserGroup' );
         $generator->startAttribute(

@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\FieldType\RelationList;
 
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\API\Repository\Values\Content\Relation;

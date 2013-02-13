@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\Core\Repository\Values\Content\Location;
-use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct;
 
 /**

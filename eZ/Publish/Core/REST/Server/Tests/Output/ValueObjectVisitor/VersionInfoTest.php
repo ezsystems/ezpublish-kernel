@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\Content;
 use eZ\Publish\Core\REST\Common;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class VersionInfoTest extends ValueObjectVisitorBaseTest
 {
@@ -59,7 +60,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
                     'eng-US' => 'Sindelfingen',
                     'eng-GB' => 'Bielefeld',
                 ),
-                'contentInfo' => new Content\ContentInfo( array( 'id' => 42 ) ),
+                'contentInfo' => new ContentInfo( array( 'id' => 42 ) ),
             )
         );
 

@@ -80,9 +80,6 @@ class UserGroup extends \eZ\Publish\API\Repository\Values\User\UserGroup
             case 'contentInfo':
                 return $this->content->contentInfo;
 
-            case 'contentType':
-                return $this->content->contentType;
-
             case 'id':
                 return $this->content->id;
 

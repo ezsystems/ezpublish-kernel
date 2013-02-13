@@ -71,7 +71,7 @@ class LegacySetupController
 
         $response = new Response();
 
-        // inject the extra ezpublish5 folders we want permissions checked for
+        // inject the extra ezpublish-community folders we want permissions checked for
         if ( $currentStep == 'Welcome' || $currentStep == 'SystemCheck' )
         {
             $this->getLegacyKernel()->runCallback(

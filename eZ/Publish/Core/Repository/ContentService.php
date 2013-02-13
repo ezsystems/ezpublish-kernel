@@ -21,7 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct as APIContentCr
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Field;
@@ -36,7 +36,6 @@ use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
 use eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
@@ -185,7 +184,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
-    public function loadVersionInfo( APIContentInfo $contentInfo, $versionNo = null )
+    public function loadVersionInfo( ContentInfo $contentInfo, $versionNo = null )
     {
         return $this->loadVersionInfoById( $contentInfo->id, $versionNo );
     }
@@ -250,7 +249,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByContentInfo( APIContentInfo $contentInfo, array $languages = null, $versionNo = null )
+    public function loadContentByContentInfo( ContentInfo $contentInfo, array $languages = null, $versionNo = null )
     {
         return $this->loadContent(
             $contentInfo->id,
@@ -741,7 +740,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content with the updated attributes
      */
-    public function updateContentMetadata( APIContentInfo $contentInfo, ContentMetadataUpdateStruct $contentMetadataUpdateStruct )
+    public function updateContentMetadata( ContentInfo $contentInfo, ContentMetadataUpdateStruct $contentMetadataUpdateStruct )
     {
         $propertyCount = 0;
         foreach ( $contentMetadataUpdateStruct as $propertyName => $propertyValue )
@@ -889,7 +888,7 @@ class ContentService implements ContentServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      */
-    public function deleteContent( APIContentInfo $contentInfo )
+    public function deleteContent( ContentInfo $contentInfo )
     {
         if ( !$this->repository->canUser( 'content', 'remove', $contentInfo ) )
             throw new UnauthorizedException( 'content', 'remove' );
@@ -922,7 +921,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContentDraft( APIContentInfo $contentInfo, APIVersionInfo $versionInfo = null, User $user = null )
+    public function createContentDraft( ContentInfo $contentInfo, APIVersionInfo $versionInfo = null, User $user = null )
     {
         $contentInfo = $this->loadContentInfo( $contentInfo->id );
 
@@ -1097,10 +1096,11 @@ class ContentService implements ContentServiceInterface
         $fields = array();
         $languageCodes = $content->versionInfo->languageCodes;
         $initialLanguageCode = $contentUpdateStruct->initialLanguageCode ?: $content->contentInfo->mainLanguageCode;
+        $contentType = $this->repository->getContentTypeService()->loadContentType( $content->contentInfo->contentTypeId );
 
         foreach ( $contentUpdateStruct->fields as $field )
         {
-            $fieldDefinition = $content->contentType->getFieldDefinition( $field->fieldDefIdentifier );
+            $fieldDefinition = $contentType->getFieldDefinition( $field->fieldDefIdentifier );
             if ( $fieldDefinition === null )
             {
                 throw new ContentValidationException(
@@ -1135,9 +1135,8 @@ class ContentService implements ContentServiceInterface
         $allFieldErrors = array();
         $inputRelations = array();
         $locationIdToContentIdMapping = array();
-        $fieldDefinitions = $content->contentType->getFieldDefinitions();
 
-        foreach ( $fieldDefinitions as $fieldDefinition )
+        foreach ( $contentType->getFieldDefinitions() as $fieldDefinition )
         {
             /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
             $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
@@ -1231,7 +1230,12 @@ class ContentService implements ContentServiceInterface
 
         $spiContentUpdateStruct = new SPIContentUpdateStruct(
             array(
-                "name" => $this->repository->getNameSchemaService()->resolveNameSchema( $content, $fieldValues, $languageCodes ),
+                "name" => $this->repository->getNameSchemaService()->resolveNameSchema(
+                    $content,
+                    $fieldValues,
+                    $languageCodes,
+                    $contentType
+                ),
                 "creatorId" => $this->repository->getCurrentUser()->id,
                 "fields" => $spiFields,
                 "modificationDate" => time(),
@@ -1254,7 +1258,7 @@ class ContentService implements ContentServiceInterface
                 $inputRelations,
                 $spiContent->versionInfo->contentInfo->id,
                 $spiContent->versionInfo->versionNo,
-                $content->contentType,
+                $contentType,
                 $existingRelations
             );
             $this->repository->commit();
@@ -1383,7 +1387,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] Sorted by creation date
      */
-    public function loadVersions( APIContentInfo $contentInfo )
+    public function loadVersions( ContentInfo $contentInfo )
     {
         if ( !$this->repository->canUser( 'content', 'versionread', $contentInfo ) )
             throw new UnauthorizedException( 'content', 'versionread' );
@@ -1424,7 +1428,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function copyContent( APIContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, APIVersionInfo $versionInfo = null)
+    public function copyContent( ContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, APIVersionInfo $versionInfo = null)
     {
         if ( $destinationLocationCreateStruct->remoteId !== null )
         {
@@ -1529,7 +1533,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
-    public function loadReverseRelations( APIContentInfo $contentInfo )
+    public function loadReverseRelations( ContentInfo $contentInfo )
     {
         if ( $this->repository->hasAccess( 'content', 'reverserelatedlist' ) !== true )
             throw new UnauthorizedException( 'content', 'reverserelatedlist' );
@@ -1569,7 +1573,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation the newly created relation
      */
-    public function addRelation( APIVersionInfo $sourceVersion, APIContentInfo $destinationContent )
+    public function addRelation( APIVersionInfo $sourceVersion, ContentInfo $destinationContent )
     {
         $sourceVersion = $this->loadVersionInfoById(
             $sourceVersion->contentInfo->id,
@@ -1624,7 +1628,7 @@ class ContentService implements ContentServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent
      */
-    public function deleteRelation( APIVersionInfo $sourceVersion, APIContentInfo $destinationContent )
+    public function deleteRelation( APIVersionInfo $sourceVersion, ContentInfo $destinationContent )
     {
         $sourceVersion = $this->loadVersionInfoById(
             $sourceVersion->contentInfo->id,
@@ -1711,7 +1715,7 @@ class ContentService implements ContentServiceInterface
      *
      * @since 5.0
      */
-    public function loadTranslationInfos( APIContentInfo $contentInfo, array $filter = array() )
+    public function loadTranslationInfos( ContentInfo $contentInfo, array $filter = array() )
     {
 
     }
@@ -1789,11 +1793,10 @@ class ContentService implements ContentServiceInterface
             $spiContent->versionInfo->contentInfo->contentTypeId
         );
 
-        $versionInfo = $this->buildVersionInfoDomainObject( $spiContent->versionInfo, $type );
         return new Content(
             array(
                 "internalFields" => $this->buildDomainFields( $spiContent->fields, $type ),
-                "versionInfo" => $versionInfo,
+                "versionInfo" => $this->buildVersionInfoDomainObject( $spiContent->versionInfo ),
             )
         );
     }
@@ -1854,18 +1857,14 @@ class ContentService implements ContentServiceInterface
      *
      * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $spiContentInfo
      *
-     * @return \eZ\Publish\Core\Repository\Values\Content\ContentInfo
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
-    public function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo, ContentType $type = null )
+    public function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo )
     {
-        if ( $type === null )
-        {
-            $type = $this->repository->getContentTypeService()->loadContentType( $spiContentInfo->contentTypeId );
-        }
-
         return new ContentInfo(
             array(
                 "id" => $spiContentInfo->id,
+                "contentTypeId" => $spiContentInfo->contentTypeId,
                 "name" => $spiContentInfo->name,
                 "sectionId" => $spiContentInfo->sectionId,
                 "currentVersionNo" => $spiContentInfo->currentVersionNo,
@@ -1880,8 +1879,7 @@ class ContentService implements ContentServiceInterface
                 "alwaysAvailable" => $spiContentInfo->alwaysAvailable,
                 "remoteId" => $spiContentInfo->remoteId,
                 "mainLanguageCode" => $spiContentInfo->mainLanguageCode,
-                "mainLocationId" => $spiContentInfo->mainLocationId,
-                "contentType" => $type
+                "mainLocationId" => $spiContentInfo->mainLocationId
             )
         );
     }
@@ -1893,7 +1891,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return VersionInfo
      */
-    protected function buildVersionInfoDomainObject( SPIVersionInfo $spiVersionInfo, ContentType $type = null )
+    protected function buildVersionInfoDomainObject( SPIVersionInfo $spiVersionInfo )
     {
         $languageCodes = array();
         foreach ( $spiVersionInfo->languageIds as $languageId )
@@ -1914,7 +1912,7 @@ class ContentService implements ContentServiceInterface
                 "initialLanguageCode" => $spiVersionInfo->initialLanguageCode,
                 "languageCodes" => $languageCodes,
                 "names" => $spiVersionInfo->names,
-                "contentInfo" => $this->buildContentInfoDomainObject( $spiVersionInfo->contentInfo, $type )
+                "contentInfo" => $this->buildContentInfoDomainObject( $spiVersionInfo->contentInfo )
             )
         );
     }
@@ -1963,7 +1961,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation
      */
-    protected function buildRelationDomainObject( SPIRelation $spiRelation, APIContentInfo $sourceContentInfo = null, APIContentInfo $destinationContentInfo = null )
+    protected function buildRelationDomainObject( SPIRelation $spiRelation, ContentInfo $sourceContentInfo = null, ContentInfo $destinationContentInfo = null )
     {
         // @todo Should relations really be loaded w/o checking permissions just because User needs to be accessible??
         if ( $sourceContentInfo === null )
@@ -1975,9 +1973,10 @@ class ContentService implements ContentServiceInterface
         $sourceFieldDefinition = null;
         if ( $spiRelation->sourceFieldDefinitionId !== null )
         {
-            $sourceFieldDefinition = $sourceContentInfo->getContentType()->getFieldDefinitionById(
-                $spiRelation->sourceFieldDefinitionId
+            $contentType = $this->repository->getContentTypeService()->loadContentType(
+                $sourceContentInfo->contentTypeId
             );
+            $sourceFieldDefinition = $contentType->getFieldDefinitionById( $spiRelation->sourceFieldDefinitionId );
         }
 
         return new Relation(
