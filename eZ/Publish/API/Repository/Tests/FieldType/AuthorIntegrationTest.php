@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\API\Repository\Tests\FieldType\AuthorIntegrationTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -401,6 +401,21 @@ class AuthorIntegrationTest extends BaseIntegrationTest
                     )
                 )
             ),
+        );
+    }
+
+    /**
+     * @todo this is a workaround for a bug in PHP 5.3.3 {@link https://bugs.php.net/bug.php?id=61326}, can be removed when support for it ends
+     *
+     * @covers \eZ\Publish\Core\FieldType\FieldType::isEmptyValue
+     * @dataProvider providerForTestIsNotEmptyValue
+     */
+    public function testIsNotEmptyValue( $value )
+    {
+        $emptyValue = $this->getRepository()->getFieldTypeService()->buildFieldType( $this->getTypeName() )->getEmptyValue();
+
+        $this->assertFalse(
+            $value === null || ( (array)$value->authors == (array)$emptyValue->authors )
         );
     }
 }

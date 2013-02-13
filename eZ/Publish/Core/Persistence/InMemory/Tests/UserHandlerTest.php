@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\Core\Persistence\InMemory\Tests\UserHandlerTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -309,76 +309,6 @@ class UserHandlerTest extends HandlerTest
         $roles = $handler->loadRoles();
         $this->assertCount( 3, $roles );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $roles[0] );
-    }
-
-    /**
-     * Test loadRolesByGroupId function
-     *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRolesByGroupId
-     */
-    public function testLoadRolesByGroupId()
-    {
-        $handler = $this->persistenceHandler->userHandler();
-        $obj = $handler->createRole( self::getRole() );
-        $handler->assignRole( 4, $obj->id );// 4: Users
-
-        // add a policy and check that it is part of returned permission after re fetch
-        $handler->addPolicy(
-            $obj->id,
-            new Policy(
-                array(
-                    'module' => 'Foo',
-                    'function' => 'Bar',
-                    'limitations' => array( 'Limit' => array( 'Test' ) )
-                )
-            )
-        );
-        $list = $handler->loadRolesByGroupId( 4 );
-        $this->assertEquals( 1, count( $list ) );
-        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $list[0] );
-        $role = $list[0];
-        $this->assertEquals( 'Foo', $role->policies[3]->module );
-        $this->assertEquals( 'Bar', $role->policies[3]->function );
-        $this->assertEquals( array( 'Test' ), $role->policies[3]->limitations['Limit'] );
-    }
-
-    /**
-     * Test loadRolesByGroupId function
-     *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRolesByGroupId
-     */
-    public function testLoadRolesByGroupIdEmpty()
-    {
-        $this->clearRolesByGroupId( 42 );
-
-        $handler = $this->persistenceHandler->userHandler();
-        $list = $handler->loadRolesByGroupId( 42 );
-        $this->assertEquals( 0, count( $list ) );
-        $this->assertEquals( array(), $list  );
-    }
-
-    /**
-     * Test loadRolesByGroupId function
-     *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRolesByGroupId
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     */
-    public function testLoadRolesByGroupIdNotFound()
-    {
-        $handler = $this->persistenceHandler->userHandler();
-        $handler->loadRolesByGroupId( 999 );
-    }
-
-    /**
-     * Test loadRolesByGroupId function
-     *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRolesByGroupId
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    public function testLoadRolesByGroupIdNotFoundWithCorrectType()
-    {
-        $handler = $this->persistenceHandler->userHandler();
-        $handler->loadRolesByGroupId( 1 );
     }
 
     /**
@@ -1022,9 +952,9 @@ class UserHandlerTest extends HandlerTest
     protected function clearRolesByGroupId( $groupId )
     {
         $handler = $this->persistenceHandler->userHandler();
-        foreach ( $handler->loadRolesByGroupId( $groupId ) as $role )
+        foreach ( $handler->loadRoleAssignmentsByGroupId( $groupId ) as $roleAssignment )
         {
-            $handler->unAssignRole( $groupId, $role->id );
+            $handler->unAssignRole( $groupId, $roleAssignment->role->id );
         }
     }
 }

@@ -5,6 +5,7 @@ parameters:
     ezpublish.url_generator.base.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator
     ezpublish.urlalias_router.class: eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter
     ezpublish.urlalias_generator.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator
+    ezpublish.siteaccess.matcher_builder.class: eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder
     ezpublish.siteaccess_router.class: eZ\Publish\Core\MVC\Symfony\SiteAccess\Router
     ezpublish.siteaccess_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\SiteAccessListener
     ezpublish.request_redirect_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\RequestEventListener
@@ -42,9 +43,15 @@ services:
         arguments: [@ezpublish.api.repository.lazy, @router]
         parent: ezpublish.url_generator.base
 
+    ezpublish.siteaccess.matcher_builder:
+        class: %ezpublish.siteaccess.matcher_builder.class%
+        arguments: [@service_container]
+
     ezpublish.siteaccess_router:
         class: %ezpublish.siteaccess_router.class%
         arguments:
+            - @ezpublish.siteaccess.matcher_builder
+            - @logger
             - %ezpublish.siteaccess.default%
             - %ezpublish.siteaccess.match_config%
             - %ezpublish.siteaccess.list%

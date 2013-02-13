@@ -2,7 +2,7 @@
 /**
  * File containing the UrlAliasRouter class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -118,6 +118,18 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                     );
 
                     $request->attributes->set( 'locationId', $urlAlias->destination );
+
+                    if ( $urlAlias->isHistory === true )
+                    {
+                        $activeUrlAlias = $this->getRepository()->getURLAliasService()->reverseLookup(
+                            $this->getRepository()->getLocationService()->loadLocation(
+                                $urlAlias->destination
+                            )
+                        );
+
+                        $request->attributes->set( 'semanticPathinfo', $activeUrlAlias->path );
+                        $request->attributes->set( 'needsRedirect', true );
+                    }
 
                     if ( isset( $this->logger ) )
                         $this->logger->info( "UrlAlias matched location #{$urlAlias->destination}. Forwarding to ViewController" );

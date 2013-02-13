@@ -1,0 +1,5 @@
+{% block ezoverride_settings %}default{% endblock %}
+
+{% block eznooverride_settings %}default (no override){% endblock %}
+
+{% block ezwithdata_settings %}{{ fielddefinition.id }} {{ fielddefinition.fieldTypeIdentifier }} {{ settings.frameworks|join( ', ' ) }}{% endblock %}
