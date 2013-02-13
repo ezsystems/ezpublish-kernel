@@ -1,5 +1,5 @@
 {
-    "hash": "eaab7fe4567bff7a430759af079f2f23",
+    "hash": "2049b0206bafa2f17542e6f24e76c48a",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -537,16 +537,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "2.2.x-dev",
+            "version": "v2.2.0-RC2",
             "source": {
                 "type": "git",
                 "url": "git://github.com/symfony/symfony.git",
-                "reference": "b38ab51271824467eecf4698b84b5a49152adbf1"
+                "reference": "v2.2.0-RC2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/b38ab51271824467eecf4698b84b5a49152adbf1",
-                "reference": "b38ab51271824467eecf4698b84b5a49152adbf1",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/v2.2.0-RC2",
+                "reference": "v2.2.0-RC2",
                 "shasum": ""
             },
             "require": {
@@ -598,7 +598,7 @@
                 "monolog/monolog": ">=1.3,<2.0",
                 "propel/propel1": "1.6.*"
             },
-            "time": "2013-02-13 07:21:16",
+            "time": "2013-02-11 12:46:49",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1981,61 +1981,7 @@
             "homepage": "https://github.com/zetacomponents"
         }
     ],
-    "packages-dev": [
-        {
-            "name": "ezsystems/ezpublish-legacy",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ezsystems/ezpublish-legacy.git",
-                "reference": "a0a0096b7a2499c909f27f3518e0ba7d9f913b57"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ezsystems/ezpublish-legacy/zipball/a0a0096b7a2499c909f27f3518e0ba7d9f913b57",
-                "reference": "a0a0096b7a2499c909f27f3518e0ba7d9f913b57",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "time": "2013-02-13 11:38:59",
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "description": "eZ Publish LegacyStack (4.x)",
-            "homepage": "http://share.ez.no"
-        },
-        {
-            "name": "mikey179/vfsStream",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mikey179/vfsStream",
-                "reference": "v1.1.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/mikey179/vfsStream/zipball/v1.1.0",
-                "reference": "v1.1.0",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "time": "2012-08-25 05:49:29",
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "org\\bovigo\\vfs": "src/main/php"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD"
-            ],
-            "homepage": "http://vfs.bovigo.org/"
-        }
-    ],
+    "packages-dev": null,
     "aliases": [
 
     ],
@@ -2057,6 +2003,7 @@
         "zetacomponents/php-generator": 20,
         "zetacomponents/signal-slot": 20,
         "zetacomponents/system-information": 20,
+        "symfony/symfony": 5,
         "kriswallsmith/buzz": 20,
         "ezsystems/ezpublish-legacy": 20
     }
