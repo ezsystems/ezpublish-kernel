@@ -481,13 +481,11 @@ class Handler implements BaseContentHandler
      */
     public function removeRawContent( $contentId )
     {
-        $contentInfo = $this->loadContentInfo( $contentId );
         $this->locationGateway->removeElementFromTrash(
-            $contentInfo->mainLocationId
+            $this->loadContentInfo( $contentId )->mainLocationId
         );
 
-        $versionInfos = $this->listVersions( $contentId );
-        foreach ( $versionInfos as $versionInfo )
+        foreach ( $this->listVersions( $contentId ) as $versionInfo )
         {
             $this->fieldHandler->deleteFields( $contentId, $versionInfo );
         }
@@ -650,10 +648,9 @@ class Handler implements BaseContentHandler
      */
     public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null )
     {
-        $rows = $this->contentGateway->loadRelations( $sourceContentId, $sourceContentVersionNo, $type );
-
-        $relationObjects = $this->mapper->extractRelationsFromRows( $rows );
-        return $relationObjects;
+        return $this->mapper->extractRelationsFromRows(
+            $this->contentGateway->loadRelations( $sourceContentId, $sourceContentVersionNo, $type )
+        );
     }
 
     /**
@@ -670,9 +667,8 @@ class Handler implements BaseContentHandler
      */
     public function loadReverseRelations( $destinationContentId, $type = null )
     {
-        $rows = $this->contentGateway->loadReverseRelations( $destinationContentId, $type );
-
-        $relationObjects = $this->mapper->extractRelationsFromRows( $rows );
-        return $relationObjects;
+        return $this->mapper->extractRelationsFromRows(
+            $this->contentGateway->loadReverseRelations( $destinationContentId, $type )
+        );
     }
 }
