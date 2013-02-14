@@ -1516,7 +1516,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
             new Query(
                 array(
                     'criterion' => new Criterion\LanguageCode(
-                        'eng-GB'
+                        'eng-US'
                     ),
                     'limit' => 10,
                     'sortClauses' => array( new SortClause\ContentId ),
