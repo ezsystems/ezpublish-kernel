@@ -29,9 +29,21 @@ class CLIHandler implements ezpKernelHandler
     protected $container;
 
     /**
+     * Legacy script to run.
+     * e.g. bin/php/eztc.php
+     *
+     * @var string
+     */
+    protected $embeddedScript;
+
+    /**
      * Constructor
      *
-     * @param array $settings Settings to pass to \eZScript constructor.
+     * Additional valid settings for $settings :
+     * - injected-settings : INI settings override
+     * - script : Path to script to run in legacy context (relative to legacy root)
+     *
+     * @param array $settings Settings to pass to eZScript constructor.
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
@@ -49,24 +61,35 @@ class CLIHandler implements ezpKernelHandler
             // those settings override anything else in local .ini files and
             // their overrides
             eZINI::injectSettings( $injectedSettings );
+            unset( $settings['injected-settings'] );
+        }
+
+        if ( isset( $settings['script'] ) )
+        {
+            $this->embeddedScript = $settings['script'];
+            unset( $settings['script'] );
         }
 
         $this->script = eZScript::instance( $settings );
         $this->script->startup();
         if ( isset( $siteAccess ) )
             $this->script->setUseSiteAccess( $siteAccess->name );
-
-        $this->script->initialize();
     }
 
     /**
-     * Not supported by CLIHandler
+     * Runs a legacy script.
      *
      * @throws \RuntimeException
      */
     public function run()
     {
-        throw new RuntimeException( 'run() method is not supported by CLIHandler' );
+        if ( !isset( $this->embeddedScript ) )
+            throw new RuntimeException( 'No legacy script to run has been passed. Cannot run, aborting.' );
+
+        if ( !file_exists( $this->embeddedScript ) )
+            throw new RuntimeException( 'Passed legacy script does not exist. Please provide the correct script path, relative to the legacy root.' );
+
+        include $this->embeddedScript;
     }
 
     /**
@@ -81,6 +104,9 @@ class CLIHandler implements ezpKernelHandler
      */
     public function runCallback( \Closure $callback, $postReinitialize = true )
     {
+        if ( !$this->script->isInitialized() )
+            $this->script->initialize();
+
         $return = $callback();
         $this->script->shutdown();
         if ( !$postReinitialize )
@@ -130,5 +156,15 @@ class CLIHandler implements ezpKernelHandler
     public function getServiceContainer()
     {
         return $this->container;
+    }
+
+    /**
+     * Injects path to script to run in legacy context (relative to legacy root).
+     *
+     * @param string $script
+     */
+    public function setEmbeddedScript( $script )
+    {
+        $this->embeddedScript = $script;
     }
 }
