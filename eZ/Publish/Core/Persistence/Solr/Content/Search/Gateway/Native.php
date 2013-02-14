@@ -19,6 +19,7 @@ use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
+use RuntimeException;
 
 /**
  * The Content Search Gateway provides the implementation for one database to
@@ -203,7 +204,10 @@ class Native extends Gateway
             )
         );
 
-        // @todo: Add error handling
+        if ( $result->headers["status"] !== 200 )
+        {
+            throw new RuntimeException( "Wrong HTTP status received from Solr: " . $result->headers["status"] );
+        }
     }
 
     /**
