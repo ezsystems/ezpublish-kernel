@@ -170,6 +170,19 @@ class Handler extends BaseSearchHandler
     }
 
     /**
+     * Deletes a content object from the index
+     *
+     * @param int $contentID
+     * @param int|null $versionID
+     *
+     * @return void
+     */
+    public function deleteContent( $contentID, $versionID = null )
+    {
+        $this->gateway->deleteContent( $contentID, $versionID );
+    }
+
+    /**
      * Map content to document.
      *
      * A document is an array of fields

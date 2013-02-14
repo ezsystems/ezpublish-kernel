@@ -236,6 +236,19 @@ class SearchHandler extends SearchHandlerInterface
     }
 
     /**
+     * Deletes a content object from the index
+     *
+     * @param int $contentID
+     * @param int|null $versionID
+     *
+     * @return void
+     */
+    public function deleteContent( $contentID, $versionID = null )
+    {
+        throw new \Exception( "Not implemented yet." );
+    }
+
+    /**
      * Generate match array for use with Backend based on criteria
      *
      * @param array $criteria

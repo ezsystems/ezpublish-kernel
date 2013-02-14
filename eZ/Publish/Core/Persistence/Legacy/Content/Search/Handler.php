@@ -172,5 +172,17 @@ class Handler extends BaseSearchHandler
     {
         throw new \Exception( "Not implemented yet." );
     }
-}
 
+    /**
+     * Deletes a content object from the index
+     *
+     * @param int $contentID
+     * @param int|null $versionID
+     *
+     * @return void
+     */
+    public function deleteContent( $contentID, $versionID = null )
+    {
+        throw new \Exception( "Not implemented yet." );
+    }
+}

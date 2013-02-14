@@ -211,6 +211,28 @@ class Native extends Gateway
     }
 
     /**
+     * Deletes a content object from the index
+     *
+     * @param int content id
+     * @param int|null version id
+     *
+     * @return void
+     */
+    public function deleteContent( $contentID, $versionID = null )
+    {
+        $this->client->request(
+            'POST',
+            '/solr/update?commit=true&wt=json',
+            new Message(
+                array(
+                    'Content-Type: text/xml',
+                ),
+                "<delete><query>id:" . (int)$contentID . ( $versionID !== null ? " AND version_id:" . (int)$versionID : "" ) . "</query></delete>"
+            )
+        );
+    }
+
+    /**
      * Purges all contents from the index
      *
      * @return void
