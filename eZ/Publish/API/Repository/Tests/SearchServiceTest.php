@@ -285,6 +285,29 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . 'Status.php',
+                // Result having the same sort level should be sorted between them to be system independent
+                function ( &$data )
+                {
+                    usort(
+                        $data->searchHits,
+                        function ( $a, $b )
+                        {
+                            if ( $a->score == $b->score )
+                            {
+                                if ( $a->valueObject["id"] == $b->valueObject["id"] )
+                                {
+                                    return 0;
+                                }
+
+                                // Order by ascending ID
+                                return ( $a->valueObject["id"] < $b->valueObject["id"] ) ? -1 : 1;
+                            }
+
+                            // Order by descending score
+                            return ( $a->score > $b->score ) ? -1 : 1;
+                        }
+                    );
+                }
             ),
             array(
                 new Query(
@@ -379,9 +402,9 @@ class SearchServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
-    public function testFindContent( Query $query, $fixture )
+    public function testFindContent( Query $query, $fixture, $closure = null )
     {
-        $this->assertQueryFixture( $query, $fixture );
+        $this->assertQueryFixture( $query, $fixture, $closure );
     }
 
     public function testFindSingle()
