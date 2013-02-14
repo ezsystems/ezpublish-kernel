@@ -24,17 +24,17 @@ class Status extends Criterion implements CriterionInterface
     /**
      * Status constant: draft
      */
-    const STATUS_DRAFT = "draft";
+    const STATUS_DRAFT = 0;
 
     /**
      * Status constant: published
      */
-    const STATUS_PUBLISHED = "published";
+    const STATUS_PUBLISHED = 1;
 
     /**
      * Status constant: archived
      */
-    const STATUS_ARCHIVED = "archived";
+    const STATUS_ARCHIVED = 2;
 
     /**
      * Creates a new Status criterion
@@ -67,12 +67,12 @@ class Status extends Criterion implements CriterionInterface
             new Specifications(
                 Operator::IN,
                 Specifications::FORMAT_ARRAY,
-                Specifications::TYPE_STRING
+                Specifications::TYPE_INTEGER
             ),
             new Specifications(
                 Operator::EQ,
                 Specifications::FORMAT_SINGLE,
-                Specifications::TYPE_STRING
+                Specifications::TYPE_INTEGER
             ),
         );
     }
