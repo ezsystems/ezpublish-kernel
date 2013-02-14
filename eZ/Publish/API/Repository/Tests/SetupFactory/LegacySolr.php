@@ -18,8 +18,6 @@ use eZ\Publish\Core\FieldType;
  */
 class LegacySolr extends Legacy
 {
-    protected static $indexed = false;
-
     /**
      * Returns a configured repository for testing.
      *
@@ -39,8 +37,13 @@ class LegacySolr extends Legacy
         $searchProperty->setAccessible( true );
         $searchProperty->setValue(
             $persistenceHandler,
-            $this->getSearchHandler( $persistenceHandler )
+            $searchHandler = $this->getSearchHandler( $persistenceHandler )
         );
+
+        if ( $initializeFromScratch )
+        {
+            $this->indexAll( $persistenceHandler, $searchHandler );
+        }
 
         return $repository;
     }
@@ -81,7 +84,7 @@ class LegacySolr extends Legacy
             )
         );
 
-        $searchHandler = new Solr\Content\Search\Handler(
+        return new Solr\Content\Search\Handler(
             new Solr\Content\Search\Gateway\Native(
                 new Solr\Content\Search\Gateway\HttpClient\Stream( getenv( "solrServer" ) ),
                 new Solr\Content\Search\CriterionVisitor\Aggregate(
@@ -149,19 +152,10 @@ class LegacySolr extends Legacy
             $persistenceHandler->contentTypeHandler(),
             $persistenceHandler->objectStateHandler()
         );
-
-        $this->indexAll( $persistenceHandler, $searchHandler );
-
-        return $searchHandler;
     }
 
     protected function indexAll( $persistenceHandler, $searchHandler )
     {
-        if ( self::$indexed )
-        {
-            return;
-        }
-
         // @todo: Is there a nicer way to get access to all content objects? We
         // require this to run a full index here.
         $dbHandlerProperty = new \ReflectionProperty( $persistenceHandler, 'dbHandler' );
@@ -182,7 +176,5 @@ class LegacySolr extends Legacy
                 $persistenceHandler->contentHandler()->load( $row['id'], $row['current_version'] )
             );
         }
-
-        self::$indexed = true;
     }
 }
