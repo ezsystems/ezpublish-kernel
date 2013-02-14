@@ -111,24 +111,34 @@ class Native extends Gateway
      */
     public function findContent( Query $query, array $fieldFilters = array() )
     {
+        $parameters = array(
+            "q" => $this->criterionVisitor->visit( $query->criterion ),
+            "sort" => implode(
+                ", ",
+                array_map(
+                    array( $this->sortClauseVisitor, "visit" ),
+                    $query->sortClauses
+                )
+            ),
+            "fl" => "*,score",
+            "wt" => "json",
+        );
+
+        if ( $query->offset !== null )
+        {
+            $parameters["start"] = $query->offset;
+        }
+
+        if ( $query->limit !== null )
+        {
+            $parameters["rows"] = $query->limit;
+        }
+
         // @todo: Extract method
         $response = $this->client->request(
             'GET',
             '/solr/select?' .
-            http_build_query(
-                array(
-                    'q'    => $this->criterionVisitor->visit( $query->criterion ),
-                    'sort' => implode(
-                        ', ',
-                        array_map(
-                            array( $this->sortClauseVisitor, 'visit' ),
-                            $query->sortClauses
-                        )
-                    ),
-                    'fl'   => '*,score',
-                    'wt'   => 'json',
-                )
-            ) .
+            http_build_query( $parameters ) .
             ( count( $query->facetBuilders ) ? '&facet=true&facet.sort=count&' : '' ) .
             implode(
                 '&',
