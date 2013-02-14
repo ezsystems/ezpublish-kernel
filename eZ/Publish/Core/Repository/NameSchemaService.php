@@ -2,7 +2,7 @@
 /**
  * File containing the NameSchemaService class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -78,16 +78,24 @@ class NameSchemaService
      * Convenience method for resolving URL alias schema
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType|null $contentType
      *
      * @return array
      */
-    public function resolveUrlAliasSchema( Content $content )
+    public function resolveUrlAliasSchema( Content $content, ContentType $contentType = null )
     {
+        if ( $contentType === null )
+        {
+            $contentType = $this->repository->getContentTypeService()->loadContentType(
+                $content->contentInfo->contentTypeId
+            );
+        }
+
         return $this->resolve(
-            strlen( $content->contentType->urlAliasSchema ) === 0 ?
-                $content->contentType->nameSchema :
-                $content->contentType->urlAliasSchema,
-            $content->contentType,
+            strlen( $contentType->urlAliasSchema ) === 0 ?
+                $contentType->nameSchema :
+                $contentType->urlAliasSchema,
+            $contentType,
             $content->fields,
             $content->versionInfo->languageCodes
         );
@@ -99,15 +107,23 @@ class NameSchemaService
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param array $fieldMap
      * @param array $languageCodes
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType|null $contentType
      *
      * @return array
      */
-    public function resolveNameSchema( Content $content, array $fieldMap = array(), array $languageCodes = array() )
+    public function resolveNameSchema( Content $content, array $fieldMap = array(), array $languageCodes = array(), ContentType $contentType = null )
     {
+        if ( $contentType === null )
+        {
+            $contentType = $this->repository->getContentTypeService()->loadContentType(
+                $content->contentInfo->contentTypeId
+            );
+        }
+
         $languageCodes = $languageCodes ?: $content->versionInfo->languageCodes;
         return $this->resolve(
-            $content->contentType->nameSchema,
-            $content->contentType,
+            $contentType->nameSchema,
+            $contentType,
             $this->mergeFieldMap(
                 $content,
                 $fieldMap,

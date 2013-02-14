@@ -2,7 +2,7 @@
 /**
  * File containing the EzcDatabase sort clause converter class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -120,7 +120,7 @@ class SortClauseConverter
         // The following line was added because without it, loading sub user groups through the Public API
         // fails with the database error "Unknown column sort_column_0". The change does not break any
         // integration tests or legacy persistence tests, but it can break something else, so review is needed
-        // Discussion: https://github.com/ezsystems/ezp-next/commit/8749d0977307858c3e2a7d82f3be90fa21973357#L1R102
+        // Discussion: https://github.com/ezsystems/ezpublish-kernel/commit/8749d0977307858c3e2a7d82f3be90fa21973357#L1R102
         $this->sortColumns = array();
     }
 }

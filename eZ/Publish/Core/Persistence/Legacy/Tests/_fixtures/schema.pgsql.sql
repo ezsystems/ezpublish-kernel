@@ -721,11 +721,7 @@ CREATE UNIQUE INDEX ezcontentobject_remote_id ON ezcontentobject USING btree (re
 
 CREATE INDEX ezcontentobject_status ON ezcontentobject USING btree (status);
 
-CREATE INDEX ezcontentobject_attr_id ON ezcontentobject_attribute USING btree (id);
-
 CREATE INDEX ezcontentobject_attribute_co_id_ver_lang_code ON ezcontentobject_attribute USING btree (contentobject_id, "version", language_code);
-
-CREATE INDEX ezcontentobject_attribute_contentobject_id ON ezcontentobject_attribute USING btree (contentobject_id);
 
 CREATE INDEX ezcontentobject_attribute_language_code ON ezcontentobject_attribute USING btree (language_code);
 
@@ -736,8 +732,6 @@ CREATE INDEX sort_key_string ON ezcontentobject_attribute USING btree (sort_key_
 CREATE INDEX ezco_link_from ON ezcontentobject_link USING btree (from_contentobject_id, from_contentobject_version, contentclassattribute_id);
 
 CREATE INDEX ezco_link_to_co_id ON ezcontentobject_link USING btree (to_contentobject_id);
-
-CREATE INDEX ezcontentobject_name_co_id ON ezcontentobject_name USING btree (contentobject_id);
 
 CREATE INDEX ezcontentobject_name_cov_id ON ezcontentobject_name USING btree (content_version);
 
@@ -778,8 +772,6 @@ CREATE INDEX ezcobj_version_status ON ezcontentobject_version USING btree (statu
 CREATE INDEX idx_object_version_objver ON ezcontentobject_version USING btree (contentobject_id, "version");
 
 CREATE INDEX ezcontentobject_version_object_status ON ezcontentobject_version USING btree (contentobject_id, status);
-
-CREATE INDEX eznode_assignment_co_id ON eznode_assignment USING btree (contentobject_id);
 
 CREATE INDEX eznode_assignment_co_version ON eznode_assignment USING btree (contentobject_version);
 
@@ -841,19 +833,13 @@ CREATE INDEX ezurlalias_wcard_fwd ON ezurlalias USING btree (is_wildcard, forwar
 
 CREATE INDEX ezurlalias_ml_act_org ON ezurlalias_ml USING btree ("action", is_original);
 
-CREATE INDEX ezurlalias_ml_action ON ezurlalias_ml USING btree ("action", id, link);
-
-CREATE INDEX ezurlalias_ml_actt ON ezurlalias_ml USING btree (action_type);
-
 CREATE INDEX ezurlalias_ml_actt_org_al ON ezurlalias_ml USING btree (action_type, is_original, is_alias);
 
 CREATE INDEX ezurlalias_ml_id ON ezurlalias_ml USING btree (id);
 
-CREATE INDEX ezurlalias_ml_par_act_id_lnk ON ezurlalias_ml USING btree (parent, "action", id, link);
+CREATE INDEX ezurlalias_ml_par_act_id_lnk ON ezurlalias_ml USING btree ("action", id, link, parent);
 
-CREATE INDEX ezurlalias_ml_par_lnk_txt ON ezurlalias_ml USING btree (parent, link, text);
-
-CREATE INDEX ezurlalias_ml_par_txt ON ezurlalias_ml USING btree (parent, text);
+CREATE INDEX ezurlalias_ml_par_lnk_txt ON ezurlalias_ml USING btree (parent, text, link);
 
 CREATE INDEX ezurlalias_ml_text ON ezurlalias_ml USING btree (text, id, link);
 
@@ -866,7 +852,6 @@ CREATE INDEX ezuser_role_role_id ON ezuser_role USING btree (role_id);
 CREATE INDEX ezkeyword_keyword ON ezkeyword USING btree (keyword);
 CREATE INDEX ezkeyword_id ON ezkeyword USING btree (keyword,id);
 
-CREATE INDEX ezkeyword_attr_link_keyword_id ON ezkeyword USING btree (keyword_id);
 CREATE INDEX ezkeyword_attr_link_kid_oaid ON ezkeyword USING btree (keyword_id,objectattribute_id);
 CREATE INDEX ezkeyword_attr_link_oaid ON ezkeyword USING btree (objectattribute_id);
 

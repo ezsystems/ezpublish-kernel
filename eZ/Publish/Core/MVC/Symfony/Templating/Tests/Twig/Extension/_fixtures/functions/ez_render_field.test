@@ -1,0 +1,68 @@
+--TEST--
+"ez_render_field" function
+--TEMPLATE--
+{{ ez_render_field( nooverride, 'testfield' ) }}
+{{ ez_render_field( overrides, 'testfield' ) }}
+{{ ez_render_field( notdefault, 'testfield' ) }}
+{{ ez_render_field( data, 'testfield' ) }}
+{{ ez_render_field( data, 'testfield', {'attr': {'class': 'added'}} ) }}
+{{ ez_render_field( data, 'testfield', {'parameters': { 'key1' : 1, 'key2': 2, 'key3': 3 }} ) }}
+{{ ez_render_field( data, 'testfield', {'parameters': [ 3, 2, 1]} ) }}
+{{ ez_render_field( data, 'testfield', {'parameters': [ 3, 2, 1], 'template': "templates/fields_localoverride.html.twig"} ) }}
+--DATA--
+return array(
+    'nooverride' => $this->getContent(
+        'nooverride',
+        array(
+            'eznooverride' => array(
+                'id' => 2,
+                'fieldDefIdentifier' => 'testfield',
+                'value' => 'foo2',
+                'languageCode' => 'fre-FR'
+            ),
+        )
+    ),
+    'overrides' => $this->getContent(
+        'overrides',
+        array(
+            'ezoverride' => array(
+                'id' => 3,
+                'fieldDefIdentifier' => 'testfield',
+                'value' => 'foo2',
+                'languageCode' => 'fre-FR'
+            ),
+        )
+    ),
+    'notdefault' => $this->getContent(
+        'notdefault',
+        array(
+            'eznotdefault' => array(
+                'id' => 4,
+                'fieldDefIdentifier' => 'testfield',
+                'value' => 'foo2',
+                'languageCode' => 'fre-FR'
+            ),
+        )
+    ),
+    'data' => $this->getContent(
+        'data',
+        array(
+            'ezdata' => array(
+                'id' => 5,
+                'fieldDefIdentifier' => 'testfield',
+                'value' => 'foo2',
+                'languageCode' => 'fre-FR'
+            ),
+        )
+    )
+
+)
+--EXPECT--
+default (no override)
+override2
+not default
+field id: 5 contentInfo id: 42 versionInfo versionNo: 64 attr class: ezdata-field parameters:empty
+field id: 5 contentInfo id: 42 versionInfo versionNo: 64 attr class: added ezdata-field parameters:empty
+field id: 5 contentInfo id: 42 versionInfo versionNo: 64 attr class: ezdata-field parameters:1, 2, 3
+field id: 5 contentInfo id: 42 versionInfo versionNo: 64 attr class: ezdata-field parameters:3, 2, 1
+LOCAL OVERRIDE field id: 5 contentInfo id: 42 versionInfo versionNo: 64 attr class: ezdata-field parameters:3, 2, 1

@@ -2,7 +2,7 @@
 /**
  * File containing the RelationTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -13,7 +13,7 @@ use eZ\Publish\Core\FieldType\Relation\Type as Relation;
 use eZ\Publish\Core\FieldType\Relation\Value;
 use eZ\Publish\Core\FieldType\Tests\FieldTypeTest;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
-use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class RelationTest extends StandardizedFieldTypeTest
 {

@@ -2,7 +2,7 @@
 /**
  * File containing the eZ\Publish\API\Repository\Values\Content\Content class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -15,7 +15,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * this class represents a content object in a specific version
  *
  * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo convenience getter for getVersionInfo()->getContentInfo()
- * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType convenience getter for getVersionInfo()->getContentInfo()->contentType ( @deprecated Use getVersionInfo()->getContentInfo()->contentTypeId )
  * @property-read mixed $id convenience getter for retrieving the contentId: $versionInfo->contentInfo->id
  * @property-read \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo calls getVersionInfo()
  * @property-read array $fields access fields, calls getFields()

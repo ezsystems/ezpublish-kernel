@@ -2,7 +2,7 @@
 /**
  * File containing the ContentTypeTest class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -104,22 +104,7 @@ class ContentTypeTest extends BaseTest
      */
     private function generateContentInfoForContentType( $contentTypeId )
     {
-        $contentInfo = $this->getContentInfoMock();
-        $contentInfo
-            ->expects( $this->any() )
-            ->method( 'getContentType' )
-            ->will(
-                $this->returnValue(
-                    $this
-                        ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' )
-                        ->setConstructorArgs(
-                            array( array( 'id' => $contentTypeId ) )
-                        )
-                        ->getMockForAbstractClass()
-                )
-            );
-
-        return $contentInfo;
+        return $this->getContentInfoMock( array( "contentTypeId" => $contentTypeId ) );
     }
 
     /**

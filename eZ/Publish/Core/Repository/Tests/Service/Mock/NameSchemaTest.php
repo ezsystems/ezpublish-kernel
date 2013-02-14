@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\Core\Repository\Tests\Service\Mock\NameSchemaTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -12,7 +12,6 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\NameSchemaService;
 use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
@@ -32,7 +31,7 @@ class NameSchemaTest extends BaseServiceMockTest
     {
         $serviceMock = $this->getPartlyMockedNameSchemaService( array( "resolve" ) );
 
-        $content = $this->buildTestContent();
+        list( $content, $contentType ) = $this->buildTestObjects();
 
         $serviceMock->expects(
             $this->once()
@@ -40,14 +39,14 @@ class NameSchemaTest extends BaseServiceMockTest
             "resolve"
         )->with(
             "<urlalias_schema>",
-            $this->equalTo( $content->contentType ),
+            $this->equalTo( $contentType ),
             $this->equalTo( $content->fields ),
             $this->equalTo( $content->versionInfo->languageCodes )
         )->will(
             $this->returnValue( 42 )
         );
 
-        $result = $serviceMock->resolveUrlAliasSchema( $content );
+        $result = $serviceMock->resolveUrlAliasSchema( $content, $contentType );
 
         self::assertEquals( 42, $result );
     }
@@ -60,7 +59,7 @@ class NameSchemaTest extends BaseServiceMockTest
     {
         $serviceMock = $this->getPartlyMockedNameSchemaService( array( "resolve" ) );
 
-        $content = $this->buildTestContent( "<name_schema>", "" );
+        list( $content, $contentType ) = $this->buildTestObjects( "<name_schema>", "" );
 
         $serviceMock->expects(
             $this->once()
@@ -68,14 +67,14 @@ class NameSchemaTest extends BaseServiceMockTest
             "resolve"
         )->with(
             "<name_schema>",
-            $this->equalTo( $content->contentType ),
+            $this->equalTo( $contentType ),
             $this->equalTo( $content->fields ),
             $this->equalTo( $content->versionInfo->languageCodes )
         )->will(
             $this->returnValue( 42 )
         );
 
-        $result = $serviceMock->resolveUrlAliasSchema( $content );
+        $result = $serviceMock->resolveUrlAliasSchema( $content, $contentType );
 
         self::assertEquals( 42, $result );
     }
@@ -88,7 +87,7 @@ class NameSchemaTest extends BaseServiceMockTest
     {
         $serviceMock = $this->getPartlyMockedNameSchemaService( array( "resolve" ) );
 
-        $content = $this->buildTestContent();
+        list( $content, $contentType ) = $this->buildTestObjects();
 
         $serviceMock->expects(
             $this->once()
@@ -96,14 +95,14 @@ class NameSchemaTest extends BaseServiceMockTest
             "resolve"
         )->with(
             "<name_schema>",
-            $this->equalTo( $content->contentType ),
+            $this->equalTo( $contentType ),
             $this->equalTo( $content->fields ),
             $this->equalTo( $content->versionInfo->languageCodes )
         )->will(
             $this->returnValue( 42 )
         );
 
-        $result = $serviceMock->resolveNameSchema( $content );
+        $result = $serviceMock->resolveNameSchema( $content, array(), array(), $contentType );
 
         self::assertEquals( 42, $result );
     }
@@ -116,7 +115,8 @@ class NameSchemaTest extends BaseServiceMockTest
     {
         $serviceMock = $this->getPartlyMockedNameSchemaService( array( "resolve" ) );
 
-        $content = $this->buildTestContent();
+        list( $content, $contentType ) = $this->buildTestObjects();
+
         $fields = array();
         $fields["text3"]["cro-HR"] = new TextLineValue( "tri" );
         $fields["text1"]["ger-DE"] = new TextLineValue( "ein" );
@@ -136,14 +136,14 @@ class NameSchemaTest extends BaseServiceMockTest
             "resolve"
         )->with(
             "<name_schema>",
-            $this->equalTo( $content->contentType ),
+            $this->equalTo( $contentType ),
             $this->equalTo( $mergedFields ),
             $this->equalTo( $languages )
         )->will(
             $this->returnValue( 42 )
         );
 
-        $result = $serviceMock->resolveNameSchema( $content, $fields, $languages );
+        $result = $serviceMock->resolveNameSchema( $content, $fields, $languages, $contentType );
 
         self::assertEquals( 42, $result );
     }
@@ -234,8 +234,18 @@ class NameSchemaTest extends BaseServiceMockTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    protected function buildTestContent( $nameSchema = "<name_schema>", $urlAliasSchema = "<urlalias_schema>" )
+    protected function buildTestObjects( $nameSchema = "<name_schema>", $urlAliasSchema = "<urlalias_schema>" )
     {
+        $content = new Content(
+            array(
+                "internalFields" => $this->getFields(),
+                "versionInfo" => new VersionInfo(
+                    array(
+                        "languageCodes" => array( "eng-GB", "cro-HR" )
+                    )
+                )
+            )
+        );
         $contentType = new ContentType(
             array(
                 "nameSchema" => $nameSchema,
@@ -243,24 +253,8 @@ class NameSchemaTest extends BaseServiceMockTest
                 "fieldDefinitions" => $this->getFieldDefinitions()
             )
         );
-        $contentInfo = new ContentInfo(
-            array(
-                "contentType" => $contentType
-            )
-        );
-        $versionInfo = new VersionInfo(
-            array(
-                "contentInfo" => $contentInfo,
-                "languageCodes" => array( "eng-GB", "cro-HR" )
-            )
-        );
 
-        return new Content(
-            array(
-                "internalFields" => $this->getFields(),
-                "versionInfo" => $versionInfo
-            )
-        );
+        return array( $content, $contentType );
     }
 
     /**

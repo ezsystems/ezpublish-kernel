@@ -2,7 +2,7 @@
 /**
  * File containing the StorageGateway base class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -22,10 +22,7 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
  * context provided by the SPI.
  *
  * The method {@link getGateway()} is used in derived classes to retrieve the
- * correct gateway implementation, based on the context. The method {@link
- * getPersistenceHandler()} can be used to retrieve the SPI persistence
- * handler. It is encouraged, to use this object to retrieve any eZ Publish
- * internal data objects, in order to allow caching.
+ * correct gateway implementation, based on the context.
  */
 abstract class GatewayBasedStorage implements FieldStorage
 {

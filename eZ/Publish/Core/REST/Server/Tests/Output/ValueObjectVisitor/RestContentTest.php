@@ -2,7 +2,7 @@
 /**
  * File containing a test class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -15,6 +15,7 @@ use eZ\Publish\Core\REST\Server\Values\RestContent;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values;
 use eZ\Publish\Core\REST\Common;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class RestContentTest extends ValueObjectVisitorBaseTest
 {
@@ -52,7 +53,7 @@ class RestContentTest extends ValueObjectVisitorBaseTest
     protected function getBasicRestContent()
     {
         return new RestContent(
-            new Values\Content\ContentInfo(
+            new ContentInfo(
                 array(
                     'id' => 'content23',
                     'name' => 'Sindelfingen',
@@ -66,12 +67,7 @@ class RestContentTest extends ValueObjectVisitorBaseTest
                     'remoteId' => 'abc123',
                     'mainLanguageCode' => 'eng-US',
                     'mainLocationId' => 'location23',
-                    'contentType' => new Values\ContentType\ContentType(
-                        array(
-                            'id' => 'contentType23',
-                            'fieldDefinitions' => array(),
-                        )
-                    )
+                    'contentTypeId' => 'contentType23',
                 )
             ),
             new Values\Content\Location(
@@ -320,6 +316,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
             )
         );
         $restContent->relations = array();
+        $restContent->contentType = $this->getMockForAbstractClass(
+            "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType"
+        );
 
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'visitValueObject' )
