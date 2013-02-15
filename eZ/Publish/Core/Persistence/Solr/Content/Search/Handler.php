@@ -194,6 +194,13 @@ class Handler extends BaseSearchHandler
     protected function mapContent( Content $content )
     {
         $locations = $this->locationHandler->loadLocationsByContent( $content->versionInfo->contentInfo->id );
+        $mainLocation = null;
+        foreach ( $locations as $location )
+        {
+            if ( $location->id == $content->versionInfo->contentInfo->mainLocationId )
+                $mainLocation = $location;
+        }
+
         $document = array(
             new Field(
                 'id',
@@ -306,6 +313,40 @@ class Handler extends BaseSearchHandler
                 new FieldType\StringField()
             ),
         );
+
+        if ( $mainLocation !== null )
+        {
+            $document[] = new Field(
+                'main_location',
+                $mainLocation->id,
+                new FieldType\IdentifierField()
+            );
+            $document[] = new Field(
+                'main_location_parent',
+                $mainLocation->parentId,
+                new FieldType\IdentifierField()
+            );
+            $document[] = new Field(
+                'main_location_remote_id',
+                $mainLocation->remoteId,
+                new FieldType\IdentifierField()
+            );
+            $document[] = new Field(
+                'main_path',
+                $mainLocation->pathString,
+                new FieldType\IdentifierField()
+            );
+            $document[] = new Field(
+                'main_depth',
+                $mainLocation->depth,
+                new FieldType\IntegerField()
+            );
+            $document[] = new Field(
+                'main_priority',
+                $mainLocation->priority,
+                new FieldType\IntegerField()
+            );
+        }
 
         $contentType = $this->contentTypeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
         $document[] = new Field(
