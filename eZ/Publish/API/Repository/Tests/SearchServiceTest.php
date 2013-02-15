@@ -571,6 +571,7 @@ class SearchServiceTest extends BaseTest
                 $fixtureDir . 'SortMultiple.php',
             ),
             array(
+            // FIXME: this test is not relevant since all priorities are "0"
                 new Query(
                     array(
                         'criterion'   => new Criterion\SectionId( array( 2 ) ),
@@ -583,6 +584,18 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . 'SortDesc.php',
+                // Result having the same sort level should be sorted between them to be system independent
+                // Update when above FIXME has been resolved.
+                function ( &$data )
+                {
+                    usort(
+                        $data->searchHits,
+                        function ( $a, $b )
+                        {
+                            return ( $a->valueObject["id"] < $b->valueObject["id"] ) ? -1 : 1;
+                        }
+                    );
+                },
             ),
             array(
                 new Query(
