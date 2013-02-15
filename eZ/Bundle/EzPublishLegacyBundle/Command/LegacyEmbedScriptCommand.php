@@ -57,6 +57,8 @@ EOT
             array_shift( $GLOBALS['argv'] );
         }
 
+        $output->writeln( "<comment>Running script '$legacyScript' in eZ Publish legacy context</comment>" );
+
         /** @var $legacyCLIHandlerClosure \Closure */
         $legacyCLIHandlerClosure = $this->container->get( 'ezpublish_legacy.kernel_handler.cli' );
         /** @var $legacyKernelClosure \Closure */
