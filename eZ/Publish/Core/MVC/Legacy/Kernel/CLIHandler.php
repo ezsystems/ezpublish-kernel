@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\MVC\Legacy\Kernel;
 use ezpKernelHandler;
 use eZScript;
 use eZINI;
+use ezpSessionHandlerSymfony;
+use eZSession;
 use RuntimeException;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -27,6 +29,8 @@ class CLIHandler implements ezpKernelHandler
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
     protected $container;
+
+    protected $sessionSettings;
 
     /**
      * Legacy script to run.
@@ -63,6 +67,11 @@ class CLIHandler implements ezpKernelHandler
             unset( $settings['injected-settings'] );
         }
 
+        if ( isset( $settings['session'] ) )
+        {
+            $this->sessionSettings = $settings['session'];
+        }
+
         $this->script = eZScript::instance( $settings );
         $this->script->startup();
         if ( isset( $siteAccess ) )
@@ -82,7 +91,24 @@ class CLIHandler implements ezpKernelHandler
         if ( !file_exists( $this->embeddedScript ) )
             throw new RuntimeException( 'Passed legacy script does not exist. Please provide the correct script path, relative to the legacy root.' );
 
+        $this->sessionInit();
+        $argv = $_SERVER['argv'];
         include $this->embeddedScript;
+    }
+
+    private function sessionInit()
+    {
+        $sfHandler = new ezpSessionHandlerSymfony(
+            $this->sessionSettings['has_previous']
+            || $this->sessionSettings['started']
+        );
+        $sfHandler->setStorage( $this->sessionSettings['storage'] );
+        eZSession::init(
+            $this->sessionSettings['name'],
+            $this->sessionSettings['started'],
+            $this->sessionSettings['namespace'],
+            $sfHandler
+        );
     }
 
     /**
