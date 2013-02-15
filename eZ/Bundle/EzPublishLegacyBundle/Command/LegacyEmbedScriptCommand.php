@@ -30,6 +30,7 @@ class LegacyEmbedScriptCommand extends ContainerAwareCommand
         $this
             ->setName( 'ezpublish:legacy:script' )
             ->addArgument( 'script', InputArgument::REQUIRED, 'Path to legacy script you want to run. Path must be relative to the legacy root' )
+            ->addOption( 'legacy-help', null, InputOption::VALUE_NONE, 'Use this option if you want to display help for the legacy script' )
             ->setDescription( 'Runs an eZ Publish legacy script.' )
             ->setHelp(
                 <<<EOT
@@ -55,6 +56,12 @@ EOT
 
             array_shift( $_SERVER['argv'] );
             array_shift( $GLOBALS['argv'] );
+        }
+
+        if ( $input->getOption( 'legacy-help' ) )
+        {
+            $_SERVER['argv'][] = '--help';
+            $GLOBALS['argv'][] = '--help';
         }
 
         $output->writeln( "<comment>Running script '$legacyScript' in eZ Publish legacy context</comment>" );
