@@ -2,7 +2,7 @@
 /**
  * File containing the View\Provider\Location class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -14,6 +14,8 @@ use eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProviderIn
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZModule;
+use ezjscPacker;
+use eZINI;
 use Symfony\Component\HttpFoundation\Request;
 
 class Location extends Provider implements LocationViewProviderInterface
@@ -41,11 +43,12 @@ class Location extends Provider implements LocationViewProviderInterface
     {
         $legacyKernel = $this->getLegacyKernel();
         $logger = $this->logger;
+        $legacyHelper = $this->legacyHelper;
         $viewParameters = array();
         if ( isset( $this->request ) )
             $viewParameters = $this->request->attributes->get( 'viewParameters', array() );
 
-        $legacyContentClosure = function ( array $params ) use ( $location, $viewType, $legacyKernel, $logger, $viewParameters )
+        $legacyContentClosure = function ( array $params ) use ( $location, $viewType, $legacyKernel, $logger, $legacyHelper, $viewParameters )
         {
             // Additional parameters (aka user parameters in legacy) are expected to be scalar
             foreach ( $params as $paramName => $param )
@@ -66,7 +69,7 @@ class Location extends Provider implements LocationViewProviderInterface
             $params += $viewParameters;
 
             return $legacyKernel->runCallback(
-                function () use ( $location, $viewType, $params )
+                function () use ( $location, $viewType, $params, $legacyHelper )
                 {
                     $contentViewModule = eZModule::findModule( 'content' );
                     $moduleResult = $contentViewModule->run(
@@ -75,7 +78,57 @@ class Location extends Provider implements LocationViewProviderInterface
                         false,
                         $params
                     );
-                    // @todo: What about persistent variable & css/js added from ezjscore ? We ideally want to handle that as well
+
+                    // Injecting all $moduleResult entries in the legacy helper
+                    foreach ( $moduleResult as $key => $val )
+                    {
+                        if ( $key === 'content' )
+                            continue;
+
+                        $legacyHelper->set( $key, $val );
+                    }
+
+                    // Javascript/CSS files required with ezcss_require/ezscript_require
+                    // Compression level is forced to 0 to only get the files list
+                    if ( isset( $moduleResult['content_info']['persistent_variable']['css_files'] ) )
+                    {
+                        $legacyHelper->set(
+                            'css_files',
+                            ezjscPacker::buildStylesheetFiles(
+                                $moduleResult['content_info']['persistent_variable']['css_files'],
+                                0
+                            )
+                        );
+                    }
+                    if ( isset( $moduleResult['content_info']['persistent_variable']['js_files'] ) )
+                    {
+                        $legacyHelper->set(
+                            'js_files',
+                            ezjscPacker::buildJavascriptFiles(
+                                $moduleResult['content_info']['persistent_variable']['js_files'],
+                                0
+                            )
+                        );
+                    }
+
+                    // Now getting configured JS/CSS files, in design.ini
+                    // Will only take FrontendCSSFileList/FrontendJavascriptList
+                    $designINI = eZINI::instance( 'design.ini' );
+                    $legacyHelper->set(
+                        'css_files_configured',
+                        ezjscPacker::buildStylesheetFiles(
+                            $designINI->variable( 'StylesheetSettings', 'FrontendCSSFileList' ),
+                            0
+                        )
+                    );
+                    $legacyHelper->set(
+                        'js_files_configured',
+                        ezjscPacker::buildJavascriptFiles(
+                            $designINI->variable( 'JavaScriptSettings', 'FrontendJavaScriptList' ),
+                            0
+                        )
+                    );
+
                     return $moduleResult['content'];
                 },
                 false

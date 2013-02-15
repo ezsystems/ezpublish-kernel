@@ -2,7 +2,7 @@
 /**
  * File containing the User Handler interface
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -108,16 +108,6 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\User\Role[]
      */
     public function loadRoles();
-
-    /**
-     * Loads roles assigned to a user/group (not including inherited roles)
-     *
-     * @param mixed $groupId
-     *              In legacy storage engine this is the content object id a role is assigned to.
-     *              By the nature of legacy storage engine, it is therefor possible to use $userId as well here.
-     * @return \eZ\Publish\SPI\Persistence\User\Role[]
-     */
-    public function loadRolesByGroupId( $groupId );
 
     /**
      * Loads roles assignments Role

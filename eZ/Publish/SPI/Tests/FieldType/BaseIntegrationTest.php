@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\SPI\Tests\FieldType\BaseIntegrationTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -15,6 +15,7 @@ use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
+use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 
@@ -530,6 +531,11 @@ abstract class BaseIntegrationTest extends TestCase
     {
         return new Legacy\Handler(
             self::$setUp,
+            new FieldTypeRegistry(
+                array(
+                    'ezstring' => new \eZ\Publish\Core\FieldType\TextLine\Type(),
+                )
+            ),
             new ConverterRegistry(
                 array(
                     'ezstring' => new Legacy\Content\FieldValue\Converter\TextLine(),

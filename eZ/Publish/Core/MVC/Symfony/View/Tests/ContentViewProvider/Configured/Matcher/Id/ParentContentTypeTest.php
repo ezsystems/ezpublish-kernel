@@ -2,7 +2,7 @@
 /**
  * File containing the ParentContentTypeTest class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -27,7 +27,7 @@ class ParentContentTypeTest extends BaseTest
     }
 
     /**
-     * Returns a Repository mock configured to return the appropriate Section object with given section identifier
+     * Returns a Repository mock configured to return the appropriate ContentType object with given id.
      *
      * @param int $contentTypeId
      *
@@ -35,21 +35,7 @@ class ParentContentTypeTest extends BaseTest
      */
     private function generateRepositoryMockForContentTypeId( $contentTypeId )
     {
-        $parentContentInfo = $this->getContentInfoMock();
-        $parentContentInfo->expects( $this->once() )
-            ->method( 'getContentType' )
-            ->will(
-                $this->returnValue(
-                    $this
-                        ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' )
-                        ->setConstructorArgs(
-                            array(
-                                array( 'id' => $contentTypeId )
-                            )
-                        )
-                        ->getMockForAbstractClass()
-                )
-            );
+        $parentContentInfo = $this->getContentInfoMock( array( "contentTypeId" => $contentTypeId ) );
         $parentLocation = $this->getLocationMock();
         $parentLocation->expects( $this->once() )
             ->method( 'getContentInfo' )

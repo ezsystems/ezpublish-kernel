@@ -128,7 +128,8 @@ CREATE TABLE ezcontentclass (
   url_alias_name varchar(255) default NULL,
   version int(11) NOT NULL default '0',
   PRIMARY KEY  (id,version),
-  KEY ezcontentclass_version (version)
+  KEY ezcontentclass_version (version),
+  KEY ezcontentclass_identifier (identifier, version)
 ) ENGINE=InnoDB;
 
 
@@ -255,9 +256,7 @@ CREATE TABLE ezcontentobject_attribute (
   sort_key_string varchar(255) NOT NULL default '',
   version int(11) NOT NULL default '0',
   PRIMARY KEY  (id,version),
-  KEY ezcontentobject_attr_id (id),
   KEY ezcontentobject_attribute_co_id_ver_lang_code (contentobject_id,version,language_code),
-  KEY ezcontentobject_attribute_contentobject_id (contentobject_id),
   KEY ezcontentobject_attribute_language_code (language_code),
   KEY sort_key_int (sort_key_int),
   KEY sort_key_string (sort_key_string)
@@ -294,7 +293,6 @@ CREATE TABLE ezcontentobject_name (
   name varchar(255) default NULL,
   real_translation varchar(20) default NULL,
   PRIMARY KEY  (contentobject_id,content_version,content_translation),
-  KEY ezcontentobject_name_co_id (contentobject_id),
   KEY ezcontentobject_name_cov_id (content_version),
   KEY ezcontentobject_name_lang_id (language_id),
   KEY ezcontentobject_name_name (name)
@@ -353,6 +351,7 @@ CREATE TABLE ezcontentobject_tree (
   sort_field int(11) default '1',
   sort_order int(11) default '1',
   PRIMARY KEY  (node_id),
+  KEY ezcontentobject_tree_remote_id (remote_id),
   KEY ezcontentobject_tree_co_id (contentobject_id),
   KEY ezcontentobject_tree_depth (depth),
   KEY ezcontentobject_tree_p_node_id (parent_node_id),
@@ -381,7 +380,8 @@ CREATE TABLE ezcontentobject_version (
   PRIMARY KEY  (id),
   KEY ezcobj_version_creator_id (creator_id),
   KEY ezcobj_version_status (status),
-  KEY idx_object_version_objver (contentobject_id,version)
+  KEY idx_object_version_objver (contentobject_id,version),
+  KEY ezcontentobject_version_object_status (contentobject_id, status)
 ) ENGINE=InnoDB;
 
 
@@ -401,7 +401,6 @@ CREATE TABLE eznode_assignment (
   sort_field int(11) default '1',
   sort_order int(11) default '1',
   PRIMARY KEY  (id),
-  KEY eznode_assignment_co_id (contentobject_id),
   KEY eznode_assignment_co_version (contentobject_version),
   KEY eznode_assignment_coid_cov (contentobject_id,contentobject_version),
   KEY eznode_assignment_is_main (is_main),
@@ -420,7 +419,8 @@ CREATE TABLE ezpolicy (
   original_id int(11) NOT NULL default '0',
   role_id int(11) default NULL,
   PRIMARY KEY  (id),
-  KEY ezpolicy_original_id (original_id)
+  KEY ezpolicy_original_id (original_id),
+  KEY ezpolicy_role_id (role_id)
 ) ENGINE=InnoDB;
 
 
@@ -446,7 +446,8 @@ CREATE TABLE ezpolicy_limitation_value (
   limitation_id int(11) default NULL,
   value varchar(255) default NULL,
   PRIMARY KEY  (id),
-  KEY ezpolicy_limitation_value_val (value)
+  KEY ezpolicy_limitation_value_val (value),
+  KEY ezpolicy_limitation_value_limitation_id (limitation_id)
 ) ENGINE=InnoDB;
 
 
@@ -535,13 +536,10 @@ CREATE TABLE ezurlalias_ml (
   text_md5 varchar(32) NOT NULL default '',
   PRIMARY KEY  (parent,text_md5),
   KEY ezurlalias_ml_act_org (action(32),is_original),
-  KEY ezurlalias_ml_action (action(32),id,link),
-  KEY ezurlalias_ml_actt (action_type),
   KEY ezurlalias_ml_actt_org_al (action_type,is_original,is_alias),
   KEY ezurlalias_ml_id (id),
-  KEY ezurlalias_ml_par_act_id_lnk (parent,action(32),id,link),
-  KEY ezurlalias_ml_par_lnk_txt (parent,link,text(32)),
-  KEY ezurlalias_ml_par_txt (parent,text(32)),
+  KEY ezurlalias_ml_par_act_id_lnk (action(32),id,link,parent),
+  KEY ezurlalias_ml_par_lnk_txt (parent,text(32),link),
   KEY ezurlalias_ml_text (text(32),id,link),
   KEY ezurlalias_ml_text_lang (text(32),lang_mask,parent)
 ) ENGINE=InnoDB;
@@ -699,8 +697,7 @@ CREATE TABLE `ezkeyword` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `keyword` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `ezkeyword_keyword` (`keyword`),
-  KEY `ezkeyword_keyword_id` (`keyword`,`id`)
+  KEY `ezkeyword_keyword` (`keyword`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `ezkeyword_attribute_link`;
@@ -709,7 +706,6 @@ CREATE TABLE `ezkeyword_attribute_link` (
   `keyword_id` int(11) NOT NULL DEFAULT '0',
   `objectattribute_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `ezkeyword_attr_link_keyword_id` (`keyword_id`),
   KEY `ezkeyword_attr_link_kid_oaid` (`keyword_id`,`objectattribute_id`),
   KEY `ezkeyword_attr_link_oaid` (`objectattribute_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

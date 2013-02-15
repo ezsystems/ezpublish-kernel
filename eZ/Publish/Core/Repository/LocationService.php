@@ -2,7 +2,7 @@
 /**
  * File containing the eZ\Publish\Core\Repository\LocationService class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  * @package eZ\Publish\Core\Repository
@@ -12,9 +12,8 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\Content\Location;
-use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
@@ -235,7 +234,7 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[] An array of {@link Location}
      */
-    public function loadLocations( APIContentInfo $contentInfo, APILocation $rootLocation = null )
+    public function loadLocations( ContentInfo $contentInfo, APILocation $rootLocation = null )
     {
         if ( !is_numeric( $contentInfo->id ) )
         {
@@ -401,7 +400,7 @@ class LocationService implements LocationServiceInterface
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created Location
      *
      */
-    public function createLocation( APIContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
+    public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
     {
         if ( !is_numeric( $contentInfo->id ) )
             throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
@@ -877,13 +876,7 @@ class LocationService implements LocationServiceInterface
                     'name' => 'Top Level Nodes',
                     'sectionId' => 1,
                     'mainLocationId' => 1,
-                    'contentType' => new ContentType(
-                        array(
-                            'identifier' => 'folder',
-                            'isContainer' => true,
-                            'fieldDefinitions' => array()
-                        )
-                    )
+                    'contentTypeId' => 1,
                 )
             );
         else // @todo This should not be loaded separately, SPI need to change to fix this.

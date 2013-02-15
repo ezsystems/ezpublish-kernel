@@ -2,7 +2,7 @@
 /**
  * File containing the User controller class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -16,6 +16,7 @@ use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\RoleService;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\SectionService;
@@ -57,6 +58,13 @@ class User extends RestController
     protected $contentService;
 
     /**
+     * Content service
+     *
+     * @var \eZ\Publish\API\Repository\ContentTypeService
+     */
+    protected $contentTypeService;
+
+    /**
      * Location service
      *
      * @var \eZ\Publish\API\Repository\LocationService
@@ -91,6 +99,7 @@ class User extends RestController
         UserService $userService,
         RoleService $roleService,
         ContentService $contentService,
+        ContentTypeService $contentTypeService,
         LocationService $locationService,
         SectionService $sectionService,
         Repository $repository )
@@ -98,6 +107,7 @@ class User extends RestController
         $this->userService = $userService;
         $this->roleService = $roleService;
         $this->contentService = $contentService;
+        $this->contentTypeService = $contentTypeService;
         $this->locationService = $locationService;
         $this->sectionService = $sectionService;
         $this->repository = $repository;
@@ -132,10 +142,13 @@ class User extends RestController
         $userGroup = $this->userService->loadUserGroup(
             $userGroupLocation->contentId
         );
+        $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
+        $contentType = $this->contentTypeService->loadContentType( $userGroupContentInfo->contentTypeId );
 
         return new Values\RestUserGroup(
             $userGroup,
-            $userGroup->getVersionInfo()->getContentInfo(),
+            $contentType,
+            $userGroupContentInfo,
             $userGroupLocation,
             $this->contentService->loadRelations( $userGroup->getVersionInfo() )
         );
@@ -156,9 +169,11 @@ class User extends RestController
 
         $userContentInfo = $user->getVersionInfo()->getContentInfo();
         $userMainLocation = $this->locationService->loadLocation( $userContentInfo->mainLocationId );
+        $contentType = $this->contentTypeService->loadContentType( $userContentInfo->contentTypeId );
 
         return new Values\RestUser(
             $user,
+            $contentType,
             $userContentInfo,
             $userMainLocation,
             $this->contentService->loadRelations( $user->getVersionInfo() )
@@ -210,10 +225,13 @@ class User extends RestController
 
         $createdContentInfo = $createdUserGroup->getVersionInfo()->getContentInfo();
         $createdLocation = $this->locationService->loadLocation( $createdContentInfo->mainLocationId );
+        $contentType = $this->contentTypeService->loadContentType( $createdContentInfo->contentTypeId );
+
         return new Values\CreatedUserGroup(
             array(
                 'userGroup' => new Values\RestUserGroup(
                     $createdUserGroup,
+                    $contentType,
                     $createdContentInfo,
                     $createdLocation,
                     $this->contentService->loadRelations( $createdUserGroup->getVersionInfo() )
@@ -254,10 +272,13 @@ class User extends RestController
 
         $createdContentInfo = $createdUser->getVersionInfo()->getContentInfo();
         $createdLocation = $this->locationService->loadLocation( $createdContentInfo->mainLocationId );
+        $contentType = $this->contentTypeService->loadContentType( $createdContentInfo->contentTypeId );
+
         return new Values\CreatedUser(
             array(
                 'user' => new Values\RestUser(
                     $createdUser,
+                    $contentType,
                     $createdContentInfo,
                     $createdLocation,
                     $this->contentService->loadRelations( $createdUser->getVersionInfo() )
@@ -304,9 +325,13 @@ class User extends RestController
         }
 
         $updatedGroup = $this->userService->updateUserGroup( $userGroup, $updateStruct->userGroupUpdateStruct );
+        $contentType = $this->contentTypeService->loadContentType(
+            $updatedGroup->getVersionInfo()->getContentInfo()->contentTypeId
+        );
 
         return new Values\RestUserGroup(
             $updatedGroup,
+            $contentType,
             $updatedGroup->getVersionInfo()->getContentInfo(),
             $userGroupLocation,
             $this->contentService->loadRelations( $updatedGroup->getVersionInfo() )
@@ -347,9 +372,11 @@ class User extends RestController
         $updatedUser = $this->userService->updateUser( $user, $updateStruct->userUpdateStruct );
         $updatedContentInfo = $updatedUser->getVersionInfo()->getContentInfo();
         $mainLocation = $this->locationService->loadLocation( $updatedContentInfo->mainLocationId );
+        $contentType = $this->contentTypeService->loadContentType( $updatedContentInfo->contentTypeId );
 
         return new Values\RestUser(
             $updatedUser,
+            $contentType,
             $updatedContentInfo,
             $mainLocation,
             $this->contentService->loadRelations( $updatedUser->getVersionInfo() )
@@ -445,9 +472,11 @@ class User extends RestController
         $contentInfo = $this->contentService->loadContentInfoByRemoteId( $this->request->variables['remoteId'] );
         $user = $this->userService->loadUser( $contentInfo->id );
         $userLocation = $this->locationService->loadLocation( $contentInfo->mainLocationId );
+        $contentType = $this->contentTypeService->loadContentType( $contentInfo->contentTypeId );
 
         return new Values\RestUser(
             $user,
+            $contentType,
             $contentInfo,
             $userLocation,
             $this->contentService->loadRelations( $user->getVersionInfo() )
@@ -475,9 +504,11 @@ class User extends RestController
                 $user = $roleAssignment->getUser();
                 $userContentInfo = $user->getVersionInfo()->getContentInfo();
                 $userLocation = $this->locationService->loadLocation( $userContentInfo->mainLocationId );
+                $contentType = $this->contentTypeService->loadContentType( $userContentInfo->contentTypeId );
 
                 $restUsers[] = new Values\RestUser(
                     $user,
+                    $contentType,
                     $userContentInfo,
                     $userLocation,
                     $this->contentService->loadRelations( $user->getVersionInfo() )
@@ -501,10 +532,12 @@ class User extends RestController
             $userGroup = $this->userService->loadUserGroup( $this->request->variables['id'] );
             $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
             $userGroupMainLocation = $this->locationService->loadLocation( $userGroupContentInfo->mainLocationId );
+            $contentType = $this->contentTypeService->loadContentType( $userGroupContentInfo->contentTypeId );
 
             $restUserGroups = array(
                 new Values\RestUserGroup(
                     $userGroup,
+                    $contentType,
                     $userGroupContentInfo,
                     $userGroupMainLocation,
                     $this->contentService->loadRelations( $userGroup->getVersionInfo() )
@@ -540,9 +573,11 @@ class User extends RestController
         $contentInfo = $this->contentService->loadContentInfoByRemoteId( $this->request->variables['remoteId'] );
         $userGroup = $this->userService->loadUserGroup( $contentInfo->id );
         $userGroupLocation = $this->locationService->loadLocation( $contentInfo->mainLocationId );
+        $contentType = $this->contentTypeService->loadContentType( $contentInfo->contentTypeId );
 
         return new Values\RestUserGroup(
             $userGroup,
+            $contentType,
             $contentInfo,
             $userGroupLocation,
             $this->contentService->loadRelations( $userGroup->getVersionInfo() )
@@ -570,9 +605,11 @@ class User extends RestController
                 $userGroup = $roleAssignment->getUserGroup();
                 $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
                 $userGroupLocation = $this->locationService->loadLocation( $userGroupContentInfo->mainLocationId );
+                $contentType = $this->contentTypeService->loadContentType( $userGroupContentInfo->contentTypeId );
 
                 $restUserGroups[] = new Values\RestUserGroup(
                     $userGroup,
+                    $contentType,
                     $userGroupContentInfo,
                     $userGroupLocation,
                     $this->contentService->loadRelations( $userGroup->getVersionInfo() )
@@ -674,8 +711,11 @@ class User extends RestController
         {
             $subGroupContentInfo = $subGroup->getVersionInfo()->getContentInfo();
             $subGroupLocation = $this->locationService->loadLocation( $subGroupContentInfo->mainLocationId );
+            $contentType = $this->contentTypeService->loadContentType( $subGroupContentInfo->contentTypeId );
+
             $restUserGroups[] = new Values\RestUserGroup(
                 $subGroup,
+                $contentType,
                 $subGroupContentInfo,
                 $subGroupLocation,
                 $this->contentService->loadRelations( $subGroup->getVersionInfo() )
@@ -709,8 +749,11 @@ class User extends RestController
         {
             $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
             $userGroupLocation = $this->locationService->loadLocation( $userGroupContentInfo->mainLocationId );
+            $contentType = $this->contentTypeService->loadContentType( $userGroupContentInfo->contentTypeId );
+
             $restUserGroups[] = new Values\RestUserGroup(
                 $userGroup,
+                $contentType,
                 $userGroupContentInfo,
                 $userGroupLocation,
                 $this->contentService->loadRelations( $userGroup->getVersionInfo() )
@@ -754,8 +797,11 @@ class User extends RestController
         {
             $userContentInfo = $user->getVersionInfo()->getContentInfo();
             $userLocation = $this->locationService->loadLocation( $userContentInfo->mainLocationId );
+            $contentType = $this->contentTypeService->loadContentType( $userContentInfo->contentTypeId );
+
             $restUsers[] = new Values\RestUser(
                 $user,
+                $contentType,
                 $userContentInfo,
                 $userLocation,
                 $this->contentService->loadRelations( $user->getVersionInfo() )
@@ -802,8 +848,11 @@ class User extends RestController
         {
             $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
             $userGroupLocation = $this->locationService->loadLocation( $userGroupContentInfo->mainLocationId );
+            $contentType = $this->contentTypeService->loadContentType( $userGroupContentInfo->contentTypeId );
+
             $restUserGroups[] = new Values\RestUserGroup(
                 $userGroup,
+                $contentType,
                 $userGroupContentInfo,
                 $userGroupLocation,
                 $this->contentService->loadRelations( $userGroup->getVersionInfo() )
@@ -865,8 +914,11 @@ class User extends RestController
         {
             $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
             $userGroupLocation = $this->locationService->loadLocation( $userGroupContentInfo->mainLocationId );
+            $contentType = $this->contentTypeService->loadContentType( $userGroupContentInfo->contentTypeId );
+
             $restUserGroups[] = new Values\RestUserGroup(
                 $userGroup,
+                $contentType,
                 $userGroupContentInfo,
                 $userGroupLocation,
                 $this->contentService->loadRelations( $userGroup->getVersionInfo() )

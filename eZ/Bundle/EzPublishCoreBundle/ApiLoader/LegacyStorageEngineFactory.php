@@ -2,7 +2,7 @@
 /**
  * File containing the LegacyStorageEngineFactory class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -11,12 +11,12 @@ namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
+use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LegacyStorageEngineFactory
 {
-
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
@@ -77,6 +77,9 @@ class LegacyStorageEngineFactory
         $legacyEngineClass = $this->container->getParameter( 'ezpublish.api.storage_engine.legacy.class' );
         return new $legacyEngineClass(
             $dbhandler,
+            new FieldTypeRegistry(
+                $this->container->get( 'ezpublish.api.repository.factory' )->getFieldTypes()
+            ),
             new ConverterRegistry( $this->converters ),
             new StorageRegistry(
                 $this->container->get( 'ezpublish.api.repository.factory' )->getExternalStorageHandlers()

@@ -2,7 +2,7 @@
 /**
  * File containing the EzcDatabase subtree criterion handler class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -32,7 +32,9 @@ class Subtree extends CriterionHandler
     }
 
     /**
-     * Check if this criterion handler accepts to handle the given criterion.
+     * Generate query expression for a Criterion this handler accepts
+     *
+     * accept() must be called before calling this method.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter$converter
      * @param \ezcQuerySelect $query
@@ -42,29 +44,31 @@ class Subtree extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
     {
-        $subSelect = $query->subSelect();
+        $table = $this->getUniqueTableName();
 
         $statements = array();
         foreach ( $criterion->value as $pattern )
         {
-            $statements[] = $subSelect->expr->like(
-                $this->dbHandler->quoteColumn( 'path_string', 'ezcontentobject_tree' ),
-                $subSelect->bindValue( $pattern . '%' )
+            $statements[] = $query->expr->like(
+                $this->dbHandler->quoteColumn( 'path_string', $table ),
+                $query->bindValue( $pattern . '%' )
             );
         }
 
-        $subSelect
-            ->select(
-                $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' )
-            )->from(
-                $this->dbHandler->quoteTable( 'ezcontentobject_tree' )
-            )->where(
-                $query->expr->lOr( $statements )
+        $query
+            ->leftJoin(
+                $query->alias(
+                    $this->dbHandler->quoteTable( 'ezcontentobject_tree' ),
+                    $this->dbHandler->quoteIdentifier( $table )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentobject_id', $table ),
+                    $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' )
+                )
             );
 
-        return $query->expr->in(
-            $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
-            $subSelect
+        return $query->expr->lOr(
+            $statements
         );
     }
 }

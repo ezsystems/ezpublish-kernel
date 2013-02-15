@@ -2,7 +2,7 @@
 /**
  * File containing a test class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -15,7 +15,7 @@ use eZ\Publish\Core\Repository\Values\User\UserGroup;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\UserGroupRefList;
 use eZ\Publish\Core\REST\Server\Values\RestUserGroup;
-use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\REST\Common;
 
@@ -37,6 +37,7 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
             array(
                 new RestUserGroup(
                     new UserGroup(),
+                    $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" ),
                     new ContentInfo(),
                     new Location(
                         array(
@@ -48,6 +49,7 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
                 ),
                 new RestUserGroup(
                     new UserGroup(),
+                    $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" ),
                     new ContentInfo(),
                     new Location(
                         array(

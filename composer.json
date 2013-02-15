@@ -1,5 +1,5 @@
 {
-    "name": "ezsystems/ezpublish",
+    "name": "ezsystems/ezpublish-kernel",
     "description": "eZ Publish API and kernel. This is the heart of eZ Publish 5.",
     "version": "5.1-dev",
     "homepage": "http://share.ez.no",
@@ -24,7 +24,7 @@
         "zetacomponents/signal-slot": "dev-master",
         "zetacomponents/system-information": "dev-master",
         "zetacomponents/webdav": "1.1.3",
-        "symfony/symfony": "2.1.*",
+        "symfony/symfony": "2.2.0-RC2",
         "symfony-cmf/routing": "1.0.*",
         "qafoo/rmf": "1.0.0",
         "kriswallsmith/buzz": "dev-master"
@@ -32,6 +32,9 @@
     "require-dev": {
         "ezsystems/ezpublish-legacy": "dev-master",
         "mikey179/vfsStream": "1.1.0"
+    },
+    "replace": {
+        "ezsystems/ezpublish": "*"
     },
     "autoload": {
         "psr-0": {

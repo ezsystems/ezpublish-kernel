@@ -2,7 +2,7 @@
 /**
  * File containing the Configuration class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -68,7 +68,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode( 'default_siteaccess' )->isRequired()->info( 'Name of the default siteaccess' )->end()
                         ->arrayNode( 'match' )
-                            ->info( 'Siteaccess match configuration. First key is the matcher class, value is passed to the matcher' )
+                            ->info( 'Siteaccess match configuration. First key is the matcher class, value is passed to the matcher. Key can be a service identifier (prepended by "@"), or a FQ class name (prepended by "\\")' )
                             ->example(
                                 array(
                                     'Map\\URI' => array(
@@ -79,11 +79,18 @@ class Configuration implements ConfigurationInterface
                                     'Map\\Host' => array(
                                         'ezpublish.dev' => 'ezdemo_site',
                                         'admin.ezpublish.dev' => 'ezdemo_site_admin'
+                                    ),
+                                    '\\My\\Custom\\Matcher' => array(
+                                        'some'  => 'configuration'
+                                    ),
+                                    '@my.custom.matcher' => array(
+                                        'some' => 'other_configuration'
                                     )
                                 )
                             )
                             ->isRequired()
                             ->useAttributeAsKey( 'key' )
+                            ->normalizeKeys( false )
                             ->prototype( 'array' )
                                 ->beforeNormalization()
                                     // Value passed to the matcher should always be an array.
@@ -102,6 +109,7 @@ class Configuration implements ConfigurationInterface
                                     )
                                 ->end()
                                 ->useAttributeAsKey( 'key' )
+                                ->normalizeKeys( false )
                                 ->prototype( 'variable' )->end()
                             ->end()
                         ->end()
@@ -186,6 +194,7 @@ EOT;
                         ->arrayNode( 'filters' )
                             ->info( $filtersInfo )
                             ->example( array( 'geometry/scaledownonly' => '"-geometry {1}x{2}>"' ) )
+                            ->prototype( 'scalar' )->end()
                         ->end()
                     ->end()
                 ->end()

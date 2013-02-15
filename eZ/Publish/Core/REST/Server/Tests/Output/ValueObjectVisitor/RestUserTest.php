@@ -2,7 +2,7 @@
 /**
  * File containing a test class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -15,6 +15,7 @@ use eZ\Publish\Core\REST\Server\Values\RestUser;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values;
 use eZ\Publish\Core\REST\Common;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class RestUserTest extends ValueObjectVisitorBaseTest
 {
@@ -53,7 +54,8 @@ class RestUserTest extends ValueObjectVisitorBaseTest
     {
         return new RestUser(
             new Values\User\User(),
-            new Values\Content\ContentInfo(
+            $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" ),
+            new ContentInfo(
                 array(
                     'id' => 'content23',
                     'name' => 'Sindelfingen',
@@ -67,12 +69,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
                     'remoteId' => 'abc123',
                     'mainLanguageCode' => 'eng-US',
                     'mainLocationId' => 'location23',
-                    'contentType' => new Values\ContentType\ContentType(
-                        array(
-                            'id' => 'contentType23',
-                            'fieldDefinitions' => array(),
-                        )
-                    )
+                    'contentTypeId' => 'contentType23',
                 )
             ),
             new Values\Content\Location(

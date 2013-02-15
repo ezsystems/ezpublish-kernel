@@ -2,7 +2,7 @@
 /**
  * File containing the ParentContentTypeTest class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -35,21 +35,7 @@ class ParentContentTypeTest extends BaseTest
      */
     private function generateRepositoryMockForContentTypeIdentifier( $contentTypeIdentifier )
     {
-        $parentContentInfo = $this->getContentInfoMock();
-        $parentContentInfo->expects( $this->once() )
-            ->method( 'getContentType' )
-            ->will(
-                $this->returnValue(
-                    $this
-                        ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' )
-                        ->setConstructorArgs(
-                            array(
-                                array( 'identifier' => $contentTypeIdentifier )
-                            )
-                        )
-                        ->getMockForAbstractClass()
-                )
-            );
+        $parentContentInfo = $this->getContentInfoMock( array( "contentTypeId" => 42 ) );
         $parentLocation = $this->getLocationMock();
         $parentLocation->expects( $this->once() )
             ->method( 'getContentInfo' )
@@ -73,11 +59,35 @@ class ParentContentTypeTest extends BaseTest
                 $this->returnValue( $this->getLocationMock() )
             );
 
+        $contentTypeServiceMock = $this
+            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\ContentTypeService' )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contentTypeServiceMock->expects( $this->once() )
+            ->method( 'loadContentType' )
+            ->with( 42 )
+            ->will(
+                $this->returnValue(
+                    $this
+                        ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' )
+                        ->setConstructorArgs(
+                            array(
+                                array( 'identifier' => $contentTypeIdentifier )
+                            )
+                        )
+                        ->getMockForAbstractClass()
+                )
+            );
+
         $repository = $this->getRepositoryMock();
         $repository
             ->expects( $this->any() )
             ->method( 'getLocationService' )
             ->will( $this->returnValue( $locationServiceMock ) );
+        $repository
+            ->expects( $this->once() )
+            ->method( 'getContentTypeService' )
+            ->will( $this->returnValue( $contentTypeServiceMock ) );
 
         return $repository;
     }

@@ -2,7 +2,7 @@
 /**
  * File containing the Test Setup Factory base class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -46,7 +46,7 @@ class Legacy extends SetupFactory
      * Global settings of eZ Publish setup
      *
      * @var mixed
-     * @todo This might change, if ezp-next starts using another DI mechanism
+     * @todo This might change, if ezpublish-kernel starts using another DI mechanism
      */
     protected static $globalSettings;
 
@@ -99,6 +99,7 @@ class Legacy extends SetupFactory
             $this->insertData();
         }
 
+        $this->clearInternalCaches();
         $repository = $this->getServiceContainer()->get( 'inner_repository' );
         $repository->setCurrentUser(
             $repository->getUserService()->loadUser( 14 )
@@ -202,6 +203,20 @@ class Legacy extends SetupFactory
     }
 
     /**
+     * CLears internal in memory caches after inserting data circumventing the
+     * API.
+     *
+     * @return void
+     */
+    protected function clearInternalCaches()
+    {
+        $handler = $this->getServiceContainer()->get( 'persistence_handler_legacy' );
+
+        $handler->contentLanguageHandler()->clearCache();
+        $handler->contentTypeHandler()->clearCache();
+    }
+
+    /**
      * Returns statements to be executed after data insert
      *
      * @return string[]
@@ -289,7 +304,7 @@ class Legacy extends SetupFactory
     }
 
     /**
-     * Returns the global ezp-next settings
+     * Returns the global ezpublish-kernel settings
      *
      * @return mixed
      */

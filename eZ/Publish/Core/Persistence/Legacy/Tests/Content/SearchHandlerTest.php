@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandlerTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -12,10 +12,11 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content;
 use eZ\Publish\SPI\Persistence\Content as ContentObject;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
-use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine;
@@ -33,16 +34,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected $fieldRegistry;
-
-    /**
-     * Returns the test suite with all tests declared in this class.
-     *
-     * @return \PHPUnit_Framework_TestSuite
-     */
-    public static function suite()
-    {
-        return new \PHPUnit_Framework_TestSuite( __CLASS__ );
-    }
 
     /**
      * Only set up once for these read only tests on a large fixture
@@ -108,6 +99,9 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         new Content\Search\Gateway\CriterionHandler\ContentTypeId(
                             $this->getDatabaseHandler()
                         ),
+                        new Content\Search\Gateway\CriterionHandler\ContentTypeIdentifier(
+                            $this->getDatabaseHandler()
+                        ),
                         new Content\Search\Gateway\CriterionHandler\ContentTypeGroupId(
                             $this->getDatabaseHandler()
                         ),
@@ -165,7 +159,11 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         ),
                     )
                 ),
-                new Content\Search\Gateway\SortClauseConverter(),
+                new Content\Search\Gateway\SortClauseConverter(
+                    array(
+                        new Content\Search\Gateway\SortClauseHandler\ContentId( $this->getDatabaseHandler() ),
+                    )
+                ),
                 new QueryBuilder( $this->getDatabaseHandler() ),
                 $this->getLanguageHandler(),
                 $this->getLanguageMaskGenerator()
@@ -529,16 +527,19 @@ class SearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $expectedContentIds = array( 4, 10, 12 );
+
         $this->assertEquals(
-            array( 4, 10, 12 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            count( $expectedContentIds ),
+            count( $result->searchHits )
         );
+        foreach ( $result->searchHits as $hit )
+        {
+            $this->assertContains(
+                $hit->valueObject->versionInfo->contentInfo->id,
+                $expectedContentIds
+            );
+        }
     }
 
     /**
@@ -653,7 +654,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ContentTypeId
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
-    public function testContentTypeFilter()
+    public function testContentTypeIdFilter()
     {
         $locator = $this->getContentSearchHandler();
 
@@ -670,6 +671,38 @@ class SearchHandlerTest extends LanguageAwareTestCase
 
         $this->assertEquals(
             array( 10, 14 ),
+            array_map(
+                function ( $hit )
+                {
+                    return $hit->valueObject->versionInfo->contentInfo->id;
+                },
+                $result->searchHits
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ContentTypeIdentifier
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testContentTypeIdentifierFilter()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->findContent(
+            new Query(
+                array(
+                    'criterion' => new Criterion\ContentTypeIdentifier(
+                        'folder'
+                    ),
+                    'limit' => 5,
+                )
+            )
+        );
+
+        $this->assertEquals(
+            array( 41, 45, 49, 50, 51 ),
             array_map(
                 function ( $hit )
                 {
@@ -700,15 +733,17 @@ class SearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
-            array( 4, 11, 12, 13, 42, 225, 10, 14 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            array( 4, 10, 11, 12, 13, 14, 42, 225 ),
+            $ids
         );
     }
 
@@ -734,15 +769,17 @@ class SearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
             array( 11, 225 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            $ids
         );
     }
 
@@ -768,15 +805,17 @@ class SearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
             array( 11, 14, 225 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            $ids
         );
     }
 
@@ -802,15 +841,17 @@ class SearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
             array( 11, 14, 225 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            $ids
         );
     }
 
@@ -836,15 +877,17 @@ class SearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
             array( 11, 14, 225 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            $ids
         );
     }
 
@@ -870,15 +913,17 @@ class SearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
-            array( 131, 66, 225 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            array( 66, 131, 225 ),
+            $ids
         );
     }
 
@@ -1030,15 +1075,17 @@ class SearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 42 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            $ids
         );
     }
 
@@ -1208,15 +1255,17 @@ class SearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
             array( 11, 69, 71, 72 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            $ids
         );
     }
 
@@ -1470,19 +1519,22 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         'eng-GB'
                     ),
                     'limit' => 10,
+                    'sortClauses' => array( new SortClause\ContentId ),
                 )
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            $ids
         );
     }
 
@@ -1502,19 +1554,22 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         'eng-US', 'eng-GB'
                     ),
                     'limit' => 10,
+                    'sortClauses' => array( new SortClause\ContentId ),
                 )
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            $ids
         );
     }
 
@@ -1550,3 +1605,4 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 }
+

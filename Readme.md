@@ -1,16 +1,16 @@
 # eZ Publish 5.x Kernel
-[![Build Status](https://travis-ci.org/ezsystems/ezp-next.png?branch=master)](https://travis-ci.org/ezsystems/ezp-next)
+[![Build Status](https://travis-ci.org/ezsystems/ezpublish-kernel.png?branch=master)](https://travis-ci.org/ezsystems/ezpublish-kernel)
 
 Welcome to the new eZ Publish 5.x Kernel, this code repository contains several layers of API's and implementation of them.
 However it does not contain all parts that make up the eZ Publish 5 install, for the full eZ Publish 5 package including
-bundles, Legacy Stack, install doc and more; please see our [ezpublish5](https://github.com/ezsystems/ezpublish5) repository.
+bundles, Legacy Stack, install doc and more; please see our [ezpublish-community](https://github.com/ezsystems/ezpublish-community) repository.
 
 ## Legacy Stack (LS)
 
 Legacy Stack: Legacy kernel (4.x) + extensions
 
 eZ Publish 5.x is a bottom up rewrite of eZ Publish, so a conservative approach where taken on backwards compatibility
-by bundling both Legacy Stack (4.x) and 5.x Stack together in one integrated package (ref ezpublish5 repository above).
+by bundling both Legacy Stack (4.x) and 5.x Stack together in one integrated package (ref ezpublish-community repository above).
 
 In addition to the BC reason, the second reason is that eZ Publish 5.x does not yet provide own UI's, editor and admin
 gui is for the time being still provided by Legacy Stack.
@@ -30,7 +30,7 @@ is not the case if you point Apache directly to eZ Publish Legacy), but will avo
 ### Bundles
 The highest level in the eZ Publish 5 architecture are bundles that builds on top of everything bellow, this is where
 most eZ Publish 5 Bundles  will be written. They will exist in separate git repositories, and optionally
-defined as dependencies in your project composer.json file (see ezpublish5 repository).
+defined as dependencies in your project composer.json file (see ezpublish-community repository).
 
 ### 5.x Kernel
 
@@ -42,9 +42,9 @@ These bundles are important parts of the eZ Publish 5.x kernel.
 * Legacy Bundle: Integrations with Legacy kernel, like fallbacks and code reuse across 5.x/Legacy Stack.
 * REST Bundle: Integration of REST API to 5.x (Symfony) Stack
 
-You can find these in [eZ/Bundle](/ezsystems/ezp-next/tree/master/eZ/Bundle/) and their lower level parts in:
-* [eZ/Publish/Core/REST](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/REST/)  *The REST API implementation*
-* [eZ/Publish/Core/MVC](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/MVC/)  *MVC implementation that integrate with Symfony and Legacy*
+You can find these in [eZ/Bundle](/ezsystems/ezpublish-kernel/tree/master/eZ/Bundle/) and their lower level parts in:
+* [eZ/Publish/Core/REST](/ezsystems/ezpublish-kernel/tree/master/eZ/Publish/Core/REST/)  *The REST API implementation*
+* [eZ/Publish/Core/MVC](/ezsystems/ezpublish-kernel/tree/master/eZ/Publish/Core/MVC/)  *MVC implementation that integrate with Symfony and Legacy*
 
 
 #### Public API
@@ -58,8 +58,8 @@ performant storage engines. It is also fully backwards compatible by using the i
 stores data in the way legacy kernel is used to finding it.
 
 Important parts of this layer is:
-* [eZ/Publish/API](/ezsystems/ezp-next/tree/master/eZ/Publish/API/)  *Public API Interfaces*
-* [eZ/Publish/Core/Repository](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/Repository/)  *Public API Repository implementation*
+* [eZ/Publish/API](/ezsystems/ezpublish-kernel/tree/master/eZ/Publish/API/)  *Public API Interfaces*
+* [eZ/Publish/Core/Repository](/ezsystems/ezpublish-kernel/tree/master/eZ/Publish/Core/Repository/)  *Public API Repository implementation*
 
 #### (Private) SPI(Service Provider Interface)
 
@@ -72,10 +72,10 @@ have a fully working NoSQL implementation of Persistence and scalable IO storage
 Meaning you can make your own implementation if you want, but we don't guarantee that it will work across versions.
 
 Currently SPI consists of:
-* [eZ/Publish/SPI](/ezsystems/ezp-next/tree/master/eZ/Publish/SPI/)  *Service provider interfaces*
-* [eZ/Publish/Core/Persistence/Legacy](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/Persistence/Legacy/)  *Legacy Storage-Engine (Persistence-handler)*
-* [eZ/Publish/Core/Persistence/InMemory](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/Persistence/InMemory/)  *InMemory Storage-Engine (for unit testing)*
-* [eZ/Publish/Core/IO](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/IO/)  *IO (file) Handlers; Legacy, Dispatcher and InMemory (for unit testing)*
+* [eZ/Publish/SPI](/ezsystems/ezpublish-kernel/tree/master/eZ/Publish/SPI/)  *Service provider interfaces*
+* [eZ/Publish/Core/Persistence/Legacy](/ezsystems/ezpublish-kernel/tree/master/eZ/Publish/Core/Persistence/Legacy/)  *Legacy Storage-Engine (Persistence-handler)*
+* [eZ/Publish/Core/Persistence/InMemory](/ezsystems/ezpublish-kernel/tree/master/eZ/Publish/Core/Persistence/InMemory/)  *InMemory Storage-Engine (for unit testing)*
+* [eZ/Publish/Core/IO](/ezsystems/ezpublish-kernel/tree/master/eZ/Publish/Core/IO/)  *IO (file) Handlers; Legacy, Dispatcher and InMemory (for unit testing)*
 
 
 ## Dependencies
@@ -101,7 +101,7 @@ eZ Publish 5.x is a fully open source, community-driven project, and code contri
 Short:
 * Remember to first create a issue in our issue tracker and refer to it in commits and pull requests headers, example:
   "Fixed EZP-20104: ContentController should return error status when content is not found"
-* If you want to contribute implementation specification proposals, place them in [doc/](/ezsystems/ezp-next/tree/master/doc/) folder.
+* If you want to contribute implementation specification proposals, place them in [doc/](/ezsystems/ezpublish-kernel/tree/master/doc/) folder.
 * Keep different changes in different commits in case cherry-pick is preferred instead of a merge later.
   * A Pull Request should only cover one issue
   * A commit should not contain code changes at the some time as doing coding standards/whitespace/typo fixes

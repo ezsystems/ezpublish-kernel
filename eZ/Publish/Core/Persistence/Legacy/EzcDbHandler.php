@@ -2,7 +2,7 @@
 /**
  * File containing a wrapper for the DB handler
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -123,9 +123,9 @@ class EzcDbHandler
      */
     public function aliasedColumn( ezcQuerySelect $query, $columnName, $tableName = null )
     {
-        return $query->alias(
+        return $this->alias(
             $this->quoteColumn( $columnName, $tableName ),
-            $this->ezcDbHandler->quoteIdentifier(
+            $this->quoteIdentifier(
                 ( $tableName ? $tableName . '_' : '' ) .
                 $columnName
             )
@@ -146,7 +146,7 @@ class EzcDbHandler
         // their shortened variants here.
         return
             ( $tableName ? $this->quoteTable( $tableName ) . '.' : '' ) .
-            $this->ezcDbHandler->quoteIdentifier( $columnName );
+            $this->quoteIdentifier( $columnName );
     }
 
     /**
@@ -160,7 +160,39 @@ class EzcDbHandler
     {
         // @todo: For oracle we need a mapping of table and column names to
         // their shortened variants here.
-        return $this->ezcDbHandler->quoteIdentifier( $tableName );
+        return $this->quoteIdentifier( $tableName );
+    }
+
+    /**
+     * Custom alias method
+     *
+     * Ignores some properties of identifier quoting, but since we use somehow
+     * sane table and column names, ourselves, this is fine.
+     *
+     * This is an optimization and works around the ezcDB implementation.
+     *
+     * @param string $identifier
+     * @return string
+     */
+    public function alias( $name, $alias )
+    {
+        return $name . ' ' . $alias;
+    }
+
+    /**
+     * Custom quote identifier method
+     *
+     * Ignores some properties of identifier quoting, but since we use somehow
+     * sane table and column names, ourselves, this is fine.
+     *
+     * This is an optimization and works around the ezcDB implementation.
+     *
+     * @param string $identifier
+     * @return string
+     */
+    public function quoteIdentifier( $identifier )
+    {
+        return '`' . $identifier . '`';
     }
 
     /**

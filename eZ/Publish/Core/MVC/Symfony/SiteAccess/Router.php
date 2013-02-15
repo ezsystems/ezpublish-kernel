@@ -2,7 +2,7 @@
 /**
  * File containing the eZ\Publish\Core\MVC\Symfony\SiteAccess\Router class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException;
+use Psr\Log\LoggerInterface;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\CompoundInterface;
 
 class Router
 {
@@ -67,15 +69,29 @@ class Router
     protected $siteAccessClass;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface
+     */
+    protected $matcherBuilder;
+
+    /**
      * Constructor.
      *
+     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface $matcherBuilder
+     * @param \Psr\Log\LoggerInterface $logger
      * @param string $defaultSiteAccess
      * @param array $siteAccessesConfiguration
      * @param array $siteAccessList
-     * @param null $siteAccessClass
+     * @param string|null $siteAccessClass
      */
-    public function __construct( $defaultSiteAccess, array $siteAccessesConfiguration, array $siteAccessList, $siteAccessClass = null )
+    public function __construct( MatcherBuilderInterface $matcherBuilder, LoggerInterface $logger, $defaultSiteAccess, array $siteAccessesConfiguration, array $siteAccessList, $siteAccessClass = null )
     {
+        $this->matcherBuilder = $matcherBuilder;
+        $this->logger = $logger;
         $this->defaultSiteAccess = $defaultSiteAccess;
         $this->siteAccessesConfiguration = $siteAccessesConfiguration;
         $this->siteAccessList = array_fill_keys( $siteAccessList, true );
@@ -129,15 +145,24 @@ class Router
             return $this->siteAccess;
         }
 
+        return $this->doMatch( $request );
+    }
+
+    /**
+     * Returns the SiteAccess object matched against $request and the siteaccess configuration.
+     * If nothing could be matched, the default siteaccess is returned, with "default" as matching type.
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
+     *
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess
+     */
+    private function doMatch( SimplifiedRequest $request )
+    {
         foreach ( $this->siteAccessesConfiguration as $matchingClass => $matchingConfiguration )
         {
-            // If class begins with a '\' it means it's a FQ class name,
-            // otherwise it is relative to this namespace.
-            if ( $matchingClass[0] !== '\\' )
-                $matchingClass = __NAMESPACE__ . "\\Matcher\\$matchingClass";
-
-            $matcher = new $matchingClass( $matchingConfiguration );
-            $matcher->setRequest( $request );
+            $matcher = $this->matcherBuilder->buildMatcher( $matchingClass, $matchingConfiguration, $request );
+            if ( $matcher instanceof CompoundInterface )
+                $matcher->setMatcherBuilder( $this->matcherBuilder );
 
             if ( ( $siteaccessName = $matcher->match() ) !== false )
             {
@@ -151,6 +176,7 @@ class Router
             }
         }
 
+        $this->logger->notice( 'Siteaccess not matched against configuration, returning default siteaccess.' );
         $this->siteAccess->name = $this->defaultSiteAccess;
         $this->siteAccess->matchingType = 'default';
         return $this->siteAccess;

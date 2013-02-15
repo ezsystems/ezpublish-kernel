@@ -1,5 +1,4 @@
 parameters:
-    twig.loader.chain.class: Twig_Loader_Chain
     twig.loader.string.class: Twig_Loader_String
 
     ezpublish.twig.extension.content.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ContentExtension
@@ -10,22 +9,10 @@ parameters:
     ezpublish.content_view.viewbase_layout: "EzPublishCoreBundle::viewbase_layout.html.twig"
     ezpublish.content_view.content_block_name: "content"
 
+    ezpublish.templating.global_helper.core.class: eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper
+    ezpublish.twig.extension.core.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\CoreExtension
+
 services:
-    # Redefining twig loader to use the chain loader instead of only the file system loader.
-    # This allows to add additional loading logic
-    # Loaders can be registered by identifying with twig.loader tag.
-    twig.loader.chain:
-        class: %twig.loader.chain.class%
-
-    twig.loader:
-        alias: twig.loader.chain
-
-    twig.loader.filesystem:
-        class: %twig.loader.class%
-        arguments: [@templating.locator, @templating.name_parser]
-        tags:
-            - {name: twig.loader}
-
     twig.loader.string:
         class: %twig.loader.string.class%
         tags:
@@ -52,3 +39,16 @@ services:
         arguments: [@ezpublish.config.resolver, @ezpublish.api.repository, @service_container]
         tags:
             - {name: ezpublish.location_view_provider, priority: 10}
+
+    ezpublish.templating.global_helper.core:
+        class: %ezpublish.templating.global_helper.core.class%
+        arguments: [@service_container]
+
+    ezpublish.templating.global_helper:
+        alias: ezpublish.templating.global_helper.core
+
+    ezpublish.twig.extension.core:
+        class: %ezpublish.twig.extension.core.class%
+        arguments: [@ezpublish.templating.global_helper]
+        tags:
+            - {name: twig.extension}

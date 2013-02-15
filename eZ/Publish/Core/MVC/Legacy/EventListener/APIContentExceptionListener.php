@@ -2,7 +2,7 @@
 /**
  * File containing the APIExceptionListener class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -13,11 +13,11 @@ use eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound as ConverterNotFound;
 use eZ\Publish\Core\Repository\Values\Content\Location;
-use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\MVC\Legacy\View\Provider\Content as LegacyContentViewProvider;
 use eZ\Publish\Core\MVC\Legacy\View\Provider\Location as LegacyLocationViewProvider;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 class APIContentExceptionListener implements EventSubscriberInterface
 {
@@ -32,7 +32,7 @@ class APIContentExceptionListener implements EventSubscriberInterface
     protected $legacyLVP;
 
     /**
-     * @var \Symfony\Component\HttpKernel\Log\LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 

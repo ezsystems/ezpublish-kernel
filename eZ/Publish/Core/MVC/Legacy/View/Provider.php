@@ -2,7 +2,7 @@
 /**
  * File containing the Provider abstract class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -10,7 +10,8 @@
 namespace eZ\Publish\Core\MVC\Legacy\View;
 
 use eZ\Publish\Core\MVC\Legacy\View\TwigContentViewLayoutDecorator;
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use eZ\Publish\Core\MVC\Legacy\Templating\LegacyHelper;
+use Psr\Log\LoggerInterface;
 use Closure;
 
 abstract class Provider
@@ -21,7 +22,7 @@ abstract class Provider
     private $legacyKernelClosure;
 
     /**
-     * @var \Symfony\Component\HttpKernel\Log\LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -30,10 +31,16 @@ abstract class Provider
      */
     protected $decorator;
 
-    public function __construct( Closure $legacyKernelClosure, TwigContentViewLayoutDecorator $decorator, LoggerInterface $logger = null )
+    /**
+     * @var \eZ\Publish\Core\MVC\Legacy\Templating\LegacyHelper
+     */
+    protected $legacyHelper;
+
+    public function __construct( Closure $legacyKernelClosure, TwigContentViewLayoutDecorator $decorator, LegacyHelper $legacyHelper, LoggerInterface $logger = null )
     {
         $this->legacyKernelClosure = $legacyKernelClosure;
         $this->decorator = $decorator;
+        $this->legacyHelper = $legacyHelper;
         $this->logger = $logger;
     }
 

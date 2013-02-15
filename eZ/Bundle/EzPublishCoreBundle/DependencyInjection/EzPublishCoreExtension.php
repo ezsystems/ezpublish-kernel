@@ -2,7 +2,7 @@
 /**
  * File containing the EzPublishCoreExtension class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -56,14 +56,8 @@ class EzPublishCoreExtension extends Extension
         );
         $configuration = $this->getConfiguration( $configs, $container );
 
-        // Workaround for http://jira.ez.no/browse/EZP-20107
-        $this->fixUpConfiguration( $configs );
-
         // Note: this is where the transformation occurs
         $config = $this->processConfiguration( $configuration, $configs );
-
-        // Workaround for http://jira.ez.no/browse/EZP-20107
-        $this->unFixUpConfiguration( $config );
 
         // Base services and services overrides
         $loader->load( 'services.yml' );
@@ -86,113 +80,6 @@ class EzPublishCoreExtension extends Extension
         foreach ( $this->configParsers as $configParser )
         {
             $configParser->registerInternalConfig( $config, $container );
-        }
-    }
-
-    /**
-     * Applies the workaround for http://jira.ez.no/browse/EZP-20107
-     *
-     * Prefixes affected keys (siteaccess map matching, override rules, image variations names) that contain a dash
-     * with an underscore so that the symfony normalize method (https://github.com/symfony/symfony/blob/master/src/Symfony/Component/Config/Definition/Processor.php#L55)
-     * doesn't replace dashes with underscores
-     *
-     * @param array $config Raw configuration array
-     */
-    private function fixUpConfiguration( array &$config )
-    {
-        $affectedMatchMethods = array( 'Map\\URI' => true, 'Map\\Host' => true );
-        $affectedSystemKeys = array( 'location_view', 'content_view', 'image_variations' );
-        foreach ( $config as &$subConfig )
-        {
-            if ( isset( $subConfig['siteaccess']['match'] ) )
-            {
-                foreach ( $subConfig['siteaccess']['match'] as $mappingMethod => &$configurationBlock )
-                {
-                    if ( !isset( $affectedMatchMethods[$mappingMethod] ) )
-                        continue;
-
-                    $this->fixedUpKeys['siteaccess']['match'][$mappingMethod] = $this->fixUpKeyReference( $configurationBlock );
-                }
-            }
-
-            if ( isset( $subConfig['system'] ) )
-            {
-                foreach ( $subConfig['system'] as $configurationKey => &$configurationBlock )
-                {
-                    foreach ( $affectedSystemKeys as $affectedKey )
-                    {
-                        if ( !isset( $configurationBlock[$affectedKey] ) )
-                            continue;
-                        $result = $this->fixUpKeyReference( $configurationBlock[$affectedKey] );
-                        if ( !empty( $result ) )
-                            $this->fixedUpKeys['system'][$configurationKey][$affectedKey] = $result;
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Prefixes keys from $configuration that are affected by http://jira.ez.no/browse/EZP-20107 with an underscore
-     * and returns the list of modified keys (original values)
-     *
-     * Workaround for http://jira.ez.no/browse/EZP-20107
-     *
-     * @param array $configuration
-     *
-     * @return array
-     */
-    private function fixUpKeyReference( &$configuration )
-    {
-        $fixedUpItems = array();
-        foreach ( $configuration as $key => $value )
-        {
-            if ( strpos( $key, '-' ) !== false && strstr( $key, '_' ) === false )
-            {
-                $configuration["_{$key}"] = $value;
-                unset( $configuration[$key] );
-                $fixedUpItems[$key] = true;
-            }
-        }
-
-        return $fixedUpItems;
-    }
-
-    /**
-     * Undoes the changes done by {@see fixUpConfiguration()}
-     *
-     * Workaround for http://jira.ez.no/browse/EZP-20107
-     *
-     * @param array $config
-     */
-    private function unFixUpConfiguration( array &$config )
-    {
-        $this->processFixedUpKeyReference( $this->fixedUpKeys, $config );
-    }
-
-    /**
-     * Recursively scans through an n dimension array of keys, ending up with a true value, and for those keys,
-     * cancels the changes done by {@see fixedUpConfiguration}. The method pops the keys out of $keyReferenceArray
-     * in order to dive into $configReference until it finds out the modified value, and restores it when found
-     *
-     * Workaround for http://jira.ez.no/browse/EZP-20107
-     *
-     * @param array $keyReferencesArray Keys array to process $array[keya][keyb] = true
-     * @param array $configReference Configuration array
-     */
-    private function processFixedUpKeyReference( array $keyReferencesArray, &$configReference )
-    {
-        foreach ( $keyReferencesArray as $key => $value )
-        {
-            if ( is_array( $value ) )
-            {
-                $this->processFixedUpKeyReference( $value, $configReference[$key] );
-            }
-            else
-            {
-                $configReference[$key] = $configReference["_{$key}"];
-                unset( $configReference["_{$key}"] );
-            }
         }
     }
 

@@ -2,7 +2,7 @@
 /**
  * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -34,11 +34,22 @@ abstract class LogicalOperator extends Criterion
      */
     public function __construct( array $criteria )
     {
-        foreach ( $criteria as $criterion )
+        foreach ( $criteria as $key => $criterion )
         {
             if ( !$criterion instanceof Criterion )
             {
-                throw new InvalidArgumentException( "Only Criterion objects are accepted" );
+                if ( $criterion === null )
+                    $type = 'null';
+                else if ( is_object( $criterion ) )
+                    $type = get_class( $criterion );
+                else if ( is_array( $criterion ) )
+                    $type = "Array, with keys: " . join( ', ', array_keys( $criterion ) );
+                else
+                    $type = gettype( $criterion ) . ", with value: '{$criterion}'";
+
+                throw new InvalidArgumentException(
+                    "Only Criterion objects are accepted, at index '{$key}': " . $type
+                );
             }
             $this->criteria[] = $criterion;
         }

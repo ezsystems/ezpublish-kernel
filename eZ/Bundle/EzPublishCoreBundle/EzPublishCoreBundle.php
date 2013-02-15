@@ -2,7 +2,7 @@
 /**
  * File containing the EzPublishCoreBundle class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -15,7 +15,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterLimitatio
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainConfigResolverPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\TwigTweaksPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ContentViewPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LocationViewPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
@@ -36,7 +35,6 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new RegisterLimitationTypePass );
         $container->addCompilerPass( new RegisterStorageEnginePass );
         $container->addCompilerPass( new LegacyStorageEnginePass );
-        $container->addCompilerPass( new TwigTweaksPass );
         $container->addCompilerPass( new ContentViewPass );
         $container->addCompilerPass( new LocationViewPass );
 
@@ -56,6 +54,7 @@ class EzPublishCoreBundle extends Bundle
                     new ConfigParser\Common,
                     new ConfigParser\Content,
                     new ConfigParser\FieldTemplates,
+                    new ConfigParser\FieldDefinitionSettingsTemplates,
                     new ConfigParser\Image,
                 )
             );

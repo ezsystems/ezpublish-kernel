@@ -84,6 +84,7 @@ services:
         parent: ezpublish_rest.controller.base
         arguments:
             - @ezpublish.api.service.content
+            - @ezpublish.api.service.content_type
             - @ezpublish.api.service.location
             - @ezpublish.api.service.section
             - @ezpublish.api.service.search
@@ -131,6 +132,7 @@ services:
             - @ezpublish.api.service.user
             - @ezpublish.api.service.role
             - @ezpublish.api.service.content
+            - @ezpublish.api.service.content_type
             - @ezpublish.api.service.location
             - @ezpublish.api.service.section
             - @ezpublish.api.repository

@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandlerSortTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -31,16 +31,6 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
      * @var \eZ\Publish\SPI\Persistence\Content\FieldValue\ConverterRegistry
      */
     protected $fieldRegistry;
-
-    /**
-     * Returns the test suite with all tests declared in this class.
-     *
-     * @return \PHPUnit_Framework_TestSuite
-     */
-    public static function suite()
-    {
-        return new \PHPUnit_Framework_TestSuite( __CLASS__ );
-    }
 
     /**
      * Only set up once for these read only tests on a large fixture
@@ -198,15 +188,17 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 42 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            $ids
         );
     }
 
@@ -252,15 +244,31 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+
+        // Content with id 4 is the only one with depth = 1
+        $this->assertEquals( 4, $ids[0] );
+
+        // Content with ids 11, 12, 13, 42 are the ones with depth = 2
+        $nextIds = array_slice( $ids, 1, 4 );
+        sort( $nextIds );
         $this->assertEquals(
-            array( 4, 11, 12, 13, 42, 10, 14 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            array( 11, 12, 13, 42 ),
+            $nextIds
+        );
+
+        // Content with ids 10, 14 are the ones with depth = 3
+        $nextIds = array_slice( $ids, 5 );
+        sort( $nextIds );
+        $this->assertEquals(
+            array( 10, 14 ),
+            $nextIds
         );
     }
 
@@ -296,6 +304,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
 
     public function testSortLocationPriority()
     {
+        // @todo FIXME: This test doesn't ensure order is correct since they all have a priority of 0.
         $locator = $this->getContentSearchHandler();
 
         $result = $locator->findContent(
@@ -311,15 +320,17 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             )
         );
 
+        $ids = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->versionInfo->contentInfo->id;
+            },
+            $result->searchHits
+        );
+        sort( $ids );
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 42 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            $ids
         );
     }
 

@@ -2,7 +2,7 @@
 /**
  * File containing the eZ\Publish\API\Repository\SectionService class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  * @package eZ\Publish\API\Repository
@@ -32,7 +32,7 @@ interface SectionService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section The newly create section
      */
-    public function createSection(SectionCreateStruct $sectionCreateStruct );
+    public function createSection( SectionCreateStruct $sectionCreateStruct );
 
     /**
      * Updates the given in the content repository

@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -54,6 +54,25 @@ class CountryIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
+        $handler->getFieldTypeRegistry()->register(
+            'ezcountry',
+            new FieldType\Country\Type(
+                array(
+                    "BE" => array(
+                        "Name" => "Belgium",
+                        "Alpha2" => "BE",
+                        "Alpha3" => "BEL",
+                        "IDC" => "32",
+                    ),
+                    "FR" => array(
+                        "Name" => "France",
+                        "Alpha2" => "FR",
+                        "Alpha3" => "FRA",
+                        "IDC" => "33",
+                    ),
+                )
+            )
+        );
         $handler->getStorageRegistry()->register(
             'ezcountry',
             new FieldType\NullStorage()

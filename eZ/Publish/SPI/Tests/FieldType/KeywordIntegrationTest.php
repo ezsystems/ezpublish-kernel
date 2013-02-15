@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\SPI\Tests\FieldType\KeywordIntegrationTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -55,6 +55,10 @@ class KeywordIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
+        $handler->getFieldTypeRegistry()->register(
+            'ezkeyword',
+            new FieldType\Keyword\Type()
+        );
         $handler->getStorageRegistry()->register(
             'ezkeyword',
             new FieldType\Keyword\KeywordStorage(

@@ -2,7 +2,7 @@
 /**
  * File containing the Http Curl client class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -12,12 +12,12 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 use Buzz\Client\Curl as BaseCurl;
 use Buzz\Message\RequestInterface;
 use Buzz\Message\MessageInterface;
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 class Curl extends BaseCurl
 {
     /**
-     * @var \Symfony\Component\HttpKernel\Log\LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 

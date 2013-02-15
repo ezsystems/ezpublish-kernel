@@ -2,7 +2,7 @@
 /**
  * File containing the RoleServiceStub class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -854,9 +854,12 @@ class RoleServiceStub implements RoleService
     private function getRoleAssignmentsForRoleAndContent( Role $role, $contentId )
     {
         $contentService = $this->repository->getContentService();
+        $contentTypeService = $this->repository->getContentTypeService();
         $userService = $this->repository->getUserService();
 
-        $contentType = $contentService->loadContent( $contentId )->contentType;
+        $contentType = $contentTypeService->loadContentType(
+            $contentService->loadContent( $contentId )->contentTypeId
+        );
         if ( $contentType->identifier != 'user_group' && $contentType->identifier != 'user' )
         {
             throw new \ErrorException(

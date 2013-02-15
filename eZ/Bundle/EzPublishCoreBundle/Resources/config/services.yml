@@ -38,6 +38,6 @@ services:
         scope: request
 
     # This alias allows easier management for subrequests
-    # {% render "ez_content:viewLocation" with {"locationId": 123, "viewMode": "line"} %}
+    # {{ render( controller( "ez_content:viewLocation", {"locationId": 123, "viewMode": "line"} ) ) }
     ez_content:
         alias: ezpublish.controller.content.view
