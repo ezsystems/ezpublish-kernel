@@ -62,7 +62,7 @@ class Session implements EventSubscriberInterface
             $sessionInfos['namespace'] = $this->container->getParameter(
                 'ezpublish.session.attribute_bag.storage_key'
             );
-            $sessionInfos['has_previous'] = $this->container->isScopeActive( 'request' ) ? $this->container->get( 'request' ) : false;
+            $sessionInfos['has_previous'] = $this->container->isScopeActive( 'request' ) ? $this->container->get( 'request' )->hasPreviousSession() : false;
             $sessionInfos['storage'] = $this->container->get( 'session.storage' );
         }
 
