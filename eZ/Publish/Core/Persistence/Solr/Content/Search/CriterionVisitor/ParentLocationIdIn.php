@@ -49,7 +49,7 @@ class ParentLocationIdIn extends CriterionVisitor
                 array_map(
                     function ( $value )
                     {
-                        return 'location_parent_id:"' . $value . '"';
+                        return 'location_parent_mid:"' . $value . '"';
                     },
                     $criterion->value
                 )

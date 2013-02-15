@@ -138,6 +138,7 @@ class LegacySolr extends Legacy
                 new Solr\Content\Search\FieldValueMapper\Aggregate(
                     array(
                         new Solr\Content\Search\FieldValueMapper\IdentifierMapper(),
+                        new Solr\Content\Search\FieldValueMapper\MultipleIdentifierMapper(),
                         new Solr\Content\Search\FieldValueMapper\StringMapper(),
                         new Solr\Content\Search\FieldValueMapper\IntegerMapper(),
                         new Solr\Content\Search\FieldValueMapper\DateMapper(),

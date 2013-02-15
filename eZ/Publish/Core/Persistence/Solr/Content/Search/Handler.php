@@ -187,7 +187,7 @@ class Handler extends BaseSearchHandler
      *
      * A document is an array of fields
      *
-     * @param Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content $content
      *
      * @return array
      */
@@ -254,7 +254,7 @@ class Handler extends BaseSearchHandler
                     },
                     $locations
                 ),
-                new FieldType\IdentifierField()
+                new FieldType\MultipleIdentifierField()
             ),
             new Field(
                 'location',
@@ -265,7 +265,7 @@ class Handler extends BaseSearchHandler
                     },
                     $locations
                 ),
-                new FieldType\IdentifierField()
+                new FieldType\MultipleIdentifierField()
             ),
             new Field(
                 'depth',
@@ -287,7 +287,7 @@ class Handler extends BaseSearchHandler
                     },
                     $locations
                 ),
-                new FieldType\IdentifierField()
+                new FieldType\MultipleIdentifierField()
             ),
             new Field(
                 'location_remote_id',
@@ -298,7 +298,7 @@ class Handler extends BaseSearchHandler
                     },
                     $locations
                 ),
-                new FieldType\IdentifierField()
+                new FieldType\MultipleIdentifierField()
             ),
             new Field(
                 'language_code',

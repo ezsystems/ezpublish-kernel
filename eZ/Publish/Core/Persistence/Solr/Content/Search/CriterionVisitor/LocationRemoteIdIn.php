@@ -49,7 +49,7 @@ class LocationRemoteIdIn extends CriterionVisitor
                 array_map(
                     function ( $value )
                     {
-                        return 'location_remote_id_id:"' . $value . '"';
+                        return 'location_remote_id_mid:"' . $value . '"';
                     },
                     $criterion->value
                 )
