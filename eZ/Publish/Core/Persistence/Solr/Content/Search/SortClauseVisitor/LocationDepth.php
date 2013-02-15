@@ -38,7 +38,7 @@ class LocationDepth extends SortClauseVisitor
      */
     public function visit( SortClause $sortClause )
     {
-        return 'depth_i' . $this->getDirection( $sortClause );
+        return 'main_depth_i' . $this->getDirection( $sortClause );
     }
 }
 
