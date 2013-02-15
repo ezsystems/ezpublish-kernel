@@ -41,7 +41,6 @@ class CLIHandler implements ezpKernelHandler
      *
      * Additional valid settings for $settings :
      * - injected-settings : INI settings override
-     * - script : Path to script to run in legacy context (relative to legacy root)
      *
      * @param array $settings Settings to pass to eZScript constructor.
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
@@ -62,12 +61,6 @@ class CLIHandler implements ezpKernelHandler
             // their overrides
             eZINI::injectSettings( $injectedSettings );
             unset( $settings['injected-settings'] );
-        }
-
-        if ( isset( $settings['script'] ) )
-        {
-            $this->embeddedScript = $settings['script'];
-            unset( $settings['script'] );
         }
 
         $this->script = eZScript::instance( $settings );
