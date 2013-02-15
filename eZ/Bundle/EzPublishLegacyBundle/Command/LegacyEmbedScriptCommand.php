@@ -45,12 +45,16 @@ EOT
     protected function execute( InputInterface $input, OutputInterface $output )
     {
         $this->container = $this->getContainer();
+        $legacyScript = $input->getArgument( 'script' );
 
         // Cleanup the input arguments as the legacy kernel expects the script to run as first argument
-        for ( $i = 0; $i < 2; ++$i )
+        foreach ( $_SERVER['argv'] as $rawArg )
         {
-            array_shift( $GLOBALS['argv'] );
+            if ( $rawArg === $legacyScript )
+                break;
+
             array_shift( $_SERVER['argv'] );
+            array_shift( $GLOBALS['argv'] );
         }
 
         /** @var $legacyCLIHandlerClosure \Closure */
@@ -58,7 +62,8 @@ EOT
         /** @var $legacyKernelClosure \Closure */
         $legacyKernelClosure = $this->container->get( 'ezpublish_legacy.kernel' );
 
-        $legacyCLIHandlerClosure()->setEmbeddedScript( $input->getArgument( 'script' ) );
+        // CLIHandler is contained in $legacyKernel, but we need to inject the script to run separately.
+        $legacyCLIHandlerClosure()->setEmbeddedScript( $legacyScript );
         $legacyKernelClosure()->run();
     }
 }
