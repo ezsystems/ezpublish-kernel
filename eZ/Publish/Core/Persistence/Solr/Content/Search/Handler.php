@@ -286,6 +286,17 @@ class Handler extends BaseSearchHandler
                 new FieldType\IntegerField()
             ),
             new Field(
+                'priority',
+                array_map(
+                    function ( $location )
+                    {
+                        return $location->priority;
+                    },
+                    $locations
+                ),
+                new FieldType\IntegerField()
+            ),
+            new Field(
                 'location_parent',
                 array_map(
                     function ( $location )

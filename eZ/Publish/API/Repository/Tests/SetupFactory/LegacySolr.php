@@ -126,6 +126,7 @@ class LegacySolr extends Legacy
                         new Solr\Content\Search\SortClauseVisitor\ContentId(),
                         new Solr\Content\Search\SortClauseVisitor\LocationPathString(),
                         new Solr\Content\Search\SortClauseVisitor\LocationDepth(),
+                        new Solr\Content\Search\SortClauseVisitor\LocationPriority(),
                     )
                 ),
                 new Solr\Content\Search\FacetBuilderVisitor\Aggregate(
