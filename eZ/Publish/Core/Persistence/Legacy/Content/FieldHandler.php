@@ -16,7 +16,8 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Persistence\FieldTypeRegistry;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 
 /**
  * Field Handler.
@@ -40,7 +41,7 @@ class FieldHandler
     /**
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
      */
-    public $languageHandler;
+    protected $languageHandler;
 
     /**
      * Content Mapper
@@ -57,6 +58,13 @@ class FieldHandler
     protected $storageHandler;
 
     /**
+     * FieldType registry
+     *
+     * @var \eZ\Publish\Core\Persistence\FieldTypeRegistry
+     */
+    protected $fieldTypeRegistry;
+
+    /**
      * Hash of SPI FieldTypes or callable callbacks to generate one.
      *
      * @var array
@@ -69,52 +77,21 @@ class FieldHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $mapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler
-     * @param array $fieldTypes Hash of SPI FieldTypes or callable callbacks to generate one.
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
+     * @param \eZ\Publish\Core\Persistence\FieldTypeRegistry $fieldTypeRegistry
      */
     public function __construct(
         Gateway $contentGateway,
         Mapper $mapper,
         StorageHandler $storageHandler,
-        array $fieldTypes )
+        LanguageHandler $languageHandler,
+        FieldTypeRegistry $fieldTypeRegistry )
     {
         $this->contentGateway = $contentGateway;
         $this->mapper = $mapper;
         $this->storageHandler = $storageHandler;
-        $this->fieldTypes = $fieldTypes;
-    }
-
-    /**
-     * Instantiates a FieldType\Type object
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $type not properly setup
-     *         with settings injected to service
-     *
-     * @param $identifier
-     *
-     * @return \eZ\Publish\SPI\FieldType\FieldType
-     */
-    protected function buildFieldType( $identifier )
-    {
-        if ( !isset( $this->fieldTypes[$identifier] ) )
-        {
-            throw new NotFoundException(
-                "FieldType",
-                "Provided \$identifier is unknown: '{$identifier}', has: " . var_export( array_keys( $this->fieldTypes ), true )
-            );
-        }
-
-        if ( $this->fieldTypes[$identifier] instanceof \eZ\Publish\SPI\FieldType\FieldType )
-        {
-            return $this->fieldTypes[$identifier];
-        }
-        else if ( !is_callable( $this->fieldTypes[$identifier] ) )
-        {
-            throw new InvalidArgumentException( "\$settings[$identifier]", 'must be instance of SPI\\FieldType\\FieldType or callback to generate it' );
-        }
-
-        /** @var $closure \Closure */
-        $closure = $this->fieldTypes[$identifier];
-        return $closure();
+        $this->languageHandler = $languageHandler;
+        $this->fieldTypeRegistry = $fieldTypeRegistry;
     }
 
     /**
@@ -175,12 +152,12 @@ class FieldHandler
      */
     protected function getEmptyField( FieldDefinition $fieldDefinition, $languageCode )
     {
-        $fieldType = $this->buildFieldType( $fieldDefinition->fieldType );
+        $fieldType = $this->fieldTypeRegistry->getFieldType( $fieldDefinition->fieldType );
         return new Field(
             array(
                 "fieldDefinitionId" => $fieldDefinition->id,
                 "type" => $fieldDefinition->fieldType,
-                "value" => $fieldType->toPersistenceValue( $fieldType->getEmptyValue() ),
+                "value" => $fieldType->getEmptyValue(),
                 "languageCode" => $languageCode
             )
         );
@@ -196,7 +173,7 @@ class FieldHandler
     public function createExistingFieldsInNewVersion( Content $content )
     {
         $fieldsToCopy = array();
-        $languageCodes = $existingLanguageCodes = $this->getLanguageCodes( $content->versionInfo->languageIds );
+        $languageCodes = $this->getLanguageCodes( $content->versionInfo->languageIds );
         $contentFieldMap = $this->getFieldMap( $content->fields );
         $content->fields = array();
         $contentType = $this->typeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
@@ -205,18 +182,18 @@ class FieldHandler
         {
             foreach ( array_keys( $languageCodes ) as $languageCode )
             {
-                if ( $fieldDefinition->isTranslatable
-                    || $languageCode != $content->versionInfo->contentInfo->mainLanguageCode
+                if ( !$fieldDefinition->isTranslatable
+                    && $languageCode != $content->versionInfo->contentInfo->mainLanguageCode
                 )
+                {
+                    $fieldsToCopy[$fieldDefinition->id][$languageCode] =
+                        $contentFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
+                }
+                else
                 {
                     $field = $contentFieldMap[$fieldDefinition->id][$languageCode];
                     $this->createExistingFieldInNewVersion( $field, $content );
                     $content->fields[] = $field;
-                }
-                else
-                {
-                    $fieldsToCopy[$fieldDefinition->id][$languageCode] =
-                        $contentFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
                 }
             }
         }
@@ -270,7 +247,7 @@ class FieldHandler
      *
      * @return void
      */
-    public function copyFields( array $fields, Content $content )
+    protected function copyFields( array $fields, Content $content )
     {
         foreach ( $fields as $languageFields )
         {
@@ -294,9 +271,9 @@ class FieldHandler
      */
     protected function copyField( Field $originalField, $languageCode, Content $content )
     {
+        $originalField->versionNo = $content->versionInfo->versionNo;
         $field = clone $originalField;
         $field->languageCode = $languageCode;
-        $field->versionNo = $content->versionInfo->versionNo;
 
         $field->id = $this->contentGateway->insertNewField(
             $content,
@@ -392,7 +369,7 @@ class FieldHandler
      *
      * @return void
      */
-    public function createExistingFieldInNewVersion( Field $field, Content $content )
+    protected function createExistingFieldInNewVersion( Field $field, Content $content )
     {
         $field->versionNo = $content->versionInfo->versionNo;
 

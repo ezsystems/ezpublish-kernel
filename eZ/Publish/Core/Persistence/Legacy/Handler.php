@@ -303,7 +303,7 @@ class Handler implements HandlerInterface
         $this->converterRegistry = $converterRegistry;
         $this->storageRegistry = $storageRegistry;
         $this->transformationProcessor = $transformationProcessor;
-        $this->config = $config + array( "field_type" => array() );
+        $this->config = $config;
     }
 
     /**
@@ -377,10 +377,10 @@ class Handler implements HandlerInterface
                 $this->getContentGateway(),
                 $this->getContentMapper(),
                 $this->getStorageHandler(),
-                $this->config["field_type"]
+                $this->contentLanguageHandler(),
+                $this->getFieldTypeRegistry()
             );
             $this->fieldHandler->typeHandler = $this->contentTypeHandler();
-            $this->fieldHandler->languageHandler = $this->contentLanguageHandler();
         }
         return $this->fieldHandler;
     }
