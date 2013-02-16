@@ -523,7 +523,7 @@ class ContentService implements ContentServiceInterface
             {
                 $isEmptyValue = false;
                 $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $contentCreateStruct->mainLanguageCode;
-                $isLanguageMain = $valueLanguageCode === $contentCreateStruct->mainLanguageCode;
+                $isLanguageMain = $languageCode === $contentCreateStruct->mainLanguageCode;
                 if ( isset( $fields[$fieldDefinition->identifier][$valueLanguageCode] ) )
                 {
                     $fieldValue = $fieldType->acceptValue(
