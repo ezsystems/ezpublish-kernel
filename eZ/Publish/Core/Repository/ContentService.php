@@ -51,6 +51,9 @@ use eZ\Publish\SPI\Persistence\Content\Field as SPIField;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as SPILocationCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Relation as SPIRelation;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreateStruct;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
 use DateTime;
 use Exception;
 
@@ -512,7 +515,11 @@ class ContentService implements ContentServiceInterface
         $fieldValues = array();
         $spiFields = array();
         $allFieldErrors = array();
-        foreach ( $contentCreateStruct->contentType->getFieldDefinitions() as $fieldDefinition )
+        $inputRelations = array();
+        $locationIdToContentIdMapping = array();
+        $fieldDefinitions = $contentCreateStruct->contentType->getFieldDefinitions();
+
+        foreach ( $fieldDefinitions as $fieldDefinition )
         {
             /** @var $fieldType \eZ\Publish\Core\FieldType\FieldType */
             $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
@@ -560,6 +567,13 @@ class ContentService implements ContentServiceInterface
                     continue;
                 }
 
+                $this->repository->getRelationProcessor()->appendFieldRelations(
+                    $inputRelations,
+                    $locationIdToContentIdMapping,
+                    $fieldType,
+                    $fieldValue,
+                    $fieldDefinition->id
+                );
                 $fieldValues[$fieldDefinition->identifier][$languageCode] = $fieldValue;
 
                 // Only non-empty value fields and untranslatable fields in main language
@@ -612,6 +626,12 @@ class ContentService implements ContentServiceInterface
         try
         {
             $spiContent = $this->persistenceHandler->contentHandler()->create( $spiContentCreateStruct );
+            $this->repository->getRelationProcessor()->processFieldRelations(
+                $inputRelations,
+                $spiContent->versionInfo->contentInfo->id,
+                $spiContent->versionInfo->versionNo,
+                $contentCreateStruct->contentType
+            );
             $this->repository->commit();
         }
         catch ( Exception $e )
@@ -1111,6 +1131,8 @@ class ContentService implements ContentServiceInterface
         $fieldValues = array();
         $spiFields = array();
         $allFieldErrors = array();
+        $inputRelations = array();
+        $locationIdToContentIdMapping = array();
 
         foreach ( $contentType->getFieldDefinitions() as $fieldDefinition )
         {
@@ -1180,6 +1202,13 @@ class ContentService implements ContentServiceInterface
                     continue;
                 }
 
+                $this->repository->getRelationProcessor()->appendFieldRelations(
+                    $inputRelations,
+                    $locationIdToContentIdMapping,
+                    $fieldType,
+                    $fieldValue,
+                    $fieldDefinition->id
+                );
                 $fieldValues[$fieldDefinition->identifier][$languageCode] = $fieldValue;
 
                 if ( !( $isCopiedValue || ( $isLanguageNew && $isEmptyValue ) ) )
@@ -1221,6 +1250,7 @@ class ContentService implements ContentServiceInterface
                 )->id
             )
         );
+        $existingRelations = $this->loadRelations( $versionInfo );
 
         $this->repository->beginTransaction();
         try
@@ -1229,6 +1259,13 @@ class ContentService implements ContentServiceInterface
                 $versionInfo->getContentInfo()->id,
                 $versionInfo->versionNo,
                 $spiContentUpdateStruct
+            );
+            $this->repository->getRelationProcessor()->processFieldRelations(
+                $inputRelations,
+                $spiContent->versionInfo->contentInfo->id,
+                $spiContent->versionInfo->versionNo,
+                $contentType,
+                $existingRelations
             );
             $this->repository->commit();
         }
@@ -1473,6 +1510,7 @@ class ContentService implements ContentServiceInterface
             $versionInfo->versionNo
         );
 
+        /** @var $relations \eZ\Publish\API\Repository\Values\Content\Relation[] */
         $relations = array();
         foreach ( $spiRelations as $spiRelation )
         {
@@ -1638,7 +1676,10 @@ class ContentService implements ContentServiceInterface
             {
                 if ( $spiRelation->destinationContentId == $destinationContent->id )
                 {
-                    $this->persistenceHandler->contentHandler()->removeRelation( $spiRelation->id );
+                    $this->persistenceHandler->contentHandler()->removeRelation(
+                        $spiRelation->id,
+                        APIRelation::COMMON
+                    );
                 }
             }
             $this->repository->commit();

@@ -138,6 +138,13 @@ class Repository implements RepositoryInterface
     protected $nameSchemaService;
 
     /**
+     * Instance of relation processor service
+     *
+     * @var \eZ\Publish\Core\Repository\RelationProcessor
+     */
+    protected $relationProcessor;
+
+    /**
      * Instance of URL alias service
      *
      * @var \eZ\Publish\Core\Repository\URLAliasService
@@ -624,6 +631,24 @@ class Repository implements RepositoryInterface
 
         $this->nameSchemaService = new NameSchemaService( $this, $this->serviceSettings['nameSchema'] );
         return $this->nameSchemaService;
+    }
+
+    /**
+     * Get RelationProcessor
+     *
+     * @access private Internal service for the Core Services
+     *
+     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
+     *
+     * @return \eZ\Publish\Core\Repository\RelationProcessor
+     */
+    public function getRelationProcessor()
+    {
+        if ( $this->relationProcessor !== null )
+            return $this->relationProcessor;
+
+        $this->relationProcessor = new RelationProcessor( $this, $this->persistenceHandler );
+        return $this->relationProcessor;
     }
 
     /**
