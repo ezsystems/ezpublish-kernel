@@ -30,6 +30,23 @@ class LegacyStorageEnginePass implements CompilerPassInterface
 
         $legacyStorageEngineDef = $container->getDefinition( 'ezpublish.api.storage_engine.legacy.factory' );
 
+        // Field types.
+        // Alias attribute is the field type string.
+        foreach ( $container->findTaggedServiceIds( 'ezpublish.fieldType' ) as $id => $attributes )
+        {
+            if ( !isset( $attributes[0]['alias'] ) )
+                throw new \LogicException( 'ezpublish.fieldType service tag needs an "alias" attribute to identify the field type. None given.' );
+
+            $legacyStorageEngineDef->addMethodCall(
+                'registerFieldType',
+                array(
+                    // Only pass the service Id since field types will be lazy loaded via the service container
+                    $id,
+                    $attributes[0]['alias']
+                )
+            );
+        }
+
         foreach ( $container->findTaggedServiceIds( 'ezpublish.storageEngine.legacy.converter' ) as $id => $attributes )
         {
             if ( isset( $attributes[0]['lazy'] ) && $attributes[0]['lazy'] === true )
