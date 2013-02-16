@@ -63,7 +63,7 @@ class LanguageCode extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
     {
-        $languages = $criterion->value;
+        $languages = array_flip( $criterion->value );
         $languages['always-available'] = 0;
 
         return $query->expr->gt(
