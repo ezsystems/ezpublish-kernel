@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway as UrlAliasGateway;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
@@ -60,24 +62,44 @@ class Handler implements BaseContentHandler
     protected $fieldHandler;
 
     /**
+     * URL slug converter.
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter
+     */
+    protected $slugConverter;
+
+    /**
+     * UrlAlias gateway
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway
+     */
+    protected $urlAliasGateway;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $locationGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $mapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler $fieldHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter $slugConverter
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway $urlAliasGateway
      */
     public function __construct(
         Gateway $contentGateway,
         LocationGateway $locationGateway,
         Mapper $mapper,
-        FieldHandler $fieldHandler
+        FieldHandler $fieldHandler,
+        SlugConverter $slugConverter,
+        UrlAliasGateway $urlAliasGateway
     )
     {
         $this->contentGateway = $contentGateway;
         $this->locationGateway = $locationGateway;
         $this->mapper = $mapper;
         $this->fieldHandler = $fieldHandler;
+        $this->slugConverter = $slugConverter;
+        $this->urlAliasGateway = $urlAliasGateway;
     }
 
     /**
@@ -355,7 +377,10 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Updates a content object meta data, identified by $contentId
+     * Updates a content object meta data, identified by $contentId.
+     *
+     * This implementation also updates path identification string for locations of
+     * given $contentId if main language is set in update struct.
      *
      * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $content
@@ -365,6 +390,34 @@ class Handler implements BaseContentHandler
     public function updateMetadata( $contentId, MetadataUpdateStruct $content )
     {
         $this->contentGateway->updateContent( $contentId, $content );
+
+        if ( isset( $content->mainLanguageId ) )
+        {
+            $contentLocationsRows = $this->locationGateway->loadLocationDataByContent( $contentId );
+            foreach ( $contentLocationsRows as $row )
+            {
+                $locationName = "";
+                $urlAliasRows = $this->urlAliasGateway->loadLocationEntries(
+                    $row["node_id"],
+                    false,
+                    $content->mainLanguageId
+                );
+                if ( !empty( $urlAliasRows ) )
+                {
+                    $locationName = $urlAliasRows[0]["text"];
+                }
+                $this->locationGateway->updatePathIdentificationString(
+                    $row["node_id"],
+                    $row["parent_node_id"],
+                    $this->slugConverter->convert(
+                        $locationName,
+                        "node_" . $row["node_id"],
+                        "urlalias_compat"
+                    )
+                );
+            }
+        }
+
         return $this->loadContentInfo( $contentId );
     }
 
