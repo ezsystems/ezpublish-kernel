@@ -378,10 +378,12 @@ class Handler implements HandlerInterface
         {
             $this->fieldHandler = new ContentFieldHandler(
                 $this->getContentGateway(),
-                $this->getContentTypeGateway(),
                 $this->getContentMapper(),
-                $this->getStorageHandler()
+                $this->getStorageHandler(),
+                $this->contentLanguageHandler(),
+                $this->getFieldTypeRegistry()
             );
+            $this->fieldHandler->typeHandler = $this->contentTypeHandler();
         }
         return $this->fieldHandler;
     }
