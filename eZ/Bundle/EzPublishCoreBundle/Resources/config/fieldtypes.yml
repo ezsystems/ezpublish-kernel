@@ -15,6 +15,7 @@ parameters:
     ezpublish.fieldType.ezimage.pathGenerator.class: eZ\Publish\Core\FieldType\Image\PathGenerator\LegacyPathGenerator
     ezpublish.fieldType.ezimage.fileService.class: eZ\Publish\Core\MVC\Symfony\File\ConfiguredLocalImageService
     ezpublish.fieldType.ezimage.externalStorage.class: eZ\Publish\Core\FieldType\Image\ImageStorage
+    ezpublish.fieldType.ezimage.mimeTypeDetector.class: eZ\Publish\Core\FieldType\BinaryBase\MimeTypeDetector\FileInfoDetector
     ezpublish.fieldType.ezkeyword.class: eZ\Publish\Core\FieldType\Keyword\Type
     ezpublish.fieldType.ezkeyword.externalStorage.class: eZ\Publish\Core\FieldType\Keyword\KeywordStorage
     ezpublish.fieldType.ezmedia.class: eZ\Publish\Core\FieldType\Media\Type
@@ -55,7 +56,7 @@ parameters:
         AI: {Name: "Anguilla", Alpha2: "AI", Alpha3: "AIA", IDC: "1264"}
         AQ: {Name: "Antarctica", Alpha2: "AQ", Alpha3: "ATA", IDC: "672"}
         AG: {Name: "Antigua and Barbuda", Alpha2: "AG", Alpha3: "ATG", IDC: "1268"}
-        AR: {Name: "Argentina", Alpha2: "AR", Alpha3: "ARG", IDC: "54"}
+        AR: {Name: "A²rgentina", Alpha2: "AR", Alpha3: "ARG", IDC: "54"}
         AM: {Name: "Armenia", Alpha2: "AM", Alpha3: "ARM", IDC: "374"}
         AW: {Name: "Aruba", Alpha2: "AW", Alpha3: "ABW", IDC: "297"}
         AU: {Name: "Australia", Alpha2: "AU", Alpha3: "AUS", IDC: "61"}
@@ -314,7 +315,7 @@ services:
 
     ezpublish.fieldType.ezbinaryfile.fileService:
         class: %ezpublish.fieldType.ezbinaryfile.fileService.class%
-        arguments: [@ezpublish.config.resolver, %webroot_dir%]
+        arguments: [@ezpublish_legacy.kernel, @ezpublish.config.resolver, %webroot_dir%]
 
     ezpublish.fieldType.ezbinaryfile.mimeTypeDetector:
         class: %ezpublish.fieldType.ezbinaryfile.mimeTypeDetector.class%
@@ -368,13 +369,16 @@ services:
     ezpublish.fieldType.ezimage:
         class: %ezpublish.fieldType.ezimage.class%
         parent: ezpublish.fieldType
-        arguments: [@ezpublish.fieldType.ezbinaryfile.fileService]
+        arguments: [ @ezpublish.fieldType.ezimage.fileService, @ezpublish.fieldType.ezimage.mimeTypeDetector ]
         tags:
             - {name: ezpublish.fieldType, alias: ezimage}
 
+    ezpublish.fieldType.ezimage.mimeTypeDetector:
+        class: %ezpublish.fieldType.ezimage.mimeTypeDetector.class%
+
     ezpublish.fieldType.ezimage.fileService:
         class: %ezpublish.fieldType.ezimage.fileService.class%
-        arguments: [@ezpublish.config.resolver, %webroot_dir%]
+        arguments: [@ezpublish_legacy.kernel, @ezpublish.config.resolver, %webroot_dir%]
 
     ezpublish.fieldType.ezimage.pathGenerator:
         class: %ezpublish.fieldType.ezimage.pathGenerator.class%
