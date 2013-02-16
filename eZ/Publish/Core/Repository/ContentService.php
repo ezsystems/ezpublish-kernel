@@ -523,7 +523,7 @@ class ContentService implements ContentServiceInterface
             {
                 $isEmptyValue = false;
                 $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $contentCreateStruct->mainLanguageCode;
-                $isLanguageMain = $valueLanguageCode === $contentCreateStruct->mainLanguageCode;
+                $isLanguageMain = $languageCode === $contentCreateStruct->mainLanguageCode;
                 if ( isset( $fields[$fieldDefinition->identifier][$valueLanguageCode] ) )
                 {
                     $fieldValue = $fieldType->acceptValue(
@@ -812,14 +812,7 @@ class ContentService implements ContentServiceInterface
                 && $loadedContentInfo->alwaysAvailable !== $contentMetadataUpdateStruct->alwaysAvailable )
             {
                 $content = $this->loadContent( $loadedContentInfo->id );
-                $this->publishUrlAliasesForContent( $content );
-            }
-            // @todo: this is legacy storage specific for updating ezcontentobject_tree.path_identification_string, to be removed
-            else if ( isset( $contentMetadataUpdateStruct->mainLanguageCode )
-                && ( $loadedContentInfo->mainLanguageCode !== $contentMetadataUpdateStruct->mainLanguageCode ) )
-            {
-                $content = $this->loadContent( $loadedContentInfo->id );
-                $this->publishUrlAliasesForContent( $content, true );
+                $this->publishUrlAliasesForContent( $content, false );
             }
 
             $this->repository->commit();
@@ -837,11 +830,12 @@ class ContentService implements ContentServiceInterface
      * Publishes URL aliases for all locations of a given content.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     * @param boolean $onlyMain @todo: this is legacy storage specific for updating ezcontentobject_tree.path_identification_string, to be removed
+     * @param boolean $updatePathIdentificationString this parameter is legacy storage specific for updating
+     *                      ezcontentobject_tree.path_identification_string, it is ignored by other storage engines
      *
      * @return void
      */
-    protected function publishUrlAliasesForContent( APIContent $content, $onlyMain = false )
+    protected function publishUrlAliasesForContent( APIContent $content, $updatePathIdentificationString = true )
     {
         $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
         $locations = $this->repository->getLocationService()->loadLocations(
@@ -851,19 +845,15 @@ class ContentService implements ContentServiceInterface
         {
             foreach ( $urlAliasNames as $languageCode => $name )
             {
-                if ( $onlyMain && $languageCode != $content->contentInfo->mainLanguageCode )
-                {
-                    continue;
-                }
-
                 $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
                     $location->id,
                     $location->parentLocationId,
                     $name,
                     $languageCode,
                     $content->contentInfo->alwaysAvailable,
-                    // @todo: this is legacy storage specific for updating ezcontentobject_tree.path_identification_string, to be removed
-                    $languageCode === $content->contentInfo->mainLanguageCode
+                    $updatePathIdentificationString ?
+                        $languageCode === $content->contentInfo->mainLanguageCode :
+                        false
                 );
             }
         }
