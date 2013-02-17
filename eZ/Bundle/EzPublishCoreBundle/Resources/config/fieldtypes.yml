@@ -292,7 +292,11 @@ parameters:
         ZW: {Name: "Zimbabwe", Alpha2: "ZW", Alpha3: "ZWE", IDC: "263"}
 
     ezpublish.fieldType.eznull.class: eZ\Publish\Core\FieldType\Null\Type
+<<<<<<< HEAD
     ezpublish.fieldType.ezrecommendation.class: %ezpublish.fieldType.eznull.class%
+=======
+    ezpublish.fieldType.metadataHandler.imagesize.class: eZ\Publish\Core\FieldType\MetadataHandler\ImageSize
+>>>>>>> e6e0859... EZp-20231: Added ImageSize MetadataHandler
 
 services:
     ezpublish.fieldType:
@@ -672,3 +676,6 @@ services:
         arguments: [ "ezrecommendation" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezrecommendation}
+
+    ezpublish.fieldType.metadataHandler.imagesize:
+        class: %ezpublish.fieldType.metadataHandler.imagesize.class%
