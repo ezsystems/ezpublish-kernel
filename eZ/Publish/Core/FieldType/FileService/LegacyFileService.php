@@ -233,7 +233,7 @@ class LegacyFileService implements FileService
             $this->getTargetPath( $storageIdentifier )
         );
 
-        $metaData = $this->getLegacyKernel()->runCallback(
+        return $this->getLegacyKernel()->runCallback(
             /** @var $clusterHandler \eZClusterFileHandlerInterface */
             function() use( $clusterHandler, $metadataHandler )
             {
@@ -242,11 +242,6 @@ class LegacyFileService implements FileService
                 $clusterHandler->fileDeleteLocal( $temporaryFileName );
                 return $metadata;
             }
-        );
-
-        return array(
-            'width' => $metadata[0],
-            'height' => $metadata[1],
         );
     }
 

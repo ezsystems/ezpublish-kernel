@@ -13,6 +13,7 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\FieldType\FileService;
 use eZ\Publish\Core\FieldType\GatewayBasedStorage;
+use eZ\Publish\SPI\FieldType\MetadataHandler;
 
 /**
  * Converter for Image field type external storage
@@ -37,18 +38,23 @@ class ImageStorage extends GatewayBasedStorage
      */
     protected $pathGenerator;
 
+    /** @var  */
+    protected $imageSizeMetadataHandler;
+
     /**
      * Construct from gateways
      *
      * @param \eZ\Publish\Core\FieldType\StorageGateway[] $gateways
      * @param FileService $fileService
-     * @param PathGenerator $pathGenerator
+     * @param PathGenerator $imageSizeMetadataHandler
+     * @param MetadataHandler $pathGenerator
      */
-    public function __construct( array $gateways, FileService $fileService, PathGenerator $pathGenerator )
+    public function __construct( array $gateways, FileService $fileService, PathGenerator $pathGenerator, MetadataHandler $imageSizeMetadataHandler )
     {
         parent::__construct( $gateways );
         $this->fileService = $fileService;
         $this->pathGenerator = $pathGenerator;
+        $this->imageSizeMetadataHandler = $imageSizeMetadataHandler;
     }
 
     /**
@@ -68,13 +74,12 @@ class ImageStorage extends GatewayBasedStorage
         $storedValue = array_merge(
             // Basic value data
             $field->value->data,
-            // Image meta data
-            $this->fileService->getMetaData( $field->value->data['path'] ),
             // Content meta data
             $contentMetaData
         );
 
         $field->value->data = $storedValue;
+        $field->value->externalData = null;
 
         return true;
     }
@@ -130,7 +135,7 @@ class ImageStorage extends GatewayBasedStorage
             // Basic value data
             $storedValue,
             // Image meta data
-            $this->fileService->getMetaData( $storageIdentifier ),
+            $this->fileService->getMetaData( $this->imageSizeMetadataHandler, $storageIdentifier ),
             // Content meta data
             $contentMetaData
         );
