@@ -519,7 +519,7 @@ class ContentHandlerRelationTest extends HandlerTest
         self::assertEquals( 1, count( $relations ) );
         self::assertEquals( $newRelation->id, $relations[0]->id );
 
-        $this->persistenceHandler->contentHandler()->removeRelation( $newRelation->id );
+        $this->persistenceHandler->contentHandler()->removeRelation( $newRelation->id, Relation::COMMON );
         $relations = $this->persistenceHandler->contentHandler()->loadRelations( $this->contentId );
         self::assertEmpty( $relations );
     }
@@ -540,6 +540,6 @@ class ContentHandlerRelationTest extends HandlerTest
             )
         );
 
-        $this->persistenceHandler->contentHandler()->removeRelation( 42 );
+        $this->persistenceHandler->contentHandler()->removeRelation( 42, Relation::COMMON );
     }
 }

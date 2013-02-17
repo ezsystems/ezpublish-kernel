@@ -843,10 +843,14 @@ class ContentHandler implements ContentHandlerInterface
      * Removes a relation by relation Id.
      *
      * @param mixed $relationId
+     * @param int $type {@see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if relation to be removed is not found.
      */
-    public function removeRelation( $relationId )
+    public function removeRelation( $relationId, $type )
     {
         $requestedRelation = $this->backend->find( "Content\\Relation", array( "id" => $relationId ) );
         if ( empty( $requestedRelation ) )

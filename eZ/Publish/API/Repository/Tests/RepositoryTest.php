@@ -87,23 +87,6 @@ class RepositoryTest extends BaseTest
     }
 
     /**
-     * Test for the getTrashService() method.
-     *
-     * @return void
-     * @group trash
-     * @see \eZ\Publish\API\Repository\Repository::getTrashService()
-     *
-     */
-    public function testGetTrashService()
-    {
-        $repository = $this->getRepository();
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\TrashService',
-            $repository->getTrashService()
-        );
-    }
-
-    /**
      * Test for the getSectionService() method.
      *
      * @return void
@@ -132,6 +115,23 @@ class RepositoryTest extends BaseTest
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\UserService',
             $repository->getUserService()
+        );
+    }
+
+    /**
+     * Test for the getTrashService() method.
+     *
+     * @return void
+     * @group trash
+     * @see \eZ\Publish\API\Repository\Repository::getTrashService()
+     *
+     */
+    public function testGetTrashService()
+    {
+        $repository = $this->getRepository();
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\TrashService',
+            $repository->getTrashService()
         );
     }
 
