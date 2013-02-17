@@ -386,7 +386,11 @@ services:
 
     ezpublish.fieldType.ezimage.externalStorage:
         class: %ezpublish.fieldType.ezimage.externalStorage.class%
-        arguments: [[], @ezpublish.fieldType.ezimage.fileService, @ezpublish.fieldType.ezimage.pathGenerator]
+        arguments:
+            - []
+            - @ezpublish.fieldType.ezimage.fileService
+            - @ezpublish.fieldType.ezimage.pathGenerator
+            - @ezpublish.fieldType.metadataHandler.imagesize
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezimage}
 
