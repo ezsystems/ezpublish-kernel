@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\FieldType\FileService;
 
 use eZ\Publish\SPI\FieldType\FileService;
+use eZ\Publish\SPI\FieldType\MetadataHandler;
 use RuntimeException;
 
 /**
@@ -226,20 +227,7 @@ class LegacyFileService implements FileService
         return $storageIdentifier;
     }
 
-    /**
-     * Returns a hash of meta data
-     *
-     * array(
-     *  'width' => <int>,
-     *  'height' => <int>,
-     *  'mime' => <string>,
-     * );
-     *
-     * @param string $storageIdentifier
-     *
-     * @return array
-     */
-    public function getMetaData( $storageIdentifier )
+    public function getMetadata( MetadataHandler $metadataHandler, $storageIdentifier )
     {
         $clusterHandler = $this->getClusterHandler(
             $this->getTargetPath( $storageIdentifier )
@@ -247,21 +235,18 @@ class LegacyFileService implements FileService
 
         $metaData = $this->getLegacyKernel()->runCallback(
             /** @var $clusterHandler \eZClusterFileHandlerInterface */
-            function() use( $clusterHandler )
+            function() use( $clusterHandler, $metadataHandler )
             {
                 $temporaryFileName = $clusterHandler->fetchUnique();
-                $metaData = getimagesize( $temporaryFileName );
-
+                $metadata = $metadataHandler->extract( $temporaryFileName );
                 $clusterHandler->fileDeleteLocal( $temporaryFileName );
-
-                return $metaData;
+                return $metadata;
             }
         );
 
         return array(
-            'width' => $metaData[0],
-            'height' => $metaData[1],
-            'mime' => $metaData['mime'],
+            'width' => $metadata[0],
+            'height' => $metadata[1],
         );
     }
 

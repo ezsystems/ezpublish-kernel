@@ -24,21 +24,12 @@ interface FileService
     public function storeFile( $sourcePath, $storageIdentifier );
 
     /**
-     * Returns a hash of meta data for $storageIdentifier
-     *
-     * array(
-     *  'width' => <int>,
-     *  'height' => <int>,
-     *  'mime' => <string>,
-     * );
-     *
+     * Uses $metadataHandler to extract metadata from $storageIdentifier
+     * @param MetadataHandler $metadataHandler
      * @param string $storageIdentifier
-     *
      * @return array
-     * @todo This method should be extracted later into a dedicated class to
-     *       handle meta data.
      */
-    public function getMetaData( $storageIdentifier );
+    public function getMetadata( MetadataHandler $metadataHandler, $storageIdentifier );
 
     /**
      * Returns the file size of the file identified by $storageIdentifier

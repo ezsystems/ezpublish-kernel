@@ -290,4 +290,24 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
             $size
         );
     }
+
+    public function testGetMetadata()
+    {
+        $expectedMetadata = array( 'metadata1' => 1, 'metadata2' => 2 );
+
+        $storedPath = $this->testStoreExternalFile();
+        $fileService = $this->getFileService();
+
+        $metadataHandler = $this->getMock( 'eZ\\Publish\\SPI\\FieldType\\MetadataHandler' );
+        $metadataHandler->expects( $this->once() )
+                        ->method( 'extract' )
+                        ->with( $storedPath )
+                        ->will( $this->returnValue( $expectedMetadata ) );
+        $metadata = $fileService->getMetadata(
+            $metadataHandler,
+            $storedPath
+        );
+
+        $this->assertEquals( $metadata, $expectedMetadata );
+    }
 }

@@ -10,6 +10,8 @@
 namespace eZ\Publish\Core\FieldType\FileService;
 
 use eZ\Publish\SPI\FieldType\FileService;
+use eZ\Publish\SPI\FieldType\MetadataHandler;
+
 use RuntimeException;
 
 class LocalFileService implements FileService
@@ -223,20 +225,14 @@ class LocalFileService implements FileService
      *  'mime' => <string>,
      * );
      *
+     * @param MetadataHandler $metadataHandler
      * @param string $storageIdentifier
      *
      * @return array
      */
-    public function getMetaData( $storageIdentifier )
+    public function getMetadata( MetadataHandler $metadataHandler, $storageIdentifier )
     {
-        // Does not depend on GD
-        $metaData = getimagesize( $this->getFullPath( $storageIdentifier ) );
-
-        return array(
-            'width' => $metaData[0],
-            'height' => $metaData[1],
-            'mime' => $metaData['mime'],
-        );
+        return $metadataHandler->extract( $this->getFullPath( $storageIdentifier ) );
     }
 
     /**
