@@ -136,6 +136,7 @@ class LegacySolr extends Legacy
                         new SortClauseVisitor\LocationPriority(),
                         new SortClauseVisitor\SectionIdentifier(),
                         new SortClauseVisitor\SectionName(),
+                        new SortClauseVisitor\DatePublished(),
                     )
                 ),
                 new FacetBuilderVisitor\Aggregate(
