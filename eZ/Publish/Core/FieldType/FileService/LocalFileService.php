@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\FieldType\FileService;
 
 use eZ\Publish\Core\FieldType\FileService;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use RuntimeException;
 
 class LocalFileService implements FileService
@@ -136,6 +137,13 @@ class LocalFileService implements FileService
      */
     public function remove( $storageIdentifier, $recursive = false )
     {
+        if ( empty( $storageIdentifier ) )
+        {
+            throw new InvalidArgumentException(
+                'storageIdentifier', 'Cannot be empty'
+            );
+        }
+
         $fullPath = $this->getFullPath( $storageIdentifier );
 
         $this->removePathInternal( $fullPath, $recursive );
