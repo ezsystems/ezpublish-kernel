@@ -170,17 +170,37 @@ class Handler extends BaseSearchHandler
     }
 
     /**
+     * Deletes a content object from the index
+     *
+     * @param int $contentID
+     * @param int|null $versionID
+     *
+     * @return void
+     */
+    public function deleteContent( $contentID, $versionID = null )
+    {
+        $this->gateway->deleteContent( $contentID, $versionID );
+    }
+
+    /**
      * Map content to document.
      *
      * A document is an array of fields
      *
-     * @param Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content $content
      *
      * @return array
      */
     protected function mapContent( Content $content )
     {
         $locations = $this->locationHandler->loadLocationsByContent( $content->versionInfo->contentInfo->id );
+        $mainLocation = null;
+        foreach ( $locations as $location )
+        {
+            if ( $location->id == $content->versionInfo->contentInfo->mainLocationId )
+                $mainLocation = $location;
+        }
+
         $document = array(
             new Field(
                 'id',
@@ -241,7 +261,7 @@ class Handler extends BaseSearchHandler
                     },
                     $locations
                 ),
-                new FieldType\IdentifierField()
+                new FieldType\MultipleIdentifierField()
             ),
             new Field(
                 'location',
@@ -252,7 +272,7 @@ class Handler extends BaseSearchHandler
                     },
                     $locations
                 ),
-                new FieldType\IdentifierField()
+                new FieldType\MultipleIdentifierField()
             ),
             new Field(
                 'depth',
@@ -260,6 +280,17 @@ class Handler extends BaseSearchHandler
                     function ( $location )
                     {
                         return $location->depth;
+                    },
+                    $locations
+                ),
+                new FieldType\IntegerField()
+            ),
+            new Field(
+                'priority',
+                array_map(
+                    function ( $location )
+                    {
+                        return $location->priority;
                     },
                     $locations
                 ),
@@ -274,7 +305,7 @@ class Handler extends BaseSearchHandler
                     },
                     $locations
                 ),
-                new FieldType\IdentifierField()
+                new FieldType\MultipleIdentifierField()
             ),
             new Field(
                 'location_remote_id',
@@ -285,7 +316,7 @@ class Handler extends BaseSearchHandler
                     },
                     $locations
                 ),
-                new FieldType\IdentifierField()
+                new FieldType\MultipleIdentifierField()
             ),
             new Field(
                 'language_code',
@@ -293,6 +324,40 @@ class Handler extends BaseSearchHandler
                 new FieldType\StringField()
             ),
         );
+
+        if ( $mainLocation !== null )
+        {
+            $document[] = new Field(
+                'main_location',
+                $mainLocation->id,
+                new FieldType\IdentifierField()
+            );
+            $document[] = new Field(
+                'main_location_parent',
+                $mainLocation->parentId,
+                new FieldType\IdentifierField()
+            );
+            $document[] = new Field(
+                'main_location_remote_id',
+                $mainLocation->remoteId,
+                new FieldType\IdentifierField()
+            );
+            $document[] = new Field(
+                'main_path',
+                $mainLocation->pathString,
+                new FieldType\IdentifierField()
+            );
+            $document[] = new Field(
+                'main_depth',
+                $mainLocation->depth,
+                new FieldType\IntegerField()
+            );
+            $document[] = new Field(
+                'main_priority',
+                $mainLocation->priority,
+                new FieldType\IntegerField()
+            );
+        }
 
         $contentType = $this->contentTypeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
         $document[] = new Field(

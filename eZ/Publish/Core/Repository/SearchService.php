@@ -26,6 +26,12 @@ use eZ\Publish\SPI\Persistence\Content\Search\Handler;
 class SearchService implements SearchServiceInterface
 {
     /**
+     * 2^30, since PHP_INT_MAX can cause overflows in DB systems, if PHP is run
+     * on 64 bit systems
+     */
+    const MAX_LIMIT = 1073741824;
+
+    /**
      * @var \eZ\Publish\API\Repository\Repository
      */
     protected $repository;
@@ -74,6 +80,11 @@ class SearchService implements SearchServiceInterface
         if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $query->criterion ) )
         {
             return new SearchResult( array( 'time' => 0, 'totalCount' => 0 ) );
+        }
+
+        if ( $query->limit === null )
+        {
+            $query->limit = self::MAX_LIMIT;
         }
 
         $result = $this->searchHandler->findContent( $query, $fieldFilters );
