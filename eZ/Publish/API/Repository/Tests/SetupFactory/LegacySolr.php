@@ -134,6 +134,8 @@ class LegacySolr extends Legacy
                         new SortClauseVisitor\LocationPathString(),
                         new SortClauseVisitor\LocationDepth(),
                         new SortClauseVisitor\LocationPriority(),
+                        new SortClauseVisitor\SectionIdentifier(),
+                        new SortClauseVisitor\SectionName(),
                     )
                 ),
                 new FacetBuilderVisitor\Aggregate(
@@ -159,7 +161,8 @@ class LegacySolr extends Legacy
             $fieldRegistry,
             $persistenceHandler->locationHandler(),
             $persistenceHandler->contentTypeHandler(),
-            $persistenceHandler->objectStateHandler()
+            $persistenceHandler->objectStateHandler(),
+            $persistenceHandler->sectionHandler()
         );
     }
 
