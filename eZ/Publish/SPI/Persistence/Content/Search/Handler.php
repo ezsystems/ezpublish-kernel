@@ -65,4 +65,14 @@ abstract class Handler
      * @return void
      */
     abstract public function indexContent( Content $content );
+
+    /**
+     * Deletes a content object from the index
+     *
+     * @param int $contentID
+     * @param int|null $versionID
+     *
+     * @return void
+     */
+    abstract public function deleteContent( $contentID, $versionID = null );
 }

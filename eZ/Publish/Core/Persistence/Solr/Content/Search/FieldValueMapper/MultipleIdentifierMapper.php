@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Content Search handler class
+ * File containing the MultipleIdentifierMapper class
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Persistence\Content\Search\FieldType;
 /**
  * Maps raw document field values to something Solr can index.
  */
-class IdentifierMapper extends FieldValueMapper
+class MultipleIdentifierMapper extends IdentifierMapper
 {
     /**
      * Check if field can be mapped
@@ -27,7 +27,7 @@ class IdentifierMapper extends FieldValueMapper
      */
     public function canMap( Field $field )
     {
-        return $field->type instanceof FieldType\IdentifierField;
+        return $field->type instanceof FieldType\MultipleIdentifierField;
     }
 
     /**
@@ -39,20 +39,14 @@ class IdentifierMapper extends FieldValueMapper
      */
     public function map( Field $field )
     {
-        return $this->convert( $field->value );
-    }
+        $values = array();
 
-    /**
-     * Convert to a proper Solr representation
-     *
-     * @param mixed $value
-     *
-     * @return string
-     */
-    protected function convert( $value )
-    {
-        // Remove non-printables
-        return preg_replace( '([^A-Za-z0-9/]+)', '', $value );
+        foreach ( $field->value as $value )
+        {
+            $values[] = $this->convert( $value );
+        }
+
+        return $values;
     }
 }
 

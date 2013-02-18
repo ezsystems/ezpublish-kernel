@@ -27,6 +27,7 @@ class FieldNameGenerator
     protected $fieldNameMapping = array(
         "ez_integer"  => "i",
         "ez_id"       => "id",
+        "ez_mid"      => "mid",
         "ez_string"   => "s",
         "ez_long"     => "l",
         "ez_text"     => "t",
