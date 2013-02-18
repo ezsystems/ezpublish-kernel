@@ -63,7 +63,7 @@ interface FieldStorage
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      *
-     * @return mixed null or true
+     * @return mixed null|true
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context );
 
