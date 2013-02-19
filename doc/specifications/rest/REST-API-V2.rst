@@ -5814,7 +5814,7 @@ Create session (login a User):
 
 :Resource:    /user/sessions
 :Method:      POST
-:Description: Performs a login for the user and returns the session and session cookie, client will need to remember both session name/id and csrf param/token as this is for security reasons not exposed via GET.
+:Description: Performs a login for the user and returns the session and session cookie. The client will need to remember both session name/id and csrf param/token as this is for security reasons not exposed via GET.
 :Headers:
     :Accept:
          :application/vnd.ez.api.Session+xml: (see Session_)
@@ -5923,7 +5923,7 @@ Delete session (logout a User):
     :Cookie:
          <sessionName> : <sessionID>
 :Parameters:
-    :<csrf-param>: The <csrf-token> needed on all unsafe http methods whit session.
+    :<csrf-param>: The <csrf-token> needed on all unsafe http methods with session.
 :Response: 204
 :Error Codes:
     :404: If the session does not exist
