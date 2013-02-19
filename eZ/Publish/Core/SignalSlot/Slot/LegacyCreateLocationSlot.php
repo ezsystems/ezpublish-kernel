@@ -33,7 +33,7 @@ class LegacyCreateLocationSlot extends AbstractLegacySlot
         $kernel->runCallback(
             function () use ( $signal )
             {
-                \eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
+                \eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId, true, array( $signal->locationId ) );
                 $object = \eZContentObject::fetch( $signal->contentId );
                 \eZSearch::addNodeAssignment( $object->mainNodeID(), $signal->contentId, $signal->locationId );
             },
