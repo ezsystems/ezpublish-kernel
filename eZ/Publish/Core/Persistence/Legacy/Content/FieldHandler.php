@@ -172,37 +172,32 @@ class FieldHandler
      */
     public function createExistingFieldsInNewVersion( Content $content )
     {
-        $fieldsToCopy = array();
         $languageCodes = $this->getLanguageCodes( $content->versionInfo->languageIds );
         $contentFieldMap = $this->getFieldMap( $content->fields );
         $content->fields = array();
         $contentType = $this->typeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
+        $mainLanguageCode = $content->versionInfo->contentInfo->mainLanguageCode;
 
         foreach ( $contentType->fieldDefinitions as $fieldDefinition )
         {
             foreach ( array_keys( $languageCodes ) as $languageCode )
             {
-                if ( !$fieldDefinition->isTranslatable
-                    && $languageCode != $content->versionInfo->contentInfo->mainLanguageCode
-                )
+                if ( !$fieldDefinition->isTranslatable && $languageCode != $mainLanguageCode )
                 {
-                    $fieldsToCopy[$fieldDefinition->id][$languageCode] =
-                        $contentFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
+                    $createInNewLanguageCode = $languageCode;
+                    $field = $contentFieldMap[$fieldDefinition->id][$mainLanguageCode];
                 }
                 else
                 {
+                    $createInNewLanguageCode = null;
                     $field = $contentFieldMap[$fieldDefinition->id][$languageCode];
-                    $this->createExistingFieldInNewVersion( $field, $content );
-                    $content->fields[] = $field;
                 }
-            }
-        }
 
-        foreach ( $fieldsToCopy as $languageFields )
-        {
-            foreach ( $languageFields as $languageCode => $field )
-            {
-                $content->fields[] = $this->copyExistingFieldInNewVersion( $field, $languageCode, $content );
+                $content->fields[] = $this->createExistingFieldInNewVersion(
+                    $field,
+                    $content,
+                    $createInNewLanguageCode
+                );
             }
         }
     }
@@ -296,43 +291,6 @@ class FieldHandler
     }
 
     /**
-     * Copies existing field to new field for given $languageCode.
-     *
-     * Used by self::createNewFields() and self::updateFields()
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Field $originalField
-     * @param string $languageCode
-     * @param \eZ\Publish\SPI\Persistence\Content $content
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Field
-     */
-    protected function copyExistingFieldInNewVersion( Field $originalField, $languageCode, Content $content )
-    {
-        $field = clone $originalField;
-        $field->languageCode = $languageCode;
-        $field->versionNo = $content->versionInfo->versionNo;
-
-        $this->contentGateway->insertExistingField(
-            $content,
-            $field,
-            $this->mapper->convertToStorageValue( $field )
-        );
-
-        // If the storage handler returns true, it means that $field value has been modified
-        // So we need to update it in order to store those modifications
-        // Field converter is called once again via the Mapper
-        if ( $this->storageHandler->copyFieldData( $content->versionInfo, $field, $originalField ) === true )
-        {
-            $this->contentGateway->updateField(
-                $field,
-                $this->mapper->convertToStorageValue( $field )
-            );
-        }
-
-        return $field;
-    }
-
-    /**
      * Updates an existing field in the database.
      *
      * Used by self::createNewFields() and self::updateFields()
@@ -362,15 +320,28 @@ class FieldHandler
     }
 
     /**
-     * Creates an existing field in a new version, no new ID is generated
+     * Creates an existing field in a new version, no new ID is generated.
      *
-     * @param Field $field
+     * If $newLanguageCode is set field will be created in it. This is used for creating non-translatable
+     * fields from field in main language.
+     *
+     * External data is being copied here as some FieldTypes require original field external data.
+     * By default copying falls back to storing, it is upon external storage implementation to override
+     * the behaviour as needed.
+     *
+     * @param Field $originalField
      * @param Content $content
+     * @param string|null $newLanguageCode
      *
-     * @return void
+     * @return \eZ\Publish\SPI\Persistence\Content\Field
      */
-    protected function createExistingFieldInNewVersion( Field $field, Content $content )
+    protected function createExistingFieldInNewVersion( Field $originalField, Content $content, $newLanguageCode = null )
     {
+        $field = clone $originalField;
+        if ( $newLanguageCode !== null )
+        {
+            $field->languageCode = $newLanguageCode;
+        }
         $field->versionNo = $content->versionInfo->versionNo;
 
         $this->contentGateway->insertExistingField(
@@ -382,13 +353,15 @@ class FieldHandler
         // If the storage handler returns true, it means that $field value has been modified
         // So we need to update it in order to store those modifications
         // Field converter is called once again via the Mapper
-        if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
+        if ( $this->storageHandler->copyFieldData( $content->versionInfo, $field, $originalField ) === true )
         {
             $this->contentGateway->updateField(
                 $field,
                 $this->mapper->convertToStorageValue( $field )
             );
         }
+
+        return $field;
     }
 
     /**
