@@ -155,11 +155,15 @@ If an unsafe request is missing csrf token, or it has wrong value, a response er
 Rich client application security concerns
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The whole point of csrf protection is to avoid that users accidentally can do harmful operations by being tricked into executing a http(s) request against a web applications they are logged into, in case of browsers this will then be blocked by lack of csrf token. However if you develop a rich client application (javascript, java, flash, silverlight, iOS, android, ..) that is:
+
 * Registering itself as a protocol handler
-** In a way that exposes unsafe methods
+
+  * In a way that exposes unsafe methods
+
 * Authenticates using either:
-** Session based authentication
-** "Client side session" by remembering user login/password
+
+  * Session based authentication
+  * "Client side session" by remembering user login/password
 
 Then you have to make sure to ask the user if he really want to perform an unsafe operation when this is asked by over such a protocol handler.
 
