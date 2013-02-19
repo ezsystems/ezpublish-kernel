@@ -149,7 +149,7 @@ Example request headers:
     DELETE /content/types/32?<csrf-param>=<csrf-token> HTTP/1.1
     DELETE /user/sessions/<sessionID>?<csrf-param>=<csrf-token> HTTP/1.1
 
-If a unsafe request is missing csrf token, or it has wrong value, a response error must be given:
+If an unsafe request is missing csrf token, or it has wrong value, a response error must be given:
     401 Unauthorized
 
 Rich client application security concerns
