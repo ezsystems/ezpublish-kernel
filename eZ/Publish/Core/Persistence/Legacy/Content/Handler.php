@@ -379,9 +379,6 @@ class Handler implements BaseContentHandler
     /**
      * Updates a content object meta data, identified by $contentId.
      *
-     * This implementation also updates path identification string for locations of
-     * given $contentId if main language is set in update struct.
-     *
      * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $content
      *
@@ -390,7 +387,24 @@ class Handler implements BaseContentHandler
     public function updateMetadata( $contentId, MetadataUpdateStruct $content )
     {
         $this->contentGateway->updateContent( $contentId, $content );
+        $this->updatePathIdentificationString( $contentId, $content );
 
+        return $this->loadContentInfo( $contentId );
+    }
+
+    /**
+     * Updates path identification string for locations of given $contentId if main language
+     * is set in update struct.
+     *
+     * This is specific to the Legacy storage engine, as path identification string is deprecated.
+     *
+     * @param int $contentId
+     * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $content
+     *
+     * @return void
+     */
+    protected function updatePathIdentificationString( $contentId, MetadataUpdateStruct $content )
+    {
         if ( isset( $content->mainLanguageId ) )
         {
             $contentLocationsRows = $this->locationGateway->loadLocationDataByContent( $contentId );
@@ -417,8 +431,6 @@ class Handler implements BaseContentHandler
                 );
             }
         }
-
-        return $this->loadContentInfo( $contentId );
     }
 
     /**
