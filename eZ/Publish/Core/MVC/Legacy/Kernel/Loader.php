@@ -99,7 +99,7 @@ class Loader
                 $request = $container->get( 'request' );
                 $eventDispatcher = $container->get( 'event_dispatcher' );
 
-                // PRE_BUILD_LEGACY_KERNEL for non request related stuff (potentially available in CLI context as well
+                // PRE_BUILD_LEGACY_KERNEL for non request related stuff
                 $eventDispatcher->dispatch( LegacyEvents::PRE_BUILD_LEGACY_KERNEL, new PreBuildKernelEvent( $legacyParameters ) );
 
                 // Pure web stuff
