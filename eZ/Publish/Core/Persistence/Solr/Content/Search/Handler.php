@@ -405,6 +405,8 @@ class Handler extends BaseSearchHandler
             }
         }
 
+        /*
+        @todo FIXME: Uncomment when object states implementation is ready to be used
         $objectStateIds = array();
         foreach ( $this->objectStateHandler->loadAllGroups() as $objectStateGroup )
         {
@@ -419,6 +421,7 @@ class Handler extends BaseSearchHandler
             $objectStateIds,
             new FieldType\IdentifierField()
         );
+        */
 
         return $document;
     }
