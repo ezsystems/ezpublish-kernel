@@ -204,7 +204,7 @@ abstract class IOBase extends BaseServiceTest
         $filePath = __DIR__ . '/ezplogo.png';
 
         $binaryCreateStruct = $ioService->newBinaryCreateStructFromLocalFile( $filePath );
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct', $binaryCreateStruct );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\IO\\BinaryFileCreateStruct', $binaryCreateStruct );
 
         $fileHandle = fopen( $filePath, 'rb' );
 

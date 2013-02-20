@@ -125,7 +125,7 @@ abstract class TrashBase extends BaseServiceTest
         $trashItem = $location = $trashService->trash( $locationService->loadLocation( 44 ) );
         $loadedTrashItem = $trashService->loadTrashItem( $location->id );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\TrashItem', $trashItem );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem', $trashItem );
 
         self::assertSameClassPropertiesCorrect(
             array(
@@ -168,7 +168,7 @@ abstract class TrashBase extends BaseServiceTest
         $location = $locationService->loadLocation( 44 );
         $trashItem = $trashService->trash( $location );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\TrashItem', $trashItem );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem', $trashItem );
 
         self::assertSameClassPropertiesCorrect(
             array(
@@ -251,7 +251,7 @@ abstract class TrashBase extends BaseServiceTest
 
         $recoveredLocation = $trashService->recover( $trashItem );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $recoveredLocation );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location', $recoveredLocation );
 
         self::assertSameClassPropertiesCorrect(
             array(

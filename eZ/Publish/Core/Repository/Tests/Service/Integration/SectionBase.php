@@ -117,7 +117,7 @@ abstract class SectionBase extends BaseServiceTest
 
         $createdSection = $sectionService->createSection( $sectionCreateStruct );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Section', $createdSection );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section', $createdSection );
         self::assertGreaterThan( 0, $createdSection->id );
 
         $this->assertStructPropertiesCorrect(
@@ -229,7 +229,7 @@ abstract class SectionBase extends BaseServiceTest
 
         foreach ( $sections as $section )
         {
-            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Section', $section );
+            self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section', $section );
         }
     }
 
@@ -373,7 +373,7 @@ abstract class SectionBase extends BaseServiceTest
 
         $sectionCreateStruct = $sectionService->newSectionCreateStruct();
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\SectionCreateStruct', $sectionCreateStruct );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct', $sectionCreateStruct );
 
         $this->assertPropertiesCorrect(
             array(
@@ -394,7 +394,7 @@ abstract class SectionBase extends BaseServiceTest
 
         $sectionUpdateStruct = $sectionService->newSectionUpdateStruct();
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct', $sectionUpdateStruct );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct', $sectionUpdateStruct );
 
         $this->assertPropertiesCorrect(
             array(
