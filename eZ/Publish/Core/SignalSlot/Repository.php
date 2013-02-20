@@ -473,6 +473,26 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Tests if a transaction has been started
+     *
+     * @return bool
+     */
+    public function hasTransactionStarted()
+    {
+        return $this->repository->hasTransactionStarted();
+    }
+
+    /**
+     * Enqueue an event to be triggered at commit or directly if no transaction has started
+     *
+     * @param Callable $event
+     */
+    public function commitEvent( $event )
+    {
+        $this->repository->commitEvent( $event );
+    }
+
+    /**
      * Only for internal use.
      *
      * Creates a \DateTime object for $timestamp in the current time zone
