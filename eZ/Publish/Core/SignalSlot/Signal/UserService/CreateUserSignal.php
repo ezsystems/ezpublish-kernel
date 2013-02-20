@@ -18,9 +18,9 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class CreateUserSignal extends Signal
 {
     /**
-     * User ID
+     * User
      *
-     * @var mixed
+     * @var \eZ\Publish\API\Repository\Values\User\User
      */
-    public $userId;
+    public $user;
 }

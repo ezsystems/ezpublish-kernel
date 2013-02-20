@@ -17,7 +17,11 @@ use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
+use eZ\Publish\Core\Persistence\Solr\Slot;
 use eZ\Publish\Core\FieldType;
+use eZ\Publish\Core\SignalSlot\Repository as SignalSlotRepository;
+use eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher;
+use eZ\Publish\Core\SignalSlot\SlotFactory\GeneralSlotFactory;
 
 /**
  * A Test Factory is used to setup the infrastructure for a tests, based on a
@@ -51,6 +55,34 @@ class LegacySolr extends Legacy
         {
             $this->indexAll( $persistenceHandler, $searchHandler );
         }
+
+        $repository = new SignalSlotRepository(
+            $repository,
+            new DefaultSignalDispatcher(
+                new GeneralSlotFactory(
+                    array(
+                        // Attention: we are passing the NON SignalSlotted repository here because it is still under creation
+                        // this might be an issue and might require a dedicated setRepository() method.
+                        "solr-publish-version" => new Slot\PublishVersion( $repository, $persistenceHandler ),
+                        "solr-copy-content" => new Slot\CopyContent( $repository, $persistenceHandler ),
+                        "solr-delete-content" => new Slot\DeleteContent( $repository, $persistenceHandler ),
+                        "solr-delete-version" => new Slot\DeleteVersion( $repository, $persistenceHandler ),
+                        "solr-create-user" => new Slot\CreateUser( $repository, $persistenceHandler ),
+                        "solr-create-user-group" => new Slot\CreateUserGroup( $repository, $persistenceHandler ),
+                        "solr-move-user-group" => new Slot\MoveUserGroup( $repository, $persistenceHandler ),
+                    )
+                ),
+                array(
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\PublishVersionSignal" => array( "solr-publish-version" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\DeleteContentSignal" => array( "solr-delete-content" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\DeleteVersionSignal" => array( "solr-delete-version" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\CopyContentSignal" => array( "solr-copy-content" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\CreateUserSignal" => array( "solr-create-user" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\CreateUserGroupSignal" => array( "solr-create-user-group" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\MoveUserGroupSignal" => array( "solr-move-user-group" ),
+                )
+            )
+        );
 
         return $repository;
     }
