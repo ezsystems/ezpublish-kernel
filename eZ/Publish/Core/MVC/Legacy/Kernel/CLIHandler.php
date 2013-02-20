@@ -33,12 +33,12 @@ class CLIHandler implements ezpKernelHandler
     protected $sessionSettings;
 
     /**
-     * Legacy script to run.
+     * Path to legacy script to run.
      * e.g. bin/php/eztc.php
      *
      * @var string
      */
-    protected $embeddedScript;
+    protected $embeddedScriptPath;
 
     /**
      * Constructor
@@ -85,15 +85,16 @@ class CLIHandler implements ezpKernelHandler
      */
     public function run()
     {
-        if ( !isset( $this->embeddedScript ) )
+        if ( !isset( $this->embeddedScriptPath ) )
             throw new RuntimeException( 'No legacy script to run has been passed. Cannot run, aborting.' );
 
-        if ( !file_exists( $this->embeddedScript ) )
+        if ( !file_exists( $this->embeddedScriptPath ) )
             throw new RuntimeException( 'Passed legacy script does not exist. Please provide the correct script path, relative to the legacy root.' );
 
         $this->sessionInit();
+        // Exposing $argv to embedded script
         $argv = $_SERVER['argv'];
-        include $this->embeddedScript;
+        include $this->embeddedScriptPath;
     }
 
     private function sessionInit()
@@ -180,10 +181,10 @@ class CLIHandler implements ezpKernelHandler
     /**
      * Injects path to script to run in legacy context (relative to legacy root).
      *
-     * @param string $script
+     * @param string $scriptPath
      */
-    public function setEmbeddedScript( $script )
+    public function setEmbeddedScriptPath( $scriptPath )
     {
-        $this->embeddedScript = $script;
+        $this->embeddedScriptPath = $scriptPath;
     }
 }

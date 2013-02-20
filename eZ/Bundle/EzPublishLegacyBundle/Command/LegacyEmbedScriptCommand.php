@@ -72,7 +72,7 @@ EOT
         $legacyKernelClosure = $this->container->get( 'ezpublish_legacy.kernel' );
 
         // CLIHandler is contained in $legacyKernel, but we need to inject the script to run separately.
-        $legacyCLIHandlerClosure()->setEmbeddedScript( $legacyScript );
+        $legacyCLIHandlerClosure()->setEmbeddedScriptPath( $legacyScript );
         $legacyKernelClosure()->run();
     }
 }
