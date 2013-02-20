@@ -415,6 +415,8 @@ class Handler implements SearchHandlerInterface
             }
         }
 
+        /*
+        @todo FIXME: Uncomment when object states implementation is ready to be used
         $objectStateIds = array();
         foreach ( $this->objectStateHandler->loadAllGroups() as $objectStateGroup )
         {
@@ -429,6 +431,7 @@ class Handler implements SearchHandlerInterface
             $objectStateIds,
             new FieldType\IdentifierField()
         );
+        */
 
         return $document;
     }
