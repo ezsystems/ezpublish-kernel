@@ -291,6 +291,7 @@ parameters:
         ZW: {Name: "Zimbabwe", Alpha2: "ZW", Alpha3: "ZWE", IDC: "263"}
 
     ezpublish.fieldType.eznull.class: eZ\Publish\Core\FieldType\Null\Type
+    ezpublish.fieldType.ezrecommendation.class: %ezpublish.fieldType.eznull.class%
 
 services:
     ezpublish.fieldType:
@@ -665,3 +666,10 @@ services:
         arguments: [ "eztags" ]
         tags:
             - {name: ezpublish.fieldType, alias: eztags}
+
+    ezpublish.fieldType.ezrecommendation:
+        class: %ezpublish.fieldType.ezrecommendation.class%
+        parent: ezpublish.fieldType
+        arguments: [ "ezrecommendation" ]
+        tags:
+            - {name: ezpublish.fieldType, alias: ezrecommendation}
