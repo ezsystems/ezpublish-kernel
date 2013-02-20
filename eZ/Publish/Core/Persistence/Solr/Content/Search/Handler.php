@@ -342,7 +342,7 @@ class Handler extends BaseSearchHandler
             new Field(
                 'language_code',
                 array_keys( $content->versionInfo->names ),
-                new FieldType\StringField()
+                new FieldType\MultipleStringField()
             ),
         );
 

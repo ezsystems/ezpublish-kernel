@@ -43,9 +43,20 @@ class StringMapper extends FieldValueMapper
      */
     public function map( Field $field )
     {
-        // Remove non-printables
+        return $this->convert( $field->value );
+    }
 
-        return preg_replace( '([\x00-\x09\x0B\x0C\x1E\x1F]+)', '', $field->value instanceof DOMDocument ? $field->value->saveXML() : $field->value );
+    /**
+     * Convert to a proper Solr representation
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
+    protected function convert( $value )
+    {
+        // Remove non-printables
+        return preg_replace( '([\x00-\x09\x0B\x0C\x1E\x1F]+)', '', $value instanceof DOMDocument ? $value->saveXML() : $value );
     }
 }
 

@@ -29,6 +29,7 @@ class FieldNameGenerator
         "ez_id"       => "id",
         "ez_mid"      => "mid",
         "ez_string"   => "s",
+        "ez_mstring"  => "ms",
         "ez_long"     => "l",
         "ez_text"     => "t",
         "ez_html"     => "h",
