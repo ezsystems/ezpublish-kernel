@@ -151,6 +151,7 @@ class LegacySolr extends Legacy
                         new FieldValueMapper\IdentifierMapper(),
                         new FieldValueMapper\MultipleIdentifierMapper(),
                         new FieldValueMapper\StringMapper(),
+                        new FieldValueMapper\MultipleStringMapper(),
                         new FieldValueMapper\IntegerMapper(),
                         new FieldValueMapper\DateMapper(),
                         new FieldValueMapper\PriceMapper(),
