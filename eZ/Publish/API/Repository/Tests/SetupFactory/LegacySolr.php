@@ -10,6 +10,13 @@
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
 use eZ\Publish\Core\Persistence\Solr;
+use eZ\Publish\Core\Persistence\Solr\Content\Search;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
 use eZ\Publish\Core\FieldType;
 
 /**
@@ -50,8 +57,8 @@ class LegacySolr extends Legacy
 
     protected function getSearchHandler( $persistenceHandler )
     {
-        $nameGenerator = new Solr\Content\Search\FieldNameGenerator();
-        $fieldRegistry = new Solr\Content\Search\FieldRegistry(
+        $nameGenerator = new FieldNameGenerator();
+        $fieldRegistry = new FieldRegistry(
             array(
                 'ezstring'              => new FieldType\TextLine\SearchField(),
                 'ezprice'               => new FieldType\Price\SearchField(),
@@ -84,66 +91,66 @@ class LegacySolr extends Legacy
             )
         );
 
-        return new Solr\Content\Search\Handler(
-            new Solr\Content\Search\Gateway\Native(
-                new Solr\Content\Search\Gateway\HttpClient\Stream( getenv( "solrServer" ) ),
-                new Solr\Content\Search\CriterionVisitor\Aggregate(
+        return new Search\Handler(
+            new Search\Gateway\Native(
+                new Search\Gateway\HttpClient\Stream( getenv( "solrServer" ) ),
+                new CriterionVisitor\Aggregate(
                     array(
-                        new Solr\Content\Search\CriterionVisitor\ContentIdIn(),
-                        new Solr\Content\Search\CriterionVisitor\LogicalAnd(),
-                        new Solr\Content\Search\CriterionVisitor\LogicalOr(),
-                        new Solr\Content\Search\CriterionVisitor\LogicalNot(),
-                        new Solr\Content\Search\CriterionVisitor\SubtreeIn(),
-                        new Solr\Content\Search\CriterionVisitor\ContentTypeIdIn(),
-                        new Solr\Content\Search\CriterionVisitor\ContentTypeGroupIdIn(),
-                        new Solr\Content\Search\CriterionVisitor\LocationIdIn(),
-                        new Solr\Content\Search\CriterionVisitor\ParentLocationIdIn(),
-                        new Solr\Content\Search\CriterionVisitor\SectionIn(),
-                        new Solr\Content\Search\CriterionVisitor\RemoteIdIn(),
-                        new Solr\Content\Search\CriterionVisitor\LanguageCodeIn(),
-                        new Solr\Content\Search\CriterionVisitor\ObjectStateIdIn(),
-                        new Solr\Content\Search\CriterionVisitor\LocationRemoteIdIn(),
-                        new Solr\Content\Search\CriterionVisitor\DateMetadata\ModifiedIn(),
-                        new Solr\Content\Search\CriterionVisitor\DateMetadata\PublishedIn(),
-                        new Solr\Content\Search\CriterionVisitor\DateMetadata\ModifiedBetween(),
-                        new Solr\Content\Search\CriterionVisitor\DateMetadata\PublishedBetween(),
-                        new Solr\Content\Search\CriterionVisitor\StatusIn(),
-                        new Solr\Content\Search\CriterionVisitor\FullText(),
-                        new Solr\Content\Search\CriterionVisitor\Field\FieldIn(
+                        new CriterionVisitor\ContentIdIn(),
+                        new CriterionVisitor\LogicalAnd(),
+                        new CriterionVisitor\LogicalOr(),
+                        new CriterionVisitor\LogicalNot(),
+                        new CriterionVisitor\SubtreeIn(),
+                        new CriterionVisitor\ContentTypeIdIn(),
+                        new CriterionVisitor\ContentTypeGroupIdIn(),
+                        new CriterionVisitor\LocationIdIn(),
+                        new CriterionVisitor\ParentLocationIdIn(),
+                        new CriterionVisitor\SectionIn(),
+                        new CriterionVisitor\RemoteIdIn(),
+                        new CriterionVisitor\LanguageCodeIn(),
+                        new CriterionVisitor\ObjectStateIdIn(),
+                        new CriterionVisitor\LocationRemoteIdIn(),
+                        new CriterionVisitor\DateMetadata\ModifiedIn(),
+                        new CriterionVisitor\DateMetadata\PublishedIn(),
+                        new CriterionVisitor\DateMetadata\ModifiedBetween(),
+                        new CriterionVisitor\DateMetadata\PublishedBetween(),
+                        new CriterionVisitor\StatusIn(),
+                        new CriterionVisitor\FullText(),
+                        new CriterionVisitor\Field\FieldIn(
                             $fieldRegistry,
                             $persistenceHandler->contentTypeHandler(),
                             $nameGenerator
                         ),
-                        new Solr\Content\Search\CriterionVisitor\Field\FieldRange(
+                        new CriterionVisitor\Field\FieldRange(
                             $fieldRegistry,
                             $persistenceHandler->contentTypeHandler(),
                             $nameGenerator
                         ),
                     )
                 ),
-                new Solr\Content\Search\SortClauseVisitor\Aggregate(
+                new SortClauseVisitor\Aggregate(
                     array(
-                        new Solr\Content\Search\SortClauseVisitor\ContentId(),
-                        new Solr\Content\Search\SortClauseVisitor\LocationPathString(),
-                        new Solr\Content\Search\SortClauseVisitor\LocationDepth(),
-                        new Solr\Content\Search\SortClauseVisitor\LocationPriority(),
+                        new SortClauseVisitor\ContentId(),
+                        new SortClauseVisitor\LocationPathString(),
+                        new SortClauseVisitor\LocationDepth(),
+                        new SortClauseVisitor\LocationPriority(),
                     )
                 ),
-                new Solr\Content\Search\FacetBuilderVisitor\Aggregate(
+                new FacetBuilderVisitor\Aggregate(
                     array(
-                        new Solr\Content\Search\FacetBuilderVisitor\ContentType(),
-                        new Solr\Content\Search\FacetBuilderVisitor\Section(),
-                        new Solr\Content\Search\FacetBuilderVisitor\User(),
+                        new FacetBuilderVisitor\ContentType(),
+                        new FacetBuilderVisitor\Section(),
+                        new FacetBuilderVisitor\User(),
                     )
                 ),
-                new Solr\Content\Search\FieldValueMapper\Aggregate(
+                new FieldValueMapper\Aggregate(
                     array(
-                        new Solr\Content\Search\FieldValueMapper\IdentifierMapper(),
-                        new Solr\Content\Search\FieldValueMapper\MultipleIdentifierMapper(),
-                        new Solr\Content\Search\FieldValueMapper\StringMapper(),
-                        new Solr\Content\Search\FieldValueMapper\IntegerMapper(),
-                        new Solr\Content\Search\FieldValueMapper\DateMapper(),
-                        new Solr\Content\Search\FieldValueMapper\PriceMapper(),
+                        new FieldValueMapper\IdentifierMapper(),
+                        new FieldValueMapper\MultipleIdentifierMapper(),
+                        new FieldValueMapper\StringMapper(),
+                        new FieldValueMapper\IntegerMapper(),
+                        new FieldValueMapper\DateMapper(),
+                        new FieldValueMapper\PriceMapper(),
                     )
                 ),
                 $persistenceHandler->contentHandler(),
