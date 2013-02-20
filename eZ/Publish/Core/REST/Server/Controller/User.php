@@ -30,6 +30,7 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 
 use eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException AS RestInvalidArgumentException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 
 /**
  * User controller
@@ -929,6 +930,34 @@ class User extends RestController
             $restUserGroups,
             $this->urlHandler->generate( 'userGroups', array( 'user' => $urlValues['user'] ) ),
             $urlValues['user']
+        );
+    }
+
+    /**
+     * Creates a new session based on the credentials provided as POST parameters
+     */
+    public function createSession()
+    {
+        // Temporary. POST isn't used anywhere in REST, and isn't even understood by RMF
+        // See https://github.com/ezsystems/ezpublish-kernel/pull/225/files#r3084189
+        $login = $_POST['login'];
+        $password = $_POST['password'];
+
+        try
+        {
+            $user = $this->userService->loadUserByCredentials( $login, $password );
+        }
+        catch ( NotFoundException $e )
+        {
+            throw new UnauthorizedException( "Invalid login or password", 0, null, $e );
+        }
+
+        return new Values\UserSession(
+            $user,
+            "l=$login,p=$password",
+            'sessionId',
+            '_csrf_token',
+            '1234565677'
         );
     }
 

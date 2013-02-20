@@ -1034,3 +1034,9 @@ ezpublish_rest_deleteURLAlias:
     defaults:
         _controller: ezpublish_rest.controller.url_alias:deleteURLAlias
     methods: [DELETE]
+
+ezpublish_rest_createSession:
+    path: /user/sessions
+    defaults:
+        _controller: ezpublish_rest.controller.user:createSession
+    methods: [POST]

@@ -244,6 +244,7 @@ class Factory
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserRefList'                 => new Output\ValueObjectVisitor\UserRefList( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedUser'                 => new Output\ValueObjectVisitor\CreatedUser( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUser'                    => new Output\ValueObjectVisitor\RestUser( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserSession'                 => new Output\ValueObjectVisitor\UserSession( $urlHandler ),
 
             // ContentType
 
