@@ -238,10 +238,10 @@ class ContentHandler implements ContentHandlerInterface
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Handler::removeRelation
      */
-    public function removeRelation( $relationId )
+    public function removeRelation( $relationId, $type )
     {
-        $this->logger->logCall( __METHOD__, array( 'relation' => $relationId ) );
-        return $this->persistenceFactory->getContentHandler()->removeRelation( $relationId );
+        $this->logger->logCall( __METHOD__, array( 'relation' => $relationId, 'type' => $type ) );
+        $this->persistenceFactory->getContentHandler()->removeRelation( $relationId, $type );
     }
 
     /**

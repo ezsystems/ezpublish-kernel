@@ -171,9 +171,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
     }
 
     /**
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\UrlAlias[] $urlAliases
-     * @see \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::removeURLAliases
+     * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::removeURLAliases
      */
     public function removeURLAliases( array $urlAliases )
     {

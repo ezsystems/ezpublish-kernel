@@ -155,15 +155,6 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::loadRolesByGroupId
-     */
-    public function loadRolesByGroupId( $groupId )
-    {
-        $this->logger->logCall( __METHOD__, array( 'group' => $groupId ) );
-        return $this->persistenceFactory->getUserHandler()->loadRolesByGroupId( $groupId );
-    }
-
-    /**
      * @see eZ\Publish\SPI\Persistence\User\Handler::loadRoleAssignmentsByRoleId
      */
     public function loadRoleAssignmentsByRoleId( $roleId )

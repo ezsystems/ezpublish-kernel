@@ -95,7 +95,16 @@ class SearchHandler extends SearchHandlerInterface
      */
     public function indexContent( Content $content )
     {
-        $this->logger->logCall( __METHOD__, array( 'content' => $content ) );
+        $this->logger->logCall( __METHOD__, array( 'content' => $content->id ) );
         $this->persistenceFactory->getSearchHandler()->indexContent( $content );
+    }
+
+    /**
+     * @see eZ\Publish\SPI\Persistence\Content\Search\Handler::deleteContent
+     */
+    public function deleteContent( $contentID, $versionID = null )
+    {
+        $this->logger->logCall( __METHOD__, array( 'content' => $contentID, 'version' => $versionID ) );
+        $this->persistenceFactory->getSearchHandler()->deleteContent( $contentID, $versionID );
     }
 }
