@@ -203,6 +203,16 @@ class Handler implements SearchHandlerInterface
     }
 
     /**
+     * Deletes a location from the index
+     *
+     * @param mixed $locationId
+     */
+    public function deleteLocation( $locationId )
+    {
+        $this->gateway->deleteLocation( $locationId );
+    }
+
+    /**
      * Map content to document.
      *
      * A document is an array of fields

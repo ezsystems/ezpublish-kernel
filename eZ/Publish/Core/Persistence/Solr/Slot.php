@@ -68,4 +68,21 @@ abstract class Slot extends BaseSlot
             }
         );
     }
+
+    /**
+     * Enqueue the deletion of location
+     *
+     * @param mixed $locationId
+     */
+    protected function enqueueDeletionLocation( $locationId )
+    {
+        $searchHandler = $this->persistenceHandler->searchHandler();
+
+        $this->repository->commitEvent(
+            function () use ( $searchHandler, $locationId )
+            {
+                $searchHandler->deleteLocation( $locationId );
+            }
+        );
+    }
 }
