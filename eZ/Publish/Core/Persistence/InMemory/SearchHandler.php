@@ -238,12 +238,12 @@ class SearchHandler extends SearchHandlerInterface
     /**
      * Deletes a content object from the index
      *
-     * @param int $contentID
-     * @param int|null $versionID
+     * @param int $contentId
+     * @param int|null $versionId
      *
      * @return void
      */
-    public function deleteContent( $contentID, $versionID = null )
+    public function deleteContent( $contentId, $versionId = null )
     {
         throw new \Exception( "Not implemented yet." );
     }

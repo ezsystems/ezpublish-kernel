@@ -57,11 +57,11 @@ class LegacyStorage extends Gateway
      * Stores the keyword list from $field->value->externalData
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field
-     * @param mixed $contentTypeID
+     * @param mixed $contentTypeId
      */
-    public function storeFieldData( Field $field, $contentTypeID )
+    public function storeFieldData( Field $field, $contentTypeId )
     {
-        $existingKeywordMap = $this->getExistingKeywords( $field->value->externalData, $contentTypeID );
+        $existingKeywordMap = $this->getExistingKeywords( $field->value->externalData, $contentTypeId );
 
         $this->deleteOldKeywordAssignements( $field );
 
@@ -72,7 +72,7 @@ class LegacyStorage extends Gateway
                     array_fill_keys( $field->value->externalData, true ),
                     $existingKeywordMap
                 ),
-                $contentTypeID
+                $contentTypeId
             ) + $existingKeywordMap
         );
     }
@@ -96,9 +96,9 @@ class LegacyStorage extends Gateway
      *
      * @return mixed
      */
-    public function getContentTypeID( Field $field )
+    public function getContentTypeId( Field $field )
     {
-        return $this->loadContentTypeID( $field->fieldDefinitionId );
+        return $this->loadContentTypeId( $field->fieldDefinitionId );
     }
 
     /**
@@ -142,7 +142,7 @@ class LegacyStorage extends Gateway
      *
      * @return mixed
      */
-    protected function loadContentTypeID( $fieldDefinitionId )
+    protected function loadContentTypeId( $fieldDefinitionId )
     {
         $dbHandler = $this->getConnection();
 
@@ -181,11 +181,11 @@ class LegacyStorage extends Gateway
      * </code>
      *
      * @param string[] $keywordList
-     * @param mixed $contentTypeID
+     * @param mixed $contentTypeId
      *
      * @return mixed[]
      */
-    protected function getExistingKeywords( $keywordList, $contentTypeID )
+    protected function getExistingKeywords( $keywordList, $contentTypeId )
     {
         $dbHandler = $this->getConnection();
 
@@ -199,7 +199,7 @@ class LegacyStorage extends Gateway
                         "keyword",
                         $keywordList
                     ),
-                    $q->expr->eq( "class_id", $contentTypeID )
+                    $q->expr->eq( "class_id", $contentTypeId )
                 )
             );
         $statement = $q->prepare();
@@ -232,7 +232,7 @@ class LegacyStorage extends Gateway
      *
      * @return mixed[]
      */
-    protected function insertKeywords( array $keywordsToInsert, $contentTypeID )
+    protected function insertKeywords( array $keywordsToInsert, $contentTypeId )
     {
         $dbHandler = $this->getConnection();
 
@@ -246,7 +246,7 @@ class LegacyStorage extends Gateway
                 $dbHandler->quoteTable( "ezkeyword" )
             )->set(
                 $dbHandler->quoteColumn( "class_id" ),
-                $insertQuery->bindValue( $contentTypeID, null, \PDO::PARAM_INT )
+                $insertQuery->bindValue( $contentTypeId, null, \PDO::PARAM_INT )
             )->set(
                 $dbHandler->quoteColumn( "keyword" ),
                 $insertQuery->bindParam( $keyword )

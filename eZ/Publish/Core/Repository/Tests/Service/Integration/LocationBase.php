@@ -498,7 +498,7 @@ abstract class LocationBase extends BaseServiceTest
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @covers \eZ\Publish\API\Repository\LocationService::createLocation
      */
-    public function testCreateLocationThrowsInvalidArgumentExceptionExistingRemoteID()
+    public function testCreateLocationThrowsInvalidArgumentExceptionExistingRemoteId()
     {
         $locationService = $this->repository->getLocationService();
         $contentService = $this->repository->getContentService();

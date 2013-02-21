@@ -218,7 +218,7 @@ class Native extends Gateway
      *
      * @return void
      */
-    public function deleteContent( $contentID, $versionID = null )
+    public function deleteContent( $contentId, $versionId = null )
     {
         $this->client->request(
             'POST',
@@ -227,7 +227,7 @@ class Native extends Gateway
                 array(
                     'Content-Type: text/xml',
                 ),
-                "<delete><query>id:" . (int)$contentID . ( $versionID !== null ? " AND version_id:" . (int)$versionID : "" ) . "</query></delete>"
+                "<delete><query>id:" . (int)$contentId . ( $versionId !== null ? " AND version_id:" . (int)$versionId : "" ) . "</query></delete>"
             )
         );
     }

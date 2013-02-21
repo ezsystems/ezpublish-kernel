@@ -34,8 +34,8 @@ class KeywordStorage extends GatewayBasedStorage
 
         $gateway = $this->getGateway( $context );
 
-        $contentTypeID = $gateway->getContentTypeID( $field );
-        return $gateway->storeFieldData( $field, $contentTypeID );
+        $contentTypeId = $gateway->getContentTypeId( $field );
+        return $gateway->storeFieldData( $field, $contentTypeId );
     }
 
     /**
