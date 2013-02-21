@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\User\UserHandlerTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -18,16 +18,6 @@ use eZ\Publish\SPI\Persistence;
  */
 class UserHandlerTest extends TestCase
 {
-    /**
-     * Returns the test suite with all tests declared in this class.
-     *
-     * @return \PHPUnit_Framework_TestSuite
-     */
-    public static function suite()
-    {
-        return new \PHPUnit_Framework_TestSuite( __CLASS__ );
-    }
-
     protected function getUserHandler()
     {
         $dbHandler = $this->getDatabaseHandler();
@@ -763,109 +753,6 @@ class UserHandlerTest extends TestCase
             array(),
             $this->handler->createSelectQuery()->select( 'id', 'contentobject_id', 'role_id', 'limit_identifier', 'limit_value' )->from( 'ezuser_role' ),
             'Expected no user policy associations.'
-        );
-    }
-
-    public function testLoadPoliciesForGroup()
-    {
-        $handler = $this->getUserHandler();
-
-        $role1 = new Persistence\User\Role();
-        $role1->identifier = 'Test role 1';
-        $handler->createRole( $role1 );
-
-        $policy = new Persistence\User\Policy();
-        $policy->module = 'foo_1';
-        $policy->function = 'blubb';
-        $policy->limitations = array(
-            'Foo' => array( 'Bar' ),
-        );
-
-        $handler->addPolicy( $role1->id, $policy );
-
-        $role2 = new Persistence\User\Role();
-        $role2->identifier = 'Test role 2';
-        $handler->createRole( $role2 );
-
-        $policy = new Persistence\User\Policy();
-        $policy->module = 'foo_1';
-        $policy->function = 'bar';
-        $policy->limitations = array(
-            'Subtree' => array( '/1', '/1/2' ),
-            'Foo' => array( 'Bar' ),
-        );
-
-        $handler->addPolicy( $role2->id, $policy );
-
-        $policy = new Persistence\User\Policy();
-        $policy->module = 'foo_2';
-        $policy->function = 'bar';
-        $policy->limitations = array(
-            'Subtree' => array( '/1/2/3' ),
-        );
-
-        $handler->addPolicy( $role2->id, $policy );
-
-        $handler->assignRole( 23, $role1->id );
-        $handler->assignRole( 23, $role2->id );
-        $handler->assignRole( 42, $role2->id );
-
-        $this->assertEquals(
-            array(
-                new Persistence\User\Role(
-                    array(
-                        'id' => 1,
-                        'identifier' => 'Test role 1',
-                        'policies' => array(
-                            new Persistence\User\Policy(
-                                array(
-                                    'id' => 1,
-                                    'roleId' => 1,
-                                    'module' => 'foo_1',
-                                    'function' => 'blubb',
-                                    'limitations' => array(
-                                        'Foo' => array( 'Bar' ),
-                                    ),
-                                )
-                            ),
-                        ),
-                        'groupIds' => array( 23 ),
-                    )
-                ),
-                new Persistence\User\Role(
-                    array(
-                        'id' => 2,
-                        'identifier' => 'Test role 2',
-                        'policies' => array(
-                            new Persistence\User\Policy(
-                                array(
-                                    'id' => 2,
-                                    'roleId' => 2,
-                                    'module' => 'foo_1',
-                                    'function' => 'bar',
-                                    'limitations' => array(
-                                        'Subtree' => array( '/1', '/1/2' ),
-                                        'Foo' => array( 'Bar' ),
-                                    ),
-                                )
-                            ),
-                            new Persistence\User\Policy(
-                                array(
-                                    'id' => 3,
-                                    'roleId' => 2,
-                                    'module' => 'foo_2',
-                                    'function' => 'bar',
-                                    'limitations' => array(
-                                        'Subtree' => array( '/1/2/3' ),
-                                    ),
-                                )
-                            ),
-                        ),
-                        'groupIds' => array( 23, 42 ),
-                    )
-                ),
-            ),
-            $handler->loadRolesByGroupId( 23 )
         );
     }
 

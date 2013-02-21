@@ -2,7 +2,7 @@
 /**
  * File containing the Object State InMemory Handler class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -119,7 +119,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
 
         usort(
             $objectStates,
-            function( ObjectState $first, ObjectState $second )
+            function ( ObjectState $first, ObjectState $second )
             {
                 if ( $first->priority == $second->priority )
                     return 0;
@@ -187,7 +187,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
         {
             $allContentInfos = $this->backend->find( "Content\\ContentInfo" );
             $allContentIds = array_map(
-                function( ContentInfo $contentInfo )
+                function ( ContentInfo $contentInfo )
                 {
                     return $contentInfo->id;
                 },

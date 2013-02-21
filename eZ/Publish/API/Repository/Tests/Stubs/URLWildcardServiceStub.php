@@ -2,7 +2,7 @@
 /**
  * File containing the URLWildcardServiceStub class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -166,7 +166,7 @@ class URLWildcardServiceStub implements URLWildcardService
     {
         uasort(
             $this->wildcards,
-            function( URLWildcard $w1, URLWildcard $w2 )
+            function ( URLWildcard $w1, URLWildcard $w2 )
             {
                 return strlen( $w2->sourceUrl ) - strlen( $w1->sourceUrl );
             }

@@ -2,7 +2,7 @@
 /**
  * File containing the FieldType class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * Base class for field types, the most basic storage unit of data inside eZ Publish.
@@ -110,7 +111,7 @@ abstract class FieldType implements FieldTypeInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
-     * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field for which an action is performed
+     * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field value for which an action is performed
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
@@ -360,5 +361,35 @@ abstract class FieldType implements FieldTypeInterface
     public function validatorConfigurationFromHash( $validatorConfigurationHash )
     {
         return $validatorConfigurationHash;
+    }
+
+    /**
+     * Returns relation data extracted from value.
+     *
+     * Not intended for \eZ\Publish\API\Repository\Values\Content\Relation::COMMON type relations,
+     * there is an API for handling those.
+     *
+     * @param \eZ\Publish\Core\FieldType\Value $fieldValue
+     *
+     * @return array Hash with relation type as key and array of destination content ids as value.
+     *
+     * Example:
+     * <code>
+     *  array(
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::LINK => array(
+     *          "contentIds" => array( 12, 13, 14 ),
+     *          "locationIds" => array( 24 )
+     *      ),
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::EMBED => array(
+     *          "contentIds" => array( 12 ),
+     *          "locationIds" => array( 24, 45 )
+     *      ),
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::FIELD => array( 12 )
+     *  )
+     * </code>
+     */
+    public function getRelations( BaseValue $fieldValue )
+    {
+        return array();
     }
 }

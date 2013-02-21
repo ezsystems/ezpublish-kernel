@@ -2,7 +2,7 @@
 /**
  * File containing the Content Search Gateway class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -38,6 +38,16 @@ abstract class Gateway
      * @return void
      */
     abstract public function indexContent( array $document );
+
+    /**
+     * Deletes a content object from the index
+     *
+     * @param int content id
+     * @param int|null version id
+     *
+     * @return void
+     */
+    abstract public function deleteContent( $contentID, $versionID = null );
 
     /**
      * Purges all contents from the index

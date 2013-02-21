@@ -2,7 +2,7 @@
 /**
  * File containing the ContentHandler implementation
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -10,13 +10,17 @@
 namespace eZ\Publish\Core\Persistence\InMemory;
 
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandlerInterface;
+use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use RuntimeException;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
@@ -36,15 +40,24 @@ class ContentHandler implements ContentHandlerInterface
     protected $backend;
 
     /**
+     * Hash of SPI FieldTypes or callable callbacks to generate one.
+     *
+     * @var \eZ\Publish\Core\Persistence\FieldTypeRegistry
+     */
+    protected $fieldTypeRegistry;
+
+    /**
      * Setups current handler instance with reference to Handler object that created it.
      *
      * @param \eZ\Publish\Core\Persistence\InMemory\Handler $handler
      * @param \eZ\Publish\Core\Persistence\InMemory\Backend $backend The storage engine backend
+     * @param \eZ\Publish\Core\Persistence\FieldTypeRegistry $fieldTypeRegistry
      */
-    public function __construct( Handler $handler, Backend $backend )
+    public function __construct( Handler $handler, Backend $backend, FieldTypeRegistry $fieldTypeRegistry = null )
     {
         $this->handler = $handler;
         $this->backend = $backend;
+        $this->fieldTypeRegistry = $fieldTypeRegistry;
     }
 
     /**
@@ -54,9 +67,9 @@ class ContentHandler implements ContentHandlerInterface
     {
         /** @var \eZ\Publish\SPI\Persistence\Content $contentObj */
         $contentObj = $this->backend->create( 'Content', array( '_currentVersionNo' => 1 ) );
-        /** @var \eZ\Publish\SPI\Persistence\Content\ContentInfo $contentInfo */
         $mainLanguageCode = $this->handler->contentLanguageHandler()
             ->load( $content->initialLanguageId )->languageCode;
+        /** @var \eZ\Publish\SPI\Persistence\Content\ContentInfo $contentInfo */
         $contentInfo = $this->backend->create(
             'Content\\ContentInfo',
             array(
@@ -79,26 +92,16 @@ class ContentHandler implements ContentHandlerInterface
             true
         );
         $languageCodes = array();
-        $languageIds = array();
-        foreach ( $content->fields as $field )
+        $fields = $this->createCompleteFields( $content, $languageCodes, $mainLanguageCode );
+        foreach ( $fields as $languageFields )
         {
-            $contentObj->fields[] = $this->backend->create(
-                'Content\\Field',
-                array(
-                    'versionNo' => 1,
-                    // Using internal _contentId since it's not directly exposed by Persistence
-                    '_contentId' => $contentInfo->id,
-                    'value' => new FieldValue(
-                        array(
-                            'data' => $field->value->data,
-                            'sortKey' => array( 'sort_key_string' => $field->value->sortKey )
-                        )
-                    )
-                ) + (array)$field
-            );
-            $languageCodes[] = $field->languageCode;
+            foreach ( $languageFields as $field )
+            {
+                $contentObj->fields[] = $this->createField( $field, $contentInfo->id );
+            }
         }
-        foreach ( array_unique( $languageCodes ) as $languageCode )
+        $languageIds = array();
+        foreach ( array_keys( $languageCodes ) as $languageCode )
         {
             $languageIds[] = $this->handler->contentLanguageHandler()
                 ->loadByLanguageCode( $languageCode )->id;
@@ -107,7 +110,6 @@ class ContentHandler implements ContentHandlerInterface
         $versionInfo = $this->backend->create(
             'Content\\VersionInfo',
             array(
-                // @todo: Name should be computed!
                 'names' => $content->name,
                 'creatorId' => $content->ownerId,
                 'creationDate' => $content->modified,
@@ -136,6 +138,82 @@ class ContentHandler implements ContentHandlerInterface
         return $contentObj;
     }
 
+    protected function createField( $field, $contentId, $versionNo = 1 )
+    {
+        return $this->backend->create(
+            'Content\\Field',
+            array(
+                'versionNo' => $versionNo,
+                // Using internal _contentId since it's not directly exposed by Persistence
+                '_contentId' => $contentId,
+                'value' => $field->value
+            ) + (array)$field
+        );
+    }
+
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
+     * @param array $languageCodes
+     *
+     * @return array
+     */
+    protected function getFieldMap( array $fields, array &$languageCodes = null )
+    {
+        $mappedFields = array();
+        foreach ( $fields as $field )
+        {
+            if ( isset( $languageCodes ) )
+            {
+                $languageCodes[$field->languageCode] = true;
+            }
+            $mappedFields[$field->fieldDefinitionId][$field->languageCode] = $field;
+        }
+
+        return $mappedFields;
+    }
+
+    /**
+     * Returns complete set of fields.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $contentCreateStruct
+     * @param array $languageCodes
+     * @param string $mainLanguageCode
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Field[]
+     */
+    protected function createCompleteFields( CreateStruct $contentCreateStruct, array &$languageCodes, $mainLanguageCode )
+    {
+        $fields = $this->getFieldMap( $contentCreateStruct->fields, $languageCodes );
+        $contentType = $this->handler->contentTypeHandler()->load( $contentCreateStruct->typeId );
+
+        foreach ( $contentType->fieldDefinitions as $fieldDefinition )
+        {
+            foreach ( array_keys( $languageCodes ) as $languageCode )
+            {
+                if ( isset( $fields[$fieldDefinition->id][$languageCode] ) )
+                {
+                    continue;
+                }
+
+                if ( $fieldDefinition->isTranslatable
+                    || !isset( $fields[$fieldDefinition->id][$mainLanguageCode] ) )
+                {
+                    $field = $this->getEmptyField( $fieldDefinition, $languageCode );
+                }
+                else
+                {
+                    $field = clone $fields[$fieldDefinition->id][$mainLanguageCode];
+                    $field->id = null;
+                    $field->languageCode = $languageCode;
+                }
+
+                $fields[$fieldDefinition->id][$languageCode] = $field;
+            }
+        }
+
+        return $fields;
+    }
+
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Handler
      */
@@ -153,7 +231,7 @@ class ContentHandler implements ContentHandlerInterface
             )
         );
         if ( empty( $aVersion ) )
-            throw new NotFound( "Version", "contentId: $contentId // versionNo: $srcVersion" );
+            throw new NotFoundException( "Version", "contentId: $contentId // versionNo: $srcVersion" );
 
         // Create new version
         $newVersionNo = $this->getLastVersionNumber( $contentId ) + 1;
@@ -208,7 +286,7 @@ class ContentHandler implements ContentHandlerInterface
     {
         $originalContentInfo = $this->backend->load( 'Content\\ContentInfo', $contentId );
         if ( !$originalContentInfo )
-            throw new NotFound( 'Content\\ContentInfo', "contentId: $contentId" );
+            throw new NotFoundException( 'Content\\ContentInfo', "contentId: $contentId" );
 
         $time = time();
 
@@ -265,7 +343,7 @@ class ContentHandler implements ContentHandlerInterface
             )
         );
         if ( empty( $aVersion ) )
-            throw new NotFound( "Version", "contentId: {$contentInfo->id} // versionNo: $currentVersionNo" );
+            throw new NotFoundException( "Version", "contentId: {$contentInfo->id} // versionNo: $currentVersionNo" );
 
         $contentObj->versionInfo = $aVersion[0];
         $contentObj->versionInfo->contentInfo = $contentInfo;
@@ -311,7 +389,7 @@ class ContentHandler implements ContentHandlerInterface
             array( 'id' => $id )
         );
         if ( empty( $res ) )
-            throw new NotFound( "Content", "contentId:{$id}" );
+            throw new NotFoundException( "Content", "contentId:{$id}" );
 
         $content = $res[0];
         $versions = $this->backend->find(
@@ -329,10 +407,10 @@ class ContentHandler implements ContentHandlerInterface
             )
         );
         if ( !isset( $versions[0] ) )
-            throw new NotFound( "Version", "contentId:{$id}, versionNo:{$version}" );
+            throw new NotFoundException( "Version", "contentId:{$id}, versionNo:{$version}" );
 
         if ( !$versions[0]->contentInfo instanceof ContentInfo )
-            throw new NotFound( "Content\\ContentInfo", "contentId:{$id}" );
+            throw new NotFoundException( "Content\\ContentInfo", "contentId:{$id}" );
 
         $fieldMatch = array(
             "_contentId" => $id,
@@ -406,7 +484,7 @@ class ContentHandler implements ContentHandlerInterface
         );
 
         if ( empty( $versionInfoList ) )
-            throw new NotFound( "Content\\VersionInfo", "contentId: $contentId, versionNo: $versionNo" );
+            throw new NotFoundException( "Content\\VersionInfo", "contentId: $contentId, versionNo: $versionNo" );
 
         $versionInfo = reset( $versionInfoList );
         $locations = $this->backend->find(
@@ -465,7 +543,7 @@ class ContentHandler implements ContentHandlerInterface
 
         if ( !count( $versions ) )
         {
-            throw new NotFound( "Version", "contentId: $contentId, versionNo: $version" );
+            throw new NotFoundException( "Version", "contentId: $contentId, versionNo: $version" );
         }
         return $this->backend->update( 'Content\\VersionInfo', $versions[0]->id, array( 'status' => $status ) );
     }
@@ -493,60 +571,75 @@ class ContentHandler implements ContentHandlerInterface
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Handler
      */
-    public function updateContent( $contentId, $versionNo, UpdateStruct $content )
+    public function updateContent( $contentId, $versionNo, UpdateStruct $updateStruct )
     {
-        $versionInfo = $this->loadVersionInfo( $contentId, $versionNo );
-        $versionLanguageIds = $versionInfo->languageIds;
-
+        /** @var $content \eZ\Publish\SPI\Persistence\Content */
+        $content = $this->load( $contentId, $versionNo );
         $versionUpdateData = array(
-            "creatorId" => $content->creatorId,
-            "modificationDate" => $content->modificationDate,
-            "names" => $content->name,
+            "creatorId" => $updateStruct->creatorId,
+            "modificationDate" => $updateStruct->modificationDate,
+            "names" => $updateStruct->name,
             "initialLanguageCode" => $this->handler->contentLanguageHandler()
-                ->load( $content->initialLanguageId )->languageCode
+                ->load( $updateStruct->initialLanguageId )->languageCode
         );
 
-        foreach ( $content->fields as $field )
+        $languageCodes = $existingLanguageCodes = $this->getLanguageCodes( $content->versionInfo->languageIds );
+        $contentFieldMap = $this->getFieldMap( $content->fields );
+        $updateFieldMap = $this->getFieldMap( $updateStruct->fields, $languageCodes );
+        $contentType = $this->handler->contentTypeHandler()->load( $content->versionInfo->contentInfo->contentTypeId );
+
+        foreach ( $contentType->fieldDefinitions as $fieldDefinition )
         {
-            if ( !isset( $field->id ) )
+            foreach ( array_keys( $languageCodes ) as $languageCode )
             {
-                $versionLanguageIds[] =
-                    $this->handler->contentLanguageHandler()->loadByLanguageCode( $field->languageCode )->id;
-                $this->backend->create(
-                    'Content\\Field',
-                    array( '_contentId' => $contentId, 'versionNo' => $versionNo ) + (array)$field
-                );
-            }
-            else
-            {
-                $fieldDefinition = $this->backend->load( "Content\\Type\\FieldDefinition", $field->fieldDefinitionId );
-                if ( $fieldDefinition->isTranslatable )
+                if ( isset( $updateFieldMap[$fieldDefinition->id][$languageCode] ) )
                 {
-                    $this->backend->updateByMatch(
-                        "Content\\Field",
-                        array(
-                            "id" => $field->id,
-                            "versionNo" => $versionNo
-                        ),
-                        array( "value" => $field->value )
-                    );
+                    $field = $updateFieldMap[$fieldDefinition->id][$languageCode];
+                    if ( isset( $field->id ) )
+                    {
+                        $this->backend->updateByMatch(
+                            "Content\\Field",
+                            array(
+                                "id" => $field->id,
+                                "versionNo" => $versionNo
+                            ),
+                            array( "value" => $field->value )
+                        );
+                    }
+                    else
+                    {
+                        $this->createField( $field, $contentId, $versionNo );
+                    }
                 }
-                else
+                // If field is not set for new language
+                else if ( !isset( $existingLanguageCodes[$languageCode] ) )
                 {
-                    $this->backend->updateByMatch(
-                        "Content\\Field",
-                        array(
-                            "fieldDefinitionId" => $field->fieldDefinitionId,
-                            "versionNo" => $versionNo,
-                            "_contentId" => $contentId
-                        ),
-                        array( "value" => $field->value )
-                    );
+                    if ( $fieldDefinition->isTranslatable
+                        || !isset( $contentFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode] ) )
+                    {
+                        // Use empty value
+                        $field = $this->getEmptyField( $fieldDefinition, $languageCode, $versionNo );
+                    }
+                    else
+                    {
+                        // Use value from main language code
+                        $field = clone $contentFieldMap[$fieldDefinition->id][$content->versionInfo->contentInfo->mainLanguageCode];
+                        $field->id = null;
+                        $field->languageCode = $languageCode;
+                    }
+
+                    $this->createField( $field, $contentId, $versionNo );
                 }
             }
         }
 
-        $versionUpdateData["languageIds"] = array_unique( $versionLanguageIds );
+        $languageIds = array();
+        foreach ( array_keys( $languageCodes ) as $languageCode )
+        {
+            $languageIds[] = $this->handler->contentLanguageHandler()
+                ->loadByLanguageCode( $languageCode )->id;
+        }
+        $versionUpdateData["languageIds"] = array_unique( $languageIds );
         $this->backend->updateByMatch(
             "Content\\VersionInfo",
             array( "_contentId" => $contentId, "versionNo" => $versionNo ),
@@ -554,6 +647,49 @@ class ContentHandler implements ContentHandlerInterface
         );
 
         return $this->load( $contentId, $versionNo );
+    }
+
+    /**
+     * Returns empty Field object for given field definition and language code.
+     *
+     * Uses FieldType to create empty field value.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param string $languageCode
+     * @param int $versionNo
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Field
+     */
+    protected function getEmptyField( FieldDefinition $fieldDefinition, $languageCode, $versionNo = 1 )
+    {
+        $fieldType = $this->fieldTypeRegistry->getFieldType( $fieldDefinition->fieldType );
+        return new Field(
+            array(
+                "fieldDefinitionId" => $fieldDefinition->id,
+                "type" => $fieldDefinition->fieldType,
+                "value" => $fieldType->getEmptyValue(),
+                "languageCode" => $languageCode,
+                "versionNo" => $versionNo
+            )
+        );
+    }
+
+    /**
+     * For given $languageIds returns array with language codes as keys.
+     *
+     * @param array $languageIds
+     *
+     * @return array
+     */
+    protected function getLanguageCodes( array $languageIds )
+    {
+        $languageCodes = array();
+        foreach ( $languageIds as $languageId )
+        {
+            $languageCodes[$this->handler->contentLanguageHandler()->load( $languageId )->languageCode] = true;
+        }
+
+        return $languageCodes;
     }
 
     /**
@@ -664,7 +800,7 @@ class ContentHandler implements ContentHandlerInterface
         );
 
         if ( empty( $versions ) )
-            throw new NotFound( "Content\\VersionInfo", "contentId: $contentId" );
+            throw new NotFoundException( "Content\\VersionInfo", "contentId: $contentId" );
 
         return $versions;
     }
@@ -683,7 +819,7 @@ class ContentHandler implements ContentHandlerInterface
         $sourceContent = $this->backend->find( 'Content\\ContentInfo', array( "id" => $relation->sourceContentId ) );
 
         if ( empty( $sourceContent ) )
-            throw new NotFound( 'Content\\ContentInfo', "contentId: {$relation->sourceContentId}" );
+            throw new NotFoundException( 'Content\\ContentInfo', "contentId: {$relation->sourceContentId}" );
 
         // Ensure source content exists if version is specified
         if ( $relation->sourceContentVersionNo !== null )
@@ -691,14 +827,14 @@ class ContentHandler implements ContentHandlerInterface
             $version = $this->backend->find( "Content\\VersionInfo", array( "_contentId" => $relation->sourceContentId, "versionNo" => $relation->sourceContentVersionNo ) );
 
             if ( empty( $version ) )
-                throw new NotFound( "Content\\VersionInfo", "contentId: {$relation->sourceContentId}, versionNo: {$relation->sourceContentVersionNo}" );
+                throw new NotFoundException( "Content\\VersionInfo", "contentId: {$relation->sourceContentId}, versionNo: {$relation->sourceContentVersionNo}" );
         }
 
         // Ensure destination content exists
         $destinationContent = $this->backend->find( 'Content\\ContentInfo', array( "id" => $relation->destinationContentId ) );
 
         if ( empty( $destinationContent ) )
-            throw new NotFound( 'Content\\ContentInfo', "contentId: {$relation->destinationContentId}" );
+            throw new NotFoundException( 'Content\\ContentInfo', "contentId: {$relation->destinationContentId}" );
 
         return $this->backend->create( "Content\\Relation", (array)$relation );
     }
@@ -707,15 +843,19 @@ class ContentHandler implements ContentHandlerInterface
      * Removes a relation by relation Id.
      *
      * @param mixed $relationId
+     * @param int $type {@see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if relation to be removed is not found.
      */
-    public function removeRelation( $relationId )
+    public function removeRelation( $relationId, $type )
     {
         $requestedRelation = $this->backend->find( "Content\\Relation", array( "id" => $relationId ) );
         if ( empty( $requestedRelation ) )
         {
-            throw new NotFound( "Content\\Relation", "id: " . $relationId );
+            throw new NotFoundException( "Content\\Relation", "id: " . $relationId );
         }
         $this->backend->delete( "Content\\Relation", $relationId );
     }
@@ -867,7 +1007,7 @@ class ContentHandler implements ContentHandlerInterface
         );
 
         if ( empty( $allVersions ) )
-            throw new NotFound( "Version", "contentId: $contentId" );
+            throw new NotFoundException( "Version", "contentId: $contentId" );
 
         foreach ( $allVersions as $version )
         {

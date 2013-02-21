@@ -2,7 +2,7 @@
 /**
  * File containing the SearchServiceTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -285,6 +285,29 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . 'Status.php',
+                // Result having the same sort level should be sorted between them to be system independent
+                function ( &$data )
+                {
+                    usort(
+                        $data->searchHits,
+                        function ( $a, $b )
+                        {
+                            if ( $a->score == $b->score )
+                            {
+                                if ( $a->valueObject["id"] == $b->valueObject["id"] )
+                                {
+                                    return 0;
+                                }
+
+                                // Order by ascending ID
+                                return ( $a->valueObject["id"] < $b->valueObject["id"] ) ? -1 : 1;
+                            }
+
+                            // Order by descending score
+                            return ( $a->score > $b->score ) ? -1 : 1;
+                        }
+                    );
+                }
             ),
             array(
                 new Query(
@@ -379,9 +402,9 @@ class SearchServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
-    public function testFindContent( Query $query, $fixture )
+    public function testFindContent( Query $query, $fixture, $closure = null )
     {
-        $this->assertQueryFixture( $query, $fixture );
+        $this->assertQueryFixture( $query, $fixture, $closure );
     }
 
     public function testFindSingle()
@@ -473,7 +496,7 @@ class SearchServiceTest extends BaseTest
                         'sortClauses' => array()
                     )
                 ),
-                $fixtureDir . '/SortNone.php',
+                $fixtureDir . 'SortNone.php',
                 // Result having the same sort level should be sorted between them to be system independent
                 function ( &$data )
                 {
@@ -495,7 +518,7 @@ class SearchServiceTest extends BaseTest
                         'sortClauses' => array( new SortClause\LocationPathString( Query::SORT_DESC ) )
                     )
                 ),
-                $fixtureDir . '/SortPathString.php',
+                $fixtureDir . 'SortPathString.php',
             ),
             array(
                 new Query(
@@ -506,7 +529,7 @@ class SearchServiceTest extends BaseTest
                         'sortClauses' => array( new SortClause\LocationDepth( Query::SORT_ASC ) )
                     )
                 ),
-                $fixtureDir . '/SortLocationDepth.php',
+                $fixtureDir . 'SortLocationDepth.php',
                 // Result having the same sort level should be sorted between them to be system independent
                 function ( &$data )
                 {
@@ -545,9 +568,10 @@ class SearchServiceTest extends BaseTest
                         )
                     )
                 ),
-                $fixtureDir . '/SortMultiple.php',
+                $fixtureDir . 'SortMultiple.php',
             ),
             array(
+            // FIXME: this test is not relevant since all priorities are "0"
                 new Query(
                     array(
                         'criterion'   => new Criterion\SectionId( array( 2 ) ),
@@ -559,7 +583,19 @@ class SearchServiceTest extends BaseTest
                         )
                     )
                 ),
-                $fixtureDir . '/SortDesc.php',
+                $fixtureDir . 'SortDesc.php',
+                // Result having the same sort level should be sorted between them to be system independent
+                // Update when above FIXME has been resolved.
+                function ( &$data )
+                {
+                    usort(
+                        $data->searchHits,
+                        function ( $a, $b )
+                        {
+                            return ( $a->valueObject["id"] < $b->valueObject["id"] ) ? -1 : 1;
+                        }
+                    );
+                },
             ),
             array(
                 new Query(
@@ -573,7 +609,7 @@ class SearchServiceTest extends BaseTest
                         )
                     )
                 ),
-                $fixtureDir . '/SortDatePublished.php',
+                $fixtureDir . 'SortDatePublished.php',
             ),
             array(
                 new Query(
@@ -587,7 +623,7 @@ class SearchServiceTest extends BaseTest
                         )
                     )
                 ),
-                $fixtureDir . '/SortSectionIdentifier.php',
+                $fixtureDir . 'SortSectionIdentifier.php',
             ),
             array(
                 new Query(
@@ -601,7 +637,7 @@ class SearchServiceTest extends BaseTest
                         )
                     )
                 ),
-                $fixtureDir . '/SortSectionName.php',
+                $fixtureDir . 'SortSectionName.php',
             ),
             array(
                 new Query(
@@ -615,7 +651,7 @@ class SearchServiceTest extends BaseTest
                         )
                     )
                 ),
-                $fixtureDir . '/SortContentName.php',
+                $fixtureDir . 'SortContentName.php',
             ),
             array(
                 new Query(
@@ -629,7 +665,7 @@ class SearchServiceTest extends BaseTest
                         )
                     )
                 ),
-                $fixtureDir . '/SortFolderName.php',
+                $fixtureDir . 'SortFolderName.php',
             ),
             array(
                 new Query(
@@ -643,7 +679,7 @@ class SearchServiceTest extends BaseTest
                         )
                     )
                 ),
-                $fixtureDir . '/SortTemplateTitle.php',
+                $fixtureDir . 'SortTemplateTitle.php',
             ),
         );
     }

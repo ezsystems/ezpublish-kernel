@@ -2,7 +2,7 @@
 /**
  * File containing the Content Search handler class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -47,9 +47,9 @@ class LocationRemoteIdIn extends CriterionVisitor
             implode(
                 ' OR ',
                 array_map(
-                    function( $value )
+                    function ( $value )
                     {
-                        return 'location_remote_id_id:"' . $value . '"';
+                        return 'location_remote_id_mid:"' . $value . '"';
                     },
                     $criterion->value
                 )

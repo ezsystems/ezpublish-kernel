@@ -5,17 +5,29 @@ php:
   - 5.3.3
   - 5.3
   - 5.4
-#  - 5.5
+  - 5.5
 
 # execute unit tests, integration test stubs and integration tests using legacy storage engine
 env:
   - TEST_CONFIG="phpunit.xml"
   - TEST_CONFIG="phpunit-integration.xml"
   - TEST_CONFIG="phpunit-integration-legacy.xml"
+  - TEST_CONFIG="phpunit-integration-legacy-solr.xml"
 
-#matrix:
-#  allow_failures:
-#    - php: 5.5
+matrix:
+  allow_failures:
+    - php: 5.5
+  exclude:
+    - php: 5.5
+      env: TEST_CONFIG="phpunit-integration.xml"
+    - php: 5.5
+      env: TEST_CONFIG="phpunit-integration-legacy.xml"
+    - php: 5.5
+      env: TEST_CONFIG="phpunit-integration-legacy-solr.xml"
+    - php: 5.3
+      env: TEST_CONFIG="phpunit-integration-legacy.xml"
+    - php: 5.3
+      env: TEST_CONFIG="phpunit-integration-legacy-solr.xml"
 
 # test only master (+ Pull requests)
 branches:
@@ -26,7 +38,8 @@ branches:
 before_script:
   - cp config.php-DEVELOPMENT config.php
   - ./composer_install_github_key.sh
-  - COMPOSER_ROOT_VERSION=dev-master composer --dev --prefer-dist install
+  - composer install --dev --prefer-source
+  - "if [ \"$TEST_CONFIG\" = \"phpunit-integration-legacy-solr.xml\" ] ; then curl https://raw.github.com/patrickallaert/travis-solr/master/travis-solr.sh | SOLR_VERSION=3.6.2 SOLR_CONFS=eZ/Publish/Core/Persistence/Solr/Content/Search/schema.xml bash ; fi"
 
 # execute phpunit as the script command
 script: "phpunit -d memory_limit=-1 -c $TEST_CONFIG"

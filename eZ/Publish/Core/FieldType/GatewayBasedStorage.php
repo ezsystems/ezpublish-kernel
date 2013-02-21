@@ -2,7 +2,7 @@
 /**
  * File containing the StorageGateway base class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -10,6 +10,8 @@
 namespace eZ\Publish\Core\FieldType;
 
 use eZ\Publish\SPI\FieldType\FieldStorage;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 /**
  * Storage gateway base class to be used by FieldType storages
@@ -20,10 +22,7 @@ use eZ\Publish\SPI\FieldType\FieldStorage;
  * context provided by the SPI.
  *
  * The method {@link getGateway()} is used in derived classes to retrieve the
- * correct gateway implementation, based on the context. The method {@link
- * getPersistenceHandler()} can be used to retrieve the SPI persistence
- * handler. It is encouraged, to use this object to retrieve any eZ Publish
- * internal data objects, in order to allow caching.
+ * correct gateway implementation, based on the context.
  */
 abstract class GatewayBasedStorage implements FieldStorage
 {
@@ -78,5 +77,24 @@ abstract class GatewayBasedStorage implements FieldStorage
         $gateway->setConnection( $context['connection'] );
 
         return $gateway;
+    }
+
+    /**
+     * This method is used exclusively by Legacy Storage to copy external data of existing field in main language to
+     * the untranslatable field not passed in create or update struct, but created implicitly in storage layer.
+     *
+     * By default the method falls back to the {@link \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()}.
+     * External storages implement this method as needed.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $originalField
+     * @param array $context
+     *
+     * @return null|boolean Same as {@link \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()}.
+     */
+    public function copyLegacyField( VersionInfo $versionInfo, Field $field, Field $originalField, array $context )
+    {
+        return $this->storeFieldData( $versionInfo, $field, $context );
     }
 }

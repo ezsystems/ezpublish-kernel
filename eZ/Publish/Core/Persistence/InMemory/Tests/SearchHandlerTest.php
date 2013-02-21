@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\Core\Persistence\InMemory\Tests\SearchHandlerTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -11,6 +11,9 @@ namespace eZ\Publish\Core\Persistence\InMemory\Tests;
 
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct as TypeCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -41,20 +44,31 @@ class SearchHandlerTest extends HandlerTest
     protected $contentToDelete = array();
 
     /**
+     * ContentTypes which should be removed in tearDown
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Type[]
+     */
+    protected $contentTypeToDelete = array();
+
+    /**
      * Setup the HandlerTest.
      */
     protected function setUp()
     {
         parent::setUp();
 
+        $type = $this->persistenceHandler->contentTypeHandler()->create( $this->getTypeCreateStruct() );
+        $this->contentTypeToDelete[] = $type;
+
         $struct = new CreateStruct();
         $struct->name = array( 'eng-GB' => "test" );
         $struct->ownerId = 14;
         $struct->sectionId = 1;
-        $struct->typeId = 2;
+        $struct->typeId = $type->id;
         $struct->initialLanguageId = 2;
         $struct->fields[] = new Field(
             array(
+                "fieldDefinitionId" => $type->fieldDefinitions[0]->id,
                 "type" => "ezstring",
                 // FieldValue object compatible with ezstring
                 "value" => new FieldValue(
@@ -87,7 +101,62 @@ class SearchHandlerTest extends HandlerTest
         {
         }
         unset( $this->contentId );
+
+        $contentTypeHandler = $this->persistenceHandler->contentTypeHandler();
+        foreach ( $this->contentTypeToDelete as $type )
+        {
+            try
+            {
+                $contentTypeHandler->delete( $type->id, $type->status );
+            }
+            catch ( NotFound $e )
+            {
+            }
+        }
+
         parent::tearDown();
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct
+     */
+    protected function getTypeCreateStruct()
+    {
+        $struct = new TypeCreateStruct();
+        $struct->created = $struct->modified = time();
+        $struct->creatorId = $struct->modifierId = 14;
+        $struct->name = array( 'eng-GB' => 'Article' );
+        $struct->description = array( 'eng-GB' => 'Article content type' );
+        $struct->identifier = 'article';
+        $struct->isContainer = true;
+        $struct->status = Type::STATUS_DEFINED;
+        $struct->initialLanguageId = 2;
+        $struct->nameSchema = "<short_title|title>";
+        $struct->fieldDefinitions = array();
+        $struct->groupIds = array( 1 );
+        $struct->fieldDefinitions[] = $field = $this->getTypeFieldDefinition();
+        return $struct;
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
+     */
+    protected function getTypeFieldDefinition()
+    {
+        $field = new FieldDefinition();
+        $field->identifier = 'title';
+        $field->fieldType = 'ezstring';
+        $field->position = 0;
+        $field->isTranslatable = $field->isRequired = true;
+        $field->isInfoCollector = false;
+        $field->defaultValue = new FieldValue(
+            array(
+                "data" => "New Article"
+            )
+        );
+        $field->name = array( 'eng-GB' => "Title" );
+        $field->description = array( 'eng-GB' => "Title, used for headers, and url if short_title is empty" );
+        return $field;
     }
 
     /**
@@ -123,7 +192,7 @@ class SearchHandlerTest extends HandlerTest
     public function testFindSingle()
     {
         $content = $this->persistenceHandler->searchHandler()->findSingle( new ContentId( $this->content->versionInfo->contentInfo->id ) );
-        $this->assertInstanceOf( 'eZ\Publish\SPI\Persistence\Content', $content );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content', $content );
         $this->assertEquals( $this->contentId, $content->versionInfo->contentInfo->id );
         $this->assertEquals( 14, $content->versionInfo->contentInfo->ownerId );
         $this->assertEquals( array( 'eng-GB' => 'test' ), $content->versionInfo->names );
@@ -175,7 +244,7 @@ class SearchHandlerTest extends HandlerTest
         );
 
         $contentIds = array_map(
-            function( $searchHit )
+            function ( $searchHit )
             {
                 return $searchHit->valueObject->versionInfo->contentInfo->id;
             },

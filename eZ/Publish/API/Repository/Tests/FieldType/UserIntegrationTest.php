@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\API\Repository\Tests\FieldType\UserIntegrationTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -124,7 +124,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     public function assertFieldDataLoadedCorrect( Field $field )
     {
         $this->assertInstanceOf(
-            'eZ\Publish\Core\FieldType\User\Value',
+            'eZ\\Publish\\Core\\FieldType\\User\\Value',
             $field->value
         );
 
@@ -250,7 +250,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     public function assertCopiedFieldDataLoadedCorrectly( Field $field )
     {
         $this->assertInstanceOf(
-            'eZ\Publish\Core\FieldType\User\Value',
+            'eZ\\Publish\\Core\\FieldType\\User\\Value',
             $field->value
         );
 

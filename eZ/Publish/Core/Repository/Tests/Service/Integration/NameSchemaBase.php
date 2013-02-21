@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\NameSchemaBase class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -12,7 +12,6 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
 use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
 use eZ\Publish\Core\Repository\NameSchemaService;
 use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
@@ -34,11 +33,11 @@ abstract class NameSchemaBase extends BaseServiceTest
         /** @var $service \eZ\Publish\Core\Repository\NameSchemaService */
         $service = $this->repository->getNameSchemaService();
 
-        $content = $this->buildTestContent();
+        list( $content, $contentType ) = $this->buildTestObjects();
 
         $name = $service->resolve(
             $nameSchema,
-            $content->contentType,
+            $contentType,
             $content->fields,
             $content->versionInfo->languageCodes
         );
@@ -63,11 +62,11 @@ abstract class NameSchemaBase extends BaseServiceTest
             )
         );
 
-        $content = $this->buildTestContent();
+        list( $content, $contentType ) = $this->buildTestObjects();
 
         $name = $service->resolve(
             "Hello, <text1> and <text2> and then goodbye and hello again",
-            $content->contentType,
+            $contentType,
             $content->fields,
             $content->versionInfo->languageCodes
         );
@@ -266,7 +265,7 @@ abstract class NameSchemaBase extends BaseServiceTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    protected function buildTestContent( $nameSchema = "<name_schema>", $urlAliasSchema = "<urlalias_schema>" )
+    protected function buildTestObjects( $nameSchema = "<name_schema>", $urlAliasSchema = "<urlalias_schema>" )
     {
         $contentType = new ContentType(
             array(
@@ -275,24 +274,18 @@ abstract class NameSchemaBase extends BaseServiceTest
                 "fieldDefinitions" => $this->getFieldDefinitions()
             )
         );
-        $contentInfo = new ContentInfo(
+        $content = new Content(
             array(
-                "contentType" => $contentType
-            )
-        );
-        $versionInfo = new VersionInfo(
-            array(
-                "contentInfo" => $contentInfo,
-                "languageCodes" => array( "eng-GB", "cro-HR" )
+                "internalFields" => $this->getFields(),
+                "versionInfo" => new VersionInfo(
+                    array(
+                        "languageCodes" => array( "eng-GB", "cro-HR" )
+                    )
+                )
             )
         );
 
-        return new Content(
-            array(
-                "internalFields" => $this->getFields(),
-                "versionInfo" => $versionInfo
-            )
-        );
+        return array( $content, $contentType );
     }
 
     /**

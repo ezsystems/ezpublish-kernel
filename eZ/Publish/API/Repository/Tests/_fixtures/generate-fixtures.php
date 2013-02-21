@@ -3,7 +3,7 @@
 /**
  * File containing a simple fixture generator
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -51,7 +51,7 @@ function generateContentTypeGroupFixture( array $fixture )
     }
 
     return generateReturnArray(
-        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub', $groups ),
+        generateValueObjects( '\\eZ\\Publish\\API\\Repository\\Tests\\Stubs\\Values\\ContentType\\ContentTypeGroupStub', $groups ),
         $nextId
     );
 }
@@ -110,7 +110,7 @@ function generateContentTypeFixture( array $fixture )
             'defaultSortField' => $data['sort_field'],
             'defaultSortOrder' => $data['sort_order'],
 
-            'fieldDefinitions' => trim( generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub', isset( $fieldDef[$data['id']] ) ? $fieldDef[$data['id']] : array() ) ),
+            'fieldDefinitions' => trim( generateValueObjects( '\\eZ\\Publish\\API\\Repository\\Tests\\Stubs\\Values\\ContentType\\FieldDefinitionStub', isset( $fieldDef[$data['id']] ) ? $fieldDef[$data['id']] : array() ) ),
             'contentTypeGroups' => isset( $typeGroups[$data['id']] ) ? $typeGroups[$data['id']] : array(),
         );
 
@@ -118,7 +118,7 @@ function generateContentTypeFixture( array $fixture )
     }
 
     return generateReturnArray(
-        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeStub', $types ),
+        generateValueObjects( '\\eZ\\Publish\\API\\Repository\\Tests\\Stubs\\Values\\ContentType\\ContentTypeStub', $types ),
         $nextTypeId,
         $nextFieldId
     );
@@ -213,7 +213,7 @@ function generateSectionFixture( array $fixture )
     }
 
     return generateReturnArray(
-        generateValueObjects( '\eZ\Publish\API\Repository\Values\Content\Section', $sections ),
+        generateValueObjects( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section', $sections ),
         generateMapping( $identifiers ),
         generateMapping( $assignedContents ),
         $nextId
@@ -379,7 +379,7 @@ function generateContentInfoFixture( array $fixture )
             $contentFields[] = $field;
         }
 
-        $contentFields = trim( generateValueObjects( '\eZ\Publish\API\Repository\Values\Content\Field', $contentFields ) );
+        $contentFields = trim( generateValueObjects( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Field', $contentFields ) );
 
         $content[] = array(
             'id' => $data['contentobject_id'],
@@ -402,7 +402,7 @@ function generateContentInfoFixture( array $fixture )
 
     uasort(
         $versionInfo,
-        function( $versionInfo1, $versionInfo2 )
+        function ( $versionInfo1, $versionInfo2 )
         {
             if ( $versionInfo1['contentId'] === $versionInfo2['contentId'] )
             {
@@ -414,7 +414,7 @@ function generateContentInfoFixture( array $fixture )
 
     uasort(
         $content,
-        function( $content1, $content2 )
+        function ( $content1, $content2 )
         {
             if ( $content1['id'] === $content2['id'] )
             {
@@ -425,11 +425,11 @@ function generateContentInfoFixture( array $fixture )
     );
 
     return generateReturnArray(
-        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentInfoStub', $contentInfos ),
+        generateValueObjects( '\\eZ\\Publish\\API\\Repository\\Tests\\Stubs\\Values\\Content\\ContentInfoStub', $contentInfos ),
         $nextId,
-        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\Content\VersionInfoStub', $versionInfo ),
+        generateValueObjects( '\\eZ\\Publish\\API\\Repository\\Tests\\Stubs\\Values\\Content\\VersionInfoStub', $versionInfo ),
         $versionNextId,
-        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\Content\ContentStub', $content ),
+        generateValueObjects( '\\eZ\\Publish\\API\\Repository\\Tests\\Stubs\\Values\\Content\\ContentStub', $content ),
         generateMapping( $indexMap )
     );
 }
@@ -462,7 +462,7 @@ function generateLocationFixture( array $fixture )
     }
 
     return generateReturnArray(
-        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub', $locations ),
+        generateValueObjects( '\\eZ\\Publish\\API\\Repository\\Tests\\Stubs\\Values\\Content\\LocationStub', $locations ),
         $nextId
     );
 }
@@ -510,7 +510,7 @@ function generateLanguageFixture( array $fixture )
     }
 
     return generateReturnArray(
-        generateValueObjects( '\eZ\Publish\API\Repository\Values\Content\Language', $languages ),
+        generateValueObjects( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Language', $languages ),
         generateMapping( $languageCodes ),
         $nextId
     );
@@ -533,7 +533,7 @@ function generateUserFixture( array $fixture )
     }
 
     return generateReturnArray(
-        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub', $users )
+        generateValueObjects( '\\eZ\\Publish\\API\\Repository\\Tests\\Stubs\\Values\\User\\UserStub', $users )
     );
 }
 
@@ -592,7 +592,7 @@ function generateUserGroupFixture( array $fixture )
     }
 
     return generateReturnArray(
-        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub', $groups )
+        generateValueObjects( '\\eZ\\Publish\\API\\Repository\\Tests\\Stubs\\Values\\User\\UserGroupStub', $groups )
     );
 }
 
@@ -662,11 +662,11 @@ function generateRoleFixture( array $fixture )
     }
 
     return generateReturnArray(
-        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleStub', $roles ),
+        generateValueObjects( '\\eZ\\Publish\\API\\Repository\\Tests\\Stubs\\Values\\User\\RoleStub', $roles ),
         generateMapping( $names ),
         $nextId,
         generateMapping( $content2role ),
-        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyStub', $policies ),
+        generateValueObjects( '\\eZ\\Publish\\API\\Repository\\Tests\\Stubs\\Values\\User\\PolicyStub', $policies ),
         $policyNextId,
         generateMapping( $role2policy ),
         generateMapping( $roleLimitations )
@@ -725,7 +725,7 @@ function generateURLAliasFixture( array $fixture )
     }
 
     return generateReturnArray(
-        generateValueObjects( '\eZ\Publish\API\Repository\Values\Content\URLAlias', $aliases ),
+        generateValueObjects( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias', $aliases ),
         $nextId
     );
 }
@@ -759,7 +759,7 @@ function generateObjectStateGroupFixture( array $fixture )
     }
 
     return generateReturnArray(
-        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ObjectState\ObjectStateGroupStub', $groups ),
+        generateValueObjects( '\\eZ\\Publish\\API\\Repository\\Tests\\Stubs\\Values\\ObjectState\\ObjectStateGroupStub', $groups ),
         $nextId
     );
 }
@@ -825,7 +825,7 @@ function generateObjectStateFixture( array $fixture )
     }
 
     return generateReturnArray(
-        generateValueObjects( '\eZ\Publish\API\Repository\Tests\Stubs\Values\ObjectState\ObjectStateStub', $states ),
+        generateValueObjects( '\\eZ\\Publish\\API\\Repository\\Tests\\Stubs\\Values\\ObjectState\\ObjectStateStub', $states ),
         var_export( $groupStateMap, true ),
         var_export( $objectStateMap, true ),
         $nextId

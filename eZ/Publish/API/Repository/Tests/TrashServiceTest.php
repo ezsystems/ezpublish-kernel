@@ -2,7 +2,7 @@
 /**
  * File containing the TrashServiceTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -37,7 +37,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\TrashItem',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem',
             $trashItem
         );
     }
@@ -190,7 +190,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\TrashItem',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem',
             $trashItemReloaded
         );
 
@@ -250,7 +250,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Location',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
             $location
         );
 
@@ -419,7 +419,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\SearchResult',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SearchResult',
             $searchResult
         );
 

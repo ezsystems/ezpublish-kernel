@@ -5,7 +5,9 @@
          processIsolation="false"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true">
+         convertWarningsToExceptions="true"
+         colors="true"
+         >
     <php>
         <env name="setupFactory" value="eZ\Publish\API\Repository\Tests\SetupFactory\Legacy" />
         <env name="backendVersion" value="5" />

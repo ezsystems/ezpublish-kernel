@@ -2,7 +2,7 @@
 /**
  * File containing the UrlAlias ezcDatabase Gateway class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -81,10 +81,11 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $locationId
      * @param boolean $custom
+     * @param mixed $languageId
      *
      * @return array
      */
-    public function loadLocationEntries( $locationId, $custom = false )
+    public function loadLocationEntries( $locationId, $custom = false, $languageId = false )
     {
         /** @var $query \ezcQuerySelect */
         $query = $this->dbHandler->createSelectQuery();
@@ -96,6 +97,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( "lang_mask" ),
             $this->dbHandler->quoteColumn( "is_original" ),
             $this->dbHandler->quoteColumn( "parent" ),
+            $this->dbHandler->quoteColumn( "text" ),
             $this->dbHandler->quoteColumn( "text_md5" ),
             $this->dbHandler->quoteColumn( "action" )
         )->from(
@@ -119,6 +121,20 @@ class EzcDatabase extends Gateway
                 )
             )
         );
+
+        if ( $languageId !== false )
+        {
+            $query->where(
+                $query->expr->gt(
+                    $query->expr->bitAnd(
+                        $this->dbHandler->quoteColumn( "lang_mask" ),
+                        $query->bindValue( $languageId, null, \PDO::PARAM_INT )
+                    ),
+                    0
+                )
+            );
+        }
+
         $statement = $query->prepare();
         $statement->execute();
 

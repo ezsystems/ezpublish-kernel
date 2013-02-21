@@ -2,7 +2,7 @@
 /**
  * File containing the RoleServiceTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -49,7 +49,7 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct( 'roleName' );
 
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\RoleCreateStruct', $roleCreate );
+        $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleCreateStruct', $roleCreate );
     }
 
     /**
@@ -97,7 +97,7 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\Role',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role',
             $role
         );
     }
@@ -362,7 +362,7 @@ class RoleServiceTest extends BaseTest
         $roleUpdate = $roleService->newRoleUpdateStruct( 'newRole' );
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\RoleUpdateStruct', $roleUpdate );
+        $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleUpdateStruct', $roleUpdate );
     }
 
     /**
@@ -470,7 +470,7 @@ class RoleServiceTest extends BaseTest
         $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\PolicyCreateStruct', $policyCreate );
+        $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\PolicyCreateStruct', $policyCreate );
     }
 
     /**
@@ -593,7 +593,7 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\Policy',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy',
             $policy
         );
 
@@ -695,7 +695,7 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\PolicyUpdateStruct',
             $policyUpdate
         );
     }
@@ -763,7 +763,7 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\Policy',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy',
             $policy
         );
 
@@ -892,7 +892,7 @@ class RoleServiceTest extends BaseTest
 
         $this->assertEquals( 1, count( $roleAssignments ) );
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupRoleAssignment',
             reset( $roleAssignments )
         );
 
@@ -1104,7 +1104,7 @@ class RoleServiceTest extends BaseTest
 
         $this->assertEquals( 1, count( $roleAssignments ) );
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\UserRoleAssignment',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserRoleAssignment',
             reset( $roleAssignments )
         );
     }
@@ -1298,7 +1298,7 @@ class RoleServiceTest extends BaseTest
 
         $this->assertEquals( 1, count( $roleAssignments ) );
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupRoleAssignment',
             reset( $roleAssignments )
         );
     }

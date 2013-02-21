@@ -2,7 +2,7 @@
 /**
  * File containing the LegacyKernelController class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -60,61 +60,15 @@ class LegacyKernelController
 
     /**
      * Base fallback action.
-     * Will be basically used for every
+     * Will be basically used for every legacy module.
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction()
     {
-        try
-        {
-            $result = $this->kernel->run();
-        }
-        catch ( ezpModuleNotFound $e )
-        {
-            return $this->render(
-                "EzPublishLegacyBundle:errors:module_not_found.html.twig",
-                array( "moduleName" => $e->moduleName )
-            )->setStatusCode( 404 );
-        }
-        catch ( ezpModuleViewNotFound $e )
-        {
-            return $this->render(
-                "EzPublishLegacyBundle:errors:module_view_not_found.html.twig",
-                array( "moduleName" => $e->moduleName, "viewName" => $e->viewName )
-            )->setStatusCode( 404 );
-        }
-        catch ( ezpModuleDisabled $e )
-        {
-            return $this->render(
-                "EzPublishLegacyBundle:errors:module_disabled.html.twig",
-                array( "moduleName" => $e->moduleName )
-            )->setStatusCode( 404 );
-        }
-        catch ( ezpModuleViewDisabled $e )
-        {
-            return $this->render(
-                "EzPublishLegacyBundle:errors:module_view_disabled.html.twig",
-                array( "moduleName" => $e->moduleName, "viewName" => $e->viewName )
-            )->setStatusCode( 404 );
-        }
-        catch ( ezpAccessDenied $e )
-        {
-            return $this->render(
-                "EzPublishLegacyBundle:errors:access_denied.html.twig"
-            )->setStatusCode( 403 );
-        }
-        catch ( ezpContentNotFoundException $e )
-        {
-            return $this->render(
-                "EzPublishLegacyBundle:errors:content_not_found.html.twig"
-            )->setStatusCode( 404 );
-        }
-        catch ( ezpLanguageNotFound $e )
-        {
-            return $this->render(
-                "EzPublishLegacyBundle:errors:language_not_found.html.twig"
-            )->setStatusCode( 500 );
-        }
+        $this->kernel->setUseExceptions( false );
+        $result = $this->kernel->run();
+        $this->kernel->setUseExceptions( true );
 
         return new Response(
             $result->getContent()

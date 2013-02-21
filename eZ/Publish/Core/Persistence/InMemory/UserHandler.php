@@ -2,7 +2,7 @@
 /**
  * File containing the User Handler inMemory impl
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -234,36 +234,6 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
-     * Loads roles assigned to a user/group
-     *
-     * @param mixed $groupId
-     *
-     * @return \eZ\Publish\SPI\Persistence\User\Role[]
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user (it's content object atm) is not found
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group is not of user_group Content Type
-     */
-    public function loadRolesByGroupId( $groupId )
-    {
-        $content = $this->backend->load( 'Content\\ContentInfo', $groupId );
-
-        if ( !$content )
-            throw new NotFound( 'Group', $groupId );
-        if ( $content->contentTypeId != 3 && $content->contentTypeId != 4 )
-            throw new NotFound( "Content", $groupId );
-
-        return $this->backend->find(
-            'User\\Role',
-            array( 'groupIds' => $groupId ),
-            array(
-                'policies' => array(
-                    'type' => 'User\\Policy',
-                    'match' => array( 'roleId' => 'id' )
-                )
-            )
-        );
-    }
-
-    /**
      * Loads roles assignments Role
      *
      * Role Assignments with same roleId and limitationIdentifier will be merged together into one.
@@ -400,7 +370,7 @@ class UserHandler implements UserHandlerInterface
         $roleAssignments = array();
         array_walk_recursive(
             $data,
-            function( $roleAssignment ) use ( &$roleAssignments )
+            function ( $roleAssignment ) use ( &$roleAssignments )
             {
                 $roleAssignments[] = $roleAssignment;
             }

@@ -2,7 +2,7 @@
 /**
  * File containing the Author class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -148,6 +148,26 @@ class Type extends FieldType
     public function isSearchable()
     {
         return true;
+    }
+
+    /**
+     * @todo workaround for a bug in PHP 5.3.3 {@link https://bugs.php.net/bug.php?id=61326},
+     * when support for it ends this implementation should be removed for overriden method
+     *
+     * Returns if the given $value is considered empty by the field type
+     *
+     * Default implementation, which performs a "==" check with the value
+     * returned by {@link getEmptyValue()}. Overwrite in the specific field
+     * type, if necessary.
+     *
+     * @param mixed $value
+     *
+     * @return boolean
+     */
+    public function isEmptyValue( $value )
+    {
+        return $value === null
+            || ( $value instanceof Value && (array)$value->authors == (array)$this->getEmptyValue()->authors );
     }
 
     /**

@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\SectionTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -117,7 +117,7 @@ abstract class SectionBase extends BaseServiceTest
 
         $createdSection = $sectionService->createSection( $sectionCreateStruct );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Section', $createdSection );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section', $createdSection );
         self::assertGreaterThan( 0, $createdSection->id );
 
         $this->assertStructPropertiesCorrect(
@@ -229,7 +229,7 @@ abstract class SectionBase extends BaseServiceTest
 
         foreach ( $sections as $section )
         {
-            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Section', $section );
+            self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section', $section );
         }
     }
 
@@ -373,7 +373,7 @@ abstract class SectionBase extends BaseServiceTest
 
         $sectionCreateStruct = $sectionService->newSectionCreateStruct();
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\SectionCreateStruct', $sectionCreateStruct );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct', $sectionCreateStruct );
 
         $this->assertPropertiesCorrect(
             array(
@@ -394,7 +394,7 @@ abstract class SectionBase extends BaseServiceTest
 
         $sectionUpdateStruct = $sectionService->newSectionUpdateStruct();
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct', $sectionUpdateStruct );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct', $sectionUpdateStruct );
 
         $this->assertPropertiesCorrect(
             array(

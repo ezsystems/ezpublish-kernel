@@ -2,7 +2,7 @@
 /**
  * File containing the LocationServiceTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -45,7 +45,7 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\LocationCreateStruct',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationCreateStruct',
             $locationCreate
         );
 
@@ -113,7 +113,7 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Location',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
             $location
         );
 
@@ -336,7 +336,7 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Location',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
             $location
         );
         return $location;
@@ -370,7 +370,7 @@ class LocationServiceTest extends BaseTest
         );
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\ContentInfo',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo',
             $location->contentInfo
         );
         $this->assertEquals(
@@ -491,7 +491,7 @@ class LocationServiceTest extends BaseTest
         foreach ( $locations as $loadedLocation )
         {
             $this->assertInstanceOf(
-                '\eZ\Publish\API\Repository\Values\Content\Location',
+                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
                 $loadedLocation
             );
         }
@@ -718,7 +718,7 @@ class LocationServiceTest extends BaseTest
         foreach ( $locations->locations as $location )
         {
             $this->assertInstanceOf(
-                '\eZ\Publish\API\Repository\Values\Content\Location',
+                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
                 $location
             );
         }
@@ -793,7 +793,7 @@ class LocationServiceTest extends BaseTest
         foreach ( $locations->locations as $location )
         {
             $this->assertInstanceOf(
-                '\eZ\Publish\API\Repository\Values\Content\Location',
+                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
                 $location
             );
         }
@@ -866,7 +866,7 @@ class LocationServiceTest extends BaseTest
         foreach ( $locations->locations as $location )
         {
             $this->assertInstanceOf(
-                '\eZ\Publish\API\Repository\Values\Content\Location',
+                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
                 $location
             );
         }
@@ -904,7 +904,7 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationUpdateStruct',
             $updateStruct
         );
     }
@@ -939,7 +939,7 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Location',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
             $updatedLocation
         );
 
@@ -1078,7 +1078,7 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Location',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
             $hiddenLocation
         );
 
@@ -1153,7 +1153,7 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Location',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
             $unHiddenLocation
         );
 
@@ -1201,7 +1201,7 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Location',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
             $unHiddenHigherLocation
         );
 
@@ -1380,7 +1380,7 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Location',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
             $copiedLocation
         );
 

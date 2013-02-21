@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\Gateway\EzcDatabaseTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -1533,9 +1533,33 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         self::assertEquals( 4, $this->countContentRelations( 57 ) );
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->deleteRelation( 2 );
+        $gateway->deleteRelation( 2, RelationValue::COMMON );
 
         self::assertEquals( 3, $this->countContentRelations( 57 ) );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::deleteRelation
+     */
+    public function testDeleteRelationWithCompositeBitmask()
+    {
+        $this->insertRelationFixture();
+
+        $gateway = $this->getDatabaseGateway();
+        $gateway->deleteRelation( 11, RelationValue::COMMON );
+
+        /** @var $query \ezcQuerySelect */
+        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( 'relation_type' => RelationValue::LINK, ), ),
+            $query->select(
+                array( 'relation_type', )
+            )->from(
+                'ezcontentobject_link'
+            )->where(
+                $query->expr->eq( 'id', 11 )
+            )
+        );
     }
 
     /**
@@ -1831,15 +1855,5 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $struct->type = RelationValue::COMMON;
 
         return $struct;
-    }
-
-    /**
-     * Returns the test suite with all tests declared in this class.
-     *
-     * @return \PHPUnit_Framework_TestSuite
-     */
-    public static function suite()
-    {
-        return new \PHPUnit_Framework_TestSuite( __CLASS__ );
     }
 }

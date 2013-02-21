@@ -2,7 +2,7 @@
 /**
  * File containing the ContentInfo class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -13,7 +13,7 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * This class provides all version independent information of the content object.
- * It is similar to {@link \eZ\Publish\Core\Repository\Values\Content\ContentInfo}, but for the persistence layer.
+ * It is similar to {@link \eZ\Publish\API\Repository\Values\Content\ContentInfo}, but for the persistence layer.
  * Thus it only contains raw data.
  */
 class ContentInfo extends ValueObject

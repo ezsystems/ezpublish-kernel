@@ -2,7 +2,7 @@
 /**
  * File containing the Handler in memory implementation
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\InMemory;
 
 use eZ\Publish\SPI\Persistence\Handler as HandlerInterface;
+use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\Core\Base\Exceptions\MissingClass;
 
 /**
@@ -32,11 +33,19 @@ class Handler implements HandlerInterface
     protected $backend;
 
     /**
+     * FieldType registry
+     *
+     * @var \eZ\Publish\Core\Persistence\FieldTypeRegistry
+     */
+    protected $fieldTypeRegistry;
+
+    /**
      * Setup instance with an instance of Backend class
      */
-    public function __construct()
+    public function __construct( FieldTypeRegistry $fieldTypeRegistry = null )
     {
         $this->backend = new Backend( json_decode( file_get_contents( __DIR__ . '/data.json' ), true ) );
+        $this->fieldTypeRegistry = $fieldTypeRegistry;
     }
 
     /**
@@ -177,7 +186,18 @@ class Handler implements HandlerInterface
             return $this->serviceHandlers[$className];
 
         if ( class_exists( $className ) )
-            return $this->serviceHandlers[$className] = new $className( $this, $this->backend );
+        {
+            switch ( $className )
+            {
+                case 'eZ\\Publish\\Core\\Persistence\\InMemory\\ContentHandler':
+                    $handler = new $className( $this, $this->backend, $this->fieldTypeRegistry );
+                    break;
+                default:
+                    $handler = new $className( $this, $this->backend );
+            }
+
+            return $this->serviceHandlers[$className] = $handler;
+        }
 
         throw new MissingClass( $className, 'service handler' );
     }

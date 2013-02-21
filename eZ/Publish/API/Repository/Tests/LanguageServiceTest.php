@@ -2,7 +2,7 @@
 /**
  * File containing the LanguageServiceTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -38,7 +38,7 @@ class LanguageServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LanguageCreateStruct',
             $languageCreate
         );
     }
@@ -66,7 +66,7 @@ class LanguageServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Language',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Language',
             $language
         );
 
@@ -165,7 +165,7 @@ class LanguageServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Language',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Language',
             $language
         );
     }
@@ -222,7 +222,7 @@ class LanguageServiceTest extends BaseTest
 
         // Verify that the service returns an updated language instance.
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Language',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Language',
             $updatedLanguage
         );
 

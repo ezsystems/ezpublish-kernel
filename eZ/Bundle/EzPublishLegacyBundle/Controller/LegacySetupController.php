@@ -2,7 +2,7 @@
 /**
  * File containing the LegacySetupController class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -71,11 +71,11 @@ class LegacySetupController
 
         $response = new Response();
 
-        // inject the extra ezpublish5 folders we want permissions checked for
+        // inject the extra ezpublish-community folders we want permissions checked for
         if ( $currentStep == 'Welcome' || $currentStep == 'SystemCheck' )
         {
             $this->getLegacyKernel()->runCallback(
-                function()
+                function ()
                 {
                     $directoriesCheckList = eZINI::instance( 'setup.ini' )->variable( 'directory_permissions', 'CheckList' );
                     $injectedSettings = array();
@@ -98,7 +98,7 @@ class LegacySetupController
         {
             // Clear INI cache since setup has written new files
             $this->getLegacyKernel()->runCallback(
-                function()
+                function ()
                 {
                     eZINI::injectSettings( array() );
                     eZCache::clearByTag( 'ini' );

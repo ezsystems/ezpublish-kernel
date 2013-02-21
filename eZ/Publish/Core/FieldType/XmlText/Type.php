@@ -2,7 +2,7 @@
 /**
  * File containing the eZ\Publish\Core\FieldType\XmlText\Type class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -15,6 +15,8 @@ use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\FieldType\XmlText\Input;
 use eZ\Publish\Core\FieldType\XmlText\Input\EzXml;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 use DOMDocument;
 
 /**
@@ -211,7 +213,7 @@ class Type extends FieldType
     }
 
     /**
-     * @param Value $value
+     * @param \eZ\Publish\Core\FieldType\XmlText\Value $value
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
@@ -296,5 +298,84 @@ class Type extends FieldType
         }
 
         return $validationErrors;
+    }
+
+    /**
+     * Returns relation data extracted from value.
+     *
+     * Not intended for \eZ\Publish\API\Repository\Values\Content\Relation::COMMON type relations,
+     * there is a service API for handling those.
+     *
+     * @param \eZ\Publish\Core\FieldType\Value $fieldValue
+     *
+     * @return array Hash with relation type as key and array of destination content ids as value.
+     *
+     * Example:
+     * <code>
+     *  array(
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::LINK => array(
+     *          "contentIds" => array( 12, 13, 14 ),
+     *          "locationIds" => array( 24 )
+     *      ),
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::EMBED => array(
+     *          "contentIds" => array( 12 ),
+     *          "locationIds" => array( 24, 45 )
+     *      ),
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::ATTRIBUTE => array( 12 )
+     *  )
+     * </code>
+     */
+    public function getRelations( BaseValue $fieldValue )
+    {
+        $relations = array();
+
+        if ( $fieldValue->xml instanceof DOMDocument )
+        {
+            $relations = array(
+                Relation::LINK => $this->getRelatedObjectIds( $fieldValue, Relation::LINK ),
+                Relation::EMBED => $this->getRelatedObjectIds( $fieldValue, Relation::EMBED )
+            );
+        }
+
+        return $relations;
+    }
+
+    protected function getRelatedObjectIds( BaseValue $fieldValue, $relationType )
+    {
+        if ( $relationType === Relation::EMBED )
+        {
+            $tagName = "embed";
+        }
+        else
+        {
+            $tagName = "link";
+        }
+
+        $locationIds = array();
+        $contentIds = array();
+        $linkTags = $fieldValue->xml->getElementsByTagName( $tagName );
+        if ( $linkTags->length > 0 )
+        {
+            /** @var $link \DOMElement */
+            foreach ( $linkTags as $link )
+            {
+                $contentId = $link->getAttribute( 'object_id' );
+                if ( !empty( $contentId ) )
+                {
+                    $contentIds[] = $contentId;
+                    continue;
+                }
+                $locationId = $link->getAttribute( 'node_id' );
+                if ( !empty( $locationId ) )
+                {
+                    $locationIds[] = $locationId;
+                }
+            }
+        }
+
+        return array(
+            "locationIds" => array_unique( $locationIds ),
+            "contentIds" => array_unique( $contentIds )
+        );
     }
 }

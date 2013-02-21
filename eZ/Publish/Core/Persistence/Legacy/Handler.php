@@ -2,7 +2,7 @@
 /**
  * File containing the Handler interface
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -30,6 +30,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler as UrlAliasHandl
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper as UrlAliasMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase as UrlAliasGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\ExceptionConversion as UrlAliasExceptionConversionGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler as UrlWildcardHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper as UrlWildcardMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase as UrlWildcardGateway;
@@ -319,7 +320,9 @@ class Handler implements HandlerInterface
                 $this->getContentGateway(),
                 $this->getLocationGateway(),
                 $this->getContentMapper(),
-                $this->getFieldHandler()
+                $this->getFieldHandler(),
+                $this->getSlugConverter(),
+                $this->getUrlAliasGateway()
             );
             $this->contentHandler->locationHandler = $this->locationHandler();
         }
@@ -375,10 +378,12 @@ class Handler implements HandlerInterface
         {
             $this->fieldHandler = new ContentFieldHandler(
                 $this->getContentGateway(),
-                $this->getContentTypeGateway(),
                 $this->getContentMapper(),
-                $this->getStorageHandler()
+                $this->getStorageHandler(),
+                $this->contentLanguageHandler(),
+                $this->getFieldTypeRegistry()
             );
+            $this->fieldHandler->typeHandler = $this->contentTypeHandler();
         }
         return $this->fieldHandler;
     }
@@ -780,7 +785,7 @@ class Handler implements HandlerInterface
                 $this->getUrlAliasMapper(),
                 $this->getLocationGateway(),
                 $this->contentLanguageHandler(),
-                $this->transformationProcessor
+                $this->getSlugConverter()
             );
         }
 
@@ -820,6 +825,22 @@ class Handler implements HandlerInterface
             );
         }
         return $this->urlAliasMapper;
+    }
+
+    /**
+     * Returns a slug converter
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter
+     */
+    protected function getSlugConverter()
+    {
+        if ( !isset( $this->slugConverter ) )
+        {
+            $this->slugConverter = new SlugConverter(
+                $this->transformationProcessor
+            );
+        }
+        return $this->slugConverter;
     }
 
     /**

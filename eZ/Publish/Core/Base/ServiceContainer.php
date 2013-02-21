@@ -2,7 +2,7 @@
 /**
  * Service Container class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -334,13 +334,13 @@ class ServiceContainer implements Container
                 return null;
 
             if ( $function !== '' )
-                return function() use ( $serviceContainer, $argument, $function )
+                return function () use ( $serviceContainer, $argument, $function )
                 {
                     $serviceObject = $serviceContainer->get( ltrim( $argument, '%' ) );
                     return call_user_func_array( array( $serviceObject, $function ), func_get_args() );
                 };
             else
-                return function() use ( $serviceContainer, $argument )
+                return function () use ( $serviceContainer, $argument )
                 {
                     return $serviceContainer->get( ltrim( $argument, '%' ) );
                 };

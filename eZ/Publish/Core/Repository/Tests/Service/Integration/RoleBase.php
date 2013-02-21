@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\RoleBase class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -173,7 +173,7 @@ abstract class RoleBase extends BaseServiceTest
 
         $createdRole = $roleService->createRole( $roleCreateStruct );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $createdRole );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role', $createdRole );
         self::assertGreaterThan( 0, $createdRole->id );
 
         /* @todo uncomment when support for multilingual names and descriptions is added
@@ -259,7 +259,7 @@ abstract class RoleBase extends BaseServiceTest
 
         $createdRole = $roleService->createRole( $roleCreateStruct );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $createdRole );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role', $createdRole );
         self::assertGreaterThan( 0, $createdRole->id );
 
         /* @todo uncomment when support for multilingual names and descriptions is added
@@ -289,7 +289,7 @@ abstract class RoleBase extends BaseServiceTest
 
         foreach ( $createdRole->getPolicies() as $policy )
         {
-            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Policy', $policy );
+            self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy', $policy );
             self::assertGreaterThan( 0, $policy->id );
             self::assertEquals( $createdRole->id, $policy->roleId );
 
@@ -297,7 +297,7 @@ abstract class RoleBase extends BaseServiceTest
 
             foreach ( $policy->getLimitations() as $limitation )
             {
-                self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Limitation', $limitation );
+                self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation', $limitation );
 
                 if ( $policy->module == 'content' && $policy->function == 'read' )
                 {
@@ -359,7 +359,7 @@ abstract class RoleBase extends BaseServiceTest
 
         $updatedRole = $roleService->updateRole( $role, $roleUpdateStruct );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $updatedRole );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role', $updatedRole );
 
         // @todo: enable
 /*
@@ -427,12 +427,12 @@ abstract class RoleBase extends BaseServiceTest
 
         $updatedRole = $roleService->addPolicy( $role, $policyCreateStruct );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $updatedRole );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role', $updatedRole );
         self::assertCount( $policyCount + 1, $updatedRole->getPolicies() );
 
         foreach ( $updatedRole->getPolicies() as $policy )
         {
-            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Policy', $policy );
+            self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy', $policy );
             self::assertGreaterThan( 0, $policy->id );
             self::assertEquals( $role->id, $policy->roleId );
         }
@@ -490,7 +490,7 @@ abstract class RoleBase extends BaseServiceTest
         $limitations = $updatedPolicy->getLimitations();
 
         self::assertCount( 1, $limitations );
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Limitation', $limitations[0] );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation', $limitations[0] );
         self::assertEquals( Limitation::CONTENTTYPE, $limitations[0]->getIdentifier() );
         self::assertEquals( $limitation->limitationValues, $limitations[0]->limitationValues );
     }
@@ -504,7 +504,7 @@ abstract class RoleBase extends BaseServiceTest
         $roleService = $this->repository->getRoleService();
 
         $role = $roleService->loadRole( 1 );
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $role );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role', $role );
 
         $this->assertPropertiesCorrect(
             array(
@@ -536,7 +536,7 @@ abstract class RoleBase extends BaseServiceTest
         $roleService = $this->repository->getRoleService();
 
         $role = $roleService->loadRoleByIdentifier( 'Anonymous' );
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $role );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role', $role );
 
         $this->assertPropertiesCorrect(
             array(
@@ -573,7 +573,7 @@ abstract class RoleBase extends BaseServiceTest
 
         foreach ( $roles as $role )
         {
-            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $role );
+            self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role', $role );
             self::assertGreaterThan( 0, $role->id );
         }
     }
@@ -587,7 +587,7 @@ abstract class RoleBase extends BaseServiceTest
         $roleService = $this->repository->getRoleService();
 
         $role = $roleService->loadRole( 1 );
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $role );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role', $role );
 
         $roleService->deleteRole( $role );
 
@@ -616,7 +616,7 @@ abstract class RoleBase extends BaseServiceTest
 
         foreach ( $policies as $policy )
         {
-            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Policy', $policy );
+            self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy', $policy );
             self::assertGreaterThan( 0, $policy->id );
             self::assertGreaterThan( 0, $policy->roleId );
         }
@@ -784,7 +784,7 @@ abstract class RoleBase extends BaseServiceTest
 
         foreach ( $roleAssignments as $assignment )
         {
-            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\RoleAssignment', $assignment );
+            self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleAssignment', $assignment );
         }
     }
 
@@ -807,7 +807,7 @@ abstract class RoleBase extends BaseServiceTest
 
         foreach ( $userAssignments as $assignment )
         {
-            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserRoleAssignment', $assignment );
+            self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserRoleAssignment', $assignment );
         }
     }
 
@@ -826,7 +826,7 @@ abstract class RoleBase extends BaseServiceTest
 
         foreach ( $userGroupAssignments as $assignment )
         {
-            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment', $assignment );
+            self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupRoleAssignment', $assignment );
         }
     }
 
@@ -840,7 +840,7 @@ abstract class RoleBase extends BaseServiceTest
 
         $roleCreateStruct = $roleService->newRoleCreateStruct( "Ultimate permissions" );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\RoleCreateStruct', $roleCreateStruct );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleCreateStruct', $roleCreateStruct );
 
         $this->assertPropertiesCorrect(
             array(
@@ -868,7 +868,7 @@ abstract class RoleBase extends BaseServiceTest
 
         $policyCreateStruct = $roleService->newPolicyCreateStruct( "content", "read" );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\PolicyCreateStruct', $policyCreateStruct );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\PolicyCreateStruct', $policyCreateStruct );
 
         $this->assertPropertiesCorrect(
             array(
@@ -892,7 +892,7 @@ abstract class RoleBase extends BaseServiceTest
 
         $roleUpdateStruct = $roleService->newRoleUpdateStruct();
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\RoleUpdateStruct', $roleUpdateStruct );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleUpdateStruct', $roleUpdateStruct );
 
         $this->assertPropertiesCorrect(
             array(
@@ -916,7 +916,7 @@ abstract class RoleBase extends BaseServiceTest
 
         $policyUpdateStruct = $roleService->newPolicyUpdateStruct();
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct', $policyUpdateStruct );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\PolicyUpdateStruct', $policyUpdateStruct );
 
         self::assertInternalType( "array", $policyUpdateStruct->getLimitations() );
         self::assertEmpty( $policyUpdateStruct->getLimitations() );

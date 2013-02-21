@@ -2,7 +2,7 @@
 /**
  * File containing the Content Search Gateway class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -19,6 +19,7 @@ use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
+use RuntimeException;
 
 /**
  * The Content Search Gateway provides the implementation for one database to
@@ -111,24 +112,34 @@ class Native extends Gateway
      */
     public function findContent( Query $query, array $fieldFilters = array() )
     {
+        $parameters = array(
+            "q" => $this->criterionVisitor->visit( $query->criterion ),
+            "sort" => implode(
+                ", ",
+                array_map(
+                    array( $this->sortClauseVisitor, "visit" ),
+                    $query->sortClauses
+                )
+            ),
+            "fl" => "*,score",
+            "wt" => "json",
+        );
+
+        if ( $query->offset !== null )
+        {
+            $parameters["start"] = $query->offset;
+        }
+
+        if ( $query->limit !== null )
+        {
+            $parameters["rows"] = $query->limit;
+        }
+
         // @todo: Extract method
         $response = $this->client->request(
             'GET',
             '/solr/select?' .
-            http_build_query(
-                array(
-                    'q'    => $this->criterionVisitor->visit( $query->criterion ),
-                    'sort' => implode(
-                        ', ',
-                        array_map(
-                            array( $this->sortClauseVisitor, 'visit' ),
-                            $query->sortClauses
-                        )
-                    ),
-                    'fl'   => '*,score',
-                    'wt'   => 'json',
-                )
-            ) .
+            http_build_query( $parameters ) .
             ( count( $query->facetBuilders ) ? '&facet=true&facet.sort=count&' : '' ) .
             implode(
                 '&',
@@ -193,7 +204,32 @@ class Native extends Gateway
             )
         );
 
-        // @todo: Add error handling
+        if ( $result->headers["status"] !== 200 )
+        {
+            throw new RuntimeException( "Wrong HTTP status received from Solr: " . $result->headers["status"] );
+        }
+    }
+
+    /**
+     * Deletes a content object from the index
+     *
+     * @param int content id
+     * @param int|null version id
+     *
+     * @return void
+     */
+    public function deleteContent( $contentID, $versionID = null )
+    {
+        $this->client->request(
+            'POST',
+            '/solr/update?commit=true&wt=json',
+            new Message(
+                array(
+                    'Content-Type: text/xml',
+                ),
+                "<delete><query>id:" . (int)$contentID . ( $versionID !== null ? " AND version_id:" . (int)$versionID : "" ) . "</query></delete>"
+            )
+        );
     }
 
     /**

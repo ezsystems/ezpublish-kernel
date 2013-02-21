@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\UserBase class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -14,7 +14,7 @@ use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\Core\Repository\Values\User\UserGroup;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;
 use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
@@ -225,7 +225,7 @@ abstract class UserBase extends BaseServiceTest
     {
         $userService = $this->repository->getUserService();
         $userGroup = $userService->loadUserGroup( 4 );
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroup', $userGroup );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroup', $userGroup );
     }
 
     /**
@@ -446,7 +446,7 @@ abstract class UserBase extends BaseServiceTest
         $parentGroup = $userService->loadUserGroup( 42 );
         $createdUser = $userService->createUser( $userCreateStruct, array( $parentGroup ) );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\User', $createdUser );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\User', $createdUser );
         self::assertEquals( "New", $createdUser->getFieldValue( "first_name" ) );
         self::assertEquals( "User", $createdUser->getFieldValue( "last_name" ) );
         self::assertEquals( $userCreateStruct->login, $createdUser->login );
@@ -527,7 +527,7 @@ abstract class UserBase extends BaseServiceTest
 
         $loadedUser = $userService->loadUser( 14 );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\User', $loadedUser );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\User', $loadedUser );
         self::assertEquals( 14, $loadedUser->id );
     }
 
@@ -553,7 +553,7 @@ abstract class UserBase extends BaseServiceTest
 
         $loadedUser = $userService->loadAnonymousUser();
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\User', $loadedUser );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\User', $loadedUser );
         self::assertEquals( 10, $loadedUser->id );
     }
 
@@ -566,7 +566,7 @@ abstract class UserBase extends BaseServiceTest
         $userService = $this->repository->getUserService();
 
         $loadedUser = $userService->loadUserByCredentials( 'admin', 'publish' );
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\User', $loadedUser );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\User', $loadedUser );
 
         $this->assertPropertiesCorrect(
             array(
@@ -647,7 +647,7 @@ abstract class UserBase extends BaseServiceTest
         $userService->updateUser( $user, $userUpdateStruct );
         $updatedUser = $userService->loadUser( $user->id );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\User', $updatedUser );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\User', $updatedUser );
         self::assertEquals(
             "New first name",
             $updatedUser->getFieldValue( "first_name" )
@@ -806,7 +806,7 @@ abstract class UserBase extends BaseServiceTest
 
         foreach ( $userGroups as $userGroup )
         {
-            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroup', $userGroup );
+            self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroup', $userGroup );
             self::assertContains(
                 $userGroup->getVersionInfo()->getContentInfo()->mainLocationId,
                 $groupLocationIds
@@ -831,7 +831,7 @@ abstract class UserBase extends BaseServiceTest
 
         foreach ( $users as $user )
         {
-            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\User', $user );
+            self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\User', $user );
 
             $userLocation = $locationService->loadLocation( $user->getVersionInfo()->getContentInfo()->mainLocationId );
 
@@ -851,7 +851,7 @@ abstract class UserBase extends BaseServiceTest
         $userService = $this->repository->getUserService();
 
         $userCreateStruct = $userService->newUserCreateStruct( "admin", "admin@ez.no", "password", "eng-GB" );
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserCreateStruct', $userCreateStruct );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserCreateStruct', $userCreateStruct );
 
         $this->assertPropertiesCorrect(
             array(
@@ -875,7 +875,7 @@ abstract class UserBase extends BaseServiceTest
         $userService = $this->repository->getUserService();
 
         $userGroupCreateStruct = $userService->newUserGroupCreateStruct( "eng-GB" );
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct', $userGroupCreateStruct );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupCreateStruct', $userGroupCreateStruct );
         self::assertEquals( "eng-GB", $userGroupCreateStruct->mainLanguageCode );
     }
 
@@ -890,7 +890,7 @@ abstract class UserBase extends BaseServiceTest
         $userUpdateStruct = $userService->newUserUpdateStruct();
 
         self::assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\UserUpdateStruct',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserUpdateStruct',
             $userUpdateStruct
         );
 
@@ -919,7 +919,7 @@ abstract class UserBase extends BaseServiceTest
         $userGroupUpdateStruct = $userService->newUserGroupUpdateStruct();
 
         self::assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupUpdateStruct',
             $userGroupUpdateStruct
         );
 

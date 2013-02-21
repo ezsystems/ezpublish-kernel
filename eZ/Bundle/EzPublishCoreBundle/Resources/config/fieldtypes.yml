@@ -20,7 +20,6 @@ parameters:
     ezpublish.fieldType.ezmedia.class: eZ\Publish\Core\FieldType\Media\Type
     ezpublish.fieldType.ezmedia.externalStorage.class: eZ\Publish\Core\FieldType\Media\MediaStorage
     ezpublish.fieldType.ezobjectrelation.class: eZ\Publish\Core\FieldType\Relation\Type
-    ezpublish.fieldType.ezobjectrelation.externalStorage.class: eZ\Publish\Core\FieldType\Relation\RelationStorage
     ezpublish.fieldType.ezsrrating.class: eZ\Publish\Core\FieldType\Rating\Type
     ezpublish.fieldType.ezselection.class: eZ\Publish\Core\FieldType\Selection\Type
     ezpublish.fieldType.eztext.class: eZ\Publish\Core\FieldType\TextBlock\Type
@@ -30,7 +29,7 @@ parameters:
     ezpublish.fieldType.ezxmltext.class: eZ\Publish\Core\FieldType\XmlText\Type
     ezpublish.fieldType.ezxmltext.externalStorage.class: eZ\Publish\Core\FieldType\XmlText\XmlTextStorage
     ezpublish.fieldType.ezxmltext.converter.html5.class: eZ\Publish\Core\FieldType\XmlText\Converter\Html5
-    ezpublish.fieldType.ezxmltext.converter.html5.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5.xsl
+    ezpublish.fieldType.ezxmltext.converter.html5.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5.xsl
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5
     ezpublish.fieldType.ezpage.class: eZ\Publish\Core\FieldType\Page\Type
     ezpublish.fieldType.ezpage.pageService.class: eZ\Publish\Core\FieldType\Page\Service
@@ -40,7 +39,6 @@ parameters:
     ezpublish.fieldType.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\Type
     ezpublish.fieldType.ezgmaplocation.externalStorage.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage
     ezpublish.fieldType.ezobjectrelationlist.class: eZ\Publish\Core\FieldType\RelationList\Type
-    ezpublish.fieldType.ezobjectrelationlist.externalStorage.class: eZ\Publish\Core\FieldType\Relation\RelationStorage
     ezpublish.fieldType.ezuser.class: eZ\Publish\Core\FieldType\User\Type
     ezpublish.fieldType.ezuser.externalStorage.class: eZ\Publish\Core\FieldType\User\UserStorage
     ezpublish.fieldType.ezcountry.class: eZ\Publish\Core\FieldType\Country\Type
@@ -293,6 +291,7 @@ parameters:
         ZW: {Name: "Zimbabwe", Alpha2: "ZW", Alpha3: "ZWE", IDC: "263"}
 
     ezpublish.fieldType.eznull.class: eZ\Publish\Core\FieldType\Null\Type
+    ezpublish.fieldType.ezrecommendation.class: %ezpublish.fieldType.eznull.class%
 
 services:
     ezpublish.fieldType:
@@ -422,12 +421,6 @@ services:
         tags:
             - {name: ezpublish.fieldType, alias: ezobjectrelation}
 
-    ezpublish.fieldType.ezobjectrelation.externalStorage:
-        class: %ezpublish.fieldType.ezobjectrelation.externalStorage.class%
-        arguments: [[]]
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezobjectrelation}
-
     ezpublish.fieldType.ezsrrating:
         class: %ezpublish.fieldType.ezsrrating.class%
         parent: ezpublish.fieldType
@@ -518,12 +511,6 @@ services:
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezobjectrelationlist}
-
-    ezpublish.fieldType.ezobjectrelationlist.externalStorage:
-        class: %ezpublish.fieldType.ezobjectrelationlist.externalStorage.class%
-        arguments: [[]]
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezobjectrelationlist}
 
     ezpublish.fieldType.ezuser:
         class: %ezpublish.fieldType.ezuser.class%
@@ -679,3 +666,10 @@ services:
         arguments: [ "eztags" ]
         tags:
             - {name: ezpublish.fieldType, alias: eztags}
+
+    ezpublish.fieldType.ezrecommendation:
+        class: %ezpublish.fieldType.ezrecommendation.class%
+        parent: ezpublish.fieldType
+        arguments: [ "ezrecommendation" ]
+        tags:
+            - {name: ezpublish.fieldType, alias: ezrecommendation}

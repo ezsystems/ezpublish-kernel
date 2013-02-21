@@ -8,11 +8,11 @@ API
 ### Model API
 
 This part has already been defined, and value objects can be found here:
-* https://github.com/ezsystems/ezp-next/tree/master/eZ/Publish/API/Repository/Values/User
+* https://github.com/ezsystems/ezpublish-kernel/tree/master/eZ/Publish/API/Repository/Values/User
 
 For the Service API's that deal with these objects, look here:
-* https://github.com/ezsystems/ezp-next/blob/master/eZ/Publish/API/Repository/UserService.php
-* https://github.com/ezsystems/ezp-next/blob/master/eZ/Publish/API/Repository/RoleService.php
+* https://github.com/ezsystems/ezpublish-kernel/blob/master/eZ/Publish/API/Repository/UserService.php
+* https://github.com/ezsystems/ezpublish-kernel/blob/master/eZ/Publish/API/Repository/RoleService.php
 
 
 ### Authorization API
@@ -198,8 +198,8 @@ This means identifier needs to be unique!
 References
 ----------
 
-[canUser]:           https://github.com/ezsystems/ezp-next/blob/9e14c6b3133a2585c103376555849c5fcd8591d2/ezp/Base/Repository.php#L122
-[contentDefinition]: https://github.com/ezsystems/ezp-next/blob/9e14c6b3133a2585c103376555849c5fcd8591d2/ezp/Content/Concrete.php#L235
-[userDefinition]:    https://github.com/ezsystems/ezp-next/blob/9e14c6b3133a2585c103376555849c5fcd8591d2/ezp/User/Concrete.php#L96
-[hasAccessTo]:       https://github.com/ezsystems/ezp-next/blob/9e14c6b3133a2585c103376555849c5fcd8591d2/ezp/User/Concrete.php#L162
-[login]:             https://github.com/ezsystems/ezp-next/blob/master/eZ/Publish/API/Repository/UserService.php#L142
+[canUser]:           https://github.com/ezsystems/ezpublish-kernel/blob/9e14c6b3133a2585c103376555849c5fcd8591d2/ezp/Base/Repository.php#L122
+[contentDefinition]: https://github.com/ezsystems/ezpublish-kernel/blob/9e14c6b3133a2585c103376555849c5fcd8591d2/ezp/Content/Concrete.php#L235
+[userDefinition]:    https://github.com/ezsystems/ezpublish-kernel/blob/9e14c6b3133a2585c103376555849c5fcd8591d2/ezp/User/Concrete.php#L96
+[hasAccessTo]:       https://github.com/ezsystems/ezpublish-kernel/blob/9e14c6b3133a2585c103376555849c5fcd8591d2/ezp/User/Concrete.php#L162
+[login]:             https://github.com/ezsystems/ezpublish-kernel/blob/master/eZ/Publish/API/Repository/UserService.php#L142

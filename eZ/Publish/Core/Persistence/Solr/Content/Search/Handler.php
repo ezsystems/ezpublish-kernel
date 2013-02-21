@@ -2,7 +2,7 @@
 /**
  * File containing the Content Search handler class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search;
 
 use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
 use eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler;
@@ -58,6 +59,13 @@ class Handler extends BaseSearchHandler
     protected $fieldRegistry;
 
     /**
+     * Location handler
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
+     */
+    protected $locationHandler;
+
+    /**
      * Content type handler
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
@@ -76,13 +84,15 @@ class Handler extends BaseSearchHandler
      *
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway $gateway
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry $fieldRegistry
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
      */
-    public function __construct( Gateway $gateway, FieldRegistry $fieldRegistry, ContentTypeHandler $contentTypeHandler, ObjectStateHandler $objectStateHandler )
+    public function __construct( Gateway $gateway, FieldRegistry $fieldRegistry, LocationHandler $locationHandler, ContentTypeHandler $contentTypeHandler, ObjectStateHandler $objectStateHandler )
     {
         $this->gateway            = $gateway;
         $this->fieldRegistry      = $fieldRegistry;
+        $this->locationHandler    = $locationHandler;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->objectStateHandler = $objectStateHandler;
     }
@@ -160,25 +170,46 @@ class Handler extends BaseSearchHandler
     }
 
     /**
+     * Deletes a content object from the index
+     *
+     * @param int $contentID
+     * @param int|null $versionID
+     *
+     * @return void
+     */
+    public function deleteContent( $contentID, $versionID = null )
+    {
+        $this->gateway->deleteContent( $contentID, $versionID );
+    }
+
+    /**
      * Map content to document.
      *
      * A document is an array of fields
      *
-     * @param Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content $content
      *
      * @return array
      */
     protected function mapContent( Content $content )
     {
+        $locations = $this->locationHandler->loadLocationsByContent( $content->versionInfo->contentInfo->id );
+        $mainLocation = null;
+        foreach ( $locations as $location )
+        {
+            if ( $location->id == $content->versionInfo->contentInfo->mainLocationId )
+                $mainLocation = $location;
+        }
+
         $document = array(
             new Field(
                 'id',
-                $content->contentInfo->id,
+                $content->versionInfo->contentInfo->id,
                 new FieldType\IdentifierField()
             ),
             new Field(
                 'type',
-                $content->contentInfo->contentTypeId,
+                $content->versionInfo->contentInfo->contentTypeId,
                 new FieldType\IdentifierField()
             ),
             new Field(
@@ -193,7 +224,7 @@ class Handler extends BaseSearchHandler
             ),
             new Field(
                 'name',
-                $content->contentInfo->name,
+                $content->versionInfo->contentInfo->name,
                 new FieldType\StringField()
             ),
             new Field(
@@ -203,22 +234,22 @@ class Handler extends BaseSearchHandler
             ),
             new Field(
                 'section',
-                $content->contentInfo->sectionId,
+                $content->versionInfo->contentInfo->sectionId,
                 new FieldType\IdentifierField()
             ),
             new Field(
                 'remote_id',
-                $content->contentInfo->remoteId,
+                $content->versionInfo->contentInfo->remoteId,
                 new FieldType\IdentifierField()
             ),
             new Field(
                 'modified',
-                $content->contentInfo->modificationDate,
+                $content->versionInfo->contentInfo->modificationDate,
                 new FieldType\DateField()
             ),
             new Field(
                 'published',
-                $content->contentInfo->publicationDate,
+                $content->versionInfo->contentInfo->publicationDate,
                 new FieldType\DateField()
             ),
             new Field(
@@ -228,9 +259,9 @@ class Handler extends BaseSearchHandler
                     {
                         return $location->pathString;
                     },
-                    $content->locations
+                    $locations
                 ),
-                new FieldType\IdentifierField()
+                new FieldType\MultipleIdentifierField()
             ),
             new Field(
                 'location',
@@ -239,9 +270,9 @@ class Handler extends BaseSearchHandler
                     {
                         return $location->id;
                     },
-                    $content->locations
+                    $locations
                 ),
-                new FieldType\IdentifierField()
+                new FieldType\MultipleIdentifierField()
             ),
             new Field(
                 'depth',
@@ -250,7 +281,18 @@ class Handler extends BaseSearchHandler
                     {
                         return $location->depth;
                     },
-                    $content->locations
+                    $locations
+                ),
+                new FieldType\IntegerField()
+            ),
+            new Field(
+                'priority',
+                array_map(
+                    function ( $location )
+                    {
+                        return $location->priority;
+                    },
+                    $locations
                 ),
                 new FieldType\IntegerField()
             ),
@@ -261,9 +303,9 @@ class Handler extends BaseSearchHandler
                     {
                         return $location->parentId;
                     },
-                    $content->locations
+                    $locations
                 ),
-                new FieldType\IdentifierField()
+                new FieldType\MultipleIdentifierField()
             ),
             new Field(
                 'location_remote_id',
@@ -272,9 +314,9 @@ class Handler extends BaseSearchHandler
                     {
                         return $location->remoteId;
                     },
-                    $content->locations
+                    $locations
                 ),
-                new FieldType\IdentifierField()
+                new FieldType\MultipleIdentifierField()
             ),
             new Field(
                 'language_code',
@@ -283,7 +325,41 @@ class Handler extends BaseSearchHandler
             ),
         );
 
-        $contentType = $this->contentTypeHandler->load( $content->contentInfo->contentTypeId );
+        if ( $mainLocation !== null )
+        {
+            $document[] = new Field(
+                'main_location',
+                $mainLocation->id,
+                new FieldType\IdentifierField()
+            );
+            $document[] = new Field(
+                'main_location_parent',
+                $mainLocation->parentId,
+                new FieldType\IdentifierField()
+            );
+            $document[] = new Field(
+                'main_location_remote_id',
+                $mainLocation->remoteId,
+                new FieldType\IdentifierField()
+            );
+            $document[] = new Field(
+                'main_path',
+                $mainLocation->pathString,
+                new FieldType\IdentifierField()
+            );
+            $document[] = new Field(
+                'main_depth',
+                $mainLocation->depth,
+                new FieldType\IntegerField()
+            );
+            $document[] = new Field(
+                'main_priority',
+                $mainLocation->priority,
+                new FieldType\IntegerField()
+            );
+        }
+
+        $contentType = $this->contentTypeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
         $document[] = new Field(
             'group',
             $contentType->groupIds,
@@ -312,7 +388,7 @@ class Handler extends BaseSearchHandler
         foreach ( $this->objectStateHandler->loadAllGroups() as $objectStateGroup )
         {
             $objectStateIds[] = $this->objectStateHandler->getContentState(
-                $content->contentInfo->id,
+                $content->versionInfo->contentInfo->id,
                 $objectStateGroup->id
             )->id;
         }

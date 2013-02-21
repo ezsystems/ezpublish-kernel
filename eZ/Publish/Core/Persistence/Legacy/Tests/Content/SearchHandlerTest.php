@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandlerTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -34,16 +34,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected $fieldRegistry;
-
-    /**
-     * Returns the test suite with all tests declared in this class.
-     *
-     * @return \PHPUnit_Framework_TestSuite
-     */
-    public static function suite()
-    {
-        return new \PHPUnit_Framework_TestSuite( __CLASS__ );
-    }
 
     /**
      * Only set up once for these read only tests on a large fixture
@@ -537,16 +527,19 @@ class SearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $expectedContentIds = array( 4, 10, 12 );
+
         $this->assertEquals(
-            array( 4, 10, 12 ),
-            array_map(
-                function ( $hit )
-                {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
-                },
-                $result->searchHits
-            )
+            count( $expectedContentIds ),
+            count( $result->searchHits )
         );
+        foreach ( $result->searchHits as $hit )
+        {
+            $this->assertContains(
+                $hit->valueObject->versionInfo->contentInfo->id,
+                $expectedContentIds
+            );
+        }
     }
 
     /**
@@ -1523,7 +1516,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
             new Query(
                 array(
                     'criterion' => new Criterion\LanguageCode(
-                        'eng-GB'
+                        'eng-US'
                     ),
                     'limit' => 10,
                     'sortClauses' => array( new SortClause\ContentId ),

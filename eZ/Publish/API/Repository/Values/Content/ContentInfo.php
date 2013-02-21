@@ -2,7 +2,7 @@
 /**
  * File containing the eZ\Publish\API\Repository\Values\Content\ContentInfo class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -14,7 +14,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 /**
  * This class provides all version independent information of the content object.
  *
- * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType ( @deprecated Use $contentTypeId )
  * @property-read mixed $id The unique id of the content object
  * @property-read mixed $contentTypeId The unique id of the content type object this content is an instance of
  * @property-read string $name the computed name (via name schema) in the main language of the content object
@@ -29,7 +28,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read string $mainLanguageCode The main language code of the content. If the available flag is set to true the content is shown in this language if the requested language does not exist.
  * @property-read mixed $mainLocationId Identifier of the main location.
  */
-abstract class ContentInfo extends ValueObject
+class ContentInfo extends ValueObject
 {
     /**
      * The unique id of the content object
@@ -38,19 +37,17 @@ abstract class ContentInfo extends ValueObject
     protected $id;
 
     /**
+     * The content type id of the content.
+     *
+     * @var mixed
+     */
+    protected $contentTypeId;
+
+    /**
      * the computed name (via name schema) in the main language of the content object
      * @var string
      */
     protected $name;
-
-    /**
-     * The content type of this content object
-     *
-     * @deprecated Use $contentTypeId and ContentTypeService
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
-     */
-    abstract public function getContentType();
 
     /**
      * the section to which the content is assigned
@@ -121,5 +118,4 @@ abstract class ContentInfo extends ValueObject
      * @var mixed
      */
     protected $mainLocationId;
-
 }

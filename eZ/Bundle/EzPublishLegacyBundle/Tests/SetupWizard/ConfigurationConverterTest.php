@@ -90,7 +90,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
      */
     protected function convertMapToCallback( $callbackMap )
     {
-        return function() use ( $callbackMap )
+        return function () use ( $callbackMap )
         {
             foreach ( $callbackMap as $map )
             {
@@ -178,7 +178,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
 
         $exceptionType = 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException';
 
-//        $parameterNotFoundException = function()
+//        $parameterNotFoundException = function ()
 //        {
 //            throw new \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException( 'Test', 'test' );
 //        };
@@ -195,6 +195,10 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                 'Languages_eng' => array( 'RegionalSettings', 'SiteLanguageList', 'site.ini', 'eng', array( 'eng-GB' ) ),
                 'Languages_demo' => array( 'RegionalSettings', 'SiteLanguageList', 'site.ini', 'ezdemo_site', array( 'eng-GB' ) ),
                 'Languages_admin' => array( 'RegionalSettings', 'SiteLanguageList', 'site.ini', 'ezdemo_site_admin', array( 'eng-GB' ) ),
+                'SessionNameHandler_eng' => array( 'Session', 'SessionNameHandler', 'site.ini', 'eng', 'default' ),
+                'SessionNameHandler_demo' => array( 'Session', 'SessionNameHandler', 'site.ini', 'ezdemo_site', 'default' ),
+                'SessionNameHandler_admin' => array( 'Session', 'SessionNameHandler', 'site.ini', 'ezdemo_site_admin', 'default' ),
+                'SessionName' => array( 'Session', 'SessionNamePrefix', 'site.ini', null, 'eZSESSID' ),
             ),
             'getGroup' => array(
                 'SiteAccessSettings' => array(
@@ -382,6 +386,15 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
         unset( $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['languages'] );
         $data[] = $element;
 
+        // session name
+        $element = $baseData;
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['SessionNameHandler_eng'] = array( 'Session', 'SessionNameHandler', 'site.ini', 'eng', 'custom' );
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['SessionNameHandler_demo'] = array( 'Session', 'SessionNameHandler', 'site.ini', 'ezdemo_site', 'custom' );
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['SessionNamePerSiteAccess_eng'] = array( 'Session', 'SessionNamePerSiteAccess', 'site.ini', 'eng', 'enabled' );
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['SessionNamePerSiteAccess_demo'] = array( 'Session', 'SessionNamePerSiteAccess', 'site.ini', 'ezdemo_site', 'disabled' );
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site']['session_name'] = 'eZSESSID';
+        $data[] = $element;
+
         return $data;
     }
 
@@ -457,7 +470,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
             ->method( 'runCallback' )
             ->will( $this->returnValue( 'ezpKernelResult' ) );
 
-        $closureMock = function() use ( $legacyKernelMock )
+        $closureMock = function () use ( $legacyKernelMock )
         {
             return $legacyKernelMock;
         };

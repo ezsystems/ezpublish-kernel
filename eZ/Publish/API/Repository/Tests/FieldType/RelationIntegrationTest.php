@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\RepositoryTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -12,6 +12,8 @@ namespace eZ\Publish\API\Repository\Tests\FieldType;
 use eZ\Publish\API\Repository;
 use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\Repository\Values\Content\Relation;
+use eZ\Publish\API\Repository\Values\Content\Content;
 
 /**
  * Integration test for use field type
@@ -19,7 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
+class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
 {
     /**
      * Get name of tested field type
@@ -29,6 +31,48 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
     public function getTypeName()
     {
         return 'ezobjectrelation';
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return array|\eZ\Publish\API\Repository\Values\Content\Relation[]
+     */
+    public function getCreateExpectedRelations( Content $content )
+    {
+        $contentService = $this->getRepository()->getContentService();
+
+        return array(
+            new Relation(
+                array(
+                    "sourceFieldDefinitionIdentifier" => "data",
+                    "type" => Relation::FIELD,
+                    "sourceContentInfo" => $content->contentInfo,
+                    "destinationContentInfo" => $contentService->loadContentInfo( 4 )
+                )
+            ),
+        );
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return array|\eZ\Publish\API\Repository\Values\Content\Relation[]
+     */
+    public function getUpdateExpectedRelations( Content $content )
+    {
+        $contentService = $this->getRepository()->getContentService();
+
+        return array(
+            new Relation(
+                array(
+                    "sourceFieldDefinitionIdentifier" => "data",
+                    "type" => Relation::FIELD,
+                    "sourceContentInfo" => $content->contentInfo,
+                    "destinationContentInfo" => $contentService->loadContentInfo( 49 )
+                )
+            ),
+        );
     }
 
     /**

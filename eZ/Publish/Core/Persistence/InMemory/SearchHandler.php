@@ -2,7 +2,7 @@
 /**
  * File containing the Content Search handler class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -236,6 +236,19 @@ class SearchHandler extends SearchHandlerInterface
     }
 
     /**
+     * Deletes a content object from the index
+     *
+     * @param int $contentID
+     * @param int|null $versionID
+     *
+     * @return void
+     */
+    public function deleteContent( $contentID, $versionID = null )
+    {
+        throw new \Exception( "Not implemented yet." );
+    }
+
+    /**
      * Generate match array for use with Backend based on criteria
      *
      * @param array $criteria
@@ -279,7 +292,7 @@ class SearchHandler extends SearchHandlerInterface
             {
                 $languageHandler = $this->handler->contentLanguageHandler();
                 $languageIds = array_map(
-                    function( $languageCode ) use ( $languageHandler )
+                    function ( $languageCode ) use ( $languageHandler )
                     {
                         return $languageHandler->loadByLanguageCode( $languageCode )->id;
                     },

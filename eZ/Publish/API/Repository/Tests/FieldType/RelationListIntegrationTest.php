@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\RepositoryTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -13,6 +13,8 @@ use eZ\Publish\API\Repository;
 use eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue;
 use eZ\Publish\Core\FieldType\RelationList\Type as RelationListType;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\Repository\Values\Content\Relation;
+use eZ\Publish\API\Repository\Values\Content\Content;
 
 /**
  * Integration test for use field type
@@ -20,7 +22,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class RelationListFieldTypeIntegrationTest extends BaseIntegrationTest
+class RelationListFieldTypeIntegrationTest extends RelationBaseIntegrationTest
 {
     /**
      * Get name of tested field type
@@ -30,6 +32,66 @@ class RelationListFieldTypeIntegrationTest extends BaseIntegrationTest
     public function getTypeName()
     {
         return 'ezobjectrelationlist';
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return array|\eZ\Publish\API\Repository\Values\Content\Relation[]
+     */
+    public function getCreateExpectedRelations( Content $content )
+    {
+        $contentService = $this->getRepository()->getContentService();
+
+        return array(
+            new Relation(
+                array(
+                    "sourceFieldDefinitionIdentifier" => "data",
+                    "type" => Relation::FIELD,
+                    "sourceContentInfo" => $content->contentInfo,
+                    "destinationContentInfo" => $contentService->loadContentInfo( 4 )
+                )
+            ),
+            new Relation(
+                array(
+                    "sourceFieldDefinitionIdentifier" => "data",
+                    "type" => Relation::FIELD,
+                    "sourceContentInfo" => $content->contentInfo,
+                    "destinationContentInfo" => $contentService->loadContentInfo( 49 )
+                )
+            ),
+        );
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return array|\eZ\Publish\API\Repository\Values\Content\Relation[]
+     */
+    public function getUpdateExpectedRelations( Content $content )
+    {
+        $contentService = $this->getRepository()->getContentService();
+
+        return array(
+            new Relation(
+                array(
+                    "id" => null,
+                    "sourceFieldDefinitionIdentifier" => "data",
+                    "type" => Relation::FIELD,
+                    "sourceContentInfo" => $content->contentInfo,
+                    "destinationContentInfo" => $contentService->loadContentInfo( 4 )
+                )
+            ),
+            new Relation(
+                array(
+                    "id" => null,
+                    "sourceFieldDefinitionIdentifier" => "data",
+                    "type" => Relation::FIELD,
+                    "sourceContentInfo" => $content->contentInfo,
+                    "destinationContentInfo" => $contentService->loadContentInfo( 54 )
+                )
+            ),
+        );
     }
 
     /**
@@ -120,7 +182,7 @@ class RelationListFieldTypeIntegrationTest extends BaseIntegrationTest
      */
     public function getValidCreationFieldData()
     {
-        return new RelationListValue( array( 4 ) );
+        return new RelationListValue( array( 4, 49 ) );
     }
 
     /**
@@ -141,7 +203,7 @@ class RelationListFieldTypeIntegrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'destinationContentIds' => array( 4 ),
+            'destinationContentIds' => array( 4, 49 ),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -187,7 +249,7 @@ class RelationListFieldTypeIntegrationTest extends BaseIntegrationTest
      */
     public function getValidUpdateFieldData()
     {
-        return new RelationListValue( array( 49 ) );
+        return new RelationListValue( array( 4, 54 ) );
     }
 
     /**
@@ -205,7 +267,7 @@ class RelationListFieldTypeIntegrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'destinationContentIds' => array( 49 ),
+            'destinationContentIds' => array( 4, 54 ),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -255,7 +317,7 @@ class RelationListFieldTypeIntegrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'destinationContentIds' => array( 4 )
+            'destinationContentIds' => array( 4, 49 )
         );
 
         $this->assertPropertiesCorrect(
@@ -288,9 +350,9 @@ class RelationListFieldTypeIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new RelationListValue( array( 4 ) ),
+                new RelationListValue( array( 4, 49 ) ),
                 array(
-                    'destinationContentIds' => array( 4 ),
+                    'destinationContentIds' => array( 4, 49 ),
                 )
             ),
         );
@@ -307,8 +369,8 @@ class RelationListFieldTypeIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                array( 'destinationContentIds' => array( 4 ) ),
-                new RelationListValue( array( 4 ) )
+                array( 'destinationContentIds' => array( 4, 49 ) ),
+                new RelationListValue( array( 4, 49 ) )
             ),
         );
     }

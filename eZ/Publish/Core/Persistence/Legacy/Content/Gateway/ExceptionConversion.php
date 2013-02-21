@@ -2,7 +2,7 @@
 /**
  * File containing the Content Gateway base class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -768,17 +768,21 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Deletes the relation with the given $relationId
+     * Deletes the relation with the given $relationId.
      *
      * @param int $relationId
+     * @param int $type {@see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
      *
      * @return void
      */
-    public function deleteRelation( $relationId )
+    public function deleteRelation( $relationId, $type )
     {
         try
         {
-            return $this->innerGateway->deleteRelation( $relationId );
+            return $this->innerGateway->deleteRelation( $relationId, $type );
         }
         catch ( \ezcDbException $e )
         {

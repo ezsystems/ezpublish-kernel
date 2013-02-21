@@ -2,7 +2,7 @@
 /**
  * File containing the Content Handler class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway as UrlAliasGateway;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
@@ -60,24 +62,44 @@ class Handler implements BaseContentHandler
     protected $fieldHandler;
 
     /**
+     * URL slug converter.
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter
+     */
+    protected $slugConverter;
+
+    /**
+     * UrlAlias gateway
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway
+     */
+    protected $urlAliasGateway;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $locationGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $mapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler $fieldHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter $slugConverter
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway $urlAliasGateway
      */
     public function __construct(
         Gateway $contentGateway,
         LocationGateway $locationGateway,
         Mapper $mapper,
-        FieldHandler $fieldHandler
+        FieldHandler $fieldHandler,
+        SlugConverter $slugConverter,
+        UrlAliasGateway $urlAliasGateway
     )
     {
         $this->contentGateway = $contentGateway;
         $this->locationGateway = $locationGateway;
         $this->mapper = $mapper;
         $this->fieldHandler = $fieldHandler;
+        $this->slugConverter = $slugConverter;
+        $this->urlAliasGateway = $urlAliasGateway;
     }
 
     /**
@@ -355,7 +377,7 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Updates a content object meta data, identified by $contentId
+     * Updates a content object meta data, identified by $contentId.
      *
      * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $content
@@ -365,7 +387,50 @@ class Handler implements BaseContentHandler
     public function updateMetadata( $contentId, MetadataUpdateStruct $content )
     {
         $this->contentGateway->updateContent( $contentId, $content );
+        $this->updatePathIdentificationString( $contentId, $content );
+
         return $this->loadContentInfo( $contentId );
+    }
+
+    /**
+     * Updates path identification string for locations of given $contentId if main language
+     * is set in update struct.
+     *
+     * This is specific to the Legacy storage engine, as path identification string is deprecated.
+     *
+     * @param int $contentId
+     * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $content
+     *
+     * @return void
+     */
+    protected function updatePathIdentificationString( $contentId, MetadataUpdateStruct $content )
+    {
+        if ( isset( $content->mainLanguageId ) )
+        {
+            $contentLocationsRows = $this->locationGateway->loadLocationDataByContent( $contentId );
+            foreach ( $contentLocationsRows as $row )
+            {
+                $locationName = "";
+                $urlAliasRows = $this->urlAliasGateway->loadLocationEntries(
+                    $row["node_id"],
+                    false,
+                    $content->mainLanguageId
+                );
+                if ( !empty( $urlAliasRows ) )
+                {
+                    $locationName = $urlAliasRows[0]["text"];
+                }
+                $this->locationGateway->updatePathIdentificationString(
+                    $row["node_id"],
+                    $row["parent_node_id"],
+                    $this->slugConverter->convert(
+                        $locationName,
+                        "node_" . $row["node_id"],
+                        "urlalias_compat"
+                    )
+                );
+            }
+        }
     }
 
     /**
@@ -428,13 +493,11 @@ class Handler implements BaseContentHandler
      */
     public function removeRawContent( $contentId )
     {
-        $contentInfo = $this->loadContentInfo( $contentId );
         $this->locationGateway->removeElementFromTrash(
-            $contentInfo->mainLocationId
+            $this->loadContentInfo( $contentId )->mainLocationId
         );
 
-        $versionInfos = $this->listVersions( $contentId );
-        foreach ( $versionInfos as $versionInfo )
+        foreach ( $this->listVersions( $contentId ) as $versionInfo )
         {
             $this->fieldHandler->deleteFields( $contentId, $versionInfo );
         }
@@ -566,15 +629,21 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Removes a relation by $relationId.
+     * Removes a relation by relation Id.
+     *
+     * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
      *
      * @param mixed $relationId
+     * @param int $type {@see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
      *
      * @return void
      */
-    public function removeRelation( $relationId )
+    public function removeRelation( $relationId, $type )
     {
-        $this->contentGateway->deleteRelation( $relationId );
+        $this->contentGateway->deleteRelation( $relationId, $type );
     }
 
     /**
@@ -586,14 +655,14 @@ class Handler implements BaseContentHandler
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
     public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null )
     {
-        $rows = $this->contentGateway->loadRelations( $sourceContentId, $sourceContentVersionNo, $type );
-
-        $relationObjects = $this->mapper->extractRelationsFromRows( $rows );
-        return $relationObjects;
+        return $this->mapper->extractRelationsFromRows(
+            $this->contentGateway->loadRelations( $sourceContentId, $sourceContentVersionNo, $type )
+        );
     }
 
     /**
@@ -610,9 +679,8 @@ class Handler implements BaseContentHandler
      */
     public function loadReverseRelations( $destinationContentId, $type = null )
     {
-        $rows = $this->contentGateway->loadReverseRelations( $destinationContentId, $type );
-
-        $relationObjects = $this->mapper->extractRelationsFromRows( $rows );
-        return $relationObjects;
+        return $this->mapper->extractRelationsFromRows(
+            $this->contentGateway->loadReverseRelations( $destinationContentId, $type )
+        );
     }
 }

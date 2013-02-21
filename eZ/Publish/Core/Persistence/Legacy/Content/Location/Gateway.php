@@ -2,7 +2,7 @@
 /**
  * File containing the Location Gateway class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -90,12 +90,12 @@ abstract class Gateway
      * operations, which then depend on the respective database.
      *
      * @todo optimize
-     * @param string $fromPathString
-     * @param string $toPathString
+     * @param array $fromPathString
+     * @param array $toPathString
      *
      * @return void
      */
-    abstract public function moveSubtreeNodes( $fromPathString, $toPathString );
+    abstract public function moveSubtreeNodes( array $fromPathString, array $toPathString );
 
     /**
      * Updated subtree modification time for all nodes on path

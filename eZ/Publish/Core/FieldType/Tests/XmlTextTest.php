@@ -2,7 +2,7 @@
 /**
  * File containing the FieldType\XmlTextTypeTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType;
 use eZ\Publish\Core\FieldType\XmlText\Input\EzXml;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\API\Repository\Values\Content\Relation;
 use Exception;
 use DOMDocument;
 
@@ -290,6 +291,50 @@ class XmlTextTest extends FieldTypeTest
             array( '<section><paragraph>test</paragraph></section>', "test" ),
 
             array( '<section><paragraph><link node_id="1">test</link><link object_id="1">test</link></paragraph></section>', "test" ),
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\XmlText\Type::getRelations
+     */
+    public function testGetRelations()
+    {
+        $xml =
+<<<EOT
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+    <paragraph><link node_id="72">link1</link></paragraph>
+    <paragraph><link node_id="61">link2</link></paragraph>
+    <paragraph><link node_id="61">link3</link></paragraph>
+    <paragraph><link object_id="70">link4</link></paragraph>
+    <paragraph><link object_id="75">link5</link></paragraph>
+    <paragraph><link object_id="75">link6</link></paragraph>
+    <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+        <embed view="embed" size="medium" node_id="52" custom:offset="0" custom:limit="5"/>
+        <embed view="embed" size="medium" node_id="42" custom:offset="0" custom:limit="5"/>
+        <embed view="embed" size="medium" node_id="52" custom:offset="0" custom:limit="5"/>
+        <embed view="embed" size="medium" object_id="72" custom:offset="0" custom:limit="5"/>
+        <embed view="embed" size="medium" object_id="74" custom:offset="0" custom:limit="5"/>
+        <embed view="embed" size="medium" object_id="72" custom:offset="0" custom:limit="5"/>
+    </paragraph>
+</section>
+EOT;
+
+        $ft = $this->getFieldType();
+        $this->assertEquals(
+            array(
+                Relation::LINK => array(
+                    "locationIds" => array( 72, 61 ),
+                    "contentIds" => array( 70, 75 ),
+                ),
+                Relation::EMBED => array(
+                    "locationIds" => array( 52, 42 ),
+                    "contentIds" => array( 72, 74 ),
+                ),
+            ),
+            $ft->getRelations( $ft->acceptValue( $xml ) )
         );
     }
 }

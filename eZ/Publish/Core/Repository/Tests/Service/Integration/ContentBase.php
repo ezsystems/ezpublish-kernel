@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\ContentBase class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -718,6 +718,7 @@ abstract class ContentBase extends BaseServiceTest
             "expected" => $contentCreate,
             "actual" => $contentDraft,
             "loadedActual" => $contentService->loadContent( $contentDraft->id, null, 1 ),
+            "contentType" => $testContentType,
             "time" => $time
         );
     }
@@ -803,7 +804,7 @@ abstract class ContentBase extends BaseServiceTest
         $this->assertNotNull( $contentDraft->id );
         $this->assertEquals(
             $contentCreate->contentType->id,
-            $contentDraft->versionInfo->contentInfo->contentType->id
+            $contentDraft->versionInfo->contentInfo->contentTypeId
         );
     }
 
@@ -869,6 +870,8 @@ abstract class ContentBase extends BaseServiceTest
         $contentDraft = $data['actual'];
         /** @var $contentCreate \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct */
         $contentCreate = $data['expected'];
+        /** @var $contentType \eZ\Publish\API\Repository\Values\ContentType\ContentType */
+        $contentType = $data['contentType'];
 
         $createdFields = $contentDraft->getFields();
         $createdInLanguageCodes = $this->getLanguageCodesFromFields(
@@ -877,7 +880,7 @@ abstract class ContentBase extends BaseServiceTest
         );
 
         $this->assertCount(
-            count( $contentDraft->contentType->fieldDefinitions ) * count( $createdInLanguageCodes ),
+            count( $contentType->fieldDefinitions ) * count( $createdInLanguageCodes ),
             $createdFields,
             "Number of created fields does not match number of content type field definitions multiplied by number of languages the content is created in"
         );
@@ -886,7 +889,7 @@ abstract class ContentBase extends BaseServiceTest
         $structFields = array();
         foreach ( $contentCreate->fields as $field )
             $structFields[$field->fieldDefIdentifier][$field->languageCode] = $field;
-        foreach ( $contentDraft->contentType->fieldDefinitions as $fieldDefinition )
+        foreach ( $contentType->fieldDefinitions as $fieldDefinition )
         {
             $this->assertArrayHasKey(
                 $fieldDefinition->identifier,
@@ -1343,7 +1346,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContent()
     {
-        $content = $this->createTestContent();
+        list( $content, $contentType ) = $this->createTestContent();
         $time = time();
 
         /* BEGIN: Use Case */
@@ -1371,6 +1374,7 @@ abstract class ContentBase extends BaseServiceTest
             "actual" => $updatedContent,
             "expected" => $contentUpdateStruct,
             "previous" => $content,
+            "contentType" => $contentType,
             "time" => $time
         );
     }
@@ -1391,6 +1395,8 @@ abstract class ContentBase extends BaseServiceTest
         $contentUpdate = $data['expected'];
         /** @var $contentDraft \eZ\Publish\API\Repository\Values\Content\Content */
         $contentDraft = $data['previous'];
+        /** @var $contentDraft \eZ\Publish\API\Repository\Values\ContentType\ContentType */
+        $contentType = $data['contentType'];
 
         $this->assertCount( 8, $updatedContentDraft->getFields() );
 
@@ -1401,7 +1407,7 @@ abstract class ContentBase extends BaseServiceTest
             $structFields[$field->fieldDefIdentifier][$field->languageCode] = $field;
         }
 
-        foreach ( $updatedContentDraft->contentType->fieldDefinitions as $fieldDefinition )
+        foreach ( $contentType->fieldDefinitions as $fieldDefinition )
         {
             $this->assertArrayHasKey(
                 $fieldDefinition->identifier,
@@ -1455,7 +1461,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContentWithNewLanguage()
     {
-        $content = $this->createTestContent();
+        list( $content, $contentType ) = $this->createTestContent();
 
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
@@ -1507,7 +1513,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContentThrowsUnauthorizedException()
     {
-        $content = $this->createTestContent();
+        list( $content, $contentType ) = $this->createTestContent();
 
         $contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
         $contentUpdateStruct->initialLanguageCode = "eng-US";
@@ -1549,7 +1555,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContentThrowsContentFieldValidationException()
     {
-        $content = $this->createTestContent();
+        list( $content, $contentType ) = $this->createTestContent();
 
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
@@ -1580,7 +1586,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContentThrowsContentValidationExceptionRequiredFieldEmpty()
     {
-        $content = $this->createTestContent();
+        list( $content, $contentType ) = $this->createTestContent();
 
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
@@ -1607,7 +1613,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContentThrowsContentValidationExceptionFieldDefinitionNonexistent()
     {
-        $content = $this->createTestContent();
+        list( $content, $contentType ) = $this->createTestContent();
 
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
@@ -1637,7 +1643,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContentThrowsContentValidationExceptionUntranslatableField()
     {
-        $content = $this->createTestContent();
+        list( $content, $contentType ) = $this->createTestContent();
 
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
@@ -1666,7 +1672,7 @@ abstract class ContentBase extends BaseServiceTest
     public function testPublishVersion()
     {
         $time = time();
-        $draftContent = $this->createTestContent();
+        list( $draftContent, $contentType ) = $this->createTestContent();
 
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
@@ -1712,7 +1718,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testPublishVersionThrowsUnauthorizedException()
     {
-        $draftContent = $this->createTestContent();
+        list( $draftContent, $contentType ) = $this->createTestContent();
 
         // Set anonymous as current user
         $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
@@ -2299,7 +2305,7 @@ abstract class ContentBase extends BaseServiceTest
         $originalVersionInfos = $contentService->loadVersions( $contentInfo );
         $copiedVersionInfos = $contentService->loadVersions( $copiedContent->contentInfo );
         $sorter =
-            function( $a, $b )
+            function ( $a, $b )
             {
                 return strcmp( $a->versionNo, $b->versionNo );
             };
@@ -2337,11 +2343,6 @@ abstract class ContentBase extends BaseServiceTest
      */
     protected function assertCopyContentValues( APIContent $originalContent, APIContent $copiedContent )
     {
-        $this->assertEquals(
-            $originalContent->contentType,
-            $copiedContent->contentType,
-            "Content type of content copy does not match the content type of original content"
-        );
         $this->assertNotEquals(
             $originalContent->id,
             $copiedContent->id,
@@ -2351,6 +2352,7 @@ abstract class ContentBase extends BaseServiceTest
         $this->assertSameClassPropertiesCorrect(
             array(
                 //"name",
+                "contentTypeId",
                 "sectionId",
                 //"currentVersionNo",
                 "published",
@@ -2479,7 +2481,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadRelations()
     {
-        $contentDraft = $this->createTestContent();
+        list( $contentDraft, $contentType ) = $this->createTestContent();
         $contentService = $this->repository->getContentService();
 
         $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
@@ -2514,7 +2516,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadRelationsThrowsUnauthorizedException()
     {
-        $contentDraft = $this->createTestContent();
+        list( $contentDraft, $contentType ) = $this->createTestContent();
         $contentService = $this->repository->getContentService();
 
         $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
@@ -2537,7 +2539,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadReverseRelations()
     {
-        $contentDraft = $this->createTestContent();
+        list( $contentDraft, $contentType ) = $this->createTestContent();
         $contentService = $this->repository->getContentService();
 
         $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
@@ -2560,7 +2562,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadReverseRelationsThrowsUnauthorizedException()
     {
-        $contentDraft = $this->createTestContent();
+        list( $contentDraft, $contentType ) = $this->createTestContent();
         $contentService = $this->repository->getContentService();
 
         $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
@@ -2584,7 +2586,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testAddRelationThrowsUnauthorizedException()
     {
-        $contentDraft = $this->createTestContent();
+        list( $contentDraft, $contentType ) = $this->createTestContent();
         $contentService = $this->repository->getContentService();
 
         $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
@@ -2607,7 +2609,7 @@ abstract class ContentBase extends BaseServiceTest
     public function testAddRelationThrowsBadStateException()
     {
         $contentService = $this->repository->getContentService();
-        $contentDraft = $this->createTestContent();
+        list( $contentDraft, $contentType ) = $this->createTestContent();
         $publishedContent = $contentService->publishVersion( $contentDraft->versionInfo );
 
         $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
@@ -2625,7 +2627,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testDeleteRelation()
     {
-        $contentDraft = $this->createTestContent();
+        list( $contentDraft, $contentType ) = $this->createTestContent();
         $contentService = $this->repository->getContentService();
 
         $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
@@ -2653,7 +2655,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testDeleteRelationThrowsUnauthorizedException()
     {
-        $contentDraft = $this->createTestContent();
+        list( $contentDraft, $contentType ) = $this->createTestContent();
         $contentService = $this->repository->getContentService();
 
         $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
@@ -2681,7 +2683,7 @@ abstract class ContentBase extends BaseServiceTest
     public function testDeleteRelationThrowsBadStateException()
     {
         $contentService = $this->repository->getContentService();
-        $contentDraft = $this->createTestContent();
+        list( $contentDraft, $contentType ) = $this->createTestContent();
 
         $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
 
@@ -2706,7 +2708,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testDeleteRelationThrowsInvalidArgumentException()
     {
-        $contentDraft = $this->createTestContent();
+        list( $contentDraft, $contentType ) = $this->createTestContent();
         $contentService = $this->repository->getContentService();
 
         $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
@@ -2761,7 +2763,7 @@ abstract class ContentBase extends BaseServiceTest
             ),
         );
 
-        return $contentService->createContent( $contentCreate, $locationCreates );
+        return array( $contentService->createContent( $contentCreate, $locationCreates ), $testContentType );
     }
 
     /**

@@ -2,7 +2,7 @@
 /**
  * File containing the FieldTypeParserTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Common\Tests\Input;
 
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
-use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 
@@ -95,16 +95,7 @@ class FieldTypeParserTest extends \PHPUnit_Framework_TestCase
             ->with( '23' )
             ->will(
                 $this->returnValue(
-                    new ContentInfo(
-                        array(
-                            'contentType' => new ContentType(
-                                array(
-                                    'id' => '42',
-                                    'fieldDefinitions' => array()
-                                )
-                            )
-                        )
-                    )
+                    new ContentInfo( array( 'contentTypeId' => '42' ) )
                 )
             );
 

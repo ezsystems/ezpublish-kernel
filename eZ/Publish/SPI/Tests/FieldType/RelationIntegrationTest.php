@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -62,11 +62,7 @@ class RelationIntegrationTest extends BaseIntegrationTest
         );
         $handler->getStorageRegistry()->register(
             'ezobjectrelation',
-            new FieldType\Relation\RelationStorage(
-                array(
-                    'LegacyStorage' => new FieldType\Relation\RelationStorage\Gateway\LegacyStorage(),
-                )
-            )
+            new FieldType\NullStorage()
         );
         $handler->getFieldValueConverterRegistry()->register(
             'ezobjectrelation',
@@ -124,7 +120,7 @@ class RelationIntegrationTest extends BaseIntegrationTest
         return new Content\FieldValue(
             array(
                 'data'         => array( 'destinationContentId' => 1 ),
-                'externalData' => array( 'destinationContentId' => 1 ),
+                'externalData' => null,
                 'sortKey'      => null,
             )
         );
@@ -168,7 +164,7 @@ class RelationIntegrationTest extends BaseIntegrationTest
         return new Content\FieldValue(
             array(
                 'data'         => array( 'destinationContentId' => 2 ),
-                'externalData' => array( 'destinationContentId' => 2 ),
+                'externalData' => null,
                 'sortKey'      => null,
             )
         );

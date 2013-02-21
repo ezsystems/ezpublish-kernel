@@ -150,6 +150,17 @@ class ConfigurationConverter
         // Explicitly set Http cache purge type to "local"
         $settings['ezpublish']['http_cache']['purge_type'] = 'local';
 
+        foreach ( $siteList as $siteaccess )
+        {
+            if (
+                $this->getParameter( "Session", "SessionNameHandler", "site.ini", $siteaccess ) === "custom" &&
+                $this->getParameter( "Session", "SessionNamePerSiteAccess", "site.ini", $siteaccess ) !== "enabled"
+            )
+            {
+                $settings['ezpublish']['system'][$siteaccess]['session_name'] = $this->getParameter( "Session", "SessionNamePrefix", "site.ini" );
+            }
+        }
+
         return $settings;
     }
 
@@ -250,7 +261,7 @@ class ConfigurationConverter
                         // make sure integers are actually integers, not strings
                         array_walk(
                             $filterParams,
-                            function( &$value )
+                            function ( &$value )
                             {
                                 if ( preg_match( '/^[0-9]+$/', $value ) )
                                     $value = (int)$value;
@@ -350,7 +361,7 @@ class ConfigurationConverter
         $matching = array(); $match = false;
         foreach ( explode( ';', $siteaccessSettings['MatchOrder'] ) as $matchMethod )
         {
-            switch( $matchMethod )
+            switch ( $matchMethod )
             {
                 case 'uri':
                     $match = $this->resolveURIMatching( $siteaccessSettings );
@@ -376,7 +387,7 @@ class ConfigurationConverter
 
     protected function resolveUriMatching( $siteaccessSettings )
     {
-        switch( $siteaccessSettings['URIMatchType'] )
+        switch ( $siteaccessSettings['URIMatchType'] )
         {
             case 'disabled':
                 return false;
@@ -405,7 +416,7 @@ class ConfigurationConverter
      */
     protected function resolveHostMatching( $siteaccessSettings )
     {
-        switch( $siteaccessSettings['HostMatchType'] )
+        switch ( $siteaccessSettings['HostMatchType'] )
         {
             case 'disabled':
                 return false;

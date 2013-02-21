@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\LocationBase class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -261,7 +261,7 @@ abstract class LocationBase extends BaseServiceTest
         $locationService = $this->repository->getLocationService();
         $loadedLocation = $locationService->loadLocation( 5 );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $loadedLocation );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location', $loadedLocation );
         self::assertEquals( 5, $loadedLocation->id );
     }
 
@@ -284,7 +284,7 @@ abstract class LocationBase extends BaseServiceTest
     {
         $location = $this->repository->getLocationService()->loadLocationByRemoteId( '769380b7aa94541679167eab817ca893' );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location', $location );
         self::assertGreaterThan( 0, $location->id );
         self::assertEquals( '769380b7aa94541679167eab817ca893', $location->remoteId );
     }
@@ -339,7 +339,7 @@ abstract class LocationBase extends BaseServiceTest
 
         foreach ( $locations as $location )
         {
-            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
+            self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location', $location );
             self::assertEquals( $contentInfo->id, $location->getContentInfo()->id );
         }
 
@@ -355,7 +355,7 @@ abstract class LocationBase extends BaseServiceTest
 
         foreach ( $locations as $location )
         {
-            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
+            self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location', $location );
             self::assertEquals( $contentInfo->id, $location->getContentInfo()->id );
         }
 
@@ -382,7 +382,7 @@ abstract class LocationBase extends BaseServiceTest
 
         foreach ( $locations as $location )
         {
-            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
+            self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location', $location );
         }
 
         foreach ( $locations as $location )
@@ -424,7 +424,7 @@ abstract class LocationBase extends BaseServiceTest
 
         foreach ( $childrenLocations->locations as $childLocation )
         {
-            self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $childLocation );
+            self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location', $childLocation );
             self::assertEquals( $rootLocation->id, $childLocation->parentLocationId );
         }
     }
@@ -454,7 +454,7 @@ abstract class LocationBase extends BaseServiceTest
             $locationCreateStruct
         );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $createdLocation );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location', $createdLocation );
         self::assertGreaterThan( 0, $createdLocation->id );
         $createdPath = $parentLocation->path;
         $createdPath[] = $createdLocation->id;
@@ -541,7 +541,7 @@ abstract class LocationBase extends BaseServiceTest
 
         $location = $locationService->updateLocation( $location, $locationUpdateStruct );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location', $location );
 
         $this->assertPropertiesCorrect(
             array(
@@ -604,12 +604,12 @@ abstract class LocationBase extends BaseServiceTest
 
         $location = $locationService->loadLocation( 5 );
         $location = $locationService->hideLocation( $location );
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location', $location );
         self::assertEquals( true, $location->hidden );
         self::assertEquals( true, $location->invisible );
 
         $location = $locationService->unhideLocation( $location );
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location', $location );
         self::assertEquals( false, $location->hidden );
         self::assertEquals( false, $location->invisible );
     }
@@ -661,7 +661,7 @@ abstract class LocationBase extends BaseServiceTest
         $locationService = $this->repository->getLocationService();
 
         $locationCreateStruct = $locationService->newLocationCreateStruct( 2 );
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\LocationCreateStruct', $locationCreateStruct );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationCreateStruct', $locationCreateStruct );
 
         $this->assertPropertiesCorrect(
             array(
@@ -685,7 +685,7 @@ abstract class LocationBase extends BaseServiceTest
         $locationService = $this->repository->getLocationService();
 
         $locationUpdateStruct = $locationService->newLocationUpdateStruct();
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct', $locationUpdateStruct );
+        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationUpdateStruct', $locationUpdateStruct );
 
         $this->assertPropertiesCorrect(
             array(

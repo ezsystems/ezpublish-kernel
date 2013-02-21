@@ -2,7 +2,7 @@
 /**
  * File containing the ContentServiceTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -101,36 +101,6 @@ class ContentServiceTest extends BaseContentServiceTest
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
-    public function testCreateContentSetsContentType( $content )
-    {
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\ContentType\ContentType', $content->contentType );
-
-        return $content;
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentSetsContentType
-     */
-    public function testCreateContentSetsExpectedContentType( $content )
-    {
-        $this->assertEquals( 'forum', $content->contentType->identifier );
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
-     */
     public function testCreateContentSetsContentInfo( $content )
     {
         $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo', $content->contentInfo );
@@ -152,6 +122,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals(
             array(
                 $content->id,
+                28,// id of content type "forum"
                 true,
                 1,
                 'abcdef0123456789abcdef0123456789',
@@ -162,6 +133,7 @@ class ContentServiceTest extends BaseContentServiceTest
             ),
             array(
                 $content->contentInfo->id,
+                $content->contentInfo->contentTypeId,
                 $content->contentInfo->alwaysAvailable,
                 $content->contentInfo->currentVersionNo,
                 $content->contentInfo->remoteId,
@@ -2050,7 +2022,8 @@ class ContentServiceTest extends BaseContentServiceTest
         }
         usort(
             $actual,
-            function ( $field1, $field2 ) {
+            function ( $field1, $field2 )
+            {
                 if ( 0 === ( $return = strcasecmp( $field1->fieldDefIdentifier, $field2->fieldDefIdentifier ) ) )
                 {
                     return strcasecmp( $field1->languageCode, $field2->languageCode );
@@ -2724,7 +2697,8 @@ class ContentServiceTest extends BaseContentServiceTest
 
         usort(
             $relations,
-            function( $rel1, $rel2 ) {
+            function ( $rel1, $rel2 )
+            {
                 return strcasecmp(
                     $rel2->getDestinationContentInfo()->remoteId,
                     $rel1->getDestinationContentInfo()->remoteId
@@ -2818,7 +2792,8 @@ class ContentServiceTest extends BaseContentServiceTest
 
         usort(
             $reverseRelations,
-            function( $rel1, $rel2 ) {
+            function ( $rel1, $rel2 )
+            {
                 return strcasecmp(
                     $rel2->getSourceContentInfo()->remoteId,
                     $rel1->getSourceContentInfo()->remoteId
@@ -3861,7 +3836,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // $contentId is the ID of the "Members" user group in an eZ Publish
         // demo installation
 
-        // $locationId is the ID of the "Adminstrator users" group location
+        // $locationId is the ID of the "Administrator users" group location
 
         // Get services
         $contentService = $repository->getContentService();
@@ -4264,7 +4239,8 @@ class ContentServiceTest extends BaseContentServiceTest
         }
         usort(
             $normalized,
-            function ( $field1, $field2 ) {
+            function ( $field1, $field2 )
+            {
                 if ( 0 === ( $return = strcasecmp( $field1->fieldDefIdentifier, $field2->fieldDefIdentifier ) ) )
                 {
                     return strcasecmp( $field1->languageCode, $field2->languageCode );

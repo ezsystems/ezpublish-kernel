@@ -2,7 +2,7 @@
 /**
  * File containing a test class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -15,6 +15,7 @@ use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\Content;
 use eZ\Publish\Core\REST\Common;
 use eZ\Publish\Core\REST\Server\Values\RestRelation;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class RestRelationTest extends ValueObjectVisitorBaseTest
 {
@@ -34,12 +35,12 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
             new Content\Relation(
                 array(
                     'id' => 42,
-                    'sourceContentInfo' => new Content\ContentInfo(
+                    'sourceContentInfo' => new ContentInfo(
                         array(
                             'id' => 1,
                         )
                     ),
-                    'destinationContentInfo' => new Content\ContentInfo(
+                    'destinationContentInfo' => new ContentInfo(
                         array(
                             'id' => 2,
                         )

@@ -2,7 +2,7 @@
 /**
  * File containing the EzcDatabase content gateway class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -1474,23 +1474,83 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Deletes the relation with the given $relationId
+     * Deletes the relation with the given $relationId.
      *
      * @param int $relationId
+     * @param int $type {@see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
+     *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
      *
      * @return void
      */
-    public function deleteRelation( $relationId )
+    public function deleteRelation( $relationId, $type )
     {
-        $q = $this->dbHandler->createDeleteQuery();
-        $q->deleteFrom( 'ezcontentobject_link' )
-        ->where(
-            $q->expr->eq(
-                $this->dbHandler->quoteColumn( 'id' ),
-                $q->bindValue( $relationId, null, \PDO::PARAM_INT )
+        // Legacy Storage stores COMMON, LINK and EMBED types using bitmask, therefore first load
+        // existing relation type by given $relationId for comparison
+        /** @var $query \ezcQuerySelect */
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $this->dbHandler->quoteColumn( "relation_type" )
+        )->from(
+            $this->dbHandler->quoteTable( "ezcontentobject_link" )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( "id" ),
+                $query->bindValue( $relationId, null, \PDO::PARAM_INT )
             )
         );
 
-        $q->prepare()->execute();
+        $statement = $query->prepare();
+        $statement->execute();
+        $loadedRelationType = $statement->fetchColumn();
+
+        if ( !$loadedRelationType )
+        {
+            return;
+        }
+
+        // If relation type matches then delete
+        if ( $loadedRelationType == $type )
+        {
+            /** @var $query \ezcQueryDelete */
+            $query = $this->dbHandler->createDeleteQuery();
+            $query->deleteFrom(
+                "ezcontentobject_link"
+            )->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "id" ),
+                    $query->bindValue( $relationId, null, \PDO::PARAM_INT )
+                )
+            );
+
+            $query->prepare()->execute();
+        }
+        // If relation type is composite update bitmask
+        else if ( $loadedRelationType & $type )
+        {
+            /** @var $query \ezcQueryUpdate */
+            $query = $this->dbHandler->createUpdateQuery();
+            $query->update(
+                $this->dbHandler->quoteTable( "ezcontentobject_link" )
+            )->set(
+                $this->dbHandler->quoteColumn( "relation_type" ),
+                $query->expr->bitAnd(
+                    $this->dbHandler->quoteColumn( "relation_type" ),
+                    $query->bindValue( ~$type, null, \PDO::PARAM_INT )
+                )
+            )->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "id" ),
+                    $query->bindValue( $relationId, null, \PDO::PARAM_INT )
+                )
+            );
+
+            $query->prepare()->execute();
+        }
+        else
+        {
+            // No match, do nothing
+        }
     }
 }

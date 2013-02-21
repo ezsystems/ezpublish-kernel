@@ -2,7 +2,7 @@
 /**
  * File containing the eZ\Publish\Core\Repository\ContentTypeService class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  * @package eZ\Publish\Core\Repository
@@ -1154,31 +1154,31 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * Copy Type incl fields and groupIds to a new Type object
      *
-     * New Type will have $userId as creator / modifier, created / modified should be updated with current time,
+     * New Type will have $creator as creator / modifier, created / modified should be updated with current time,
      * updated remoteId and identifier should be appended with '_' + unique string.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to copy a content type
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to copy a content type
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
-     * @param \eZ\Publish\API\Repository\Values\User\User $user if null the current user is used
+     * @param \eZ\Publish\API\Repository\Values\User\User $creator if null the current-user is used
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function copyContentType( APIContentType $contentType, User $user = null )
+    public function copyContentType( APIContentType $contentType, User $creator = null )
     {
         if ( $this->repository->hasAccess( 'class', 'create' ) !== true )
             throw new UnauthorizedException( 'ContentType', 'create' );
 
-        if ( empty( $user ) )
+        if ( empty( $creator ) )
         {
-            $user = $this->repository->getCurrentUser();
+            $creator = $this->repository->getCurrentUser();
         }
 
         $this->repository->beginTransaction();
         try
         {
             $spiContentType = $this->contentTypeHandler->copy(
-                $user->id,
+                $creator->id,
                 $contentType->id,
                 SPIContentType::STATUS_DEFINED
             );

@@ -2,7 +2,7 @@
 /**
  * File containing the ViewManagerTest class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -124,8 +124,8 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
 
         // Configuring content mocks
         $content = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Content' );
-        $versionInfo = $this->getMock( 'eZ\\Publish\\Core\\Repository\\Values\\Content\\VersionInfo' );
-        $contentInfo = $this->getMock( 'eZ\\Publish\\Core\\Repository\\Values\\Content\\ContentInfo' );
+        $versionInfo = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo' );
+        $contentInfo = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' );
         $content
             ->expects( $this->once() )
             ->method( 'getVersionInfo' )
@@ -170,8 +170,8 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
 
         // Configuring content mocks
         $content = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Content' );
-        $versionInfo = $this->getMock( 'eZ\\Publish\\Core\\Repository\\Values\\Content\\VersionInfo' );
-        $contentInfo = $this->getMock( 'eZ\\Publish\\Core\\Repository\\Values\\Content\\ContentInfo' );
+        $versionInfo = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo' );
+        $contentInfo = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' );
         $content
             ->expects( $this->once() )
             ->method( 'getVersionInfo' )
@@ -218,7 +218,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
 
         $location = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
         $content = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Content' );
-        $contentInfo = $this->getMock( 'eZ\\Publish\\Core\\Repository\\Values\\Content\\ContentInfo' );
+        $contentInfo = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' );
 
         // Configuring view provider behaviour
         $templateIdentifier = 'foo:bar:baz';
@@ -279,7 +279,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
 
         $location = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
         $content = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Content' );
-        $contentInfo = $this->getMock( 'eZ\\Publish\\Core\\Repository\\Values\\Content\\ContentInfo' );
+        $contentInfo = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' );
 
         // Configuring view provider behaviour
         $closure = function ( $params )

@@ -5,7 +5,9 @@
          processIsolation="false"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true">
+         convertWarningsToExceptions="true"
+         colors="true"
+         >
     <php>
         <env name="setupFactory" value="eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr" />
         <env name="backendVersion" value="5" />
@@ -14,15 +16,37 @@
     </php>
     <testsuites>
         <testsuite name="eZ\Publish\API\Repository">
-            <file>RepositoryTest.php</file>
             <!-- Only the Solr Search tests differ from the other tests, so we
                  are skipping everything else
 
                  @todo: Search service is used all over the place, so we must test
                         all services here.
             -->
+            <file>eZ/Publish/API/Repository/Tests/RepositoryTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/SectionServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/LanguageServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/ContentTypeServiceTest.php</file>
+            <!--file>eZ/Publish/API/Repository/Tests/ContentServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/LocationServiceTest.php</file!-->
+            <file>eZ/Publish/API/Repository/Tests/UserServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/RoleServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/TrashServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/URLAliasServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/URLWildcardServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/ObjectStateServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/SectionServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/LanguageServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/ContentTypeServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/ContentServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/LocationServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/UserServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/RoleServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/TrashServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/URLWildcardServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/ObjectStateServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/LimitationTest.php</file>
         </testsuite>
     </testsuites>
     <filter>

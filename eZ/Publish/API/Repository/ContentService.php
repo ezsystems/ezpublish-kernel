@@ -2,7 +2,7 @@
 /**
  * File containing the eZ\Publish\API\Repository\ContentService class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  * @package eZ\Publish\API\Repository
@@ -203,24 +203,24 @@ interface ContentService
      * 4.x: The draft is created with the initialLanguage code of the source version or if not present with the main language.
      * It can be changed on updating the version.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to create the draft
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     * @param \eZ\Publish\API\Repository\Values\User\User $user if set given user is used to create the draft - otherwise the current user is used
+     * @param \eZ\Publish\API\Repository\Values\User\User $creator Used as creator of the draft if given - otherwise uses current-user
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContentDraft( ContentInfo $contentInfo, VersionInfo $versionInfo = null, User $user = null );
+    public function createContentDraft( ContentInfo $contentInfo, VersionInfo $versionInfo = null, User $creator = null );
 
     /**
      * Loads drafts for a user.
      *
      * If no user is given the drafts for the authenticated user a returned
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load the draft list
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to load the draft list
      *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts from if defined, otherwise drafts for current-user
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] the drafts ({@link VersionInfo}) owned by the given user
      */
@@ -233,20 +233,20 @@ interface ContentService
      *
      * @example Examples/translation_5x.php
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to update this version
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destination version is not a draft
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
      *
      * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
      * @param \eZ\Publish\API\Repository\Values\Content\TranslationValues $translationValues
-     * @param \eZ\Publish\API\Repository\Values\User\User $user If set, this user is taken as modifier of the version
+     * @param \eZ\Publish\API\Repository\Values\User\User $modifier Taken as modifier of the version, otherwise current-user is used
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the translated fields
      *
      * @since 5.0
      */
-    public function translateVersion( TranslationInfo $translationInfo, TranslationValues $translationValues, User $user = null );
+    public function translateVersion( TranslationInfo $translationInfo, TranslationValues $translationValues, User $modifier = null );
 
     /**
      * Updates the fields of a draft.

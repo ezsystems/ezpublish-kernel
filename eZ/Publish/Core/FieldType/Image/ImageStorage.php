@@ -2,7 +2,7 @@
 /**
  * File containing the ImageStorage Converter class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -165,8 +165,7 @@ class ImageStorage extends GatewayBasedStorage
         foreach ( $fieldXmls as $fieldId => $xml )
         {
             $fieldStorageIdentifier = $this->extractStorageIdentifier( $xml );
-
-            if ( $fieldStorageIdentifier === false )
+            if ( $fieldStorageIdentifier === null )
             {
                 continue;
             }
@@ -185,7 +184,7 @@ class ImageStorage extends GatewayBasedStorage
      *
      * @param string $xml
      *
-     * @return string|false
+     * @return string|null
      */
     protected function extractStorageIdentifier( $xml )
     {
@@ -197,12 +196,13 @@ class ImageStorage extends GatewayBasedStorage
 
         $dom = new \DOMDocument();
         $dom->loadXml( $xml );
-
         if ( $dom->documentElement->hasAttribute( 'dirpath' ) )
         {
-            return $dom->documentElement->getAttribute( 'dirpath' );
+            $path = $dom->documentElement->getAttribute( 'dirpath' );
+            if ( !empty( $path ) )
+                return $path;
         }
-        return false;
+        return null;
     }
 
     /**

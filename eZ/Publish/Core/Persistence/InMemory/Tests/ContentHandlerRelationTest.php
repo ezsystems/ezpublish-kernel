@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\Core\Persistence\InMemory\Tests\ContentHandlerRelationTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -10,6 +10,9 @@
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
 
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct as TypeCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\API\Repository\Values\Content\Relation;
@@ -47,13 +50,23 @@ class ContentHandlerRelationTest extends HandlerTest
     protected $lastRelationId;
 
     /**
+     * ContentTypes which should be removed in tearDown
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Type[]
+     */
+    protected $contentTypeToDelete = array();
+
+    /**
      * Setup the HandlerTest.
      */
     protected function setUp()
     {
         parent::setUp();
 
-        $struct = $this->createContentStruct( "test", "Welcome" );
+        $type = $this->persistenceHandler->contentTypeHandler()->create( $this->getTypeCreateStruct() );
+        $this->contentTypeToDelete[] = $type;
+
+        $struct = $this->createContentStruct( "test", "Welcome", $type );
 
         $this->content = $this->persistenceHandler->contentHandler()->create( $struct );
         $this->contentToDelete[] = $this->content;
@@ -72,32 +85,9 @@ class ContentHandlerRelationTest extends HandlerTest
             )->id;
 
         $this->content2 = $this->persistenceHandler->contentHandler()->create(
-            $this->createContentStruct( "Second object", "Do you relate to me?" )
+            $this->createContentStruct( "Second object", "Do you relate to me?", $type )
         );
         $this->contentToDelete[] = $this->content2;
-    }
-
-    protected function createContentStruct( $name, $textValue )
-    {
-        $struct = new CreateStruct();
-        $struct->name = $name;
-        $struct->ownerId = 14;
-        $struct->sectionId = 1;
-        $struct->typeId = 2;
-        $struct->initialLanguageId = 2;
-        $struct->fields[] = new Field(
-            array(
-                'type' => 'ezstring',
-                // FieldValue object compatible with ezstring
-                'value' => new FieldValue(
-                    array(
-                        'data' => $textValue
-                    )
-                ),
-                'languageCode' => 'eng-GB',
-            )
-        );
-        return $struct;
     }
 
     /**
@@ -119,7 +109,95 @@ class ContentHandlerRelationTest extends HandlerTest
         {
         }
         unset( $this->contentId );
+
+        $contentTypeHandler = $this->persistenceHandler->contentTypeHandler();
+        foreach ( $this->contentTypeToDelete as $type )
+        {
+            try
+            {
+                $contentTypeHandler->delete( $type->id, $type->status );
+            }
+            catch ( NotFound $e )
+            {
+            }
+        }
+
         parent::tearDown();
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct
+     */
+    protected function getTypeCreateStruct()
+    {
+        $struct = new TypeCreateStruct();
+        $struct->created = $struct->modified = time();
+        $struct->creatorId = $struct->modifierId = 14;
+        $struct->name = array( 'eng-GB' => 'Article' );
+        $struct->description = array( 'eng-GB' => 'Article content type' );
+        $struct->identifier = 'article';
+        $struct->isContainer = true;
+        $struct->status = Type::STATUS_DEFINED;
+        $struct->initialLanguageId = 2;
+        $struct->nameSchema = "<short_title|title>";
+        $struct->fieldDefinitions = array();
+        $struct->groupIds = array( 1 );
+        $struct->fieldDefinitions[] = $field = $this->getTypeFieldDefinition();
+        return $struct;
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
+     */
+    protected function getTypeFieldDefinition()
+    {
+        $field = new FieldDefinition();
+        $field->identifier = 'title';
+        $field->fieldType = 'ezstring';
+        $field->position = 0;
+        $field->isTranslatable = $field->isRequired = true;
+        $field->isInfoCollector = false;
+        $field->defaultValue = new FieldValue(
+            array(
+                "data" => "New Article"
+            )
+        );
+        $field->name = array( 'eng-GB' => "Title" );
+        $field->description = array( 'eng-GB' => "Title, used for headers, and url if short_title is empty" );
+        return $field;
+    }
+
+    /**
+     *
+     *
+     * @param $name
+     * @param $textValue
+     * @param $type \eZ\Publish\SPI\Persistence\Content\Type
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\CreateStruct
+     */
+    protected function createContentStruct( $name, $textValue, Type $type )
+    {
+        $struct = new CreateStruct();
+        $struct->name = $name;
+        $struct->ownerId = 14;
+        $struct->sectionId = 1;
+        $struct->typeId = $type->id;
+        $struct->initialLanguageId = 2;
+        $struct->fields[] = new Field(
+            array(
+                'fieldDefinitionId' => $type->fieldDefinitions[0]->id,
+                'type' => 'ezstring',
+                // FieldValue object compatible with ezstring
+                'value' => new FieldValue(
+                    array(
+                        'data' => $textValue
+                    )
+                ),
+                'languageCode' => 'eng-GB',
+            )
+        );
+        return $struct;
     }
 
     /**
@@ -170,7 +248,7 @@ class ContentHandlerRelationTest extends HandlerTest
     /**
      * Test addRelation function with unexisting source content ID
      *
-     * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::addRelation
      */
     public function testAddRelationSourceDoesNotExist1()
@@ -190,7 +268,7 @@ class ContentHandlerRelationTest extends HandlerTest
     /**
      * Test addRelation function with unexisting source content version
      *
-     * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::addRelation
      */
     public function testAddRelationSourceDoesNotExist2()
@@ -441,13 +519,13 @@ class ContentHandlerRelationTest extends HandlerTest
         self::assertEquals( 1, count( $relations ) );
         self::assertEquals( $newRelation->id, $relations[0]->id );
 
-        $this->persistenceHandler->contentHandler()->removeRelation( $newRelation->id );
+        $this->persistenceHandler->contentHandler()->removeRelation( $newRelation->id, Relation::COMMON );
         $relations = $this->persistenceHandler->contentHandler()->loadRelations( $this->contentId );
         self::assertEmpty( $relations );
     }
 
     /**
-     * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::removeRelation
      */
     public function testRemoveRelationDoesNotExist()
@@ -462,6 +540,6 @@ class ContentHandlerRelationTest extends HandlerTest
             )
         );
 
-        $this->persistenceHandler->contentHandler()->removeRelation( 42 );
+        $this->persistenceHandler->contentHandler()->removeRelation( 42, Relation::COMMON );
     }
 }

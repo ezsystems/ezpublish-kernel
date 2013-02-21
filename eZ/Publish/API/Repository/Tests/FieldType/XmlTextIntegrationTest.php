@@ -2,7 +2,7 @@
 /**
  * File contains: eZ\Publish\API\Repository\Tests\FieldType\XmlTextIntegrationTest class
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
@@ -13,6 +13,8 @@ use eZ\Publish\Core\FieldType\XmlText\Value as XmlTextValue;
 use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use DOMDocument;
+use eZ\Publish\Core\Repository\Values\Content\Relation;
+use eZ\Publish\API\Repository\Values\Content\Content;
 
 /**
  * Integration test for use field type
@@ -20,7 +22,7 @@ use DOMDocument;
  * @group integration
  * @group field-type
  */
-class XmlTextIntegrationTest extends BaseIntegrationTest
+class XmlTextIntegrationTest extends RelationBaseIntegrationTest
 {
     /**
      * @var \DOMDocument
@@ -38,6 +40,12 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
 <paragraph>Example</paragraph>
+<paragraph><link node_id="58">link1</link></paragraph>
+<paragraph><link object_id="54">link2</link></paragraph>
+<paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+    <embed view="embed" size="medium" node_id="60" custom:offset="0" custom:limit="5"/>
+    <embed view="embed" size="medium" object_id="56" custom:offset="0" custom:limit="5"/>
+</paragraph>
 </section>
 EOT
         );
@@ -48,8 +56,80 @@ EOT
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
 <paragraph>Example 2</paragraph>
+<paragraph><link node_id="60">link1</link></paragraph>
+<paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+    <embed view="embed" size="medium" object_id="56" custom:offset="0" custom:limit="5"/>
+</paragraph>
 </section>
 EOT
+        );
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return \eZ\Publish\Core\Repository\Values\Content\Relation[]
+     */
+    public function getCreateExpectedRelations( Content $content )
+    {
+        $contentService = $this->getRepository()->getContentService();
+
+        return array(
+            new Relation(
+                array(
+                    "type" => Relation::LINK,
+                    "sourceContentInfo" => $content->contentInfo,
+                    "destinationContentInfo" => $contentService->loadContentInfo( 56 )
+                )
+            ),
+            new Relation(
+                array(
+                    "type" => Relation::LINK,
+                    "sourceContentInfo" => $content->contentInfo,
+                    "destinationContentInfo" => $contentService->loadContentInfo( 54 )
+                )
+            ),
+            new Relation(
+                array(
+                    "type" => Relation::EMBED,
+                    "sourceContentInfo" => $content->contentInfo,
+                    "destinationContentInfo" => $contentService->loadContentInfo( 58 )
+                )
+            ),
+            new Relation(
+                array(
+                    "type" => Relation::EMBED,
+                    "sourceContentInfo" => $content->contentInfo,
+                    "destinationContentInfo" => $contentService->loadContentInfo( 56 )
+                )
+            )
+        );
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return \eZ\Publish\Core\Repository\Values\Content\Relation[]
+     */
+    public function getUpdateExpectedRelations( Content $content )
+    {
+        $contentService = $this->getRepository()->getContentService();
+
+        return array(
+            new Relation(
+                array(
+                    "type" => Relation::LINK,
+                    "sourceContentInfo" => $content->contentInfo,
+                    "destinationContentInfo" => $contentService->loadContentInfo( 58 )
+                )
+            ),
+            new Relation(
+                array(
+                    "type" => Relation::EMBED,
+                    "sourceContentInfo" => $content->contentInfo,
+                    "destinationContentInfo" => $contentService->loadContentInfo( 56 )
+                )
+            ),
         );
     }
 
@@ -152,6 +232,12 @@ EOT
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
 <paragraph>Example</paragraph>
+<paragraph><link node_id="58">link1</link></paragraph>
+<paragraph><link object_id="54">link2</link></paragraph>
+<paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+    <embed view="embed" size="medium" node_id="60" custom:offset="0" custom:limit="5"/>
+    <embed view="embed" size="medium" object_id="56" custom:offset="0" custom:limit="5"/>
+</paragraph>
 </section>
 EOT
         );
