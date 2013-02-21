@@ -163,6 +163,7 @@ class LegacySolr extends Legacy
                 new SortClauseVisitor\Aggregate(
                     array(
                         new SortClauseVisitor\ContentId(),
+                        new SortClauseVisitor\ContentName(),
                         new SortClauseVisitor\LocationPathString(),
                         new SortClauseVisitor\LocationDepth(),
                         new SortClauseVisitor\LocationPriority(),
