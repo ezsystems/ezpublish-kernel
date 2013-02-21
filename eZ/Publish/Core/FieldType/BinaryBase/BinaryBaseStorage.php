@@ -120,7 +120,6 @@ class BinaryBaseStorage extends GatewayBasedStorage
         $gateway = $this->getGateway( $context );
 
         $fileReference = $gateway->getFileReferenceData( $fieldId, $versionNo );
-
         if ( $fileReference === null )
         {
             // No previous file
