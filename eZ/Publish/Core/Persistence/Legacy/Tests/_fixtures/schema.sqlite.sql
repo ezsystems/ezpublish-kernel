@@ -181,7 +181,6 @@ CREATE TABLE 'ezcontentobject_link' (
   'from_contentobject_id' integer NOT NULL DEFAULT 0,
   'from_contentobject_version' integer NOT NULL DEFAULT 0,
   'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-  'op_code' integer NOT NULL DEFAULT 0,
   'relation_type' integer NOT NULL DEFAULT 1,
   'to_contentobject_id' integer NOT NULL DEFAULT 0
 );
