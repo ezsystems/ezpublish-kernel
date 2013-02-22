@@ -20,6 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
+use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
@@ -94,20 +95,24 @@ class Content extends RestController
     /**
      * Loads a content info by remote ID
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ContentList
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\TemporaryRedirect
      */
-    public function loadContentInfoByRemoteId()
+    public function redirectContent()
     {
-        $contentInfo = $this->contentService->loadContentInfoByRemoteId(
-            // GET variable
-            $this->request->variables['remoteId']
-        );
+        if ( !isset( $this->request->variables['remoteId'] ) )
+        {
+            throw new BadRequestException( "'remoteId' parameter is required." );
+        }
 
-        return new Values\ContentList(
-            array(
-                new Values\RestContent(
-                    $contentInfo,
-                    $this->locationService->loadLocation( $contentInfo->mainLocationId )
+        $contentInfo = $this->contentService->loadContentInfoByRemoteId( $this->request->variables['remoteId'] );
+
+        return new Values\TemporaryRedirect(
+            $this->urlHandler->generate(
+                'object',
+                array(
+                    'object' => $contentInfo->id
                 )
             )
         );
