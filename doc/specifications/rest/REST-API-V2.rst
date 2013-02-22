@@ -3268,6 +3268,24 @@ Get Content Type Group
     :401: If the user is not authorized to read this content type
     :404: If the content type group does not exist
 
+
+Get Content Type Group by id
+````````````````````````````
+:Resource: /content/typegroups
+:Method: GET
+:Description: loads the content type group for a given identifier
+:Parameters: :identifier: the identifier of the content type group. If present the content type group is with the given identifier is returned.
+:Response:
+
+.. code:: http
+
+          HTTP/1.1 307 Temporary Redirect
+          Location: /content/typegroups/<ID>
+
+:Error Codes:
+        :404: If the content type group with the given identifier does not exist
+
+
 Update Content Type Group
 `````````````````````````
 :Resource: /content/typegroups/<ID>
