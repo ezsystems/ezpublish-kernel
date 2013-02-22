@@ -91,7 +91,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
-        $groupCreate->creatorId = $repository->getCurrentUser()->id;
+        $groupCreate->creatorId = $this->generateId( "user", $repository->getCurrentUser()->id );
         $groupCreate->creationDate = $this->createDateTime();
         /* @todo uncomment when support for multilingual names and descriptions is added
         $groupCreate->mainLanguageCode = 'ger-DE';
