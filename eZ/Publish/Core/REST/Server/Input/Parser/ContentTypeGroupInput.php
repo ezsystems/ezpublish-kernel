@@ -70,7 +70,6 @@ class ContentTypeGroupInput extends Base
 
         $contentTypeGroupCreateStruct = $this->contentTypeService->newContentTypeGroupCreateStruct( $contentTypeGroupIdentifier );
 
-        // @todo mismatch between modificationDate in XSD & creationDate in struct
         if ( array_key_exists( 'modificationDate', $data ) )
         {
             $contentTypeGroupCreateStruct->creationDate = new DateTime( $data['modificationDate'] );
