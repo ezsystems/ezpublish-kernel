@@ -16,17 +16,23 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct;
-use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct as APIContentTypeCreateStruct;
+use eZ\Publish\Core\REST\Client\Values\ContentType\ContentTypeCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
+use eZ\Publish\Core\REST\Common\Exceptions\NotFoundException;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Common\Message;
 
 use eZ\Publish\Core\REST\Client\Values;
+
+use eZ\Publish\Core\REST\Client\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\REST\Common\Exceptions\ForbiddenException;
 
 /**
  * @example Examples/contenttype.php
@@ -103,9 +109,25 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function createContentTypeGroup( ContentTypeGroupCreateStruct  $contentTypeGroupCreateStruct )
+    public function createContentTypeGroup( ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct )
     {
-        throw new \Exception( "@todo: Implement." );
+        $inputMessage = $this->outputVisitor->visit( $contentTypeGroupCreateStruct );
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'ContentTypeGroup' );
+
+        $result = $this->client->request(
+            'POST',
+            $this->urlHandler->generate( 'typegroups' ),
+            $inputMessage
+        );
+
+        try
+        {
+            return $this->inputDispatcher->parse( $result );
+        }
+        catch ( ForbiddenException $e )
+        {
+            throw new InvalidArgumentException( $e->getMessage(), $e->getCode() );
+        }
     }
 
     /**
@@ -119,7 +141,14 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      */
     public function loadContentTypeGroup( $contentTypeGroupId )
     {
-        throw new \Exception( "@todo: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $contentTypeGroupId,
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'Section' ) )
+            )
+        );
+        return $this->inputDispatcher->parse( $response );
     }
 
     /**
@@ -133,7 +162,25 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      */
     public function loadContentTypeGroupByIdentifier( $contentTypeGroupIdentifier )
     {
-        throw new \Exception( "@todo: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $this->urlHandler->generate( 'typegroups' ),
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'ContentTypeGroupList' ) )
+            )
+        );
+        $contentTypeGroups = $this->inputDispatcher->parse( $response );
+
+        foreach ( $contentTypeGroups as $contentTypeGroup )
+        {
+            if ( $contentTypeGroup->identifier == $contentTypeGroupIdentifier )
+            {
+                return $contentTypeGroup;
+            }
+        }
+
+        // TODO this really needs /content/typegroups?identifier=blah
+        throw new NotFoundException( "Could not find..." );
     }
 
     /**
@@ -143,7 +190,14 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      */
     public function loadContentTypeGroups()
     {
-        throw new \Exception( "@todo: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $this->urlHandler->generate( 'typegroups' ),
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'ContentTypeGroupList' ) )
+            )
+        );
+        return $this->inputDispatcher->parse( $response );
     }
 
     /**
@@ -157,7 +211,26 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      */
     public function updateContentTypeGroup( ContentTypeGroup $contentTypeGroup, ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct )
     {
-        throw new \Exception( "@todo: Implement." );
+        $inputMessage = $this->outputVisitor->visit( $contentTypeGroupUpdateStruct );
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'ContentTypeGroup' );
+        $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
+
+        // Should originally be PATCH, but PHP's shiny new internal web server
+        // dies with it.
+        $result = $this->client->request(
+            'POST',
+            $contentTypeGroup->id,
+            $inputMessage
+        );
+
+        try
+        {
+            return $this->inputDispatcher->parse( $result );
+        }
+        catch ( ForbiddenException $e )
+        {
+            throw new InvalidArgumentException( $e->getMessage(), $e->getCode() );
+        }
     }
 
     /**
@@ -172,7 +245,22 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      */
     public function deleteContentTypeGroup( ContentTypeGroup $contentTypeGroup )
     {
-        throw new \Exception( "@todo: Implement." );
+        $response = $this->client->request(
+            'DELETE',
+            $contentTypeGroup->id,
+            new Message(
+                // @todo: What media-type should we set here? Actually, it should be
+                // all expected exceptions + none? Or is "Section" correct,
+                // since this is what is to be expected by the resource
+                // identified by the URL?
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'ContentTypeGroup' ) )
+            )
+        );
+
+        if ( !empty( $response->body ) )
+        {
+            $this->inputDispatcher->parse( $response );
+        }
     }
 
     /**
@@ -188,7 +276,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function createContentType( ContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups )
+    public function createContentType( APIContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups )
     {
         throw new \Exception( "@todo: Implement." );
     }
@@ -480,7 +568,16 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      */
     public function newContentTypeGroupCreateStruct( $identifier )
     {
-        throw new \Exception( "@todo: Implement." );
+        if ( !is_string( $identifier ) )
+        {
+            throw new InvalidArgumentValue( '$identifier', $identifier );
+        }
+
+        return new ContentTypeGroupCreateStruct(
+            array(
+                "identifier" => $identifier
+            )
+        );
     }
 
     /**
@@ -492,7 +589,16 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      */
     public function newContentTypeCreateStruct( $identifier )
     {
-        throw new \Exception( "@todo: Implement." );
+        if ( !is_string( $identifier ) )
+        {
+            throw new InvalidArgumentValue( '$identifier', $identifier );
+        }
+
+        return new ContentTypeCreateStruct(
+            array(
+                "identifier" => $identifier
+            )
+        );
     }
 
     /**
@@ -502,7 +608,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      */
     public function newContentTypeUpdateStruct()
     {
-        throw new \Exception( "@todo: Implement." );
+        return new ContentTypeUpdateStruct;
     }
 
     /**
@@ -512,7 +618,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      */
     public function newContentTypeGroupUpdateStruct()
     {
-        throw new \Exception( "@todo: Implement." );
+        return new ContentTypeGroupUpdateStruct;
     }
 
     /**
@@ -525,7 +631,22 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      */
     public function newFieldDefinitionCreateStruct( $identifier, $fieldTypeIdentifier )
     {
-        throw new \Exception( "@todo: Implement." );
+        if ( !is_string( $identifier ) )
+        {
+            throw new InvalidArgumentValue( '$identifier', $identifier );
+        }
+
+        if ( !is_string( $fieldTypeIdentifier ) )
+        {
+            throw new InvalidArgumentValue( '$fieldTypeIdentifier', $fieldTypeIdentifier );
+        }
+
+        return new FieldDefinitionCreateStruct(
+            array(
+                "identifier" => $identifier,
+                "fieldTypeIdentifier" => $fieldTypeIdentifier
+            )
+        );
     }
 
     /**
@@ -535,6 +656,6 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      */
     public function newFieldDefinitionUpdateStruct()
     {
-        throw new \Exception( "@todo: Implement." );
+        return new FieldDefinitionUpdateStruct;
     }
 }
