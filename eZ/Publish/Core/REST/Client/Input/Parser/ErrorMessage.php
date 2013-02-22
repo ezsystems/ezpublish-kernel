@@ -22,6 +22,7 @@ class ErrorMessage extends Parser
      * @var array
      */
     protected $errorCodeMapping = array(
+        403 => '\\eZ\\Publish\\Core\\REST\\Common\\Exceptions\\ForbiddenException',
         404 => '\\eZ\\Publish\\Core\\REST\\Common\\Exceptions\\NotFoundException',
         406 => '\\eZ\\Publish\\Core\\REST\\Client\\Exceptions\\InvalidArgumentException',
         409 => '\\eZ\\Publish\\Core\\REST\\Client\\Exceptions\\BadStateException',
