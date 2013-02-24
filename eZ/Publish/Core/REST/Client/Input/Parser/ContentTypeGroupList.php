@@ -13,7 +13,7 @@ use eZ\Publish\Core\REST\Common\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 
 /**
- * Parser for SectionList
+ * Parser for ContentTypeGroupList
  */
 class ContentTypeGroupList extends Parser
 {

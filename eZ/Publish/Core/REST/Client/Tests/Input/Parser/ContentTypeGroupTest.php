@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values;
 class ContentTypeGroupTest extends BaseTest
 {
     /**
-     * Tests the section parser
+     * Tests the ContentTypeGroup parser
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */

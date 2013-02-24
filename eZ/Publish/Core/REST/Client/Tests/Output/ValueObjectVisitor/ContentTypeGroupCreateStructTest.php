@@ -69,7 +69,7 @@ class ContentTypeGroupCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains identifier value element
+     * Tests that the result contains modificationDate value element
      *
      * @param string $result
      *
