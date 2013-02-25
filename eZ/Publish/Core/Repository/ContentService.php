@@ -622,6 +622,18 @@ class ContentService implements ContentServiceInterface
             )
         );
 
+        $objectStateHandler = $this->persistenceHandler->objectStateHandler();
+        $defaultObjectStatesMap = array();
+        foreach ( $objectStateHandler->loadAllGroups() as $objectStateGroup )
+        {
+            foreach ( $objectStateHandler->loadObjectStates( $objectStateGroup->id ) as $objectState )
+            {
+                // Only register the first object state which is the default one.
+                $defaultObjectStatesMap[$objectStateGroup->id] = $objectState;
+                break;
+            }
+        }
+
         $this->repository->beginTransaction();
         try
         {
@@ -632,6 +644,16 @@ class ContentService implements ContentServiceInterface
                 $spiContent->versionInfo->versionNo,
                 $contentCreateStruct->contentType
             );
+
+            foreach ( $defaultObjectStatesMap as $objectStateGroupId => $objectState )
+            {
+                $objectStateHandler->setContentState(
+                    $spiContent->versionInfo->contentInfo->id,
+                    $objectStateGroupId,
+                    $objectState->id
+                );
+            }
+
             $this->repository->commit();
         }
         catch ( Exception $e )
