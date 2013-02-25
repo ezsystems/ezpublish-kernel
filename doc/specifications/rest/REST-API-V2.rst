@@ -6189,7 +6189,7 @@ Version
               <xsd:element name="Fields" minOccurs="0">
                 <xsd:complexType>
                   <xsd:sequence>
-                    <xsd:element name="field" type="fieldValueType"
+                    <xsd:element name="field" type="fieldOutputValueType"
                       minOccurs="1" maxOccurs="unbounded" />
                   </xsd:sequence>
                 </xsd:complexType>
