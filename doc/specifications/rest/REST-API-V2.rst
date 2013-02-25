@@ -8216,21 +8216,21 @@ FieldDefinition XML Schema
                     </xsd:documentation>
                 </xsd:annotation>
               </xsd:element>
-              <xsd:element name="defaultValue" type="xsd:string">
+              <xsd:element name="defaultValue" type="fieldValueType">
                 <xsd:annotation>
                   <xsd:documentation>
                     Default value of the field
                   </xsd:documentation>
                 </xsd:annotation>
               </xsd:element>
-              <xsd:element name="fieldSettings" type="xsd:string">
+              <xsd:element name="fieldSettings" type="valueType">
                 <xsd:annotation>
                   <xsd:documentation>
                     Settings of the field
                   </xsd:documentation>
                 </xsd:annotation>
               </xsd:element>
-              <xsd:element name="validatorConfiguration" type="xsd:string">
+              <xsd:element name="validatorConfiguration" type="valueType">
                 <xsd:annotation>
                   <xsd:documentation>
                     Validator configuration of the field
@@ -8332,21 +8332,21 @@ FieldDefinitionCreate XML Schema
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="defaultValue" type="xsd:string">
+          <xsd:element name="defaultValue" type="fieldValueType">
             <xsd:annotation>
               <xsd:documentation>
                 Default value of the field
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="fieldSettings" type="xsd:string">
+          <xsd:element name="fieldSettings" type="valueType">
             <xsd:annotation>
               <xsd:documentation>
                 Settings of the field
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="validatorConfiguration" type="xsd:string">
+          <xsd:element name="validatorConfiguration" type="valueType">
             <xsd:annotation>
               <xsd:documentation>
                 Validator configuration of the field
@@ -8426,21 +8426,21 @@ FieldDefinitionUpdate XML Schema
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="defaultValue" type="xsd:string">
+          <xsd:element name="defaultValue" type="fieldValueType">
             <xsd:annotation>
               <xsd:documentation>
                 If set the default value of the field is changed
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="fieldSettings" type="xsd:string">
+          <xsd:element name="fieldSettings" type="valueType">
             <xsd:annotation>
               <xsd:documentation>
                 If set the settings of the field are changed
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="validatorConfiguration" type="xsd:string">
+          <xsd:element name="validatorConfiguration" type="valueType">
             <xsd:annotation>
               <xsd:documentation>
                 If set the validatorConfiguration of the field is changed
