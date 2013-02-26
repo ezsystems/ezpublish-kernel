@@ -1,5 +1,5 @@
 parameters:
-    ezpublish.fieldType.class: eZ\Publish\Core\FieldType\FieldType
+    ezpublish.fieldType.class: eZ\Publish\Core\MVC\Symfony\FieldType\FieldType
     ezpublish.fieldType.ezauthor.class: eZ\Publish\Core\FieldType\Author\Type
     ezpublish.fieldType.ezbinaryfile.class: eZ\Publish\Core\FieldType\BinaryFile\Type
     ezpublish.fieldType.ezbinaryfile.externalStorage.class: eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage
