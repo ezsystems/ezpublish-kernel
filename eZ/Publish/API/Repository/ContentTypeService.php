@@ -105,12 +105,12 @@ interface ContentTypeService
      *         - content type create struct does not contain at least one field definition create struct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $contentTypeGroups Required array of
-     *        {@link ContentTypeGroup} to link type with (must contain one)
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup A group to
+     *        link the type with
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function createContentType( ContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups );
+    public function createContentType( ContentTypeCreateStruct $contentTypeCreateStruct, ContentTypeGroup $contentTypeGroup );
 
     /**
      * Get a Content Type object by id
@@ -225,6 +225,7 @@ interface ContentTypeService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to unlink a content type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the content type is already assigned the given group
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If the content type is not in the state STATUS_DEFINED
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
@@ -236,7 +237,8 @@ interface ContentTypeService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to link a content type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the content type is not assigned this the given group.
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If $contentTypeGroup is the last group assigned to the content type
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If the content type is not in the state STATUS_DEFINED
+     *                                                                 If $contentTypeGroup is the last group assigned to the content type
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
