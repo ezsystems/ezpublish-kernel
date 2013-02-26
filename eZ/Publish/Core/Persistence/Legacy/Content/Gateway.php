@@ -158,6 +158,17 @@ abstract class Gateway
     abstract public function load( $contentId, $version, $translations = null );
 
     /**
+     * Loads info for a content object identified by its remote ID
+     *
+     * Returns an array with the relevant data.
+     *
+     * @param mixed $remoteId
+     *
+     * @return array
+     */
+    abstract public function loadContentInfoByRemoteId( $remoteId );
+
+    /**
      * Loads info for content identified by $contentId.
      * Will basically return a hash containing all field values for ezcontentobject table plus following keys:
      *  - always_available => Boolean indicating if content's language mask contains alwaysAvailable bit field

@@ -78,6 +78,15 @@ interface Handler
     public function loadContentInfo( $contentId );
 
     /**
+     * Returns the metadata object for a content identified by $remoteId.
+     *
+     * @param mixed $remoteId
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
+     */
+    public function loadContentInfoByRemoteId( $remoteId );
+
+    /**
      * Returns the version object for a content/version identified by $contentId and $versionNo
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If version is not found

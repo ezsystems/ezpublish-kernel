@@ -479,6 +479,33 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::loadContentInfoByRemoteId
+     *
+     * @return void
+     */
+    public function testLoadContentInfoByRemoteId()
+    {
+        $contentInfoData = array( new ContentInfo );
+        $this->getGatewayMock()->expects( $this->once() )
+            ->method( 'loadContentInfoByRemoteId' )
+            ->with(
+                $this->equalTo( "15b256dbea2ae72418ff5facc999e8f9" )
+            )->will(
+                $this->returnValue( array( 42 ) )
+            );
+
+        $this->getMapperMock()->expects( $this->once() )
+            ->method( 'extractContentInfoFromRow' )
+            ->with( $this->equalTo( array( 42 ) ) )
+            ->will( $this->returnValue( $contentInfoData ) );
+
+        $this->assertSame(
+            $contentInfoData,
+            $this->getContentHandler()->loadContentInfoByRemoteId( "15b256dbea2ae72418ff5facc999e8f9" )
+        );
+    }
+
+    /**
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::load
      * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
