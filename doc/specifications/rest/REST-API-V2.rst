@@ -679,6 +679,22 @@ List/Search Content
 :Method: GET (not implemented)
 :Description: This resource will used in future for searching content by providing a query string as alternative to posting a view to /content/views.
 
+Load Content by remote id
+`````````````````````````
+:Resource: /content/objects
+:Method: GET
+:Description: loads the content for a given remote id
+:Parameters: :remoteId: the remote id of the content. If present the content with the given remote id is returned
+:Response:
+
+.. code:: http
+
+          HTTP/1.1 307 Temporary Redirect
+          Location: /content/objects/<id>
+
+:Error Codes:
+    :404: If the content with the given remote id does not exist
+
 Load Content
 ````````````
 :Resource: /content/objects/<ID>
