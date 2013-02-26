@@ -651,14 +651,9 @@ class LocationHandlerTest extends HandlerTest
     public function testChangeMainLocation()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $this->cacheMock
-            ->expects( $this->at( 0 ) )
-            ->method( 'clear' )
-            ->with( 'location' )
-            ->will( $this->returnValue( true ) );
 
         $this->cacheMock
-            ->expects( $this->at( 1 ) )
+            ->expects( $this->at( 0 ) )
             ->method( 'clear' )
             ->with( 'content', 'info', 30 )
             ->will( $this->returnValue( true ) );

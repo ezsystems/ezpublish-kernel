@@ -43,7 +43,6 @@ class Mapper
         $location->parentId = $data[$prefix . 'parent_node_id'];
         $location->pathIdentificationString = $data[$prefix . 'path_identification_string'];
         $location->pathString = $data[$prefix . 'path_string'];
-        $location->mainLocationId = $data[$prefix . 'main_node_id'];
         $location->depth = $data[$prefix . 'depth'];
         $location->sortField = $data[$prefix . 'sort_field'];
         $location->sortOrder = $data[$prefix . 'sort_order'];

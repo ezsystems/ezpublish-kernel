@@ -83,9 +83,9 @@ class TrashHandler implements TrashHandlerInterface
                 }
                 $this->backend->delete( 'Content\\Location', $location->id );
                 $remainingLocations = $this->backend->find( 'Content\\Location', array( 'contentId' => $location->contentId ) );
-                $this->backend->updateByMatch(
-                    'Content\\Location',
-                    array( 'contentId' => $location->contentId ),
+                $this->backend->update(
+                    'Content\\ContentInfo',
+                    $location->contentId,
                     array( 'mainLocationId' => $remainingLocations[0]->id )
                 );
             }

@@ -238,7 +238,6 @@ class LocationHandler implements LocationHandlerInterface
     {
         $this->logger->logCall( __METHOD__, array( 'location' => $locationId, 'content' => $contentId ) );
         $this->persistenceFactory->getLocationHandler()->changeMainLocation( $contentId, $locationId );
-        $this->cache->clear( 'location' );//TIMBER! (->mainLocationId)
         $this->cache->clear( 'content', 'info', $contentId );
     }
 }
