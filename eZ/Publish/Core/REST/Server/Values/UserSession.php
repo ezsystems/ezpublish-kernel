@@ -34,7 +34,7 @@ class UserSession extends RestValue
      * Session ID
      * @var string
      */
-    public $identifier;
+    public $sessionId;
 
     /**
      * CSRF token name
@@ -55,11 +55,11 @@ class UserSession extends RestValue
      * @param \eZ\Publish\Core\REST\Server\Values\RestUser[] $users
      * @param string $path
      */
-    public function __construct( $user, $name, $identifier, $csrfParam, $csrfToken )
+    public function __construct( $user, $sessionName, $sessionId, $csrfParam, $csrfToken )
     {
         $this->user = $user;
-        $this->sessionName = $name;
-        $this->identifier = $identifier;
+        $this->sessionName = $sessionName;
+        $this->sessionId = $sessionId;
         $this->csrfParam = $csrfParam;
         $this->csrfToken = $csrfToken;
     }

@@ -34,19 +34,19 @@ class UserSession extends ValueObjectVisitor
 
         $generator->startObjectElement( 'Session' );
 
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'userSession', array( 'sessionId' => $data->identifier ) ) );
+        $generator->startAttribute( 'href', $this->urlHandler->generate( 'userSession', array( 'sessionId' => $data->sessionId ) ) );
         $generator->endAttribute( 'href' );
 
         $generator->startValueElement( 'name', $data->sessionName );
         $generator->endValueElement( 'name' );
 
-        $generator->startValueElement( 'identifier', $data->identifier );
+        $generator->startValueElement( 'identifier', $data->sessionId );
         $generator->endValueElement( 'identifier' );
 
         $generator->startValueElement( 'csrf-param', $data->csrfParam );
         $generator->endValueElement( 'csrf-param' );
 
-        $generator->startValueElement( 'csrf-token', $data->csrfParam );
+        $generator->startValueElement( 'csrf-token', $data->csrfToken );
         $generator->endValueElement( 'csrf-token' );
 
         $generator->startObjectElement( 'User', 'User' );

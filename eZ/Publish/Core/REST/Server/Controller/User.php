@@ -952,12 +952,21 @@ class User extends RestController
             throw new UnauthorizedException( "Invalid login or password", 0, null, $e );
         }
 
+        $this->repository->setCurrentUser( $user );
+
+        /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
+        $session = $this->container->get( 'session' );
+
+        /** @var $csrfProvider \Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface */
+        $csrfProvider = $this->container->get( 'form.csrf_provider' );
+
+        $session->start();
         return new Values\UserSession(
             $user,
-            "l=$login,p=$password",
-            'sessionId',
+            $session->getName(),
+            $session->getId(),
             '_csrf_token',
-            '1234565677'
+            $csrfProvider->generateCsrfToken( 'rest' )
         );
     }
 
