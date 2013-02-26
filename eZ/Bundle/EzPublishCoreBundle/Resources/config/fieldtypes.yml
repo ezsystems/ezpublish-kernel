@@ -23,7 +23,7 @@ parameters:
     ezpublish.fieldType.ezsrrating.class: eZ\Publish\Core\FieldType\Rating\Type
     ezpublish.fieldType.ezselection.class: eZ\Publish\Core\FieldType\Selection\Type
     ezpublish.fieldType.eztext.class: eZ\Publish\Core\FieldType\TextBlock\Type
-    ezpublish.fieldType.ezstring.class: eZ\Publish\Core\FieldType\TextLine\Type
+    ezpublish.fieldType.ezstring.class: eZ\Publish\Core\MVC\Symfony\FieldType\TextLine\Type
     ezpublish.fieldType.ezurl.class: eZ\Publish\Core\FieldType\Url\Type
     ezpublish.fieldType.ezurl.externalStorage.class: eZ\Publish\Core\FieldType\Url\UrlStorage
     ezpublish.fieldType.ezxmltext.class: eZ\Publish\Core\FieldType\XmlText\Type
