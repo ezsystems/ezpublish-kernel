@@ -34,7 +34,10 @@ class UserSession extends ValueObjectVisitor
 
         $generator->startObjectElement( 'Session' );
 
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'userSession', array( 'sessionId' => $data->sessionId ) ) );
+        $generator->startAttribute(
+            'href',
+            $this->urlHandler->generate( 'userSession', array( 'sessionId' => $data->sessionId ) )
+        );
         $generator->endAttribute( 'href' );
 
         $generator->startValueElement( 'name', $data->sessionName );

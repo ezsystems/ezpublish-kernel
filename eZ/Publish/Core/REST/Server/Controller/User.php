@@ -938,10 +938,23 @@ class User extends RestController
      */
     public function createSession()
     {
+        /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
+        $session = $this->container->get( 'session' );
+
         // Temporary. POST isn't used anywhere in REST, and isn't even understood by RMF
         // See https://github.com/ezsystems/ezpublish-kernel/pull/225/files#r3084189
         $login = $_POST['login'];
         $password = $_POST['password'];
+
+        if ( $session->isStarted() )
+        {
+            return new Values\SeeOther(
+                $this->urlHandler->generate(
+                    'userSession',
+                    array( 'sessionId' => $session->getId() )
+                )
+            );
+        }
 
         try
         {
@@ -953,9 +966,6 @@ class User extends RestController
         }
 
         $this->repository->setCurrentUser( $user );
-
-        /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
-        $session = $this->container->get( 'session' );
 
         /** @var $csrfProvider \Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface */
         $csrfProvider = $this->container->get( 'form.csrf_provider' );

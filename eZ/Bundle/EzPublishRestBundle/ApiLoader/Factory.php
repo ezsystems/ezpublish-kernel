@@ -319,6 +319,7 @@ class Factory
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceCreated'             => new Output\ValueObjectVisitor\ResourceCreated( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\NoContent'                   => new Output\ValueObjectVisitor\NoContent( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Common\\Values\\Root'                        => new Output\ValueObjectVisitor\Root( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\SeeOther'                    => new Output\ValueObjectVisitor\SeeOther( $urlHandler ),
         );
 
         $jsonVisitor = new Common\Output\Visitor(
