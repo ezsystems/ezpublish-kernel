@@ -35,7 +35,6 @@ class UserHandlerTest extends HandlerTest
             //array( 'loadRole', array( 22 ) ),
             array( 'loadRoleByIdentifier', array( 'users' ) ),
             array( 'loadRoles', array() ),
-            array( 'loadRolesByGroupId', array( 44 ) ),
             array( 'loadRoleAssignmentsByRoleId', array( 22 ) ),
             //array( 'loadRoleAssignmentsByGroupId', array( 44, true ) ),
             //array( 'updateRole', array( new RoleUpdateStruct ) ),

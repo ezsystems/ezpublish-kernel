@@ -46,17 +46,20 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
     protected $loggerMock;
 
     /**
-     * Setup the HandlerTest.
-     *
-     * @param array|null $persistenceFactoryMockMethods
+     * @param array|null $persistenceFactoryMockMethod
      */
-    protected function setUp( $persistenceFactoryMockMethods = array() )
+    protected $persistenceFactoryMockMethods = array();
+
+    /**
+     * Setup the HandlerTest.
+     */
+    protected function setUp()
     {
         parent::setUp();
 
         $this->persistenceFactoryMock = $this->getMock(
             "eZ\\Publish\\Core\\Persistence\\Factory",
-            $persistenceFactoryMockMethods,
+            $this->persistenceFactoryMockMethods,
             array(),
             '',
             false

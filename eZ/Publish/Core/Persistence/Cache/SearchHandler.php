@@ -95,7 +95,7 @@ class SearchHandler extends SearchHandlerInterface
      */
     public function indexContent( Content $content )
     {
-        $this->logger->logCall( __METHOD__, array( 'content' => $content->id ) );
+        $this->logger->logCall( __METHOD__, array( 'content' => $content->versionInfo->contentInfo->id ) );
         $this->persistenceFactory->getSearchHandler()->indexContent( $content );
     }
 

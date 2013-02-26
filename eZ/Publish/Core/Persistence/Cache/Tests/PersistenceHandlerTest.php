@@ -17,11 +17,16 @@ use eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryHandler;
 class PersistenceHandlerTest extends HandlerTest
 {
     /**
+     * @param array|null $persistenceFactoryMockMethod
+     */
+    protected $persistenceFactoryMockMethods = array( 'getPersistenceHandler' );
+
+    /**
      * Setup the PersistenceHandlerTest.
      */
     protected function setUp()
     {
-        parent::setUp( array( 'getPersistenceHandler' ) );
+        parent::setUp();
 
         $this->persistenceFactoryMock
             ->expects( $this->any() )

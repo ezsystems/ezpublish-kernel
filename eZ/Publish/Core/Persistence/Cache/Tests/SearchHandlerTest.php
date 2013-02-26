@@ -10,6 +10,8 @@
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
 use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId;
 
@@ -27,7 +29,11 @@ class SearchHandlerTest extends HandlerTest
             array( 'findContent', array( new Query, array( 42 ) ) ),
             array( 'findSingle', array( new ContentTypeId( 4 ), array( 42 ) ) ),
             array( 'suggest', array( 'prefix%', array( 42 ), 10, new ContentTypeId( 4 ) ) ),
-            array( 'indexContent', array( new Content ) ),
+            array( 'indexContent', array( new Content( array(
+                'versionInfo' => new VersionInfo( array(
+                    'contentInfo' => new ContentInfo( array( 'id' => 42 ) )
+                ) )
+            ) ) ) ),
         );
     }
 

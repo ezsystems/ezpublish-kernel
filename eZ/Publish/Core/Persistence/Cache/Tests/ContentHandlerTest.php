@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\Relation as APIRelation;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
@@ -43,7 +44,7 @@ class ContentHandlerTest extends HandlerTest
             //array( 'deleteVersion', array( 2, 1 ) ),
             array( 'listVersions', array( 2 ) ),
             array( 'addRelation', array( new RelationCreateStruct ) ),
-            array( 'removeRelation', array( 66 ) ),
+            array( 'removeRelation', array( 66, APIRelation::COMMON ) ),
             array( 'loadRelations', array( 2, 1, 3 ) ),
             array( 'loadReverseRelations', array( 2, 3 ) ),
             //array( 'publish', array( 2, 3, new MetadataUpdateStruct ) ),
