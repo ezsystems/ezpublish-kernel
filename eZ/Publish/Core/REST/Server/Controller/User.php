@@ -965,7 +965,7 @@ class User extends RestController
             $user,
             $session->getName(),
             $session->getId(),
-            '_csrf_token',
+            $this->container->getParameter( 'form.type_extension.csrf.field_name' ),
             $csrfProvider->generateCsrfToken( 'rest' )
         );
     }
