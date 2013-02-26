@@ -1,5 +1,5 @@
 {
-    "hash": "2049b0206bafa2f17542e6f24e76c48a",
+    "hash": "e9bb15c6bbd291804d50004662b0bb89",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -195,13 +195,13 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/doctrine/common",
-                "reference": "53859ae1c84ccf1a5aa58c8379c69cd9adedf03a"
+                "url": "https://github.com/doctrine/common.git",
+                "reference": "e211821c719d33ad2cd1186fafb4dadb5f74d6ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/common/zipball/53859ae1c84ccf1a5aa58c8379c69cd9adedf03a",
-                "reference": "53859ae1c84ccf1a5aa58c8379c69cd9adedf03a",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/e211821c719d33ad2cd1186fafb4dadb5f74d6ed",
+                "reference": "e211821c719d33ad2cd1186fafb4dadb5f74d6ed",
                 "shasum": ""
             },
             "require": {
@@ -212,7 +212,7 @@
                 "doctrine/lexer": "1.*",
                 "php": ">=5.3.2"
             },
-            "time": "2013-01-29 12:48:56",
+            "time": "2013-02-19 09:37:33",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -537,16 +537,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.2.0-RC2",
+            "version": "v2.2.0-RC3",
             "source": {
                 "type": "git",
-                "url": "git://github.com/symfony/symfony.git",
-                "reference": "v2.2.0-RC2"
+                "url": "https://github.com/symfony/symfony.git",
+                "reference": "v2.2.0-RC3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/v2.2.0-RC2",
-                "reference": "v2.2.0-RC2",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/v2.2.0-RC3",
+                "reference": "v2.2.0-RC3",
                 "shasum": ""
             },
             "require": {
@@ -598,7 +598,7 @@
                 "monolog/monolog": ">=1.3,<2.0",
                 "propel/propel1": "1.6.*"
             },
-            "time": "2013-02-11 12:46:49",
+            "time": "2013-02-24 12:07:19",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -639,19 +639,19 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git://github.com/fabpot/Twig.git",
-                "reference": "72c8bb73e90cf6d2e992b01ab508f7fc13e38c8f"
+                "url": "https://github.com/fabpot/Twig.git",
+                "reference": "bc30d9b7e24b0cd2f02078064b2d9fe1c20aa1aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/72c8bb73e90cf6d2e992b01ab508f7fc13e38c8f",
-                "reference": "72c8bb73e90cf6d2e992b01ab508f7fc13e38c8f",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/bc30d9b7e24b0cd2f02078064b2d9fe1c20aa1aa",
+                "reference": "bc30d9b7e24b0cd2f02078064b2d9fe1c20aa1aa",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2013-02-09 18:37:02",
+            "time": "2013-02-26 13:03:39",
             "type": "library",
             "extra": {
                 "branch-alias": {
