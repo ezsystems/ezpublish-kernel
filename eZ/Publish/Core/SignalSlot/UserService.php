@@ -73,7 +73,7 @@ class UserService implements UserServiceInterface
         $this->signalDispatcher->emit(
             new Signal\UserService\CreateUserGroupSignal(
                 array(
-                    'userGroupId' => $returnValue->id,
+                    'userGroup' => $returnValue,
                 )
             )
         );
@@ -145,7 +145,7 @@ class UserService implements UserServiceInterface
         $this->signalDispatcher->emit(
             new Signal\UserService\MoveUserGroupSignal(
                 array(
-                    'userGroupId' => $userGroup->id,
+                    'userGroup' => $userGroup,
                     'newParentId' => $newParent->id,
                 )
             )
@@ -202,7 +202,7 @@ class UserService implements UserServiceInterface
         $this->signalDispatcher->emit(
             new Signal\UserService\CreateUserSignal(
                 array(
-                    'userId' => $returnValue->id,
+                    'user' => $returnValue,
                 )
             )
         );

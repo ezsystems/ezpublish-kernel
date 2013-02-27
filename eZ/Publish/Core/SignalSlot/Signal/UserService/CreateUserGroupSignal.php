@@ -18,9 +18,9 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class CreateUserGroupSignal extends Signal
 {
     /**
-     * User Group ID
+     * User Group
      *
-     * @var mixed
+     * @var \eZ\Publish\API\Repository\Values\User\UserGroup
      */
-    public $userGroupId;
+    public $userGroup;
 }

@@ -166,6 +166,25 @@ class Repository implements RepositoryInterface
     protected $serviceSettings;
 
     /**
+     * Array of arrays of commit events indexed by the transaction count.
+     *
+     * @var array
+     */
+    protected $commitEventsQueue = array();
+
+    /**
+     * @var int
+     */
+    protected $transactionDepth = 0;
+
+    /**
+     * @var int
+     */
+    private $transactionCount = 0;
+
+    /**
+
+    /**
      * Constructor
      *
      * Construct repository object with provided storage engine
@@ -660,6 +679,9 @@ class Repository implements RepositoryInterface
     public function beginTransaction()
     {
         $this->persistenceHandler->beginTransaction();
+
+        ++$this->transactionDepth;
+        $this->commitEventsQueue[++$this->transactionCount] = array();
     }
 
     /**
@@ -674,6 +696,21 @@ class Repository implements RepositoryInterface
         try
         {
             $this->persistenceHandler->commit();
+
+            --$this->transactionDepth;
+
+            if ( $this->transactionDepth === 0 )
+            {
+                foreach ( $this->commitEventsQueue as $eventsQueue )
+                {
+                    foreach ( $eventsQueue as $event )
+                    {
+                        $event();
+                    }
+                }
+
+                $this->commitEventsQueue = array();
+            }
         }
         catch ( Exception $e )
         {
@@ -693,10 +730,40 @@ class Repository implements RepositoryInterface
         try
         {
             $this->persistenceHandler->rollback();
+
+            --$this->transactionDepth;
+            unset( $this->commitEventsQueue[$this->transactionCount] );
         }
         catch ( Exception $e )
         {
             throw new RuntimeException( $e->getMessage(), 0, $e );
+        }
+    }
+
+    /**
+     * Tests if a transaction has been started
+     *
+     * @return bool
+     */
+    public function hasTransactionStarted()
+    {
+        return $this->transactionDepth !== 0;
+    }
+
+    /**
+     * Enqueue an event to be triggered at commit or directly if no transaction has started
+     *
+     * @param Callable $event
+     */
+    public function commitEvent( $event )
+    {
+        if ( $this->transactionDepth !== 0 )
+        {
+            $this->commitEventsQueue[$this->transactionCount][] = $event;
+        }
+        else
+        {
+            $event();
         }
     }
 

@@ -13,6 +13,7 @@ use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
+use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
 use eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler;
 use eZ\Publish\SPI\Persistence\Content\Search\Field;
 use eZ\Publish\SPI\Persistence\Content\Search\FieldType;
@@ -80,6 +81,13 @@ class Handler extends BaseSearchHandler
     protected $objectStateHandler;
 
     /**
+     * Section handler
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Section\Handler
+     */
+    protected $sectionHandler;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway $gateway
@@ -87,14 +95,16 @@ class Handler extends BaseSearchHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Section\Handler $sectionHandler
      */
-    public function __construct( Gateway $gateway, FieldRegistry $fieldRegistry, LocationHandler $locationHandler, ContentTypeHandler $contentTypeHandler, ObjectStateHandler $objectStateHandler )
+    public function __construct( Gateway $gateway, FieldRegistry $fieldRegistry, LocationHandler $locationHandler, ContentTypeHandler $contentTypeHandler, ObjectStateHandler $objectStateHandler, SectionHandler $sectionHandler )
     {
         $this->gateway            = $gateway;
         $this->fieldRegistry      = $fieldRegistry;
         $this->locationHandler    = $locationHandler;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->objectStateHandler = $objectStateHandler;
+        $this->sectionHandler     = $sectionHandler;
     }
 
     /**
@@ -200,6 +210,7 @@ class Handler extends BaseSearchHandler
             if ( $location->id == $content->versionInfo->contentInfo->mainLocationId )
                 $mainLocation = $location;
         }
+        $section = $this->sectionHandler->load( $content->versionInfo->contentInfo->sectionId );
 
         $document = array(
             new Field(
@@ -236,6 +247,16 @@ class Handler extends BaseSearchHandler
                 'section',
                 $content->versionInfo->contentInfo->sectionId,
                 new FieldType\IdentifierField()
+            ),
+            new Field(
+                'section_identifier',
+                $section->identifier,
+                new FieldType\IdentifierField()
+            ),
+            new Field(
+                'section_name',
+                $section->name,
+                new FieldType\StringField()
             ),
             new Field(
                 'remote_id',
@@ -321,7 +342,7 @@ class Handler extends BaseSearchHandler
             new Field(
                 'language_code',
                 array_keys( $content->versionInfo->names ),
-                new FieldType\StringField()
+                new FieldType\MultipleStringField()
             ),
         );
 
@@ -384,6 +405,8 @@ class Handler extends BaseSearchHandler
             }
         }
 
+        /*
+        @todo FIXME: Uncomment when object states implementation is ready to be used
         $objectStateIds = array();
         foreach ( $this->objectStateHandler->loadAllGroups() as $objectStateGroup )
         {
@@ -398,6 +421,7 @@ class Handler extends BaseSearchHandler
             $objectStateIds,
             new FieldType\IdentifierField()
         );
+        */
 
         return $document;
     }

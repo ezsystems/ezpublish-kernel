@@ -122,6 +122,23 @@ class Repository implements APIRepository
     private $fieldTypes;
 
     /**
+     * Array of arrays of commit events indexed by the transaction count.
+     *
+     * @var array
+     */
+    protected $commitEventsQueue = array();
+
+    /**
+     * @var int
+     */
+    protected $transactionDepth = 0;
+
+    /**
+     * @var int
+     */
+    private $transactionCount = 0;
+
+    /**
      * Instantiates the REST Client repository.
      *
      * @param \eZ\Publish\Core\REST\Client\HttpClient $client
@@ -471,6 +488,7 @@ class Repository implements APIRepository
     public function beginTransaction()
     {
         ++$this->transactionDepth;
+        $this->commitEventsQueue[++$this->transactionCount] = array();
     }
 
     /**
@@ -483,6 +501,21 @@ class Repository implements APIRepository
     public function commit()
     {
         // @todo: Implement / discuss
+
+        --$this->transactionDepth;
+
+        if ( $this->transactionDepth === 0 )
+        {
+            foreach ( $this->commitEventsQueue as $eventsQueue )
+            {
+                foreach ( $eventsQueue as $event )
+                {
+                    $event();
+                }
+            }
+
+            $this->commitEventsQueue = array();
+        }
     }
 
     /**
@@ -495,5 +528,35 @@ class Repository implements APIRepository
     public function rollback()
     {
         // @todo: Implement / discuss
+
+        --$this->transactionDepth;
+        unset( $this->commitEventsQueue[$this->transactionCount] );
+    }
+
+    /**
+     * Tests if a transaction has been started
+     *
+     * @return bool
+     */
+    public function hasTransactionStarted()
+    {
+        return $this->transactionDepth !== 0;
+    }
+
+    /**
+     * Enqueue an event to be triggered at commit or directly if no transaction has started
+     *
+     * @param Callable $event
+     */
+    public function commitEvent( $event )
+    {
+        if ( $this->transactionDepth !== 0 )
+        {
+            $this->commitEventsQueue[$this->transactionCount][] = $event;
+        }
+        else
+        {
+            $event();
+        }
     }
 }
