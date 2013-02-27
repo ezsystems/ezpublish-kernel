@@ -679,6 +679,22 @@ List/Search Content
 :Method: GET (not implemented)
 :Description: This resource will used in future for searching content by providing a query string as alternative to posting a view to /content/views.
 
+Load Content by remote id
+`````````````````````````
+:Resource: /content/objects
+:Method: GET
+:Description: loads the content for a given remote id
+:Parameters: :remoteId: the remote id of the content. If present the content with the given remote id is returned
+:Response:
+
+.. code:: http
+
+          HTTP/1.1 307 Temporary Redirect
+          Location: /content/objects/<id>
+
+:Error Codes:
+    :404: If the content with the given remote id does not exist
+
 Load Content
 ````````````
 :Resource: /content/objects/<ID>
@@ -3267,6 +3283,24 @@ Get Content Type Group
 :ErrorCodes:
     :401: If the user is not authorized to read this content type
     :404: If the content type group does not exist
+
+
+Get Content Type Group by id
+````````````````````````````
+:Resource: /content/typegroups
+:Method: GET
+:Description: loads the content type group for a given identifier
+:Parameters: :identifier: the identifier of the content type group. If present the content type group is with the given identifier is returned.
+:Response:
+
+.. code:: http
+
+          HTTP/1.1 307 Temporary Redirect
+          Location: /content/typegroups/<ID>
+
+:Error Codes:
+        :404: If the content type group with the given identifier does not exist
+
 
 Update Content Type Group
 `````````````````````````
@@ -6189,7 +6223,7 @@ Version
               <xsd:element name="Fields" minOccurs="0">
                 <xsd:complexType>
                   <xsd:sequence>
-                    <xsd:element name="field" type="fieldValueType"
+                    <xsd:element name="field" type="fieldOutputValueType"
                       minOccurs="1" maxOccurs="unbounded" />
                   </xsd:sequence>
                 </xsd:complexType>
@@ -8145,8 +8179,8 @@ ContentTypeUpdate XML Schema
 
 .. _FieldDefinition:
 
-FieldDefinition JSON Schema
----------------------------
+FieldDefinition XML Schema
+--------------------------
 .. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
@@ -8216,10 +8250,24 @@ FieldDefinition JSON Schema
                     </xsd:documentation>
                 </xsd:annotation>
               </xsd:element>
-              <xsd:element name="defaultValue" type="xsd:string">
+              <xsd:element name="defaultValue" type="fieldValueType">
                 <xsd:annotation>
                   <xsd:documentation>
                     Default value of the field
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="fieldSettings" type="xsd:anyType">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Settings of the field
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="validatorConfiguration" type="xsd:anyType">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Validator configuration of the field
                   </xsd:documentation>
                 </xsd:annotation>
               </xsd:element>
@@ -8271,7 +8319,7 @@ FieldDefinitionCreate XML Schema
               <xsd:documentation>
                 Readable string identifier of a field
                 definition
-                  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="fieldType" type="xsd:string">
@@ -8285,7 +8333,7 @@ FieldDefinitionCreate XML Schema
             <xsd:annotation>
               <xsd:documentation>
                 Field group name
-                    </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="position" type="xsd:int">
@@ -8293,21 +8341,21 @@ FieldDefinitionCreate XML Schema
               <xsd:documentation>
                 the position of the field definition in
                 the content typr
-                    </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="isTranslatable" type="xsd:boolean">
             <xsd:annotation>
               <xsd:documentation>
                 If the field type is translatable
-                  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="isRequired" type="xsd:boolean">
             <xsd:annotation>
               <xsd:documentation>
                 Is the field required
-                  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="isInfoCollector" type="xsd:boolean">
@@ -8315,14 +8363,28 @@ FieldDefinitionCreate XML Schema
               <xsd:documentation>
                 the flag if this attribute is used for
                 information collection
-                    </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="defaultValue" type="xsd:string">
+          <xsd:element name="defaultValue" type="fieldValueType">
             <xsd:annotation>
               <xsd:documentation>
                 Default value of the field
-                  </xsd:documentation>
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="fieldSettings" type="xsd:anyType">
+            <xsd:annotation>
+              <xsd:documentation>
+                Settings of the field
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="validatorConfiguration" type="xsd:anyType">
+            <xsd:annotation>
+              <xsd:documentation>
+                Validator configuration of the field
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="isSearchable" type="xsd:boolean">
@@ -8330,7 +8392,7 @@ FieldDefinitionCreate XML Schema
               <xsd:documentation>
                 Indicates if th the content is
                 searchable by this attribute
-                    </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="names" type="multiLanguageValuesType" />
@@ -8359,14 +8421,14 @@ FieldDefinitionUpdate XML Schema
               <xsd:documentation>
                 If set the identifier of a field
                 definition is changed
-               </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="fieldGroup" type="xsd:string">
             <xsd:annotation>
               <xsd:documentation>
                 If set the field group is changed
-               </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="position" type="xsd:int">
@@ -8381,35 +8443,49 @@ FieldDefinitionUpdate XML Schema
             <xsd:annotation>
               <xsd:documentation>
                 If set the translatable flag is set to this value
-                  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="isRequired" type="xsd:boolean">
             <xsd:annotation>
               <xsd:documentation>
                 If set the required flag is set to this value
-                  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="isInfoCollector" type="xsd:boolean">
             <xsd:annotation>
               <xsd:documentation>
                 If set the info collection flag is set to this value
-                    </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="defaultValue" type="xsd:string">
+          <xsd:element name="defaultValue" type="fieldValueType">
             <xsd:annotation>
               <xsd:documentation>
                 If set the default value of the field is changed
-                  </xsd:documentation>
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="fieldSettings" type="xsd:anyType">
+            <xsd:annotation>
+              <xsd:documentation>
+                If set the settings of the field are changed
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="validatorConfiguration" type="xsd:anyType">
+            <xsd:annotation>
+              <xsd:documentation>
+                If set the validatorConfiguration of the field is changed
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="isSearchable" type="xsd:boolean">
             <xsd:annotation>
               <xsd:documentation>
-               If set the searchable flag is set to this value
-                     </xsd:documentation>
+                If set the searchable flag is set to this value
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="names" type="multiLanguageValuesType" />

@@ -164,7 +164,6 @@ class QueryBuilder
             $this->dbHandler->aliasedColumn( $query, 'contentclassattribute_id', 'ezcontentobject_link' ),
             $this->dbHandler->aliasedColumn( $query, 'from_contentobject_id', 'ezcontentobject_link' ),
             $this->dbHandler->aliasedColumn( $query, 'from_contentobject_version', 'ezcontentobject_link' ),
-            $this->dbHandler->aliasedColumn( $query, 'op_code', 'ezcontentobject_link' ),
             $this->dbHandler->aliasedColumn( $query, 'relation_type', 'ezcontentobject_link' ),
             $this->dbHandler->aliasedColumn( $query, 'to_contentobject_id', 'ezcontentobject_link' )
         )->from(

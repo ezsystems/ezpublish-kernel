@@ -31,5 +31,5 @@ final class LegacyEvents
      * The event listener method receives a
      * \eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent
      */
-    const PRE_BUILD_LEGACY_KERNEL = 'epzublish_legacy.build_kernel';
+    const PRE_BUILD_LEGACY_KERNEL = 'ezpublish_legacy.build_kernel';
 }

@@ -81,7 +81,9 @@ class Dispatcher
         $contentTypeParts = explode( '+', $message->headers['Content-Type'] );
         if ( count( $contentTypeParts ) !== 2 )
         {
-            throw new Exceptions\Parser( "No format specification in content type. Missing '+(json|xml|…)' in '{$message->headers['Content-Type']}'." );
+            // TODO expose default format
+            $contentTypeParts[1] = "xml";
+            //throw new Exceptions\Parser( "No format specification in content type. Missing '+(json|xml|…)' in '{$message->headers['Content-Type']}'." );
         }
 
         $media  = $contentTypeParts[0];

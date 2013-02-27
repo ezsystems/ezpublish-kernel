@@ -51,6 +51,12 @@ ezpublish_rest_deleteSection:
 # Content
 
 
+ezpublish_rest_redirectContent:
+    path: /content/objects
+    defaults:
+        _controller: ezpublish_rest.controller.content:redirectContent
+    methods: [GET]
+
 ezpublish_rest_createContent:
     path: /content/objects
     defaults:

@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\MVC\Legacy\Kernel;
 use ezpKernelHandler;
 use eZScript;
 use eZINI;
+use ezpSessionHandlerSymfony;
+use eZSession;
 use RuntimeException;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -28,10 +30,23 @@ class CLIHandler implements ezpKernelHandler
      */
     protected $container;
 
+    protected $sessionSettings;
+
+    /**
+     * Path to legacy script to run.
+     * e.g. bin/php/eztc.php
+     *
+     * @var string
+     */
+    protected $embeddedScriptPath;
+
     /**
      * Constructor
      *
-     * @param array $settings Settings to pass to \eZScript constructor.
+     * Additional valid settings for $settings :
+     * - injected-settings : INI settings override
+     *
+     * @param array $settings Settings to pass to eZScript constructor.
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
@@ -49,24 +64,52 @@ class CLIHandler implements ezpKernelHandler
             // those settings override anything else in local .ini files and
             // their overrides
             eZINI::injectSettings( $injectedSettings );
+            unset( $settings['injected-settings'] );
+        }
+
+        if ( isset( $settings['session'] ) )
+        {
+            $this->sessionSettings = $settings['session'];
         }
 
         $this->script = eZScript::instance( $settings );
         $this->script->startup();
         if ( isset( $siteAccess ) )
             $this->script->setUseSiteAccess( $siteAccess->name );
-
-        $this->script->initialize();
     }
 
     /**
-     * Not supported by CLIHandler
+     * Runs a legacy script.
      *
      * @throws \RuntimeException
      */
     public function run()
     {
-        throw new RuntimeException( 'run() method is not supported by CLIHandler' );
+        if ( !isset( $this->embeddedScriptPath ) )
+            throw new RuntimeException( 'No legacy script to run has been passed. Cannot run, aborting.' );
+
+        if ( !file_exists( $this->embeddedScriptPath ) )
+            throw new RuntimeException( 'Passed legacy script does not exist. Please provide the correct script path, relative to the legacy root.' );
+
+        $this->sessionInit();
+        // Exposing $argv to embedded script
+        $argv = $_SERVER['argv'];
+        include $this->embeddedScriptPath;
+    }
+
+    private function sessionInit()
+    {
+        $sfHandler = new ezpSessionHandlerSymfony(
+            $this->sessionSettings['has_previous']
+            || $this->sessionSettings['started']
+        );
+        $sfHandler->setStorage( $this->sessionSettings['storage'] );
+        eZSession::init(
+            $this->sessionSettings['name'],
+            $this->sessionSettings['started'],
+            $this->sessionSettings['namespace'],
+            $sfHandler
+        );
     }
 
     /**
@@ -81,6 +124,9 @@ class CLIHandler implements ezpKernelHandler
      */
     public function runCallback( \Closure $callback, $postReinitialize = true )
     {
+        if ( !$this->script->isInitialized() )
+            $this->script->initialize();
+
         $return = $callback();
         $this->script->shutdown();
         if ( !$postReinitialize )
@@ -130,5 +176,15 @@ class CLIHandler implements ezpKernelHandler
     public function getServiceContainer()
     {
         return $this->container;
+    }
+
+    /**
+     * Injects path to script to run in legacy context (relative to legacy root).
+     *
+     * @param string $scriptPath
+     */
+    public function setEmbeddedScriptPath( $scriptPath )
+    {
+        $this->embeddedScriptPath = $scriptPath;
     }
 }

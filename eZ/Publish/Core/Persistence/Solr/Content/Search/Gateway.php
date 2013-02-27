@@ -47,7 +47,7 @@ abstract class Gateway
      *
      * @return void
      */
-    abstract public function deleteContent( $contentID, $versionID = null );
+    abstract public function deleteContent( $contentId, $versionId = null );
 
     /**
      * Purges all contents from the index

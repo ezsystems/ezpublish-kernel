@@ -61,14 +61,14 @@ class ContentType extends Parser
 
         $fieldDefinitionListReference = $this->parserTools->parseObjectElement( $data['FieldDefinitions'], $parsingDispatcher );
 
-        return new Values\ContentType\ContentType(
+        $contentType = new Values\ContentType\ContentType(
             $this->contentTypeService,
             array(
                 'id'   => $data['_href'],
                 'status' => $this->parserTools->parseStatus( $data['status'] ),
                 'identifier' => $data['identifier'],
-                'names' => $this->parserTools->parseTranslatableList( $data['names'] ),
-                'descriptions' => $this->parserTools->parseTranslatableList( $data['descriptions'] ),
+                'names' => isset( $data['names'] ) ? $this->parserTools->parseTranslatableList( $data['names'] ) : null,
+                'descriptions' => isset( $data['descriptions'] ) ? $this->parserTools->parseTranslatableList( $data['descriptions'] ) : null,
                 'creationDate' => new \DateTime( $data['creationDate'] ),
                 'modificationDate' => new \DateTime( $data['modificationDate'] ),
                 'creatorId' => $creatorId,
@@ -85,5 +85,12 @@ class ContentType extends Parser
                 'fieldDefinitionListReference' => $fieldDefinitionListReference,
             )
         );
+
+        if ( $contentType->status === Values\ContentType\ContentType::STATUS_DRAFT )
+        {
+            return new Values\ContentType\ContentTypeDraft( $contentType );
+        }
+
+        return $contentType;
     }
 }

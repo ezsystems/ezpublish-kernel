@@ -46,7 +46,7 @@ interface ContentTypeService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group can not be found
      *
-     * @param int $contentTypeGroupId
+     * @param mixed $contentTypeGroupId
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */

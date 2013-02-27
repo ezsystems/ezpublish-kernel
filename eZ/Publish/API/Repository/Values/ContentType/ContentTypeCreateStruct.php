@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
- * this clss is used for creating content types
+ * This class is used for creating content types.
  *
  * @property $fieldDefinitions the collection of field definitions
  */

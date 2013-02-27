@@ -154,6 +154,22 @@ class ContentType extends RestController
      */
     public function loadContentTypeGroupList()
     {
+        if ( isset( $this->request->variables['identifier'] ) )
+        {
+            $contentTypeGroup = $this->contentTypeService->loadContentTypeGroupByIdentifier(
+                $this->request->variables['identifier']
+            );
+
+            return new Values\TemporaryRedirect(
+                $this->urlHandler->generate(
+                    'typegroup',
+                    array(
+                        'typegroup' => $contentTypeGroup->id
+                    )
+                )
+            );
+        }
+
         return new Values\ContentTypeGroupList(
             $this->contentTypeService->loadContentTypeGroups()
         );
