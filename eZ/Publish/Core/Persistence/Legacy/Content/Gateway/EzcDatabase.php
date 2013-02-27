@@ -745,12 +745,12 @@ class EzcDatabase extends Gateway
      * Returns an array with the relevant data.
      *
      * @param mixed $contentId
-     * @param mixed $version
+     * @param mixed|null $version
      * @param string[] $translations
      *
      * @return array
      */
-    public function load( $contentId, $version, $translations = null )
+    public function load( $contentId, $version = null, $translations = null )
     {
         $query = $this->queryBuilder->createFindQuery( $translations );
         $query->where(
@@ -761,36 +761,9 @@ class EzcDatabase extends Gateway
                 ),
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' ),
-                    $query->bindValue( $version )
-                )
-            )
-        );
-        $statement = $query->prepare();
-        $statement->execute();
-
-        return $statement->fetchAll( \PDO::FETCH_ASSOC );
-    }
-
-    /**
-     * Loads data for the latest published version of the content identified by
-     * $contentId
-     *
-     * @param mixed $contentId
-     *
-     * @return array
-     */
-    public function loadLatestPublishedData( $contentId )
-    {
-        $query = $this->queryBuilder->createFindQuery();
-        $query->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
-                    $query->bindValue( $contentId, null, \PDO::PARAM_INT )
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' ),
-                    $this->dbHandler->quoteColumn( 'current_version', 'ezcontentobject' )
+                    $version !== null ?
+                        $query->bindValue( $version ) :
+                        $this->dbHandler->quoteColumn( 'current_version', 'ezcontentobject' )
                 )
             )
         );

@@ -439,6 +439,46 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::load
+     *
+     * @return void
+     */
+    public function testLoadWithoutVersion()
+    {
+        $handler = $this->getContentHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+        $mapperMock = $this->getMapperMock();
+        $fieldHandlerMock = $this->getFieldHandlerMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'load' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( null ),
+                $this->equalTo( array( 'eng-GB' ) )
+            )->will(
+                $this->returnValue( array( 42 ) )
+            );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractContentFromRows' )
+            ->with( $this->equalTo( array( 42 ) ) )
+            ->will( $this->returnValue( array( $this->getContentFixtureForDraft() ) ) );
+
+        $fieldHandlerMock->expects( $this->once() )
+            ->method( 'loadExternalFieldData' )
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ) );
+
+        $result = $handler->load( 23, null, array( 'eng-GB' ) );
+
+        $this->assertEquals(
+            $result,
+            $this->getContentFixtureForDraft()
+        );
+    }
+
+    /**
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::load
      * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException

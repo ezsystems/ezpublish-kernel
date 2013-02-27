@@ -149,12 +149,12 @@ abstract class Gateway
      * Returns an array with the relevant data.
      *
      * @param mixed $contentId
-     * @param mixed $version
+     * @param mixed|null $version
      * @param string[] $translations
      *
      * @return array
      */
-    abstract public function load( $contentId, $version, $translations = null );
+    abstract public function load( $contentId, $version = null, $translations = null );
 
     /**
      * Loads info for content identified by $contentId.
@@ -306,16 +306,6 @@ abstract class Gateway
      * @return void
      */
     abstract public function deleteContent( $contentId );
-
-    /**
-     * Loads data for the latest published version of the content identified by
-     * $contentId
-     *
-     * @param mixed $contentId
-     *
-     * @return array
-     */
-    abstract public function loadLatestPublishedData( $contentId );
 
     /**
      * Loads data of related to/from $contentId

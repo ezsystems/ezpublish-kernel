@@ -277,21 +277,17 @@ class Handler implements BaseContentHandler
     /**
      * Returns the raw data of a content object identified by $id, in a struct.
      *
-     * A version to load must be specified. If you want to load the current
-     * version of a content object use SearchHandler::findSingle() with the
-     * ContentId criterion.
-     *
      * Optionally a translation filter may be specified. If specified only the
      * translations with the listed language codes will be retrieved. If not,
      * all translations will be retrieved.
      *
      * @param int|string $id
-     * @param int|string $version
+     * @param mixed|null $version
      * @param string[] $translations
      *
      * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
-    public function load( $id, $version, $translations = null )
+    public function load( $id, $version = null, $translations = null )
     {
         $rows = $this->contentGateway->load( $id, $version, $translations );
 

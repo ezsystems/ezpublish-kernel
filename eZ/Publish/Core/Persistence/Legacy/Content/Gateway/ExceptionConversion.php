@@ -324,12 +324,12 @@ class ExceptionConversion extends Gateway
      * Returns an array with the relevant data.
      *
      * @param mixed $contentId
-     * @param mixed $version
+     * @param mixed|null $version
      * @param string[] $translations
      *
      * @return array
      */
-    public function load( $contentId, $version, $translations = null )
+    public function load( $contentId, $version = null, $translations = null )
     {
         try
         {
@@ -681,30 +681,6 @@ class ExceptionConversion extends Gateway
         try
         {
             return $this->innerGateway->deleteContent( $contentId );
-        }
-        catch ( \ezcDbException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( \PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-    }
-
-    /**
-     * Loads data for the latest published version of the content identified by
-     * $contentId
-     *
-     * @param mixed $contentId
-     *
-     * @return array
-     */
-    public function loadLatestPublishedData( $contentId )
-    {
-        try
-        {
-            return $this->innerGateway->loadLatestPublishedData( $contentId );
         }
         catch ( \ezcDbException $e )
         {

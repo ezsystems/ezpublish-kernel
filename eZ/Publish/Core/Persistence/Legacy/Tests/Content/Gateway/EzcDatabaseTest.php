@@ -734,6 +734,33 @@ class EzcDatabaseTest extends LanguageAwareTestCase
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::load
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
      */
+    public function testLoadWithoutVersionWithAllTranslations()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $res = $gateway->load( 226 );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_attribute_language_code',
+            array( 'eng-US', 'eng-GB' ),
+            $res
+        );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_attribute_language_id',
+            array( '2' ),
+            $res
+        );
+    }
+
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::load
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
+     */
     public function testCreateFixtureForMapperExtractContentFromRowsMultipleVersions()
     {
         $this->insertDatabaseFixture(
@@ -819,6 +846,36 @@ class EzcDatabaseTest extends LanguageAwareTestCase
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::load
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
      */
+    public function testLoadWithoutVersionWithSingleTranslation()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $res = $gateway->load( 226, null, array( 'eng-GB' ) );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_attribute_language_code',
+            array( 'eng-GB' ),
+            $res
+        );
+        $this->assertValuesInRows(
+            'ezcontentobject_attribute_language_id',
+            array( '2' ),
+            $res
+        );
+        $this->assertEquals(
+            1,
+            count( $res )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::load
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
+     */
     public function testLoadNonExistentTranslation()
     {
         $this->insertDatabaseFixture(
@@ -827,6 +884,26 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getDatabaseGateway();
         $res = $gateway->load( 226, 2, array( 'de-DE' ) );
+
+        $this->assertEquals(
+            0,
+            count( $res )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::load
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
+     */
+    public function testLoadWithoutVersionNonExistentTranslation()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $res = $gateway->load( 226, null, array( 'de-DE' ) );
 
         $this->assertEquals(
             0,
@@ -1299,25 +1376,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                 'all' => $this->countContent(),
                 'this' => $this->countContent( 14 )
             )
-        );
-    }
-
-    /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::loadLatestPublishedData
-     *
-     * @return void
-     */
-    public function testLoadLatestPublishedData()
-    {
-        $this->insertDatabaseFixture(
-            __DIR__ . '/../_fixtures/contentobjects.php'
-        );
-
-        $gateway = $this->getDatabaseGateway();
-
-        $this->assertEquals(
-            $gateway->loadLatestPublishedData( 10 ),
-            $gateway->load( 10, 2 )
         );
     }
 
