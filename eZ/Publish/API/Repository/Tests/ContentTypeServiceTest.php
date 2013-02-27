@@ -741,7 +741,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             'eng-GB' => 'A blog post',
             'ger-DE' => 'Ein Blog-Eintrag',
         );
-        $typeCreate->creatorId = $repository->getCurrentUser()->id;
+        $typeCreate->creatorId = $this->generateId( "user", $repository->getCurrentUser()->id );
         $typeCreate->creationDate = $this->createDateTime();
 
         $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
@@ -965,8 +965,18 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'folder' );
 
+        $firstFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title', 'ezstring'
+        );
+        $typeCreate->addFieldDefinition( $firstFieldCreate );
+
+        $groups = array(
+            $contentTypeService->loadContentTypeGroupByIdentifier( 'Media' ),
+            $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )
+        );
+
         // Throws exception, since type "folder" exists
-        $secondType = $contentTypeService->createContentType( $typeCreate, array() );
+        $secondType = $contentTypeService->createContentType( $typeCreate, $groups );
         /* END: Use Case */
     }
 
@@ -988,8 +998,18 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'news-article' );
         $typeCreate->remoteId = 'a3d405b81be900468eb153d774f4f0d2';
 
+        $firstFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title', 'ezstring'
+        );
+        $typeCreate->addFieldDefinition( $firstFieldCreate );
+
+        $groups = array(
+            $contentTypeService->loadContentTypeGroupByIdentifier( 'Media' ),
+            $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )
+        );
+
         // Throws exception, since "folder" type has this remote ID
-        $secondType = $contentTypeService->createContentType( $typeCreate, array() );
+        $secondType = $contentTypeService->createContentType( $typeCreate, $groups );
         /* END: Use Case */
     }
 
@@ -1020,8 +1040,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         );
         $typeCreate->addFieldDefinition( $secondFieldCreate );
 
+        $groups = array(
+            $contentTypeService->loadContentTypeGroupByIdentifier( 'Media' ),
+            $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )
+        );
+
         // Throws exception, due to duplicate "title" field
-        $secondType = $contentTypeService->createContentType( $typeCreate, array() );
+        $secondType = $contentTypeService->createContentType( $typeCreate, $groups );
         /* END: Use Case */
     }
 
