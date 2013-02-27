@@ -27,16 +27,6 @@ use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
  */
 class SearchServiceTest extends BaseTest
 {
-    /**
-     * Returns search service to test
-     *
-     * @return SearchService
-     */
-    protected function getSearchService()
-    {
-        return new SearchService();
-    }
-
     public function getSearches()
     {
         $fixtureDir = $this->getFixtureDir();
@@ -571,7 +561,7 @@ class SearchServiceTest extends BaseTest
                 $fixtureDir . 'SortMultiple.php',
             ),
             array(
-            // FIXME: this test is not relevant since all priorities are "0"
+                // FIXME: this test is not relevant since all priorities are "0"
                 new Query(
                     array(
                         'criterion'   => new Criterion\SectionId( array( 2 ) ),
