@@ -29,6 +29,9 @@ class Xml extends Handler
         'ContentList' => array(
             'Content',
         ),
+        'ContentTypeList' => array(
+            'ContentType',
+        ),
         'SectionList' => array(
             'Section',
         ),
