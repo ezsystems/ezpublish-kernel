@@ -9,14 +9,14 @@
           <xsd:documentation>
             If set the identifier of a field
             definition is changed
-           </xsd:documentation>
+          </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="fieldGroup" type="xsd:string">
         <xsd:annotation>
           <xsd:documentation>
             If set the field group is changed
-           </xsd:documentation>
+          </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="position" type="xsd:int">
@@ -31,35 +31,49 @@
         <xsd:annotation>
           <xsd:documentation>
             If set the translatable flag is set to this value
-              </xsd:documentation>
+          </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="isRequired" type="xsd:boolean">
         <xsd:annotation>
           <xsd:documentation>
             If set the required flag is set to this value
-              </xsd:documentation>
+          </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="isInfoCollector" type="xsd:boolean">
         <xsd:annotation>
           <xsd:documentation>
             If set the info collection flag is set to this value
-                </xsd:documentation>
+          </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="defaultValue" type="xsd:string">
+      <xsd:element name="defaultValue" type="fieldValueType">
         <xsd:annotation>
           <xsd:documentation>
-            If set the default value of the field is changed
-              </xsd:documentation>
+            Default value of the field
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="fieldSettings" type="xsd:anyType">
+        <xsd:annotation>
+          <xsd:documentation>
+            Settings of the field
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="validatorConfiguration" type="xsd:anyType">
+        <xsd:annotation>
+          <xsd:documentation>
+            Validator configuration of the field
+          </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="isSearchable" type="xsd:boolean">
         <xsd:annotation>
           <xsd:documentation>
-           If set the searchable flag is set to this value
-                 </xsd:documentation>
+            If set the searchable flag is set to this value
+          </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="names" type="multiLanguageValuesType" />

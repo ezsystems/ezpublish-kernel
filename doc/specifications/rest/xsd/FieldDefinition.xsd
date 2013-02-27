@@ -25,7 +25,7 @@
             <xsd:annotation>
               <xsd:documentation>
                 Field group name
-                </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="position" type="xsd:int">
@@ -33,7 +33,7 @@
               <xsd:documentation>
                 the position of the field definition in
                 the content typr
-                </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="fieldType" type="xsd:string">
@@ -62,13 +62,27 @@
               <xsd:documentation>
                 the flag if this attribute is used for
                 information collection
-                </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="defaultValue" type="xsd:string">
+          <xsd:element name="defaultValue" type="fieldValueType">
             <xsd:annotation>
               <xsd:documentation>
                 Default value of the field
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="fieldSettings" type="xsd:anyType">
+            <xsd:annotation>
+              <xsd:documentation>
+                Settings of the field
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="validatorConfiguration" type="xsd:anyType">
+            <xsd:annotation>
+              <xsd:documentation>
+                Validator configuration of the field
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
@@ -77,7 +91,7 @@
               <xsd:documentation>
                 Indicates if th the content is
                 searchable by this attribute
-                </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="names" type="multiLanguageValuesType" />
