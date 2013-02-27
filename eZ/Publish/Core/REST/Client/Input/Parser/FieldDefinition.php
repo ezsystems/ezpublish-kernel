@@ -69,8 +69,12 @@ class FieldDefinition extends Parser
                 'isRequired' => $this->parserTools->parseBooleanValue( $data['isRequired'] ),
                 'isInfoCollector' => $this->parserTools->parseBooleanValue( $data['isInfoCollector'] ),
                 'isSearchable' => $this->parserTools->parseBooleanValue( $data['isSearchable'] ),
-                'names' => $this->parserTools->parseTranslatableList( $data['names'] ),
-                'descriptions' => $this->parserTools->parseTranslatableList( $data['descriptions'] ),
+                'names' => isset( $data['names'] ) ?
+                    $this->parserTools->parseTranslatableList( $data['names'] ) :
+                    null,
+                'descriptions' => isset( $data['descriptions'] ) ?
+                    $this->parserTools->parseTranslatableList( $data['descriptions'] ) :
+                    null,
 
                 'defaultValue' => $this->fieldTypeParser->parseValue(
                     $data['fieldType'],
