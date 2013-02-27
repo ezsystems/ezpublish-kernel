@@ -49,7 +49,7 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
             ->method( 'serializeFieldDefaultValue' )
             ->with(
                 $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' ),
-                $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition' ),
+                $this->equalTo( 'my-field-type' ),
                 $this->equalTo(
                     'my default value text'
                 )

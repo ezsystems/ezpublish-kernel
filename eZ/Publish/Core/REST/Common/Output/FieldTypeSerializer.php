@@ -67,15 +67,15 @@ class FieldTypeSerializer
      * Serializes the $defaultValue for $fieldDefIdentifier through $generator
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
+     * @param string $fieldTypeIdentifier
      * @param mixed $defaultValue
      */
-    public function serializeFieldDefaultValue( Generator $generator, FieldDefinition $fieldDefinition, $defaultValue )
+    public function serializeFieldDefaultValue( Generator $generator, $fieldTypeIdentifier, $defaultValue )
     {
         $this->serializeValue(
             'defaultValue',
             $generator,
-            $this->getFieldType( $fieldDefinition->fieldTypeIdentifier ),
+            $this->getFieldType( $fieldTypeIdentifier ),
             $defaultValue
         );
     }
@@ -85,17 +85,15 @@ class FieldTypeSerializer
      * $generator
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
+     * @param string $fieldTypeIdentifier
      * @param mixed $settings
      */
-    public function serializeFieldSettings( Generator $generator, FieldDefinition $fieldDefinition, $settings )
+    public function serializeFieldSettings( Generator $generator, $fieldTypeIdentifier, $settings )
     {
         $this->serializeHash(
             'fieldSettings',
             $generator,
-            $this->getFieldType(
-                $fieldDefinition->fieldTypeIdentifier
-            )->fieldSettingsToHash( $settings )
+            $this->getFieldType( $fieldTypeIdentifier )->fieldSettingsToHash( $settings )
         );
     }
 
@@ -103,17 +101,15 @@ class FieldTypeSerializer
      * Serializes $validatorConfiguration for $fieldDefinition using $generator
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
+     * @param string $fieldTypeIdentifier
      * @param mixed $validatorConfiguration
      */
-    public function serializeValidatorConfiguration( Generator $generator, FieldDefinition $fieldDefinition, $validatorConfiguration )
+    public function serializeValidatorConfiguration( Generator $generator, $fieldTypeIdentifier, $validatorConfiguration )
     {
         $this->serializeHash(
             'validatorConfiguration',
             $generator,
-            $this->getFieldType(
-                $fieldDefinition->fieldTypeIdentifier
-            )->validatorConfigurationToHash( $validatorConfiguration )
+            $this->getFieldType( $fieldTypeIdentifier )->validatorConfigurationToHash( $validatorConfiguration )
         );
     }
 
