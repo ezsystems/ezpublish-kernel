@@ -33,8 +33,8 @@ class FieldDefinitionList extends Parser
     protected $contentTypeService;
 
     /**
-     * @param ParserTools $parserTools
-     * @param ContentTypeService $contentTypeService
+     * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
+     * @param \eZ\Publish\Core\REST\Client\ContentTypeService $contentTypeService
      */
     public function __construct( ParserTools $parserTools, ContentTypeService $contentTypeService )
     {
