@@ -170,7 +170,7 @@ class UserHandler implements UserHandlerInterface
     {
         $cacheKey = ( $inherit ? 'inherited/' : '' ) . $groupId;
         $cache = $this->cache->get( 'user', 'role', 'assignments', 'byGroup', $cacheKey );
-        $cacheAssignments = $cache->get();
+        $assignments = $cache->get();
         if ( $cache->isMiss() )
         {
             $this->logger->logCall( __METHOD__, array( 'group' => $groupId, 'inherit' => $inherit ) );
@@ -178,12 +178,7 @@ class UserHandler implements UserHandlerInterface
                 $groupId,
                 $inherit
             );
-            $cache->set( $this->deCoupleRoleAssignments( $assignments ) );
-        }
-        else
-        {
-            // rebuild RoleAssignments to the known outside value
-            $assignments = $this->coupleRoleAssignments( $cacheAssignments );
+            $cache->set( $assignments );
         }
 
         return $assignments;
@@ -290,40 +285,5 @@ class UserHandler implements UserHandlerInterface
         $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', 'inherited' );
 
         return $return;
-    }
-
-    /**
-     * Prepare RoleAssignments for cache swapping Role object for id and return result
-     *
-     * @param \eZ\Publish\SPI\Persistence\User\RoleAssignment[] $assignments
-     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[] Cloned $assignments with role switched for Role ID
-     */
-    protected function deCoupleRoleAssignments( array $assignments )
-    {
-        $cacheAssignments = array();
-        foreach ( $assignments as $key => $assignment )
-        {
-            $cacheAssignments[$key] = clone $assignment;
-            $cacheAssignments[$key]->role = $assignment->role->id;
-        }
-        return $cacheAssignments;
-    }
-
-    /**
-     * Build proper RoleAssignments by swapping Role id's for Role objects, reversing deCoupleRoleAssignments()
-     *
-     * @uses loadRole()
-     * @param \eZ\Publish\SPI\Persistence\User\RoleAssignment[] $cacheAssignments
-     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
-     */
-    protected function coupleRoleAssignments( array $cacheAssignments )
-    {
-        $assignments = array();
-        foreach ( $cacheAssignments as $key => $cacheAssignment )
-        {
-            $assignments[$key] = clone $cacheAssignment;
-            $assignments[$key]->role = $this->loadRole( $cacheAssignment->role );
-        }
-        return $assignments;
     }
 }

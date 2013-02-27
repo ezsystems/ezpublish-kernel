@@ -237,10 +237,9 @@ class UserHandlerTest extends HandlerTest
             ->method(  'loadRoleAssignmentsByGroupId' )
             ->with( 42, false )
             ->will(
-                $this->returnValue( array( new RoleAssignment( array( 'role' => new Role( array( 'id' => 33 ) ) ) ) ) )
+                $this->returnValue( array( new RoleAssignment( array( 'roleId' =>  33 ) ) ) )
             );
 
-        // @todo Test that value set on cache is actually correct amount, type and that role has been swapped out by id
         $cacheItemMock
             ->expects( $this->once() )
             ->method( 'set' )
@@ -251,7 +250,7 @@ class UserHandlerTest extends HandlerTest
 
         $this->assertEquals( 1, count( $roleAssignments ) );
         $this->assertInstanceOf( '\\eZ\\Publish\\SPI\\Persistence\\User\\RoleAssignment', $roleAssignments[0] );
-        $this->assertInstanceOf( '\\eZ\\Publish\\SPI\\Persistence\\User\\Role', $roleAssignments[0]->role );
+        $this->assertEquals( 33, $roleAssignments[0]->roleId );
     }
 
     /**
@@ -263,7 +262,7 @@ class UserHandlerTest extends HandlerTest
 
         $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
         $this->cacheMock
-            ->expects( $this->at( 0 ) )
+            ->expects( $this->once() )
             ->method( 'get' )
             ->with( 'user', 'role', 'assignments', 'byGroup', 42 )
             ->will( $this->returnValue( $cacheItemMock ) );
@@ -272,7 +271,7 @@ class UserHandlerTest extends HandlerTest
             ->expects( $this->once() )
             ->method( 'get' )
             ->will(
-                $this->returnValue( array( new RoleAssignment( array( 'role' => 33 ) ) ) )
+                $this->returnValue( array( new RoleAssignment( array( 'roleId' => 33 ) ) ) )
             );
 
         $cacheItemMock
@@ -288,36 +287,12 @@ class UserHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( 'set' );
 
-        // inline call to loadRole():
-        $cacheItemMock2 = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
-        $this->cacheMock
-            ->expects( $this->at( 1 ) )
-            ->method( 'get' )
-            ->with( 'user', 'role', 33 )
-            ->will( $this->returnValue( $cacheItemMock2 ) );
-
-        $cacheItemMock2
-            ->expects( $this->once() )
-            ->method( 'get' )
-            ->will(
-                $this->returnValue( new Role( array( 'id' => 33 ) ) )
-            );
-
-        $cacheItemMock2
-            ->expects( $this->once() )
-            ->method( 'isMiss' )
-            ->will( $this->returnValue( false ) );
-
-        $cacheItemMock2
-            ->expects( $this->never() )
-            ->method( 'set' );
-
         $handler = $this->persistenceHandler->userHandler();
         $roleAssignments = $handler->loadRoleAssignmentsByGroupId( 42 );
 
         $this->assertEquals( 1, count( $roleAssignments ) );
         $this->assertInstanceOf( '\\eZ\\Publish\\SPI\\Persistence\\User\\RoleAssignment', $roleAssignments[0] );
-        $this->assertInstanceOf( '\\eZ\\Publish\\SPI\\Persistence\\User\\Role', $roleAssignments[0]->role );
+        $this->assertEquals( 33, $roleAssignments[0]->roleId );
     }
 
     /**
@@ -355,10 +330,9 @@ class UserHandlerTest extends HandlerTest
             ->method(  'loadRoleAssignmentsByGroupId' )
             ->with( 42, true )
             ->will(
-                $this->returnValue( array( new RoleAssignment( array( 'role' => new Role( array( 'id' => 33 ) ) ) ) ) )
+                $this->returnValue( array( new RoleAssignment( array( 'roleId' => 33 ) ) ) )
             );
 
-        // @todo Test that value set on cache is actually correct amount, type and that role has been swapped out by id
         $cacheItemMock
             ->expects( $this->once() )
             ->method( 'set' )
@@ -369,7 +343,7 @@ class UserHandlerTest extends HandlerTest
 
         $this->assertEquals( 1, count( $roleAssignments ) );
         $this->assertInstanceOf( '\\eZ\\Publish\\SPI\\Persistence\\User\\RoleAssignment', $roleAssignments[0] );
-        $this->assertInstanceOf( '\\eZ\\Publish\\SPI\\Persistence\\User\\Role', $roleAssignments[0]->role );
+        $this->assertEquals( 33, $roleAssignments[0]->roleId );
     }
 
     /**
@@ -381,7 +355,7 @@ class UserHandlerTest extends HandlerTest
 
         $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
         $this->cacheMock
-            ->expects( $this->at( 0 ) )
+            ->expects( $this->once() )
             ->method( 'get' )
             ->with( 'user', 'role', 'assignments', 'byGroup', 'inherited/42' )
             ->will( $this->returnValue( $cacheItemMock ) );
@@ -390,7 +364,7 @@ class UserHandlerTest extends HandlerTest
             ->expects( $this->once() )
             ->method( 'get' )
             ->will(
-                $this->returnValue( array( new RoleAssignment( array( 'role' => 33 ) ) ) )
+                $this->returnValue( array( new RoleAssignment( array( 'roleId' => 33 ) ) ) )
             );
 
         $cacheItemMock
@@ -406,36 +380,12 @@ class UserHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( 'set' );
 
-        // inline call to loadRole():
-        $cacheItemMock2 = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
-        $this->cacheMock
-            ->expects( $this->at( 1 ) )
-            ->method( 'get' )
-            ->with( 'user', 'role', 33 )
-            ->will( $this->returnValue( $cacheItemMock2 ) );
-
-        $cacheItemMock2
-            ->expects( $this->once() )
-            ->method( 'get' )
-            ->will(
-                $this->returnValue( new Role( array( 'id' => 33 ) ) )
-            );
-
-        $cacheItemMock2
-            ->expects( $this->once() )
-            ->method( 'isMiss' )
-            ->will( $this->returnValue( false ) );
-
-        $cacheItemMock2
-            ->expects( $this->never() )
-            ->method( 'set' );
-
         $handler = $this->persistenceHandler->userHandler();
         $roleAssignments = $handler->loadRoleAssignmentsByGroupId( 42, true );
 
         $this->assertEquals( 1, count( $roleAssignments ) );
         $this->assertInstanceOf( '\\eZ\\Publish\\SPI\\Persistence\\User\\RoleAssignment', $roleAssignments[0] );
-        $this->assertInstanceOf( '\\eZ\\Publish\\SPI\\Persistence\\User\\Role', $roleAssignments[0]->role );
+        $this->assertEquals( 33, $roleAssignments[0]->roleId );
     }
 
     /**

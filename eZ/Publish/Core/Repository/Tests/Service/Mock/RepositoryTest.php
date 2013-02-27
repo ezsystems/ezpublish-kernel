@@ -24,40 +24,66 @@ class RepositoryTest extends BaseServiceMockTest
         return array(
             array(
                 array(
-                    $this->createRoleAssignment(
-                        null,
+                    25 => $this->createRole(
                         array(
                             array( "dummy-module", "dummy-function", "dummy-limitation" ),
                             array( "dummy-module2", "dummy-function2", "dummy-limitation2" )
-                        )
+                        ),
+                        25
                     ),
-                    $this->createRoleAssignment(
-                        null,
+                    26 => $this->createRole(
                         array(
                             array( "*", "dummy-function", "dummy-limitation" )
+                        ),
+                        26
+                    )
+                ),
+                array(
+                    new RoleAssignment(
+                        array(
+                            "roleId" => 25,
+                        )
+                    ),
+                    new RoleAssignment(
+                        array(
+                            "roleId" => 26,
                         )
                     )
-                )
+                ),
             ),
             array(
                 array(
-                    $this->createRoleAssignment(
-                        null,
+                    27 => $this->createRole(
                         array(
                             array( "test-module", "*", "dummy-limitation" )
+                        ),
+                        27
+                    )
+                ),
+                array(
+                    new RoleAssignment(
+                        array(
+                            "roleId" => 27,
                         )
                     )
-                )
+                ),
             ),
             array(
                 array(
-                    $this->createRoleAssignment(
-                        null,
+                    28 => $this->createRole(
                         array(
                             array( "test-module", "test-function", "*" )
+                        ),
+                        28
+                    )
+                ),
+                array(
+                    new RoleAssignment(
+                        array(
+                            "roleId" => 28,
                         )
                     )
-                )
+                ),
             ),
         );
     }
@@ -68,7 +94,7 @@ class RepositoryTest extends BaseServiceMockTest
      * @covers \eZ\Publish\API\Repository\Repository::hasAccess
      * @dataProvider providerForTestHasAccessReturnsTrue
      */
-    public function testHasAccessReturnsTrue( array $roleAssignments )
+    public function testHasAccessReturnsTrue( array $roles, array $roleAssignments )
     {
         /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
@@ -80,6 +106,15 @@ class RepositoryTest extends BaseServiceMockTest
             ->with( $this->isType( "integer" ), $this->equalTo( true ) )
             ->will( $this->returnValue( $roleAssignments ) );
 
+        foreach ( $roleAssignments as $at => $roleAssignment )
+        {
+            $userHandlerMock
+                ->expects( $this->at( $at +1 ) )
+                ->method( "loadRole" )
+                ->with( $roleAssignment->roleId )
+                ->will( $this->returnValue( $roles[$roleAssignment->roleId] ) );
+        }
+
         $result = $mockedRepository->hasAccess( "test-module", "test-function" );
 
         self::assertEquals( true, $result );
@@ -88,26 +123,40 @@ class RepositoryTest extends BaseServiceMockTest
     public function providerForTestHasAccessReturnsFalse()
     {
         return array(
-            array( array() ),
+            array( array(), array() ),
             array(
                 array(
-                    $this->createRoleAssignment(
-                        null,
+                    29 => $this->createRole(
                         array(
                             array( "dummy-module", "dummy-function", "dummy-limitation" )
-                        )
+                        ),
+                        29
                     ),
-                )
+                ),
+                array(
+                    new RoleAssignment(
+                        array(
+                            "roleId" => 29,
+                        )
+                    )
+                ),
             ),
             array(
                 array(
-                    $this->createRoleAssignment(
-                        null,
+                    30 => $this->createRole(
                         array(
                             array( "test-module", "dummy-function", "dummy-limitation" )
-                        )
+                        ),
+                        30
                     ),
-                )
+                ),
+                array(
+                    new RoleAssignment(
+                        array(
+                            "roleId" => 30,
+                        )
+                    )
+                ),
             ),
         );
     }
@@ -118,7 +167,7 @@ class RepositoryTest extends BaseServiceMockTest
      * @covers \eZ\Publish\API\Repository\Repository::hasAccess
      * @dataProvider providerForTestHasAccessReturnsFalse
      */
-    public function testHasAccessReturnsFalse( array $roleAssignments )
+    public function testHasAccessReturnsFalse( array $roles, array $roleAssignments )
     {
         /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
@@ -129,6 +178,15 @@ class RepositoryTest extends BaseServiceMockTest
             ->method( "loadRoleAssignmentsByGroupId" )
             ->with( $this->isType( "integer" ), $this->equalTo( true ) )
             ->will( $this->returnValue( $roleAssignments ) );
+
+        foreach ( $roleAssignments as $at => $roleAssignment )
+        {
+            $userHandlerMock
+                ->expects( $this->at( $at +1 ) )
+                ->method( "loadRole" )
+                ->with( $roleAssignment->roleId )
+                ->will( $this->returnValue( $roles[$roleAssignment->roleId] ) );
+        }
 
         $result = $mockedRepository->hasAccess( "test-module", "test-function" );
 
@@ -140,13 +198,20 @@ class RepositoryTest extends BaseServiceMockTest
         return array(
             array(
                 array(
-                    $this->createRoleAssignment(
-                        null,
+                    31 => $this->createRole(
                         array(
                             array( "test-module", "test-function", "test-limitation" )
-                        )
+                        ),
+                        31
                     ),
-                )
+                ),
+                array(
+                    new RoleAssignment(
+                        array(
+                            "roleId" => 31,
+                        )
+                    )
+                ),
             )
         );
     }
@@ -157,7 +222,7 @@ class RepositoryTest extends BaseServiceMockTest
      * @covers \eZ\Publish\API\Repository\Repository::hasAccess
      * @dataProvider providerForTestHasAccessReturnsPermissionSets
      */
-    public function testHasAccessReturnsPermissionSets( array $roleAssignments )
+    public function testHasAccessReturnsPermissionSets( array $roles, array $roleAssignments )
     {
         /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
@@ -192,12 +257,21 @@ class RepositoryTest extends BaseServiceMockTest
             ->with( $this->isType( "integer" ), $this->equalTo( true ) )
             ->will( $this->returnValue( $roleAssignments ) );
 
+        foreach ( $roleAssignments as $at => $roleAssignment )
+        {
+            $userHandlerMock
+                ->expects( $this->at( $at +1 ) )
+                ->method( "loadRole" )
+                ->with( $roleAssignment->roleId )
+                ->will( $this->returnValue( $roles[$roleAssignment->roleId] ) );
+        }
+
         $permissionSets = array();
         /** @var $roleAssignments \eZ\Publish\SPI\Persistence\User\RoleAssignment[] */
         foreach ( $roleAssignments as $i => $roleAssignment )
         {
             $permissionSet = array( "limitation" => null );
-            foreach ( $roleAssignment->role->policies as $k => $policy )
+            foreach ( $roles[$roleAssignment->roleId]->policies as $k => $policy )
             {
                 $policyName = "policy-" . $i . "-" . $k;
                 $roleServiceMock
@@ -222,22 +296,35 @@ class RepositoryTest extends BaseServiceMockTest
         return array(
             array(
                 array(
-                    $this->createRoleAssignment(
-                        "test-role-limitation",
+                    32 => $this->createRole(
                         array(
                             array( "test-module", "test-function", "test-limitation" )
                         ),
-                        array( "test-role-limitation-value" )
+                        32
                     ),
+                ),
+                array(
+                    new RoleAssignment(
+                        array(
+                            "roleId" => 32,
+                            "limitationIdentifier" => "test-role-limitation",
+                            "values" => array( "test-role-limitation-value" ),
+                        )
+                    )
                 ),
             ),
             array(
                 array(
-                    $this->createRoleAssignment(
-                        "test-role-limitation",
-                        array( array( "*", "*", "*" ) ),
-                        array( "test-role-limitation-value" )
-                    ),
+                    33 => $this->createRole( array( array( "*", "*", "*" ) ), 33 ),
+                ),
+                array(
+                    new RoleAssignment(
+                        array(
+                            "roleId" => 33,
+                            "limitationIdentifier" => "test-role-limitation",
+                            "values" => array( "test-role-limitation-value" ),
+                        )
+                    )
                 ),
             )
         );
@@ -249,7 +336,7 @@ class RepositoryTest extends BaseServiceMockTest
      * @covers \eZ\Publish\API\Repository\Repository::hasAccess
      * @dataProvider providerForTestHasAccessReturnsPermissionSetsWithRoleLimitation
      */
-    public function testHasAccessReturnsPermissionSetsWithRoleLimitation( array $roleAssignments )
+    public function testHasAccessReturnsPermissionSetsWithRoleLimitation( array $roles, array $roleAssignments )
     {
         /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
@@ -285,12 +372,21 @@ class RepositoryTest extends BaseServiceMockTest
             ->with( $this->isType( "integer" ), $this->equalTo( true ) )
             ->will( $this->returnValue( $roleAssignments ) );
 
+        foreach ( $roleAssignments as $at => $roleAssignment )
+        {
+            $userHandlerMock
+                ->expects( $this->at( $at +1 ) )
+                ->method( "loadRole" )
+                ->with( $roleAssignment->roleId )
+                ->will( $this->returnValue( $roles[$roleAssignment->roleId] ) );
+        }
+
         $permissionSets = array();
         /** @var $roleAssignments \eZ\Publish\SPI\Persistence\User\RoleAssignment[] */
         foreach ( $roleAssignments as $i => $roleAssignment )
         {
             $permissionSet = array();
-            foreach ( $roleAssignment->role->policies as $k => $policy )
+            foreach ( $roles[$roleAssignment->roleId]->policies as $k => $policy )
             {
                 $policyName = "policy-{$i}-{$k}";
                 $permissionSet["policies"][] = $policyName;
@@ -324,15 +420,14 @@ class RepositoryTest extends BaseServiceMockTest
     }
 
     /**
-     * Returns RoleAssignment stub.
+     * Returns Role stub.
      *
-     * @param $limitationIdentifier
      * @param array $policiesData
-     * @param array $limitationValues
+     * @param mixed $roleId
      *
-     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment
+     * @return \eZ\Publish\SPI\Persistence\User\Role
      */
-    private function createRoleAssignment( $limitationIdentifier, array $policiesData, array $limitationValues = array() )
+    private function createRole( array $policiesData, $roleId = null )
     {
         $policies = array();
         foreach ( $policiesData as $policyData )
@@ -346,13 +441,10 @@ class RepositoryTest extends BaseServiceMockTest
             );
         }
 
-        return new RoleAssignment(
-            array(
-                "limitationIdentifier" => $limitationIdentifier,
-                "values" => $limitationValues,
-                "role" => new Role( array( "policies" => $policies ) )
-            )
-        );
+        return new Role( array(
+            "id" => $roleId,
+            "policies" => $policies
+        ) );
     }
 
     public function providerForTestCanUserSimple()
