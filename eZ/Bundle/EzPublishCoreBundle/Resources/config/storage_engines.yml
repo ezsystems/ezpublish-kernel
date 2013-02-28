@@ -10,6 +10,7 @@ parameters:
     ezpublish.spi.persistence.cache.userHandler.class: eZ\Publish\Core\Persistence\Cache\UserHandler
     ezpublish.spi.persistence.cache.searchHandler.class: eZ\Publish\Core\Persistence\Cache\SearchHandler
     ezpublish.spi.persistence.cache.trashHandler.class: eZ\Publish\Core\Persistence\Cache\TrashHandler
+    ezpublish.spi.persistence.cache.locationSearchHandler.class: eZ\Publish\Core\Persistence\Cache\LocationSearchHandler
     ezpublish.spi.persistence.cache.urlAliasHandler.class: eZ\Publish\Core\Persistence\Cache\UrlAliasHandler
     ezpublish.spi.persistence.cache.persistenceLogger.class: eZ\Publish\Core\Persistence\Cache\PersistenceLogger
     # Make sure logging is only enabled for debug by default
@@ -110,6 +111,7 @@ services:
             - @ezpublish.spi.persistence.cache.userHandler
             - @ezpublish.spi.persistence.cache.searchHandler
             - @ezpublish.spi.persistence.cache.trashHandler
+            - @ezpublish.spi.persistence.cache.locationSearchHandler
             - @ezpublish.spi.persistence.cache.urlAliasHandler
             - @ezpublish.spi.persistence.cache.persistenceLogger
             - @ezpublish.cache_pool.spi.cache.decorator
@@ -163,6 +165,10 @@ services:
 
     ezpublish.spi.persistence.cache.trashHandler:
         class: %ezpublish.spi.persistence.cache.trashHandler.class%
+        parent: ezpublish.spi.persistence.cache.abstractHandler
+
+    ezpublish.spi.persistence.cache.locationSearchHandler:
+        class: %ezpublish.spi.persistence.cache.locationSearchHandler.class%
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.urlAliasHandler:

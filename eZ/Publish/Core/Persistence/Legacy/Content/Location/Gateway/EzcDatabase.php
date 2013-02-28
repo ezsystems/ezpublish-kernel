@@ -15,8 +15,9 @@ use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
-use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use RuntimeException;
 use PDO;
@@ -34,6 +35,11 @@ class EzcDatabase extends Gateway
     protected $handler;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\CriteriaConverter
+     */
+    private $criteriaConverter;
+
+    /**
      * Construct from database handler
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $handler
@@ -43,6 +49,17 @@ class EzcDatabase extends Gateway
     public function __construct( EzcDbHandler $handler )
     {
         $this->handler = $handler;
+        // @todo:
+        // - inject CriteriaConverter ?
+        // - complete with other criterions ?
+        $this->criteriaConverter = new CriteriaConverter(
+            array(
+                new CriterionHandler\LocationId( $handler ),
+                new CriterionHandler\ParentLocationId( $handler ),
+                new CriterionHandler\LogicalAnd( $handler ),
+                new CriterionHandler\Status( $handler ),
+            )
+        );
     }
 
     /**
@@ -108,6 +125,60 @@ class EzcDatabase extends Gateway
         }
 
         throw new NotFound( 'location', $remoteId );
+    }
+
+    /**
+     * Search for nodes based on $criterion and returns an array with basic node data
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return array
+     */
+    public function find( Criterion $criterion, $offset, $limit )
+    {
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select( '*' )
+            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->where(
+                $this->criteriaConverter->convertCriteria( $query, $criterion )
+            )
+            ->limit( $limit === null ? -1 : $limit, $offset );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( PDO::FETCH_ASSOC );
+    }
+
+    /**
+     * Search for nodes based on $criterion and returns an array with basic node data
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return array
+     */
+    public function count( Criterion $criterion )
+    {
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select(
+                $query->alias( $query->expr->count( '*' ), 'count' )
+            )
+            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->where(
+                $this->criteriaConverter->convertCriteria( $query, $criterion )
+            );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        $res = $statement->fetchAll( PDO::FETCH_ASSOC );
+        return (int)$res[0]['count'];
     }
 
     /**

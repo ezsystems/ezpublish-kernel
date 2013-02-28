@@ -97,6 +97,14 @@ class Handler implements HandlerInterface
     }
 
     /**
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler
+     */
+    public function locationSearchHandler()
+    {
+        return $this->serviceHandler( 'eZ\\Publish\\Core\\Persistence\\InMemory\\LocationSearchHandler' );
+    }
+
+    /**
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
      */
     public function objectStateHandler()

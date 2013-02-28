@@ -109,6 +109,7 @@ class SearchHandler implements SearchHandlerInterface
         $list = $this->backend->find(
             'Content',
             $match,
+            array(),
             array(
                 'locations' => array(
                     'type' => 'Content\\Location',
