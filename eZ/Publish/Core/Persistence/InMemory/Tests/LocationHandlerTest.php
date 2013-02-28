@@ -19,6 +19,7 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * Test case for Location Handler using in memory storage.
@@ -98,6 +99,7 @@ class LocationHandlerTest extends HandlerTest
                         "sectionId" => 1,
                         "typeId" => $type->id,
                         "initialLanguageId" => 2,
+                        "remoteId" => "contentRemote$i",
                         "fields" => array(
                             new Field(
                                 array(
@@ -124,6 +126,7 @@ class LocationHandlerTest extends HandlerTest
                     array(
                         "contentId" => $this->lastContentId,
                         "contentVersion" => 1,
+                        "remoteId" => "locationRemote$i",
                         "mainLocationId" => $this->lastLocationId,
                         "sortField" => Location::SORT_FIELD_NAME,
                         "sortOrder" => Location::SORT_ORDER_ASC,
@@ -524,6 +527,282 @@ class LocationHandlerTest extends HandlerTest
             2,
             $content->versionInfo->contentInfo->sectionId,
             "Subtree section has not been changed"
+        );
+    }
+
+    /**
+     * Test for findLocations() method.
+     *
+     * @dataProvider providerForTestFindLocations
+     * @covers \eZ\Publish\Core\Persistence\InMemory\LocationHandler::findLocations
+     * @group locationHandler
+     */
+    public function testFindLocations( Criterion $criterion, $results )
+    {
+        $locations = $this->persistenceHandler->locationHandler()->findLocations( $criterion );
+        usort(
+            $locations,
+            function ( $a, $b )
+            {
+                if ( $a->id == $b->id )
+                    return 0;
+
+                return ( $a->id < $b->id ) ? -1 : 1;
+            }
+        );
+        $this->assertEquals( count( $results ), count( $locations ) );
+        foreach ( $results as $n => $result )
+        {
+            foreach ( $result as $key => $value )
+            {
+                $this->assertEquals( $value, $locations[$n]->$key );
+            }
+        }
+    }
+
+    public function providerForTestFindLocations()
+    {
+        return array(
+            array(
+                new Criterion\ParentLocationId( 1 ),
+                array(
+                    array( "id" => 2, "parentId" => 1 ),
+                    array( "id" => 5, "parentId" => 1 ),
+                    array( "id" => 43, "parentId" => 1 ),
+                )
+            ),
+            array(
+                new Criterion\ContentId( 54 ),
+                array( array( "id" => 56, "contentId" => 54 ) )
+            ),
+            array(
+                new Criterion\LocationRemoteId( "locationRemote1" ),
+                array( array( "id" => 55, "remoteId" => "locationRemote1" ) )
+            ),
+            array(
+                new Criterion\SectionId( 3 ),
+                array(
+                    array( "id" => 43 ),
+                    array( "id" => 53 ),
+                )
+            ),
+            array(
+                new Criterion\RemoteId( "contentRemote1" ),
+                array(
+                    array( "id" => 55, "remoteId" => "locationRemote1" ),
+                )
+            ),
+            array(
+                new Criterion\ContentTypeId( 3 ),
+                array(
+                    array( "id" => 5 ),
+                    array( "id" => 12 ),
+                    array( "id" => 13 ),
+                    array( "id" => 44 ),
+                )
+            ),
+            array(
+                new Criterion\ContentTypeIdentifier( "user_group" ),
+                array(
+                    array( "id" => 5 ),
+                    array( "id" => 12 ),
+                    array( "id" => 13 ),
+                    array( "id" => 44 ),
+                )
+            ),
+            array(
+                new Criterion\ContentTypeGroupId( 2 ),
+                array(
+                    array( "id" => 5 ),
+                    array( "id" => 12 ),
+                    array( "id" => 13 ),
+                    array( "id" => 44 ),
+                )
+            ),
+            array(
+                new Criterion\ParentLocationId( 54 ),
+                array( array( "id" => 55, "parentId" => 54 ) )
+            ),
+            array(
+                new Criterion\LocationId( 55 ),
+                array( array( "id" => 55 ) )
+            ),
+            array(
+                new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\LocationRemoteId( "locationRemote1" ),
+                        new Criterion\ParentLocationId( 54 )
+                    )
+                ),
+                array( array( "id" => 55, "parentId" => 54, "remoteId" => "locationRemote1" ) )
+            ),
+            array(
+                new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\LogicalAnd(
+                            array(
+                                new Criterion\LocationRemoteId( "locationRemote1" ),
+                                new Criterion\ParentLocationId( 54 )
+                            )
+                        ),
+                        new Criterion\ParentLocationId( 54 )
+                    )
+                ),
+                array( array( "id" => 55, "parentId" => 54, "remoteId" => "locationRemote1" ) )
+            ),
+            array(
+                new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\LocationId( 55 ),
+                        new Criterion\LogicalAnd(
+                            array(
+                                new Criterion\LocationRemoteId( "locationRemote1" ),
+                                new Criterion\ParentLocationId( 54 )
+                            )
+                        )
+                    )
+                ),
+                array( array( "id" => 55, "parentId" => 54, "remoteId" => "locationRemote1" ) )
+            ),
+            array(
+                new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\LocationId( 54 ),
+                        new Criterion\LogicalAnd(
+                            array(
+                                new Criterion\LocationRemoteId( "locationRemote1" ),
+                                new Criterion\ParentLocationId( 54 )
+                            )
+                        )
+                    )
+                ),
+                array()
+            ),
+            array(
+                new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\LocationRemoteId( "locationRemote0" ),
+                        new Criterion\ParentLocationId( 54 )
+                    )
+                ),
+                array()
+            ),
+            array(
+                new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\ParentLocationId( 1 ),
+                        new Criterion\LocationId( 43 ),
+                    )
+                ),
+                array(
+                    array( "id" => 43, "parentId" => 1 ),
+                )
+            ),
+            array(
+                new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\ParentLocationId( 1 ),
+                        new Criterion\ParentLocationId( 1 ),
+                        new Criterion\ParentLocationId( 1 ),
+                    )
+                ),
+                array(
+                    array( "id" => 2, "parentId" => 1 ),
+                    array( "id" => 5, "parentId" => 1 ),
+                    array( "id" => 43, "parentId" => 1 ),
+                )
+            ),
+            array(
+                new Criterion\LogicalOr(
+                    array(
+                        new Criterion\LocationRemoteId( "locationRemote1" ),
+                        new Criterion\ParentLocationId( 54 ),
+                        new Criterion\LocationRemoteId( "ARemoteIdThatDoesNotExist" ),
+                    )
+                ),
+                array( array( "id" => 55, "parentId" => 54, "remoteId" => "locationRemote1" ) )
+            ),
+            array(
+                new Criterion\LogicalOr(
+                    array(
+                        new Criterion\LocationRemoteId( "locationRemote0" ),
+                        new Criterion\LogicalOr(
+                            array(
+                                new Criterion\LocationRemoteId( "locationRemote1" ),
+                                new Criterion\ParentLocationId( 54 ),
+                            )
+                        )
+                    )
+                ),
+                array(
+                    array( "id" => 54, "remoteId" => "locationRemote0" ),
+                    array( "id" => 55, "parentId" => 54, "remoteId" => "locationRemote1" )
+                )
+            ),
+            array(
+                new Criterion\LogicalOr(
+                    array(
+                        new Criterion\LocationRemoteId( "locationRemote1" ),
+                        new Criterion\LocationRemoteId( "ARemoteIdThatDoesNotExist" ),
+                    )
+                ),
+                array(
+                    array( "id" => 55, "remoteId" => "locationRemote1" ),
+                )
+            ),
+            array(
+                new Criterion\Subtree(
+                    "/1/2/"
+                ),
+                array(
+                    array( "id" => 54 ),
+                    array( "id" => 55 ),
+                    array( "id" => 56 ),
+                    array( "id" => 57 ),
+                    array( "id" => 58 ),
+                )
+            ),
+            array(
+                new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\Subtree(
+                            "/1/2/"
+                        ),
+                        new Criterion\LogicalNot(
+                            new Criterion\LocationRemoteId( "locationRemote1" )
+                        ),
+                    )
+                ),
+                array(
+                    array( "id" => 54 ),
+                    array( "id" => 56 ),
+                    array( "id" => 57 ),
+                    array( "id" => 58 ),
+                )
+            ),
+            array(
+                new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\LogicalNot(
+                            new Criterion\Subtree(
+                                "/1/2/"
+                            )
+                        ),
+                        new Criterion\LogicalNot(
+                            new Criterion\Subtree(
+                                "/1/5/"
+                            )
+                        ),
+                    )
+                ),
+                array(
+                    array( "id" => 1, "parentId" => 0 ),
+                    array( "id" => 2, "parentId" => 1 ),
+                    array( "id" => 5, "parentId" => 1 ),
+                    array( "id" => 43, "parentId" => 1 ),
+                    array( "id" => 53, "parentId" => 43 ),
+                )
+            ),
         );
     }
 

@@ -398,6 +398,7 @@ class ContentHandler implements ContentHandlerInterface
                 '_contentId' => $id,
                 'versionNo' => $version
             ),
+            array(),
             array(
                 'contentInfo' => array(
                     'type' => 'Content\\ContentInfo',
@@ -455,6 +456,7 @@ class ContentHandler implements ContentHandlerInterface
                 '_contentId' => $contentId,
                 'versionNo' => $versionNo
             ),
+            array(),
             array(
                 'contentInfo' => array(
                     'type' => 'Content\\ContentInfo',
@@ -482,6 +484,7 @@ class ContentHandler implements ContentHandlerInterface
                 "status" => VersionInfo::STATUS_DRAFT,
                 "creatorId" => $userId
             ),
+            array(),
             array(
                 'contentInfo' => array(
                     'type' => 'Content\\ContentInfo',
@@ -750,6 +753,7 @@ class ContentHandler implements ContentHandlerInterface
             array(
                 '_contentId' => $contentId
             ),
+            array(),
             array(
                 'contentInfo' => array(
                     'type' => 'Content\\ContentInfo',

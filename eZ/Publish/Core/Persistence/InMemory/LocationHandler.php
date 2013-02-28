@@ -15,6 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location as LocationValue;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
@@ -36,6 +37,11 @@ class LocationHandler implements LocationHandlerInterface
     protected $backend;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\InMemory\CriterionHandler[]
+     */
+    private $criterionHandlers;
+
+    /**
      * Setups current handler instance with reference to Handler object that created it.
      *
      * @param Handler $handler
@@ -45,6 +51,21 @@ class LocationHandler implements LocationHandlerInterface
     {
         $this->handler = $handler;
         $this->backend = $backend;
+        $this->criterionHandlers = array(
+            new CriterionHandler\LocationId( $this, $backend ),
+            new CriterionHandler\ParentLocationId( $this, $backend ),
+            new CriterionHandler\LocationRemoteId( $this, $backend ),
+            new CriterionHandler\ContentId( $this, $backend ),
+            new CriterionHandler\SectionId( $this, $backend ),
+            new CriterionHandler\RemoteId( $this, $backend ),
+            new CriterionHandler\ContentTypeId( $this, $backend ),
+            new CriterionHandler\ContentTypeIdentifier( $this, $backend ),
+            new CriterionHandler\ContentTypeGroupId( $this, $backend ),
+            new CriterionHandler\Subtree( $this, $backend ),
+            new CriterionHandler\LogicalAnd( $this, $backend ),
+            new CriterionHandler\LogicalOr( $this, $backend ),
+            new CriterionHandler\LogicalNot( $this, $backend ),
+        );
     }
 
     /**
@@ -93,6 +114,69 @@ class LocationHandler implements LocationHandlerInterface
             'Content\\Location',
             array( 'contentId' => $contentId )
         );
+    }
+
+    /**
+     * Finds all locations given some $criterion.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param int $offset
+     * @param int $limit
+     */
+    public function findLocations( Criterion $criterion, $offset = 0, $limit = 10 )
+    {
+        $match = $excludeMatch = array();
+        $this->convertCriteria( $criterion, $match, $excludeMatch );
+
+        if ( $match === false )
+        {
+            return array();
+        }
+
+        return array_slice(
+            $this->backend->find(
+                'Content\\Location',
+                $match,
+                $excludeMatch
+            ),
+            $offset,
+            $limit
+        );
+    }
+
+    /**
+     * Counts all locations given some $criterion.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     *
+     * @return int
+     */
+    public function getLocationCount( Criterion $criterion )
+    {
+        $match = $excludeMatch = array();
+        $this->convertCriteria( $criterion, $match, $excludeMatch );
+
+        if ( $match === false )
+        {
+            return 0;
+        }
+
+        return $this->backend->count(
+            'Content\\Location',
+            $match,
+            $excludeMatch
+        );
+    }
+
+    public function convertCriteria( Criterion $criterion, array &$match, array &$excludeMatch )
+    {
+        foreach ( $this->criterionHandlers as $criterionHandler )
+        {
+            if ( $criterionHandler->accept( $criterion ) )
+            {
+                $criterionHandler->handle( $criterion, $match, $excludeMatch );
+            }
+        }
     }
 
     /**

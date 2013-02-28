@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
@@ -81,6 +82,32 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         }
 
         return $locations;
+    }
+
+    /**
+     * Finds all locations given some $criterion.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param int $offset
+     * @param int $limit
+     */
+    public function findLocations( Criterion $criterion, $offset = 0, $limit = 10 )
+    {
+        $this->logger->logCall( __METHOD__, array( 'criterion' => $criterion, 'offset' => $offset, 'limit' => $limit ) );
+        return $this->persistenceFactory->getLocationHandler()->findLocations( $criterion, $offset, $limit );
+    }
+
+    /**
+     * Counts all locations given some $criterion.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     *
+     * @return int
+     */
+    public function getLocationCount( Criterion $criterion )
+    {
+        $this->logger->logCall( __METHOD__, array( 'criterion' => $criterion ) );
+        return $this->persistenceFactory->getLocationHandler()->getLocationCount( $criterion );
     }
 
     /**
