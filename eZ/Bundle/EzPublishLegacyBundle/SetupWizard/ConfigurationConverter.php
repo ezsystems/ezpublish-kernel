@@ -161,7 +161,80 @@ class ConfigurationConverter
             }
         }
 
+        $settings['stash'] = $this->getStashCacheSettings( $databaseSettings['Database'] );
+
         return $settings;
+    }
+
+    /**
+     * Returns cache settings based on which cache functionality is available on the current server
+     *
+     * Order of preference:
+     * - APC
+     * - Xcache  [DISABLED, SEE INLINE]
+     * - Memcache(d)  [BROKEN, SEE INLINE]
+     * - FileSystem  [DISABLED, SEE INLINE]
+     * - variable instance cache  [DISABLED, SEE INLINE]
+     *
+     * @param string $databaseName
+     *
+     * @return array
+     */
+    protected function getStashCacheSettings( $databaseName )
+    {
+        $handlers = array();// Should only contain one out of the box
+        $handlerSetting = array();
+        if ( \Stash\Handler\Apc::isAvailable() )
+        {
+            $handlers[] = 'Apc';
+            $handlerSetting['Apc'] = array(
+                'ttl' => 500,
+                'namespace' => $databaseName
+            );
+        }
+        /* Not fully supported by Stash-bundle
+        else if ( \Stash\Handler\Xcache::isAvailable() )
+        {
+            $handlers[] = 'Xcache';
+        }*/
+        else if ( \Stash\Handler\Memcache::isAvailable() )
+        {
+            $handlers[] = 'Memcache';
+            // @todo: This configuration seem to not work with the Stash-bundle
+            $handlerSetting['Memcache'] = array(
+                'prefix_key' => $databaseName,
+                'servers' => array(
+                    array('server' => '127.0.0.1', 'port' => '11211')
+                )
+            );
+        }
+        /* Not fully supported by Stash-bundle
+        else if ( \Stash\Handler\Ephemeral::isAvailable() )
+        {
+            $handlers[] = 'Ephemeral';
+        }*/
+        /* Does not work without getting the user to create a cache/<env>/stash folder
+        else if ( \Stash\Handler\FileSystem::isAvailable() )
+        {
+            $handlers[] = 'FileSystem';
+        }*/
+        else
+        {
+            throw new InvalidArgumentException(
+                "cache handler",
+                "Only APC and Memcache(d) currently supported for caching, please enable one of them on the install"
+            );
+        }
+
+        return array(
+            'caches' => array(
+                'default' => array(
+                    'handlers' => $handlers,
+                    'inMemory' => false,
+                    'registerDoctrineAdapter' => false
+                ) + $handlerSetting
+            )
+        );
     }
 
     /**
