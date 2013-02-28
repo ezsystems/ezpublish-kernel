@@ -32,6 +32,9 @@ class Xml extends Handler
         'ContentTypeList' => array(
             'ContentType',
         ),
+        'ContentTypeGroupRefList' => array(
+            'ContentTypeGroupRef',
+        ),
         'SectionList' => array(
             'Section',
         ),
