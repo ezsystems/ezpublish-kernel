@@ -941,10 +941,13 @@ class User extends RestController
         /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
         $session = $this->container->get( 'session' );
 
-        // Temporary. POST isn't used anywhere in REST, and isn't even understood by RMF
-        // See https://github.com/ezsystems/ezpublish-kernel/pull/225/files#r3084189
-        $login = $_POST['login'];
-        $password = $_POST['password'];
+        /** @var $sessionInput \eZ\Publish\Core\REST\Server\Values\SessionInput */
+        $sessionInput = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $this->request->contentType ),
+                $this->request->body
+            )
+        );
 
         if ( $session->isStarted() )
         {
@@ -958,7 +961,10 @@ class User extends RestController
 
         try
         {
-            $user = $this->userService->loadUserByCredentials( $login, $password );
+            $user = $this->userService->loadUserByCredentials(
+                $sessionInput->login,
+                $sessionInput->password
+            );
         }
         catch ( NotFoundException $e )
         {
