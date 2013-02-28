@@ -156,6 +156,7 @@ services:
         arguments:
             - @service_container
             - @ezpublish_rest.request
+            - @form.csrf_provider
         tags:
             - { name: kernel.event_subscriber }
 

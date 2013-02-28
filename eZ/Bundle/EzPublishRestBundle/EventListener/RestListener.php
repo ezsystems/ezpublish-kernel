@@ -17,6 +17,8 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 
 use eZ\Publish\Core\REST\Server\Request as RESTRequest;
 
@@ -38,14 +40,19 @@ class RestListener implements EventSubscriberInterface
      */
     private $request;
 
+    /** @var CsrfProviderInterface */
+    private $csrfProvider;
+
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      * @param \eZ\Publish\Core\REST\Server\Request $request
+     * @param CsrfProviderInterface $csrfProvider
      */
-    public function __construct( ContainerInterface $container, RESTRequest $request )
+    public function __construct( ContainerInterface $container, RESTRequest $request, CsrfProviderInterface $csrfProvider )
     {
         $this->container = $container;
         $this->request = $request;
+        $this->csrfProvider = $csrfProvider;
     }
 
     /**
@@ -56,8 +63,7 @@ class RestListener implements EventSubscriberInterface
         return array(
             KernelEvents::VIEW => 'onKernelResultView',
             KernelEvents::EXCEPTION => 'onKernelExceptionView',
-            // @todo delete completely when this auth. method has been totally removed
-            // KernelEvents::REQUEST => 'onKernelRequest'
+            KernelEvents::REQUEST => 'onKernelRequest'
         );
     }
 
@@ -110,17 +116,22 @@ class RestListener implements EventSubscriberInterface
         if ( !$this->isRestRequest( $event->getRequest() ) )
             return;
 
-        /**  @var \eZ\Publish\Core\REST\Server\Request $request */
-        $request = $this->container->get( 'ezpublish_rest.request' );
-        if ( !isset( $request->testUser ) )
+        if ( in_array( $event->getRequest()->getMethod(), array( 'GET', 'HEAD' ) ) )
             return;
 
-        /**  @var \eZ\Publish\API\Repository\Repository $repository */
-        $repository = $this->container->get( 'ezpublish.api.repository' );
+        // we don't need a CSRF token when logging in, obviously
+        if ( $event->getRequest()->getPathInfo() == '/api/ezp/v2/user/sessions' )
+            return;
 
-        $repository->setCurrentUser(
-            $repository->getUserService()->loadUser( $request->testUser )
-        );
+        $csrfTokenName = $this->container->getParameter( 'form.type_extension.csrf.field_name' );
+        if ( !isset( $this->request->variables[$csrfTokenName] ) || !$this->csrfProvider->isCsrfTokenValid( 'rest', $this->request->variables[$csrfTokenName] ) )
+        {
+            throw new UnauthorizedException(
+                "Missing or invalid CSRF token",
+                $event->getRequest()->getMethod() . " " . $event->getRequest()->getPathInfo()
+            );
+        }
+
     }
 
     /**
