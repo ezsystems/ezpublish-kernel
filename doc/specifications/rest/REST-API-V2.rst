@@ -5820,10 +5820,8 @@ Create session (login a User):
          :application/vnd.ez.api.Session+xml: (see Session_)
          :application/vnd.ez.api.Session+json:  (see Session_)
     :Content-Type:
-         application/x-www-form-urlencoded
-:Parameters:
-        :login:  the login of the user
-        :password:  the password
+         :application/vnd.ez.api.SessionInput+xml: the SessionInput_ schema encoded in json
+         :application/vnd.ez.api.SessionInput+json: the SessionInput_ schema encoded in json
 :Response:
 
 
@@ -5839,9 +5837,10 @@ Create session (login a User):
 
 
 :Error codes:
-       :401: If the authorization failed
-       :303: If header contained a session cookie and same user was authorized, like 201 Created it will include a Location header
-       :409: If header contained a session cookie but different user was authorized
+    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :401: If the authorization failed
+    :303: If header contained a session cookie and same user was authorized, like 201 Created it will include a Location header
+    :409: If header contained a session cookie but different user was authorized
 
 
 XML Example
@@ -5852,10 +5851,16 @@ XML Example
     POST /user/sessions HTTP/1.1
     Host: www.example.net
     Accept: application/vnd.ez.api.Session+xml
-    Content-Type: application/x-www-form-urlencoded
+    Content-Type: application/vnd.ez.api.SessionInput+xml
     Content-Length: xxx
 
-    login=Jonathan+Doe&password=This+is+a+p422wORd%21
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <SessionInput>
+      <login>admin</login>
+      <password>secret</password>
+    </SessionInput>
 
 .. code:: http
 
@@ -5885,10 +5890,17 @@ JSON Example
     POST /user/sessions HTTP/1.1
     Host: www.example.net
     Accept: application/vnd.ez.api.Session+json
-    Content-Type: application/x-www-form-urlencoded
+    Content-Type: application/vnd.ez.api.SessionInput+xml
     Content-Length: xxx
 
-    login=Jonathan+Doe&password=This+is+a+p422wORd%21
+.. code:: json
+
+    {
+      "SessionInput": {
+        "login": "admin",
+        "password": "secret"
+      }
+    }
 
 .. code:: http
 
@@ -5910,7 +5922,8 @@ JSON Example
           "_href": "/user/users/14",
           "_media-type": "application/vnd.ez.api.User+json"
         }
-     }
+      }
+    }
 
 
 Delete session (logout a User):
@@ -7507,16 +7520,38 @@ Session XML Schema
         <xsd:complexContent>
           <xsd:extension base="ref">
             <xsd:all>
-            <xsd:element name="name" type="xsd:int"/>
-            <xsd:element name="identifier" type="xsd:string"/>
-            <xsd:element name="csrf-param" type="xsd:string"/>
-            <xsd:element name="csrf-token" type="xsd:string"/>
-            <xsd:element name="User" type="vnd.ez.api.User" />
+              <xsd:element name="name" type="xsd:int"/>
+              <xsd:element name="identifier" type="xsd:string"/>
+              <xsd:element name="csrf-param" type="xsd:string"/>
+              <xsd:element name="csrf-token" type="xsd:string"/>
+              <xsd:element name="User" type="vnd.ez.api.User" />
             </xsd:all>
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
       <xsd:element name="Session" type="vnd.ez.api.Session"></xsd:element>
+    </xsd:schema>
+
+
+.. _SessionInput:
+
+SessionInput XML Schema
+-----------------------
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:complexType name="vnd.ez.api.SessionInput">
+        <xsd:complexContent>
+          <xsd:all>
+            <xsd:element name="login" type="xsd:string"/>
+            <xsd:element name="password" type="xsd:string" />
+          </xsd:all>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:element name="SessionInput" type="vnd.ez.api.SessionInput"></xsd:element>
     </xsd:schema>
 
 

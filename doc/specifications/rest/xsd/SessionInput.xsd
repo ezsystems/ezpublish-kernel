@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:complexType name="vnd.ez.api.SessionInput">
+    <xsd:complexContent>
+      <xsd:all>
+        <xsd:element name="login" type="xsd:string"/>
+        <xsd:element name="password" type="xsd:string" />
+      </xsd:all>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="SessionInput" type="vnd.ez.api.SessionInput"></xsd:element>
+</xsd:schema>
