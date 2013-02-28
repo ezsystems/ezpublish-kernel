@@ -44,11 +44,6 @@ use eZ\Publish\Core\REST\Client\Exceptions\BadStateException;
 class ContentTypeService implements APIContentTypeService, Sessionable
 {
     /**
-     * @var \eZ\Publish\Core\REST\Client\ContentService
-     */
-    private $contentService;
-
-    /**
      * @var \eZ\Publish\Core\REST\Client\HttpClient
      */
     private $client;
@@ -324,7 +319,6 @@ class ContentTypeService implements APIContentTypeService, Sessionable
             $this->assignContentTypeGroup( $contentType, $contentTypeGroup );
         }
 
-        return $contentType;
         return $this->completeContentType( $contentType );
     }
 
@@ -339,6 +333,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      */
     protected function completeContentType( ContentType $contentType )
     {
+        // TODO: currently no way to fetch groups of a type draft
         if ( $contentType instanceof ContentTypeDraft )
         {
             return $contentType;
@@ -355,7 +350,8 @@ class ContentTypeService implements APIContentTypeService, Sessionable
             )
         );
 
-        $this->inputDispatcher->parse( $response );
+        /** @var $referenceList \eZ\Publish\Core\REST\Client\Values\ContentTypeGroupRefList */
+        $referenceList = $this->inputDispatcher->parse( $response );
 
         return new RestContentType(
             $this,
@@ -379,7 +375,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
                 "status" => $contentType->status,
 
                 "fieldDefinitionListReference" => $contentType->fieldDefinitionListReference,
-                "contentTypeGroupListReference" => $response["_href"],
+                "contentTypeGroupListReference" => $referenceList->listReference,
 
                 // dynamic
                 //"fieldDefinitions" => $contentType->fieldDefinitions,
@@ -518,7 +514,8 @@ class ContentTypeService implements APIContentTypeService, Sessionable
                 array( 'Accept' => $this->outputVisitor->getMediaType( 'ContentType' ) )
             )
         );
-        return $this->inputDispatcher->parse( $response );
+
+        return $this->completeContentType( $this->inputDispatcher->parse( $response ) );
     }
 
     /**
@@ -575,7 +572,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      *
      * @param mixed $contentTypeGroupListReference
      *
-     * @return \eZ\Publish\Core\REST\Client\Values\ContentTypeGroupList
+     * @return \eZ\Publish\Core\REST\Client\Values\ContentTypeGroupRefList
      */
     public function loadContentTypeGroupList( $contentTypeGroupListReference )
     {
@@ -608,7 +605,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
             )
         );
         $contentTypes = $this->inputDispatcher->parse( $response );
-        return reset( $contentTypes );
+        return $this->completeContentType( reset( $contentTypes ) );
     }
 
     /**
@@ -652,8 +649,13 @@ class ContentTypeService implements APIContentTypeService, Sessionable
                 array( 'Accept' => $this->outputVisitor->getMediaType( 'ContentTypeList' ) )
             )
         );
+        $completedContentTypes = array();
         $contentTypes = $this->inputDispatcher->parse( $response );
-        return reset( $contentTypes );
+        foreach ( $contentTypes as $contentType )
+        {
+            $completedContentTypes[] = $this->completeContentType( $contentType );
+        }
+        return $completedContentTypes;
     }
 
     /**
@@ -769,7 +771,8 @@ class ContentTypeService implements APIContentTypeService, Sessionable
         {
             $urlValues = $this->urlHandler->parse( "type", $contentType->id );
         }
-        $urlValues["group"] = $contentTypeGroup->id;
+        $groupUrlValues = $this->urlHandler->parse( "typegroup", $contentTypeGroup->id );
+        $urlValues["group"] = $groupUrlValues["typegroup"];
 
         $response = $this->client->request(
             'DELETE',
