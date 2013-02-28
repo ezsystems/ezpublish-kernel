@@ -91,6 +91,14 @@ class Factory
     }
 
     /**
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Handler
+     */
+    public function getLocationSearchHandler()
+    {
+        return $this->getPersistenceHandler()->locationSearchHandler();
+    }
+
+    /**
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
      */
     public function getObjectStateHandler()

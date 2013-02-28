@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
@@ -78,6 +79,50 @@ class ExceptionConversion extends Gateway
         try
         {
             return $this->innerGateway->getBasicNodeDataByRemoteId( $remoteId );
+        }
+        catch ( ezcDbException $e )
+        {
+            throw new RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return mixed
+     */
+    public function find( Criterion $criterion, $offset, $limit )
+    {
+        try
+        {
+            return $this->innerGateway->find( $criterion, $offset, $limit );
+        }
+        catch ( ezcDbException $e )
+        {
+            throw new RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     *
+     * @return int
+     */
+    public function count( Criterion $criterion )
+    {
+        try
+        {
+            return $this->innerGateway->count( $criterion );
         }
         catch ( ezcDbException $e )
         {

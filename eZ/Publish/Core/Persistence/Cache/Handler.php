@@ -13,6 +13,7 @@ use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandlerInterface;
 use eZ\Publish\Core\Persistence\Cache\SectionHandler as CacheSectionHandler;
 use eZ\Publish\Core\Persistence\Cache\LocationHandler as CacheLocationHandler;
+use eZ\Publish\Core\Persistence\Cache\LocationSearchHandler as CacheLocationSearchHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentHandler as CacheContentHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler as CacheContentLanguageHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentTypeHandler as CacheContentTypeHandler;
@@ -57,6 +58,11 @@ class Handler implements PersistenceHandlerInterface
     protected $locationHandler;
 
     /**
+     * @var LocationSearchHandler
+     */
+    protected $locationSearchHandler;
+
+    /**
      * @var UserHandler
      */
     protected $userHandler;
@@ -80,14 +86,15 @@ class Handler implements PersistenceHandlerInterface
      * Construct the class
      *
      * @param \eZ\Publish\Core\Persistence\Factory $persistenceFactory Must be factory for inner persistence, ie: legacy
-     * @param SectionHandler $sectionHandler
-     * @param LocationHandler $locationHandler
-     * @param ContentHandler $contentHandler
-     * @param ContentLanguageHandler $contentLanguageHandler
-     * @param ContentTypeHandler $contentTypeHandler
-     * @param UserHandler $userHandler
-     * @param SearchHandler $searchHandler
-     * @param UrlAliasHandler $urlAliasHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\SectionHandler $sectionHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\LocationHandler $locationHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\ContentHandler $contentHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler $contentLanguageHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler $contentTypeHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\UserHandler $userHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\SearchHandler $searchHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\LocationSearchHandler $locationSearchHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\UrlAliasHandler $urlAliasHandler
      * @param PersistenceLogger $logger
      */
     public function __construct(
@@ -99,6 +106,7 @@ class Handler implements PersistenceHandlerInterface
         CacheContentTypeHandler $contentTypeHandler,
         CacheUserHandler $userHandler,
         CacheSearchHandler $searchHandler,
+        CacheLocationSearchHandler $locationSearchHandler,
         CacheUrlAliasHandler $urlAliasHandler,
         PersistenceLogger $logger
     )
@@ -111,6 +119,7 @@ class Handler implements PersistenceHandlerInterface
         $this->contentTypeHandler = $contentTypeHandler;
         $this->userHandler = $userHandler;
         $this->searchHandler = $searchHandler;
+        $this->locationSearchHandler = $locationSearchHandler;
         $this->urlAliasHandler = $urlAliasHandler;
         $this->logger = $logger;
     }
@@ -153,6 +162,14 @@ class Handler implements PersistenceHandlerInterface
     public function locationHandler()
     {
         return $this->locationHandler;
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Handler
+     */
+    public function locationSearchHandler()
+    {
+        return $this->locationSearchHandler;
     }
 
     /**

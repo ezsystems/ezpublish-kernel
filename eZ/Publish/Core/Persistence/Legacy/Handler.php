@@ -18,6 +18,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as TypeMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Search\Handler as LocationSearchHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler as TrashHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler as ObjectStateHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper as ObjectStateMapper;
@@ -108,6 +109,13 @@ class Handler implements HandlerInterface
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
      */
     protected $locationHandler;
+
+    /**
+     * Location search handler
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Search\Handler
+     */
+    protected $locationSearchHandler;
 
     /**
      * Location gateway
@@ -649,6 +657,21 @@ class Handler implements HandlerInterface
             );
         }
         return $this->locationHandler;
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\SearchHandler
+     */
+    public function locationSearchHandler()
+    {
+        if ( !isset( $this->locationSearchHandler ) )
+        {
+            $this->locationSearchHandler = new LocationSearchHandler(
+                $this->getLocationGateway(),
+                $this->getLocationMapper()
+            );
+        }
+        return $this->locationSearchHandler;
     }
 
     /**
