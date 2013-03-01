@@ -398,7 +398,6 @@ services:
 
     ezpublish.fieldType.ezkeyword.externalStorage:
         class: %ezpublish.fieldType.ezkeyword.externalStorage.class%
-        arguments: [[]]
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezkeyword}
 
@@ -453,7 +452,6 @@ services:
 
     ezpublish.fieldType.ezurl.externalStorage:
         class: %ezpublish.fieldType.ezurl.externalStorage.class%
-        arguments: [[]]
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezurl}
 
@@ -465,7 +463,6 @@ services:
 
     ezpublish.fieldType.ezxmltext.externalStorage:
         class: %ezpublish.fieldType.ezxmltext.externalStorage.class%
-        arguments: [[]]
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezxmltext}
 
@@ -502,7 +499,6 @@ services:
 
     ezpublish.fieldType.ezgmaplocation.externalStorage:
         class: %ezpublish.fieldType.ezgmaplocation.externalStorage.class%
-        arguments: [[]]
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezgmaplocation}
 
@@ -520,7 +516,6 @@ services:
 
     ezpublish.fieldType.ezuser.externalStorage:
         class: %ezpublish.fieldType.ezuser.externalStorage.class%
-        arguments: [[]]
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezuser}
 
