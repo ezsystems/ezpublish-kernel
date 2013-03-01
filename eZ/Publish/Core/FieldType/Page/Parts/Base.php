@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\FieldType\Page\Parts;
 
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
-use eZ\Publish\Core\FieldType\Page\Service as PageService;
+use eZ\Publish\Core\FieldType\Page\PageService;
 
 class Base
 {
@@ -24,14 +24,14 @@ class Base
     /**
      * Service container
      *
-     * @var \eZ\Publish\Core\FieldType\Page\Service
+     * @var \eZ\Publish\Core\FieldType\Page\PageService
      */
     protected $pageService;
 
     /**
      * Constructor
      *
-     * @param \eZ\Publish\Core\FieldType\Page\Service $pageService
+     * @param \eZ\Publish\Core\FieldType\Page\PageService $pageService
      */
     public function __construct( PageService $pageService )
     {

@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\FieldType\Page;
 
 use eZ\Publish\Core\FieldType\FieldType;
-use eZ\Publish\Core\FieldType\Page\Service as PageService;
+use eZ\Publish\Core\FieldType\Page\PageService;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -28,12 +28,12 @@ class Type extends FieldType
     );
 
     /**
-     * @var Service
+     * @var \eZ\Publish\Core\FieldType\Page\PageService
      */
     protected $pageService;
 
     /**
-     * @param \eZ\Publish\Core\FieldType\Page\Service $pageService
+     * @param \eZ\Publish\Core\FieldType\Page\PageService $pageService
      */
     public function __construct( PageService $pageService )
     {
