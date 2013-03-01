@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\Core\FieldType\Page\Parts;
-use eZ\Publish\Core\FieldType\Page\Service;
+use eZ\Publish\Core\FieldType\Page\PageService;
 use DOMDocument;
 use DOMElement;
 
@@ -24,16 +24,16 @@ class Page implements Converter
     /**
      * Page service container
      *
-     * @var \eZ\Publish\Core\FieldType\Page\Service
+     * @var \eZ\Publish\Core\FieldType\Page\PageService
      */
     protected $pageService;
 
     /**
      * Constructor
      *
-     * @param \eZ\Publish\Core\FieldType\Page\Service $pageService
+     * @param \eZ\Publish\Core\FieldType\Page\PageService $pageService
      */
-    public function __construct( Service $pageService )
+    public function __construct( PageService $pageService )
     {
         $this->pageService = $pageService;
     }
@@ -117,7 +117,7 @@ class Page implements Converter
     {
         $dom = new DOMDocument( '1.0', 'utf-8' );
         $dom->formatOutput = true;
-        $success = $dom->loadXML( '<page />' );
+        $dom->loadXML( '<page />' );
 
         $pageNode = $dom->documentElement;
 
@@ -295,7 +295,7 @@ class Page implements Converter
         if ( $xmlString )
         {
             $dom = new DOMDocument( '1.0', 'utf-8' );
-            $success = $dom->loadXML( $xmlString );
+            $dom->loadXML( $xmlString );
             $root = $dom->documentElement;
 
             foreach ( $root->childNodes as $node )
