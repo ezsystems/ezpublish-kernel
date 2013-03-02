@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ContentTypeGroupList class
+ * File containing the ContentTypeGroupRefList class
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -12,10 +12,17 @@ namespace eZ\Publish\Core\REST\Client\Values;
 use eZ\Publish\Core\REST\Client\ContentTypeService;
 
 /**
- * ContentTypeGroupList
+ * ContentTypeGroupRefList
  */
-class ContentTypeGroupList
+class ContentTypeGroupRefList
 {
+    /**
+     * Contains ContentTypeGroupRefList reference
+     *
+     * @var string
+     */
+    public $listReference;
+
     /**
      * Contains ContentTypeGroup references
      *
@@ -32,11 +39,13 @@ class ContentTypeGroupList
 
     /**
      * @param \eZ\Publish\Core\REST\Client\ContentTypeService $contentTypeService
+     * @param string $listReference
      * @param string[] $contentTypeGroupReferences
      */
-    public function __construct( ContentTypeService $contentTypeService, array $contentTypeGroupReferences )
+    public function __construct( ContentTypeService $contentTypeService, $listReference, array $contentTypeGroupReferences )
     {
         $this->contentTypeService = $contentTypeService;
+        $this->listReference = $listReference;
         $this->contentTypeGroupReferences = $contentTypeGroupReferences;
     }
 

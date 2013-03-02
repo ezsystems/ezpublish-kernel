@@ -147,7 +147,7 @@ class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentT
         $contentTypeGroupList = $this->contentTypeService->loadContentTypeGroupList(
             $this->contentTypeGroupListReference
         );
-        return $contentTypeGroupList;
+        return $contentTypeGroupList->getContentTypeGroups();
     }
 
     /**

@@ -408,17 +408,17 @@ XML Example
       <remoteId>remoteId12345678</remoteId>
       <fields>
         <field>
-          <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>title</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>This is a title</fieldValue>
         </field>
         <field>
-          <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>summary</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>This is a summary</fieldValue>
         </field>
         <field>
-          <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>authors</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>
             <value>
@@ -467,18 +467,18 @@ XML Example
           <fields>
             <field>
               <id>1234</id>
-              <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+              <fieldDefinitionIdentifier>title</fieldDefinitionIdentifier>
               <languageCode>eng-UK</languageCode>
               <fieldValue>This is a title</fieldValue>
             </field>
             <field>
               <id>1235</id>
-              <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
+              <fieldDefinitionIdentifier>summary</fieldDefinitionIdentifier>
               <languageCode>eng-UK</languageCode>
               <fieldValue>This is a summary</fieldValue>
             </field>
             <field>
-              <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
+              <fieldDefinitionIdentifier>authors</fieldDefinitionIdentifier>
               <languageCode>eng-US</languageCode>
               <fieldValue>
                 <value>
@@ -540,17 +540,17 @@ JSON Example
         "fields": {
           "field": [
             {
-              "fieldDefinitionIdentifer": "title",
+              "fieldDefinitionIdentifier": "title",
               "languageCode": "eng-US",
               "fieldValue": "This is a title"
             },
             {
-              "fieldDefinitionIdentifer": "summary",
+              "fieldDefinitionIdentifier": "summary",
               "languageCode": "eng-US",
               "fieldValue": "This is a summary"
             },
             {
-              "fieldDefinitionIdentifer": "authors",
+              "fieldDefinitionIdentifier": "authors",
               "languageCode": "eng-US",
               "fieldValue": [
                     {
@@ -620,18 +620,18 @@ JSON Example
               "field": [
                 {
                   "id": "1234",
-                  "fieldDefinitionIdentifer": "title",
+                  "fieldDefinitionIdentifier": "title",
                   "languageCode": "eng-UK",
                   "fieldValue": "This is a title"
                 },
                 {
                   "id": "1235",
-                  "fieldDefinitionIdentifer": "summary",
+                  "fieldDefinitionIdentifier": "summary",
                   "languageCode": "eng-UK",
                   "fieldValue": "This is a summary"
                 },
                 {
-                  "fieldDefinitionIdentifer": "authors",
+                  "fieldDefinitionIdentifier": "authors",
                   "languageCode": "eng-US",
                   "fieldValue":
                   [
@@ -1100,18 +1100,18 @@ XML Example
       <Fields>
         <field>
           <id>1234</id>
-          <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>title</fieldDefinitionIdentifier>
           <languageCode>ger-DE</languageCode>
           <fieldValue>Titel</fieldValue>
         </field>
         <field>
           <id>1235</id>
-          <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>summary</fieldDefinitionIdentifier>
           <languageCode>ger-DE</languageCode>
           <fieldValue>Dies ist eine Zusammenfassungy</fieldValue>
         </field>
         <field>
-          <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>authors</fieldDefinitionIdentifier>
           <languageCode>ger-DE</languageCode>
           <fieldValue>
             <value>
@@ -1190,13 +1190,13 @@ XML Example
       <fields>
         <field>
           <id>1234</id>
-          <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>title</fieldDefinitionIdentifier>
           <languageCode>ger-DE</languageCode>
           <fieldValue>Neuer Titel</fieldValue>
         </field>
         <field>
           <id>1235</id>
-          <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>summary</fieldDefinitionIdentifier>
           <languageCode>ger-DE</languageCode>
           <fieldValue>Dies ist eine neue Zusammenfassungy</fieldValue>
         </field>
@@ -1231,18 +1231,18 @@ XML Example
       <Fields>
         <field>
           <id>1234</id>
-          <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>title</fieldDefinitionIdentifier>
           <languageCode>ger-DE</languageCode>
           <fieldValue>Neuer Titel</fieldValue>
         </field>
         <field>
           <id>1235</id>
-          <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>summary</fieldDefinitionIdentifier>
           <languageCode>ger-DE</languageCode>
           <fieldValue>Dies ist eine neuse Zusammenfassungy</fieldValue>
         </field>
         <field>
-          <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>authors</fieldDefinitionIdentifier>
           <languageCode>ger-DE</languageCode>
           <fieldValue>
             <authors>
@@ -2084,14 +2084,14 @@ Perform a query on articles with a specific title.
                     <Fields>
                       <field>
                         <id>1234</id>
-                        <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+                        <fieldDefinitionIdentifier>title</fieldDefinitionIdentifier>
                         <languageCode>eng-UK</languageCode>
                         <fieldValue>Title</fieldValue>
                       </field>
                       <field>
                         <id>1235</id>
-                        <fieldDefinitionIdentifer>summary
-                        </fieldDefinitionIdentifer>
+                        <fieldDefinitionIdentifier>summary
+                        </fieldDefinitionIdentifier>
                         <languageCode>eng-UK</languageCode>
                         <fieldValue>This is a summary</fieldValue>
                       </field>
@@ -4265,13 +4265,13 @@ Creating a top level group
         <Fields>
           <field>
             <id>1234</id>
-            <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>name</fieldDefinitionIdentifier>
             <languageCode>eng-UK</languageCode>
             <fieldValue>Users</fieldValue>
           </field>
           <field>
             <id>1235</id>
-            <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>description</fieldDefinitionIdentifier>
             <languageCode>eng-UK</languageCode>
             <fieldValue>Main Group</fieldValue>
           </field>
@@ -4298,12 +4298,12 @@ Creating a top level group
       <remoteId>remoteId-qwert098</remoteId>
       <fields>
         <field>
-          <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>name</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>UserGroup</fieldValue>
         </field>
         <field>
-          <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>description</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>This is the description of the user group</fieldValue>
         </field>
@@ -4348,13 +4348,13 @@ Creating a top level group
         <Fields>
           <field>
             <id>1234</id>
-            <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>name</fieldDefinitionIdentifier>
             <languageCode>eng-UK</languageCode>
             <fieldValue>UserGroup</fieldValue>
           </field>
           <field>
             <id>1235</id>
-            <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>description</fieldDefinitionIdentifier>
             <languageCode>eng-UK</languageCode>
             <fieldValue>This is the description of the user group</fieldValue>
           </field>
@@ -4419,7 +4419,7 @@ XML Example
     <UserGroupUpdate>
       <fields>
         <field>
-          <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>description</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>This is another description</fieldValue>
         </field>
@@ -4463,13 +4463,13 @@ XML Example
         <Fields>
           <field>
             <id>1234</id>
-            <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>name</fieldDefinitionIdentifier>
             <languageCode>eng-UK</languageCode>
             <fieldValue>UserGroup</fieldValue>
           </field>
           <field>
             <id>1235</id>
-            <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>description</fieldDefinitionIdentifier>
             <languageCode>eng-UK</languageCode>
             <fieldValue>This is another description of the user group</fieldValue>
           </field>
@@ -4623,12 +4623,12 @@ XML Example
       <password>john-does-password</password>
       <fields>
         <field>
-          <fieldDefinitionIdentifer>first_name</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>first_name</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>John</fieldValue>
         </field>
         <field>
-          <fieldDefinitionIdentifer>last_name</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>last_name</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>Doe</fieldValue>
         </field>
@@ -4677,12 +4677,12 @@ XML Example
         </VersionInfo>
         <fields>
           <field>
-            <fieldDefinitionIdentifer>first_name</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>first_name</fieldDefinitionIdentifier>
             <languageCode>eng-US</languageCode>
             <fieldValue>John</fieldValue>
           </field>
           <field>
-            <fieldDefinitionIdentifer>last_name</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>last_name</fieldDefinitionIdentifier>
             <languageCode>eng-US</languageCode>
             <fieldValue>Doe</fieldValue>
           </field>
@@ -4796,7 +4796,7 @@ XML Example
       <email>john.doe@mooglemail.com</email>
       <fields>
         <field>
-          <fieldDefinitionIdentifer>signature</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>signature</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>
           John Doe
@@ -4849,18 +4849,18 @@ XML Example
         </VersionInfo>
         <fields>
           <field>
-            <fieldDefinitionIdentifer>first_name</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>first_name</fieldDefinitionIdentifier>
             <languageCode>eng-US</languageCode>
             <fieldValue>John</fieldValue>
           </field>
           <field>
-            <fieldDefinitionIdentifer>last_name</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>last_name</fieldDefinitionIdentifier>
             <languageCode>eng-US</languageCode>
             <fieldValue>Doe</fieldValue>
           </field>
         </fields>
         <field>
-          <fieldDefinitionIdentifer>signature</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>signature</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>
           John Doe
@@ -5888,7 +5888,7 @@ Common definition which are used from multiple schema definitions
           </xsd:documentation>
         </xsd:annotation>
         <xsd:all>
-          <xsd:element name="fieldDefinitionIdentifer" type="xsd:string" />
+          <xsd:element name="fieldDefinitionIdentifier" type="xsd:string" />
           <xsd:element name="languageCode" type="xsd:string" />
           <xsd:element name="fieldValue" type="fieldValueType" />
         </xsd:all>
@@ -6210,7 +6210,7 @@ Version
       <xsd:complexType name="fieldOutputValueType">
         <xsd:all>
           <xsd:element name="id" type="xsd:integer" />
-          <xsd:element name="fieldDefinitionIdentifer" type="xsd:string" />
+          <xsd:element name="fieldDefinitionIdentifier" type="xsd:string" />
           <xsd:element name="languageCode" type="xsd:string" />
           <xsd:element name="value" type="fieldValueType" />
         </xsd:all>

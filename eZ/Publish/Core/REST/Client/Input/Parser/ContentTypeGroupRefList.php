@@ -48,21 +48,19 @@ class ContentTypeGroupRefList extends Parser
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      *
-     * @return \eZ\Publish\Core\REST\Client\Values\ContentTypeGroupList
+     * @return \eZ\Publish\Core\REST\Client\Values\ContentTypeGroupRefList
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
         $contentTypeGroupReferences = array();
-        foreach ( $data['ContentTypeGroupRef'] as $reference )
+        foreach ( $data['ContentTypeGroupRef'] as $groupData )
         {
-            $contentTypeGroupReferences[] = $this->parserTools->parseObjectElement(
-                $reference,
-                $parsingDispatcher
-            );
+            $contentTypeGroupReferences[] = $groupData["_href"];
         }
 
-        return new Values\ContentTypeGroupList(
+        return new Values\ContentTypeGroupRefList(
             $this->contentTypeService,
+            $data["_href"],
             $contentTypeGroupReferences
         );
     }
