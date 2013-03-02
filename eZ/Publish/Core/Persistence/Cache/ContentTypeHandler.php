@@ -65,7 +65,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         $this->logger->logCall( __METHOD__, array( 'struct' => $struct ) );
         $group = $this->persistenceFactory->getContentTypeHandler()->createGroup( $struct );
 
-        $this->cache->get( 'contentTypeGroup', $group->id )->set( $group );
+        $this->cache->getItem( 'contentTypeGroup', $group->id )->set( $group );
 
         return $group;
     }
@@ -78,7 +78,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         $this->logger->logCall( __METHOD__, array( 'struct' => $struct ) );
 
         $this->cache
-            ->get( 'contentTypeGroup', $struct->id )
+            ->getItem( 'contentTypeGroup', $struct->id )
             ->set( $group = $this->persistenceFactory->getContentTypeHandler()->updateGroup( $struct ) );
 
         return $group;
@@ -101,7 +101,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function loadGroup( $groupId )
     {
-        $cache = $this->cache->get( 'contentTypeGroup', $groupId );
+        $cache = $this->cache->getItem( 'contentTypeGroup', $groupId );
         $group = $cache->get();
         if ( $cache->isMiss() )
         {
@@ -151,7 +151,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         }
 
         // Get cache for published content types
-        $cache = $this->cache->get( 'contentType', $typeId );
+        $cache = $this->cache->getItem( 'contentType', $typeId );
         $type = $cache->get();
         if ( $cache->isMiss() )
         {
@@ -168,7 +168,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     public function loadByIdentifier( $identifier )
     {
         // Get identifier to id cache if there is one (avoids caching an object several times)
-        $cache = $this->cache->get( 'contentType', 'identifier', $identifier );
+        $cache = $this->cache->getItem( 'contentType', 'identifier', $identifier );
         $typeId = $cache->get();
         if ( $cache->isMiss() )
         {
@@ -205,8 +205,8 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         if ( $type->status === Type::STATUS_DEFINED )
         {
             // Warm cache
-            $this->cache->get( 'contentType', $type->id )->set( $type );
-            $this->cache->get( 'contentType', 'identifier', $type->identifier )->set( $type->id );
+            $this->cache->getItem( 'contentType', $type->id )->set( $type );
+            $this->cache->getItem( 'contentType', 'identifier', $type->identifier )->set( $type->id );
         }
 
         return $type;
@@ -223,7 +223,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
 
         // Warm cache
         $this->cache
-            ->get( 'contentType', $typeId )
+            ->getItem( 'contentType', $typeId )
             ->set( $type = $this->persistenceFactory->getContentTypeHandler()->update( $typeId, $status, $struct ) );
 
         // Clear identifier cache in case it was changed

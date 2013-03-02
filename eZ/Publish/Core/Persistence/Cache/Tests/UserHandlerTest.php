@@ -126,10 +126,10 @@ class UserHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'user', 'role', 33 )
             ->will( $this->returnValue( $cacheItemMock ) );
 
@@ -173,10 +173,10 @@ class UserHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->never() )->method( 'logCall' );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'user', 'role', 33 )
             ->will( $this->returnValue( $cacheItemMock ) );
 
@@ -209,10 +209,10 @@ class UserHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'user', 'role', 'assignments', 'byGroup', 42 )
             ->will( $this->returnValue( $cacheItemMock ) );
 
@@ -260,10 +260,10 @@ class UserHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->never() )->method( 'logCall' );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'user', 'role', 'assignments', 'byGroup', 42 )
             ->will( $this->returnValue( $cacheItemMock ) );
 
@@ -302,10 +302,10 @@ class UserHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'user', 'role', 'assignments', 'byGroup', 'inherited/42' )
             ->will( $this->returnValue( $cacheItemMock ) );
 
@@ -353,10 +353,10 @@ class UserHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->never() )->method( 'logCall' );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'user', 'role', 'assignments', 'byGroup', 'inherited/42' )
             ->will( $this->returnValue( $cacheItemMock ) );
 
@@ -413,10 +413,10 @@ class UserHandlerTest extends HandlerTest
                 )
             );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'user', 'role', 33 )
             ->will( $this->returnValue( $cacheItemMock ) );
 
@@ -458,10 +458,10 @@ class UserHandlerTest extends HandlerTest
                 )
             );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'user', 'role', 33 )
             ->will( $this->returnValue( $cacheItemMock ) );
 

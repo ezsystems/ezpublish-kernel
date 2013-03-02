@@ -61,7 +61,7 @@ class SectionHandler implements SectionHandlerInterface
     {
         $this->logger->logCall( __METHOD__, array( 'name' => $name, 'identifier' => $identifier ) );
         $section = $this->persistenceFactory->getSectionHandler()->create( $name, $identifier );
-        $this->cache->get( 'section', $section->id )->set( $section );
+        $this->cache->getItem( 'section', $section->id )->set( $section );
         return $section;
     }
 
@@ -72,7 +72,7 @@ class SectionHandler implements SectionHandlerInterface
     {
         $this->logger->logCall( __METHOD__, array( 'section' => $id, 'name' => $name, 'identifier' => $identifier ) );
         $this->cache
-            ->get( 'section', $id )
+            ->getItem( 'section', $id )
             ->set( $section = $this->persistenceFactory->getSectionHandler()->update( $id, $name, $identifier ) );
         return $section;
     }
@@ -82,7 +82,7 @@ class SectionHandler implements SectionHandlerInterface
      */
     public function load( $id )
     {
-        $cache = $this->cache->get( 'section', $id );
+        $cache = $this->cache->getItem( 'section', $id );
         $section = $cache->get();
         if ( $cache->isMiss() )
         {

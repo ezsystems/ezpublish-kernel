@@ -102,7 +102,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
             $locationId, $path, $forwarding, $languageCode, $alwaysAvailable
         );
 
-        $this->cache->get( 'urlAlias', $urlAlias->id )->set( $urlAlias );
+        $this->cache->getItem( 'urlAlias', $urlAlias->id )->set( $urlAlias );
         $this->cache->clear( 'urlAlias', 'location', $urlAlias->destination, 'custom' );
         return $urlAlias;
     }
@@ -127,7 +127,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
             $resource, $path, $forwarding, $languageCode, $alwaysAvailable
         );
 
-        $this->cache->get( 'urlAlias', $urlAlias->id )->set( $urlAlias );
+        $this->cache->getItem( 'urlAlias', $urlAlias->id )->set( $urlAlias );
         return $urlAlias;
     }
 
@@ -146,7 +146,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
     public function listURLAliasesForLocation( $locationId, $custom = false )
     {
         // Look for location to list of url alias id's cache
-        $cache = $this->cache->get( 'urlAlias', 'location', $locationId . ( $custom ? '/custom' : '' ) );
+        $cache = $this->cache->getItem( 'urlAlias', 'location', $locationId . ( $custom ? '/custom' : '' ) );
         $urlAliasIds = $cache->get();
         if ( $cache->isMiss() )
         {
@@ -195,7 +195,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
     public function lookup( $url )
     {
         // Look for url to url alias id cache
-        $cache = $this->cache->get( 'urlAlias', 'url', $url );
+        $cache = $this->cache->getItem( 'urlAlias', 'url', $url );
         $urlAliasId = $cache->get();
         if ( $cache->isMiss() )
         {
@@ -232,7 +232,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
     public function loadUrlAlias( $id )
     {
         // Look for url alias cache
-        $cache = $this->cache->get( 'urlAlias', $id );
+        $cache = $this->cache->getItem( 'urlAlias', $id );
         $urlAlias = $cache->get();
         if ( $cache->isMiss() )
         {

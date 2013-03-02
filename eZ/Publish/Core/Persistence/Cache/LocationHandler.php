@@ -59,7 +59,7 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function load( $locationId )
     {
-        $cache = $this->cache->get( 'location', $locationId );
+        $cache = $this->cache->getItem( 'location', $locationId );
         $location = $cache->get();
         if ( $cache->isMiss() )
         {
@@ -76,7 +76,7 @@ class LocationHandler implements LocationHandlerInterface
     public function loadLocationsByContent( $contentId, $rootLocationId = null )
     {
         $rootKey = $rootLocationId ? '/root/' . $rootLocationId : '';
-        $cache = $this->cache->get( 'content', 'locations', $contentId . $rootKey );
+        $cache = $this->cache->getItem( 'content', 'locations', $contentId . $rootKey );
         $locationIds = $cache->get();
         if ( $cache->isMiss() )
         {
@@ -187,7 +187,7 @@ class LocationHandler implements LocationHandlerInterface
     {
         $this->logger->logCall( __METHOD__, array( 'location' => $locationId, 'struct' => $struct ) );
         $this->cache
-            ->get( 'location', $locationId )
+            ->getItem( 'location', $locationId )
             ->set( $location = $this->persistenceFactory->getLocationHandler()->update( $struct, $locationId ) );
 
         return $location;
@@ -201,7 +201,7 @@ class LocationHandler implements LocationHandlerInterface
         $this->logger->logCall( __METHOD__, array( 'struct' => $locationStruct ) );
         $location = $this->persistenceFactory->getLocationHandler()->create( $locationStruct );
 
-        $this->cache->get( 'location', $location->id )->set( $location );
+        $this->cache->getItem( 'location', $location->id )->set( $location );
         $this->cache->clear( 'content', 'locations', $location->contentId );
 
         return $location;

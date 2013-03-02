@@ -114,7 +114,7 @@ class UserHandler implements UserHandlerInterface
         $this->logger->logCall( __METHOD__, array( 'struct' => $struct ) );
         $role = $this->persistenceFactory->getUserHandler()->createRole( $struct );
 
-        $this->cache->get( 'user', 'role', $role->id )->set( $role );
+        $this->cache->getItem( 'user', 'role', $role->id )->set( $role );
 
         return $role;
     }
@@ -124,7 +124,7 @@ class UserHandler implements UserHandlerInterface
      */
     public function loadRole( $roleId )
     {
-        $cache = $this->cache->get( 'user', 'role', $roleId );
+        $cache = $this->cache->getItem( 'user', 'role', $roleId );
         $role = $cache->get();
         if ( $cache->isMiss() )
         {
@@ -169,7 +169,7 @@ class UserHandler implements UserHandlerInterface
     public function loadRoleAssignmentsByGroupId( $groupId, $inherit = false )
     {
         $cacheKey = ( $inherit ? 'inherited/' : '' ) . $groupId;
-        $cache = $this->cache->get( 'user', 'role', 'assignments', 'byGroup', $cacheKey );
+        $cache = $this->cache->getItem( 'user', 'role', 'assignments', 'byGroup', $cacheKey );
         $assignments = $cache->get();
         if ( $cache->isMiss() )
         {
@@ -192,7 +192,7 @@ class UserHandler implements UserHandlerInterface
         $this->logger->logCall( __METHOD__, array( 'struct' => $struct ) );
         $role = $this->persistenceFactory->getUserHandler()->updateRole( $struct );
 
-        $this->cache->get( 'user', 'role', $role->id )->set( $role );
+        $this->cache->getItem( 'user', 'role', $role->id )->set( $role );
 
         return $role;
     }

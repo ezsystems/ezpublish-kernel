@@ -23,10 +23,10 @@ class ContentLanguageHandlerTest extends HandlerTest
     public function testCreate()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'language', 2 )
             ->will( $this->returnValue( $cacheItemMock ) );
 
@@ -97,10 +97,10 @@ class ContentLanguageHandlerTest extends HandlerTest
     public function testLoadCacheIsMiss()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'language', 2 )
             ->will( $this->returnValue( $cacheItemMock ) );
 
@@ -147,10 +147,10 @@ class ContentLanguageHandlerTest extends HandlerTest
     public function testLoadHasCache()
     {
         $this->loggerMock->expects( $this->never() )->method( $this->anything() );
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'language', 2 )
             ->will( $this->returnValue( $cacheItemMock ) );
 
@@ -245,10 +245,10 @@ class ContentLanguageHandlerTest extends HandlerTest
     public function testUpdate()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'language', 2 )
             ->will( $this->returnValue( $cacheItemMock ) );
 

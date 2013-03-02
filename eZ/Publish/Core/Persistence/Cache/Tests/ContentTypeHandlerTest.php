@@ -28,10 +28,10 @@ class ContentTypeHandlerTest extends HandlerTest
     public function testCreateGroup()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'contentTypeGroup', 55 )
             ->will( $this->returnValue( $cacheItemMock ) );
 
@@ -66,10 +66,10 @@ class ContentTypeHandlerTest extends HandlerTest
     public function testUpdateGroup()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'contentTypeGroup', 55 )
             ->will( $this->returnValue( $cacheItemMock ) );
 
@@ -132,10 +132,10 @@ class ContentTypeHandlerTest extends HandlerTest
     public function testLoadGroupIsMiss()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'contentTypeGroup', 55 )
             ->will( $this->returnValue( $cacheItemMock ) );
 
@@ -176,10 +176,10 @@ class ContentTypeHandlerTest extends HandlerTest
     public function testLoadGroupHasCache()
     {
         $this->loggerMock->expects( $this->never() )->method( $this->anything() );
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'contentTypeGroup', 55 )
             ->will( $this->returnValue( $cacheItemMock ) );
 
@@ -325,10 +325,10 @@ class ContentTypeHandlerTest extends HandlerTest
     public function testLoadCacheIsMiss()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'contentType', 55 )
             ->will( $this->returnValue( $cacheItemMock ) );
 
@@ -375,10 +375,10 @@ class ContentTypeHandlerTest extends HandlerTest
     public function testLoadHasCache()
     {
         $this->loggerMock->expects( $this->never() )->method( $this->anything() );
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'contentType', 55 )
             ->will( $this->returnValue( $cacheItemMock ) );
 
@@ -416,10 +416,10 @@ class ContentTypeHandlerTest extends HandlerTest
     public function testLoadByIdentifierIsMiss()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'contentType', 'identifier', 'forum' )
             ->will( $this->returnValue( $cacheItemMock ) );
 
@@ -460,10 +460,10 @@ class ContentTypeHandlerTest extends HandlerTest
     public function testLoadByIdentifierHasCache()
     {
         $this->loggerMock->expects( $this->never() )->method( $this->anything() );
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->at( 0 ) )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'contentType', 'identifier', 'forum' )
             ->will( $this->returnValue( $cacheItemMock ) );
 
@@ -486,10 +486,10 @@ class ContentTypeHandlerTest extends HandlerTest
             ->method( 'set' );
 
         // the code reuses load():
-        $cacheItemMock2 = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock2 = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->at( 1 ) )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'contentType', 55 )
             ->will( $this->returnValue( $cacheItemMock2 ) );
 
@@ -549,17 +549,17 @@ class ContentTypeHandlerTest extends HandlerTest
     public function testCreate()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->at( 0 ) )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'contentType', 55 )
             ->will( $this->returnValue( $cacheItemMock ) );
 
-        $cacheItemMock2 = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock2 = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->at( 1 ) )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'contentType', 'identifier', 'forum' )
             ->will( $this->returnValue( $cacheItemMock2 ) );
 
@@ -641,10 +641,10 @@ class ContentTypeHandlerTest extends HandlerTest
     public function testUpdate()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $cacheItemMock = $this->getMock( 'Stash\\Cache', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->at( 0 ) )
-            ->method( 'get' )
+            ->method( 'getItem' )
             ->with( 'contentType', 55 )
             ->will( $this->returnValue( $cacheItemMock ) );
 

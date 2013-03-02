@@ -98,7 +98,7 @@ class ContentHandler implements ContentHandlerInterface
             return $this->persistenceFactory->getContentHandler()->load( $contentId, $version, $translations );
         }
 
-        $cache = $this->cache->get( 'content', $contentId, $version );
+        $cache = $this->cache->getItem( 'content', $contentId, $version );
         $content = $cache->get();
         if ( $cache->isMiss() )
         {
@@ -119,7 +119,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function loadContentInfo( $contentId )
     {
-        $cache = $this->cache->get( 'content', 'info', $contentId );
+        $cache = $this->cache->getItem( 'content', 'info', $contentId );
         $contentInfo = $cache->get();
         if ( $cache->isMiss() )
         {
@@ -170,7 +170,7 @@ class ContentHandler implements ContentHandlerInterface
         $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'struct' => $struct ) );
 
         $this->cache
-            ->get( 'content', 'info', $contentId )
+            ->getItem( 'content', 'info', $contentId )
             ->set( $contentInfo = $this->persistenceFactory->getContentHandler()->updateMetadata( $contentId, $struct ) );
 
         return $contentInfo;
@@ -184,7 +184,7 @@ class ContentHandler implements ContentHandlerInterface
         $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'version' => $versionNo, 'struct' => $struct ) );
         $content = $this->persistenceFactory->getContentHandler()->updateContent( $contentId, $versionNo, $struct );
         $this->cache
-            ->get( 'content', $contentId, $versionNo )
+            ->getItem( 'content', $contentId, $versionNo )
             ->set( $this->cloneAndSerializeXMLFields( $content ) );
         return $content;
     }
@@ -282,9 +282,9 @@ class ContentHandler implements ContentHandlerInterface
         // warm up cache
         $contentInfo = $content->versionInfo->contentInfo;
         $this->cache
-            ->get( 'content', $contentInfo->id, $content->versionInfo->versionNo )
+            ->getItem( 'content', $contentInfo->id, $content->versionInfo->versionNo )
             ->set( $this->cloneAndSerializeXMLFields( $content ) );
-        $this->cache->get( 'content', 'info', $contentInfo->id )->set( $contentInfo );
+        $this->cache->getItem( 'content', 'info', $contentInfo->id )->set( $contentInfo );
 
         return $content;
     }

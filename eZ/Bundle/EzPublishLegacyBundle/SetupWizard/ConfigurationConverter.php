@@ -184,7 +184,7 @@ class ConfigurationConverter
     {
         $handlers = array();// Should only contain one out of the box
         $handlerSetting = array();
-        if ( \Stash\Handler\Apc::isAvailable() )
+        if ( \Stash\Driver\Apc::isAvailable() )
         {
             $handlers[] = 'Apc';
             $handlerSetting['Apc'] = array(
@@ -193,37 +193,34 @@ class ConfigurationConverter
             );
         }
         /* Not fully supported by Stash-bundle
-        else if ( \Stash\Handler\Xcache::isAvailable() )
+        else if ( \Stash\Driver\Xcache::isAvailable() )
         {
             $handlers[] = 'Xcache';
         }*/
-        else if ( \Stash\Handler\Memcache::isAvailable() )
+        else if ( \Stash\Driver\Memcache::isAvailable() )
         {
             $handlers[] = 'Memcache';
             // @todo: This configuration seem to not work with the Stash-bundle
             $handlerSetting['Memcache'] = array(
                 'prefix_key' => $databaseName,
                 'servers' => array(
-                    array('server' => '127.0.0.1', 'port' => '11211')
+                    array( 'server' => '127.0.0.1', 'port' => '11211' )
                 )
             );
         }
         /* Not fully supported by Stash-bundle
-        else if ( \Stash\Handler\Ephemeral::isAvailable() )
+        else if ( \Stash\Driver\Ephemeral::isAvailable() )
         {
             $handlers[] = 'Ephemeral';
         }*/
         /* Does not work without getting the user to create a cache/<env>/stash folder
-        else if ( \Stash\Handler\FileSystem::isAvailable() )
+        else if ( \Stash\Driver\FileSystem::isAvailable() )
         {
             $handlers[] = 'FileSystem';
         }*/
         else
         {
-            throw new InvalidArgumentException(
-                "cache handler",
-                "Only APC and Memcache(d) currently supported for caching, please enable one of them on the install"
-            );
+            $handlers[] = 'BlackHole';// "Null" driver, no cache at all
         }
 
         return array(

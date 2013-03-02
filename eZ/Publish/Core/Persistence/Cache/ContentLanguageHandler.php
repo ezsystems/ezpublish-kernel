@@ -60,7 +60,7 @@ class ContentLanguageHandler implements ContentLanguageHandlerInterface
     {
         $this->logger->logCall( __METHOD__, array( 'struct' => $struct ) );
         $language = $this->persistenceFactory->getContentLanguageHandler()->create( $struct );
-        $this->cache->get( 'language', $language->id )->set( $language );
+        $this->cache->getItem( 'language', $language->id )->set( $language );
         return $language;
     }
 
@@ -71,7 +71,7 @@ class ContentLanguageHandler implements ContentLanguageHandlerInterface
     {
         $this->logger->logCall( __METHOD__, array( 'struct' => $struct ) );
         $this->cache
-            ->get( 'language', $struct->id )
+            ->getItem( 'language', $struct->id )
             ->set( $language = $this->persistenceFactory->getContentLanguageHandler()->update( $struct ) );
         return $language;
     }
@@ -81,7 +81,7 @@ class ContentLanguageHandler implements ContentLanguageHandlerInterface
      */
     public function load( $id )
     {
-        $cache = $this->cache->get( 'language', $id );
+        $cache = $this->cache->getItem( 'language', $id );
         $language = $cache->get();
         if ( $cache->isMiss() )
         {
