@@ -938,9 +938,6 @@ class User extends RestController
      */
     public function createSession()
     {
-        /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
-        $session = $this->container->get( 'session' );
-
         /** @var $sessionInput \eZ\Publish\Core\REST\Server\Values\SessionInput */
         $sessionInput = $this->inputDispatcher->parse(
             new Message(
@@ -948,16 +945,6 @@ class User extends RestController
                 $this->request->body
             )
         );
-
-        if ( $session->isStarted() )
-        {
-            return new Values\SeeOther(
-                $this->urlHandler->generate(
-                    'userSession',
-                    array( 'sessionId' => $session->getId() )
-                )
-            );
-        }
 
         try
         {
@@ -971,12 +958,35 @@ class User extends RestController
             throw new UnauthorizedException( "Invalid login or password", 0, null, $e );
         }
 
-        $this->repository->setCurrentUser( $user );
+        /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
+        $session = $this->container->get( 'session' );
+
+        if ( $session->isStarted() )
+        {
+            /** @var $authenticationToken \Symfony\Component\Security\Core\Authentication\Token\TokenInterface */
+            $authenticationToken = $this->container->get( 'security.context' )->getToken();
+            /** @var $currentUser \eZ\Publish\API\Repository\Values\User\User */
+            $currentUser = $authenticationToken->getUser()->getAPIUser();
+
+            if ( $user->id == $currentUser->id )
+            {
+                return new Values\SeeOther(
+                    $this->urlHandler->generate(
+                        'userSession',
+                        array( 'sessionId' => $session->getId() )
+                    )
+                );
+            }
+
+            // Already logged in with another user, this will be converted to HTTP status 409
+            return new Values\Conflict();
+        }
 
         /** @var $csrfProvider \Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface */
         $csrfProvider = $this->container->get( 'form.csrf_provider' );
 
         $session->start();
+        $session->set( "eZUserLoggedInID", $user->id );
         return new Values\UserSession(
             $user,
             $session->getName(),
