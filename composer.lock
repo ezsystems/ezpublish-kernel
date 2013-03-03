@@ -1,5 +1,5 @@
 {
-    "hash": "25dce212705bb027b5c09928909140dc",
+    "hash": "64fe92a55c544f66109acf659762782c",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -639,16 +639,16 @@
         },
         {
             "name": "tedivm/stash",
-            "version": "v0.10.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tedivm/Stash.git",
-                "reference": "v0.10.2"
+                "reference": "071352c5905706b74b9b2fb925493935975e4d25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tedivm/Stash/zipball/v0.10.2",
-                "reference": "v0.10.2",
+                "url": "https://api.github.com/repos/tedivm/Stash/zipball/071352c5905706b74b9b2fb925493935975e4d25",
+                "reference": "071352c5905706b74b9b2fb925493935975e4d25",
                 "shasum": ""
             },
             "require": {
@@ -683,28 +683,28 @@
                 "scalability",
                 "sessions"
             ],
-            "time": "2013-02-26 07:42:04"
+            "time": "2013-03-03 00:18:55"
         },
         {
             "name": "tedivm/stash-bundle",
-            "version": "dev-symfony22",
+            "version": "dev-blackhole",
             "target-dir": "Tedivm/StashBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/andrerom/TedivmStashBundle.git",
-                "reference": "cbbff9d848693ae27dff40beb66d903fd2a3ea8c"
+                "reference": "9b83333a9bf046321c3d7c2d43ef2e3209707563"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/andrerom/TedivmStashBundle/zipball/cbbff9d848693ae27dff40beb66d903fd2a3ea8c",
-                "reference": "cbbff9d848693ae27dff40beb66d903fd2a3ea8c",
+                "url": "https://api.github.com/repos/andrerom/TedivmStashBundle/zipball/9b83333a9bf046321c3d7c2d43ef2e3209707563",
+                "reference": "9b83333a9bf046321c3d7c2d43ef2e3209707563",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0",
                 "symfony/framework-bundle": ">=2.2,<3.0",
                 "symfony/yaml": ">=2.2,<3.0",
-                "tedivm/stash": "0.10.*"
+                "tedivm/stash": "dev-master#071352c5905706b74b9b2fb925493935975e4d25"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -733,9 +733,9 @@
                 "symfony"
             ],
             "support": {
-                "source": "https://github.com/andrerom/TedivmStashBundle/tree/symfony22"
+                "source": "https://github.com/andrerom/TedivmStashBundle/tree/blackhole"
             },
-            "time": "2013-03-02 14:35:56"
+            "time": "2013-03-03 11:30:46"
         },
         {
             "name": "twig/twig",
