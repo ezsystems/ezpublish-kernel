@@ -121,7 +121,7 @@ class Page implements Converter
 
         $pageNode = $dom->documentElement;
 
-        foreach ( $page->getProperties() as $attrName => $attrValue )
+        foreach ( $page->getState() as $attrName => $attrValue )
         {
             switch ( $attrName )
             {
@@ -157,7 +157,7 @@ class Page implements Converter
     protected function generateZoneXmlString( $zone, DOMDocument $dom )
     {
         $zoneNode = $dom->createElement( 'zone' );
-        foreach ( $zone->getProperties() as $attrName => $attrValue )
+        foreach ( $zone->getState() as $attrName => $attrValue )
         {
             switch ( $attrName )
             {
@@ -197,7 +197,7 @@ class Page implements Converter
     {
         $blockNode = $dom->createElement( 'block' );
 
-        foreach ( $block->getProperties() as $attrName => $attrValue )
+        foreach ( $block->getState() as $attrName => $attrValue )
         {
             switch ( $attrName )
             {
@@ -259,7 +259,7 @@ class Page implements Converter
 
         $itemNode = $dom->createElement( 'item' );
 
-        foreach ( $item->getProperties() as $attrName => $attrValue )
+        foreach ( $item->getState() as $attrName => $attrValue )
         {
             switch ( $attrName )
             {
@@ -290,7 +290,8 @@ class Page implements Converter
      */
     public function restoreValueFromXmlString( $xmlString )
     {
-        $page = new Parts\Page( $this->pageService );
+        $zones = array();
+        $attributes = array();
 
         if ( $xmlString )
         {
@@ -302,11 +303,12 @@ class Page implements Converter
             {
                 if ( $node->nodeType == XML_ELEMENT_NODE && $node->nodeName == 'zone' )
                 {
-                   $page->addZone( $this->restoreZoneFromXml( $node ) );
+                    $zone = $this->restoreZoneFromXml( $node );
+                    $zones[$zone->id] = $zone;
                 }
                 else if ( $node->nodeType == XML_ELEMENT_NODE )
                 {
-                    $page->{$node->nodeName} = $node->nodeValue;
+                    $attributes[$node->nodeName] = $node->nodeValue;
                 }
             }
 
@@ -314,12 +316,18 @@ class Page implements Converter
             {
                 foreach ( $root->attributes as $attr )
                 {
-                    $page->{$attr->name} = $attr->value;
+                    $attributes[$attr->name] = $attr->value;
                 }
             }
         }
 
-        return $page;
+        return $page = new Parts\Page(
+            $this->pageService,
+            array(
+                'zones'        => $zones,
+                'attributes'   => $attributes
+            )
+        );
     }
 
     /**
@@ -331,37 +339,62 @@ class Page implements Converter
      */
     protected function restoreZoneFromXml( DOMElement $node )
     {
-        $zone = new Parts\Zone( $this->pageService );
+        $zoneId = null;
+        $zoneIdentifier = null;
+        $action = null;
+        $blocks = array();
+        $attributes = array();
 
         if ( $node->hasAttributes() )
         {
             foreach ( $node->attributes as $attr )
             {
-                if ( $attr->name == 'id' )
+                switch ( $attr->name )
                 {
-                    $value = explode( '_', $attr->value );
-                    $zone->{$attr->name} = $value[1];
-                }
-                else
-                {
-                    $zone->{$attr->name} = $attr->value;
+                    case 'id':
+                        // Stored Id has following format : id_<zoneId>, so extract <zoneId>
+                        $zoneId = substr(
+                            $attr->value, 0,
+                            strpos( $attr->value, '_' ) + 1
+                        );
+                        break;
+                    case 'action':
+                        $action = $attr->value;
+                        break;
+                    default:
+                        $attributes[$attr->name] = $attr->value;
                 }
             }
         }
 
         foreach ( $node->childNodes as $node )
         {
-            if ( $node->nodeType == XML_ELEMENT_NODE && $node->nodeName == 'block' )
+            if ( $node->nodeType !== XML_ELEMENT_NODE )
+                continue;
+
+            switch ( $node->nodeName )
             {
-                $zone->addBlock( $this->restoreBlockFromXml( $node ) );
-            }
-            else if ( $node->nodeType == XML_ELEMENT_NODE )
-            {
-                $zone->{$node->nodeName} = $node->nodeValue;
+                case 'block':
+                    $block = $this->restoreBlockFromXml( $node );
+                    $blocks[$block->id] = $block;
+                    break;
+                case 'zone_identifier':
+                    $zoneIdentifier = $node->nodeValue;
+                    break;
+                default:
+                    $attributes[$node->nodeName] = $node->nodeValue;
             }
         }
 
-        return $zone;
+        return new Parts\Zone(
+            $this->pageService,
+            array(
+                'id'            => $zoneId,
+                'identifier'    => $zoneIdentifier,
+                'attributes'    => $attributes,
+                'action'        => $action
+            )
+        );
     }
 
     /**
@@ -373,68 +406,95 @@ class Page implements Converter
      */
     protected function restoreBlockFromXml( DOMElement $node )
     {
-        $block = new Parts\Block( $this->pageService );
+        $blockId = null;
+        $items = array();
+        $rotation = array();
+        $customAttributes = array();
+        $attributes = array();
+        $name = null;
+        $type = null;
+        $view = null;
+        $overflowId = null;
+        $action = null;
 
         if ( $node->hasAttributes() )
         {
             foreach ( $node->attributes as $attr )
             {
-                if ( $attr->name == 'id' )
+                switch ( $attr->name )
                 {
-                    $value = explode( '_', $attr->value );
-                    $block->{$attr->name} = $value[1];
-                }
-                else
-                {
-                    $block->{$attr->name} = $attr->value;
+                    case 'id':
+                        // Stored Id has following format : id_<blockId>, so extract <blockId>
+                        $blockId = substr(
+                            $attr->value, 0,
+                            strpos( $attr->value, '_' ) + 1
+                        );
+                        break;
+                    case 'action':
+                        $action = $attr->value;
+                        break;
+                    default:
+                        $attributes[$attr->name] = $attr->value;
                 }
             }
         }
 
         foreach ( $node->childNodes as $node )
         {
-            if ( $node->nodeType == XML_ELEMENT_NODE && $node->nodeName == 'item' )
-            {
-                $block->addItem( $this->restoreItemFromXml( $node ) );
-            }
-            else if ( $node->nodeType == XML_ELEMENT_NODE && $node->nodeName == 'rotation' )
-            {
-                $attrValue = array();
+            if ( $node->nodeType !== XML_ELEMENT_NODE )
+                continue;
 
-                foreach ( $node->childNodes as $subNode )
-                {
-                    if ( $subNode->nodeType == XML_ELEMENT_NODE )
+            switch ( $node->nodeName )
+            {
+                case 'item':
+                    $items[] = $this->restoreItemFromXml( $node );
+                    break;
+                case 'rotation':
+                    foreach ( $node->childNodes as $subNode )
                     {
-                        $attrValue[$subNode->nodeName] = $subNode->nodeValue;
+                        if ( $subNode->nodeType !== XML_ELEMENT_NODE )
+                            continue;
+
+                        $rotation[$subNode->nodeName] = $subNode->nodeValue;
                     }
-                }
-
-                $block->{$node->nodeName} = $attrValue;
-            }
-            else if ( $node->nodeType == XML_ELEMENT_NODE && $node->nodeName == 'custom_attributes' )
-            {
-                $attrValue = array();
-
-                foreach ( $node->childNodes as $subNode )
-                {
-                    if ( $subNode->nodeType == XML_ELEMENT_NODE )
+                    break;
+                case 'custom_attributes':
+                    foreach ( $node->childNodes as $subNode )
                     {
-                        $attrValue[$subNode->nodeName] = $subNode->nodeValue;
-                    }
-                }
+                        if ( $subNode->nodeType !== XML_ELEMENT_NODE )
+                            continue;
 
-                $block->{$node->nodeName} = $attrValue;
-            }
-            else
-            {
-                if ( $node->nodeType == XML_ELEMENT_NODE )
-                {
-                    $block->{$node->nodeName} = $node->nodeValue;
-                }
+                        $customAttributes[$subNode->nodeName] = $subNode->nodeValue;
+                    }
+                    break;
+                case 'name':
+                case 'type':
+                case 'view':
+                    ${$node->nodeName} = $node->nodeValue;
+                    break;
+                case 'overflow_id':
+                    $overflowId = $node->nodeValue;
+                    break;
+                default:
+                    $attributes[$node->nodeName = $node->nodeValue];
             }
         }
 
-        return $block;
+        return new Parts\Block(
+            $this->pageService,
+            array(
+                'id'                => $blockId,
+                'action'            => $action,
+                'items'             => $items,
+                'rotation'          => $rotation,
+                'customAttributes'  => $customAttributes,
+                'attributes'        => $attributes,
+                'name'              => $name,
+                'type'              => $type,
+                'view'              => $view,
+                'overflowId'        => $overflowId
+            )
+        );
     }
 
     /**
@@ -446,24 +506,43 @@ class Page implements Converter
      */
     protected function restoreItemFromXml( DOMElement $node )
     {
-        $item = new Parts\Item( $this->pageService );
+        $itemId = null;
+        $action = null;
+        $attributes = array();
 
         if ( $node->hasAttributes() )
         {
             foreach ( $node->attributes as $attr )
             {
-                $item->{$attr->name} = $attr->value;
+                switch ( $attr->name )
+                {
+                    case 'id':
+                        $itemId = $attr->value;
+                        break;
+                    case 'action':
+                        $action = $attr->value;
+                        break;
+                    default:
+                        $attributes[$attr->name] = $attr->value;
+                }
             }
         }
 
         foreach ( $node->childNodes as $node )
         {
-            if ( $node->nodeType == XML_ELEMENT_NODE )
-            {
-                $item->{$node->nodeName} = $node->nodeValue;
-            }
+            if ( $node->nodeType !== XML_ELEMENT_NODE )
+                continue;
+
+            $item[$node->nodeName] = $node->nodeValue;
         }
 
-        return $item;
+        return new Parts\Item(
+            $this->pageService,
+            array(
+                'id'            => $itemId,
+                'action'        => $action,
+                'attributes'    => $attributes
+            )
+        );
     }
 }
