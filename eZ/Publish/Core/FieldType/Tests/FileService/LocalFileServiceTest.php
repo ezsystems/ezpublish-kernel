@@ -313,7 +313,7 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
         $metadataHandler = $this->getMock( 'eZ\\Publish\\SPI\\FieldType\\MetadataHandler' );
         $metadataHandler->expects( $this->once() )
                         ->method( 'extract' )
-                        ->with( $storedPath )
+                        ->with( $this->getStorageDir() . '/' . $storedPath )
                         ->will( $this->returnValue( $expectedMetadata ) );
         $metadata = $fileService->getMetadata(
             $metadataHandler,
