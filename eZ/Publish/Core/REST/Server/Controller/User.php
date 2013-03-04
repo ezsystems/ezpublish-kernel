@@ -29,6 +29,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 
 use eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException AS RestInvalidArgumentException;
+use eZ\Publish\Core\REST\Common\Exceptions\NotFoundException AS RestNotFoundException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 
@@ -994,6 +995,26 @@ class User extends RestController
             $this->container->getParameter( 'form.type_extension.csrf.field_name' ),
             $csrfProvider->generateCsrfToken( 'rest' )
         );
+    }
+
+    /**
+     * Deletes given session.
+     */
+    public function deleteSession()
+    {
+        $urlValues = $this->urlHandler->parse( "userSession", $this->request->path );
+        $sessionId = $urlValues["sessionId"];
+
+        /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
+        $session = $this->container->get( 'session' );
+        if ( !$session->isStarted() || $session->getId() != $sessionId )
+        {
+            throw new RestNotFoundException( "Session not found: '{$sessionId}'." );
+        }
+
+        $session->invalidate();
+
+        return new Values\NoContent();
     }
 
     /**
