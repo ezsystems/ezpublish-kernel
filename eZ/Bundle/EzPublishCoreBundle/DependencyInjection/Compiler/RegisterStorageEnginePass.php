@@ -30,18 +30,19 @@ class RegisterStorageEnginePass implements CompilerPassInterface
      */
     public function process( ContainerBuilder $container )
     {
+        if ( !$container->hasDefinition( 'ezpublish.api.storage_engine.factory' ) )
+            return;
+
         $default = $container->getParameter( 'ezpublish.api.storage_engine.default' );
-        if ( $container->hasDefinition( 'ezpublish.api.storage_engine.factory' ) )
-            $storageEngineFactoryDef = $container->getDefinition( 'ezpublish.api.storage_engine.factory' );
+        $storageEngineFactoryDef = $container->getDefinition( 'ezpublish.api.storage_engine.factory' );
 
         foreach ( $container->findTaggedServiceIds( 'ezpublish.storageEngine' ) as $id => $attributes )
         {
+            // Set the default id on parameter ezpublish.spi.persistence.default_id for lazy factory
             if ( $attributes[0]['alias'] === $default )
                 $container->setParameter( 'ezpublish.spi.persistence.default_id', $id );
 
-            if ( !isset( $storageEngineFactoryDef ) )
-                continue;
-
+            // Register the storage engine on the main storage engine factory
             $storageEngineFactoryDef->addMethodCall(
                 'registerStorageEngine',
                 array(
