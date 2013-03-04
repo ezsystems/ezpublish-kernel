@@ -245,13 +245,13 @@ class Repository implements RepositoryInterface
      *
      * Low level function, use canUser instead if you have objects to check against.
      *
-     * @param string $module
-     * @param string $function
+     * @param string $controller
+     * @param string $action
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
      * @return boolean|array Bool if user has full or no access, array if limitations if not
      */
-    public function hasAccess( $module, $function, User $user = null )
+    public function hasAccess( $controller, $action, User $user = null )
     {
         if ( $user === null )
             $user = $this->getCurrentUser();
@@ -268,13 +268,13 @@ class Repository implements RepositoryInterface
                 if ( $spiPolicy->module === '*' && $spiRoleAssignment->limitationIdentifier === null )
                     return true;
 
-                if ( $spiPolicy->module !== $module && $spiPolicy->module !== '*' )
+                if ( $spiPolicy->module !== $controller && $spiPolicy->module !== '*' )
                     continue;
 
                 if ( $spiPolicy->function === '*' && $spiRoleAssignment->limitationIdentifier === null )
                     return true;
 
-                if ( $spiPolicy->function !== $function && $spiPolicy->function !== '*' )
+                if ( $spiPolicy->function !== $action && $spiPolicy->function !== '*' )
                     continue;
 
                 if ( $spiPolicy->limitations === '*' && $spiRoleAssignment->limitationIdentifier === null )
@@ -297,7 +297,7 @@ class Repository implements RepositoryInterface
         if ( !empty( $permissionSets ) )
             return $permissionSets;
 
-        return false;// No policies matching $module and $function, or they contained limitations
+        return false;// No policies matching $controller and $action, or they contained limitations
     }
 
     /**
@@ -309,16 +309,16 @@ class Repository implements RepositoryInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
      *
-     * @param string $module The module, aka controller identifier to check permissions on
-     * @param string $function The function, aka the controller action to check permissions on
+     * @param string $controller The module, aka controller identifier to check permissions on
+     * @param string $action The function, aka the controller action to check permissions on
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
      * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
      *
      * @return boolean
      */
-    public function canUser( $module, $function, ValueObject $object, ValueObject $target = null )
+    public function canUser( $controller, $action, ValueObject $object, ValueObject $target = null )
     {
-        $permissionSets = $this->hasAccess( $module, $function );
+        $permissionSets = $this->hasAccess( $controller, $action );
         if ( $permissionSets === false || $permissionSets === true )
         {
             return $permissionSets;

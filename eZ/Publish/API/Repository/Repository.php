@@ -36,13 +36,13 @@ interface Repository
     public function setCurrentUser( User $user );
 
     /**
-     * @param string $module The module, aka controller identifier to check permissions on
-     * @param string $function The function, aka the controller action to check permissions on
+     * @param string $controller The controller (legacy:module) identifier to check permissions on, example: 'Bundle:controller'
+     * @param string $action The controller action (legacy:function) to check permissions on, example: 'read'
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
      * @return boolean|array if limitations are on this function an array of limitations is returned
      */
-    public function hasAccess( $module, $function, User $user = null );
+    public function hasAccess( $controller, $action, User $user = null );
 
     /**
      * Indicates if the current user is allowed to perform an action given by the function on the given
@@ -58,14 +58,14 @@ interface Repository
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
      *
-     * @param string $module The module, aka controller identifier to check permissions on
-     * @param string $function The function, aka the controller action to check permissions on
+     * @param string $controller The controller (legacy:module) identifier to check permissions on, example: 'Bundle:controller'
+     * @param string $action The controller action (legacy:function) to check permissions on, example: 'read'
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
      * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
      *
      * @return boolean
      */
-    public function canUser( $module, $function, ValueObject $object, ValueObject $target = null );
+    public function canUser( $controller, $action, ValueObject $object, ValueObject $target = null );
 
     /**
      * Get Content Service

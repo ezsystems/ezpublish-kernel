@@ -21,16 +21,16 @@ use Exception;
 class UnauthorizedException extends APIUnauthorizedException implements Httpable
 {
     /**
-     * Generates: User does not have access to '{$function}' '{$module}'[ with identifier '{$identifier}']
+     * Generates: User does not have access to '{$action}' '{$controller}'[ with identifier '{$identifier}']
      *
      * Example: User does not have access to 'read' 'content' with identifier '42'
      *
-     * @param string $module The module name should be in sync with the name of the domain object in question
-     * @param string $function
-     * @param string|null $identifier
+     * @param string $controller The $controller name should be in sync with the name of the domain object in question
+     * @param string $action
+     * @param array|null $properties List of identifiers for object user did not have access to
      * @param \Exception|null $previous
      */
-    public function __construct( $module, $function, array $properties = null, Exception $previous = null )
+    public function __construct( $controller, $action, array $properties = null, Exception $previous = null )
     {
         $identificationString = '';
         if ( $properties !== null )
@@ -43,7 +43,7 @@ class UnauthorizedException extends APIUnauthorizedException implements Httpable
         }
 
         parent::__construct(
-            "User does not have access to '{$function}' '{$module}'" . $identificationString,
+            "User does not have access to '{$action}' '{$controller}'" . $identificationString,
             self::UNAUTHORIZED,
             $previous
         );
