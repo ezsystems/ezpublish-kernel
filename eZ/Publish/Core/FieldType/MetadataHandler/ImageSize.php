@@ -18,6 +18,8 @@ class ImageSize implements MetadataHandler
         return array(
             'width' => $metadata[0],
             'height' => $metadata[1],
+            // required until a dedicated mimetype metadata handler is added
+            'mime' => $metadata['mime'],
         );
 
     }
