@@ -20,7 +20,7 @@ use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Search\Handler
  */
-class SearchHandler extends SearchHandlerInterface
+class SearchHandler implements SearchHandlerInterface
 {
     /**
      * @var \Tedivm\StashBundle\Service\CacheService

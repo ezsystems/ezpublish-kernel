@@ -56,7 +56,7 @@ use Exception;
  * content objects based on criteria, which could not be converted in to
  * database statements.
  */
-class SearchHandler extends SearchHandlerInterface
+class SearchHandler implements SearchHandlerInterface
 {
     /**
      * @var Handler

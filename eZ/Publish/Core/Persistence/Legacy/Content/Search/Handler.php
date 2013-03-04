@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
 
 use eZ\Publish\SPI\Persistence\Content;
-use eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler;
+use eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandlerInterface;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
@@ -43,7 +43,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
  * content objects based on criteria, which could not be convertedd in to
  * database statements.
  */
-class Handler extends BaseSearchHandler
+class Handler implements SearchHandlerInterface
 {
     /**
      * Content locator gateway.
