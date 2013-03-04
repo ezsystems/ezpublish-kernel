@@ -213,7 +213,6 @@ class FieldHandlerTest extends LanguageAwareTestCase
 
         $callNo = 0;
         $fieldValue = new FieldValue();
-        $fieldsToCopy = array();
         foreach ( array( 1, 2, 3 ) as $fieldDefinitionId )
         {
             foreach ( array( "eng-US", "eng-GB" ) as $languageCode )
@@ -222,40 +221,25 @@ class FieldHandlerTest extends LanguageAwareTestCase
                     array(
                         "fieldDefinitionId" => $fieldDefinitionId,
                         "type" => "some-type",
-                        "versionNo" => 1,
                         "value" => $fieldValue,
                         "languageCode" => $languageCode
                     )
                 );
+                $originalField = clone $field;
+                $field->versionNo = 1;
                 // These fields are copied from main language
                 if ( ( $fieldDefinitionId == 2 || $fieldDefinitionId == 3 ) && $languageCode == "eng-US" )
                 {
-                    $originalField = clone $field;
                     $originalField->languageCode = "eng-GB";
-                    $fieldsToCopy[] = array(
-                        "copy" => clone $field,
-                        "original" => $originalField
-                    );
-                    continue;
                 }
                 $storageHandlerMock->expects( $this->at( $callNo++ ) )
-                    ->method( 'storeFieldData' )
+                    ->method( 'copyFieldData' )
                     ->with(
                         $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
-                        $this->equalTo( $field )
+                        $this->equalTo( $field ),
+                        $this->equalTo( $originalField )
                     )->will( $this->returnValue( $storageHandlerUpdatesFields ) );
             }
-        }
-
-        foreach ( $fieldsToCopy as $fieldToCopy )
-        {
-            $storageHandlerMock->expects( $this->at( $callNo++ ) )
-                ->method( 'copyFieldData' )
-                ->with(
-                    $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
-                    $this->equalTo( $fieldToCopy["copy"] ),
-                    $this->equalTo( $fieldToCopy["original"] )
-                )->will( $this->returnValue( $storageHandlerUpdatesFields ) );
         }
     }
 
