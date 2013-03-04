@@ -45,7 +45,7 @@ class PersistenceLoggerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetName()
     {
-        $this->assertEquals( 'PersistenceLogger', $this->logger->getName() );
+        $this->assertEquals( PersistenceLogger::NAME, $this->logger->getName() );
     }
 
     /**

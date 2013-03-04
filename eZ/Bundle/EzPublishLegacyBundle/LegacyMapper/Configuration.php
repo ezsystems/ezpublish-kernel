@@ -131,8 +131,7 @@ class Configuration implements EventSubscriberInterface
         ezpEvent::getInstance()->attach( 'content/cache', array( $this->gatewayCachePurger, 'purge' ) );
         ezpEvent::getInstance()->attach( 'content/cache/all', array( $this->gatewayCachePurger, 'purgeAll' ) );
 
-
-         // Register persistence cache event listeners
+        // Register persistence cache event listeners
         ezpEvent::getInstance()->attach( 'content/cache', array( $this->persistenceCachePurger, 'content' ) );
         ezpEvent::getInstance()->attach( 'content/cache/all', array( $this->persistenceCachePurger, 'all' ) );
         ezpEvent::getInstance()->attach( 'content/class/cache/all', array( $this->persistenceCachePurger, 'contentType' ) );

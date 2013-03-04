@@ -14,6 +14,8 @@ namespace eZ\Publish\Core\Persistence\Cache;
  */
 class PersistenceLogger
 {
+    const NAME = 'PersistenceLogger';
+
     /**
      * @var int
      */
@@ -58,7 +60,7 @@ class PersistenceLogger
      */
     public function getName()
     {
-        return 'PersistenceLogger';
+        return self::NAME;
     }
 
     /**

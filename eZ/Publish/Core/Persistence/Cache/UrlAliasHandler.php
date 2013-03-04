@@ -218,7 +218,6 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
         }
         else
         {
-            /** @var $urlAliasUrlLookupCache int */
             $urlAlias = $this->loadUrlAlias( $urlAliasId );
         }
 
