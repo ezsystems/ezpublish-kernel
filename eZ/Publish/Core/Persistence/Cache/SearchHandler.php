@@ -13,47 +13,12 @@ use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandlerInterface;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
-use Tedivm\StashBundle\Service\CacheService;
-use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Search\Handler
  */
-class SearchHandler implements SearchHandlerInterface
+class SearchHandler extends AbstractHandler implements SearchHandlerInterface
 {
-    /**
-     * @var \Tedivm\StashBundle\Service\CacheService
-     */
-    protected $cache;
-
-    /**
-     * @var \eZ\Publish\Core\Persistence\Factory
-     */
-    protected $persistenceFactory;
-
-    /**
-     * @var PersistenceLogger
-     */
-    protected $logger;
-
-    /**
-     * Setups current handler with everything needed
-     *
-     * @param \Tedivm\StashBundle\Service\CacheService $cache
-     * @param \eZ\Publish\Core\Persistence\Factory $persistenceFactory
-     * @param PersistenceLogger $logger
-     */
-    public function __construct(
-        CacheService $cache,
-        PersistenceFactory $persistenceFactory,
-        PersistenceLogger $logger )
-    {
-        $this->cache = $cache;
-        $this->persistenceFactory = $persistenceFactory;
-        $this->logger = $logger;
-    }
-
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Search\Handler::findContent
      */

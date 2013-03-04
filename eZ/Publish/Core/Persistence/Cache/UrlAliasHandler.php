@@ -13,51 +13,16 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundExcepti
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias;
-use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
-use Tedivm\StashBundle\Service\CacheService;
-use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
  */
-class UrlAliasHandler implements UrlAliasHandlerInterface
+class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterface
 {
     /**
      * Constant used for storing not found results for lookup()
      */
     const NOT_FOUND = 0;
-
-    /**
-     * @var \Tedivm\StashBundle\Service\CacheService
-     */
-    protected $cache;
-
-    /**
-     * @var \eZ\Publish\Core\Persistence\Factory
-     */
-    protected $persistenceFactory;
-
-    /**
-     * @var PersistenceLogger
-     */
-    protected $logger;
-
-    /**
-     * Setups current handler with everything needed
-     *
-     * @param \Tedivm\StashBundle\Service\CacheService $cache
-     * @param \eZ\Publish\Core\Persistence\Factory $persistenceFactory
-     * @param PersistenceLogger $logger
-     */
-    public function __construct(
-        CacheService $cache,
-        PersistenceFactory $persistenceFactory,
-        PersistenceLogger $logger )
-    {
-        $this->cache = $cache;
-        $this->persistenceFactory = $persistenceFactory;
-        $this->logger = $logger;
-    }
 
     /**
      * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::publishUrlAliasForLocation

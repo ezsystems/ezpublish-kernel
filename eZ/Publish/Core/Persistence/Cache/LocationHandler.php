@@ -13,47 +13,12 @@ use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandlerInterf
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location;
-use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
-use Tedivm\StashBundle\Service\CacheService;
-use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
  */
-class LocationHandler implements LocationHandlerInterface
+class LocationHandler extends AbstractHandler implements LocationHandlerInterface
 {
-    /**
-     * @var \Tedivm\StashBundle\Service\CacheService
-     */
-    protected $cache;
-
-    /**
-     * @var \eZ\Publish\Core\Persistence\Factory
-     */
-    protected $persistenceFactory;
-
-    /**
-     * @var PersistenceLogger
-     */
-    protected $logger;
-
-    /**
-     * Setups current handler with everything needed
-     *
-     * @param \Tedivm\StashBundle\Service\CacheService $cache
-     * @param \eZ\Publish\Core\Persistence\Factory $persistenceFactory
-     * @param PersistenceLogger $logger
-     */
-    public function __construct(
-        CacheService $cache,
-        PersistenceFactory $persistenceFactory,
-        PersistenceLogger $logger )
-    {
-        $this->cache = $cache;
-        $this->persistenceFactory = $persistenceFactory;
-        $this->logger = $logger;
-    }
-
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::load
      */

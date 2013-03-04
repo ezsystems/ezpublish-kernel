@@ -21,40 +21,8 @@ use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 /**
  * Cache handler for user module
  */
-class UserHandler implements UserHandlerInterface
+class UserHandler extends AbstractHandler implements UserHandlerInterface
 {
-    /**
-     * @var \Tedivm\StashBundle\Service\CacheService
-     */
-    protected $cache;
-
-    /**
-     * @var \eZ\Publish\Core\Persistence\Factory
-     */
-    protected $persistenceFactory;
-
-    /**
-     * @var PersistenceLogger
-     */
-    protected $logger;
-
-    /**
-     * Setups current handler with everything needed
-     *
-     * @param \Tedivm\StashBundle\Service\CacheService $cache
-     * @param \eZ\Publish\Core\Persistence\Factory $persistenceFactory
-     * @param PersistenceLogger $logger
-     */
-    public function __construct(
-        CacheService $cache,
-        PersistenceFactory $persistenceFactory,
-        PersistenceLogger $logger )
-    {
-        $this->cache = $cache;
-        $this->persistenceFactory = $persistenceFactory;
-        $this->logger = $logger;
-    }
-
     /**
      * @see eZ\Publish\SPI\Persistence\User\Handler::create
      */

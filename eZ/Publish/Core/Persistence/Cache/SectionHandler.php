@@ -10,9 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandlerInterface;
-use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
-use Tedivm\StashBundle\Service\CacheService;
-use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
@@ -20,40 +17,8 @@ use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
  * @todo Consider loadAll & loadByIdentifier cache, however then loadAll() must be used
  *       by all (incl create) but update & delete to avoid doing several cache lookups.
  */
-class SectionHandler implements SectionHandlerInterface
+class SectionHandler extends AbstractHandler implements SectionHandlerInterface
 {
-    /**
-     * @var \Tedivm\StashBundle\Service\CacheService
-     */
-    protected $cache;
-
-    /**
-     * @var \eZ\Publish\Core\Persistence\Factory
-     */
-    protected $persistenceFactory;
-
-    /**
-     * @var PersistenceLogger
-     */
-    protected $logger;
-
-    /**
-     * Setups current handler with everything needed
-     *
-     * @param \Tedivm\StashBundle\Service\CacheService $cache
-     * @param \eZ\Publish\Core\Persistence\Factory $persistenceFactory
-     * @param PersistenceLogger $logger
-     */
-    public function __construct(
-        CacheService $cache,
-        PersistenceFactory $persistenceFactory,
-        PersistenceLogger $logger )
-    {
-        $this->cache = $cache;
-        $this->persistenceFactory = $persistenceFactory;
-        $this->logger = $logger;
-    }
-
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
      */
