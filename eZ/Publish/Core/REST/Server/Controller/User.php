@@ -961,11 +961,11 @@ class User extends RestController
 
         /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
         $session = $this->container->get( 'session' );
+        /** @var $authenticationToken \Symfony\Component\Security\Core\Authentication\Token\TokenInterface */
+        $authenticationToken = $this->container->get( 'security.context' )->getToken();
 
-        if ( $session->isStarted() )
+        if ( $session->isStarted() && $authenticationToken !== null )
         {
-            /** @var $authenticationToken \Symfony\Component\Security\Core\Authentication\Token\TokenInterface */
-            $authenticationToken = $this->container->get( 'security.context' )->getToken();
             /** @var $currentUser \eZ\Publish\API\Repository\Values\User\User */
             $currentUser = $authenticationToken->getUser()->getAPIUser();
             if ( $user->id == $currentUser->id )
