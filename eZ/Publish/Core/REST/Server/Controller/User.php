@@ -968,7 +968,6 @@ class User extends RestController
             $authenticationToken = $this->container->get( 'security.context' )->getToken();
             /** @var $currentUser \eZ\Publish\API\Repository\Values\User\User */
             $currentUser = $authenticationToken->getUser()->getAPIUser();
-
             if ( $user->id == $currentUser->id )
             {
                 return new Values\SeeOther(
@@ -979,12 +978,19 @@ class User extends RestController
                 );
             }
 
-            // Already logged in with another user, this will be converted to HTTP status 409
-            return new Values\Conflict();
+            $anonymousUser = $this->userService->loadAnonymousUser();
+            if ( $currentUser->id != $anonymousUser->id )
+            {
+                // Already logged in with another user, this will be converted to HTTP status 409
+                return new Values\Conflict();
+            }
         }
 
-        /** @var $csrfProvider \Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface */
-        $csrfProvider = $this->container->get( 'form.csrf_provider' );
+        if ( $this->container->getParameter( 'form.type_extension.csrf.enabled' ) )
+        {
+            /** @var $csrfProvider \Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface */
+            $csrfProvider = $this->container->get( 'form.csrf_provider' );
+        }
 
         $session->start();
         $session->set( "eZUserLoggedInID", $user->id );
@@ -992,8 +998,9 @@ class User extends RestController
             $user,
             $session->getName(),
             $session->getId(),
-            $this->container->getParameter( 'form.type_extension.csrf.field_name' ),
-            $csrfProvider->generateCsrfToken( 'rest' )
+            isset( $csrfProvider ) ?
+                $csrfProvider->generateCsrfToken( 'rest' ) :
+                ""
         );
     }
 
