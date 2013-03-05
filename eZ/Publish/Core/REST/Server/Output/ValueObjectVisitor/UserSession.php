@@ -28,6 +28,7 @@ class UserSession extends ValueObjectVisitor
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Session' ) );
+        $visitor->setHeader( 'Set-Cookie', 'is_logged_in=true; path=/' );
 
         //@todo Needs refactoring, disabling certain headers should not be done this way
         $visitor->setHeader( 'Accept-Patch', false );
