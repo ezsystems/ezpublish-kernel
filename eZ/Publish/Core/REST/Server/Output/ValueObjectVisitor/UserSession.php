@@ -46,11 +46,8 @@ class UserSession extends ValueObjectVisitor
         $generator->startValueElement( 'identifier', $data->sessionId );
         $generator->endValueElement( 'identifier' );
 
-        $generator->startValueElement( 'csrf-param', $data->csrfParam );
-        $generator->endValueElement( 'csrf-param' );
-
-        $generator->startValueElement( 'csrf-token', $data->csrfToken );
-        $generator->endValueElement( 'csrf-token' );
+        $generator->startValueElement( 'csrfToken', $data->csrfToken );
+        $generator->endValueElement( 'csrfToken' );
 
         $generator->startObjectElement( 'User', 'User' );
         $generator->startAttribute(

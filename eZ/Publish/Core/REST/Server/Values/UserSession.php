@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\Core\REST\Common\Value as RestValue;
+use eZ\Publish\API\Repository\Values\User\User;
 
 /**
  * User list view model
@@ -37,30 +38,22 @@ class UserSession extends RestValue
     public $sessionId;
 
     /**
-     * CSRF token name
-     * @var string
-     */
-    public $csrfParam;
-
-    /**
      * CSRF token value
      * @var string
      */
     public $csrfToken;
 
-
     /**
-     * Construct
-     *
-     * @param \eZ\Publish\Core\REST\Server\Values\RestUser[] $users
-     * @param string $path
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param string $sessionName
+     * @param string $sessionId
+     * @param string $csrfToken
      */
-    public function __construct( $user, $sessionName, $sessionId, $csrfParam, $csrfToken )
+    public function __construct( User $user, $sessionName, $sessionId, $csrfToken )
     {
         $this->user = $user;
         $this->sessionName = $sessionName;
         $this->sessionId = $sessionId;
-        $this->csrfParam = $csrfParam;
         $this->csrfToken = $csrfToken;
     }
 }

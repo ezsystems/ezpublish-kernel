@@ -33,7 +33,6 @@ class SessionTest extends ValueObjectVisitorBaseTest
             $this->getUserMock(),
             "sessionName",
             "sessionId",
-            "csrfParam",
             "csrfToken"
         );
 
@@ -63,7 +62,7 @@ class SessionTest extends ValueObjectVisitorBaseTest
             array(
                 'tag' => 'Session',
                 'children' => array(
-                    'count' => 5,
+                    'count' => 4,
                 )
             ),
             $result,
@@ -136,26 +135,6 @@ class SessionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains csrf-param value element
-     *
-     * @param string $result
-     *
-     * @depends testVisit
-     */
-    public function testResultContainsCsrfParamValueElement( $result )
-    {
-        $this->assertTag(
-            array(
-                'tag' => 'csrf-param',
-                'content' => 'csrfParam',
-            ),
-            $result,
-            'Invalid or non-existing <Session> csrf-param value element.',
-            false
-        );
-    }
-
-    /**
      * Test if result contains csrf-token value element
      *
      * @param string $result
@@ -166,7 +145,7 @@ class SessionTest extends ValueObjectVisitorBaseTest
     {
         $this->assertTag(
             array(
-                'tag' => 'csrf-token',
+                'tag' => 'csrfToken',
                 'content' => 'csrfToken',
             ),
             $result,
