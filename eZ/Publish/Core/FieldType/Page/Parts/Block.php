@@ -17,7 +17,9 @@ namespace eZ\Publish\Core\FieldType\Page\Parts;
  * @property-read string $overflowId Block overflow Id.
  * @property-read array $customAttributes Arbitrary custom attributes (when block is "special").
  * @property-read \eZ\Publish\Core\FieldType\Page\Parts\Item[] $items Block items.
- * @property-read string $action Action to be executed. Can be either "add", "modify" or "remove" (see \eZ\Publish\Core\FieldType\Page\Parts\Base for ACTION_* constants)
+ * @property-read string $action Action to be executed. Can be either "add", "modify" or "remove" (see \eZ\Publish\Core\FieldType\Page\Parts\Base for ACTION_* constants).
+ * @property-read array $rotation
+ * @property-read string $zoneId Id of zone current block belongs to.
  */
 class Block extends Base
 {
@@ -49,7 +51,7 @@ class Block extends Base
     /**
      * @var array
      */
-    protected $customAttributes = array();
+    protected $customAttributes;
 
     /**
      * @see \eZ\Publish\Core\FieldType\Page\Parts\Base for ACTION_* constants
@@ -57,6 +59,16 @@ class Block extends Base
      * @var string
      */
     protected $action;
+
+    /**
+     * @var array
+     */
+    protected $rotation;
+
+    /**
+     * @var string
+     */
+    protected $zoneId;
 
     /**
      * @var \eZ\Publish\Core\FieldType\Page\Parts\Item[]

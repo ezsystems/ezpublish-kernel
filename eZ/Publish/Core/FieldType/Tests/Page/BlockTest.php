@@ -109,8 +109,10 @@ class BlockTest extends \PHPUnit_Framework_TestCase
             'type'              => 'Campaign',
             'view'              => 'default',
             'overflowId'        => '',
-            'customAttributes'  => array(),
+            'customAttributes'  => null,
             'action'            => null,
+            'rotation'          => null,
+            'zoneId'            => '6c7f907b831a819ed8562e3ddce5b264',
             'items'             => array( $item ),
             'attributes'        => array(
                 'foo'   => 'bar',
