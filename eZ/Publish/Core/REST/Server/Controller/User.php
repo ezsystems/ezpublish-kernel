@@ -1019,6 +1019,7 @@ class User extends RestController
             throw new RestNotFoundException( "Session not found: '{$sessionId}'." );
         }
 
+        $this->container->get( 'security.context' )->setToken( null );
         $session->invalidate();
 
         return new Values\NoContent();
