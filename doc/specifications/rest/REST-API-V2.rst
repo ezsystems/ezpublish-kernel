@@ -520,7 +520,7 @@ JSON Example
     {
       "ContentCreate": {
         "ContentType": {
-          "_href": "/content/types/10",
+          "_href": "/content/types/10"
         },
         "mainLanguageCode": "eng-US",
         "LocationCreate": {
@@ -533,7 +533,7 @@ JSON Example
           "sortOrder": "ASC"
         }
         "Section": {
-          "_href": "/content/sections/4",
+          "_href": "/content/sections/4"
         },
         "alwaysAvailable": "true",
         "remoteId": "remoteId12345678",
