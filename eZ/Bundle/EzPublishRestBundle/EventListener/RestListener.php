@@ -31,6 +31,11 @@ use eZ\Publish\Core\REST\Server\Request as RESTRequest;
 class RestListener implements EventSubscriberInterface
 {
     /**
+     * Name of the HTTP header containing CSRF token.
+     */
+    const CSRF_TOKEN_HEADER = "X-CSRF-Token";
+
+    /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
     private $container;
@@ -40,15 +45,17 @@ class RestListener implements EventSubscriberInterface
      */
     private $request;
 
-    /** @var CsrfProviderInterface */
+    /**
+     * @var \Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface
+     */
     private $csrfProvider;
 
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      * @param \eZ\Publish\Core\REST\Server\Request $request
-     * @param CsrfProviderInterface $csrfProvider
+     * @param \Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface $csrfProvider
      */
-    public function __construct( ContainerInterface $container, RESTRequest $request, CsrfProviderInterface $csrfProvider )
+    public function __construct( ContainerInterface $container, RESTRequest $request, CsrfProviderInterface $csrfProvider = null )
     {
         $this->container = $container;
         $this->request = $request;
@@ -108,8 +115,18 @@ class RestListener implements EventSubscriberInterface
         $event->stopPropagation();
     }
 
+    /**
+     * This method validates CSRF token if CSRF protection is enabled.
+     *
+     * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     */
     public function onKernelRequest( GetResponseEvent $event )
     {
+        if ( !$this->container->getParameter( 'form.type_extension.csrf.enabled' ) )
+            return;
+
         if ( $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
             return;
 
@@ -119,19 +136,20 @@ class RestListener implements EventSubscriberInterface
         if ( in_array( $event->getRequest()->getMethod(), array( 'GET', 'HEAD' ) ) )
             return;
 
-        // we don't need a CSRF token when logging in, obviously
+        // TODO: add CSRF token to protect against force-login attacks
         if ( $event->getRequest()->getPathInfo() == '/api/ezp/v2/user/sessions' )
             return;
 
-        $csrfTokenName = $this->container->getParameter( 'form.type_extension.csrf.field_name' );
-        if ( !isset( $this->request->variables[$csrfTokenName] ) || !$this->csrfProvider->isCsrfTokenValid( 'rest', $this->request->variables[$csrfTokenName] ) )
+        if (
+            !$event->getRequest()->headers->has( self::CSRF_TOKEN_HEADER )
+            || !$this->csrfProvider->isCsrfTokenValid( 'rest', $event->getRequest()->headers->get( self::CSRF_TOKEN_HEADER ) )
+        )
         {
             throw new UnauthorizedException(
                 "Missing or invalid CSRF token",
                 $event->getRequest()->getMethod() . " " . $event->getRequest()->getPathInfo()
             );
         }
-
     }
 
     /**
