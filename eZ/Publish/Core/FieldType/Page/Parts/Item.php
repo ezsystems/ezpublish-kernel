@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\FieldType\Page\Parts;
 
+use eZ\Publish\API\Repository\Values\ValueObject;
+
 /**
  * @property-read mixed $contentId Related content Id.
  * @property-read mixed $locationId Related location Id.
@@ -19,7 +21,7 @@ namespace eZ\Publish\Core\FieldType\Page\Parts;
  * @property-read mixed $movedTo
  * @property-read string $action Action to be executed. Can be either "add", "modify" or "remove" (see \eZ\Publish\Core\FieldType\Page\Parts\Base for ACTION_* constants)
  */
-class Item extends Base
+class Item extends ValueObject
 {
     /**
      * @var mixed
@@ -62,4 +64,28 @@ class Item extends Base
      * @var string
      */
     protected $action;
+
+    /**
+     * Hash of arbitrary attributes.
+     *
+     * @var array
+     */
+    public $attributes = array();
+
+    /**
+     * Returns available properties with their values as a simple hash.
+     *
+     * @return array
+     */
+    public function getState()
+    {
+        $hash = array();
+
+        foreach ( $this->getProperties() as $property )
+        {
+            $hash[$property] = $this->$property;
+        }
+
+        return $hash;
+    }
 }
