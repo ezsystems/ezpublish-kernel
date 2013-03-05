@@ -28,6 +28,7 @@ class UserSession extends ValueObjectVisitor
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Session' ) );
+        // @deprecated Since 5.0, this cookie is used for legacy until Static cache support is removed along with this cookie
         $visitor->setHeader( 'Set-Cookie', 'is_logged_in=true; path=/' );
 
         //@todo Needs refactoring, disabling certain headers should not be done this way
