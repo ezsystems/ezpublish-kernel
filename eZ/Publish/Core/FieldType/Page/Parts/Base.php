@@ -58,6 +58,9 @@ class Base extends ValueObject
 
         foreach ( $this->getProperties() as $property )
         {
+            if ( $property === 'pageService' )
+                continue;
+
             $hash[$property] = $this->$property;
         }
 
