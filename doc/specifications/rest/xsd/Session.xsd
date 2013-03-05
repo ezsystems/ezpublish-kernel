@@ -8,9 +8,8 @@
         <xsd:all>
           <xsd:element name="name" type="xsd:int"/>
           <xsd:element name="identifier" type="xsd:string"/>
-          <xsd:element name="csrf-param" type="xsd:string"/>
-          <xsd:element name="csrf-token" type="xsd:string"/>
-          <xsd:element name="User" type="vnd.ez.api.User" />
+          <xsd:element name="csrfToken" type="xsd:string"/>
+          <xsd:element name="User" type="ref" />
         </xsd:all>
       </xsd:extension>
     </xsd:complexContent>
