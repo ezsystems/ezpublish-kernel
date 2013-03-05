@@ -86,7 +86,9 @@ class Block extends Base
     public function getValidItems()
     {
         if ( !isset( $this->validItems ) )
+        {
             $this->validItems = $this->pageService->getValidBlockItems( $this );
+        }
 
         return $this->validItems;
     }
@@ -99,7 +101,9 @@ class Block extends Base
     public function getWaitingItems()
     {
         if ( !isset( $this->waitingItems ) )
+        {
             $this->waitingItems = $this->pageService->getWaitingBlockItems( $this );
+        }
 
         return $this->waitingItems;
     }
@@ -112,7 +116,9 @@ class Block extends Base
     public function getArchivedItems()
     {
         if ( !isset( $this->archivedItems ) )
+        {
             $this->archivedItems = $this->pageService->getArchivedBlockItems( $this );
+        }
 
         return $this->archivedItems;
     }
