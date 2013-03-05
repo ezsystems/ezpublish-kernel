@@ -62,6 +62,9 @@ class ImageStorage extends GatewayBasedStorage
      */
     public function copyLegacyField( VersionInfo $versionInfo, Field $field, Field $originalField, array $context )
     {
+        if ( $originalField->data === null )
+            return false;
+
         // Field copies don't store their own image, but store their own reference to it
         $this->getGateway( $context )->storeImageReference( $originalField->value->data['path'], $field->id );
 
