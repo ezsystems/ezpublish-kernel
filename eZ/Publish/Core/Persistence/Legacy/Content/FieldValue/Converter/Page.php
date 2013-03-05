@@ -134,6 +134,19 @@ class Page implements Converter
                         $pageNode->appendChild( $this->generateZoneXmlString( $zone, $dom ) );
                     }
                     break;
+                case 'layout':
+                    $node = $dom->createElement( 'zone_layout', $attrValue );
+                    $pageNode->appendChild( $node );
+                    break;
+                case 'attributes':
+                    foreach ( $attrValue as $arrayItemKey => $arrayItemValue )
+                    {
+                        $tmp = $dom->createElement( $arrayItemKey );
+                        $tmpValue = $dom->createTextNode( $arrayItemValue );
+                        $tmp->appendChild( $tmpValue );
+                        $pageNode->appendChild( $tmp );
+                    }
+                    break;
                 default:
                     $node = $dom->createElement( $attrName );
                     $nodeValue = $dom->createTextNode( $attrValue );
@@ -165,12 +178,29 @@ class Page implements Converter
                     $zoneNode->setAttribute( 'id', 'id_' . $attrValue );
                     break;
                 case 'action':
-                    $zoneNode->setAttribute( 'action', $attrValue );
+                    if ( isset( $attrValue ) )
+                    {
+                        $zoneNode->setAttribute( 'action', $attrValue );
+                    }
+                    break;
+                case 'identifier':
+                    $node = $dom->createElement( 'zone_identifier' );
+                    $node->appendChild( $dom->createTextNode( $attrValue ) );
+                    $zoneNode->appendChild( $node );
                     break;
                 case 'blocks':
                     foreach ( $zone->{$attrName} as $block )
                     {
                         $zoneNode->appendChild( $this->generateBlockXmlString( $block, $dom ) );
+                    }
+                    break;
+                case 'attributes':
+                    foreach ( $attrValue as $arrayItemKey => $arrayItemValue )
+                    {
+                        $tmp = $dom->createElement( $arrayItemKey );
+                        $tmpValue = $dom->createTextNode( $arrayItemValue );
+                        $tmp->appendChild( $tmpValue );
+                        $zoneNode->appendChild( $tmp );
                     }
                     break;
                 default:
@@ -204,11 +234,16 @@ class Page implements Converter
                 case 'id':
                     $blockNode->setAttribute( 'id', 'id_' . $attrValue );
                     break;
-                case 'action':
-                    $blockNode->setAttribute( 'action', $attrValue );
+                case 'zoneId':
+                    $blockNode->appendChild( $dom->createElement( 'zone_id', $attrValue ) );
                     break;
+                case 'action':
+                    if ( isset( $attrValue ) )
+                    {
+                        $blockNode->setAttribute( 'action', $attrValue );
+                    }
                 case 'items':
-                    foreach ( $block->{$attrName} as $item )
+                    foreach ( $block->items as $item )
                     {
                         $itemNode = $this->generateItemXmlString( $item, $dom );
                         if ( $itemNode )
@@ -218,7 +253,12 @@ class Page implements Converter
                     }
                     break;
                 case 'rotation':
-                case 'custom_attributes':
+                case 'customAttributes':
+                    if ( !isset( $attrValue ) )
+                    {
+                        continue 2;
+                    }
+
                     $node = $dom->createElement( $attrName );
                     $blockNode->appendChild( $node );
 
@@ -228,6 +268,15 @@ class Page implements Converter
                         $tmpValue = $dom->createTextNode( $arrayItemValue );
                         $tmp->appendChild( $tmpValue );
                         $node->appendChild( $tmp );
+                    }
+                    break;
+                case 'attributes':
+                    foreach ( $attrValue as $arrayItemKey => $arrayItemValue )
+                    {
+                        $tmp = $dom->createElement( $arrayItemKey );
+                        $tmpValue = $dom->createTextNode( $arrayItemValue );
+                        $tmp->appendChild( $tmpValue );
+                        $blockNode->appendChild( $tmp );
                     }
                     break;
                 default:
@@ -267,8 +316,10 @@ class Page implements Converter
                     $itemNode->setAttribute( 'id', $attrValue );
                     break;
                 case 'action':
-                    $itemNode->setAttribute( 'action', $attrValue );
-                    break;
+                    if ( isset( $attrValue ) )
+                    {
+                        $itemNode->setAttribute( 'action', $attrValue );
+                    }
                 default:
                     $node = $dom->createElement( $attrName );
                     $nodeValue = $dom->createTextNode( $attrValue );
@@ -292,6 +343,7 @@ class Page implements Converter
     {
         $zones = array();
         $attributes = array();
+        $layout = null;
 
         if ( $xmlString )
         {
@@ -301,14 +353,21 @@ class Page implements Converter
 
             foreach ( $root->childNodes as $node )
             {
-                if ( $node->nodeType == XML_ELEMENT_NODE && $node->nodeName == 'zone' )
+                if ( $node->nodeType !== XML_ELEMENT_NODE )
+                    continue;
+
+                switch ( $node->nodeName )
                 {
-                    $zone = $this->restoreZoneFromXml( $node );
-                    $zones[$zone->id] = $zone;
-                }
-                else if ( $node->nodeType == XML_ELEMENT_NODE )
-                {
-                    $attributes[$node->nodeName] = $node->nodeValue;
+                    case 'zone':
+                        $zone = $this->restoreZoneFromXml( $node );
+                        $zones[$zone->id] = $zone;
+                        break;
+                    case 'zone_layout':
+                        $layout = $node->nodeValue;
+                        break;
+                    default:
+                        $attributes[$node->nodeName] = $node->nodeValue;
+                        break;
                 }
             }
 
@@ -325,6 +384,7 @@ class Page implements Converter
             $this->pageService,
             array(
                 'zones'        => $zones,
+                'layout'       => $layout,
                 'attributes'   => $attributes
             )
         );
@@ -354,7 +414,7 @@ class Page implements Converter
                     case 'id':
                         // Stored Id has following format : id_<zoneId>, so extract <zoneId>
                         $zoneId = substr(
-                            $attr->value, 0,
+                            $attr->value,
                             strpos( $attr->value, '_' ) + 1
                         );
                         break;
@@ -392,7 +452,8 @@ class Page implements Converter
                 'id'            => $zoneId,
                 'identifier'    => $zoneIdentifier,
                 'attributes'    => $attributes,
-                'action'        => $action
+                'action'        => $action,
+                'blocks'        => $blocks
             )
         );
     }
@@ -408,14 +469,15 @@ class Page implements Converter
     {
         $blockId = null;
         $items = array();
-        $rotation = array();
-        $customAttributes = array();
+        $rotation = null;
+        $customAttributes = null;
         $attributes = array();
         $name = null;
         $type = null;
         $view = null;
         $overflowId = null;
         $action = null;
+        $zoneId = null;
 
         if ( $node->hasAttributes() )
         {
@@ -426,7 +488,7 @@ class Page implements Converter
                     case 'id':
                         // Stored Id has following format : id_<blockId>, so extract <blockId>
                         $blockId = substr(
-                            $attr->value, 0,
+                            $attr->value,
                             strpos( $attr->value, '_' ) + 1
                         );
                         break;
@@ -450,6 +512,9 @@ class Page implements Converter
                     $items[] = $this->restoreItemFromXml( $node );
                     break;
                 case 'rotation':
+                    if ( !isset( $rotation ) )
+                        $rotation = array();
+
                     foreach ( $node->childNodes as $subNode )
                     {
                         if ( $subNode->nodeType !== XML_ELEMENT_NODE )
@@ -459,6 +524,9 @@ class Page implements Converter
                     }
                     break;
                 case 'custom_attributes':
+                    if ( !isset( $customAttributes ) )
+                        $customAttributes = array();
+
                     foreach ( $node->childNodes as $subNode )
                     {
                         if ( $subNode->nodeType !== XML_ELEMENT_NODE )
@@ -475,8 +543,11 @@ class Page implements Converter
                 case 'overflow_id':
                     $overflowId = $node->nodeValue;
                     break;
+                case 'zone_id':
+                    $zoneId = $node->nodeValue;
+                    break;
                 default:
-                    $attributes[$node->nodeName = $node->nodeValue];
+                    $attributes[$node->nodeName] = $node->nodeValue;
             }
         }
 
@@ -492,7 +563,8 @@ class Page implements Converter
                 'name'              => $name,
                 'type'              => $type,
                 'view'              => $view,
-                'overflowId'        => $overflowId
+                'overflowId'        => $overflowId,
+                'zoneId'            => $zoneId
             )
         );
     }
