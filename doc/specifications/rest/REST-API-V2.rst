@@ -143,18 +143,26 @@ Example request header:
 
 CSRF
 ~~~~
-A csrf token needs to be sent in every request using "unsafe" methods (as in: not GET or HEAD) when a session has been established. In case of POST as part of parameters, with other methods it should be placed in url as a query. The param name (csrf-param) and value (csrf-token) is defined  in response when login via POST /user/sessions.
+A CSRF token needs to be sent in every request using "unsafe" methods (as in: not GET or HEAD) when a session has been established. It should be sent with header X-CSRF-Token. The token (csrfToken) is defined in response when login via POST /user/sessions.
 
 Example request headers:
-    DELETE /content/types/32?<csrf-param>=<csrf-token> HTTP/1.1
-    DELETE /user/sessions/<sessionID>?<csrf-param>=<csrf-token> HTTP/1.1
 
-If an unsafe request is missing csrf token, or it has wrong value, a response error must be given:
+.. code:: http
+
+    DELETE /content/types/32 HTTP/1.1
+    X-CSRF-Token: <csrfToken>
+
+.. code:: http
+
+    DELETE /user/sessions/<sessionID>
+    X-CSRF-Token: <csrfToken>
+
+If an unsafe request is missing CSRF token, or it has wrong value, a response error must be given:
     401 Unauthorized
 
 Rich client application security concerns
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The whole point of csrf protection is to avoid that users accidentally can do harmful operations by being tricked into executing a http(s) request against a web applications they are logged into, in case of browsers this will then be blocked by lack of csrf token. However if you develop a rich client application (javascript, java, flash, silverlight, iOS, android, ..) that is:
+The whole point of CSRF protection is to avoid that users accidentally can do harmful operations by being tricked into executing a http(s) request against a web applications they are logged into, in case of browsers this will then be blocked by lack of CSRF token. However if you develop a rich client application (javascript, java, flash, silverlight, iOS, android, ..) that is:
 
 * Registering itself as a protocol handler
 
@@ -5814,7 +5822,7 @@ Create session (login a User):
 
 :Resource:    /user/sessions
 :Method:      POST
-:Description: Performs a login for the user and returns the session and session cookie. The client will need to remember both session name/id and csrf param/token as this is for security reasons not exposed via GET.
+:Description: Performs a login for the user and returns the session and session cookie. The client will need to remember both session name/id and CSRF token as this is for security reasons not exposed via GET.
 :Headers:
     :Accept:
          :application/vnd.ez.api.Session+xml: (see Session_)
@@ -5876,8 +5884,7 @@ XML Example
     <Session href="/user/sessions/sessionID" media-type="application/vnd.ez.api.Session+xml">
       <name>eZSSID</name>
       <identifier>go327ij2cirpo59pb6rrv2a4el2</identifier>
-      <csrf-param>_csrf_token</csrf-parameter>
-      <csrf-token>23lkneri34ijajedfw39orj3j93</csrf-token>
+      <csrfToken>23lkneri34ijajedfw39orj3j93</csrfToken>
       <User href="/user/users/14" media-type="vnd.ez.api.User+xml"/>
     </Session>
 
@@ -5916,8 +5923,7 @@ JSON Example
       "Session": {
         "name": "eZSSID",
         "identifier": "go327ij2cirpo59pb6rrv2a4el2",
-        "csrf-param": "_csrf_token",
-        "csrf-token": "23lkneri34ijajedfw39orj3j93",
+        "csrfToken": "23lkneri34ijajedfw39orj3j93",
         "User": {
           "_href": "/user/users/14",
           "_media-type": "application/vnd.ez.api.User+json"
@@ -5934,9 +5940,9 @@ Delete session (logout a User):
 :Description: The user session is removed i.e. the user is logged out.
 :Headers:
     :Cookie:
-         <sessionName> : <sessionID>
-:Parameters:
-    :<csrf-param>: The <csrf-token> needed on all unsafe http methods with session.
+        <sessionName> : <sessionID>
+    :X-CSRF-Token:
+        <csrfToken> The <csrfToken> needed on all unsafe http methods with session.
 :Response: 204
 :Error Codes:
     :404: If the session does not exist
@@ -5947,9 +5953,10 @@ Example
 
 .. code:: http
 
-    DELETE /user/sessions/go327ij2cirpo59pb6rrv2a4el2?_csrf_token=23lkneri34ijajedfw39orj3j93 HTTP/1.1
+    DELETE /user/sessions/go327ij2cirpo59pb6rrv2a4el2 HTTP/1.1
     Host: www.example.net
     Cookie: eZSSID : go327ij2cirpo59pb6rrv2a4el2
+    X-CSRF-Token: 23lkneri34ijajedfw39orj3j93
 
 .. code:: http
 
@@ -7522,8 +7529,7 @@ Session XML Schema
             <xsd:all>
               <xsd:element name="name" type="xsd:int"/>
               <xsd:element name="identifier" type="xsd:string"/>
-              <xsd:element name="csrf-param" type="xsd:string"/>
-              <xsd:element name="csrf-token" type="xsd:string"/>
+              <xsd:element name="csrfToken" type="xsd:string"/>
               <xsd:element name="User" type="vnd.ez.api.User" />
             </xsd:all>
           </xsd:extension>
