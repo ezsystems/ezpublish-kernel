@@ -32,9 +32,7 @@ parameters:
     ezpublish.fieldType.ezxmltext.converter.html5.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5.xsl
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5
     ezpublish.fieldType.ezpage.class: eZ\Publish\Core\FieldType\Page\Type
-    ezpublish.fieldType.ezpage.pageService.class: eZ\Publish\Core\FieldType\Page\Service
-    ezpublish.fieldtype.ezpage.zoneDefinition: {}
-    ezpublish.fieldType.ezpage.blockDefinition: {}
+    ezpublish.fieldType.ezpage.pageService.class: eZ\Publish\Core\MVC\Symfony\FieldType\Page\ConfiguredService
 
     ezpublish.fieldType.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\Type
     ezpublish.fieldType.ezgmaplocation.externalStorage.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage
@@ -486,7 +484,7 @@ services:
 
     ezpublish.fieldType.ezpage.pageService:
         class: %ezpublish.fieldType.ezpage.pageService.class%
-        arguments: [%ezpublish.fieldtype.ezpage.zoneDefinition%, %ezpublish.fieldtype.ezpage.blockDefinition%]
+        arguments: [@ezpublish.config.resolver]
 
     ezpublish.fieldType.ezgmaplocation:
         class: %ezpublish.fieldType.ezgmaplocation.class%

@@ -133,6 +133,12 @@ parameters:
         optimize: "-strip"
 
     ###
+    # default ezpage settings
+    ##
+    ezpublish.ezpage.layouts: {}
+    ezpublish.ezpage.blocks: {}
+
+    ###
     # Internal settings
     ###
     ezpublish.siteaccess.groups: {}
