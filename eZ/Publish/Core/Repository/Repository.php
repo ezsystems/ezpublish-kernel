@@ -265,16 +265,16 @@ class Repository implements RepositoryInterface
             $permissionSet = array( 'limitation' => null, 'policies' => array() );
             foreach ( $spiRoleAssignment->role->policies as $spiPolicy )
             {
-                if ( $spiPolicy->module === '*' && $spiRoleAssignment->limitationIdentifier === null )
+                if ( $spiPolicy->controller === '*' && $spiRoleAssignment->limitationIdentifier === null )
                     return true;
 
-                if ( $spiPolicy->module !== $controller && $spiPolicy->module !== '*' )
+                if ( $spiPolicy->controller !== $controller && $spiPolicy->controller !== '*' )
                     continue;
 
-                if ( $spiPolicy->function === '*' && $spiRoleAssignment->limitationIdentifier === null )
+                if ( $spiPolicy->action === '*' && $spiRoleAssignment->limitationIdentifier === null )
                     return true;
 
-                if ( $spiPolicy->function !== $action && $spiPolicy->function !== '*' )
+                if ( $spiPolicy->action !== $action && $spiPolicy->action !== '*' )
                     continue;
 
                 if ( $spiPolicy->limitations === '*' && $spiRoleAssignment->limitationIdentifier === null )

@@ -339,8 +339,8 @@ class RepositoryTest extends BaseServiceMockTest
         {
             $policies[] = new Policy(
                 array(
-                    "module" => $policyData[0],
-                    "function" => $policyData[1],
+                    "controller" => $policyData[0],
+                    "action" => $policyData[1],
                     "limitations" => $policyData[2],
                 )
             );

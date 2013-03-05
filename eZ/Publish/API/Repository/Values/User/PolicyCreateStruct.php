@@ -13,26 +13,29 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class is used to create a policy
+ *
+ * @property string $module @deprecated alias for $controller
+ * @property string $function @deprecated alias for $action
  */
 abstract class PolicyCreateStruct extends ValueObject
 {
     /**
-     * Name of module, associated with the Policy
+     * The controller (legacy:module) identifier
      *
-     * Eg: content
+     * Eg: 'Bundle:controller' or 'content'
      *
      * @var string
      */
-    public $module;
+    public $controller;
 
     /**
-     * Name of the module function Or all functions with '*'
+     * Controller action (legacy:function), unique within controller
      *
-     * Eg: read
+     * Eg: 'read' or '*'
      *
      * @var string
      */
-    public $function;
+    public $action;
 
     /**
      * Returns list of limitations added to policy
@@ -46,4 +49,59 @@ abstract class PolicyCreateStruct extends ValueObject
      * @param Limitation $limitation
      */
     abstract public function addLimitation( Limitation $limitation );
+
+    /**
+     * Magic getter for supporting $module and $function
+     *
+     * @deprecated Since 5.1
+     * @param string $property The name of the property to retrieve
+     *
+     * @return mixed
+     */
+    public function __get( $property )
+    {
+        if ( $property === 'module' )
+            return $this->controller;
+
+        if ( $property === 'function' )
+            return $this->action;
+
+        return parent::__get( $property );
+    }
+
+    /**
+     * Magic set for supporting $module and $function
+     *
+     * @deprecated Since 5.1
+     * @param string $property
+     * @param mixed $propertyValue
+     */
+    public function __set( $property, $propertyValue )
+    {
+        if ( $property === 'module' )
+            $this->controller = $propertyValue;
+        else if ( $property === 'function' )
+            $this->action = $propertyValue;
+        else
+            parent::__set( $property, $propertyValue );
+    }
+
+    /**
+     * Magic isset for supporting $module and $function
+     *
+     * @deprecated Since 5.1
+     * @param string $property
+     *
+     * @return boolean
+     */
+    public function __isset( $property )
+    {
+        if ( $property === 'module' )
+            return true;
+
+        if ( $property === 'function' )
+            return true;
+
+        return parent::__isset( $property );
+    }
 }

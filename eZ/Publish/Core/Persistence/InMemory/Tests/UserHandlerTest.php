@@ -372,8 +372,8 @@ class UserHandlerTest extends HandlerTest
             $obj->id,
             new Policy(
                 array(
-                    'module' => 'Foo',
-                    'function' => 'Bar',
+                    'controller' => 'Foo',
+                    'action' => 'Bar',
                     'limitations' => array( 'Limit' => array( 'Test' ) )
                 )
             )
@@ -408,7 +408,7 @@ class UserHandlerTest extends HandlerTest
         // $role->description = array( 'eng-GB' => 'Test2 role' );
 
         $role->policies = array(
-            new Policy( array( 'module' => 'tag', 'function' => '*', 'limitations' => '*' ) ),
+            new Policy( array( 'controller' => 'tag', 'action' => '*', 'limitations' => '*' ) ),
         );
         $obj = $handler->createRole( $role );
         $handler->assignRole( 4, $obj->id );// 4: Users
@@ -484,8 +484,8 @@ class UserHandlerTest extends HandlerTest
         $role->policies = array(
             new Policy(
                 array(
-                    'module' => $obj->policies[2]->module,
-                    'function' => $obj->policies[2]->function,
+                    'controller' => $obj->policies[2]->controller,
+                    'action' => $obj->policies[2]->action,
                     'limitations' => $obj->policies[2]->limitations,
                 )
             ),
@@ -563,8 +563,8 @@ class UserHandlerTest extends HandlerTest
             $id,
             new Policy(
                 array(
-                    'module' => 'Foo',
-                    'function' => 'Bar',
+                    'controller' => 'Foo',
+                    'action' => 'Bar',
                     'limitations' => array( 'Limit' => array( 'Test' ) )
                 )
             )
@@ -573,9 +573,9 @@ class UserHandlerTest extends HandlerTest
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 4, count( $obj->policies ) );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Policy', $obj->policies[3] );
-        $this->assertEquals( 'Foo', $obj->policies[3]->module );
+        $this->assertEquals( 'Foo', $obj->policies[3]->controller );
         $this->assertEquals( $id, $obj->policies[3]->roleId );
-        $this->assertEquals( 'Bar', $obj->policies[3]->function );
+        $this->assertEquals( 'Bar', $obj->policies[3]->action );
         $this->assertEquals( 1, count( $obj->policies[3]->limitations ) );
         $this->assertEquals( array( 'Test' ), $obj->policies[3]->limitations['Limit'] );
     }
@@ -591,8 +591,8 @@ class UserHandlerTest extends HandlerTest
         $obj = $handler->createRole( self::getRole() );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 3, count( $obj->policies ) );
-        $this->assertEquals( 'content', $obj->policies[0]->module );
-        $this->assertEquals( 'write', $obj->policies[0]->function );
+        $this->assertEquals( 'content', $obj->policies[0]->controller );
+        $this->assertEquals( 'write', $obj->policies[0]->action );
         $this->assertEquals( array( 'SubTree' => array( '/1/2/' ) ), $obj->policies[0]->limitations );
 
         $id = $obj->id;
@@ -604,8 +604,8 @@ class UserHandlerTest extends HandlerTest
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 3, count( $obj->policies ) );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Policy', $obj->policies[0] );
-        $this->assertEquals( 'content', $obj->policies[0]->module );
-        $this->assertEquals( 'write', $obj->policies[0]->function );
+        $this->assertEquals( 'content', $obj->policies[0]->controller );
+        $this->assertEquals( 'write', $obj->policies[0]->action );
         $this->assertEquals( array( 'Node' => array( 2, 45 ) ), $obj->policies[0]->limitations );
     }
 
@@ -795,8 +795,8 @@ class UserHandlerTest extends HandlerTest
             $obj->id,
             new Policy(
                 array(
-                    'module' => 'Foo',
-                    'function' => 'Bar',
+                    'controller' => 'Foo',
+                    'action' => 'Bar',
                     'limitations' => array( 'Limit' => array( 'Test' ) )
                 )
             )
@@ -804,8 +804,8 @@ class UserHandlerTest extends HandlerTest
         $list = $handler->loadPoliciesByUserId( 10 );
         $this->assertEquals( 4, count( $list ) );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Policy', $list[3] );
-        $this->assertEquals( 'Foo', $list[3]->module );
-        $this->assertEquals( 'Bar', $list[3]->function );
+        $this->assertEquals( 'Foo', $list[3]->controller );
+        $this->assertEquals( 'Bar', $list[3]->action );
         $this->assertEquals( array( 'Test' ), $list[3]->limitations['Limit'] );
     }
 
@@ -830,7 +830,7 @@ class UserHandlerTest extends HandlerTest
         // $role->description = array( 'eng-GB' => 'Test2 role' );
 
         $role->policies = array(
-            new Policy( array( 'module' => 'tag', 'function' => '*', 'limitations' => '*' ) ),
+            new Policy( array( 'controller' => 'tag', 'action' => '*', 'limitations' => '*' ) ),
         );
         $obj = $handler->createRole( $role );
         $handler->assignRole( 4, $obj->id );// 4: Users
@@ -838,8 +838,8 @@ class UserHandlerTest extends HandlerTest
         $list = $handler->loadPoliciesByUserId( 10 );// 10: Anonymous User
         $this->assertEquals( 4, count( $list ) );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Policy', $list[3] );
-        $this->assertEquals( 'tag', $list[3]->module );
-        $this->assertEquals( '*', $list[3]->function );
+        $this->assertEquals( 'tag', $list[3]->controller );
+        $this->assertEquals( '*', $list[3]->action );
         $this->assertEquals( '*', $list[3]->limitations );
     }
 
@@ -909,8 +909,8 @@ class UserHandlerTest extends HandlerTest
         $role->policies = array(
             new Policy(
                 array(
-                    'module' => $obj->policies[2]->module,
-                    'function' => $obj->policies[2]->function,
+                    'controller' => $obj->policies[2]->controller,
+                    'action' => $obj->policies[2]->action,
                     'limitations' => $obj->policies[2]->limitations,
                 )
             ),
@@ -937,9 +937,9 @@ class UserHandlerTest extends HandlerTest
         // $role->description = array( 'eng-GB' => 'Test role' );
 
         $role->policies = array(
-            new Policy( array( 'module' => 'content', 'function' => 'write', 'limitations' => array( 'SubTree' => array( '/1/2/' ) ) ) ),
-            new Policy( array( 'module' => 'content', 'function' => 'read', 'limitations' => '*' ) ),
-            new Policy( array( 'module' => 'user', 'function' => '*', 'limitations' => '*' ) ),
+            new Policy( array( 'controller' => 'content', 'action' => 'write', 'limitations' => array( 'SubTree' => array( '/1/2/' ) ) ) ),
+            new Policy( array( 'controller' => 'content', 'action' => 'read', 'limitations' => '*' ) ),
+            new Policy( array( 'controller' => 'user', 'action' => '*', 'limitations' => '*' ) ),
         );
         return $role;
     }
