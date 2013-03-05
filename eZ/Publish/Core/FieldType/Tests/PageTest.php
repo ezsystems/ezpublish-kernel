@@ -23,7 +23,7 @@ class PageTest extends StandardizedFieldTypeTest
       * Page service mock.
       *
       * @see getPageServiceMock()
-      * @var \eZ\Publish\Core\FieldType\Page\Service
+      * @var \eZ\Publish\Core\FieldType\Page\PageService
       */
     private $pageServiceMock;
 
