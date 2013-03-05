@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\Core\FieldType\Page\Parts;
 
-use OutOfBoundsException;
-
 /**
  * @property-read string $layout The layout identifier (e.g. "2ZonesLayout1").
  * @property-read \eZ\Publish\Core\FieldType\Page\Parts\Zone[] $zones Zone objects for current page.
@@ -26,21 +24,4 @@ class Page extends Base
      * @var string
      */
     protected $layout;
-
-    /**
-     * Returns zone object by given $index.
-     * Throws an OutOfBoundsException if no zone can be found à $index.
-     *
-     * @param int $index
-     *
-     * @throws \OutOfBoundsException
-     * @return \eZ\Publish\Core\FieldType\Page\Parts\Zone
-     */
-    public function getZone( $index )
-    {
-        if ( !isset( $this->zones[$index] ) )
-            throw new OutOfBoundsException( "No zone at index #$index for current Page." );
-
-        return $this->zones[$index];
-    }
 }
