@@ -175,7 +175,7 @@ class LegacyStorage extends Gateway
     {
         return new Item(
             array(
-                'id'                => $row['block_id'],
+                'blockId'           => $row['block_id'],
                 'contentId'         => $row['object_id'],
                 'locationId'        => $row['node_id'],
                 'priority'          => $row['priority'],
