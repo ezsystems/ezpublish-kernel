@@ -14,12 +14,14 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 /**
  * @property-read mixed $contentId Related content Id.
  * @property-read mixed $locationId Related location Id.
+ * @property-read int $priority Priority of current item in its parent block.
  * @property-read \DateTime $publicationDate Date when the item has been published.
- * @property-read \DateTime $visibilityDate Date when the item has been made visible.
+ * @property-read \DateTime|null $visibilityDate Date when the item has been made visible.
  * @property-read \DateTime|null $hiddenDate Date when the item must be hidden.
  * @property-read \DateTime|null $rotationUntilDate Date until this item can be made in rotation with other items of the same block.
  * @property-read mixed $movedTo
  * @property-read string $action Action to be executed. Can be either "add", "modify" or "remove" (see \eZ\Publish\Core\FieldType\Page\Parts\Base for ACTION_* constants)
+ * @property-read string $blockId Id of page block current item belongs to.
  */
 class Item extends ValueObject
 {
@@ -32,6 +34,11 @@ class Item extends ValueObject
      * @var mixed
      */
     protected $locationId;
+
+    /**
+     * @var int
+     */
+    protected $priority;
 
     /**
      * @var \DateTime
@@ -64,6 +71,11 @@ class Item extends ValueObject
      * @var string
      */
     protected $action;
+
+    /**
+     * @var string
+     */
+    protected $blockId;
 
     /**
      * Hash of arbitrary attributes.
