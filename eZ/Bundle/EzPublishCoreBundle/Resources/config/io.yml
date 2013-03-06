@@ -1,0 +1,12 @@
+parameters:
+    ezpublish.api.io_handler.class: eZ\Publish\Core\IO\LegacyHandler
+
+services:
+    ezpublish.core.io.service:
+        class: eZ\Publish\Core\IO\IOService
+        arguments: [@ezpublish.core.io.handler]
+
+    ezpublish.core.io.handler:
+        class: %ezpublish.api.io_handler.class%
+        public: false
+        arguments: [@ezpublish_legacy.kernel]

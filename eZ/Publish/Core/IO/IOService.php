@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository;
+namespace eZ\Publish\Core\IO;
 
 use eZ\Publish\SPI\IO\Handler;
 use eZ\Publish\Core\IO\Values\BinaryFile;
@@ -16,6 +16,7 @@ use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * The io service for managing binary files
@@ -149,10 +150,11 @@ class IOService
      * Deletes the BinaryFile with $path
      *
      * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
+     *
+     * @throws InvalidArgumentValue
      */
     public function deleteBinaryFile( BinaryFile $binaryFile )
     {
-        //@todo: is $binaryFile->id equal to file path?
         if ( empty( $binaryFile->id ) || !is_string( $binaryFile->id ) )
             throw new InvalidArgumentValue( "id", $binaryFile->id, "BinaryFile" );
 
@@ -162,19 +164,26 @@ class IOService
     /**
      * Loads the binary file with $id
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If the id is invalid
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If no file identified by $path exists
      *
      * @param string $binaryFileId
      *
-     * @return \eZ\Publish\Core\IO\Values\BinaryFile
+     * @return \eZ\Publish\Core\IO\Values\BinaryFile|bool the file, or false if it doesn't exist
      */
     public function loadBinaryFile( $binaryFileId )
     {
-        if ( empty( $binaryFileid ) || !is_string( $binaryFileid ) )
-            throw new InvalidArgumentValue( "binaryFileid", $binaryFileid );
+        if ( empty( $binaryFileId ) || !is_string( $binaryFileId ) )
+            throw new InvalidArgumentValue( "binaryFileId", $binaryFileId );
 
-        //@todo: is binaryFileid equal to path?
-        $spiBinaryFile = $this->ioHandler->load( $binaryFileid );
+        try
+        {
+            $spiBinaryFile = $this->ioHandler->load( $binaryFileId );
+        }
+        catch ( NotFoundException $e )
+        {
+            return false;
+        }
 
         return $this->buildDomainBinaryFileObject( $spiBinaryFile );
     }
@@ -193,7 +202,6 @@ class IOService
         if ( empty( $binaryFile->id ) || !is_string( $binaryFile->id ) )
             throw new InvalidArgumentValue( "id", $binaryFile->id, "BinaryFile" );
 
-        //@todo: is binary file ID equal to file path?
         return $this->ioHandler->getFileResource( $binaryFile->id );
     }
 

@@ -34,14 +34,14 @@ class ImageTest extends FieldTypeTest
     /**
      * Returns a mock for the FileService
      *
-     * @return \eZ\Publish\SPI\FieldType\FileService
+     * @return \eZ\Publish\Core\FieldType\FileService
      */
     protected function getFileServiceMock()
     {
         if ( !isset( $this->fileServiceMock ) )
         {
             $this->fileServiceMock = $this->getMock(
-                'eZ\\Publish\\SPI\\FieldType\\FileService',
+                'eZ\\Publish\\Core\\FieldType\\FileService',
                 array(),
                 array(),
                 '',

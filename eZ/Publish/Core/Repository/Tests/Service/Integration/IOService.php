@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 /**
  * Test case for IO Service
  */
-abstract class IOBase extends BaseServiceTest
+abstract class IOService extends BaseServiceTest
 {
     /**
      * @return \PHPUnit_Extensions_PhptTestCase
@@ -180,7 +180,7 @@ abstract class IOBase extends BaseServiceTest
      */
     public function testNewBinaryCreateStructFromUploadedFileThrowsInvalidArgumentException()
     {
-        $ioService = $this->repository->getIOService();
+        $ioService = $this->getIOService();
 
         $postArray = array(
             'name' => 'ezplogo.png',
@@ -199,7 +199,7 @@ abstract class IOBase extends BaseServiceTest
      */
     public function testNewBinaryCreateStructFromLocalFile()
     {
-        $ioService = $this->repository->getIOService();
+        $ioService = $this->getIOService();
 
         $filePath = __DIR__ . '/ezplogo.png';
 
@@ -234,7 +234,7 @@ abstract class IOBase extends BaseServiceTest
      */
     public function testNewBinaryCreateStructFromLocalFileThrowsInvalidArgumentException()
     {
-        $ioService = $this->repository->getIOService();
+        $ioService = $this->getIOService();
 
         $filePath = __DIR__ . '/ezplogo-invalid.png';
 
@@ -247,7 +247,7 @@ abstract class IOBase extends BaseServiceTest
      */
     public function testCreateBinaryFile()
     {
-        $ioService = $this->repository->getIOService();
+        $ioService = $this->getIOService();
 
         $filePath = __DIR__ . '/ezplogo.png';
 
@@ -279,7 +279,7 @@ abstract class IOBase extends BaseServiceTest
      */
     public function testDeleteBinaryFileThrowsNotFoundException()
     {
-        $ioService = $this->repository->getIOService();
+        $ioService = $this->getIOService();
 
         $filePath = __DIR__ . '/ezplogo.png';
 
@@ -309,7 +309,7 @@ abstract class IOBase extends BaseServiceTest
      */
     public function testLoadBinaryFile()
     {
-        $ioService = $this->repository->getIOService();
+        $ioService = $this->getIOService();
 
         $filePath = __DIR__ . '/ezplogo.png';
 
@@ -342,7 +342,7 @@ abstract class IOBase extends BaseServiceTest
      */
     public function testLoadBinaryFileThrowsNotFoundException()
     {
-        $ioService = $this->repository->getIOService();
+        $ioService = $this->getIOService();
 
         $filePath = __DIR__ . '/ezplogo-invalid.png';
         $ioService->loadBinaryFile( $filePath );
@@ -354,7 +354,7 @@ abstract class IOBase extends BaseServiceTest
      */
     public function testGetFileInputStream()
     {
-        $ioService = $this->repository->getIOService();
+        $ioService = $this->getIOService();
 
         $filePath = __DIR__ . '/ezplogo.png';
 
@@ -374,7 +374,7 @@ abstract class IOBase extends BaseServiceTest
      */
     public function testGetFileContents()
     {
-        $ioService = $this->repository->getIOService();
+        $ioService = $this->getIOService();
 
         $filePath = __DIR__ . '/ezplogo.png';
 
@@ -387,5 +387,14 @@ abstract class IOBase extends BaseServiceTest
         $loadedFileContents = $ioService->getFileContents( $binaryFile );
 
         self::assertEquals( base64_encode( $expectedFileContents ), base64_encode( $loadedFileContents ) );
+    }
+
+
+    /**
+     * @return \eZ\Publish\Core\IO\IOService
+     */
+    private function getIOService()
+    {
+        return
     }
 }

@@ -9,12 +9,12 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration\Legacy;
 
-use eZ\Publish\Core\Repository\Tests\Service\Integration\IOBase as BaseIOServiceTest;
+use eZ\Publish\Core\Repository\Tests\Service\Integration\IOService as BaseIOServiceTest;
 
 /**
  * Test case for IO Service using Legacy storage class
  */
-class IOTest extends BaseIOServiceTest
+class IOServiceTest extends BaseIOServiceTest
 {
     protected function tearDown()
     {

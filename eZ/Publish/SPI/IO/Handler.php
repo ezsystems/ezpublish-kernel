@@ -60,8 +60,7 @@ interface Handler
     /**
      * Loads the BinaryFile identified by $path
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
-     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If no file identified by $path exists
      * @param string $path
      *
      * @return \eZ\Publish\SPI\IO\BinaryFile

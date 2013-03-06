@@ -15,7 +15,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
-use eZ\Publish\SPI\FieldType\FileService;
+use eZ\Publish\Core\FieldType\FileService;
 use eZ\Publish\SPI\FieldType\BinaryBase\MimeTypeDetector;
 
 /**
