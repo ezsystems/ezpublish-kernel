@@ -37,6 +37,9 @@ parameters:
     ezpublish_legacy.setup_wizard.supported_packages: [ezdemo_site, ezdemo_site_clean]
     ezpublish_legacy.fieldType.ezimage.variation_service.class: eZ\Publish\Core\MVC\Legacy\Image\AliasGenerator
 
+    # Overriding base PageService for ezpage fieldtype.
+    ezpublish.fieldType.ezpage.pageService.class: eZ\Bundle\EzPublishLegacyBundle\FieldType\Page\PageService
+
 services:
     ezpublish_legacy.kernel:
         alias: ezpublish_legacy.kernel.lazy
