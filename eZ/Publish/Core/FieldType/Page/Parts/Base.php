@@ -12,6 +12,9 @@ namespace eZ\Publish\Core\FieldType\Page\Parts;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\FieldType\Page\PageService;
 
+/**
+ * @property-read \eZ\Publish\Core\FieldType\Page\PageService $pageService Service dedicated to Page fieldtype, containing block and zone definition.
+ */
 class Base extends ValueObject
 {
     const ACTION_ADD = 'add';
@@ -21,8 +24,6 @@ class Base extends ValueObject
     const ACTION_REMOVE = 'remove';
 
     /**
-     * Service container
-     *
      * @var \eZ\Publish\Core\FieldType\Page\PageService
      */
     protected $pageService;
