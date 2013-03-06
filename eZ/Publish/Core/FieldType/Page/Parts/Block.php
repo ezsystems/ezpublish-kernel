@@ -134,4 +134,11 @@ class Block extends Base
 
         return $this->archivedItems;
     }
+
+    /**
+     * {@inheritedDoc}
+     */
+    protected function init()
+    {
+    }
 }

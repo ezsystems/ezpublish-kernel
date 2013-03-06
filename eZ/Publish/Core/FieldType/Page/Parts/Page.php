@@ -9,11 +9,10 @@
 
 namespace eZ\Publish\Core\FieldType\Page\Parts;
 
-use OutOfBoundsException;
-
 /**
  * @property-read string $layout The layout identifier (e.g. "2ZonesLayout1").
- * @property-read \eZ\Publish\Core\FieldType\Page\Parts\Zone[] $zones Zone objects for current page, indexed by their Id.
+ * @property-read \eZ\Publish\Core\FieldType\Page\Parts\Zone[] $zones Zone objects for current page, numerically indexed.
+ * @property-read \eZ\Publish\Core\FieldType\Page\Parts\Zone[] $zonesById Zone objects for current page, indexed by their Id.
  */
 class Page extends Base
 {
@@ -25,7 +24,7 @@ class Page extends Base
     /**
      * @var array
      */
-    private $zoneKeys;
+    protected $zonesById = array();
 
     /**
      * @var string
@@ -33,22 +32,13 @@ class Page extends Base
     protected $layout;
 
     /**
-     * Returns zone by numeric index.
-     *
-     * @param int $index
-     *
-     * @return \eZ\Publish\Core\FieldType\Page\Parts\Zone
-     *
-     * @throws \OutOfBoundsException If $index is invalid.
+     * {@inheritedDoc}
      */
-    public function getZoneByIndex( $index )
+    protected function init()
     {
-        if ( !isset( $this->zoneKeys ) )
-            $this->zoneKeys = array_keys( $this->zones );
-
-        if ( !isset( $this->zoneKeys[$index] ) )
-            throw new OutOfBoundsException( "Could not find zone with index #$index" );
-
-        return $this->zones[$this->zoneKeys[$index]];
+        foreach ( $this->zones as $zone )
+        {
+            $this->zonesById[$zone->id] = $zone;
+        }
     }
 }
