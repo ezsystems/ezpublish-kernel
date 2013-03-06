@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\FieldType\Page\Parts;
 
+use OutOfBoundsException;
+
 /**
  * @property-read string $id Zone Id.
  * @property-read string $identifier Zone Identifier.
@@ -21,6 +23,11 @@ class Zone extends Base
      * @var \eZ\Publish\Core\FieldType\Page\Parts\Block[]
      */
     protected $blocks = array();
+
+    /**
+     * @var array
+     */
+    private $blockKeys;
 
     /**
      * Zone Id.
@@ -42,4 +49,24 @@ class Zone extends Base
      * @var string
      */
     protected $action;
+
+    /**
+     * Returns a block by numeric index.
+     *
+     * @param int $index
+     *
+     * @return \eZ\Publish\Core\FieldType\Page\Parts\Block
+     *
+     * @throws \OutOfBoundsException If $index is invalid.
+     */
+    public function getBlockByIndex( $index )
+    {
+        if ( !isset( $this->blockKeys ) )
+            $this->blockKeys = array_keys( $this->blocks );
+
+        if ( !isset( $this->blockKeys[$index] ) )
+            throw new OutOfBoundsException( "Could not find block with index #$index" );
+
+        return $this->blocks[$this->blockKeys[$index]];
+    }
 }
