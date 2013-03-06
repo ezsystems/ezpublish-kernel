@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\FieldType\Page;
 use eZ\Publish\Core\FieldType\Page\PageStorage\Gateway;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use RuntimeException;
+use OutOfBoundsException;
 
 class PageService
 {
@@ -57,6 +58,58 @@ class PageService
     }
 
     /**
+     * Returns a zone definition for a given layout.
+     * It consists of a configuration array for the given layout.
+     *
+     * @param string $layoutIdentifier
+     *
+     * @return array
+     *
+     * @throws \OutOfBoundsException If $layoutIdentifier is invalid
+     */
+    public function getZoneDefinitionByLayout( $layoutIdentifier )
+    {
+        if ( !isset( $this->zoneDefinition[$layoutIdentifier] ) )
+            throw new OutOfBoundsException( "Could not find an ezpage zone definition block for given layout '$layoutIdentifier'" );
+
+        return $this->zoneDefinition[$layoutIdentifier];
+    }
+
+    /**
+     * Returns the template to use for given layout.
+     *
+     * @param string $layoutIdentifier
+     * @return string
+     */
+    public function getLayoutTemplate( $layoutIdentifier )
+    {
+        $def = $this->getZoneDefinitionByLayout( $layoutIdentifier );
+        return $def['template'];
+    }
+
+    /**
+     * Checks if zone definition contains a layout having $layoutIdentifier as identifier.
+     *
+     * @param string $layoutIdentifier
+     *
+     * @return bool
+     */
+    public function hasZoneLayout( $layoutIdentifier )
+    {
+        return isset( $this->zoneDefinition[$layoutIdentifier] );
+    }
+
+    /**
+     * Returns list of available zone layouts
+     *
+     * @return array
+     */
+    public function getAvailableZoneLayouts()
+    {
+        return array_keys( $this->zoneDefinition );
+    }
+
+    /**
      * Returns block definition as an array
      *
      * @return array
@@ -67,13 +120,32 @@ class PageService
     }
 
     /**
-     * Returns list of available zone definitions
+     * Returns a block definition for a given block identifier.
+     *
+     * @param string $blockIdentifier
      *
      * @return array
+     *
+     * @throws \OutOfBoundsException If $blockIdentifier is invalid.
      */
-    public function getAvailableZoneTypes()
+    public function getBlockDefinitionByIdentifier( $blockIdentifier )
     {
-        return array_keys( $this->zoneDefinition );
+        if ( !isset( $this->blockDefinition[$blockIdentifier] ) )
+            throw new OutOfBoundsException( "Could not find an ezpage block definition for given identifier '$blockIdentifier'" );
+
+        return $this->blockDefinition[$blockIdentifier];
+    }
+
+    /**
+     * Checks if block definition contains a block having $blockIdentifier as identifier.
+     *
+     * @param string $blockIdentifier
+     *
+     * @return bool
+     */
+    public function hasBlockDefinition( $blockIdentifier )
+    {
+        return isset( $this->blockDefinition[$blockIdentifier] );
     }
 
     /**
