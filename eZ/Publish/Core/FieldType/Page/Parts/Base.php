@@ -15,7 +15,7 @@ use eZ\Publish\Core\FieldType\Page\PageService;
 /**
  * @property-read \eZ\Publish\Core\FieldType\Page\PageService $pageService Service dedicated to Page fieldtype, containing block and zone definition.
  */
-class Base extends ValueObject
+abstract class Base extends ValueObject
 {
     const ACTION_ADD = 'add';
 
