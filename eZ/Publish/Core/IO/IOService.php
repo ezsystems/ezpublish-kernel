@@ -9,30 +9,21 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\IOService as IOServiceInterface;
-use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\IO\Handler;
-use eZ\Publish\API\Repository\Values\IO\BinaryFile;
-use eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct;
+use eZ\Publish\Core\IO\Values\BinaryFile;
+use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\MVC\Legacy\LegacyKernelAware;
-use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 
 /**
  * The io service for managing binary files
  *
  * @package eZ\Publish\Core\Repository
  */
-class IOService implements IOServiceInterface, LegacyKernelAware
+class IOService
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    protected $repository;
-
     /**
      * @var \eZ\Publish\SPI\IO\Handler
      */
@@ -43,21 +34,15 @@ class IOService implements IOServiceInterface, LegacyKernelAware
      */
     protected $settings;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Legacy\Kernel
-     */
-    protected $legacyKernel;
 
     /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
-     * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\IO\Handler $handler
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct( Handler $handler, array $settings = array() )
     {
-        $this->repository = $repository;
         $this->ioHandler = $handler;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
@@ -66,35 +51,13 @@ class IOService implements IOServiceInterface, LegacyKernelAware
     }
 
     /**
-     * Injects the legacy kernel instance.
-     *
-     * @param \eZ\Publish\Core\MVC\Legacy\Kernel $legacyKernel
-     *
-     * @return void
-     */
-    public function setLegacyKernel( LegacyKernel $legacyKernel )
-    {
-        $this->legacyKernel = $legacyKernel;
-    }
-
-    /**
-     * Gets the legacy kernel instance.
-     *
-     * @return \eZ\Publish\Core\MVC\Legacy\Kernel
-     */
-    protected function getLegacyKernel()
-    {
-        return $this->legacyKernel;
-    }
-
-    /**
      * Creates a BinaryFileCreateStruct object from the uploaded file $uploadedFile
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException When given an invalid uploaded file
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException When given an invalid uploaded file
      *
      * @param array $uploadedFile The $_POST hash of an uploaded file
      *
-     * @return \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct
+     * @return \eZ\Publish\Core\IO\Values\BinaryFileCreateStruct
      */
     public function newBinaryCreateStructFromUploadedFile( array $uploadedFile )
     {
@@ -121,11 +84,11 @@ class IOService implements IOServiceInterface, LegacyKernelAware
     /**
      * Creates a BinaryFileCreateStruct object from $localFile
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException When given a non existing / unreadable file
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException When given a non existing / unreadable file
      *
      * @param string $localFile Path to local file
      *
-     * @return \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct
+     * @return \eZ\Publish\Core\IO\Values\BinaryFileCreateStruct
      */
     public function newBinaryCreateStructFromLocalFile( $localFile )
     {
@@ -152,9 +115,11 @@ class IOService implements IOServiceInterface, LegacyKernelAware
     /**
      * Creates a binary file in the repository
      *
-     * @param \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct $binaryFileCreateStruct
+     * @param \eZ\Publish\Core\IO\Values\BinaryFileCreateStruct $binaryFileCreateStruct
      *
-     * @return \eZ\Publish\API\Repository\Values\IO\BinaryFile The created BinaryFile object
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+     *
+     * @return \eZ\Publish\Core\IO\Values\BinaryFile The created BinaryFile object
      */
     public function createBinaryFile( BinaryFileCreateStruct $binaryFileCreateStruct )
     {
@@ -183,7 +148,7 @@ class IOService implements IOServiceInterface, LegacyKernelAware
     /**
      * Deletes the BinaryFile with $path
      *
-     * @param \eZ\Publish\API\Repository\Values\IO\BinaryFile $binaryFile
+     * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
      */
     public function deleteBinaryFile( BinaryFile $binaryFile )
     {
@@ -197,13 +162,13 @@ class IOService implements IOServiceInterface, LegacyKernelAware
     /**
      * Loads the binary file with $id
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      *
-     * @param string $binaryFileid
+     * @param string $binaryFileId
      *
-     * @return \eZ\Publish\API\Repository\Values\IO\BinaryFile
+     * @return \eZ\Publish\Core\IO\Values\BinaryFile
      */
-    public function loadBinaryFile( $binaryFileid )
+    public function loadBinaryFile( $binaryFileId )
     {
         if ( empty( $binaryFileid ) || !is_string( $binaryFileid ) )
             throw new InvalidArgumentValue( "binaryFileid", $binaryFileid );
@@ -217,7 +182,9 @@ class IOService implements IOServiceInterface, LegacyKernelAware
     /**
      * Returns a read (mode: rb) file resource to the binary file identified by $path
      *
-     * @param \eZ\Publish\API\Repository\Values\IO\BinaryFile $binaryFile
+     * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      *
      * @return resource
      */
@@ -233,8 +200,10 @@ class IOService implements IOServiceInterface, LegacyKernelAware
     /**
      * Returns the content of the binary file
      *
-     * @param \eZ\Publish\API\Repository\Values\IO\BinaryFile $binaryFile
+     * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
      *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+
      * @return string
      */
     public function getFileContents( BinaryFile $binaryFile )
@@ -249,7 +218,7 @@ class IOService implements IOServiceInterface, LegacyKernelAware
     /**
      * Generates SPI BinaryFileCreateStruct object from provided API BinaryFileCreateStruct object
      *
-     * @param \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct $binaryFileCreateStruct
+     * @param \eZ\Publish\Core\IO\Values\BinaryFileCreateStruct $binaryFileCreateStruct
      *
      * @return \eZ\Publish\SPI\IO\BinaryFileCreateStruct
      */
@@ -271,7 +240,7 @@ class IOService implements IOServiceInterface, LegacyKernelAware
      *
      * @param \eZ\Publish\SPI\IO\BinaryFile $spiBinaryFile
      *
-     * @return \eZ\Publish\API\Repository\Values\IO\BinaryFile
+     * @return \eZ\Publish\Core\IO\Values\BinaryFile
      */
     protected function buildDomainBinaryFileObject( SPIBinaryFile $spiBinaryFile )
     {

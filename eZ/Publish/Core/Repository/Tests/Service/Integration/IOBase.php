@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
 
 use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
-use eZ\Publish\API\Repository\Values\IO\BinaryFile;
+use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;
 use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
@@ -27,7 +27,7 @@ abstract class IOBase extends BaseServiceTest
 
     /**
      * Test a new class and default values on properties
-     * @covers \eZ\Publish\API\Repository\Values\IO\BinaryFile::__construct
+     * @covers \eZ\Publish\Core\IO\Values\BinaryFile::__construct
      */
     public function testNewClass()
     {
@@ -49,7 +49,7 @@ abstract class IOBase extends BaseServiceTest
 
     /**
      * Test retrieving missing property
-     * @covers \eZ\Publish\API\Repository\Values\IO\BinaryFile::__get
+     * @covers \eZ\Publish\Core\IO\Values\BinaryFile::__get
      */
     public function testMissingProperty()
     {
@@ -66,7 +66,7 @@ abstract class IOBase extends BaseServiceTest
 
     /**
      * Test setting read only property
-     * @covers \eZ\Publish\API\Repository\Values\IO\BinaryFile::__set
+     * @covers \eZ\Publish\Core\IO\Values\BinaryFile::__set
      */
     public function testReadOnlyProperty()
     {
@@ -83,7 +83,7 @@ abstract class IOBase extends BaseServiceTest
 
     /**
      * Test if property exists
-     * @covers \eZ\Publish\API\Repository\Values\IO\BinaryFile::__isset
+     * @covers \eZ\Publish\Core\IO\Values\BinaryFile::__isset
      */
     public function testIsPropertySet()
     {
@@ -97,7 +97,7 @@ abstract class IOBase extends BaseServiceTest
 
     /**
      * Test unsetting a property
-     * @covers \eZ\Publish\API\Repository\Values\IO\BinaryFile::__unset
+     * @covers \eZ\Publish\Core\IO\Values\BinaryFile::__unset
      */
     public function testUnsetProperty()
     {

@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue;
 use eZ\Publish\Core\FieldType\Validator\FileSizeValidator;
-use eZ\Publish\API\Repository\Values\IO\BinaryFile;
+use eZ\Publish\Core\IO\Values\BinaryFile;
 use PHPUnit_Framework_TestCase;
 
 /**
