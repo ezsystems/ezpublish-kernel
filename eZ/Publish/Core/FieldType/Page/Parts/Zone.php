@@ -15,7 +15,8 @@ use OutOfBoundsException;
  * @property-read string $id Zone Id.
  * @property-read string $identifier Zone Identifier.
  * @property-read string $action Action to be executed. Can be either "add", "modify" or "remove" (see \eZ\Publish\Core\FieldType\Page\Parts\Base for ACTION_* constants)
- * @property-read \eZ\Publish\Core\FieldType\Page\Parts\Block[] $blocks Array of blocks, indexed by their Id.
+ * @property-read \eZ\Publish\Core\FieldType\Page\Parts\Block[] $blocks Array of blocks, numerically indexed.
+ * @property-read \eZ\Publish\Core\FieldType\Page\Parts\Block[] $blocksById Array of blocks, indexed by their Id.
  */
 class Zone extends Base
 {
@@ -23,6 +24,11 @@ class Zone extends Base
      * @var \eZ\Publish\Core\FieldType\Page\Parts\Block[]
      */
     protected $blocks = array();
+
+    /**
+     * @var \eZ\Publish\Core\FieldType\Page\Parts\Block[]
+     */
+    protected $blocksById = array();
 
     /**
      * @var array
@@ -68,5 +74,16 @@ class Zone extends Base
             throw new OutOfBoundsException( "Could not find block with index #$index" );
 
         return $this->blocks[$this->blockKeys[$index]];
+    }
+
+    /**
+     * {@inheritedDoc}
+     */
+    protected function init()
+    {
+        foreach ( $this->blocks as $block )
+        {
+            $this->blocksById[$block->id] = $block;
+        }
     }
 }

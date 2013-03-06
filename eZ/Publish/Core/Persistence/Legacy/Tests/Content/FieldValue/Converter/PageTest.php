@@ -91,13 +91,13 @@ EOT;
             array(
                 'layout'    => '2ZonesLayout1',
                 'zones'     => array(
-                    '6c7f907b831a819ed8562e3ddce5b264' => new Parts\Zone(
+                    new Parts\Zone(
                         $this->pageServiceMock,
                         array(
                             'id'            => '6c7f907b831a819ed8562e3ddce5b264',
                             'identifier'    => 'left',
                             'blocks'        => array(
-                                '1e1e355c8da3c92e80354f243c6dd37b' => new Parts\Block(
+                                new Parts\Block(
                                     $this->pageServiceMock,
                                     array(
                                         'id'           => '1e1e355c8da3c92e80354f243c6dd37b',
@@ -109,7 +109,7 @@ EOT;
                                         'attributes'    => array()
                                     )
                                 ),
-                                '250bcab3ea2929edbf72ece096dcdb7a' => new Parts\Block(
+                                new Parts\Block(
                                     $this->pageServiceMock,
                                     array(
                                         'id'            => '250bcab3ea2929edbf72ece096dcdb7a',
@@ -124,13 +124,13 @@ EOT;
                             )
                         )
                     ),
-                    '656b2182b4be70f18ca7b44b3fbb6dbe' => new Parts\Zone(
+                    new Parts\Zone(
                         $this->pageServiceMock,
                         array(
                             'id'            => '656b2182b4be70f18ca7b44b3fbb6dbe',
                             'identifier'    => 'right',
                             'blocks'        => array(
-                                '4d2f5e57d2a2528b276cd9e776a62e42' => new Parts\Block(
+                                new Parts\Block(
                                     $this->pageServiceMock,
                                     array(
                                         'id'            => '4d2f5e57d2a2528b276cd9e776a62e42',
@@ -142,7 +142,7 @@ EOT;
                                         'attributes'    => array()
                                     )
                                 ),
-                                'f36743396b8c36f10b467aa52f133e58' => new Parts\Block(
+                                new Parts\Block(
                                     $this->pageServiceMock,
                                     array(
                                         'id'            => 'f36743396b8c36f10b467aa52f133e58',
@@ -207,8 +207,8 @@ EOT;
         $zoneId = substr( (string)$zoneNode['id'], 3 );
 
         // Check zone validity through extracted $zoneId
-        $this->assertTrue( isset( $this->pageReference->zones[$zoneId] ) );
-        $zone = $this->pageReference->zones[$zoneId];
+        $this->assertTrue( isset( $this->pageReference->zonesById[$zoneId] ) );
+        $zone = $this->pageReference->zonesById[$zoneId];
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Zone', $zone );
         $this->assertSame( $zone->id, $zoneId );
 
@@ -235,8 +235,8 @@ EOT;
         $blockId = substr( (string)$blockNode['id'], 3 );
 
         // Check zone validity through extracted $zoneId
-        $this->assertTrue( isset( $this->pageReference->zones[$currentZoneId]->blocks[$blockId] ) );
-        $block = $this->pageReference->zones[$currentZoneId]->blocks[$blockId];
+        $this->assertTrue( isset( $this->pageReference->zonesById[$currentZoneId]->blocksById[$blockId] ) );
+        $block = $this->pageReference->zonesById[$currentZoneId]->blocksById[$blockId];
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Block', $block );
         $this->assertSame( $block->id, $blockId );
 

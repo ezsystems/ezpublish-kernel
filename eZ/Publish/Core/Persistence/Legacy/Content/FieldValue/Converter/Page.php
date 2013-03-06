@@ -147,6 +147,9 @@ class Page implements Converter
                         $pageNode->appendChild( $tmp );
                     }
                     break;
+                case 'zonesById':
+                    // Do not store
+                    break;
                 default:
                     $node = $dom->createElement( $attrName );
                     $nodeValue = $dom->createTextNode( $attrValue );
@@ -202,6 +205,9 @@ class Page implements Converter
                         $tmp->appendChild( $tmpValue );
                         $zoneNode->appendChild( $tmp );
                     }
+                    break;
+                case 'blocksById':
+                    // Do not store
                     break;
                 default:
                     $node = $dom->createElement( $attrName );
@@ -360,7 +366,7 @@ class Page implements Converter
                 {
                     case 'zone':
                         $zone = $this->restoreZoneFromXml( $node );
-                        $zones[$zone->id] = $zone;
+                        $zones[] = $zone;
                         break;
                     case 'zone_layout':
                         $layout = $node->nodeValue;
@@ -436,7 +442,7 @@ class Page implements Converter
             {
                 case 'block':
                     $block = $this->restoreBlockFromXml( $node );
-                    $blocks[$block->id] = $block;
+                    $blocks[] = $block;
                     break;
                 case 'zone_identifier':
                     $zoneIdentifier = $node->nodeValue;

@@ -46,7 +46,13 @@ abstract class Base extends ValueObject
         $this->pageService = $pageService;
         $this->attributes = array();
         parent::__construct( $properties );
+        $this->init();
     }
+
+    /**
+     * Does further initialization.
+     */
+    abstract protected function init();
 
     /**
      * Returns available properties with their values as a simple hash.
