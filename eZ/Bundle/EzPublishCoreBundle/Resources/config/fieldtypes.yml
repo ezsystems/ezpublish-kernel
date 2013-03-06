@@ -3,7 +3,7 @@ parameters:
     ezpublish.fieldType.ezauthor.class: eZ\Publish\Core\FieldType\Author\Type
     ezpublish.fieldType.ezbinaryfile.class: eZ\Publish\Core\FieldType\BinaryFile\Type
     ezpublish.fieldType.ezbinaryfile.externalStorage.class: eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage
-    ezpublish.fieldType.ezbinaryfile.fileService.class: eZ\Publish\Core\MVC\Symfony\ConfiguredLocalFileService
+    ezpublish.fieldType.ezbinaryfile.fileService.class: eZ\Publish\Core\MVC\Symfony\ConfiguredFileService
     ezpublish.fieldType.ezbinaryfile.mimeTypeDetector.class: eZ\Publish\Core\FieldType\BinaryBase\MimeTypeDetector\FileInfoDetector
     ezpublish.fieldType.ezbinaryfile.pathGenerator.class: eZ\Publish\Core\FieldType\BinaryBase\PathGenerator\LegacyPathGenerator
     ezpublish.fieldType.ezboolean.class: eZ\Publish\Core\FieldType\Checkbox\Type
@@ -13,7 +13,7 @@ parameters:
     ezpublish.fieldType.ezinteger.class: eZ\Publish\Core\FieldType\Integer\Type
     ezpublish.fieldType.ezimage.class: eZ\Publish\Core\FieldType\Image\Type
     ezpublish.fieldType.ezimage.pathGenerator.class: eZ\Publish\Core\FieldType\Image\PathGenerator\LegacyPathGenerator
-    ezpublish.fieldType.ezimage.fileService.class: eZ\Publish\Core\MVC\Symfony\File\ConfiguredLocalImageService
+    ezpublish.fieldType.ezimage.fileService.class: eZ\Publish\Core\MVC\Symfony\File\ConfiguredImageService
     ezpublish.fieldType.ezimage.externalStorage.class: eZ\Publish\Core\FieldType\Image\ImageStorage
     ezpublish.fieldType.ezimage.mimeTypeDetector.class: eZ\Publish\Core\FieldType\BinaryBase\MimeTypeDetector\FileInfoDetector
     ezpublish.fieldType.ezkeyword.class: eZ\Publish\Core\FieldType\Keyword\Type
