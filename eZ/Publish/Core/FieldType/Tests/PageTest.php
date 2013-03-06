@@ -23,7 +23,7 @@ class PageTest extends StandardizedFieldTypeTest
       * Page service mock.
       *
       * @see getPageServiceMock()
-      * @var \eZ\Publish\Core\FieldType\Page\Service
+      * @var \eZ\Publish\Core\FieldType\Page\PageService
       */
     private $pageServiceMock;
 
@@ -31,13 +31,10 @@ class PageTest extends StandardizedFieldTypeTest
     {
         if ( !isset( $this->pageServiceMock ) )
         {
-            $this->pageServiceMock = $this->getMock(
-                'eZ\\Publish\\Core\\FieldType\\Page\\Service',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->pageServiceMock = $this
+                ->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\Page\\PageService' )
+                ->disableOriginalConstructor()
+                ->getMock();
         }
         return $this->pageServiceMock;
     }

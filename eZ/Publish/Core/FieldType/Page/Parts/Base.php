@@ -9,82 +9,68 @@
 
 namespace eZ\Publish\Core\FieldType\Page\Parts;
 
-use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
-use eZ\Publish\Core\FieldType\Page\Service as PageService;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\Core\FieldType\Page\PageService;
 
-class Base
+/**
+ * @property-read \eZ\Publish\Core\FieldType\Page\PageService $pageService Service dedicated to Page fieldtype, containing block and zone definition.
+ */
+abstract class Base extends ValueObject
 {
-    /**
-     * Object properties container
-     *
-     * @var array
-     */
-    protected $properties = array();
+    const ACTION_ADD = 'add';
+
+    const ACTION_MODIFY = 'modify';
+
+    const ACTION_REMOVE = 'remove';
 
     /**
-     * Service container
-     *
-     * @var \eZ\Publish\Core\FieldType\Page\Service
+     * @var \eZ\Publish\Core\FieldType\Page\PageService
      */
     protected $pageService;
 
     /**
+     * Hash of arbitrary attributes.
+     *
+     * @var array
+     */
+    public $attributes;
+
+    /**
      * Constructor
      *
-     * @param \eZ\Publish\Core\FieldType\Page\Service $pageService
+     * @param \eZ\Publish\Core\FieldType\Page\PageService $pageService
+     * @param array $properties
      */
-    public function __construct( PageService $pageService )
+    public function __construct( PageService $pageService, array $properties = array() )
     {
         $this->pageService = $pageService;
+        $this->attributes = array();
+        parent::__construct( $properties );
+        $this->init();
     }
 
     /**
-     * Sets property $value for a given $name
-     *
-     * @param string $name
-     * @param mixed $value
+     * Does further initialization.
      */
-    public function __set( $name, $value )
-    {
-        $this->properties[$name] = $value;
-    }
+    abstract protected function init();
 
     /**
-     * Returns property value for a given $name
-     *
-     * @param string $name
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
-     *
-     * @return null
-     */
-    public function __get( $name )
-    {
-        if ( isset( $this->properties[$name] ) )
-            return $this->properties[$name];
-
-        throw new PropertyNotFoundException( $name, get_class( $this ) );
-    }
-
-    /**
-     * Checks whether property for given $name exists
-     *
-     * @param string $name
-     *
-     * @return boolean
-     */
-    public function __isset( $name )
-    {
-        return isset( $this->properties[$name] );
-    }
-
-    /**
-     * Getter for property list
+     * Returns available properties with their values as a simple hash.
      *
      * @return array
      */
-    public function getProperties()
+    public function getState()
     {
-        return $this->properties;
+        $hash = array();
+
+        foreach ( $this->getProperties() as $property )
+        {
+            if ( $property === 'pageService' )
+                continue;
+
+            $hash[$property] = $this->$property;
+        }
+
+        return $hash;
     }
 }

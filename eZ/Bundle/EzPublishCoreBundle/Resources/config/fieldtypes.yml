@@ -32,7 +32,8 @@ parameters:
     ezpublish.fieldType.ezxmltext.converter.html5.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5.xsl
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5
     ezpublish.fieldType.ezpage.class: eZ\Publish\Core\FieldType\Page\Type
-    ezpublish.fieldType.ezpage.pageService.class: eZ\Publish\Core\FieldType\Page\Service
+    ezpublish.fieldType.ezpage.externalStorage.class: eZ\Publish\Core\FieldType\Page\PageStorage
+    ezpublish.fieldType.ezpage.pageService.class: eZ\Publish\Core\FieldType\Page\PageService
     ezpublish.fieldtype.ezpage.zoneDefinition: {}
     ezpublish.fieldType.ezpage.blockDefinition: {}
 
@@ -480,6 +481,12 @@ services:
         arguments: [@ezpublish.fieldType.ezpage.pageService]
         tags:
             - {name: ezpublish.fieldType, alias: ezpage}
+
+    ezpublish.fieldType.ezpage.externalStorage:
+        class: %ezpublish.fieldType.ezpage.externalStorage.class%
+        arguments: [[], @ezpublish.fieldType.ezpage.pageService]
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezpage}
 
     ezpublish.fieldType.ezpage.pageService:
         class: %ezpublish.fieldType.ezpage.pageService.class%
