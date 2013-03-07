@@ -33,7 +33,7 @@ parameters:
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5
     ezpublish.fieldType.ezpage.class: eZ\Publish\Core\FieldType\Page\Type
     ezpublish.fieldType.ezpage.externalStorage.class: eZ\Publish\Core\FieldType\Page\PageStorage
-    ezpublish.fieldType.ezpage.pageService.class: eZ\Publish\Core\FieldType\Page\PageService
+    ezpublish.fieldType.ezpage.pageService.class: eZ\Bundle\EzPublishCoreBundle\FieldType\Page
     ezpublish.fieldtype.ezpage.zoneDefinition: {}
     ezpublish.fieldType.ezpage.blockDefinition: {}
 
@@ -491,6 +491,8 @@ services:
     ezpublish.fieldType.ezpage.pageService:
         class: %ezpublish.fieldType.ezpage.pageService.class%
         arguments: [%ezpublish.fieldtype.ezpage.zoneDefinition%, %ezpublish.fieldtype.ezpage.blockDefinition%]
+        calls:
+            - [setRepository, [@ezpublish.api.repository]]
 
     ezpublish.fieldType.ezgmaplocation:
         class: %ezpublish.fieldType.ezgmaplocation.class%
