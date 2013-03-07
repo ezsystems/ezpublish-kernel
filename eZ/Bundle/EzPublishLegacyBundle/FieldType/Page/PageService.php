@@ -9,9 +9,9 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\FieldType\Page;
 
-use eZ\Publish\Core\FieldType\Page\PageService as BasePageService;
+use eZ\Bundle\EzPublishCoreBundle\FieldType\Page\PageService as CorePageService;
 
-class PageService extends BasePageService
+class PageService extends CorePageService
 {
     /**
      * Returns the template to use for given layout.

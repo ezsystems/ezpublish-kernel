@@ -245,7 +245,7 @@ class PageServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Block
      */
-    private function buildBlock()
+    protected function buildBlock()
     {
         return new Block(
             $this->pageService,
