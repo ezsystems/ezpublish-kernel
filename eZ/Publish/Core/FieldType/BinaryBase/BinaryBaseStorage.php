@@ -88,14 +88,16 @@ class BinaryBaseStorage extends GatewayBasedStorage
 
         $storedValue = $field->value->externalData;
 
-        if ( !$this->fileService->exists( $storedValue['path'] ) )
-        {
-            // Only store a new file copy, if it does not exist, yet
-            $targetPath = $this->pathGenerator->getStoragePathForField( $field, $versionInfo );
+        // Only store a new file copy, if it does not exist, yet
+        $targetPath = $this->fileService->getStorageIdentifier(
+            $this->pathGenerator->getStoragePathForField( $field, $versionInfo )
+        );
 
+        if ( !$this->fileService->exists( $targetPath ) )
+        {
             $storedValue['path'] = $this->fileService->storeFile(
                 $storedValue['path'],
-                $this->fileService->getStorageIdentifier( $targetPath )
+                $targetPath
             );
         }
 
