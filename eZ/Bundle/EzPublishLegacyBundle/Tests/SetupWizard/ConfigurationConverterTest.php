@@ -174,6 +174,15 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                 ),
                 'http_cache' => array( 'purge_type' => 'local' )
             ),
+            'stash' => array(
+                'caches' => array(
+                    'default' => array(
+                        'handlers' => array( 'BlackHole' ),// If this fails then APC or Memcached is enabled on PHP-CLI
+                        'inMemory' => true,
+                        'registerDoctrineAdapter' => false,
+                    )
+                )
+            )
         );
 
         $exceptionType = 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException';

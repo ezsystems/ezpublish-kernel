@@ -623,7 +623,7 @@ class EzcDatabase extends Gateway
 
         $location->id = $this->handler->lastInsertId( $this->handler->getSequenceName( 'ezcontentobject_tree', 'node_id' ) );
 
-        $location->mainLocationId = $createStruct->mainLocationId === true ? $location->id : $createStruct->mainLocationId;
+        $mainLocationId = $createStruct->mainLocationId === true ? $location->id : $createStruct->mainLocationId;
         $location->pathString = $parentNode['path_string'] . $location->id . '/';
         /** @var $query \ezcQueryUpdate */
         $query = $this->handler->createUpdateQuery();
@@ -635,7 +635,7 @@ class EzcDatabase extends Gateway
             )
             ->set(
                 $this->handler->quoteColumn( 'main_node_id' ),
-                $query->bindValue( $location->mainLocationId, null, \PDO::PARAM_INT )
+                $query->bindValue( $mainLocationId, null, \PDO::PARAM_INT )
             )
             ->where(
                 $query->expr->eq(

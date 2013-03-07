@@ -322,20 +322,7 @@ class UserHandler implements UserHandlerInterface
          */
         $list = $this->backend->find(
             'User\\RoleAssignment',
-            array( 'contentId' => $contentIds ),
-            array(
-                'role' => array(
-                    'type' => 'User\\Role',
-                    'match' => array( 'id' => '_roleId' ),
-                    'single' => true,
-                    'sub' => array(
-                        'policies' => array(
-                            'type' => 'User\\Policy',
-                            'match' => array( 'roleId' => 'id' )
-                        )
-                    )
-                )
-            )
+            array( 'contentId' => $contentIds )
         );
 
         // merge policies
@@ -343,26 +330,26 @@ class UserHandler implements UserHandlerInterface
         foreach ( $list as $new )
         {
             // if user already have full access to a role, continue
-            if ( isset( $data[$new->role->id][$new->contentId] )
-              && $data[$new->role->id][$new->contentId] instanceof RoleAssignment )
+            if ( isset( $data[$new->roleId][$new->contentId] )
+              && $data[$new->roleId][$new->contentId] instanceof RoleAssignment )
                 continue;
 
             if ( !empty( $new->limitationIdentifier ) )
             {
-                if ( !isset( $data[$new->role->id][$new->contentId][$new->limitationIdentifier] ) )
+                if ( !isset( $data[$new->roleId][$new->contentId][$new->limitationIdentifier] ) )
                 {
                     $new->values = array( $new->values );
-                    $data[$new->role->id][$new->contentId][$new->limitationIdentifier] = $new;
+                    $data[$new->roleId][$new->contentId][$new->limitationIdentifier] = $new;
                 }
                 // merge limitation values
                 else
                 {
-                    $data[$new->role->id][$new->contentId][$new->limitationIdentifier]->values[] = $new->values;
+                    $data[$new->roleId][$new->contentId][$new->limitationIdentifier]->values[] = $new->values;
                 }
             }
             else
             {
-                $data[$new->role->id][$new->contentId] = $new;
+                $data[$new->roleId][$new->contentId] = $new;
             }
         }
 
@@ -405,7 +392,7 @@ class UserHandler implements UserHandlerInterface
     {
         $this->backend->delete( 'User\\Role', $roleId );
         $this->backend->deleteByMatch( 'User\\Policy', array( 'roleId' => $roleId ) );
-        $this->backend->deleteByMatch( 'User\\RoleAssignment', array( '_roleId' => $roleId ) );
+        $this->backend->deleteByMatch( 'User\\RoleAssignment', array( 'roleId' => $roleId ) );
     }
 
     /**
@@ -620,7 +607,7 @@ class UserHandler implements UserHandlerInterface
                 $this->backend->create(
                     'User\\RoleAssignment',
                     array(
-                        '_roleId' => $roleId,
+                        'roleId' => $roleId,
                         'contentId' => $contentId,
                         'limitationIdentifier' => $limitIdentifier,
                         'values' => $limitValues
@@ -633,7 +620,7 @@ class UserHandler implements UserHandlerInterface
             $this->backend->create(
                 'User\\RoleAssignment',
                 array(
-                    '_roleId' => $roleId,
+                    'roleId' => $roleId,
                     'contentId' => $contentId,
                     'limitationIdentifier' => null,
                     'values' => null
@@ -671,13 +658,13 @@ class UserHandler implements UserHandlerInterface
 
         $roleAssignments = $this->backend->find(
             'User\\RoleAssignment',
-            array( '_roleId' => $roleId, 'contentId' => $contentId )
+            array( 'roleId' => $roleId, 'contentId' => $contentId )
         );
 
         if ( empty( $roleAssignments ) )
             throw new InvalidArgumentValue( '$roleId', $roleId );
 
-        $this->backend->deleteByMatch( 'User\\RoleAssignment', array( '_roleId' => $roleId, 'contentId' => $contentId ) );
+        $this->backend->deleteByMatch( 'User\\RoleAssignment', array( 'roleId' => $roleId, 'contentId' => $contentId ) );
 
         $role->groupIds = array_values( array_diff( $role->groupIds, array( $contentId ) ) );
         $this->backend->update( 'User\\Role', $roleId, (array)$role );

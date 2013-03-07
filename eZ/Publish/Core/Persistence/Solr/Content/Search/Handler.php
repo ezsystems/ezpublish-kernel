@@ -13,7 +13,7 @@ use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
-use eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler;
+use eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Search\Field;
 use eZ\Publish\SPI\Persistence\Content\Search\FieldType;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -42,7 +42,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
  * content objects based on criteria, which could not be converted in to
  * database statements.
  */
-class Handler extends BaseSearchHandler
+class Handler implements SearchHandlerInterface
 {
     /**
      * Content locator gateway.

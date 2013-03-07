@@ -56,7 +56,7 @@ use Exception;
  * content objects based on criteria, which could not be converted in to
  * database statements.
  */
-class SearchHandler extends SearchHandlerInterface
+class SearchHandler implements SearchHandlerInterface
 {
     /**
      * @var Handler
@@ -149,15 +149,6 @@ class SearchHandler extends SearchHandlerInterface
                         'versionNo' => $item->versionInfo->contentInfo->currentVersionNo
                     )
                 );
-
-                $locations = $this->backend->find(
-                    'Content\\Location',
-                    array( 'contentId' => $item->versionInfo->contentInfo->id )
-                );
-                if ( !empty( $locations ) )
-                {
-                    $item->versionInfo->contentInfo->mainLocationId = $locations[0]->mainLocationId;
-                }
 
                 $resultList[] = $item;
             }

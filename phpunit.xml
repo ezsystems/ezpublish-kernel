@@ -20,6 +20,9 @@
     <testsuite name="eZ\Publish\Core\Persistence">
       <directory>eZ/Publish/Core/Persistence/Tests</directory>
     </testsuite>
+    <testsuite name="eZ\Publish\Core\Persistence\Cache">
+      <directory>eZ/Publish/Core/Persistence/Cache/Tests</directory>
+    </testsuite>
     <testsuite name="eZ\Publish\Core\Persistence\InMemory">
       <directory>eZ/Publish/Core/Persistence/InMemory/Tests</directory>
     </testsuite>

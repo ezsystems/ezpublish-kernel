@@ -879,7 +879,7 @@ class LocationService implements LocationServiceInterface
                     'contentTypeId' => 1,
                 )
             );
-        else // @todo This should not be loaded separately, SPI need to change to fix this.
+        else
             $contentInfo = $this->repository->getContentService()->internalLoadContentInfo( $spiLocation->contentId );
 
         return new Location(
