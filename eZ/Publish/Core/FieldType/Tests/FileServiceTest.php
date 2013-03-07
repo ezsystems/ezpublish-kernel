@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\Tests\FileService;
+namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\FileService\LocalFileService;
 
@@ -15,7 +15,7 @@ use eZ\Publish\Core\FieldType\FileService\LocalFileService;
  * @group fieldType
  * @group ezimage
  */
-class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
+class FileServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Temporary directory to use for operations

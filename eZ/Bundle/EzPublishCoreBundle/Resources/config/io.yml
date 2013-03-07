@@ -1,10 +1,11 @@
 parameters:
-    ezpublish.api.io_handler.class: eZ\Publish\Core\IO\LegacyHandler
+    ezpublish.core.io.handler.in_memory.class: eZ\Publish\Core\IO\Handler\Legacy
+    ezpublish.core.io.handler.legacy.class: eZ\Publish\Core\IO\Handler\InMemory
 
 services:
     ezpublish.core.io.service:
         class: eZ\Publish\Core\IO\IOService
-        arguments: [@ezpublish.core.io.handler]
+        arguments: [@ezpublish.core.io.handler.legacy]
 
     ezpublish.core.io.handler:
         class: %ezpublish.api.io_handler.class%

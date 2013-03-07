@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\IO\Tests;
+namespace eZ\Publish\Core\IO\Tests\Handler;
 
-use eZ\Publish\Core\IO\InMemoryHandler as InMemory;
-use eZ\Publish\Core\IO\Tests\Base as BaseHandlerTest;
+use eZ\Publish\Core\IO\Handler\InMemory;
+use eZ\Publish\Core\IO\Tests\Handler\Base as BaseHandlerTest;
 
 /**
  * Handler test

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
+namespace eZ\Publish\Core\IO\Tests\Service\Integration;
 
 use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
 use eZ\Publish\Core\IO\Values\BinaryFile;
@@ -18,12 +18,17 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 /**
  * Test case for IO Service
  */
-abstract class IOService extends BaseServiceTest
+abstract class IOServiceTest extends BaseServiceTest
 {
     /**
      * @return \PHPUnit_Extensions_PhptTestCase
      */
     abstract protected function getFileUploadTest();
+
+    protected function setUp()
+    {
+        // do NOT call the parent setup as IOService isn't a "real" (e.g. repository) service
+    }
 
     /**
      * Test a new class and default values on properties
@@ -258,7 +263,6 @@ abstract class IOService extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                //@todo: is binary file ID equal to path?
                 'id' => $binaryCreateStruct->uri,
                 'size' => $binaryCreateStruct->size,
                 'mimeType' => $binaryCreateStruct->mimeType,
@@ -395,6 +399,6 @@ abstract class IOService extends BaseServiceTest
      */
     private function getIOService()
     {
-        return
+        return '';
     }
 }

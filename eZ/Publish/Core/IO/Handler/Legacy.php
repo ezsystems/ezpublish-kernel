@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the eZ\Publish\Core\IO\LegacyHandler class.
+ * File containing the eZ\Publish\Core\IO\Handler\Legacy class.
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\IO;
+namespace eZ\Publish\Core\IO\Handler;
 
 use eZ\Publish\SPI\IO\Handler as IoHandlerInterface;
 use eZ\Publish\SPI\IO\BinaryFile;
@@ -27,8 +27,7 @@ use finfo;
  * - ctime is not really supported, and will always have the same value as mtime
  * - mtime can not be modified, and will always automatically be set depending on the server time upon each write operation
  */
-
-class LegacyHandler implements IoHandlerInterface
+class Legacy implements IoHandlerInterface
 {
     /**
      * File resource provider

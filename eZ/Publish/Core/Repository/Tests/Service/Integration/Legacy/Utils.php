@@ -25,7 +25,6 @@ abstract class Utils extends InMemoryUtils
         // Override to set legacy handlers
         $sc = self::getServiceContainer(
             'persistence_handler_legacy',
-            'io_handler_legacy',
             ( $dsn = getenv( "DATABASE" ) ) ? $dsn : "sqlite://:memory:"
         );
 

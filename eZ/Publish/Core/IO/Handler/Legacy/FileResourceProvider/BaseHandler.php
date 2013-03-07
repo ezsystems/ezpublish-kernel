@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\IO\LegacyHandler\FileResourceProvider;
+namespace eZ\Publish\Core\IO\Handler\Legacy\FileResourceProvider;
 
 use eZ\Publish\Core\MVC\Legacy\LegacyKernelAware;
 use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;

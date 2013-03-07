@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the eZ\Publish\Core\IO\InMemoryHandler class
+ * File containing the eZ\Publish\Core\IO\Handler\InMemory class
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\IO;
+namespace eZ\Publish\Core\IO\Handler;
 
 use eZ\Publish\SPI\IO\Handler as IoHandlerInterface;
 use eZ\Publish\SPI\IO\BinaryFile;
@@ -18,10 +18,9 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use DateTime;
 
 /**
- * Backend interface for handling of binary files I/O
+ * Backend interface for handling of binary files I/O in memory
  */
-
-class InMemoryHandler implements IoHandlerInterface
+class InMemory implements IoHandlerInterface
 {
     /**
      * Files storage

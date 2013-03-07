@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\IO\Tests;
+namespace eZ\Publish\Core\IO\Tests\Handler;
 
-use eZ\Publish\Core\IO\DispatcherHandler as Dispatcher;
-use eZ\Publish\Core\IO\InMemoryHandler as InMemory;
-use eZ\Publish\Core\IO\Tests\Base as BaseHandlerTest;
+use eZ\Publish\Core\IO\Handler\Dispatcher;
+use eZ\Publish\Core\IO\Handler\InMemory as InMemory;
+use eZ\Publish\Core\IO\Tests\Handler\Base as BaseHandlerTest;
 
 /**
  * Handler test
@@ -51,7 +51,7 @@ class DispatcherTest extends BaseHandlerTest
 
     /**
      * Test that file is created in default handler
-     * @covers \eZ\Publish\Core\IO\DispatcherHandler::__construct
+     * @covers \eZ\Publish\Core\IO\Handler\Dispatcher::__construct
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testDispatcherInvalidAlternativeHandlerParam()
@@ -64,7 +64,7 @@ class DispatcherTest extends BaseHandlerTest
 
     /**
      * Test that file is created in default handler
-     * @covers \eZ\Publish\Core\IO\DispatcherHandler::__construct
+     * @covers \eZ\Publish\Core\IO\Handler\Dispatcher::__construct
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testDispatcherInvalidAlternativeHandler()
@@ -85,7 +85,7 @@ class DispatcherTest extends BaseHandlerTest
 
     /**
      * Test that file is created in default handler
-     * @covers \eZ\Publish\Core\IO\DispatcherHandler::__construct
+     * @covers \eZ\Publish\Core\IO\Handler\Dispatcher::__construct
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testDispatcherInvalidAlternativeHandlerConfig()
@@ -102,7 +102,7 @@ class DispatcherTest extends BaseHandlerTest
 
     /**
      * Test that file is created in default handler
-     * @covers \eZ\Publish\Core\IO\DispatcherHandler::getHandler
+     * @covers \eZ\Publish\Core\IO\Handler\Dispatcher::getHandler
      */
     public function testDispatcherDefaultBackendCreate()
     {
@@ -116,7 +116,7 @@ class DispatcherTest extends BaseHandlerTest
 
     /**
      * Test that file is created in default handler
-     * @covers \eZ\Publish\Core\IO\DispatcherHandler::getHandler
+     * @covers \eZ\Publish\Core\IO\Handler\Dispatcher::getHandler
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDispatcherDefaultBackendCreateNotFound()
@@ -129,7 +129,7 @@ class DispatcherTest extends BaseHandlerTest
 
     /**
      * Test that file is created in alternative handler
-     * @covers \eZ\Publish\Core\IO\DispatcherHandler::getHandler
+     * @covers \eZ\Publish\Core\IO\Handler\Dispatcher::getHandler
      */
     public function testDispatcherAlternativeBackendCreate()
     {
@@ -143,7 +143,7 @@ class DispatcherTest extends BaseHandlerTest
 
     /**
      * Test that file is created in alternative handler
-     * @covers \eZ\Publish\Core\IO\DispatcherHandler::getHandler
+     * @covers \eZ\Publish\Core\IO\Handler\Dispatcher::getHandler
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDispatcherAlternativeBackendCreateNotFound()

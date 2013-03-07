@@ -44,13 +44,21 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
      */
     protected function getFileService()
     {
-        return new FieldType\FileService\LocalFileService(
+        return new FieldType\FileService(
+            $this->getIOHandler(),
             $this->getTempDir(),
             $this->getStorageDir(),
             $this->getStorageIdentifierPrefix()
         );
     }
 
+    /**
+     * @return IO
+     */
+    public function getIOHandler()
+    {
+
+    }
     /**
      * Returns MIME type detector to be used.
      *

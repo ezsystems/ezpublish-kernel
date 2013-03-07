@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\IO\Tests;
+namespace eZ\Publish\Core\IO\Tests\Handler;
 
-use eZ\Publish\Core\IO\LegacyHandler as Legacy;
-use eZ\Publish\Core\IO\Tests\Base as BaseHandlerTest;
+use eZ\Publish\Core\IO\Handler\Legacy as Legacy;
+use eZ\Publish\Core\IO\Tests\Handler\Base as BaseHandlerTest;
 use ezcBaseFile;
 
 /**

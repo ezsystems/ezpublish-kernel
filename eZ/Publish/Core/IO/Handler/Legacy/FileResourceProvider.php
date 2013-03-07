@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\IO\LegacyHandler;
+namespace eZ\Publish\Core\IO\Handler\Legacy;
 
 /**
  * This interface handles providing of a file resource based on a cluster handler / cluster file
