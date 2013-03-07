@@ -295,6 +295,8 @@ class PageServiceTest extends \PHPUnit_Framework_TestCase
             ->with( $block )
             ->will( $this->returnValue( $items ) );
         $this->pageService->setStorageGateway( $this->storageGateway );
+        // Calling assertion twice to test cache (comes along with storage gateway's getValidBlockItems() that should be called only once. See above)
+        $this->assertSame( $items, $this->pageService->getValidBlockItems( $block ) );
         $this->assertSame( $items, $this->pageService->getValidBlockItems( $block ) );
     }
 
@@ -317,6 +319,8 @@ class PageServiceTest extends \PHPUnit_Framework_TestCase
             ->with( $block )
             ->will( $this->returnValue( $items ) );
         $this->pageService->setStorageGateway( $this->storageGateway );
+        // Calling assertion twice to test cache (comes along with storage gateway's getWaitingBlockItems() that should be called only once. See above)
+        $this->assertSame( $items, $this->pageService->getWaitingBlockItems( $block ) );
         $this->assertSame( $items, $this->pageService->getWaitingBlockItems( $block ) );
     }
 
@@ -339,6 +343,8 @@ class PageServiceTest extends \PHPUnit_Framework_TestCase
             ->with( $block )
             ->will( $this->returnValue( $items ) );
         $this->pageService->setStorageGateway( $this->storageGateway );
+        // Calling assertion twice to test cache (comes along with storage gateway's getArchivedBlockItems() that should be called only once. See above)
+        $this->assertSame( $items, $this->pageService->getArchivedBlockItems( $block ) );
         $this->assertSame( $items, $this->pageService->getArchivedBlockItems( $block ) );
     }
 }

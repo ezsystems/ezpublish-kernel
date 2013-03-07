@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId;
+use SplObjectStorage;
 
 class PageService extends BasePageService implements RepositoryAwareInterface
 {
@@ -22,6 +23,19 @@ class PageService extends BasePageService implements RepositoryAwareInterface
      * @var \eZ\Publish\API\Repository\Repository
      */
     protected $repository;
+
+    /**
+     * Cached content items by block.
+     *
+     * @var \SplObjectStorage
+     */
+    protected $validBlockContentItems;
+
+    public function __construct( array $zoneDefinition = array(), array $blockDefinition = array() )
+    {
+        parent::__construct( $zoneDefinition, $blockDefinition );
+        $this->validBlockContentItems = new SplObjectStorage();
+    }
 
     /**
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -42,6 +56,9 @@ class PageService extends BasePageService implements RepositoryAwareInterface
      */
     public function getValidBlockItemsAsContent( Block $block )
     {
+        if ( isset( $this->validBlockContentItems[$block] ) )
+            return $this->validBlockContentItems[$block];
+
         $contentIds = array();
         foreach ( $this->getValidBlockItems( $block ) as $item )
         {
@@ -62,6 +79,6 @@ class PageService extends BasePageService implements RepositoryAwareInterface
             $contentObjects[] = $searchHit->valueObject;
         }
 
-        return $contentObjects;
+        return $this->validBlockContentItems[$block] = $contentObjects;
     }
 }
