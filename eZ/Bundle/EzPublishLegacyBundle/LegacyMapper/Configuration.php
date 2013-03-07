@@ -13,6 +13,7 @@ use eZ\Publish\Core\MVC\Legacy\LegacyEvents;
 use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger;
+use eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger;
 use ezpEvent;
 use ezxFormToken;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -34,6 +35,11 @@ class Configuration implements EventSubscriberInterface
     private $gatewayCachePurger;
 
     /**
+     * @var \eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger
+     */
+    private $persistenceCachePurger;
+
+    /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
     private $container;
@@ -43,10 +49,11 @@ class Configuration implements EventSubscriberInterface
      */
     private $options;
 
-    public function __construct( ConfigResolverInterface $configResolver, GatewayCachePurger $gatewayCachePurger, ContainerInterface $container, array $options = array() )
+    public function __construct( ConfigResolverInterface $configResolver, GatewayCachePurger $gatewayCachePurger, PersistenceCachePurger $persistenceCachePurger, ContainerInterface $container, array $options = array() )
     {
         $this->configResolver = $configResolver;
         $this->gatewayCachePurger = $gatewayCachePurger;
+        $this->persistenceCachePurger = $persistenceCachePurger;
         $this->container = $container;
         $this->options = $options;
     }
@@ -120,9 +127,19 @@ class Configuration implements EventSubscriberInterface
             ezxFormToken::setFormField( $this->container->getParameter( 'form.type_extension.csrf.field_name' ) );
         }
 
-        // Register content/cache event listener
+        // Register http cache content/cache event listener
         ezpEvent::getInstance()->attach( 'content/cache', array( $this->gatewayCachePurger, 'purge' ) );
         ezpEvent::getInstance()->attach( 'content/cache/all', array( $this->gatewayCachePurger, 'purgeAll' ) );
+
+        // Register persistence cache event listeners
+        ezpEvent::getInstance()->attach( 'content/cache', array( $this->persistenceCachePurger, 'content' ) );
+        ezpEvent::getInstance()->attach( 'content/cache/all', array( $this->persistenceCachePurger, 'all' ) );
+        ezpEvent::getInstance()->attach( 'content/class/cache/all', array( $this->persistenceCachePurger, 'contentType' ) );
+        ezpEvent::getInstance()->attach( 'content/class/cache', array( $this->persistenceCachePurger, 'contentType' ) );
+        ezpEvent::getInstance()->attach( 'content/class/group/cache', array( $this->persistenceCachePurger, 'contentTypeGroup' ) );
+        ezpEvent::getInstance()->attach( 'content/section/cache', array( $this->persistenceCachePurger, 'section' ) );
+        ezpEvent::getInstance()->attach( 'user/cache/all', array( $this->persistenceCachePurger, 'user' ) );
+        ezpEvent::getInstance()->attach( 'content/translations/cache', array( $this->persistenceCachePurger, 'languages' ) );
     }
 
     private function getImageSettings()

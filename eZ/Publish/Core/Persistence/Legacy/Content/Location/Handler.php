@@ -250,8 +250,8 @@ class Handler implements BaseLocationHandler
 
         // If subtree root is main location for its content, update subtree section to the one of the
         // parent location content
-        /** @var $copiedSubtreeRootLocation */
-        if ( $copiedSubtreeRootLocation->mainLocationId === $copiedSubtreeRootLocation->id )
+        $subtreeRootContentInfo = $this->contentHandler->loadContentInfo( $copiedSubtreeRootLocation->contentId );
+        if ( $subtreeRootContentInfo->mainLocationId === $copiedSubtreeRootLocation->id )
         {
             $this->setSectionForSubtree(
                 $copiedSubtreeRootLocation->id,

@@ -18,9 +18,9 @@ class RoleAssignment extends ValueObject
     /**
      * The Role connected to this assignment
      *
-     * @var \eZ\Publish\SPI\Persistence\User\Role
+     * @var mixed
      */
-    public $role;
+    public $roleId;
 
     /**
      * The user or user group id

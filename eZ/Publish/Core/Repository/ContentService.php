@@ -1839,10 +1839,18 @@ class ContentService implements ContentServiceInterface
     protected function buildDomainFields( array $spiFields, ContentType $type = null )
     {
         $fields = array();
+        if ( $type !== null )
+        {
+            $fieldIdentifierMap = array();
+            foreach ( $type->getFieldDefinitions() as $fieldDefinitions )
+            {
+                $fieldIdentifierMap[$fieldDefinitions->id] = $fieldDefinitions->identifier;
+            }
+        }
 
         foreach ( $spiFields as $spiField )
         {
-            if ( $type === null )
+            if ( !isset( $fieldIdentifierMap ) )
             {
                 $identifier = $this->persistenceHandler->contentTypeHandler()->getFieldDefinition(
                     $spiField->fieldDefinitionId,
@@ -1851,14 +1859,7 @@ class ContentService implements ContentServiceInterface
             }
             else
             {
-                foreach ( $type->fieldDefinitions as $fieldDefinitions )
-                {
-                    if ( $fieldDefinitions->id === $spiField->fieldDefinitionId )
-                    {
-                        $identifier = $fieldDefinitions->identifier;
-                        break;
-                    }
-                }
+                $identifier = $fieldIdentifierMap[$spiField->fieldDefinitionId];
             }
 
             $fields[] = new Field(

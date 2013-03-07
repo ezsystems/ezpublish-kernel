@@ -106,16 +106,6 @@ class Location extends ValueObject
     public $pathString;
 
     /**
-     * Identifier of the main location.
-     *
-     * If the content object in this location has multiple locations,
-     * $mainLocationId will point to the main one.
-     *
-     * @var mixed
-     */
-    public $mainLocationId;
-
-    /**
      * Depth location has in the location tree.
      *
      * @var int

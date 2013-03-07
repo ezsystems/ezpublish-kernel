@@ -355,7 +355,6 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         $location->contentId = 1;
         $location->contentVersion = 1;
         $location->parentId = 1;
-        $location->mainLocationId = 2;
         $location->remoteId = 'string';
         $location->pathIdentificationString = '/1/3/';
         $location->sortField = Location::SORT_FIELD_MODIFIED;
