@@ -13,6 +13,7 @@ use eZ\Publish\Core\FieldType\Page\PageStorage\Gateway;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use RuntimeException;
 use OutOfBoundsException;
+use SplObjectStorage;
 
 class PageService
 {
@@ -36,6 +37,27 @@ class PageService
     protected $storageGateway;
 
     /**
+     * Cached valid block items by block.
+     *
+     * @var \SplObjectStorage
+     */
+    protected $validBlockItems;
+
+    /**
+     * Cached waiting block items by block.
+     *
+     * @var \SplObjectStorage
+     */
+    protected $waitingBlockItems;
+
+    /**
+     * Cached archived block items by block.
+     *
+     * @var \SplObjectStorage
+     */
+    protected $archivedBlockItems;
+
+    /**
      * Constructor
      *
      * @param array $zoneDefinition
@@ -45,6 +67,9 @@ class PageService
     {
         $this->zoneDefinition = $zoneDefinition;
         $this->blockDefinition = $blockDefinition;
+        $this->validBlockItems = new SplObjectStorage();
+        $this->waitingBlockItems = new SplObjectStorage();
+        $this->archivedBlockItems = new SplObjectStorage();
     }
 
     /**
@@ -190,7 +215,10 @@ class PageService
      */
     public function getValidBlockItems( Block $block )
     {
-        return $this->getStorageGateway()->getValidBlockItems( $block );
+        if ( isset( $this->validBlockItems[$block] ) )
+            return $this->validBlockItems[$block];
+
+        return $this->validBlockItems[$block] = $this->getStorageGateway()->getValidBlockItems( $block );
     }
 
     /**
@@ -202,7 +230,10 @@ class PageService
      */
     public function getWaitingBlockItems( Block $block )
     {
-        return $this->getStorageGateway()->getWaitingBlockItems( $block );
+        if ( isset( $this->waitingBlockItems[$block] ) )
+            return $this->waitingBlockItems[$block];
+
+        return $this->waitingBlockItems[$block] = $this->getStorageGateway()->getWaitingBlockItems( $block );
     }
 
     /**
@@ -214,6 +245,9 @@ class PageService
      */
     public function getArchivedBlockItems( Block $block )
     {
-        return $this->getStorageGateway()->getArchivedBlockItems( $block );
+        if ( isset( $this->archivedBlockItems[$block] ) )
+            return $this->archivedBlockItems[$block];
+
+        return $this->archivedBlockItems[$block] = $this->getStorageGateway()->getArchivedBlockItems( $block );
     }
 }

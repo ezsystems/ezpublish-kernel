@@ -79,6 +79,8 @@ class PageServiceTest extends BaseTest
             ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Query' ) )
             ->will( $this->returnValue( $searchResult ) );
 
+        // Calling assertion twice to test cache (comes along with search service/gateway methods that should be called only once. See above)
+        $this->assertSame( $expectedResult, $this->pageService->getValidBlockItemsAsContent( $block ) );
         $this->assertSame( $expectedResult, $this->pageService->getValidBlockItemsAsContent( $block ) );
     }
 }
