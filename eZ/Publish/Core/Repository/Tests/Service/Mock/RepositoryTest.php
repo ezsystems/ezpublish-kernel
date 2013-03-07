@@ -173,7 +173,6 @@ class RepositoryTest extends BaseServiceMockTest
             array( "getRoleService", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
-                $this->getIOMock(),
             )
         );
 
@@ -259,7 +258,6 @@ class RepositoryTest extends BaseServiceMockTest
             array( "getRoleService", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
-                $this->getIOMock(),
             )
         );
         $roleServiceMock = $this->getMock(
@@ -379,7 +377,6 @@ class RepositoryTest extends BaseServiceMockTest
             array( "hasAccess", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
-                $this->getIOMock(),
             )
         );
 
@@ -413,7 +410,6 @@ class RepositoryTest extends BaseServiceMockTest
             array( "hasAccess", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
-                $this->getIOMock(),
             )
         );
 
@@ -711,7 +707,6 @@ class RepositoryTest extends BaseServiceMockTest
             array( "getUserService" ),
             array(
                 $this->getPersistenceMock(),
-                $this->getIOMock(),
             )
         );
 
