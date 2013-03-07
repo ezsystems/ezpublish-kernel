@@ -12,6 +12,9 @@ namespace eZ\Publish\Core\MVC\Symfony\View\Provider\Content;
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Content as ContentViewProvider;
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Configured as ProviderConfigured;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use InvalidArgumentException;
 
 class Configured extends ProviderConfigured implements ContentViewProvider
 {
@@ -25,5 +28,21 @@ class Configured extends ProviderConfigured implements ContentViewProvider
      */
     public function getView( ContentInfo $contentInfo, $viewType )
     {
+    }
+
+    /**
+     * Checks if $valueObject matches the $matcher's rules.
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher $matcher
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $valueObject
+     *
+     * @throws \InvalidArgumentException If $valueObject is not of expected sub-type.
+     *
+     * @return bool
+     */
+    protected function doMatch( ViewProviderMatcher $matcher, ValueObject $valueObject )
+    {
+        if ( !$valueObject instanceof ContentInfo )
+            throw new InvalidArgumentException( 'Value object must be a valid ContentInfo instance' );
     }
 }
