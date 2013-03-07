@@ -15,6 +15,9 @@ use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher;
 use eZ\Publish\Core\MVC\RepositoryAwareInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher;
+use InvalidArgumentException;
 
 class Configured extends ProviderConfigured implements LocationViewProvider
 {
@@ -46,7 +49,7 @@ class Configured extends ProviderConfigured implements LocationViewProvider
                 $matcher = $this->matchers[$matcherIdentifier];
 
                 if ( !$matcher instanceof Matcher )
-                    throw new \InvalidArgumentException(
+                    throw new InvalidArgumentException(
                         'Matcher for ContentViewProvider\\Configured must implement eZ\\Publish\\MVC\\View\\ContentViewProvider\\Configured\\Matcher interface.'
                     );
 
@@ -54,7 +57,7 @@ class Configured extends ProviderConfigured implements LocationViewProvider
                     $matcher->setRepository( $this->repository );
 
                 $matcher->setMatchingConfig( $value );
-                if ( !$matcher->matchLocation( $location ) )
+                if ( !$this->doMatch( $matcher, $location ) )
                     $hasMatched = false;
             }
 
@@ -63,5 +66,23 @@ class Configured extends ProviderConfigured implements LocationViewProvider
                 return new ContentView( $configHash['template'] );
             }
         }
+    }
+
+    /**
+     * Checks if $valueObject matches the $matcher's rules.
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher $matcher
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $valueObject
+     *
+     * @throws \InvalidArgumentException If $valueObject is not of expected sub-type.
+     *
+     * @return bool
+     */
+    protected function doMatch( ViewProviderMatcher $matcher, ValueObject $valueObject )
+    {
+        if ( !$valueObject instanceof Location )
+            throw new InvalidArgumentException( 'Value object must be a valid Location instance' );
+
+        return $matcher->matchLocation( $valueObject );
     }
 }

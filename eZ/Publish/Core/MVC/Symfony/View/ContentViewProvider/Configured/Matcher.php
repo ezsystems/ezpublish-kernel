@@ -11,24 +11,13 @@ namespace eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher;
 
 /**
- * Main interface for matchers to be used with View\Provider\Content\Configured.
+ * Main interface for content/location matchers to be used with View\Provider\Content\Configured.
  */
-interface Matcher
+interface Matcher extends ViewProviderMatcher
 {
-    /**
-     * Registers the matching configuration for the matcher.
-     * It's up to the implementor to validate $matchingConfig since it can be anything configured by the end-developer.
-     *
-     * @param mixed $matchingConfig
-     *
-     * @throws \InvalidArgumentException Should be thrown if $matchingConfig is not valid.
-     *
-     * @return void
-     */
-    public function setMatchingConfig( $matchingConfig );
-
     /**
      * Checks if a Location object matches.
      *

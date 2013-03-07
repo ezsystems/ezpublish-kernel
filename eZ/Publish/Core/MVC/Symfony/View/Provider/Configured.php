@@ -10,6 +10,8 @@
 namespace eZ\Publish\Core\MVC\Symfony\View\Provider;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher;
 
 abstract class Configured
 {
@@ -53,4 +55,16 @@ abstract class Configured
 
         return new $matcherIdentifier();
     }
+
+    /**
+     * Checks if $valueObject matches the $matcher's rules.
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher $matcher
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $valueObject
+     *
+     * @throws \InvalidArgumentException If $valueObject is not of expected sub-type.
+     *
+     * @return bool
+     */
+    abstract protected function doMatch( ViewProviderMatcher $matcher, ValueObject $valueObject );
 }
