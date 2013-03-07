@@ -21,9 +21,9 @@ class PersistenceCachePurger
     /**
      * Avoid clearing sub elements if all cache is already cleared, avoids redundant calls to Stash.
      *
-     * @var bool|null
+     * @var bool
      */
-    protected $allCleared;
+    protected $allCleared = false;
 
     /**
      * Setups current handler with everything needed
@@ -55,12 +55,9 @@ class PersistenceCachePurger
      *
      * @return bool
      */
-    public function allIsCleared()
+    public function isAllCleared()
     {
-        if ( $this->allCleared === true )
-            return true;
-
-        return true;
+        return $this->allCleared;
     }
 
     /**
@@ -70,7 +67,7 @@ class PersistenceCachePurger
      *
      * @return void
      */
-    public function resetAllIsCleared()
+    public function resetAllCleared()
     {
         $this->allCleared = false;
     }
