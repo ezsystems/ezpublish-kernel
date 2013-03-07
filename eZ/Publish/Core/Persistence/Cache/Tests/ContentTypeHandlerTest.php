@@ -418,7 +418,7 @@ class ContentTypeHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
-            ->expects( $this->once() )
+            ->expects( $this->at( 0 ) )
             ->method( 'getItem' )
             ->with( 'contentType', 'identifier', 'forum' )
             ->will( $this->returnValue( $cacheItemMock ) );
@@ -449,6 +449,27 @@ class ContentTypeHandlerTest extends HandlerTest
             ->expects( $this->once() )
             ->method( 'set' )
             ->with( 55 );
+
+
+        $cacheItemMock2 = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $this->cacheMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'getItem' )
+            ->with( 'contentType', 55 )
+            ->will( $this->returnValue( $cacheItemMock2 ) );
+
+        $cacheItemMock2
+            ->expects( $this->never() )
+            ->method( 'get' );
+
+        $cacheItemMock2
+            ->expects( $this->never() )
+            ->method( 'isMiss' );
+
+        $cacheItemMock2
+            ->expects( $this->once() )
+            ->method( 'set' )
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type' ) );
 
         $handler = $this->persistenceHandler->contentTypeHandler();
         $handler->loadByIdentifier( 'forum' );
@@ -682,6 +703,22 @@ class ContentTypeHandlerTest extends HandlerTest
             ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type' ) );
 
         $cacheItemMock
+            ->expects( $this->never() )
+            ->method( 'get' );
+
+        $cacheItemMock2 = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $this->cacheMock
+            ->expects( $this->at( 2 ) )
+            ->method( 'getItem' )
+            ->with( 'contentType', 'identifier', 'forum' )
+            ->will( $this->returnValue( $cacheItemMock2 ) );
+
+        $cacheItemMock2
+            ->expects( $this->once() )
+            ->method( 'set' )
+            ->with( 55 );
+
+        $cacheItemMock2
             ->expects( $this->never() )
             ->method( 'get' );
 

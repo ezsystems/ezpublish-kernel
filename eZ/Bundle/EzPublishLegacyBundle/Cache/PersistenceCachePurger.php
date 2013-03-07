@@ -21,9 +21,9 @@ class PersistenceCachePurger
     /**
      * Avoid clearing sub elements if all cache is already cleared, avoids redundant calls to Stash.
      *
-     * @var bool
+     * @var bool|null
      */
-    protected $allCleared = false;
+    protected $allCleared;
 
     /**
      * Setups current handler with everything needed
@@ -36,6 +36,10 @@ class PersistenceCachePurger
     }
 
     /**
+     * Clear all persistence cache
+     *
+     * Sets a internal flag 'allCleared' to avoid clearing cache several times
+     *
      * @return void
      */
     public function all()
@@ -45,6 +49,37 @@ class PersistenceCachePurger
     }
 
     /**
+     * Returns true if all cache has been cleared already
+     *
+     * Returns the internal flag 'allCleared' that avoids clearing cache several times
+     *
+     * @return bool
+     */
+    public function allIsCleared()
+    {
+        if ( $this->allCleared === true )
+            return true;
+
+        return true;
+    }
+
+    /**
+     * Reset 'allCleared' flag
+     *
+     * Resets the internal flag 'allCleared' that avoids clearing cache several times
+     *
+     * @return void
+     */
+    public function resetAllIsCleared()
+    {
+        $this->allCleared = false;
+    }
+
+    /**
+     * Clear all content persistence cache, or by id
+     *
+     * Either way all location and urlAlias cache is cleared as well.
+     *
      * @param int|null $id Purges all content cache if null
      * @return void
      */
@@ -69,6 +104,8 @@ class PersistenceCachePurger
     }
 
     /**
+     * Clear all contentType persistence cache, or by id
+     *
      * @param int|null $id Purges all contentType cache if null
      * @return void
      */
@@ -88,6 +125,10 @@ class PersistenceCachePurger
     }
 
     /**
+     * Clear all contentTypeGroup persistence cache, or by id
+     *
+     * Either way, contentType cache is also cleared as it contains the relation to contentTypeGroups
+     *
      * @param int|null $id Purges all contentTypeGroup cache if null
      * @return void
      */
@@ -110,6 +151,8 @@ class PersistenceCachePurger
     }
 
     /**
+     * Clear all section persistence cache, or by id
+     *
      * @param int|null $id Purges all section cache if null
      * @return void
      */
@@ -129,6 +172,8 @@ class PersistenceCachePurger
 
 
     /**
+     * Clear all language persistence cache, or by id
+     *
      * @param array $ids
      * @return void
      */
@@ -142,6 +187,8 @@ class PersistenceCachePurger
     }
 
     /**
+     * Clear all user persistence cache
+     *
      * @return void
      */
     public function user()

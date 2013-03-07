@@ -58,7 +58,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function load( $contentId, $version, $translations = null )
     {
-        if ( $translations !== null )
+        if ( null !== $translations )
         {
             $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'version' => $version, 'translations' => $translations ) );
             return $this->persistenceFactory->getContentHandler()->load( $contentId, $version, $translations );
@@ -260,6 +260,8 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      *
      * Needed for DomDocuments on field values as they can not be serialized directly.
      *
+     * @todo Change SPI to document that fieldValue->data and external data *must* be serializable, then remove this.
+     *
      * @param Content $content
      * @return Content A serializable version of Content
      */
@@ -270,18 +272,20 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         {
             $contentClone->fields[$key] = $fieldClone = clone $field;
             $fieldClone->value = clone $fieldClone->value;
+
+            // Add 'unique' string in front of xml string version of dom document, used by unSerializeXMLFields()
             if ( $fieldClone->value->data instanceof DOMDocument )
             {
                 $fieldClone->value->data =
                     self::FIELD_VALUE_DOM_DOCUMENT_KEY .
-                        $fieldClone->value->data->saveXML();
+                    $fieldClone->value->data->saveXML();
             }
 
             if ( $fieldClone->value->externalData instanceof DOMDocument )
             {
                 $fieldClone->value->externalData =
                     self::FIELD_VALUE_DOM_DOCUMENT_KEY .
-                        $fieldClone->value->externalData->saveXML();
+                    $fieldClone->value->externalData->saveXML();
             }
         }
         return $contentClone;
@@ -292,6 +296,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      *
      * Needed for DomDocuments on field values as they can not be serialized directly.
      *
+     * @see cloneAndSerializeXMLFields
      * @param Content $content
      * @return Content
      */
@@ -299,18 +304,23 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     {
         foreach ( $content->fields as $field )
         {
-            if ( !empty( $field->value->data ) &&
+            // Look for self::FIELD_VALUE_DOM_DOCUMENT_KEY, it indicates a xml string that needs to be DomDocument
+            if (
+                !empty( $field->value->data ) &&
                 is_string( $field->value->data ) &&
-                strpos( $field->value->data, self::FIELD_VALUE_DOM_DOCUMENT_KEY ) === 0 )
+                strpos( $field->value->data, self::FIELD_VALUE_DOM_DOCUMENT_KEY ) === 0
+            )
             {
                 $dom = new DOMDocument( '1.0', 'UTF-8' );
                 $dom->loadXML( substr( $field->value->data, strlen( self::FIELD_VALUE_DOM_DOCUMENT_KEY ) ) );
                 $field->value->data = $dom;
             }
 
-            if ( !empty( $field->value->externalData ) &&
+            if (
+                !empty( $field->value->externalData ) &&
                 is_string( $field->value->externalData ) &&
-                strpos( $field->value->externalData, self::FIELD_VALUE_DOM_DOCUMENT_KEY ) === 0 )
+                strpos( $field->value->externalData, self::FIELD_VALUE_DOM_DOCUMENT_KEY ) === 0
+            )
             {
                 $dom = new DOMDocument( '1.0', 'UTF-8' );
                 $dom->loadXML( substr( $field->value->externalData, strlen( self::FIELD_VALUE_DOM_DOCUMENT_KEY ) ) );

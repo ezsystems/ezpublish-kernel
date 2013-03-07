@@ -18,6 +18,10 @@ use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStr
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 
 /**
+ * ContentType cache
+ *
+ * Caches defined (published) content types and content type groups.
+ *
  * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler
  */
 class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerInterface
@@ -140,10 +144,12 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
             $this->logger->logCall( __METHOD__, array( 'type' => $identifier ) );
             $type = $this->persistenceFactory->getContentTypeHandler()->loadByIdentifier( $identifier );
             $cache->set( $type->id );
+            // Warm contentType cache in case it's not set
+            $this->cache->getItem( 'contentType', $type->id )->set( $type );
         }
         else
         {
-            // Reuse load() if we have id
+            // Reuse load() if we have id (it should be cached anyway)
             $type = $this->load( $typeId );
         }
 
@@ -184,15 +190,18 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     {
         $this->logger->logCall( __METHOD__, array( 'type' => $typeId, 'status' => $status, 'struct' => $struct ) );
         if ( $status !== Type::STATUS_DEFINED )
+        {
             return $this->persistenceFactory->getContentTypeHandler()->update( $typeId, $status, $struct );
+        }
 
         // Warm cache
         $this->cache
             ->getItem( 'contentType', $typeId )
             ->set( $type = $this->persistenceFactory->getContentTypeHandler()->update( $typeId, $status, $struct ) );
 
-        // Clear identifier cache in case it was changed
+        // Clear identifier cache in case it was changed before warming the new one
         $this->cache->clear( 'contentType', 'identifier' );
+        $this->cache->getItem( 'contentType', 'identifier', $type->identifier )->set( $typeId );
 
         return $type;
     }

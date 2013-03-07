@@ -13,6 +13,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 use eZINI;
 use eZSiteAccess;
+use Stash\Driver\Apc as APCDriver;
 
 /**
  * Handles conversionlegacy eZ Publish 4 parameters from a set of settings to a configuration array
@@ -183,8 +184,9 @@ class ConfigurationConverter
     protected function getStashCacheSettings( $databaseName )
     {
         $handlers = array();// Should only contain one out of the box
+        $inMemory = false;
         $handlerSetting = array();
-        if ( \Stash\Driver\Apc::isAvailable() )
+        if ( APCDriver::isAvailable() )
         {
             $handlers[] = 'Apc';
             $handlerSetting['Apc'] = array(
@@ -192,42 +194,38 @@ class ConfigurationConverter
                 'namespace' => $databaseName
             );
         }
-        /* Not fully supported by Stash-bundle
+        /* Disabled for installer, not tested, and stash-bundle does not provide a way to set settings
         else if ( \Stash\Driver\Xcache::isAvailable() )
         {
             $handlers[] = 'Xcache';
         }*/
+        /* Disabled for installer, as we cant prompt user for correct settings atm
         else if ( \Stash\Driver\Memcache::isAvailable() )
         {
             $handlers[] = 'Memcache';
-            // @todo: This configuration seem to not work with the Stash-bundle
             $handlerSetting['Memcache'] = array(
                 'prefix_key' => $databaseName,
                 'servers' => array(
                     array( 'server' => '127.0.0.1', 'port' => '11211' )
                 )
             );
-        }
-        /* Not fully supported by Stash-bundle
-        else if ( \Stash\Driver\Ephemeral::isAvailable() )
-        {
-            $handlers[] = 'Ephemeral';
         }*/
-        /* Does not work without getting the user to create a cache/<env>/stash folder
+        /* Disabled for installer, currently requires user to manually create cache/<env>/stash folder
         else if ( \Stash\Driver\FileSystem::isAvailable() )
         {
             $handlers[] = 'FileSystem';
         }*/
         else
         {
-            $handlers[] = 'BlackHole';// "Null" driver, no cache at all
+            $handlers[] = 'BlackHole';// '/dev/null' fallback driver, no cache at all
+            $inMemory = true;// compensate by enabling "Ephemeral", not allowed as separate handler in stash-bundle
         }
 
         return array(
             'caches' => array(
                 'default' => array(
                     'handlers' => $handlers,
-                    'inMemory' => false,
+                    'inMemory' => $inMemory,
                     'registerDoctrineAdapter' => false
                 ) + $handlerSetting
             )
