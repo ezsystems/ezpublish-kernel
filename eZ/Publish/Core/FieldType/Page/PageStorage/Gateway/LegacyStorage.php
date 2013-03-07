@@ -176,9 +176,9 @@ class LegacyStorage extends Gateway
         return new Item(
             array(
                 'blockId'           => $row['block_id'],
-                'contentId'         => $row['object_id'],
-                'locationId'        => $row['node_id'],
-                'priority'          => $row['priority'],
+                'contentId'         => (int)$row['object_id'],
+                'locationId'        => (int)$row['node_id'],
+                'priority'          => (int)$row['priority'],
                 'publicationDate'   => new DateTime( "@{$row['ts_publication']}" ),
                 'visibilityDate'    => $row['ts_visible'] ? new DateTime( "@{$row['ts_visible']}" ) : null,
                 'hiddenDate'        => $row['ts_hidden'] ? new DateTime( "@{$row['ts_hidden']}" ) : null,
