@@ -145,7 +145,7 @@ class Type extends FieldType
     /**
      * Converts an $hash to the Value defined by the field type
      *
-     * @param int $hash Number of seconds since Unix Epoch
+     * @param mixed $hash Null or associative array containing timestamp and optionally date in RFC850 format.
      *
      * @return \eZ\Publish\Core\FieldType\DateAndTime\Value $value
      */
