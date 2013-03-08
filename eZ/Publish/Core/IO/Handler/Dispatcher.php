@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\IO\Handler;
 
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\SPI\IO\Handler as IoHandlerInterface;
+use eZ\Publish\Core\IO\Handler as IoHandlerInterface;
 use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * Handler interface for handling of binary files I/O
@@ -90,13 +90,13 @@ class Dispatcher implements IoHandlerInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the target path already exists
      *
-     * @param \eZ\Publish\SPI\IO\BinaryFileCreateStruct $createFilestruct
+     * @param \eZ\Publish\SPI\IO\BinaryFileCreateStruct $createStruct
      *
      * @return \eZ\Publish\SPI\IO\BinaryFile The newly created BinaryFile object
      */
-    public function create( BinaryFileCreateStruct $createFilestruct )
+    public function create( BinaryFileCreateStruct $createStruct )
     {
-        return $this->getHandler( $createFilestruct->path )->create( $createFilestruct );
+        return $this->getHandler( $createStruct->path )->create( $createStruct );
     }
 
     /**
@@ -164,13 +164,13 @@ class Dispatcher implements IoHandlerInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
      *
-     * @param string $path
+     * @param string $uri
      *
      * @return \eZ\Publish\SPI\IO\BinaryFile
      */
-    public function load( $path )
+    public function load( $uri )
     {
-        return $this->getHandler( $path )->load( $path );
+        return $this->getHandler( $uri )->load( $uri );
     }
 
     /**
@@ -178,13 +178,13 @@ class Dispatcher implements IoHandlerInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
      *
-     * @param string $path
+     * @param string $uri
      *
      * @return resource
      */
-    public function getFileResource( $path )
+    public function getFileResource( $uri )
     {
-        return $this->getHandler( $path )->getFileResource( $path );
+        return $this->getHandler( $uri )->getFileResource( $uri );
     }
 
     /**
@@ -192,13 +192,13 @@ class Dispatcher implements IoHandlerInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the file couldn't be found
      *
-     * @param string $path
+     * @param string $uri
      *
      * @return string
      */
-    public function getFileContents( $path )
+    public function getFileContents( $uri )
     {
-        return $this->getHandler( $path )->getFileContents( $path );
+        return $this->getHandler( $uri )->getFileContents( $uri );
     }
 
     /**

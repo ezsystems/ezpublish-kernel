@@ -9,14 +9,13 @@
 
 namespace eZ\Publish\Core\IO\Handler;
 
-use eZ\Publish\SPI\IO\Handler as IoHandlerInterface;
+use eZ\Publish\Core\IO\Handler as IOHandlerInterface;
 use eZ\Publish\SPI\IO\BinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
-use eZ\Publish\Core\MVC\Legacy\LegacyKernelAware;
 use eZClusterFileHandler;
 use DateTime;
 use finfo;
@@ -28,7 +27,7 @@ use finfo;
  * - ctime is not really supported, and will always have the same value as mtime
  * - mtime can not be modified, and will always automatically be set depending on the server time upon each write operation
  */
-class Legacy implements IoHandlerInterface, LegacyKernelAware
+class Legacy implements IOHandlerInterface
 {
     /**
      * File resource provider
@@ -43,9 +42,9 @@ class Legacy implements IoHandlerInterface, LegacyKernelAware
     private $clusterHandler = null;
 
     /**
-     * @var \eZ\Publish\Core\MVC\Legacy\Kernel
+     * @var \Closure
      */
-    private $legacyKernel;
+    private $legacyKernelClosure;
 
     /**
      * The storage directory where data is stored
@@ -60,15 +59,25 @@ class Legacy implements IoHandlerInterface, LegacyKernelAware
      * @param string $storageDirectory
      * @param \eZ\Publish\Core\MVC\Legacy\Kernel $legacyKernel
      */
-    public function __construct( $varDirectory, LegacyKernel $legacyKernel = null )
+    public function __construct( $varDirectory, LegacyKernel $legacyKernelClosure = null )
     {
-        if ( $this->legacyKernel )
-            $this->legacyKernel = $legacyKernel;
+        if ( $this->legacyKernelClosure )
+        {
+            $this->legacyKernelClosure = $legacyKernelClosure;
+        }
     }
 
-    public function setLegacyKernel( LegacyKernel $kernel )
+    public function setLegacyKernel( \Closure $kernelClosure )
     {
-        $this->legacyKernel = $kernel;
+        $this->legacyKernelClosure = $kernelClosure;
+    }
+
+    /**
+     * @return LegacyKernel
+     */
+    protected function getLegacyKernel()
+    {
+        return $this->legacyKernelClosure();
     }
 
     /**
@@ -76,37 +85,37 @@ class Legacy implements IoHandlerInterface, LegacyKernelAware
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If the target path already exists
      *
-     * @param \eZ\Publish\SPI\IO\BinaryFileCreateStruct $createFilestruct
+     * @param \eZ\Publish\SPI\IO\BinaryFileCreateStruct $createStruct
      *
      * @return \eZ\Publish\SPI\IO\BinaryFile The newly created BinaryFile object
      */
-    public function create( BinaryFileCreateStruct $createFilestruct )
+    public function create( BinaryFileCreateStruct $createStruct )
     {
-        if ( $this->exists( $createFilestruct->path ) )
+        if ( $this->exists( $createStruct->path ) )
         {
             throw new InvalidArgumentException(
                 "\$createFilestruct->path",
-                "file '{$createFilestruct->path}' already exists"
+                "file '{$createStruct->path}' already exists"
             );
         }
 
         $clusterHandler = $this->getClusterHandler();
         $this->legacyKernel->runCallback(
-            function () use ( $createFilestruct, $clusterHandler )
+            function () use ( $createStruct, $clusterHandler )
             {
                 // @todo Build a path / scope mapper
                 $scope = 'todo';
                 $clusterHandler->fileStoreContents(
-                    $createFilestruct->path,
-                    fread( $createFilestruct->getInputStream(), $createFilestruct->size ),
-                    $createFilestruct->mimeType,
+                    $createStruct->path,
+                    fread( $createStruct->getInputStream(), $createStruct->size ),
+                    $createStruct->mimeType,
                     $scope
                 );
             },
             false
         );
 
-        return $this->load( $createFilestruct->path );
+        return $this->load( $createStruct->path );
     }
 
     /**
