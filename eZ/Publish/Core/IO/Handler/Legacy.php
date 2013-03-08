@@ -16,6 +16,7 @@ use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
+use eZ\Publish\Core\MVC\Legacy\LegacyKernelAware;
 use eZClusterFileHandler;
 use DateTime;
 use finfo;
@@ -27,7 +28,7 @@ use finfo;
  * - ctime is not really supported, and will always have the same value as mtime
  * - mtime can not be modified, and will always automatically be set depending on the server time upon each write operation
  */
-class Legacy implements IoHandlerInterface
+class Legacy implements IoHandlerInterface, LegacyKernelAware
 {
     /**
      * File resource provider
@@ -47,13 +48,27 @@ class Legacy implements IoHandlerInterface
     private $legacyKernel;
 
     /**
+     * The storage directory where data is stored
+     * Example: var/site/storage
+     * @var string
+     */
+    private $storageDirectory;
+
+    /**
      * Created Legacy handler instance
      *
+     * @param string $storageDirectory
      * @param \eZ\Publish\Core\MVC\Legacy\Kernel $legacyKernel
      */
-    public function __construct( LegacyKernel $legacyKernel )
+    public function __construct( $varDirectory, LegacyKernel $legacyKernel = null )
     {
-        $this->legacyKernel = $legacyKernel;
+        if ( $this->legacyKernel )
+            $this->legacyKernel = $legacyKernel;
+    }
+
+    public function setLegacyKernel( LegacyKernel $kernel )
+    {
+        $this->legacyKernel = $kernel;
     }
 
     /**

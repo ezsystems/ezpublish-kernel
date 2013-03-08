@@ -53,16 +53,25 @@ class IOFactory
      * Returns an IOHandler instance
      *
      * @param $handlerClass The IOHandler class to instanciate
-     * @param $legacyKernel
-     * @param $varDirectorySetting Path to the "var" directory
+     * @param string|array $varDirectorySetting Setting(s) that build-up the storage directory
      *
      * @return mixed
      */
-    public function getHandler( $handlerClass, $legacyKernel, $varDirectorySetting )
+    public function getHandler( $handlerClass, $storageDirectorySetting )
     {
-        return new $handlerClass(
-            $legacyKernel,
-            $this->configResolver->getParameter( $varDirectorySetting )
-        );
+        if ( is_string( $storageDirectorySetting ) )
+        {
+            $storageDirectory = $this->configResolver->getParameter( $varDirectorySetting );
+        }
+        elseif ( is_array( $storageDirectorySetting ) )
+        {
+            $storageDirectoryParts = '';
+            foreach ( $storageDirectorySetting as $setting )
+            {
+                $storageDirectoryParts[] = $this->configResolver->getParameter( $setting );
+            }
+            $storageDirectory = implode( DIRECTORY_SEPARATOR, $storageDirectoryParts );
+        }
+        return new $handlerClass( $storageDirectory );
     }
 }
