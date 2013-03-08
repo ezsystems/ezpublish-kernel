@@ -28,7 +28,7 @@
         "symfony-cmf/routing": "1.0.*",
         "qafoo/rmf": "1.0.0",
         "kriswallsmith/buzz": "dev-master",
-        "tedivm/stash-bundle": "dev-blackhole"
+        "tedivm/stash-bundle": "dev-master"
     },
     "require-dev": {
         "ezsystems/ezpublish-legacy": "dev-master",
