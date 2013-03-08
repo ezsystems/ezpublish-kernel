@@ -17,10 +17,14 @@ use DateTime;
 class Type extends FieldType
 {
     /**
-     * Default value types
+     * Default value type empty.
      */
-    const DEFAULT_EMPTY = 0,
-        DEFAULT_CURRENT_DATE = 1;
+    const DEFAULT_EMPTY = 0;
+
+    /**
+     * Default value type current date.
+     */
+    const DEFAULT_CURRENT_DATE = 1;
 
     protected $settingsSchema = array(
         // One of the DEFAULT_* class constants
