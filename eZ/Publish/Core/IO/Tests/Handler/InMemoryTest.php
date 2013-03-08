@@ -20,7 +20,7 @@ class InMemoryTest extends BaseHandlerTest
     /**
      * @return \eZ\Publish\SPI\IO\Handler
      */
-    protected function getIoHandler()
+    protected function getIOHandler()
     {
         return new InMemory();
     }

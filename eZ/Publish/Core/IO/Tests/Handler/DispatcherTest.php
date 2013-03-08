@@ -31,7 +31,7 @@ class DispatcherTest extends BaseHandlerTest
     /**
      * @return \eZ\Publish\SPI\IO\Handler
      */
-    protected function getIoHandler()
+    protected function getIOHandler()
     {
         $this->defaultBackend = new InMemory();
         $this->alternativeBackend = new InMemory();
@@ -108,7 +108,7 @@ class DispatcherTest extends BaseHandlerTest
     {
         $repositoryPath = 'var/test/storage/images/ezplogo.gif';
         $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
-        $binaryFile = $this->ioHandler->create( $struct );
+        $binaryFile = $this->IOHandler->create( $struct );
         $binaryFile2 = $this->defaultBackend->load( $repositoryPath );
 
         self::assertEquals( $binaryFile, $binaryFile2 );
@@ -123,7 +123,7 @@ class DispatcherTest extends BaseHandlerTest
     {
         $repositoryPath = 'var/test/storage/images/ezplogo.gif';
         $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
-        $binaryFile = $this->ioHandler->create( $struct );
+        $binaryFile = $this->IOHandler->create( $struct );
         $this->alternativeBackend->load( $repositoryPath );
     }
 
@@ -135,7 +135,7 @@ class DispatcherTest extends BaseHandlerTest
     {
         $repositoryPath = 'var/test/storage/image-versioned/ezplogo.gif';
         $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
-        $binaryFile = $this->ioHandler->create( $struct );
+        $binaryFile = $this->IOHandler->create( $struct );
         $binaryFile2 = $this->alternativeBackend->load( $repositoryPath );
 
         self::assertEquals( $binaryFile, $binaryFile2 );
@@ -150,7 +150,7 @@ class DispatcherTest extends BaseHandlerTest
     {
         $repositoryPath = 'var/test/storage/image-versioned/ezplogo.gif';
         $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
-        $binaryFile = $this->ioHandler->create( $struct );
+        $binaryFile = $this->IOHandler->create( $struct );
         $this->defaultBackend->load( $repositoryPath );
     }
 }

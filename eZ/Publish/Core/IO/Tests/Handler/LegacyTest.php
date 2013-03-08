@@ -24,7 +24,7 @@ class LegacyTest extends BaseHandlerTest
     /**
      * @return \eZ\Publish\SPI\IO\Handler
      */
-    protected function getIoHandler()
+    protected function getIOHandler()
     {
         if ( !isset( $_ENV['legacyKernel'] ) )
         {
