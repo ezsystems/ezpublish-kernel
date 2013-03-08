@@ -163,12 +163,10 @@ class TimeTest extends StandardizedFieldTypeTest
                 new TimeValue( $dateTime->getOffset() + 1 ),
             ),
             array(
-                TimeValue::fromTimestamp( 1346149200, 'Europe/Berlin' ),
-                new TimeValue( 44400 ),
-            ),
-            array(
-                TimeValue::fromTimestamp( 1346149200, 'EET' ),
-                new TimeValue( 48000 ),
+                TimeValue::fromTimestamp( $timestamp = 1346149200 ),
+                new TimeValue(
+                    $dateTime->setTimestamp( $timestamp )->getTimestamp() - $dateTime->setTime( 0, 0, 0 )->getTimestamp()
+                ),
             ),
             array(
                 clone $dateTime,

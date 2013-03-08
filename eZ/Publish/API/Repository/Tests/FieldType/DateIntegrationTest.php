@@ -269,12 +269,14 @@ class DateIntegrationTest extends BaseIntegrationTest
      */
     public function provideToHashData()
     {
+        $dateTime = new DateTime();
+
         return array(
             array(
-                DateValue::fromTimestamp( 86400, "UTC" ),
+                DateValue::fromTimestamp( $timestamp = 186401 ),
                 array(
-                    "timestamp" => 86400,
-                    "rfc850" => "Friday, 02-Jan-70 00:00:00 UTC",
+                    "timestamp" => $dateTime->setTimestamp( $timestamp )->setTime( 0, 0, 0 )->getTimestamp(),
+                    "rfc850" => $dateTime->format( DateTime::RFC850 )
                 )
             ),
         );
@@ -302,13 +304,22 @@ class DateIntegrationTest extends BaseIntegrationTest
      */
     public function provideFromHashData()
     {
+        $dateTime = new DateTime();
+
         return array(
             array(
                 array(
-                    "timestamp" => 123456,
-                    "rfc850" => "Friday, 02-Jan-70 10:17:36 UTC",
+                    "timestamp" => $dateTime->setTimestamp( 123456 )->setTime( 0, 0, 0 )->getTimestamp(),
+                    "rfc850" => ( $rfc850 = $dateTime->format( DateTime::RFC850 ) )
                 ),
-                DateValue::fromTimestamp( 123456, "UTC" )
+                DateValue::fromString( $rfc850 )
+            ),
+            array(
+                array(
+                    "timestamp" => $dateTime->setTimestamp( $timestamp = 123456 )->setTime( 0, 0, 0 )->getTimestamp(),
+                    "rfc850" => null
+                ),
+                DateValue::fromTimestamp( $timestamp )
             ),
         );
     }

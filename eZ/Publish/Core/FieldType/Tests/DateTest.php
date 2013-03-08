@@ -153,12 +153,8 @@ class DateTest extends StandardizedFieldTypeTest
                 ),
             ),
             array(
-                DateValue::fromTimestamp( 1372895999, 'Australia/Yancowinna' ),
-                new DateValue(
-                    clone $dateTime
-                        ->setTimezone( new DateTimeZone( "Australia/Yancowinna" ) )
-                        ->setTimestamp( 1372896000 )
-                ),
+                DateValue::fromTimestamp( 1372895999 ),
+                new DateValue( clone $dateTime->setTimestamp( 1372896000 ) ),
             ),
             array(
                 ( $dateTime = new DateTime() ),

@@ -71,37 +71,20 @@ class Value extends BaseValue
     }
 
     /**
-     * Creates a Value from the given $timestamp and $timezone
+     * Creates a Value from the given $timestamp
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param int $timestamp
-     * @param string|null $timezone
      *
      * @return \eZ\Publish\Core\FieldType\Date\Value
      */
-    public static function fromTimestamp( $timestamp, $timezone = null )
+    public static function fromTimestamp( $timestamp )
     {
-        if ( $timezone !== null )
-        {
-            try
-            {
-                $timezone = new DateTimeZone( $timezone );
-            }
-            catch ( Exception $e )
-            {
-                throw new InvalidArgumentValue( '$timezone', $timezone, __CLASS__, $e );
-            }
-        }
-
         try
         {
             $dateTime = new DateTime();
             $dateTime->setTimestamp( $timestamp );
-            if ( $timezone !== null )
-            {
-                $dateTime->setTimezone( $timezone );
-            }
             return new static( $dateTime );
         }
         catch ( Exception $e )
