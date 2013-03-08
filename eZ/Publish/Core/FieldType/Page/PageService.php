@@ -39,23 +39,23 @@ class PageService
     /**
      * Cached valid block items by block.
      *
-     * @var \SplObjectStorage
+     * @var array
      */
-    protected $validBlockItems;
+    protected $validBlockItems = array();
 
     /**
      * Cached waiting block items by block.
      *
-     * @var \SplObjectStorage
+     * @var array
      */
-    protected $waitingBlockItems;
+    protected $waitingBlockItems = array();
 
     /**
      * Cached archived block items by block.
      *
-     * @var \SplObjectStorage
+     * @var array
      */
-    protected $archivedBlockItems;
+    protected $archivedBlockItems = array();
 
     /**
      * Constructor
@@ -67,9 +67,6 @@ class PageService
     {
         $this->zoneDefinition = $zoneDefinition;
         $this->blockDefinition = $blockDefinition;
-        $this->validBlockItems = new SplObjectStorage();
-        $this->waitingBlockItems = new SplObjectStorage();
-        $this->archivedBlockItems = new SplObjectStorage();
     }
 
     /**
@@ -215,10 +212,10 @@ class PageService
      */
     public function getValidBlockItems( Block $block )
     {
-        if ( isset( $this->validBlockItems[$block] ) )
-            return $this->validBlockItems[$block];
+        if ( isset( $this->validBlockItems[$block->id] ) )
+            return $this->validBlockItems[$block->id];
 
-        return $this->validBlockItems[$block] = $this->getStorageGateway()->getValidBlockItems( $block );
+        return $this->validBlockItems[$block->id] = $this->getStorageGateway()->getValidBlockItems( $block );
     }
 
     /**
@@ -230,10 +227,10 @@ class PageService
      */
     public function getWaitingBlockItems( Block $block )
     {
-        if ( isset( $this->waitingBlockItems[$block] ) )
-            return $this->waitingBlockItems[$block];
+        if ( isset( $this->waitingBlockItems[$block->id] ) )
+            return $this->waitingBlockItems[$block->id];
 
-        return $this->waitingBlockItems[$block] = $this->getStorageGateway()->getWaitingBlockItems( $block );
+        return $this->waitingBlockItems[$block->id] = $this->getStorageGateway()->getWaitingBlockItems( $block );
     }
 
     /**
@@ -245,9 +242,9 @@ class PageService
      */
     public function getArchivedBlockItems( Block $block )
     {
-        if ( isset( $this->archivedBlockItems[$block] ) )
-            return $this->archivedBlockItems[$block];
+        if ( isset( $this->archivedBlockItems[$block->id] ) )
+            return $this->archivedBlockItems[$block->id];
 
-        return $this->archivedBlockItems[$block] = $this->getStorageGateway()->getArchivedBlockItems( $block );
+        return $this->archivedBlockItems[$block->id] = $this->getStorageGateway()->getArchivedBlockItems( $block );
     }
 }
