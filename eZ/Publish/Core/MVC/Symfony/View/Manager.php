@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View;
 
+use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Content as ContentViewProvider;
@@ -20,11 +21,8 @@ use Symfony\Component\Templating\EngineInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class Manager
+class Manager implements ViewManagerInterface
 {
-    const VIEW_TYPE_FULL = 'full',
-          VIEW_TYPE_LINE = 'line';
-
     /**
      * @var \Symfony\Component\Templating\EngineInterface
      */
@@ -179,7 +177,7 @@ class Manager
      *
      * @return string
      */
-    public function renderContent( Content $content, $viewType = self::VIEW_TYPE_FULL, $parameters = array() )
+    public function renderContent( Content $content, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array() )
     {
         $contentInfo = $content->getVersionInfo()->getContentInfo();
         foreach ( $this->getAllContentViewProviders() as $viewProvider )
@@ -209,7 +207,7 @@ class Manager
      *
      * @return string
      */
-    public function renderLocation( Location $location, $viewType = self::VIEW_TYPE_FULL, $parameters = array() )
+    public function renderLocation( Location $location, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array() )
     {
         foreach ( $this->getAllLocationViewProviders() as $viewProvider )
         {
