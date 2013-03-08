@@ -62,6 +62,8 @@ parameters:
     ezpublish.fieldType.ezboolean.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Checkbox
     ezpublish.fieldType.ezcountry.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country
     ezpublish.fieldType.ezdatetime.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime
+    ezpublish.fieldType.ezdate.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Date
+    ezpublish.fieldType.eztime.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Time
     ezpublish.fieldType.ezemail.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\EmailAddress
     ezpublish.fieldType.ezfloat.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Float
     ezpublish.fieldType.ezgmaplocation.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\MapLocation
@@ -366,7 +368,7 @@ services:
     # Not implemented converters
     # Configured to use the Null converter which does not nothing
     ezpublish.fieldType.ezdate.converter:
-        class: %ezpublish.fieldType.eznull.converter.class%
+        class: %ezpublish.fieldType.ezdate.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezdate, lazy: true, callback: '::create'}
 
@@ -441,7 +443,7 @@ services:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezsubtreesubscription, lazy: true, callback: '::create'}
 
     ezpublish.fieldType.eztime.converter:
-        class: %ezpublish.fieldType.eznull.converter.class%
+        class: %ezpublish.fieldType.eztime.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: eztime, lazy: true, callback: '::create'}
 

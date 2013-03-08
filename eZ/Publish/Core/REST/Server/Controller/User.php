@@ -29,7 +29,9 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 
 use eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException AS RestInvalidArgumentException;
+use eZ\Publish\Core\REST\Common\Exceptions\NotFoundException AS RestNotFoundException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 
 /**
  * User controller
@@ -930,6 +932,97 @@ class User extends RestController
             $this->urlHandler->generate( 'userGroups', array( 'user' => $urlValues['user'] ) ),
             $urlValues['user']
         );
+    }
+
+    /**
+     * Creates a new session based on the credentials provided as POST parameters
+     */
+    public function createSession()
+    {
+        /** @var $sessionInput \eZ\Publish\Core\REST\Server\Values\SessionInput */
+        $sessionInput = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $this->request->contentType ),
+                $this->request->body
+            )
+        );
+
+        try
+        {
+            $user = $this->userService->loadUserByCredentials(
+                $sessionInput->login,
+                $sessionInput->password
+            );
+        }
+        catch ( NotFoundException $e )
+        {
+            throw new UnauthorizedException( "Invalid login or password", 0, null, $e );
+        }
+
+        /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
+        $session = $this->container->get( 'session' );
+        /** @var $authenticationToken \Symfony\Component\Security\Core\Authentication\Token\TokenInterface */
+        $authenticationToken = $this->container->get( 'security.context' )->getToken();
+
+        if ( $session->isStarted() && $authenticationToken !== null )
+        {
+            /** @var $currentUser \eZ\Publish\API\Repository\Values\User\User */
+            $currentUser = $authenticationToken->getUser()->getAPIUser();
+            if ( $user->id == $currentUser->id )
+            {
+                return new Values\SeeOther(
+                    $this->urlHandler->generate(
+                        'userSession',
+                        array( 'sessionId' => $session->getId() )
+                    )
+                );
+            }
+
+            $anonymousUser = $this->userService->loadAnonymousUser();
+            if ( $currentUser->id != $anonymousUser->id )
+            {
+                // Already logged in with another user, this will be converted to HTTP status 409
+                return new Values\Conflict();
+            }
+        }
+
+        if ( $this->container->getParameter( 'form.type_extension.csrf.enabled' ) )
+        {
+            /** @var $csrfProvider \Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface */
+            $csrfProvider = $this->container->get( 'form.csrf_provider' );
+        }
+
+        $session->start();
+        $session->set( "eZUserLoggedInID", $user->id );
+        return new Values\UserSession(
+            $user,
+            $session->getName(),
+            $session->getId(),
+            isset( $csrfProvider ) ?
+                $csrfProvider->generateCsrfToken( 'rest' ) :
+                ""
+        );
+    }
+
+    /**
+     * Deletes given session.
+     */
+    public function deleteSession()
+    {
+        $urlValues = $this->urlHandler->parse( "userSession", $this->request->path );
+        $sessionId = $urlValues["sessionId"];
+
+        /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
+        $session = $this->container->get( 'session' );
+        if ( !$session->isStarted() || $session->getId() != $sessionId )
+        {
+            throw new RestNotFoundException( "Session not found: '{$sessionId}'." );
+        }
+
+        $this->container->get( 'security.context' )->setToken( null );
+        $session->invalidate();
+
+        return new Values\NoContent();
     }
 
     /**
