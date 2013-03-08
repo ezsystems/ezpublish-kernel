@@ -485,7 +485,6 @@ services:
 
     ezpublish.fieldType.ezpage.pageService.factory:
         class: %ezpublish.fieldType.ezpage.pageService.factory.class%
-        arguments: [@service_container]
 
     ezpublish.fieldType.ezpage.pageService:
         class: %ezpublish.fieldType.ezpage.pageService.class%

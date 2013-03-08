@@ -15,16 +15,6 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 class PageServiceFactory
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected $container;
-
-    public function __construct( ContainerInterface $container )
-    {
-        $this->container = $container;
-    }
-
-    /**
      * Builds the page service
      *
      * @param string $serviceClass the class of the page service
