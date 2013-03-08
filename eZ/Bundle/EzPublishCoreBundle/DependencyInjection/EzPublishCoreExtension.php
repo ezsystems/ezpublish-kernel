@@ -159,6 +159,21 @@ class EzPublishCoreExtension extends Extension
                 $config['ezpage']['blocks'] + $container->getParameter( 'ezpublish.ezpage.blocks' )
             );
         }
+        if ( isset( $config['ezpage']['enabledLayouts'] ) )
+        {
+            $container->setParameter(
+                'ezpublish.ezpage.enabledLayouts',
+                $config['ezpage']['enabledLayouts'] + $container->getParameter( 'ezpublish.ezpage.enabledLayouts' )
+            );
+        }
+        if ( isset( $config['ezpage']['enabledBlocks'] ) )
+        {
+            $container->setParameter(
+                'ezpublish.ezpage.enabledBlocks',
+                $config['ezpage']['enabledBlocks'] + $container->getParameter( 'ezpublish.ezpage.enabledBlocks' )
+            );
+        }
+
     }
 
     /**

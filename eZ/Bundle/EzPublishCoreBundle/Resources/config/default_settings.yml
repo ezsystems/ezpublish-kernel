@@ -135,6 +135,8 @@ parameters:
     ###
     # default ezpage settings
     ##
+    ezpublish.ezpage.enabledLayouts: []
+    ezpublish.ezpage.enabledBlocks: []
     ezpublish.ezpage.layouts:
         GlobalZoneLayout:
             name: Global zone layout

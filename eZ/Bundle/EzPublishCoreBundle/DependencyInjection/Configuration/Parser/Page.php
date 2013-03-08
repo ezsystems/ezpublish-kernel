@@ -76,8 +76,8 @@ class Page extends AbstractParser
         $defaultConfig = array(
             'layouts' => $container->getParameter( 'ezpublish.ezpage.layouts' ),
             'blocks' => $container->getParameter( 'ezpublish.ezpage.blocks' ),
-            'enabledLayouts' => array(),
-            'enabledBlocks' => array()
+            'enabledLayouts' => $container->getParameter( 'ezpublish.ezpage.enabledLayouts' ),
+            'enabledBlocks' => $container->getParameter( 'ezpublish.ezpage.enabledBlocks' ),
         );
         $container->setParameter(
             'ezsettings.' . ConfigResolver::SCOPE_DEFAULT . '.ezpage',
