@@ -8,6 +8,8 @@ parameters:
     ezpublish.fieldType.ezbinaryfile.pathGenerator.class: eZ\Publish\Core\FieldType\BinaryBase\PathGenerator\LegacyPathGenerator
     ezpublish.fieldType.ezboolean.class: eZ\Publish\Core\FieldType\Checkbox\Type
     ezpublish.fieldType.ezdatetime.class: eZ\Publish\Core\FieldType\DateAndTime\Type
+    ezpublish.fieldType.ezdate.class: eZ\Publish\Core\FieldType\Date\Type
+    ezpublish.fieldType.eztime.class: eZ\Publish\Core\FieldType\Time\Type
     ezpublish.fieldType.ezemail.class: eZ\Publish\Core\FieldType\EmailAddress\Type
     ezpublish.fieldType.ezfloat.class: eZ\Publish\Core\FieldType\Float\Type
     ezpublish.fieldType.ezinteger.class: eZ\Publish\Core\FieldType\Integer\Type
@@ -527,7 +529,7 @@ services:
     # Not implemented fieldtypes
     # Configured to use the Null type to not throw exception
     ezpublish.fieldType.ezdate:
-        class: %ezpublish.fieldType.eznull.class%
+        class: %ezpublish.fieldType.ezdate.class%
         parent: ezpublish.fieldType
         arguments: [ "ezdate" ]
         tags:
@@ -632,7 +634,7 @@ services:
             - {name: ezpublish.fieldType, alias: ezsubtreesubscription}
 
     ezpublish.fieldType.eztime:
-        class: %ezpublish.fieldType.eznull.class%
+        class: %ezpublish.fieldType.eztime.class%
         parent: ezpublish.fieldType
         arguments: [ "eztime" ]
         tags:
