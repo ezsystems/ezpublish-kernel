@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\View\Provider\Content;
 
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Content as ContentViewProvider;
-use eZ\Publish\Core\MVC\Symfony\View\Provider\Configured as ProviderConfigured;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\ContentBasedConfigured as ProviderConfigured;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher;
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -44,5 +44,7 @@ class Configured extends ProviderConfigured implements ContentViewProvider
     {
         if ( !$valueObject instanceof ContentInfo )
             throw new InvalidArgumentException( 'Value object must be a valid ContentInfo instance' );
+
+        return $matcher->matchContentInfo( $valueObject );
     }
 }

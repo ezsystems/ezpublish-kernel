@@ -44,17 +44,11 @@ abstract class Configured
     /**
      * Returns the matcher object.
      *
-     * @param string $matcherIdentifier The matcher class. If it begins with a '\' it means it's a FQ class name, otherwise it is relative to this namespace.
+     * @param string $matcherIdentifier The matcher class.
      *
-     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher
      */
-    protected function getMatcher( $matcherIdentifier )
-    {
-        if ( $matcherIdentifier[0] !== '\\' )
-            $matcherIdentifier = "eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider\\Configured\\Matcher\\$matcherIdentifier";
-
-        return new $matcherIdentifier();
-    }
+    abstract protected function getMatcher( $matcherIdentifier );
 
     /**
      * Checks if $valueObject matches the $matcher's rules.

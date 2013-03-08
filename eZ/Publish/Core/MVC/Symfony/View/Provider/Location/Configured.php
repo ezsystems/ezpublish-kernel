@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\View\Provider\Location;
 
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProvider;
-use eZ\Publish\Core\MVC\Symfony\View\Provider\Configured as ProviderConfigured;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\ContentBasedConfigured as ProviderConfigured;
 use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher;
 use eZ\Publish\Core\MVC\RepositoryAwareInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
