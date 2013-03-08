@@ -7,119 +7,37 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\IO\Tests\Service\Integration;
+namespace eZ\Publish\Core\IO\Tests;
 
-use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
-use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;
 use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\Core\IO\Handler as IOHandlerInterface;
+use eZ\Publish\Core\IO\Values\BinaryFile;
+use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
+use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
+use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
 
 /**
  * Test case for IO Service
  */
-abstract class IOServiceTest extends BaseServiceTest
+class IOServiceTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @return \PHPUnit_Extensions_PhptTestCase
-     */
-    abstract protected function getFileUploadTest();
-
-    protected function setUp()
-    {
-        // do NOT call the parent setup as IOService isn't a "real" (e.g. repository) service
-    }
+    const PREFIX = 'test-prefix';
 
     /**
-     * Test a new class and default values on properties
-     * @covers \eZ\Publish\Core\IO\Values\BinaryFile::__construct
+     * @var IOService
      */
-    public function testNewClass()
-    {
-        $binaryFile = new BinaryFile();
-
-        $this->assertPropertiesCorrect(
-            array(
-                'id' => null,
-                'size' => null,
-                'mtime' => null,
-                'ctime' => null,
-                'mimeType' => null,
-                'uri' => null,
-                'originalFile' => null
-            ),
-            $binaryFile
-        );
-    }
+    private $IOService;
 
     /**
-     * Test retrieving missing property
-     * @covers \eZ\Publish\Core\IO\Values\BinaryFile::__get
+     * @var IOHandlerInterface
      */
-    public function testMissingProperty()
-    {
-        try
-        {
-            $binaryFile = new BinaryFile();
-            $value = $binaryFile->notDefined;
-            self::fail( "Succeeded getting non existing property" );
-        }
-        catch ( PropertyNotFound $e )
-        {
-        }
-    }
-
-    /**
-     * Test setting read only property
-     * @covers \eZ\Publish\Core\IO\Values\BinaryFile::__set
-     */
-    public function testReadOnlyProperty()
-    {
-        try
-        {
-            $binaryFile = new BinaryFile();
-            $binaryFile->id = 42;
-            self::fail( "Succeeded setting read only property" );
-        }
-        catch ( PropertyReadOnlyException $e )
-        {
-        }
-    }
-
-    /**
-     * Test if property exists
-     * @covers \eZ\Publish\Core\IO\Values\BinaryFile::__isset
-     */
-    public function testIsPropertySet()
-    {
-        $binaryFile = new BinaryFile();
-        $value = isset( $binaryFile->notDefined );
-        self::assertEquals( false, $value );
-
-        $value = isset( $binaryFile->id );
-        self::assertEquals( true, $value );
-    }
-
-    /**
-     * Test unsetting a property
-     * @covers \eZ\Publish\Core\IO\Values\BinaryFile::__unset
-     */
-    public function testUnsetProperty()
-    {
-        $binaryFile = new BinaryFile( array( "id" => "file-id" ) );
-        try
-        {
-            unset( $binaryFile->id );
-            self::fail( 'Unsetting read-only property succeeded' );
-        }
-        catch ( PropertyReadOnlyException $e )
-        {
-        }
-    }
+    private $IOHandlerMock;
 
     /**
      * Test creating new BinaryCreateStruct from uploaded file
-     * @covers \eZ\Publish\API\Repository\IOService::newBinaryCreateStructFromUploadedFile
+     * @covers \eZ\Publish\Core\IO\IOService::newBinaryCreateStructFromUploadedFile
      */
     public function testNewBinaryCreateStructFromUploadedFile()
     {
@@ -155,250 +73,142 @@ abstract class IOServiceTest extends BaseServiceTest
     }
 
     /**
-     * @param array $failures
-     * @param string $delimiter
-     *
-     * @return string
-     */
-    private function expandFailureMessages( array $failures, $delimiter = ', ' )
-    {
-        $messages = array();
-        /**
-         * @var \PHPUnit_Framework_TestFailure $failure
-         */
-        foreach ( $failures as $failure )
-        {
-            $e = $failure->thrownException();
-            $text = "\n\nException " . get_class( $e ) . ' in file ' . $e->getFile() . ':' . $e->getLine() . "\n";
-            $text .= $e->toString();
-            $text .= "\n" . $e->getTraceAsString();
-            $messages[] = $text;
-        }
-        return implode( $delimiter, $messages );
-
-    }
-
-    /**
-     * Test creating new BinaryCreateStruct from uploaded file throwing InvalidArgumentException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\API\Repository\IOService::newBinaryCreateStructFromUploadedFile
-     */
-    public function testNewBinaryCreateStructFromUploadedFileThrowsInvalidArgumentException()
-    {
-        $ioService = $this->getIOService();
-
-        $postArray = array(
-            'name' => 'ezplogo.png',
-            'type' => 'image/png',
-            'tmp_name' => __DIR__ . '/ezplogo.png',
-            'size' => 7329,
-            'error' => 0
-        );
-
-        $ioService->newBinaryCreateStructFromUploadedFile( $postArray );
-    }
-
-    /**
-     * Test creating new BinaryCreateStruct from local file
-     * @covers \eZ\Publish\API\Repository\IOService::newBinaryCreateStructFromLocalFile
+     * @covers \eZ\Publish\Core\IO\IOService::newBinaryCreateStructFromUploadedFile
      */
     public function testNewBinaryCreateStructFromLocalFile()
     {
-        $ioService = $this->getIOService();
-
-        $filePath = __DIR__ . '/ezplogo.png';
-
-        $binaryCreateStruct = $ioService->newBinaryCreateStructFromLocalFile( $filePath );
-        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\IO\\BinaryFileCreateStruct', $binaryCreateStruct );
-
-        $fileHandle = fopen( $filePath, 'rb' );
-
-        $this->assertPropertiesCorrect(
-            array(
-                'mimeType' => 'image/png',
-                'uri' => $filePath,
-                'originalFileName' => 'ezplogo.png',
-                'size' => 7329
-            ),
-            $binaryCreateStruct
+        $binaryCreateStruct = $this->getIOService()->newBinaryCreateStructFromLocalFile(
+            __FILE__
         );
 
-        $expectedStreamMetaData = stream_get_meta_data( $fileHandle );
-        $actualStreamMetaData = stream_get_meta_data( $binaryCreateStruct->inputStream );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\IO\\Values\\BinaryFileCreateStruct', $binaryCreateStruct );
+        self::assertNull( $binaryCreateStruct->uri );
+        self::assertTrue( is_resource( $binaryCreateStruct->inputStream ) );
+        self::assertEquals( filesize( __FILE__ ), $binaryCreateStruct->size );
 
-        self::assertEquals( $expectedStreamMetaData, $actualStreamMetaData );
-
-        fclose( $fileHandle );
-        fclose( $binaryCreateStruct->inputStream );
+        return $binaryCreateStruct;
     }
 
     /**
-     * Test creating new BinaryCreateStruct from local file throwing InvalidArgumentException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\API\Repository\IOService::newBinaryCreateStructFromLocalFile
+     * @covers \eZ\Publish\Core\IO\IOService::createBinaryFile
+     * @depends testNewBinaryCreateStructFromLocalFile
      */
-    public function testNewBinaryCreateStructFromLocalFileThrowsInvalidArgumentException()
+    public function testCreateBinaryFile( BinaryFileCreateStruct $createStruct )
     {
-        $ioService = $this->getIOService();
+        $createStruct->uri = "my/path.php";
+        $uri = $this->getPrefixedUri( $createStruct->uri );
 
-        $filePath = __DIR__ . '/ezplogo-invalid.png';
+        $spiBinaryFile = new SPIBinaryFile;
+        $spiBinaryFile->uri = $uri;
+        $spiBinaryFile->size = filesize( __FILE__ );
 
-        $ioService->newBinaryCreateStructFromLocalFile( $filePath );
+        $this->getIOHandlerMock()->expects( $this->once() )
+            ->method( 'create' )
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\IO\\BinaryFileCreateStruct' ) )
+            ->will( $this->returnValue( $spiBinaryFile ) );
+
+        $binaryFile = $this->getIOService()->createBinaryFile( $createStruct );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\IO\Values\\BinaryFile', $binaryFile );
+        self::assertEquals( $createStruct->uri, $binaryFile->uri );
+
+        return $binaryFile;
     }
 
     /**
-     * Test creating new BinaryFile in the repository
-     * @covers \eZ\Publish\API\Repository\IOService::createBinaryFile
-     */
-    public function testCreateBinaryFile()
-    {
-        $ioService = $this->getIOService();
-
-        $filePath = __DIR__ . '/ezplogo.png';
-
-        $binaryCreateStruct = $ioService->newBinaryCreateStructFromLocalFile( $filePath );
-        $binaryCreateStruct->uri = 'var/test/ezplogo.png';
-
-        $binaryFile = $ioService->createBinaryFile( $binaryCreateStruct );
-
-        $this->assertPropertiesCorrect(
-            array(
-                'id' => $binaryCreateStruct->uri,
-                'size' => $binaryCreateStruct->size,
-                'mimeType' => $binaryCreateStruct->mimeType,
-                'uri' => $binaryCreateStruct->uri,
-                'originalFile' => $binaryCreateStruct->originalFileName
-            ),
-            $binaryFile,
-            array(
-                'mtime',
-                'ctime'
-            )
-        );
-    }
-
-    /**
-     * Test deleting BinaryFile from the repository
-     * @covers \eZ\Publish\API\Repository\IOService::deleteBinaryFile
-     */
-    public function testDeleteBinaryFileThrowsNotFoundException()
-    {
-        $ioService = $this->getIOService();
-
-        $filePath = __DIR__ . '/ezplogo.png';
-
-        $binaryCreateStruct = $ioService->newBinaryCreateStructFromLocalFile( $filePath );
-        $binaryCreateStruct->uri = 'var/test/ezplogo.png';
-
-        $binaryFile = $ioService->createBinaryFile( $binaryCreateStruct );
-
-        $loadedBinaryFile = $ioService->loadBinaryFile( $binaryFile->id );
-
-        $ioService->deleteBinaryFile( $loadedBinaryFile );
-
-        try
-        {
-            $ioService->loadBinaryFile( $loadedBinaryFile->id );
-            self::fail( "succeeded loading deleted file" );
-        }
-        catch ( NotFoundException $e )
-        {
-            // Do nothing
-        }
-    }
-
-    /**
-     * Test loading BinaryFile from the repository
-     * @covers \eZ\Publish\API\Repository\IOService::loadBinaryFile
+     * @covers \eZ\Publish\Core\IO\IOService::loadBinaryFile
      */
     public function testLoadBinaryFile()
     {
-        $ioService = $this->getIOService();
+        $uri = "my/path.png";
+        $spiUri = $this->getPrefixedUri( $uri );
+        $spiBinaryFile = new SPIBinaryFile;
+        $spiBinaryFile->uri = $spiUri;
 
-        $filePath = __DIR__ . '/ezplogo.png';
+        $this->getIOHandlerMock()
+            ->expects( $this->once() )
+            ->method( 'load' )
+            ->with( $spiUri )
+            ->will( $this->returnValue( $spiBinaryFile ) );
 
-        $binaryCreateStruct = $ioService->newBinaryCreateStructFromLocalFile( $filePath );
-        $binaryCreateStruct->uri = 'var/test/ezplogo.png';
+        $binaryFile = $this->getIOService()->loadBinaryFile( $uri );
+        // @todo Do we really expect the SPI URI here ? Shouldn't it be kept INSIDE the IOService only ?
+        self::assertEquals( $uri, $binaryFile->uri );
 
-        $binaryFile = $ioService->createBinaryFile( $binaryCreateStruct );
+        return $binaryFile;
+    }
 
-        $loadedBinaryFile = $ioService->loadBinaryFile( $binaryFile->id );
+    /**
+     * @covers \eZ\Publish\Core\IO\IOService::getFileInputStream
+     * @depends testCreateBinaryFile
+     */
+    public function testGetFileInputStream( BinaryFile $binaryFile )
+    {
+        self::markTestSkipped( "Not implemented" );
+    }
 
-        $this->assertSameClassPropertiesCorrect(
-            array(
-                'id',
-                'size',
-                'mtime',
-                'ctime',
-                'mimeType',
-                'uri',
-                'originalFile'
-            ),
-            $binaryFile,
-            $loadedBinaryFile
+    /**
+     * @depends testLoadBinaryFile
+     * @covers \eZ\Publish\Core\IO\IOService::getFileContents
+     */
+    public function testGetFileContents( BinaryFile $binaryFile )
+    {
+        $expectedContents = file_get_contents( __FILE__ );
+
+        $this->getIOHandlerMock()
+            ->expects( $this->once() )
+            ->method( 'getFileContents' )
+            ->with( $this->equalTo( $this->getPrefixedUri( $binaryFile->uri ) ) )
+            ->will( $this->returnValue( $expectedContents ) );
+
+        self::assertEquals(
+            $this->getIOService()->getFileContents( $binaryFile ),
+            $expectedContents
         );
     }
 
     /**
-     * Test loading BinaryFile from the repository throwing NotFoundException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\API\Repository\IOService::loadBinaryFile
+     * @covers \eZ\Publish\Core\IO\IOService::deleteBinaryFile
+     * @depends testCreateBinaryFile
      */
-    public function testLoadBinaryFileThrowsNotFoundException()
+    public function testDeleteBinaryFile( BinaryFile $binaryFile )
     {
-        $ioService = $this->getIOService();
+        $this->getIOHandlerMock()
+            ->expects( $this->once() )
+            ->method( 'delete' )
+            ->with( $this->equalTo( $this->getPrefixedUri( $binaryFile->uri ) ) );
 
-        $filePath = __DIR__ . '/ezplogo-invalid.png';
-        $ioService->loadBinaryFile( $filePath );
+        $this->getIOService()->deleteBinaryFile( $binaryFile );
     }
 
-    /**
-     * Test getting file input stream
-     * @covers \eZ\Publish\API\Repository\IOService::getFileInputStream
-     */
-    public function testGetFileInputStream()
+    public function getPrefixedUri( $uri )
     {
-        $ioService = $this->getIOService();
-
-        $filePath = __DIR__ . '/ezplogo.png';
-
-        $binaryCreateStruct = $ioService->newBinaryCreateStructFromLocalFile( $filePath );
-        $binaryCreateStruct->uri = 'var/test/ezplogo.png';
-
-        $binaryFile = $ioService->createBinaryFile( $binaryCreateStruct );
-
-        $loadedInputStream = $ioService->getFileInputStream( $binaryFile );
-
-        self::assertEquals( true, is_resource( $loadedInputStream ) );
+        return self::PREFIX . '/' . $uri;
     }
-
-    /**
-     * Test getting file contents
-     * @covers \eZ\Publish\API\Repository\IOService::getFileContents
-     */
-    public function testGetFileContents()
-    {
-        $ioService = $this->getIOService();
-
-        $filePath = __DIR__ . '/ezplogo.png';
-
-        $binaryCreateStruct = $ioService->newBinaryCreateStructFromLocalFile( $filePath );
-        $binaryCreateStruct->uri = 'var/test/ezplogo.png';
-
-        $binaryFile = $ioService->createBinaryFile( $binaryCreateStruct );
-
-        $expectedFileContents = file_get_contents( $filePath );
-        $loadedFileContents = $ioService->getFileContents( $binaryFile );
-
-        self::assertEquals( base64_encode( $expectedFileContents ), base64_encode( $loadedFileContents ) );
-    }
-
 
     /**
      * @return \eZ\Publish\Core\IO\IOService
      */
     private function getIOService()
     {
-        return '';
+        if ( !$this->IOService )
+        {
+            $this->IOService = new \eZ\Publish\Core\IO\IOService(
+                $this->getIOHandlerMock(),
+                array( 'prefix' => self::PREFIX )
+            );
+        }
+        return $this->IOService;
+    }
+
+    /**
+     * @return IOHandlerInterface
+     */
+    private function getIOHandlerMock()
+    {
+        if ( !$this->IOHandlerMock )
+        {
+            $this->IOHandlerMock = $this->getMock( 'eZ\\Publish\\Core\\IO\\Handler' );
+        }
+        return $this->IOHandlerMock;
     }
 }

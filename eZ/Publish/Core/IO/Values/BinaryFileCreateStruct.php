@@ -17,22 +17,10 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 class BinaryFileCreateStruct extends ValueObject
 {
     /**
-     * File mimeType (image/jpeg, audio/mp3, etc) aka contentType
-     * @var string
-     */
-    public $mimeType;
-
-    /**
-     * HTTP URI to the binary file
+     * URI the binary file should be stored to
      * @var string
      */
     public $uri;
-
-    /**
-     * Original file name
-     * @var string
-     */
-    public $originalFileName;
 
     /**
      * The size of the file

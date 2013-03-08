@@ -13,14 +13,8 @@ services:
         class: %ezpublish.core.io.service.class%
         arguments: [@ezpublish.core.io.handler.legacy]
 
-    ezpublish.core.io.handler.legacy:
-        public: false
-        factory_service: ezpublish.core.io.factory
-        factory_method: getHandler
-        arguments: [%ezpublish.core.io.handler.legacy.class%, @ezpublish_legacy.kernel]
-
     ezpublish.core.io.handler.in_memory:
         public: false
         factory_service: ezpublish.core.io.factory
         factory_method: getHandler
-        arguments: [%ezpublish.core.io.handler.in_memory.class%, @ezpublish_legacy.kernel]
+        arguments: [%ezpublish.core.io.handler.in_memory.class%]

@@ -7,12 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\SPI\IO;
+namespace eZ\Publish\Core\IO;
+use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
+use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
 
 /**
  * Backend interface for handling of binary files I/O
  */
-
 interface Handler
 {
     /**
@@ -20,11 +21,11 @@ interface Handler
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the target path already exists
      *
-     * @param \eZ\Publish\SPI\IO\BinaryFileCreateStruct $createFilestruct
+     * @param \eZ\Publish\SPI\IO\BinaryFileCreateStruct $createStruct
      *
      * @return \eZ\Publish\SPI\IO\BinaryFile The newly created BinaryFile object
      */
-    public function create( BinaryFileCreateStruct $createFilestruct );
+    public function create( BinaryFileCreateStruct $createStruct );
 
     /**
      * Deletes the existing BinaryFile with path $path
@@ -61,31 +62,31 @@ interface Handler
      * Loads the BinaryFile identified by $path
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If no file identified by $path exists
-     * @param string $path
+     * @param string $uri
      *
      * @return \eZ\Publish\SPI\IO\BinaryFile
      */
-    public function load( $path );
+    public function load( $uri );
 
     /**
      * Returns a file resource to the BinaryFile identified by $path
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
      *
-     * @param string $path
+     * @param string $uri
      *
      * @return resource
      */
-    public function getFileResource( $path );
+    public function getFileResource( $uri );
 
     /**
      * Returns the contents of the BinaryFile identified by $path
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the file couldn't be found
      *
-     * @param string $path
+     * @param string $uri
      *
      * @return string
      */
-    public function getFileContents( $path );
+    public function getFileContents( $uri );
 }
