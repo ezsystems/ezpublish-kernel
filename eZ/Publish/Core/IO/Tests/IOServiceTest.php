@@ -17,6 +17,7 @@ use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
+use eZ\Publish\SPI\IO\MimeTypeDetector;
 
 /**
  * Test case for IO Service
@@ -34,6 +35,9 @@ class IOServiceTest extends \PHPUnit_Framework_TestCase
      * @var IOHandlerInterface
      */
     private $IOHandlerMock;
+
+    /** @var MimeTypeDetector */
+    private $mimeTypeDetectorMock;
 
     /**
      * Test creating new BinaryCreateStruct from uploaded file
@@ -77,20 +81,31 @@ class IOServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewBinaryCreateStructFromLocalFile()
     {
+        $file = __FILE__;
+
+        $this->getMimeTypeDetectorMock()
+            ->expects( $this->once() )
+            ->method( 'getFromPath' )
+            ->with( $this->equalTo( $file ) )
+            ->will( $this->returnValue( 'text/x-php' ) );
+
         $binaryCreateStruct = $this->getIOService()->newBinaryCreateStructFromLocalFile(
-            __FILE__
+            $file
         );
 
         self::assertInstanceOf( 'eZ\\Publish\\Core\\IO\\Values\\BinaryFileCreateStruct', $binaryCreateStruct );
         self::assertNull( $binaryCreateStruct->uri );
         self::assertTrue( is_resource( $binaryCreateStruct->inputStream ) );
         self::assertEquals( filesize( __FILE__ ), $binaryCreateStruct->size );
+        self::assertEquals( 'text/x-php', $binaryCreateStruct->mimeType );
 
         return $binaryCreateStruct;
     }
 
     /**
      * @covers \eZ\Publish\Core\IO\IOService::createBinaryFile
+     * @covers \eZ\Publish\Core\IO\IOService::buildSPIBinaryFileCreateStructObject
+     * @covers \eZ\Publish\Core\IO\IOService::buildDomainBinaryFileObject
      * @depends testNewBinaryCreateStructFromLocalFile
      */
     public function testCreateBinaryFile( BinaryFileCreateStruct $createStruct )
@@ -101,6 +116,7 @@ class IOServiceTest extends \PHPUnit_Framework_TestCase
         $spiBinaryFile = new SPIBinaryFile;
         $spiBinaryFile->uri = $uri;
         $spiBinaryFile->size = filesize( __FILE__ );
+        $spiBinaryFile->mimeType = 'text/x-php';
 
         $this->getIOHandlerMock()->expects( $this->once() )
             ->method( 'create' )
@@ -110,6 +126,8 @@ class IOServiceTest extends \PHPUnit_Framework_TestCase
         $binaryFile = $this->getIOService()->createBinaryFile( $createStruct );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\IO\Values\\BinaryFile', $binaryFile );
         self::assertEquals( $createStruct->uri, $binaryFile->uri );
+        self::assertEquals( $createStruct->mimeType, $binaryFile->mimeType );
+        self::assertEquals( $createStruct->size, $binaryFile->size );
 
         return $binaryFile;
     }
@@ -123,6 +141,8 @@ class IOServiceTest extends \PHPUnit_Framework_TestCase
         $spiUri = $this->getPrefixedUri( $uri );
         $spiBinaryFile = new SPIBinaryFile;
         $spiBinaryFile->uri = $spiUri;
+        $spiBinaryFile->size = 12345;
+        $spiBinaryFile->mimeType = 'application/any';
 
         $this->getIOHandlerMock()
             ->expects( $this->once() )
@@ -131,7 +151,6 @@ class IOServiceTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $spiBinaryFile ) );
 
         $binaryFile = $this->getIOService()->loadBinaryFile( $uri );
-        // @todo Do we really expect the SPI URI here ? Shouldn't it be kept INSIDE the IOService only ?
         self::assertEquals( $uri, $binaryFile->uri );
 
         return $binaryFile;
@@ -194,6 +213,7 @@ class IOServiceTest extends \PHPUnit_Framework_TestCase
         {
             $this->IOService = new \eZ\Publish\Core\IO\IOService(
                 $this->getIOHandlerMock(),
+                $this->getMimeTypeDetectorMock(),
                 array( 'prefix' => self::PREFIX )
             );
         }
@@ -210,5 +230,17 @@ class IOServiceTest extends \PHPUnit_Framework_TestCase
             $this->IOHandlerMock = $this->getMock( 'eZ\\Publish\\Core\\IO\\Handler' );
         }
         return $this->IOHandlerMock;
+    }
+
+    /**
+     * @return MimeTypeDetector
+     */
+    private function getMimeTypeDetectorMock()
+    {
+        if ( !$this->mimeTypeDetectorMock )
+        {
+            $this->mimeTypeDetectorMock = $this->getMock( 'eZ\\Publish\\SPI\\IO\\MimeTypeDetector' );
+        }
+        return $this->mimeTypeDetectorMock;
     }
 }

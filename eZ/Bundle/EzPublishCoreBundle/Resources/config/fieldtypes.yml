@@ -3,7 +3,6 @@ parameters:
     ezpublish.fieldType.ezauthor.class: eZ\Publish\Core\FieldType\Author\Type
     ezpublish.fieldType.ezbinaryfile.class: eZ\Publish\Core\FieldType\BinaryFile\Type
     ezpublish.fieldType.ezbinaryfile.externalStorage.class: eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage
-    ezpublish.fieldType.ezbinaryfile.mimeTypeDetector.class: eZ\Publish\Core\FieldType\BinaryBase\MimeTypeDetector\FileInfoDetector
     ezpublish.fieldType.ezbinaryfile.pathGenerator.class: eZ\Publish\Core\FieldType\BinaryBase\PathGenerator\LegacyPathGenerator
     ezpublish.fieldType.ezboolean.class: eZ\Publish\Core\FieldType\Checkbox\Type
     ezpublish.fieldType.ezdatetime.class: eZ\Publish\Core\FieldType\DateAndTime\Type
@@ -13,7 +12,6 @@ parameters:
     ezpublish.fieldType.ezimage.class: eZ\Publish\Core\FieldType\Image\Type
     ezpublish.fieldType.ezimage.pathGenerator.class: eZ\Publish\Core\FieldType\Image\PathGenerator\LegacyPathGenerator
     ezpublish.fieldType.ezimage.externalStorage.class: eZ\Publish\Core\FieldType\Image\ImageStorage
-    ezpublish.fieldType.ezimage.mimeTypeDetector.class: eZ\Publish\Core\FieldType\BinaryBase\MimeTypeDetector\FileInfoDetector
     ezpublish.fieldType.ezkeyword.class: eZ\Publish\Core\FieldType\Keyword\Type
     ezpublish.fieldType.ezkeyword.externalStorage.class: eZ\Publish\Core\FieldType\Keyword\KeywordStorage
     ezpublish.fieldType.ezmedia.class: eZ\Publish\Core\FieldType\Media\Type

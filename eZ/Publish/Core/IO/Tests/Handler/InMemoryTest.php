@@ -22,6 +22,7 @@ class InMemoryTest extends BaseHandlerTest
      */
     protected function getIOHandler()
     {
-        return new InMemory();
+        $handler = new InMemory();
+
     }
 }

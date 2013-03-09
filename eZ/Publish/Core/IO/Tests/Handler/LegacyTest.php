@@ -33,7 +33,7 @@ class LegacyTest extends BaseHandlerTest
             );
         }
 
-        return new Legacy( $_ENV['legacyKernel'] );
+        return new Legacy( 'var/test', $_ENV['legacyKernel'] );
     }
 
     public function setUp()

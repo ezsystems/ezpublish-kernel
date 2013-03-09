@@ -8,25 +8,29 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
-use eZ\Publish\SPI\IO\Handler as IoHandlerInterface;
+use eZ\Publish\Core\IO\Handler as IoHandlerInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\SPI\IO\MimeTypeDetector;
 
 class IOFactory
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     protected $configResolver;
 
+    /** @var string */
     protected $IOServiceClass = 'eZ\\Publish\\Core\\IO\\IOService';
+
+    /** @var MimeTypeDetector */
+    protected $mimeTypeDetector;
 
     /**
      * Constructs a new IOServiceFactory
      * @param ConfigResolverInterface $configResolver
      */
-    public function __construct( ConfigResolverInterface $configResolver )
+    public function __construct( ConfigResolverInterface $configResolver, MimeTypeDetector $mimeTypeDetector )
     {
         $this->configResolver = $configResolver;
+        $this->mimeTypeDetector = $mimeTypeDetector;
     }
 
     /**
@@ -46,7 +50,7 @@ class IOFactory
             $settings['prefix'] = $this->configResolver->getParameter( $prefixSetting );
         }
 
-        return new $this->IOServiceClass( $IOHandler, $settings );
+        return new $this->IOServiceClass( $IOHandler, $this->mimeTypeDetector, $settings );
     }
 
     /**

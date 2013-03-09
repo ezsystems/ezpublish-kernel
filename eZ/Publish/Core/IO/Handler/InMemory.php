@@ -58,7 +58,7 @@ class InMemory implements IoHandlerInterface
             );
         }
 
-        $this->data[$createStruct->path] = base64_encode(
+        $this->data[$createStruct->uri] = base64_encode(
             fread( $createStruct->getInputStream(), $createStruct->size )
         );
 
@@ -123,7 +123,7 @@ class InMemory implements IoHandlerInterface
             $this->storage[$newUri] = $this->storage[$oldUri];
             $this->data[$newUri] = $this->data[$oldUri];
 
-            $this->storage[$newUri]->path = $newUri;
+            $this->storage[$newUri]->uri = $newUri;
 
             unset( $this->storage[$oldUri] );
             unset( $this->data[$oldUri] );
@@ -144,11 +144,6 @@ class InMemory implements IoHandlerInterface
         if ( $updateFileStruct->mtime !== null && $updateFileStruct->mtime !== $this->storage[$uri]->mtime )
         {
             $this->storage[$uri]->mtime = $updateFileStruct->mtime;
-        }
-
-        if ( $updateFileStruct->ctime !== null && $updateFileStruct->ctime !== $this->storage[$uri]->ctime )
-        {
-            $this->storage[$uri]->ctime = $updateFileStruct->ctime;
         }
 
         return $this->storage[$uri];

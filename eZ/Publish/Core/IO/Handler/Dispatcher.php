@@ -96,7 +96,7 @@ class Dispatcher implements IoHandlerInterface
      */
     public function create( BinaryFileCreateStruct $createStruct )
     {
-        return $this->getHandler( $createStruct->path )->create( $createStruct );
+        return $this->getHandler( $createStruct->uri )->create( $createStruct );
     }
 
     /**
@@ -124,12 +124,12 @@ class Dispatcher implements IoHandlerInterface
      */
     public function update( $path, BinaryFileUpdateStruct $updateFileStruct )
     {
-        if ( $path === $updateFileStruct->path )
+        if ( $path === $updateFileStruct->uri )
             return $this->getHandler( $path )->update( $path, $updateFileStruct );
 
         // When file path has changed, check if we should move from one handler to another
         $oldHandler = $this->getHandler( $path );
-        $newHandler = $this->getHandler( $updateFileStruct->path );
+        $newHandler = $this->getHandler( $updateFileStruct->uri );
         if ( $oldHandler === $newHandler )
             return $oldHandler->update( $path, $updateFileStruct );
 
@@ -142,7 +142,7 @@ class Dispatcher implements IoHandlerInterface
         }
         catch ( \Exception $e )
         {
-            $newHandler->delete( $updateFile->path );
+            $newHandler->delete( $updateFile->uri );
             throw $e;
         }*/
     }

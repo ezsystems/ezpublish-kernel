@@ -29,7 +29,7 @@ class DispatcherTest extends BaseHandlerTest
     protected $alternativeBackend;
 
     /**
-     * @return \eZ\Publish\SPI\IO\Handler
+     * @return \eZ\Publish\Core\IO\Handler
      */
     protected function getIOHandler()
     {

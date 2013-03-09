@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\IO\Tests\Handler;
 
-use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
-use eZ\Publish\Core\IO\Values\BinaryFileUpdateStruct;
+use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
+use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
 use DateTime;
 use finfo;
 
@@ -63,11 +63,10 @@ abstract class Base extends \PHPUnit_Framework_TestCase
         $binaryFile = $this->IOHandler->create( $struct );
 
         self::assertInstanceOf( 'eZ\\Publish\\SPI\\IO\\BinaryFile', $binaryFile );
-        self::assertEquals( $repositoryPath, $binaryFile->path );
+        self::assertEquals( $repositoryPath, $binaryFile->uri );
         self::assertEquals( 1928, $binaryFile->size );
         self::assertInstanceOf( 'DateTime', $binaryFile->mtime );
         self::assertNotEquals( 0, $binaryFile->mtime->getTimestamp() );
-        self::assertEquals( 'image/gif', $binaryFile->mimeType );
     }
 
     /**
@@ -104,7 +103,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
 
         $newFilePath = __DIR__ . DIRECTORY_SEPARATOR . 'ezplogo2.png';
         $updateStruct = new BinaryFileUpdateStruct();
-        $updateStruct->path = $secondPath;
+        $updateStruct->uri = $secondPath;
         $updateStruct->setInputStream( fopen( $newFilePath, 'rb' ) );
         $updateStruct->size = filesize( $newFilePath );
 
@@ -133,8 +132,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
         $updateStruct->mtime = $newMtime;
 
         $updatedBinaryFile = $this->IOHandler->update( $path, $updateStruct );
-        self::assertEquals( $binaryFile->path, $updatedBinaryFile->path );
-        self::assertEquals( $binaryFile->ctime, $updatedBinaryFile->ctime );
+        self::assertEquals( $binaryFile->uri, $updatedBinaryFile->uri );
         self::assertEquals( $binaryFile->size, $updatedBinaryFile->size );
 
         self::assertEquals( $newMtime, $updatedBinaryFile->mtime );
@@ -154,7 +152,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
         $updateStruct->ctime = $newCtime;
 
         $updatedBinaryFile = $this->IOHandler->update( $path, $updateStruct );
-        self::assertEquals( $binaryFile->path, $updatedBinaryFile->path );
+        self::assertEquals( $binaryFile->uri, $updatedBinaryFile->uri );
         self::assertEquals( $binaryFile->mtime, $updatedBinaryFile->mtime );
         self::assertEquals( $binaryFile->size, $updatedBinaryFile->size );
 
@@ -168,7 +166,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     public function testUpdateNonExistingSource()
     {
         $updateStruct = new BinaryFileUpdateStruct();
-        $updateStruct->path = 'var/test/testUpdateSourceNotFoundTarget.png';
+        $updateStruct->uri = 'var/test/testUpdateSourceNotFoundTarget.png';
 
         $this->IOHandler->update( 'var/test/testUpdateSourceNotFoundSource.png', $updateStruct );
     }
@@ -192,7 +190,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
         self::assertTrue( $this->IOHandler->exists( $secondPath ) );
 
         $updateStruct = new BinaryFileUpdateStruct();
-        $updateStruct->path = $secondPath;
+        $updateStruct->uri = $secondPath;
 
         $this->IOHandler->update( $firstPath, $updateStruct );
     }
@@ -251,11 +249,9 @@ abstract class Base extends \PHPUnit_Framework_TestCase
 
         self::assertInstanceOf( 'eZ\\Publish\\SPI\\IO\\BinaryFile', $loadedFile );
 
-        self::assertEquals( 'var/test/storage/load.gif', $loadedFile->path );
+        self::assertEquals( 'var/test/storage/load.gif', $loadedFile->uri );
         self::assertEquals( 1928, $loadedFile->size );
         self::assertInstanceOf( 'DateTime', $loadedFile->mtime );
-        self::assertInstanceOf( 'DateTime', $loadedFile->ctime );
-        self::assertEquals( 'image/gif', $loadedFile->mimeType );
     }
 
     /**
@@ -331,10 +327,8 @@ abstract class Base extends \PHPUnit_Framework_TestCase
         }
 
         $struct = new BinaryFileCreateStruct();
-        $struct->originalFile = basename( $localFile );
         $struct->size = filesize( $localFile );
-        $struct->mimeType = self::getMimeTypeFromPath( $localFile );
-        $struct->path = $repositoryPath;
+        $struct->uri = $repositoryPath;
 
         $inputStream = fopen( $localFile, 'rb' );
         $struct->setInputStream( $inputStream );

@@ -14,6 +14,7 @@ use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
+use eZ\Publish\SPI\IO\MimeTypeDetector;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
@@ -35,6 +36,10 @@ class IOService
      */
     protected $settings;
 
+    /**
+     * @var MimeTypeDetector
+     */
+    protected $mimeTypeDetector;
 
     /**
      * Setups service with reference to repository object that created it & corresponding handler
@@ -42,9 +47,11 @@ class IOService
      * @param \eZ\Publish\Core\IO\Handler $handler
      * @param array $settings
      */
-    public function __construct( Handler $handler, array $settings = array() )
+    public function __construct( Handler $handler, MimeTypeDetector $mimeTypeDetector, array $settings = array() )
     {
         $this->ioHandler = $handler;
+        $this->mimeTypeDetector = $mimeTypeDetector;
+
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
@@ -76,6 +83,7 @@ class IOService
         $binaryCreateStruct->uri = $uploadedFile['tmp_name'];
         $binaryCreateStruct->size = $uploadedFile['size'];
         $binaryCreateStruct->inputStream = $fileHandle;
+        $binaryCreateStruct->mimeType = $uploadedFile['type'];
 
         return $binaryCreateStruct;
     }
@@ -104,7 +112,8 @@ class IOService
         $binaryCreateStruct = new BinaryFileCreateStruct(
             array(
                 'size' => filesize( $localFile ),
-                'inputStream' => $fileHandle
+                'inputStream' => $fileHandle,
+                'mimeType' => $this->mimeTypeDetector->getFromPath( $localFile )
             )
         );
 
@@ -130,6 +139,13 @@ class IOService
 
         if ( !is_resource( $binaryFileCreateStruct->inputStream ) )
             throw new InvalidArgumentValue( "inputStream", "property is not a file resource", "BinaryFileCreateStruct" );
+
+        if ( !isset( $binaryFileCreateStruct->mimeType ) )
+        {
+            $buffer = fread( $binaryFileCreateStruct->inputStream, $binaryFileCreateStruct->size );
+            $binaryFileCreateStruct->mimeType = $this->mimeTypeDetector->getFromBuffer( $buffer );
+            unset( $buffer );
+        }
 
         $spiBinaryCreateStruct = $this->buildSPIBinaryFileCreateStructObject( $binaryFileCreateStruct );
         $spiBinaryFile = $this->ioHandler->create( $spiBinaryCreateStruct );
@@ -231,6 +247,7 @@ class IOService
         $spiBinaryCreateStruct->uri = $this->getPrefixedUri( $binaryFileCreateStruct->uri );
         $spiBinaryCreateStruct->size = $binaryFileCreateStruct->size;
         $spiBinaryCreateStruct->setInputStream( $binaryFileCreateStruct->inputStream );
+        $spiBinaryCreateStruct->mimeType = $binaryFileCreateStruct->mimeType;
 
         return $spiBinaryCreateStruct;
     }
@@ -244,11 +261,23 @@ class IOService
      */
     protected function buildDomainBinaryFileObject( SPIBinaryFile $spiBinaryFile )
     {
+        if ( isset( $spiBinaryFile->mimeType ) )
+        {
+            $mimeType = $spiBinaryFile->mimeType;
+        }
+        else
+        {
+            $mimeType = $this->mimeTypeDetector->getFromBuffer(
+                $this->ioHandler->getFileContents( $spiBinaryFile->uri )
+            );
+        }
+
         return new BinaryFile(
             array(
                 'size' => (int)$spiBinaryFile->size,
                 'mtime' => $spiBinaryFile->mtime,
                 'uri' => $this->removeUriPrefix( $spiBinaryFile->uri ),
+                'mimeType' => $mimeType,
             )
         );
     }
