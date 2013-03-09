@@ -33,4 +33,12 @@ class BinaryFileCreateStruct extends ValueObject
      * @var resource
      */
     public $inputStream;
+
+    /**
+     * The file's mime type
+     * If not provided, will be auto-detected by the IOService
+     * Example: text/xml
+     * @var string
+     */
+    public $mimeType;
 }

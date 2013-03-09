@@ -39,4 +39,12 @@ class BinaryFile extends ValueObject
      * @var string
      */
     protected $uri;
+
+    /**
+     * The file's mime type
+     * Example: text/xml
+     * @var string
+     */
+    public $mimeType;
+
 }

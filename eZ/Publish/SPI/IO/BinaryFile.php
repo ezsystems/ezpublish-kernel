@@ -37,4 +37,12 @@ class BinaryFile
      * @var string
      */
     public $uri;
+
+    /**
+     * The file's mime type
+     * If not provided, will be auto-detected by the IOService
+     * Example: text/xml
+     * @var string
+     */
+    public $mimeType;
 }

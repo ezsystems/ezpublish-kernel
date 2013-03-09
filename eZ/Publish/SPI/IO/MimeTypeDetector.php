@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\SPI\FieldType\BinaryBase;
+namespace eZ\Publish\SPI\IO;
 
 interface MimeTypeDetector
 {
@@ -18,5 +18,14 @@ interface MimeTypeDetector
      *
      * @return string
      */
-    public function getMimeType( $path );
+    public function getFromPath( $path );
+
+    /**
+     * Returns the MIME type of the data in $buffer
+     *
+     * @param string $buffer
+     *
+     * @return string
+     */
+    public function getFromBuffer( $buffer );
 }

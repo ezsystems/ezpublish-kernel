@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\BinaryBase\MimeTypeDetector;
+namespace eZ\Publish\Core\IO\MimeTypeDetector;
 
-use eZ\Publish\SPI\FieldType\BinaryBase\MimeTypeDetector;
+use eZ\Publish\SPI\IO\MimeTypeDetector;
 
-class FileInfoDetector implements MimeTypeDetector
+class FileInfo implements MimeTypeDetector
 {
     /**
      * Magic FileInfo object
@@ -33,16 +33,14 @@ class FileInfoDetector implements MimeTypeDetector
         }
     }
 
-    /**
-     * Returns the MIME type of the file identified by $path
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    public function getMimeType( $path )
+    public function getFromPath( $path )
     {
         return $this->getFileInfo()->file( $path );
+    }
+
+    public function getFromBuffer( $path )
+    {
+        return $this->getFileInfo()->buffer( $path );
     }
 
     /**
