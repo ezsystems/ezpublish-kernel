@@ -31,10 +31,7 @@ class MediaTest extends BinaryBaseTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new MediaType(
-            $this->getFileServiceMock(),
-            $this->getMimeTypeDetectorMock()
-        );
+        return new MediaType();
     }
 
     protected function getEmptyValueExpectation()
@@ -101,8 +98,6 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
-                        'mimeType' => 'text/plain',
                         'hasController' => false,
                         'autoplay' => false,
                         'loop' => false,
@@ -110,8 +105,6 @@ class MediaTest extends BinaryBaseTest
                         'height' => 0,
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) ),
-                array( 'getMimeType' => 'text/plain' )
             ),
             array(
                 array( 'path' => __FILE__ ),
@@ -119,8 +112,6 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
-                        'mimeType' => 'text/plain',
                         'hasController' => false,
                         'autoplay' => false,
                         'loop' => false,
@@ -128,8 +119,6 @@ class MediaTest extends BinaryBaseTest
                         'height' => 0,
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) ),
-                array( 'getMimeType' => 'text/plain' )
             ),
             array(
                 array(
@@ -141,7 +130,6 @@ class MediaTest extends BinaryBaseTest
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => 23,
-                        'mimeType' => 'text/plain',
                         'hasController' => false,
                         'autoplay' => false,
                         'loop' => false,
@@ -149,8 +137,6 @@ class MediaTest extends BinaryBaseTest
                         'height' => 0,
                     )
                 ),
-                array(),
-                array( 'getMimeType' => 'text/plain' )
             ),
             array(
                 array(
@@ -161,7 +147,6 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
                         'mimeType' => 'application/text+php',
                         'hasController' => false,
                         'autoplay' => false,
@@ -170,7 +155,6 @@ class MediaTest extends BinaryBaseTest
                         'height' => 0,
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) )
             ),
             array(
                 array(
@@ -181,8 +165,6 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
-                        'mimeType' => 'text/plain',
                         'hasController' => true,
                         'autoplay' => false,
                         'loop' => false,
@@ -190,8 +172,6 @@ class MediaTest extends BinaryBaseTest
                         'height' => 0,
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) ),
-                array( 'getMimeType' => 'text/plain' )
             ),
             array(
                 array(
@@ -202,8 +182,6 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
-                        'mimeType' => 'text/plain',
                         'hasController' => false,
                         'autoplay' => true,
                         'loop' => false,
@@ -211,8 +189,6 @@ class MediaTest extends BinaryBaseTest
                         'height' => 0,
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) ),
-                array( 'getMimeType' => 'text/plain' )
             ),
             array(
                 array(
@@ -223,8 +199,6 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
-                        'mimeType' => 'text/plain',
                         'hasController' => false,
                         'autoplay' => false,
                         'loop' => true,
@@ -232,8 +206,6 @@ class MediaTest extends BinaryBaseTest
                         'height' => 0,
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) ),
-                array( 'getMimeType' => 'text/plain' )
             ),
             array(
                 array(
@@ -244,8 +216,6 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
-                        'mimeType' => 'text/plain',
                         'hasController' => false,
                         'autoplay' => false,
                         'loop' => false,
@@ -253,8 +223,6 @@ class MediaTest extends BinaryBaseTest
                         'height' => 0,
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) ),
-                array( 'getMimeType' => 'text/plain' )
             ),
             array(
                 array(
@@ -265,8 +233,6 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
-                        'mimeType' => 'text/plain',
                         'hasController' => false,
                         'autoplay' => false,
                         'loop' => false,
@@ -274,8 +240,6 @@ class MediaTest extends BinaryBaseTest
                         'height' => 42,
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) ),
-                array( 'getMimeType' => 'text/plain' )
             ),
         );
     }
