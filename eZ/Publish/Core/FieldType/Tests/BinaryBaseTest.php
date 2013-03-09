@@ -22,7 +22,7 @@ use \eZ\Publish\SPI\FieldType\FileService;
 abstract class BinaryBaseTest extends FieldTypeTest
 {
     /** @var FileService */
-    private $fileServiceMock;
+    private $IOServiceMock;
 
     /** @var MimeTypeDetector */
     private $mimeTypeDetectorMock;
@@ -47,7 +47,7 @@ abstract class BinaryBaseTest extends FieldTypeTest
     /**
      * @param mixed  $inputValue
      * @param mixed  $expectedOutputValue
-     * @param array  $fileServiceExpectations
+     * @param array  $IOServiceExpectations
      *        An array indexed by {@see FileService} method name, with for each method one value that will be returned
      * @param null   $mimeTypeDetectorExpectations
      *        An array indexed by {@see MimeTypeDetectorr} method name, with for each method one value that will be returned
@@ -56,27 +56,26 @@ abstract class BinaryBaseTest extends FieldTypeTest
      *
      * @dataProvider provideValidInputForAcceptValue
      */
-    public function testAcceptValue( $inputValue, $expectedOutputValue, $fileServiceExpectations = null, $mimeTypeDetectorExpectations = null )
+    public function testAcceptValue( $inputValue, $expectedOutputValue, $IOServiceExpectations = null, $mimeTypeDetectorExpectations = null )
     {
         /** @var $fieldType BinaryBaseType */
         $fieldType = $this->createFieldTypeUnderTest();
 
         // add custom expectations to the FileService mock
-        if ( count( $fileServiceExpectations ) )
+        if ( count( $IOServiceExpectations ) )
         {
             /** @var $fieldType BinaryBaseType */
             $fieldType = $this->createFieldTypeUnderTest();
 
             /** @var $fileServiceMock \PHPUnit_Framework_MockObject_MockObject */
-            $fileServiceMock = $this->getFileServiceMock();
+            $IOServiceMock = $this->getIOServiceMock();
 
-            foreach ( $fileServiceExpectations as $method => $value )
+            foreach ( $IOServiceExpectations as $method => $value )
             {
-                $fileServiceMock->expects( $this->once() )
+                $IOServiceMock->expects( $this->once() )
                     ->method( $method )
                     ->will( $this->returnValue( $value ) );
             }
-            $fieldType->setFileService( $fileServiceMock );
         }
 
         // add custom expectations to the MimeTypeDetector mock
@@ -91,7 +90,6 @@ abstract class BinaryBaseTest extends FieldTypeTest
                     ->method( $method )
                     ->will( $this->returnValue( $value ) );
             }
-            $fieldType->setMimeTypeDetector( $mimeTypeDetectorMock );
         }
 
         parent::testAcceptValue( $inputValue, $expectedOutputValue );
@@ -256,18 +254,18 @@ abstract class BinaryBaseTest extends FieldTypeTest
      *
      * @return \eZ\Publish\Core\FieldType\FileService
      */
-    protected function getFileServiceMock()
+    protected function getIOServiceMock()
     {
-        if ( !isset( $this->fileServiceMock ) )
+        if ( !isset( $this->IOServiceMock ) )
         {
-            $this->fileServiceMock = $this->getMock(
-                'eZ\\Publish\\Core\\FieldType\\FileService',
+            $this->IOServiceMock = $this->getMock(
+                'eZ\\Publish\\Core\\IO\\IOService',
                 array(),
                 array(),
                 '',
                 false
             );
         }
-        return $this->fileServiceMock;
+        return $this->IOServiceMock;
     }
 }

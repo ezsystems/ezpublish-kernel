@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\FieldType\BinaryBase;
 
 use eZ\Publish\Core\FieldType\GatewayBasedStorage;
-use eZ\Publish\Core\FieldType\FileService;
+use eZ\Publish\Core\IO\IOService;
 use eZ\Publish\SPI\FieldType\BinaryBase\PathGenerator;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
@@ -21,11 +21,11 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 class BinaryBaseStorage extends GatewayBasedStorage
 {
     /**
-     * File service to be used
+     * An instance of IOService configured to store to the images folder
      *
-     * @var FileService
+     * @var IOService
      */
-    protected $fileService;
+    protected $IOService;
 
     /**
      * Path generator
@@ -38,13 +38,13 @@ class BinaryBaseStorage extends GatewayBasedStorage
      * Construct from gateways
      *
      * @param \eZ\Publish\Core\FieldType\StorageGateway[] $gateways
-     * @param FileService $fileService
+     * @param IOService $IOService
      * @param PathGenerator $pathGenerator
      */
-    public function __construct( array $gateways, FileService $fileService, PathGenerator $pathGenerator )
+    public function __construct( array $gateways, IOService $IOService, PathGenerator $pathGenerator )
     {
         parent::__construct( $gateways );
-        $this->fileService = $fileService;
+        $this->IOService = $IOService;
         $this->pathGenerator = $pathGenerator;
     }
 
@@ -88,15 +88,15 @@ class BinaryBaseStorage extends GatewayBasedStorage
 
         $storedValue = $field->value->externalData;
 
-        // Only store a new file copy, if it does not exist, yet
-        $targetPath = $this->fileService->getStorageIdentifier(
-            $this->pathGenerator->getStoragePathForField( $field, $versionInfo )
-        );
+        $storagePath = $this->pathGenerator->getStoragePathForField( $field, $versionInfo );
 
         if ( !$this->fileService->exists( $targetPath ) )
         {
+            $createStruct = $this->IOService->newBinaryCreateStructFromLocalFile( $storedValue->externalData['path'] );
+            $this->IOService->createBinaryFile( $createStruct );
+
             $storedValue['path'] = $this->fileService->storeFile(
-                $storedValue['path'],
+                $storagePath,
                 $targetPath
             );
         }

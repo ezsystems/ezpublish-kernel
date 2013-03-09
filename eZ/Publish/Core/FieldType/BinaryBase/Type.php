@@ -15,8 +15,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
-use eZ\Publish\Core\FieldType\FileService;
-use eZ\Publish\SPI\FieldType\BinaryBase\MimeTypeDetector;
+use eZ\Publish\Core\IO\IOService;
 
 /**
  * Base FileType class for Binary field types (i.e. BinaryBase & Media)
@@ -36,47 +35,27 @@ abstract class Type extends FieldType
     );
 
     /**
-     * File service for storing binary files
-     *
-     * @var FileService
+     * @var IOService
      */
-    protected $fileService;
-
-    /**
-     * MIME type detector
-     *
-     * @var MimeTypeDetector
-     */
-    protected $mimeTypeDetector;
+    protected $IOService;
 
     /**
      * Creates a new Image FieldType
      *
-     * @param FileService $fileService
-     * @param MimeTypeDetector $mimeTypeDetector
+     * @param IOService $IOService
      */
-    public function __construct( FileService $fileService, MimeTypeDetector $mimeTypeDetector )
+    public function __construct( IOService $IOService )
     {
-        $this->fileService = $fileService;
-        $this->mimeTypeDetector = $mimeTypeDetector;
+        $this->IOService = $IOService;
     }
 
     /**
-     * Sets the Type's FileService to $fileService
-     * @param FileService $fileService
+     * Sets the Type's IOService to $IOServicez
+     * @param IOService $IOService
      */
-    public function setFileService( FileService $fileService )
+    public function setIOService( FileService $fileService )
     {
-        $this->fileService = $fileService;
-    }
-
-    /**
-     * Sets the Type's MimeTypeDetector to $mimeTypeDetector
-     * @param MimeTypeDetector $mimeTypeDetector
-     */
-    public function setMimeTypeDetector( MimeTypeDetector $mimeTypeDetector )
-    {
-        $this->mimeTypeDetector = $mimeTypeDetector;
+        $this->IOService = $IOService;
     }
 
     /**
@@ -136,9 +115,9 @@ abstract class Type extends FieldType
         }
 
         // Required parameter $path
-        if ( !isset( $inputValue->path ) || !$this->fileExists( $inputValue->path ) )
+        if ( !isset( $inputValue->path ) || !file_exists( $inputValue->path ))
         {
-            throw new InvalidArgumentType(
+            throw new InvalidArgumentValue(
                 '$inputValue->path',
                 'Path to an existing file',
                 $inputValue->path
@@ -158,7 +137,7 @@ abstract class Type extends FieldType
         }
 
         // Required parameter $fileSize
-        if ( !isset( $inputValue->fileSize ) || !is_int( $inputValue->fileSize ) )
+        if ( isset( $inputValue->fileSize ) && !is_int( $inputValue->fileSize ) )
         {
             throw new InvalidArgumentType(
                 '$inputValue->fileSize',
@@ -182,7 +161,7 @@ abstract class Type extends FieldType
     {
         return (
             ( realpath( $path ) == $path && file_exists( $path ) )
-                || $this->fileService->exists( $this->fileService->getStorageIdentifier( $path ) )
+                || $this->IOService->loadBinaryFile( $path )
         );
     }
 
@@ -195,21 +174,16 @@ abstract class Type extends FieldType
      */
     protected function completeValue( $value )
     {
-        if ( !isset( $value->fileSize ) )
-        {
-            $value->fileSize = $this->fileService->getFileSize(
-                $this->fileService->getStorageIdentifier( $value->path )
-            );
-        }
+//        if ( !isset( $value->fileSize ) )
+//        {
+//            $value->fileSize = $this->IOService->getFileSize(
+//                $this->fileService->getStorageIdentifier( $value->path )
+//            );
+//        }
 
         if ( !isset( $value->fileName ) )
         {
             $value->fileName = basename( $value->path );
-        }
-
-        if ( !isset( $value->mimeType ) )
-        {
-            $value->mimeType = $this->mimeTypeDetector->getMimeType( $value->path );
         }
     }
 

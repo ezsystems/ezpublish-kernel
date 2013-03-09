@@ -32,7 +32,7 @@ class BinaryFileTest extends BinaryBaseTest
     protected function createFieldTypeUnderTest()
     {
         return new BinaryFileType(
-            $this->getFileServiceMock(),
+            $this->getIOServiceMock(),
             $this->getMimeTypeDetectorMock()
         );
     }
@@ -71,13 +71,13 @@ class BinaryFileTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
+                        'fileSize' => null,
                         'downloadCount' => 0,
-                        'mimeType' => 'text/plain',
+                        'mimeType' => null,
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) ),
-                array( 'getMimeType' => 'text/plain' )
+                array( /* 'getFileSize' => filesize( __FILE__ ) */ ),
+                array( /* 'getMimeType' => 'text/plain' */ )
             ),
             array(
                 array( 'path' => __FILE__ ),
@@ -85,13 +85,13 @@ class BinaryFileTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
+                        'fileSize' => null,
                         'downloadCount' => 0,
-                        'mimeType' => 'text/plain',
+                        'mimeType' => null,
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) ),
-                array( 'getMimeType' => 'text/plain' )
+                array( /*'getFileSize' => filesize( __FILE__ ) */ ),
+                array( /* 'getMimeType' => 'text/plain' */ )
             ),
             array(
                 array(
@@ -104,11 +104,11 @@ class BinaryFileTest extends BinaryBaseTest
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => 23,
                         'downloadCount' => 0,
-                        'mimeType' => 'text/plain',
+                        'mimeType' => null,
                     )
                 ),
                 array(),
-                array( 'getMimeType' => 'text/plain' )
+                array( /* 'getMimeType' => 'text/plain' */ )
             ),
             array(
                 array(
@@ -119,13 +119,13 @@ class BinaryFileTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
+                        'fileSize' => null,
                         'downloadCount' => 42,
-                        'mimeType' => 'text/plain',
+                        'mimeType' => null,
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) ),
-                array( 'getMimeType' => 'text/plain' )
+                array( /* 'getFileSize' => filesize( __FILE__ ) */ ),
+                array( /* 'getMimeType' => 'text/plain' */ )
             ),
             array(
                 array(
@@ -136,12 +136,12 @@ class BinaryFileTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
+                        'fileSize' => null,
                         'downloadCount' => 0,
                         'mimeType' => 'application/text+php',
                     )
                 ),
-                array( 'getFileSize' => filesize( __FILE__ ) )
+                array( /* 'getFileSize' => filesize( __FILE__ ) */ )
             ),
         );
     }
