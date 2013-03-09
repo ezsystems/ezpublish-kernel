@@ -140,27 +140,6 @@ abstract class Base extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \eZ\Publish\SPI\IO\Handler::update
-     */
-    public function testUpdateCtime()
-    {
-        $path = 'var/test/updateMtime.gif';
-        $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $path );
-        $binaryFile = clone $this->IOHandler->create( $struct );
-
-        $newCtime = new DateTime( 'last week' );
-        $updateStruct = new BinaryFileUpdateStruct();
-        $updateStruct->ctime = $newCtime;
-
-        $updatedBinaryFile = $this->IOHandler->update( $path, $updateStruct );
-        self::assertEquals( $binaryFile->uri, $updatedBinaryFile->uri );
-        self::assertEquals( $binaryFile->mtime, $updatedBinaryFile->mtime );
-        self::assertEquals( $binaryFile->size, $updatedBinaryFile->size );
-
-        self::assertEquals( $newCtime, $updatedBinaryFile->ctime );
-    }
-
-    /**
-     * @covers \eZ\Publish\SPI\IO\Handler::update
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testUpdateNonExistingSource()

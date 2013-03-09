@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\IO;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
-use eZ\Publish\SPI\IO\MimeTypeDetector;
 
 /**
  * Backend interface for handling of binary files I/O
@@ -90,10 +89,4 @@ interface Handler
      * @return string
      */
     public function getFileContents( $uri );
-
-    /**
-     * Sets the handler's MimeType detector
-     * @param MimeTypeDetector $mimeTypeDetector
-     */
-    public function setMimeTypeDetector( MimeTypeDetector $mimeTypeDetector );
 }
