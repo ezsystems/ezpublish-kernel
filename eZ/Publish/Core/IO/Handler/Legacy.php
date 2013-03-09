@@ -32,6 +32,7 @@ class Legacy implements IOHandlerInterface
     /**
      * File resource provider
      * @see getFileResourceProvider
+     * @var FileReso
      */
     private $fileResourceProvider = null;
 
@@ -51,7 +52,7 @@ class Legacy implements IOHandlerInterface
      * Example: var/site/storage
      * @var string
      */
-    private $varDirectory;
+    private $storageDirectory;
 
     /**
      * Created Legacy handler instance
@@ -59,13 +60,13 @@ class Legacy implements IOHandlerInterface
      * @param string $storageDirectory
      * @param \eZ\Publish\Core\MVC\Legacy\Kernel $legacyKernel
      */
-    public function __construct( $varDirectory, LegacyKernel $legacyKernel = null )
+    public function __construct( $storageDirectory, LegacyKernel $legacyKernel = null )
     {
         if ( $legacyKernel )
         {
             $this->legacyKernel = $legacyKernel;
         }
-        $this->varDirectory = $varDirectory;
+        $this->storageDirectory = $storageDirectory;
     }
 
     public function setLegacyKernelClosure( \Closure $kernelClosure )
@@ -105,14 +106,16 @@ class Legacy implements IOHandlerInterface
             );
         }
 
+        $storagePath = $this->getStoragePath( $createStruct->uri );
+
         $clusterHandler = $this->getClusterHandler();
         $this->getLegacyKernel()->runCallback(
-            function () use ( $createStruct, $clusterHandler )
+            function () use ( $createStruct, $storagePath, $clusterHandler )
             {
-                // @todo Build a path / scope mapper
+                // @todo Build a path / scope mapper. Not so critical for binary files anyway.
                 $scope = 'todo';
                 $clusterHandler->fileStoreContents(
-                    $createStruct->uri,
+                    $storagePath,
                     fread( $createStruct->getInputStream(), $createStruct->size ),
                     $createStruct->mimeType,
                     $scope
@@ -137,12 +140,12 @@ class Legacy implements IOHandlerInterface
         {
             throw new NotFoundException( 'BinaryFile', $path );
         }
-
+        $storagePath = $this->getStoragePath( $path );
         $clusterHandler = $this->getClusterHandler();
         $this->getLegacyKernel()->runCallback(
-            function () use ( $path, $clusterHandler )
+            function () use ( $storagePath, $clusterHandler )
             {
-                $clusterHandler->fileDelete( $path );
+                $clusterHandler->fileDelete( $storagePath );
             },
             false
         );
@@ -166,44 +169,47 @@ class Legacy implements IOHandlerInterface
             throw new NotFoundException( 'BinaryFile', $path );
         }
 
+        $destinationPath = $updateFileStruct->uri;
+        if ( isset( $updateFileStruct->uri ) && $updateFileStruct->uri !== $path )
+        {
+            if ( $this->exists( $updateFileStruct->uri ) )
+            {
+                throw new InvalidArgumentException(
+                    "\$updateFileStruct->uri",
+                    "File '{$updateFileStruct->uri}' already exists"
+                );
+            }
+
+            $updateFileStruct->uri = $this->getStoragePath( $updateFileStruct->uri );
+        }
+
+        $storagePath = $this->getStoragePath( $path );
         $clusterHandler = $this->getClusterHandler();
-        $path = $this->getLegacyKernel()->runCallback(
-            function () use ( $path, $updateFileStruct, $clusterHandler )
+        $this->getLegacyKernel()->runCallback(
+            function () use ( $storagePath, $updateFileStruct, $clusterHandler )
             {
                 // path
-                if ( $updateFileStruct->uri !== null && $updateFileStruct->uri != $path )
+                if ( $updateFileStruct->uri !== null && $updateFileStruct->uri != $storagePath )
                 {
-                    if ( $clusterHandler->fileExists( $updateFileStruct->uri ) )
-                    {
-                        throw new InvalidArgumentException(
-                            "\$updateFileStruct->uri",
-                            "file '{$updateFileStruct->uri}' already exists"
-                        );
-                    }
-                    $clusterHandler->fileMove( $path, $updateFileStruct->uri );
-
-                    // update the path we are working on
-                    $path = $updateFileStruct->uri;
+                    $clusterHandler->fileMove( $storagePath, $updateFileStruct->uri );
+                    $storagePath = $updateFileStruct->uri;
                 }
 
                 $resource = $updateFileStruct->getInputStream();
                 if ( $resource !== null )
                 {
                     $binaryUpdateData = fread( $resource, $updateFileStruct->size );
-                    $clusterFile = eZClusterFileHandler::instance( $path );
+                    $clusterFile = eZClusterFileHandler::instance( $storagePath );
                     $metaData = $clusterFile->metaData;
                     $scope = isset( $metaData['scope'] ) ? $metaData['scope'] : false;
                     $datatype = isset( $metaData['datatype'] ) ? $metaData['datatype'] : false;
                     $clusterFile->storeContents( $binaryUpdateData, $scope, $datatype );
                 }
-
-                // mtime and ctime have no effect as mtime isn't modifiable, and ctime isn't really supported (=mtime)
-                return $path;
             },
             false
         );
 
-        return $this->load( $path );
+        return $this->load( $destinationPath );
     }
 
     /**
@@ -215,6 +221,7 @@ class Legacy implements IOHandlerInterface
      */
     public function exists( $path )
     {
+        $path = $this->getStoragePath( $path );
         $clusterHandler = $this->getClusterHandler();
         return $this->getLegacyKernel()->runCallback(
             function () use ( $clusterHandler, $path )
@@ -241,10 +248,11 @@ class Legacy implements IOHandlerInterface
             throw new NotFoundException( 'BinaryFile', $path );
         }
 
+        $storagePath = $this->getStoragePath( $path );
         $metaData = $this->getLegacyKernel()->runCallback(
-            function () use ( $path )
+            function () use ( $storagePath )
             {
-                $clusterFile = eZClusterFileHandler::instance( $path );
+                $clusterFile = eZClusterFileHandler::instance( $storagePath );
                 return $clusterFile->metaData;
             },
             false
@@ -256,9 +264,6 @@ class Legacy implements IOHandlerInterface
         $file->mtime = new DateTime();
         $file->mtime->setTimestamp( $metaData['mtime'] );
 
-        // Setting the same timestamp as mtime, since ctime is not supported in Legacy
-        $file->ctime = clone $file->mtime;
-
         $file->size = $metaData['size'];
 
         // will only work with some ClusterFileHandlers (DB based ones, not with FS ones)
@@ -266,13 +271,8 @@ class Legacy implements IOHandlerInterface
         {
             $file->mimeType = $metaData['datatype'];
         }
-        else
-        {
-            $file->mimeType = $this->getMimeTypeFromLocalFile( $path );
-        }
 
         $file->uri = $file->uri;
-        $file->originalFile = basename( $file->uri );
 
         return $file;
     }
@@ -286,7 +286,11 @@ class Legacy implements IOHandlerInterface
      */
     public function getFileResource( $path )
     {
-        return $this->getFileResourceProvider()->getResource( $this->load( $path ) );// @todo incorrect object provided to getResource?
+        if ( !$this->exists( $path ) )
+        {
+            throw new NotFoundException( "BinaryFile", $path );
+        }
+        return $this->getFileResourceProvider()->getResource( $this->getStoragePath( $path ) );
     }
 
     /**
@@ -305,11 +309,12 @@ class Legacy implements IOHandlerInterface
             throw new NotFoundException( 'BinaryFile', $path );
         }
 
+        $storagePath = $this->getStoragePath( $path );
         $clusterHandler = $this->getClusterHandler();
         return $this->getLegacyKernel()->runCallback(
-            function () use ( $path, $clusterHandler )
+            function () use ( $storagePath, $clusterHandler )
             {
-                return $clusterHandler->fileFetchContents( $path );
+                return $clusterHandler->fileFetchContents( $storagePath );
             },
             false
         );
@@ -390,5 +395,15 @@ class Legacy implements IOHandlerInterface
         }
 
         return $returnValue;
+    }
+
+    /**
+     * Transforms a path in a storage path using the $storageDirectory
+     */
+    protected function getStoragePath( $path )
+    {
+        if ( $this->storageDirectory )
+            $path = $this->storageDirectory . DIRECTORY_SEPARATOR . $path;
+        return $path;
     }
 }
