@@ -170,13 +170,9 @@ class IOService
 
     /**
      * Loads the binary file with $id
-     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If the id is invalid
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If no file identified by $path exists
-     *
      * @param string $uri
-     *
-     * @return \eZ\Publish\Core\IO\Values\BinaryFile|bool the file, or false if it doesn't exist
+     * @return BinaryFile|bool the file, or false if it doesn't exist
      */
     public function loadBinaryFile( $uri )
     {
