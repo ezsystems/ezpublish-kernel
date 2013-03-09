@@ -24,9 +24,9 @@ class ImageTest extends FieldTypeTest
      *
      * @var \PHPUnit_Framework_Mock
      */
-    private $fileServiceMock;
+    private $IOServiceMock;
 
-    public function getImagePath()
+    public function getImageInputPath()
     {
         return __DIR__ . '/squirrel-developers.jpg';
     }
@@ -36,19 +36,19 @@ class ImageTest extends FieldTypeTest
      *
      * @return \eZ\Publish\Core\FieldType\FileService
      */
-    protected function getFileServiceMock()
+    protected function getIOServiceMock()
     {
-        if ( !isset( $this->fileServiceMock ) )
+        if ( !isset( $this->IOServiceMock) )
         {
-            $this->fileServiceMock = $this->getMock(
-                'eZ\\Publish\\Core\\FieldType\\FileService',
+            $this->IOServiceMock = $this->getMock(
+                'eZ\\Publish\\Core\\IO\\IOService',
                 array(),
                 array(),
                 '',
                 false
             );
         }
-        return $this->fileServiceMock;
+        return $this->IOServiceMock;
     }
 
     /**
@@ -83,8 +83,7 @@ class ImageTest extends FieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         return new ImageType(
-            $this->getFileServiceMock(),
-            $this->getMimeTypeDetectorMock()
+            $this->getIOServiceMock()
         );
     }
 
@@ -241,26 +240,26 @@ class ImageTest extends FieldTypeTest
                 new ImageValue,
             ),
             array(
-                $this->getImagePath(),
+                $this->getImageInputPath(),
                 new ImageValue(
                     array(
-                        'path' => $this->getImagePath(),
-                        'fileName' => basename( $this->getImagePath() ),
-                        'fileSize' => filesize( $this->getImagePath() ),
+                        'path' => $this->getImageInputPath(),
+                        'fileName' => basename( $this->getImageInputPath() ),
+                        'fileSize' => filesize( $this->getImageInputPath() ),
                         'alternativeText' => null,
                     )
                 ),
             ),
             array(
                 array(
-                    'path' => $this->getImagePath(),
+                    'path' => $this->getImageInputPath(),
                     'fileName' => 'Sindelfingen-Squirrels.jpg',
                     'fileSize' => 23,
                     'alternativeText' => 'This is so Sindelfingen!',
                 ),
                 new ImageValue(
                     array(
-                        'path' => $this->getImagePath(),
+                        'path' => $this->getImageInputPath(),
                         'fileName' => 'Sindelfingen-Squirrels.jpg',
                         'fileSize' => 23,
                         'alternativeText' => 'This is so Sindelfingen!',
@@ -315,14 +314,14 @@ class ImageTest extends FieldTypeTest
             array(
                 new ImageValue(
                     array(
-                        'path' => $this->getImagePath(),
+                        'path' => $this->getImageInputPath(),
                         'fileName' => 'Sindelfingen-Squirrels.jpg',
                         'fileSize' => 23,
                         'alternativeText' => 'This is so Sindelfingen!',
                     )
                 ),
                 array(
-                    'path' => $this->getImagePath(),
+                    'path' => $this->getImageInputPath(),
                     'fileName' => 'Sindelfingen-Squirrels.jpg',
                     'fileSize' => 23,
                     'alternativeText' => 'This is so Sindelfingen!',
@@ -375,14 +374,14 @@ class ImageTest extends FieldTypeTest
             ),
             array(
                 array(
-                    'path' => $this->getImagePath(),
+                    'path' => $this->getImageInputPath(),
                     'fileName' => 'Sindelfingen-Squirrels.jpg',
                     'fileSize' => 23,
                     'alternativeText' => 'This is so Sindelfingen!',
                 ),
                 new ImageValue(
                     array(
-                        'path' => $this->getImagePath(),
+                        'path' => $this->getImageInputPath(),
                         'fileName' => 'Sindelfingen-Squirrels.jpg',
                         'fileSize' => 23,
                         'alternativeText' => 'This is so Sindelfingen!',
