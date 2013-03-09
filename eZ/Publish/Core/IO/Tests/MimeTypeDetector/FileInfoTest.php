@@ -22,18 +22,16 @@ class FileInfoTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFromPath()
     {
-        $path = __FILE__;
         self::assertEquals(
-            $this->mimeTypeDetector->getFromPath( $path ),
+            $this->mimeTypeDetector->getFromPath( __FILE__ ),
             'text/x-php'
         );
     }
 
     public function testGetFromBuffer()
     {
-        $buffer = file_get_contents( __FILE__ );
         self::assertEquals(
-            $this->mimeTypeDetector->getFromBuffer( $buffer ),
+            $this->mimeTypeDetector->getFromBuffer( file_get_contents( __FILE__ ) ),
             'text/x-php'
         );
     }
