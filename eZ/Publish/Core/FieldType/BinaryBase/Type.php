@@ -35,30 +35,6 @@ abstract class Type extends FieldType
     );
 
     /**
-     * @var IOService
-     */
-    protected $IOService;
-
-    /**
-     * Creates a new Image FieldType
-     *
-     * @param IOService $IOService
-     */
-    public function __construct( IOService $IOService )
-    {
-        $this->IOService = $IOService;
-    }
-
-    /**
-     * Sets the Type's IOService to $IOServicez
-     * @param IOService $IOService
-     */
-    public function setIOService( FileService $fileService )
-    {
-        $this->IOService = $IOService;
-    }
-
-    /**
      * Creates a specific value of the derived class from $inputValue
      *
      * @param array $inputValue
@@ -150,22 +126,6 @@ abstract class Type extends FieldType
     }
 
     /**
-     * Returns if the given $path exists on the local disc or in the file
-     * storage
-     *
-     * @param string $path
-     *
-     * @return boolean
-     */
-    protected function fileExists( $path )
-    {
-        return (
-            ( realpath( $path ) == $path && file_exists( $path ) )
-                || $this->IOService->loadBinaryFile( $path )
-        );
-    }
-
-    /**
      * Attempts to complete the data in $value
      *
      * @param Value $value
@@ -174,13 +134,6 @@ abstract class Type extends FieldType
      */
     protected function completeValue( $value )
     {
-//        if ( !isset( $value->fileSize ) )
-//        {
-//            $value->fileSize = $this->IOService->getFileSize(
-//                $this->fileService->getStorageIdentifier( $value->path )
-//            );
-//        }
-
         if ( !isset( $value->fileName ) )
         {
             $value->fileName = basename( $value->path );
