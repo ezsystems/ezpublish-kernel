@@ -10,4 +10,4 @@ services:
             - %ezpublish.core.io.handler.legacy.class%
             - [var_dir, storage_dir]
         calls:
-            - [setLegacyKernel, @ezpublish_legacy.kernel]
+            - [setLegacyKernelClosure, @ezpublish_legacy.kernel]

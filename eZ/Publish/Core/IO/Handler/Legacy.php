@@ -42,9 +42,9 @@ class Legacy implements IOHandlerInterface
     private $clusterHandler = null;
 
     /**
-     * @var \Closure
+     * @var LegacyKernel
      */
-    private $legacyKernelClosure;
+    private $legacyKernel;
 
     /**
      * The storage directory where data is stored
@@ -63,14 +63,14 @@ class Legacy implements IOHandlerInterface
     {
         if ( $legacyKernel )
         {
-            $this->legacyKernelClosure = $legacyKernel;
+            $this->legacyKernel = $legacyKernel;
         }
         $this->varDirectory = $varDirectory;
     }
 
     public function setLegacyKernelClosure( \Closure $kernelClosure )
     {
-        $this->legacyKernelClosure = $kernelClosure;
+        $this->legacyKernel = $kernelClosure();
     }
 
     public function setLegacyKernel( LegacyKernel $kernel )
@@ -83,9 +83,7 @@ class Legacy implements IOHandlerInterface
      */
     protected function getLegacyKernel()
     {
-        $kernelClosure = $this->legacyKernelClosure;
-        print_r( $this->legacyKernelClosure );
-        return $kernelClosure();
+        return $this->legacyKernel;
     }
 
     /**
