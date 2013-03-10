@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read string $id The id of the binary file
  * @property-read int $mtime File modification time
  * @property-read string $uri HTTP URI to the binary file
+ * @property-read int $size File size
  */
 class BinaryFile extends ValueObject
 {
