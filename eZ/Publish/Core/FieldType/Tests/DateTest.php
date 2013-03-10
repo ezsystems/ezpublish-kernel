@@ -154,7 +154,7 @@ class DateTest extends StandardizedFieldTypeTest
             ),
             array(
                 DateValue::fromTimestamp( 1372895999 ),
-                new DateValue( clone $dateTime->setTimestamp( 1372896000 ) ),
+                new DateValue( $dateTime->setTimestamp( 1372895999 )->setTime( 0, 0, 0 ) ),
             ),
             array(
                 ( $dateTime = new DateTime() ),
