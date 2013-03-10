@@ -230,6 +230,17 @@ class IOService
     }
 
     /**
+     * Returns the internal, handler level path to the file $file
+     */
+    public function getInternalPath( $file )
+    {
+        $path = $this->ioHandler->getInternalPath(
+            $this->getPrefixedUri( $file )
+        );
+        return $path;
+    }
+
+    /**
      * Generates SPI BinaryFileCreateStruct object from provided API BinaryFileCreateStruct object
      *
      * @param \eZ\Publish\Core\IO\Values\BinaryFileCreateStruct $binaryFileCreateStruct
