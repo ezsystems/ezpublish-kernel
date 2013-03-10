@@ -90,15 +90,14 @@ class BinaryBaseStorage extends GatewayBasedStorage
 
         $storagePath = $this->pathGenerator->getStoragePathForField( $field, $versionInfo );
 
-        if ( !$this->fileService->exists( $targetPath ) )
+        if ( $this->IOService->loadBinaryFile( $storagePath ) === false )
         {
-            $createStruct = $this->IOService->newBinaryCreateStructFromLocalFile( $storedValue->externalData['path'] );
-            $this->IOService->createBinaryFile( $createStruct );
-
-            $storedValue['path'] = $this->fileService->storeFile(
-                $storagePath,
-                $targetPath
+            $createStruct = $this->IOService->newBinaryCreateStructFromLocalFile(
+                $storedValue['path']
             );
+            $createStruct->uri = $storagePath;
+            $this->IOService->createBinaryFile( $createStruct );
+            $storedValue['path'] = $createStruct->uri;
         }
 
         $field->value->externalData = $storedValue;
@@ -114,7 +113,7 @@ class BinaryBaseStorage extends GatewayBasedStorage
             return false;
 
         // field translations have their own file reference, but to the original file
-        $field->value->externalData['path'] = $originalField->value->externalData['path'];
+        $originalField->value->externalData['path'];
         return $this->getGateway( $context )->storeFileReference( $versionInfo, $field );
     }
 
@@ -145,7 +144,9 @@ class BinaryBaseStorage extends GatewayBasedStorage
 
         if ( $fileCounts[$fileReference['path']] === 0 )
         {
-            $this->fileService->remove( $fileReference['path'] );
+            $this->IOService->deleteBinaryFile(
+                $this->IOService->loadBinaryFile( $fileReference['path'] )
+            );
         }
     }
 
@@ -167,11 +168,15 @@ class BinaryBaseStorage extends GatewayBasedStorage
 
         if ( $field->value->externalData !== null )
         {
-            $field->value->externalData['fileSize'] = $this->fileService->getFileSize( $field->value->externalData['path'] );
+            $binaryFile = $this->IOService->loadBinaryFile( $field->value->externalData['path'] );
+            $field->value->externalData['fileSize'] = $binaryFile->size;
         }
     }
 
     /**
+     * Deletes all referenced external data
+     *
+     * @param VersionInfo $versionInfo
      * @param array $fieldIds
      * @param array $context
      *
@@ -191,7 +196,9 @@ class BinaryBaseStorage extends GatewayBasedStorage
         {
             if ( $count === 0 )
             {
-                $this->fileService->remove( $filePath );
+                $this->IOService->deleteBinaryFile(
+                    $this->IOService->loadBinaryFile( $filePath )
+                );
             }
         }
     }

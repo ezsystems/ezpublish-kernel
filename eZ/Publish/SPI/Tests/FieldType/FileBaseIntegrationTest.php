@@ -3,6 +3,9 @@
 namespace eZ\Publish\SPI\Tests\FieldType;
 
 use eZ\Publish\Core\FieldType;
+use eZ\Publish\Core\IO\IOService;
+use eZ\Publish\Core\IO\Handler\Filesystem as IOHandler;
+use eZ\Publish\Core\IO\MimeTypeDetector\FileInfo as MimeTypeDetector;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use FileSystemIterator;
@@ -17,66 +20,54 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     protected static $removeTmpDir = false;
 
     /**
-     * Temporary directory
+     * Temporary storage directory
      *
      * @var string
      */
-    protected static $tmpDir;
+    protected static $storageDir;
 
     /**
-     * Returns the storage dir used by the file service
+     * Returns the storage dir used by the IOHandler
      *
      * @return string
      */
     abstract protected function getStorageDir();
 
     /**
-     * Returns the storage identifier prefix used by the file service
+     * Returns prefix used by the IOService
      *
-     * @return void
+     * @return string
      */
-    abstract protected function getStorageIdentifierPrefix();
+    abstract protected function getStoragePrefix();
 
     /**
-     * Returns a file service to be used.
-     *
-     * @return FileService
+     * @return \eZ\Publish\Core\IO\IOService
      */
-    protected function getFileService()
+    public function getIOService()
     {
-        return new FieldType\FileService(
+        return new IOService(
             $this->getIOHandler(),
-            $this->getTempDir(),
-            $this->getStorageDir(),
-            $this->getStorageIdentifierPrefix()
+            $this->getMimeTypeDetector(),
+            array( 'prefix' => $this->getStoragePrefix() )
         );
     }
 
     /**
-     * @return IO
+     * @return IOHandler
      */
-    public function getIOHandler()
+    protected function getIOHandler()
     {
-
+        return new IOHandler( $this->getStorageDir() );
     }
+
     /**
      * Returns MIME type detector to be used.
      *
-     * @return \eZ\Publish\Core\FieldType\BinaryBase\MimeTypeDetector
+     * @return \eZ\Publish\SPI\IO\MimeTypeDetector
      */
     protected function getMimeTypeDetector()
     {
-        return new FieldType\BinaryBase\MimeTypeDetector\FileInfoDetector();
-    }
-
-    /**
-     * Returns the temporary directory to be used for file storage
-     *
-     * @return string
-     */
-    protected function getTempDir()
-    {
-        return self::$tmpDir;
+        return new MimeTypeDetector;
     }
 
     /**
@@ -97,7 +88,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
         unlink( $tmpFile );
         mkdir( $tmpFile );
 
-        self::$tmpDir = $tmpFile;
+        self::$storageDir = $tmpFile;
     }
 
     /**
@@ -109,7 +100,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     {
         if ( self::$removeTmpDir )
         {
-            self::removeRecursive( self::$tmpDir );
+            self::removeRecursive( self::$storageDir );
         }
     }
 
