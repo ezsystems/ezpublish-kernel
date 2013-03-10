@@ -89,4 +89,6 @@ interface Handler
      * @return string
      */
     public function getFileContents( $uri );
+
+    public function getInternalPath( $path );
 }

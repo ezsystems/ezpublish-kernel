@@ -216,4 +216,9 @@ class InMemory implements IoHandlerInterface
         }
         return base64_decode( $this->data[$uri] );
     }
+
+    public function getInternalPath( $path )
+    {
+        return 'memory:' . $path;
+    }
 }

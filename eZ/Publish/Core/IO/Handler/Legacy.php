@@ -320,6 +320,11 @@ class Legacy implements IOHandlerInterface
         );
     }
 
+    public function getInternalPath( $path )
+    {
+        return $this->getStoragePath( $path );
+    }
+
     /**
      * Returns the appropriate FileResourceProvider depending on the cluster handler in use
      *

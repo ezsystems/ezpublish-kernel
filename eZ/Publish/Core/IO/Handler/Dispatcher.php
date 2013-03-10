@@ -247,4 +247,9 @@ class Dispatcher implements IoHandlerInterface
 
         return $this->defaultHandler;
     }
+
+    public function getInternalPath()
+    {
+        // @todo Implement me somehow
+    }
 }
