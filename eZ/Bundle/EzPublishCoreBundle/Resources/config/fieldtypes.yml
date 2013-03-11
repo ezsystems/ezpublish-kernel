@@ -34,9 +34,7 @@ parameters:
     ezpublish.fieldType.ezpage.class: eZ\Publish\Core\FieldType\Page\Type
     ezpublish.fieldType.ezpage.externalStorage.class: eZ\Publish\Core\FieldType\Page\PageStorage
     ezpublish.fieldType.ezpage.pageService.class: eZ\Bundle\EzPublishCoreBundle\FieldType\Page
-    ezpublish.fieldtype.ezpage.zoneDefinition: {}
-    ezpublish.fieldType.ezpage.blockDefinition: {}
-
+    ezpublish.fieldType.ezpage.pageService.factory.class: eZ\Publish\Core\MVC\Symfony\FieldType\PageServiceFactory
     ezpublish.fieldType.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\Type
     ezpublish.fieldType.ezgmaplocation.externalStorage.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage
     ezpublish.fieldType.ezobjectrelationlist.class: eZ\Publish\Core\FieldType\RelationList\Type
@@ -488,9 +486,14 @@ services:
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezpage}
 
+    ezpublish.fieldType.ezpage.pageService.factory:
+        class: %ezpublish.fieldType.ezpage.pageService.factory.class%
+
     ezpublish.fieldType.ezpage.pageService:
         class: %ezpublish.fieldType.ezpage.pageService.class%
-        arguments: [%ezpublish.fieldtype.ezpage.zoneDefinition%, %ezpublish.fieldtype.ezpage.blockDefinition%]
+        factory_service: ezpublish.fieldType.ezpage.pageService.factory
+        factory_method: buildService
+        arguments: [%ezpublish.fieldType.ezpage.pageService.class%, @ezpublish.config.resolver]
         calls:
             - [setRepository, [@ezpublish.api.repository]]
 

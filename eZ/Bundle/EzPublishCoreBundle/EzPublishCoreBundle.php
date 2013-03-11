@@ -56,6 +56,7 @@ class EzPublishCoreBundle extends Bundle
                     new ConfigParser\FieldTemplates,
                     new ConfigParser\FieldDefinitionSettingsTemplates,
                     new ConfigParser\Image,
+                    new ConfigParser\Page,
                 )
             );
         }
