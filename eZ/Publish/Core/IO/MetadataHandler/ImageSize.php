@@ -6,8 +6,8 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\FieldType\MetadataHandler;
-use eZ\Publish\SPI\FieldType\MetadataHandler;
+namespace eZ\Publish\Core\IO\MetadataHandler;
+use eZ\Publish\Core\IO\MetadataHandler;
 
 class ImageSize implements MetadataHandler
 {

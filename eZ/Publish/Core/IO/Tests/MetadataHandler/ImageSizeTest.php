@@ -8,8 +8,8 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests\MetadataHandler;
 
-use eZ\Publish\SPI\FieldType\FileService;
-use eZ\Publish\Core\FieldType\MetadataHandler\ImageSize as ImageSizeMetadataHandler;
+use eZ\Publish\Core\IO\FileService;
+use eZ\Publish\Core\IO\MetadataHandler\ImageSize as ImageSizeMetadataHandler;
 
 /**
  * @group fieldType
