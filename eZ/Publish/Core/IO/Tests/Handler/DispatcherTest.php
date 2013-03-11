@@ -153,4 +153,9 @@ class DispatcherTest extends BaseHandlerTest
         $binaryFile = $this->IOHandler->create( $struct );
         $this->defaultBackend->load( $repositoryPath );
     }
+
+    public function testGetMetadata()
+    {
+        self::markTestIncomplete( "Not implemented" );
+    }
 }
