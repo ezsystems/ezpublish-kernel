@@ -326,6 +326,11 @@ class Legacy implements IOHandlerInterface
         return $this->getStoragePath( $path );
     }
 
+    public function getExternalPath( $path )
+    {
+        return $this->removeStoragePath( $path );
+    }
+
     public function getMetadata( MetadataHandler $metadataHandler, $path )
     {
         $clusterHandler = $this->getClusterHandler(
@@ -448,5 +453,20 @@ class Legacy implements IOHandlerInterface
         if ( $this->storageDirectory )
             $path = $this->storageDirectory . DIRECTORY_SEPARATOR . $path;
         return $path;
+    }
+
+    protected function removeStoragePath( $path )
+    {
+        if ( !$this->storageDirectory )
+        {
+            return $path;
+        }
+
+        if ( strpos( $path, $this->storageDirectory . DIRECTORY_SEPARATOR ) !== 0 )
+        {
+            throw new InvalidArgumentException( '$path', "Storage directory not found" );
+        }
+
+        return substr( $path, strlen( $this->storageDirectory ) + 1 );
     }
 }

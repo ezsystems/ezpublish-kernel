@@ -35,6 +35,9 @@ class InMemory implements IoHandlerInterface
      */
     private $data;
 
+    /** @var string */
+    private $storagePrefix = 'memory:';
+
     public function __construct( array $storage = array() )
     {
         $this->storage = $storage;
@@ -220,12 +223,22 @@ class InMemory implements IoHandlerInterface
 
     public function getInternalPath( $path )
     {
-        return 'memory:' . $path;
+        return $this->storagePrefix . $path;
+    }
+
+    public function getExternalPath( $path )
+    {
+        if ( substr( $path, 0, strlen( $this->storagePrefix ) ) != $this->storagePrefix )
+        {
+            throw new InvalidArgumentException( '$path', "Storage prefix" );
+        }
+
+        return substr( $path, strlen( $this->storagePrefix ) + 1 );
     }
 
     public function getMetadata( MetadataHandler $metadataHandler, $path )
     {
         // @todo This won't work. InternalPath is NOT a path. Need to write it to disk somehow.
-        $metadataHandler->extract( $this->getInternalPath( $path ) );
+        return $metadataHandler->extract( $this->getInternalPath( $path ) );
     }
 }

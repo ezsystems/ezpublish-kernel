@@ -263,7 +263,14 @@ class Filesystem implements IOHandlerInterface
 */
     public function getInternalPath( $path )
     {
-        return $this->getStoragePath( $path );
+        // This handler doesn't support a prefix (e.g. var/ezdemo_site/storage), and doesn't need one
+        return $path;
+    }
+
+    public function getExternalPath( $path )
+    {
+        // This handler doesn't support a prefix (e.g. var/ezdemo_site/storage), and doesn't need one
+        return $path;
     }
 
     /**
@@ -290,7 +297,4 @@ class Filesystem implements IOHandlerInterface
             $path = $this->storageDirectory . DIRECTORY_SEPARATOR . $path;
         return $path;
     }
-
-
-
 }

@@ -231,19 +231,31 @@ class IOService
     }
 
     /**
-     * Returns the internal, handler level path to the file $file
+     * Returns the internal, handler level path to $externalPath
+     * @param string $externalPath
+     * @return string
      */
-    public function getInternalPath( $file )
+    public function getInternalPath( $externalPath )
     {
         $path = $this->ioHandler->getInternalPath(
-            $this->getPrefixedUri( $file )
+            $this->getPrefixedUri( $externalPath )
         );
         return $path;
     }
 
     /**
-     * @param MetadataHandler   $metadataHandler
-     * @param BinaryFile        $binaryFile
+     * Returns the external path to $internalPath
+     * @param string $internalPath
+     * @return string
+     */
+    public function getExternalPath( $internalPath )
+    {
+        return $this->removeUriPrefix( $this->ioHandler->getExternalPath( $internalPath ) );
+    }
+
+    /**
+     * @param MetadataHandler $metadataHandler
+     * @param BinaryFile      $binaryFile
      *
      * @return array
      */
@@ -325,7 +337,7 @@ class IOService
         }
 
         if ( strpos( $uri, $this->settings['prefix'] . DIRECTORY_SEPARATOR ) !== 0 )
-            throw new InvalidArgumentException( uri, "Prefix not found" );
+            throw new InvalidArgumentException( '$uri', "Prefix not found" );
 
         $uri = substr( $uri, strlen( $this->settings['prefix'] ) + 1 );
         return $uri;

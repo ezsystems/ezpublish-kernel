@@ -99,6 +99,13 @@ interface Handler
     public function getInternalPath( $path );
 
     /**
+     * Removes the internal storage path from $path
+     * @param string $path
+     * @return string
+     */
+    public function getExternalPath( $path );
+
+    /**
      * Executes $metadataHandler on $path, and returns the metadata array
      * @param MetadataHandler $metadataHandler
      * @param string $path
