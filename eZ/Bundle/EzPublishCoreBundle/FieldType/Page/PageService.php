@@ -27,9 +27,15 @@ class PageService extends BasePageService implements RepositoryAwareInterface
     /**
      * Cached content items by block.
      *
-     * @var array
+     * @var \SplObjectStorage
      */
-    protected $validBlockContentItems = array();
+    protected $validBlockContentItems;
+
+    public function __construct( array $zoneDefinition = array(), array $blockDefinition = array() )
+    {
+        parent::__construct( $zoneDefinition, $blockDefinition );
+        $this->validBlockContentItems = new SplObjectStorage();
+    }
 
     /**
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -50,8 +56,8 @@ class PageService extends BasePageService implements RepositoryAwareInterface
      */
     public function getValidBlockItemsAsContent( Block $block )
     {
-        if ( isset( $this->validBlockContentItems[$block->id] ) )
-            return $this->validBlockContentItems[$block->id];
+        if ( isset( $this->validBlockContentItems[$block] ) )
+            return $this->validBlockContentItems[$block];
 
         $contentIds = array();
         foreach ( $this->getValidBlockItems( $block ) as $item )
@@ -73,6 +79,6 @@ class PageService extends BasePageService implements RepositoryAwareInterface
             $contentObjects[] = $searchHit->valueObject;
         }
 
-        return $this->validBlockContentItems[$block->id] = $contentObjects;
+        return $this->validBlockContentItems[$block] = $contentObjects;
     }
 }
