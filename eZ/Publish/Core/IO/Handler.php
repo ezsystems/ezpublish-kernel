@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\IO;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
+use eZ\Publish\Core\IO\MetadataHandler;
 
 /**
  * Backend interface for handling of binary files I/O
@@ -90,5 +91,18 @@ interface Handler
      */
     public function getFileContents( $uri );
 
+    /**
+     * Returns the internal, handler level path for $path
+     * @param string $path
+     * @return string
+     */
     public function getInternalPath( $path );
+
+    /**
+     * Executes $metadataHandler on $path, and returns the metadata array
+     * @param MetadataHandler $metadataHandler
+     * @param string $path
+     * @return array
+     */
+    public function getMetadata( MetadataHandler $metadataHandler, $path );
 }

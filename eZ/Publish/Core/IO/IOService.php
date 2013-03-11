@@ -18,6 +18,7 @@ use eZ\Publish\SPI\IO\MimeTypeDetector;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\IO\MetadataHandler;
 
 /**
  * The io service for managing binary files
@@ -238,6 +239,20 @@ class IOService
             $this->getPrefixedUri( $file )
         );
         return $path;
+    }
+
+    /**
+     * @param MetadataHandler   $metadataHandler
+     * @param BinaryFile        $binaryFile
+     *
+     * @return array
+     */
+    public function getMetadata( MetadataHandler $metadataHandler, BinaryFile $binaryFile )
+    {
+        return $this->ioHandler->getMetadata(
+            $metadataHandler,
+            $this->getPrefixedUri( $binaryFile->uri )
+        );
     }
 
     /**

@@ -204,6 +204,34 @@ class IOServiceTest extends \PHPUnit_Framework_TestCase
         return self::PREFIX . '/' . $uri;
     }
 
+    public function testGetMetadata()
+    {
+        $binaryFile = new BinaryFile(
+            array(
+                'uri' => 'some/uri.png',
+            )
+        );
+
+        $expectedMetadata = array(
+            'meta' => 1,
+            'data' => 2
+        );
+
+        $metadataHandlerMock = $this->getMock( 'eZ\\Publish\\Core\\IO\\MetadataHandler' );
+
+        $this->getIOHandlerMock()
+            ->expects( $this->once() )
+            ->method( 'getMetadata' )
+            ->with(
+                $metadataHandlerMock,
+                'test-prefix/some/uri.png'
+            )
+            ->will( $this->returnValue( $expectedMetadata ) );
+
+        $metadata = $this->getIOService()->getMetadata( $metadataHandlerMock, $binaryFile );
+        self::assertEquals( $metadata, $expectedMetadata );
+    }
+
     /**
      * @return \eZ\Publish\Core\IO\IOService
      */
