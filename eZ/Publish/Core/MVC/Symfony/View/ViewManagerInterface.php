@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\MVC\Symfony\View;
 
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface;
 
 interface ViewManagerInterface
@@ -48,6 +49,20 @@ interface ViewManagerInterface
      * @return string
      */
     public function renderLocation( Location $location, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array() );
+
+    /**
+     * Renders $block by selecting the right template.
+     * $block will be injected in the selected template.
+     *
+     * @param \eZ\Publish\Core\FieldType\Page\Parts\Block $block
+     * @param array $parameters Parameters to pass to the template called to
+     *        render the view. By default, it's empty.
+     *        'block' entry is reserved for the Block that is viewed.
+     * @throws \RuntimeException
+     *
+     * @return string
+     */
+    public function renderBlock( Block $block, $parameters = array() );
 
     /**
      * Renders passed ContentView object via the template engine.

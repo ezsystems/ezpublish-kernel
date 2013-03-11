@@ -17,7 +17,7 @@ use eZ\Publish\Core\FieldType\Page\Parts\Block as PageBlock;
  * Block view providers select a view for a given page block, depending on its own internal rules.
  * Such provider is meant to work along with Page field type.
  */
-interface Block
+interface Block extends ViewProviderInterface
 {
     /**
      * Returns a ContentView object corresponding to $block, or null if not applicable

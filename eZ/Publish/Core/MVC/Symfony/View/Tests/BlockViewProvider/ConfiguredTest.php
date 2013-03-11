@@ -7,13 +7,31 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured;
+namespace eZ\Publish\Core\MVC\Symfony\View\Tests\BlockViewProvider\Configured;
 
-use eZ\Publish\Core\MVC\Symfony\View\Provider\Location\Configured as LocationViewProvider;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Block\Configured as BlockViewProvider;
 use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher;
 
-class ConfiguredTest extends BaseTest
+class ConfiguredTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getRepositoryMock()
+    {
+        return $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' );
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getBlockMock()
+    {
+        return $this->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Block' )
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      *
@@ -21,24 +39,41 @@ class ConfiguredTest extends BaseTest
      */
     public function testGetViewWrongMatcher()
     {
-        $lvp = new LocationViewProvider(
+        $lvp = new BlockViewProvider(
             $this->getRepositoryMock(),
             array(
-                'full' => array(
-                    'failingMatchBlock' => array(
-                        'match'    => array(
-                            'wrongMatcher' => 'bibou est un gentil garçon'
-                        ),
-                        'template' => "mytemplate"
-                    )
+                'failingMatchBlock' => array(
+                    'match'    => array(
+                        'wrongMatcher' => 'bibou est un gentil garçon'
+                    ),
+                    'template' => "mytemplate"
                 )
             )
         );
 
         $lvp->getView(
-            $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' ),
+            $this->getBlockMock(),
             'full'
         );
+    }
+
+    /**
+     * @param array $matchingConfig
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getPartiallyMockedViewProvider( array $matchingConfig = array() )
+    {
+        return $this
+            ->getMockBuilder( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\Provider\\Block\\Configured' )
+            ->setConstructorArgs(
+                array(
+                    $this->getRepositoryMock(),
+                    $matchingConfig
+                )
+            )
+            ->setMethods( array( 'getMatcher' ) )
+            ->getMock();
     }
 
     /**
@@ -47,15 +82,15 @@ class ConfiguredTest extends BaseTest
      * @param boolean $match
      *
      * @return void
-     * @covers eZ\Publish\Core\MVC\Symfony\View\Provider\Content\Configured::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\View\Provider\Content\Configured::getView
+     * @covers eZ\Publish\Core\MVC\Symfony\View\Provider\Block\Configured::__construct
+     * @covers eZ\Publish\Core\MVC\Symfony\View\Provider\Block\Configured::getView
      *
-     * @dataProvider getViewLocationProvider
+     * @dataProvider getViewBlockProvider
      */
-    public function testGetViewLocation( array $matchers, array $matchingConfig, $match )
+    public function testGetViewBlock( array $matchers, array $matchingConfig, $match )
     {
-        $lvp = $this->getPartiallyMockedViewProvider( $matchingConfig );
-        $lvp
+        $bvp = $this->getPartiallyMockedViewProvider( $matchingConfig );
+        $bvp
             ->expects(
                 $this->exactly( count( $matchers ) )
             )
@@ -66,10 +101,7 @@ class ConfiguredTest extends BaseTest
                 )
             );
 
-        $contentView = $lvp->getView(
-            $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' ),
-            'full'
-        );
+        $contentView = $bvp->getView( $this->getBlockMock() );
         if ( $match )
             $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewInterface', $contentView );
         else
@@ -82,7 +114,7 @@ class ConfiguredTest extends BaseTest
      *
      * @return array
      */
-    public function getViewLocationProvider()
+    public function getViewBlockProvider()
     {
         $arguments = array();
         for ( $i = 0; $i < 10; ++$i )
@@ -92,15 +124,15 @@ class ConfiguredTest extends BaseTest
             $matchingConfig = array();
             $doMatch = true;
 
-            $matcherMock1 = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider\\Configured\\Matcher' );
+            $matcherMock1 = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\BlockViewProvider\\Configured\\Matcher' );
             $matcherMock1
                 ->expects( $this->any() )
                 ->method( 'setMatchingConfig' )
                 ->with( $matchValue );
             $matcherMock1
                 ->expects( $this->any() )
-                ->method( 'matchLocation' )
-                ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' ) )
+                ->method( 'matchBlock' )
+                ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Block' ) )
                 ->will( $this->returnValue( true ) );
             $matchers[] = $matcherMock1;
             $matchingConfig[get_class( $matcherMock1 )] = $matchValue;
@@ -111,8 +143,8 @@ class ConfiguredTest extends BaseTest
                 $failingMatcher = clone $matcherMock1;
                 $failingMatcher
                     ->expects( $this->once() )
-                    ->method( 'matchLocation' )
-                    ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' ) )
+                    ->method( 'matchBlock' )
+                    ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Block' ) )
                     ->will( $this->returnValue( true ) );
                 $matchers[] = $failingMatcher;
                 $matchingConfig[get_class( $failingMatcher ) . 'failing'] = $matchValue;
@@ -128,11 +160,9 @@ class ConfiguredTest extends BaseTest
             $arguments[] = array(
                 $matchers,
                 array(
-                    'full' => array(
-                        "matchingBlock-$i" => array(
-                            'match'   => $matchingConfig,
-                            'template' => "mytemplate-$i"
-                        )
+                    "matchingBlock-$i" => array(
+                        'match'   => $matchingConfig,
+                        'template' => "mytemplate-$i"
                     )
                 ),
                 $doMatch
@@ -147,15 +177,15 @@ class ConfiguredTest extends BaseTest
      */
     public function testMatch()
     {
-        $matcherMock = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider\\Configured\\Matcher' );
-        $locationMock = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
+        $matcherMock = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\BlockViewProvider\\Configured\\Matcher' );
+        $blockMock = $this->getBlockMock();
         $matcherMock
             ->expects( $this->once() )
-            ->method( 'matchLocation' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' ) );
+            ->method( 'matchBlock' )
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Block' ) );
 
-        $lvp = new LocationViewProvider( $this->getRepositoryMock(), array() );
-        $lvp->match( $matcherMock, $locationMock );
+        $lvp = new BlockViewProvider( $this->getRepositoryMock(), array() );
+        $lvp->match( $matcherMock, $blockMock );
     }
 
     /**
@@ -165,9 +195,9 @@ class ConfiguredTest extends BaseTest
     public function testMatchWrongValueObject()
     {
         $matcherMock = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider\\Configured\\Matcher' );
-        $locationMock = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' );
+        $wrongObject = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' );
 
-        $lvp = new LocationViewProvider( $this->getRepositoryMock(), array() );
-        $lvp->match( $matcherMock, $locationMock );
+        $lvp = new BlockViewProvider( $this->getRepositoryMock(), array() );
+        $lvp->match( $matcherMock, $wrongObject );
     }
 }

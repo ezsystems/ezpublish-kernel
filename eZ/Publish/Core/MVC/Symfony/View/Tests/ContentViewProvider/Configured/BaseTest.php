@@ -27,7 +27,7 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getPartiallyMockedLocationViewProvider( array $matchingConfig = array() )
+    protected function getPartiallyMockedViewProvider( array $matchingConfig = array() )
     {
         return $this
             ->getMockBuilder( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\Provider\\Location\\Configured' )
@@ -47,7 +47,7 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
     protected function getRepositoryMock()
     {
         return $this
-            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\Repository' )
+            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Repository' )
             ->disableOriginalConstructor()
             ->getMock();
     }

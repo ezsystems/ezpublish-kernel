@@ -19,28 +19,25 @@ use InvalidArgumentException;
 class Configured extends ProviderConfigured implements ContentViewProvider
 {
     /**
-     * Returns a ContentView object corresponding to $contentInfo, or void if not applicable
+     * Returns a ContentView object corresponding to $contentInfo, or null if not applicable
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param string $viewType Variation of display for your content
      *
-     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|void
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|null
      */
     public function getView( ContentInfo $contentInfo, $viewType )
     {
+        if ( !isset( $this->matchConfig[$viewType] ) )
+            return;
+
+        return $this->doMatch( $this->matchConfig[$viewType], $contentInfo );
     }
 
     /**
-     * Checks if $valueObject matches the $matcher's rules.
-     *
-     * @param \eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher $matcher
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $valueObject
-     *
-     * @throws \InvalidArgumentException If $valueObject is not of expected sub-type.
-     *
-     * @return bool
+     * {@inheritDoc}
      */
-    protected function doMatch( ViewProviderMatcher $matcher, ValueObject $valueObject )
+    public function match( ViewProviderMatcher $matcher, ValueObject $valueObject )
     {
         if ( !$valueObject instanceof ContentInfo )
             throw new InvalidArgumentException( 'Value object must be a valid ContentInfo instance' );
