@@ -9,8 +9,10 @@
 
 namespace eZ\Publish\Core\IO\Tests\Handler;
 
+use eZ\Publish\SPI\IO\BinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
+use eZ\Publish\Core\IO\Handler as IOHandler;
 use DateTime;
 use finfo;
 
@@ -18,7 +20,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
 {
     /**
      * Binary IoHandler
-     * @var \eZ\Publish\SPI\IO\Handler
+     * @var \eZ\Publish\Core\IO\Handler
      */
     protected $IOHandler;
 
@@ -67,6 +69,8 @@ abstract class Base extends \PHPUnit_Framework_TestCase
         self::assertEquals( 1928, $binaryFile->size );
         self::assertInstanceOf( 'DateTime', $binaryFile->mtime );
         self::assertNotEquals( 0, $binaryFile->mtime->getTimestamp() );
+
+        return $binaryFile;
     }
 
     /**
@@ -290,6 +294,32 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @depends testCreate
+     * @param BinaryFile $binaryFile
+     */
+    public function testGetMetadata( BinaryFile $binaryFile )
+    {
+        // @todo Add @depends on createFile
+        $path = $binaryFile->uri;
+        $internalPath = $this->IOHandler->getInternalPath( $path );
+
+        $metadataHandlerMock = $this->getMock( 'eZ\\Publish\\Core\\IO\\MetadataHandler' );
+        $expectedMetadata = array( 'some' => 1, 'meta' => 2 );
+        $metadataHandlerMock
+            ->expects( $this->once() )
+            ->method( 'extract' )
+            ->with( $internalPath )
+            ->will( $this->returnValue( $expectedMetadata ) );
+
+        $metadata = $this->IOHandler->getMetadata(
+            $metadataHandlerMock,
+            $path
+        );
+
+        self::assertEquals( $metadata, $expectedMetadata );
+    }
+
+        /**
      * Creates a BinaryFile object from $localFile
      *
      * @throws \Exception When given a non existing / unreadable file

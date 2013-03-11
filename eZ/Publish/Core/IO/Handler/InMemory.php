@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\IO\Handler;
 
 use eZ\Publish\Core\IO\Handler as IoHandlerInterface;
+use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\SPI\IO\BinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
@@ -220,5 +221,11 @@ class InMemory implements IoHandlerInterface
     public function getInternalPath( $path )
     {
         return 'memory:' . $path;
+    }
+
+    public function getMetadata( MetadataHandler $metadataHandler, $path )
+    {
+        // @todo This won't work. InternalPath is NOT a path. Need to write it to disk somehow.
+        $metadataHandler->extract( $this->getInternalPath( $path ) );
     }
 }

@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\IO\Handler;
 
 use eZ\Publish\Core\IO\Handler as IOHandlerInterface;
+use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\SPI\IO\BinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
@@ -325,6 +326,25 @@ class Legacy implements IOHandlerInterface
         return $this->getStoragePath( $path );
     }
 
+    public function getMetadata( MetadataHandler $metadataHandler, $path )
+    {
+        $clusterHandler = $this->getClusterHandler(
+            $this->getStoragePath( $path )
+        );
+
+        return $this->getLegacyKernel()->runCallback(
+        /** @var $clusterHandler \eZClusterFileHandlerInterface */
+            function() use( $clusterHandler, $metadataHandler )
+            {
+                $temporaryFileName = $clusterHandler->fetchUnique();
+                $metadata = $metadataHandler->extract( $temporaryFileName );
+                $clusterHandler->fileDeleteLocal( $temporaryFileName );
+                return $metadata;
+            }
+        );
+    }
+
+
     /**
      * Returns the appropriate FileResourceProvider depending on the cluster handler in use
      *
@@ -353,20 +373,38 @@ class Legacy implements IOHandlerInterface
      *
      * @return \eZClusterFileHandler
      */
-    private function getClusterHandler()
+    private function getClusterHandler( $path = null )
     {
-        if ( $this->clusterHandler === null )
+        if ( $path )
         {
-            $this->clusterHandler = $this->getLegacyKernel()->runCallback(
-                function ()
-                {
-                    return eZClusterFileHandler::instance();
-                },
-                false
-            );
+            if ( !isset( $this->clusterFileHandlers[$path] ) )
+            {
+                $this->clusterFileHandlers[$path] = $this->getLegacyKernel()->runCallback(
+                    function () use ( $path )
+                    {
+                        return \eZClusterFileHandler::instance( $path );
+                    },
+                    false
+                );
+            }
+            $clusterHandler = $this->clusterFileHandlers[$path];
+        }
+        else
+        {
+            if ( $this->clusterHandler === null )
+            {
+                $this->clusterHandler = $this->getLegacyKernel()->runCallback(
+                    function ()
+                    {
+                        return \eZClusterFileHandler::instance();
+                    },
+                    false
+                );
+            }
+            $clusterHandler = $this->clusterHandler;
         }
 
-        return $this->clusterHandler;
+        return $clusterHandler;
     }
 
     /**

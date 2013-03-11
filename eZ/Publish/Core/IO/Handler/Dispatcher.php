@@ -248,8 +248,15 @@ class Dispatcher implements IoHandlerInterface
         return $this->defaultHandler;
     }
 
-    public function getInternalPath()
+    public function getInternalPath( $path )
     {
-        // @todo Implement me somehow
+        // TODO: Implement getInternalPath() method.
     }
+
+    public function getMetadata( MetadataHandler $metadataHandler, $path )
+    {
+        // TODO: Implement getMetadata() method.
+    }
+
+
 }
