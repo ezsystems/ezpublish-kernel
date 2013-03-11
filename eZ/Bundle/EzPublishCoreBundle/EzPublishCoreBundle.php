@@ -17,6 +17,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainConfigResolverPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ContentViewPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LocationViewPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\BlockViewPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser as ConfigParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\Factory as EzPublishSecurityFactory;
@@ -37,6 +38,7 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new LegacyStorageEnginePass );
         $container->addCompilerPass( new ContentViewPass );
         $container->addCompilerPass( new LocationViewPass );
+        $container->addCompilerPass( new BlockViewPass );
 
         $securityExtension = $container->getExtension( 'security' );
         $securityExtension->addSecurityListenerFactory( new EzPublishSecurityFactory );
@@ -56,7 +58,6 @@ class EzPublishCoreBundle extends Bundle
                     new ConfigParser\FieldTemplates,
                     new ConfigParser\FieldDefinitionSettingsTemplates,
                     new ConfigParser\Image,
-                    new ConfigParser\Page,
                 )
             );
         }
