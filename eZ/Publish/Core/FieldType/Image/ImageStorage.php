@@ -146,8 +146,10 @@ class ImageStorage extends GatewayBasedStorage
                 return true;
             }
 
+            $binaryFile = $this->IOService->loadBinaryFile( $this->IOService->getExternalPath( $field->value->data['path'] ) );
             $field->value->data = array_merge(
                 $field->value->data,
+                $this->IOService->getMetadata( $this->imageSizeMetadataHandler, $binaryFile ),
                 $contentMetaData
             );
             $field->value->externalData = null;
