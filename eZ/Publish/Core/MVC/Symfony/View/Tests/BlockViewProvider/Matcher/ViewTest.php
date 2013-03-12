@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\MVC\Symfony\View\Tests\BlockViewProvider\Matcher;
 use eZ\Publish\Core\MVC\Symfony\View\BlockViewProvider\Configured\Matcher\View as BlockViewMatcher;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 
-class TypeTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\View\BlockViewProvider\Configured\Matcher

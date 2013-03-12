@@ -14,7 +14,7 @@ use eZ\Publish\Core\MVC\Symfony\View\Provider\Block as BlockProvider;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher;
 use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\Core\MVC\Symfony\BlockViewProvider\Configured\Matcher;
+use eZ\Publish\Core\MVC\Symfony\View\BlockViewProvider\Configured\Matcher;
 use InvalidArgumentException;
 
 class Configured extends ProviderConfigured implements BlockProvider
@@ -42,7 +42,7 @@ class Configured extends ProviderConfigured implements BlockProvider
      *
      * @throws \InvalidArgumentException
      *
-     * @return \eZ\Publish\Core\MVC\Symfony\BlockViewProvider\Configured\Matcher
+     * @return \eZ\Publish\Core\MVC\Symfony\View\BlockViewProvider\Configured\Matcher
      */
     protected function getMatcher( $matcherIdentifier )
     {

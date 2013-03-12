@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZ\Publish\Core\MVC\RepositoryAwareInterface;
 use InvalidArgumentException;
 
 /**
@@ -83,6 +84,8 @@ abstract class Configured
         {
             $this->matchers[$matcherIdentifier]->setRepository( $this->repository );
         }
+
+        return $this->matchers[$matcherIdentifier];
     }
 
     /**
