@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\Core\FieldType\Page\Parts;
 
-use OutOfBoundsException;
-
 /**
  * @property-read string $id Zone Id.
  * @property-read string $identifier Zone Identifier.
