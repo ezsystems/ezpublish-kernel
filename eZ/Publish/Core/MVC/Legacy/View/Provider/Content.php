@@ -41,6 +41,9 @@ class Content extends Provider implements ContentViewProviderInterface
                      * @var \eZObjectForwarder
                      */
                     $funcObject = $tpl->fetchFunctionObject( 'content_view_gui' );
+
+                    $tpl->setVariable( 'object_parameters', $params["objectParameters"], 'ContentView' );
+
                     $children = array();
                     $params['content_object'] = array(
                         array(
