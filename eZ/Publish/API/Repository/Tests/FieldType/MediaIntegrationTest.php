@@ -27,9 +27,10 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     protected static $loadedMediaPath;
 
     /**
-     * Storage dir settings key
+     * IOService storage prefix for the tested Type's files
+     * @var string
      */
-    protected static $storageDirConfigKey = 'binaryfile_storage_dir';
+    protected static $storagePrefixConfigKey = 'binaryfile_storage_prefix';
 
     /**
      * Sets up fixture data.
@@ -227,17 +228,17 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
         return array(
             array(
                 array(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
             ),
             array(
                 new MediaValue( array() ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
             ),
             array(
                 array(
                     'path' => '/foo/bar/sindelfingen.pdf',
                 ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
             ),
             array(
                 new MediaValue(
@@ -245,7 +246,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                         'path' => '/foo/bar/sindelfingen.pdf',
                     )
                 ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
             ),
         );
     }
