@@ -9,6 +9,7 @@ parameters:
     # Content/Location view
     ezsettings.default.location_view: {}
     ezsettings.default.content_view: {}
+    ezsettings.default.block_view: {}
 
     # Common settings
     ezsettings.default.database.params: ~
