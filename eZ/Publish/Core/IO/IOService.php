@@ -180,6 +180,10 @@ class IOService
         if ( empty( $uri ) || !is_string( $uri ) )
             throw new InvalidArgumentValue( "binaryFileId", $uri );
 
+        // @todo An absolute path can in no case be loaded, but throwing an exception is a bit too much at this stage
+        if ( $uri[0] === '/' )
+            return false;
+
         try
         {
             $spiBinaryFile = $this->ioHandler->load( $this->getPrefixedUri( $uri ) );

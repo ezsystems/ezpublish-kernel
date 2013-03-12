@@ -49,7 +49,7 @@ class Filesystem implements IOHandlerInterface
         {
             throw new \RuntimeException( "Storage directory $storageDirectory can not be written to" );
         }
-        $this->storageDirectory = $storageDirectory;
+        $this->storageDirectory = realpath( $storageDirectory );
     }
 
     /**
@@ -82,6 +82,7 @@ class Filesystem implements IOHandlerInterface
         {
             $this->createFolderStructure( $outputDirectory );
         }
+
         $outputStream = fopen( $storagePath, 'wb' );
         stream_copy_to_stream( $createStruct->getInputStream(), $outputStream );
         return $this->load( $createStruct->uri );

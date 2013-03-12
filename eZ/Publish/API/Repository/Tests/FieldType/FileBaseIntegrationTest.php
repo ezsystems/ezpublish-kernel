@@ -35,12 +35,6 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     protected static $storageDir;
 
     /**
-     * Prefix added by IOService to stored files
-     * @var string
-     */
-    protected static $storagePrefix;
-
-    /**
      * Storage dir settings key
      */
     protected static $storageDirConfigKey = 'storage_dir';
@@ -69,7 +63,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
      */
     protected function getStorageDir()
     {
-        return self::$storageDir . '/' . self::$storagePrefix;
+        return self::$storageDir;
     }
 
     /**
@@ -85,7 +79,6 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
         {
             self::$installDir = $this->getConfigValue( 'install_dir' );
             self::$storageDir = $this->getConfigValue( static::$storageDirConfigKey );
-            self::$storagePrefix = $this->getConfigValue( static::$storagePrefixConfigKey);
         }
     }
 

@@ -61,10 +61,12 @@ class ImageStorage extends GatewayBasedStorage
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage
      */
-    public function copyLegacyField( VersionInfo $versionInfo, Field $field, Field $originalField, array $context )
+    /*public function copyLegacyField( VersionInfo $versionInfo, Field $field, Field $originalField, array $context )
     {
-        if ( $originalField->data === null )
+        if ( $originalField->value->data === null )
+        {
             return false;
+        }
 
         // Field copies don't store their own image, but store their own reference to it
         $this->getGateway( $context )->storeImageReference( $originalField->value->data['path'], $field->id );
@@ -86,18 +88,18 @@ class ImageStorage extends GatewayBasedStorage
         $field->value->externalData = null;
 
         return true;
-    }
+    }*/
 
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
-        $storedValue = isset( $field->value->externalData )
+        /*$storedValue = isset( $field->value->externalData )
             // New image
             ? $field->value->externalData
             // Copied / updated image
-            : $field->value->data;
+            : $field->value->data;*/
 
         $contentMetaData = array(
             'fieldId' => $field->id,
@@ -105,47 +107,53 @@ class ImageStorage extends GatewayBasedStorage
             'languageCode' => $field->languageCode,
         );
 
-        if ( $storedValue === null )
+        // new image
+        if ( isset( $field->value->externalData ) )
         {
-            // Store empty value only with content meta data
-            $field->value->data = $contentMetaData;
-            return true;
-        }
+            $targetPath = $this->getFieldPath(
+                $field->id,
+                $versionInfo->versionNo,
+                $field->languageCode,
+                $this->getGateway( $context )->getNodePathString( $versionInfo, $field->id )
+            ) . '/' . $field->value->externalData['fileName'];
 
-        // Only store a new copy of the image, if it does not exist, yet
-        $nodePathString = $this->getGateway( $context )->getNodePathString( $versionInfo, $field->id );
+            if ( !$binaryFile = $this->IOService->loadBinaryFile( $targetPath ) )
+            {
+                $binaryFileCreateStruct = $this->IOService->newBinaryCreateStructFromLocalFile(
+                    $field->value->externalData['path']
+                );
+                $binaryFileCreateStruct->uri = $targetPath;
+                $binaryFile = $this->IOService->createBinaryFile( $binaryFileCreateStruct );
+            }
+            $field->value->externalData['path'] = $this->IOService->getInternalPath( $binaryFile->uri );
+            $field->value->externalData['mimeType'] = $binaryFile->mimeType;
 
-        $targetPath = $this->getFieldPath(
-            $field->id,
-            $versionInfo->versionNo,
-            $field->languageCode,
-            $nodePathString
-        ) . '/' . $storedValue['fileName'];
-
-
-        if ( ( $binaryFile = $this->IOService->loadBinaryFile( $targetPath ) ) === false )
-        {
-            $binaryFileCreateStruct = $this->IOService->newBinaryCreateStructFromLocalFile(
-                $storedValue['path']
+            $field->value->data = array_merge(
+                $field->value->externalData,
+                $this->IOService->getMetadata( $this->imageSizeMetadataHandler, $binaryFile ),
+                $contentMetaData
             );
-            $binaryFileCreateStruct->uri = $targetPath;
-            $binaryFile = $this->IOService->createBinaryFile( $binaryFileCreateStruct );
-            $storedValue['path'] = $this->IOService->getInternalPath( $binaryFileCreateStruct->uri );
+
+            $field->value->externalData = null;
+        }
+        // existing image
+        else
+        {
+            if ( $field->value->data === null )
+            {
+                // Store empty value only with content meta data
+                $field->value->data = $contentMetaData;
+                return true;
+            }
+
+            $field->value->data = array_merge(
+                $field->value->data,
+                $contentMetaData
+            );
+            $field->value->externalData = null;
         }
 
-        $this->getGateway( $context )->storeImageReference( $storedValue['path'], $field->id );
-
-        $storedValue = array_merge(
-            // Basic value data
-            $storedValue,
-            // Image meta data
-            $this->IOService->getMetadata( $this->imageSizeMetadataHandler, $binaryFile ),
-            // Content meta data
-            $contentMetaData
-        );
-
-        $field->value->data = $storedValue;
-        $field->value->externalData = null;
+        $this->getGateway( $context )->storeImageReference( $field->value->data['path'], $field->id );
 
         // Data has been updated and needs to be stored!
         return true;
