@@ -31,6 +31,11 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
      */
     protected static $storagePrefixConfigKey = 'binaryfile_storage_prefix';
 
+    protected function getStoragePrefix()
+    {
+        return $this->getConfigValue( self::$storagePrefixConfigKey );
+    }
+
     /**
      * Sets up fixture data.
      *
@@ -183,8 +188,8 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
         );
 
         $this->assertTrue(
-            file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $field->value->path ),
-            "Failed asserting that $path exists"
+            file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->path ),
+            "File $path exists"
         );
 
         self::$loadedBinaryFilePath = $field->value->path;
@@ -275,7 +280,8 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
         );
 
         $this->assertTrue(
-            file_exists( $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $field->value->path )
+            file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->path ),
+            "File $path exists."
         );
     }
 
