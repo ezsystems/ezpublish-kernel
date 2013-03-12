@@ -16,6 +16,10 @@ use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\Core\Limitation\SubtreeLimitationType;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use Exception;
 use RuntimeException;
 
@@ -303,6 +307,39 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Returns true if given action is content/edit and value object refers to Content that the current user owns
+     * and has no published version, otherwise returns false.
+     *
+     * @param string $module
+     * @param string $function
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object
+     *
+     * @return boolean
+     */
+    protected function isCanUserEditOwnUnpublishedContent( $module, $function, ValueObject $object )
+    {
+        if ( $object instanceof Content )
+        {
+            $object = $object->getVersionInfo()->getContentInfo();
+        }
+        else if ( $object instanceof VersionInfo )
+        {
+            $object = $object->getContentInfo();
+        }
+
+        if ( $module === "content"
+            && $function === "edit"
+            && $object instanceof ContentInfo
+            && !$object->published
+            && $object->ownerId == $this->getCurrentUser()->id )
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Check if user has access to a given action on a given value object
      *
      * Indicates if the current user is allowed to perform an action given by the function on the given
@@ -337,7 +374,13 @@ class Repository implements RepositoryInterface
             {
                 $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
                 if ( !$type->evaluate( $permissionSet['limitation'], $currentUser, $object, $target ) )
-                    continue;
+                {
+                    if ( !$type instanceof SubtreeLimitationType
+                        || !$this->isCanUserEditOwnUnpublishedContent( $module, $function, $object ) )
+                    {
+                        continue;
+                    }
+                }
             }
 
             /**
