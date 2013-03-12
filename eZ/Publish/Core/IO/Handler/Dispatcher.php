@@ -259,5 +259,8 @@ class Dispatcher implements IoHandlerInterface
         // TODO: Implement getMetadata() method.
     }
 
-
+    public function getExternalPath( $path )
+    {
+        // TODO: Implement getExternalPath() method
+    }
 }
