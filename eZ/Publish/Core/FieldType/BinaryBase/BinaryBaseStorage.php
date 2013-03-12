@@ -14,6 +14,7 @@ use eZ\Publish\Core\IO\IOService;
 use eZ\Publish\SPI\FieldType\BinaryBase\PathGenerator;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\IO\MimeTypeDetector;
 
 /**
  * Storage for binary files
@@ -27,12 +28,13 @@ class BinaryBaseStorage extends GatewayBasedStorage
      */
     protected $IOService;
 
-    /**
-     * Path generator
-     *
-     * @var PathGenerator
-     */
+    /** @var PathGenerator */
     protected $pathGenerator;
+
+    /**
+     * @var MimeTypeDetector
+     */
+    protected $mimeTypeDetector;
 
     /**
      * Construct from gateways
@@ -41,11 +43,12 @@ class BinaryBaseStorage extends GatewayBasedStorage
      * @param IOService $IOService
      * @param PathGenerator $pathGenerator
      */
-    public function __construct( array $gateways, IOService $IOService, PathGenerator $pathGenerator )
+    public function __construct( array $gateways, IOService $IOService, PathGenerator $pathGenerator, MimeTypeDetector $mimeTypeDetector )
     {
         parent::__construct( $gateways );
         $this->IOService = $IOService;
         $this->pathGenerator = $pathGenerator;
+        $this->mimeTypeDetector = $mimeTypeDetector;
     }
 
     /**
@@ -86,11 +89,18 @@ class BinaryBaseStorage extends GatewayBasedStorage
             return false;
         }
 
-        $storedValue = $field->value->externalData;
+        // no mimeType means we are dealing with an input, local file
+        if ( !isset( $field->value->externalData['mimeType'] ) )
+        {
+            $field->value->externalData['mimeType'] = $this->mimeTypeDetector->getFromPath( $field->value->externalData['path'] );
+        }
 
+        $storedValue = $field->value->externalData;
         $storagePath = $this->pathGenerator->getStoragePathForField( $field, $versionInfo );
 
-        if ( $this->IOService->loadBinaryFile( $storagePath ) === false )
+        // The file referenced in externalData MAY be an existing IOService file which we can use
+        if ( ( $this->IOService->loadBinaryFile( $storedValue['path'] ) === false ) &&
+             ( $this->IOService->loadBinaryFile( $storagePath ) === false ) )
         {
             $createStruct = $this->IOService->newBinaryCreateStructFromLocalFile(
                 $storedValue['path']
@@ -98,6 +108,7 @@ class BinaryBaseStorage extends GatewayBasedStorage
             $createStruct->uri = $storagePath;
             $this->IOService->createBinaryFile( $createStruct );
             $storedValue['path'] = $createStruct->uri;
+            $storedValue['mimeType'] = $createStruct->mimeType;
         }
 
         $field->value->externalData = $storedValue;
@@ -109,11 +120,12 @@ class BinaryBaseStorage extends GatewayBasedStorage
 
     public function copyLegacyField( VersionInfo $versionInfo, Field $field, Field $originalField, array $context )
     {
-        if ( $originalField->data === null )
+        if ( $originalField->value->data === null )
             return false;
 
         // field translations have their own file reference, but to the original file
         $originalField->value->externalData['path'];
+
         return $this->getGateway( $context )->storeFileReference( $versionInfo, $field );
     }
 
@@ -165,11 +177,16 @@ class BinaryBaseStorage extends GatewayBasedStorage
     public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         $field->value->externalData = $this->getGateway( $context )->getFileReferenceData( $field->id, $versionInfo->versionNo );
-
         if ( $field->value->externalData !== null )
         {
-            $binaryFile = $this->IOService->loadBinaryFile( $field->value->externalData['path'] );
-            $field->value->externalData['fileSize'] = $binaryFile->size;
+            if ( ( $binaryFile = $this->IOService->loadBinaryFile( $field->value->externalData['path'] ) ) !== false )
+            {
+                $field->value->externalData['fileSize'] = $binaryFile->size;
+            }
+            else
+            {
+                throw new \RuntimeException( "Failed loading binary file {$field->value->externalData['path']}" );
+            }
         }
     }
 

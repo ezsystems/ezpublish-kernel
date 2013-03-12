@@ -91,7 +91,7 @@ abstract class Type extends FieldType
         }
 
         // Required parameter $path
-        if ( !isset( $inputValue->path ) || !file_exists( $inputValue->path ))
+        if ( !isset( $inputValue->path ) || !file_exists( $inputValue->path ) )
         {
             throw new InvalidArgumentValue(
                 '$inputValue->path',
