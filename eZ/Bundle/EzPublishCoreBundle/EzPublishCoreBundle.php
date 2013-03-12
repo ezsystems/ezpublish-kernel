@@ -53,6 +53,7 @@ class EzPublishCoreBundle extends Bundle
                 array(
                     new ConfigParser\LocationView,
                     new ConfigParser\ContentView,
+                    new ConfigParser\BlockView,
                     new ConfigParser\Common,
                     new ConfigParser\Content,
                     new ConfigParser\FieldTemplates,
