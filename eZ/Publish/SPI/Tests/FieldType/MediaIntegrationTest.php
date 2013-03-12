@@ -93,7 +93,8 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                     'LegacyStorage' => new FieldType\Media\MediaStorage\Gateway\LegacyStorage(),
                 ),
                 $this->getIOService(),
-                new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator()
+                new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator(),
+                $this->getMimeTypeDetector()
             )
         );
         $handler->getFieldValueConverterRegistry()->register(
