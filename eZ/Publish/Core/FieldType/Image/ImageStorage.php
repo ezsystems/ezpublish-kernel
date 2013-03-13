@@ -224,7 +224,7 @@ class ImageStorage extends GatewayBasedStorage
         foreach ( $fieldXmls as $fieldId => $xml )
         {
             $storedFiles = $this->extractFiles( $xml );
-            if ( !count( $storedFiles ) )
+            if ( $storedFiles === null )
             {
                 continue;
             }
@@ -254,7 +254,7 @@ class ImageStorage extends GatewayBasedStorage
         if ( empty( $xml ) )
         {
             // Empty image value
-            return false;
+            return null;
         }
 
         $files = array();
