@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\View\BlockViewProvider\Configured\Matcher\Id;
 
 use eZ\Publish\Core\MVC\Symfony\View\BlockViewProvider\Configured\Matcher\MultipleValued;
-use eZ\Publish\Core\FieldType\Page\Parts\Block as Block;
+use eZ\Publish\Core\FieldType\Page\Parts\Block as PageBlock;
 
 class Zone extends MultipleValued
 {
@@ -21,7 +21,7 @@ class Zone extends MultipleValued
      *
      * @return boolean
      */
-    public function matchBlock( Block $block )
+    public function matchBlock( PageBlock $block )
     {
         return isset( $this->values[$block->zoneId] );
     }
