@@ -34,25 +34,25 @@ class BlockAdapter extends DefinitionBasedAdapter
             'overflow_id'           => 'overflowId',
             'zone_id'               => 'zoneId',
             'valid_items'           =>
-            function ( Block $block )
-            {
-                return eZFlowPool::validItems( $block->id );
-            },
+                function ( Block $block )
+                {
+                    return eZFlowPool::validItems( $block->id );
+                },
             'valid_nodes'           =>
-            function ( Block $block )
-            {
-                return eZFlowPool::validNodes( $block->id );
-            },
+                function ( Block $block )
+                {
+                    return eZFlowPool::validNodes( $block->id );
+                },
             'archived_items'        =>
-            function ( Block $block )
-            {
-                return eZFlowPool::archivedItems( $block->id );
-            },
+                function ( Block $block )
+                {
+                    return eZFlowPool::archivedItems( $block->id );
+                },
             'waiting_items'         =>
-            function ( Block $block )
-            {
-                return eZFlowPool::waitingItems( $block->id );
-            }
+                function ( Block $block )
+                {
+                    return eZFlowPool::waitingItems( $block->id );
+                }
         );
     }
 }
