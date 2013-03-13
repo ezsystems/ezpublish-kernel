@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\IO\Tests\Handler;
 use eZ\Publish\Core\IO\Handler\Dispatcher;
 use eZ\Publish\Core\IO\Handler\InMemory as InMemory;
 use eZ\Publish\Core\IO\Tests\Handler\Base as BaseHandlerTest;
+use eZ\Publish\SPI\IO\BinaryFile;
 
 /**
  * Handler test
@@ -154,7 +155,7 @@ class DispatcherTest extends BaseHandlerTest
         $this->defaultBackend->load( $repositoryPath );
     }
 
-    public function testGetMetadata()
+    public function testGetMetadata( BinaryFile $binaryFile )
     {
         self::markTestIncomplete( "Not implemented" );
     }
