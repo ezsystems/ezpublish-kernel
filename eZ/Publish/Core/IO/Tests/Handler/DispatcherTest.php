@@ -29,6 +29,11 @@ class DispatcherTest extends BaseHandlerTest
      */
     protected $alternativeBackend;
 
+    public function setUp()
+    {
+        self::markTestSkipped();
+    }
+
     /**
      * @return \eZ\Publish\Core\IO\Handler
      */
