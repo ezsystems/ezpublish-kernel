@@ -13,16 +13,14 @@ use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\FieldType\Page\Parts\Zone;
 use eZ\Publish\Core\MVC\Legacy\Templating\Adapter\BlockAdapter;
 use eZ\Publish\Core\MVC\Legacy\Templating\Adapter\ZoneAdapter;
+use InvalidArgumentException;
 
 class PagePartsConverter implements ObjectConverter
 {
-    /**
-     * {@inheritDoc}
-     */
     public function convert( $object )
     {
-        if ( is_object( $object ) )
-            throw new \InvalidArgumentException( 'Transferred object must be a Page\\Parts\\Block object. Got ' . gettype( $object ) );
+        if ( !is_object( $object ) )
+            throw new InvalidArgumentException( 'Transferred object must be a Page\\Parts\\Block object. Got ' . gettype( $object ) );
 
         if ( $object instanceof Block )
         {
@@ -33,6 +31,6 @@ class PagePartsConverter implements ObjectConverter
             return new ZoneAdapter( $object );
         }
 
-        throw new \InvalidArgumentException( 'Transferred object must be a Page\\Parts\\Block object. Got ' . get_class( $object ) );
+        throw new InvalidArgumentException( 'Transferred object must be a Page\\Parts\\Block object. Got ' . get_class( $object ) );
     }
 }
