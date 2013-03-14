@@ -186,8 +186,8 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         );
 
         $this->assertTrue(
-            file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $field->value->path ),
-            "File $path exists."
+            $exists = file_exists( $path = $this->getInstallDir() . '/' . $field->value->path ),
+            "Asserting that $path exists."
         );
 
         self::$loadedImagePath = $field->value->path;
@@ -281,8 +281,8 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         );
 
         $this->assertTrue(
-            file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $field->value->path ),
-            "File $path exists"
+            file_exists( $path = $this->getInstallDir() . '/' . $field->value->path ),
+            "Asserting that file $path exists"
         );
     }
 
