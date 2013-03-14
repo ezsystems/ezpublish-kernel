@@ -37,6 +37,11 @@ class Filesystem implements IOHandlerInterface
     private $storageDirectory;
 
     /**
+     * @var string
+     */
+    private $prefix;
+
+    /**
      * @param string $storageDirectory
      */
     public function __construct( $storageDirectory )
@@ -49,6 +54,7 @@ class Filesystem implements IOHandlerInterface
         {
             throw new \RuntimeException( "Storage directory $storageDirectory can not be written to" );
         }
+        $this->prefix = $storageDirectory;
         $this->storageDirectory = realpath( $storageDirectory );
     }
 
@@ -264,14 +270,19 @@ class Filesystem implements IOHandlerInterface
 */
     public function getInternalPath( $path )
     {
-        // This handler doesn't support a prefix (e.g. var/ezdemo_site/storage), and doesn't need one
-        return $path;
+        if ( !isset( $this->prefix ) )
+        {
+            return $path;
+        }
+        else
+        {
+            return $this->prefix . DIRECTORY_SEPARATOR . $path;
+        }
     }
 
     public function getExternalPath( $path )
     {
-        // This handler doesn't support a prefix (e.g. var/ezdemo_site/storage), and doesn't need one
-        return $path;
+        return $this->removePrefix( $path );
     }
 
     /**
@@ -297,5 +308,20 @@ class Filesystem implements IOHandlerInterface
         if ( $this->storageDirectory )
             $path = $this->storageDirectory . DIRECTORY_SEPARATOR . $path;
         return $path;
+    }
+
+    protected function removePrefix( $uri )
+    {
+        if ( !isset( $this->prefix ) )
+        {
+            return $uri;
+        }
+
+        if ( strpos( $uri, $this->prefix . DIRECTORY_SEPARATOR ) !== 0 )
+        {
+            throw new InvalidArgumentException( '$uri', "Prefix {$this->prefix} not found in {$uri}" );
+        }
+
+        return substr( $uri, strlen( $this->prefix ) + 1 );
     }
 }

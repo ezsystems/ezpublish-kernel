@@ -202,7 +202,7 @@ class ImageStorage extends GatewayBasedStorage
             $path = $this->IOService->getExternalPath( $field->value->data['path'] );
             if ( ( $binaryFile = $this->IOService->loadBinaryFile( $path ) ) === false )
             {
-                throw new NotFoundException( '$field->value->data[path]', $field->value->data['path'] );
+                throw new NotFoundException( '$field->value->data[path]', $path );
             }
 
             $field->value->data['fileSize'] = $binaryFile->size;

@@ -341,7 +341,9 @@ class IOService
         }
 
         if ( strpos( $uri, $this->settings['prefix'] . DIRECTORY_SEPARATOR ) !== 0 )
-            throw new InvalidArgumentException( '$uri', "Prefix not found" );
+        {
+            throw new InvalidArgumentException( '$uri', "Prefix {$this->settings['prefix']} not found in {$uri}" );
+        }
 
         $uri = substr( $uri, strlen( $this->settings['prefix'] ) + 1 );
         return $uri;
