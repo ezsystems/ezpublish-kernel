@@ -214,6 +214,14 @@ Changes affecting version compatibility with former or future versions.
 * Deprecated virtual property `$criterion` on class `eZ\Publish\API\Repository\Values\Content\Query`,
   is removed.
 
+* Removed support for XML DOMDocument values on `eZ\Publish\SPI\Persistence\Content\FieldValue`
+
+  As part of EZP-24832, `$data` property now needs to be scalar/array type, so it can be json
+  serialized in future storage engine improvements. Likewise `$externalData`, like any other
+  `eZ\Publish\SPI\Persistence\ValueObject` property, has been documented to have to be
+  serializable, as it is cached by Persistence Cache which depends on this.
+
+
 ## Changes from 2015.01 (6.0.0-alpha1)
 
 * Bundle `EzPublishElasticsearchBundle` has been renamed to `EzPublishElasticsearchSearchEngineBundle`
