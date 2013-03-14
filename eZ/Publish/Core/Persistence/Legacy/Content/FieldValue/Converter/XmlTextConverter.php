@@ -18,7 +18,6 @@ use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\Core\FieldType\XmlText\Value;
-use DOMDocument;
 
 class XmlTextConverter implements Converter
 {
@@ -42,7 +41,7 @@ class XmlTextConverter implements Converter
      */
     public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue)
     {
-        $storageFieldValue->dataText = $value->data->saveXML();
+        $storageFieldValue->dataText = $value->data;
     }
 
     /**
@@ -53,9 +52,7 @@ class XmlTextConverter implements Converter
      */
     public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
     {
-        $domDoc = new DOMDocument();
-        $domDoc->loadXML($value->dataText ?: Value::EMPTY_VALUE);
-        $fieldValue->data = $domDoc;
+        $fieldValue->data = $value->dataText ?: Value::EMPTY_VALUE;
     }
 
     /**
@@ -68,8 +65,9 @@ class XmlTextConverter implements Converter
     {
         $storageDefinition->dataInt1 = $fieldDefinition->fieldTypeConstraints->fieldSettings['numRows'];
         $storageDefinition->dataText2 = $fieldDefinition->fieldTypeConstraints->fieldSettings['tagPreset'];
+
         if (!empty($fieldDefinition->defaultValue->data)) {
-            $storageDefinition->dataText1 = $fieldDefinition->defaultValue->data->saveXML();
+            $storageDefinition->dataText1 = $fieldDefinition->defaultValue->data;
         }
     }
 
@@ -90,9 +88,9 @@ class XmlTextConverter implements Converter
 
         $defaultValue = null;
         if (!empty($storageDefinition->dataText1)) {
-            $defaultValue = new DOMDocument();
-            $defaultValue->loadXML($storageDefinition->dataText1);
+            $defaultValue = $storageDefinition->dataText1;
         }
+
         $fieldDefinition->defaultValue->data = $defaultValue;
     }
 
