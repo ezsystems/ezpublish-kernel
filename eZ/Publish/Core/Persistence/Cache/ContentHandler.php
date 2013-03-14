@@ -18,15 +18,12 @@ use eZ\Publish\SPI\Persistence\Content\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
-use DOMDocument;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Handler
  */
 class ContentHandler extends AbstractHandler implements ContentHandlerInterface
 {
-    const FIELD_VALUE_DOM_DOCUMENT_KEY = '§:DomDocument:§';
-
     const ALL_TRANSLATIONS_KEY = '0';
 
     /**
@@ -71,9 +68,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $version, 'translations' => $translations));
             $content = $this->persistenceHandler->contentHandler()->load($contentId, $version, $translations);
-            $cache->set($this->cloneAndSerializeXMLFields($content));
-        } else {
-            $this->unSerializeXMLFields($content);
+            $cache->set($content);
         }
 
         return $content;
@@ -172,7 +167,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $this->cache->clear('content', $contentId, $versionNo);
         $this->cache
             ->getItem('content', $contentId, $versionNo, self::ALL_TRANSLATIONS_KEY)
-            ->set($this->cloneAndSerializeXMLFields($content));
+            ->set($content);
 
         return $content;
     }
@@ -293,82 +288,8 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $contentInfo = $content->versionInfo->contentInfo;
         $this->cache
             ->getItem('content', $contentInfo->id, $content->versionInfo->versionNo, self::ALL_TRANSLATIONS_KEY)
-            ->set($this->cloneAndSerializeXMLFields($content));
+            ->set($content);
         $this->cache->getItem('content', 'info', $contentInfo->id)->set($contentInfo);
-
-        return $content;
-    }
-
-    /**
-     * Custom serializer for Content.
-     *
-     * Needed for DomDocuments on field values as they can not be serialized directly.
-     *
-     * @todo Change SPI to document that fieldValue->data and external data *must* be serializable, then remove this.
-     *
-     * @param Content $content
-     *
-     * @return Content A serializable version of Content
-     */
-    protected function cloneAndSerializeXMLFields(Content $content)
-    {
-        $contentClone = clone $content;
-        foreach ($contentClone->fields as $key => $field) {
-            $contentClone->fields[$key] = $fieldClone = clone $field;
-            $fieldClone->value = clone $fieldClone->value;
-
-            // Add 'unique' string in front of xml string version of dom document, used by unSerializeXMLFields()
-            if ($fieldClone->value->data instanceof DOMDocument) {
-                $fieldClone->value->data =
-                    self::FIELD_VALUE_DOM_DOCUMENT_KEY .
-                    $fieldClone->value->data->saveXML();
-            }
-
-            if ($fieldClone->value->externalData instanceof DOMDocument) {
-                $fieldClone->value->externalData =
-                    self::FIELD_VALUE_DOM_DOCUMENT_KEY .
-                    $fieldClone->value->externalData->saveXML();
-            }
-        }
-
-        return $contentClone;
-    }
-
-    /**
-     * Custom unSerializer for Content.
-     *
-     * Needed for DomDocuments on field values as they can not be serialized directly.
-     *
-     * @see cloneAndSerializeXMLFields
-     *
-     * @param Content $content
-     *
-     * @return Content
-     */
-    protected function unSerializeXMLFields(Content $content)
-    {
-        foreach ($content->fields as $field) {
-            // Look for self::FIELD_VALUE_DOM_DOCUMENT_KEY, it indicates a xml string that needs to be DomDocument
-            if (
-                !empty($field->value->data) &&
-                is_string($field->value->data) &&
-                strpos($field->value->data, self::FIELD_VALUE_DOM_DOCUMENT_KEY) === 0
-            ) {
-                $dom = new DOMDocument('1.0', 'UTF-8');
-                $dom->loadXML(substr($field->value->data, strlen(self::FIELD_VALUE_DOM_DOCUMENT_KEY)));
-                $field->value->data = $dom;
-            }
-
-            if (
-                !empty($field->value->externalData) &&
-                is_string($field->value->externalData) &&
-                strpos($field->value->externalData, self::FIELD_VALUE_DOM_DOCUMENT_KEY) === 0
-            ) {
-                $dom = new DOMDocument('1.0', 'UTF-8');
-                $dom->loadXML(substr($field->value->externalData, strlen(self::FIELD_VALUE_DOM_DOCUMENT_KEY)));
-                $field->value->externalData = $dom;
-            }
-        }
 
         return $content;
     }
