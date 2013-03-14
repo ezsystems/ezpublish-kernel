@@ -18,9 +18,6 @@ use eZFlowPool;
  */
 class BlockAdapter extends DefinitionBasedAdapter
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function definition()
     {
         return array(

@@ -17,22 +17,22 @@ class ValueObjectAdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $valueObject;
+    protected $valueObject;
 
     /**
      * @var array
      */
-    private $validProperties;
+    protected $validProperties;
 
     /**
      * @var array
      */
-    private $map;
+    protected $map;
 
     /**
      * @var \eZ\Publish\Core\MVC\Legacy\Templating\Adapter\ValueObjectAdapter
      */
-    private $adapter;
+    protected $adapter;
 
     protected function setUp()
     {
@@ -64,7 +64,20 @@ class ValueObjectAdapterTest extends \PHPUnit_Framework_TestCase
                 )
             )
             ->getMockForAbstractClass();
-        $this->adapter = new ValueObjectAdapter( $this->valueObject, $this->map );
+        $this->adapter = $this->getAdapter( $this->valueObject, $this->map );
+    }
+
+    /**
+     * Returns the adapter to test.
+     *
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $valueObject
+     * @param array $map
+     *
+     * @return \eZ\Publish\Core\MVC\Legacy\Templating\Adapter\ValueObjectAdapter
+     */
+    protected function getAdapter( ValueObject $valueObject, array $map )
+    {
+        return new ValueObjectAdapter( $valueObject, $map );
     }
 
     /**
