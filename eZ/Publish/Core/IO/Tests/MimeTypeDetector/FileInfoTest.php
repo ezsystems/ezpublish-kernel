@@ -20,19 +20,28 @@ class FileInfoTest extends \PHPUnit_Framework_TestCase
         $this->mimeTypeDetector = new MimeTypeDetector;
     }
 
+    protected function getFixture()
+    {
+        return __DIR__ . '/../_fixtures/squirrel-developers.jpg';
+    }
+
     public function testGetFromPath()
     {
         self::assertEquals(
-            $this->mimeTypeDetector->getFromPath( __FILE__ ),
-            'text/x-php'
+            $this->mimeTypeDetector->getFromPath(
+                $this->getFixture()
+            ),
+            'image/jpeg'
         );
     }
 
     public function testGetFromBuffer()
     {
         self::assertEquals(
-            $this->mimeTypeDetector->getFromBuffer( file_get_contents( __FILE__ ) ),
-            'text/x-php'
+            $this->mimeTypeDetector->getFromBuffer(
+                file_get_contents( $this->getFixture() )
+            ),
+            'image/jpeg'
         );
     }
 }
