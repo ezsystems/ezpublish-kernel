@@ -203,7 +203,7 @@ class ContentExtension extends Twig_Extension
         // Adding field type specific parameters if any.
         if ( $parameterProviderRegistry->hasParameterProvider( $fieldDefinition->fieldTypeIdentifier ) )
         {
-            $params += $parameterProviderRegistry
+            $params['parameters'] += $parameterProviderRegistry
                 ->getParameterProvider( $fieldDefinition->fieldTypeIdentifier )
                 ->getViewParameters();
         }
