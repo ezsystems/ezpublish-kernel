@@ -10,11 +10,7 @@
 namespace eZ\Publish\Core\FieldType\Page\Parts;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\Core\FieldType\Page\PageService;
 
-/**
- * @property-read \eZ\Publish\Core\FieldType\Page\PageService $pageService Service dedicated to Page fieldtype, containing block and zone definition.
- */
 abstract class Base extends ValueObject
 {
     const ACTION_ADD = 'add';
@@ -22,11 +18,6 @@ abstract class Base extends ValueObject
     const ACTION_MODIFY = 'modify';
 
     const ACTION_REMOVE = 'remove';
-
-    /**
-     * @var \eZ\Publish\Core\FieldType\Page\PageService
-     */
-    protected $pageService;
 
     /**
      * Hash of arbitrary attributes.
@@ -38,12 +29,10 @@ abstract class Base extends ValueObject
     /**
      * Constructor
      *
-     * @param \eZ\Publish\Core\FieldType\Page\PageService $pageService
      * @param array $properties
      */
-    public function __construct( PageService $pageService, array $properties = array() )
+    public function __construct( array $properties = array() )
     {
-        $this->pageService = $pageService;
         $this->attributes = array();
         parent::__construct( $properties );
         $this->init();
@@ -65,9 +54,6 @@ abstract class Base extends ValueObject
 
         foreach ( $this->getProperties() as $property )
         {
-            if ( $property === 'pageService' )
-                continue;
-
             $hash[$property] = $this->$property;
         }
 

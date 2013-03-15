@@ -76,66 +76,6 @@ class Block extends Base
     protected $items = array();
 
     /**
-     * @var \eZ\Publish\Core\FieldType\Page\Parts\Item[]|null
-     */
-    private $validItems;
-
-    /**
-     * @var \eZ\Publish\Core\FieldType\Page\Parts\Item[]|null
-     */
-    private $waitingItems;
-
-    /**
-     * @var \eZ\Publish\Core\FieldType\Page\Parts\Item[]|null
-     */
-    private $archivedItems;
-
-    /**
-     * Returns valid items (that are to be displayed), for current block.
-     *
-     * @return \eZ\Publish\Core\FieldType\Page\Parts\Item[]
-     */
-    public function getValidItems()
-    {
-        if ( !isset( $this->validItems ) )
-        {
-            $this->validItems = $this->pageService->getValidBlockItems( $this );
-        }
-
-        return $this->validItems;
-    }
-
-    /**
-     * Returns queued items (the next to be displayed), for current block.
-     *
-     * @return \eZ\Publish\Core\FieldType\Page\Parts\Item[]
-     */
-    public function getWaitingItems()
-    {
-        if ( !isset( $this->waitingItems ) )
-        {
-            $this->waitingItems = $this->pageService->getWaitingBlockItems( $this );
-        }
-
-        return $this->waitingItems;
-    }
-
-    /**
-     * Returns archived items (that were previously displayed), for current block.
-     *
-     * @return \eZ\Publish\Core\FieldType\Page\Parts\Item[]
-     */
-    public function getArchivedItems()
-    {
-        if ( !isset( $this->archivedItems ) )
-        {
-            $this->archivedItems = $this->pageService->getArchivedBlockItems( $this );
-        }
-
-        return $this->archivedItems;
-    }
-
-    /**
      * {@inheritedDoc}
      */
     protected function init()

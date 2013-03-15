@@ -60,14 +60,6 @@ class PageTest extends \PHPUnit_Framework_TestCase
 EOT;
 
     /**
-     * Page service mock.
-     *
-     * @see getPageServiceMock()
-     * @var \eZ\Publish\Core\FieldType\Page\PageService
-     */
-    private $pageServiceMock;
-
-    /**
      * @var \eZ\Publish\Core\FieldType\Page\Parts\Page
      */
     private $pageReference;
@@ -80,25 +72,18 @@ EOT;
     protected function setUp()
     {
         parent::setUp();
-        $this->pageServiceMock = $this
-            ->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\Page\\PageService' )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->converter = new PageConverter( $this->pageServiceMock );
+        $this->converter = new PageConverter();
 
         $this->pageReference = new Parts\Page(
-            $this->pageServiceMock,
             array(
                 'layout'    => '2ZonesLayout1',
                 'zones'     => array(
                     new Parts\Zone(
-                        $this->pageServiceMock,
                         array(
                             'id'            => '6c7f907b831a819ed8562e3ddce5b264',
                             'identifier'    => 'left',
                             'blocks'        => array(
                                 new Parts\Block(
-                                    $this->pageServiceMock,
                                     array(
                                         'id'           => '1e1e355c8da3c92e80354f243c6dd37b',
                                         'name'         => 'Campaign',
@@ -110,7 +95,6 @@ EOT;
                                     )
                                 ),
                                 new Parts\Block(
-                                    $this->pageServiceMock,
                                     array(
                                         'id'            => '250bcab3ea2929edbf72ece096dcdb7a',
                                         'name'          => 'Amazon Gallery',
@@ -125,13 +109,11 @@ EOT;
                         )
                     ),
                     new Parts\Zone(
-                        $this->pageServiceMock,
                         array(
                             'id'            => '656b2182b4be70f18ca7b44b3fbb6dbe',
                             'identifier'    => 'right',
                             'blocks'        => array(
                                 new Parts\Block(
-                                    $this->pageServiceMock,
                                     array(
                                         'id'            => '4d2f5e57d2a2528b276cd9e776a62e42',
                                         'name'          => 'Featured Video',
@@ -143,7 +125,6 @@ EOT;
                                     )
                                 ),
                                 new Parts\Block(
-                                    $this->pageServiceMock,
                                     array(
                                         'id'            => 'f36743396b8c36f10b467aa52f133e58',
                                         'name'          => 'Travel Information',

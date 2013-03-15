@@ -76,7 +76,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     private function generateBlockForType( $type )
     {
         return new Block(
-            $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Page\\PageService' ),
             array( 'type' => $type )
         );
     }

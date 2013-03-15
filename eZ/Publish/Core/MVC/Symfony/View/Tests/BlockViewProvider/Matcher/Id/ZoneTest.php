@@ -71,7 +71,6 @@ class ZoneTest extends \PHPUnit_Framework_TestCase
     private function generateBlockForZoneId( $id )
     {
         return new Block(
-            $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Page\\PageService' ),
             array( 'zoneId' => $id )
         );
     }

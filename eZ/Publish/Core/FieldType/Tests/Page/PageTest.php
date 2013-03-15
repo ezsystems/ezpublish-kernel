@@ -15,31 +15,20 @@ use eZ\Publish\Core\FieldType\Page\Parts\Zone;
 class PageTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $pageService;
-
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->pageService = $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Page\\PageService' );
-    }
-
-    /**
      * @covers eZ\Publish\Core\FieldType\Page\Parts\Base::__construct
      * @covers eZ\Publish\Core\FieldType\Page\Parts\Page::init
      * @covers eZ\Publish\Core\FieldType\Page\Parts\Base::getState
      */
     public function testGetState()
     {
-        $zone1 = new Zone( $this->pageService, array( 'id' => 'foo' ) );
-        $zone2 = new Zone( $this->pageService, array( 'id' => 'bar' ) );
-        $zone3 = new Zone( $this->pageService, array( 'id' => 'baz' ) );
+        $zone1 = new Zone( array( 'id' => 'foo' ) );
+        $zone2 = new Zone( array( 'id' => 'bar' ) );
+        $zone3 = new Zone( array( 'id' => 'baz' ) );
         $properties = array(
             'layout'    => 'my_layout',
             'zones'     => array( $zone1, $zone2, $zone3 )
         );
-        $page = new Page( $this->pageService, $properties );
+        $page = new Page( $properties );
         $this->assertEquals(
             $properties + array(
                 'zonesById'     => array(

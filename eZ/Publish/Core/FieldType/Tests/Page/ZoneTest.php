@@ -15,33 +15,22 @@ use eZ\Publish\Core\FieldType\Page\Parts\Block;
 class ZoneTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $pageService;
-
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->pageService = $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Page\\PageService' );
-    }
-
-    /**
      * @covers eZ\Publish\Core\FieldType\Page\Parts\Base::__construct
      * @covers eZ\Publish\Core\FieldType\Page\Parts\Zone::init
      * @covers eZ\Publish\Core\FieldType\Page\Parts\Base::getState
      */
     public function testGetState()
     {
-        $block1 = new Block( $this->pageService, array( 'id' => 'foo' ) );
-        $block2 = new Block( $this->pageService, array( 'id' => 'bar' ) );
-        $block3 = new Block( $this->pageService, array( 'id' => 'baz' ) );
+        $block1 = new Block( array( 'id' => 'foo' ) );
+        $block2 = new Block( array( 'id' => 'bar' ) );
+        $block3 = new Block( array( 'id' => 'baz' ) );
         $properties = array(
             'id'            => 'my_zone_id',
             'identifier'    => 'somezone',
             'action'        => Zone::ACTION_ADD,
             'blocks'        => array( $block1, $block2, $block3 )
         );
-        $zone = new Zone( $this->pageService, $properties );
+        $zone = new Zone( $properties );
         $this->assertEquals(
             $properties + array(
                 'blocksById'     => array(

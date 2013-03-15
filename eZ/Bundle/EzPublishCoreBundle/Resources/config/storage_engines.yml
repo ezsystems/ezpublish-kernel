@@ -314,7 +314,6 @@ services:
 
     ezpublish.fieldType.ezpage.converter:
         class: %ezpublish.fieldType.ezpage.converter.class%
-        arguments: [@ezpublish.fieldType.ezpage.pageService]
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezpage}
 

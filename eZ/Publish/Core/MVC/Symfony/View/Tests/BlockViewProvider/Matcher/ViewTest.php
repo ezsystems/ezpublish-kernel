@@ -76,7 +76,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     private function generateBlockForView( $view )
     {
         return new Block(
-            $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Page\\PageService' ),
             array( 'view' => $view )
         );
     }

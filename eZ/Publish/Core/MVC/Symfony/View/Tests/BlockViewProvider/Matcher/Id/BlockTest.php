@@ -71,7 +71,6 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     private function generateBlockForId( $id )
     {
         return new Block(
-            $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Page\\PageService' ),
             array( 'id' => $id )
         );
     }

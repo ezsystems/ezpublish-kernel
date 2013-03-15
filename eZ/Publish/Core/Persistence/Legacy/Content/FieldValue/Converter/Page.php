@@ -15,29 +15,11 @@ use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\Core\FieldType\Page\Parts;
-use eZ\Publish\Core\FieldType\Page\PageService;
 use DOMDocument;
 use DOMElement;
 
 class Page implements Converter
 {
-    /**
-     * Page service container
-     *
-     * @var \eZ\Publish\Core\FieldType\Page\PageService
-     */
-    protected $pageService;
-
-    /**
-     * Constructor
-     *
-     * @param \eZ\Publish\Core\FieldType\Page\PageService $pageService
-     */
-    public function __construct( PageService $pageService )
-    {
-        $this->pageService = $pageService;
-    }
-
     /**
      * Converts data from $value to $storageFieldValue
      *
@@ -387,7 +369,6 @@ class Page implements Converter
         }
 
         return $page = new Parts\Page(
-            $this->pageService,
             array(
                 'zones'        => $zones,
                 'layout'       => $layout,
@@ -453,7 +434,6 @@ class Page implements Converter
         }
 
         return new Parts\Zone(
-            $this->pageService,
             array(
                 'id'            => $zoneId,
                 'identifier'    => $zoneIdentifier,
@@ -558,7 +538,6 @@ class Page implements Converter
         }
 
         return new Parts\Block(
-            $this->pageService,
             array(
                 'id'                => $blockId,
                 'action'            => $action,
@@ -615,7 +594,6 @@ class Page implements Converter
         }
 
         return new Parts\Item(
-            $this->pageService,
             array(
                 'id'            => $itemId,
                 'action'        => $action,

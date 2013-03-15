@@ -248,7 +248,6 @@ class PageServiceTest extends \PHPUnit_Framework_TestCase
     protected function buildBlock()
     {
         return new Block(
-            $this->pageService,
             array( 'id' => md5( mt_rand() . microtime() ) )
         );
     }
