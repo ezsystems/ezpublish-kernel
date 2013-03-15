@@ -113,15 +113,6 @@ class Type extends FieldType
             );
         }
 
-        // Required parameter $path
-        if ( !isset( $inputValue->path ) || !$this->fileExists( $inputValue->path ) )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->path',
-                'Existing fileName',
-                $inputValue->path
-            );
-        }
         // Required parameter $fileName
         if ( !isset( $inputValue->fileName ) || !is_string( $inputValue->fileName ) )
         {
