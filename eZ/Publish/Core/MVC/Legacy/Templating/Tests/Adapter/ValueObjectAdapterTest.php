@@ -59,7 +59,6 @@ class ValueObjectAdapterTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Zone' )
             ->setConstructorArgs(
                 array(
-                    $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Page\\PageService' ),
                     $this->validProperties
                 )
             )
