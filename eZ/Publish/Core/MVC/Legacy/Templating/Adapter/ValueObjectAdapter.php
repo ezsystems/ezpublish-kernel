@@ -90,4 +90,12 @@ class ValueObjectAdapter implements LegacyCompatible
     {
         return array_keys( $this->attributesMap );
     }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Values\ValueObject
+     */
+    public function getValueObject()
+    {
+        return $this->valueObject;
+    }
 }

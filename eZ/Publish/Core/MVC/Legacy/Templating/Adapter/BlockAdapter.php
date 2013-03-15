@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\MVC\Legacy\Templating\Adapter;
 
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZFlowPool;
+use eZPageBlock;
 
 /**
  * Adapter for page Block objects.
@@ -22,6 +23,7 @@ class BlockAdapter extends DefinitionBasedAdapter
     {
         return array(
             'id'                    => 'id',
+            'name'                  => 'name',
             'action'                => 'action',
             'items'                 => 'items',
             'rotation'              => 'rotation',
@@ -50,6 +52,31 @@ class BlockAdapter extends DefinitionBasedAdapter
                 {
                     return eZFlowPool::waitingItems( $block->id );
                 }
+        );
+    }
+
+    /**
+     * Builds a legacy eZPageBlock object from current value object.
+     *
+     * @return \eZPageBlock
+     */
+    public function getLegacyBlock()
+    {
+        $valueObject = $this->getValueObject();
+        return new eZPageBlock(
+            null,
+            array(
+                'id'                    => $valueObject->id,
+                'name'                  => $valueObject->name,
+                'action'                => $valueObject->action,
+                'items'                 => $valueObject->items,
+                'rotation'              => $valueObject->rotation,
+                'custom_attributes'     => $valueObject->customAttributes,
+                'type'                  => $valueObject->type,
+                'view'                  => $valueObject->view,
+                'overflow_id'           => $valueObject->overflowId,
+                'zone_id'               => $valueObject->zoneId,
+            )
         );
     }
 }
