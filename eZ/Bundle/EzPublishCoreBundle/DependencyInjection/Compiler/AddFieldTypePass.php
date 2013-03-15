@@ -48,6 +48,23 @@ class AddFieldTypePass implements CompilerPassInterface
             );
         }
 
+        // Parameter providers for field types.
+        $parameterProviderRegistryDef = $container->getDefinition( 'ezpublish.fieldType.parameterProviderRegistry' );
+        foreach ( $container->findTaggedServiceIds( 'ezpublish.fieldType.parameterProvider' ) as $id => $attributes )
+        {
+            if ( !isset( $attributes[0]['alias'] ) )
+                throw new \LogicException( 'ezpublish.fieldType.parameterProvier service tag needs an "alias" attribute to identify the field type. None given.' );
+
+            $parameterProviderRegistryDef->addMethodCall(
+                'setParameterProvider',
+                array(
+                    // Only pass the service Id since field types will be lazy loaded via the service container
+                    new Reference( $id ),
+                    $attributes[0]['alias']
+                )
+            );
+        }
+
         // Gateways for external storage handlers.
         // Alias attribute is the corresponding field type string.
         $externalStorageGateways = array();
