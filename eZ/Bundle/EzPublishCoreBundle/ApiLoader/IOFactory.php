@@ -65,7 +65,7 @@ class IOFactory
     {
         if ( is_string( $storageDirectorySetting ) )
         {
-            $storageDirectory = $this->configResolver->getParameter( $varDirectorySetting );
+            $storageDirectory = $this->configResolver->getParameter( $storageDirectorySetting );
         }
         elseif ( is_array( $storageDirectorySetting ) )
         {

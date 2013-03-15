@@ -289,7 +289,6 @@ parameters:
 
     ezpublish.fieldType.eznull.class: eZ\Publish\Core\FieldType\Null\Type
     ezpublish.fieldType.ezrecommendation.class: %ezpublish.fieldType.eznull.class%
-    ezpublish.fieldType.metadataHandler.imagesize.class: eZ\Publish\Core\FieldType\MetadataHandler\ImageSize
 
 services:
     ezpublish.fieldType:
@@ -305,30 +304,30 @@ services:
     ezpublish.fieldType.ezbinaryfile:
         class: %ezpublish.fieldType.ezbinaryfile.class%
         parent: ezpublish.fieldType
-        arguments:
-            - @ezpublish.fieldType.ezbinaryfile.IOService
-            - @ezpublish.fieldType.ezbinaryfile.mimeTypeDetector
         tags:
             - {name: ezpublish.fieldType, alias: ezbinaryfile}
 
     ezpublish.fieldType.ezbinaryfile.IOService:
+        class: %ezpublish.core.io.service.class%
         factory_service: ezpublish.core.io.factory
-        factory_call: getService
+        factory_method: getService
         arguments:
             - @ezpublish.core.io.handler.legacy
             - 'binary_dir'
 
-    ezpublish.fieldType.ezbinaryfile.mimeTypeDetector:
-        class: %ezpublish.fieldType.ezbinaryfile.mimeTypeDetector.class%
-
     ezpublish.fieldType.ezbinaryfile.pathGenerator:
         class: %ezpublish.fieldType.ezbinaryfile.pathGenerator.class%
         arguments:
+            # @todo: this will ONLY take the default binary_dir setting into account !
             - %ezsettings.default.binary_dir%
 
     ezpublish.fieldType.ezbinaryfile.externalStorage:
         class: %ezpublish.fieldType.ezbinaryfile.externalStorage.class%
-        arguments: [[], @ezpublish.core.io.service, @ezpublish.fieldType.ezbinaryfile.pathGenerator]
+        arguments:
+            - []
+            - @ezpublish.core.io.service
+            - @ezpublish.fieldType.ezbinaryfile.pathGenerator
+            - @ezpublish.core.io.mimeTypeDetector
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezbinaryfile}
 
@@ -372,16 +371,14 @@ services:
     ezpublish.fieldType.ezimage:
         class: %ezpublish.fieldType.ezimage.class%
         parent: ezpublish.fieldType
-        arguments: [ @ezpublish.fieldType.ezimage.IOService, @ezpublish.fieldType.ezimage.mimeTypeDetector ]
+        arguments: [ @ezpublish.fieldType.ezimage.IOService ]
         tags:
             - {name: ezpublish.fieldType, alias: ezimage}
 
-    ezpublish.fieldType.ezimage.mimeTypeDetector:
-        class: %ezpublish.fieldType.ezimage.mimeTypeDetector.class%
-
     ezpublish.fieldType.ezimage.IOService:
+        class: %ezpublish.core.io.service.class%
         factory_service: ezpublish.core.io.factory
-        factory_call: getService
+        factory_method: getService
         arguments:
             - @ezpublish.core.io.handler.legacy
             - 'image.published_images_dir'
@@ -420,15 +417,17 @@ services:
 
     ezpublish.fieldType.ezmedia:
         class: %ezpublish.fieldType.ezmedia.class%
-        arguments:
-            - @ezpublish.fieldType.ezbinaryfile.mimeTypeDetector
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezmedia}
 
     ezpublish.fieldType.ezmedia.externalStorage:
         class: %ezpublish.fieldType.ezmedia.externalStorage.class%
-        arguments: [[], @ezpublish.fieldType.ezbinaryfile.IOService, @ezpublish.fieldType.ezbinaryfile.pathGenerator]
+        arguments:
+            - []
+            - @ezpublish.fieldType.ezbinaryfile.IOService
+            - @ezpublish.fieldType.ezbinaryfile.pathGenerator
+            - @ezpublish.core.io.mimeTypeDetector
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezmedia}
 
@@ -688,4 +687,4 @@ services:
             - {name: ezpublish.fieldType, alias: ezrecommendation}
 
     ezpublish.fieldType.metadataHandler.imagesize:
-        class: %ezpublish.fieldType.metadataHandler.imagesize.class%
+        class: %ezpublish.core.io.metadataHandler.imagesize.class%

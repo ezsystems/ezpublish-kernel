@@ -49,6 +49,9 @@ class EzPublishLegacyExtension extends Extension
 
             // View
             $loader->load( 'view.yml' );
+
+            // IO Services
+            $loader->load( 'io.yml' );
         }
     }
 }
