@@ -20,7 +20,6 @@ use Twig_Environment;
 use Twig_Function_Method;
 use Twig_Filter_Method;
 use Twig_Template;
-use SplObjectStorage;
 use InvalidArgumentException;
 use LogicException;
 
@@ -185,20 +184,29 @@ class ContentExtension extends Twig_Extension
 
         /** @var $repository \eZ\Publish\API\Repository\Repository */
         $repository = $this->container->get( 'ezpublish.api.repository' );
+        /** @var $parameterProviderRegistry \eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistryInterface */
+        $parameterProviderRegistry = $this->container->get( 'ezpublish.fieldType.parameterProviderRegistry' );
 
         $versionInfo = $content->getVersionInfo();
         $contentInfo = $versionInfo->getContentInfo();
         $contentType = $repository->getContentTypeService()->loadContentType( $contentInfo->contentTypeId );
+        $fieldDefinition = $contentType->getFieldDefinition( $field->fieldDefIdentifier );
         // Adding Field, FieldSettings and ContentInfo objects to
         // parameters to be passed to the template
         $params += array(
             'field' => $field,
             'contentInfo' => $contentInfo,
             'versionInfo' => $versionInfo,
-            'fieldSettings' => $contentType
-                ->getFieldDefinition( $field->fieldDefIdentifier )
-                ->getFieldSettings()
+            'fieldSettings' => $fieldDefinition->getFieldSettings()
         );
+
+        // Adding field type specific parameters if any.
+        if ( $parameterProviderRegistry->hasParameterProvider( $fieldDefinition->fieldTypeIdentifier ) )
+        {
+            $params += $parameterProviderRegistry
+                ->getParameterProvider( $fieldDefinition->fieldTypeIdentifier )
+                ->getViewParameters();
+        }
 
         // make sure we can easily add class="<fieldtypeidentifier>-field" to the
         // generated HTML
