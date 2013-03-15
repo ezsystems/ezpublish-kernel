@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\MVC\Symfony\FieldType;
+namespace eZ\Publish\Core\MVC\Symfony\FieldType\Page;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
