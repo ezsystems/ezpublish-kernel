@@ -31,16 +31,19 @@ class LegacyKernelController
      */
     private $kernel;
 
+    private $legacyLayout;
+
     /**
      * @todo Maybe following dependencies should be mutualized in an abstract controller
      *       Injection can be done through "parent service" feature for DIC : http://symfony.com/doc/master/components/dependency_injection/parentservices.html
      * @param \Closure $kernelClosure
      * @param \Symfony\Component\Templating\EngineInterface $templateEngine
      */
-    public function __construct( \Closure $kernelClosure, EngineInterface $templateEngine )
+    public function __construct( \Closure $kernelClosure, EngineInterface $templateEngine, $legacyLayout )
     {
         $this->kernel = $kernelClosure();
         $this->templateEngine = $templateEngine;
+        $this->legacyLayout = $legacyLayout;
     }
 
     /**
@@ -70,8 +73,20 @@ class LegacyKernelController
         $result = $this->kernel->run();
         $this->kernel->setUseExceptions( true );
 
-        return new Response(
-            $result->getContent()
-        );
+        $moduleResult = $result->getAttribute('module_result');
+
+        if ($this->legacyLayout)
+        {
+            return $this->render(
+                $this->legacyLayout, 
+                array('module_result'=>$moduleResult)
+            );
+        }
+        else
+        {
+            return new Response(
+                $result->getContent()
+            );
+        }
     }
 }
