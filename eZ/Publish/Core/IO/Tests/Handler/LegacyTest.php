@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\IO\Tests\Handler;
 
 use eZ\Publish\Core\IO\Handler\Legacy as Legacy;
 use eZ\Publish\Core\IO\Tests\Handler\Base as BaseHandlerTest;
+use eZ\Publish\Core\MVC\Legacy\Kernel;
 use ezcBaseFile;
 
 /**
@@ -33,7 +34,7 @@ class LegacyTest extends BaseHandlerTest
             );
         }
 
-        return new Legacy( 'var/test', $_ENV['legacyKernel'] );
+        return new Legacy( 'var/test/storage', $_ENV['legacyKernel'] );
     }
 
     public function setUp()
@@ -50,6 +51,15 @@ class LegacyTest extends BaseHandlerTest
         {
             ezcBaseFile::removeRecursive( 'var/test' );
         }
+        /** @var $legacyKernel Kernel */
+        $legacyKernel = $_ENV['legacyKernel'];
+        $legacyKernel->runCallback(
+            function ()
+            {
+                \eZClusterFileHandler::instance()->fileDelete( 'var/test', true );
+            }
+        );
+
         chdir( $this->originalDir );
         parent::tearDown();
     }

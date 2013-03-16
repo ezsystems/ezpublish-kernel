@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\IO\Handler\Legacy\FileResourceProvider;
 
-use Stash\Exception\RuntimeException;
+use RuntimeException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\Handler\Legacy\FileResourceProvider;
 
@@ -30,12 +30,12 @@ class eZDFSFileHandler extends BaseHandler implements FileResourceProvider
             function () use ( $storagePath )
             {
                 /** @var $ini \eZINI */
-                $ini = eZINI::instance( 'file.ini' );
-                $clusterHandler = $ini->variable( 'ClusterSettings', 'FileHandler' );
+                $ini = \eZINI::instance( 'file.ini' );
+                $clusterHandler = $ini->variable( 'ClusteringSettings', 'FileHandler' );
 
                 if ( $clusterHandler != 'eZDFSFileHandler' )
                 {
-                    throw new RuntimeException( "eZDFSFileHandler isn't the active file handler" );
+                    throw new RuntimeException( "eZDFSFileHandler isn't the active file handler (active: $clusterHandler)" );
                 }
 
                 $dfsMountPointPath = $ini->variable( 'eZDFSClusteringSettings', 'MountPointPath' );

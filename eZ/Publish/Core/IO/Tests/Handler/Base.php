@@ -92,8 +92,8 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     public function testUpdate()
     {
         $this->urlFopenPrecheck();
-        $firstPath = 'update-before.gif';
-        $secondPath = 'update-after.png';
+        $firstPath = 'images/update-before.gif';
+        $secondPath = 'images/update-after.png';
 
         $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $firstPath );
         $binaryFile = $this->IOHandler->create( $struct );
@@ -127,7 +127,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateMtime()
     {
-        $path = 'update-mtime.gif';
+        $path = 'images/update-mtime.gif';
         $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $path );
         $binaryFile = $this->IOHandler->create( $struct );
 
@@ -149,9 +149,9 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     public function testUpdateNonExistingSource()
     {
         $updateStruct = new BinaryFileUpdateStruct();
-        $updateStruct->uri = 'testUpdateSourceNotFoundTarget.png';
+        $updateStruct->uri = 'images/testUpdateSourceNotFoundTarget.png';
 
-        $this->IOHandler->update( 'testUpdateSourceNotFoundSource.png', $updateStruct );
+        $this->IOHandler->update( 'images/testUpdateSourceNotFoundSource.png', $updateStruct );
     }
 
     /**
@@ -160,8 +160,8 @@ abstract class Base extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateTargetExists()
     {
-        $firstPath = 'testUpdateTargetExists-1.gif';
-        $secondPath = 'testUpdateTargetExists-2.png';
+        $firstPath = 'images/testUpdateTargetExists-1.gif';
+        $secondPath = 'images/testUpdateTargetExists-2.png';
 
         $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $firstPath );
         $binaryFile = $this->IOHandler->create( $struct );
@@ -183,7 +183,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
      */
     public function testExists()
     {
-        $repositoryPath = 'exists.gif';
+        $repositoryPath = 'images/exists.gif';
 
         self::assertFalse( $this->IOHandler->exists( $repositoryPath ) );
 
@@ -198,7 +198,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
-        $repositoryPath = 'delete.gif';
+        $repositoryPath = 'images/delete.gif';
 
         $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
         $binaryFile = $this->IOHandler->create( $struct );
@@ -216,7 +216,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteNonExistingFile()
     {
-        $this->IOHandler->delete( 'deleteNonExisting.gif' );
+        $this->IOHandler->delete( 'images/deleteNonExisting.gif' );
     }
 
     /**
@@ -224,7 +224,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
      */
     public function testLoad()
     {
-        $repositoryPath = 'load.gif';
+        $repositoryPath = 'images/load.gif';
         $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
         $binaryFile = $this->IOHandler->create( $struct );
 
@@ -232,7 +232,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
 
         self::assertInstanceOf( 'eZ\\Publish\\SPI\\IO\\BinaryFile', $loadedFile );
 
-        self::assertEquals( 'load.gif', $loadedFile->uri );
+        self::assertEquals( 'images/load.gif', $loadedFile->uri );
         self::assertEquals( 1928, $loadedFile->size );
         self::assertInstanceOf( 'DateTime', $loadedFile->mtime );
     }
@@ -243,7 +243,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
      */
     public function testLoadNonExistingFile()
     {
-        $this->IOHandler->load( 'loadNotFound.png' );
+        $this->IOHandler->load( 'images/loadNotFound.png' );
     }
 
     /**
@@ -252,7 +252,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     public function testGetFileResource()
     {
         $this->urlFopenPrecheck();
-        $repositoryPath = 'getfileresource.gif';
+        $repositoryPath = 'images/getfileresource.gif';
         $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
         $binaryFile = $this->IOHandler->create( $struct );
 
@@ -264,20 +264,20 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\SPI\IO\Handler::getFileResource
+     * @covers \eZ\Publish\Core\IO\Handler::getFileResource
      * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testGetFileResourceNonExistingFile()
     {
-        $this->IOHandler->getFileResource( 'testGetFileResourceNonExistingFile.png' );
+        $this->IOHandler->getFileResource( 'images/testGetFileResourceNonExistingFile.png' );
     }
 
     /**
-     * @covers \eZ\Publish\SPI\IO\Handler::getFileContents
+     * @covers \eZ\Publish\Core\IO\Handler::getFileContents
      */
     public function testGetFileContents()
     {
-        $repositoryPath = 'testGetFileContents.gif';
+        $repositoryPath = 'images/testGetFileContents.gif';
         $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
         $this->IOHandler->create( $struct );
 
@@ -285,7 +285,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\SPI\IO\Handler::getFileContents
+     * @covers \eZ\Publish\Core\IO\Handler::getFileContents
      * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testGetFileContentsNonExistingFile()
@@ -308,7 +308,6 @@ abstract class Base extends \PHPUnit_Framework_TestCase
         $metadataHandlerMock
             ->expects( $this->once() )
             ->method( 'extract' )
-            ->with( $internalPath )
             ->will( $this->returnValue( $expectedMetadata ) );
 
         $metadata = $this->IOHandler->getMetadata(
