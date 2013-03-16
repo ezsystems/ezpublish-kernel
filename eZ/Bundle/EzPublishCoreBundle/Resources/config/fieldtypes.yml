@@ -325,7 +325,7 @@ services:
         class: %ezpublish.fieldType.ezbinaryfile.externalStorage.class%
         arguments:
             - []
-            - @ezpublish.core.io.service
+            - @ezpublish.fieldType.ezbinaryfile.IOService
             - @ezpublish.fieldType.ezbinaryfile.pathGenerator
             - @ezpublish.core.io.mimeTypeDetector
         tags:
