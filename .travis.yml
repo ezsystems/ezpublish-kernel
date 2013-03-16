@@ -36,6 +36,7 @@ branches:
 
 # setup requirements for running unit tests
 before_script:
+  - echo '' > ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
   - cp config.php-DEVELOPMENT config.php
   - ./composer_install_github_key.sh
   - composer install --dev --prefer-source
