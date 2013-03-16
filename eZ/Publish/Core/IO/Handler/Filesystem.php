@@ -54,8 +54,11 @@ class Filesystem implements IOHandlerInterface
         {
             throw new \RuntimeException( "Storage directory $storageDirectory can not be written to" );
         }
-        $this->prefix = $storageDirectory;
         $this->storageDirectory = realpath( $storageDirectory );
+        if ( $storageDirectory[0] !== DIRECTORY_SEPARATOR )
+        {
+            $this->prefix = $storageDirectory;
+        }
     }
 
     /**
