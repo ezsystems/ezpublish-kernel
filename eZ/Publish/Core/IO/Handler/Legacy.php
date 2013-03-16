@@ -108,24 +108,66 @@ class Legacy implements IOHandlerInterface
         }
 
         $storagePath = $this->getStoragePath( $createStruct->uri );
+        $scope = $this->getScope( $storagePath );
+        $datatype = $this->getDatatype( $createStruct->mimeType );
 
         $clusterHandler = $this->getClusterHandler();
         $this->getLegacyKernel()->runCallback(
-            function () use ( $createStruct, $storagePath, $clusterHandler )
+            function () use ( $createStruct, $storagePath, $datatype, $scope, $clusterHandler )
             {
-                // @todo Build a path / scope mapper. Not so critical for binary files anyway.
-                $scope = 'todo';
                 $clusterHandler->fileStoreContents(
                     $storagePath,
                     fread( $createStruct->getInputStream(), $createStruct->size ),
-                    $createStruct->mimeType,
-                    $scope
+                    $scope,
+                    $datatype
                 );
             },
             false
         );
 
         return $this->load( $createStruct->uri );
+    }
+
+    protected function getDatatype( $mimeType )
+    {
+        return substr( $mimeType, 0, strpos( $mimeType, '/' ) );
+    }
+
+    /**
+     * Maps a URI to a scope.
+     *
+     * Note that mediafile & binaryfile can't be distinguished from each other using the path alone,
+     * since they're stored in the same directory. We consider that a file of mimetype media will be
+     * a mediafile, and other binary files will be scoped binaryfile
+     *
+     * @param string $path
+     * @return string|false The scope, defaulting to UNKNOWN_SCOPE
+     */
+    protected function getScope( $path )
+    {
+        $pathArray = explode( DIRECTORY_SEPARATOR, $path );
+        echo "array for $path:\n"; print_r( $pathArray );
+        $storagePrefix = $pathArray[3];
+        $mimeType = $pathArray[4];
+
+        if ( $storagePrefix === 'images' )
+        {
+            return 'images';
+        }
+
+        if ( $storagePrefix === 'original' )
+        {
+            if ( $mimeType === 'video' || $mimeType === 'audio' )
+            {
+                return 'mediafile';
+            }
+            else
+            {
+                return 'binaryfile';
+            }
+        }
+
+        return 'UNKNOWN_SCOPE';
     }
 
     /**
