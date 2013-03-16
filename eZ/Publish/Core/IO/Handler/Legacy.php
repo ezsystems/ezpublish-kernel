@@ -325,6 +325,7 @@ class Legacy implements IOHandlerInterface
      *
      * @param string $path
      *
+     * @throws NotFoundException if $path doesn't exist
      * @return resource
      */
     public function getFileResource( $path )
@@ -429,7 +430,7 @@ class Legacy implements IOHandlerInterface
                 $this->clusterFileHandlers[$path] = $this->getLegacyKernel()->runCallback(
                     function () use ( $path )
                     {
-                        return \eZClusterFileHandler::instance( $path );
+                        return eZClusterFileHandler::instance( $path );
                     },
                     false
                 );
@@ -443,7 +444,7 @@ class Legacy implements IOHandlerInterface
                 $this->clusterHandler = $this->getLegacyKernel()->runCallback(
                     function ()
                     {
-                        return \eZClusterFileHandler::instance();
+                        return eZClusterFileHandler::instance();
                     },
                     false
                 );
@@ -456,13 +457,9 @@ class Legacy implements IOHandlerInterface
 
     /**
      * Returns a mimeType from a local file, using fileinfo
-     *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If file does not exist
-     *
      * @todo If legacy path is made available then this function can use that to skip executing legacy kernel
-     *
      * @param string $path
-     *
      * @return string
      */
     protected function getMimeTypeFromLocalFile( $path )
@@ -489,6 +486,8 @@ class Legacy implements IOHandlerInterface
 
     /**
      * Transforms a path in a storage path using the $storageDirectory
+     * @param string $path
+     * @return string
      */
     protected function getStoragePath( $path )
     {
