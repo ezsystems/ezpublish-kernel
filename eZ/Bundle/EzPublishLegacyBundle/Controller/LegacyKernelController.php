@@ -31,6 +31,13 @@ class LegacyKernelController
      */
     private $kernel;
 
+    /**
+     * Template declaration to wrap legacy responses in a Twig pagelayout (optional)
+     * Either a template declaration string or null/false to use legacy pagelayout 
+     * Default is null.
+     * 
+     * @var mixed
+     */
     private $legacyLayout;
 
     /**
@@ -38,6 +45,7 @@ class LegacyKernelController
      *       Injection can be done through "parent service" feature for DIC : http://symfony.com/doc/master/components/dependency_injection/parentservices.html
      * @param \Closure $kernelClosure
      * @param \Symfony\Component\Templating\EngineInterface $templateEngine
+     * @param mixed $legacyLayout
      */
     public function __construct( \Closure $kernelClosure, EngineInterface $templateEngine, $legacyLayout )
     {
@@ -73,20 +81,18 @@ class LegacyKernelController
         $result = $this->kernel->run();
         $this->kernel->setUseExceptions( true );
 
-        $moduleResult = $result->getAttribute('module_result');
+        $moduleResult = $result->getAttribute( 'module_result' );
 
-        if ($this->legacyLayout)
+        if ( isset( $this->legacyLayout ) )
         {
             return $this->render(
-                $this->legacyLayout, 
-                array('module_result'=>$moduleResult)
+                $this->legacyLayout,
+                array( 'module_result' => $moduleResult )
             );
         }
-        else
-        {
-            return new Response(
-                $result->getContent()
-            );
-        }
+
+        return new Response(
+            $result->getContent()
+        );
     }
 }
