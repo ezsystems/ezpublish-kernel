@@ -10,16 +10,15 @@
 namespace eZ\Publish\Core\IO\Handler\Legacy;
 
 /**
- * This interface handles providing of a file resource based on a cluster handler / cluster file
+ * This interface handles providing of a file resource based on a stored cluster path
  */
 
 interface FileResourceProvider
 {
     /**
-     * Returns a file resource for $clusterFile
-     * @param \eZClusterFileHandlerInterface $clusterFile Note: no hinting as not all handlers implement the interface
-     *
+     * Returns a read file resource for legacy path $path
+     * @param string $storagePath
      * @return resource
      */
-    public function getResource( $clusterFile );
+    public function getResource( $storagePath );
 }

@@ -398,7 +398,7 @@ class Legacy implements IOHandlerInterface
      *
      * @throws \Exception
      *
-     * @return \eZ\Publish\Core\IO\LegacyHandler\FileResourceProvider
+     * @return \eZ\Publish\Core\IO\Handler\Legacy\FileResourceProvider
      */
     private function getFileResourceProvider()
     {
@@ -418,8 +418,8 @@ class Legacy implements IOHandlerInterface
 
     /**
      * Lazy loads eZClusterFileHandler
-     *
-     * @return \eZClusterFileHandler
+     * @param string $path
+     * @return eZClusterFileHandler
      */
     private function getClusterHandler( $path = null )
     {
