@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\IO\Handler;
 
 use eZ\Publish\Core\IO\Handler as IOHandlerInterface;
 use eZ\Publish\Core\IO\MetadataHandler;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\SPI\IO\BinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
@@ -103,7 +104,7 @@ class Legacy implements IOHandlerInterface
         {
             throw new InvalidArgumentException(
                 "\$createFilestruct->uri",
-                "file '{$createStruct->uri}' already exists"
+                "file '" . $this->getStoragePath( $createStruct->uri ). "' already exists"
             );
         }
 
@@ -140,13 +141,15 @@ class Legacy implements IOHandlerInterface
      * since they're stored in the same directory. We consider that a file of mimetype media will be
      * a mediafile, and other binary files will be scoped binaryfile
      *
+     * @throws InvalidArgumentValue If $path isn't a legacy compatible storage path
      * @param string $path
      * @return string|false The scope, defaulting to UNKNOWN_SCOPE
      */
     protected function getScope( $path )
     {
         $pathArray = explode( DIRECTORY_SEPARATOR, $path );
-        echo "array for $path:\n"; print_r( $pathArray );
+        if ( count( $pathArray ) < 5 )
+            throw new InvalidArgumentValue( "$path isn't a Legacy compatible storage path" );
         $storagePrefix = $pathArray[3];
         $mimeType = $pathArray[4];
 
@@ -219,7 +222,7 @@ class Legacy implements IOHandlerInterface
             {
                 throw new InvalidArgumentException(
                     "\$updateFileStruct->uri",
-                    "File '{$updateFileStruct->uri}' already exists"
+                    "File '" . $this->getStoragePath( $updateFileStruct->uri ). "' already exists"
                 );
             }
 
@@ -243,10 +246,18 @@ class Legacy implements IOHandlerInterface
                 {
                     $binaryUpdateData = fread( $resource, $updateFileStruct->size );
                     $clusterFile = eZClusterFileHandler::instance( $storagePath );
+
                     $metaData = $clusterFile->metaData;
                     $scope = isset( $metaData['scope'] ) ? $metaData['scope'] : false;
                     $datatype = isset( $metaData['datatype'] ) ? $metaData['datatype'] : false;
                     $clusterFile->storeContents( $binaryUpdateData, $scope, $datatype );
+
+                    // Unfortunately required due to insufficient handly of in memory cache in eZDFSFileHandler...
+                    if ( isset( $GLOBALS['eZClusterInfo'][$storagePath] ) )
+                    {
+                        unset( $GLOBALS['eZClusterInfo'][$storagePath] );
+                    }
+
                 }
             },
             false
