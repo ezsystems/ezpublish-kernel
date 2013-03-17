@@ -43,31 +43,28 @@ class EzLinkToHtml5 implements Converter
         foreach ( $xmlDoc->getElementsByTagName( "link" ) as $link )
         {
             $location = false;
-            
-            if ($link->hasAttribute('object_id'))
-            {
-                $content = $contentService->loadContent($link->getAttribute('object_id'));
-                if ($content)
-                {
-                    $location = $locationService->loadLocation($content->contentInfo->mainLocationId);
 
+            if ( $link->hasAttribute( 'object_id' ) )
+            {
+                $content = $contentService->loadContent( $link->getAttribute( 'object_id' ) );
+                if ( $content )
+                {
+                    $location = $locationService->loadLocation( $content->contentInfo->mainLocationId );
                 }
             }
 
-            if ($link->hasAttribute('node_id'))
+            if ( $link->hasAttribute( 'node_id' ) )
             {
-                $location = $locationService->loadLocation($link->getAttribute('node_id'));
+                $location = $locationService->loadLocation( $link->getAttribute( 'node_id' ) );
             }
 
-            if ($location)
+            if ( $location )
             {
-                $urlAlias = $urlAliasService->reverseLookup($location);
-                $link->setAttribute('url', $urlAlias->path);
+                $urlAlias = $urlAliasService->reverseLookup( $location );
+                $link->setAttribute( 'url', $urlAlias->path );
             }
-
         }
 
         return null;
     }
-
 }
