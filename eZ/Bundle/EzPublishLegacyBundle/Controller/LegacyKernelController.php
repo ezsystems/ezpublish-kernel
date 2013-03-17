@@ -45,13 +45,15 @@ class LegacyKernelController
      *       Injection can be done through "parent service" feature for DIC : http://symfony.com/doc/master/components/dependency_injection/parentservices.html
      * @param \Closure $kernelClosure
      * @param \Symfony\Component\Templating\EngineInterface $templateEngine
+     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver     
      * @param mixed $legacyLayout
      */
-    public function __construct( \Closure $kernelClosure, EngineInterface $templateEngine, $legacyLayout )
+    public function __construct( \Closure $kernelClosure, EngineInterface $templateEngine, ConfigResolverInterface $configResolver, $legacyLayout )
     {
         $this->kernel = $kernelClosure();
         $this->templateEngine = $templateEngine;
         $this->legacyLayout = $legacyLayout;
+        $this->configResolver = $configResolver;
     }
 
     /**
@@ -77,13 +79,15 @@ class LegacyKernelController
      */
     public function indexAction()
     {
+        $legacyMode = $this->configResolver->getParameter( 'legacy_mode' );
+
         $this->kernel->setUseExceptions( false );
         $result = $this->kernel->run();
         $this->kernel->setUseExceptions( true );
 
         $moduleResult = $result->getAttribute( 'module_result' );
 
-        if ( isset( $this->legacyLayout ) )
+        if ( isset( $this->legacyLayout ) && !$legacyMode )
         {
             return $this->render(
                 $this->legacyLayout,
