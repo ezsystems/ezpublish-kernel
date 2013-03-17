@@ -49,6 +49,10 @@ class EzPublishLegacyExtension extends Extension
 
             // View
             $loader->load( 'view.yml' );
+
+            // Default settings
+            $loader->load( 'default_settings.yml' );
+            
         }
     }
 }
