@@ -38,7 +38,7 @@ class UrlAliasHandlerTest extends HandlerTest
 
     /**
      * @dataProvider providerForUnCachedMethods
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler
+     * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler
      */
     public function testUnCachedMethods( $method, array $arguments )
     {
@@ -75,7 +75,7 @@ class UrlAliasHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::publishUrlAliasForLocation
+     * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::publishUrlAliasForLocation
      */
     public function testPublishUrlAliasForLocation()
     {
@@ -104,7 +104,7 @@ class UrlAliasHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::createCustomUrlAlias
+     * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::createCustomUrlAlias
      */
     public function testCreateCustomUrlAlias()
     {
@@ -149,7 +149,7 @@ class UrlAliasHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::createGlobalUrlAlias
+     * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::createGlobalUrlAlias
      */
     public function testCreateGlobalUrlAlias()
     {
@@ -188,7 +188,7 @@ class UrlAliasHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::listURLAliasesForLocation
+     * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::listURLAliasesForLocation
      */
     public function testListURLAliasesForLocationIsMiss()
     {
@@ -241,7 +241,7 @@ class UrlAliasHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::listURLAliasesForLocation
+     * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::listURLAliasesForLocation
      */
     public function testListURLAliasesForLocationCustomIsMiss()
     {
@@ -294,7 +294,7 @@ class UrlAliasHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::listURLAliasesForLocation
+     * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::listURLAliasesForLocation
      */
     public function testListURLAliasesForLocationHasCache()
     {
@@ -374,7 +374,7 @@ class UrlAliasHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::listURLAliasesForLocation
+     * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::listURLAliasesForLocation
      */
     public function testListURLAliasesForLocationCustomHasCache()
     {
@@ -454,7 +454,7 @@ class UrlAliasHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::removeURLAliases
+     * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::removeURLAliases
      */
     public function testRemoveURLAliases()
     {
@@ -500,7 +500,7 @@ class UrlAliasHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::lookup
+     * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::lookup
      */
     public function testLookupIsMiss()
     {
@@ -545,7 +545,7 @@ class UrlAliasHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::lookup
+     * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::lookup
      */
     public function testLookupHasCache()
     {
@@ -602,7 +602,7 @@ class UrlAliasHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::loadUrlAlias
+     * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::loadUrlAlias
      */
     public function testLoadUrlAliasIsMiss()
     {
@@ -647,7 +647,7 @@ class UrlAliasHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::loadUrlAlias
+     * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::loadUrlAlias
      */
     public function testLoadUrlAliasHasCache()
     {
@@ -683,7 +683,7 @@ class UrlAliasHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::locationMoved
+     * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::locationMoved
      */
     public function testLocationMoved()
     {
@@ -711,7 +711,7 @@ class UrlAliasHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::locationDeleted
+     * @covers eZ\Publish\Core\Persistence\Cache\UrlAliasHandler::locationDeleted
      */
     public function testLocationDeleted()
     {
