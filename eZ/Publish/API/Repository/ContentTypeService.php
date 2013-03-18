@@ -46,7 +46,7 @@ interface ContentTypeService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group can not be found
      *
-     * @param int $contentTypeGroupId
+     * @param mixed $contentTypeGroupId
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
@@ -208,17 +208,17 @@ interface ContentTypeService
     /**
      * Copy Type incl fields and groupIds to a new Type object
      *
-     * New Type will have $userId as creator / modifier, created / modified should be updated with current time,
+     * New Type will have $creator as creator / modifier, created / modified should be updated with current time,
      * updated remoteId and identifier should be appended with '_' + unique string.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to copy a content type
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to copy a content type
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
-     * @param \eZ\Publish\API\Repository\Values\User\User $user if null the current user is used
+     * @param \eZ\Publish\API\Repository\Values\User\User $creator If null the current-user is used instead
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function copyContentType( ContentType $contentType, User $user = null );
+    public function copyContentType( ContentType $contentType, User $creator = null );
 
     /**
      * Assigns a content type to a content type group.

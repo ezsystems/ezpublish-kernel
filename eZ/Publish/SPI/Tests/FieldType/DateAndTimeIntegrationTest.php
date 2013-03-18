@@ -42,7 +42,7 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
      */
     public function getTypeName()
     {
-        return 'ezdate';
+        return 'ezdatetime';
     }
 
     /**
@@ -55,15 +55,15 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
         $handler = $this->getHandler();
 
         $handler->getFieldTypeRegistry()->register(
-            'ezdate',
+            'ezdatetime',
             new FieldType\DateAndTime\Type()
         );
         $handler->getStorageRegistry()->register(
-            'ezdate',
+            'ezdatetime',
             new FieldType\NullStorage()
         );
         $handler->getFieldValueConverterRegistry()->register(
-            'ezdate',
+            'ezdatetime',
             new Legacy\Content\FieldValue\Converter\DateAndTime()
         );
 
@@ -91,9 +91,9 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
     public function getFieldDefinitionData()
     {
         return array(
-            // The ezdate field type does not have any special field definition
+            // The ezdatetime field type does not have any special field definition
             // properties
-            array( 'fieldType', 'ezdate' ),
+            array( 'fieldType', 'ezdatetime' ),
             array(
                 'fieldTypeConstraints',
                 new Content\FieldTypeConstraints(

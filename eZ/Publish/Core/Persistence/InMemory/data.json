@@ -11,15 +11,15 @@
         {"id": 51, "_currentVersionNo" : 1}
     ],
     "Content\\ContentInfo": [
-        {"id": 1, "contentTypeId": 1, "sectionId": 1, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "alwaysAvailable": true, "remoteId": "remoteIdForContent1", "mainLanguageCode": "eng-GB", "isPublished": true, "name": "eZ Publish"},
-        {"id": 4, "contentTypeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1033917596, "publicationDate": 1033917596, "alwaysAvailable": true, "remoteId": "f5c88a2209584891056f987fd965b0ba", "mainLanguageCode": "eng-US", "isPublished": true, "name": "Users"},
-        {"id": 11, "contentTypeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 2, "status": 1, "modificationDate": 1311154215, "publicationDate": 1033920746, "alwaysAvailable": true, "remoteId": "5f7f0bdb3381d6a461d8c29ff53d908f", "mainLanguageCode": "eng-US", "isPublished": true, "name": "Members"},
-        {"id": 12, "contentTypeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "alwaysAvailable": true, "remoteId": "9b47a45624b023b1a76c73b74d704acf", "mainLanguageCode": "eng-GB", "isPublished": true, "name": "Administrator users"},
-        {"id": 14, "contentTypeId": 4, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "alwaysAvailable": true, "remoteId": "1bb4fe25487f05527efa8bfd394cecc7", "mainLanguageCode": "eng-GB", "isPublished": true, "name": "Administrator user"},
-        {"id": 42, "contentTypeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "alwaysAvailable": true, "remoteId": "15b256dbea2ae72418ff5facc999e8f9", "mainLanguageCode": "eng-US", "isPublished": true, "name": "Anonymous Users"},
-        {"id": 10, "contentTypeId": 4, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "alwaysAvailable": true, "remoteId": "faaeb9be3bd98ed09f606fc16d144eca", "mainLanguageCode": "eng-GB", "isPublished": true, "name": "Anonymous User"},
-        {"id": 41, "contentTypeId": 1, "sectionId": 3, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1311154215, "publicationDate": 1033920746, "alwaysAvailable": true, "remoteId": "a6e35cbcb7cd6ae4b691f3eee30cd262", "mainLanguageCode": "eng-US", "isPublished": true, "name": "Media"},
-        {"id": 51, "contentTypeId": 1, "sectionId": 3, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1311154215, "publicationDate": 1033920746, "alwaysAvailable": true, "remoteId": "09082deb98662a104f325aaa8c4933d3", "mainLanguageCode": "eng-US", "isPublished": true, "name": "Multimedia"}
+        {"id": 1, "contentTypeId": 1, "sectionId": 1, "mainLocationId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "alwaysAvailable": true, "remoteId": "remoteIdForContent1", "mainLanguageCode": "eng-GB", "isPublished": true, "name": "eZ Publish"},
+        {"id": 4, "contentTypeId": 3, "sectionId": 2, "mainLocationId": 5, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1033917596, "publicationDate": 1033917596, "alwaysAvailable": true, "remoteId": "f5c88a2209584891056f987fd965b0ba", "mainLanguageCode": "eng-US", "isPublished": true, "name": "Users"},
+        {"id": 11, "contentTypeId": 3, "sectionId": 2, "mainLocationId": 12, "ownerId": 14, "currentVersionNo": 2, "status": 1, "modificationDate": 1311154215, "publicationDate": 1033920746, "alwaysAvailable": true, "remoteId": "5f7f0bdb3381d6a461d8c29ff53d908f", "mainLanguageCode": "eng-US", "isPublished": true, "name": "Members"},
+        {"id": 12, "contentTypeId": 3, "sectionId": 2, "mainLocationId": 13, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "alwaysAvailable": true, "remoteId": "9b47a45624b023b1a76c73b74d704acf", "mainLanguageCode": "eng-GB", "isPublished": true, "name": "Administrator users"},
+        {"id": 14, "contentTypeId": 4, "sectionId": 2, "mainLocationId": 15, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "alwaysAvailable": true, "remoteId": "1bb4fe25487f05527efa8bfd394cecc7", "mainLanguageCode": "eng-GB", "isPublished": true, "name": "Administrator user"},
+        {"id": 42, "contentTypeId": 3, "sectionId": 2, "mainLocationId": 44, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "alwaysAvailable": true, "remoteId": "15b256dbea2ae72418ff5facc999e8f9", "mainLanguageCode": "eng-US", "isPublished": true, "name": "Anonymous Users"},
+        {"id": 10, "contentTypeId": 4, "sectionId": 2, "mainLocationId": 45, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1310792400, "publicationDate": 1310792400, "alwaysAvailable": true, "remoteId": "faaeb9be3bd98ed09f606fc16d144eca", "mainLanguageCode": "eng-GB", "isPublished": true, "name": "Anonymous User"},
+        {"id": 41, "contentTypeId": 1, "sectionId": 3, "mainLocationId": 43, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1311154215, "publicationDate": 1033920746, "alwaysAvailable": true, "remoteId": "a6e35cbcb7cd6ae4b691f3eee30cd262", "mainLanguageCode": "eng-US", "isPublished": true, "name": "Media"},
+        {"id": 51, "contentTypeId": 1, "sectionId": 3, "mainLocationId": 53, "ownerId": 14, "currentVersionNo": 1, "status": 1, "modificationDate": 1311154215, "publicationDate": 1033920746, "alwaysAvailable": true, "remoteId": "09082deb98662a104f325aaa8c4933d3", "mainLanguageCode": "eng-US", "isPublished": true, "name": "Multimedia"}
     ],
     "Content\\Field": [
         {"id": 1, "fieldDefinitionId": 1, "type": "ezstring", "value": {"text": "eZ Publish NextGen"}, "languageCode": "eng-GB", "versionNo": 1, "_contentId": 1},
@@ -53,16 +53,16 @@
         {"id": 8, "languageCode": "eng-GB", "isEnabled": true, "name": "English (United Kingdom)" }
     ],
     "Content\\Location" : [
-        {"id": 1,  "remoteId": "629709ba256fe317c3ddcee35453a96a", "contentId": 0,  "parentId": 0,  "pathIdentificationString": "", "mainLocationId": 1,  "depth": 0, "pathString": "/1/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 1, "sortOrder": 1},
-        {"id": 2,  "remoteId": "f3e90596361e31d496d4026eb624c983", "contentId": 1,  "parentId": 1,  "pathIdentificationString": "", "mainLocationId": 2,  "depth": 1, "pathString": "/1/2/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1},
-        {"id": 5,  "remoteId": "3f6d92f8044aed134f32153517850f5a", "contentId": 4,  "parentId": 1,  "pathIdentificationString": "", "mainLocationId": 5,  "depth": 1, "pathString": "/1/5/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1},
-        {"id": 12, "remoteId": "602dcf84765e56b7f999eaafd3821dd3", "contentId": 11, "parentId": 5,  "pathIdentificationString": "", "mainLocationId": 12, "depth": 2, "pathString": "/1/5/12/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1},
-        {"id": 13, "remoteId": "769380b7aa94541679167eab817ca893", "contentId": 12, "parentId": 5,  "pathIdentificationString": "", "mainLocationId": 13, "depth": 2, "pathString": "/1/5/13/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1},
-        {"id": 15, "remoteId": "e5161a99f733200b9ed4e80f9c16187b", "contentId": 14, "parentId": 13, "pathIdentificationString": "", "mainLocationId": 15, "depth": 3, "pathString": "/1/5/13/15/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1},
-        {"id": 44, "remoteId": "4fdf0072da953bb276c0c7e0141c5c9b", "contentId": 42, "parentId": 5,  "pathIdentificationString": "", "mainLocationId": 44, "depth": 2, "pathString": "/1/5/44/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1},
-        {"id": 45, "remoteId": "2cf8343bee7b482bab82b269d8fecd76", "contentId": 10, "parentId": 44, "pathIdentificationString": "", "mainLocationId": 45, "depth": 3, "pathString": "/1/5/44/45/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1},
-        {"id": 43, "remoteId": "75c715a51699d2d309a924eca6a95145", "contentId": 41, "parentId": 1, "pathIdentificationString": "", "mainLocationId": 43, "depth": 1, "pathString": "/1/43/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1},
-        {"id": 53, "remoteId": "4f18b82c75f10aad476cae5adf98c11f", "contentId": 51, "parentId": 43, "pathIdentificationString": "", "mainLocationId": 53, "depth": 2, "pathString": "/1/43/53/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1}
+        {"id": 1,  "remoteId": "629709ba256fe317c3ddcee35453a96a", "contentId": 0,  "parentId": 0,  "pathIdentificationString": "", "depth": 0, "pathString": "/1/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 1, "sortOrder": 1},
+        {"id": 2,  "remoteId": "f3e90596361e31d496d4026eb624c983", "contentId": 1,  "parentId": 1,  "pathIdentificationString": "", "depth": 1, "pathString": "/1/2/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1},
+        {"id": 5,  "remoteId": "3f6d92f8044aed134f32153517850f5a", "contentId": 4,  "parentId": 1,  "pathIdentificationString": "", "depth": 1, "pathString": "/1/5/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1},
+        {"id": 12, "remoteId": "602dcf84765e56b7f999eaafd3821dd3", "contentId": 11, "parentId": 5,  "pathIdentificationString": "", "depth": 2, "pathString": "/1/5/12/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1},
+        {"id": 13, "remoteId": "769380b7aa94541679167eab817ca893", "contentId": 12, "parentId": 5,  "pathIdentificationString": "", "depth": 2, "pathString": "/1/5/13/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1},
+        {"id": 15, "remoteId": "e5161a99f733200b9ed4e80f9c16187b", "contentId": 14, "parentId": 13, "pathIdentificationString": "", "depth": 3, "pathString": "/1/5/13/15/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1},
+        {"id": 44, "remoteId": "4fdf0072da953bb276c0c7e0141c5c9b", "contentId": 42, "parentId": 5,  "pathIdentificationString": "", "depth": 2, "pathString": "/1/5/44/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1},
+        {"id": 45, "remoteId": "2cf8343bee7b482bab82b269d8fecd76", "contentId": 10, "parentId": 44, "pathIdentificationString": "", "depth": 3, "pathString": "/1/5/44/45/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1},
+        {"id": 43, "remoteId": "75c715a51699d2d309a924eca6a95145", "contentId": 41, "parentId": 1, "pathIdentificationString": "", "depth": 1, "pathString": "/1/43/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1},
+        {"id": 53, "remoteId": "4f18b82c75f10aad476cae5adf98c11f", "contentId": 51, "parentId": 43, "pathIdentificationString": "", "depth": 2, "pathString": "/1/43/53/", "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1}
     ],
     "Content\\Location\\Trashed" : [],
     "Content\\VersionInfo" : [
@@ -144,9 +144,9 @@
         {"id": 9, "roleId": 1, "module": "user", "function": "login", "limitations": { "SiteAccess" : [ 3781580864 ] } }
     ],
     "User\\RoleAssignment" : [
-        {"id": 1, "_roleId": 1, "contentId": 11, "limitationIdentifier": null, "values": null},
-        {"id": 2, "_roleId": 1, "contentId": 42, "limitationIdentifier": null, "values": null},
-        {"id": 3, "_roleId": 2, "contentId": 12, "limitationIdentifier": null, "values": null}
+        {"id": 1, "roleId": 1, "contentId": 11, "limitationIdentifier": null, "values": null},
+        {"id": 2, "roleId": 1, "contentId": 42, "limitationIdentifier": null, "values": null},
+        {"id": 3, "roleId": 2, "contentId": 12, "limitationIdentifier": null, "values": null}
     ],
     "Content\\ObjectState" : [
         {"id": 1, "identifier": "not_locked", "groupId": 2, "priority": 0, "defaultLanguage": "eng-US", "languageCodes": ["eng-US"], "name": {"eng-US": "Not locked"}, "description": {"eng-US": ""}, "_contentId": [1, 4, 10, 11, 12, 14, 42, 41, 51]},

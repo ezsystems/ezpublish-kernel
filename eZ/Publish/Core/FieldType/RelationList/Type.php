@@ -11,8 +11,11 @@ namespace eZ\Publish\Core\FieldType\RelationList;
 
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * The RelationList field type.
@@ -229,5 +232,37 @@ class Type extends FieldType
     public function isSearchable()
     {
         return true;
+    }
+
+    /**
+     * Returns relation data extracted from value.
+     *
+     * Not intended for \eZ\Publish\API\Repository\Values\Content\Relation::COMMON type relations,
+     * there is an API for handling those.
+     *
+     * @param \eZ\Publish\Core\FieldType\Value $fieldValue
+     *
+     * @return array Hash with relation type as key and array of destination content ids as value.
+     *
+     * Example:
+     * <code>
+     *  array(
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::LINK => array(
+     *          "contentIds" => array( 12, 13, 14 ),
+     *          "locationIds" => array( 24 )
+     *      ),
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::EMBED => array(
+     *          "contentIds" => array( 12 ),
+     *          "locationIds" => array( 24, 45 )
+     *      ),
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::ATTRIBUTE => array( 12 )
+     *  )
+     * </code>
+     */
+    public function getRelations( BaseValue $fieldValue )
+    {
+        return array(
+            Relation::FIELD => $fieldValue->destinationContentIds
+        );
     }
 }

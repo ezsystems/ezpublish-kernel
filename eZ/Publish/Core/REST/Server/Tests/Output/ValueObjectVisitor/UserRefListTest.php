@@ -15,7 +15,7 @@ use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\UserRefList;
 use eZ\Publish\Core\REST\Server\Values\RestUser;
-use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\REST\Common;
 
@@ -37,6 +37,7 @@ class UserRefListTest extends ValueObjectVisitorBaseTest
             array(
                 new RestUser(
                     new User(),
+                    $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" ),
                     new ContentInfo(
                         array(
                             'id' => 14

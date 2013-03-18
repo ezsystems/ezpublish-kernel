@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\REST\Client\Values;
 use eZ\Publish\Core\REST\Client\ContentTypeService;
 
 /**
- * FieldDefinitonList
+ * FieldDefinitionList
  */
 class FieldDefinitionList
 {
@@ -26,12 +26,12 @@ class FieldDefinitionList
     /**
      * Content type service
      *
-     * @var ContentTypeService
+     * @var \eZ\Publish\Core\REST\Client\ContentTypeService
      */
     protected $contentTypeService;
 
     /**
-     * @param \eZ\Publish\Core\REST\ContentTypeService $contentTypeService
+     * @param \eZ\Publish\Core\REST\Client\ContentTypeService $contentTypeService
      * @param string[] $fieldDefinitionReferences
      */
     public function __construct( ContentTypeService $contentTypeService, array $fieldDefinitionReferences )
@@ -41,9 +41,9 @@ class FieldDefinitionList
     }
 
     /**
-     * Fetches and returnd the field definitions contained in the list
+     * Fetches and returns the field definitions contained in the list
      *
-     * @return FieldDefinition[]
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
     public function getFieldDefinitions()
     {

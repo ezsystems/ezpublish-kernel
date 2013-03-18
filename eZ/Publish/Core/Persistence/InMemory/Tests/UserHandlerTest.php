@@ -324,7 +324,7 @@ class UserHandlerTest extends HandlerTest
             array(
                 new RoleAssignment(
                     array(
-                        'role' => $handler->loadRole( 1 ),
+                        'roleId' => 1,
                         'contentId' => 11,
                         'limitationIdentifier' => null,
                         'values' => null
@@ -381,7 +381,7 @@ class UserHandlerTest extends HandlerTest
         $list = $handler->loadRoleAssignmentsByGroupId( 10, true );
         $this->assertEquals( 1, count( $list ) );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\RoleAssignment', $list[0] );
-        $this->assertEquals( $obj->id, $list[0]->role->id );
+        $this->assertEquals( $obj->id, $list[0]->roleId );
         $this->assertEquals( 42, $list[0]->contentId );
         $this->assertEquals( null, $list[0]->limitationIdentifier );
         $this->assertEquals( null, $list[0]->values );
@@ -416,7 +416,7 @@ class UserHandlerTest extends HandlerTest
         $list = $handler->loadRoleAssignmentsByGroupId( 10, true );// 10: Anonymous User
         $this->assertEquals( 2, count( $list ) );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\RoleAssignment', $list[1] );
-        $this->assertEquals( $obj->id, $list[1]->role->id );
+        $this->assertEquals( $obj->id, $list[1]->roleId );
         $this->assertEquals( 4, $list[1]->contentId );
     }
 
@@ -439,10 +439,10 @@ class UserHandlerTest extends HandlerTest
 
         $list = $handler->loadRoleAssignmentsByGroupId( 10, true );// 10: Anonymous User
         $this->assertEquals( 2, count( $list ), "Duplicate RoleAssignments should be merged" );
-        $this->assertEquals( $obj->id, $list[0]->role->id );
+        $this->assertEquals( $obj->id, $list[0]->roleId );
         $this->assertEquals( null, $list[0]->limitationIdentifier );
         $this->assertEquals( null, $list[0]->values );
-        $this->assertEquals( $obj->id, $list[1]->role->id );
+        $this->assertEquals( $obj->id, $list[1]->roleId );
         $this->assertEquals( null, $list[1]->limitationIdentifier );
         $this->assertEquals( null, $list[1]->values );
     }
@@ -643,7 +643,7 @@ class UserHandlerTest extends HandlerTest
         // See if our role was properly assigned to the user group
         foreach ( $roleAssignments as $roleAssignment )
         {
-            if ( $roleAssignment->role->id == $obj->id )
+            if ( $roleAssignment->roleId == $obj->id )
                 return;
         }
 
@@ -704,7 +704,7 @@ class UserHandlerTest extends HandlerTest
         $roleAssigned = false;
         foreach ( $roleAssignments as $roleAssignment )
         {
-            if ( $roleAssignment->role->id == $obj->id )
+            if ( $roleAssignment->roleId == $obj->id )
                 $roleAssigned = true;
         }
 
@@ -718,7 +718,7 @@ class UserHandlerTest extends HandlerTest
         $roleAssignments = $handler->loadRoleAssignmentsByGroupId( 42 );
         foreach ( $roleAssignments as $roleAssignment )
         {
-            if ( $roleAssignment->role->id == $obj->id )
+            if ( $roleAssignment->roleId == $obj->id )
                 $this->fail( 'Role was not unassigned from User Group with id: 42' );
         }
     }
@@ -954,7 +954,7 @@ class UserHandlerTest extends HandlerTest
         $handler = $this->persistenceHandler->userHandler();
         foreach ( $handler->loadRoleAssignmentsByGroupId( $groupId ) as $roleAssignment )
         {
-            $handler->unAssignRole( $groupId, $roleAssignment->role->id );
+            $handler->unAssignRole( $groupId, $roleAssignment->roleId );
         }
     }
 }

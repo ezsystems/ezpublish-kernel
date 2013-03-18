@@ -37,7 +37,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\TrashItem',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem',
             $trashItem
         );
     }
@@ -190,7 +190,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\TrashItem',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem',
             $trashItemReloaded
         );
 
@@ -250,7 +250,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Location',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
             $location
         );
 
@@ -419,7 +419,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\SearchResult',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SearchResult',
             $searchResult
         );
 

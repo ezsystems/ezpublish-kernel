@@ -47,7 +47,7 @@ class ObjectStateIdIn extends CriterionVisitor
             implode(
                 ' OR ',
                 array_map(
-                    function( $value )
+                    function ( $value )
                     {
                         return 'object_state_id:"' . $value . '"';
                     },

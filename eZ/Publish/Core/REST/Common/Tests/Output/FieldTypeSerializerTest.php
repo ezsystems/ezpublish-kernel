@@ -195,15 +195,9 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
             ->with( $this->equalTo( 'my-field-value' ) )
             ->will( $this->returnValue( array( 23, 42 ) ) );
 
-        $fieldDefinition = new FieldDefinition(
-            array(
-                'fieldTypeIdentifier' => 'myFancyFieldType',
-            )
-        );
-
         $serializer->serializeFieldDefaultValue(
             $this->getGeneratorMock(),
-            $fieldDefinition,
+            'myFancyFieldType',
             'my-field-value'
         );
     }
@@ -237,15 +231,9 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
             ->with( $this->equalTo( 'my-field-settings' ) )
             ->will( $this->returnValue( array( 'foo' => 'bar' ) ) );
 
-        $fieldDefinition = new FieldDefinition(
-            array(
-                'fieldTypeIdentifier' => 'myFancyFieldType',
-            )
-        );
-
         $serializer->serializeFieldSettings(
             $this->getGeneratorMock(),
-            $fieldDefinition,
+            'myFancyFieldType',
             'my-field-settings'
         );
     }
@@ -279,15 +267,9 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
             ->with( $this->equalTo( 'validator-config' ) )
             ->will( $this->returnValue( array( 'bar' => 'foo' ) ) );
 
-        $fieldDefinition = new FieldDefinition(
-            array(
-                'fieldTypeIdentifier' => 'myFancyFieldType',
-            )
-        );
-
         $serializer->serializeValidatorConfiguration(
             $this->getGeneratorMock(),
-            $fieldDefinition,
+            'myFancyFieldType',
             'validator-config'
         );
     }

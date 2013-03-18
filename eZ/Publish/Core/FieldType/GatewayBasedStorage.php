@@ -10,6 +10,8 @@
 namespace eZ\Publish\Core\FieldType;
 
 use eZ\Publish\SPI\FieldType\FieldStorage;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 /**
  * Storage gateway base class to be used by FieldType storages
@@ -36,7 +38,7 @@ abstract class GatewayBasedStorage implements FieldStorage
      *
      * @param \eZ\Publish\Core\FieldType\StorageGateway[] $gateways
      */
-    public function __construct( array $gateways )
+    public function __construct( array $gateways = array() )
     {
         foreach ( $gateways as $identifier => $gateway )
         {
@@ -75,5 +77,24 @@ abstract class GatewayBasedStorage implements FieldStorage
         $gateway->setConnection( $context['connection'] );
 
         return $gateway;
+    }
+
+    /**
+     * This method is used exclusively by Legacy Storage to copy external data of existing field in main language to
+     * the untranslatable field not passed in create or update struct, but created implicitly in storage layer.
+     *
+     * By default the method falls back to the {@link \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()}.
+     * External storages implement this method as needed.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $originalField
+     * @param array $context
+     *
+     * @return null|boolean Same as {@link \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()}.
+     */
+    public function copyLegacyField( VersionInfo $versionInfo, Field $field, Field $originalField, array $context )
+    {
+        return $this->storeFieldData( $versionInfo, $field, $context );
     }
 }

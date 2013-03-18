@@ -47,7 +47,7 @@ class StatusIn extends CriterionVisitor
             implode(
                 ' OR ',
                 array_map(
-                    function( $value )
+                    function ( $value )
                     {
                         return 'status_id:"' . $value . '"';
                     },

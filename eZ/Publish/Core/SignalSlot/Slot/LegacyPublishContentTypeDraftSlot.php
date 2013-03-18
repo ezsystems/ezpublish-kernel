@@ -32,7 +32,7 @@ class LegacyPublishContentTypeDraftSlot extends AbstractLegacySlot
 
         $kernel = $this->getLegacyKernel();
         $kernel->runCallback(
-            function () use( $signal )
+            function () use ( $signal )
             {
                 eZExpiryHandler::registerShutdownFunction();
                 $handler = eZExpiryHandler::instance();

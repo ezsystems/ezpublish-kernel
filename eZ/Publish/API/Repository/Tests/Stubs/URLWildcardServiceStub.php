@@ -166,7 +166,7 @@ class URLWildcardServiceStub implements URLWildcardService
     {
         uasort(
             $this->wildcards,
-            function( URLWildcard $w1, URLWildcard $w2 )
+            function ( URLWildcard $w1, URLWildcard $w2 )
             {
                 return strlen( $w2->sourceUrl ) - strlen( $w1->sourceUrl );
             }

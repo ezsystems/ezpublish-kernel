@@ -164,12 +164,12 @@ class ExceptionConversion extends Gateway
      * operations, which then depend on the respective database.
      *
      * @todo optimize
-     * @param string $fromPathString
-     * @param string $toPathString
+     * @param array $fromPathString
+     * @param array $toPathString
      *
      * @return void
      */
-    public function moveSubtreeNodes( $fromPathString, $toPathString )
+    public function moveSubtreeNodes( array $fromPathString, array $toPathString )
     {
         try
         {

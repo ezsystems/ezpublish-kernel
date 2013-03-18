@@ -47,9 +47,9 @@ class ParentLocationIdIn extends CriterionVisitor
             implode(
                 ' OR ',
                 array_map(
-                    function( $value )
+                    function ( $value )
                     {
-                        return 'location_parent_id:"' . $value . '"';
+                        return 'location_parent_mid:"' . $value . '"';
                     },
                     $criterion->value
                 )

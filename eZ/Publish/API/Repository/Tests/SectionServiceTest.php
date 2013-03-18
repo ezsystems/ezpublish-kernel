@@ -83,7 +83,7 @@ class SectionServiceTest extends BaseTest
         $sectionCreate = $sectionService->newSectionCreateStruct();
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\SectionCreateStruct', $sectionCreate );
+        $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct', $sectionCreate );
     }
 
     /**
@@ -107,7 +107,7 @@ class SectionServiceTest extends BaseTest
         $section = $sectionService->createSection( $sectionCreate );
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Section', $section );
+        $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section', $section );
     }
 
     /**
@@ -202,7 +202,7 @@ class SectionServiceTest extends BaseTest
         $sectionUpdate = $sectionService->newSectionUpdateStruct();
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct', $sectionUpdate );
+        $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct', $sectionUpdate );
     }
 
     /**
@@ -235,7 +235,7 @@ class SectionServiceTest extends BaseTest
         /* END: Use Case */
 
         // Verify that service returns an instance of Section
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Section', $updatedSection );
+        $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section', $updatedSection );
 
         // Verify that the service also persists the changes
         $updatedSection = $sectionService->loadSection( $standardSectionId );

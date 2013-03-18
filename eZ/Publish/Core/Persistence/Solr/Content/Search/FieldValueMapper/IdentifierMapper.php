@@ -39,8 +39,20 @@ class IdentifierMapper extends FieldValueMapper
      */
     public function map( Field $field )
     {
+        return $this->convert( $field->value );
+    }
+
+    /**
+     * Convert to a proper Solr representation
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
+    protected function convert( $value )
+    {
         // Remove non-printables
-        return preg_replace( '([^A-Za-z0-9/]+)', '', $field->value );
+        return preg_replace( '([^A-Za-z0-9/]+)', '', $value );
     }
 }
 

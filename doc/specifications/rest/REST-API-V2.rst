@@ -431,17 +431,17 @@ XML Example
       <remoteId>remoteId12345678</remoteId>
       <fields>
         <field>
-          <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>title</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>This is a title</fieldValue>
         </field>
         <field>
-          <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>summary</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>This is a summary</fieldValue>
         </field>
         <field>
-          <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>authors</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>
             <value>
@@ -490,18 +490,18 @@ XML Example
           <fields>
             <field>
               <id>1234</id>
-              <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+              <fieldDefinitionIdentifier>title</fieldDefinitionIdentifier>
               <languageCode>eng-UK</languageCode>
               <fieldValue>This is a title</fieldValue>
             </field>
             <field>
               <id>1235</id>
-              <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
+              <fieldDefinitionIdentifier>summary</fieldDefinitionIdentifier>
               <languageCode>eng-UK</languageCode>
               <fieldValue>This is a summary</fieldValue>
             </field>
             <field>
-              <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
+              <fieldDefinitionIdentifier>authors</fieldDefinitionIdentifier>
               <languageCode>eng-US</languageCode>
               <fieldValue>
                 <value>
@@ -543,7 +543,7 @@ JSON Example
     {
       "ContentCreate": {
         "ContentType": {
-          "_href": "/content/types/10",
+          "_href": "/content/types/10"
         },
         "mainLanguageCode": "eng-US",
         "LocationCreate": {
@@ -556,24 +556,24 @@ JSON Example
           "sortOrder": "ASC"
         }
         "Section": {
-          "_href": "/content/sections/4",
+          "_href": "/content/sections/4"
         },
         "alwaysAvailable": "true",
         "remoteId": "remoteId12345678",
         "fields": {
           "field": [
             {
-              "fieldDefinitionIdentifer": "title",
+              "fieldDefinitionIdentifier": "title",
               "languageCode": "eng-US",
               "fieldValue": "This is a title"
             },
             {
-              "fieldDefinitionIdentifer": "summary",
+              "fieldDefinitionIdentifier": "summary",
               "languageCode": "eng-US",
               "fieldValue": "This is a summary"
             },
             {
-              "fieldDefinitionIdentifer": "authors",
+              "fieldDefinitionIdentifier": "authors",
               "languageCode": "eng-US",
               "fieldValue": [
                     {
@@ -643,18 +643,18 @@ JSON Example
               "field": [
                 {
                   "id": "1234",
-                  "fieldDefinitionIdentifer": "title",
+                  "fieldDefinitionIdentifier": "title",
                   "languageCode": "eng-UK",
                   "fieldValue": "This is a title"
                 },
                 {
                   "id": "1235",
-                  "fieldDefinitionIdentifer": "summary",
+                  "fieldDefinitionIdentifier": "summary",
                   "languageCode": "eng-UK",
                   "fieldValue": "This is a summary"
                 },
                 {
-                  "fieldDefinitionIdentifer": "authors",
+                  "fieldDefinitionIdentifier": "authors",
                   "languageCode": "eng-US",
                   "fieldValue":
                   [
@@ -701,6 +701,22 @@ List/Search Content
 :Resource: /content/objects
 :Method: GET (not implemented)
 :Description: This resource will used in future for searching content by providing a query string as alternative to posting a view to /content/views.
+
+Load Content by remote id
+`````````````````````````
+:Resource: /content/objects
+:Method: GET
+:Description: loads the content for a given remote id
+:Parameters: :remoteId: the remote id of the content. If present the content with the given remote id is returned
+:Response:
+
+.. code:: http
+
+          HTTP/1.1 307 Temporary Redirect
+          Location: /content/objects/<id>
+
+:Error Codes:
+    :404: If the content with the given remote id does not exist
 
 Load Content
 ````````````
@@ -1107,18 +1123,18 @@ XML Example
       <Fields>
         <field>
           <id>1234</id>
-          <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>title</fieldDefinitionIdentifier>
           <languageCode>ger-DE</languageCode>
           <fieldValue>Titel</fieldValue>
         </field>
         <field>
           <id>1235</id>
-          <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>summary</fieldDefinitionIdentifier>
           <languageCode>ger-DE</languageCode>
           <fieldValue>Dies ist eine Zusammenfassungy</fieldValue>
         </field>
         <field>
-          <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>authors</fieldDefinitionIdentifier>
           <languageCode>ger-DE</languageCode>
           <fieldValue>
             <value>
@@ -1197,13 +1213,13 @@ XML Example
       <fields>
         <field>
           <id>1234</id>
-          <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>title</fieldDefinitionIdentifier>
           <languageCode>ger-DE</languageCode>
           <fieldValue>Neuer Titel</fieldValue>
         </field>
         <field>
           <id>1235</id>
-          <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>summary</fieldDefinitionIdentifier>
           <languageCode>ger-DE</languageCode>
           <fieldValue>Dies ist eine neue Zusammenfassungy</fieldValue>
         </field>
@@ -1238,18 +1254,18 @@ XML Example
       <Fields>
         <field>
           <id>1234</id>
-          <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>title</fieldDefinitionIdentifier>
           <languageCode>ger-DE</languageCode>
           <fieldValue>Neuer Titel</fieldValue>
         </field>
         <field>
           <id>1235</id>
-          <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>summary</fieldDefinitionIdentifier>
           <languageCode>ger-DE</languageCode>
           <fieldValue>Dies ist eine neuse Zusammenfassungy</fieldValue>
         </field>
         <field>
-          <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>authors</fieldDefinitionIdentifier>
           <languageCode>ger-DE</languageCode>
           <fieldValue>
             <authors>
@@ -2091,14 +2107,14 @@ Perform a query on articles with a specific title.
                     <Fields>
                       <field>
                         <id>1234</id>
-                        <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+                        <fieldDefinitionIdentifier>title</fieldDefinitionIdentifier>
                         <languageCode>eng-UK</languageCode>
                         <fieldValue>Title</fieldValue>
                       </field>
                       <field>
                         <id>1235</id>
-                        <fieldDefinitionIdentifer>summary
-                        </fieldDefinitionIdentifer>
+                        <fieldDefinitionIdentifier>summary
+                        </fieldDefinitionIdentifier>
                         <languageCode>eng-UK</languageCode>
                         <fieldValue>This is a summary</fieldValue>
                       </field>
@@ -3291,6 +3307,24 @@ Get Content Type Group
     :401: If the user is not authorized to read this content type
     :404: If the content type group does not exist
 
+
+Get Content Type Group by id
+````````````````````````````
+:Resource: /content/typegroups
+:Method: GET
+:Description: loads the content type group for a given identifier
+:Parameters: :identifier: the identifier of the content type group. If present the content type group is with the given identifier is returned.
+:Response:
+
+.. code:: http
+
+          HTTP/1.1 307 Temporary Redirect
+          Location: /content/typegroups/<ID>
+
+:Error Codes:
+        :404: If the content type group with the given identifier does not exist
+
+
 Update Content Type Group
 `````````````````````````
 :Resource: /content/typegroups/<ID>
@@ -4256,13 +4290,13 @@ Creating a top level group
         <Fields>
           <field>
             <id>1234</id>
-            <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>name</fieldDefinitionIdentifier>
             <languageCode>eng-UK</languageCode>
             <fieldValue>Users</fieldValue>
           </field>
           <field>
             <id>1235</id>
-            <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>description</fieldDefinitionIdentifier>
             <languageCode>eng-UK</languageCode>
             <fieldValue>Main Group</fieldValue>
           </field>
@@ -4289,12 +4323,12 @@ Creating a top level group
       <remoteId>remoteId-qwert098</remoteId>
       <fields>
         <field>
-          <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>name</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>UserGroup</fieldValue>
         </field>
         <field>
-          <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>description</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>This is the description of the user group</fieldValue>
         </field>
@@ -4339,13 +4373,13 @@ Creating a top level group
         <Fields>
           <field>
             <id>1234</id>
-            <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>name</fieldDefinitionIdentifier>
             <languageCode>eng-UK</languageCode>
             <fieldValue>UserGroup</fieldValue>
           </field>
           <field>
             <id>1235</id>
-            <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>description</fieldDefinitionIdentifier>
             <languageCode>eng-UK</languageCode>
             <fieldValue>This is the description of the user group</fieldValue>
           </field>
@@ -4410,7 +4444,7 @@ XML Example
     <UserGroupUpdate>
       <fields>
         <field>
-          <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>description</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>This is another description</fieldValue>
         </field>
@@ -4454,13 +4488,13 @@ XML Example
         <Fields>
           <field>
             <id>1234</id>
-            <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>name</fieldDefinitionIdentifier>
             <languageCode>eng-UK</languageCode>
             <fieldValue>UserGroup</fieldValue>
           </field>
           <field>
             <id>1235</id>
-            <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>description</fieldDefinitionIdentifier>
             <languageCode>eng-UK</languageCode>
             <fieldValue>This is another description of the user group</fieldValue>
           </field>
@@ -4614,12 +4648,12 @@ XML Example
       <password>john-does-password</password>
       <fields>
         <field>
-          <fieldDefinitionIdentifer>first_name</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>first_name</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>John</fieldValue>
         </field>
         <field>
-          <fieldDefinitionIdentifer>last_name</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>last_name</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>Doe</fieldValue>
         </field>
@@ -4668,12 +4702,12 @@ XML Example
         </VersionInfo>
         <fields>
           <field>
-            <fieldDefinitionIdentifer>first_name</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>first_name</fieldDefinitionIdentifier>
             <languageCode>eng-US</languageCode>
             <fieldValue>John</fieldValue>
           </field>
           <field>
-            <fieldDefinitionIdentifer>last_name</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>last_name</fieldDefinitionIdentifier>
             <languageCode>eng-US</languageCode>
             <fieldValue>Doe</fieldValue>
           </field>
@@ -4787,7 +4821,7 @@ XML Example
       <email>john.doe@mooglemail.com</email>
       <fields>
         <field>
-          <fieldDefinitionIdentifer>signature</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>signature</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>
           John Doe
@@ -4840,18 +4874,18 @@ XML Example
         </VersionInfo>
         <fields>
           <field>
-            <fieldDefinitionIdentifer>first_name</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>first_name</fieldDefinitionIdentifier>
             <languageCode>eng-US</languageCode>
             <fieldValue>John</fieldValue>
           </field>
           <field>
-            <fieldDefinitionIdentifer>last_name</fieldDefinitionIdentifer>
+            <fieldDefinitionIdentifier>last_name</fieldDefinitionIdentifier>
             <languageCode>eng-US</languageCode>
             <fieldValue>Doe</fieldValue>
           </field>
         </fields>
         <field>
-          <fieldDefinitionIdentifer>signature</fieldDefinitionIdentifer>
+          <fieldDefinitionIdentifier>signature</fieldDefinitionIdentifier>
           <languageCode>eng-US</languageCode>
           <fieldValue>
           John Doe
@@ -6030,7 +6064,7 @@ Common definition which are used from multiple schema definitions
           </xsd:documentation>
         </xsd:annotation>
         <xsd:all>
-          <xsd:element name="fieldDefinitionIdentifer" type="xsd:string" />
+          <xsd:element name="fieldDefinitionIdentifier" type="xsd:string" />
           <xsd:element name="languageCode" type="xsd:string" />
           <xsd:element name="fieldValue" type="fieldValueType" />
         </xsd:all>
@@ -6352,7 +6386,7 @@ Version
       <xsd:complexType name="fieldOutputValueType">
         <xsd:all>
           <xsd:element name="id" type="xsd:integer" />
-          <xsd:element name="fieldDefinitionIdentifer" type="xsd:string" />
+          <xsd:element name="fieldDefinitionIdentifier" type="xsd:string" />
           <xsd:element name="languageCode" type="xsd:string" />
           <xsd:element name="value" type="fieldValueType" />
         </xsd:all>
@@ -6365,7 +6399,7 @@ Version
               <xsd:element name="Fields" minOccurs="0">
                 <xsd:complexType>
                   <xsd:sequence>
-                    <xsd:element name="field" type="fieldValueType"
+                    <xsd:element name="field" type="fieldOutputValueType"
                       minOccurs="1" maxOccurs="unbounded" />
                   </xsd:sequence>
                 </xsd:complexType>
@@ -8373,8 +8407,8 @@ ContentTypeUpdate XML Schema
 
 .. _FieldDefinition:
 
-FieldDefinition JSON Schema
----------------------------
+FieldDefinition XML Schema
+--------------------------
 .. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
@@ -8444,10 +8478,24 @@ FieldDefinition JSON Schema
                     </xsd:documentation>
                 </xsd:annotation>
               </xsd:element>
-              <xsd:element name="defaultValue" type="xsd:string">
+              <xsd:element name="defaultValue" type="fieldValueType">
                 <xsd:annotation>
                   <xsd:documentation>
                     Default value of the field
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="fieldSettings" type="xsd:anyType">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Settings of the field
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="validatorConfiguration" type="xsd:anyType">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Validator configuration of the field
                   </xsd:documentation>
                 </xsd:annotation>
               </xsd:element>
@@ -8499,7 +8547,7 @@ FieldDefinitionCreate XML Schema
               <xsd:documentation>
                 Readable string identifier of a field
                 definition
-                  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="fieldType" type="xsd:string">
@@ -8513,7 +8561,7 @@ FieldDefinitionCreate XML Schema
             <xsd:annotation>
               <xsd:documentation>
                 Field group name
-                    </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="position" type="xsd:int">
@@ -8521,21 +8569,21 @@ FieldDefinitionCreate XML Schema
               <xsd:documentation>
                 the position of the field definition in
                 the content typr
-                    </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="isTranslatable" type="xsd:boolean">
             <xsd:annotation>
               <xsd:documentation>
                 If the field type is translatable
-                  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="isRequired" type="xsd:boolean">
             <xsd:annotation>
               <xsd:documentation>
                 Is the field required
-                  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="isInfoCollector" type="xsd:boolean">
@@ -8543,14 +8591,28 @@ FieldDefinitionCreate XML Schema
               <xsd:documentation>
                 the flag if this attribute is used for
                 information collection
-                    </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="defaultValue" type="xsd:string">
+          <xsd:element name="defaultValue" type="fieldValueType">
             <xsd:annotation>
               <xsd:documentation>
                 Default value of the field
-                  </xsd:documentation>
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="fieldSettings" type="xsd:anyType">
+            <xsd:annotation>
+              <xsd:documentation>
+                Settings of the field
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="validatorConfiguration" type="xsd:anyType">
+            <xsd:annotation>
+              <xsd:documentation>
+                Validator configuration of the field
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="isSearchable" type="xsd:boolean">
@@ -8558,7 +8620,7 @@ FieldDefinitionCreate XML Schema
               <xsd:documentation>
                 Indicates if th the content is
                 searchable by this attribute
-                    </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="names" type="multiLanguageValuesType" />
@@ -8587,14 +8649,14 @@ FieldDefinitionUpdate XML Schema
               <xsd:documentation>
                 If set the identifier of a field
                 definition is changed
-               </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="fieldGroup" type="xsd:string">
             <xsd:annotation>
               <xsd:documentation>
                 If set the field group is changed
-               </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="position" type="xsd:int">
@@ -8609,35 +8671,49 @@ FieldDefinitionUpdate XML Schema
             <xsd:annotation>
               <xsd:documentation>
                 If set the translatable flag is set to this value
-                  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="isRequired" type="xsd:boolean">
             <xsd:annotation>
               <xsd:documentation>
                 If set the required flag is set to this value
-                  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="isInfoCollector" type="xsd:boolean">
             <xsd:annotation>
               <xsd:documentation>
                 If set the info collection flag is set to this value
-                    </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="defaultValue" type="xsd:string">
+          <xsd:element name="defaultValue" type="fieldValueType">
             <xsd:annotation>
               <xsd:documentation>
                 If set the default value of the field is changed
-                  </xsd:documentation>
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="fieldSettings" type="xsd:anyType">
+            <xsd:annotation>
+              <xsd:documentation>
+                If set the settings of the field are changed
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="validatorConfiguration" type="xsd:anyType">
+            <xsd:annotation>
+              <xsd:documentation>
+                If set the validatorConfiguration of the field is changed
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="isSearchable" type="xsd:boolean">
             <xsd:annotation>
               <xsd:documentation>
-               If set the searchable flag is set to this value
-                     </xsd:documentation>
+                If set the searchable flag is set to this value
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="names" type="multiLanguageValuesType" />

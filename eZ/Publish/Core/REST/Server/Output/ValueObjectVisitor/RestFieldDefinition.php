@@ -99,7 +99,7 @@ class RestFieldDefinition extends RestContentTypeBase
 
         $this->fieldTypeSerializer->serializeFieldDefaultValue(
             $generator,
-            $fieldDefinition,
+            $fieldDefinition->fieldTypeIdentifier,
             $fieldDefinition->defaultValue
         );
 
@@ -116,13 +116,13 @@ class RestFieldDefinition extends RestContentTypeBase
 
         $this->fieldTypeSerializer->serializeFieldSettings(
             $generator,
-            $fieldDefinition,
+            $fieldDefinition->fieldTypeIdentifier,
             $fieldDefinition->getFieldSettings()
         );
 
         $this->fieldTypeSerializer->serializeValidatorConfiguration(
             $generator,
-            $fieldDefinition,
+            $fieldDefinition->fieldTypeIdentifier,
             $fieldDefinition->getValidatorConfiguration()
         );
 

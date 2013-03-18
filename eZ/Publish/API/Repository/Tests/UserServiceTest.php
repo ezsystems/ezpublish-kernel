@@ -41,7 +41,7 @@ class UserServiceTest extends BaseTest
         $userGroup = $userService->loadUserGroup( $mainGroupId );
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroup', $userGroup );
+        $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroup', $userGroup );
     }
 
     /**
@@ -111,7 +111,7 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupCreateStruct',
             $groupCreate
         );
 
@@ -144,7 +144,7 @@ class UserServiceTest extends BaseTest
     public function testNewUserGroupCreateStructSetsContentType( $groupCreate )
     {
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\ContentType\ContentType',
+            '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType',
             $groupCreate->contentType
         );
     }
@@ -199,7 +199,7 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\UserGroup',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroup',
             $userGroup
         );
 
@@ -570,7 +570,7 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupUpdateStruct',
             $groupUpdate
         );
     }
@@ -602,7 +602,7 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\UserGroup',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroup',
             $userGroup
         );
 
@@ -751,7 +751,7 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\UserCreateStruct',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserCreateStruct',
             $userCreate
         );
 
@@ -836,7 +836,7 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\User',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\User',
             $user
         );
 
@@ -1102,7 +1102,7 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\User',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\User',
             $anonymousUser
         );
 
@@ -1223,7 +1223,7 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\UserUpdateStruct',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserUpdateStruct',
             $userUpdate
         );
     }
@@ -1260,7 +1260,7 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\User',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\User',
             $user
         );
 

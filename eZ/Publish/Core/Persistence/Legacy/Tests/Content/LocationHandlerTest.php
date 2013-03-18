@@ -627,7 +627,7 @@ class LocationHandlerTest extends TestCase
                                     array(
                                         "contentInfo" => new ContentInfo(
                                             array(
-                                                "id" => $contentId + $offset
+                                                "id" => ( $contentId + $offset )
                                             )
                                         )
                                     )
@@ -637,6 +637,7 @@ class LocationHandlerTest extends TestCase
                     )
                 );
         }
+        $lastContentHandlerIndex = $index * 2 + 1;
 
         $pathStrings = array( $destinationData["node_id"] => $destinationData["path_identification_string"] );
         foreach ( $subtreeContentRows as $index => $row )
@@ -665,12 +666,10 @@ class LocationHandlerTest extends TestCase
                         new Location(
                             array(
                                 "id" => $row["node_id"] + $offset,
+                                "contentId" => $row["contentobject_id"],
                                 "hidden" => false,
                                 "invisible" => true,
                                 "pathIdentificationString" => $createStruct->pathIdentificationString,
-                                "mainLocationId" => $mainLocationsMap[$index] === true ?
-                                    $row["node_id"] + $offset :
-                                    $mainLocationsMap[$index]
                             )
                         )
                     )
@@ -685,6 +684,12 @@ class LocationHandlerTest extends TestCase
                 ->with( $contentId, $locationId );
         }
 
+        $this->contentHandler
+            ->expects( $this->at( $lastContentHandlerIndex + 1 ) )
+            ->method( "loadContentInfo" )
+            ->with( 21 )
+            ->will( $this->returnValue( new ContentInfo( array( "mainLocationId" => 1010 ) ) ) );
+
         $handler
             ->expects( $this->once() )
             ->method( "load" )
@@ -692,7 +697,7 @@ class LocationHandlerTest extends TestCase
             ->will( $this->returnValue( new Location( array( "contentId" => $destinationData["contentobject_id"] ) ) ) );
 
         $this->contentHandler
-            ->expects( $this->once() )
+            ->expects( $this->at( $lastContentHandlerIndex + 2 ) )
             ->method( "loadContentInfo" )
             ->with( $destinationData["contentobject_id"] )
             ->will( $this->returnValue( new ContentInfo( array( "sectionId" => 12345 ) ) ) );

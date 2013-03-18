@@ -68,7 +68,7 @@ class FieldTypeParser
     public function parseFieldValue( $contentInfoId, $fieldDefIdentifier, $value )
     {
         $contentInfo = $this->contentService->loadContentInfo( $contentInfoId );
-        $contentType = $this->contentTypeService->loadContentType( $contentInfo->getContentType()->id );
+        $contentType = $this->contentTypeService->loadContentType( $contentInfo->contentTypeId );
 
         $fieldDefinition = $contentType->getFieldDefinition( $fieldDefIdentifier );
 

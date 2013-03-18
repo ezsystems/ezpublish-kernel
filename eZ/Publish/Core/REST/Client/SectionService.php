@@ -15,6 +15,8 @@ use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 
+use eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\REST\Common\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
@@ -103,7 +105,14 @@ class SectionService implements APISectionService, Sessionable
             $inputMessage
         );
 
-        return $this->inputDispatcher->parse( $result );
+        try
+        {
+            return $this->inputDispatcher->parse( $result );
+        }
+        catch ( ForbiddenException $e )
+        {
+            throw new InvalidArgumentException( $e->getMessage(), $e->getCode() );
+        }
     }
 
     /**
@@ -131,7 +140,14 @@ class SectionService implements APISectionService, Sessionable
             $inputMessage
         );
 
-        return $this->inputDispatcher->parse( $result );
+        try
+        {
+            return $this->inputDispatcher->parse( $result );
+        }
+        catch ( ForbiddenException $e )
+        {
+            throw new InvalidArgumentException( $e->getMessage(), $e->getCode() );
+        }
     }
 
     /**

@@ -47,7 +47,7 @@ class SectionIn extends CriterionVisitor
             implode(
                 ' OR ',
                 array_map(
-                    function( $value )
+                    function ( $value )
                     {
                         return 'section_id:"' . $value . '"';
                     },

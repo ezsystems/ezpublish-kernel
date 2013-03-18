@@ -49,7 +49,7 @@ class PublishedIn extends DateMetadata
             implode(
                 ' OR ',
                 array_map(
-                    function( $value )
+                    function ( $value )
                     {
                         return 'published_dt:"' . $this->getSolrTime( $value ) . '"';
                     },

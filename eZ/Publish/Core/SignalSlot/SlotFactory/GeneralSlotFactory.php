@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\SignalSlot\SlotFactory;
 
 use eZ\Publish\Core\SignalSlot\SlotFactory;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * Slot factory that is able to lookup slots based on identifier.
@@ -43,7 +44,7 @@ class GeneralSlotFactory extends SlotFactory
     public function getSlot( $slotIdentifier )
     {
         if ( !isset( $this->slots[$slotIdentifier] ) )
-            throw new \eZ\Publish\Core\Base\Exceptions\NotFoundException( 'slot', $slotIdentifier );
+            throw new NotFoundException( 'slot', $slotIdentifier );
 
         return $this->slots[$slotIdentifier];
     }

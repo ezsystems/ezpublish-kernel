@@ -334,13 +334,13 @@ class ServiceContainer implements Container
                 return null;
 
             if ( $function !== '' )
-                return function() use ( $serviceContainer, $argument, $function )
+                return function () use ( $serviceContainer, $argument, $function )
                 {
                     $serviceObject = $serviceContainer->get( ltrim( $argument, '%' ) );
                     return call_user_func_array( array( $serviceObject, $function ), func_get_args() );
                 };
             else
-                return function() use ( $serviceContainer, $argument )
+                return function () use ( $serviceContainer, $argument )
                 {
                     return $serviceContainer->get( ltrim( $argument, '%' ) );
                 };

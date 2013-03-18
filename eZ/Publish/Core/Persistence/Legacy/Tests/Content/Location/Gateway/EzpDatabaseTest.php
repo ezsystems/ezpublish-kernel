@@ -469,7 +469,6 @@ class EzpDatabaseTest extends TestCase
             array( 'parentId', '77' ),
             array( 'pathIdentificationString', '' ),
             array( 'pathString', '/1/2/77/228/' ),
-            array( 'mainLocationId', 228 ),
             array( 'depth', 3 ),
             array( 'sortField', 1 ),
             array( 'sortOrder', 1 ),

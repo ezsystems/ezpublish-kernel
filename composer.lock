@@ -1,33 +1,31 @@
 {
-    "hash": "269c92aa525c395b163e4a3e7d98bb66",
+    "hash": "64fe92a55c544f66109acf659762782c",
     "packages": [
         {
-            "name": "doctrine/common",
-            "version": "2.3.x-dev",
+            "name": "doctrine/annotations",
+            "version": "v1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/doctrine/common",
-                "reference": "bb0aebbf234db52df476a2b473d434745b34221c"
+                "url": "https://github.com/doctrine/annotations.git",
+                "reference": "v1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/common/archive/bb0aebbf234db52df476a2b473d434745b34221c.zip",
-                "reference": "bb0aebbf234db52df476a2b473d434745b34221c",
+                "url": "https://github.com/doctrine/annotations/archive/v1.0.zip",
+                "reference": "v1.0",
                 "shasum": ""
             },
             "require": {
+                "doctrine/lexer": "1.*",
                 "php": ">=5.3.2"
             },
-            "time": "2012-09-20 05:55:18",
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.3.x-dev"
-                }
+            "require-dev": {
+                "doctrine/cache": "1.*"
             },
+            "type": "library",
             "autoload": {
                 "psr-0": {
-                    "Doctrine\\Common": "lib/"
+                    "Doctrine\\Common\\Annotations\\": "lib/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -56,41 +54,354 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
+                    "role": "Developer of wrapped JMSSerializerBundle"
+                }
+            ],
+            "description": "Docblock Annotations Parser",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "annotations",
+                "docblock",
+                "parser"
+            ],
+            "time": "2013-01-12 19:23:32"
+        },
+        {
+            "name": "doctrine/cache",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/cache.git",
+                "reference": "v1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/doctrine/cache/archive/v1.0.zip",
+                "reference": "v1.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Common\\Cache\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com",
+                    "homepage": "http://www.jwage.com/"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com",
+                    "homepage": "http://www.instaclick.com"
+                },
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Johannes Schmitt",
+                    "email": "schmittjoh@gmail.com",
+                    "homepage": "https://github.com/schmittjoh",
+                    "role": "Developer of wrapped JMSSerializerBundle"
+                }
+            ],
+            "description": "Caching library offering an object-oriented API for many cache backends",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "cache",
+                "caching"
+            ],
+            "time": "2013-01-10 22:43:46"
+        },
+        {
+            "name": "doctrine/collections",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/collections.git",
+                "reference": "v1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/doctrine/collections/archive/v1.0.zip",
+                "reference": "v1.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Common\\Collections\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com",
+                    "homepage": "http://www.jwage.com/"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com",
+                    "homepage": "http://www.instaclick.com"
+                },
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Johannes Schmitt",
+                    "email": "schmittjoh@gmail.com",
+                    "homepage": "https://github.com/schmittjoh",
+                    "role": "Developer of wrapped JMSSerializerBundle"
+                }
+            ],
+            "description": "Collections Abstraction library",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "array",
+                "collections",
+                "iterator"
+            ],
+            "time": "2013-01-12 16:36:50"
+        },
+        {
+            "name": "doctrine/common",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/common.git",
+                "reference": "e211821c719d33ad2cd1186fafb4dadb5f74d6ed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/e211821c719d33ad2cd1186fafb4dadb5f74d6ed",
+                "reference": "e211821c719d33ad2cd1186fafb4dadb5f74d6ed",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/annotations": "1.*",
+                "doctrine/cache": "1.*",
+                "doctrine/collections": "1.*",
+                "doctrine/inflector": "1.*",
+                "doctrine/lexer": "1.*",
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Common\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com",
+                    "homepage": "http://www.jwage.com/"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com",
+                    "homepage": "http://www.instaclick.com"
+                },
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Johannes Schmitt",
+                    "email": "schmittjoh@gmail.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
             "description": "Common Library for Doctrine projects",
             "homepage": "http://www.doctrine-project.org",
             "keywords": [
-                "collections",
-                "spl",
-                "eventmanager",
                 "annotations",
-                "persistence"
-            ]
+                "collections",
+                "eventmanager",
+                "persistence",
+                "spl"
+            ],
+            "time": "2013-02-19 09:37:33"
+        },
+        {
+            "name": "doctrine/inflector",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/inflector.git",
+                "reference": "v1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/doctrine/inflector/archive/v1.0.zip",
+                "reference": "v1.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Common\\Inflector\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com",
+                    "homepage": "http://www.jwage.com/"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com",
+                    "homepage": "http://www.instaclick.com"
+                },
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Johannes Schmitt",
+                    "email": "schmittjoh@gmail.com",
+                    "homepage": "https://github.com/schmittjoh",
+                    "role": "Developer of wrapped JMSSerializerBundle"
+                }
+            ],
+            "description": "Common String Manipulations with regard to casing and singular/plural rules.",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "inflection",
+                "pluarlize",
+                "singuarlize",
+                "string"
+            ],
+            "time": "2013-01-10 21:49:15"
+        },
+        {
+            "name": "doctrine/lexer",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/lexer.git",
+                "reference": "v1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/doctrine/lexer/archive/v1.0.zip",
+                "reference": "v1.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Common\\Lexer\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com",
+                    "homepage": "http://www.instaclick.com"
+                },
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Johannes Schmitt",
+                    "email": "schmittjoh@gmail.com",
+                    "homepage": "https://github.com/schmittjoh",
+                    "role": "Developer of wrapped JMSSerializerBundle"
+                }
+            ],
+            "description": "Base library for a lexer that can be used in Top-Down, Recursive Descent Parsers.",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "lexer",
+                "parser"
+            ],
+            "time": "2013-01-12 18:59:04"
         },
         {
             "name": "kriswallsmith/buzz",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "http://github.com/kriswallsmith/Buzz.git",
-                "reference": "988bf14201ffbed940f23b42f87302e6adec4c21"
+                "url": "https://github.com/kriswallsmith/Buzz.git",
+                "reference": "9bc2ff5b82d40edeba07cfb28d84b8ed21bae31e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/kriswallsmith/Buzz/archive/988bf14201ffbed940f23b42f87302e6adec4c21.zip",
-                "reference": "988bf14201ffbed940f23b42f87302e6adec4c21",
+                "url": "https://api.github.com/repos/kriswallsmith/Buzz/zipball/9bc2ff5b82d40edeba07cfb28d84b8ed21bae31e",
+                "reference": "9bc2ff5b82d40edeba07cfb28d84b8ed21bae31e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
             "suggest": {
                 "ext-curl": "*"
             },
-            "time": "2012-08-17 12:23:33",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -113,7 +424,8 @@
             "keywords": [
                 "curl",
                 "http client"
-            ]
+            ],
+            "time": "2013-03-02 00:25:43"
         },
         {
             "name": "psr/log",
@@ -129,7 +441,6 @@
                 "reference": "1.0.0",
                 "shasum": ""
             },
-            "time": "2012-12-21 11:40:51",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -151,7 +462,8 @@
                 "log",
                 "psr",
                 "psr-3"
-            ]
+            ],
+            "time": "2012-12-21 11:40:51"
         },
         {
             "name": "qafoo/rmf",
@@ -167,7 +479,6 @@
                 "reference": "1.0.0",
                 "shasum": ""
             },
-            "time": "2012-09-03 11:24:11",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -175,7 +486,8 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "description": "Very simple VC framework which makes it easy to build HTTP applications / REST webservices"
+            "description": "Very simple VC framework which makes it easy to build HTTP applications / REST webservices",
+            "time": "2012-09-03 11:24:11"
         },
         {
             "name": "symfony-cmf/routing",
@@ -183,21 +495,20 @@
             "target-dir": "Symfony/Cmf/Component/Routing",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony-cmf/Routing",
-                "reference": "1.0.0-alpha3"
+                "url": "https://github.com/symfony-cmf/Routing.git",
+                "reference": "43585d83fb07f9354c098fcae593010567f53d45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony-cmf/Routing/archive/1.0.0-alpha3.zip",
-                "reference": "1.0.0-alpha3",
+                "url": "https://api.github.com/repos/symfony-cmf/Routing/zipball/43585d83fb07f9354c098fcae593010567f53d45",
+                "reference": "43585d83fb07f9354c098fcae593010567f53d45",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
-                "symfony/routing": ">=2.1,<2.3-dev",
-                "symfony/http-kernel": ">=2.1,<2.3-dev"
+                "symfony/http-kernel": ">=2.1,<2.3-dev",
+                "symfony/routing": ">=2.1,<2.3-dev"
             },
-            "time": "2012-12-16 17:52:57",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -224,75 +535,72 @@
             "keywords": [
                 "database",
                 "routing"
-            ]
+            ],
+            "time": "2013-02-22 13:50:34"
         },
         {
             "name": "symfony/symfony",
-            "version": "dev-master",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
-                "url": "git://github.com/symfony/symfony.git",
-                "reference": "4bdfb92a3586cf077f4dab90d69b91cb96255f8b"
+                "url": "https://github.com/symfony/symfony.git",
+                "reference": "v2.2.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/symfony/archive/4bdfb92a3586cf077f4dab90d69b91cb96255f8b.zip",
-                "reference": "4bdfb92a3586cf077f4dab90d69b91cb96255f8b",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/v2.2.0",
+                "reference": "v2.2.0",
                 "shasum": ""
             },
             "require": {
-                "doctrine/common": ">2.2,<2.4-dev",
+                "doctrine/common": ">=2.2,<3.0",
                 "php": ">=5.3.3",
-                "twig/twig": ">=1.11.0,<2.0-dev",
-                "psr/log": ">=1.0,<2.0"
+                "psr/log": ">=1.0,<2.0",
+                "twig/twig": ">=1.11.0,<2.0"
             },
             "replace": {
-                "symfony/doctrine-bridge": "self.version",
-                "symfony/monolog-bridge": "self.version",
-                "symfony/propel1-bridge": "self.version",
-                "symfony/swiftmailer-bridge": "self.version",
-                "symfony/twig-bridge": "self.version",
-                "symfony/framework-bundle": "self.version",
-                "symfony/security-bundle": "self.version",
-                "symfony/twig-bundle": "self.version",
-                "symfony/web-profiler-bundle": "self.version",
                 "symfony/browser-kit": "self.version",
                 "symfony/class-loader": "self.version",
                 "symfony/config": "self.version",
                 "symfony/console": "self.version",
                 "symfony/css-selector": "self.version",
                 "symfony/dependency-injection": "self.version",
+                "symfony/doctrine-bridge": "self.version",
                 "symfony/dom-crawler": "self.version",
                 "symfony/event-dispatcher": "self.version",
                 "symfony/filesystem": "self.version",
                 "symfony/finder": "self.version",
                 "symfony/form": "self.version",
+                "symfony/framework-bundle": "self.version",
                 "symfony/http-foundation": "self.version",
                 "symfony/http-kernel": "self.version",
                 "symfony/locale": "self.version",
+                "symfony/monolog-bridge": "self.version",
                 "symfony/options-resolver": "self.version",
                 "symfony/process": "self.version",
+                "symfony/propel1-bridge": "self.version",
+                "symfony/property-access": "self.version",
                 "symfony/routing": "self.version",
                 "symfony/security": "self.version",
+                "symfony/security-bundle": "self.version",
                 "symfony/serializer": "self.version",
+                "symfony/stopwatch": "self.version",
+                "symfony/swiftmailer-bridge": "self.version",
                 "symfony/templating": "self.version",
                 "symfony/translation": "self.version",
+                "symfony/twig-bridge": "self.version",
+                "symfony/twig-bundle": "self.version",
                 "symfony/validator": "self.version",
-                "symfony/yaml": "self.version",
-                "symfony/stopwatch": "self.version",
-                "symfony/property-access": "self.version"
+                "symfony/web-profiler-bundle": "self.version",
+                "symfony/yaml": "self.version"
             },
             "require-dev": {
                 "doctrine/data-fixtures": "1.0.*",
-                "propel/propel1": "dev-master",
-                "doctrine/dbal": ">=2.2,<2.4-dev",
-                "doctrine/orm": ">=2.2.3,<2.4-dev",
-                "monolog/monolog": ">=1.3,<2.0"
+                "doctrine/dbal": ">=2.2,<3.0",
+                "doctrine/orm": ">=2.2,<3.0,>=2.2.3",
+                "monolog/monolog": ">=1.3,<2.0",
+                "propel/propel1": "1.6.*"
             },
-            "suggest": {
-                "doctrine/data-fixtures": "1.0.*"
-            },
-            "time": "2013-01-23 13:21:06",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -326,26 +634,126 @@
             "homepage": "http://symfony.com",
             "keywords": [
                 "framework"
-            ]
+            ],
+            "time": "2013-03-01 06:52:29"
+        },
+        {
+            "name": "tedivm/stash",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tedivm/Stash.git",
+                "reference": "071352c5905706b74b9b2fb925493935975e4d25"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tedivm/Stash/zipball/071352c5905706b74b9b2fb925493935975e4d25",
+                "reference": "071352c5905706b74b9b2fb925493935975e4d25",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Stash": "src/",
+                    "Stash\\Test": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Robert Hafner",
+                    "email": "tedivm@tedivm.com"
+                },
+                {
+                    "name": "Josh Hall-Bachner",
+                    "email": "charlequin@gmail.com"
+                }
+            ],
+            "description": "A place to keep your cache",
+            "homepage": "http://github.com/tedivm/Stash",
+            "keywords": [
+                "caching",
+                "performance",
+                "scalability",
+                "sessions"
+            ],
+            "time": "2013-03-03 00:18:55"
+        },
+        {
+            "name": "tedivm/stash-bundle",
+            "version": "dev-blackhole",
+            "target-dir": "Tedivm/StashBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/andrerom/TedivmStashBundle.git",
+                "reference": "9b83333a9bf046321c3d7c2d43ef2e3209707563"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/andrerom/TedivmStashBundle/zipball/9b83333a9bf046321c3d7c2d43ef2e3209707563",
+                "reference": "9b83333a9bf046321c3d7c2d43ef2e3209707563",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "symfony/framework-bundle": ">=2.2,<3.0",
+                "symfony/yaml": ">=2.2,<3.0",
+                "tedivm/stash": "dev-master#071352c5905706b74b9b2fb925493935975e4d25"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Tedivm\\StashBundle": ""
+                }
+            },
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Josh Hall-Bachner",
+                    "email": "jhallbachner@gmail.com"
+                },
+                {
+                    "name": "Robert Hafner",
+                    "email": "tedivm@tedivm.com"
+                }
+            ],
+            "description": "Incorporates the Stash caching library into Symfony.",
+            "homepage": "http://github.com/tedivm/TedivmStashBundle",
+            "keywords": [
+                "caching",
+                "sessions",
+                "symfony"
+            ],
+            "support": {
+                "source": "https://github.com/andrerom/TedivmStashBundle/tree/blackhole"
+            },
+            "time": "2013-03-03 11:30:46"
         },
         {
             "name": "twig/twig",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git://github.com/fabpot/Twig.git",
-                "reference": "93c6a8dedc46c73ccdd61342de3d5e761e4412f6"
+                "url": "https://github.com/fabpot/Twig.git",
+                "reference": "39d94faabcea7d60b90c2996d51e1b6691ab39d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/archive/93c6a8dedc46c73ccdd61342de3d5e761e4412f6.zip",
-                "reference": "93c6a8dedc46c73ccdd61342de3d5e761e4412f6",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/39d94faabcea7d60b90c2996d51e1b6691ab39d2",
+                "reference": "39d94faabcea7d60b90c2996d51e1b6691ab39d2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2013-01-18 09:58:04",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -375,7 +783,8 @@
             "homepage": "http://twig.sensiolabs.org",
             "keywords": [
                 "templating"
-            ]
+            ],
+            "time": "2013-02-28 14:08:49"
         },
         {
             "name": "zetacomponents/archive",
@@ -397,7 +806,6 @@
             "require-dev": {
                 "zetacomponents/unit-test": "*"
             },
-            "time": "2012-05-21 09:54:03",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -441,7 +849,8 @@
                 }
             ],
             "description": "The component allows you to create, modify, and extract archive files of  various formats.  The currently supported archives formats are Tar (with  the flavours: ustar, v7, pax, and gnu) and Zip.",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-21 09:54:03"
         },
         {
             "name": "zetacomponents/authentication",
@@ -463,7 +872,6 @@
             "require-dev": {
                 "zetacomponents/unit-test": "*"
             },
-            "time": "2012-05-21 09:55:21",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -507,7 +915,8 @@
                 }
             ],
             "description": "The purpose of the Authentication component is to provide support for different means of identification and authentication of users using different providers and protocols.",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-21 09:55:21"
         },
         {
             "name": "zetacomponents/base",
@@ -526,7 +935,6 @@
             "require-dev": {
                 "zetacomponents/unit-test": "*"
             },
-            "time": "2012-05-21 11:21:36",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -570,7 +978,8 @@
                 }
             ],
             "description": "The Base package provides the basic infrastructure that all packages rely on. Therefore every component relies on this package.",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-21 11:21:36"
         },
         {
             "name": "zetacomponents/cache",
@@ -592,7 +1001,6 @@
             "require-dev": {
                 "zetacomponents/unit-test": "*"
             },
-            "time": "2012-05-21 09:55:29",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -639,7 +1047,8 @@
                 }
             ],
             "description": "A solution for caching, supporting multiple backends allowing you to specify the best performing solution for your caching-problem.",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-21 09:55:29"
         },
         {
             "name": "zetacomponents/configuration",
@@ -661,7 +1070,6 @@
             "require-dev": {
                 "zetacomponents/unit-test": "*"
             },
-            "time": "2012-05-21 09:55:32",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -705,7 +1113,8 @@
                 }
             ],
             "description": "A component that allows you to use configuration files in different formats. The formats include the standard .ini file, and an array based format.",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-21 09:55:32"
         },
         {
             "name": "zetacomponents/console-tools",
@@ -727,7 +1136,6 @@
             "require-dev": {
                 "zetacomponents/unit-test": "*"
             },
-            "time": "2012-05-21 09:55:34",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -771,7 +1179,8 @@
                 }
             ],
             "description": "A set of classes to do different actions with the console (also called shell). It can render a progress bar, tables and a status bar and contains a class for parsing command line options.",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-21 09:55:34"
         },
         {
             "name": "zetacomponents/database",
@@ -793,7 +1202,6 @@
             "require-dev": {
                 "zetacomponents/unit-test": "*"
             },
-            "time": "2012-05-21 09:55:40",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -846,7 +1254,8 @@
                 }
             ],
             "description": "A lightweight database layer on top of PHP's PDO that allows you to utilize a database without having to take care of differences in SQL dialects.",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-21 09:55:40"
         },
         {
             "name": "zetacomponents/debug",
@@ -868,7 +1277,6 @@
             "require-dev": {
                 "zetacomponents/unit-test": "*"
             },
-            "time": "2012-05-21 09:55:45",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -912,7 +1320,8 @@
                 }
             ],
             "description": "This component provides a set of classes that help you to debug an application. It provides timers and report generators for different formats that give a summary of warnings and errors that occurred within your application.",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-21 09:55:45"
         },
         {
             "name": "zetacomponents/event-log",
@@ -928,7 +1337,6 @@
                 "reference": "1.4",
                 "shasum": ""
             },
-            "time": "2009-06-29 03:55:08",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -972,7 +1380,8 @@
                 }
             ],
             "description": "Allows you to log events or audit trails into files or other storage spaces in different formats.",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2009-06-29 03:55:08"
         },
         {
             "name": "zetacomponents/feed",
@@ -994,7 +1403,6 @@
             "require-dev": {
                 "zetacomponents/unit-test": "*"
             },
-            "time": "2012-05-21 09:55:58",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -1038,7 +1446,8 @@
                 }
             ],
             "description": "This component handles parsing and creating RSS1, RSS2 and ATOM feeds, with support for different feed modules (dc, content, creativeCommons, geo, iTunes).",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-21 09:55:58"
         },
         {
             "name": "zetacomponents/image-analysis",
@@ -1060,7 +1469,6 @@
             "require-dev": {
                 "zetacomponents/unit-test": "*"
             },
-            "time": "2012-05-21 09:56:09",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -1104,7 +1512,8 @@
                 }
             ],
             "description": "This class allows you to analyse image files in different ways. At least the MIME type of the file is returned. In some cases (JPEG, TIFF and GIF) additional information is gathered as well.",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-21 09:56:09"
         },
         {
             "name": "zetacomponents/image-conversion",
@@ -1127,7 +1536,6 @@
             "require-dev": {
                 "zetacomponents/unit-test": "*"
             },
-            "time": "2012-05-28 07:48:05",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -1171,7 +1579,8 @@
                 }
             ],
             "description": "A set of classes to apply different filters on images, such as colour changes, resizing and special effects.",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-28 07:48:05"
         },
         {
             "name": "zetacomponents/mail",
@@ -1193,7 +1602,6 @@
             "require-dev": {
                 "zetacomponents/unit-test": "*"
             },
-            "time": "2012-05-21 09:56:15",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -1246,7 +1654,8 @@
                 }
             ],
             "description": "The component allows you construct and/or parse Mail messages conforming to  the mail standard. It has support for attachments, multipart messages and HTML  mail. It also interfaces with SMTP to send mail or IMAP, POP3 or mbox to  retrieve e-mail.",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-21 09:56:15"
         },
         {
             "name": "zetacomponents/mvc-authentication-tiein",
@@ -1262,7 +1671,6 @@
                 "reference": "9bae3a7313e2ef7f53ef1f394276acc3fde0f80e",
                 "shasum": ""
             },
-            "time": "2012-05-21 09:46:53",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -1291,7 +1699,8 @@
                 }
             ],
             "description": "This component provides authentication filters for the MvcTools component.",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-21 09:46:53"
         },
         {
             "name": "zetacomponents/mvc-tools",
@@ -1313,7 +1722,6 @@
             "require-dev": {
                 "zetacomponents/unit-test": "*"
             },
-            "time": "2012-05-21 09:56:22",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -1345,7 +1753,8 @@
                 }
             ],
             "description": "The MvcTools component provides functionality for request parsing, routing, dispatching, views and response writing. With the tools in this component you can very easily build an MVC framework.",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-21 09:56:22"
         },
         {
             "name": "zetacomponents/persistent-object",
@@ -1367,7 +1776,6 @@
             "require-dev": {
                 "zetacomponents/unit-test": "*"
             },
-            "time": "2012-05-21 09:56:25",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -1414,7 +1822,8 @@
                 }
             ],
             "description": "This component allows you to store an arbitrary data structures to a fixed database table. The component provides all the functionality needed to fetch, list, delete etc these datastructures.",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-21 09:56:25"
         },
         {
             "name": "zetacomponents/php-generator",
@@ -1436,7 +1845,6 @@
             "require-dev": {
                 "zetacomponents/unit-test": "*"
             },
-            "time": "2012-05-21 09:56:30",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -1480,7 +1888,8 @@
                 }
             ],
             "description": "Provides a simple interface for creating PHP files and executing PHP code.",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-21 09:56:30"
         },
         {
             "name": "zetacomponents/signal-slot",
@@ -1502,7 +1911,6 @@
             "require-dev": {
                 "zetacomponents/unit-test": "*"
             },
-            "time": "2012-05-21 14:06:23",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -1546,7 +1954,8 @@
                 }
             ],
             "description": "The SignalSlot component implements a mechanism for inter and intra object communication through the use of signals and slots.",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-21 14:06:23"
         },
         {
             "name": "zetacomponents/system-information",
@@ -1568,7 +1977,6 @@
             "require-dev": {
                 "zetacomponents/unit-test": "*"
             },
-            "time": "2012-05-21 09:56:41",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -1612,7 +2020,8 @@
                 }
             ],
             "description": "Provides access to common system variables, such as CPU type and speed, and the available amount of memory.",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2012-05-21 09:56:41"
         },
         {
             "name": "zetacomponents/webdav",
@@ -1628,7 +2037,6 @@
                 "reference": "1.1.3",
                 "shasum": ""
             },
-            "time": "2009-11-09 05:34:07",
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -1672,10 +2080,65 @@
                 }
             ],
             "description": "This component allows you to set up and run your own WebDAV (RFC 2518) server, to enable online content editing for the users of your system through the WebDAV HTTP extension.",
-            "homepage": "https://github.com/zetacomponents"
+            "homepage": "https://github.com/zetacomponents",
+            "time": "2009-11-09 05:34:07"
         }
     ],
-    "packages-dev": null,
+    "packages-dev": [
+        {
+            "name": "ezsystems/ezpublish-legacy",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ezsystems/ezpublish-legacy.git",
+                "reference": "b929b8895a8abf46a12868300a2cd4860cd5ed44"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ezsystems/ezpublish-legacy/zipball/b929b8895a8abf46a12868300a2cd4860cd5ed44",
+                "reference": "b929b8895a8abf46a12868300a2cd4860cd5ed44",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "eZ Publish LegacyStack (4.x)",
+            "homepage": "http://share.ez.no",
+            "time": "2013-02-26 16:40:48"
+        },
+        {
+            "name": "mikey179/vfsStream",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mikey179/vfsStream",
+                "reference": "v1.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/mikey179/vfsStream/zipball/v1.1.0",
+                "reference": "v1.1.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "org\\bovigo\\vfs": "src/main/php"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "homepage": "http://vfs.bovigo.org/",
+            "time": "2012-08-25 05:49:29"
+        }
+    ],
     "aliases": [
 
     ],
@@ -1698,6 +2161,7 @@
         "zetacomponents/signal-slot": 20,
         "zetacomponents/system-information": 20,
         "kriswallsmith/buzz": 20,
+        "tedivm/stash-bundle": 20,
         "ezsystems/ezpublish-legacy": 20
     }
 }

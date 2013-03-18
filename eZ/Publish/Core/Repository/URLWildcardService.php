@@ -227,7 +227,7 @@ class URLWildcardService implements URLWildcardServiceInterface
         // @todo sort by specificity of the pattern?
         uasort(
             $spiUrlWildcards,
-            function( SPIUrlWildcard $w1, SPIUrlWildcard $w2 )
+            function ( SPIUrlWildcard $w1, SPIUrlWildcard $w2 )
             {
                 return strlen( $w2->sourceUrl ) - strlen( $w1->sourceUrl );
             }

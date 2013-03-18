@@ -1,0 +1,3 @@
+parameters:
+    # Override this with a Twig template definition to have Twig render legacy pagelayouts
+    ezpublish_legacy.view.legacy_layout: ~

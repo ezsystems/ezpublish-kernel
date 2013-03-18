@@ -302,7 +302,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      * @param array $typeCreateOverride
      * @param array $fieldCreateOverride
      *
-     * @return \eZ\Publish\API\Repository\Values\ContentType
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     protected function createContentType( $fieldSettings, $validatorConfiguration, array $typeCreateOverride = array(), array $fieldCreateOverride = array() )
     {

@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\SignalSlot\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Slot\AbstractLegacySlot;
+use eZContentCacheManager;
+use eZSearch;
 
 /**
  * A legacy slot handling AssignSectionSignal.
@@ -31,10 +33,10 @@ class LegacyAssignSectionSlot extends AbstractLegacySlot
 
         $kernel = $this->getLegacyKernel();
         $kernel->runCallback(
-            function() use( $signal )
+            function () use ( $signal )
             {
-                \eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
-                \eZSearch::updateObjectsSection( array( $signal->contentId ), $signal->sectionId );
+                eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
+                eZSearch::updateObjectsSection( array( $signal->contentId ), $signal->sectionId );
             },
             false
         );

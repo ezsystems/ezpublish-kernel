@@ -168,7 +168,7 @@ class ContentExtension extends Twig_Extension
      * Generates the array of parameter to pass to the field template.
      *
      * @param \eZ\Publish\Core\Repository\Values\Content\Content $content
-     * @param \eZ\Publish\Core\Repository\Values\Content\Field $field the Field to display
+     * @param \eZ\Publish\API\Repository\Values\Content\Field $field the Field to display
      * @param array $params An array of parameters to pass to the field view
      *
      * @return array
@@ -183,9 +183,12 @@ class ContentExtension extends Twig_Extension
             'attr' => array() // attributes to add on the enclosing HTML tags
         );
 
+        /** @var $repository \eZ\Publish\API\Repository\Repository */
+        $repository = $this->container->get( 'ezpublish.api.repository' );
+
         $versionInfo = $content->getVersionInfo();
         $contentInfo = $versionInfo->getContentInfo();
-        $contentType = $contentInfo->getContentType();
+        $contentType = $repository->getContentTypeService()->loadContentType( $contentInfo->contentTypeId );
         // Adding Field, FieldSettings and ContentInfo objects to
         // parameters to be passed to the template
         $params += array(
@@ -468,8 +471,13 @@ class ContentExtension extends Twig_Extension
      */
     protected function getFieldTypeIdentifier( Content $content, Field $field )
     {
-        $contentType = $content->getVersionInfo()->getContentInfo()->getContentType();
+        /** @var $repository \eZ\Publish\API\Repository\Repository */
+        $repository = $this->container->get( 'ezpublish.api.repository' );
+        $contentType = $repository->getContentTypeService()->loadContentType(
+            $content->getVersionInfo()->getContentInfo()->contentTypeId
+        );
         $key = $contentType->identifier . '  ' . $field->fieldDefIdentifier;
+
         if ( !isset( $this->fieldTypeIdentifiers[$key] ) )
         {
             $this->fieldTypeIdentifiers[$key] = $contentType

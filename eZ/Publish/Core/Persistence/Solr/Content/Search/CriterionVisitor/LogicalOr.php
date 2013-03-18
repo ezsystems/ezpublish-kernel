@@ -43,7 +43,7 @@ class LogicalOr extends CriterionVisitor
             implode(
                 ' OR ',
                 array_map(
-                    function( $value ) use ( $subVisitor )
+                    function ( $value ) use ( $subVisitor )
                     {
                         return $subVisitor->visit( $value );
                     },

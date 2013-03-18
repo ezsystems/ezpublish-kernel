@@ -62,6 +62,13 @@ class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentT
     protected $fieldDefinitionListReference;
 
     /**
+     * Contains the URL for the list of ContentTypeGroups for the ContentType.
+     *
+     * @var string
+     */
+    protected $contentTypeGroupListReference;
+
+    /**
      * @param ContentTypeService $contentTypeService
      * @param array $data
      */
@@ -137,7 +144,10 @@ class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentT
      */
     public function getContentTypeGroups()
     {
-        // @todo: Implement!
+        $contentTypeGroupList = $this->contentTypeService->loadContentTypeGroupList(
+            $this->contentTypeGroupListReference
+        );
+        return $contentTypeGroupList->getContentTypeGroups();
     }
 
     /**
@@ -171,5 +181,38 @@ class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentT
             }
         }
         return null;
+    }
+
+    /**
+     * Magic getter for retrieving convenience properties
+     *
+     * @param string $property The name of the property to retrieve
+     *
+     * @return mixed
+     */
+    public function __get( $property )
+    {
+        switch ( $property )
+        {
+            case "contentTypeGroups":
+                return $this->getContentTypeGroups();
+        }
+
+        return parent::__get( $property );
+    }
+
+    /**
+     * Magic isset for singaling existence of convenience properties
+     *
+     * @param string $property
+     *
+     * @return boolean
+     */
+    public function __isset( $property )
+    {
+        if ( $property === "contentTypeGroups" )
+            return true;
+
+        return parent::__isset( $property );
     }
 }

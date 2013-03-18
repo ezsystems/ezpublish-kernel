@@ -56,7 +56,7 @@ use Exception;
  * content objects based on criteria, which could not be converted in to
  * database statements.
  */
-class SearchHandler extends SearchHandlerInterface
+class SearchHandler implements SearchHandlerInterface
 {
     /**
      * @var Handler
@@ -150,15 +150,6 @@ class SearchHandler extends SearchHandlerInterface
                     )
                 );
 
-                $locations = $this->backend->find(
-                    'Content\\Location',
-                    array( 'contentId' => $item->versionInfo->contentInfo->id )
-                );
-                if ( !empty( $locations ) )
-                {
-                    $item->versionInfo->contentInfo->mainLocationId = $locations[0]->mainLocationId;
-                }
-
                 $resultList[] = $item;
             }
         }
@@ -236,6 +227,19 @@ class SearchHandler extends SearchHandlerInterface
     }
 
     /**
+     * Deletes a content object from the index
+     *
+     * @param int $contentId
+     * @param int|null $versionId
+     *
+     * @return void
+     */
+    public function deleteContent( $contentId, $versionId = null )
+    {
+        throw new \Exception( "Not implemented yet." );
+    }
+
+    /**
      * Generate match array for use with Backend based on criteria
      *
      * @param array $criteria
@@ -279,7 +283,7 @@ class SearchHandler extends SearchHandlerInterface
             {
                 $languageHandler = $this->handler->contentLanguageHandler();
                 $languageIds = array_map(
-                    function( $languageCode ) use ( $languageHandler )
+                    function ( $languageCode ) use ( $languageHandler )
                     {
                         return $languageHandler->loadByLanguageCode( $languageCode )->id;
                     },

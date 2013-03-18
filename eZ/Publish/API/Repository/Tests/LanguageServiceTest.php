@@ -38,7 +38,7 @@ class LanguageServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LanguageCreateStruct',
             $languageCreate
         );
     }
@@ -66,7 +66,7 @@ class LanguageServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Language',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Language',
             $language
         );
 
@@ -165,7 +165,7 @@ class LanguageServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Language',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Language',
             $language
         );
     }
@@ -222,7 +222,7 @@ class LanguageServiceTest extends BaseTest
 
         // Verify that the service returns an updated language instance.
         $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\Content\Language',
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Language',
             $updatedLanguage
         );
 

@@ -20,8 +20,10 @@ use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
+use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 
 use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\SectionService;
 use eZ\Publish\API\Repository\SearchService;
@@ -37,6 +39,13 @@ class Content extends RestController
      * @var \eZ\Publish\API\Repository\ContentService
      */
     protected $contentService;
+
+    /**
+     * ContentType service
+     *
+     * @var \eZ\Publish\API\Repository\ContentTypeService
+     */
+    protected $contentTypeService;
 
     /**
      * Location service
@@ -63,13 +72,21 @@ class Content extends RestController
      * Construct controller
      *
      * @param \eZ\Publish\API\Repository\ContentService $contentService
+     * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\SectionService $sectionService
      * @param \eZ\Publish\API\Repository\SearchService $searchService
      */
-    public function __construct( ContentService $contentService, LocationService $locationService, SectionService $sectionService, SearchService $searchService )
+    public function __construct(
+        ContentService $contentService,
+        ContentTypeService $contentTypeService,
+        LocationService $locationService,
+        SectionService $sectionService,
+        SearchService $searchService
+    )
     {
         $this->contentService  = $contentService;
+        $this->contentTypeService  = $contentTypeService;
         $this->locationService = $locationService;
         $this->sectionService  = $sectionService;
         $this->searchService   = $searchService;
@@ -78,20 +95,24 @@ class Content extends RestController
     /**
      * Loads a content info by remote ID
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ContentList
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\TemporaryRedirect
      */
-    public function loadContentInfoByRemoteId()
+    public function redirectContent()
     {
-        $contentInfo = $this->contentService->loadContentInfoByRemoteId(
-            // GET variable
-            $this->request->variables['remoteId']
-        );
+        if ( !isset( $this->request->variables['remoteId'] ) )
+        {
+            throw new BadRequestException( "'remoteId' parameter is required." );
+        }
 
-        return new Values\ContentList(
-            array(
-                new Values\RestContent(
-                    $contentInfo,
-                    $this->locationService->loadLocation( $contentInfo->mainLocationId )
+        $contentInfo = $this->contentService->loadContentInfoByRemoteId( $this->request->variables['remoteId'] );
+
+        return new Values\TemporaryRedirect(
+            $this->urlHandler->generate(
+                'object',
+                array(
+                    'object' => $contentInfo->id
                 )
             )
         );
@@ -111,6 +132,7 @@ class Content extends RestController
 
         $contentInfo = $this->contentService->loadContentInfo( $urlValues['object'] );
         $mainLocation = $this->locationService->loadLocation( $contentInfo->mainLocationId );
+        $contentType = $this->contentTypeService->loadContentType( $contentInfo->contentTypeId );
 
         $contentVersion = null;
         $relations = null;
@@ -126,7 +148,14 @@ class Content extends RestController
             $relations = $this->contentService->loadRelations( $contentVersion->getVersionInfo() );
         }
 
-        return new Values\RestContent( $contentInfo, $mainLocation, $contentVersion, $relations, $this->request->path );
+        return new Values\RestContent(
+            $contentInfo,
+            $mainLocation,
+            $contentVersion,
+            $contentType,
+            $relations,
+            $this->request->path
+        );
     }
 
     /**
@@ -232,8 +261,13 @@ class Content extends RestController
             $languages,
             $urlValues['version']
         );
+        $contentType = $this->contentTypeService->loadContentType(
+            $content->getVersionInfo()->getContentInfo()->contentTypeId
+        );
+
         return new Values\Version(
             $content,
+            $contentType,
             $this->contentService->loadRelations( $content->getVersionInfo() ),
             $this->request->path
         );
@@ -265,10 +299,14 @@ class Content extends RestController
         );
 
         $contentValue = null;
+        $contentType = null;
         $relations = null;
         if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.content' )
         {
             $contentValue = $content;
+            $contentType = $this->contentTypeService->loadContentType(
+                $content->getVersionInfo()->getContentInfo()->contentTypeId
+            );
             $relations = $this->contentService->loadRelations( $contentValue->getVersionInfo() );
         }
 
@@ -278,6 +316,7 @@ class Content extends RestController
                     $content->contentInfo,
                     null,
                     $contentValue,
+                    $contentType,
                     $relations
                 )
             )
@@ -379,6 +418,7 @@ class Content extends RestController
         $urlValues = $this->urlHandler->parse( 'objectVersion', $this->request->path );
 
         $contentInfo = $this->contentService->loadContentInfo( $urlValues['object'] );
+        $contentType = $this->contentTypeService->loadContentType( $contentInfo->contentTypeId );
         $contentDraft = $this->contentService->createContentDraft(
             $contentInfo,
             $this->contentService->loadVersionInfo(
@@ -390,6 +430,7 @@ class Content extends RestController
             array(
                 'version' => new Values\Version(
                     $contentDraft,
+                    $contentType,
                     $this->contentService->loadRelations( $contentDraft->getVersionInfo() )
                 )
             )
@@ -406,6 +447,7 @@ class Content extends RestController
         $urlValues = $this->urlHandler->parse( 'objectCurrentVersion', $this->request->path );
 
         $contentInfo = $this->contentService->loadContentInfo( $urlValues['object'] );
+        $contentType = $this->contentTypeService->loadContentType( $contentInfo->contentTypeId );
         $versionInfo = $this->contentService->loadVersionInfo(
             $contentInfo
         );
@@ -421,6 +463,7 @@ class Content extends RestController
             array(
                 'version' => new Values\Version(
                     $contentDraft,
+                    $contentType,
                     $this->contentService->loadRelations( $contentDraft->getVersionInfo() )
                 )
             )
@@ -474,9 +517,13 @@ class Content extends RestController
             $languages,
             $versionInfo->versionNo
         );
+        $contentType = $this->contentTypeService->loadContentType(
+            $content->getVersionInfo()->getContentInfo()->contentTypeId
+        );
 
         return new Values\Version(
             $content,
+            $contentType,
             $this->contentService->loadRelations( $content->getVersionInfo() ),
             $this->request->path
         );

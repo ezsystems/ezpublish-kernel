@@ -119,7 +119,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
 
         usort(
             $objectStates,
-            function( ObjectState $first, ObjectState $second )
+            function ( ObjectState $first, ObjectState $second )
             {
                 if ( $first->priority == $second->priority )
                     return 0;
@@ -187,7 +187,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
         {
             $allContentInfos = $this->backend->find( "Content\\ContentInfo" );
             $allContentIds = array_map(
-                function( ContentInfo $contentInfo )
+                function ( ContentInfo $contentInfo )
                 {
                     return $contentInfo->id;
                 },
@@ -337,15 +337,23 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
 
         $contentToStateMap = $this->getContentToStateMap();
 
-        // If the content was in one of the group states,
-        // find all content for the old state and update the old state with excluded $contentId
-        $existingStateIds = array_values( array_intersect( $groupStateIds, $contentToStateMap[(int)$contentId] ) );
-        if ( !empty( $existingStateIds ) )
+        if ( isset( $contentToStateMap[(int)$contentId] ) )
         {
-            $oldStateContentList = $this->getObjectStateContentList( $existingStateIds[0] );
-            $oldStateContentList = array_values( array_diff( $oldStateContentList, array( $contentId ) ) );
-
-            $this->backend->update( "Content\\ObjectState", $existingStateIds[0], array( "_contentId" => $oldStateContentList ) );
+            // If the content was in one of the group states,
+            // find all content for the old state and update the old state with excluded $contentId
+            $existingStateIds = array_values( array_intersect( $groupStateIds, $contentToStateMap[(int)$contentId] ) );
+            if ( !empty( $existingStateIds ) )
+            {
+                $this->backend->update(
+                    "Content\\ObjectState",
+                    $existingStateIds[0],
+                    array(
+                        "_contentId" => array_values(
+                            array_diff( $this->getObjectStateContentList( $existingStateIds[0] ), array( $contentId ) )
+                        )
+                    )
+                );
+            }
         }
 
         // Find all content for the new state and update the new state with added $contentId

@@ -181,7 +181,6 @@ CREATE TABLE 'ezcontentobject_link' (
   'from_contentobject_id' integer NOT NULL DEFAULT 0,
   'from_contentobject_version' integer NOT NULL DEFAULT 0,
   'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-  'op_code' integer NOT NULL DEFAULT 0,
   'relation_type' integer NOT NULL DEFAULT 1,
   'to_contentobject_id' integer NOT NULL DEFAULT 0
 );
@@ -425,14 +424,11 @@ CREATE UNIQUE INDEX 'ezcontentclass_classgroup_pri' ON 'ezcontentclass_classgrou
 CREATE UNIQUE INDEX 'ezcontentclass_name_pri' ON 'ezcontentclass_name' ( 'contentclass_id', 'contentclass_version', 'language_id' );
 CREATE INDEX 'ezcontentclass_version' ON 'ezcontentclass' ( 'version' );
 CREATE INDEX 'ezcontentclass_identifier' ON 'ezcontentclass' ( 'identifier', 'version' );
-CREATE INDEX 'ezcontentobject_attr_id' ON 'ezcontentobject_attribute' ( 'id' );
 CREATE INDEX 'ezcontentobject_attribute_co_id_ver_lang_code' ON 'ezcontentobject_attribute' ( 'contentobject_id', 'version', 'language_code' );
-CREATE INDEX 'ezcontentobject_attribute_contentobject_id' ON 'ezcontentobject_attribute' ( 'contentobject_id' );
 CREATE INDEX 'ezcontentobject_attribute_language_code' ON 'ezcontentobject_attribute' ( 'language_code' );
 CREATE INDEX 'ezcontentobject_classid' ON 'ezcontentobject' ( 'contentclass_id' );
 CREATE INDEX 'ezcontentobject_currentversion' ON 'ezcontentobject' ( 'current_version' );
 CREATE INDEX 'ezcontentobject_lmask' ON 'ezcontentobject' ( 'language_mask' );
-CREATE INDEX 'ezcontentobject_name_co_id' ON 'ezcontentobject_name' ( 'contentobject_id' );
 CREATE INDEX 'ezcontentobject_name_cov_id' ON 'ezcontentobject_name' ( 'content_version' );
 CREATE INDEX 'ezcontentobject_name_lang_id' ON 'ezcontentobject_name' ( 'language_id' );
 CREATE INDEX 'ezcontentobject_name_name' ON 'ezcontentobject_name' ( 'name' );
@@ -448,7 +444,6 @@ CREATE INDEX 'ezcontentobject_tree_p_node_id' ON 'ezcontentobject_tree' ( 'paren
 CREATE INDEX 'ezcontentobject_tree_path' ON 'ezcontentobject_tree' ( 'path_string' );
 CREATE INDEX 'ezcontentobject_tree_path_ident' ON 'ezcontentobject_tree' ( 'path_identification_string' );
 CREATE INDEX 'ezcontentobject_tree_remote_id' ON 'ezcontentobject_tree' ( 'remote_id' );
-CREATE INDEX 'eznode_assignment_co_id' ON 'eznode_assignment' ( 'contentobject_id' );
 CREATE INDEX 'eznode_assignment_co_version' ON 'eznode_assignment' ( 'contentobject_version' );
 CREATE INDEX 'eznode_assignment_coid_cov' ON 'eznode_assignment' ( 'contentobject_id', 'contentobject_version' );
 CREATE INDEX 'eznode_assignment_is_main' ON 'eznode_assignment' ( 'is_main' );
@@ -465,13 +460,10 @@ CREATE INDEX 'ezurlalias_desturl' ON 'ezurlalias' ( 'destination_url' );
 CREATE INDEX 'ezurlalias_forward_to_id' ON 'ezurlalias' ( 'forward_to_id' );
 CREATE INDEX 'ezurlalias_imp_wcard_fwd' ON 'ezurlalias' ( 'is_imported', 'is_wildcard', 'forward_to_id' );
 CREATE INDEX 'ezurlalias_ml_act_org' ON 'ezurlalias_ml' ( 'action', 'is_original' );
-CREATE INDEX 'ezurlalias_ml_action' ON 'ezurlalias_ml' ( 'action', 'id', 'link' );
-CREATE INDEX 'ezurlalias_ml_actt' ON 'ezurlalias_ml' ( 'action_type' );
 CREATE INDEX 'ezurlalias_ml_actt_org_al' ON 'ezurlalias_ml' ( 'action_type', 'is_original', 'is_alias' );
 CREATE INDEX 'ezurlalias_ml_id' ON 'ezurlalias_ml' ( 'id' );
-CREATE INDEX 'ezurlalias_ml_par_act_id_lnk' ON 'ezurlalias_ml' ( 'parent', 'action', 'id', 'link' );
-CREATE INDEX 'ezurlalias_ml_par_lnk_txt' ON 'ezurlalias_ml' ( 'parent', 'link', 'text' );
-CREATE INDEX 'ezurlalias_ml_par_txt' ON 'ezurlalias_ml' ( 'parent', 'text' );
+CREATE INDEX 'ezurlalias_ml_par_act_id_lnk' ON 'ezurlalias_ml' ( 'action', 'id', 'link', 'parent' );
+CREATE INDEX 'ezurlalias_ml_par_lnk_txt' ON 'ezurlalias_ml' ( 'parent', 'text', 'link' );
 CREATE UNIQUE INDEX 'ezurlalias_ml_pri' ON 'ezurlalias_ml' ( 'parent', 'text_md5' );
 CREATE INDEX 'ezurlalias_ml_text' ON 'ezurlalias_ml' ( 'text', 'id', 'link' );
 CREATE INDEX 'ezurlalias_ml_text_lang' ON 'ezurlalias_ml' ( 'text', 'lang_mask', 'parent' );
@@ -499,6 +491,5 @@ CREATE INDEX 'ezsearch_word_word_i' ON 'ezsearch_word' ( 'word' );
 CREATE INDEX 'ezkeyword_keyword' ON 'ezkeyword' ( 'keyword' );
 CREATE INDEX 'ezkeyword_id' ON 'ezkeyword' ( 'keyword', 'id' );
 
-CREATE INDEX 'ezkeyword_attr_link_keyword_id' ON 'ezkeyword_attribute_link' ( 'keyword_id' );
 CREATE INDEX 'ezkeyword_attr_link_kid_oaid' ON 'ezkeyword_attribute_link' ( 'keyword_id', 'objectattribute_id' );
 CREATE INDEX 'ezkeyword_attr_link_oaid' ON 'ezkeyword_attribute_link' ( 'objectattribute_id' );

@@ -403,19 +403,4 @@ class AuthorIntegrationTest extends BaseIntegrationTest
             ),
         );
     }
-
-    /**
-     * @todo this is a workaround for a bug in PHP 5.3.3 {@link https://bugs.php.net/bug.php?id=61326}, can be removed when support for it ends
-     *
-     * @covers \eZ\Publish\Core\FieldType\FieldType::isEmptyValue
-     * @dataProvider providerForTestIsNotEmptyValue
-     */
-    public function testIsNotEmptyValue( $value )
-    {
-        $emptyValue = $this->getRepository()->getFieldTypeService()->buildFieldType( $this->getTypeName() )->getEmptyValue();
-
-        $this->assertFalse(
-            $value === null || ( (array)$value->authors == (array)$emptyValue->authors )
-        );
-    }
 }

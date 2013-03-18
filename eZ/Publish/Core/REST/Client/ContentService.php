@@ -137,17 +137,23 @@ class ContentService implements APIContentService, Sessionable
             'GET',
             $this->urlHandler->generate( 'objectByRemote', array( 'object' => $remoteId ) ),
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'ContentList' ) )
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'ContentInfo' ) )
             )
         );
-        $contentList = $this->inputDispatcher->parse( $response );
 
-        if ( empty( $contentList ) )
+        if ( $response->statusCode == 307 )
         {
-            throw new Exceptions\NotFoundException( "@todo: Error message." );
+            $response = $this->client->request(
+                'GET',
+                $response->headers['Location'],
+                new Message(
+                    array( 'Accept' => $this->outputVisitor->getMediaType( 'ContentInfo' ) )
+                )
+            );
         }
 
-        return $this->completeContentInfo( reset( $contentList ) );
+        $restContentInfo = $this->inputDispatcher->parse( $response );
+        return $this->completeContentInfo( $restContentInfo );
     }
 
     /**

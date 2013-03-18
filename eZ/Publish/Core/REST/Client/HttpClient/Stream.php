@@ -136,7 +136,8 @@ class Stream implements HttpClient
 
         return new Message(
             $headers,
-            $body
+            $body,
+            $headers['status']
         );
     }
 

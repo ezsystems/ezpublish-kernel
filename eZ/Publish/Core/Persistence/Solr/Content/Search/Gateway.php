@@ -40,6 +40,16 @@ abstract class Gateway
     abstract public function indexContent( array $document );
 
     /**
+     * Deletes a content object from the index
+     *
+     * @param int content id
+     * @param int|null version id
+     *
+     * @return void
+     */
+    abstract public function deleteContent( $contentId, $versionId = null );
+
+    /**
      * Purges all contents from the index
      *
      * @return void
