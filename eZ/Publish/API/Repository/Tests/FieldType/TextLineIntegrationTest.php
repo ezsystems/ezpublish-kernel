@@ -132,7 +132,7 @@ class TextLineIntegrationTest extends BaseIntegrationTest
      *
      * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field)
+    public function assertFieldDataLoadedCorrect( Field $field )
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\TextLine\\Value',

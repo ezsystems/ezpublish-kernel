@@ -27,12 +27,19 @@
         "symfony/symfony": "2.2.0",
         "symfony-cmf/routing": "1.0.*",
         "qafoo/rmf": "1.0.0",
-        "kriswallsmith/buzz": "dev-master"
+        "kriswallsmith/buzz": "dev-master",
+        "tedivm/stash-bundle": "dev-blackhole"
     },
     "require-dev": {
         "ezsystems/ezpublish-legacy": "dev-master",
         "mikey179/vfsStream": "1.1.0"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/andrerom/TedivmStashBundle"
+        }
+    ],
     "replace": {
         "ezsystems/ezpublish": "*"
     },

@@ -195,7 +195,7 @@ class RelationListFieldTypeIntegrationTest extends RelationBaseIntegrationTest
      *
      * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field)
+    public function assertFieldDataLoadedCorrect( Field $field )
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\RelationList\\Value',

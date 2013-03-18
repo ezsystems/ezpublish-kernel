@@ -144,11 +144,10 @@ class Mapper
      * Map data for a set of roles
      *
      * @param array $data
-     * @param boolean $indexById
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role[]
      */
-    public function mapRoles( array $data, $indexById = false )
+    public function mapRoles( array $data )
     {
         $roleData = array();
         foreach ( $data as $row )
@@ -157,12 +156,9 @@ class Mapper
         }
 
         $roles = array();
-        foreach ( $roleData as $id => $data )
+        foreach ( $roleData as $data )
         {
-            if ( $indexById )
-                $roles[$id] = $this->mapRole( $data );
-            else
-                $roles[] = $this->mapRole( $data );
+            $roles[] = $this->mapRole( $data );
         }
 
         return $roles;
@@ -175,10 +171,8 @@ class Mapper
      *
      * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
      */
-    public function mapRoleAssignments( array $data, array $roleData )
+    public function mapRoleAssignments( array $data )
     {
-        $roles = $this->mapRoles( $roleData, true );
-
         $roleAssignmentData = array();
         foreach ( $data as $row )
         {
@@ -196,7 +190,7 @@ class Mapper
                 {
                     $roleAssignmentData[$roleId][$contentId][$limitIdentifier] = new RoleAssignment(
                         array(
-                            'role' => $roles[$roleId],
+                            'roleId' => $roleId,
                             'contentId' => $contentId,
                             'limitationIdentifier' => $limitIdentifier,
                             'values' => array( $row['limit_value'] )
@@ -212,7 +206,7 @@ class Mapper
             {
                 $roleAssignmentData[$roleId][$contentId] = new RoleAssignment(
                     array(
-                        'role' => $roles[$roleId],
+                        'roleId' => $roleId,
                         'contentId' => $contentId
                     )
                 );

@@ -211,12 +211,12 @@ class LocationHandler implements LocationHandlerInterface
 
                 // If needed mark for later update
                 if (
-                    in_array( $child->mainLocationId, $locations[$child->contentId] ) &&
+                    in_array( $originalContentInfo->mainLocationId, $locations[$child->contentId] ) &&
                     count( $locations[$child->contentId] ) > 1 &&
-                    $child->id !== $child->mainLocationId
+                    $child->id !== $originalContentInfo->mainLocationId
                 )
                 {
-                    $mainLocationsUpdate[$child->contentId] = $child->mainLocationId;
+                    $mainLocationsUpdate[$child->contentId] = $originalContentInfo->mainLocationId;
                 }
             }
 
@@ -241,7 +241,8 @@ class LocationHandler implements LocationHandlerInterface
 
         // If subtree root is main location for its content, update subtree section to the one of the
         // parent location content
-        if ( $copiedSubtreeRootLocation->mainLocationId === $copiedSubtreeRootLocation->id )
+        $subtreeRootContentInfo = $this->handler->contentHandler()->loadContentInfo( $copiedSubtreeRootLocation->contentId );
+        if ( $subtreeRootContentInfo->mainLocationId === $copiedSubtreeRootLocation->id )
         {
             $this->setSectionForSubtree(
                 $copiedSubtreeRootLocation->id,
@@ -427,7 +428,13 @@ class LocationHandler implements LocationHandlerInterface
             $vo->id,
             array(
                 'pathString' => $pathString,
-                'pathIdentificationString' => $this->getPathIdentificationString( $vo ),
+                'pathIdentificationString' => $this->getPathIdentificationString( $vo )
+            )
+        );
+        $this->backend->update(
+            'Content\\ContentInfo',
+            $vo->contentId,
+            array(
                 'mainLocationId' => isset( $mainLocationId ) ? $mainLocationId : $vo->id
             )
         );
@@ -460,20 +467,16 @@ class LocationHandler implements LocationHandlerInterface
     public function setSectionForSubtree( $locationId, $sectionId )
     {
         $location = $this->load( $locationId );
-        $aContentIds = array( $location->contentId );
+        $aContentIds = array( $location->contentId => true );
         $children = $this->backend->find( 'Content\\Location', array( 'pathString' => "$location->pathString%" ) );
         foreach ( $children as $child )
         {
-            // Only get main locations
-            if ( $child->mainLocationId == $child->id )
-            {
-                $aContentIds[] = $child->contentId;
-            }
+            $aContentIds[$child->contentId] = true;
         }
 
         $this->backend->updateByMatch(
             'Content\\ContentInfo',
-            array( 'id' => $aContentIds ),
+            array( 'id' => array_keys( $aContentIds ) ),
             array( 'sectionId' => $sectionId ),
             true
         );
@@ -549,10 +552,12 @@ class LocationHandler implements LocationHandlerInterface
         }
         else
         {
-            $this->backend->updateByMatch(
-                'Content\\Location',
-                array( 'contentId' => $location->contentId ),
-                array( 'mainLocationId' => $remainingLocations[0]->id )
+            $this->backend->update(
+                'Content\\ContentInfo',
+                $location->contentId,
+                array(
+                    'mainLocationId' => $remainingLocations[0]->id
+                )
             );
         }
     }
@@ -590,15 +595,19 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function changeMainLocation( $contentId, $locationId )
     {
-        $this->backend->updateByMatch(
-            "Content\\Location",
-            array( "contentId" => $contentId ),
-            array( "mainLocationId" => $locationId )
+        $location = $this->backend->load( "Content\\Location", $locationId );
+
+        $this->backend->update(
+            'Content\\ContentInfo',
+            $contentId,
+            array(
+                'mainLocationId' => $locationId
+            )
         );
 
         $parentLocation = $this->backend->load(
             "Content\\Location",
-            $this->backend->load( "Content\\Location", $locationId )->parentId
+            $location->parentId
         );
         $parentContent = $this->backend->load(
             "Content\\ContentInfo",
