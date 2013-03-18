@@ -10,11 +10,55 @@
 namespace eZ\Publish\Core\MVC\Symfony\Controller;
 
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
+use eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager;
+use Symfony\Component\HttpFoundation\Response;
 
 class PageController extends Controller
 {
-    public function viewBlock( Block $block, array $cacheSettings = array() )
-    {
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\View\Manager
+     */
+    private $viewManager;
 
+    public function __construct( ViewManager $viewManager )
+    {
+        $this->viewManager = $viewManager;
+    }
+
+    /**
+     * Render the block
+     *
+     * @param \eZ\Publish\Core\FieldType\Page\Parts\Block $block
+     * @param array $parameters
+     * @param array $cacheSettings settings for the HTTP cache, 'smax-age' and
+     *        'max-age' are checked.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewBlock( Block $block, array $parameters = array(), array $cacheSettings = array() )
+    {
+        $response = new Response();
+        if ( $this->getParameter( 'content.view_cache' ) === true )
+        {
+            $response->setPublic();
+            if (
+                isset( $cacheSettings['smax-age'] )
+                && is_int( $cacheSettings['smax-age'] )
+            )
+            {
+                $response->setSharedMaxAge( (int)$cacheSettings['smax-age'] );
+            }
+            if (
+                isset( $cacheSettings['max-age'] )
+                && is_int( $cacheSettings['max-age'] )
+            )
+            {
+                $response->setMaxAge( (int)$cacheSettings['max-age'] );
+            }
+        }
+        $response->setContent(
+            $this->viewManager->renderBlock( $block, $parameters )
+        );
+        return $response;
     }
 }
