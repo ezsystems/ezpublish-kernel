@@ -51,32 +51,33 @@ class BlockAdapter extends DefinitionBasedAdapter
                 function ( Block $block )
                 {
                     return eZFlowPool::waitingItems( $block->id );
-                }
-        );
-    }
+                },
+            'last_valid_items'      =>
+                function ( Block $block )
+                {
+                    $validItems = eZFlowPool::validItems( $block->id );
+                    if ( empty( $validItems ) )
+                        return;
 
-    /**
-     * Builds a legacy eZPageBlock object from current value object.
-     *
-     * @return \eZPageBlock
-     */
-    public function getLegacyBlock()
-    {
-        $valueObject = $this->getValueObject();
-        return new eZPageBlock(
-            null,
-            array(
-                'id'                    => $valueObject->id,
-                'name'                  => $valueObject->name,
-                'action'                => $valueObject->action,
-                'items'                 => $valueObject->items,
-                'rotation'              => $valueObject->rotation,
-                'custom_attributes'     => $valueObject->customAttributes,
-                'type'                  => $valueObject->type,
-                'view'                  => $valueObject->view,
-                'overflow_id'           => $valueObject->overflowId,
-                'zone_id'               => $valueObject->zoneId,
-            )
+                    $result = null;
+                    $lastTime = 0;
+                    foreach ( $validItems as $item )
+                    {
+                        if ( $item->attribute( 'ts_visible' ) >= $lastTime )
+                        {
+                            $lastTime = $item->attribute( 'ts_visible' );
+                            $result = $item;
+                        }
+                    }
+
+                    return $result;
+                },
+            // The following is only for block_view_gui template function in legacy.
+            'view_template'         =>
+                function ( Block $block )
+                {
+                    return 'view';
+                }
         );
     }
 }

@@ -36,9 +36,7 @@ class ZoneAdapter extends DefinitionBasedAdapter
                     $legacyBlocks = array();
                     foreach ( $zone->blocks as $block )
                     {
-                        // Assigning legacy eZPageBlock objects on purpose since block_view_gui does not seem to like BlockAdapter.
-                        $adapter = new BlockAdapter( $block );
-                        $legacyBlocks[] = $adapter->getLegacyBlock();
+                        $legacyBlocks[] = new BlockAdapter( $block );
                     }
 
                     return $legacyBlocks;
