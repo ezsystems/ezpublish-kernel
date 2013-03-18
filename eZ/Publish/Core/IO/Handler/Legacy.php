@@ -141,7 +141,7 @@ class Legacy implements IOHandlerInterface
      * since they're stored in the same directory. We consider that a file of mimetype media will be
      * a mediafile, and other binary files will be scoped binaryfile
      *
-     * @throws InvalidArgumentValue If $path isn't a legacy compatible storage path
+     * @throws InvalidArgumentException If $path isn't a legacy compatible storage path
      * @param string $path
      * @return string|false The scope, defaulting to UNKNOWN_SCOPE
      */
@@ -149,7 +149,8 @@ class Legacy implements IOHandlerInterface
     {
         $pathArray = explode( DIRECTORY_SEPARATOR, $path );
         if ( count( $pathArray ) < 5 )
-            throw new InvalidArgumentValue( "$path isn't a Legacy compatible storage path" );
+            throw new InvalidArgumentException( "\$path", "'$path' isn't a Legacy compatible storage path" );
+
         $storagePrefix = $pathArray[3];
         $mimeType = $pathArray[4];
 
@@ -392,7 +393,7 @@ class Legacy implements IOHandlerInterface
         );
 
         return $this->getLegacyKernel()->runCallback(
-        /** @var $clusterHandler \eZClusterFileHandlerInterface */
+            /** @var $clusterHandler \eZClusterFileHandlerInterface */
             function() use( $clusterHandler, $metadataHandler )
             {
                 $temporaryFileName = $clusterHandler->fetchUnique();
@@ -402,7 +403,6 @@ class Legacy implements IOHandlerInterface
             }
         );
     }
-
 
     /**
      * Returns the appropriate FileResourceProvider depending on the cluster handler in use

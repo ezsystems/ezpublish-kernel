@@ -67,7 +67,7 @@ class IOFactory
         {
             $storageDirectory = $this->configResolver->getParameter( $storageDirectorySetting );
         }
-        elseif ( is_array( $storageDirectorySetting ) )
+        else if ( is_array( $storageDirectorySetting ) )
         {
             $storageDirectoryParts = '';
             foreach ( $storageDirectorySetting as $setting )

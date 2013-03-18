@@ -269,7 +269,7 @@ class ImageStorage extends GatewayBasedStorage
 
             $files[] = $url;
             /** @var \DOMNode $childNode */
-            foreach( $dom->documentElement->childNodes as $childNode )
+            foreach ( $dom->documentElement->childNodes as $childNode )
             {
                 if ( $childNode->nodeName != 'alias' )
                     continue;

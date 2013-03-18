@@ -161,7 +161,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
 
     protected static function setUpIgnoredPath( $ignoredFiles )
     {
-        foreach( $ignoredFiles as $ignoredFile )
+        foreach ( $ignoredFiles as $ignoredFile )
         {
             $pathPartsArray = explode( DIRECTORY_SEPARATOR, $ignoredFile );
             foreach ( $pathPartsArray as $index => $directoryPart )
