@@ -18,7 +18,7 @@ use DateTimeZone;
  * @group fieldType
  * @group ezdate
  */
-class DateTest extends StandardizedFieldTypeTest
+class DateTest extends FieldTypeTest
 {
     /**
      * Returns the field type under test.

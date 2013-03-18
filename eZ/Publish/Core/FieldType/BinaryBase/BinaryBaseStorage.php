@@ -10,9 +10,11 @@
 namespace eZ\Publish\Core\FieldType\BinaryBase;
 
 use eZ\Publish\Core\FieldType\GatewayBasedStorage;
-use eZ\Publish\Core\FieldType\FileService;
+use eZ\Publish\Core\IO\IOService;
+use eZ\Publish\SPI\FieldType\BinaryBase\PathGenerator;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\IO\MimeTypeDetector;
 
 /**
  * Storage for binary files
@@ -20,31 +22,33 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 class BinaryBaseStorage extends GatewayBasedStorage
 {
     /**
-     * File service to be used
+     * An instance of IOService configured to store to the images folder
      *
-     * @var FileService
+     * @var IOService
      */
-    protected $fileService;
+    protected $IOService;
+
+    /** @var PathGenerator */
+    protected $pathGenerator;
 
     /**
-     * Path generator
-     *
-     * @var PathGenerator
+     * @var MimeTypeDetector
      */
-    protected $pathGenerator;
+    protected $mimeTypeDetector;
 
     /**
      * Construct from gateways
      *
      * @param \eZ\Publish\Core\FieldType\StorageGateway[] $gateways
-     * @param FileService $fileService
+     * @param IOService $IOService
      * @param PathGenerator $pathGenerator
      */
-    public function __construct( array $gateways, FileService $fileService, PathGenerator $pathGenerator )
+    public function __construct( array $gateways, IOService $IOService, PathGenerator $pathGenerator, MimeTypeDetector $mimeTypeDetector )
     {
         parent::__construct( $gateways );
-        $this->fileService = $fileService;
+        $this->IOService = $IOService;
         $this->pathGenerator = $pathGenerator;
+        $this->mimeTypeDetector = $mimeTypeDetector;
     }
 
     /**
@@ -85,22 +89,42 @@ class BinaryBaseStorage extends GatewayBasedStorage
             return false;
         }
 
-        $storedValue = $field->value->externalData;
-
-        if ( !$this->fileService->exists( $storedValue['path'] ) )
+        // no mimeType means we are dealing with an input, local file
+        if ( !isset( $field->value->externalData['mimeType'] ) )
         {
-            // Only store a new file copy, if it does not exist, yet
-            $targetPath = $this->pathGenerator->getStoragePathForField( $field, $versionInfo );
+            $field->value->externalData['mimeType'] = $this->mimeTypeDetector->getFromPath( $field->value->externalData['path'] );
+        }
 
-            $storedValue['path'] = $this->fileService->storeFile(
-                $storedValue['path'],
-                $this->fileService->getStorageIdentifier( $targetPath )
+        $storedValue = $field->value->externalData;
+        $storagePath = $this->pathGenerator->getStoragePathForField( $field, $versionInfo );
+
+        // The file referenced in externalData MAY be an existing IOService file which we can use
+        if ( ( $this->IOService->loadBinaryFile( $storedValue['path'] ) === false ) &&
+             ( $this->IOService->loadBinaryFile( $storagePath ) === false ) )
+        {
+            $createStruct = $this->IOService->newBinaryCreateStructFromLocalFile(
+                $storedValue['path']
             );
+            $createStruct->uri = $storagePath;
+            $this->IOService->createBinaryFile( $createStruct );
+            $storedValue['path'] = $createStruct->uri;
+            $storedValue['mimeType'] = $createStruct->mimeType;
         }
 
         $field->value->externalData = $storedValue;
 
         $this->removeOldFile( $field->id, $versionInfo->versionNo, $context );
+
+        return $this->getGateway( $context )->storeFileReference( $versionInfo, $field );
+    }
+
+    public function copyLegacyField( VersionInfo $versionInfo, Field $field, Field $originalField, array $context )
+    {
+        if ( $originalField->value->data === null )
+            return false;
+
+        // field translations have their own file reference, but to the original file
+        $originalField->value->externalData['path'];
 
         return $this->getGateway( $context )->storeFileReference( $versionInfo, $field );
     }
@@ -132,7 +156,9 @@ class BinaryBaseStorage extends GatewayBasedStorage
 
         if ( $fileCounts[$fileReference['path']] === 0 )
         {
-            $this->fileService->remove( $fileReference['path'] );
+            $this->IOService->deleteBinaryFile(
+                $this->IOService->loadBinaryFile( $fileReference['path'] )
+            );
         }
     }
 
@@ -151,14 +177,23 @@ class BinaryBaseStorage extends GatewayBasedStorage
     public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         $field->value->externalData = $this->getGateway( $context )->getFileReferenceData( $field->id, $versionInfo->versionNo );
-
         if ( $field->value->externalData !== null )
         {
-            $field->value->externalData['fileSize'] = $this->fileService->getFileSize( $field->value->externalData['path'] );
+            if ( ( $binaryFile = $this->IOService->loadBinaryFile( $field->value->externalData['path'] ) ) !== false )
+            {
+                $field->value->externalData['fileSize'] = $binaryFile->size;
+            }
+            else
+            {
+                throw new \RuntimeException( "Failed loading binary file {$field->value->externalData['path']}" );
+            }
         }
     }
 
     /**
+     * Deletes all referenced external data
+     *
+     * @param VersionInfo $versionInfo
      * @param array $fieldIds
      * @param array $context
      *
@@ -178,7 +213,9 @@ class BinaryBaseStorage extends GatewayBasedStorage
         {
             if ( $count === 0 )
             {
-                $this->fileService->remove( $filePath );
+                $this->IOService->deleteBinaryFile(
+                    $this->IOService->loadBinaryFile( $filePath )
+                );
             }
         }
     }

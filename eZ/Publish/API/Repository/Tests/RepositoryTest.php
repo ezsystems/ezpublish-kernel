@@ -216,22 +216,6 @@ class RepositoryTest extends BaseTest
     }
 
     /**
-     * Test for the getIOService() method.
-     *
-     * @return void
-     * @group io
-     * @see \eZ\Publish\API\Repository\Repository::getIOService()
-     */
-    public function testGetIOService()
-    {
-        $repository = $this->getRepository();
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\IOService',
-            $repository->getIOService()
-        );
-    }
-
-    /**
      * Test for the getSearchService() method.
      *
      * @return void

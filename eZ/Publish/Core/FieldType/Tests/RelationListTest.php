@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Relation;
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
-class RelationListTest extends StandardizedFieldTypeTest
+class RelationListTest extends FieldTypeTest
 {
     /**
      * Returns the field type under test.

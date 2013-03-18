@@ -47,7 +47,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
      */
     protected function getStorageDir()
     {
-        return 'var/files';
+        return self::$storageDir;
     }
 
     /**
@@ -55,9 +55,9 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
      *
      * @return void
      */
-    protected function getStorageIdentifierPrefix()
+    protected function getStoragePrefix()
     {
-        return '';
+        return 'original';
     }
 
     /**
@@ -82,7 +82,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
         $handler->getFieldTypeRegistry()->register(
             'ezmedia',
             new FieldType\Media\Type(
-                $this->getFileService(),
+                $this->getIOService(),
                 $this->getMimeTypeDetector()
             )
         );
@@ -92,8 +92,9 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                 array(
                     'LegacyStorage' => new FieldType\Media\MediaStorage\Gateway\LegacyStorage(),
                 ),
-                $this->getFileService(),
-                new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator()
+                $this->getIOService(),
+                new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator(),
+                $this->getMimeTypeDetector()
             )
         );
         $handler->getFieldValueConverterRegistry()->register(
@@ -199,7 +200,8 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
         $this->assertNotNull( $field->value->externalData );
 
         $this->assertTrue(
-            file_exists( ( $path = $this->getTempDir() . '/' . $this->getStorageDir() . '/' . $field->value->externalData['path'] ) )
+            file_exists( $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['path'] ),
+            "Stored file $path exists"
         );
 
         $this->assertEquals( 'Ice-Flower-Media.jpg', $field->value->externalData['fileName'] );
@@ -259,17 +261,18 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
         $this->assertNotNull( $field->value->externalData );
 
         $this->assertTrue(
-            file_exists( ( $filePath = $this->getTempDir() . '/' . $this->getStorageDir() . '/' . $field->value->externalData['path'] ) )
+            file_exists( $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['path'] ),
+            "Stored file $path exists"
         );
 
         // Check old file removed before update
         $this->assertEquals(
             1,
-            count( glob( dirname( $filePath ) . '/*' ) )
+            count( glob( dirname( $path ) . '/*' ) )
         );
 
         $this->assertEquals( 'Blueish-Blue-Media.jpg', $field->value->externalData['fileName'] );
-        $this->assertEquals( filesize( $filePath ), $field->value->externalData['fileSize'] );
+        $this->assertEquals( filesize( $path ), $field->value->externalData['fileSize'] );
         $this->assertEquals( 'image/png', $field->value->externalData['mimeType'] );
         $this->assertEquals( false, $field->value->externalData['hasController'] );
         $this->assertEquals( false, $field->value->externalData['autoplay'] );
@@ -291,7 +294,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     {
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(
-                $this->getTempDir() . '/' . $this->getStorageDir(),
+                $this->getStorageDir(),
                 FileSystemIterator::KEY_AS_PATHNAME | FileSystemIterator::SKIP_DOTS | FileSystemIterator::CURRENT_AS_FILEINFO
             ),
             RecursiveIteratorIterator::CHILD_FIRST
@@ -311,57 +314,4 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
         }
 
     }
-
-    /**
-     * @dep_ends \eZ\Publish\SPI\Tests\FieldType\MediaIntegrationTest::testCreateContentType
-     */
-    public function testMediasNotDeletedIfReferencesStillExist()
-    {
-        $contentType = $this->createContentType();
-
-        $firstContent = $this->createContent( $contentType, $this->getInitialValue() );
-
-        $firstField = null;
-        foreach ( $firstContent->fields as $field )
-        {
-            if ( $field->type === $this->getTypeName() )
-            {
-                $firstField = $field;
-            }
-        }
-
-        $clonedValue = clone $firstField->value;
-
-        // Create an image reference copy
-        $secondContent = $this->createContent( $contentType, $clonedValue );
-
-        $secondField = null;
-        foreach ( $secondContent->fields as $field )
-        {
-            if ( $field->type === $this->getTypeName() )
-            {
-                $secondField = $field;
-            }
-        }
-
-        $this->assertNotEquals(
-            $firstField->id,
-            $secondField->id
-        );
-
-        $this->assertEquals( $firstField->value, $secondField->value );
-
-        $this->deleteContent( $firstContent );
-
-        $this->assertTrue(
-            file_exists( $this->getTempDir() . '/' . $this->getStorageDir() . '/' . $secondField->value->externalData['path'] )
-        );
-
-        $this->deleteContent( $secondContent );
-
-        $this->assertFalse(
-            file_exists( $this->getTempDir() . '/' . $this->getStorageDir() . '/' . $secondField->value->externalData['path'] )
-        );
-    }
 }
-
