@@ -258,7 +258,6 @@ class Legacy implements IOHandlerInterface
                     {
                         unset( $GLOBALS['eZClusterInfo'][$storagePath] );
                     }
-
                 }
             },
             false
