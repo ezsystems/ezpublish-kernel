@@ -192,7 +192,7 @@
                         ~ '/version/' ~ contentInfo.currentVersionNo ~  "/file/"
                         ~ field.value.fileName|escape( 'url' ) %}
         <a href="{{ path( 'ez_legacy', {'module_uri': uri} ) }}"
-            {{ block( 'field_attributes' ) }}">{{ field.value.fileName }}</a>&nbsp;({{ field.value.fileSize }})
+            {{ block( 'field_attributes' ) }}>{{ field.value.fileName }}</a>&nbsp;({{ field.value.fileSize }})
     {% endif %}
 {% endspaceless %}
 {% endblock %}
