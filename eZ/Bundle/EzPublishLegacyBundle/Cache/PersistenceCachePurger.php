@@ -167,7 +167,6 @@ class PersistenceCachePurger
         $this->cache->clear( 'section', $id );
     }
 
-
     /**
      * Clear all language persistence cache, or by id
      *

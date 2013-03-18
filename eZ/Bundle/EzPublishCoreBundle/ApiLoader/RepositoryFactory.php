@@ -60,14 +60,13 @@ class RepositoryFactory
      *
      * @return \eZ\Publish\API\Repository\Repository
      */
-    public function buildRepository( PersistenceHandler $persistenceHandler, IoHandler $ioHandler )
+    public function buildRepository( PersistenceHandler $persistenceHandler )
     {
         /** @var $configResolver \eZ\Publish\Core\MVC\ConfigResolverInterface */
         $configResolver = $this->container->get( 'ezpublish.config.resolver' );
         $repositoryClass = $this->container->getParameter( 'ezpublish.api.inner_repository.class' );
         return new $repositoryClass(
             $persistenceHandler,
-            $ioHandler,
             array(
                 'fieldType'     => $this->fieldTypes,
                 'role'          => array(

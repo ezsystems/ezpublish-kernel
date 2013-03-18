@@ -78,7 +78,8 @@ class Dispatcher
             throw new Exceptions\Parser( 'Missing Content-Type header in message.' );
         }
 
-        $contentTypeParts = explode( '+', $message->headers['Content-Type'] );
+        $mediaTypeParts = explode( ';', $message->headers['Content-Type'] );
+        $contentTypeParts = explode( '+', $mediaTypeParts[0] );
         if ( count( $contentTypeParts ) !== 2 )
         {
             // TODO expose default format

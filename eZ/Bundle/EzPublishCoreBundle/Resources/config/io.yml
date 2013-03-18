@@ -1,0 +1,34 @@
+parameters:
+    ezpublish.core.io.handler.in_memory.class: eZ\Publish\Core\IO\Handler\InMemory
+    ezpublish.core.io.service.class: eZ\Publish\Core\IO\IOService
+    ezpublish.core.io.service_factory: eZ\Publish\Core\MVC\Symfony\
+    ezpublish.core.io.service_factory: eZ\Publish\Core\MVC\Symfony\
+    ezpublish.core.io.mimeTypeDetector.fileinfo.class: eZ\Publish\Core\IO\MimeTypeDetector\FileInfo
+    ezpublish.core.io.metadataHandler.imageSize.class: eZ\Publish\Core\IO\MetadataHandler\ImageSize
+
+services:
+    ezpublish.core.io.factory:
+        class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\IOFactory
+        arguments:
+            - @ezpublish.config.resolver
+            - @ezpublish.core.io.mimeTypeDetector
+
+    ezpublish.core.io.service:
+        class: %ezpublish.core.io.service.class%
+        arguments: [@ezpublish.core.io.handler.legacy]
+
+    ezpublish.core.io.handler.in_memory:
+        class: %ezpublish.core.io.handler.in_memory.class%
+        public: false
+        factory_service: ezpublish.core.io.factory
+        factory_method: getHandler
+        arguments: [%ezpublish.core.io.handler.in_memory.class%]
+
+    ezpublish.core.io.mimeTypeDetector.fileinfo:
+        class: %ezpublish.core.io.mimeTypeDetector.fileinfo.class%
+
+    ezpublish.core.io.mimeTypeDetector:
+        alias: ezpublish.core.io.mimeTypeDetector.fileinfo
+
+    ezpublish.core.io.metadataHandler.imageSize:
+        class: %ezpublish.core.io.metadataHandler.imageSize.class%

@@ -17,7 +17,7 @@ use ReflectionObject;
  * @group fieldType
  * @group ezselection
  */
-class TextBlockTest extends StandardizedFieldTypeTest
+class TextBlockTest extends FieldTypeTest
 {
     /**
      * Returns the field type under test.

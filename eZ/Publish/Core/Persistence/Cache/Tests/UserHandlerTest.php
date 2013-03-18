@@ -237,7 +237,11 @@ class UserHandlerTest extends HandlerTest
             ->method(  'loadRoleAssignmentsByGroupId' )
             ->with( 42, false )
             ->will(
-                $this->returnValue( array( new RoleAssignment( array( 'roleId' =>  33 ) ) ) )
+                $this->returnValue(
+                    array(
+                        new RoleAssignment( array( 'roleId' => 33 ) )
+                    )
+                )
             );
 
         $cacheItemMock

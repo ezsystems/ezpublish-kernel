@@ -450,7 +450,6 @@ class ContentTypeHandlerTest extends HandlerTest
             ->method( 'set' )
             ->with( 55 );
 
-
         $cacheItemMock2 = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->at( 1 ) )

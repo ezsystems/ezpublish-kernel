@@ -29,11 +29,20 @@ class SearchHandlerTest extends HandlerTest
             array( 'findContent', array( new Query, array( 42 ) ) ),
             array( 'findSingle', array( new ContentTypeId( 4 ), array( 42 ) ) ),
             array( 'suggest', array( 'prefix%', array( 42 ), 10, new ContentTypeId( 4 ) ) ),
-            array( 'indexContent', array( new Content( array(
-                'versionInfo' => new VersionInfo( array(
-                    'contentInfo' => new ContentInfo( array( 'id' => 42 ) )
-                ) )
-            ) ) ) ),
+            array(
+                'indexContent',
+                array(
+                    new Content(
+                        array(
+                            'versionInfo' => new VersionInfo(
+                                array(
+                                    'contentInfo' => new ContentInfo( array( 'id' => 42 ) )
+                                )
+                            )
+                        )
+                    )
+                )
+            ),
         );
     }
 

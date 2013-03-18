@@ -3,7 +3,6 @@ parameters:
     ezpublish.api.repository.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryFactory
     ezpublish.api.repository.lazy_factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\LazyRepositoryFactory
     ezpublish.api.inner_repository.class: eZ\Publish\Core\Repository\Repository
-    ezpublish.api.io_handler.class: eZ\Publish\Core\IO\InMemoryHandler
     ezpublish.api.storage_engine.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory
 
     # Signal Slot API wrapper
@@ -66,16 +65,11 @@ services:
         factory_method: buildRepository
         arguments:
             - @ezpublish.api.persistence_handler
-            - @ezpublish.api.io_handler
 
     ezpublish.api.repository.lazy:
         class: Closure
         factory_service: ezpublish.api.repository.lazy_factory
         factory_method: buildRepository
-
-    ezpublish.api.io_handler:
-        class: %ezpublish.api.io_handler.class%
-        public: false
 
     ezpublish.api.storage_engine.factory:
         class: %ezpublish.api.storage_engine.factory.class%
@@ -115,12 +109,6 @@ services:
         factory_service: ezpublish.api.repository.factory
         factory_method: buildService
         arguments: [@ezpublish.api.repository, Role]
-
-    ezpublish.api.service.io:
-        class: eZ\Publish\API\Repository\IOService
-        factory_service: ezpublish.api.repository.factory
-        factory_method: buildService
-        arguments: [@ezpublish.api.repository, IO]
 
     ezpublish.api.service.object_state:
         class: eZ\Publish\API\Repository\ObjectStateService

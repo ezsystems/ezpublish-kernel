@@ -89,7 +89,7 @@ class PersistenceLoggerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Cache\PersistenceLogger::getCall
+     * @covers \eZ\Publish\Core\Persistence\Cache\PersistenceLogger::getCalls
      * @depends testGetCountValues
      *
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger

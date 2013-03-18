@@ -114,7 +114,7 @@ class UrlIntegrationTest extends BaseIntegrationTest
      *
      * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field)
+    public function assertFieldDataLoadedCorrect( Field $field )
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Url\\Value',

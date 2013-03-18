@@ -26,9 +26,15 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     protected static $loadedBinaryFilePath;
 
     /**
-     * Storage dir settings key
+     * IOService storage prefix for the tested Type's files
+     * @var string
      */
-    protected static $storageDirConfigKey = 'binaryfile_storage_dir';
+    protected static $storagePrefixConfigKey = 'binaryfile_storage_prefix';
+
+    protected function getStoragePrefix()
+    {
+        return $this->getConfigValue( self::$storagePrefixConfigKey );
+    }
 
     /**
      * Sets up fixture data.
@@ -182,7 +188,8 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
         );
 
         $this->assertTrue(
-            file_exists( $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $field->value->path )
+            file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->path ),
+            "File $path exists"
         );
 
         self::$loadedBinaryFilePath = $field->value->path;
@@ -214,17 +221,17 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
         return array(
             array(
                 array(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
             ),
             array(
                 new BinaryFileValue( array() ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
             ),
             array(
                 array(
                     'path' => '/foo/bar/sindelfingen.pdf',
                 ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
             ),
             array(
                 new BinaryFileValue(
@@ -232,7 +239,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
                         'path' => '/foo/bar/sindelfingen.pdf',
                     )
                 ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
             ),
         );
     }
@@ -273,7 +280,8 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
         );
 
         $this->assertTrue(
-            file_exists( $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $field->value->path )
+            file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->path ),
+            "File $path exists."
         );
     }
 

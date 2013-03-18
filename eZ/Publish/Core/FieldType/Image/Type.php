@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\FieldType\Image;
 
 use eZ\Publish\Core\FieldType\FieldType;
-use eZ\Publish\Core\FieldType\FileService;
+use eZ\Publish\Core\IO\IOService;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
@@ -33,21 +33,17 @@ class Type extends FieldType
         )
     );
 
-    /**
-     * File service
-     *
-     * @var FileService
-     */
-    protected $fileService;
+    /** @var IOService */
+    protected $IOService;
 
     /**
      * Creates a new Image FieldType
      *
-     * @param FileService $fileService
+     * @param IOService $IOService
      */
-    public function __construct( FileService $fileService )
+    public function __construct( IOService $IOService )
     {
-        $this->fileService = $fileService;
+        $this->IOService = $IOService;
     }
 
     /**
@@ -117,15 +113,6 @@ class Type extends FieldType
             );
         }
 
-        // Required parameter $path
-        if ( !isset( $inputValue->path ) || !$this->fileExists( $inputValue->path ) )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->path',
-                'Existing fileName',
-                $inputValue->path
-            );
-        }
         // Required parameter $fileName
         if ( !isset( $inputValue->fileName ) || !is_string( $inputValue->fileName ) )
         {
@@ -183,7 +170,7 @@ class Type extends FieldType
     {
         return (
             ( substr( $path, 0, 1 ) === '/' && file_exists( $path ) )
-            || $this->fileService->exists( $path )
+            || $this->IOService->loadBinaryFile( $path ) !== false
         );
     }
 
