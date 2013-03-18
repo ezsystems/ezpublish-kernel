@@ -44,6 +44,13 @@ class PageService
     protected $validBlockItems;
 
     /**
+     * Cached last valid items, by block (one per block)
+     *
+     * @var \SplObjectStorage
+     */
+    protected $lastValidItems;
+
+    /**
      * Cached waiting block items by block.
      *
      * @var \SplObjectStorage
@@ -68,6 +75,7 @@ class PageService
         $this->zoneDefinition = $zoneDefinition;
         $this->blockDefinition = $blockDefinition;
         $this->validBlockItems = new SplObjectStorage();
+        $this->lastValidItems = new SplObjectStorage();
         $this->waitingBlockItems = new SplObjectStorage();
         $this->archivedBlockItems = new SplObjectStorage();
     }
@@ -219,6 +227,21 @@ class PageService
             return $this->validBlockItems[$block];
 
         return $this->validBlockItems[$block] = $this->getStorageGateway()->getValidBlockItems( $block );
+    }
+
+    /**
+     * Returns the last valid item, for a given block.
+     *
+     * @param \eZ\Publish\Core\FieldType\Page\Parts\Block $block
+     *
+     * @return \eZ\Publish\Core\FieldType\Page\Parts\Item[]|null
+     */
+    public function getLastValidBlockItem( Block $block )
+    {
+        if ( isset( $this->lastValidItems[$block] ) )
+            return $this->lastValidItems[$block];
+
+        return $this->lastValidItems[$block] = $this->getStorageGateway()->getLastValidBlockItem( $block );
     }
 
     /**

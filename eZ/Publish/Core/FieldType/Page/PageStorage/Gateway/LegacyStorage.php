@@ -97,6 +97,39 @@ class LegacyStorage extends Gateway
     }
 
     /**
+     * Returns the block item having a highest visible date, for given block.
+     * Will return null if no block item is registered for block.
+     *
+     * @param \eZ\Publish\Core\FieldType\Page\Parts\Block $block
+     *
+     * @return \eZ\Publish\Core\FieldType\Page\Parts\Item|null
+     */
+    public function getLastValidBlockItem( Block $block )
+    {
+        $dbHandler = $this->getConnection();
+        /** @var $q \ezcQuerySelect */
+        $q = $dbHandler->createSelectQuery();
+        $q
+            ->select( '*' )
+            ->from( $dbHandler->quoteTable( self::POOL_TABLE ) )
+            ->where(
+                $q->expr->eq( 'block_id', $q->bindValue( $block->id ) ),
+                $q->expr->gt( 'ts_visible', $q->bindValue( 0, null, \PDO::PARAM_INT ) ),
+                $q->expr->eq( 'ts_hidden', $q->bindValue( 0, null, \PDO::PARAM_INT ) )
+            )
+            ->orderBy( 'ts_visible', ezcQuerySelect::DESC )
+            ->limit( 1 );
+
+        $stmt = $q->prepare();
+        $stmt->execute();
+        $rows = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+        if ( empty( $rows ) )
+            return;
+
+        return $this->buildBlockItem( $rows[0] );
+    }
+
+    /**
      * Returns queued items (the next to be displayed), for a given block.
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Block
