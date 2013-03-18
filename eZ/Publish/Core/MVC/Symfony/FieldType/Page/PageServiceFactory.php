@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\FieldType\Page;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\FieldType\Page\PageStorage\Gateway as PageGateway;
 
 class PageServiceFactory
 {
@@ -19,12 +19,17 @@ class PageServiceFactory
      *
      * @param string $serviceClass the class of the page service
      * @param ConfigResolverInterface $resolver
-     * @return an instance of $serviceClass
+     * @param \eZ\Publish\Core\FieldType\Page\PageStorage\Gateway $storageGateway
+     *
+     * @return \eZ\Publish\Core\FieldType\Page\PageService
      */
-    public function buildService( $serviceClass, ConfigResolverInterface $resolver )
+    public function buildService( $serviceClass, ConfigResolverInterface $resolver, PageGateway $storageGateway )
     {
         $pageSettings = $resolver->getParameter( 'ezpage' );
-        return new $serviceClass( $pageSettings['layouts'], $pageSettings['blocks'] );
+        /** @var $pageService \eZ\Publish\Core\FieldType\Page\PageService */
+        $pageService = new $serviceClass( $pageSettings['layouts'], $pageSettings['blocks'] );
+        $pageService->setStorageGateway( $storageGateway );
+        return $pageService;
     }
 
 }

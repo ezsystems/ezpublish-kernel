@@ -489,12 +489,6 @@ services:
         tags:
             - {name: ezpublish.fieldType, alias: ezpage}
 
-    ezpublish.fieldType.ezpage.externalStorage:
-        class: %ezpublish.fieldType.ezpage.externalStorage.class%
-        arguments: [[], @ezpublish.fieldType.ezpage.pageService]
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezpage}
-
     ezpublish.fieldType.ezpage.pageService.factory:
         class: %ezpublish.fieldType.ezpage.pageService.factory.class%
 
@@ -502,7 +496,7 @@ services:
         class: %ezpublish.fieldType.ezpage.pageService.class%
         factory_service: ezpublish.fieldType.ezpage.pageService.factory
         factory_method: buildService
-        arguments: [%ezpublish.fieldType.ezpage.pageService.class%, @ezpublish.config.resolver]
+        arguments: [%ezpublish.fieldType.ezpage.pageService.class%, @ezpublish.config.resolver, @ezpublish.fieldType.ezpage.storage_gateway]
         calls:
             - [setRepository, [@ezpublish.api.repository]]
 
