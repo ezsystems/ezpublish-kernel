@@ -137,7 +137,7 @@ class RestListener implements EventSubscriberInterface
             return;
 
         // TODO: add CSRF token to protect against force-login attacks
-        if ( $event->getRequest()->getPathInfo() == '/api/ezp/v2/user/sessions' )
+        if ( $event->getRequest()->get( "_route" ) == "ezpublish_rest_createSession" )
             return;
 
         if (
