@@ -264,7 +264,9 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
         return $name instanceof Location || $name === self::URL_ALIAS_ROUTE_NAME;
     }
     
-    
+    /**
+     * @see Symfony\Cmf\Component\Routing\VersatileGeneratorInterface::getRouteDebugMessage()
+     */
     public function getRouteDebugMessage($name, array $parameters = array())
     {
         if ($name instanceof RouteObjectInterface) {
@@ -277,4 +279,5 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 
         return $name;
     }
+    
 }
