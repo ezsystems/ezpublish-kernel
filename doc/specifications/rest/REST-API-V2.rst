@@ -110,6 +110,8 @@ contruct an uri by using an id.
 Authentication
 ==============
 
+Note: Use of HTTPS for authenticated (REST) traffic is highly recommended!
+
 Basic Authentication
 --------------------
 
@@ -126,34 +128,55 @@ Session based Authentication
 ----------------------------
 
 This approach violates generally the principles of RESTful services. However,
-the sessions are only created to reauthenticate the user (and perform authorization,
+the sessions are only created to re-authenticate the user (and perform authorization,
 which has do be done anyway) and not to hold session state in the service.
 So we consider this method to support AJAX based applications.
 
-If activated the user has to login and the client has to send the session cookie in every request:
+See "/user/sessions/" section for details on performing login / logout.
 
-:Resource:    /user/sessions
-:Method:      POST
-:Description: Performs a login for the user and returns the session cookie
-:Request format: application/x-www-form-urlencoded
-:Parameters:
-        :login:  the login of the user
-        :password:  the password
-:Response: 200 Set-Cookie: SessionId : <sessionID>  A unique session id containing encryped information of client host and expiretime
-           <Uri of user>
-:Error codes:
-       :401: If the authorization failed
+Session cookie
+~~~~~~~~~~~~~~
+If activated the user has to login to use this and the client has to send the session cookie in every request, using a standard Cookie header. The name (sessionName) and value (sessionID) of the header is defined  in response when doing a POST /user/sessions.
 
+Example request header:
+    Cookie: <SessionName> : <sessionID>
 
-In order to logout the user calls:
+CSRF
+~~~~
+A CSRF token needs to be sent in every request using "unsafe" methods (as in: not GET or HEAD) when a session has been established. It should be sent with header X-CSRF-Token. The token (csrfToken) is defined in response when login via POST /user/sessions.
 
-:Resource: /user/sessions/<sessionID>
-:Method: DELETE
-:Description: The user session is removed i.e. the user is logged out.
-:Parameters:
-:Response: 204
-:Error Codes:
-    :404: If the session does not exist
+Example request headers:
+
+.. code:: http
+
+    DELETE /content/types/32 HTTP/1.1
+    X-CSRF-Token: <csrfToken>
+
+.. code:: http
+
+    DELETE /user/sessions/<sessionID>
+    X-CSRF-Token: <csrfToken>
+
+If an unsafe request is missing CSRF token, or it has wrong value, a response error must be given:
+    401 Unauthorized
+
+Rich client application security concerns
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The whole point of CSRF protection is to avoid that users accidentally can do harmful operations by being tricked into executing a http(s) request against a web applications they are logged into, in case of browsers this will then be blocked by lack of CSRF token. However if you develop a rich client application (javascript, java, flash, silverlight, iOS, android, ..) that is:
+
+* Registering itself as a protocol handler
+
+  * In a way that exposes unsafe methods
+
+* Authenticates using either:
+
+  * Session based authentication
+  * "Client side session" by remembering user login/password
+
+Then you have to make sure to ask the user if he really want to perform an unsafe operation when this is asked by over such a protocol handler.
+
+Example: A rich javascript/web application is using navigator.registerProtocolHandler() to register "web+ez:" links to go against REST api, it uses some sort of session based authentication and it is in widespread use across the net, or/and it is used by everyone within a company. A person with minimal insight into this application and the company can easily send out the following link to all employees in that company using mail: <a href="web+ez:DELETE /content/locations/1/2">latest reports</a>
+
 
 SSL Client Authentication
 -------------------------
@@ -4116,6 +4139,8 @@ Resource                                      POST                  GET         
 /user/roles/<ID>                              .                     load role             update role           delete role
 /user/roles/<ID>/policies                     create policy         load policies         .                     delete all policies from role
 /user/roles/<ID>/policies/<ID>                .                     load policy           update policy         delete policy
+/user/sessions                                create session        .                     .                     .
+/user/sessions/<sessionID>                    .                     .                     .                     delete session
 ============================================= ===================== ===================== ===================== =======================
 
 
@@ -5823,6 +5848,157 @@ List Policies for user
     :401: If the user has no permission to read roles
 
 
+User sessions (login/logout)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Create session (login a User):
+``````````````````````````````
+
+:Resource:    /user/sessions
+:Method:      POST
+:Description: Performs a login for the user and returns the session and session cookie. The client will need to remember both session name/id and CSRF token as this is for security reasons not exposed via GET.
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Session+xml: (see Session_)
+         :application/vnd.ez.api.Session+json:  (see Session_)
+    :Content-Type:
+         :application/vnd.ez.api.SessionInput+xml: the SessionInput_ schema encoded in json
+         :application/vnd.ez.api.SessionInput+json: the SessionInput_ schema encoded in json
+:Response:
+
+
+.. code:: http
+
+          HTTP/1.1 201 Created
+          Location: /user/sessions/<sessionID>
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Set-Cookie: <sessionName> : <sessionID>  A unique session id
+.. parsed-literal::
+          Session_
+
+
+:Error codes:
+    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :401: If the authorization failed
+    :303: If header contained a session cookie and same user was authorized, like 201 Created it will include a Location header
+    :409: If header contained a session cookie but different user was authorized
+
+
+XML Example
+'''''''''''
+
+.. code:: http
+
+    POST /user/sessions HTTP/1.1
+    Host: www.example.net
+    Accept: application/vnd.ez.api.Session+xml
+    Content-Type: application/vnd.ez.api.SessionInput+xml
+    Content-Length: xxx
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <SessionInput>
+      <login>admin</login>
+      <password>secret</password>
+    </SessionInput>
+
+.. code:: http
+
+    HTTP/1.1 201 Created
+    Location: /user/sessions/go327ij2cirpo59pb6rrv2a4el2
+    Set-Cookie: eZSSID : go327ij2cirpo59pb6rrv2a4el2; Domain=.example.net; Path=/; Expires=Wed, 13-Jan-2021 22:23:01 GMT; HttpOnly
+    Content-Type: application/vnd.ez.api.Session+xml
+    Content-Length: xxx
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Session href="/user/sessions/sessionID" media-type="application/vnd.ez.api.Session+xml">
+      <name>eZSSID</name>
+      <identifier>go327ij2cirpo59pb6rrv2a4el2</identifier>
+      <csrfToken>23lkneri34ijajedfw39orj3j93</csrfToken>
+      <User href="/user/users/14" media-type="vnd.ez.api.User+xml"/>
+    </Session>
+
+
+JSON Example
+''''''''''''
+
+.. code:: http
+
+    POST /user/sessions HTTP/1.1
+    Host: www.example.net
+    Accept: application/vnd.ez.api.Session+json
+    Content-Type: application/vnd.ez.api.SessionInput+xml
+    Content-Length: xxx
+
+.. code:: json
+
+    {
+      "SessionInput": {
+        "login": "admin",
+        "password": "secret"
+      }
+    }
+
+.. code:: http
+
+    HTTP/1.1 201 Created
+    Location: /user/sessions/go327ij2cirpo59pb6rrv2a4el2
+    Set-Cookie: eZSSID : go327ij2cirpo59pb6rrv2a4el2; Domain=.example.net; Path=/; Expires=Wed, 13-Jan-2021 22:23:01 GMT; HttpOnly
+    Content-Type: application/vnd.ez.api.Session+json
+    Content-Length: xxx
+
+.. code:: json
+
+    {
+      "Session": {
+        "name": "eZSSID",
+        "identifier": "go327ij2cirpo59pb6rrv2a4el2",
+        "csrfToken": "23lkneri34ijajedfw39orj3j93",
+        "User": {
+          "_href": "/user/users/14",
+          "_media-type": "application/vnd.ez.api.User+json"
+        }
+      }
+    }
+
+
+Delete session (logout a User):
+```````````````````````````````
+
+:Resource: /user/sessions/<sessionID>
+:Method: DELETE
+:Description: The user session is removed i.e. the user is logged out.
+:Headers:
+    :Cookie:
+        <sessionName> : <sessionID>
+    :X-CSRF-Token:
+        <csrfToken> The <csrfToken> needed on all unsafe http methods with session.
+:Response: 204
+:Error Codes:
+    :404: If the session does not exist
+
+
+Example
+'''''''
+
+.. code:: http
+
+    DELETE /user/sessions/go327ij2cirpo59pb6rrv2a4el2 HTTP/1.1
+    Host: www.example.net
+    Cookie: eZSSID : go327ij2cirpo59pb6rrv2a4el2
+    X-CSRF-Token: 23lkneri34ijajedfw39orj3j93
+
+.. code:: http
+
+    HTTP/1.1 204 No Content
+    Set-Cookie: eZSSID=deleted; Expires=Thu, 01-Jan-1970 00:00:01 GMT; Path=/; Domain=.example.net; HttpOnly
+
+
+
 .. _InputOutput:
 
 Input Output Specification
@@ -7366,6 +7542,58 @@ Section XML Schema
       <xsd:element name="SectionList" type="vnd.ez.api.SectionList"></xsd:element>
       <xsd:element name="SectionInput" type="vnd.ez.api.SectionInput"></xsd:element>
     </xsd:schema>
+
+
+
+
+.. _Session:
+
+Session XML Schema
+------------------
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:complexType name="vnd.ez.api.Session">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:element name="name" type="xsd:int"/>
+              <xsd:element name="identifier" type="xsd:string"/>
+              <xsd:element name="csrfToken" type="xsd:string"/>
+              <xsd:element name="User" type="ref" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:element name="Session" type="vnd.ez.api.Session"></xsd:element>
+    </xsd:schema>
+
+
+.. _SessionInput:
+
+SessionInput XML Schema
+-----------------------
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:complexType name="vnd.ez.api.SessionInput">
+        <xsd:complexContent>
+          <xsd:all>
+            <xsd:element name="login" type="xsd:string"/>
+            <xsd:element name="password" type="xsd:string" />
+          </xsd:all>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:element name="SessionInput" type="vnd.ez.api.SessionInput"></xsd:element>
+    </xsd:schema>
+
 
 .. _ObjectStateGroup:
 
