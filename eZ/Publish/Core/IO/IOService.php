@@ -333,6 +333,11 @@ class IOService
         return $prefix . $uri;
     }
 
+    /**
+     * @param $uri
+     * @return string
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     */
     protected function removeUriPrefix( $uri )
     {
         if ( !isset( $this->settings['prefix'] ) )
