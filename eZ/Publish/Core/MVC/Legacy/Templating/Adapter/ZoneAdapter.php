@@ -33,13 +33,15 @@ class ZoneAdapter extends DefinitionBasedAdapter
             'blocks'            =>
                 function ( Zone $zone )
                 {
-                    $blockAdapters = array();
+                    $legacyBlocks = array();
                     foreach ( $zone->blocks as $block )
                     {
-                        $blockAdapters[] = new BlockAdapter( $block );
+                        // Assigning legacy eZPageBlock objects on purpose since block_view_gui does not seem to like BlockAdapter.
+                        $adapter = new BlockAdapter( $block );
+                        $legacyBlocks[] = $adapter->getLegacyBlock();
                     }
 
-                    return $blockAdapters;
+                    return $legacyBlocks;
                 }
         );
     }

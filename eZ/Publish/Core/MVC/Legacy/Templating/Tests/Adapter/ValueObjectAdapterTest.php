@@ -140,4 +140,12 @@ class ValueObjectAdapterTest extends \PHPUnit_Framework_TestCase
             array( 'non_existent', null ),
         );
     }
+
+    /**
+     * @covers eZ\Publish\Core\MVC\Legacy\Templating\Adapter\ValueObjectAdapter::getValueObject
+     */
+    public function testGetValueObject()
+    {
+        $this->assertSame( $this->valueObject, $this->adapter->getValueObject() );
+    }
 }

@@ -380,8 +380,8 @@
 {% spaceless %}
 {% if field.value.page is not null %}
     {% set layout = field.value.page.layout %}
-    {% set template = parameters.pageService.getZoneDefinitionByLayout( layout )['template'] %}
-    {% include template with { 'zones': field.value.zones, 'zone_layout': layout, 'pageService': parameters.pageService } %}
+    {% set template = parameters.pageService.getLayoutTemplate( layout ) %}
+    {% include template with { 'zones': field.value.page.zones, 'zone_layout': layout, 'pageService': parameters.pageService } %}
 {% endif %}
 {% endspaceless %}
 {% endblock %}
