@@ -605,7 +605,6 @@ class LocationHandler implements LocationHandlerInterface
             )
         );
 
-
         $parentLocation = $this->backend->load(
             "Content\\Location",
             $location->parentId

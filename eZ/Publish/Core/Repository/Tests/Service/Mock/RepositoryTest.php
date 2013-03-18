@@ -109,7 +109,7 @@ class RepositoryTest extends BaseServiceMockTest
         foreach ( $roleAssignments as $at => $roleAssignment )
         {
             $userHandlerMock
-                ->expects( $this->at( $at +1 ) )
+                ->expects( $this->at( $at + 1 ) )
                 ->method( "loadRole" )
                 ->with( $roleAssignment->roleId )
                 ->will( $this->returnValue( $roles[$roleAssignment->roleId] ) );
@@ -182,7 +182,7 @@ class RepositoryTest extends BaseServiceMockTest
         foreach ( $roleAssignments as $at => $roleAssignment )
         {
             $userHandlerMock
-                ->expects( $this->at( $at +1 ) )
+                ->expects( $this->at( $at + 1 ) )
                 ->method( "loadRole" )
                 ->with( $roleAssignment->roleId )
                 ->will( $this->returnValue( $roles[$roleAssignment->roleId] ) );
@@ -260,7 +260,7 @@ class RepositoryTest extends BaseServiceMockTest
         foreach ( $roleAssignments as $at => $roleAssignment )
         {
             $userHandlerMock
-                ->expects( $this->at( $at +1 ) )
+                ->expects( $this->at( $at + 1 ) )
                 ->method( "loadRole" )
                 ->with( $roleAssignment->roleId )
                 ->will( $this->returnValue( $roles[$roleAssignment->roleId] ) );
@@ -375,7 +375,7 @@ class RepositoryTest extends BaseServiceMockTest
         foreach ( $roleAssignments as $at => $roleAssignment )
         {
             $userHandlerMock
-                ->expects( $this->at( $at +1 ) )
+                ->expects( $this->at( $at + 1 ) )
                 ->method( "loadRole" )
                 ->with( $roleAssignment->roleId )
                 ->will( $this->returnValue( $roles[$roleAssignment->roleId] ) );
@@ -441,10 +441,12 @@ class RepositoryTest extends BaseServiceMockTest
             );
         }
 
-        return new Role( array(
-            "id" => $roleId,
-            "policies" => $policies
-        ) );
+        return new Role(
+            array(
+                "id" => $roleId,
+                "policies" => $policies
+            )
+        );
     }
 
     public function providerForTestCanUserSimple()

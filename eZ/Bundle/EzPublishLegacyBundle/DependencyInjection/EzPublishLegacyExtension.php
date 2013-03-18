@@ -52,7 +52,6 @@ class EzPublishLegacyExtension extends Extension
 
             // Default settings
             $loader->load( 'default_settings.yml' );
-            
         }
     }
 }
