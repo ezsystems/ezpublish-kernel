@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Controller;
 
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
+use eZ\Publish\Core\FieldType\Page\PageService;
 use eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,22 +21,28 @@ class PageController extends Controller
      */
     private $viewManager;
 
-    public function __construct( ViewManager $viewManager )
+    /**
+     * @var \eZ\Publish\Core\FieldType\Page\PageService
+     */
+    private $pageService;
+
+    public function __construct( ViewManager $viewManager, PageService $pageService )
     {
         $this->viewManager = $viewManager;
+        $this->pageService = $pageService;
     }
 
     /**
      * Render the block
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Block $block
-     * @param array $parameters
+     * @param array $params
      * @param array $cacheSettings settings for the HTTP cache, 'smax-age' and
      *        'max-age' are checked.
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewBlock( Block $block, array $parameters = array(), array $cacheSettings = array() )
+    public function viewBlock( Block $block, array $params = array(), array $cacheSettings = array() )
     {
         $response = new Response();
         if ( $this->getParameter( 'content.view_cache' ) === true )
@@ -56,8 +63,12 @@ class PageController extends Controller
                 $response->setMaxAge( (int)$cacheSettings['max-age'] );
             }
         }
+
         $response->setContent(
-            $this->viewManager->renderBlock( $block, $parameters )
+            $this->viewManager->renderBlock(
+                $block,
+                $params + array( 'pageService' => $this->pageService )
+            )
         );
         return $response;
     }

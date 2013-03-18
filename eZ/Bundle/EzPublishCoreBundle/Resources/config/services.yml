@@ -41,7 +41,7 @@ services:
 
     ezpublish.controller.page.view:
         class: %ezpublish.controller.page.view.class%
-        arguments: [@ezpublish.view_manager]
+        arguments: [@ezpublish.view_manager, @ezpublish.fieldType.ezpage.pageService]
         parent: ezpublish.controller.base
         scope: request
 
