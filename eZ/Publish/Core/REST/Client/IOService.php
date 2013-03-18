@@ -10,8 +10,8 @@
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\IOService as APIIOService;
-use eZ\Publish\API\Repository\Values\IO\BinaryFile;
-use eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct;
+use eZ\Publish\Core\IO\Values\BinaryFile;
+use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher;
@@ -84,7 +84,7 @@ class IOService implements APIIOService, Sessionable
      *
      * @param array $uploadedFile The $_POST hash of an uploaded file
      *
-     * @return \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct
+     * @return \eZ\Publish\Core\IO\Values\BinaryFileCreateStruct
      */
     public function newBinaryCreateStructFromUploadedFile( array $uploadedFile )
     {
@@ -98,7 +98,7 @@ class IOService implements APIIOService, Sessionable
      *
      * @param string $localFile Path to local file
      *
-     * @return \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct
+     * @return \eZ\Publish\Core\IO\Values\BinaryFileCreateStruct
      */
     public function newBinaryCreateStructFromLocalFile( $localFile )
     {
@@ -108,9 +108,9 @@ class IOService implements APIIOService, Sessionable
     /**
      * Creates a  binary file in the the repository
      *
-     * @param \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct $binaryFileCreateStruct
+     * @param \eZ\Publish\Core\IO\Values\BinaryFileCreateStruct $binaryFileCreateStruct
      *
-     * @return \eZ\Publish\API\Repository\Values\IO\BinaryFile The created BinaryFile object
+     * @return \eZ\Publish\Core\IO\Values\BinaryFile The created BinaryFile object
      */
     public function createBinaryFile( BinaryFileCreateStruct $binaryFileCreateStruct )
     {
@@ -120,7 +120,7 @@ class IOService implements APIIOService, Sessionable
     /**
      * Deletes the BinaryFile with $path
      *
-     * @param \eZ\Publish\API\Repository\Values\IO\BinaryFile $binaryFile
+     * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
      */
     public function deleteBinaryFile( BinaryFile $binaryFile )
     {
@@ -134,7 +134,7 @@ class IOService implements APIIOService, Sessionable
      *
      * @param string $binaryFileid
      *
-     * @return \eZ\Publish\API\Repository\Values\IO\BinaryFile
+     * @return \eZ\Publish\Core\IO\Values\BinaryFile
      */
     public function loadBinaryFile( $binaryFileId )
     {
@@ -144,7 +144,7 @@ class IOService implements APIIOService, Sessionable
     /**
      * Returns a read (mode: rb) file resource to the binary file identified by $path
      *
-     * @param \eZ\Publish\API\Repository\Values\IO\BinaryFile $binaryFile
+     * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
      *
      * @return resource
      */
@@ -156,7 +156,7 @@ class IOService implements APIIOService, Sessionable
     /**
      * Returns the content of the binary file
      *
-     * @param \eZ\Publish\API\Repository\Values\IO\BinaryFile $binaryFile
+     * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
      *
      * @return string
      */

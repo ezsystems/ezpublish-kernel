@@ -17,7 +17,7 @@ use DateTime;
  * @group fieldType
  * @group eztime
  */
-class TimeTest extends StandardizedFieldTypeTest
+class TimeTest extends FieldTypeTest
 {
     /**
      * Returns the field type under test.

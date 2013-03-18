@@ -1,0 +1,14 @@
+parameters:
+    ezpublish.core.io.handler.legacy.class: eZ\Publish\Core\IO\Handler\Legacy
+
+services:
+    ezpublish.core.io.handler.legacy:
+        public: false
+        class: %ezpublish.core.io.handler.legacy.class%
+        factory_service: ezpublish.core.io.factory
+        factory_method: getHandler
+        arguments:
+            - %ezpublish.core.io.handler.legacy.class%
+            - [var_dir, storage_dir]
+        calls:
+            - [setLegacyKernelClosure, [@ezpublish_legacy.kernel]]

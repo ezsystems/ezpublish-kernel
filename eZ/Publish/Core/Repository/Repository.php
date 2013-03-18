@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
-use eZ\Publish\SPI\IO\Handler as IoHandler;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -31,13 +30,6 @@ class Repository implements RepositoryInterface
      * @var \eZ\Publish\SPI\Persistence\Handler
      */
     protected $persistenceHandler;
-
-    /**
-     * Io Handler object
-     *
-     * @var \eZ\Publish\SPI\IO\Handler
-     */
-    protected $ioHandler;
 
     /**
      * Currently logged in user object for permission purposes
@@ -110,13 +102,6 @@ class Repository implements RepositoryInterface
     protected $contentTypeService;
 
     /**
-     * Instance of IO service
-     *
-     * @var \eZ\Publish\API\Repository\IOService
-     */
-    protected $ioService;
-
-    /**
      * Instance of object state service
      *
      * @var \eZ\Publish\API\Repository\ObjectStateService
@@ -171,14 +156,12 @@ class Repository implements RepositoryInterface
      * Construct repository object with provided storage engine
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
-     * @param \eZ\Publish\SPI\IO\Handler $ioHandler
      * @param array $serviceSettings
      * @param \eZ\Publish\API\Repository\Values\User\User|null $user
      */
-    public function __construct( PersistenceHandler $persistenceHandler, IoHandler $ioHandler, array $serviceSettings = array(), User $user = null )
+    public function __construct( PersistenceHandler $persistenceHandler, array $serviceSettings = array(), User $user = null )
     {
         $this->persistenceHandler = $persistenceHandler;
-        $this->ioHandler = $ioHandler;
         $this->serviceSettings = $serviceSettings + array(
             'content' => array(),
             'contentType' => array(),
@@ -547,24 +530,6 @@ class Repository implements RepositoryInterface
             $this->serviceSettings['objectState']
         );
         return $this->objectStateService;
-    }
-
-    /**
-     * Get IO Service
-     *
-     * Get service object to perform operations on binary files
-     *
-     * @deprecated Will be removed in the future!
-     *
-     * @return \eZ\Publish\API\Repository\IOService
-     */
-    public function getIOService()
-    {
-        if ( $this->ioService !== null )
-            return $this->ioService;
-
-        $this->ioService = new IOService( $this, $this->ioHandler, $this->serviceSettings['io'] );
-        return $this->ioService;
     }
 
     /**

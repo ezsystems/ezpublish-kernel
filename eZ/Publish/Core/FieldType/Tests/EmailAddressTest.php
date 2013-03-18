@@ -17,7 +17,7 @@ use ReflectionObject;
  * @group fieldType
  * @group ezemail
  */
-class EmailAddressTest extends StandardizedFieldTypeTest
+class EmailAddressTest extends FieldTypeTest
 {
     /**
      * Returns the field type under test.

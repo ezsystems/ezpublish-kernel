@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\BinaryFile;
 
-use eZ\Publish\Core\FieldType\BinaryBase\Type as BaseType;
+use eZ\Publish\Core\FieldType\BinaryBase\Type as BinaryBaseType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 
@@ -18,7 +18,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
  *
  * This field type represents a simple string.
  */
-class Type extends BaseType
+class Type extends BinaryBaseType
 {
     /**
      * Returns the field type identifier for this field type
@@ -59,6 +59,8 @@ class Type extends BaseType
      * @param mixed $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\BinaryFile\Value The potentially converted and structurally plausible value.
+     *
+     * @throws InvalidArgumentType If $inputValue isn't structurally acceptable
      */
     protected function internalAcceptValue( $inputValue )
     {

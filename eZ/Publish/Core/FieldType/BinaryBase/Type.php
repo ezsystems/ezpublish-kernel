@@ -10,11 +10,12 @@
 namespace eZ\Publish\Core\FieldType\BinaryBase;
 
 use eZ\Publish\Core\FieldType\FieldType;
-use eZ\Publish\Core\FieldType\FileService;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\Core\IO\IOService;
 
 /**
  * Base FileType class for Binary field types (i.e. BinaryBase & Media)
@@ -32,32 +33,6 @@ abstract class Type extends FieldType
             )
         )
     );
-
-    /**
-     * File service for storing binary files
-     *
-     * @var FileService
-     */
-    protected $fileService;
-
-    /**
-     * MIME type detector
-     *
-     * @var MimeTypeDetector
-     */
-    protected $mimeTypeDetector;
-
-    /**
-     * Creates a new Image FieldType
-     *
-     * @param FileService $fileService
-     * @param MimeTypeDetector $mimeTypeDetector
-     */
-    public function __construct( FileService $fileService, MimeTypeDetector $mimeTypeDetector )
-    {
-        $this->fileService = $fileService;
-        $this->mimeTypeDetector = $mimeTypeDetector;
-    }
 
     /**
      * Creates a specific value of the derived class from $inputValue
@@ -116,11 +91,11 @@ abstract class Type extends FieldType
         }
 
         // Required parameter $path
-        if ( !isset( $inputValue->path ) || !$this->fileExists( $inputValue->path ) )
+        if ( !isset( $inputValue->path ) || !file_exists( $inputValue->path ) )
         {
-            throw new InvalidArgumentType(
+            throw new InvalidArgumentValue(
                 '$inputValue->path',
-                'Existing fileName',
+                'Path to an existing file',
                 $inputValue->path
             );
         }
@@ -138,7 +113,7 @@ abstract class Type extends FieldType
         }
 
         // Required parameter $fileSize
-        if ( !isset( $inputValue->fileSize ) || !is_int( $inputValue->fileSize ) )
+        if ( isset( $inputValue->fileSize ) && !is_int( $inputValue->fileSize ) )
         {
             throw new InvalidArgumentType(
                 '$inputValue->fileSize',
@@ -159,19 +134,9 @@ abstract class Type extends FieldType
      */
     protected function completeValue( $value )
     {
-        if ( !isset( $value->fileSize ) )
-        {
-            $value->fileSize = filesize( $value->path );
-        }
-
         if ( !isset( $value->fileName ) )
         {
             $value->fileName = basename( $value->path );
-        }
-
-        if ( !isset( $value->mimeType ) )
-        {
-            $value->mimeType = $this->mimeTypeDetector->getMimeType( $value->path );
         }
     }
 
@@ -266,7 +231,7 @@ abstract class Type extends FieldType
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      *
-     * @return mixed
+     * @return \eZ\Publish\Core\FieldType\BinaryBase\Value
      */
     public function fromPersistenceValue( FieldValue $fieldValue )
     {
@@ -295,22 +260,6 @@ abstract class Type extends FieldType
             )
         );
         return $result;
-    }
-
-    /**
-     * Returns if the given $path exists on the local disc or in the file
-     * storage
-     *
-     * @param string $path
-     *
-     * @return boolean
-     */
-    protected function fileExists( $path )
-    {
-        return (
-            ( substr( $path, 0, 1 ) === '/' && file_exists( $path ) )
-            || $this->fileService->exists( $this->fileService->getStorageIdentifier( $path ) )
-        );
     }
 
     /**

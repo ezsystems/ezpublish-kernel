@@ -26,9 +26,15 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     protected static $loadedImagePath;
 
     /**
-     * Storage dir settings key
+     * IOService storage prefix for the tested Type's files
+     * @var string
      */
-    protected static $storageDirConfigKey = 'image_storage_dir';
+    protected static $storagePrefixConfigKey = 'image_storage_prefix';
+
+    protected function getStoragePrefix()
+    {
+        return $this->getConfigValue( self::$storagePrefixConfigKey );
+    }
 
     /**
      * Sets up fixture data.
@@ -180,7 +186,8 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         );
 
         $this->assertTrue(
-            file_exists( $this->getInstallDir() . '/' . $field->value->path )
+            $exists = file_exists( $path = $this->getInstallDir() . '/' . $field->value->path ),
+            "Asserting that $path exists."
         );
 
         self::$loadedImagePath = $field->value->path;
@@ -274,7 +281,8 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         );
 
         $this->assertTrue(
-            file_exists( $this->getInstallDir() . '/' . $field->value->path )
+            file_exists( $path = $this->getInstallDir() . '/' . $field->value->path ),
+            "Asserting that file $path exists"
         );
     }
 
@@ -375,7 +383,6 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     {
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
-        $contentTypeService = $repository->getContentTypeService();
 
         $type = $this->createContentType(
             $this->getValidFieldSettings(),
@@ -404,7 +411,11 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             }
         }
 
-        $this->assertTrue( isset( $paths['eng-US'] ) && isset( $paths['ger-DE'] ) );
+        $this->assertTrue(
+            isset( $paths['eng-US'] ) && isset( $paths['ger-DE'] ),
+            "Failed asserting that file path for all languages were found in draft"
+        );
+
         $this->assertEquals(
             $paths['eng-US'],
             $paths['ger-DE']
