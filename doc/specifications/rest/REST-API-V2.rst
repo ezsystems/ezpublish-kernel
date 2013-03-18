@@ -7530,7 +7530,7 @@ Session XML Schema
               <xsd:element name="name" type="xsd:int"/>
               <xsd:element name="identifier" type="xsd:string"/>
               <xsd:element name="csrfToken" type="xsd:string"/>
-              <xsd:element name="User" type="vnd.ez.api.User" />
+              <xsd:element name="User" type="ref" />
             </xsd:all>
           </xsd:extension>
         </xsd:complexContent>
