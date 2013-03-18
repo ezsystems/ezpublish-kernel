@@ -71,13 +71,33 @@
 
 {# @todo:
  # - handle default format
- # - handle eztime
- # - handle ezdate
  #}
 {% block ezdatetime_field %}
 {% spaceless %}
     {% set field_value = field.value.value|date() %}
     {{ block( 'simple_block_field' ) }}
+{% endspaceless %}
+{% endblock %}
+
+{% block ezdate_field %}
+{% spaceless %}
+    {% if field.value.date %}
+        {% set field_value = field.value.date|date( "l d F Y" ) %}
+        {{ block( 'simple_block_field' ) }}
+    {% endif %}
+{% endspaceless %}
+{% endblock %}
+
+{% block eztime_field %}
+{% spaceless %}
+    {% if field.value.time %}
+        {% if fieldSettings.useSeconds %}
+            {% set field_value = field.value.time|date( "g:i:s a", "UTC" ) %}
+        {% else %}
+            {% set field_value = field.value.time|date( "g:i a", "UTC" ) %}
+        {% endif %}
+        {{ block( 'simple_block_field' ) }}
+    {% endif %}
 {% endspaceless %}
 {% endblock %}
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\API\Repository\Tests\FieldType\FloatIntegrationTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\TimeIntegrationTest class
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,8 +9,9 @@
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
-use eZ\Publish\Core\FieldType\Float\Value as FloatValue;
+use eZ\Publish\Core\FieldType\Time\Value as TimeValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use DateTime;
 
 /**
  * Integration test for use field type
@@ -18,16 +19,16 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class FloatIntegrationTest extends BaseIntegrationTest
+class TimeIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
     public function getTypeName()
     {
-        return 'ezfloat';
+        return 'eztime';
     }
 
     /**
@@ -37,7 +38,16 @@ class FloatIntegrationTest extends BaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array();
+        return array(
+            "useSeconds" => array(
+                "type"    => "bool",
+                "default" => false
+            ),
+            "defaultType" => array(
+                "type"    => "choice",
+                "default" => 0
+            )
+        );
     }
 
     /**
@@ -47,7 +57,10 @@ class FloatIntegrationTest extends BaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array();
+        return array(
+            "useSeconds"   => false,
+            "defaultType"  => 0,
+        );
     }
 
     /**
@@ -69,18 +82,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array(
-            'FloatValueValidator' => array(
-                'minFloatValue' => array(
-                    'type'    => 'float',
-                    'default' => false,
-                ),
-                'maxFloatValue' => array(
-                    'type'    => 'float',
-                    'default' => false,
-                ),
-            )
-        );
+        return array();
     }
 
     /**
@@ -90,12 +92,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array(
-            'FloatValueValidator' => array(
-                'minFloatValue' => 23.,
-                'maxFloatValue' => 43.,
-            )
-        );
+        return array();
     }
 
     /**
@@ -106,9 +103,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
     public function getInvalidValidatorConfiguration()
     {
         return array(
-            'FloatValueValidator' => array(
-                'minStringLength' => new \stdClass(),
-            )
+            'unknown' => array( 'value' => 42 ),
         );
     }
 
@@ -119,7 +114,9 @@ class FloatIntegrationTest extends BaseIntegrationTest
      */
     public function getValidCreationFieldData()
     {
-        return new FloatValue( 23.5 );
+        // We may only create times from timestamps here, since storing will
+        // loose information about the timezone.
+        return new TimeValue( 3661 );
     }
 
     /**
@@ -135,12 +132,12 @@ class FloatIntegrationTest extends BaseIntegrationTest
     public function assertFieldDataLoadedCorrect( Field $field )
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Float\\Value',
+            'eZ\\Publish\\Core\\FieldType\\Time\\Value',
             $field->value
         );
 
         $expectedData = array(
-            'value' => 23.5,
+            'time' => 3661,
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -173,16 +170,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new \stdClass(),
-                'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                new FloatValue( 5.5 ),
-                'eZ\\Publish\\API\\Repository\\Exceptions\\ContentFieldValidationException',
-            ),
-            array(
-                new FloatValue( 127.5 ),
-                'eZ\\Publish\\API\\Repository\\Exceptions\\ContentFieldValidationException',
+                "Some unknown date format", 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'
             ),
         );
     }
@@ -194,7 +182,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
      */
     public function getValidUpdateFieldData()
     {
-        return new FloatValue( 42.5 );
+        return TimeValue::fromTimestamp( 12345678 );
     }
 
     /**
@@ -207,12 +195,13 @@ class FloatIntegrationTest extends BaseIntegrationTest
     public function assertUpdatedFieldDataLoadedCorrect( Field $field )
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Float\\Value',
+            'eZ\\Publish\\Core\\FieldType\\Time\\Value',
             $field->value
         );
 
+        $dateTime = new DateTime();
         $expectedData = array(
-            'value' => 42.5,
+            'time' => $dateTime->setTimestamp( 12345678 )->getTimestamp() - $dateTime->setTime( 0, 0, 0 )->getTimestamp(),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -247,6 +236,25 @@ class FloatIntegrationTest extends BaseIntegrationTest
     }
 
     /**
+     * Tests failing content update
+     *
+     * @param mixed $failingValue
+     * @param string $expectedException
+     *
+     * @dataProvider provideInvalidUpdateFieldData
+     *
+     * @return void
+     */
+    public function testUpdateContentFails( $failingValue, $expectedException )
+    {
+        return array(
+            array(
+                "Some unknown date format", 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'
+            ),
+        );
+    }
+
+    /**
      * Asserts the the field data was loaded correctly.
      *
      * Asserts that the data provided by {@link getValidCreationFieldData()}
@@ -257,12 +265,12 @@ class FloatIntegrationTest extends BaseIntegrationTest
     public function assertCopiedFieldDataLoadedCorrectly( Field $field )
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Float\\Value',
+            'eZ\\Publish\\Core\\FieldType\\Time\\Value',
             $field->value
         );
 
         $expectedData = array(
-            'value' => 23.5,
+            'time' => 3661,
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -292,10 +300,11 @@ class FloatIntegrationTest extends BaseIntegrationTest
      */
     public function provideToHashData()
     {
+        $dateTime = new DateTime();
         return array(
             array(
-                new FloatValue( 23.5 ),
-                23.5,
+                TimeValue::fromTimestamp( 123456 ),
+                $dateTime->setTimestamp( 123456 )->getTimestamp() - $dateTime->setTime( 0, 0, 0 )->getTimestamp(),
             ),
         );
     }
@@ -311,8 +320,8 @@ class FloatIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                42.5,
-                new FloatValue( 42.5 )
+                3661,
+                new TimeValue( 3661 )
             ),
         );
     }
@@ -320,7 +329,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
     public function providerForTestIsEmptyValue()
     {
         return array(
-            array( new FloatValue ),
+            array( new TimeValue ),
         );
     }
 
@@ -330,8 +339,6 @@ class FloatIntegrationTest extends BaseIntegrationTest
             array(
                 $this->getValidCreationFieldData()
             ),
-            array( new FloatValue( 0 ) ),
-            array( new FloatValue( 0.0 ) ),
         );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\API\Repository\Tests\FieldType\FloatIntegrationTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\DateAndTimeIntegrationTest class
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,8 +9,10 @@
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
-use eZ\Publish\Core\FieldType\Float\Value as FloatValue;
+use eZ\Publish\Core\FieldType\Date\Value as DateValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\FieldType\Date\Type;
+use DateTime;
 
 /**
  * Integration test for use field type
@@ -18,16 +20,16 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class FloatIntegrationTest extends BaseIntegrationTest
+class DateIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */
     public function getTypeName()
     {
-        return 'ezfloat';
+        return "ezdate";
     }
 
     /**
@@ -37,7 +39,12 @@ class FloatIntegrationTest extends BaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array();
+        return array(
+            "defaultType" => array(
+                "type"    => "choice",
+                "default" => Type::DEFAULT_EMPTY,
+            )
+        );
     }
 
     /**
@@ -47,7 +54,9 @@ class FloatIntegrationTest extends BaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array();
+        return array(
+            "defaultType"  => Type::DEFAULT_EMPTY,
+        );
     }
 
     /**
@@ -69,18 +78,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array(
-            'FloatValueValidator' => array(
-                'minFloatValue' => array(
-                    'type'    => 'float',
-                    'default' => false,
-                ),
-                'maxFloatValue' => array(
-                    'type'    => 'float',
-                    'default' => false,
-                ),
-            )
-        );
+        return array();
     }
 
     /**
@@ -90,12 +88,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array(
-            'FloatValueValidator' => array(
-                'minFloatValue' => 23.,
-                'maxFloatValue' => 43.,
-            )
-        );
+        return array();
     }
 
     /**
@@ -106,9 +99,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
     public function getInvalidValidatorConfiguration()
     {
         return array(
-            'FloatValueValidator' => array(
-                'minStringLength' => new \stdClass(),
-            )
+            'unknown' => array( 'value' => 42 ),
         );
     }
 
@@ -119,7 +110,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
      */
     public function getValidCreationFieldData()
     {
-        return new FloatValue( 23.5 );
+        return DateValue::fromString( "Wed, 21 Jul 2013 16:59:50" );
     }
 
     /**
@@ -135,12 +126,14 @@ class FloatIntegrationTest extends BaseIntegrationTest
     public function assertFieldDataLoadedCorrect( Field $field )
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Float\\Value',
+            "eZ\\Publish\\Core\\FieldType\\Date\\Value",
             $field->value
         );
 
+        $dateTime = new DateTime( "Wed, 21 Jul 2013 16:59:50" );
+        $dateTime->setTime( 0, 0, 0 );
         $expectedData = array(
-            'value' => 23.5,
+            "date" => $dateTime,
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -173,46 +166,41 @@ class FloatIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new \stdClass(),
-                'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                new FloatValue( 5.5 ),
-                'eZ\\Publish\\API\\Repository\\Exceptions\\ContentFieldValidationException',
-            ),
-            array(
-                new FloatValue( 127.5 ),
-                'eZ\\Publish\\API\\Repository\\Exceptions\\ContentFieldValidationException',
+                "Some unknown date format",
+                "eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException"
             ),
         );
     }
 
     /**
-     * Get update field externals data
+     * Get valid field data for updating content
      *
-     * @return array
+     * @return mixed
      */
     public function getValidUpdateFieldData()
     {
-        return new FloatValue( 42.5 );
+        return DateValue::fromString( "Wed, 21 Jul 2013 17:59:50" );
     }
 
     /**
-     * Get externals updated field data values
+     * Asserts the the field data was loaded correctly.
      *
-     * This is a PHPUnit data provider
+     * Asserts that the data provided by {@link getValidUpdateFieldData()}
+     * was stored and loaded correctly.
      *
-     * @return array
+     * @param Field $field
      */
     public function assertUpdatedFieldDataLoadedCorrect( Field $field )
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Float\\Value',
+            "eZ\\Publish\\Core\\FieldType\\Date\\Value",
             $field->value
         );
 
+        $dateTime = new DateTime( "Wed, 21 Jul 2013 17:59:50" );
+        $dateTime->setTime( 0, 0, 0 );
         $expectedData = array(
-            'value' => 42.5,
+            "date" => $dateTime,
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -256,18 +244,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
      */
     public function assertCopiedFieldDataLoadedCorrectly( Field $field )
     {
-        $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Float\\Value',
-            $field->value
-        );
-
-        $expectedData = array(
-            'value' => 23.5,
-        );
-        $this->assertPropertiesCorrect(
-            $expectedData,
-            $field->value
-        );
+        $this->assertFieldDataLoadedCorrect( $field );
     }
 
     /**
@@ -292,27 +269,57 @@ class FloatIntegrationTest extends BaseIntegrationTest
      */
     public function provideToHashData()
     {
+        $dateTime = new DateTime();
+
         return array(
             array(
-                new FloatValue( 23.5 ),
-                23.5,
+                DateValue::fromTimestamp( $timestamp = 186401 ),
+                array(
+                    "timestamp" => $dateTime->setTimestamp( $timestamp )->setTime( 0, 0, 0 )->getTimestamp(),
+                    "rfc850" => $dateTime->format( DateTime::RFC850 )
+                )
             ),
         );
     }
 
     /**
-     * Get expectations for the fromHash call on our field value
+     * Get hashes and their respective converted values
      *
      * This is a PHPUnit data provider
+     *
+     * The returned records must have the the input hash assigned to the
+     * first index and the expected value result to the second. For example:
+     *
+     * <code>
+     * array(
+     *      array(
+     *          array( 'myValue' => true ),
+     *          new MyValue( true ),
+     *      ),
+     *      // ...
+     * );
+     * </code>
      *
      * @return array
      */
     public function provideFromHashData()
     {
+        $dateTime = new DateTime();
+
         return array(
             array(
-                42.5,
-                new FloatValue( 42.5 )
+                array(
+                    "timestamp" => $dateTime->setTimestamp( 123456 )->setTime( 0, 0, 0 )->getTimestamp(),
+                    "rfc850" => ( $rfc850 = $dateTime->format( DateTime::RFC850 ) )
+                ),
+                DateValue::fromString( $rfc850 )
+            ),
+            array(
+                array(
+                    "timestamp" => $dateTime->setTimestamp( $timestamp = 123456 )->setTime( 0, 0, 0 )->getTimestamp(),
+                    "rfc850" => null
+                ),
+                DateValue::fromTimestamp( $timestamp )
             ),
         );
     }
@@ -320,7 +327,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
     public function providerForTestIsEmptyValue()
     {
         return array(
-            array( new FloatValue ),
+            array( new DateValue() ),
         );
     }
 
@@ -330,8 +337,6 @@ class FloatIntegrationTest extends BaseIntegrationTest
             array(
                 $this->getValidCreationFieldData()
             ),
-            array( new FloatValue( 0 ) ),
-            array( new FloatValue( 0.0 ) ),
         );
     }
 }
