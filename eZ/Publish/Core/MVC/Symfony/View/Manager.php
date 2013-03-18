@@ -178,7 +178,7 @@ class Manager implements ViewManagerInterface
     public function getAllBlockViewProviders()
     {
         if ( empty( $this->sortedBlockViewProviders ) )
-            $this->sortedBlockViewProviders = $this->sortViewProviders( $this->sortedBlockViewProviders );
+            $this->sortedBlockViewProviders = $this->sortViewProviders( $this->blockViewProviders );
 
         return $this->sortedBlockViewProviders;
     }
