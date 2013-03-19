@@ -163,7 +163,7 @@ class Page implements Converter
                     $zoneNode->setAttribute( 'id', 'id_' . $attrValue );
                     break;
                 case 'action':
-                    if ( isset( $attrValue ) )
+                    if ( $attrValue !== null )
                     {
                         $zoneNode->setAttribute( 'action', $attrValue );
                     }
@@ -226,7 +226,7 @@ class Page implements Converter
                     $blockNode->appendChild( $dom->createElement( 'zone_id', $attrValue ) );
                     break;
                 case 'action':
-                    if ( isset( $attrValue ) )
+                    if ( $attrValue !== null )
                     {
                         $blockNode->setAttribute( 'action', $attrValue );
                     }
@@ -242,7 +242,7 @@ class Page implements Converter
                     break;
                 case 'rotation':
                 case 'customAttributes':
-                    if ( !isset( $attrValue ) )
+                    if ( $attrValue === null )
                     {
                         continue 2;
                     }
@@ -304,7 +304,7 @@ class Page implements Converter
                     $itemNode->setAttribute( 'id', $attrValue );
                     break;
                 case 'action':
-                    if ( isset( $attrValue ) )
+                    if ( $attrValue !== null )
                     {
                         $itemNode->setAttribute( 'action', $attrValue );
                     }
@@ -498,7 +498,7 @@ class Page implements Converter
                     $items[] = $this->restoreItemFromXml( $node );
                     break;
                 case 'rotation':
-                    if ( !isset( $rotation ) )
+                    if ( $rotation === null )
                         $rotation = array();
 
                     foreach ( $node->childNodes as $subNode )
@@ -510,7 +510,7 @@ class Page implements Converter
                     }
                     break;
                 case 'custom_attributes':
-                    if ( !isset( $customAttributes ) )
+                    if ( $customAttributes === null )
                         $customAttributes = array();
 
                     foreach ( $node->childNodes as $subNode )
