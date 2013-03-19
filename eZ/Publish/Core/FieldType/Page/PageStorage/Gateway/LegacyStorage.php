@@ -19,8 +19,9 @@ use ezcQuerySelect;
 
 class LegacyStorage extends Gateway
 {
-    const POOL_TABLE = 'ezm_pool';
-
+    /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     */
     protected $dbHandler;
 
     /**
@@ -76,7 +77,7 @@ class LegacyStorage extends Gateway
         $q = $dbHandler->createSelectQuery();
         $q
             ->select( '*' )
-            ->from( $dbHandler->quoteTable( self::POOL_TABLE ) )
+            ->from( $dbHandler->quoteTable( 'ezm_pool' ) )
             ->where(
                 $q->expr->eq( 'block_id', $q->bindValue( $block->id ) ),
                 $q->expr->gt( 'ts_visible', $q->bindValue( 0, null, \PDO::PARAM_INT ) ),
@@ -111,7 +112,7 @@ class LegacyStorage extends Gateway
         $q = $dbHandler->createSelectQuery();
         $q
             ->select( '*' )
-            ->from( $dbHandler->quoteTable( self::POOL_TABLE ) )
+            ->from( $dbHandler->quoteTable( 'ezm_pool' ) )
             ->where(
                 $q->expr->eq( 'block_id', $q->bindValue( $block->id ) ),
                 $q->expr->gt( 'ts_visible', $q->bindValue( 0, null, \PDO::PARAM_INT ) ),
@@ -143,7 +144,7 @@ class LegacyStorage extends Gateway
         $q = $dbHandler->createSelectQuery();
         $q
             ->select( '*' )
-            ->from( $dbHandler->quoteTable( self::POOL_TABLE ) )
+            ->from( $dbHandler->quoteTable( 'ezm_pool' ) )
             ->where(
                 $q->expr->eq( 'block_id', $q->bindValue( $block->id ) ),
                 $q->expr->eq( 'ts_visible', $q->bindValue( 0, null, \PDO::PARAM_INT ) ),
@@ -178,7 +179,7 @@ class LegacyStorage extends Gateway
         $q = $dbHandler->createSelectQuery();
         $q
             ->select( '*' )
-            ->from( $dbHandler->quoteTable( self::POOL_TABLE ) )
+            ->from( $dbHandler->quoteTable( 'ezm_pool' ) )
             ->where(
                 $q->expr->eq( 'block_id', $q->bindValue( $block->id ) ),
                 $q->expr->gt( 'ts_hidden', $q->bindValue( 0, null, \PDO::PARAM_INT ) )
