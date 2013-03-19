@@ -38,7 +38,7 @@ class ParameterProviderRegistry implements ParameterProviderRegistryInterface
      */
     public function getParameterProvider( $fieldTypeIdentifier )
     {
-        if ( !$this->hasParameterProvider( $fieldTypeIdentifier ) )
+        if ( !isset( $this->providers[$fieldTypeIdentifier] ) )
             throw new InvalidArgumentException( "No parameter provider found for '$fieldTypeIdentifier' field type." );
 
         return $this->providers[$fieldTypeIdentifier];
