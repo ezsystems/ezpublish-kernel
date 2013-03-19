@@ -100,14 +100,10 @@ class Page extends AbstractParser
                     $ezpageSettings[$type] = array();
                     continue;
                 }
-                $enabledLayouts = array_flip( $ezpageSettings[$enabledKey] );
-                foreach ( $ezpageSettings[$type] as $id => $layout )
-                {
-                    if ( !isset( $enabledLayouts[$id] ) )
-                    {
-                        unset( $ezpageSettings[$type][$id] );
-                    }
-                }
+                $ezpageSettings[$type] = array_intersect_key(
+                    $ezpageSettings[$type],
+                    array_flip( $ezpageSettings[$enabledKey] )
+                );
             }
             $container->setParameter( "ezsettings.$sa.ezpage", $ezpageSettings );
         }
