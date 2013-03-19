@@ -39,7 +39,7 @@ class ConfiguredTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetViewWrongMatcher()
     {
-        $lvp = new BlockViewProvider(
+        $bvp = new BlockViewProvider(
             $this->getRepositoryMock(),
             array(
                 'failingMatchBlock' => array(
@@ -51,7 +51,7 @@ class ConfiguredTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $lvp->getView(
+        $bvp->getView(
             $this->getBlockMock(),
             'full'
         );
@@ -184,8 +184,8 @@ class ConfiguredTest extends \PHPUnit_Framework_TestCase
             ->method( 'matchBlock' )
             ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Block' ) );
 
-        $lvp = new BlockViewProvider( $this->getRepositoryMock(), array() );
-        $lvp->match( $matcherMock, $blockMock );
+        $bvp = new BlockViewProvider( $this->getRepositoryMock(), array() );
+        $bvp->match( $matcherMock, $blockMock );
     }
 
     /**
@@ -197,7 +197,7 @@ class ConfiguredTest extends \PHPUnit_Framework_TestCase
         $matcherMock = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider\\Configured\\Matcher' );
         $wrongObject = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' );
 
-        $lvp = new BlockViewProvider( $this->getRepositoryMock(), array() );
-        $lvp->match( $matcherMock, $wrongObject );
+        $bvp = new BlockViewProvider( $this->getRepositoryMock(), array() );
+        $bvp->match( $matcherMock, $wrongObject );
     }
 }
