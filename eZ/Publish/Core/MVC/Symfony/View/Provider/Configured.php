@@ -10,7 +10,18 @@
 namespace eZ\Publish\Core\MVC\Symfony\View\Provider;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZ\Publish\Core\MVC\RepositoryAwareInterface;
+use InvalidArgumentException;
 
+/**
+ * Base for View Providers.
+ *
+ * Implementors can define MATCHER_RELATIVE_NAMESPACE constant. If so, getMatcher() will return instances of objects relative
+ * to this namespace if $matcherIdentifier argument doesn't begin with a '\' (FQ class name).
+ */
 abstract class Configured
 {
     /**
@@ -24,7 +35,7 @@ abstract class Configured
     protected $matchConfig;
 
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher[]
+     * @var \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\ViewProviderMatcher[]
      */
     protected $matchers;
 
@@ -42,15 +53,71 @@ abstract class Configured
     /**
      * Returns the matcher object.
      *
-     * @param string $matcherIdentifier The matcher class. If it begins with a '\' it means it's a FQ class name, otherwise it is relative to this namespace.
+     * @param string $matcherIdentifier The matcher class.
+     *                                  If it begins with a '\' it means it's a FQ class name, otherwise it is relative to
+     *                                  static::MATCHER_RELATIVE_NAMESPACE namespace (if available).
      *
-     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher
+     * @throws \InvalidArgumentException
+     *
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher
      */
     protected function getMatcher( $matcherIdentifier )
     {
-        if ( $matcherIdentifier[0] !== '\\' )
-            $matcherIdentifier = "eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider\\Configured\\Matcher\\$matcherIdentifier";
+        // Caching the matcher instance in memory
+        if ( isset( $this->matchers[$matcherIdentifier] ) )
+        {
+            return $this->matchers[$matcherIdentifier];
+        }
 
-        return new $matcherIdentifier();
+        // Not a FQ class name, so take the relative namespace, if defined in descendant.
+        if ( $matcherIdentifier[0] !== '\\' && defined( 'static::MATCHER_RELATIVE_NAMESPACE' ) )
+        {
+            $matcherIdentifier = static::MATCHER_RELATIVE_NAMESPACE . "\\$matcherIdentifier";
+        }
+        if ( !class_exists( $matcherIdentifier ) )
+        {
+            throw new InvalidArgumentException( "Invalid matcher class '$matcherIdentifier'" );
+        }
+        $this->matchers[$matcherIdentifier] = new $matcherIdentifier();
+
+        if ( $this->matchers[$matcherIdentifier] instanceof RepositoryAwareInterface )
+        {
+            $this->matchers[$matcherIdentifier]->setRepository( $this->repository );
+        }
+
+        return $this->matchers[$matcherIdentifier];
+    }
+
+    /**
+     * Does the matching between $matchConfig and $valueObject.
+     * Returns a ContentView object if $valueObject has successfully matched a view or null if nothing has matched.
+     *
+     * @param array $matchConfig Hash containing all match configuration to check against $valueObject.
+     *                           Must at least contain
+     *                              - 'match' => hash with matcher identifier as key and matching rules as value.
+     *                              - 'template' => Template identifier to use if match is successful.
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $valueObject
+     *
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|null
+     */
+    protected function doMatch( array $matchConfig, ValueObject $valueObject )
+    {
+        foreach ( $matchConfig as $configHash )
+        {
+            $hasMatched = true;
+            foreach ( $configHash['match'] as $matcherIdentifier => $value )
+            {
+                /** @var $matcher \eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher */
+                $matcher = $this->getMatcher( $matcherIdentifier );
+                $matcher->setMatchingConfig( $value );
+                if ( !$this->match( $matcher, $valueObject ) )
+                    $hasMatched = false;
+            }
+
+            if ( $hasMatched )
+            {
+                return new ContentView( $configHash['template'] );
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@ parameters:
     ezpublish_legacy.view_provider.class: eZ\Publish\Core\MVC\Legacy\View\Provider
     ezpublish_legacy.content_view_provider.class: eZ\Publish\Core\MVC\Legacy\View\Provider\Content
     ezpublish_legacy.location_view_provider.class: eZ\Publish\Core\MVC\Legacy\View\Provider\Location
+    ezpublish_legacy.block_view_provider.class: eZ\Publish\Core\MVC\Legacy\View\Provider\Block
     ezpublish_legacy.view_decorator.twig.class: eZ\Publish\Core\MVC\Legacy\View\TwigContentViewLayoutDecorator
     ezpublish_legacy.view_decorator.options:
         layout: %ezpublish_legacy.view.default_layout%
@@ -28,6 +29,14 @@ services:
             - [setRequest, [@request=]]
         tags:
             - {name: ezpublish.location_view_provider, priority: -255}
+
+    ezpublish_legacy.block_view_provider:
+        class: %ezpublish_legacy.block_view_provider.class%
+        parent: ezpublish_legacy.view_provider
+        calls:
+            - [setPageService, [@ezpublish.fieldType.ezpage.pageService]]
+        tags:
+            - {name: ezpublish.block_view_provider, priority: -255}
 
     ezpublish_legacy.view_decorator.twig:
         class: %ezpublish_legacy.view_decorator.twig.class%

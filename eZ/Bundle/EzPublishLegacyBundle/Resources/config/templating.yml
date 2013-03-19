@@ -1,6 +1,7 @@
 parameters:
     ezpublish_legacy.twig.extension.class: eZ\Publish\Core\MVC\Legacy\Templating\Twig\Extension\LegacyExtension
     ezpublish_legacy.templating.api_content_converter.class: eZ\Publish\Core\MVC\Legacy\Templating\Converter\ApiContentConverter
+    ezpublish_legacy.templating.pageparts_converter.class: eZ\Publish\Core\MVC\Legacy\Templating\Converter\PagePartsConverter
     ezpublish_legacy.templating.delegating_converter.class: eZ\Publish\Core\MVC\Legacy\Templating\Converter\DelegatingConverter
     ezpublish_legacy.templating.generic_converter.class: eZ\Publish\Core\MVC\Legacy\Templating\Converter\GenericConverter
     # Overriding base GlobalHelper
@@ -35,6 +36,12 @@ services:
         tags:
             - {name: ezpublish_legacy.templating.converter, for: %ezpublish.api.content.class%}
             - {name: ezpublish_legacy.templating.converter, for: %ezpublish.api.location.class%}
+
+    ezpublish_legacy.templating.pageparts_converter:
+        class: %ezpublish_legacy.templating.pageparts_converter.class%
+        tags:
+            - {name: ezpublish_legacy.templating.converter, for: %ezpublish.fieldType.ezpage.block.class%}
+            - {name: ezpublish_legacy.templating.converter, for: %ezpublish.fieldType.ezpage.zone.class%}
 
     ezpublish_legacy.templating.legacy_helper:
         class: %ezpublish_legacy.templating.legacy_helper.class%

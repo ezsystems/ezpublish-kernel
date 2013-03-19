@@ -40,6 +40,9 @@ parameters:
     # Cache purging
     ezpublish_legacy.persistence_cache_purger.class: eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger
 
+    # Overriding base PageService for ezpage fieldtype.
+    ezpublish.fieldType.ezpage.pageService.class: eZ\Bundle\EzPublishLegacyBundle\FieldType\Page\PageService
+
 services:
     ezpublish_legacy.kernel:
         alias: ezpublish_legacy.kernel.lazy
