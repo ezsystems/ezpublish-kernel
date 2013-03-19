@@ -16,15 +16,15 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
  *
  * Content view providers select a view for a given content, depending on its own internal rules.
  */
-interface Content
+interface Content extends ViewProviderInterface
 {
     /**
-     * Returns a ContentView object corresponding to $contentInfo, or void if not applicable
+     * Returns a ContentView object corresponding to $contentInfo, or null if not applicable
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param string $viewType Variation of display for your content
      *
-     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|void
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|null
      */
     public function getView( ContentInfo $contentInfo, $viewType );
 }

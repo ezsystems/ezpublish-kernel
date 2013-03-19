@@ -6,6 +6,7 @@ parameters:
     ezpublish.config.default_scope: ezsettings
     ezpublish.controller.base.class: eZ\Publish\Core\MVC\Symfony\Controller\Controller
     ezpublish.controller.content.view.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController
+    ezpublish.controller.page.view.class: eZ\Publish\Core\MVC\Symfony\Controller\PageController
     ezpublish.data_collector.spi.persistence.class: eZ\Bundle\EzPublishCoreBundle\Collector\SPIPersistenceDataCollector
 
 services:
@@ -38,10 +39,21 @@ services:
         parent: ezpublish.controller.base
         scope: request
 
+    ezpublish.controller.page.view:
+        class: %ezpublish.controller.page.view.class%
+        arguments: [@ezpublish.view_manager, @ezpublish.fieldType.ezpage.pageService]
+        parent: ezpublish.controller.base
+        scope: request
+
     # This alias allows easier management for subrequests
     # {{ render( controller( "ez_content:viewLocation", {"locationId": 123, "viewMode": "line"} ) ) }
     ez_content:
         alias: ezpublish.controller.content.view
+
+    # Same as above for the page controller
+    # {{ render( controller( "ez_page:viewBlock", {'block': myBlock} ) ) }}
+    ez_page:
+        alias: ezpublish.controller.page.view
 
     # SPI profiling
     ezpublish.data_collector.spi.persistence:

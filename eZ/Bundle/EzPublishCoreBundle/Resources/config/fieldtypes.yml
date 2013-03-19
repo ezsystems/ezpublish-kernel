@@ -1,4 +1,6 @@
 parameters:
+    ezpublish.fieldType.parameterProviderRegistry.class: eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry
+
     ezpublish.fieldType.class: eZ\Publish\Core\FieldType\FieldType
     ezpublish.fieldType.ezauthor.class: eZ\Publish\Core\FieldType\Author\Type
     ezpublish.fieldType.ezbinaryfile.class: eZ\Publish\Core\FieldType\BinaryFile\Type
@@ -31,9 +33,11 @@ parameters:
     ezpublish.fieldType.ezxmltext.converter.html5.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5.xsl
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5
     ezpublish.fieldType.ezpage.class: eZ\Publish\Core\FieldType\Page\Type
-    ezpublish.fieldType.ezpage.pageService.class: eZ\Publish\Core\FieldType\Page\Service
-    ezpublish.fieldtype.ezpage.zoneDefinition: {}
-    ezpublish.fieldType.ezpage.blockDefinition: {}
+    ezpublish.fieldType.ezpage.pageService.class: eZ\Bundle\EzPublishCoreBundle\FieldType\Page\PageService
+    ezpublish.fieldType.ezpage.pageService.factory.class: eZ\Publish\Core\MVC\Symfony\FieldType\Page\PageServiceFactory
+    ezpublish.fieldType.ezpage.parameterProvider.class: eZ\Publish\Core\MVC\Symfony\FieldType\Page\ParameterProvider
+    ezpublish.fieldType.ezpage.block.class: eZ\Publish\Core\FieldType\Page\Parts\Block
+    ezpublish.fieldType.ezpage.zone.class: eZ\Publish\Core\FieldType\Page\Parts\Zone
 
     ezpublish.fieldType.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\Type
     ezpublish.fieldType.ezgmaplocation.externalStorage.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage
@@ -293,6 +297,9 @@ parameters:
     ezpublish.fieldType.ezrecommendation.class: %ezpublish.fieldType.eznull.class%
 
 services:
+    ezpublish.fieldType.parameterProviderRegistry:
+        class: %ezpublish.fieldType.parameterProviderRegistry.class%
+
     ezpublish.fieldType:
         class: %ezpublish.fieldType.class%
         abstract: true
@@ -500,9 +507,22 @@ services:
         tags:
             - {name: ezpublish.fieldType, alias: ezpage}
 
+    ezpublish.fieldType.ezpage.pageService.factory:
+        class: %ezpublish.fieldType.ezpage.pageService.factory.class%
+
     ezpublish.fieldType.ezpage.pageService:
         class: %ezpublish.fieldType.ezpage.pageService.class%
-        arguments: [%ezpublish.fieldtype.ezpage.zoneDefinition%, %ezpublish.fieldtype.ezpage.blockDefinition%]
+        factory_service: ezpublish.fieldType.ezpage.pageService.factory
+        factory_method: buildService
+        arguments: [%ezpublish.fieldType.ezpage.pageService.class%, @ezpublish.config.resolver, @ezpublish.fieldType.ezpage.storage_gateway]
+        calls:
+            - [setRepository, [@ezpublish.api.repository]]
+
+    ezpublish.fieldType.ezpage.parameterProvider:
+        class: %ezpublish.fieldType.ezpage.parameterProvider.class%
+        arguments: [@ezpublish.fieldType.ezpage.pageService]
+        tags:
+            - {name: ezpublish.fieldType.parameterProvider, alias: ezpage}
 
     ezpublish.fieldType.ezgmaplocation:
         class: %ezpublish.fieldType.ezgmaplocation.class%

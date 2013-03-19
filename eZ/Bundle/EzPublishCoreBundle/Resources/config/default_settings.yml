@@ -9,6 +9,7 @@ parameters:
     # Content/Location view
     ezsettings.default.location_view: {}
     ezsettings.default.content_view: {}
+    ezsettings.default.block_view: {}
 
     # Common settings
     ezsettings.default.database.params: ~
@@ -131,6 +132,84 @@ parameters:
         flatten: "-flatten"
         resize: "-resize {1}"
         optimize: "-strip"
+
+    ###
+    # default ezpage settings
+    ##
+    ezpublish.ezpage.enabledLayouts: []
+    ezpublish.ezpage.enabledBlocks: []
+    ezpublish.ezpage.layouts:
+        GlobalZoneLayout:
+            name: Global zone layout
+            template: globalzonelayout.tpl
+        2ZonesLayout1:
+            name: 2 zones (layout 1)
+            template: 2zoneslayout1.tpl
+        2ZonesLayout2:
+            name: 2 zones (layout 2)
+            template: 2zoneslayout2.tpl
+        2ZonesLayout3:
+            name: 2 zones (layout 3)
+            template: 2zoneslayout3.tpl
+        3ZonesLayout1:
+            name: 3 zones (layout 1)
+            template: 3zoneslayout1.tpl
+        3ZonesLayout2:
+            name: 3 zones (layout 2)
+            template: 3zoneslayout2.tpl
+        CallForActionLayout:
+            name: Call For Action zone layout
+            template: callforactionlayout.tpl
+
+    ezpublish.ezpage.blocks:
+        DemoBlock:
+            name: Demo Block
+        Manual2Items:
+            name: 2 items (Manual)
+        Manual3Items:
+            name: 3 items (Manual)
+        Manual4Items:
+            name: 4 items (Manual)
+        Manual5Items:
+            name: 5 items (Manual)
+        Dynamic3Items:
+            name: 3 items (Dynamic)
+        Gallery:
+            name: Gallery (Manual)
+        Video:
+            name: Video (Manual)
+        ItemList:
+            name: Item list
+        MainStory:
+            name: Main story (Manual)
+        Banner:
+            name: Banner
+        TagCloud:
+            name: Tag cloud
+        Poll:
+            name: Poll
+        FlashRecorder:
+            name: Flash Recorder
+        FeedReader:
+            name: Feed reader
+        Keyword:
+            name: Keyword
+        GMap:
+            name: Google Map
+        OnlineUsers:
+            name: Online Users
+        MultimediaCarousel:
+            name: Multimedia carousel
+        Search:
+            name: Search
+        Ads:
+            name: Advertisement
+        LatestContent:
+            name: Latest content
+        TopRated:
+            name: Top Rated
+        GMapItems:
+            name: Google Map Items
 
     ###
     # Internal settings

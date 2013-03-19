@@ -72,13 +72,14 @@ class ViewController extends Controller
      * @param int $locationId
      * @param string $viewType
      * @param boolean $layout
+     * @param array $params
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @throws \Exception
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewLocation( $locationId, $viewType, $layout = false )
+    public function viewLocation( $locationId, $viewType, $layout = false, array $params = array() )
     {
         if ( !$this->isGranted( new AuthorizationAttribute( 'content', 'read' ) ) )
             throw new AccessDeniedException();
@@ -106,7 +107,7 @@ class ViewController extends Controller
                 $this->viewManager->renderLocation(
                     $location,
                     $viewType,
-                    array( 'noLayout' => !$layout )
+                    $params + array( 'noLayout' => !$layout )
                 )
             );
 
@@ -127,7 +128,8 @@ class ViewController extends Controller
             {
                 $response->setContent(
                     $this->viewManager->renderContentView(
-                        $event->getContentView()
+                        $event->getContentView(),
+                        $params
                     )
                 );
 
@@ -145,13 +147,14 @@ class ViewController extends Controller
      * @param int $contentId
      * @param string $viewType
      * @param boolean $layout
+     * @param array $params
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @throws \Exception
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewContent( $contentId, $viewType, $layout = false )
+    public function viewContent( $contentId, $viewType, $layout = false, array $params = array() )
     {
         if ( !$this->isGranted( new AuthorizationAttribute( 'content', 'read' ) ) )
             throw new AccessDeniedException();
@@ -176,7 +179,7 @@ class ViewController extends Controller
                 $this->viewManager->renderContent(
                     $content,
                     $viewType,
-                    array( 'noLayout' => !$layout )
+                    $params + array( 'noLayout' => !$layout )
                 )
             );
 
@@ -197,7 +200,8 @@ class ViewController extends Controller
             {
                 $response->setContent(
                     $this->viewManager->renderContentView(
-                        $event->getContentView()
+                        $event->getContentView(),
+                        $params
                     )
                 );
 

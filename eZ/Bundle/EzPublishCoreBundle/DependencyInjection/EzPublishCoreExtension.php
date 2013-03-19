@@ -67,6 +67,7 @@ class EzPublishCoreExtension extends Extension
         $loader->load( 'default_settings.yml' );
         $this->registerSiteAccessConfiguration( $config, $container );
         $this->registerImageMagickConfiguration( $config, $container );
+        $this->registerPageConfiguration( $config, $container );
 
         // Routing
         $this->handleRouting( $container, $loader );
@@ -140,6 +141,39 @@ class EzPublishCoreExtension extends Extension
         $filters = isset( $config['imagemagick']['filters'] ) ? $config['imagemagick']['filters'] : array();
         $filters = $filters + $container->getParameter( 'ezpublish.image.imagemagick.filters' );
         $container->setParameter( 'ezpublish.image.imagemagick.filters', $filters );
+    }
+
+    private function registerPageConfiguration( array $config, ContainerBuilder $container )
+    {
+        if ( isset( $config['ezpage']['layouts'] ) )
+        {
+            $container->setParameter(
+                'ezpublish.ezpage.layouts',
+                $config['ezpage']['layouts'] + $container->getParameter( 'ezpublish.ezpage.layouts' )
+            );
+        }
+        if ( isset( $config['ezpage']['blocks'] ) )
+        {
+            $container->setParameter(
+                'ezpublish.ezpage.blocks',
+                $config['ezpage']['blocks'] + $container->getParameter( 'ezpublish.ezpage.blocks' )
+            );
+        }
+        if ( isset( $config['ezpage']['enabledLayouts'] ) )
+        {
+            $container->setParameter(
+                'ezpublish.ezpage.enabledLayouts',
+                $config['ezpage']['enabledLayouts'] + $container->getParameter( 'ezpublish.ezpage.enabledLayouts' )
+            );
+        }
+        if ( isset( $config['ezpage']['enabledBlocks'] ) )
+        {
+            $container->setParameter(
+                'ezpublish.ezpage.enabledBlocks',
+                $config['ezpage']['enabledBlocks'] + $container->getParameter( 'ezpublish.ezpage.enabledBlocks' )
+            );
+        }
+
     }
 
     /**

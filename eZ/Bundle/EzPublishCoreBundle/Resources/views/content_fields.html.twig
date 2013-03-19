@@ -395,6 +395,17 @@
 {% endspaceless %}
 {% endblock %}
 
+{# pageService is exposed under parameters.pageService thanks to Page\ParameterProvider #}
+{% block ezpage_field %}
+{% spaceless %}
+{% if field.value.page is not null %}
+    {% set layout = field.value.page.layout %}
+    {% set template = parameters.pageService.getLayoutTemplate( layout ) %}
+    {% include template with { 'zones': field.value.page.zones, 'zone_layout': layout, 'pageService': parameters.pageService } %}
+{% endif %}
+{% endspaceless %}
+{% endblock %}
+
 
 {# The simple_block_field block is a shorthand html block-based fields (like eztext or ezxmltext) #}
 {# You can define a field_value variable before rendering this one if you need special operation for rendering content (i.e. nl2br) #}

@@ -13,6 +13,8 @@ use eZ\Publish\Core\MVC\Legacy\View\Provider;
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProviderInterface;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher;
+use eZ\Publish\API\Repository\Values\ValueObject;
 use eZModule;
 use ezjscPacker;
 use eZINI;
@@ -140,5 +142,20 @@ class Location extends Provider implements LocationViewProviderInterface
             new ContentView( $legacyContentClosure )
         );
         return $this->decorator;
+    }
+
+    /**
+     * Checks if $valueObject matches the $matcher's rules.
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher $matcher
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $valueObject
+     *
+     * @throws \InvalidArgumentException If $valueObject is not of expected sub-type.
+     *
+     * @return bool
+     */
+    public function match( ViewProviderMatcher $matcher, ValueObject $valueObject )
+    {
+        return true;
     }
 }
