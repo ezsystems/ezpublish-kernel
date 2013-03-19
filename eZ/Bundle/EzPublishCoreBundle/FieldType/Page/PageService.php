@@ -27,6 +27,8 @@ class PageService extends BasePageService implements RepositoryAwareInterface
     /**
      * Cached content items by block.
      *
+     * @todo Remove this cache when SPI cache supports search
+     *
      * @var \SplObjectStorage
      */
     protected $validBlockContentItems;
@@ -56,6 +58,7 @@ class PageService extends BasePageService implements RepositoryAwareInterface
      */
     public function getValidBlockItemsAsContent( Block $block )
     {
+        // @todo Remove this cache when SPI cache supports search
         if ( isset( $this->validBlockContentItems[$block] ) )
             return $this->validBlockContentItems[$block];
 
