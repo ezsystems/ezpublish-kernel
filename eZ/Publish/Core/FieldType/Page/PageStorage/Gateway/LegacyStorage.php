@@ -76,7 +76,7 @@ class LegacyStorage extends Gateway
         /** @var $q \ezcQuerySelect */
         $q = $dbHandler->createSelectQuery();
         $q
-            ->select( '*' )
+            ->select( 'object_id, node_id, priority, ts_publication, ts_visible, rotation_until, moved_to' )
             ->from( $dbHandler->quoteTable( 'ezm_pool' ) )
             ->where(
                 $q->expr->eq( 'block_id', $q->bindValue( $block->id ) ),
@@ -91,7 +91,12 @@ class LegacyStorage extends Gateway
         $items = array();
         foreach ( $rows as $row )
         {
-            $items[] = $this->buildBlockItem( $row );
+            $items[] = $this->buildBlockItem(
+                $row + array(
+                    'block_id'  => $block->id,
+                    'ts_hidden' => 0
+                )
+            );
         }
 
         return $items;
@@ -111,7 +116,7 @@ class LegacyStorage extends Gateway
         /** @var $q \ezcQuerySelect */
         $q = $dbHandler->createSelectQuery();
         $q
-            ->select( '*' )
+            ->select( 'object_id, node_id, priority, ts_publication, ts_visible, rotation_until, moved_to' )
             ->from( $dbHandler->quoteTable( 'ezm_pool' ) )
             ->where(
                 $q->expr->eq( 'block_id', $q->bindValue( $block->id ) ),
@@ -127,7 +132,12 @@ class LegacyStorage extends Gateway
         if ( empty( $rows ) )
             return;
 
-        return $this->buildBlockItem( $rows[0] );
+        return $this->buildBlockItem(
+            $rows[0] + array(
+                'block_id'  => $block->id,
+                'ts_hidden' => 0
+            )
+        );
     }
 
     /**
@@ -143,7 +153,7 @@ class LegacyStorage extends Gateway
         /** @var $q \ezcQuerySelect */
         $q = $dbHandler->createSelectQuery();
         $q
-            ->select( '*' )
+            ->select( 'object_id, node_id, priority, ts_publication, rotation_until, moved_to' )
             ->from( $dbHandler->quoteTable( 'ezm_pool' ) )
             ->where(
                 $q->expr->eq( 'block_id', $q->bindValue( $block->id ) ),
@@ -159,7 +169,13 @@ class LegacyStorage extends Gateway
         $items = array();
         foreach ( $rows as $row )
         {
-            $items[] = $this->buildBlockItem( $row );
+            $items[] = $this->buildBlockItem(
+                $row + array(
+                    'block_id'      => $block->id,
+                    'ts_visible'    => 0,
+                    'ts_hidden'     => 0
+                )
+            );
         }
 
         return $items;
@@ -178,7 +194,7 @@ class LegacyStorage extends Gateway
         /** @var $q \ezcQuerySelect */
         $q = $dbHandler->createSelectQuery();
         $q
-            ->select( '*' )
+            ->select( 'object_id, node_id, priority, ts_publication, ts_visible, ts_hidden, rotation_until, moved_to' )
             ->from( $dbHandler->quoteTable( 'ezm_pool' ) )
             ->where(
                 $q->expr->eq( 'block_id', $q->bindValue( $block->id ) ),
@@ -192,7 +208,11 @@ class LegacyStorage extends Gateway
         $items = array();
         foreach ( $rows as $row )
         {
-            $items[] = $this->buildBlockItem( $row );
+            $items[] = $this->buildBlockItem(
+                $row + array(
+                    'block_id' => $block->id
+                )
+            );
         }
 
         return $items;
