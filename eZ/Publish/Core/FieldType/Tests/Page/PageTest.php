@@ -15,8 +15,8 @@ use eZ\Publish\Core\FieldType\Page\Parts\Zone;
 class PageTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @covers eZ\Publish\Core\FieldType\Page\Parts\Page::__construct
      * @covers eZ\Publish\Core\FieldType\Page\Parts\Base::__construct
-     * @covers eZ\Publish\Core\FieldType\Page\Parts\Page::init
      * @covers eZ\Publish\Core\FieldType\Page\Parts\Base::getState
      */
     public function testGetState()

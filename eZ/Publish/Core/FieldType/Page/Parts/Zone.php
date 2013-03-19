@@ -49,11 +49,10 @@ class Zone extends Base
      */
     protected $action;
 
-    /**
-     * {@inheritedDoc}
-     */
-    protected function init()
+    public function __construct( array $properties = array() )
     {
+        parent::__construct( $properties );
+
         foreach ( $this->blocks as $block )
         {
             $this->blocksById[$block->id] = $block;

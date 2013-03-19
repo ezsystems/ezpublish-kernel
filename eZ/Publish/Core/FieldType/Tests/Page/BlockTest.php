@@ -24,7 +24,6 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers eZ\Publish\Core\FieldType\Page\Parts\Base::__construct
-     * @covers eZ\Publish\Core\FieldType\Page\Parts\Block::init
      * @covers eZ\Publish\Core\FieldType\Page\Parts\Base::getState
      */
     public function testGetState()

@@ -31,11 +31,10 @@ class Page extends Base
      */
     protected $layout;
 
-    /**
-     * {@inheritedDoc}
-     */
-    protected function init()
+    public function __construct( array $properties = array() )
     {
+        parent::__construct( $properties );
+
         foreach ( $this->zones as $zone )
         {
             $this->zonesById[$zone->id] = $zone;
