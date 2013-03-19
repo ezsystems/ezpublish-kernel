@@ -80,7 +80,7 @@ class PersistenceCachePurger
      * @param int|null $id Purges all content cache if null
      * @return void
      */
-    public function content( $id )
+    public function content( $id = null )
     {
         if ( $this->allCleared === true )
             return;
@@ -106,7 +106,7 @@ class PersistenceCachePurger
      * @param int|null $id Purges all contentType cache if null
      * @return void
      */
-    public function contentType( $id )
+    public function contentType( $id = null )
     {
         if ( $this->allCleared === true )
             return;
@@ -129,7 +129,7 @@ class PersistenceCachePurger
      * @param int|null $id Purges all contentTypeGroup cache if null
      * @return void
      */
-    public function contentTypeGroup( $id )
+    public function contentTypeGroup( $id = null )
     {
         if ( $this->allCleared === true )
             return;
@@ -153,7 +153,7 @@ class PersistenceCachePurger
      * @param int|null $id Purges all section cache if null
      * @return void
      */
-    public function section( $id )
+    public function section( $id = null )
     {
         if ( $this->allCleared === true )
             return;
@@ -185,13 +185,21 @@ class PersistenceCachePurger
     /**
      * Clear all user persistence cache
      *
+     * @param int|null $id Purges all users cache if null
      * @return void
      */
-    public function user()
+    public function user( $id = null )
     {
         if ( $this->allCleared === true )
             return;
 
-        $this->cache->clear( 'user' );
+        if ( $id === null )
+        {
+            $this->cache->clear( 'user' );
+        }
+        else
+        {
+            $this->cache->clear( 'user', $id );
+        }
     }
 }
