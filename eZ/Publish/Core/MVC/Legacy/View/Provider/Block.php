@@ -53,7 +53,7 @@ class Block extends Provider implements BlockViewProviderInterface
                 if ( !is_scalar( $param ) )
                 {
                     unset( $params[$paramName] );
-                    if ( isset( $logger ) )
+                    if ( $logger !== null )
                         $logger->notice(
                             "'$paramName' is not scalar, cannot pass it to legacy content module. Skipping.",
                             array( __METHOD__ )
