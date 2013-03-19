@@ -61,7 +61,6 @@ abstract class Base extends PHPUnit_Framework_TestCase
         {
             $repository = new Repository(
                 $this->getPersistenceMock(),
-                $this->getIOMock(),
                 $serviceSettings,
                 $this->getStubbedUser( 14 )
             );
@@ -173,27 +172,6 @@ abstract class Base extends PHPUnit_Framework_TestCase
         }
 
         return $this->persistenceMockHandlers[$handler];
-    }
-
-    /**
-     * Returns a persistence Handler mock
-     *
-     * @return \eZ\Publish\SPI\IO\Handler|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getIOMock()
-    {
-        if ( !isset( $this->IOMock ) )
-        {
-            $this->IOMock = $this->getMock(
-                "eZ\\Publish\\SPI\\IO\\Handler",
-                array(),
-                array(),
-                '',
-                false
-            );
-        }
-
-        return $this->IOMock;
     }
 
     /**

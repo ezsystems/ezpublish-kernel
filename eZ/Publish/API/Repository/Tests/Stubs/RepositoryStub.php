@@ -82,11 +82,6 @@ class RepositoryStub implements Repository
     private $locationService;
 
     /**
-     * @var \eZ\Publish\API\Repository\Tests\Stubs\IOServiceStub
-     */
-    private $ioService;
-
-    /**
      * @var \eZ\Publish\API\Repository\Tests\Stubs\URLAliasServiceStub
      */
     private $urlAliasService;
@@ -448,22 +443,6 @@ class RepositoryStub implements Repository
     }
 
     /**
-     * Get IO Service
-     *
-     * Get service object to perform operations on binary files
-     *
-     * @return \eZ\Publish\API\Repository\IOService
-     */
-    public function getIOService()
-    {
-        if ( null === $this->ioService )
-        {
-            $this->ioService = new IOServiceStub( $this );
-        }
-        return $this->ioService;
-    }
-
-    /**
      * Get RoleService
      *
      * @return \eZ\Publish\API\Repository\RoleService
@@ -581,10 +560,6 @@ class RepositoryStub implements Repository
         if ( $this->contentTypeService )
         {
             $this->contentTypeService->rollback();
-        }
-        if ( $this->ioService )
-        {
-            $this->ioService->rollback();
         }
         if ( $this->languageService )
         {

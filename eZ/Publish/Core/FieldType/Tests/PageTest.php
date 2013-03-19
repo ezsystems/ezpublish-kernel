@@ -17,7 +17,7 @@ use eZ\Publish\Core\FieldType\Page\Parts\Page as Page;
  * @group fieldType
  * @group ezpage
  */
-class PageTest extends StandardizedFieldTypeTest
+class PageTest extends FieldTypeTest
 {
     /**
       * Page service mock.

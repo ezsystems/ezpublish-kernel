@@ -516,7 +516,9 @@ class Page implements Converter
                     foreach ( $node->childNodes as $subNode )
                     {
                         if ( $subNode->nodeType !== XML_ELEMENT_NODE )
+                        {
                             continue;
+                        }
 
                         $customAttributes[$subNode->nodeName] = $subNode->nodeValue;
                     }

@@ -70,9 +70,9 @@
 
 {% block ezdatetime_settings %}
 <ul class="fielddef-settings {{ fielddefinition.fieldTypeIdentifier }}-settings">
-    {% if settings.defaultType == 0 %}
+    {% if settings.defaultType == constant( 'eZ\\Publish\\Core\\FieldType\\DateAndTime\\Type::DEFAULT_EMPTY' ) %}
         {% set defaultValue = 'Empty' %}
-    {% elseif settings.defaultValue == 1 %}
+    {% elseif settings.defaultType == constant( 'eZ\\Publish\\Core\\FieldType\\DateAndTime\\Type::DEFAULT_CURRENT_DATE' ) %}
         {% set defaultValue = 'Current datetime' %}
     {% else %}
         {% set interval = settings.dateInterval %}
@@ -92,6 +92,31 @@
 </ul>
 {% endblock %}
 
+{% block ezdate_settings %}
+<ul class="fielddef-settings {{ fielddefinition.fieldTypeIdentifier }}-settings">
+    {% if settings.defaultType == constant( 'eZ\\Publish\\Core\\FieldType\\Date\\Type::DEFAULT_EMPTY' ) %}
+        {% set defaultValue = 'Empty' %}
+    {% else %}
+        {% set defaultValue = 'Current date' %}
+    {% endif %}
+    {{ block( 'settings_defaultvalue' ) }}
+</ul>
+{% endblock %}
+
+{% block eztime_settings %}
+<ul class="fielddef-settings {{ fielddefinition.fieldTypeIdentifier }}-settings">
+    {% if settings.defaultType == constant( 'eZ\\Publish\\Core\\FieldType\\Time\\Type::DEFAULT_EMPTY' ) %}
+        {% set defaultValue = 'Empty' %}
+    {% else %}
+        {% set defaultValue = 'Current time' %}
+    {% endif %}
+    {{ block( 'settings_defaultvalue' ) }}
+    <li class="use-seconds">
+        <span>Use seconds:</span>
+        {{ settings.useSeconds ? 'Yes' : 'No' }}
+    </li>
+</ul>
+{% endblock %}
 
 {% block ezinteger_settings %}
 <ul class="fielddef-settings {{ fielddefinition.fieldTypeIdentifier }}-settings">

@@ -302,6 +302,27 @@ class PageServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
      * @covers eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
+     * @covers eZ\Publish\Core\FieldType\Page\PageService::getLastValidBlockItem
+     */
+    public function testGetLastValidBlockItem()
+    {
+        $block = $this->buildBlock();
+        $lastValidItem = new Item;
+
+        $this->storageGateway
+            ->expects( $this->once() )
+            ->method( 'getLastValidBlockItem' )
+            ->with( $block )
+            ->will( $this->returnValue( $lastValidItem ) );
+        $this->pageService->setStorageGateway( $this->storageGateway );
+        // Calling assertion twice to test cache (comes along with storage gateway's getLastValidBlockItem() that should be called only once. See above)
+        $this->assertSame( $lastValidItem, $this->pageService->getLastValidBlockItem( $block ) );
+        $this->assertSame( $lastValidItem, $this->pageService->getLastValidBlockItem( $block ) );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
+     * @covers eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
      * @covers eZ\Publish\Core\FieldType\Page\PageService::getWaitingBlockItems
      */
     public function testGetWaitingBlockItems()

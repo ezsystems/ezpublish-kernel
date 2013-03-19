@@ -11,12 +11,13 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 use eZ\Publish\Core\FieldType\Validator\StringLengthValidator;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @group fieldType
  * @group validator
  */
-class StringLengthValidatorTest extends FieldTypeTest
+class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @return int

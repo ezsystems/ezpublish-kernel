@@ -95,5 +95,6 @@ class eZPublish extends Pattern
         'userRoleAssignments'       => '/user/users/{user}/roles',
         'userRoleAssignment'        => '/user/users/{user}/roles/{role}',
         'userPolicies'              => '/user/policies?userId={user}',
+        'userSession'               => '/user/sessions/{sessionId}',
     );
 }

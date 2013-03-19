@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
-class RelationTest extends StandardizedFieldTypeTest
+class RelationTest extends FieldTypeTest
 {
     /**
      * Returns the field type under test.

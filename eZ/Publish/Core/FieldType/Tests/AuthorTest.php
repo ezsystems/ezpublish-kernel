@@ -17,7 +17,7 @@ use eZ\Publish\Core\FieldType\Author\Author;
  * @group fieldType
  * @group ezauthor
  */
-class AuthorTest extends StandardizedFieldTypeTest
+class AuthorTest extends FieldTypeTest
 {
     /**
      * @var \eZ\Publish\Core\FieldType\Author\Author[]

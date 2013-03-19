@@ -14,8 +14,8 @@ use eZ\Publish\Core\MVC\Legacy\Templating\Twig\Environment;
 class EnvironmentTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers eZ\Publish\Core\MVC\Legacy\Templating\Twig\Environment:loadTemplate
-     * @covers eZ\Publish\Core\MVC\Legacy\Templating\Twig\Template::getTemplateName
+     * @covers \eZ\Publish\Core\MVC\Legacy\Templating\Twig\Environment:loadTemplate
+     * @covers \eZ\Publish\Core\MVC\Legacy\Templating\Twig\Template::getTemplateName
      */
     public function testLoadTemplateLegacy()
     {
