@@ -11,6 +11,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\FieldType\Page;
 
 use eZ\Publish\Core\FieldType\Tests\Page\PageServiceTest as BaseTest;
 use eZ\Publish\Core\FieldType\Page\Parts\Item;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
@@ -30,17 +31,17 @@ class PageServiceTest extends BaseTest
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $searchService;
+    protected $contentService;
 
     protected function setUp()
     {
         parent::setUp();
         $this->repository = $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' );
-        $this->searchService = $this->getMock( 'eZ\\Publish\\API\\Repository\\SearchService' );
+        $this->contentService = $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' );
         $this->repository
             ->expects( $this->any() )
-            ->method( 'getSearchService' )
-            ->will( $this->returnValue( $this->searchService ) );
+            ->method( 'getContentService' )
+            ->will( $this->returnValue( $this->contentService ) );
     }
 
     /**
@@ -55,8 +56,8 @@ class PageServiceTest extends BaseTest
             new Item( array( 'contentId' => 1 ) ),
             new Item( array( 'contentId' => 60 ) )
         );
-        $content1 = new Content( array( 'internalFields' => array() ) );
-        $content2 = clone $content1;
+        $content1 = new ContentInfo( array( 'id' => 1 ) );
+        $content2 = new ContentInfo( array( 'id' => 60 ) );
         $expectedResult = array( $content1, $content2 );
 
         $this->storageGateway
@@ -65,22 +66,12 @@ class PageServiceTest extends BaseTest
             ->with( $block )
             ->will( $this->returnValue( $items ) );
 
-        $searchResult = new SearchResult(
-            array(
-                'searchHits' => array(
-                    new SearchHit( array( 'valueObject' => $content1 ) ),
-                    new SearchHit( array( 'valueObject' => $content2 ) ),
-                )
-            )
-        );
-        $this->searchService
-            ->expects( $this->once() )
-            ->method( 'findContent' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Query' ) )
-            ->will( $this->returnValue( $searchResult ) );
+        $this->contentService
+            ->expects( $this->exactly( count( $items ) ) )
+            ->method( 'loadContentInfo' )
+            ->with( $this->logicalOr( 1, 60 ) )
+            ->will( $this->onConsecutiveCalls( $content1, $content2 ) );
 
-        // Calling assertion twice to test cache (comes along with search service/gateway methods that should be called only once. See above)
-        $this->assertSame( $expectedResult, $this->pageService->getValidBlockItemsAsContent( $block ) );
-        $this->assertSame( $expectedResult, $this->pageService->getValidBlockItemsAsContent( $block ) );
+        $this->assertSame( $expectedResult, $this->pageService->getValidBlockItemsAsContentInfo( $block ) );
     }
 }
