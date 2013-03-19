@@ -10,6 +10,7 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\Cache;
 
 use Tedivm\StashBundle\Service\CacheService;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 class PersistenceCachePurger
 {
@@ -78,6 +79,7 @@ class PersistenceCachePurger
      * Either way all location and urlAlias cache is cleared as well.
      *
      * @param int|null $id Purges all content cache if null
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType On invalid $id type
      * @return void
      */
     public function content( $id = null )
@@ -89,10 +91,14 @@ class PersistenceCachePurger
         {
             $this->cache->clear( 'content' );
         }
-        else
+        else if ( is_scalar( $id ) )
         {
             $this->cache->clear( 'content', $id );
             $this->cache->clear( 'content', 'info', $id );
+        }
+        else
+        {
+            throw new InvalidArgumentType( "\$id", "int|null", $id );
         }
 
         // clear content related cache as well
@@ -104,6 +110,7 @@ class PersistenceCachePurger
      * Clear all contentType persistence cache, or by id
      *
      * @param int|null $id Purges all contentType cache if null
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType On invalid $id type
      * @return void
      */
     public function contentType( $id = null )
@@ -115,9 +122,13 @@ class PersistenceCachePurger
         {
             $this->cache->clear( 'contentType' );
         }
-        else
+        else if ( is_scalar( $id ) )
         {
             $this->cache->clear( 'contentType', $id );
+        }
+        else
+        {
+            throw new InvalidArgumentType( "\$id", "int|null", $id );
         }
     }
 
@@ -127,6 +138,7 @@ class PersistenceCachePurger
      * Either way, contentType cache is also cleared as it contains the relation to contentTypeGroups
      *
      * @param int|null $id Purges all contentTypeGroup cache if null
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType On invalid $id type
      * @return void
      */
     public function contentTypeGroup( $id = null )
@@ -138,9 +150,13 @@ class PersistenceCachePurger
         {
             $this->cache->clear( 'contentTypeGroup' );
         }
-        else
+        else if ( is_scalar( $id ) )
         {
             $this->cache->clear( 'contentTypeGroup', $id );
+        }
+        else
+        {
+            throw new InvalidArgumentType( "\$id", "int|null", $id );
         }
 
         // clear content type in case of changes as it contains the relation to groups
@@ -151,6 +167,7 @@ class PersistenceCachePurger
      * Clear all section persistence cache, or by id
      *
      * @param int|null $id Purges all section cache if null
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType On invalid $id type
      * @return void
      */
     public function section( $id = null )
@@ -161,10 +178,15 @@ class PersistenceCachePurger
         if ( $id === null )
         {
             $this->cache->clear( 'section' );
-            return;
         }
-
-        $this->cache->clear( 'section', $id );
+        else if ( is_scalar( $id ) )
+        {
+            $this->cache->clear( 'section', $id );
+        }
+        else
+        {
+            throw new InvalidArgumentType( "\$id", "int|null", $id );
+        }
     }
 
     /**
@@ -186,6 +208,7 @@ class PersistenceCachePurger
      * Clear all user persistence cache
      *
      * @param int|null $id Purges all users cache if null
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType On invalid $id type
      * @return void
      */
     public function user( $id = null )
@@ -197,9 +220,13 @@ class PersistenceCachePurger
         {
             $this->cache->clear( 'user' );
         }
-        else
+        else if ( is_scalar( $id ) )
         {
             $this->cache->clear( 'user', $id );
+        }
+        else
+        {
+            throw new InvalidArgumentType( "\$id", "int|null", $id );
         }
     }
 }
