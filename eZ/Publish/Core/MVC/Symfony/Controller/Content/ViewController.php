@@ -33,34 +33,34 @@ class ViewController extends Controller
     /**
      * Build the response so that depending on settings it's cacheable
      *
-     * @param string $etag
-     * @param \DateTime $lastModified
+     * @param string|null $etag
+     * @param \DateTime|null $lastModified
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function buildResponse( $etag, DateTime $lastModified )
+    protected function buildResponse( $etag = null, DateTime $lastModified = null )
     {
         $request = $this->getRequest();
         $response = new Response();
         if ( $this->getParameter( 'content.view_cache' ) === true )
         {
             $response->setPublic();
-            $response->setEtag( $etag );
-
-            // If-None-Match is the request counterpart of Etag response header
-            // Making the response to vary against it ensures that an HTTP
-            // reverse proxy caches the different possible variations of the
-            // response as it can depend on user role for instance.
-            if ( $request->headers->has( 'If-None-Match' )
-                && $this->getParameter( 'content.ttl_cache' ) === true )
+            if ( $etag !== null )
             {
-                $response->setVary( 'If-None-Match' );
+                $response->setEtag( $etag );
+            }
+
+            if ( $this->getParameter( 'content.ttl_cache' ) === true )
+            {
                 $response->setSharedMaxAge(
                     $this->getParameter( 'content.default_ttl' )
                 );
             }
 
-            $response->setLastModified( $lastModified );
+            if ( $lastModified != null )
+            {
+                $response->setLastModified( $lastModified );
+            }
         }
         return $response;
     }
@@ -86,23 +86,10 @@ class ViewController extends Controller
 
         try
         {
-            // Assume that location is cached by the repository
+            $response = $this->buildResponse();
+
             $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
-            $contentInfo = $location->getContentInfo();
-
-            // @todo: Use a dedicated etag generator, generating a hash
-            // instead of plain text
-            $response = $this->buildResponse(
-                "ezpublish-location-$locationId-$contentInfo->currentVersionNo-$viewType-$layout",
-                $contentInfo->modificationDate
-            );
             $response->headers->set( 'X-Location-Id', $locationId );
-
-            if ( $response->isNotModified( $this->getRequest() ) )
-            {
-                return $response;
-            }
-
             $response->setContent(
                 $this->viewManager->renderLocation(
                     $location,
