@@ -139,7 +139,7 @@ services:
 
     ezpublish_legacy.persistence_cache_purger:
         class: %ezpublish_legacy.persistence_cache_purger.class%
-        arguments: [@cache]
+        arguments: [@cache, @ezpublish.api.service.location]
 
     ezpublish_legacy.content_exception_handler:
         class: %ezpublish_legacy.content_exception_handler.class%
