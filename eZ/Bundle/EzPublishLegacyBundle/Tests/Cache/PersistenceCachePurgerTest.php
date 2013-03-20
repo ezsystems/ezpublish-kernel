@@ -98,7 +98,7 @@ class PersistenceCachePurgerTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->exactly( count( $map ) ) )
             ->method( 'clear' )
             ->will( $this->returnValueMap( $map ) );
-        $this->cachePurger->content();
+        $this->assertNull( $this->cachePurger->content() );
     }
 
     /**
@@ -144,7 +144,8 @@ class PersistenceCachePurgerTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->cachePurger->content( array( $locationId1, $locationId2, $locationId3 ) );
+        $locationIds = array( $locationId1, $locationId2, $locationId3 );
+        $this->assertSame( $locationIds, $this->cachePurger->content( $locationIds ) );
     }
 
     /**
@@ -173,7 +174,7 @@ class PersistenceCachePurgerTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->cachePurger->content( $locationId );
+        $this->assertSame( array( $locationId ), $this->cachePurger->content( $locationId ) );
     }
 
     /**
