@@ -83,6 +83,9 @@ class PersistenceCachePurger
      * Either way all location and urlAlias cache is cleared as well.
      *
      * @param int|int[]|null $locationIds Ids of location we need to purge content cache for. Purges all content cache if null
+     *
+     * @return array|int|\int[]|null
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType On invalid $id type
      */
     public function content( $locationIds = null )
@@ -114,6 +117,8 @@ class PersistenceCachePurger
         relatedCache:
         $this->cache->clear( 'urlAlias' );
         $this->cache->clear( 'location' );
+
+        return $locationIds;
     }
 
     /**
