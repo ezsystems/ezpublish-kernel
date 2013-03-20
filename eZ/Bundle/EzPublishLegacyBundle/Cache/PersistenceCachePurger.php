@@ -10,6 +10,7 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\Cache;
 
 use Tedivm\StashBundle\Service\CacheService;
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 class PersistenceCachePurger
@@ -18,6 +19,11 @@ class PersistenceCachePurger
      * @var \Tedivm\StashBundle\Service\CacheService
      */
     protected $cache;
+
+    /**
+     * @var \eZ\Publish\API\Repository\LocationService
+     */
+    protected $locationService;
 
     /**
      * Avoid clearing sub elements if all cache is already cleared, avoids redundant calls to Stash.
@@ -30,18 +36,18 @@ class PersistenceCachePurger
      * Setups current handler with everything needed
      *
      * @param \Tedivm\StashBundle\Service\CacheService $cache
+     * @param \eZ\Publish\API\Repository\LocationService $locationService
      */
-    public function __construct( CacheService $cache )
+    public function __construct( CacheService $cache, LocationService $locationService )
     {
         $this->cache = $cache;
+        $this->locationService = $locationService;
     }
 
     /**
      * Clear all persistence cache
      *
      * Sets a internal flag 'allCleared' to avoid clearing cache several times
-     *
-     * @return void
      */
     public function all()
     {
@@ -65,8 +71,6 @@ class PersistenceCachePurger
      * Reset 'allCleared' flag
      *
      * Resets the internal flag 'allCleared' that avoids clearing cache several times
-     *
-     * @return void
      */
     public function resetAllCleared()
     {
@@ -74,34 +78,40 @@ class PersistenceCachePurger
     }
 
     /**
-     * Clear all content persistence cache, or by id
+     * Clear all content persistence cache, or by locationIds (legacy content/cache mechanism is location based).
      *
      * Either way all location and urlAlias cache is cleared as well.
      *
-     * @param int|null $id Purges all content cache if null
+     * @param int|int[]|null $locationIds Ids of location we need to purge content cache for. Purges all content cache if null
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType On invalid $id type
-     * @return void
      */
-    public function content( $id = null )
+    public function content( $locationIds = null )
     {
         if ( $this->allCleared === true )
             return;
 
-        if ( $id === null )
+        if ( $locationIds === null )
         {
             $this->cache->clear( 'content' );
+            goto relatedCache;
         }
-        else if ( is_scalar( $id ) )
+        else if ( !is_array( $locationIds ) )
         {
-            $this->cache->clear( 'content', $id );
-            $this->cache->clear( 'content', 'info', $id );
+            $locationIds = array( $locationIds );
         }
-        else
+
+        foreach ( $locationIds as $id )
         {
-            throw new InvalidArgumentType( "\$id", "int|null", $id );
+            if ( !is_scalar( $id ) )
+                throw new InvalidArgumentType( "\$id", "int[]|null", $id );
+
+            $location = $this->locationService->loadLocation( $id );
+            $this->cache->clear( 'content', $location->contentId );
+            $this->cache->clear( 'content', 'info', $location->contentId );
         }
 
         // clear content related cache as well
+        relatedCache:
         $this->cache->clear( 'urlAlias' );
         $this->cache->clear( 'location' );
     }
@@ -111,7 +121,6 @@ class PersistenceCachePurger
      *
      * @param int|null $id Purges all contentType cache if null
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType On invalid $id type
-     * @return void
      */
     public function contentType( $id = null )
     {
@@ -139,7 +148,6 @@ class PersistenceCachePurger
      *
      * @param int|null $id Purges all contentTypeGroup cache if null
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType On invalid $id type
-     * @return void
      */
     public function contentTypeGroup( $id = null )
     {
@@ -168,7 +176,6 @@ class PersistenceCachePurger
      *
      * @param int|null $id Purges all section cache if null
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType On invalid $id type
-     * @return void
      */
     public function section( $id = null )
     {
@@ -193,7 +200,6 @@ class PersistenceCachePurger
      * Clear all language persistence cache, or by id
      *
      * @param array $ids
-     * @return void
      */
     public function languages( array $ids )
     {
@@ -209,7 +215,6 @@ class PersistenceCachePurger
      *
      * @param int|null $id Purges all users cache if null
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType On invalid $id type
-     * @return void
      */
     public function user( $id = null )
     {
