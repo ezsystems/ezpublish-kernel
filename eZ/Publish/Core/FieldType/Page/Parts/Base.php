@@ -9,82 +9,48 @@
 
 namespace eZ\Publish\Core\FieldType\Page\Parts;
 
-use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
-use eZ\Publish\Core\FieldType\Page\Service as PageService;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
-class Base
+abstract class Base extends ValueObject
 {
+    const ACTION_ADD = 'add';
+
+    const ACTION_MODIFY = 'modify';
+
+    const ACTION_REMOVE = 'remove';
+
     /**
-     * Object properties container
+     * Hash of arbitrary attributes.
      *
      * @var array
      */
-    protected $properties = array();
-
-    /**
-     * Service container
-     *
-     * @var \eZ\Publish\Core\FieldType\Page\Service
-     */
-    protected $pageService;
+    public $attributes;
 
     /**
      * Constructor
      *
-     * @param \eZ\Publish\Core\FieldType\Page\Service $pageService
+     * @param array $properties
      */
-    public function __construct( PageService $pageService )
+    public function __construct( array $properties = array() )
     {
-        $this->pageService = $pageService;
+        $this->attributes = array();
+        parent::__construct( $properties );
     }
 
     /**
-     * Sets property $value for a given $name
-     *
-     * @param string $name
-     * @param mixed $value
-     */
-    public function __set( $name, $value )
-    {
-        $this->properties[$name] = $value;
-    }
-
-    /**
-     * Returns property value for a given $name
-     *
-     * @param string $name
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
-     *
-     * @return null
-     */
-    public function __get( $name )
-    {
-        if ( isset( $this->properties[$name] ) )
-            return $this->properties[$name];
-
-        throw new PropertyNotFoundException( $name, get_class( $this ) );
-    }
-
-    /**
-     * Checks whether property for given $name exists
-     *
-     * @param string $name
-     *
-     * @return boolean
-     */
-    public function __isset( $name )
-    {
-        return isset( $this->properties[$name] );
-    }
-
-    /**
-     * Getter for property list
+     * Returns available properties with their values as a simple hash.
      *
      * @return array
      */
-    public function getProperties()
+    public function getState()
     {
-        return $this->properties;
+        $hash = array();
+
+        foreach ( $this->getProperties() as $property )
+        {
+            $hash[$property] = $this->$property;
+        }
+
+        return $hash;
     }
 }

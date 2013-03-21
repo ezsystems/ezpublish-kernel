@@ -17,7 +17,7 @@ use ReflectionObject;
  * @group fieldType
  * @group ezstring
  */
-class TextLineTest extends StandardizedFieldTypeTest
+class TextLineTest extends FieldTypeTest
 {
     /**
      * Returns the field type under test.

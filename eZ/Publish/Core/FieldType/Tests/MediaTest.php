@@ -31,10 +31,7 @@ class MediaTest extends BinaryBaseTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new MediaType(
-            $this->getFileServiceMock(),
-            $this->getMimeTypeDetectorMock()
-        );
+        return new MediaType();
     }
 
     protected function getEmptyValueExpectation()
@@ -101,15 +98,13 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
-                        'mimeType' => 'text/plain',
                         'hasController' => false,
                         'autoplay' => false,
                         'loop' => false,
                         'width' => 0,
                         'height' => 0,
                     )
-                )
+                ),
             ),
             array(
                 array( 'path' => __FILE__ ),
@@ -117,15 +112,13 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
-                        'mimeType' => 'text/plain',
                         'hasController' => false,
                         'autoplay' => false,
                         'loop' => false,
                         'width' => 0,
                         'height' => 0,
                     )
-                )
+                ),
             ),
             array(
                 array(
@@ -137,14 +130,13 @@ class MediaTest extends BinaryBaseTest
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => 23,
-                        'mimeType' => 'text/plain',
                         'hasController' => false,
                         'autoplay' => false,
                         'loop' => false,
                         'width' => 0,
                         'height' => 0,
                     )
-                )
+                ),
             ),
             array(
                 array(
@@ -155,7 +147,6 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
                         'mimeType' => 'application/text+php',
                         'hasController' => false,
                         'autoplay' => false,
@@ -163,7 +154,7 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                     )
-                )
+                ),
             ),
             array(
                 array(
@@ -174,15 +165,13 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
-                        'mimeType' => 'text/plain',
                         'hasController' => true,
                         'autoplay' => false,
                         'loop' => false,
                         'width' => 0,
                         'height' => 0,
                     )
-                )
+                ),
             ),
             array(
                 array(
@@ -193,15 +182,13 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
-                        'mimeType' => 'text/plain',
                         'hasController' => false,
                         'autoplay' => true,
                         'loop' => false,
                         'width' => 0,
                         'height' => 0,
                     )
-                )
+                ),
             ),
             array(
                 array(
@@ -212,15 +199,13 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
-                        'mimeType' => 'text/plain',
                         'hasController' => false,
                         'autoplay' => false,
                         'loop' => true,
                         'width' => 0,
                         'height' => 0,
                     )
-                )
+                ),
             ),
             array(
                 array(
@@ -231,15 +216,13 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
-                        'mimeType' => 'text/plain',
                         'hasController' => false,
                         'autoplay' => false,
                         'loop' => false,
                         'width' => 23,
                         'height' => 0,
                     )
-                )
+                ),
             ),
             array(
                 array(
@@ -250,15 +233,13 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
-                        'mimeType' => 'text/plain',
                         'hasController' => false,
                         'autoplay' => false,
                         'loop' => false,
                         'width' => 0,
                         'height' => 42,
                     )
-                )
+                ),
             ),
         );
     }

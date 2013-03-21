@@ -29,11 +29,15 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     protected static $installDir;
 
     /**
-     * Storage dir
-     *
+     * Storage directory used by the IOHandler
      * @var string
      */
     protected static $storageDir;
+
+    /**
+     * Storage dir settings key
+     */
+    protected static $storageDirConfigKey = 'storage_dir';
 
     /**
      * If storage data should not be cleaned up
@@ -41,6 +45,14 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
      * @var boolean
      */
     protected static $leaveStorageData = false;
+
+    /**
+     * List of path in config:storage_dir that must not be deleted, and must be ignored in these tests
+     * Workaround for FieldType vs. Repository tests. The repository tests require those files since they
+     * match the ones referenced in the database fixtures used by Services tests.
+     * @var array
+     */
+    protected static $ignoredPathList;
 
     /**
      * Returns the install dir used by the test
@@ -75,6 +87,8 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
         {
             self::$installDir = $this->getConfigValue( 'install_dir' );
             self::$storageDir = $this->getConfigValue( static::$storageDirConfigKey );
+
+            self::setUpIgnoredPath( $this->getConfigValue( 'ignored_storage_files' ) );
         }
     }
 
@@ -122,18 +136,54 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
             return;
         }
 
-        $iterator = self::getStorageDirIterator();
-
-        foreach ( $iterator as $path => $fileInfo )
+        try
         {
-            if ( $fileInfo->isDir() )
+            $iterator = self::getStorageDirIterator();
+
+            foreach ( $iterator as $path => $fileInfo )
             {
-                rmdir( $path );
-            }
-            else
-            {
-                unlink( $path );
+                if ( $fileInfo->isDir() )
+                {
+                    if ( !self::isIgnoredPath( dirname( $path ) ) )
+                        rmdir( $path );
+                }
+                else if ( !self::isIgnoredPath( $path ) )
+                {
+                    unlink( $path );
+                }
             }
         }
+        catch ( \UnexpectedValueException $e )
+        {
+            // The directory to cleanup just doesn't exist
+        }
+    }
+
+    protected static function setUpIgnoredPath( $ignoredFiles )
+    {
+        foreach ( $ignoredFiles as $ignoredFile )
+        {
+            $pathPartsArray = explode( DIRECTORY_SEPARATOR, $ignoredFile );
+            foreach ( $pathPartsArray as $index => $directoryPart )
+            {
+                if ( $directoryPart == '' )
+                    continue;
+                $partPath = implode(
+                    DIRECTORY_SEPARATOR,
+                    array_slice( $pathPartsArray, 0, $index + 1 )
+                );
+                self::$ignoredPathList[realpath( $partPath )] = true;
+            }
+        }
+    }
+
+    /**
+     * Checks if $path must be excluded from filesystem cleanup
+     * @param string $path
+     * @return bool
+     */
+    protected static function isIgnoredPath( $path )
+    {
+        return isset( self::$ignoredPathList[realpath( $path )] );
     }
 }

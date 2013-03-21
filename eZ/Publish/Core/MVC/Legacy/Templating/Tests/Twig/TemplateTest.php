@@ -52,7 +52,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertSame( $this->twigEnv, $this->template->getEnvironment() );
     }
     /**
-     * @covers \eZ\Publish\Core\MVC\Legacy\Templating\Twig\Template::getName
+     * @covers \eZ\Publish\Core\MVC\Legacy\Templating\Twig\Template::getTemplateName
      */
     public function testGetName()
     {

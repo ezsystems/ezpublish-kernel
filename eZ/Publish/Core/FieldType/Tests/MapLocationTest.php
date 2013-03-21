@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\MapLocation;
 
-class MapLocationTest extends StandardizedFieldTypeTest
+class MapLocationTest extends FieldTypeTest
 {
 
     /**

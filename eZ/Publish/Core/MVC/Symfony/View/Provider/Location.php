@@ -16,15 +16,15 @@ use eZ\Publish\API\Repository\Values\Content\Location as APIContentLocation;
  *
  * Location view providers select a view for a given location, depending on its own internal rules.
  */
-interface Location
+interface Location extends ViewProviderInterface
 {
     /**
-     * Returns a ContentView object corresponding to $location, or void if not applicable
+     * Returns a ContentView object corresponding to $location, or null if not applicable
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $viewType Variation of display for your content.
      *
-     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|void
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|null
      */
     public function getView( APIContentLocation $location, $viewType );
 }

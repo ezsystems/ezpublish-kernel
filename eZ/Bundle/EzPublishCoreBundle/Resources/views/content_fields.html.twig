@@ -71,13 +71,33 @@
 
 {# @todo:
  # - handle default format
- # - handle eztime
- # - handle ezdate
  #}
 {% block ezdatetime_field %}
 {% spaceless %}
     {% set field_value = field.value.value|date() %}
     {{ block( 'simple_block_field' ) }}
+{% endspaceless %}
+{% endblock %}
+
+{% block ezdate_field %}
+{% spaceless %}
+    {% if field.value.date %}
+        {% set field_value = field.value.date|date( "l d F Y" ) %}
+        {{ block( 'simple_block_field' ) }}
+    {% endif %}
+{% endspaceless %}
+{% endblock %}
+
+{% block eztime_field %}
+{% spaceless %}
+    {% if field.value.time %}
+        {% if fieldSettings.useSeconds %}
+            {% set field_value = field.value.time|date( "g:i:s a", "UTC" ) %}
+        {% else %}
+            {% set field_value = field.value.time|date( "g:i a", "UTC" ) %}
+        {% endif %}
+        {{ block( 'simple_block_field' ) }}
+    {% endif %}
 {% endspaceless %}
 {% endblock %}
 
@@ -172,7 +192,7 @@
                         ~ '/version/' ~ contentInfo.currentVersionNo ~  "/file/"
                         ~ field.value.fileName|escape( 'url' ) %}
         <a href="{{ path( 'ez_legacy', {'module_uri': uri} ) }}"
-            {{ block( 'field_attributes' ) }}">{{ field.value.fileName }}</a>&nbsp;({{ field.value.fileSize }})
+            {{ block( 'field_attributes' ) }}>{{ field.value.fileName }}</a>&nbsp;({{ field.value.fileSize }})
     {% endif %}
 {% endspaceless %}
 {% endblock %}
@@ -371,6 +391,17 @@
     <div {{ block( 'field_attributes' ) }}>
         {{ render( controller( "ez_content:viewContent", {'contentId': field.value.destinationContentId, 'viewType': 'text_linked', 'noLayout': 1} ) ) }}
     </div>
+{% endif %}
+{% endspaceless %}
+{% endblock %}
+
+{# pageService is exposed under parameters.pageService thanks to Page\ParameterProvider #}
+{% block ezpage_field %}
+{% spaceless %}
+{% if field.value.page is not null %}
+    {% set layout = field.value.page.layout %}
+    {% set template = parameters.pageService.getLayoutTemplate( layout ) %}
+    {% include template with { 'zones': field.value.page.zones, 'zone_layout': layout, 'pageService': parameters.pageService } %}
 {% endif %}
 {% endspaceless %}
 {% endblock %}

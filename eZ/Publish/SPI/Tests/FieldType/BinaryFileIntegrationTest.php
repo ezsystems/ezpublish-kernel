@@ -47,7 +47,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
      */
     protected function getStorageDir()
     {
-        return 'var/files';
+        return self::$storageDir;
     }
 
     /**
@@ -55,9 +55,9 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
      *
      * @return void
      */
-    protected function getStorageIdentifierPrefix()
+    protected function getStoragePrefix()
     {
-        return '';
+        return 'original';
     }
 
     /**
@@ -79,21 +79,15 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     {
         $handler = $this->getHandler();
 
-        $handler->getFieldTypeRegistry()->register(
-            'ezauthor',
-            new FieldType\BinaryFile\Type(
-                $this->getFileService(),
-                $this->getMimeTypeDetector()
-            )
-        );
         $handler->getStorageRegistry()->register(
             'ezbinaryfile',
             new FieldType\BinaryFile\BinaryFileStorage(
                 array(
                     'LegacyStorage' => new FieldType\BinaryFile\BinaryFileStorage\Gateway\LegacyStorage(),
                 ),
-                $this->getFileService(),
-                new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator()
+                $this->getIOService(),
+                new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator(),
+                $this->getMimeTypeDetector()
             )
         );
         $handler->getFieldValueConverterRegistry()->register(
@@ -186,8 +180,10 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     {
         $this->assertNotNull( $field->value->externalData );
 
+        $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['path'];
         $this->assertTrue(
-            file_exists( ( $path = $this->getTempDir() . '/' . $this->getStorageDir() . '/' . $field->value->externalData['path'] ) )
+            file_exists( $path ),
+            "Stored file $path exists"
         );
 
         $this->assertEquals( 'Ice-Flower-Binary.jpg', $field->value->externalData['fileName'] );
@@ -239,17 +235,18 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
         $this->assertNotNull( $field->value->externalData );
 
         $this->assertTrue(
-            file_exists( ( $filePath = $this->getTempDir() . '/' . $this->getStorageDir() . '/' . $field->value->externalData['path'] ) )
+            file_exists( ( $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['path'] ) ),
+            "Stored file $path exists"
         );
 
         // Check old file removed before update
         $this->assertEquals(
             1,
-            count( glob( dirname( $filePath ) . '/*' ) )
+            count( glob( dirname( $path ) . '/*' ) )
         );
 
         $this->assertEquals( 'Blueish-Blue-Binary.jpg', $field->value->externalData['fileName'] );
-        $this->assertEquals( filesize( $filePath ), $field->value->externalData['fileSize'] );
+        $this->assertEquals( filesize( $path ), $field->value->externalData['fileSize'] );
         $this->assertEquals( 'image/png', $field->value->externalData['mimeType'] );
         $this->assertEquals( 23, $field->value->externalData['downloadCount'] );
 
@@ -267,7 +264,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     {
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(
-                $this->getTempDir() . '/' . $this->getStorageDir(),
+                $this->getStorageDir(),
                 FileSystemIterator::KEY_AS_PATHNAME | FileSystemIterator::SKIP_DOTS | FileSystemIterator::CURRENT_AS_FILEINFO
             ),
             RecursiveIteratorIterator::CHILD_FIRST
@@ -286,57 +283,5 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
             }
         }
 
-    }
-
-    /**
-     * @dep_ends \eZ\Publish\SPI\Tests\FieldType\BinaryFileIntegrationTest::testCreateContentType
-     */
-    public function testBinaryFilesNotDeletedIfReferencesStillExist()
-    {
-        $contentType = $this->createContentType();
-
-        $firstContent = $this->createContent( $contentType, $this->getInitialValue() );
-
-        $firstField = null;
-        foreach ( $firstContent->fields as $field )
-        {
-            if ( $field->type === $this->getTypeName() )
-            {
-                $firstField = $field;
-            }
-        }
-
-        $clonedValue = clone $firstField->value;
-
-        // Create an image reference copy
-        $secondContent = $this->createContent( $contentType, $clonedValue );
-
-        $secondField = null;
-        foreach ( $secondContent->fields as $field )
-        {
-            if ( $field->type === $this->getTypeName() )
-            {
-                $secondField = $field;
-            }
-        }
-
-        $this->assertNotEquals(
-            $firstField->id,
-            $secondField->id
-        );
-
-        $this->assertEquals( $firstField->value, $secondField->value );
-
-        $this->deleteContent( $firstContent );
-
-        $this->assertTrue(
-            file_exists( $this->getTempDir() . '/' . $this->getStorageDir() . '/' . $secondField->value->externalData['path'] )
-        );
-
-        $this->deleteContent( $secondContent );
-
-        $this->assertFalse(
-            file_exists( $this->getTempDir() . '/' . $this->getStorageDir() . '/' . $secondField->value->externalData['path'] )
-        );
     }
 }

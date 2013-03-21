@@ -68,6 +68,7 @@ services:
             - [ setInputDispatcher, [@ezpublish_rest.input_dispatcher] ]
             - [ setUrlHandler, [@ezpublish_rest.url_handler] ]
             - [ setRequest, [@ezpublish_rest.request] ]
+            - [ setContainer, [@service_container] ]
 
     ezpublish_rest.controller.root:
         class: %ezpublish_rest.controller.root.class%
@@ -155,6 +156,7 @@ services:
         arguments:
             - @service_container
             - @ezpublish_rest.request
+            - @?form.csrf_provider
         tags:
             - { name: kernel.event_subscriber }
 

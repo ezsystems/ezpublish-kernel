@@ -68,7 +68,23 @@ class LegacyEngine implements EngineInterface
                 $tpl = eZTemplate::factory();
                 foreach ( $parameters as $varName => $param )
                 {
-                    if ( !is_object( $param ) || $param instanceof LegacyCompatible )
+                    // If $param is an array, we recursively convert all objects contained in it (if any).
+                    // Scalar parameters are passed as is
+                    if ( is_array( $param ) )
+                    {
+                        array_walk_recursive(
+                            $param,
+                            function ( &$element ) use ( $objectConverter )
+                            {
+                                if ( is_object( $element ) && !( $element instanceof LegacyCompatible ) )
+                                {
+                                    $element = $objectConverter->convert( $element );
+                                }
+                            }
+                        );
+                        $tpl->setVariable( $varName, $param );
+                    }
+                    else if ( !is_object( $param ) || $param instanceof LegacyCompatible )
                     {
                         $tpl->setVariable( $varName, $param );
                     }

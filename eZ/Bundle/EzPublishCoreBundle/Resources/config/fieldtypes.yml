@@ -1,19 +1,20 @@
 parameters:
+    ezpublish.fieldType.parameterProviderRegistry.class: eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry
+
     ezpublish.fieldType.class: eZ\Publish\Core\FieldType\FieldType
     ezpublish.fieldType.ezauthor.class: eZ\Publish\Core\FieldType\Author\Type
     ezpublish.fieldType.ezbinaryfile.class: eZ\Publish\Core\FieldType\BinaryFile\Type
     ezpublish.fieldType.ezbinaryfile.externalStorage.class: eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage
-    ezpublish.fieldType.ezbinaryfile.fileService.class: eZ\Publish\Core\MVC\Symfony\ConfiguredLocalFileService
-    ezpublish.fieldType.ezbinaryfile.mimeTypeDetector.class: eZ\Publish\Core\FieldType\BinaryBase\MimeTypeDetector\FileInfoDetector
     ezpublish.fieldType.ezbinaryfile.pathGenerator.class: eZ\Publish\Core\FieldType\BinaryBase\PathGenerator\LegacyPathGenerator
     ezpublish.fieldType.ezboolean.class: eZ\Publish\Core\FieldType\Checkbox\Type
     ezpublish.fieldType.ezdatetime.class: eZ\Publish\Core\FieldType\DateAndTime\Type
+    ezpublish.fieldType.ezdate.class: eZ\Publish\Core\FieldType\Date\Type
+    ezpublish.fieldType.eztime.class: eZ\Publish\Core\FieldType\Time\Type
     ezpublish.fieldType.ezemail.class: eZ\Publish\Core\FieldType\EmailAddress\Type
     ezpublish.fieldType.ezfloat.class: eZ\Publish\Core\FieldType\Float\Type
     ezpublish.fieldType.ezinteger.class: eZ\Publish\Core\FieldType\Integer\Type
     ezpublish.fieldType.ezimage.class: eZ\Publish\Core\FieldType\Image\Type
     ezpublish.fieldType.ezimage.pathGenerator.class: eZ\Publish\Core\FieldType\Image\PathGenerator\LegacyPathGenerator
-    ezpublish.fieldType.ezimage.fileService.class: eZ\Publish\Core\MVC\Symfony\File\ConfiguredLocalImageService
     ezpublish.fieldType.ezimage.externalStorage.class: eZ\Publish\Core\FieldType\Image\ImageStorage
     ezpublish.fieldType.ezkeyword.class: eZ\Publish\Core\FieldType\Keyword\Type
     ezpublish.fieldType.ezkeyword.externalStorage.class: eZ\Publish\Core\FieldType\Keyword\KeywordStorage
@@ -32,9 +33,11 @@ parameters:
     ezpublish.fieldType.ezxmltext.converter.html5.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5.xsl
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5
     ezpublish.fieldType.ezpage.class: eZ\Publish\Core\FieldType\Page\Type
-    ezpublish.fieldType.ezpage.pageService.class: eZ\Publish\Core\FieldType\Page\Service
-    ezpublish.fieldtype.ezpage.zoneDefinition: {}
-    ezpublish.fieldType.ezpage.blockDefinition: {}
+    ezpublish.fieldType.ezpage.pageService.class: eZ\Bundle\EzPublishCoreBundle\FieldType\Page\PageService
+    ezpublish.fieldType.ezpage.pageService.factory.class: eZ\Publish\Core\MVC\Symfony\FieldType\Page\PageServiceFactory
+    ezpublish.fieldType.ezpage.parameterProvider.class: eZ\Publish\Core\MVC\Symfony\FieldType\Page\ParameterProvider
+    ezpublish.fieldType.ezpage.block.class: eZ\Publish\Core\FieldType\Page\Parts\Block
+    ezpublish.fieldType.ezpage.zone.class: eZ\Publish\Core\FieldType\Page\Parts\Zone
 
     ezpublish.fieldType.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\Type
     ezpublish.fieldType.ezgmaplocation.externalStorage.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage
@@ -294,6 +297,9 @@ parameters:
     ezpublish.fieldType.ezrecommendation.class: %ezpublish.fieldType.eznull.class%
 
 services:
+    ezpublish.fieldType.parameterProviderRegistry:
+        class: %ezpublish.fieldType.parameterProviderRegistry.class%
+
     ezpublish.fieldType:
         class: %ezpublish.fieldType.class%
         abstract: true
@@ -307,23 +313,30 @@ services:
     ezpublish.fieldType.ezbinaryfile:
         class: %ezpublish.fieldType.ezbinaryfile.class%
         parent: ezpublish.fieldType
-        arguments: [@ezpublish.fieldType.ezbinaryfile.fileService, @ezpublish.fieldType.ezbinaryfile.mimeTypeDetector]
         tags:
             - {name: ezpublish.fieldType, alias: ezbinaryfile}
 
-    ezpublish.fieldType.ezbinaryfile.fileService:
-        class: %ezpublish.fieldType.ezbinaryfile.fileService.class%
-        arguments: [@ezpublish.config.resolver, %webroot_dir%]
-
-    ezpublish.fieldType.ezbinaryfile.mimeTypeDetector:
-        class: %ezpublish.fieldType.ezbinaryfile.mimeTypeDetector.class%
+    ezpublish.fieldType.ezbinaryfile.IOService:
+        class: %ezpublish.core.io.service.class%
+        factory_service: ezpublish.core.io.factory
+        factory_method: getService
+        arguments:
+            - @ezpublish.core.io.handler.legacy
+            - 'binary_dir'
 
     ezpublish.fieldType.ezbinaryfile.pathGenerator:
         class: %ezpublish.fieldType.ezbinaryfile.pathGenerator.class%
+        arguments:
+            # @todo: this will ONLY take the default binary_dir setting into account !
+            - %ezsettings.default.binary_dir%
 
     ezpublish.fieldType.ezbinaryfile.externalStorage:
         class: %ezpublish.fieldType.ezbinaryfile.externalStorage.class%
-        arguments: [[], @ezpublish.fieldType.ezbinaryfile.fileService, @ezpublish.fieldType.ezbinaryfile.pathGenerator]
+        arguments:
+            - []
+            - @ezpublish.fieldType.ezbinaryfile.IOService
+            - @ezpublish.fieldType.ezbinaryfile.pathGenerator
+            - @ezpublish.core.io.mimeTypeDetector
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezbinaryfile}
 
@@ -367,20 +380,30 @@ services:
     ezpublish.fieldType.ezimage:
         class: %ezpublish.fieldType.ezimage.class%
         parent: ezpublish.fieldType
-        arguments: [@ezpublish.fieldType.ezbinaryfile.fileService]
+        arguments: [ @ezpublish.fieldType.ezimage.IOService ]
         tags:
             - {name: ezpublish.fieldType, alias: ezimage}
 
-    ezpublish.fieldType.ezimage.fileService:
-        class: %ezpublish.fieldType.ezimage.fileService.class%
-        arguments: [@ezpublish.config.resolver, %webroot_dir%]
+    ezpublish.fieldType.ezimage.IOService:
+        class: %ezpublish.core.io.service.class%
+        factory_service: ezpublish.core.io.factory
+        factory_method: getService
+        arguments:
+            - @ezpublish.core.io.handler.legacy
+            - 'image.published_images_dir'
 
     ezpublish.fieldType.ezimage.pathGenerator:
         class: %ezpublish.fieldType.ezimage.pathGenerator.class%
+        arguments:
+            - %ezsettings.default.image.published_images_dir%
 
     ezpublish.fieldType.ezimage.externalStorage:
         class: %ezpublish.fieldType.ezimage.externalStorage.class%
-        arguments: [[], @ezpublish.fieldType.ezimage.fileService, @ezpublish.fieldType.ezimage.pathGenerator]
+        arguments:
+            - []
+            - @ezpublish.fieldType.ezimage.IOService
+            - @ezpublish.fieldType.ezimage.pathGenerator
+            - @ezpublish.fieldType.metadataHandler.imagesize
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezimage}
 
@@ -403,14 +426,17 @@ services:
 
     ezpublish.fieldType.ezmedia:
         class: %ezpublish.fieldType.ezmedia.class%
-        arguments: [@ezpublish.fieldType.ezbinaryfile.fileService, @ezpublish.fieldType.ezbinaryfile.mimeTypeDetector]
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezmedia}
 
     ezpublish.fieldType.ezmedia.externalStorage:
         class: %ezpublish.fieldType.ezmedia.externalStorage.class%
-        arguments: [[], @ezpublish.fieldType.ezbinaryfile.fileService, @ezpublish.fieldType.ezbinaryfile.pathGenerator]
+        arguments:
+            - []
+            - @ezpublish.fieldType.ezbinaryfile.IOService
+            - @ezpublish.fieldType.ezbinaryfile.pathGenerator
+            - @ezpublish.core.io.mimeTypeDetector
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezmedia}
 
@@ -481,9 +507,22 @@ services:
         tags:
             - {name: ezpublish.fieldType, alias: ezpage}
 
+    ezpublish.fieldType.ezpage.pageService.factory:
+        class: %ezpublish.fieldType.ezpage.pageService.factory.class%
+
     ezpublish.fieldType.ezpage.pageService:
         class: %ezpublish.fieldType.ezpage.pageService.class%
-        arguments: [%ezpublish.fieldtype.ezpage.zoneDefinition%, %ezpublish.fieldtype.ezpage.blockDefinition%]
+        factory_service: ezpublish.fieldType.ezpage.pageService.factory
+        factory_method: buildService
+        arguments: [%ezpublish.fieldType.ezpage.pageService.class%, @ezpublish.config.resolver, @ezpublish.fieldType.ezpage.storage_gateway]
+        calls:
+            - [setRepository, [@ezpublish.api.repository]]
+
+    ezpublish.fieldType.ezpage.parameterProvider:
+        class: %ezpublish.fieldType.ezpage.parameterProvider.class%
+        arguments: [@ezpublish.fieldType.ezpage.pageService]
+        tags:
+            - {name: ezpublish.fieldType.parameterProvider, alias: ezpage}
 
     ezpublish.fieldType.ezgmaplocation:
         class: %ezpublish.fieldType.ezgmaplocation.class%
@@ -522,7 +561,7 @@ services:
     # Not implemented fieldtypes
     # Configured to use the Null type to not throw exception
     ezpublish.fieldType.ezdate:
-        class: %ezpublish.fieldType.eznull.class%
+        class: %ezpublish.fieldType.ezdate.class%
         parent: ezpublish.fieldType
         arguments: [ "ezdate" ]
         tags:
@@ -627,7 +666,7 @@ services:
             - {name: ezpublish.fieldType, alias: ezsubtreesubscription}
 
     ezpublish.fieldType.eztime:
-        class: %ezpublish.fieldType.eznull.class%
+        class: %ezpublish.fieldType.eztime.class%
         parent: ezpublish.fieldType
         arguments: [ "eztime" ]
         tags:
@@ -668,3 +707,6 @@ services:
         arguments: [ "ezrecommendation" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezrecommendation}
+
+    ezpublish.fieldType.metadataHandler.imagesize:
+        class: %ezpublish.core.io.metadataHandler.imagesize.class%

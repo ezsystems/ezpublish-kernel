@@ -78,7 +78,7 @@ class Provider implements APIUserProviderInterface
         }
         catch ( NotFoundException $e )
         {
-            throw new UsernameNotFoundException( $e->getMessage(), null, 0, $e );
+            throw new UsernameNotFoundException( $e->getMessage(), 0, $e );
         }
     }
 

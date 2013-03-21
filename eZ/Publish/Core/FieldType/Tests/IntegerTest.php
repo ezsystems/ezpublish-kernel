@@ -17,7 +17,7 @@ use ReflectionObject;
  * @group fieldType
  * @group ezinteger
  */
-class IntegerTest extends StandardizedFieldTypeTest
+class IntegerTest extends FieldTypeTest
 {
     /**
      * Returns the field type under test.

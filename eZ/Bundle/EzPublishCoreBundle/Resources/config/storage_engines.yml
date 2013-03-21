@@ -62,6 +62,8 @@ parameters:
     ezpublish.fieldType.ezboolean.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Checkbox
     ezpublish.fieldType.ezcountry.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country
     ezpublish.fieldType.ezdatetime.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime
+    ezpublish.fieldType.ezdate.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Date
+    ezpublish.fieldType.eztime.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Time
     ezpublish.fieldType.ezemail.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\EmailAddress
     ezpublish.fieldType.ezfloat.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Float
     ezpublish.fieldType.ezgmaplocation.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\MapLocation
@@ -86,6 +88,7 @@ parameters:
     ezpublish.fieldType.ezuser.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
     ezpublish.fieldType.ezuser.storage_gateway.class: eZ\Publish\Core\FieldType\User\UserStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezpage.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Page
+    ezpublish.fieldType.ezpage.storage_gateway.class: eZ\Publish\Core\FieldType\Page\PageStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezrecommendation.converter.class: %ezpublish.fieldType.eznull.converter.class%
 
     ezpublish.fieldType.eznull.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
@@ -174,6 +177,11 @@ services:
         class: %ezpublish.api.storage_engine.legacy.dbhandler.class%
         factory_service: ezpublish.api.storage_engine.legacy.dbhandler.factory
         factory_method: buildLegacyDbHandler
+
+    # Alias for backend connection used by eZ Publish storage engine
+    # Useful if you need to reuse it in order to access resources not related to eZ Publish, but stored in your backend (e.g. foreign DB tables)
+    ezpublish.connection:
+        alias: ezpublish.api.storage_engine.legacy.dbhandler
 
     ezpublish.api.storage_engine.legacy:
         class: %ezpublish.api.storage_engine.legacy.class%
@@ -313,9 +321,13 @@ services:
 
     ezpublish.fieldType.ezpage.converter:
         class: %ezpublish.fieldType.ezpage.converter.class%
-        arguments: [@ezpublish.fieldType.ezpage.pageService]
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezpage}
+
+    ezpublish.fieldType.ezpage.storage_gateway:
+        class: %ezpublish.fieldType.ezpage.storage_gateway.class%
+        calls:
+            - [setConnection, [@ezpublish.connection]]
 
     ezpublish.fieldType.ezimage.converter:
         class: %ezpublish.fieldType.ezimage.converter.class%
@@ -366,7 +378,7 @@ services:
     # Not implemented converters
     # Configured to use the Null converter which does not nothing
     ezpublish.fieldType.ezdate.converter:
-        class: %ezpublish.fieldType.eznull.converter.class%
+        class: %ezpublish.fieldType.ezdate.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezdate, lazy: true, callback: '::create'}
 
@@ -441,7 +453,7 @@ services:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezsubtreesubscription, lazy: true, callback: '::create'}
 
     ezpublish.fieldType.eztime.converter:
-        class: %ezpublish.fieldType.eznull.converter.class%
+        class: %ezpublish.fieldType.eztime.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: eztime, lazy: true, callback: '::create'}
 

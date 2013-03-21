@@ -299,7 +299,8 @@ class ContentExtensionIntegrationTest extends Twig_Test_IntegrationTestCase
                 $this->logicalOr(
                     $this->equalTo( "ezpublish.api.repository" ),
                     $this->equalTo( "ezpublish.fieldType.ezxmltext.converter.html5" ),
-                    $this->equalTo( "ezpublish.fieldType.ezimage.variation_service" )
+                    $this->equalTo( "ezpublish.fieldType.ezimage.variation_service" ),
+                    $this->equalTo( "ezpublish.fieldType.parameterProviderRegistry" )
                 )
             )
             ->will(
@@ -324,6 +325,9 @@ class ContentExtensionIntegrationTest extends Twig_Test_IntegrationTestCase
         {
             case "ezpublish.api.repository":
                 return $this->getRepositoryMock();
+
+            case "ezpublish.fieldType.parameterProviderRegistry":
+                return $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\FieldType\\View\\ParameterProviderRegistryInterface' );
 
             case "ezpublish.fieldType.ezxmltext.converter.html5":
             case "ezpublish.fieldType.ezimage.variation_service":

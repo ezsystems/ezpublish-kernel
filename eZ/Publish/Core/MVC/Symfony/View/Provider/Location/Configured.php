@@ -10,58 +10,42 @@
 namespace eZ\Publish\Core\MVC\Symfony\View\Provider\Location;
 
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProvider;
-use eZ\Publish\Core\MVC\Symfony\View\Provider\Configured as ProviderConfigured;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\ContentBasedConfigured as ProviderConfigured;
 use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher;
-use eZ\Publish\Core\MVC\RepositoryAwareInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher;
+use InvalidArgumentException;
 
 class Configured extends ProviderConfigured implements LocationViewProvider
 {
     /**
-     * Returns a ContentView object corresponding to $location, or void if not applicable
+     * Returns a ContentView object corresponding to $location, or null if not applicable
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $viewType Variation of display for your content.
      *
      * @throws \InvalidArgumentException
      *
-     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|void
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|null
      */
     public function getView( Location $location, $viewType )
     {
         if ( !isset( $this->matchConfig[$viewType] ) )
             return;
 
-        foreach ( $this->matchConfig[$viewType] as $configHash )
-        {
-            $hasMatched = true;
-            foreach ( $configHash['match'] as $matcherIdentifier => $value )
-            {
-                // Caching the matcher instance in memory
-                if ( !isset( $this->matchers[$matcherIdentifier] ) )
-                {
-                    $this->matchers[$matcherIdentifier] = $this->getMatcher( $matcherIdentifier );
-                }
-                $matcher = $this->matchers[$matcherIdentifier];
+        return $this->doMatch( $this->matchConfig[$viewType], $location );
+    }
 
-                if ( !$matcher instanceof Matcher )
-                    throw new \InvalidArgumentException(
-                        'Matcher for ContentViewProvider\\Configured must implement eZ\\Publish\\MVC\\View\\ContentViewProvider\\Configured\\Matcher interface.'
-                    );
+    /**
+     * {@inheritDoc}
+     */
+    public function match( ViewProviderMatcher $matcher, ValueObject $valueObject )
+    {
+        if ( !$valueObject instanceof Location )
+            throw new InvalidArgumentException( 'Value object must be a valid Location instance' );
 
-                if ( $matcher instanceof RepositoryAwareInterface )
-                    $matcher->setRepository( $this->repository );
-
-                $matcher->setMatchingConfig( $value );
-                if ( !$matcher->matchLocation( $location ) )
-                    $hasMatched = false;
-            }
-
-            if ( $hasMatched )
-            {
-                return new ContentView( $configHash['template'] );
-            }
-        }
+        return $matcher->matchLocation( $valueObject );
     }
 }
