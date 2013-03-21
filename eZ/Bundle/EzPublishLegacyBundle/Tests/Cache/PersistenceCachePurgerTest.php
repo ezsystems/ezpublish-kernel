@@ -44,6 +44,17 @@ class PersistenceCachePurgerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger::isEnabled
+     * @covers eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger::setIsEnabled
+     */
+    public function testIsEnabled()
+    {
+        $this->assertTrue( $this->cachePurger->isEnabled() );
+        $this->cachePurger->setIsEnabled( false );
+        $this->assertFalse( $this->cachePurger->isEnabled() );
+    }
+
+    /**
      * @covers eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger::all
      * @covers eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger::isAllCleared
      */
@@ -82,6 +93,32 @@ class PersistenceCachePurgerTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->never() )
             ->method( 'clear' );
         $this->cachePurger->content();
+    }
+
+    /**
+     * @covers eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger::setIsEnabled
+     * @covers eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger::content
+     */
+    public function testClearContentDisabled()
+    {
+        $this->cachePurger->setIsEnabled( false );
+        $this->cacheService
+            ->expects( $this->never() )
+            ->method( 'clear' );
+        $this->cachePurger->content();
+    }
+
+    /**
+     * @covers eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger::setIsEnabled
+     * @covers eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger::all
+     */
+    public function testClearAllDisabled()
+    {
+        $this->cachePurger->setIsEnabled( false );
+        $this->cacheService
+            ->expects( $this->never() )
+            ->method( 'clear' );
+        $this->cachePurger->all();
     }
 
     /**

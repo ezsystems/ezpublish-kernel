@@ -101,7 +101,7 @@ services:
     ezpublish_legacy.setup.controller:
         class: %ezpublish_legacy.setup.controller.class%
         parent: ezpublish.controller.base
-        arguments: [@ezpublish_legacy.kernel, @ezpublish_legacy.config.resolver]
+        arguments: [@ezpublish_legacy.kernel, @ezpublish_legacy.config.resolver, @ezpublish_legacy.persistence_cache_purger]
 
     ezpublish_legacy.router:
         class: %ezpublish_legacy.router.class%
