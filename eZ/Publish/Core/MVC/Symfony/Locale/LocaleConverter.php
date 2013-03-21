@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Locale;
 
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 class LocaleConverter implements LocaleConverterInterface
 {
@@ -29,11 +29,11 @@ class LocaleConverter implements LocaleConverterInterface
     private $reverseConversionMap;
 
     /**
-     * @var \Symfony\Component\HttpKernel\Log\LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     private $logger;
 
-    public function __construct( array $conversionMap, LoggerInterface $logger = null )
+    public function __construct( array $conversionMap, LoggerInterface $logger )
     {
         $this->conversionMap = $conversionMap;
         $this->reverseConversionMap = array_flip( $conversionMap );
@@ -51,9 +51,7 @@ class LocaleConverter implements LocaleConverterInterface
     {
         if ( !isset( $this->conversionMap[$ezpLocale] ) )
         {
-            if ( $this->logger !== null )
-                $this->logger->warn( "Could not convert locale '$ezpLocale' to POSIX format. Please check your locale configuration in ezpublish.yml" );
-
+            $this->logger->warning( "Could not convert locale '$ezpLocale' to POSIX format. Please check your locale configuration in ezpublish.yml" );
             return;
         }
 
@@ -71,9 +69,7 @@ class LocaleConverter implements LocaleConverterInterface
     {
         if ( !isset( $this->reverseConversionMap[$posixLocale] ) )
         {
-            if ( $this->logger !== null )
-                $this->logger->warn( "Could not convert locale '$posixLocale' to eZ Publish format. Please check your locale configuration in ezpublish.yml" );
-
+            $this->logger->warning( "Could not convert locale '$posixLocale' to eZ Publish format. Please check your locale configuration in ezpublish.yml" );
             return;
         }
 

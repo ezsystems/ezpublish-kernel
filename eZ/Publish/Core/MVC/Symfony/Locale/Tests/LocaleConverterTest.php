@@ -18,6 +18,11 @@ class LocaleConverterTest extends \PHPUnit_Framework_TestCase
      */
     private $localeConverter;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $logger;
+
     private $conversionMap;
 
     protected function setUp()
@@ -32,7 +37,8 @@ class LocaleConverterTest extends \PHPUnit_Framework_TestCase
             'cro-HR'       => 'hr_HR',
         );
 
-        $this->localeConverter = new LocaleConverter( $this->conversionMap );
+        $this->logger = $this->getMock( 'Psr\\Log\\LoggerInterface' );
+        $this->localeConverter = new LocaleConverter( $this->conversionMap, $this->logger );
     }
 
     /**
@@ -45,6 +51,13 @@ class LocaleConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertToPOSIX( $ezpLocale, $expected )
     {
+        if ( $expected === null )
+        {
+            $this->logger
+                ->expects( $this->once() )
+                ->method( 'warning' );
+        }
+
         $this->assertSame( $expected, $this->localeConverter->convertToPOSIX( $ezpLocale ) );
     }
 
@@ -70,6 +83,13 @@ class LocaleConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertToEz( $posixLocale, $expected )
     {
+        if ( $expected === null )
+        {
+            $this->logger
+                ->expects( $this->once() )
+                ->method( 'warning' );
+        }
+
         $this->assertSame( $expected, $this->localeConverter->convertToEz( $posixLocale ) );
     }
 
