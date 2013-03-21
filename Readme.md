@@ -18,7 +18,7 @@ gui is for the time being still provided by Legacy Stack.
 The legacy integrations are done in many parts of the systems, making it possible to use both kernels in the same request,
 hence being able to do a smooth transition from existing 4.x installation to 5.x installation going forward.
 
-However for performance reasons we recommend trying to use either legacy with "legacy_mode" turned on or pure 5.x Stack
+However for performance reasons we recommend trying to use either legacy with "legacy\_mode" turned on or pure 5.x Stack
 on a siteaccess case by case basis. This will still make sure cache and other integrations work together (something that
 is not the case if you point Apache directly to eZ Publish Legacy), but will avoid duplicate lookups ("fallbacks").
 
@@ -52,7 +52,7 @@ Public API currently provides access to the Content Repository of eZ Publish, ex
 (former Nodes), Sections, Content Types (former Content Classes), User Groups, Users and Roles.
 It also provides a new clear interface for plugging in custom field types (former Datatypes).
 
-Public API is built on top of a set of SPI's abstracting storage/file/* functionality.
+Public API is built on top of a set of SPI's abstracting storage/file/\* functionality.
 By using Public API your code will be forward compatible to future releases based on enhanced, more scalable and more
 performant storage engines. It is also fully backwards compatible by using the included "Legacy" storage engine, which
 stores data in the way legacy kernel is used to finding it.
@@ -81,7 +81,7 @@ Currently SPI consists of:
 ## Dependencies
 * **Composer**: Just run `curl -s http://getcomposer.org/installer | php` to get **composer.phar**
 * **PHPUnit 3.6+**
-* **PHP 5 Modules**: php5_sqlite
+* **PHP 5 Modules**: php5\_sqlite
 * **Database**: sqlite3 if not installed by above stage
 
 ## How to run tests
