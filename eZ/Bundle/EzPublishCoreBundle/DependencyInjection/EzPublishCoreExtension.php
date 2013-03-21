@@ -70,6 +70,7 @@ class EzPublishCoreExtension extends Extension
         $this->handleTemplating( $container, $loader );
         $this->handleSessionLoading( $container, $loader );
         $this->handleCache( $config, $container, $loader );
+        $this->handleLocale( $config, $container, $loader );
 
         // Map settings
         foreach ( $this->configParsers as $configParser )
@@ -267,5 +268,17 @@ class EzPublishCoreExtension extends Extension
         {
             $container->setParameter( 'ezpublish.http_cache.purge_client.http_client.timeout', (int)$config['http_cache']['timeout'] );
         }
+    }
+
+    /**
+     * Handle locale parameters.
+     *
+     * @param array $config
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \Symfony\Component\DependencyInjection\Loader\FileLoader $loader
+     */
+    private function handleLocale( array $config, ContainerBuilder $container, FileLoader $loader )
+    {
+        $loader->load( 'locale.yml' );
     }
 }
