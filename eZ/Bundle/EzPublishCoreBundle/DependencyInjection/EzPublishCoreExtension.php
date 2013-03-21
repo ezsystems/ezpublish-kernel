@@ -18,12 +18,6 @@ use Symfony\Component\Config\FileLocator;
 class EzPublishCoreExtension extends Extension
 {
     /**
-     * References to settings keys that were altered in order to work around https://jira.ez.no/browse/EZP-20107
-     * @var array
-     */
-    private $fixedUpKeys = array();
-
-    /**
      * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser[]
      */
     private $configParsers;
