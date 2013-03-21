@@ -33,6 +33,13 @@ class PersistenceCachePurger
     protected $allCleared = false;
 
     /**
+     * Activation flag.
+     *
+     * @var bool
+     */
+    protected $isEnabled = true;
+
+    /**
      * Setups current handler with everything needed
      *
      * @param \Tedivm\StashBundle\Service\CacheService $cache
@@ -51,6 +58,9 @@ class PersistenceCachePurger
      */
     public function all()
     {
+        if ( $this->isEnabled === false )
+            return;
+
         $this->cache->clear();
         $this->allCleared = true;
     }
@@ -78,6 +88,28 @@ class PersistenceCachePurger
     }
 
     /**
+     * Enables or disables cache purger.
+     * Disabling the cache purger might be useful in certain situations
+     * (like setup wizard where legacy cache is cleared but everything is not set yet to correctly clear SPI cache).
+     *
+     * @param bool $isEnabled
+     */
+    public function setIsEnabled( $isEnabled )
+    {
+        $this->isEnabled = (bool)$isEnabled;
+    }
+
+    /**
+     * Checks if cache purger is enabled or not.
+     *
+     * @return bool
+     */
+    public function isEnabled()
+    {
+        return $this->isEnabled;
+    }
+
+    /**
      * Clear all content persistence cache, or by locationIds (legacy content/cache mechanism is location based).
      *
      * Either way all location and urlAlias cache is cleared as well.
@@ -90,7 +122,7 @@ class PersistenceCachePurger
      */
     public function content( $locationIds = null )
     {
-        if ( $this->allCleared === true )
+        if ( $this->allCleared === true || $this->isEnabled === false )
             return;
 
         if ( $locationIds === null )
@@ -129,7 +161,7 @@ class PersistenceCachePurger
      */
     public function contentType( $id = null )
     {
-        if ( $this->allCleared === true )
+        if ( $this->allCleared === true || $this->isEnabled === false )
             return;
 
         if ( $id === null )
@@ -156,7 +188,7 @@ class PersistenceCachePurger
      */
     public function contentTypeGroup( $id = null )
     {
-        if ( $this->allCleared === true )
+        if ( $this->allCleared === true || $this->isEnabled === false )
             return;
 
         if ( $id === null )
@@ -184,7 +216,7 @@ class PersistenceCachePurger
      */
     public function section( $id = null )
     {
-        if ( $this->allCleared === true )
+        if ( $this->allCleared === true || $this->isEnabled === false )
             return;
 
         if ( $id === null )
@@ -208,7 +240,7 @@ class PersistenceCachePurger
      */
     public function languages( array $ids )
     {
-        if ( $this->allCleared === true )
+        if ( $this->allCleared === true || $this->isEnabled === false )
             return;
 
         foreach ( $ids as $id )
@@ -223,7 +255,7 @@ class PersistenceCachePurger
      */
     public function user( $id = null )
     {
-        if ( $this->allCleared === true )
+        if ( $this->allCleared === true || $this->isEnabled === false )
             return;
 
         if ( $id === null )

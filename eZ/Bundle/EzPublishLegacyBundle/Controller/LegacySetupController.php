@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Symfony\Component\HttpFoundation\Response;
 use eZ\Publish\Core\MVC\Symfony\ConfigDumperInterface;
 use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver;
+use eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger;
 use eZINI;
 use eZCache;
 
@@ -32,6 +33,11 @@ class LegacySetupController
     private $legacyConfigResolver;
 
     /**
+     * @var \eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger
+     */
+    private $persistenceCachePurger;
+
+    /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
     protected $container;
@@ -42,11 +48,13 @@ class LegacySetupController
      *
      * @param \Closure $kernelClosure
      * @param \eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver $legacyConfigResolver
+     * @param \eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger $persistenceCachePurger
      */
-    public function __construct( \Closure $kernelClosure, LegacyConfigResolver $legacyConfigResolver )
+    public function __construct( \Closure $kernelClosure, LegacyConfigResolver $legacyConfigResolver, PersistenceCachePurger $persistenceCachePurger )
     {
         $this->legacyKernelClosure = $kernelClosure;
         $this->legacyConfigResolver = $legacyConfigResolver;
+        $this->persistenceCachePurger = $persistenceCachePurger;
     }
 
     public function setContainer( Container $container )
@@ -65,6 +73,10 @@ class LegacySetupController
 
     public function init()
     {
+        // Ensure that persistence cache purger is disabled as legacy cache will be cleared by legacy setup wizard while
+        // everything is not ready yet to clear SPI cache (no connection to repository yet).
+        $this->persistenceCachePurger->setIsEnabled( false );
+
         /** @var $request \Symfony\Component\HttpFoundation\Request */
         $request = $this->container->get( 'request' );
         $currentStep = $request->request->get( 'eZSetup_current_step' );
