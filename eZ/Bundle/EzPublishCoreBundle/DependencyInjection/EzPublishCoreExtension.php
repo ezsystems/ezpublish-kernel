@@ -280,5 +280,9 @@ class EzPublishCoreExtension extends Extension
     private function handleLocale( array $config, ContainerBuilder $container, FileLoader $loader )
     {
         $loader->load( 'locale.yml' );
+        $container->setParameter(
+            'ezpublish.locale.conversion_map',
+            $config['locale_conversion'] + $container->getParameter( 'ezpublish.locale.conversion_map' )
+        );
     }
 }
