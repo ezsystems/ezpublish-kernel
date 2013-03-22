@@ -18,7 +18,6 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class LocalePass implements CompilerPassInterface
 {
-
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *
