@@ -1,0 +1,55 @@
+parameters:
+    ezpublish.locale.conversion_map:
+        ara-SA: ar_SA
+        cat-ES: ca_ES
+        chi-CN: zh_CN
+        chi-HK: zh_HK
+        chi-TW: zh_TW
+        cro-HR: hr_HR
+        cze-CS: cs_CZ
+        dan-DK: da_DK
+        dut-NL: nl_NL
+        ell-GR: el_GR
+        eng-AU: en_AU
+        eng-CA: en_CA
+        eng-GB: en_GB
+        eng-NZ: en_NZ
+        eng-US: en_US
+        epo-EO: eo
+        esl-ES: es_ES
+        esl-MX: es_MX
+        fin-FI: fi_FI
+        fre-BE: fr_BE
+        fre-CA: fr_CA
+        fre-FR: fr_FR
+        ger-DE: de_DE
+        heb-IL: he_IL
+        hin-IN: hi_IN
+        hun-HU: hu_HU
+        ind-ID: id_ID
+        ita-IT: it_IT
+        jpn-JP: ja_JP
+        kor-KR: ko_KR
+        nno-NO: nn_NO
+        nor-NO: no_NO
+        pol-PL: pl_PL
+        por-BR: pt_BR
+        por-MZ: pt_MZ
+        por-PT: pt_PT
+        rus-RU: ru_RI
+        ser-SR: sr_RS
+        slk-SK: sk_SK
+        srp-RS: sr_RS
+        swe-SE: sv_SE
+        tur-TR: tr_TR
+        ukr-UA: uk_UA
+
+    # Overriding the original locale listener to trigger the internal locale conversion correctly.
+    locale_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\LocaleListener
+
+    ezpublish.locale.converter.class: eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter
+
+services:
+    ezpublish.locale.converter:
+        class: %ezpublish.locale.converter.class%
+        arguments: [%ezpublish.locale.conversion_map%, @logger]
