@@ -18,12 +18,6 @@ use Symfony\Component\Config\FileLocator;
 class EzPublishCoreExtension extends Extension
 {
     /**
-     * References to settings keys that were altered in order to work around https://jira.ez.no/browse/EZP-20107
-     * @var array
-     */
-    private $fixedUpKeys = array();
-
-    /**
      * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser[]
      */
     private $configParsers;
@@ -76,6 +70,7 @@ class EzPublishCoreExtension extends Extension
         $this->handleTemplating( $container, $loader );
         $this->handleSessionLoading( $container, $loader );
         $this->handleCache( $config, $container, $loader );
+        $this->handleLocale( $config, $container, $loader );
 
         // Map settings
         foreach ( $this->configParsers as $configParser )
@@ -273,5 +268,21 @@ class EzPublishCoreExtension extends Extension
         {
             $container->setParameter( 'ezpublish.http_cache.purge_client.http_client.timeout', (int)$config['http_cache']['timeout'] );
         }
+    }
+
+    /**
+     * Handle locale parameters.
+     *
+     * @param array $config
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \Symfony\Component\DependencyInjection\Loader\FileLoader $loader
+     */
+    private function handleLocale( array $config, ContainerBuilder $container, FileLoader $loader )
+    {
+        $loader->load( 'locale.yml' );
+        $container->setParameter(
+            'ezpublish.locale.conversion_map',
+            $config['locale_conversion'] + $container->getParameter( 'ezpublish.locale.conversion_map' )
+        );
     }
 }
