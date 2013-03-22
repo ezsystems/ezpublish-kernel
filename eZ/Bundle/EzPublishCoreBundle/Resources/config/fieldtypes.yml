@@ -498,7 +498,10 @@ services:
 
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5:
         class: %ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class%
-        arguments: [@ezpublish.view_manager,@ezpublish.api.repository]
+        arguments:
+            - @ezpublish.view_manager
+            - @ezpublish.api.repository
+            - {view: 1, class: 1, node_id: 1, object_id: 1}
 
     ezpublish.fieldType.ezpage:
         class: %ezpublish.fieldType.ezpage.class%

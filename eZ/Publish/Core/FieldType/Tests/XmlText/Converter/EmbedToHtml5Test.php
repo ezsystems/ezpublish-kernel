@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Converter;
 
 use eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5;
 use PHPUnit_Framework_TestCase;
-use Exception;
 
 /**
  * Tests the EmbedToHtml5 Preconverter
@@ -20,7 +19,9 @@ use Exception;
  */
 class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
 {
-
+    /**
+     * @return array
+     */
     public function providerEmbedXmlSample()
     {
         return array(
@@ -31,11 +32,13 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                 null,
                 'embed',
                 array(
-                    'size' => 'medium',
-                    'offset' => 3,
-                    'limit' => 5,
+                    'objectParameters' => array(
+                        'size' => 'medium',
+                        'offset' => 3,
+                        'limit' => 5,
+                    ),
                     'noLayout' => true,
-                )
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
@@ -44,11 +47,13 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                 114,
                 'embed',
                 array(
-                    'size' => 'medium',
-                    'offset' => 2,
-                    'limit' => 7,
+                    'objectParameters' => array(
+                        'size' => 'medium',
+                        'offset' => 2,
+                        'limit' => 7,
+                    ),
                     'noLayout' => true,
-                )
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
@@ -57,11 +62,13 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                 null,
                 'embed',
                 array(
-                    'size' => 'medium',
-                    'funkyattrib' => 3,
-                    'limit' => 5,
+                    'objectParameters' => array(
+                        'size' => 'medium',
+                        'funkyattrib' => 3,
+                        'limit' => 5,
+                    ),
                     'noLayout' => true,
-                )
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
@@ -71,7 +78,9 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                 'embed-inline',
                 array(
                     'noLayout' => true,
-                    'size' => 'small'
+                    'objectParameters' => array(
+                        'size' => 'small'
+                    ),
                 )
             ),
             array(
@@ -82,14 +91,19 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                 'embed',
                 array(
                     'noLayout' => true,
-                    'size' => 'large',
-                    'limit' => '5',
-                    'offset' => '0',
-                )
+                    'objectParameters' => array(
+                        'size' => 'large',
+                        'limit' => '5',
+                        'offset' => '0',
+                    ),
+                ),
             )
         );
     }
 
+    /**
+     * @return array
+     */
     public function providerEmbedXmlBadSample()
     {
         return array(
@@ -101,47 +115,51 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                 'embed',
                 array(
                     'noLayout' => true,
-                    'size' => 'medium',
-                    'limit' => 5,
-                    'offset' => 3,
+                    'objectParameters' => array(
+                        'size' => 'medium',
+                        'limit' => 5,
+                        'offset' => 3,
+                    ),
                 )
             ),
         );
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getMockViewManager()
     {
-        $viewManager = $this->getMockBuilder( 'eZ\Publish\Core\MVC\Symfony\View\Manager' )
+        return $this->getMockBuilder( 'eZ\Publish\Core\MVC\Symfony\View\Manager' )
             ->disableOriginalConstructor()
             ->getMock();
-
-        /*
-        $viewManager->expects($this->any())
-            ->method('renderContent')
-            ->will($this->returnValue('true'));
-        */
-
-        return $viewManager;
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getMockContentService()
     {
-        $contentService = $this->getMockBuilder( 'eZ\Publish\Core\Repository\ContentService' )
+        return $this->getMockBuilder( 'eZ\Publish\Core\Repository\ContentService' )
             ->disableOriginalConstructor()
             ->getMock();
-
-        return $contentService;
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getMockLocationService()
     {
-        $locationService = $this->getMockBuilder( 'eZ\Publish\Core\Repository\LocationService' )
+        return $this->getMockBuilder( 'eZ\Publish\Core\Repository\LocationService' )
             ->disableOriginalConstructor()
             ->getMock();
-
-        return $locationService;
     }
 
+    /**
+     * @param $contentService
+     * @param $locationService
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getMockRepository( $contentService, $locationService )
     {
         $repository = $this->getMock( 'eZ\Publish\API\Repository\Repository' );
@@ -157,6 +175,13 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
         return $repository;
     }
 
+    /**
+     * @param $xmlString
+     * @param $contentId
+     * @param $locationId
+     * @param $view
+     * @param $parameters
+     */
     public function runNodeEmbed($xmlString, $contentId, $locationId, $view, $parameters)
     {
         $dom = new \DOMDocument();
@@ -203,12 +228,13 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                 );
         }
 
-        $converter = new EmbedToHtml5( $viewManager, $repository );
+        $converter = new EmbedToHtml5(
+            $viewManager,
+            $repository,
+            array( 'view' => 1, 'class' => 1, 'node_id' => 1, 'object_id' => 1 )
+        );
 
         $converter->convert( $dom );
-
-        echo $dom->saveXML();
-
     }
 
     /**

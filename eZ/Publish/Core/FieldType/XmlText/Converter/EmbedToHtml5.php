@@ -19,13 +19,11 @@ use DOMDocument;
  */
 class EmbedToHtml5 implements Converter
 {
-
     /**
      * List of disallowed attributes
-     * @const
      * @var array
      */
-    protected static $excludedAttributes = array( 'view', 'class', 'node_id', 'object_id' );
+    protected $excludedAttributes = array();
 
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\View\Manager
@@ -37,14 +35,11 @@ class EmbedToHtml5 implements Converter
      */
     protected $repository;
 
-    /**
-     * @param Manager $viewManager
-     * @param Repository $repository
-     */
-    public function __construct( Manager $viewManager, Repository $repository )
+    public function __construct( Manager $viewManager, Repository $repository, array $excludedAttributes )
     {
         $this->viewManager = $viewManager;
         $this->repository = $repository;
+        $this->excludedAttributes = $excludedAttributes;
     }
 
     /**
@@ -64,11 +59,12 @@ class EmbedToHtml5 implements Converter
             $embedContent = null;
             $parameters = array(
                 "noLayout" => true,
+                "objectParameters" => array()
             );
 
             if ( $attribute = $embed->getAttribute( "size" ) )
             {
-                $parameters["size"] = $attribute;
+                $parameters["objectParameters"]["size"] = $attribute;
             }
 
             $customNS = "http://ez.no/namespaces/ezpublish3/custom/";
@@ -78,10 +74,10 @@ class EmbedToHtml5 implements Converter
                 // We only consider tags in the custom namespace, and skip disallowed names
                 if (
                     $attribute->namespaceURI == $customNS &&
-                    !in_array( $attribute->localName, self::$excludedAttributes )
+                    !isset( $this->excludedAttributes[ $attribute->localName ] )
                 )
                 {
-                    $parameters[ $attribute->localName ] = $attribute->nodeValue;
+                    $parameters["objectParameters"][$attribute->localName] = $attribute->nodeValue;
                 }
             }
 
