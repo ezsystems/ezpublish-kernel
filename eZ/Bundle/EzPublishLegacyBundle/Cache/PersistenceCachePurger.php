@@ -10,7 +10,7 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\Cache;
 
 use Tedivm\StashBundle\Service\CacheService;
-use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandlerInterface;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 class PersistenceCachePurger
@@ -21,9 +21,9 @@ class PersistenceCachePurger
     protected $cache;
 
     /**
-     * @var \eZ\Publish\API\Repository\LocationService
+     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
-    protected $locationService;
+    protected $locationHandler;
 
     /**
      * Avoid clearing sub elements if all cache is already cleared, avoids redundant calls to Stash.
@@ -43,12 +43,12 @@ class PersistenceCachePurger
      * Setups current handler with everything needed
      *
      * @param \Tedivm\StashBundle\Service\CacheService $cache
-     * @param \eZ\Publish\API\Repository\LocationService $locationService
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      */
-    public function __construct( CacheService $cache, LocationService $locationService )
+    public function __construct( CacheService $cache, LocationHandlerInterface $locationHandler )
     {
         $this->cache = $cache;
-        $this->locationService = $locationService;
+        $this->locationHandler = $locationHandler;
     }
 
     /**
@@ -140,7 +140,7 @@ class PersistenceCachePurger
             if ( !is_scalar( $id ) )
                 throw new InvalidArgumentType( "\$id", "int[]|null", $id );
 
-            $location = $this->locationService->loadLocation( $id );
+            $location = $this->locationHandler->load( $id );
             $this->cache->clear( 'content', $location->contentId );
             $this->cache->clear( 'content', 'info', $location->contentId );
         }

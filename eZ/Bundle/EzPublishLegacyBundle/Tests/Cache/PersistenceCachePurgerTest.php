@@ -10,7 +10,7 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\Tests\Cache;
 
 use eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger;
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class PersistenceCachePurgerTest extends \PHPUnit_Framework_TestCase
@@ -23,7 +23,7 @@ class PersistenceCachePurgerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $locationService;
+    private $locationHandler;
 
     /**
      * @var \eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger
@@ -38,9 +38,9 @@ class PersistenceCachePurgerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->locationService = $this->getMock( 'eZ\\Publish\\API\\Repository\\LocationService' );
+        $this->locationHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
 
-        $this->cachePurger = new PersistenceCachePurger( $this->cacheService, $this->locationService );
+        $this->cachePurger = new PersistenceCachePurger( $this->cacheService, $this->locationHandler );
     }
 
     /**
@@ -150,9 +150,9 @@ class PersistenceCachePurgerTest extends \PHPUnit_Framework_TestCase
         $locationId3 = 3;
         $contentId3 = 30;
 
-        $this->locationService
+        $this->locationHandler
             ->expects( $this->exactly( 3 ) )
-            ->method( 'loadLocation' )
+            ->method( 'load' )
             ->will(
                 $this->returnValueMap(
                     array(
@@ -193,9 +193,9 @@ class PersistenceCachePurgerTest extends \PHPUnit_Framework_TestCase
         $locationId = 1;
         $contentId = 10;
 
-        $this->locationService
+        $this->locationHandler
             ->expects( $this->once() )
-            ->method( 'loadLocation' )
+            ->method( 'load' )
             ->will( $this->returnValue( $this->buildLocation( $locationId, $contentId ) ) );
         $this->cacheService
             ->expects( $this->any() )
@@ -217,18 +217,14 @@ class PersistenceCachePurgerTest extends \PHPUnit_Framework_TestCase
     /**
      * @param $locationId
      * @param $contentId
-     * @return \eZ\Publish\Core\Repository\Values\Content\Location
+     * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     private function buildLocation( $locationId, $contentId )
     {
         return new Location(
             array(
                 'id'           => $locationId,
-                'contentInfo'  => new ContentInfo(
-                    array(
-                        'id' => $contentId
-                    )
-                )
+                'contentId'    => $contentId
             )
         );
     }
