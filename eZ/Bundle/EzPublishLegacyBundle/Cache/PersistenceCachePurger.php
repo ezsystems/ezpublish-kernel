@@ -12,6 +12,8 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Cache;
 use Tedivm\StashBundle\Service\CacheService;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandlerInterface;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use Psr\Log\LoggerInterface;
 
 class PersistenceCachePurger
 {
@@ -40,15 +42,21 @@ class PersistenceCachePurger
     protected $isEnabled = true;
 
     /**
+     * @var Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * Setups current handler with everything needed
      *
      * @param \Tedivm\StashBundle\Service\CacheService $cache
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      */
-    public function __construct( CacheService $cache, LocationHandlerInterface $locationHandler )
+    public function __construct( CacheService $cache, LocationHandlerInterface $locationHandler, LoggerInterface $logger )
     {
         $this->cache = $cache;
         $this->locationHandler = $locationHandler;
+        $this->logger = $logger;
     }
 
     /**
@@ -140,9 +148,18 @@ class PersistenceCachePurger
             if ( !is_scalar( $id ) )
                 throw new InvalidArgumentType( "\$id", "int[]|null", $id );
 
-            $location = $this->locationHandler->load( $id );
-            $this->cache->clear( 'content', $location->contentId );
-            $this->cache->clear( 'content', 'info', $location->contentId );
+            try
+            {
+                $location = $this->locationHandler->load( $id );
+                $this->cache->clear( 'content', $location->contentId );
+                $this->cache->clear( 'content', 'info', $location->contentId );
+            }
+            catch ( NotFoundException $e )
+            {
+                $this->logger->notice(
+                    "Unable to load the location with the id '$id' to clear its cache"
+                );
+            }
         }
 
         // clear content related cache as well

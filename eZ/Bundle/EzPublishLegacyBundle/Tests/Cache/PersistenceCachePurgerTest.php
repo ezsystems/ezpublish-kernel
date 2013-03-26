@@ -12,6 +12,7 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Tests\Cache;
 use eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 class PersistenceCachePurgerTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,6 +31,11 @@ class PersistenceCachePurgerTest extends \PHPUnit_Framework_TestCase
      */
     private $cachePurger;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $logger;
+
     protected function setUp()
     {
         parent::setUp();
@@ -39,8 +45,29 @@ class PersistenceCachePurgerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->locationHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
+        $this->logger = $this->getMock( 'Psr\\Log\\LoggerInterface' );
 
-        $this->cachePurger = new PersistenceCachePurger( $this->cacheService, $this->locationHandler );
+        $this->cachePurger = new PersistenceCachePurger(
+            $this->cacheService, $this->locationHandler, $this->logger
+        );
+    }
+
+    /**
+     * Test case for https://jira.ez.no/browse/EZP-20618
+     */
+    public function testNotFoundLocation()
+    {
+        $id = 'locationIdThatDoesNotExist';;
+        $this->locationHandler
+            ->expects( $this->once() )
+            ->method( 'load' )
+            ->will( $this->throwException( new NotFoundException( 'location', $id ) ) );
+
+        $this->logger
+            ->expects( $this->once() )
+            ->method( 'notice' );
+
+        $this->cachePurger->content( $id );
     }
 
     /**
