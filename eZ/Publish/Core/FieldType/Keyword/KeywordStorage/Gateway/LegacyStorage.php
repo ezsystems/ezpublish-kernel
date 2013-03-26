@@ -63,7 +63,7 @@ class LegacyStorage extends Gateway
     {
         $existingKeywordMap = $this->getExistingKeywords( $field->value->externalData, $contentTypeId );
 
-        $this->deleteOldKeywordAssignements( $field );
+        $this->deleteOldKeywordAssignments( $field );
 
         $this->assignKeywords(
             $field->id,
@@ -267,7 +267,7 @@ class LegacyStorage extends Gateway
         return $keywordIdMap;
     }
 
-    protected function deleteOldKeywordAssignements( Field $field )
+    protected function deleteOldKeywordAssignments( Field $field )
     {
         $dbHandler = $this->getConnection();
 
