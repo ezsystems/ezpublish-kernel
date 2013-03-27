@@ -253,13 +253,14 @@ class PersistenceCachePurger
     /**
      * Clear all language persistence cache, or by id
      *
-     * @param array $ids
+     * @param array|int $ids
      */
-    public function languages( array $ids )
+    public function languages( $ids )
     {
         if ( $this->allCleared === true || $this->isEnabled === false )
             return;
 
+        $ids = (array)$ids;
         foreach ( $ids as $id )
             $this->cache->clear( 'language', $id );
     }
