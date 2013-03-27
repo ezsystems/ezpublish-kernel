@@ -191,6 +191,7 @@ class ConfigurationConverter
         if ( FileSystemDriver::isAvailable() )
         {
             $handlers[] = 'FileSystem';
+            $inMemory = true;
         }
         else if ( APCDriver::isAvailable() )
         {
