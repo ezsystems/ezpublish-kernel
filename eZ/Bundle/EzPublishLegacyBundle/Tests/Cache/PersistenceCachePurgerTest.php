@@ -414,6 +414,27 @@ class PersistenceCachePurgerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger::languages
+     */
+    public function testClearOneLanguage()
+    {
+        $languageId = 123;
+
+        $this->cacheService
+            ->expects( $this->once() )
+            ->method( 'clear' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( $languageId, null ),
+                    )
+                )
+            );
+
+        $this->cachePurger->languages( $languageId );
+    }
+
+    /**
      * @covers eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger::user
      */
     public function testClearUserAll()
