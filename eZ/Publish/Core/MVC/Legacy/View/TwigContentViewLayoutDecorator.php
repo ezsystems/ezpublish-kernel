@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\View;
 
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
@@ -28,10 +29,13 @@ class TwigContentViewLayoutDecorator implements ContentViewInterface
 
     protected $options;
 
-    public function __construct( Twig_Environment $twig, array $options )
+    public function __construct( Twig_Environment $twig, array $options, ConfigResolverInterface $resolver )
     {
         $this->twig = $twig;
-        $this->options = $options + array( 'contentBlockName' => 'content' );
+        $this->options = $options + array(
+            'contentBlockName' => 'content',
+            'layout' => $resolver->getParameter( 'view_default_layout', 'ezpublish_legacy' )
+        );
     }
 
     /**

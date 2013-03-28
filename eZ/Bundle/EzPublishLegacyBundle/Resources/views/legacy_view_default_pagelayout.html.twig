@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>{% for element in ezpublish.legacy.get( 'title_path' )|reverse|slice( 0, 2 ) %}
+        {{ element.text }}{% if not loop.last %} / {% endif %}
+    {%endfor %}</title>
+</head>
+<body>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

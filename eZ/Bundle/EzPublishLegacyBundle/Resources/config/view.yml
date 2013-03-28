@@ -5,7 +5,6 @@ parameters:
     ezpublish_legacy.block_view_provider.class: eZ\Publish\Core\MVC\Legacy\View\Provider\Block
     ezpublish_legacy.view_decorator.twig.class: eZ\Publish\Core\MVC\Legacy\View\TwigContentViewLayoutDecorator
     ezpublish_legacy.view_decorator.options:
-        layout: %ezpublish_legacy.view.default_layout%
         viewbaseLayout: %ezpublish.content_view.viewbase_layout%
         contentBlockName: %ezpublish.content_view.content_block_name%
 
@@ -40,7 +39,7 @@ services:
 
     ezpublish_legacy.view_decorator.twig:
         class: %ezpublish_legacy.view_decorator.twig.class%
-        arguments: [@twig, %ezpublish_legacy.view_decorator.options%]
+        arguments: [@twig, %ezpublish_legacy.view_decorator.options%, @ezpublish.config.resolver]
 
     ezpublish_legacy.view_decorator:
         alias: ezpublish_legacy.view_decorator.twig
