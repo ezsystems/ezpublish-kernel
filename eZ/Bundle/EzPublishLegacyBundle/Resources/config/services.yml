@@ -87,7 +87,6 @@ services:
             - @ezpublish_legacy.kernel
             - @templating
             - @ezpublish.config.resolver            
-            - %ezpublish_legacy.view.legacy_layout%
 
     ezpublish_legacy.treemenu.controller:
         class: %ezpublish_legacy.treemenu.controller.class%
