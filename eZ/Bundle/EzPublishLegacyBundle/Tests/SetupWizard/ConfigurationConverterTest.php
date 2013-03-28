@@ -171,6 +171,10 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                 'imagemagick' => array(
                     'enabled' => true,
                     'path' => '/usr/bin/convert',
+                    'filters' => array(
+                        'geometry/scale' => '-geometry {1}x{2}',
+                        'geometry/scalewidth' => '-geometry {1}',
+                    ),
                 ),
                 'http_cache' => array( 'purge_type' => 'local' )
             ),
@@ -254,6 +258,9 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                     'infoboximage', 'image.ini', 'ezdemo_site_admin',
                     array( 'Reference' => '', 'Filters' => array( 'geometry/scalewidth=75', 'flatten' ) )
                 ),
+                'ImageMagick' => array(
+                    'ImageMagick', 'image.ini', 'eng',
+                    array( 'Filters' => array( 'geometry/scale=-geometry %1x%2', 'geometry/scalewidth=-geometry %1' ) ) ),
             )
         );
 
@@ -273,6 +280,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
         $element[IDX_MOCK_PARAMETERS]['getParameter']['ImageMagickIsEnabled'] = array( 'ImageMagick', 'IsEnabled', 'eng', 'image.ini', 'false' );
         $element[IDX_EXPECTED_RESULT]['ezpublish']['imagemagick']['enabled'] = false;
         unset( $element[IDX_EXPECTED_RESULT]['ezpublish']['imagemagick']['path'] );
+        unset( $element[IDX_EXPECTED_RESULT]['ezpublish']['imagemagick']['filters'] );
         $data[] = $element;
 
         // postgresql
