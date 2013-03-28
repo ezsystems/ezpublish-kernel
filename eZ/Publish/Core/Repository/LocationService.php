@@ -707,11 +707,8 @@ class LocationService implements LocationServiceInterface
      */
     public function moveSubtree( APILocation $location, APILocation $newParentLocation )
     {
-        if ( !is_numeric( $location->id ) )
-            throw new InvalidArgumentValue( "id", $location->id, "Location" );
-
-        if ( !is_numeric( $newParentLocation->id ) )
-            throw new InvalidArgumentValue( "id", $newParentLocation->id, "Location" );
+        $location = $this->loadLocation( $location->id );
+        $newParentLocation = $this->loadLocation( $newParentLocation->id );
 
         // check create permission on target location
         if ( !$this->repository->canUser( 'content', 'create', $location->getContentInfo(), $newParentLocation ) )
