@@ -1766,6 +1766,43 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test for the moveSubtree() method.
+     *
+     * @return void
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testMoveSubtree
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testMoveSubtreeThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+        $mediaLocationId = $this->generateId( 'location', 43 );
+        $multimediaLocationId = $this->generateId( 'location', 53 );
+
+        /* BEGIN: Use Case */
+        // $mediaLocationId is the ID of the "Media" page location in
+        // an eZ Publish demo installation
+
+        // $multimediaLocationId is the ID of the "Multimedia" page location in an eZ
+        // Publish demo installation
+
+        // Load the location service
+        $locationService = $repository->getLocationService();
+
+        // Load location to move
+        $locationToMove = $locationService->loadLocation( $mediaLocationId );
+
+        // Load new parent location
+        $newParentLocation = $locationService->loadLocation( $multimediaLocationId );
+
+        // Throws an exception because new parent location is placed below location to move
+        $locationService->moveSubtree(
+            $locationToMove,
+            $newParentLocation
+        );
+        /* END: Use Case */
+    }
+
+    /**
      * Loads properties from all locations in the $location's subtree
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
