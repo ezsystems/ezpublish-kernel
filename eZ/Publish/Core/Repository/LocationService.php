@@ -744,7 +744,7 @@ class LocationService implements LocationServiceInterface
         {
             throw new InvalidArgumentException(
                 "\$newParentLocation",
-                "new parent location is a subtree of the given \$location"
+                "new parent location is in a subtree of the given \$location"
             );
         }
 
