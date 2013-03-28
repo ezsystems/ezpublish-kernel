@@ -94,7 +94,14 @@ class Factory
                         $urlHandler,
                         $this->repository->getContentTypeService(),
                         // Needed here since there's no media type in request for embedded FieldDefinitionCreate
-                        ( $fieldDefinitionCreateParser = new Input\Parser\FieldDefinitionCreate( $urlHandler, $this->repository->getContentTypeService(), $parserTools ) ),
+                        (
+                            $fieldDefinitionCreateParser = new Input\Parser\FieldDefinitionCreate(
+                                $urlHandler,
+                                $this->repository->getContentTypeService(),
+                                $fieldTypeParser,
+                                $parserTools
+                            )
+                        ),
                         $parserTools
                     ),
                     'application/vnd.ez.api.ContentTypeUpdate'      => new Input\Parser\ContentTypeUpdate(
