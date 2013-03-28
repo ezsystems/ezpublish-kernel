@@ -242,7 +242,7 @@ class Type extends FieldType
                         );
                         break;
                     }
-                    if ( !is_int( $parameters['maxFileSize'] ) && !is_bool( $parameters['maxFileSize'] ) )
+                    if ( !is_int( $parameters['maxFileSize'] ) && $parameters['maxFileSize'] !== false )
                     {
                         $validationErrors[] = new ValidationError(
                             "Validator %validator% expects parameter %parameter% to be of %type%.",
