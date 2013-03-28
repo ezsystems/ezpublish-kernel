@@ -260,7 +260,8 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                 ),
                 'ImageMagick' => array(
                     'ImageMagick', 'image.ini', 'eng',
-                    array( 'Filters' => array( 'geometry/scale=-geometry %1x%2', 'geometry/scalewidth=-geometry %1' ) ) ),
+                    array( 'Filters' => array( 'geometry/scale=-geometry %1x%2', 'geometry/scalewidth=-geometry %1' ) )
+                ),
             )
         );
 
