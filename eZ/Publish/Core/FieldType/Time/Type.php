@@ -205,6 +205,7 @@ class Type extends FieldType
                         "setting" => $name
                     )
                 );
+                continue;
             }
 
             switch ( $name )
