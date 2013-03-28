@@ -231,7 +231,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
         $converter = new EmbedToHtml5(
             $viewManager,
             $repository,
-            array( 'view' => 1, 'class' => 1, 'node_id' => 1, 'object_id' => 1 )
+            array( 'view', 'class', 'node_id', 'object_id' )
         );
 
         $converter->convert( $dom );

@@ -39,7 +39,7 @@ class EmbedToHtml5 implements Converter
     {
         $this->viewManager = $viewManager;
         $this->repository = $repository;
-        $this->excludedAttributes = $excludedAttributes;
+        $this->excludedAttributes = array_fill_keys( $excludedAttributes, true );
     }
 
     /**
@@ -74,7 +74,7 @@ class EmbedToHtml5 implements Converter
                 // We only consider tags in the custom namespace, and skip disallowed names
                 if (
                     $attribute->namespaceURI == $customNS &&
-                    !isset( $this->excludedAttributes[ $attribute->localName ] )
+                    !isset( $this->excludedAttributes[$attribute->localName] )
                 )
                 {
                     $parameters["objectParameters"][$attribute->localName] = $attribute->nodeValue;
