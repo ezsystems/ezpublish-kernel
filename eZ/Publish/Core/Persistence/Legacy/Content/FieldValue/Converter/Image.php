@@ -119,7 +119,7 @@ class Image implements Converter
         // </ezimage>
 $xml = <<<EOT
 <?xml version="1.0" encoding="utf-8"?>
-<ezimage serial_number="1" is_valid="1" filename="%s"
+<ezimage serial_number="1" is_valid="%s" filename="%s"
     suffix="%s" basename="%s" dirpath="%s" url="%s"
     original_filename="%s" mime_type="%s" width="%s"
     height="%s" alternative_text="%s" alias_key="%s" timestamp="%s">
@@ -131,6 +131,7 @@ EOT;
         return sprintf(
             $xml,
             // <ezimage>
+            ( $pathInfo['basename'] !== '' ? '1' : '' ), // is_valid="%s"
             htmlspecialchars( $pathInfo['basename'] ), // filename="%s"
             htmlspecialchars( $pathInfo['extension'] ), // suffix="%s"
             htmlspecialchars( $pathInfo['filename'] ), // basename="%s"
