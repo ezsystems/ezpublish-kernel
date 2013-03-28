@@ -741,6 +741,14 @@ class LocationService implements LocationServiceInterface
             }
         }
 
+        if ( strpos( $newParentLocation->pathString, $location->pathString ) === 0 )
+        {
+            throw new InvalidArgumentException(
+                "\$newParentLocation",
+                "new parent location is a subtree of the given \$location"
+            );
+        }
+
         $this->repository->beginTransaction();
         try
         {
