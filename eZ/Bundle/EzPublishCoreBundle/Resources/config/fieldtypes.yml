@@ -32,6 +32,7 @@ parameters:
     ezpublish.fieldType.ezxmltext.converter.html5.class: eZ\Publish\Core\FieldType\XmlText\Converter\Html5
     ezpublish.fieldType.ezxmltext.converter.html5.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5.xsl
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5
+    ezpublish.fieldType.ezxmlText.converter.embedToHtml5.excludedAttributes: [view, node_id, object_id]
     ezpublish.fieldType.ezpage.class: eZ\Publish\Core\FieldType\Page\Type
     ezpublish.fieldType.ezpage.pageService.class: eZ\Bundle\EzPublishCoreBundle\FieldType\Page\PageService
     ezpublish.fieldType.ezpage.pageService.factory.class: eZ\Publish\Core\MVC\Symfony\FieldType\Page\PageServiceFactory
@@ -498,7 +499,10 @@ services:
 
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5:
         class: %ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class%
-        arguments: [@ezpublish.view_manager,@ezpublish.api.repository]
+        arguments:
+            - @ezpublish.view_manager
+            - @ezpublish.api.repository
+            - %ezpublish.fieldType.ezxmlText.converter.embedToHtml5.excludedAttributes%
 
     ezpublish.fieldType.ezpage:
         class: %ezpublish.fieldType.ezpage.class%
