@@ -29,7 +29,7 @@ class Type extends FieldType
             ),
             'maxStringLength' => array(
                 'type' => 'int',
-                'default' => null
+                'default' => false
             )
         )
     );
