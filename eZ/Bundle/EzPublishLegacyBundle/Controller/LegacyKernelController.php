@@ -42,11 +42,11 @@ class LegacyKernelController
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver     
      * @param mixed $legacyLayout
      */
-    public function __construct( \Closure $kernelClosure, EngineInterface $templateEngine, ConfigResolverInterface $configResolver, $legacyLayout )
+    public function __construct( \Closure $kernelClosure, EngineInterface $templateEngine, ConfigResolverInterface $configResolver )
     {
         $this->kernel = $kernelClosure();
         $this->templateEngine = $templateEngine;
-        $this->legacyLayout = $legacyLayout;
+        $this->legacyLayout = $configResolver->getParameter( 'module_default_layout', 'ezpublish_legacy' );
         $this->configResolver = $configResolver;
     }
 
