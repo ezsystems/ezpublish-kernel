@@ -58,7 +58,7 @@ class ImageProcessor extends BinaryInputProcessor
      *
      * @return mixed Post processed hash
      */
-    public function postProcessHash( $outgoingValueHash )
+    public function postProcessValueHash( $outgoingValueHash )
     {
         if ( !is_array( $outgoingValueHash ) )
         {
