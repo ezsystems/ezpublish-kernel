@@ -113,6 +113,7 @@ class Factory
                     'application/vnd.ez.api.FieldDefinitionUpdate'  => new Input\Parser\FieldDefinitionUpdate(
                         $urlHandler,
                         $this->repository->getContentTypeService(),
+                        $fieldTypeParser,
                         $parserTools
                     ),
                     'application/vnd.ez.api.PolicyCreate'           => new Input\Parser\PolicyCreate( $urlHandler, $this->repository->getRoleService(), $parserTools ),
