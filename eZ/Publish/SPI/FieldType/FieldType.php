@@ -11,7 +11,6 @@ namespace eZ\Publish\SPI\FieldType;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
-use \eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\SPI\FieldType\Event;
 
 /**
@@ -331,7 +330,7 @@ interface FieldType
      * Not intended for \eZ\Publish\API\Repository\Values\Content\Relation::COMMON type relations,
      * there is an API for handling those.
      *
-     * @param \eZ\Publish\Core\FieldType\Value $fieldValue
+     * @param mixed $fieldValue
      *
      * @return array Hash with relation type as key and array of destination content ids as value.
      *
@@ -350,5 +349,5 @@ interface FieldType
      *  )
      * </code>
      */
-    public function getRelations( BaseValue $fieldValue );
+    public function getRelations( $fieldValue );
 }
