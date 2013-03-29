@@ -503,7 +503,7 @@ services:
 
     ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5:
         class: %ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5.class%
-        arguments: [@ezpublish.api.repository]
+        arguments: [@ezpublish.api.repository, @?logger]
 
     ezpublish.fieldType.ezpage:
         class: %ezpublish.fieldType.ezpage.class%
