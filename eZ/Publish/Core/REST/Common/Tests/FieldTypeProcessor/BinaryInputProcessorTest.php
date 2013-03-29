@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
-use eZ\Publish\Core\REST\Server\Tests\BaseTest;
+use PHPUnit_Framework_TestCase;
 
-abstract class BinaryInputProcessorTest extends BaseTest
+abstract class BinaryInputProcessorTest extends PHPUnit_Framework_TestCase
 {
     private $tempDir;
 

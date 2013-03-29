@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
-use eZ\Publish\Core\REST\Server\Tests\BaseTest;
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor\RelationProcessor;
+use PHPUnit_Framework_TestCase;
 
-class RelationProcessorTest extends BaseTest
+class RelationProcessorTest extends PHPUnit_Framework_TestCase
 {
     protected $constants = array(
         "SELECTION_BROWSE",
