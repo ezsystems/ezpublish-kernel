@@ -18,17 +18,17 @@ class LogicalOr extends Compound
 {
     const NAME = 'logicalOr';
 
-    /**
-     * @inheritDoc
-     */
     public function match()
     {
-        foreach ( $this->matchersMap as $subMatcher )
+        foreach ( $this->config as $i => $rule )
         {
-            // It's a logical OR, so first matched => return configured siteaccess name
-            if ( $subMatcher->match() )
+            foreach ( $rule['matchers'] as $subMatcherClass => $matchingConfig )
             {
-                return $this->siteaccessName;
+                if ( $this->matchersMap[$i][$subMatcherClass]->match() )
+                {
+                    $this->subMatchers = $this->matchersMap[$i];
+                    return $rule['match'];
+                }
             }
         }
 

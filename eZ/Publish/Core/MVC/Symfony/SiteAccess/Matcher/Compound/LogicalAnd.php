@@ -18,20 +18,23 @@ class LogicalAnd extends Compound
 {
     const NAME = 'logicalAnd';
 
-    /**
-     * @inheritDoc
-     */
     public function match()
     {
-        foreach ( $this->matchersMap as $subMatcher )
+        foreach ( $this->config as $i => $rule )
         {
-            // All submatchers must match, so if only one doesn't, return false.
-            if ( $subMatcher->match() === false )
+            foreach ( $rule['matchers'] as $subMatcherClass => $matchingConfig )
             {
-                return false;
+                // If at least one sub matcher doesn't match, jump to the next rule set.
+                if ( $this->matchersMap[$i][$subMatcherClass]->match() === false )
+                {
+                    continue 2;
+                }
             }
+
+            $this->subMatchers = $this->matchersMap[$i];
+            return $rule['match'];
         }
 
-        return $this->siteaccessName;
+        return false;
     }
 }

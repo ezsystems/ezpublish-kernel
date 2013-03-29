@@ -33,13 +33,37 @@ class CompoundAndTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
+        return $this->buildMatcher();
+    }
+
+    /**
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound\LogicalAnd
+     */
+    private function buildMatcher()
+    {
         return new LogicalAnd(
             array(
-                'matchers'  => array(
-                    'Map\\URI' => array( 'eng' => true ),
-                    'Map\\Host' => array( 'fr.ezpublish.dev' => true )
+                array(
+                    'matchers'  => array(
+                        'Map\\URI' => array( 'eng' => true ),
+                        'Map\\Host' => array( 'fr.ezpublish.dev' => true )
+                    ),
+                    'match'     => 'fr_eng'
                 ),
-                'match'     => 'fr_eng'
+                array(
+                    'matchers'  => array(
+                        'Map\\URI' => array( 'fre' => true ),
+                        'Map\\Host' => array( 'us.ezpublish.dev' => true )
+                    ),
+                    'match'     => 'fr_us'
+                ),
+                array(
+                    'matchers'  => array(
+                        'Map\\URI' => array( 'de' => true ),
+                        'Map\\Host' => array( 'jp.ezpublish.dev' => true )
+                    ),
+                    'match'     => 'de_jp'
+                ),
             )
         );
     }
@@ -51,7 +75,8 @@ class CompoundAndTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetMatcherBuilder( Compound $compoundMatcher )
     {
-        $this->matcherBuilder
+        $this
+            ->matcherBuilder
             ->expects( $this->any() )
             ->method( 'buildMatcher' )
             ->will( $this->returnValue( $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\Matcher' ) ) );
@@ -67,16 +92,15 @@ class CompoundAndTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testConstruct
      * @dataProvider matchProvider
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound\LogicalAnd::match
      *
-     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound $compoundMatcher
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
      * @param $expectedMatch
      */
-    public function testMatch( SimplifiedRequest $request, $expectedMatch, Compound $compoundMatcher )
+    public function testMatch( SimplifiedRequest $request, $expectedMatch )
     {
+        $compoundMatcher = $this->buildMatcher();
         $compoundMatcher->setRequest( $request );
         $compoundMatcher->setMatcherBuilder( new MatcherBuilder() );
         $this->assertSame( $expectedMatch, $compoundMatcher->match() );
@@ -90,7 +114,9 @@ class CompoundAndTest extends \PHPUnit_Framework_TestCase
             array( SimplifiedRequest::fromUrl( 'http://fr.ezpublish.dev/fre' ), false ),
             array( SimplifiedRequest::fromUrl( 'http://fr.ezpublish.dev/' ), false ),
             array( SimplifiedRequest::fromUrl( 'http://us.ezpublish.dev/eng' ), false ),
+            array( SimplifiedRequest::fromUrl( 'http://us.ezpublish.dev/fre' ), 'fr_us' ),
             array( SimplifiedRequest::fromUrl( 'http://ezpublish.dev/fr' ), false ),
+            array( SimplifiedRequest::fromUrl( 'http://jp.ezpublish.dev/de' ), 'de_jp' ),
         );
     }
 }

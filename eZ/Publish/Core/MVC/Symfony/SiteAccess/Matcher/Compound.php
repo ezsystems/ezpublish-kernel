@@ -21,21 +21,19 @@ use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 abstract class Compound implements CompoundInterface, URILexer
 {
     /**
-     * @var array
+     * @var array Collection of rules using the Compound matcher.
      */
-    protected $matchersMapConfig;
+    protected $config;
 
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher[]
      */
-    protected $matchersMap;
+    protected $matchersMap = array();
 
     /**
-     * The siteaccess name to return if the Compound matcher matches.
-     *
-     * @var string
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher[]
      */
-    protected $siteaccessName;
+    protected $subMatchers = array();
 
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface
@@ -49,45 +47,30 @@ abstract class Compound implements CompoundInterface, URILexer
 
     public function __construct( array $config )
     {
-        $this->matchersMapConfig = $config['matchers'];
+        $this->config = $config;
         $this->matchersMap = array();
-        $this->siteaccessName = $config['match'];
     }
 
-    /**
-     * @inheritDoc
-     */
     public function setMatcherBuilder( MatcherBuilderInterface $matcherBuidler )
     {
         $this->matcherBuilder = $matcherBuidler;
-        foreach ( $this->matchersMapConfig as $matcherClass => $matchingConfig )
+        foreach ( $this->config as $i => $rule )
         {
-            $this->matchersMap[$matcherClass] = $matcherBuidler->buildMatcher( $matcherClass, $matchingConfig, $this->request );
+            foreach ( $rule['matchers'] as $matcherClass => $matchingConfig )
+            {
+                $this->matchersMap[$i][$matcherClass] = $matcherBuidler->buildMatcher( $matcherClass, $matchingConfig, $this->request );
+            }
         }
     }
 
-    /**
-     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher[]
-     */
-    public function getSubMatchers()
-    {
-        return $this->matchersMap;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function setRequest( SimplifiedRequest $request )
     {
         $this->request = $request;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function analyseURI( $uri )
     {
-        foreach ( $this->matchersMap as $matcher )
+        foreach ( $this->getSubMatchers() as $matcher )
         {
             if ( $matcher instanceof URILexer )
             {
@@ -98,12 +81,9 @@ abstract class Compound implements CompoundInterface, URILexer
         return $uri;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function analyseLink( $linkUri )
     {
-        foreach ( $this->matchersMap as $matcher )
+        foreach ( $this->getSubMatchers() as $matcher )
         {
             if ( $matcher instanceof URILexer )
             {
@@ -112,6 +92,16 @@ abstract class Compound implements CompoundInterface, URILexer
         }
 
         return $linkUri;
+    }
+
+    /**
+     * Returns all used sub-matchers.
+     *
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher[]
+     */
+    public function getSubMatchers()
+    {
+        return $this->subMatchers;
     }
 
     /**
@@ -127,7 +117,7 @@ abstract class Compound implements CompoundInterface, URILexer
            static::NAME . '(' .
            implode(
                ', ',
-               array_keys( $this->matchersMap )
+               array_keys( $this->getSubMatchers() )
            ) . ')';
     }
 }
