@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Server\Tests\FieldTypeProcessor;
+namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Server\Tests\BaseTest;
 
@@ -89,7 +89,7 @@ abstract class BinaryInputProcessorTest extends BaseTest
     /**
      * Returns the processor under test
      *
-     * @return \eZ\Publish\Core\REST\Server\FieldTypeProcessor\BinaryInputProcessor
+     * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryInputProcessor
      */
     abstract protected function getProcessor();
 }

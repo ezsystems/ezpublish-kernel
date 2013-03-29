@@ -4,7 +4,7 @@ namespace eZ\Bundle\EzPublishRestBundle\ApiLoader;
 use eZ\Publish\Core\REST\Server\Input;
 use eZ\Publish\Core\REST\Server\Output;
 use eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher;
-use eZ\Publish\Core\REST\Server\FieldTypeProcessor;
+use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 use eZ\Publish\Core\REST\Common;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use eZ\Publish\API\Repository\Repository;
