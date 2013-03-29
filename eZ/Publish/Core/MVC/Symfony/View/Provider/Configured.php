@@ -116,7 +116,9 @@ abstract class Configured
 
             if ( $hasMatched )
             {
-                return new ContentView( $configHash['template'] );
+                $contentView = new ContentView( $configHash['template'] );
+                $contentView->setConfigHash( $configHash + array( 'matcher' => $matcher ) );
+                return $contentView;
             }
         }
     }

@@ -29,6 +29,11 @@ class TwigContentViewLayoutDecorator implements ContentViewInterface
 
     protected $options;
 
+    /**
+     * @var array
+     */
+    protected $configHash;
+
     public function __construct( Twig_Environment $twig, array $options, ConfigResolverInterface $resolver )
     {
         $this->twig = $twig;
@@ -159,5 +164,29 @@ EOT;
     public function getParameter( $parameterName )
     {
         return $this->contentView->getParameter( $parameterName );
+    }
+
+    /**
+     * Injects the config hash that was used to match and generate the current view.
+     * Typically, the hash would have as keys:
+     *  - template : The template that has been matched
+     *  - match : The matching configuration, including the matcher "identifier" and what has been passed to it.
+     *  - matcher : The matcher object
+     *
+     * @param array $config
+     */
+    public function setConfigHash( array $config )
+    {
+        $this->configHash = $config;
+    }
+
+    /**
+     * Returns the config hash.
+     *
+     * @return array|null
+     */
+    public function getConfigHash()
+    {
+        return $this->configHash;
     }
 }
