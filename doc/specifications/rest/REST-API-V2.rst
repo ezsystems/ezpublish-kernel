@@ -8485,14 +8485,14 @@ FieldDefinition XML Schema
                   </xsd:documentation>
                 </xsd:annotation>
               </xsd:element>
-              <xsd:element name="fieldSettings" type="xsd:anyType">
+              <xsd:element name="fieldSettings" type="fieldSettingsType">
                 <xsd:annotation>
                   <xsd:documentation>
                     Settings of the field
                   </xsd:documentation>
                 </xsd:annotation>
               </xsd:element>
-              <xsd:element name="validatorConfiguration" type="xsd:anyType">
+              <xsd:element name="validatorConfiguration" type="validatorConfigurationType">
                 <xsd:annotation>
                   <xsd:documentation>
                     Validator configuration of the field
@@ -8601,14 +8601,14 @@ FieldDefinitionCreate XML Schema
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="fieldSettings" type="xsd:anyType">
+          <xsd:element name="fieldSettings" type="fieldSettingsType">
             <xsd:annotation>
               <xsd:documentation>
                 Settings of the field
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="validatorConfiguration" type="xsd:anyType">
+          <xsd:element name="validatorConfiguration" type="validatorConfigurationType">
             <xsd:annotation>
               <xsd:documentation>
                 Validator configuration of the field
@@ -8695,14 +8695,14 @@ FieldDefinitionUpdate XML Schema
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="fieldSettings" type="xsd:anyType">
+          <xsd:element name="fieldSettings" type="fieldSettingsType">
             <xsd:annotation>
               <xsd:documentation>
                 If set the settings of the field are changed
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="validatorConfiguration" type="xsd:anyType">
+          <xsd:element name="validatorConfiguration" type="validatorConfigurationType">
             <xsd:annotation>
               <xsd:documentation>
                 If set the validatorConfiguration of the field is changed
