@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\REST\Server\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
-abstract class BinaryInputProcessor implements FieldTypeProcessor
+abstract class BinaryInputProcessor extends FieldTypeProcessor
 {
     /**
      * @var string
@@ -39,7 +39,7 @@ abstract class BinaryInputProcessor implements FieldTypeProcessor
      *
      * @return array
      */
-    public function preProcessHash( $incomingValueHash )
+    public function preProcessValueHash( $incomingValueHash )
     {
         if ( isset( $incomingValueHash['data'] ) )
         {
