@@ -187,7 +187,14 @@ class Factory
                         'gallery' => 'image/jpeg',
                         'thumbnail' => 'image/png',
                     )
-                )
+                ),
+                'ezdatetime' => new FieldTypeProcessor\DateAndTimeProcessor(),
+                'ezdate' => new FieldTypeProcessor\DateProcessor(),
+                'ezmedia' => new FieldTypeProcessor\MediaProcessor(),
+                'ezobjectrelationlist' => new FieldTypeProcessor\RelationListProcessor(),
+                'ezobjectrelation' => new FieldTypeProcessor\RelationProcessor(),
+                'eztime' => new FieldTypeProcessor\TimeProcessor(),
+                'ezxmltext' => new FieldTypeProcessor\XmlTextProcessor(),
             )
         );
     }
