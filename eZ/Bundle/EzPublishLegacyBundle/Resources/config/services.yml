@@ -40,6 +40,9 @@ parameters:
     # Cache purging
     ezpublish_legacy.persistence_cache_purger.class: eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger
 
+    # Overriding base PageService for ezpage fieldtype.
+    ezpublish.fieldType.ezpage.pageService.class: eZ\Bundle\EzPublishLegacyBundle\FieldType\Page\PageService
+
 services:
     ezpublish_legacy.kernel:
         alias: ezpublish_legacy.kernel.lazy
@@ -80,7 +83,10 @@ services:
 
     ezpublish_legacy.controller:
         class: %ezpublish_legacy.controller.class%
-        arguments: [@ezpublish_legacy.kernel, @templating]
+        arguments: 
+            - @ezpublish_legacy.kernel
+            - @templating
+            - @ezpublish.config.resolver            
 
     ezpublish_legacy.treemenu.controller:
         class: %ezpublish_legacy.treemenu.controller.class%
@@ -94,7 +100,7 @@ services:
     ezpublish_legacy.setup.controller:
         class: %ezpublish_legacy.setup.controller.class%
         parent: ezpublish.controller.base
-        arguments: [@ezpublish_legacy.kernel, @ezpublish_legacy.config.resolver]
+        arguments: [@ezpublish_legacy.kernel, @ezpublish_legacy.config.resolver, @ezpublish_legacy.persistence_cache_purger]
 
     ezpublish_legacy.router:
         class: %ezpublish_legacy.router.class%
@@ -132,7 +138,7 @@ services:
 
     ezpublish_legacy.persistence_cache_purger:
         class: %ezpublish_legacy.persistence_cache_purger.class%
-        arguments: [@cache]
+        arguments: [@cache, @ezpublish.spi.persistence.cache.locationHandler, @logger]
 
     ezpublish_legacy.content_exception_handler:
         class: %ezpublish_legacy.content_exception_handler.class%

@@ -18,12 +18,6 @@ use Symfony\Component\Config\FileLocator;
 class EzPublishCoreExtension extends Extension
 {
     /**
-     * References to settings keys that were altered in order to work around https://jira.ez.no/browse/EZP-20107
-     * @var array
-     */
-    private $fixedUpKeys = array();
-
-    /**
      * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser[]
      */
     private $configParsers;
@@ -67,6 +61,7 @@ class EzPublishCoreExtension extends Extension
         $loader->load( 'default_settings.yml' );
         $this->registerSiteAccessConfiguration( $config, $container );
         $this->registerImageMagickConfiguration( $config, $container );
+        $this->registerPageConfiguration( $config, $container );
 
         // Routing
         $this->handleRouting( $container, $loader );
@@ -75,6 +70,7 @@ class EzPublishCoreExtension extends Extension
         $this->handleTemplating( $container, $loader );
         $this->handleSessionLoading( $container, $loader );
         $this->handleCache( $config, $container, $loader );
+        $this->handleLocale( $config, $container, $loader );
 
         // Map settings
         foreach ( $this->configParsers as $configParser )
@@ -142,6 +138,39 @@ class EzPublishCoreExtension extends Extension
         $container->setParameter( 'ezpublish.image.imagemagick.filters', $filters );
     }
 
+    private function registerPageConfiguration( array $config, ContainerBuilder $container )
+    {
+        if ( isset( $config['ezpage']['layouts'] ) )
+        {
+            $container->setParameter(
+                'ezpublish.ezpage.layouts',
+                $config['ezpage']['layouts'] + $container->getParameter( 'ezpublish.ezpage.layouts' )
+            );
+        }
+        if ( isset( $config['ezpage']['blocks'] ) )
+        {
+            $container->setParameter(
+                'ezpublish.ezpage.blocks',
+                $config['ezpage']['blocks'] + $container->getParameter( 'ezpublish.ezpage.blocks' )
+            );
+        }
+        if ( isset( $config['ezpage']['enabledLayouts'] ) )
+        {
+            $container->setParameter(
+                'ezpublish.ezpage.enabledLayouts',
+                $config['ezpage']['enabledLayouts'] + $container->getParameter( 'ezpublish.ezpage.enabledLayouts' )
+            );
+        }
+        if ( isset( $config['ezpage']['enabledBlocks'] ) )
+        {
+            $container->setParameter(
+                'ezpublish.ezpage.enabledBlocks',
+                $config['ezpage']['enabledBlocks'] + $container->getParameter( 'ezpublish.ezpage.enabledBlocks' )
+            );
+        }
+
+    }
+
     /**
      * Handle routing parameters
      *
@@ -164,6 +193,8 @@ class EzPublishCoreExtension extends Extension
     {
         // Public API services
         $loader->load( 'papi.yml' );
+        // IO Services
+        $loader->load( 'io.yml' );
         // Built-in field types
         $loader->load( 'fieldtypes.yml' );
         // Built-in storage engines
@@ -237,5 +268,21 @@ class EzPublishCoreExtension extends Extension
         {
             $container->setParameter( 'ezpublish.http_cache.purge_client.http_client.timeout', (int)$config['http_cache']['timeout'] );
         }
+    }
+
+    /**
+     * Handle locale parameters.
+     *
+     * @param array $config
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \Symfony\Component\DependencyInjection\Loader\FileLoader $loader
+     */
+    private function handleLocale( array $config, ContainerBuilder $container, FileLoader $loader )
+    {
+        $loader->load( 'locale.yml' );
+        $container->setParameter(
+            'ezpublish.locale.conversion_map',
+            $config['locale_conversion'] + $container->getParameter( 'ezpublish.locale.conversion_map' )
+        );
     }
 }

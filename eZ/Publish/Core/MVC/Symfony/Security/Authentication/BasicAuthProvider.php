@@ -54,7 +54,7 @@ class BasicAuthProvider extends UserAuthenticationProvider
         }
         catch ( NotFoundException $e )
         {
-            throw new AuthenticationException( 'Authentication to eZ Publish failed', null, $e->getCode(), $e );
+            throw new AuthenticationException( 'Authentication to eZ Publish failed', $e->getCode(), $e );
         }
     }
 

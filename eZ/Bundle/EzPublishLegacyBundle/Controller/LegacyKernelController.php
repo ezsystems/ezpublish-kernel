@@ -11,13 +11,7 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Templating\EngineInterface;
-use ezpModuleNotFound;
-use ezpModuleViewNotFound;
-use ezpModuleDisabled;
-use ezpModuleViewDisabled;
-use ezpAccessDenied;
-use ezpContentNotFoundException;
-use ezpLanguageNotFound;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 /**
  * Controller embedding legacy kernel.
@@ -32,15 +26,28 @@ class LegacyKernelController
     private $kernel;
 
     /**
+     * Template declaration to wrap legacy responses in a Twig pagelayout (optional)
+     * Either a template declaration string or null/false to use legacy pagelayout 
+     * Default is null.
+     * 
+     * @var mixed
+     */
+    private $legacyLayout;
+
+    /**
      * @todo Maybe following dependencies should be mutualized in an abstract controller
      *       Injection can be done through "parent service" feature for DIC : http://symfony.com/doc/master/components/dependency_injection/parentservices.html
      * @param \Closure $kernelClosure
      * @param \Symfony\Component\Templating\EngineInterface $templateEngine
+     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver     
+     * @param mixed $legacyLayout
      */
-    public function __construct( \Closure $kernelClosure, EngineInterface $templateEngine )
+    public function __construct( \Closure $kernelClosure, EngineInterface $templateEngine, ConfigResolverInterface $configResolver )
     {
         $this->kernel = $kernelClosure();
         $this->templateEngine = $templateEngine;
+        $this->legacyLayout = $configResolver->getParameter( 'module_default_layout', 'ezpublish_legacy' );
+        $this->configResolver = $configResolver;
     }
 
     /**
@@ -66,9 +73,21 @@ class LegacyKernelController
      */
     public function indexAction()
     {
+        $legacyMode = $this->configResolver->getParameter( 'legacy_mode' );
+
         $this->kernel->setUseExceptions( false );
         $result = $this->kernel->run();
         $this->kernel->setUseExceptions( true );
+
+        $moduleResult = $result->getAttribute( 'module_result' );
+
+        if ( isset( $this->legacyLayout ) && !$legacyMode )
+        {
+            return $this->render(
+                $this->legacyLayout,
+                array( 'module_result' => $moduleResult )
+            );
+        }
 
         return new Response(
             $result->getContent()

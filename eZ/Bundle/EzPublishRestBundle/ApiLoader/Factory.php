@@ -122,6 +122,7 @@ class Factory
                     'application/vnd.ez.api.ViewInput'              => new Input\Parser\ViewInput( $urlHandler ),
                     'application/vnd.ez.api.UrlWildcardCreate'      => new Input\Parser\URLWildcardCreate( $urlHandler, $parserTools ),
                     'application/vnd.ez.api.UrlAliasCreate'         => new Input\Parser\URLAliasCreate( $urlHandler, $parserTools ),
+                    'application/vnd.ez.api.SessionInput'           => new Input\Parser\SessionInput( $urlHandler, $parserTools ),
 
                     // internal Media-Types
                     'application/vnd.ez.api.internal.criterion.ContentId'              => new Input\Parser\Criterion\ContentId( $urlHandler ),
@@ -244,6 +245,7 @@ class Factory
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserRefList'                 => new Output\ValueObjectVisitor\UserRefList( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedUser'                 => new Output\ValueObjectVisitor\CreatedUser( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUser'                    => new Output\ValueObjectVisitor\RestUser( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserSession'                 => new Output\ValueObjectVisitor\UserSession( $urlHandler ),
 
             // ContentType
 
@@ -318,6 +320,8 @@ class Factory
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceCreated'             => new Output\ValueObjectVisitor\ResourceCreated( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\NoContent'                   => new Output\ValueObjectVisitor\NoContent( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Common\\Values\\Root'                        => new Output\ValueObjectVisitor\Root( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\SeeOther'                    => new Output\ValueObjectVisitor\SeeOther( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\Conflict'                    => new Output\ValueObjectVisitor\Conflict( $urlHandler, true ),
         );
 
         $jsonVisitor = new Common\Output\Visitor(

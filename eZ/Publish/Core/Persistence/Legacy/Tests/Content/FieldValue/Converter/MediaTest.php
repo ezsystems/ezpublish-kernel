@@ -19,7 +19,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Media as Med
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler;
+use eZ\Publish\Core\IO\Handler\InMemory as InMemoryIOHandler;
 use eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler;
 
 /**

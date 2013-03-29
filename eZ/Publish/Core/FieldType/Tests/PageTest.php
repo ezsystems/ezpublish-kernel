@@ -17,13 +17,13 @@ use eZ\Publish\Core\FieldType\Page\Parts\Page as Page;
  * @group fieldType
  * @group ezpage
  */
-class PageTest extends StandardizedFieldTypeTest
+class PageTest extends FieldTypeTest
 {
     /**
       * Page service mock.
       *
       * @see getPageServiceMock()
-      * @var \eZ\Publish\Core\FieldType\Page\Service
+      * @var \eZ\Publish\Core\FieldType\Page\PageService
       */
     private $pageServiceMock;
 
@@ -31,13 +31,10 @@ class PageTest extends StandardizedFieldTypeTest
     {
         if ( !isset( $this->pageServiceMock ) )
         {
-            $this->pageServiceMock = $this->getMock(
-                'eZ\\Publish\\Core\\FieldType\\Page\\Service',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->pageServiceMock = $this
+                ->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\Page\\PageService' )
+                ->disableOriginalConstructor()
+                ->getMock();
         }
         return $this->pageServiceMock;
     }
@@ -169,8 +166,8 @@ class PageTest extends StandardizedFieldTypeTest
                 new PageValue()
             ),
             array(
-                new PageValue( new Page( $this->getPageServiceMock() ) ),
-                new PageValue( new Page( $this->getPageServiceMock() ) )
+                new PageValue( new Page() ),
+                new PageValue( new Page() )
             )
         );
     }
@@ -218,8 +215,8 @@ class PageTest extends StandardizedFieldTypeTest
                 null
             ),
             array(
-                new PageValue( new Page( $this->getPageServiceMock() ) ),
-                serialize( new Page( $this->getPageServiceMock() ) ),
+                new PageValue( new Page() ),
+                serialize( new Page() ),
             )
         );
     }
@@ -267,8 +264,8 @@ class PageTest extends StandardizedFieldTypeTest
                 null
             ),
             array(
-                serialize( new Page( $this->getPageServiceMock() ) ),
-                new PageValue( new Page( $this->getPageServiceMock() ) )
+                serialize( new Page() ),
+                new PageValue( new Page() )
             )
         );
     }

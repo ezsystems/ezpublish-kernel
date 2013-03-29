@@ -11,9 +11,7 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 
 use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
 use eZ\Publish\Core\MVC\Legacy\Kernel\Loader;
-use ezpKernelTreeMenu;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LegacyTreeMenuController extends Controller
 {

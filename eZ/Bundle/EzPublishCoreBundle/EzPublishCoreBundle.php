@@ -15,8 +15,10 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterLimitatio
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainConfigResolverPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LocalePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ContentViewPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LocationViewPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\BlockViewPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser as ConfigParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\Factory as EzPublishSecurityFactory;
@@ -35,8 +37,10 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new RegisterLimitationTypePass );
         $container->addCompilerPass( new RegisterStorageEnginePass );
         $container->addCompilerPass( new LegacyStorageEnginePass );
+        $container->addCompilerPass( new LocalePass );
         $container->addCompilerPass( new ContentViewPass );
         $container->addCompilerPass( new LocationViewPass );
+        $container->addCompilerPass( new BlockViewPass );
 
         $securityExtension = $container->getExtension( 'security' );
         $securityExtension->addSecurityListenerFactory( new EzPublishSecurityFactory );
@@ -51,11 +55,13 @@ class EzPublishCoreBundle extends Bundle
                 array(
                     new ConfigParser\LocationView,
                     new ConfigParser\ContentView,
+                    new ConfigParser\BlockView,
                     new ConfigParser\Common,
                     new ConfigParser\Content,
                     new ConfigParser\FieldTemplates,
                     new ConfigParser\FieldDefinitionSettingsTemplates,
                     new ConfigParser\Image,
+                    new ConfigParser\Page
                 )
             );
         }

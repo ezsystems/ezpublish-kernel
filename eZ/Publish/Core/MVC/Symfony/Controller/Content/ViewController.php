@@ -33,34 +33,34 @@ class ViewController extends Controller
     /**
      * Build the response so that depending on settings it's cacheable
      *
-     * @param string $etag
-     * @param \DateTime $lastModified
+     * @param string|null $etag
+     * @param \DateTime|null $lastModified
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function buildResponse( $etag, DateTime $lastModified )
+    protected function buildResponse( $etag = null, DateTime $lastModified = null )
     {
         $request = $this->getRequest();
         $response = new Response();
         if ( $this->getParameter( 'content.view_cache' ) === true )
         {
             $response->setPublic();
-            $response->setEtag( $etag );
-
-            // If-None-Match is the request counterpart of Etag response header
-            // Making the response to vary against it ensures that an HTTP
-            // reverse proxy caches the different possible variations of the
-            // response as it can depend on user role for instance.
-            if ( $request->headers->has( 'If-None-Match' )
-                && $this->getParameter( 'content.ttl_cache' ) === true )
+            if ( $etag !== null )
             {
-                $response->setVary( 'If-None-Match' );
+                $response->setEtag( $etag );
+            }
+
+            if ( $this->getParameter( 'content.ttl_cache' ) === true )
+            {
                 $response->setSharedMaxAge(
                     $this->getParameter( 'content.default_ttl' )
                 );
             }
 
-            $response->setLastModified( $lastModified );
+            if ( $lastModified != null )
+            {
+                $response->setLastModified( $lastModified );
+            }
         }
         return $response;
     }
@@ -72,41 +72,29 @@ class ViewController extends Controller
      * @param int $locationId
      * @param string $viewType
      * @param boolean $layout
+     * @param array $params
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @throws \Exception
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewLocation( $locationId, $viewType, $layout = false )
+    public function viewLocation( $locationId, $viewType, $layout = false, array $params = array() )
     {
         if ( !$this->isGranted( new AuthorizationAttribute( 'content', 'read' ) ) )
             throw new AccessDeniedException();
 
         try
         {
-            // Assume that location is cached by the repository
+            $response = $this->buildResponse();
+
             $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
-            $contentInfo = $location->getContentInfo();
-
-            // @todo: Use a dedicated etag generator, generating a hash
-            // instead of plain text
-            $response = $this->buildResponse(
-                "ezpublish-location-$locationId-$contentInfo->currentVersionNo-$viewType-$layout",
-                $contentInfo->modificationDate
-            );
             $response->headers->set( 'X-Location-Id', $locationId );
-
-            if ( $response->isNotModified( $this->getRequest() ) )
-            {
-                return $response;
-            }
-
             $response->setContent(
                 $this->viewManager->renderLocation(
                     $location,
                     $viewType,
-                    array( 'noLayout' => !$layout )
+                    $params + array( 'noLayout' => !$layout )
                 )
             );
 
@@ -127,7 +115,8 @@ class ViewController extends Controller
             {
                 $response->setContent(
                     $this->viewManager->renderContentView(
-                        $event->getContentView()
+                        $event->getContentView(),
+                        $params
                     )
                 );
 
@@ -145,13 +134,14 @@ class ViewController extends Controller
      * @param int $contentId
      * @param string $viewType
      * @param boolean $layout
+     * @param array $params
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @throws \Exception
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewContent( $contentId, $viewType, $layout = false )
+    public function viewContent( $contentId, $viewType, $layout = false, array $params = array() )
     {
         if ( !$this->isGranted( new AuthorizationAttribute( 'content', 'read' ) ) )
             throw new AccessDeniedException();
@@ -176,7 +166,7 @@ class ViewController extends Controller
                 $this->viewManager->renderContent(
                     $content,
                     $viewType,
-                    array( 'noLayout' => !$layout )
+                    $params + array( 'noLayout' => !$layout )
                 )
             );
 
@@ -197,7 +187,8 @@ class ViewController extends Controller
             {
                 $response->setContent(
                     $this->viewManager->renderContentView(
-                        $event->getContentView()
+                        $event->getContentView(),
+                        $params
                     )
                 );
 

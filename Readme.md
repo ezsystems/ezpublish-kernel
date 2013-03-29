@@ -18,7 +18,7 @@ gui is for the time being still provided by Legacy Stack.
 The legacy integrations are done in many parts of the systems, making it possible to use both kernels in the same request,
 hence being able to do a smooth transition from existing 4.x installation to 5.x installation going forward.
 
-However for performance reasons we recommend trying to use either legacy with "legacy_mode" turned on or pure 5.x Stack
+However for performance reasons we recommend trying to use either legacy with "legacy\_mode" turned on or pure 5.x Stack
 on a siteaccess case by case basis. This will still make sure cache and other integrations work together (something that
 is not the case if you point Apache directly to eZ Publish Legacy), but will avoid duplicate lookups ("fallbacks").
 
@@ -42,9 +42,9 @@ These bundles are important parts of the eZ Publish 5.x kernel.
 * Legacy Bundle: Integrations with Legacy kernel, like fallbacks and code reuse across 5.x/Legacy Stack.
 * REST Bundle: Integration of REST API to 5.x (Symfony) Stack
 
-You can find these in [eZ/Bundle](/ezsystems/ezpublish-kernel/tree/master/eZ/Bundle/) and their lower level parts in:
-* [eZ/Publish/Core/REST](/ezsystems/ezpublish-kernel/tree/master/eZ/Publish/Core/REST/)  *The REST API implementation*
-* [eZ/Publish/Core/MVC](/ezsystems/ezpublish-kernel/tree/master/eZ/Publish/Core/MVC/)  *MVC implementation that integrate with Symfony and Legacy*
+You can find these in [eZ/Bundle](eZ/Bundle/) and their lower level parts in:
+* [eZ/Publish/Core/REST](eZ/Publish/Core/REST/)  *The REST API implementation*
+* [eZ/Publish/Core/MVC](eZ/Publish/Core/MVC/)  *MVC implementation that integrate with Symfony and Legacy*
 
 
 #### Public API
@@ -52,14 +52,14 @@ Public API currently provides access to the Content Repository of eZ Publish, ex
 (former Nodes), Sections, Content Types (former Content Classes), User Groups, Users and Roles.
 It also provides a new clear interface for plugging in custom field types (former Datatypes).
 
-Public API is built on top of a set of SPI's abstracting storage/file/* functionality.
+Public API is built on top of a set of SPI's abstracting storage/file/\* functionality.
 By using Public API your code will be forward compatible to future releases based on enhanced, more scalable and more
 performant storage engines. It is also fully backwards compatible by using the included "Legacy" storage engine, which
 stores data in the way legacy kernel is used to finding it.
 
 Important parts of this layer is:
-* [eZ/Publish/API](/ezsystems/ezpublish-kernel/tree/master/eZ/Publish/API/)  *Public API Interfaces*
-* [eZ/Publish/Core/Repository](/ezsystems/ezpublish-kernel/tree/master/eZ/Publish/Core/Repository/)  *Public API Repository implementation*
+* [eZ/Publish/API](eZ/Publish/API/)  *Public API Interfaces*
+* [eZ/Publish/Core/Repository](eZ/Publish/Core/Repository/)  *Public API Repository implementation*
 
 #### (Private) SPI(Service Provider Interface)
 
@@ -72,16 +72,16 @@ have a fully working NoSQL implementation of Persistence and scalable IO storage
 Meaning you can make your own implementation if you want, but we don't guarantee that it will work across versions.
 
 Currently SPI consists of:
-* [eZ/Publish/SPI](/ezsystems/ezpublish-kernel/tree/master/eZ/Publish/SPI/)  *Service provider interfaces*
-* [eZ/Publish/Core/Persistence/Legacy](/ezsystems/ezpublish-kernel/tree/master/eZ/Publish/Core/Persistence/Legacy/)  *Legacy Storage-Engine (Persistence-handler)*
-* [eZ/Publish/Core/Persistence/InMemory](/ezsystems/ezpublish-kernel/tree/master/eZ/Publish/Core/Persistence/InMemory/)  *InMemory Storage-Engine (for unit testing)*
-* [eZ/Publish/Core/IO](/ezsystems/ezpublish-kernel/tree/master/eZ/Publish/Core/IO/)  *IO (file) Handlers; Legacy, Dispatcher and InMemory (for unit testing)*
+* [eZ/Publish/SPI](eZ/Publish/SPI/)  *Service provider interfaces*
+* [eZ/Publish/Core/Persistence/Legacy](eZ/Publish/Core/Persistence/Legacy/)  *Legacy Storage-Engine (Persistence-handler)*
+* [eZ/Publish/Core/Persistence/InMemory](eZ/Publish/Core/Persistence/InMemory/)  *InMemory Storage-Engine (for unit testing)*
+* [eZ/Publish/Core/IO](eZ/Publish/Core/IO/)  *IO (file) Handlers; Legacy, Dispatcher and InMemory (for unit testing)*
 
 
 ## Dependencies
 * **Composer**: Just run `curl -s http://getcomposer.org/installer | php` to get **composer.phar**
 * **PHPUnit 3.6+**
-* **PHP 5 Modules**: php5_sqlite
+* **PHP 5 Modules**: php5\_sqlite
 * **Database**: sqlite3 if not installed by above stage
 
 ## How to run tests
@@ -101,7 +101,7 @@ eZ Publish 5.x is a fully open source, community-driven project, and code contri
 Short:
 * Remember to first create a issue in our issue tracker and refer to it in commits and pull requests headers, example:
   "Fixed EZP-20104: ContentController should return error status when content is not found"
-* If you want to contribute implementation specification proposals, place them in [doc/](/ezsystems/ezpublish-kernel/tree/master/doc/) folder.
+* If you want to contribute implementation specification proposals, place them in [doc/](doc/) folder.
 * Keep different changes in different commits in case cherry-pick is preferred instead of a merge later.
   * A Pull Request should only cover one issue
   * A commit should not contain code changes at the some time as doing coding standards/whitespace/typo fixes

@@ -163,17 +163,6 @@ interface Repository
     public function getObjectStateService();
 
     /**
-     * Get IO Service
-     *
-     * Get service object to perform operations on binary files
-     *
-     * @deprecated Will be removed in the future!
-     *
-     * @return \eZ\Publish\API\Repository\IOService
-     */
-    public function getIOService();
-
-    /**
      * Get RoleService
      *
      * @return \eZ\Publish\API\Repository\RoleService

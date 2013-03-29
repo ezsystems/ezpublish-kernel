@@ -1005,6 +1005,19 @@ ezpublish_rest_unassignRoleFromUserGroup:
         groupId: "[0-9/]+"
         roleId: \d+
 
+ezpublish_rest_createSession:
+    path: /user/sessions
+    defaults:
+        _controller: ezpublish_rest.controller.user:createSession
+    methods: [POST]
+
+ezpublish_rest_deleteSession:
+    path: /user/sessions/{sessionId}
+    defaults:
+        _controller: ezpublish_rest.controller.user:deleteSession
+    methods: [DELETE]
+
+
 
 # URL aliases
 

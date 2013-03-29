@@ -109,7 +109,7 @@ class RepositoryTest extends BaseServiceMockTest
         foreach ( $roleAssignments as $at => $roleAssignment )
         {
             $userHandlerMock
-                ->expects( $this->at( $at +1 ) )
+                ->expects( $this->at( $at + 1 ) )
                 ->method( "loadRole" )
                 ->with( $roleAssignment->roleId )
                 ->will( $this->returnValue( $roles[$roleAssignment->roleId] ) );
@@ -182,7 +182,7 @@ class RepositoryTest extends BaseServiceMockTest
         foreach ( $roleAssignments as $at => $roleAssignment )
         {
             $userHandlerMock
-                ->expects( $this->at( $at +1 ) )
+                ->expects( $this->at( $at + 1 ) )
                 ->method( "loadRole" )
                 ->with( $roleAssignment->roleId )
                 ->will( $this->returnValue( $roles[$roleAssignment->roleId] ) );
@@ -238,7 +238,6 @@ class RepositoryTest extends BaseServiceMockTest
             array( "getRoleService", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
-                $this->getIOMock(),
             )
         );
 
@@ -260,7 +259,7 @@ class RepositoryTest extends BaseServiceMockTest
         foreach ( $roleAssignments as $at => $roleAssignment )
         {
             $userHandlerMock
-                ->expects( $this->at( $at +1 ) )
+                ->expects( $this->at( $at + 1 ) )
                 ->method( "loadRole" )
                 ->with( $roleAssignment->roleId )
                 ->will( $this->returnValue( $roles[$roleAssignment->roleId] ) );
@@ -346,7 +345,6 @@ class RepositoryTest extends BaseServiceMockTest
             array( "getRoleService", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
-                $this->getIOMock(),
             )
         );
         $roleServiceMock = $this->getMock(
@@ -375,7 +373,7 @@ class RepositoryTest extends BaseServiceMockTest
         foreach ( $roleAssignments as $at => $roleAssignment )
         {
             $userHandlerMock
-                ->expects( $this->at( $at +1 ) )
+                ->expects( $this->at( $at + 1 ) )
                 ->method( "loadRole" )
                 ->with( $roleAssignment->roleId )
                 ->will( $this->returnValue( $roles[$roleAssignment->roleId] ) );
@@ -441,10 +439,12 @@ class RepositoryTest extends BaseServiceMockTest
             );
         }
 
-        return new Role( array(
-            "id" => $roleId,
-            "policies" => $policies
-        ) );
+        return new Role(
+            array(
+                "id" => $roleId,
+                "policies" => $policies
+            )
+        );
     }
 
     public function providerForTestCanUserSimple()
@@ -471,7 +471,6 @@ class RepositoryTest extends BaseServiceMockTest
             array( "hasAccess", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
-                $this->getIOMock(),
             )
         );
 
@@ -505,7 +504,6 @@ class RepositoryTest extends BaseServiceMockTest
             array( "hasAccess", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
-                $this->getIOMock(),
             )
         );
 
@@ -803,7 +801,6 @@ class RepositoryTest extends BaseServiceMockTest
             array( "getUserService" ),
             array(
                 $this->getPersistenceMock(),
-                $this->getIOMock(),
             )
         );
 

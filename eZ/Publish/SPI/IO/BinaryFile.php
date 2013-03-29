@@ -18,13 +18,6 @@ namespace eZ\Publish\SPI\IO;
 class BinaryFile
 {
     /**
-     * Relative path to the file
-     *
-     * @var string
-     */
-    public $path;
-
-    /**
      * File size, in bytes
      *
      * @var int
@@ -39,20 +32,6 @@ class BinaryFile
     public $mtime;
 
     /**
-     * File creation time
-     *
-     * @var \DateTime
-     */
-    public $ctime;
-
-    /**
-     * File mime type (aka contentType, like image/jpeg, audio/mp3, etc)
-     *
-     * @var string
-     */
-    public $mimeType;
-
-    /**
      * HTTP URI to the binary file
      *
      * @var string
@@ -60,9 +39,10 @@ class BinaryFile
     public $uri;
 
     /**
-     * Original file name
-     *
+     * The file's mime type
+     * If not provided, will be auto-detected by the IOService
+     * Example: text/xml
      * @var string
      */
-    public $originalFile;
+    public $mimeType;
 }

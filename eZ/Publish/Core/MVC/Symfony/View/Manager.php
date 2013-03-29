@@ -9,22 +9,23 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View;
 
+use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Content as ContentViewProvider;
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProvider;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Block as BlockViewProvider;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
 use eZ\Publish\API\Repository\Repository;
 use Symfony\Component\Templating\EngineInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use RuntimeException;
 
-class Manager
+class Manager implements ViewManagerInterface
 {
-    const VIEW_TYPE_FULL = 'full',
-          VIEW_TYPE_LINE = 'line';
-
     /**
      * @var \Symfony\Component\Templating\EngineInterface
      */
@@ -50,6 +51,13 @@ class Manager
     protected $locationViewProviders = array();
 
     /**
+     * @var array Array indexed by priority.
+     *            Each priority key is an array of Block View Provider objects having this priority.
+     *            The highest priority number is the highest priority
+     */
+    protected $blockViewProviders = array();
+
+    /**
      * @var \eZ\Publish\Core\MVC\Symfony\View\Provider\Content[]
      */
     protected $sortedContentViewProviders;
@@ -58,6 +66,11 @@ class Manager
      * @var \eZ\Publish\Core\MVC\Symfony\View\Provider\Location[]
      */
     protected $sortedLocationViewProviders;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\View\Provider\Block[]
+     */
+    protected $sortedBlockViewProviders;
 
     /**
      * @var \eZ\Publish\API\Repository\Repository
@@ -126,6 +139,18 @@ class Manager
     }
 
     /**
+     * Registers $viewProvider as a valid location view provider.
+     * When this view provider will be called in the chain depends on $priority. The highest $priority is, the earliest the router will be called.
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\View\Provider\Block $viewProvider
+     * @param int $priority
+     */
+    public function addBlockViewProvider( BlockViewProvider $viewProvider, $priority = 0 )
+    {
+        $this->addViewProvider( $this->blockViewProviders, $viewProvider, $priority );
+    }
+
+    /**
      * @return \eZ\Publish\Core\MVC\Symfony\View\Provider\Content[]
      */
     public function getAllContentViewProviders()
@@ -148,10 +173,22 @@ class Manager
     }
 
     /**
+     * @return \eZ\Publish\Core\MVC\Symfony\View\Provider\Block[]
+     */
+    public function getAllBlockViewProviders()
+    {
+        if ( empty( $this->sortedBlockViewProviders ) )
+            $this->sortedBlockViewProviders = $this->sortViewProviders( $this->blockViewProviders );
+
+        return $this->sortedBlockViewProviders;
+    }
+
+    /**
      * Sort the registered view providers by priority.
      * The highest priority number is the highest priority (reverse sorting)
      *
-     * @return \eZ\Publish\Core\MVC\Symfony\View\Provider\Content[]|\eZ\Publish\Core\MVC\Symfony\View\Provider\Location[]
+     * @param array $property view providers to sort
+     * @return \eZ\Publish\Core\MVC\Symfony\View\Provider\Content[]|\eZ\Publish\Core\MVC\Symfony\View\Provider\Location[]|\eZ\Publish\Core\MVC\Symfony\View\Provider\Block[]
      */
     protected function sortViewProviders( $property )
     {
@@ -179,7 +216,7 @@ class Manager
      *
      * @return string
      */
-    public function renderContent( Content $content, $viewType = self::VIEW_TYPE_FULL, $parameters = array() )
+    public function renderContent( Content $content, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array() )
     {
         $contentInfo = $content->getVersionInfo()->getContentInfo();
         foreach ( $this->getAllContentViewProviders() as $viewProvider )
@@ -192,7 +229,7 @@ class Manager
             }
         }
 
-        throw new \RuntimeException( "Unable to find a template for #$contentInfo->id" );
+        throw new RuntimeException( "Unable to find a template for #$contentInfo->id" );
     }
 
     /**
@@ -209,7 +246,7 @@ class Manager
      *
      * @return string
      */
-    public function renderLocation( Location $location, $viewType = self::VIEW_TYPE_FULL, $parameters = array() )
+    public function renderLocation( Location $location, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array() )
     {
         foreach ( $this->getAllLocationViewProviders() as $viewProvider )
         {
@@ -222,7 +259,34 @@ class Manager
             }
         }
 
-        throw new \RuntimeException( "Unable to find a view for location #$location->id" );
+        throw new RuntimeException( "Unable to find a view for location #$location->id" );
+    }
+
+    /**
+     * Renders $block by selecting the right template.
+     * $block will be injected in the selected template.
+     *
+     * @param \eZ\Publish\Core\FieldType\Page\Parts\Block $block
+     * @param array $parameters Parameters to pass to the template called to
+     *        render the view. By default, it's empty.
+     *        'block' entry is reserved for the Block that is viewed.
+     * @throws \RuntimeException
+     *
+     * @return string
+     */
+    public function renderBlock( Block $block, $parameters = array() )
+    {
+        foreach ( $this->getAllBlockViewProviders() as $viewProvider )
+        {
+            $view = $viewProvider->getView( $block );
+            if ( $view instanceof ContentViewInterface )
+            {
+                $parameters['block'] = $block;
+                return $this->renderContentView( $view, $parameters );
+            }
+        }
+
+        throw new RuntimeException( "Unable to find a view for location #$block->id" );
     }
 
     /**
