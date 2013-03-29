@@ -71,7 +71,7 @@ class EzLinkToHtml5 implements Converter
                 {
                     if ( $this->logger )
                     {
-                        $this->logger->info(
+                        $this->logger->warning(
                             "While generating links for xmltext, could not locate " .
                             "Content object with ID " . $link->getAttribute( 'object_id' )
                         );
@@ -81,7 +81,7 @@ class EzLinkToHtml5 implements Converter
                 {
                     if ( $this->logger )
                     {
-                        $this->logger->debug(
+                        $this->logger->notice(
                             "While generating links for xmltext, unauthorized to load " .
                             "Content object with ID " . $link->getAttribute( 'object_id' )
                         );
@@ -99,7 +99,7 @@ class EzLinkToHtml5 implements Converter
                 {
                     if ( $this->logger )
                     {
-                        $this->logger->info(
+                        $this->logger->warning(
                             "While generating links for xmltext, could not locate " .
                             "Location with ID " . $link->getAttribute( 'node_id' )
                         );
@@ -109,7 +109,7 @@ class EzLinkToHtml5 implements Converter
                 {
                     if ( $this->logger )
                     {
-                        $this->logger->debug(
+                        $this->logger->notice(
                             "While generating links for xmltext, unauthorized to load " .
                             "Location with ID " . $link->getAttribute( 'node_id' )
                         );
