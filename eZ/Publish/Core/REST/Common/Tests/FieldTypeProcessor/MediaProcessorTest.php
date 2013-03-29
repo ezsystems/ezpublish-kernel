@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
-use eZ\Publish\Core\REST\Server\Tests\BaseTest;
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor\MediaProcessor;
+use PHPUnit_Framework_TestCase;
 
-class MediaProcessorTest extends BaseTest
+class MediaProcessorTest extends PHPUnit_Framework_TestCase
 {
     protected $constants = array(
         "TYPE_FLASH",

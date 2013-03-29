@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
-use eZ\Publish\Core\REST\Server\Tests\BaseTest;
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor\XmlTextProcessor;
+use PHPUnit_Framework_TestCase;
 
-class XmlTextProcessorTest extends BaseTest
+class XmlTextProcessorTest extends PHPUnit_Framework_TestCase
 {
     protected $constants = array(
         "TAG_PRESET_DEFAULT",
