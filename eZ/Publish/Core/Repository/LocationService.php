@@ -14,7 +14,6 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\Content\Location;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
@@ -700,17 +699,15 @@ class LocationService implements LocationServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to move this location to the target
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user does not have read access to the whole source subtree
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the new parent is in a subtree of the location
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
      */
     public function moveSubtree( APILocation $location, APILocation $newParentLocation )
     {
-        if ( !is_numeric( $location->id ) )
-            throw new InvalidArgumentValue( "id", $location->id, "Location" );
-
-        if ( !is_numeric( $newParentLocation->id ) )
-            throw new InvalidArgumentValue( "id", $newParentLocation->id, "Location" );
+        $location = $this->loadLocation( $location->id );
+        $newParentLocation = $this->loadLocation( $newParentLocation->id );
 
         // check create permission on target location
         if ( !$this->repository->canUser( 'content', 'create', $location->getContentInfo(), $newParentLocation ) )
@@ -741,6 +738,14 @@ class LocationService implements LocationServiceInterface
             {
                 throw new UnauthorizedException( 'content', 'read' );
             }
+        }
+
+        if ( strpos( $newParentLocation->pathString, $location->pathString ) === 0 )
+        {
+            throw new InvalidArgumentException(
+                "\$newParentLocation",
+                "new parent location is in a subtree of the given \$location"
+            );
         }
 
         $this->repository->beginTransaction();
