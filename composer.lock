@@ -516,12 +516,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony-cmf/Routing.git",
-                "reference": "1.0.0-beta1"
+                "reference": "1.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony-cmf/Routing/zipball/1.0.0-beta1",
-                "reference": "1.0.0-beta1",
+                "url": "https://api.github.com/repos/symfony-cmf/Routing/zipball/1.0.0",
+                "reference": "1.0.0",
                 "shasum": ""
             },
             "require": {
@@ -556,7 +556,7 @@
                 "database",
                 "routing"
             ],
-            "time": "2013-03-18 08:20:28"
+            "time": "2013-03-25 15:02:40"
         },
         {
             "name": "symfony/symfony",
