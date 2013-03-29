@@ -593,6 +593,8 @@ class ContentType extends RestController
             new Message(
                 array(
                     'Content-Type' => $this->request->contentType,
+                    // @todo Needs refactoring! Temporary solution so parser has access to URL
+                    'Url' => $this->request->path
                 ),
                 $this->request->body
             )
