@@ -13,7 +13,7 @@ use eZ\Publish\Core\REST\Server\FieldTypeProcessor\ImageProcessor;
 
 class ImageProcessorTest extends BinaryInputProcessorTest
 {
-    public function testPostProcessHash()
+    public function testPostProcessValueHash()
     {
         $processor = $this->getProcessor();
 
@@ -21,7 +21,7 @@ class ImageProcessorTest extends BinaryInputProcessorTest
             'path' => 'var/some_site/223-1-eng-US/Cool-File.jpg',
         );
 
-        $outputHash = $processor->postProcessHash( $inputHash );
+        $outputHash = $processor->postProcessValueHash( $inputHash );
 
         $this->assertEquals(
             array(
