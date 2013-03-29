@@ -369,7 +369,7 @@ abstract class FieldType implements FieldTypeInterface
      * Not intended for \eZ\Publish\API\Repository\Values\Content\Relation::COMMON type relations,
      * there is an API for handling those.
      *
-     * @param \eZ\Publish\Core\FieldType\Value $fieldValue
+     * @param mixed $fieldValue
      *
      * @return array Hash with relation type as key and array of destination content ids as value.
      *
@@ -388,7 +388,7 @@ abstract class FieldType implements FieldTypeInterface
      *  )
      * </code>
      */
-    public function getRelations( BaseValue $fieldValue )
+    public function getRelations( $fieldValue )
     {
         return array();
     }
