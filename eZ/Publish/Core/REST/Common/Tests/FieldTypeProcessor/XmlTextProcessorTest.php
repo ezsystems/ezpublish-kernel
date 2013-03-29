@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Server\Tests\FieldTypeProcessor;
+namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Server\Tests\BaseTest;
-use eZ\Publish\Core\REST\Server\FieldTypeProcessor\XmlTextProcessor;
+use eZ\Publish\Core\REST\Common\FieldTypeProcessor\XmlTextProcessor;
 
 class XmlTextProcessorTest extends BaseTest
 {
@@ -60,7 +60,7 @@ class XmlTextProcessorTest extends BaseTest
     }
 
     /**
-     * @return \eZ\Publish\Core\REST\Server\FieldTypeProcessor\XmlTextProcessor
+     * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\XmlTextProcessor
      */
     protected function getProcessor()
     {

@@ -1,22 +1,22 @@
 <?php
 /**
- * File containing the DateProcessorTest class
+ * File containing the RelationListProcessor class
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Server\Tests\FieldTypeProcessor;
+namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Server\Tests\BaseTest;
-use eZ\Publish\Core\REST\Server\FieldTypeProcessor\DateProcessor;
+use eZ\Publish\Core\REST\Common\FieldTypeProcessor\RelationListProcessor;
 
-class DateProcessorTest extends BaseTest
+class RelationListProcessorTest extends BaseTest
 {
     protected $constants = array(
-        "DEFAULT_EMPTY",
-        "DEFAULT_CURRENT_DATE"
+        "SELECTION_BROWSE",
+        "SELECTION_DROPDOWN"
     );
 
     public function fieldSettingsHashes()
@@ -25,8 +25,8 @@ class DateProcessorTest extends BaseTest
             function( $constantName )
             {
                 return array(
-                    array( "defaultType" => $constantName ),
-                    array( "defaultType" => constant( "eZ\\Publish\\Core\\FieldType\\Date\\Type::{$constantName}" ) )
+                    array( "selectionMethod" => $constantName ),
+                    array( "selectionMethod" => constant( "eZ\\Publish\\Core\\FieldType\\RelationList\\Type::{$constantName}" ) )
                 );
             },
             $this->constants
@@ -60,10 +60,10 @@ class DateProcessorTest extends BaseTest
     }
 
     /**
-     * @return \eZ\Publish\Core\REST\Server\FieldTypeProcessor\DateProcessor
+     * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\RelationListProcessor
      */
     protected function getProcessor()
     {
-        return new DateProcessor;
+        return new RelationListProcessor;
     }
 }
