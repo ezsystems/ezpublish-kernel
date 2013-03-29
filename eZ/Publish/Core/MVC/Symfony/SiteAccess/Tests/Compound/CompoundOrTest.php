@@ -33,13 +33,30 @@ class CompoundOrTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
+        return $this->buildMatcher();
+    }
+
+    /**
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound\LogicalOr
+     */
+    private function buildMatcher()
+    {
         return new LogicalOr(
             array(
-                'matchers'  => array(
-                    'Map\\URI' => array( 'eng' => true ),
-                    'Map\\Host' => array( 'fr.ezpublish.dev' => true )
+                array(
+                    'matchers'  => array(
+                        'Map\\URI' => array( 'eng' => true ),
+                        'Map\\Host' => array( 'fr.ezpublish.dev' => true )
+                    ),
+                    'match'     => 'fr_eng'
                 ),
-                'match'     => 'fr_eng'
+                array(
+                    'matchers'  => array(
+                        'Map\\URI' => array( 'fre' => true ),
+                        'Map\\Host' => array( 'jp.ezpublish.dev' => true )
+                    ),
+                    'match'     => 'fr_jp'
+                ),
             )
         );
     }
@@ -67,7 +84,6 @@ class CompoundOrTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testConstruct
      * @dataProvider matchProvider
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound\LogicalOr::match
      *
@@ -75,8 +91,9 @@ class CompoundOrTest extends \PHPUnit_Framework_TestCase
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
      * @param $expectedMatch
      */
-    public function testMatch( SimplifiedRequest $request, $expectedMatch, Compound $compoundMatcher )
+    public function testMatch( SimplifiedRequest $request, $expectedMatch )
     {
+        $compoundMatcher = $this->buildMatcher();
         $compoundMatcher->setRequest( $request );
         $compoundMatcher->setMatcherBuilder( new MatcherBuilder() );
         $this->assertSame( $expectedMatch, $compoundMatcher->match() );
@@ -90,7 +107,9 @@ class CompoundOrTest extends \PHPUnit_Framework_TestCase
             array( SimplifiedRequest::fromUrl( 'http://fr.ezpublish.dev/fre' ), 'fr_eng' ),
             array( SimplifiedRequest::fromUrl( 'http://fr.ezpublish.dev/' ), 'fr_eng' ),
             array( SimplifiedRequest::fromUrl( 'http://us.ezpublish.dev/eng' ), 'fr_eng' ),
-            array( SimplifiedRequest::fromUrl( 'http://us.ezpublish.dev/fre' ), false ),
+            array( SimplifiedRequest::fromUrl( 'http://us.ezpublish.dev/foo' ), false ),
+            array( SimplifiedRequest::fromUrl( 'http://us.ezpublish.dev/fre' ), 'fr_jp' ),
+            array( SimplifiedRequest::fromUrl( 'http://jp.ezpublish.dev/foo' ), 'fr_jp' ),
             array( SimplifiedRequest::fromUrl( 'http://ezpublish.dev/fr' ), false ),
         );
     }

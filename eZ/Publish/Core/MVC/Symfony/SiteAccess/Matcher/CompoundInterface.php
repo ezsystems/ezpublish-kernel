@@ -20,4 +20,11 @@ interface CompoundInterface extends Matcher
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface $matcherBuilder
      */
     public function setMatcherBuilder( MatcherBuilderInterface $matcherBuilder );
+
+    /**
+     * Returns all used sub-matchers.
+     *
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher[]
+     */
+    public function getSubMatchers();
 }
