@@ -713,6 +713,7 @@ class LocationServiceStub implements LocationService
      * he can do it regardless of an existing descendant on which the user has no permission.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to move this location to the target
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the new parent is in a subtree of the location
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
@@ -723,6 +724,8 @@ class LocationServiceStub implements LocationService
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
+
+        $this->checkLocationNotInTree( $location, $newParentLocation );
 
         $oldParentLocation = $this->loadLocation( $location->parentLocationId );
 
