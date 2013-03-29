@@ -109,7 +109,6 @@ class Configuration implements ConfigurationInterface
                                         }
                                     )
                                 ->end()
-                                ->useAttributeAsKey( 'key' )
                                 ->normalizeKeys( false )
                                 ->prototype( 'variable' )->end()
                             ->end()
