@@ -332,6 +332,9 @@ class LegacyStorage extends Gateway
     /**
      * Deletes all orphaned keywords.
      *
+     * @todo using two queries because zeta Database does not support joins in delete query.
+     * That could be avoided if the feature is implemented there.
+     *
      * Keyword is orphaned if it is not linked to a content attribute through ezkeyword_attribute_link table.
      *
      * @return void
