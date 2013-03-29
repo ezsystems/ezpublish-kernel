@@ -1,23 +1,23 @@
 <?php
 /**
- * File containing the TimeProcessorTest class
+ * File containing the DateAndTimeProcessorTest class
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Server\Tests\FieldTypeProcessor;
+namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Server\Tests\BaseTest;
-use eZ\Publish\Core\REST\Server\FieldTypeProcessor\TimeProcessor;
-use eZ\Publish\Core\FieldType\Time\Type;
+use eZ\Publish\Core\REST\Common\FieldTypeProcessor\DateAndTimeProcessor;
 
-class TimeProcessorTest extends BaseTest
+class DateAndTimeProcessorTest extends BaseTest
 {
     protected $constants = array(
         "DEFAULT_EMPTY",
-        "DEFAULT_CURRENT_TIME"
+        "DEFAULT_CURRENT_DATE",
+        "DEFAULT_CURRENT_DATE_ADJUSTED"
     );
 
     public function fieldSettingsHashes()
@@ -27,7 +27,7 @@ class TimeProcessorTest extends BaseTest
             {
                 return array(
                     array( "defaultType" => $constantName ),
-                    array( "defaultType" => constant( "eZ\\Publish\\Core\\FieldType\\Time\\Type::{$constantName}" ) )
+                    array( "defaultType" => constant( "eZ\\Publish\\Core\\FieldType\\DateAndTime\\Type::{$constantName}" ) )
                 );
             },
             $this->constants
@@ -61,10 +61,10 @@ class TimeProcessorTest extends BaseTest
     }
 
     /**
-     * @return \eZ\Publish\Core\REST\Server\FieldTypeProcessor\TimeProcessor
+     * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\DateAndTimeProcessor
      */
     protected function getProcessor()
     {
-        return new TimeProcessor;
+        return new DateAndTimeProcessor;
     }
 }

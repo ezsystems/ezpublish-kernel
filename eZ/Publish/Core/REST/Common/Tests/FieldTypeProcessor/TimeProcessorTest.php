@@ -1,27 +1,23 @@
 <?php
 /**
- * File containing the MediaProcessorTest class
+ * File containing the TimeProcessorTest class
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Server\Tests\FieldTypeProcessor;
+namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Server\Tests\BaseTest;
-use eZ\Publish\Core\REST\Server\FieldTypeProcessor\MediaProcessor;
+use eZ\Publish\Core\REST\Common\FieldTypeProcessor\TimeProcessor;
+use eZ\Publish\Core\FieldType\Time\Type;
 
-class MediaProcessorTest extends BaseTest
+class TimeProcessorTest extends BaseTest
 {
     protected $constants = array(
-        "TYPE_FLASH",
-        "TYPE_QUICKTIME",
-        "TYPE_REALPLAYER",
-        "TYPE_SILVERLIGHT",
-        "TYPE_WINDOWSMEDIA",
-        "TYPE_HTML5_VIDEO",
-        "TYPE_HTML5_AUDIO"
+        "DEFAULT_EMPTY",
+        "DEFAULT_CURRENT_TIME"
     );
 
     public function fieldSettingsHashes()
@@ -30,8 +26,8 @@ class MediaProcessorTest extends BaseTest
             function( $constantName )
             {
                 return array(
-                    array( "mediaType" => $constantName ),
-                    array( "mediaType" => constant( "eZ\\Publish\\Core\\FieldType\\Media\\Type::{$constantName}" ) )
+                    array( "defaultType" => $constantName ),
+                    array( "defaultType" => constant( "eZ\\Publish\\Core\\FieldType\\Time\\Type::{$constantName}" ) )
                 );
             },
             $this->constants
@@ -65,10 +61,10 @@ class MediaProcessorTest extends BaseTest
     }
 
     /**
-     * @return \eZ\Publish\Core\REST\Server\FieldTypeProcessor\DateAndTimeProcessor
+     * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\TimeProcessor
      */
     protected function getProcessor()
     {
-        return new MediaProcessor;
+        return new TimeProcessor;
     }
 }

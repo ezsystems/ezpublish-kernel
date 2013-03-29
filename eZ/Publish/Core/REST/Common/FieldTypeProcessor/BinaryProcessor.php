@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Server\FieldTypeProcessor;
+namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
 class BinaryProcessor extends BinaryInputProcessor
 {
