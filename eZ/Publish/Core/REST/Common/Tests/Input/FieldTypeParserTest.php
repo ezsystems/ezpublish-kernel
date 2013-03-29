@@ -220,7 +220,7 @@ class FieldTypeParserTest extends \PHPUnit_Framework_TestCase
             );
 
         $processor->expects( $this->once() )
-            ->method( 'preProcessHash' )
+            ->method( 'preProcessValueHash' )
             ->with( array( 1, 2, 3 ) )
             ->will( $this->returnValue( array( 4, 5, 6 ) ) );
 
