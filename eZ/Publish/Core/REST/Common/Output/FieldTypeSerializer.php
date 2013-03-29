@@ -90,11 +90,17 @@ class FieldTypeSerializer
      */
     public function serializeFieldSettings( Generator $generator, $fieldTypeIdentifier, $settings )
     {
-        $this->serializeHash(
-            'fieldSettings',
-            $generator,
-            $this->getFieldType( $fieldTypeIdentifier )->fieldSettingsToHash( $settings )
-        );
+        $fieldType = $this->fieldTypeService->getFieldType( $fieldTypeIdentifier );
+        $hash = $fieldType->fieldSettingsToHash( $settings );
+
+        $fieldTypeIdentifier = $fieldType->getFieldTypeIdentifier();
+        if ( $this->fieldTypeProcessorRegistry->hasProcessor( $fieldTypeIdentifier ) )
+        {
+            $processor = $this->fieldTypeProcessorRegistry->getProcessor( $fieldTypeIdentifier );
+            $hash = $processor->postProcessFieldSettingsHash( $hash );
+        }
+
+        $this->serializeHash( 'fieldSettings', $generator, $hash );
     }
 
     /**
@@ -106,11 +112,17 @@ class FieldTypeSerializer
      */
     public function serializeValidatorConfiguration( Generator $generator, $fieldTypeIdentifier, $validatorConfiguration )
     {
-        $this->serializeHash(
-            'validatorConfiguration',
-            $generator,
-            $this->getFieldType( $fieldTypeIdentifier )->validatorConfigurationToHash( $validatorConfiguration )
-        );
+        $fieldType = $this->fieldTypeService->getFieldType( $fieldTypeIdentifier );
+        $hash = $fieldType->validatorConfigurationToHash( $validatorConfiguration );
+
+        $fieldTypeIdentifier = $fieldType->getFieldTypeIdentifier();
+        if ( $this->fieldTypeProcessorRegistry->hasProcessor( $fieldTypeIdentifier ) )
+        {
+            $processor = $this->fieldTypeProcessorRegistry->getProcessor( $fieldTypeIdentifier );
+            $hash = $processor->postProcessValidatorConfigurationHash( $hash );
+        }
+
+        $this->serializeHash( 'validatorConfiguration', $generator, $hash );
     }
 
     /**
@@ -144,7 +156,7 @@ class FieldTypeSerializer
         if ( $this->fieldTypeProcessorRegistry->hasProcessor( $fieldTypeIdentifier ) )
         {
             $processor = $this->fieldTypeProcessorRegistry->getProcessor( $fieldTypeIdentifier );
-            $hash = $processor->postProcessHash( $hash );
+            $hash = $processor->postProcessValueHash( $hash );
         }
 
         $this->serializeHash( $elementName, $generator, $hash );

@@ -129,7 +129,7 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
                 )
             );
         $processorMock->expects( $this->once() )
-            ->method( 'postProcessHash' )
+            ->method( 'postProcessValueHash' )
             ->with( $this->equalTo( array( 23, 42 ) ) )
             ->will( $this->returnValue( array( 'post-processed' ) ) );
 
