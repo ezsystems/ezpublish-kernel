@@ -93,7 +93,6 @@ class FieldTypeSerializer
         $fieldType = $this->fieldTypeService->getFieldType( $fieldTypeIdentifier );
         $hash = $fieldType->fieldSettingsToHash( $settings );
 
-        $fieldTypeIdentifier = $fieldType->getFieldTypeIdentifier();
         if ( $this->fieldTypeProcessorRegistry->hasProcessor( $fieldTypeIdentifier ) )
         {
             $processor = $this->fieldTypeProcessorRegistry->getProcessor( $fieldTypeIdentifier );
@@ -115,7 +114,6 @@ class FieldTypeSerializer
         $fieldType = $this->fieldTypeService->getFieldType( $fieldTypeIdentifier );
         $hash = $fieldType->validatorConfigurationToHash( $validatorConfiguration );
 
-        $fieldTypeIdentifier = $fieldType->getFieldTypeIdentifier();
         if ( $this->fieldTypeProcessorRegistry->hasProcessor( $fieldTypeIdentifier ) )
         {
             $processor = $this->fieldTypeProcessorRegistry->getProcessor( $fieldTypeIdentifier );
