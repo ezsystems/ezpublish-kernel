@@ -357,6 +357,12 @@ class ConfigurationConverter
         return $variations;
     }
 
+    /**
+     * Returns the ImageMagick filter settings for the siteaccess
+     *
+     * @param string $defaultSiteaccess
+     * @return array
+     */
     protected function getImageMagickFilters( $defaultSiteaccess )
     {
         $filters = array();
