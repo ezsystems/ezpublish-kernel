@@ -1,5 +1,5 @@
 {
-    "hash": "b9336298f5939b77eaa86c326b26bd0f",
+    "hash": "f45f2c2a92f445d21ef41122e843f6b0",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -659,16 +659,16 @@
         },
         {
             "name": "tedivm/stash",
-            "version": "dev-filesystem_dir_creation",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/lolautruche/Stash.git",
-                "reference": "19436bda6bcc6e9c5df7ff4f52027d2f12cba8ea"
+                "url": "https://github.com/tedivm/Stash.git",
+                "reference": "7cbe1b212a0715acbbe407a93a67bb14e71de7a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lolautruche/Stash/zipball/19436bda6bcc6e9c5df7ff4f52027d2f12cba8ea",
-                "reference": "19436bda6bcc6e9c5df7ff4f52027d2f12cba8ea",
+                "url": "https://api.github.com/repos/tedivm/Stash/zipball/7cbe1b212a0715acbbe407a93a67bb14e71de7a7",
+                "reference": "7cbe1b212a0715acbbe407a93a67bb14e71de7a7",
                 "shasum": ""
             },
             "require": {
@@ -677,10 +677,10 @@
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "Stash": "src/",
-                    "Stash\\Test": "tests/"
+                    "Stash": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -702,10 +702,7 @@
                 "scalability",
                 "sessions"
             ],
-            "support": {
-                "source": "https://github.com/lolautruche/Stash/tree/filesystem_dir_creation"
-            },
-            "time": "2013-03-08 15:51:33"
+            "time": "2013-03-30 23:24:06"
         },
         {
             "name": "tedivm/stash-bundle",
@@ -714,19 +711,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lolautruche/TedivmStashBundle.git",
-                "reference": "3dbbcaddbb8e0ab780b57c5573552f4fc00faaca"
+                "reference": "60c2b8fdd343af9a2976709110edfa862945de34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lolautruche/TedivmStashBundle/zipball/3dbbcaddbb8e0ab780b57c5573552f4fc00faaca",
-                "reference": "3dbbcaddbb8e0ab780b57c5573552f4fc00faaca",
+                "url": "https://api.github.com/repos/lolautruche/TedivmStashBundle/zipball/60c2b8fdd343af9a2976709110edfa862945de34",
+                "reference": "60c2b8fdd343af9a2976709110edfa862945de34",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0",
                 "symfony/framework-bundle": ">=2.2,<3.0",
                 "symfony/yaml": ">=2.2,<3.0",
-                "tedivm/stash": "dev-filesystem_dir_creation"
+                "tedivm/stash": "dev-master#7cbe1b212a0715acbbe407a93a67bb14e71de7a7"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -757,7 +754,7 @@
             "support": {
                 "source": "https://github.com/lolautruche/TedivmStashBundle/tree/blackhole"
             },
-            "time": "2013-03-25 17:27:55"
+            "time": "2013-04-02 15:42:18"
         },
         {
             "name": "twig/twig",
