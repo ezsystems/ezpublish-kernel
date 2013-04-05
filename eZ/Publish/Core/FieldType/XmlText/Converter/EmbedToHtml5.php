@@ -62,20 +62,10 @@ class EmbedToHtml5 implements Converter
                 "objectParameters" => array()
             );
 
-            if ( $attribute = $embed->getAttribute( "size" ) )
-            {
-                $parameters["objectParameters"]["size"] = $attribute;
-            }
-
-            $customNS = "http://ez.no/namespaces/ezpublish3/custom/";
-
             foreach ( $embed->attributes as $attribute )
             {
                 // We only consider tags in the custom namespace, and skip disallowed names
-                if (
-                    $attribute->namespaceURI == $customNS &&
-                    !isset( $this->excludedAttributes[$attribute->localName] )
-                )
+                if ( !isset( $this->excludedAttributes[$attribute->localName] ) )
                 {
                     $parameters["objectParameters"][$attribute->localName] = $attribute->nodeValue;
                 }
