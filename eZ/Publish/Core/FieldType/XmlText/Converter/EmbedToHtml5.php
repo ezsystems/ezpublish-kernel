@@ -62,11 +62,6 @@ class EmbedToHtml5 implements Converter
                 "objectParameters" => array()
             );
 
-            if ( $attribute = $embed->getAttribute( "size" ) )
-            {
-                $parameters["objectParameters"]["size"] = $attribute;
-            }
-
             foreach ( $embed->attributes as $attribute )
             {
                 // We only consider tags in the custom namespace, and skip disallowed names
