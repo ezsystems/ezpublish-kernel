@@ -45,9 +45,9 @@ class PageServiceTest extends BaseTest
     }
 
     /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\Tests\FieldType\Page\PageService::getValidBlockItemsAsContent
+     * @covers \eZ\Bundle\EzPublishCoreBundle\FieldType\Page\PageService::getValidBlockItemsAsContentInfo
      */
-    public function testGetValidBlockItemsAsContent()
+    public function testGetValidBlockItemsAsContentInfo()
     {
         $this->pageService->setStorageGateway( $this->storageGateway );
         $this->pageService->setRepository( $this->repository );

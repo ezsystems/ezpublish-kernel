@@ -17,9 +17,10 @@ class ConfiguredTest extends BaseTest
     /**
      * @expectedException \InvalidArgumentException
      *
-     * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Configured::getMatcher
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Content\Configured::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Content\Configured::getView
      */
-    public function testGetViewWrongMatcher()
+    public function testGetViewLocationWrongMatcher()
     {
         $lvp = new LocationViewProvider(
             $this->getRepositoryMock(),
