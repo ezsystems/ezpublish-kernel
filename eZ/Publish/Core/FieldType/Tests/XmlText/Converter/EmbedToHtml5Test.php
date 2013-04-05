@@ -33,6 +33,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                 'embed',
                 array(
                     'objectParameters' => array(
+                        'align' => 'right',
                         'size' => 'medium',
                         'offset' => 3,
                         'limit' => 5,
@@ -48,6 +49,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                 'embed',
                 array(
                     'objectParameters' => array(
+                        'align' => 'right',
                         'size' => 'medium',
                         'offset' => 2,
                         'limit' => 7,
@@ -57,7 +59,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><embed align="right" class="itemized_sub_items" custom:limit="5" custom:funkyattrib="3" object_id="107" size="medium" view="embed"/></paragraph></section>',
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><embed class="itemized_sub_items" custom:limit="5" custom:funkyattrib="3" object_id="107" size="medium" view="embed"/></paragraph></section>',
                 107,
                 null,
                 'embed',
@@ -85,13 +87,14 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><embed align="right" custom:limit="5" custom:offset="0" object_id="113" size="large" view="embed"/></paragraph></section>',
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><embed align="left" custom:limit="5" custom:offset="0" object_id="113" size="large" view="embed"/></paragraph></section>',
                 113,
                 null,
                 'embed',
                 array(
                     'noLayout' => true,
                     'objectParameters' => array(
+                        'align' => 'left',
                         'size' => 'large',
                         'limit' => '5',
                         'offset' => '0',
@@ -116,6 +119,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                 array(
                     'noLayout' => true,
                     'objectParameters' => array(
+                        'align' => 'right',
                         'size' => 'medium',
                         'limit' => 5,
                         'offset' => 3,
