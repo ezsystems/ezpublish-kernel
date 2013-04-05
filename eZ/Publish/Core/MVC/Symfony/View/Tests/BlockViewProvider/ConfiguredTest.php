@@ -35,7 +35,8 @@ class ConfiguredTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      *
-     * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Configured::getMatcher
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Block\Configured::getView
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Block\Configured::getMatcher
      */
     public function testGetViewWrongMatcher()
     {
@@ -82,8 +83,8 @@ class ConfiguredTest extends \PHPUnit_Framework_TestCase
      * @param boolean $match
      *
      * @return void
-     * @covers eZ\Publish\Core\MVC\Symfony\View\Provider\Block\Configured::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\View\Provider\Block\Configured::getView
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Block\Configured::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Block\Configured::getView
      *
      * @dataProvider getViewBlockProvider
      */
@@ -173,7 +174,7 @@ class ConfiguredTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\MVC\Symfony\View\Provider\Location\Configured::match
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Block\Configured::match
      */
     public function testMatch()
     {
@@ -189,7 +190,7 @@ class ConfiguredTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\MVC\Symfony\View\Provider\Location\Configured::match
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Block\Configured::match
      * @expectedException \InvalidArgumentException
      */
     public function testMatchWrongValueObject()
