@@ -1,5 +1,5 @@
 {
-    "hash": "f45f2c2a92f445d21ef41122e843f6b0",
+    "hash": "69f73b85babac5f0c3dc4da76111c4ee",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -206,12 +206,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common.git",
-                "reference": "d7987c96675e153638729383577090feed9854f1"
+                "reference": "33f906e257510247d0bcd60b8b54f47cfb51e3ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/common/zipball/d7987c96675e153638729383577090feed9854f1",
-                "reference": "d7987c96675e153638729383577090feed9854f1",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/33f906e257510247d0bcd60b8b54f47cfb51e3ed",
+                "reference": "33f906e257510247d0bcd60b8b54f47cfb51e3ed",
                 "shasum": ""
             },
             "require": {
@@ -239,7 +239,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan H. Wage",
+                    "name": "Jonathan Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/"
                 },
@@ -257,9 +257,9 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -272,7 +272,7 @@
                 "persistence",
                 "spl"
             ],
-            "time": "2013-03-11 00:27:11"
+            "time": "2013-03-24 17:52:59"
         },
         {
             "name": "doctrine/inflector",
@@ -405,12 +405,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kriswallsmith/Buzz.git",
-                "reference": "e4310004bced0598b690fd648df9c0e97fa8f984"
+                "reference": "309e674e87bca0850bd0ec17226ff9beb86d7651"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kriswallsmith/Buzz/zipball/e4310004bced0598b690fd648df9c0e97fa8f984",
-                "reference": "e4310004bced0598b690fd648df9c0e97fa8f984",
+                "url": "https://api.github.com/repos/kriswallsmith/Buzz/zipball/309e674e87bca0850bd0ec17226ff9beb86d7651",
+                "reference": "309e674e87bca0850bd0ec17226ff9beb86d7651",
                 "shasum": ""
             },
             "require": {
@@ -445,7 +445,7 @@
                 "curl",
                 "http client"
             ],
-            "time": "2013-03-06 06:11:47"
+            "time": "2013-03-29 13:04:03"
         },
         {
             "name": "psr/log",
@@ -516,12 +516,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony-cmf/Routing.git",
-                "reference": "1.0.0"
+                "reference": "016914314b4d5d6fb567c1a0260ee049ad777d1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony-cmf/Routing/zipball/1.0.0",
-                "reference": "1.0.0",
+                "url": "https://api.github.com/repos/symfony-cmf/Routing/zipball/016914314b4d5d6fb567c1a0260ee049ad777d1b",
+                "reference": "016914314b4d5d6fb567c1a0260ee049ad777d1b",
                 "shasum": ""
             },
             "require": {
@@ -556,7 +556,7 @@
                 "database",
                 "routing"
             ],
-            "time": "2013-03-25 15:02:40"
+            "time": "2013-04-05 09:05:16"
         },
         {
             "name": "symfony/symfony",
@@ -659,16 +659,16 @@
         },
         {
             "name": "tedivm/stash",
-            "version": "dev-master",
+            "version": "v0.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tedivm/Stash.git",
-                "reference": "7cbe1b212a0715acbbe407a93a67bb14e71de7a7"
+                "reference": "v0.10.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tedivm/Stash/zipball/7cbe1b212a0715acbbe407a93a67bb14e71de7a7",
-                "reference": "7cbe1b212a0715acbbe407a93a67bb14e71de7a7",
+                "url": "https://api.github.com/repos/tedivm/Stash/zipball/v0.10.3",
+                "reference": "v0.10.3",
                 "shasum": ""
             },
             "require": {
@@ -705,69 +705,17 @@
             "time": "2013-03-30 23:24:06"
         },
         {
-            "name": "tedivm/stash-bundle",
-            "version": "dev-blackhole",
-            "target-dir": "Tedivm/StashBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/lolautruche/TedivmStashBundle.git",
-                "reference": "60c2b8fdd343af9a2976709110edfa862945de34"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/lolautruche/TedivmStashBundle/zipball/60c2b8fdd343af9a2976709110edfa862945de34",
-                "reference": "60c2b8fdd343af9a2976709110edfa862945de34",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0",
-                "symfony/framework-bundle": ">=2.2,<3.0",
-                "symfony/yaml": ">=2.2,<3.0",
-                "tedivm/stash": "dev-master#7cbe1b212a0715acbbe407a93a67bb14e71de7a7"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-0": {
-                    "Tedivm\\StashBundle": ""
-                }
-            },
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Josh Hall-Bachner",
-                    "email": "jhallbachner@gmail.com"
-                },
-                {
-                    "name": "Robert Hafner",
-                    "email": "tedivm@tedivm.com"
-                }
-            ],
-            "description": "Incorporates the Stash caching library into Symfony.",
-            "homepage": "http://github.com/tedivm/TedivmStashBundle",
-            "keywords": [
-                "caching",
-                "sessions",
-                "symfony"
-            ],
-            "support": {
-                "source": "https://github.com/lolautruche/TedivmStashBundle/tree/blackhole"
-            },
-            "time": "2013-04-02 15:42:18"
-        },
-        {
             "name": "twig/twig",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Twig.git",
-                "reference": "ba67e2cf8e2ca6cada1de5a316a724df648c52ac"
+                "reference": "399916916533589c95dc04e1afd4aeefa34928ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/ba67e2cf8e2ca6cada1de5a316a724df648c52ac",
-                "reference": "ba67e2cf8e2ca6cada1de5a316a724df648c52ac",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/399916916533589c95dc04e1afd4aeefa34928ad",
+                "reference": "399916916533589c95dc04e1afd4aeefa34928ad",
                 "shasum": ""
             },
             "require": {
@@ -803,7 +751,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2013-03-10 07:23:01"
+            "time": "2013-04-01 08:27:18"
         },
         {
             "name": "zetacomponents/archive",
@@ -2110,12 +2058,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezsystems/ezpublish-legacy.git",
-                "reference": "79f8697d2ca399aae6675bd7e8afc9299d94544c"
+                "reference": "456ab707c8a0e3d6c999a78a714135637efaf71c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezsystems/ezpublish-legacy/zipball/79f8697d2ca399aae6675bd7e8afc9299d94544c",
-                "reference": "79f8697d2ca399aae6675bd7e8afc9299d94544c",
+                "url": "https://api.github.com/repos/ezsystems/ezpublish-legacy/zipball/456ab707c8a0e3d6c999a78a714135637efaf71c",
+                "reference": "456ab707c8a0e3d6c999a78a714135637efaf71c",
                 "shasum": ""
             },
             "require": {
@@ -2125,7 +2073,7 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "eZ Publish LegacyStack (4.x)",
             "homepage": "http://share.ez.no",
-            "time": "2013-03-18 09:26:43"
+            "time": "2013-04-03 11:48:26"
         },
         {
             "name": "mikey179/vfsStream",
@@ -2180,7 +2128,6 @@
         "zetacomponents/signal-slot": 20,
         "zetacomponents/system-information": 20,
         "kriswallsmith/buzz": 20,
-        "tedivm/stash-bundle": 20,
         "ezsystems/ezpublish-legacy": 20
     },
     "platform": {
