@@ -1,5 +1,5 @@
 {
-    "hash": "c61ed0fb53ab62dadd45eded1aa9e363",
+    "hash": "f1d120f389cd8b3c0493a4e38f02c41f",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -703,6 +703,56 @@
                 "sessions"
             ],
             "time": "2013-03-30 23:24:06"
+        },
+        {
+            "name": "tedivm/stash-bundle",
+            "version": "dev-master",
+            "target-dir": "Tedivm/StashBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tedivm/TedivmStashBundle.git",
+                "reference": "19325338534431eeb1d214a6953688941d726418"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tedivm/TedivmStashBundle/zipball/19325338534431eeb1d214a6953688941d726418",
+                "reference": "19325338534431eeb1d214a6953688941d726418",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "symfony/framework-bundle": ">=2.2,<3.0",
+                "symfony/yaml": ">=2.2,<3.0",
+                "tedivm/stash": "0.10.*"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Tedivm\\StashBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Robert Hafner",
+                    "email": "tedivm@tedivm.com"
+                },
+                {
+                    "name": "Josh Hall-Bachner",
+                    "email": "jhallbachner@gmail.com"
+                }
+            ],
+            "description": "Incorporates the Stash caching library into Symfony.",
+            "homepage": "http://github.com/tedivm/TedivmStashBundle",
+            "keywords": [
+                "caching",
+                "sessions",
+                "symfony"
+            ],
+            "time": "2013-03-30 23:19:43"
         },
         {
             "name": "twig/twig",
@@ -2128,6 +2178,7 @@
         "zetacomponents/signal-slot": 20,
         "zetacomponents/system-information": 20,
         "kriswallsmith/buzz": 20,
+        "tedivm/stash-bundle": 20,
         "ezsystems/ezpublish-legacy": 20
     },
     "platform": {
