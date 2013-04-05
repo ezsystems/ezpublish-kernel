@@ -62,6 +62,11 @@ class EmbedToHtml5 implements Converter
                 "objectParameters" => array()
             );
 
+            if ( $attribute = $embed->getAttribute( "align" ) )
+            {
+                $parameters["objectParameters"]["align"] = $attribute;
+            }
+
             if ( $attribute = $embed->getAttribute( "size" ) )
             {
                 $parameters["objectParameters"]["size"] = $attribute;
