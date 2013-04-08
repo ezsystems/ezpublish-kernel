@@ -48,6 +48,7 @@ class UrlAliasTest extends BaseServiceMockTest
         $spiUrlAliases1 = array(
             new SPIUrlAlias(
                 array(
+                    "id" => "1",
                     "pathData" => $pathData1,
                     "languageCodes" => array( "cro-HR" ),
                     "alwaysAvailable" => true,
@@ -57,6 +58,7 @@ class UrlAliasTest extends BaseServiceMockTest
         $spiUrlAliases2 = array(
             new SPIUrlAlias(
                 array(
+                    "id" => "1",
                     "pathData" => $pathData2,
                     "languageCodes" => array( "cro-HR" ),
                     "alwaysAvailable" => false,
@@ -64,6 +66,7 @@ class UrlAliasTest extends BaseServiceMockTest
             ),
             new SPIUrlAlias(
                 array(
+                    "id" => "2",
                     "pathData" => $pathData2,
                     "languageCodes" => array( "eng-GB" ),
                     "alwaysAvailable" => false,
@@ -73,6 +76,7 @@ class UrlAliasTest extends BaseServiceMockTest
         $spiUrlAliases3 = array(
             new SPIUrlAlias(
                 array(
+                    "id" => "1",
                     "pathData" => $pathData3,
                     "languageCodes" => array( "cro-HR" ),
                     "alwaysAvailable" => false,
@@ -80,6 +84,7 @@ class UrlAliasTest extends BaseServiceMockTest
             ),
             new SPIUrlAlias(
                 array(
+                    "id" => "2",
                     "pathData" => $pathData3,
                     "languageCodes" => array( "eng-GB" ),
                     "alwaysAvailable" => false,
@@ -87,6 +92,7 @@ class UrlAliasTest extends BaseServiceMockTest
             ),
             new SPIUrlAlias(
                 array(
+                    "id" => "3",
                     "pathData" => $pathData3,
                     "languageCodes" => array( "ger-DE" ),
                     "alwaysAvailable" => false,
@@ -164,8 +170,8 @@ class UrlAliasTest extends BaseServiceMockTest
                 $spiUrlAliases2,
                 array( "eng-GB", "cro-HR" ),
                 array(
-                    "cro-HR" => "/jedan/dva",
                     "eng-GB" => "/jedan/two",
+                    "cro-HR" => "/jedan/dva",
                 ),
                 "eng-GB",
             ),
@@ -215,8 +221,8 @@ class UrlAliasTest extends BaseServiceMockTest
                 $spiUrlAliases2,
                 array( "eng-GB", "cro-HR", "ger-DE" ),
                 array(
-                    "cro-HR" => "/jedan/dva",
                     "eng-GB" => "/jedan/two",
+                    "cro-HR" => "/jedan/dva",
                 ),
                 "eng-GB",
             ),
@@ -224,8 +230,8 @@ class UrlAliasTest extends BaseServiceMockTest
                 $spiUrlAliases2,
                 array( "eng-GB", "ger-DE", "cro-HR" ),
                 array(
-                    "cro-HR" => "/jedan/dva",
                     "eng-GB" => "/jedan/two",
+                    "cro-HR" => "/jedan/dva",
                 ),
                 "eng-GB",
             ),
@@ -242,8 +248,8 @@ class UrlAliasTest extends BaseServiceMockTest
                 $spiUrlAliases2,
                 array( "ger-DE", "eng-GB", "cro-HR" ),
                 array(
-                    "cro-HR" => "/jedan/dva",
                     "eng-GB" => "/jedan/two",
+                    "cro-HR" => "/jedan/dva",
                 ),
                 "eng-GB",
             ),
@@ -285,8 +291,8 @@ class UrlAliasTest extends BaseServiceMockTest
                 $spiUrlAliases3,
                 array( "eng-GB", "cro-HR" ),
                 array(
-                    "cro-HR" => "/jedan/two/tri",
                     "eng-GB" => "/jedan/two/three",
+                    "cro-HR" => "/jedan/two/tri",
                 ),
                 "eng-GB",
             ),
@@ -303,8 +309,8 @@ class UrlAliasTest extends BaseServiceMockTest
                 $spiUrlAliases3,
                 array( "ger-DE", "eng-GB" ),
                 array(
-                    "eng-GB" => "/jedan/two/three",
                     "ger-DE" => "/jedan/two/drei",
+                    "eng-GB" => "/jedan/two/three",
                 ),
                 "ger-DE",
             ),
@@ -312,8 +318,8 @@ class UrlAliasTest extends BaseServiceMockTest
                 $spiUrlAliases3,
                 array( "ger-DE", "cro-HR" ),
                 array(
-                    "cro-HR" => "/jedan/dva/tri",
                     "ger-DE" => "/jedan/dva/drei",
+                    "cro-HR" => "/jedan/dva/tri",
                 ),
                 "ger-DE",
             ),
@@ -332,8 +338,8 @@ class UrlAliasTest extends BaseServiceMockTest
                 array( "cro-HR", "ger-DE", "eng-GB" ),
                 array(
                     "cro-HR" => "/jedan/dva/tri",
-                    "eng-GB" => "/jedan/dva/three",
                     "ger-DE" => "/jedan/dva/drei",
+                    "eng-GB" => "/jedan/dva/three",
                 ),
                 "cro-HR",
             ),
@@ -341,8 +347,8 @@ class UrlAliasTest extends BaseServiceMockTest
                 $spiUrlAliases3,
                 array( "eng-GB", "cro-HR", "ger-DE" ),
                 array(
-                    "cro-HR" => "/jedan/two/tri",
                     "eng-GB" => "/jedan/two/three",
+                    "cro-HR" => "/jedan/two/tri",
                     "ger-DE" => "/jedan/two/drei",
                 ),
                 "eng-GB",
@@ -351,9 +357,9 @@ class UrlAliasTest extends BaseServiceMockTest
                 $spiUrlAliases3,
                 array( "eng-GB", "ger-DE", "cro-HR" ),
                 array(
-                    "cro-HR" => "/jedan/two/tri",
                     "eng-GB" => "/jedan/two/three",
                     "ger-DE" => "/jedan/two/drei",
+                    "cro-HR" => "/jedan/two/tri",
                 ),
                 "eng-GB",
             ),
@@ -361,9 +367,9 @@ class UrlAliasTest extends BaseServiceMockTest
                 $spiUrlAliases3,
                 array( "ger-DE", "cro-HR", "eng-GB" ),
                 array(
+                    "ger-DE" => "/jedan/dva/drei",
                     "cro-HR" => "/jedan/dva/tri",
                     "eng-GB" => "/jedan/dva/three",
-                    "ger-DE" => "/jedan/dva/drei",
                 ),
                 "ger-DE",
             ),
@@ -371,9 +377,9 @@ class UrlAliasTest extends BaseServiceMockTest
                 $spiUrlAliases3,
                 array( "ger-DE", "eng-GB", "cro-HR" ),
                 array(
-                    "cro-HR" => "/jedan/two/tri",
-                    "eng-GB" => "/jedan/two/three",
                     "ger-DE" => "/jedan/two/drei",
+                    "eng-GB" => "/jedan/two/three",
+                    "cro-HR" => "/jedan/two/tri",
                 ),
                 "ger-DE",
             ),
