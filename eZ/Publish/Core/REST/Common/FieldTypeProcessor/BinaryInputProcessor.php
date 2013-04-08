@@ -27,17 +27,7 @@ abstract class BinaryInputProcessor extends FieldTypeProcessor
     }
 
     /**
-     * Processes uploaded binary file data in $incomingValueHash
-     *
-     * This method checks the 'data' key in $incomingValueHash, which must
-     * contain base64 encoded binary data to be stored as a binary file. It
-     * stores the decoded data in a temporary file in {@link
-     * $temporaryDirectory} and sets the 'path' key in the returned hash
-     * accordingly.
-     *
-     * @param array $incomingValueHash
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function preProcessValueHash( $incomingValueHash )
     {

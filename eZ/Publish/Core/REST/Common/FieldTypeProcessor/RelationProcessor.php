@@ -14,6 +14,9 @@ use eZ\Publish\Core\FieldType\Relation\Type;
 
 class RelationProcessor extends FieldTypeProcessor
 {
+    /**
+     * {@inheritDoc}
+     */
     public function preProcessFieldSettingsHash( $incomingSettingsHash )
     {
         if ( isset( $incomingSettingsHash["selectionMethod"] ) )
@@ -31,6 +34,9 @@ class RelationProcessor extends FieldTypeProcessor
         return $incomingSettingsHash;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function postProcessFieldSettingsHash( $outgoingSettingsHash )
     {
         if ( isset( $outgoingSettingsHash["selectionMethod"] ) )

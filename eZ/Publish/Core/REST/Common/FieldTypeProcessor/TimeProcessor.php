@@ -14,6 +14,9 @@ use eZ\Publish\Core\FieldType\Time\Type;
 
 class TimeProcessor extends FieldTypeProcessor
 {
+    /**
+     * {@inheritDoc}
+     */
     public function preProcessFieldSettingsHash( $incomingSettingsHash )
     {
         if ( isset( $incomingSettingsHash["defaultType"] ) )
@@ -31,6 +34,9 @@ class TimeProcessor extends FieldTypeProcessor
         return $incomingSettingsHash;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function postProcessFieldSettingsHash( $outgoingSettingsHash )
     {
         if ( isset( $outgoingSettingsHash["defaultType"] ) )

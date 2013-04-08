@@ -14,6 +14,9 @@ use eZ\Publish\Core\FieldType\XmlText\Type;
 
 class XmlTextProcessor extends FieldTypeProcessor
 {
+    /**
+     * {@inheritDoc}
+     */
     public function preProcessFieldSettingsHash( $incomingSettingsHash )
     {
         if ( isset( $incomingSettingsHash["tagPreset"] ) )
@@ -30,6 +33,9 @@ class XmlTextProcessor extends FieldTypeProcessor
         return $incomingSettingsHash;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function postProcessFieldSettingsHash( $outgoingSettingsHash )
     {
         if ( isset( $outgoingSettingsHash["tagPreset"] ) )
