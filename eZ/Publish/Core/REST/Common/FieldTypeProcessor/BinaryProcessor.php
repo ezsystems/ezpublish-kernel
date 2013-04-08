@@ -32,18 +32,7 @@ class BinaryProcessor extends BinaryInputProcessor
     }
 
     /**
-     * Perform manipulations on an a generated $outgoingValueHash
-     *
-     * This method is called by the REST server to allow a field type to post
-     * process the given $outgoingValueHash, which was previously generated
-     * using {@link eZ\Publish\SPI\FieldType\FieldType::toHash()}, before it is
-     * sent to the client. The return value of this method replaces
-     * $outgoingValueHash and must obey to the same rules as the original
-     * $outgoingValueHash.
-     *
-     * @param mixed $outgoingValueHash
-     *
-     * @return mixed Post processed hash
+     * {@inheritDoc}
      */
     public function postProcessValueHash( $outgoingValueHash )
     {

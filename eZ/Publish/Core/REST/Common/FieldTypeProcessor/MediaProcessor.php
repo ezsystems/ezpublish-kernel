@@ -14,6 +14,9 @@ use eZ\Publish\Core\FieldType\Media\Type;
 
 class MediaProcessor extends FieldTypeProcessor
 {
+    /**
+     * {@inheritDoc}
+     */
     public function preProcessFieldSettingsHash( $incomingSettingsHash )
     {
         if ( isset( $incomingSettingsHash["mediaType"] ) )
@@ -46,6 +49,9 @@ class MediaProcessor extends FieldTypeProcessor
         return $incomingSettingsHash;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function postProcessFieldSettingsHash( $outgoingSettingsHash )
     {
         if ( isset( $outgoingSettingsHash["mediaType"] ) )
