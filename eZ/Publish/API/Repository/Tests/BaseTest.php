@@ -33,11 +33,6 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     private $repository;
 
     /**
-     * @var \eZ\Publish\API\Repository\Tests\IdManager
-     */
-    private $idManager;
-
-    /**
      * @return void
      */
     protected function setUp()
