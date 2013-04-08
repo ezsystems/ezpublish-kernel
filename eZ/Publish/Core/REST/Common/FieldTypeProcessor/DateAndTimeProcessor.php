@@ -14,6 +14,9 @@ use eZ\Publish\Core\FieldType\DateAndTime\Type;
 
 class DateAndTimeProcessor extends FieldTypeProcessor
 {
+    /**
+     * {@inheritDoc}
+     */
     public function preProcessFieldSettingsHash( $incomingSettingsHash )
     {
         if ( isset( $incomingSettingsHash["defaultType"] ) )
@@ -34,6 +37,9 @@ class DateAndTimeProcessor extends FieldTypeProcessor
         return $incomingSettingsHash;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function postProcessFieldSettingsHash( $outgoingSettingsHash )
     {
         if ( isset( $outgoingSettingsHash["defaultType"] ) )
