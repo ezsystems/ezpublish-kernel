@@ -51,9 +51,6 @@ use eZ\Publish\SPI\Persistence\Content\Field as SPIField;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as SPILocationCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Relation as SPIRelation;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreateStruct;
-use eZ\Publish\Core\FieldType\Value as BaseValue;
-use eZ\Publish\Core\FieldType\FieldType;
-use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
 use DateTime;
 use Exception;
 
