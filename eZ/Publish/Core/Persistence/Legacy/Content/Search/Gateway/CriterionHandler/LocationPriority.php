@@ -9,7 +9,7 @@ use ezcQuerySelect;
 
 class LocationPriority extends CriterionHandler
 {
-    
+
     public function accept( Criterion $criterion )
     {
         return $criterion instanceof Criterion\LocationPriority;
@@ -25,7 +25,7 @@ class LocationPriority extends CriterionHandler
             case Criterion\Operator::BETWEEN:
                 $subSelect
                     ->select(
-                            $this->dbHandler->quoteColumn( 'contentobject_id' )
+                        $this->dbHandler->quoteColumn( 'contentobject_id' )
                     )->from(
                         $this->dbHandler->quoteTable( 'ezcontentobject_tree' )
                     )->where(
@@ -34,8 +34,7 @@ class LocationPriority extends CriterionHandler
                             $criterion->value[0],
                             $criterion->value[1]
                         )
-                    )
-                ;
+                    );
                 break;
 
             case Criterion\Operator::GT:
@@ -45,7 +44,7 @@ class LocationPriority extends CriterionHandler
                 $operatorFunction = $this->comparatorMap[$criterion->operator];
                 $subSelect
                     ->select(
-                            $this->dbHandler->quoteColumn( 'contentobject_id' )
+                        $this->dbHandler->quoteColumn( 'contentobject_id' )
                     )->from(
                         $this->dbHandler->quoteTable( 'ezcontentobject_tree' )
                     )->where(
@@ -53,8 +52,7 @@ class LocationPriority extends CriterionHandler
                             $this->dbHandler->quoteColumn( 'priority' ),
                             reset( $criterion->value )
                         )
-                    )
-                ;
+                    );
         }
 
         return $query->expr->in(
