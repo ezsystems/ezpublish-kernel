@@ -43,4 +43,28 @@ class UrlAliasRouter extends BaseUrlAliasRouter
 
         return parent::matchRequest( $request );
     }
+
+    /**
+     * Will return the right UrlAlias in regards to configured root location.
+     *
+     * @param string $pathinfo
+     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     */
+    protected function getUrlAlias( $pathinfo )
+    {
+        $rootLocationId = $this->getConfigResolver()->getParameter( 'content.root_location' );
+        if ( $rootLocationId === null )
+        {
+            return parent::getUrlAlias( $pathinfo );
+        }
+
+        $repository = $this->getRepository();
+        $urlAliasService = $repository->getURLAliasService();
+        $pathPrefix = $urlAliasService
+            ->reverseLookup( $repository->getLocationService()->loadLocation( $rootLocationId ) )
+            ->path;
+
+        $urlAlias = $urlAliasService->lookup( $pathPrefix . $pathinfo );
+        return $urlAlias;
+    }
 }

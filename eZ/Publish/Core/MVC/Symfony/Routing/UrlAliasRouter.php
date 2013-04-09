@@ -97,11 +97,8 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     {
         try
         {
-            $urlAlias = $this->getRepository()->getURLAliasService()->lookup(
-                $request->attributes->get(
-                    'semanticPathinfo',
-                    $request->getPathInfo()
-                )
+            $urlAlias = $this->getUrlAlias(
+                $request->attributes->get( 'semanticPathinfo', $request->getPathInfo() )
             );
 
             $params = array(
@@ -153,6 +150,17 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
         {
             throw new ResourceNotFoundException( $e->getMessage(), $e->getCode(), $e );
         }
+    }
+
+    /**
+     * Returns the UrlAlias object to use, starting from the request.
+     *
+     * @param $pathinfo
+     * @return URLAlias
+     */
+    protected function getUrlAlias( $pathinfo )
+    {
+        return $this->getRepository()->getURLAliasService()->lookup( $pathinfo );
     }
 
     /**
