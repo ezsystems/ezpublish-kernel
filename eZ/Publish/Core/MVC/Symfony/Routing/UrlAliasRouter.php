@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Routing;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -100,11 +101,8 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
         try
         {
             $this->generator->setSiteAccess( $request->attributes->get( 'siteaccess' ) );
-            $urlAlias = $this->getRepository()->getURLAliasService()->lookup(
-                $request->attributes->get(
-                    'semanticPathinfo',
-                    $request->getPathInfo()
-                )
+            $urlAlias = $this->getUrlAlias(
+                $request->attributes->get( 'semanticPathinfo', $request->getPathInfo() )
             );
 
             $params = array(
@@ -124,14 +122,15 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 
                     if ( $urlAlias->isHistory === true )
                     {
-                        $activeUrlAlias = $this->getRepository()->getURLAliasService()->reverseLookup(
-                            $this->getRepository()->getLocationService()->loadLocation(
-                                $urlAlias->destination
+                        $request->attributes->set(
+                            'semanticPathinfo',
+                            $this->generate(
+                                $this->generator->loadLocation( $urlAlias->destination )
                             )
                         );
-
-                        $request->attributes->set( 'semanticPathinfo', $activeUrlAlias->path );
                         $request->attributes->set( 'needsRedirect', true );
+                        // Specify not to prepend siteaccess while redirecting when applicable since it would be already present (see UrlAliasGenerator::doGenerate())
+                        $request->attributes->set( 'prependSiteaccessOnRedirect', false );
                     }
 
                     if ( isset( $this->logger ) )
@@ -156,6 +155,17 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
         {
             throw new ResourceNotFoundException( $e->getMessage(), $e->getCode(), $e );
         }
+    }
+
+    /**
+     * Returns the UrlAlias object to use, starting from the request.
+     *
+     * @param $pathinfo
+     * @return URLAlias
+     */
+    protected function getUrlAlias( $pathinfo )
+    {
+        return $this->getRepository()->getURLAliasService()->lookup( $pathinfo );
     }
 
     /**
