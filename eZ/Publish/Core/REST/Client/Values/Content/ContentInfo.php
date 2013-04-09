@@ -48,9 +48,4 @@ class ContentInfo extends \eZ\Publish\API\Repository\Values\Content\ContentInfo
         parent::__construct( $data );
         $this->contentTypeService = $contentTypeService;
     }
-
-    public function __get( $property )
-    {
-        return parent::__get( $property );
-    }
 }

@@ -10,19 +10,9 @@
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
- * This class does...
+ * This criterion implements a logical AND criterion and will only match
+ * if ALL of the given criteria match
  */
 class LogicalAnd extends LogicalOperator
 {
-    /**
-     * Creates a new AND logic criterion.
-     *
-     * This criterion will only match if ALL of the given criteria match
-     *
-     * @param Criterion[] $criteria
-     */
-    public function __construct( array $criteria )
-    {
-        parent::__construct( $criteria );
-    }
 }
