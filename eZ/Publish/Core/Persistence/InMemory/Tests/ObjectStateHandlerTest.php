@@ -33,14 +33,6 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * Removes stuff created in setUp().
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
-    }
-
-    /**
      * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::createGroup
      */
     public function testCreateGroup()

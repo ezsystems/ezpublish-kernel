@@ -24,11 +24,6 @@ class ContentInfoStub extends ContentInfo
      */
     protected $repository;
 
-    public function __get( $property )
-    {
-        return parent::__get( $property );
-    }
-
     /**
      * Internal helper method to modify the $mainLocationId property
      *
