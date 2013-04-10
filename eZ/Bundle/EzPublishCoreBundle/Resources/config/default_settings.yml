@@ -25,7 +25,8 @@ parameters:
     ezsettings.default.content.view_cache: true         # Whether to use content view cache or not (Etag/Last-Modified based)
     ezsettings.default.content.ttl_cache: false         # Whether to use TTL Cache for content (i.e. Max-Age response header)
     ezsettings.default.content.default_ttl: 60          # Default TTL cache value for content
-    ezsettings.default.content.root_location: ~         # Root locationId for routing and link generation. Useful for multisite apps with one repository.
+    ezsettings.default.content.tree_root.location_id: ~ # Root locationId for routing and link generation. Useful for multisite apps with one repository.
+    ezsettings.default.content.tree_root.excluded_uri_prefixes: [] # URI prefixes that are allowed to be outside the content tree
 
     # Cache settings
     ezsettings.default.http_cache.purge_servers: ["http://localhost/"]   # Server(s) URL(s) that will be used for purging HTTP cache with PURGE requests.

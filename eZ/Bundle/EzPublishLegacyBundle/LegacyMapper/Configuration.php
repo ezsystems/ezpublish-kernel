@@ -14,6 +14,7 @@ use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger;
 use eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger;
+use eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter;
 use ezpEvent;
 use ezxFormToken;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -40,6 +41,11 @@ class Configuration implements EventSubscriberInterface
     private $persistenceCachePurger;
 
     /**
+     * @var \eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter
+     */
+    private $urlAliasRouter;
+
+    /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
     private $container;
@@ -49,12 +55,20 @@ class Configuration implements EventSubscriberInterface
      */
     private $options;
 
-    public function __construct( ConfigResolverInterface $configResolver, GatewayCachePurger $gatewayCachePurger, PersistenceCachePurger $persistenceCachePurger, ContainerInterface $container, array $options = array() )
+    public function __construct(
+        ConfigResolverInterface $configResolver,
+        GatewayCachePurger $gatewayCachePurger,
+        PersistenceCachePurger $persistenceCachePurger,
+        ContainerInterface $container,
+        UrlAliasRouter $urlAliasRouter,
+        array $options = array()
+    )
     {
         $this->configResolver = $configResolver;
         $this->gatewayCachePurger = $gatewayCachePurger;
         $this->persistenceCachePurger = $persistenceCachePurger;
         $this->container = $container;
+        $this->urlAliasRouter = $urlAliasRouter;
         $this->options = $options;
     }
 
@@ -111,6 +125,8 @@ class Configuration implements EventSubscriberInterface
             'site.ini/FileSettings/VarDir'      => $this->configResolver->getParameter( 'var_dir' ),
             'site.ini/FileSettings/StorageDir'  => $this->configResolver->getParameter( 'storage_dir' )
         );
+        // Multisite settings (PathPrefix and co)
+        $settings += $this->getMultiSiteSettings();
 
         $event->getParameters()->set(
             "injected-settings",
@@ -178,5 +194,33 @@ class Configuration implements EventSubscriberInterface
         }
 
         return $imageSettings;
+    }
+
+    private function getMultiSiteSettings()
+    {
+        $rootLocationId = $this->configResolver->getParameter( 'content.tree_root.location_id' );
+        if ( $rootLocationId === null )
+        {
+            return array();
+        }
+
+        $pathPrefix = trim( $this->urlAliasRouter->getPathPrefixByRootLocationId( $rootLocationId ), '/' );
+        $pathPrefixExcludeItems = $this->configResolver->getParameter( 'content.tree_root.excluded_uri_prefixes' );
+        array_walk(
+            $pathPrefixExcludeItems,
+            function (&$value, $key)
+            {
+                $value = trim( $value, '/' );
+            }
+        );
+
+        return array(
+            'site.ini/SiteAccessSettings/PathPrefix'        => $pathPrefix,
+            'site.ini/SiteAccessSettings/PathPrefixExclude' => $pathPrefixExcludeItems,
+            'logfile.ini/AccessLogFileSettings/PathPrefix'  => $pathPrefix,
+            'site.ini/SiteSettings/IndexPage'               => "/content/view/full/$rootLocationId/",
+            'site.ini/SiteSettings/DefaultPage'             => "/content/view/full/$rootLocationId/",
+            'content.ini/NodeSettings/RootNode'             => $rootLocationId,
+        );
     }
 }

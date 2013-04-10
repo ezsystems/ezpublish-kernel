@@ -21,6 +21,11 @@ class UrlAliasRouter extends BaseUrlAliasRouter
      */
     protected $container;
 
+    /**
+     * @var array
+     */
+    private $pathPrefixMap = array();
+
     public function setContainer( ContainerInterface $container )
     {
         $this->container = $container;
@@ -52,19 +57,49 @@ class UrlAliasRouter extends BaseUrlAliasRouter
      */
     protected function getUrlAlias( $pathinfo )
     {
-        $rootLocationId = $this->getConfigResolver()->getParameter( 'content.root_location' );
+        $configResolver = $this->getConfigResolver();
+        $rootLocationId = $configResolver->getParameter( 'content.tree_root.location_id' );
         if ( $rootLocationId === null )
         {
             return parent::getUrlAlias( $pathinfo );
         }
 
+        foreach ( $configResolver->getParameter( 'content.tree_root.excluded_uri_prefixes' ) as $excludedPrefix )
+        {
+            // If pathinfo begins with an excluded prefix, ignore it.
+            // stripos() check excludes leading /
+            $excludedPrefix = '/' . trim( $excludedPrefix, '/' );
+            if ( mb_stripos( $pathinfo, $excludedPrefix ) === 0 )
+            {
+                return parent::getUrlAlias( $pathinfo );
+            }
+        }
+
         $repository = $this->getRepository();
-        $urlAliasService = $repository->getURLAliasService();
-        $pathPrefix = $urlAliasService
-            ->reverseLookup( $repository->getLocationService()->loadLocation( $rootLocationId ) )
+        return $repository
+            ->getURLAliasService()
+            ->lookup( $this->getPathPrefixByRootLocationId( $rootLocationId ) . $pathinfo );
+    }
+
+    /**
+     * Returns path corresponding to $rootLocationId.
+     *
+     * @param int $rootLocationId
+     * @return string
+     */
+    public function getPathPrefixByRootLocationId( $rootLocationId )
+    {
+        if ( isset( $this->pathPrefixMap[$rootLocationId] ) )
+        {
+            return $this->pathPrefixMap[$rootLocationId];
+        }
+
+        $repository = $this->getRepository();
+        $this->pathPrefixMap[$rootLocationId] = $repository
+            ->getURLAliasService()
+            ->reverseLookup( $this->loadLocation( $rootLocationId ) )
             ->path;
 
-        $urlAlias = $urlAliasService->lookup( $pathPrefix . $pathinfo );
-        return $urlAlias;
+        return $this->pathPrefixMap[$rootLocationId];
     }
 }

@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Routing;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -119,9 +120,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                     if ( $urlAlias->isHistory === true )
                     {
                         $activeUrlAlias = $this->getRepository()->getURLAliasService()->reverseLookup(
-                            $this->getRepository()->getLocationService()->loadLocation(
-                                $urlAlias->destination
-                            )
+                            $this->loadLocation( $urlAlias->destination )
                         );
 
                         $request->attributes->set( 'semanticPathinfo', $activeUrlAlias->path );
@@ -149,6 +148,24 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
         catch ( NotFoundException $e )
         {
             throw new ResourceNotFoundException( $e->getMessage(), $e->getCode(), $e );
+        }
+    }
+
+    /**
+     * Loads a location by its locationId, regardless to user limitations since the router is invoked BEFORE security (no user authenticated yet).
+     * Not to be used for link generation.
+     *
+     * @param int $locationId
+     * @return Location
+     */
+    final protected function loadLocation( $locationId )
+    {
+        $repository = $this->getRepository();
+        $content = $repository->getSearchService()->findSingle( new LocationId( $locationId ), array(), false );
+        foreach ( $repository->getLocationService()->loadLocations( $content->contentInfo ) as $location )
+        {
+            if ( $location->id === $locationId )
+                return $location;
         }
     }
 

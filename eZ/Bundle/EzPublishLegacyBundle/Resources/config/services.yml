@@ -132,6 +132,7 @@ services:
             - @ezpublish.http_cache.purger
             - @ezpublish_legacy.persistence_cache_purger
             - @service_container
+            - @ezpublish.urlalias_router
             - %ezpublish_legacy.configuration_mapper.options%
         tags:
             - { name: kernel.event_subscriber }
