@@ -277,7 +277,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 
         if ( $name instanceof SymfonyRoute )
         {
-            return 'Route with pattern ' . $name->getPattern();
+            return 'Route with pattern ' . $name->getPath();
         }
 
         return $name;
