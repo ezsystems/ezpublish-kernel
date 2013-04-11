@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 use Symfony\Component\Routing\RouterInterface;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 
 /**
  * URL generator for UrlAlias based links
@@ -28,10 +30,23 @@ class UrlAliasGenerator extends Generator
      */
     private $router;
 
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
+     */
+    private $siteAccess;
+
     public function __construct( \Closure $lazyRepository, RouterInterface $router )
     {
         $this->lazyRepository = $lazyRepository;
         $this->router = $router;
+    }
+
+    /**
+     * @param SiteAccess $siteAccess
+     */
+    public function setSiteAccess( SiteAccess $siteAccess )
+    {
+        $this->siteAccess = $siteAccess;
     }
 
     /**
@@ -69,6 +84,11 @@ class UrlAliasGenerator extends Generator
                 self::INTERNAL_LOCATION_ROUTE,
                 array( 'locationId' => $location->id )
             );
+
+        if ( isset( $this->siteAccess ) && $this->siteAccess->matcher instanceof URILexer )
+        {
+            $path = $this->siteAccess->matcher->analyseLink( $path );
+        }
 
         return $path . $queryString;
     }
