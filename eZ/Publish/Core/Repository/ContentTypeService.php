@@ -44,6 +44,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\ContentTypeFieldDefinitionValidationException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\FieldType\ValidationError;
 use DateTime;
 use Exception;
 
@@ -560,6 +561,29 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     protected function buildSPIFieldDefinitionCreate( FieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
     {
+        /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
+        $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
+            $fieldDefinitionCreateStruct->fieldTypeIdentifier
+        );
+
+        $validationErrors = array();
+        if ( $fieldDefinitionCreateStruct->isSearchable && !$fieldType->isSearchable() )
+        {
+            $validationErrors[] = new ValidationError(
+                "FieldType '{$fieldDefinitionCreateStruct->fieldTypeIdentifier}' is not searchable"
+            );
+        }
+        $validationErrors = array_merge(
+            $validationErrors,
+            $fieldType->validateValidatorConfiguration( $fieldDefinitionCreateStruct->validatorConfiguration ),
+            $fieldType->validateFieldSettings( $fieldDefinitionCreateStruct->fieldSettings )
+        );
+
+        if ( !empty( $validationErrors ) )
+        {
+            throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
+        }
+
         $spiFieldDefinition = new SPIFieldDefinition(
             array(
                 "id" => null,
@@ -578,26 +602,6 @@ class ContentTypeService implements ContentTypeServiceInterface
                 //"defaultValue"
             )
         );
-        /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
-        $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
-            $fieldDefinitionCreateStruct->fieldTypeIdentifier
-        );
-
-        $validationErrors = $fieldType->validateValidatorConfiguration(
-            $fieldDefinitionCreateStruct->validatorConfiguration
-        );
-        if ( !empty( $validationErrors ) )
-        {
-            throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
-        }
-
-        $validationErrors = $fieldType->validateFieldSettings(
-            $fieldDefinitionCreateStruct->fieldSettings
-        );
-        if ( !empty( $validationErrors ) )
-        {
-            throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
-        }
 
         $spiFieldDefinition->fieldTypeConstraints->validators = $fieldDefinitionCreateStruct->validatorConfiguration;
         $spiFieldDefinition->fieldTypeConstraints->fieldSettings = $fieldDefinitionCreateStruct->fieldSettings;
@@ -634,13 +638,19 @@ class ContentTypeService implements ContentTypeServiceInterface
             ? $fieldDefinition->fieldSettings
             : $fieldDefinitionUpdateStruct->fieldSettings;
 
-        $validationErrors = $fieldType->validateValidatorConfiguration( $validatorConfiguration );
-        if ( !empty( $validationErrors ) )
+        $validationErrors = array();
+        if ( $fieldDefinitionUpdateStruct->isSearchable && !$fieldType->isSearchable() )
         {
-            throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
+            $validationErrors[] = new ValidationError(
+                "FieldType '{$fieldDefinition->fieldTypeIdentifier}' is not searchable"
+            );
         }
+        $validationErrors = array_merge(
+            $validationErrors,
+            $fieldType->validateValidatorConfiguration( $validatorConfiguration ),
+            $fieldType->validateFieldSettings( $fieldSettings )
+        );
 
-        $validationErrors = $fieldType->validateFieldSettings( $fieldSettings );
         if ( !empty( $validationErrors ) )
         {
             throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
