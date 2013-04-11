@@ -8,6 +8,7 @@
         "php": ">=5.3.3",
         "zetacomponents/archive": "dev-master",
         "zetacomponents/authentication": "dev-master",
+        "zetacomponents/authentication-database-tiein": "dev-master",
         "zetacomponents/cache": "dev-master",
         "zetacomponents/configuration": "dev-master",
         "zetacomponents/console-tools": "dev-master",
