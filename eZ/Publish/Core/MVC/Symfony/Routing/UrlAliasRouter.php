@@ -93,7 +93,6 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      * @return array An array of parameters
      *
      * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException If no matching resource could be found
-     * @throws MethodNotAllowedException If a matching resource was found but the request method is not allowed
      */
     public function matchRequest( Request $request )
     {
