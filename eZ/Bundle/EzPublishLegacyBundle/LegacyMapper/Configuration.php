@@ -205,13 +205,12 @@ class Configuration implements EventSubscriberInterface
         }
 
         $pathPrefix = trim( $this->urlAliasRouter->getPathPrefixByRootLocationId( $rootLocationId ), '/' );
-        $pathPrefixExcludeItems = $this->configResolver->getParameter( 'content.tree_root.excluded_uri_prefixes' );
-        array_walk(
-            $pathPrefixExcludeItems,
-            function (&$value, $key)
+        $pathPrefixExcludeItems = array_map(
+            function ( $value )
             {
-                $value = trim( $value, '/' );
-            }
+                return trim( $value, '/' );
+            },
+            $this->configResolver->getParameter( 'content.tree_root.excluded_uri_prefixes' )
         );
 
         return array(
