@@ -39,6 +39,13 @@ class Repository implements RepositoryInterface
     protected $user;
 
     /**
+     * Flag to specify if current execution is sudo mode, only set by {@see sudo()}.
+     *
+     * @var bool
+     */
+    protected $sudoFlag = false;
+
+    /**
      * Instance of content service
      *
      * @var \eZ\Publish\API\Repository\ContentService
@@ -224,6 +231,40 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Allows API execution to be performed with full access sand-boxed
+     *
+     * The closure sandbox will do a catch all on exceptions and rethrow after
+     * re-setting the sudo flag.
+     *
+     * @access private This function is not official API atm, and can change anytime.
+     *
+     * @param \Closure $callback
+     *
+     * @throws \RuntimeException Thrown on recursive sudo() use.
+     * @throws \Exception Re throws exceptions thrown inside $callback
+     * @return mixed
+     */
+    public function sudo( \Closure $callback )
+    {
+        if ( $this->sudoFlag === true )
+            throw new RuntimeException( "Recursive sudo use detected, abort abort!" );
+
+        $this->sudoFlag = true;
+        try
+        {
+            $returnValue = $callback( $this );
+        }
+        catch ( Exception $e  )
+        {
+            $this->sudoFlag = false;
+            throw $e;
+        }
+
+        $this->sudoFlag = false;
+        return $returnValue;
+    }
+
+    /**
      * Check if user has access to a given module / function
      *
      * Low level function, use canUser instead if you have objects to check against.
@@ -236,6 +277,10 @@ class Repository implements RepositoryInterface
      */
     public function hasAccess( $module, $function, User $user = null )
     {
+        // Full access if sudoFlag is set by {@see sudo()}
+        if ( $this->sudoFlag === true )
+            return true;
+
         if ( $user === null )
             $user = $this->getCurrentUser();
 
