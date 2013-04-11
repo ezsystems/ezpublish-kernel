@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -30,7 +30,7 @@ class UrlAliasGenerator extends Generator
     private $router;
 
     /**
-     * @var \Symfony\Component\HttpKernel\Log\LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     private $logger;
 
@@ -99,7 +99,7 @@ class UrlAliasGenerator extends Generator
                 // This is most likely an error (from content edition or link generation logic).
                 else if ( !$this->isUriPrefixExcluded( $path ) && $this->logger !== null )
                 {
-                    $this->logger->warn( "Generating a link to a location outside root content tree: '$path' is outside tree starting to location #$this->rootLocationId" );
+                    $this->logger->warning( "Generating a link to a location outside root content tree: '$path' is outside tree starting to location #$this->rootLocationId" );
                 }
             }
         }
