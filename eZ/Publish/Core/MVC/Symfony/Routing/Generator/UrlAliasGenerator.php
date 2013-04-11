@@ -142,7 +142,7 @@ class UrlAliasGenerator extends Generator
     public function setRootLocationId( $rootLocationId )
     {
         $this->rootLocationId = $rootLocationId;
-}
+    }
 
     /**
      * @param array $excludedUriPrefixes
