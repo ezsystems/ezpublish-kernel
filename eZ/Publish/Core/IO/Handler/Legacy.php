@@ -21,6 +21,7 @@ use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 use eZClusterFileHandler;
 use DateTime;
 use finfo;
+use Psr\Log\LoggerInterface;
 
 /**
  * Legacy Io/Storage handler, based on eZ Cluster
@@ -57,6 +58,11 @@ class Legacy implements IOHandlerInterface
     private $storageDirectory;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Created Legacy handler instance
      *
      * @param string $storageDirectory
@@ -64,11 +70,16 @@ class Legacy implements IOHandlerInterface
      */
     public function __construct( $storageDirectory, LegacyKernel $legacyKernel = null )
     {
+        $this->storageDirectory = $storageDirectory;
         if ( $legacyKernel )
         {
             $this->legacyKernel = $legacyKernel;
         }
-        $this->storageDirectory = $storageDirectory;
+    }
+
+    public function setLogger( LoggerInterface $logger )
+    {
+        $this->logger = $logger;
     }
 
     public function setLegacyKernelClosure( \Closure $kernelClosure )
@@ -515,9 +526,34 @@ class Legacy implements IOHandlerInterface
 
         if ( strpos( $path, $this->storageDirectory . DIRECTORY_SEPARATOR ) !== 0 )
         {
+            // Legacy tolerated path that didn't match the current configuration, for instance due to a renamed VarDir
+            // We will consider that a file is "valid" if it exists as far as the Legacy Cluster API is concerned
+            if ( $this->clusterPathExists( $path ) )
+            {
+                if ( isset( $this->logger ) )
+                {
+                    $this->logger->warning( "Path '$path' doesn't match the configured storage directory {$this->storageDirectory}" );
+                }
+                return $path;
+            }
             throw new InvalidArgumentException( '$path', "Storage directory not found in $path" );
         }
 
         return substr( $path, strlen( $this->storageDirectory ) + 1 );
+    }
+
+    /**
+     * Checks using the Legacy Kernel if a path exists on eZ Cluster
+     * @param string $path
+     * @return bool
+     */
+    protected function clusterPathExists( $path)
+    {
+        return $this->getLegacyKernel()->runCallback(
+            function () use ( $path )
+            {
+                return eZClusterFileHandler::instance()->fileExists( $path );
+            }
+        );
     }
 }

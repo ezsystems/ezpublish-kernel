@@ -424,6 +424,11 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $contentService->deleteContent( $updatedDraft->contentInfo );
     }
 
+    public function loadImageWithOtherVarDir()
+    {
+
+    }
+
     public function providerForTestIsEmptyValue()
     {
         return array(

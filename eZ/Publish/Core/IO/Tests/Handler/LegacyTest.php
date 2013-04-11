@@ -51,12 +51,22 @@ class LegacyTest extends BaseHandlerTest
         {
             ezcBaseFile::removeRecursive( 'var/test' );
         }
+        if ( file_exists( 'var/othertest' ) )
+        {
+            ezcBaseFile::removeRecursive( 'var/othertest' );
+        }
         /** @var $legacyKernel Kernel */
         $legacyKernel = $_ENV['legacyKernel'];
         $legacyKernel->runCallback(
             function ()
             {
                 \eZClusterFileHandler::instance()->fileDelete( 'var/test', true );
+            }
+        );
+        $legacyKernel->runCallback(
+            function ()
+            {
+                \eZClusterFileHandler::instance()->fileDelete( 'var/othertest', true );
             }
         );
 
@@ -78,5 +88,19 @@ class LegacyTest extends BaseHandlerTest
     public function testUpdateCtime()
     {
         self::markTestIncomplete( "Not supported by Legacy io handler, aka incomplete" );
+    }
+
+    /**
+     * Tests that loading a file located outside the vardir passes
+     */
+    public function testFileOutsideVarDir()
+    {
+        // problem: the logic of IOService isn't gonna work well here...
+        // ImageStorage (only affected) would have var/otherfolder/storage/path,
+        // but to load the file, it would call IOService::getExternalPath( $absolutePath )
+        // Is it possible to return anything even a tiny bit consistent / that would work at all here ?
+
+
+        $this->IOHandler->load( 'var/othertest/path/outside/vardir' );
     }
 }

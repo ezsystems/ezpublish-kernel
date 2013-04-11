@@ -415,6 +415,7 @@ services:
             - @ezpublish.fieldType.ezimage.IOService
             - @ezpublish.fieldType.ezimage.pathGenerator
             - @ezpublish.fieldType.metadataHandler.imagesize
+            - @?logger
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezimage}
 
