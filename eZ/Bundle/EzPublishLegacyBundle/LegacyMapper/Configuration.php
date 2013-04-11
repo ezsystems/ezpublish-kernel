@@ -14,7 +14,7 @@ use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger;
 use eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger;
-use eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter;
+use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use ezpEvent;
 use ezxFormToken;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -43,7 +43,7 @@ class Configuration implements EventSubscriberInterface
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter
      */
-    private $urlAliasRouter;
+    private $urlAliasGenerator;
 
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
@@ -60,7 +60,7 @@ class Configuration implements EventSubscriberInterface
         GatewayCachePurger $gatewayCachePurger,
         PersistenceCachePurger $persistenceCachePurger,
         ContainerInterface $container,
-        UrlAliasRouter $urlAliasRouter,
+        UrlAliasGenerator $urlAliasGenerator,
         array $options = array()
     )
     {
@@ -68,7 +68,7 @@ class Configuration implements EventSubscriberInterface
         $this->gatewayCachePurger = $gatewayCachePurger;
         $this->persistenceCachePurger = $persistenceCachePurger;
         $this->container = $container;
-        $this->urlAliasRouter = $urlAliasRouter;
+        $this->urlAliasGenerator = $urlAliasGenerator;
         $this->options = $options;
     }
 
@@ -204,7 +204,7 @@ class Configuration implements EventSubscriberInterface
             return array();
         }
 
-        $pathPrefix = trim( $this->urlAliasRouter->getPathPrefixByRootLocationId( $rootLocationId ), '/' );
+        $pathPrefix = trim( $this->urlAliasGenerator->getPathPrefixByRootLocationId( $rootLocationId ), '/' );
         $pathPrefixExcludeItems = array_map(
             function ( $value )
             {
