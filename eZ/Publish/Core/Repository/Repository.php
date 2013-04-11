@@ -236,6 +236,13 @@ class Repository implements RepositoryInterface
      * The closure sandbox will do a catch all on exceptions and rethrow after
      * re-setting the sudo flag.
      *
+     * Example use:
+     *     $location = $repository->sudo(
+     *         function( $repo ) use ( $locationId ){
+                   return $repo->getLocationService()->loadLocations( $locationId )
+     *         }
+     *     );
+     *
      * @access private This function is not official API atm, and can change anytime.
      *
      * @param \Closure $callback
