@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 use Psr\Log\LoggerInterface;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 use Symfony\Component\Routing\RouterInterface;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 
 /**
  * URL generator for UrlAlias based links
@@ -49,11 +51,24 @@ class UrlAliasGenerator extends Generator
      */
     private $pathPrefixMap = array();
 
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
+     */
+    private $siteAccess;
+
     public function __construct( \Closure $lazyRepository, RouterInterface $router, LoggerInterface $logger = null )
     {
         $this->lazyRepository = $lazyRepository;
         $this->router = $router;
         $this->logger = $logger;
+    }
+
+    /**
+     * @param SiteAccess $siteAccess
+     */
+    public function setSiteAccess( SiteAccess $siteAccess )
+    {
+        $this->siteAccess = $siteAccess;
     }
 
     /**
@@ -111,6 +126,11 @@ class UrlAliasGenerator extends Generator
             );
         }
 
+        if ( isset( $this->siteAccess ) && $this->siteAccess->matcher instanceof URILexer )
+        {
+            $path = $this->siteAccess->matcher->analyseLink( $path );
+        }
+
         return $path . $queryString;
     }
 
@@ -122,7 +142,7 @@ class UrlAliasGenerator extends Generator
     public function setRootLocationId( $rootLocationId )
     {
         $this->rootLocationId = $rootLocationId;
-    }
+}
 
     /**
      * @param array $excludedUriPrefixes

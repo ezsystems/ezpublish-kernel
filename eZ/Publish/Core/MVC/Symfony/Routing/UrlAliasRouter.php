@@ -17,11 +17,13 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RequestContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\Route as SymfonyRoute;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -92,12 +94,12 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      * @return array An array of parameters
      *
      * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException If no matching resource could be found
-     * @throws MethodNotAllowedException If a matching resource was found but the request method is not allowed
      */
     public function matchRequest( Request $request )
     {
         try
         {
+            $this->generator->setSiteAccess( $request->attributes->get( 'siteaccess' ) );
             $urlAlias = $this->getUrlAlias(
                 $request->attributes->get( 'semanticPathinfo', $request->getPathInfo() )
             );
@@ -284,7 +286,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 
         if ( $name instanceof SymfonyRoute )
         {
-            return 'Route with pattern ' . $name->getPattern();
+            return 'Route with pattern ' . $name->getPath();
         }
 
         return $name;
