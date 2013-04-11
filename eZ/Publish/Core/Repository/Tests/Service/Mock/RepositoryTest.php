@@ -193,6 +193,33 @@ class RepositoryTest extends BaseServiceMockTest
         self::assertEquals( false, $result );
     }
 
+    /**
+     * Test for the sudo() & hasAccess() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\Repository::sudo
+     * @covers \eZ\Publish\API\Repository\Repository::hasAccess
+     * @dataProvider providerForTestHasAccessReturnsFalse
+     */
+    public function testHasAccessReturnsFalseButSudoSoTrue( array $roles, array $roleAssignments )
+    {
+        /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
+        $userHandlerMock = $this->getPersistenceMock()->userHandler();
+        $mockedRepository = $this->getRepository();
+
+        $userHandlerMock
+            ->expects( $this->never() )
+            ->method( $this->anything() );
+
+        $result = $mockedRepository->sudo(
+            function( $repo )
+            {
+                return $repo->hasAccess( "test-module", "test-function" );
+            }
+        );
+
+        self::assertEquals( true, $result );
+    }
+
     public function providerForTestHasAccessReturnsPermissionSets()
     {
         return array(
