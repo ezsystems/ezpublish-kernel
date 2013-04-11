@@ -128,6 +128,8 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                             )
                         );
                         $request->attributes->set( 'needsRedirect', true );
+                        // Specify not to prepend siteaccess while redirecting when applicable since it would be already present (see UrlAliasGenerator::doGenerate())
+                        $request->attributes->set( 'prependSiteaccessOnRedirect', false );
                     }
 
                     if ( isset( $this->logger ) )
