@@ -134,8 +134,8 @@
     ],
     "User\\Policy" : [
         {"id": 1, "roleId": 2, "module": "*", "function": "*", "limitations": "*" },
-        {"id": 2, "roleId": 1, "module": "content", "function": "pdf", "limitations": { "Section" : [ 1 ] } },
-        {"id": 3, "roleId": 1, "module": "content", "function": "read", "limitations": { "Section" : [ 1 ] }},
+        {"id": 2, "roleId": 1, "module": "content", "function": "read", "limitations": { "Section" : [ 1 ] }},
+        {"id": 3, "roleId": 1, "module": "content", "function": "pdf", "limitations": { "Section" : [ 1 ] } },
         {"id": 4, "roleId": 1, "module": "content", "function": "read", "limitations": { "Class" : [ 29, 30, 32, 33, 34, 42 ], "Section" : [ 3 ] } },
         {"id": 5, "roleId": 1, "module": "rss", "function": "feed", "limitations": "*" },
         {"id": 6, "roleId": 1, "module": "user", "function": "login", "limitations": { "SiteAccess" : [ 2576532274 ] } },

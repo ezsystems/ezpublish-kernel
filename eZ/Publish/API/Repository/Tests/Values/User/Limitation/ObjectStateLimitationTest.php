@@ -46,7 +46,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
         $removePolicy = null;
         foreach ( $role->getPolicies() as $policy )
         {
-            if ( 'content' != $policy->module || 'versionremove' != $policy->function )
+            if ( 'content' != $policy->module || 'remove' != $policy->function )
             {
                 continue;
             }
@@ -56,7 +56,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
 
         if ( null === $removePolicy )
         {
-            throw new \ErrorException( 'No content:versionremove policy found.' );
+            throw new \ErrorException( 'No content:remove policy found.' );
         }
 
         // Only allow deletion of content with default state
@@ -83,7 +83,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
 
         $draft = $this->createWikiPageDraft();
 
-        $contentService->deleteVersion( $draft->versionInfo );
+        $contentService->deleteContent( $draft->contentInfo );
         /* END: Use Case */
 
         $this->setExpectedException( '\\eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException' );
@@ -113,7 +113,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
         $removePolicy = null;
         foreach ( $role->getPolicies() as $policy )
         {
-            if ( 'content' != $policy->module || 'versionremove' != $policy->function )
+            if ( 'content' != $policy->module || 'remove' != $policy->function )
             {
                 continue;
             }
@@ -123,7 +123,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
 
         if ( null === $removePolicy )
         {
-            throw new \ErrorException( 'No content:versionremove policy found.' );
+            throw new \ErrorException( 'No content:remove policy found.' );
         }
 
         // Only allow deletion of content with default state
@@ -150,7 +150,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
 
         $draft = $this->createWikiPageDraft();
 
-        $contentService->deleteVersion( $draft->versionInfo );
+        $contentService->deleteContent( $draft->contentInfo );
         /* END: Use Case */
     }
 }
