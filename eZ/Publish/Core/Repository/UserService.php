@@ -503,12 +503,11 @@ class UserService implements UserServiceInterface
         try
         {
             $contentDraft = $contentService->createContent( $userCreateStruct, $locationCreateStructs );
-            $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
-
+            // Create user before publishing, so that external data can be returned
             $spiUser = $this->userHandler->create(
                 new SPIUser(
                     array(
-                        'id' => $publishedContent->id,
+                        'id' => $contentDraft->id,
                         'login' => $userCreateStruct->login,
                         'email' => $userCreateStruct->email,
                         'passwordHash' => $this->createPasswordHash(
@@ -523,6 +522,7 @@ class UserService implements UserServiceInterface
                     )
                 )
             );
+            $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
 
             $this->repository->commit();
         }
@@ -532,10 +532,7 @@ class UserService implements UserServiceInterface
             throw $e;
         }
 
-        return $this->buildDomainUserObject(
-            $spiUser,
-            $contentService->loadContent( $publishedContent->id )// Reload to get with updated user field value
-        );
+        return $this->buildDomainUserObject( $spiUser, $publishedContent );
     }
 
     /**
