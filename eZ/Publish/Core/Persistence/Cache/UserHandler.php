@@ -29,7 +29,12 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     public function create( User $user )
     {
         $this->logger->logCall( __METHOD__, array( 'struct' => $user ) );
-        return $this->persistenceFactory->getUserHandler()->create( $user );
+        $return = $this->persistenceFactory->getUserHandler()->create( $user );
+
+        // Clear corresponding content cache as creation of the User changes it's external data
+        $this->cache->clear( 'content', $user->id );
+
+        return $return;
     }
 
     /**
