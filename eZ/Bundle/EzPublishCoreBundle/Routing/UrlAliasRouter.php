@@ -63,8 +63,8 @@ class UrlAliasRouter extends BaseUrlAliasRouter
             return parent::getUrlAlias( $pathinfo );
         }
 
-        $repository = $this->getRepository();
-        return $repository
+        return $this
+            ->getRepository()
             ->getURLAliasService()
             ->lookup( $this->generator->getPathPrefixByRootLocationId( $this->rootLocationId ) . $pathinfo );
     }
