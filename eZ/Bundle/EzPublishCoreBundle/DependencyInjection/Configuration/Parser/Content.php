@@ -37,7 +37,7 @@ class Content implements Parser
                     ->arrayNode( 'tree_root' )
                         ->canBeUnset()
                         ->children()
-                            ->scalarNode( 'location_id' )
+                            ->integerNode( 'location_id' )
                                 ->info( "Root locationId for routing and link generation.\nUseful for multisite apps with one repository." )
                                 ->isRequired()
                             ->end()
