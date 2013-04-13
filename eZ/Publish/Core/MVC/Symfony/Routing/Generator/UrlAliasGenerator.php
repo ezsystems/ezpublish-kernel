@@ -190,6 +190,8 @@ class UrlAliasGenerator extends Generator
                 return true;
             }
         }
+
+        return false;
     }
 
     /**
