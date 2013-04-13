@@ -283,5 +283,30 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             }
         }*/
     }
+
+    /**
+     * Doesn't test the returned field *yet* but it at least ensures we don't get an exception
+     * @covers \eZ\Publish\Core\FieldType\Image\ImageStorage::getFieldData
+     * @covers \eZ\Publish\Core\IO\Handler\Legacy::removeStoragePath
+     */
+    public function testLoadingImageWithOtherVarDir()
+    {
+        /** @var $contentHandler \eZ\Publish\SPI\Persistence\Content\Handler */
+        $contentHandler = $this->getCustomHandler()->contentHandler();
+        $content = $contentHandler->load( 60, 1 );
+
+        /** @var $field \eZ\Publish\SPI\Persistence\Content\Field */
+        foreach( $content->fields as $field )
+        {
+            if ( $field->type !== $this->getTypeName() )
+            {
+                continue;
+            }
+
+            // won't work since the image isn't in the test's temporary folder
+            // $this->assertLoadedFieldDataCorrect( $field );
+            break;
+        }
+    }
 }
 

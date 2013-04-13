@@ -15,6 +15,8 @@ use eZ\Publish\Core\IO\IOService;
 use eZ\Publish\Core\FieldType\GatewayBasedStorage;
 use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Converter for Image field type external storage
@@ -43,19 +45,26 @@ class ImageStorage extends GatewayBasedStorage
     protected $imageSizeMetadataHandler;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Construct from gateways
      *
      * @param \eZ\Publish\Core\FieldType\StorageGateway[] $gateways
      * @param IOService $IOService
      * @param PathGenerator $imageSizeMetadataHandler
      * @param MetadataHandler $pathGenerator
+     * @param LoggerInterface $logger
      */
-    public function __construct( array $gateways, IOService $IOService, PathGenerator $pathGenerator, MetadataHandler $imageSizeMetadataHandler )
+    public function __construct( array $gateways, IOService $IOService, PathGenerator $pathGenerator, MetadataHandler $imageSizeMetadataHandler, LoggerInterface $logger = null )
     {
         parent::__construct( $gateways );
         $this->IOService = $IOService;
         $this->pathGenerator = $pathGenerator;
         $this->imageSizeMetadataHandler = $imageSizeMetadataHandler;
+        $this->logger = $logger;
     }
 
     /**
@@ -199,7 +208,19 @@ class ImageStorage extends GatewayBasedStorage
     {
         if ( $field->value->data !== null )
         {
-            $path = $this->IOService->getExternalPath( $field->value->data['path'] );
+            try
+            {
+                $path = $this->IOService->getExternalPath( $field->value->data['path'] );
+            }
+            catch ( InvalidArgumentException $e )
+            {
+                if ( $this->logger !== null )
+                {
+                    $this->logger->error( $e->getMessage() );
+                }
+                return;
+            }
+
             if ( ( $binaryFile = $this->IOService->loadBinaryFile( $path ) ) === false )
             {
                 throw new NotFoundException( '$field->value->data[path]', $path );
