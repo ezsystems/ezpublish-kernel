@@ -17,6 +17,8 @@ use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use ArrayObject;
 
 /**
  * An implementation of this class provides access to FieldTypes
@@ -37,7 +39,7 @@ class FieldTypeService implements FieldTypeServiceInterface
     protected $persistenceHandler;
 
     /**
-     * @var array Hash of SPI FieldTypes or callable callbacks to generate one.
+     * @var array|\ArrayObject Hash of SPI FieldTypes or callable callbacks to generate one.
      */
     protected $settings;
 
@@ -53,12 +55,18 @@ class FieldTypeService implements FieldTypeServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
-     * @param array $settings Hash of SPI FieldTypes or callable callbacks to generate one.
+     * @param array|\ArrayObject $settings Hash of SPI FieldTypes or callable callbacks to generate one.
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct( RepositoryInterface $repository, Handler $handler, $settings = array() )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
+
+        if ( !$settings instanceof ArrayObject && !is_array( $settings ) )
+        {
+            throw new InvalidArgumentType( '\$settings', 'array|\ArrayObject', $settings );
+        }
+
         $this->settings = $settings;
     }
 
@@ -69,7 +77,13 @@ class FieldTypeService implements FieldTypeServiceInterface
      */
     public function getFieldTypes()
     {
-        foreach ( array_keys( $this->settings ) as $identifier )
+        // Get array copy in case of ArrayObject
+        if ( $this->settings instanceof ArrayObject )
+            $array = $this->settings->getArrayCopy();
+        else
+            $array = $this->settings;
+
+        foreach ( array_keys( $array ) as $identifier )
         {
             if ( isset( $this->fieldTypes[$identifier] ) )
                 continue;
@@ -117,10 +131,11 @@ class FieldTypeService implements FieldTypeServiceInterface
      * @todo Move this to a internal service provided to services that needs this (including this)
      *
      * @access private This function is for internal use only.
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $type not properly setup
-     *         with settings injected to service
      *
      * @param string $identifier
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      *
      * @return \eZ\Publish\SPI\FieldType\FieldType
      */
@@ -128,23 +143,29 @@ class FieldTypeService implements FieldTypeServiceInterface
     {
         if ( !isset( $this->settings[$identifier] ) )
         {
+            // Get array copy in case of ArrayObject
+            if ( $this->settings instanceof ArrayObject )
+                $array = $this->settings->getArrayCopy();
+            else
+                $array = $this->settings;
+
             throw new NotFoundException(
                 "FieldType",
-                "Provided \$identifier is unknown: '{$identifier}', has: " . var_export( array_keys( $this->settings ), true )
+                "Provided \$identifier is unknown: '{$identifier}', has: " . var_export( array_keys( $array ), true )
             );
         }
 
-        if ( $this->settings[$identifier] instanceof SPIFieldType )
+        $spiFieldType = $this->settings[$identifier];
+        if ( $spiFieldType instanceof SPIFieldType )
         {
-            return $this->settings[$identifier];
+            return $spiFieldType;
         }
-        else if ( !is_callable( $this->settings[$identifier] ) )
+        else if ( !is_callable( $spiFieldType ) )
         {
             throw new InvalidArgumentException( "\$settings[$identifier]", 'must be instance of SPI\\FieldType\\FieldType or callback to generate it' );
         }
 
-        /** @var $closure \Closure */
-        $closure = $this->settings[$identifier];
-        return $closure();
+        /** @var $spiFieldType \Closure */
+        return $spiFieldType();
     }
 }
