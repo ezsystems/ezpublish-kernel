@@ -31,6 +31,8 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 {
     const URL_ALIAS_ROUTE_NAME = 'ez_urlalias';
 
+    const LOCATION_VIEW_CONTROLLER = 'ezpublish.controller.content.view:viewLocation';
+
     /**
      * @var \Symfony\Component\Routing\RequestContext
      */
@@ -70,7 +72,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     {
         $this->lazyRepository = $lazyRepository;
         $this->generator = $generator;
-        $this->requestContext = isset( $requestContext ) ? $requestContext : new RequestContext();
+        $this->requestContext = $requestContext !== null ? $requestContext : new RequestContext();
         $this->logger = $logger;
     }
 
@@ -111,7 +113,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
             {
                 case UrlAlias::LOCATION:
                     $params += array(
-                        '_controller' => 'ezpublish.controller.content.view:viewLocation',
+                        '_controller' => static::LOCATION_VIEW_CONTROLLER,
                         'locationId' => $urlAlias->destination,
                         'viewType' => ViewManager::VIEW_TYPE_FULL,
                         'layout' => true,
@@ -139,7 +141,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 
                 case UrlAlias::RESOURCE:
                 case UrlAlias::VIRTUAL:
-                    $request->attributes->set( 'semanticPathinfo', "/$urlAlias->destination" );
+                    $request->attributes->set( 'semanticPathinfo', '/' . trim( $urlAlias->destination, '/' ) );
                     // In URLAlias terms, "forward" means "redirect".
                     if ( $urlAlias->forward )
                         $request->attributes->set( 'needsRedirect', true );
@@ -240,6 +242,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     public function setContext( RequestContext $context )
     {
         $this->requestContext = $context;
+        $this->generator->setRequestContext( $context );
     }
 
     public function getContext()
