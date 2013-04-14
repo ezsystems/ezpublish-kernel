@@ -28,6 +28,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
@@ -254,6 +255,15 @@ class SearchHandler implements SearchHandlerInterface
             if ( $criterion instanceof LogicalAnd )
             {
                 $this->generateMatchByCriteria( $criterion->criteria, $match );
+            }
+            else if ( $criterion instanceof LogicalOr && !isset( $match['or'] ) )
+            {
+                foreach ( $criterion->criteria as $subCriterion )
+                {
+                    $subMatch = array();
+                    $this->generateMatchByCriteria( array( $subCriterion ), $subMatch );
+                    $match['or'][] = $subMatch;
+                }
             }
             else if ( $criterion instanceof ContentId && !isset( $match['id'] ) )
             {
