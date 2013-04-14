@@ -132,8 +132,14 @@ class RequestEventListener implements EventSubscriberInterface
             {
                 $siteaccess = $request->attributes->get( 'siteaccess' );
                 $semanticPathinfo = $request->attributes->get( 'semanticPathinfo' );
-                if ( $siteaccess instanceof SiteAccess && $siteaccess->matcher instanceof URILexer )
+                if (
+                    $request->attributes->get( 'prependSiteaccessOnRedirect', true )
+                    && $siteaccess instanceof SiteAccess
+                    && $siteaccess->matcher instanceof URILexer
+                )
+                {
                     $semanticPathinfo = $siteaccess->matcher->analyseLink( $semanticPathinfo );
+                }
 
                 $event->setResponse(
                     new RedirectResponse(
