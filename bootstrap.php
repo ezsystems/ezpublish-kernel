@@ -12,7 +12,7 @@
 use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 use eZ\Publish\Core\MVC\Legacy\Kernel\CLIHandler as LegacyKernelCLI;
 
-// Get globl config.php settings
+// Get global config.php settings
 if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
 {
     throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php & customize to your needs!' );
