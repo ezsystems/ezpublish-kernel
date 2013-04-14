@@ -226,6 +226,24 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test finding content with multiple ids using OR expression
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\Backend::find
+     * @group inMemoryBackend
+     */
+    public function testFindMultipleIdsUsingOR()
+    {
+        $list = $this->backend->find( 'Content\\VersionInfo', array( 'or' => array( array( 'id' => 3 ), array( 'id' => 5 ) ) ) );
+        self::assertEquals( 2, count( $list ) );
+
+        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo', $list[0] );
+        self::assertEquals( $list[0]->id, 3 );
+
+        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo', $list[1] );
+        self::assertEquals( $list[1]->id, 5 );
+    }
+
+    /**
      * Test finding content with results
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::find
