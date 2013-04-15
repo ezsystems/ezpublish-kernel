@@ -913,7 +913,13 @@ class ContentService implements ContentServiceInterface
         $this->repository->beginTransaction();
         try
         {
+            // Load Locations first as deleting Content also deletes belonging Locations
+            $spiLocations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $contentInfo->id );
             $this->persistenceHandler->contentHandler()->deleteContent( $contentInfo->id );
+            foreach ( $spiLocations as $spiLocation )
+            {
+                $this->persistenceHandler->urlAliasHandler()->locationDeleted( $spiLocation->id );
+            }
             $this->repository->commit();
         }
         catch ( Exception $e )
