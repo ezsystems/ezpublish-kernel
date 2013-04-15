@@ -26,7 +26,7 @@ class UserHandlerTest extends HandlerTest
     function providerForUnCachedMethods()
     {
         return array(
-            array( 'create', array( new User ) ),
+            //array( 'create', array( new User ) ),
             array( 'load', array( 14 ) ),
             array( 'loadByLogin', array( 'admin', true ) ),
             array( 'update', array( new User ) ),
@@ -80,6 +80,37 @@ class UserHandlerTest extends HandlerTest
 
         $handler = $this->persistenceHandler->userHandler();
         call_user_func_array( array( $handler, $method ), $arguments );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::create
+     */
+    public function testCreate()
+    {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
+
+        $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler' );
+        $this->persistenceFactoryMock
+            ->expects( $this->once() )
+            ->method( 'getUserHandler' )
+            ->will( $this->returnValue( $innerHandlerMock ) );
+
+        $innerHandlerMock
+            ->expects( $this->once() )
+            ->method(  'create' )
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User' ) )
+            ->will(
+                $this->returnValue( true )
+            );
+
+        $this->cacheMock
+            ->expects( $this->at( 0 ) )
+            ->method( 'clear' )
+            ->with( 'content', 42 )
+            ->will( $this->returnValue( true ) );
+
+        $handler = $this->persistenceHandler->userHandler();
+        $handler->create( new User( array( "id" => 42 ) ) );
     }
 
     /**
