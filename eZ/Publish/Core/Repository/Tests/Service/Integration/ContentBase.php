@@ -2185,52 +2185,6 @@ abstract class ContentBase extends BaseServiceTest
     }
 
     /**
-     * Test for the deleteContent() method.
-     *
-     * @depends testLoadContent
-     * @covers \eZ\Publish\Core\Repository\ContentService::deleteContent
-     */
-    public function testDeleteContent()
-    {
-        /* BEGIN: Use Case */
-        $contentService = $this->repository->getContentService();
-
-        $contentInfo = $contentService->loadContentInfo( 4 );
-
-        $contentService->deleteContent( $contentInfo );
-        /* END: Use Case */
-
-        try
-        {
-            $contentService->loadContent( $contentInfo->id );
-
-            $this->fail( "Content was not successfully deleted!" );
-        }
-        catch ( NotFoundException $e )
-        {
-            // Do nothing
-        }
-    }
-
-    /**
-     * Test for the deleteContent() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\ContentService::deleteContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testDeleteContentThrowsUnauthorizedException()
-    {
-        $contentService = $this->repository->getContentService();
-
-        $contentInfo = $contentService->loadContentInfo( 4 );
-
-        // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
-
-        $contentService->deleteContent( $contentInfo );
-    }
-
-    /**
      * Test for the copyContent() method.
      *
      * @dep_ends testCreate
