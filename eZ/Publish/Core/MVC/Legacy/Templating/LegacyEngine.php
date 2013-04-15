@@ -62,46 +62,49 @@ class LegacyEngine implements EngineInterface
     public function render( $name, array $parameters = array() )
     {
         $objectConverter = $this->objectConverter;
+        $legacyVars = array();
+        foreach ( $parameters as $varName => $param )
+        {
+            // If $param is an array, we recursively convert all objects contained in it (if any).
+            // Scalar parameters are passed as is
+            if ( is_array( $param ) )
+            {
+                array_walk_recursive(
+                    $param,
+                    function ( &$element ) use ( $objectConverter )
+                    {
+                        if ( is_object( $element ) && !( $element instanceof LegacyCompatible ) )
+                        {
+                            $element = $objectConverter->convert( $element );
+                        }
+                    }
+                );
+                $legacyVars[$varName] = $param;
+            }
+            else if ( !is_object( $param ) || $param instanceof LegacyCompatible )
+            {
+                $legacyVars[$varName] = $param;
+            }
+            else
+            {
+                $objectConverter->register( $param, $varName );
+            }
+        }
+        $legacyVars += $objectConverter->convertAll();
+
         return $this->getLegacyKernel()->runCallback(
-            function () use ( $name, $parameters, $objectConverter )
+            function () use ( $name, $legacyVars )
             {
                 $tpl = eZTemplate::factory();
-                foreach ( $parameters as $varName => $param )
-                {
-                    // If $param is an array, we recursively convert all objects contained in it (if any).
-                    // Scalar parameters are passed as is
-                    if ( is_array( $param ) )
-                    {
-                        array_walk_recursive(
-                            $param,
-                            function ( &$element ) use ( $objectConverter )
-                            {
-                                if ( is_object( $element ) && !( $element instanceof LegacyCompatible ) )
-                                {
-                                    $element = $objectConverter->convert( $element );
-                                }
-                            }
-                        );
-                        $tpl->setVariable( $varName, $param );
-                    }
-                    else if ( !is_object( $param ) || $param instanceof LegacyCompatible )
-                    {
-                        $tpl->setVariable( $varName, $param );
-                    }
-                    else
-                    {
-                        $objectConverter->register( $param, $varName );
-                    }
-                }
-
                 // Get converted objects if any and pass them to the template
-                foreach ( $objectConverter->convertAll() as $varName => $obj )
+                foreach ( $legacyVars as $varName => $value )
                 {
-                    $tpl->setVariable( $varName, $obj );
+                    $tpl->setVariable( $varName, $value );
                 }
 
                 return $tpl->fetch( $name );
-            }
+            },
+            false
         );
     }
 
