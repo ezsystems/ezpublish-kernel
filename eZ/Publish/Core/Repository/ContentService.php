@@ -907,6 +907,8 @@ class ContentService implements ContentServiceInterface
      */
     public function deleteContent( ContentInfo $contentInfo )
     {
+        $contentInfo = $this->internalLoadContentInfo( $contentInfo->id );
+
         if ( !$this->repository->canUser( 'content', 'remove', $contentInfo ) )
             throw new UnauthorizedException( 'content', 'remove' );
 
