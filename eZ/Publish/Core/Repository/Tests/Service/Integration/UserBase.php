@@ -607,28 +607,6 @@ abstract class UserBase extends BaseServiceTest
     }
 
     /**
-     * Test deleting a user
-     * @covers \eZ\Publish\API\Repository\UserService::deleteUser
-     */
-    public function testDeleteUser()
-    {
-        $userService = $this->repository->getUserService();
-
-        $user = $userService->loadUser( 14 );
-        $userService->deleteUser( $user );
-
-        try
-        {
-            $userService->loadUser( 14 );
-            self::fail( "failed deleting a user" );
-        }
-        catch ( NotFoundException $e )
-        {
-            // Do nothing
-        }
-    }
-
-    /**
      * Test updating a user
      * @covers \eZ\Publish\API\Repository\UserService::updateUser
      */
