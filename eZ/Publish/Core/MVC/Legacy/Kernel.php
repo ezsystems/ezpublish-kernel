@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\MVC\Legacy;
 
 use ezpKernel;
 use ezpKernelHandler;
+use RuntimeException;
 
 /**
  * Class wrapping the legacy kernel
@@ -30,6 +31,8 @@ class Kernel extends ezpKernel
      * @var string
      */
     private $webRootDir;
+
+    private $runningCallback = false;
 
     /**
      * @param \ezpKernelHandler $kernelHandler
@@ -79,19 +82,30 @@ class Kernel extends ezpKernel
 
     /**
      * Runs a callback function in the legacy kernel environment.
-     * This is useful to run eZ Publish 4.x code from a non-related context (like eZ Publish 5)
+     * This is useful to run eZ Publish 4.x code from a non-related context (like eZ Publish 5).
+     * Will throw a \RuntimeException if trying to run a callback inside a callback.
      *
      * @param \Closure $callback
      * @param boolean $postReinitialize Default is true.
      *                               If set to false, the kernel environment will not be reinitialized.
      *                               This can be useful to optimize several calls to the kernel within the same context.
+     *
+     * @throws \RuntimeException
+     *
      * @return mixed The result of the callback
      */
     public function runCallback( \Closure $callback, $postReinitialize = true )
     {
+        if ( $this->runningCallback )
+        {
+            throw new RuntimeException( 'Trying to run recursive callback in legacy kernel! Inception!' );
+        }
+
+        $this->runningCallback = true;
         $this->enterLegacyRootDir();
         $return = parent::runCallback( $callback, $postReinitialize );
         $this->leaveLegacyRootDir();
+        $this->runningCallback = false;
         return $return;
     }
 }
