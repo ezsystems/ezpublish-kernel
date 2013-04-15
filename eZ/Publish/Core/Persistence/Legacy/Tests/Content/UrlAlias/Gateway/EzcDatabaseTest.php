@@ -438,7 +438,7 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * Test for the getNewId() method.
+     * Test for the getNextId() method.
      *
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::getNextId
      */
@@ -446,12 +446,8 @@ class EzcDatabaseTest extends TestCase
     {
         $gateway = $this->getGateway();
 
-        $refObject = new \ReflectionObject( $gateway );
-        $refMethod = $refObject->getMethod( "getNextId" );
-        $refMethod->setAccessible( true );
-
-        self::assertEquals( 1, $refMethod->invoke( $gateway ) );
-        self::assertEquals( 2, $refMethod->invoke( $gateway ) );
+        self::assertEquals( 1, $gateway->getNextId() );
+        self::assertEquals( 2, $gateway->getNextId() );
     }
 
     /**
