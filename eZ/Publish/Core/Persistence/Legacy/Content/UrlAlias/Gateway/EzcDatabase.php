@@ -608,18 +608,31 @@ class EzcDatabase extends Gateway
      */
     public function getNextId()
     {
+        $sequence = $this->dbHandler->getSequenceName(
+            'ezurlalias_ml_incr', 'id'
+        );
         /** @var $query \ezcQueryInsert */
         $query = $this->dbHandler->createInsertQuery();
         $query->insertInto(
             $this->dbHandler->quoteTable( "ezurlalias_ml_incr" )
-        )->set(
-            $this->dbHandler->quoteColumn( "id" ),
-            $query->bindValue( null, null, \PDO::PARAM_NULL )
-        )->prepare()->execute();
-
-        return $this->dbHandler->lastInsertId(
-            $this->dbHandler->getSequenceName( "ezurlalias_ml_incr", "id" )
         );
+        if ( $this->dbHandler->getName() === 'pgsql' )
+        {
+            $query->set(
+                $this->dbHandler->quoteColumn( "id" ),
+                "nextval('{$sequence}')"
+            );
+        }
+        else
+        {
+            $query->set(
+                $this->dbHandler->quoteColumn( "id" ),
+                $query->bindValue( null, null, \PDO::PARAM_NULL )
+            );
+        }
+        $query->prepare()->execute();
+
+        return $this->dbHandler->lastInsertId( $sequence );
     }
 
     /**
