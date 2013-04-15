@@ -650,15 +650,13 @@ class UserService implements UserServiceInterface
      */
     public function deleteUser( APIUser $user )
     {
-        if ( !is_numeric( $user->id ) )
-            throw new InvalidArgumentValue( "id", $user->id, "User" );
-
         $loadedUser = $this->loadUser( $user->id );
 
         $this->repository->beginTransaction();
         try
         {
             $this->repository->getContentService()->deleteContent( $loadedUser->getVersionInfo()->getContentInfo() );
+            $this->userHandler->delete( $loadedUser->id );
             $this->repository->commit();
         }
         catch ( \Exception $e )
