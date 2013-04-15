@@ -96,7 +96,7 @@ class LegacyEngine implements EngineInterface
             function () use ( $name, $legacyVars )
             {
                 $tpl = eZTemplate::factory();
-                // Get converted objects if any and pass them to the template
+
                 foreach ( $legacyVars as $varName => $value )
                 {
                     $tpl->setVariable( $varName, $value );
