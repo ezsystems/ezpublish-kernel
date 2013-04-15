@@ -129,13 +129,18 @@ class UserHandler implements UserHandlerInterface
      * Delete user with the given ID.
      *
      * @param mixed $userId
-     *
-     * @todo Throw on missing user?
      */
     public function delete( $userId )
     {
-        $this->backend->delete( 'User', $userId );
-        $this->backend->deleteByMatch( 'User\\RoleAssignment', array( 'contentId' => $userId ) );
+        try
+        {
+            $this->backend->delete( 'User', $userId );
+            $this->backend->deleteByMatch( 'User\\RoleAssignment', array( 'contentId' => $userId ) );
+        }
+        catch ( NotFound $e )
+        {
+            // Do nothing, we do not throw if User or RoleAssignments do not exist
+        }
     }
 
     /**
