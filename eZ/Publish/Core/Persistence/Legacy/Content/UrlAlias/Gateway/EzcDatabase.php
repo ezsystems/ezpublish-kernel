@@ -608,18 +608,37 @@ class EzcDatabase extends Gateway
      */
     public function getNextId()
     {
+        $sequence = $this->dbHandler->getSequenceName(
+            'ezurlalias_ml_incr', 'id'
+        );
         /** @var $query \ezcQueryInsert */
         $query = $this->dbHandler->createInsertQuery();
         $query->insertInto(
             $this->dbHandler->quoteTable( "ezurlalias_ml_incr" )
-        )->set(
-            $this->dbHandler->quoteColumn( "id" ),
-            $query->bindValue( null, null, \PDO::PARAM_NULL )
-        )->prepare()->execute();
-
-        return $this->dbHandler->lastInsertId(
-            $this->dbHandler->getSequenceName( "ezurlalias_ml_incr", "id" )
         );
+        // ezcDatabase does not abstract the "auto increment id"
+        // INSERT INTO ezurlalias_ml_incr VALUES(DEFAULT) is not an option due
+        // to this mysql bug: http://bugs.mysql.com/bug.php?id=42270
+        // as a result we are forced to check which database is currently used
+        // to generate the correct SQL query
+        // see https://jira.ez.no/browse/EZP-20652
+        if ( $this->dbHandler->getName() === 'pgsql' )
+        {
+            $query->set(
+                $this->dbHandler->quoteColumn( "id" ),
+                "nextval('{$sequence}')"
+            );
+        }
+        else
+        {
+            $query->set(
+                $this->dbHandler->quoteColumn( "id" ),
+                $query->bindValue( null, null, \PDO::PARAM_NULL )
+            );
+        }
+        $query->prepare()->execute();
+
+        return $this->dbHandler->lastInsertId( $sequence );
     }
 
     /**
