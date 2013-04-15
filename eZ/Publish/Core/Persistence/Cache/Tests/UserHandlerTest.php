@@ -106,11 +106,17 @@ class UserHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->at( 0 ) )
             ->method( 'clear' )
-            ->with( 'user', 'role', 'assignments', 'byGroup', 14 )
+            ->with( 'content', 14 )
             ->will( $this->returnValue( true ) );
 
         $this->cacheMock
             ->expects( $this->at( 1 ) )
+            ->method( 'clear' )
+            ->with( 'user', 'role', 'assignments', 'byGroup', 14 )
+            ->will( $this->returnValue( true ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 2 ) )
             ->method( 'clear' )
             ->with( 'user', 'role', 'assignments', 'byGroup', 'inherited', 14 )
             ->will( $this->returnValue( true ) );
