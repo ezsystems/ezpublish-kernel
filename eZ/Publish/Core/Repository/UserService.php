@@ -680,9 +680,6 @@ class UserService implements UserServiceInterface
      */
     public function updateUser( APIUser $user, UserUpdateStruct $userUpdateStruct )
     {
-        if ( !is_numeric( $user->id ) )
-            throw new InvalidArgumentValue( "id", $user->id, "User" );
-
         // We need to determine if we have anything to update.
         // UserUpdateStruct is specific as some of the new content is in
         // content update struct and some of it is in additional fields like
@@ -718,7 +715,7 @@ class UserService implements UserServiceInterface
         if ( $userUpdateStruct->enabled !== null && !is_bool( $userUpdateStruct->enabled ) )
             throw new InvalidArgumentValue( "enabled", $userUpdateStruct->enabled, "UserUpdateStruct" );
 
-        if ( $userUpdateStruct->maxLogin !== null && !is_numeric( $userUpdateStruct->maxLogin ) )
+        if ( $userUpdateStruct->maxLogin !== null && !is_int( $userUpdateStruct->maxLogin ) )
             throw new InvalidArgumentValue( "maxLogin", $userUpdateStruct->maxLogin, "UserUpdateStruct" );
 
         $contentService = $this->repository->getContentService();
