@@ -61,7 +61,12 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     public function update( User $user )
     {
         $this->logger->logCall( __METHOD__, array( 'struct' => $user ) );
-        return $this->persistenceFactory->getUserHandler()->update( $user );
+        $return = $this->persistenceFactory->getUserHandler()->update( $user );
+
+        // Clear corresponding content cache as update of the User changes it's external data
+        $this->cache->clear( 'content', $user->id );
+
+        return $return;
     }
 
     /**
