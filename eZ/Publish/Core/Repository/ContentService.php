@@ -907,13 +907,21 @@ class ContentService implements ContentServiceInterface
      */
     public function deleteContent( ContentInfo $contentInfo )
     {
+        $contentInfo = $this->internalLoadContentInfo( $contentInfo->id );
+
         if ( !$this->repository->canUser( 'content', 'remove', $contentInfo ) )
             throw new UnauthorizedException( 'content', 'remove' );
 
         $this->repository->beginTransaction();
         try
         {
+            // Load Locations first as deleting Content also deletes belonging Locations
+            $spiLocations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $contentInfo->id );
             $this->persistenceHandler->contentHandler()->deleteContent( $contentInfo->id );
+            foreach ( $spiLocations as $spiLocation )
+            {
+                $this->persistenceHandler->urlAliasHandler()->locationDeleted( $spiLocation->id );
+            }
             $this->repository->commit();
         }
         catch ( Exception $e )

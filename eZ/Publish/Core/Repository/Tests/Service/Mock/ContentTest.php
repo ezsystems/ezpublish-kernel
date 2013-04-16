@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 
 /**
  * Mock test case for Content service
@@ -99,6 +100,143 @@ class ContentTest extends BaseServiceMockTest
             ),
             array( "cro-HR" )
         );
+    }
+
+    /**
+     * Test for the deleteContent() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteContent
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     */
+    public function testDeleteContentThrowsUnauthorizedException()
+    {
+        $repository = $this->getRepositoryMock();
+        $contentService = $this->getPartlyMockedContentService( array( "internalLoadContentInfo" ) );
+        $contentInfo = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
+
+        $contentInfo->expects( $this->any() )
+            ->method( "__get" )
+            ->with( "id" )
+            ->will( $this->returnValue( 42 ) );
+
+        $contentService->expects( $this->once() )
+            ->method( "internalLoadContentInfo" )
+            ->with( 42 )
+            ->will( $this->returnValue( $contentInfo ) );
+
+        $repository->expects( $this->once() )
+            ->method( "canUser" )
+            ->with( "content", "remove" )
+            ->will( $this->returnValue( false ) );
+
+        /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo */
+        $contentService->deleteContent( $contentInfo );
+    }
+
+    /**
+     * Test for the deleteContent() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteContent
+     */
+    public function testDeleteContent()
+    {
+        $repository = $this->getRepositoryMock();
+
+        $repository->expects( $this->once() )
+            ->method( "canUser" )
+            ->with( "content", "remove" )
+            ->will( $this->returnValue( true ) );
+
+        $contentService = $this->getPartlyMockedContentService( array( "internalLoadContentInfo" ) );
+        /** @var \PHPUnit_Framework_MockObject_MockObject $urlAliasHandler */
+        $urlAliasHandler = $this->getPersistenceMock()->urlAliasHandler();
+        /** @var \PHPUnit_Framework_MockObject_MockObject $locationHandler */
+        $locationHandler = $this->getPersistenceMock()->locationHandler();
+        /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandler */
+        $contentHandler = $this->getPersistenceMock()->contentHandler();
+
+        $contentInfo = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
+
+        $contentService->expects( $this->once() )
+            ->method( "internalLoadContentInfo" )
+            ->with( 42 )
+            ->will( $this->returnValue( $contentInfo ) );
+
+        $contentInfo->expects( $this->any() )
+            ->method( "__get" )
+            ->with( "id" )
+            ->will( $this->returnValue( 42 ) );
+
+        $repository->expects( $this->once() )->method( "beginTransaction" );
+
+        $spiLocations = array(
+            new SPILocation( array( "id" => 1 ) ),
+            new SPILocation( array( "id" => 2 ) ),
+        );
+        $locationHandler->expects( $this->once() )
+            ->method( "loadLocationsByContent" )
+            ->with( 42 )
+            ->will( $this->returnValue( $spiLocations ) );
+
+        $contentHandler->expects( $this->once() )
+            ->method( "deleteContent" )
+            ->with( 42 );
+
+        foreach ( $spiLocations as $index => $spiLocation )
+        {
+            $urlAliasHandler->expects( $this->at( $index ) )
+                ->method( "locationDeleted" )
+                ->with( $spiLocation->id );
+        }
+
+        $repository->expects( $this->once() )->method( "commit" );
+
+        /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo */
+        $contentService->deleteContent( $contentInfo );
+    }
+
+    /**
+     * Test for the deleteContent() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteContent
+     * @expectedException \Exception
+     */
+    public function testDeleteContentWithRollback()
+    {
+        $repository = $this->getRepositoryMock();
+
+        $repository->expects( $this->once() )
+            ->method( "canUser" )
+            ->with( "content", "remove" )
+            ->will( $this->returnValue( true ) );
+
+        $contentService = $this->getPartlyMockedContentService( array( "internalLoadContentInfo" ) );
+        /** @var \PHPUnit_Framework_MockObject_MockObject $locationHandler */
+        $locationHandler = $this->getPersistenceMock()->locationHandler();
+
+        $contentInfo = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
+
+        $contentService->expects( $this->once() )
+            ->method( "internalLoadContentInfo" )
+            ->with( 42 )
+            ->will( $this->returnValue( $contentInfo ) );
+
+        $contentInfo->expects( $this->any() )
+            ->method( "__get" )
+            ->with( "id" )
+            ->will( $this->returnValue( 42 ) );
+
+        $repository->expects( $this->once() )->method( "beginTransaction" );
+
+        $locationHandler->expects( $this->once() )
+            ->method( "loadLocationsByContent" )
+            ->with( 42 )
+            ->will( $this->throwException( new \Exception ) );
+
+        $repository->expects( $this->once() )->method( "rollback" );
+
+        /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo */
+        $contentService->deleteContent( $contentInfo );
     }
 
     /**
