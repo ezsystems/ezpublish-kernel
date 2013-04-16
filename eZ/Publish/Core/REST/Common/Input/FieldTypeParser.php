@@ -86,14 +86,13 @@ class FieldTypeParser
      */
     public function parseValue( $fieldTypeIdentifier, $value )
     {
-        $fieldType = $this->fieldTypeService->getFieldType( $fieldTypeIdentifier );
-
         if ( $this->fieldTypeProcessorRegistry->hasProcessor( $fieldTypeIdentifier ) )
         {
             $fieldTypeProcessor = $this->fieldTypeProcessorRegistry->getProcessor( $fieldTypeIdentifier );
-            $value = $fieldTypeProcessor->preProcessHash( $value );
+            $value = $fieldTypeProcessor->preProcessValueHash( $value );
         }
 
+        $fieldType = $this->fieldTypeService->getFieldType( $fieldTypeIdentifier );
         return $fieldType->fromHash( $value );
     }
 
@@ -108,6 +107,12 @@ class FieldTypeParser
      */
     public function parseFieldSettings( $fieldTypeIdentifier, $settingsHash )
     {
+        if ( $this->fieldTypeProcessorRegistry->hasProcessor( $fieldTypeIdentifier ) )
+        {
+            $fieldTypeProcessor = $this->fieldTypeProcessorRegistry->getProcessor( $fieldTypeIdentifier );
+            $settingsHash = $fieldTypeProcessor->preProcessFieldSettingsHash( $settingsHash );
+        }
+
         $fieldType = $this->fieldTypeService->getFieldType( $fieldTypeIdentifier );
         return $fieldType->fieldSettingsFromHash( $settingsHash );
     }
@@ -123,6 +128,12 @@ class FieldTypeParser
      */
     public function parseValidatorConfiguration( $fieldTypeIdentifier, $configurationHash )
     {
+        if ( $this->fieldTypeProcessorRegistry->hasProcessor( $fieldTypeIdentifier ) )
+        {
+            $fieldTypeProcessor = $this->fieldTypeProcessorRegistry->getProcessor( $fieldTypeIdentifier );
+            $configurationHash = $fieldTypeProcessor->preProcessValidatorConfigurationHash( $configurationHash );
+        }
+
         $fieldType = $this->fieldTypeService->getFieldType( $fieldTypeIdentifier );
         return $fieldType->validatorConfigurationFromHash( $configurationHash );
     }

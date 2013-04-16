@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Server\Tests\FieldTypeProcessor;
+namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
-use eZ\Publish\Core\REST\Server\Tests\BaseTest;
+use PHPUnit_Framework_TestCase;
 
-abstract class BinaryInputProcessorTest extends BaseTest
+abstract class BinaryInputProcessorTest extends PHPUnit_Framework_TestCase
 {
     private $tempDir;
 
@@ -52,18 +52,18 @@ abstract class BinaryInputProcessorTest extends BaseTest
         return $this->tempDir;
     }
 
-    public function testPreProcessHashMissingKey()
+    public function testPreProcessValueHashMissingKey()
     {
         $processor = $this->getProcessor();
 
         $inputHash = array( 'foo' => 'bar' );
 
-        $outputHash = $processor->preProcessHash( $inputHash );
+        $outputHash = $processor->preProcessValueHash( $inputHash );
 
         $this->assertEquals( $inputHash, $outputHash );
     }
 
-    public function testPreProcessHash()
+    public function testPreProcessValueHash()
     {
         $processor = $this->getProcessor();
 
@@ -71,7 +71,7 @@ abstract class BinaryInputProcessorTest extends BaseTest
 
         $inputHash = array( 'data' => base64_encode( $fileContent ) );
 
-        $outputHash = $processor->preProcessHash( $inputHash );
+        $outputHash = $processor->preProcessValueHash( $inputHash );
 
         $this->assertFalse( isset( $outputHash['data'] ) );
         $this->assertTrue( isset( $outputHash['path'] ) );
@@ -89,7 +89,7 @@ abstract class BinaryInputProcessorTest extends BaseTest
     /**
      * Returns the processor under test
      *
-     * @return \eZ\Publish\Core\REST\Server\FieldTypeProcessor\BinaryInputProcessor
+     * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryInputProcessor
      */
     abstract protected function getProcessor();
 }

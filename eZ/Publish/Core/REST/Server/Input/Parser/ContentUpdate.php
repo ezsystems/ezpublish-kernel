@@ -22,6 +22,8 @@ class ContentUpdate extends Base
     /**
      * Parse input structure
      *
+     * @todo use url handler instead of hardcoded URL matching
+     *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      *

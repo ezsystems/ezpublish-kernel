@@ -226,7 +226,7 @@ class Type extends FieldType
                         self::DEFAULT_EMPTY,
                         self::DEFAULT_CURRENT_DATE
                     );
-                    if ( !in_array( $value, $definedTypes ) )
+                    if ( !in_array( $value, $definedTypes, true ) )
                     {
                         $validationErrors[] = new ValidationError(
                             "Setting '%setting%' is of unknown type",

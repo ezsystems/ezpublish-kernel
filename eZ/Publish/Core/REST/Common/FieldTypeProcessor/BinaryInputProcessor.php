@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Server\FieldTypeProcessor;
+namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
-abstract class BinaryInputProcessor implements FieldTypeProcessor
+abstract class BinaryInputProcessor extends FieldTypeProcessor
 {
     /**
      * @var string
@@ -27,19 +27,9 @@ abstract class BinaryInputProcessor implements FieldTypeProcessor
     }
 
     /**
-     * Processes uploaded binary file data in $incomingValueHash
-     *
-     * This method checks the 'data' key in $incomingValueHash, which must
-     * contain base64 encoded binary data to be stored as a binary file. It
-     * stores the decoded data in a temporary file in {@link
-     * $temporaryDirectory} and sets the 'path' key in the returned hash
-     * accordingly.
-     *
-     * @param array $incomingValueHash
-     *
-     * @return array
+     * {@inheritDoc}
      */
-    public function preProcessHash( $incomingValueHash )
+    public function preProcessValueHash( $incomingValueHash )
     {
         if ( isset( $incomingValueHash['data'] ) )
         {
