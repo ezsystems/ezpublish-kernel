@@ -680,6 +680,8 @@ class UserService implements UserServiceInterface
      */
     public function updateUser( APIUser $user, UserUpdateStruct $userUpdateStruct )
     {
+        $loadedUser = $this->loadUser( $user->id );
+
         // We need to determine if we have anything to update.
         // UserUpdateStruct is specific as some of the new content is in
         // content update struct and some of it is in additional fields like
@@ -719,7 +721,6 @@ class UserService implements UserServiceInterface
             throw new InvalidArgumentValue( "maxLogin", $userUpdateStruct->maxLogin, "UserUpdateStruct" );
 
         $contentService = $this->repository->getContentService();
-        $loadedUser = $this->loadUser( $user->id );
 
         if ( !$this->repository->canUser( 'content', 'edit', $loadedUser ) )
             throw new UnauthorizedException( 'content', 'edit' );
