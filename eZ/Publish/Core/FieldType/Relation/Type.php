@@ -64,7 +64,7 @@ class Type extends FieldType
             }
         }
         if ( !isset( $fieldSettings['selectionMethod'] ) ||
-            ( $fieldSettings['selectionMethod'] != self::SELECTION_BROWSE && $fieldSettings['selectionMethod'] != self::SELECTION_DROPDOWN ) )
+            ( $fieldSettings['selectionMethod'] !== self::SELECTION_BROWSE && $fieldSettings['selectionMethod'] !== self::SELECTION_DROPDOWN ) )
         {
             $validationResult[] = new ValidationError(
                 "Setting selection method must be either %selection_browse% or %selection_dropdown%",

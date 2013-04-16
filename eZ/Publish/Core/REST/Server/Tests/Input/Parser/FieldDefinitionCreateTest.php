@@ -98,6 +98,23 @@ class FieldDefinitionCreateTest extends BaseTest
             $result->descriptions,
             'descriptions not created correctly'
         );
+
+        $this->assertEquals(
+            array( 'textRows' => 24 ),
+            $result->fieldSettings,
+            'fieldSettings not created correctly'
+        );
+
+        $this->assertEquals(
+            array(
+                'StringLengthValidator' => array(
+                    'minStringLength' => 12,
+                    'maxStringLength' => 24
+                )
+            ),
+            $result->validatorConfiguration,
+            'validatorConfiguration not created correctly'
+        );
     }
 
     /**
@@ -170,8 +187,48 @@ class FieldDefinitionCreateTest extends BaseTest
         return new FieldDefinitionCreate(
             $this->getUrlHandler(),
             $this->getContentTypeServiceMock(),
+            $this->getFieldTypeParserMock(),
             $this->getParserTools()
         );
+    }
+
+    /**
+     * Get the FieldTypeParser mock object
+     *
+     * @return \eZ\Publish\Core\REST\Common\Input\FieldTypeParser
+     */
+    protected function getFieldTypeParserMock()
+    {
+        $fieldTypeParserMock = $this->getMock(
+            'eZ\\Publish\\Core\\REST\\Common\\Input\\FieldTypeParser',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $fieldTypeParserMock->expects( $this->any() )
+            ->method( 'parseValue' )
+            ->will( $this->returnValue( 'New title' ) );
+
+        $fieldTypeParserMock->expects( $this->any() )
+            ->method( 'parseFieldSettings' )
+            ->will( $this->returnValue( array( 'textRows' => 24 ) ) );
+
+        $fieldTypeParserMock->expects( $this->any() )
+            ->method( 'parseValidatorConfiguration' )
+            ->will(
+                $this->returnValue(
+                    array(
+                        'StringLengthValidator' => array(
+                            'minStringLength' => 12,
+                            'maxStringLength' => 24
+                        )
+                    )
+                )
+            );
+
+        return $fieldTypeParserMock;
     }
 
     /**
@@ -238,7 +295,17 @@ class FieldDefinitionCreateTest extends BaseTest
                         '#text' => 'This is the title'
                     )
                 )
-            )
+            ),
+            // Note that ezstring does not support settings, but that is irrelevant for the test
+            'fieldSettings' => array(
+                'textRows' => 24
+            ),
+            'validatorConfiguration' => array(
+                'StringLengthValidator' => array(
+                    'minStringLength' => '12',
+                    'maxStringLength' => '24'
+                )
+            ),
         );
     }
 }

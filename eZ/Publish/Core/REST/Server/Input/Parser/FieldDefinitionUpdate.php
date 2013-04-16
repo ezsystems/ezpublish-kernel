@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\Core\REST\Common\Exceptions;
@@ -28,6 +29,13 @@ class FieldDefinitionUpdate extends Base
     protected $contentTypeService;
 
     /**
+     * FieldType parser
+     *
+     * @var \eZ\Publish\Core\REST\Common\Input\FieldTypeParser
+     */
+    protected $fieldTypeParser;
+
+    /**
      * Parser tools
      *
      * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
@@ -41,10 +49,11 @@ class FieldDefinitionUpdate extends Base
      * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( UrlHandler $urlHandler, ContentTypeService $contentTypeService, ParserTools $parserTools )
+    public function __construct( UrlHandler $urlHandler, ContentTypeService $contentTypeService, FieldTypeParser $fieldTypeParser, ParserTools $parserTools )
     {
         parent::__construct( $urlHandler );
         $this->contentTypeService = $contentTypeService;
+        $this->fieldTypeParser = $fieldTypeParser;
         $this->parserTools = $parserTools;
     }
 
@@ -123,15 +132,60 @@ class FieldDefinitionUpdate extends Base
             $fieldDefinitionUpdate->isSearchable = $this->parserTools->parseBooleanValue( $data['isSearchable'] );
         }
 
-        // @todo XSD says that defaultValue is mandatory, but field definition can be updated without it
+        $fieldDefinition = $this->getFieldDefinition( $data );
+
+        // @todo XSD says that defaultValue is mandatory, but content type can be created without it
         if ( array_key_exists( 'defaultValue', $data ) )
         {
-            $fieldDefinitionUpdate->defaultValue = $data['defaultValue'];
+            $fieldDefinitionUpdate->defaultValue = $this->fieldTypeParser->parseValue(
+                $fieldDefinition->fieldTypeIdentifier,
+                $data['defaultValue']
+            );
         }
 
-        //@todo fieldSettings - Not specified
-        //@todo validatorConfiguration - Not specified
+        if ( array_key_exists( 'validatorConfiguration', $data ) )
+        {
+            $fieldDefinitionUpdate->validatorConfiguration = $this->fieldTypeParser->parseValidatorConfiguration(
+                $fieldDefinition->fieldTypeIdentifier,
+                $data['validatorConfiguration']
+            );
+        }
+
+        if ( array_key_exists( 'fieldSettings', $data ) )
+        {
+            $fieldDefinitionUpdate->fieldSettings = $this->fieldTypeParser->parseFieldSettings(
+                $fieldDefinition->fieldTypeIdentifier,
+                $data['fieldSettings']
+            );
+        }
 
         return $fieldDefinitionUpdate;
+    }
+
+    /**
+     * Returns field definition by 'typeFieldDefinitionDraft' pattern URL.
+     *
+     * Assumes given $data array has '__url' element set.
+     * @todo depends on temporary solution to give parser acces to the URL
+     * @see \eZ\Publish\Core\REST\Server\Controller\ContentType::updateFieldDefinition
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @param array $data
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
+     */
+    protected function getFieldDefinition( array $data )
+    {
+        $urlValues = $this->urlHandler->parse( 'typeFieldDefinitionDraft', $data["__url"] );
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
+        foreach ( $contentTypeDraft->getFieldDefinitions() as $fieldDefinition )
+        {
+            if ( $fieldDefinition->id == $urlValues['fieldDefinition'] )
+            {
+                return $fieldDefinition;
+            }
+        }
+        throw new Exceptions\NotFoundException( "Field definition not found: '{$data["__url"]}'." );
     }
 }

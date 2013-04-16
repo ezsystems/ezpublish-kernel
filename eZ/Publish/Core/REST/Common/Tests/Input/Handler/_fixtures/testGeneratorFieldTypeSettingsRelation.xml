@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentTypeCreate>
+  <FieldDefinitions>
+    <FieldDefinition>
+      <fieldSettings>
+        <value key="selectionMethod">SELECTION_DROPDOWN</value>
+        <value key="selectionRoot">33</value>
+      </fieldSettings>
+    </FieldDefinition>
+  </FieldDefinitions>
+</ContentTypeCreate>

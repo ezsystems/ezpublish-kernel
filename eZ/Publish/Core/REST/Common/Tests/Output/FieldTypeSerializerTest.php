@@ -129,7 +129,7 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
                 )
             );
         $processorMock->expects( $this->once() )
-            ->method( 'postProcessHash' )
+            ->method( 'postProcessValueHash' )
             ->with( $this->equalTo( array( 23, 42 ) ) )
             ->will( $this->returnValue( array( 'post-processed' ) ) );
 
@@ -238,6 +238,65 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testSerializeFieldSettingsWithPostProcessing()
+    {
+        $serializer = $this->getFieldTypeSerializer();
+        $fieldTypeMock = $this->getFieldTypeMock();
+
+        $processorMock = $this->getFieldTypeProcessorMock();
+        $this->getFieldTypeProcessorRegistryMock()
+            ->expects( $this->once() )
+            ->method( 'hasProcessor' )
+            ->with( 'myFancyFieldType' )
+            ->will( $this->returnValue( true ) );
+        $this->getFieldTypeProcessorRegistryMock()
+            ->expects( $this->once() )
+            ->method( 'getProcessor' )
+            ->with( 'myFancyFieldType' )
+            ->will(
+                $this->returnCallback(
+                    function () use ( $processorMock )
+                    {
+                        return $processorMock;
+                    }
+                )
+            );
+        $processorMock->expects( $this->once() )
+            ->method( 'postProcessFieldSettingsHash' )
+            ->with( $this->equalTo( array( 'foo' => 'bar' ) ) )
+            ->will( $this->returnValue( array( 'post-processed' ) ) );
+
+        $this->getGeneratorMock()->expects( $this->once() )
+            ->method( 'generateFieldTypeHash' )
+            ->with(
+                $this->equalTo( 'fieldSettings' ),
+                $this->equalTo(  array( 'post-processed' )  )
+            );
+
+        $this->getFieldTypeServiceMock()->expects( $this->once() )
+            ->method( 'getFieldType' )
+            ->with( $this->equalTo( 'myFancyFieldType' ) )
+            ->will(
+                $this->returnCallback(
+                    function () use ( $fieldTypeMock )
+                    {
+                        return $fieldTypeMock;
+                    }
+                )
+            );
+
+        $fieldTypeMock->expects( $this->once() )
+            ->method( 'fieldSettingsToHash' )
+            ->with( $this->equalTo( 'my-field-settings' ) )
+            ->will( $this->returnValue( array( 'foo' => 'bar' ) ) );
+
+        $serializer->serializeFieldSettings(
+            $this->getGeneratorMock(),
+            'myFancyFieldType',
+            'my-field-settings'
+        );
+    }
+
     public function testSerializeValidatorConfiguration()
     {
         $serializer = $this->getFieldTypeSerializer();
@@ -250,6 +309,78 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
             );
 
         $fieldTypeMock = $this->getFieldTypeMock();
+        $this->getFieldTypeServiceMock()->expects( $this->once() )
+            ->method( 'getFieldType' )
+            ->with( $this->equalTo( 'myFancyFieldType' ) )
+            ->will(
+                $this->returnCallback(
+                    function () use ( $fieldTypeMock )
+                    {
+                        return $fieldTypeMock;
+                    }
+                )
+            );
+
+        $fieldTypeMock->expects( $this->once() )
+            ->method( 'validatorConfigurationToHash' )
+            ->with( $this->equalTo( 'validator-config' ) )
+            ->will( $this->returnValue( array( 'bar' => 'foo' ) ) );
+
+        $serializer->serializeValidatorConfiguration(
+            $this->getGeneratorMock(),
+            'myFancyFieldType',
+            'validator-config'
+        );
+    }
+
+    public function testSerializeValidatorConfigurationWithPostProcessing()
+    {
+        $serializer = $this->getFieldTypeSerializer();
+        $fieldTypeMock = $this->getFieldTypeMock();
+
+        $processorMock = $this->getFieldTypeProcessorMock();
+        $this->getFieldTypeProcessorRegistryMock()
+            ->expects( $this->once() )
+            ->method( 'hasProcessor' )
+            ->with( 'myFancyFieldType' )
+            ->will( $this->returnValue( true ) );
+        $this->getFieldTypeProcessorRegistryMock()
+            ->expects( $this->once() )
+            ->method( 'getProcessor' )
+            ->with( 'myFancyFieldType' )
+            ->will(
+                $this->returnCallback(
+                    function () use ( $processorMock )
+                    {
+                        return $processorMock;
+                    }
+                )
+            );
+        $processorMock->expects( $this->once() )
+            ->method( 'postProcessValidatorConfigurationHash' )
+            ->with( $this->equalTo( array( 'bar' => 'foo' ) ) )
+            ->will( $this->returnValue( array( 'post-processed' ) ) );
+
+        $fieldTypeMock = $this->getFieldTypeMock();
+        $this->getFieldTypeServiceMock()->expects( $this->once() )
+            ->method( 'getFieldType' )
+            ->with( $this->equalTo( 'myFancyFieldType' ) )
+            ->will(
+                $this->returnCallback(
+                    function () use ( $fieldTypeMock )
+                    {
+                        return $fieldTypeMock;
+                    }
+                )
+            );
+
+        $this->getGeneratorMock()->expects( $this->once() )
+            ->method( 'generateFieldTypeHash' )
+            ->with(
+                $this->equalTo( 'validatorConfiguration' ),
+                $this->equalTo( array( 'post-processed' ) )
+            );
+
         $this->getFieldTypeServiceMock()->expects( $this->once() )
             ->method( 'getFieldType' )
             ->with( $this->equalTo( 'myFancyFieldType' ) )

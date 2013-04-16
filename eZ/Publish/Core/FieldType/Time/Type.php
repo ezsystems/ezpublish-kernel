@@ -205,6 +205,7 @@ class Type extends FieldType
                         "setting" => $name
                     )
                 );
+                continue;
             }
 
             switch ( $name )
@@ -226,7 +227,7 @@ class Type extends FieldType
                         self::DEFAULT_EMPTY,
                         self::DEFAULT_CURRENT_TIME
                     );
-                    if ( !in_array( $value, $definedTypes ) )
+                    if ( !in_array( $value, $definedTypes, true ) )
                     {
                         $validationErrors[] = new ValidationError(
                             "Setting '%setting%' is of unknown type",

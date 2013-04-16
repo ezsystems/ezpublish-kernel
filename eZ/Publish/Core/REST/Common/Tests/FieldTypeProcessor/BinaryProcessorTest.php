@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Server\Tests\FieldTypeProcessor;
+namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
-use eZ\Publish\Core\REST\Server\FieldTypeProcessor\BinaryProcessor;
+use eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryProcessor;
 
 class BinaryProcessorTest extends BinaryInputProcessorTest
 {
-    public function testPostProcessHash()
+    public function testPostProcessValueHash()
     {
         $processor = $this->getProcessor();
 
@@ -21,7 +21,7 @@ class BinaryProcessorTest extends BinaryInputProcessorTest
             'path' => 'var/some_site/12ace8436c64ceb907536640b58788f0.pdf',
         );
 
-        $outputHash = $processor->postProcessHash( $inputHash );
+        $outputHash = $processor->postProcessValueHash( $inputHash );
 
         $this->assertEquals(
             array(
@@ -35,7 +35,7 @@ class BinaryProcessorTest extends BinaryInputProcessorTest
     /**
      * Returns the processor under test
      *
-     * @return \eZ\Publish\Core\REST\Server\FieldTypeProcessor\BinaryInputProcessor
+     * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryInputProcessor
      */
     protected function getProcessor()
     {

@@ -4,7 +4,7 @@ namespace eZ\Bundle\EzPublishRestBundle\ApiLoader;
 use eZ\Publish\Core\REST\Server\Input;
 use eZ\Publish\Core\REST\Server\Output;
 use eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher;
-use eZ\Publish\Core\REST\Server\FieldTypeProcessor;
+use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 use eZ\Publish\Core\REST\Common;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use eZ\Publish\API\Repository\Repository;
@@ -94,7 +94,14 @@ class Factory
                         $urlHandler,
                         $this->repository->getContentTypeService(),
                         // Needed here since there's no media type in request for embedded FieldDefinitionCreate
-                        ( $fieldDefinitionCreateParser = new Input\Parser\FieldDefinitionCreate( $urlHandler, $this->repository->getContentTypeService(), $parserTools ) ),
+                        (
+                            $fieldDefinitionCreateParser = new Input\Parser\FieldDefinitionCreate(
+                                $urlHandler,
+                                $this->repository->getContentTypeService(),
+                                $fieldTypeParser,
+                                $parserTools
+                            )
+                        ),
                         $parserTools
                     ),
                     'application/vnd.ez.api.ContentTypeUpdate'      => new Input\Parser\ContentTypeUpdate(
@@ -106,6 +113,7 @@ class Factory
                     'application/vnd.ez.api.FieldDefinitionUpdate'  => new Input\Parser\FieldDefinitionUpdate(
                         $urlHandler,
                         $this->repository->getContentTypeService(),
+                        $fieldTypeParser,
                         $parserTools
                     ),
                     'application/vnd.ez.api.PolicyCreate'           => new Input\Parser\PolicyCreate( $urlHandler, $this->repository->getRoleService(), $parserTools ),
@@ -179,7 +187,14 @@ class Factory
                         'gallery' => 'image/jpeg',
                         'thumbnail' => 'image/png',
                     )
-                )
+                ),
+                'ezdatetime' => new FieldTypeProcessor\DateAndTimeProcessor(),
+                'ezdate' => new FieldTypeProcessor\DateProcessor(),
+                'ezmedia' => new FieldTypeProcessor\MediaProcessor(),
+                'ezobjectrelationlist' => new FieldTypeProcessor\RelationListProcessor(),
+                'ezobjectrelation' => new FieldTypeProcessor\RelationProcessor(),
+                'eztime' => new FieldTypeProcessor\TimeProcessor(),
+                'ezxmltext' => new FieldTypeProcessor\XmlTextProcessor(),
             )
         );
     }
