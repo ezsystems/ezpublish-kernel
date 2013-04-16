@@ -20,21 +20,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  */
 class Field extends Criterion implements CriterionInterface
 {
-    /**
-     * Creates a new Field Criterion.
-     *
-     * Matches $fieldIdentifier against $value using $operator.
-     * $fieldIdentifier is same value as eZ\Publish\API\Repository\Values\Content\Field->fieldDefIdentifier
-     *
-     * @param string $fieldIdentifier The target field identifier
-     * @param string $operator The match operator
-     * @param mixed $value The value to match against
-     */
-    public function __construct( $fieldIdentifier, $operator, $value )
-    {
-        parent::__construct( $fieldIdentifier, $operator, $value );
-    }
-
     public function getSpecifications()
     {
         return array(

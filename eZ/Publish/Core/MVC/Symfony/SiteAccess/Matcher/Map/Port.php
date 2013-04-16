@@ -15,16 +15,6 @@ use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 
 class Port extends Map implements Matcher
 {
-    /**
-     * Constructor.
-     *
-     * @param array $siteAccessesConfiguration SiteAccesses configuration.
-     */
-    public function __construct( array $siteAccessesConfiguration )
-    {
-        parent::__construct( $siteAccessesConfiguration );
-    }
-
     public function getName()
     {
         return 'port';

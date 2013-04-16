@@ -17,16 +17,6 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 class URI extends Map implements Matcher, URILexer
 {
     /**
-     * Constructor.
-     *
-     * @param array $siteAccessesConfiguration SiteAccesses configuration.
-     */
-    public function __construct( array $siteAccessesConfiguration )
-    {
-        parent::__construct( $siteAccessesConfiguration );
-    }
-
-    /**
      * Injects the request object to match against.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request

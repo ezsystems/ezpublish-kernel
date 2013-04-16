@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\Base;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as ContentTypeIdCriterion;
 
@@ -20,11 +19,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as Co
  */
 class ContentTypeId extends Base
 {
-    public function __construct( UrlHandler $urlHandler )
-    {
-        parent::__construct( $urlHandler );
-    }
-
     /**
      * Parses input structure to a Criterion object
      *
