@@ -73,6 +73,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
         $return = $this->persistenceFactory->getUserHandler()->delete( $userId );
 
         // user id == content id == group id
+        $this->cache->clear( 'content', $userId );
         $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', $userId );
         $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', 'inherited', $userId );
 
