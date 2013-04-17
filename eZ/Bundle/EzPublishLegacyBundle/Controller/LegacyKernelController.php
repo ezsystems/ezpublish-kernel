@@ -83,14 +83,25 @@ class LegacyKernelController
 
         if ( isset( $this->legacyLayout ) && !$legacyMode )
         {
-            return $this->render(
+            $response = $this->render(
                 $this->legacyLayout,
                 array( 'module_result' => $moduleResult )
             );
         }
+        else
+        {
+            $response = new Response( $result->getContent() );
+        }
 
-        return new Response(
-            $result->getContent()
-        );
+        // Handling error codes sent from the legacy stack
+        if ( isset( $moduleResult['errorCode'] ) )
+        {
+            $response->setStatusCode(
+                $moduleResult['errorCode'],
+                isset( $moduleResult['errorMessage'] ) ? $moduleResult['errorMessage'] : null
+            );
+        }
+
+        return $response;
     }
 }
