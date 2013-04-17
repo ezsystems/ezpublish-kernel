@@ -937,7 +937,7 @@ Get Current Version
 .. code:: http
 
     HTTP/1.1 307 Temporary Redirect
-    Location: /content/objects/<ID>/version/<current_version_no>
+    Location: /content/objects/<ID>/versions/<current_version_no>
 
 :Error Codes:
      :404: If the resource does not exist
@@ -1157,7 +1157,7 @@ XML Example
 
 Update Version
 ``````````````
-:Resource: /content/objects/<ID>/version/<versionNo>
+:Resource: /content/objects/<ID>/versions/<versionNo>
 :Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
 :Description: A specific draft is updated.
 :Parameters:
@@ -1343,7 +1343,7 @@ Create a Draft from current Version
 
 Delete Content Version
 ``````````````````````
-:Resource: /content/objects/<ID>/version/<versionNo>
+:Resource: /content/objects/<ID>/versions/<versionNo>
 :Method: DELETE
 :Description: The version is deleted
 :Response:
@@ -1359,7 +1359,7 @@ Delete Content Version
 
 Publish a content version
 `````````````````````````
-:Resource: /content/objects/<ID>/version/<versionNo>
+:Resource: /content/objects/<ID>/versions/<versionNo>
 :Method: PUBLISH or POST with header X-HTTP-Method-Override: PUBLISH
 :Description: The content version is published
 :Response:
