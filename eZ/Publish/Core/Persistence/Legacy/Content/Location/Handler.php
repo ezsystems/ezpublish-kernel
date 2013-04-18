@@ -132,6 +132,15 @@ class Handler implements BaseLocationHandler
     }
 
     /**
+     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::loadParentLocationsForDraftContent
+     */
+    public function loadParentLocationsForDraftContent( $contentId )
+    {
+        $rows = $this->locationGateway->loadParentLocationsDataForDraftContent( $contentId );
+        return $this->locationMapper->createLocationsFromRows( $rows );
+    }
+
+    /**
      * Copy location object identified by $sourceId, into destination identified by $destinationParentId.
      *
      * Performs a deep copy of the location identified by $sourceId and all of

@@ -200,6 +200,108 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::loadParentLocationsForDraftContent
+     */
+    public function testLoadParentLocationsForDraftContentIsMiss()
+    {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $this->cacheMock
+            ->expects( $this->once() )
+            ->method( 'getItem' )
+            ->with( 'content', 'locations', "44/parentLocationsForDraftContent" )
+            ->will( $this->returnValue( $cacheItemMock ) );
+
+        $cacheItemMock
+            ->expects( $this->once() )
+            ->method( 'get' )
+            ->will( $this->returnValue( null ) );
+
+        $cacheItemMock
+            ->expects( $this->once() )
+            ->method( 'isMiss' )
+            ->will( $this->returnValue( true ) );
+
+        $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
+        $this->persistenceFactoryMock
+            ->expects( $this->once() )
+            ->method( 'getLocationHandler' )
+            ->will( $this->returnValue( $innerHandlerMock ) );
+
+        $innerHandlerMock
+            ->expects( $this->once() )
+            ->method(  'loadParentLocationsForDraftContent' )
+            ->with( 44 )
+            ->will( $this->returnValue( array( new Location(  array( 'id' => 33  ) ) ) ) );
+
+        $cacheItemMock
+            ->expects( $this->once() )
+            ->method( 'set' )
+            ->with( array( 33 ) );
+
+        $handler = $this->persistenceHandler->locationHandler();
+        $handler->loadParentLocationsForDraftContent( 44 );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::loadParentLocationsForDraftContent
+     */
+    public function testLoadParentLocationsForDraftContentHasCache()
+    {
+        $this->loggerMock->expects( $this->never() )->method( $this->anything() );
+
+        $this->persistenceFactoryMock
+            ->expects( $this->never() )
+            ->method( $this->anything() );
+
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $this->cacheMock
+            ->expects( $this->at( 0 ) )
+            ->method( 'getItem' )
+            ->with( 'content', 'locations', "44/parentLocationsForDraftContent" )
+            ->will( $this->returnValue( $cacheItemMock ) );
+
+        $cacheItemMock
+            ->expects( $this->once() )
+            ->method( 'get' )
+            ->will( $this->returnValue( array( 33 ) ) );
+
+        $cacheItemMock
+            ->expects( $this->once() )
+            ->method( 'isMiss' )
+            ->will( $this->returnValue( false ) );
+
+        $cacheItemMock
+            ->expects( $this->never() )
+            ->method( 'set' );
+
+        // inline call to load()
+        $cacheItemMock2 = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $this->cacheMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'getItem' )
+            ->with( 'location', 33 )
+            ->will( $this->returnValue( $cacheItemMock2 ) );
+
+        $cacheItemMock2
+            ->expects( $this->once() )
+            ->method( 'get' )
+            ->will( $this->returnValue( new Location(  array( 'id' => 33 ) ) ) );
+
+        $cacheItemMock2
+            ->expects( $this->once() )
+            ->method( 'isMiss' )
+            ->will( $this->returnValue( false ) );
+
+        $cacheItemMock2
+            ->expects( $this->never() )
+            ->method( 'set' );
+
+        $handler = $this->persistenceHandler->locationHandler();
+        $handler->loadParentLocationsForDraftContent( 44 );
+    }
+
+    /**
      * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::loadLocationsByContent
      */
     public function testLoadLocationsByContentWithRootIsMiss()
