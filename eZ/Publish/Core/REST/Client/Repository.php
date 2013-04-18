@@ -185,11 +185,11 @@ class Repository implements APIRepository
      * @param string $module The module, aka controller identifier to check permissions on
      * @param string $function The function, aka the controller action to check permissions on
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
+     * @param mixed $targets The location, parent or "assignment" value object, or an array of the same
      *
      * @return boolean
      */
-    public function canUser( $module, $function, ValueObject $object, ValueObject $target = null )
+    public function canUser( $module, $function, ValueObject $object, $targets = null )
     {
         // @todo: Implement
     }

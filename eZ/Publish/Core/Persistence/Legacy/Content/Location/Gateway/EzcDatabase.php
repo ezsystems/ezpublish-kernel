@@ -143,6 +143,56 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * @see \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway::loadParentLocationsDataForDraftContent
+     */
+    public function loadParentLocationsDataForDraftContent( $contentId, $drafts = null )
+    {
+        /** @var $query \ezcQuerySelect */
+        $query = $this->handler->createSelectQuery();
+        $query->selectDistinct(
+            "ezcontentobject_tree.*"
+        )->from(
+            $this->handler->quoteTable( "ezcontentobject_tree" )
+        )->innerJoin(
+            $this->handler->quoteTable( "eznode_assignment" ),
+            $query->expr->lAnd(
+
+                $query->expr->eq(
+                    $this->handler->quoteColumn( "node_id", "ezcontentobject_tree" ),
+                    $this->handler->quoteColumn( "parent_node", "eznode_assignment" )
+                ),
+                $query->expr->eq(
+                    $this->handler->quoteColumn( "contentobject_id", "eznode_assignment" ),
+                    $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->handler->quoteColumn( "op_code", "eznode_assignment" ),
+                    $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_CREATE, null, \PDO::PARAM_INT )
+                )
+            )
+        )->innerJoin(
+            $this->handler->quoteTable( "ezcontentobject" ),
+            $query->expr->lAnd(
+                $query->expr->lOr(
+                    $query->expr->eq(
+                        $this->handler->quoteColumn( "contentobject_id", "eznode_assignment" ),
+                        $this->handler->quoteColumn( "id", "ezcontentobject" )
+                    )
+                ),
+                $query->expr->eq(
+                    $this->handler->quoteColumn( "status", "ezcontentobject" ),
+                    $query->bindValue( ContentInfo::STATUS_DRAFT, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Find all content in the given subtree
      *
      * @param mixed $sourceId

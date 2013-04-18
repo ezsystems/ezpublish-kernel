@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use Exception;
 use RuntimeException;
 
@@ -349,16 +350,33 @@ class Repository implements RepositoryInterface
      * @param string $module The module, aka controller identifier to check permissions on
      * @param string $function The function, aka the controller action to check permissions on
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
+     * @param mixed $targets The location, parent or "assignment" value object, or an array of the same
      *
      * @return boolean
      */
-    public function canUser( $module, $function, ValueObject $object, ValueObject $target = null )
+    public function canUser( $module, $function, ValueObject $object, $targets = null )
     {
         $permissionSets = $this->hasAccess( $module, $function );
         if ( $permissionSets === false || $permissionSets === true )
         {
             return $permissionSets;
+        }
+
+        if ( $targets === null )
+        {
+            $targets = array();
+        }
+        else if ( $targets instanceof ValueObject )
+        {
+            $targets = array( $targets );
+        }
+        else if ( !is_array( $targets ) )
+        {
+            throw new InvalidArgumentType(
+                "\$targets",
+                "null|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject[]",
+                $targets
+            );
         }
 
         $roleService = $this->getRoleService();
@@ -371,7 +389,7 @@ class Repository implements RepositoryInterface
             if ( $permissionSet['limitation'] instanceof Limitation )
             {
                 $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
-                if ( !$type->evaluate( $permissionSet['limitation'], $currentUser, $object, $target ) )
+                if ( !$type->evaluate( $permissionSet['limitation'], $currentUser, $object, $targets ) )
                     continue;
             }
 
@@ -388,7 +406,7 @@ class Repository implements RepositoryInterface
                 foreach ( $limitations as $limitation )
                 {
                     $type = $roleService->getLimitationType( $limitation->getIdentifier() );
-                    if ( !$type->evaluate( $limitation, $currentUser, $object, $target ) )
+                    if ( !$type->evaluate( $limitation, $currentUser, $object, $targets ) )
                     {
                         $limitationsPass = false;
                         break;// Break to next policy, all limitations must pass

@@ -21,6 +21,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 use eZ\Publish\SPI\Persistence\Handler as SPIPersistenceHandler;
+use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 
 /**
  * ParentUserGroupLimitation is a Content limitation
@@ -78,11 +79,11 @@ class ParentUserGroupLimitationType implements SPILimitationTypeInterface
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject|null $target The location, parent or "assignment" value object
+     * @param \eZ\Publish\API\Repository\Values\ValueObject[] $targets An array of location, parent or "assignment" value objects
      *
      * @return boolean
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, ValueObject $target = null )
+    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = array() )
     {
         if ( !$value instanceof APIParentUserGroupLimitation )
             throw new InvalidArgumentException( '$value', 'Must be of type: APIParentUserGroupLimitation' );
@@ -95,45 +96,75 @@ class ParentUserGroupLimitationType implements SPILimitationTypeInterface
             );
         }
 
-        if ( $target instanceof LocationCreateStruct )
+        if ( empty( $targets ) )
         {
-            $spiLocation = $this->persistence->locationHandler()->load( $target->parentLocationId );
-            $spiContentInfo = $this->persistence->contentHandler()->loadContentInfo( $spiLocation->contentId );
-            $parentOwnerId = $spiContentInfo->ownerId;
+            return false;
         }
-        else if ( $target !== null && !$target instanceof Location )
-            throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
-        else if ( $target === null )
-            return false;
-        else // $target is assumed to be parent in this case
-            $parentOwnerId = $target->getContentInfo()->ownerId;
 
-        if ( $parentOwnerId === $currentUser->id )
-            return true;
-
-        /**
-         * As long as SPI userHandler and API UserService does not speak the same language, this is the ugly truth;
-         */
         $locationHandler = $this->persistence->locationHandler();
-        $parentOwnerLocations = $locationHandler->loadLocationsByContent( $parentOwnerId );
-        if ( empty( $parentOwnerLocations ) )
-            return false;
-
         $currentUserLocations = $locationHandler->loadLocationsByContent( $currentUser->id );
         if ( empty( $currentUserLocations ) )
-           return false;
-
-        // @todo Needs to take care of inherited groups as well when UserHandler gets knowledge about user groups
-        foreach ( $parentOwnerLocations as $parentOwnerLocation )
         {
-            foreach ( $currentUserLocations as $currentUserLocation )
-            {
-                if ( $parentOwnerLocation->parentId === $currentUserLocation->parentId )
-                    return true;
-            }
+            return false;
         }
 
-        return false;
+        foreach ( $targets as $target )
+        {
+            if ( $target instanceof LocationCreateStruct )
+            {
+                $target = $locationHandler->load( $target->parentLocationId );
+            }
+
+            if ( $target instanceof Location )
+            {
+                // $target is assumed to be parent in this case
+                $parentOwnerId = $target->getContentInfo()->ownerId;
+            }
+            else if ( $target instanceof SPILocation )
+            {
+                // $target is assumed to be parent in this case
+                $spiContentInfo = $this->persistence->contentHandler()->loadContentInfo( $target->contentId );
+                $parentOwnerId = $spiContentInfo->ownerId;
+            }
+            else
+            {
+                throw new InvalidArgumentException(
+                    '$targets',
+                    'Must contain objects of type: Location or LocationCreateStruct'
+                );
+            }
+
+            if ( $parentOwnerId === $currentUser->id )
+            {
+                continue;
+            }
+
+            /**
+             * As long as SPI userHandler and API UserService does not speak the same language, this is the ugly truth;
+             */
+            $locationHandler = $this->persistence->locationHandler();
+            $parentOwnerLocations = $locationHandler->loadLocationsByContent( $parentOwnerId );
+            if ( empty( $parentOwnerLocations ) )
+            {
+                return false;
+            }
+
+            // @todo Needs to take care of inherited groups as well when UserHandler gets knowledge about user groups
+            foreach ( $parentOwnerLocations as $parentOwnerLocation )
+            {
+                foreach ( $currentUserLocations as $currentUserLocation )
+                {
+                    if ( $parentOwnerLocation->parentId === $currentUserLocation->parentId )
+                    {
+                        continue 3;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
