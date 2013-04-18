@@ -66,6 +66,15 @@ abstract class Gateway
     abstract public function loadLocationDataByContent( $contentId, $rootLocationId = null );
 
     /**
+     * Loads data for all parent Locations for unpublished Content by given $contentId.
+     *
+     * @param mixed $contentId
+     *
+     * @return array
+     */
+    abstract public function loadParentLocationsDataForDraftContent( $contentId );
+
+    /**
      * Find all content in the given subtree
      *
      * @param mixed $sourceId

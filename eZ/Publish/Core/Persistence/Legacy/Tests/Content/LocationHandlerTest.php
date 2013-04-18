@@ -135,6 +135,31 @@ class LocationHandlerTest extends TestCase
         $this->assertInternalType( 'array', $locations );
     }
 
+    public function loadParentLocationsForDraftContent()
+    {
+        $handler = $this->getLocationHandler();
+
+        $this->locationGateway
+            ->expects( $this->once() )
+            ->method( 'loadParentLocationsDataForDraftContent' )
+            ->with( 23 )
+            ->will(
+                $this->returnValue(
+                    array()
+                )
+            );
+
+        $this->locationMapper
+            ->expects( $this->once() )
+            ->method( 'createLocationsFromRows' )
+            ->with( array() )
+            ->will( $this->returnValue( array( 'a', 'b' ) ) );
+
+        $locations = $handler->loadParentLocationsForDraftContent( 23 );
+
+        $this->assertInternalType( 'array', $locations );
+    }
+
     public function testMoveSubtree()
     {
         $handler = $this->getLocationHandler();

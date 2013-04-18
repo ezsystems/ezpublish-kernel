@@ -65,6 +65,34 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
+     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::loadParentLocationsForDraftContent
+     */
+    public function loadParentLocationsForDraftContent( $contentId )
+    {
+        $cache = $this->cache->getItem( 'content', 'locations', "{$contentId}/parentLocationsForDraftContent" );
+        $locationIds = $cache->get();
+        if ( $cache->isMiss() )
+        {
+            $this->logger->logCall( __METHOD__, array( 'content' => $contentId ) );
+            $locations = $this->persistenceFactory->getLocationHandler()->loadParentLocationsForDraftContent( $contentId );
+
+            $locationIds = array();
+            foreach ( $locations as $location )
+                $locationIds[] = $location->id;
+
+            $cache->set( $locationIds );
+        }
+        else
+        {
+            $locations = array();
+            foreach ( $locationIds as $locationId )
+                $locations[] = $this->load( $locationId );
+        }
+
+        return $locations;
+    }
+
+    /**
      * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::loadByRemoteId
      */
     public function loadByRemoteId( $remoteId )

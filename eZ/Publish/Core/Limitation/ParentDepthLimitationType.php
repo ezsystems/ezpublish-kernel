@@ -20,6 +20,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 use eZ\Publish\SPI\Persistence\Handler as SPIPersistenceHandler;
+use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 
 /**
  * ParentDepthLimitation is a Content limitation
@@ -77,27 +78,45 @@ class ParentDepthLimitationType implements SPILimitationTypeInterface
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject|null $target The location, parent or "assignment" value object
+     * @param \eZ\Publish\API\Repository\Values\ValueObject[] $targets An array of location, parent or "assignment" value objects
      *
      * @return boolean
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, ValueObject $target = null )
+    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = array() )
     {
         if ( !$value instanceof APIParentDepthLimitation )
             throw new InvalidArgumentException( '$value', 'Must be of type: APIParentDepthLimitation' );
 
-        if ( $target instanceof LocationCreateStruct )
-            $target = $this->persistence->locationHandler()->load( $target->parentLocationId );
-        else if ( $target !== null && !$target instanceof Location )
-            throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
-
-        if ( $target === null )
+        if ( empty( $targets ) )
+        {
             return false;
+        }
 
-        /**
-         * @var $target Location|\eZ\Publish\SPI\Persistence\Content\Location
-         */
-        return in_array( $target->depth, $value->limitationValues );
+        foreach ( $targets as $target )
+        {
+            if ( $target instanceof LocationCreateStruct )
+            {
+                $depth = $this->persistence->locationHandler()->load( $target->parentLocationId )->depth;
+            }
+            else if ( $target instanceof Location || $target instanceof SPILocation )
+            {
+                $depth = $target->depth;
+            }
+            else
+            {
+                throw new InvalidArgumentException(
+                    '$targets',
+                    'Must contain objects of type: Location or LocationCreateStruct'
+                );
+            }
+
+            if ( !in_array( $depth, $value->limitationValues ) )
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

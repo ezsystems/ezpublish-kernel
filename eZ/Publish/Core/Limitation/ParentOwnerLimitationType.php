@@ -21,6 +21,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 use eZ\Publish\SPI\Persistence\Handler as SPIPersistenceHandler;
+use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 
 /**
  * ParentOwnerLimitation is a Content limitation
@@ -78,13 +79,13 @@ class ParentOwnerLimitationType implements SPILimitationTypeInterface
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
+     * @param \eZ\Publish\API\Repository\Values\ValueObject[] $targets An array of location, parent or "assignment" value objects
      *
      * @return boolean
      *
      * @todo Add support for $limitationValues[0] == 2 when session values can be injected somehow
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, ValueObject $target = null )
+    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = array() )
     {
         if ( !$value instanceof APIParentOwnerLimitation )
             throw new InvalidArgumentException( '$value', 'Must be of type: APIParentOwnerLimitation' );
@@ -97,22 +98,42 @@ class ParentOwnerLimitationType implements SPILimitationTypeInterface
             );
         }
 
-        if ( $target instanceof LocationCreateStruct )
+        if ( empty( $targets ) )
         {
-            $spiLocation = $this->persistence->locationHandler()->load( $target->parentLocationId );
-            $spiContentInfo = $this->persistence->contentHandler()->loadContentInfo( $spiLocation->contentId );
-            return $spiContentInfo->ownerId === $currentUser->id;
+            return false;
         }
 
-        if ( $target !== null && !$target instanceof Location )
-            throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
-        else if ( $target === null )
-            return false;
+        foreach ( $targets as $target )
+        {
+            if ( $target instanceof LocationCreateStruct )
+            {
+                $target = $this->persistence->locationHandler()->load( $target->parentLocationId );
+            }
 
-        /**
-         * @var $target Location
-         */
-        return $target->getContentInfo()->ownerId === $currentUser->id;
+            if ( $target instanceof Location )
+            {
+                $ownerId = $target->getContentInfo()->ownerId;
+            }
+            else if ( $target instanceof SPILocation )
+            {
+                $spiContentInfo = $this->persistence->contentHandler()->loadContentInfo( $target->contentId );
+                $ownerId = $spiContentInfo->ownerId;
+            }
+            else
+            {
+                throw new InvalidArgumentException(
+                    '$targets',
+                    'Must contain objects of type: Location or LocationCreateStruct'
+                );
+            }
+
+            if ( $ownerId !== $currentUser->id )
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

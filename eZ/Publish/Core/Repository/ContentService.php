@@ -432,16 +432,10 @@ class ContentService implements ContentServiceInterface
             $contentCreateStruct->alwaysAvailable = false;
         }
 
-        // @todo: Add support for structs in Limitations
-        foreach ( $locationCreateStructs as $locationCreateStruct )
+        if ( !$this->repository->canUser( 'content', 'create', $contentCreateStruct, $locationCreateStructs ) )
         {
-            if ( !$this->repository->canUser( 'content', 'create', $contentCreateStruct, $locationCreateStruct ) )
-                throw new UnauthorizedException( 'content', 'create' );
-        }
-
-        if ( empty( $locationCreateStructs ) &&
-            !$this->repository->canUser( 'content', 'create', $contentCreateStruct ) )
             throw new UnauthorizedException( 'content', 'create' );
+        }
 
         if ( !empty( $contentCreateStruct->remoteId ) )
         {
@@ -1306,6 +1300,27 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * Returns true if user has a right to publish given previously unpublished $content, false otherwise.
+     *
+     * @param APIContent $content
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     *
+     * @return boolean
+     */
+    protected function canUserPublishContent( APIContent $content )
+    {
+        $spiLocations = $this->persistenceHandler->locationHandler()->loadParentLocationsForDraftContent(
+            $content->getVersionInfo()->getContentInfo()->id
+        );
+        if ( $this->repository->canUser( "content", "create", $content, $spiLocations ) )
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Publishes a content version
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish this version
@@ -1317,14 +1332,23 @@ class ContentService implements ContentServiceInterface
      */
     public function publishVersion( APIVersionInfo $versionInfo )
     {
-        $content = $this->loadContent(
+        $content = $this->internalLoadContent(
             $versionInfo->contentInfo->id,
             null,
             $versionInfo->versionNo
         );
 
-        if ( !$this->repository->canUser( 'content', 'edit', $content ) )
+        if ( !$content->getVersionInfo()->getContentInfo()->published )
+        {
+            if ( !$this->canUserPublishContent( $content ) )
+            {
+                throw new UnauthorizedException( 'content', 'create' );
+            }
+        }
+        else if ( !$this->repository->canUser( 'content', 'edit', $content ) )
+        {
             throw new UnauthorizedException( 'content', 'edit' );
+        }
 
         $this->repository->beginTransaction();
         try
