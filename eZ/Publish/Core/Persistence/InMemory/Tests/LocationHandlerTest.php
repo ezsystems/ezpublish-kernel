@@ -504,4 +504,24 @@ class LocationHandlerTest extends HandlerTest
             "Subtree section has not been changed"
         );
     }
+
+    /**
+     * Test loadParentLocationsByContent function
+     *
+     * @covers \eZ\Publish\Core\Persistence\InMemory\LocationHandler::loadParentLocationsForDraftContent
+     * @group locationHandler
+     */
+    public function testLoadParentLocationsForDraftContent()
+    {
+        $locations = $this->persistenceHandler->locationHandler()->loadParentLocationsForDraftContent( $this->lastContentId );
+        $location = reset( $locations );
+
+        $this->assertTrue( $location instanceof LocationValue );
+        $this->assertEquals( $this->lastLocationId - 1, $location->id );
+        $this->assertEquals( $this->lastContentId - 1, $location->contentId );
+        $this->assertEmpty( $location->pathIdentificationString );
+        $this->assertEquals( Location::SORT_FIELD_NAME, $location->sortField );
+        $this->assertEquals( Location::SORT_ORDER_ASC, $location->sortOrder );
+        $this->assertEquals( $this->lastLocationId - 2, $location->parentId );
+    }
 }
