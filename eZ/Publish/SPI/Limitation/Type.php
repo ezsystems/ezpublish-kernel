@@ -62,11 +62,11 @@ interface Type
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject|null $target The location, parent or "assignment" value object
+     * @param \eZ\Publish\API\Repository\Values\ValueObject[] $targets An array of location, parent or "assignment" value objects
      *
      * @return boolean
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, APIValueObject $object, APIValueObject $target = null );
+    public function evaluate( APILimitationValue $value, APIUser $currentUser, APIValueObject $object, array $targets = array() );
 
     /**
      * Returns Criterion for use in find() query
