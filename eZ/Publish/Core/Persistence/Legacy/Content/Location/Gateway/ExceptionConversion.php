@@ -112,6 +112,25 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * @see \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway::loadParentLocationsDataForDraftContent
+     */
+    public function loadParentLocationsDataForDraftContent( $contentId )
+    {
+        try
+        {
+            return $this->innerGateway->loadParentLocationsDataForDraftContent( $contentId );
+        }
+        catch ( \ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( \PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
      * Find all content in the given subtree
      *
      * @param mixed $sourceId
