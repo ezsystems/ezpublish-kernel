@@ -111,6 +111,9 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         new Content\Search\Gateway\CriterionHandler\LocationId(
                             $this->getDatabaseHandler()
                         ),
+                        new Content\Search\Gateway\CriterionHandler\LocationPriority(
+                            $this->getDatabaseHandler()
+                        ),
                         new Content\Search\Gateway\CriterionHandler\ParentLocationId(
                             $this->getDatabaseHandler()
                         ),
@@ -949,6 +952,39 @@ class SearchHandlerTest extends LanguageAwareTestCase
 
         $this->assertEquals(
             array( 4, 65 ),
+            array_map(
+                function ( $hit )
+                {
+                    return $hit->valueObject->versionInfo->contentInfo->id;
+                },
+                $result->searchHits
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LocationPriority
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testLocationPriorityFilter()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->findContent(
+            new Query(
+                array(
+                    'criterion' => new Criterion\LocationPriority(
+                        Criterion\Operator::BETWEEN,
+                        array( 1, 10 )
+                    ),
+                    'limit' => 10,
+                )
+            )
+        );
+
+        $this->assertEquals(
+            array( 154, 165, 188 ),
             array_map(
                 function ( $hit )
                 {

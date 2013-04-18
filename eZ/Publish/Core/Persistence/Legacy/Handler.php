@@ -475,6 +475,7 @@ class Handler implements HandlerInterface
                                 new CriterionHandler\ContentTypeGroupId( $db ),
                                 new CriterionHandler\DateMetadata( $db ),
                                 new CriterionHandler\LocationId( $db ),
+                                new CriterionHandler\LocationPriority( $db ),
                                 new CriterionHandler\ParentLocationId( $db ),
                                 new CriterionHandler\RemoteId( $db ),
                                 new CriterionHandler\LocationRemoteId( $db ),
