@@ -510,10 +510,10 @@ class EzcDatabase extends Gateway
                 $this->handler->getAutoIncrementValue( 'ezpolicy', 'id' )
             )->set(
                 $this->handler->quoteColumn( 'function_name' ),
-                $query->bindValue( $policy->function )
+                $query->bindValue( $policy->action )
             )->set(
                 $this->handler->quoteColumn( 'module_name' ),
-                $query->bindValue( $policy->module )
+                $query->bindValue( $policy->controller )
             )->set(
                 $this->handler->quoteColumn( 'original_id' ),
                 0

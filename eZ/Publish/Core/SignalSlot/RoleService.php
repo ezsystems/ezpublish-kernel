@@ -411,14 +411,14 @@ class RoleService implements RoleServiceInterface
     /**
      * Instantiates a policy create class
      *
-     * @param string $module
-     * @param string $function
+     * @param string $controller
+     * @param string $action
      *
      * @return \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct
      */
-    public function newPolicyCreateStruct( $module, $function )
+    public function newPolicyCreateStruct( $controller, $action )
     {
-        return $this->service->newPolicyCreateStruct( $module, $function );
+        return $this->service->newPolicyCreateStruct( $controller, $action );
     }
 
     /**
@@ -456,22 +456,31 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Returns the LimitationType's assigned to a given module/function
+     * @deprecated Since 5.1
+     * @uses getLimitationTypesByControllerAction()
+     */
+    public function getLimitationTypesByModuleFunction( $module, $function )
+    {
+        return $this->getLimitationTypesByControllerAction( $module, $function );
+    }
+
+    /**
+     * Returns the LimitationType's assigned to a given controller/action
      *
      * Typically used for:
      *  - Internal validation limitation value use on Policies
      *  - Role admin gui for editing policy limitations incl list limitation options via valueSchema()
      *
-     * @param string $module Legacy name of "controller", it's a unique identifier like "content"
-     * @param string $function Legacy name of a controller "action", it's a unique within the controller like "read"
+     * @param string $controller The controller (legacy: module) identifier, example: 'Bundle:controller' or 'content'
+     * @param string $action Controller action (legacy: function), it's a unique within the controller like 'read'
      *
      * @return \eZ\Publish\SPI\Limitation\Type[]
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If module/function to limitation type mapping
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If $controller/$action to limitation type mapping
      *                                                                 refers to a non existing identifier.
      */
-    public function getLimitationTypesByModuleFunction( $module, $function )
+    public function getLimitationTypesByControllerAction( $controller, $action )
     {
-        return $this->service->getLimitationTypesByModuleFunction( $module, $function );
+        return $this->service->getLimitationTypesByControllerAction( $controller, $action );
     }
 }

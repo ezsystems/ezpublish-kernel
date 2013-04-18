@@ -199,14 +199,14 @@ class RoleService implements RoleServiceInterface
         if ( !is_numeric( $role->id ) )
             throw new InvalidArgumentValue( "id", $role->id, "Role" );
 
-        if ( !is_string( $policyCreateStruct->module ) || empty( $policyCreateStruct->module ) )
-            throw new InvalidArgumentValue( "module", $policyCreateStruct->module, "PolicyCreateStruct" );
+        if ( !is_string( $policyCreateStruct->controller ) || empty( $policyCreateStruct->controller ) )
+            throw new InvalidArgumentValue( "controller", $policyCreateStruct->controller, "PolicyCreateStruct" );
 
-        if ( !is_string( $policyCreateStruct->function ) || empty( $policyCreateStruct->function ) )
-            throw new InvalidArgumentValue( "function", $policyCreateStruct->function, "PolicyCreateStruct" );
+        if ( !is_string( $policyCreateStruct->action ) || empty( $policyCreateStruct->action ) )
+            throw new InvalidArgumentValue( "action", $policyCreateStruct->action, "PolicyCreateStruct" );
 
-        if ( $policyCreateStruct->module === '*' && $policyCreateStruct->function !== '*' )
-            throw new InvalidArgumentValue( "module", $policyCreateStruct->module, "PolicyCreateStruct" );
+        if ( $policyCreateStruct->controller === '*' && $policyCreateStruct->action !== '*' )
+            throw new InvalidArgumentValue( "controller", $policyCreateStruct->controller, "PolicyCreateStruct" );
 
         if ( $this->repository->hasAccess( 'role', 'update' ) !== true )
             throw new UnauthorizedException( 'role', 'update' );
@@ -214,8 +214,8 @@ class RoleService implements RoleServiceInterface
         $loadedRole = $this->loadRole( $role->id );
 
         $spiPolicy = $this->buildPersistencePolicyObject(
-            $policyCreateStruct->module,
-            $policyCreateStruct->function,
+            $policyCreateStruct->controller,
+            $policyCreateStruct->action,
             $policyCreateStruct->getLimitations()
         );
 
@@ -291,18 +291,21 @@ class RoleService implements RoleServiceInterface
         if ( !is_numeric( $policy->roleId ) )
             throw new InvalidArgumentValue( "roleId", $policy->roleId, "Policy" );
 
-        if ( !is_string( $policy->module ) )
-            throw new InvalidArgumentValue( "module", $policy->module, "Policy" );
+        if ( !is_string( $policy->controller ) || empty( $policy->controller ) )
+            throw new InvalidArgumentValue( "controller", $policy->controller, "Policy" );
 
-        if ( !is_string( $policy->function ) )
-            throw new InvalidArgumentValue( "function", $policy->function, "Policy" );
+        if ( !is_string( $policy->action ) || empty( $policy->action ) )
+            throw new InvalidArgumentValue( "action", $policy->action, "Policy" );
+
+        if ( $policy->controller === '*' && $policy->action !== '*' )
+            throw new InvalidArgumentValue( "controller", $policy->controller, "PolicyCreateStruct" );
 
         if ( $this->repository->hasAccess( 'role', 'update' ) !== true )
             throw new UnauthorizedException( 'role', 'update' );
 
         $spiPolicy = $this->buildPersistencePolicyObject(
-            $policy->module,
-            $policy->function,
+            $policy->controller,
+            $policy->action,
             $policyUpdateStruct->getLimitations()
         );
 
@@ -757,17 +760,17 @@ class RoleService implements RoleServiceInterface
     /**
      * Instantiates a policy create class
      *
-     * @param string $module
-     * @param string $function
+     * @param string $controller
+     * @param string $action
      *
      * @return \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct
      */
-    public function newPolicyCreateStruct( $module, $function )
+    public function newPolicyCreateStruct( $controller, $action )
     {
         return new PolicyCreateStruct(
             array(
-                'module' => $module,
-                'function' => $function,
+                'controller' => $controller,
+                'action' => $action,
                 'limitations' => array()
             )
         );
@@ -833,7 +836,7 @@ class RoleService implements RoleServiceInterface
     public function buildDomainPolicyObject( SPIPolicy $policy, SPIRole $role = null )
     {
         $policyLimitations = array();
-        if ( $policy->module !== '*' && $policy->function !== '*' && $policy->limitations !== '*' )
+        if ( $policy->controller !== '*' && $policy->action !== '*' && $policy->limitations !== '*' )
         {
             foreach ( $policy->limitations as $identifier => $values )
             {
@@ -845,8 +848,8 @@ class RoleService implements RoleServiceInterface
             array(
                 'id' => (int)$policy->id,
                 'roleId' => $role !== null ? (int)$role->id : (int)$policy->roleId,
-                'module' => $policy->module,
-                'function' => $policy->function,
+                'controller' => $policy->controller,
+                'action' => $policy->action,
                 'limitations' => $policyLimitations
             )
         );
@@ -935,33 +938,42 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Returns the LimitationType's assigned to a given module/function
+     * @deprecated Since 5.1
+     * @uses getLimitationTypesByControllerAction()
+     */
+    public function getLimitationTypesByModuleFunction( $module, $function )
+    {
+        return $this->getLimitationTypesByControllerAction( $module, $function );
+    }
+
+    /**
+     * Returns the LimitationType's assigned to a given controller/action
      *
      * Typically used for:
      *  - Internal validation limitation value use on Policies
      *  - Role admin gui for editing policy limitations incl list limitation options via valueSchema()
      *
-     * @param string $module Legacy name of "controller", it's a unique identifier like "content"
-     * @param string $function Legacy name of a controller "action", it's a unique within the controller like "read"
+     * @param string $controller The controller (legacy: module) identifier, example: 'Bundle:controller' or 'content'
+     * @param string $action Controller action (legacy: function), it's a unique within the controller like 'read'
      *
      * @return \eZ\Publish\SPI\Limitation\Type[]
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If module/function to limitation type mapping
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If $controller/$action to limitation type mapping
      *                                                                 refers to a non existing identifier.
      */
-    public function getLimitationTypesByModuleFunction( $module, $function )
+    public function getLimitationTypesByControllerAction( $controller, $action )
     {
-        if ( empty( $this->settings['limitationMap'][$module][$function] ) )
+        if ( empty( $this->settings['limitationMap'][$controller][$action] ) )
             return array();
 
         $types = array();
-        foreach ( $this->settings['limitationMap'][$module][$function] as $identifier )
+        foreach ( $this->settings['limitationMap'][$controller][$action] as $identifier )
         {
             if ( !isset( $this->settings['limitationTypes'][$identifier] ) )
             {
                 throw new \eZ\Publish\Core\Base\Exceptions\BadStateException(
                     '$identifier',
-                    "'{$identifier}' does not exists but was configured as limitation on {$module}/{$function}"
+                    "'{$identifier}' does not exists but was configured as limitation on {$controller}/{$action}"
                 );
             }
             $types[$identifier] = $this->settings['limitationTypes'][$identifier];
@@ -982,8 +994,8 @@ class RoleService implements RoleServiceInterface
         foreach ( $roleCreateStruct->getPolicies() as $policyCreateStruct )
         {
             $policiesToCreate[] = $this->buildPersistencePolicyObject(
-                $policyCreateStruct->module,
-                $policyCreateStruct->function,
+                $policyCreateStruct->controller,
+                $policyCreateStruct->action,
                 $policyCreateStruct->getLimitations()
             );
         }
@@ -999,16 +1011,16 @@ class RoleService implements RoleServiceInterface
     /**
      * Creates SPI Policy value object from provided module, function and limitations
      *
-     * @param string $module
-     * @param string $function
+     * @param string $controller
+     * @param string $action
      * @param \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations
      *
      * @return \eZ\Publish\SPI\Persistence\User\Policy
      */
-    protected function buildPersistencePolicyObject( $module, $function, array $limitations )
+    protected function buildPersistencePolicyObject( $controller, $action, array $limitations )
     {
         $limitationsToCreate = '*';
-        if ( $module !== '*' && $function !== '*' && !empty( $limitations ) )
+        if ( $controller !== '*' && $action !== '*' && !empty( $limitations ) )
         {
             $limitationsToCreate = array();
             foreach ( $limitations as $limitation )
@@ -1019,8 +1031,8 @@ class RoleService implements RoleServiceInterface
 
         return new SPIPolicy(
             array(
-                'module' => $module,
-                'function' => $function,
+                'controller' => $controller,
+                'action' => $action,
                 'limitations' => $limitationsToCreate
             )
         );

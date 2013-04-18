@@ -286,8 +286,8 @@ class UserHandlerTest extends TestCase
         $role = $handler->createRole( $role );
 
         $policy = new Persistence\User\Policy();
-        $policy->module = 'foo';
-        $policy->function = 'bar';
+        $policy->controller = 'foo';
+        $policy->action = 'bar';
 
         $handler->addPolicy( $role->id, $policy );
 
@@ -298,8 +298,8 @@ class UserHandlerTest extends TestCase
                     array(
                         'id' => 1,
                         'roleId' => 1,
-                        'module' => 'foo',
-                        'function' => 'bar',
+                        'controller' => 'foo',
+                        'action' => 'bar',
                         'limitations' => '*',
                     )
                 )
@@ -318,8 +318,8 @@ class UserHandlerTest extends TestCase
         $role = $handler->createRole( $role );
 
         $policy = new Persistence\User\Policy();
-        $policy->module = 'foo';
-        $policy->function = 'bar';
+        $policy->controller = 'foo';
+        $policy->action = 'bar';
 
         $handler->addPolicy( $role->id, $policy );
 
@@ -333,8 +333,8 @@ class UserHandlerTest extends TestCase
                     array(
                         'id' => 1,
                         'roleId' => 1,
-                        'module' => 'foo',
-                        'function' => 'bar',
+                        'controller' => 'foo',
+                        'action' => 'bar',
                         'limitations' => '*',
                     )
                 )
@@ -358,8 +358,8 @@ class UserHandlerTest extends TestCase
         $role = $handler->createRole( $role );
 
         $policy = new Persistence\User\Policy();
-        $policy->module = 'foo';
-        $policy->function = 'bar';
+        $policy->controller = 'foo';
+        $policy->action = 'bar';
         $policy->limitations = array(
             'Subtree' => array( '/1', '/1/2' ),
             'Foo' => array( 'Bar' ),
@@ -374,8 +374,8 @@ class UserHandlerTest extends TestCase
                     array(
                         'id' => 1,
                         'roleId' => 1,
-                        'module' => 'foo',
-                        'function' => 'bar',
+                        'controller' => 'foo',
+                        'action' => 'bar',
                         'limitations' => array(
                             'Subtree' => array( '/1', '/1/2' ),
                             'Foo' => array( 'Bar' ),
@@ -465,8 +465,8 @@ class UserHandlerTest extends TestCase
         $handler->createRole( $role );
 
         $policy = new Persistence\User\Policy();
-        $policy->module = 'foo';
-        $policy->function = 'bar';
+        $policy->controller = 'foo';
+        $policy->action = 'bar';
 
         $handler->addPolicy( $role->id, $policy );
 
@@ -486,8 +486,8 @@ class UserHandlerTest extends TestCase
         $handler->createRole( $role );
 
         $policy = new Persistence\User\Policy();
-        $policy->module = 'foo';
-        $policy->function = 'bar';
+        $policy->controller = 'foo';
+        $policy->action = 'bar';
 
         $policy = $handler->addPolicy( $role->id, $policy );
 
@@ -503,8 +503,8 @@ class UserHandlerTest extends TestCase
         $handler->createRole( $role );
 
         $policy = new Persistence\User\Policy();
-        $policy->module = 'foo';
-        $policy->function = 'bar';
+        $policy->controller = 'foo';
+        $policy->action = 'bar';
         $policy->limitations = array(
             'Subtree' => array( '/1', '/1/2' ),
             'Foo' => array( 'Bar' ),
@@ -531,8 +531,8 @@ class UserHandlerTest extends TestCase
         $handler->createRole( $role );
 
         $policy = new Persistence\User\Policy();
-        $policy->module = 'foo';
-        $policy->function = 'bar';
+        $policy->controller = 'foo';
+        $policy->action = 'bar';
         $policy->limitations = array(
             'Subtree' => array( '/1', '/1/2' ),
             'Foo' => array( 'Bar' ),
@@ -556,16 +556,16 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         $policy1 = new Persistence\User\Policy();
-        $policy1->module = 'foo';
-        $policy1->function = 'bar';
+        $policy1->controller = 'foo';
+        $policy1->action = 'bar';
         $policy1->limitations = array(
             'Subtree' => array( '/1', '/1/2' ),
             'Foo' => array( 'Bar' ),
         );
 
         $policy2 = new Persistence\User\Policy();
-        $policy2->module = 'foo';
-        $policy2->function = 'blubb';
+        $policy2->controller = 'foo';
+        $policy2->action = 'blubb';
         $policy2->limitations = array(
             'Foo' => array( 'Blubb' ),
         );

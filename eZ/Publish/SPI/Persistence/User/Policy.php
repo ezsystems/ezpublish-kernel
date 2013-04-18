@@ -30,22 +30,22 @@ class Policy extends ValueObject
     public $roleId;
 
     /**
-     * Name of module, associated with the Policy
+     * Name of controller (legacy:module), associated with the Policy
      *
      * Eg: content
      *
      * @var string
      */
-    public $module;
+    public $controller;
 
     /**
-     * Name of the module function Or all functions with '*'
+     * Name of the controller action (legacy:function) Or all actions with '*'
      *
      * Eg: read
      *
      * @var string
      */
-    public $function;
+    public $action;
 
     /**
      * Array of policy limitations, which is just a random hash map.

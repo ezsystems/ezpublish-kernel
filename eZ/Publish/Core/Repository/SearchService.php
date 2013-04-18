@@ -182,16 +182,16 @@ class SearchService implements SearchServiceInterface
      *
      * @return boolean|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
-    public function getPermissionsCriterion( $module = 'content', $function = 'read' )
+    public function getPermissionsCriterion( $controller = 'content', $action = 'read' )
     {
-        $permissionSets = $this->repository->hasAccess( $module, $function );
+        $permissionSets = $this->repository->hasAccess( $controller, $action );
         if ( $permissionSets === false || $permissionSets === true )
         {
             return $permissionSets;
         }
 
         if ( empty( $permissionSets ) )
-            throw new \RuntimeException( "Got an empty array of limitations from hasAccess( '{$module}', '{$function}' )" );
+            throw new \RuntimeException( "Got an empty array of limitations from hasAccess( '{$controller}', '{$action}' )" );
 
         /**
          * RoleAssignment is a OR condition, so is policy, while limitations is a AND condition

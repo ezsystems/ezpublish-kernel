@@ -28,15 +28,15 @@ class PolicyCreateStructStub extends PolicyCreateStruct
     /**
      * Instantiates a policy create struct.
      *
-     * @param string $module
-     * @param string $function
+     * @param string $controller
+     * @param string $action
      */
-    public function __construct( $module, $function )
+    public function __construct( $controller, $action )
     {
         parent::__construct(
             array(
-                'module' => $module,
-                'function' => $function
+                'controller' => $controller,
+                'action' => $action
             )
         );
     }

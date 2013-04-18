@@ -164,13 +164,13 @@ class Repository implements APIRepository
     }
 
     /**
-     * @param string $module
-     * @param string $function
+     * @param string $controller
+     * @param string $action
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
      * @return boolean|\eZ\Publish\API\Repository\Values\User\Limitation[] if limitations are on this function an array of limitations is returned
      */
-    public function hasAccess( $module, $function, User $user = null )
+    public function hasAccess( $controller, $action, User $user = null )
     {
         // @todo: Implement
     }
@@ -182,14 +182,14 @@ class Repository implements APIRepository
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
      *
-     * @param string $module The module, aka controller identifier to check permissions on
-     * @param string $function The function, aka the controller action to check permissions on
+     * @param string $controller The module, aka controller identifier to check permissions on
+     * @param string $action The function, aka the controller action to check permissions on
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
      * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
      *
      * @return boolean
      */
-    public function canUser( $module, $function, ValueObject $object, ValueObject $target = null )
+    public function canUser( $controller, $action, ValueObject $object, ValueObject $target = null )
     {
         // @todo: Implement
     }

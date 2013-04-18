@@ -146,13 +146,13 @@ class RepositoryStub implements Repository
     }
 
     /**
-     * @param string $module
-     * @param string $function
+     * @param string $controller
+     * @param string $action
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
      * @return boolean|\eZ\Publish\API\Repository\Values\User\Limitation[] if limitations are on this function an array of limitations is returned
      */
-    public function hasAccess( $module, $function, User $user = null )
+    public function hasAccess( $controller, $action, User $user = null )
     {
         if ( $this->permissionChecks > 0 )
         {
@@ -176,7 +176,7 @@ class RepositoryStub implements Repository
                     return true;
                 }
 
-                if ( $policy->module !== $module && $policy->module !== "*" )
+                if ( $policy->module !== $controller && $policy->module !== "*" )
                     continue;
 
                 if ( $policy->function === '*' && $roleLimitation === null )
@@ -185,7 +185,7 @@ class RepositoryStub implements Repository
                     return true;
                 }
 
-                if ( $policy->function !== $function && $policy->function !== "*" )
+                if ( $policy->function !== $action && $policy->function !== "*" )
                     continue;
 
                 $permissionSet['policies'][] = $policy;
@@ -207,7 +207,7 @@ class RepositoryStub implements Repository
         if ( !empty( $permissionSets ) )
             return $permissionSets;
 
-        return false;// No policies matching $module and $function
+        return false;// No policies matching $controller and $action
     }
 
     /**
@@ -217,21 +217,21 @@ class RepositoryStub implements Repository
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
      *
-     * @param string $module The module, aka controller identifier to check permissions on
-     * @param string $function The function, aka the controller action to check permissions on
+     * @param string $controller The module, aka controller identifier to check permissions on
+     * @param string $action The function, aka the controller action to check permissions on
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
      * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
      *
      * @return boolean
      */
-    public function canUser( $module, $function, ValueObject $object, ValueObject $target = null )
+    public function canUser( $controller, $action, ValueObject $object, ValueObject $target = null )
     {
         if ( $this->permissionChecks > 0 )
         {
             return true;
         }
 
-        $permissionSets = $this->hasAccess( $module, $function );
+        $permissionSets = $this->hasAccess( $controller, $action );
         if ( $permissionSets === false || $permissionSets === true )
         {
             return $permissionSets;
