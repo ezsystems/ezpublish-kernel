@@ -23,6 +23,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 use eZ\Publish\SPI\Persistence\Handler as SPIPersistenceHandler;
+use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 
 /**
  * LocationLimitation is a Content limitation
@@ -80,38 +81,28 @@ class LocationLimitationType implements SPILimitationTypeInterface
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject|null $target The location, parent or "assignment" value object
+     * @param \eZ\Publish\API\Repository\Values\ValueObject[] $targets An array of location, parent or "assignment" value objects
      *
      * @return boolean
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, ValueObject $target = null )
+    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = array() )
     {
         if ( !$value instanceof APILocationLimitation )
         {
             throw new InvalidArgumentException( '$value', 'Must be of type: APILocationLimitation' );
         }
 
-        if ( $object instanceof Content )
+        if ( $object instanceof ContentCreateStruct )
+        {
+            return $this->evaluateForContentCreateStruct( $value, $targets );
+        }
+        else if ( $object instanceof Content )
         {
             $object = $object->getVersionInfo()->getContentInfo();
         }
         else if ( $object instanceof VersionInfo )
         {
             $object = $object->getContentInfo();
-        }
-        else if ( $object instanceof ContentCreateStruct )
-        {
-            // If target is null return false as user does not have access to content w/o location with this limitation
-            if ( $target === null )
-                return false;
-
-            if ( !$target instanceof LocationCreateStruct )
-            {
-                throw new InvalidArgumentException(
-                    '$object',
-                    'Cannot be ContentCreateStruct unless $target is LocationCreateStruct'
-                );
-            }
         }
         else if ( !$object instanceof ContentInfo )
         {
@@ -121,41 +112,67 @@ class LocationLimitationType implements SPILimitationTypeInterface
             );
         }
 
-        if ( $target !== null && !$target instanceof Location && !$target instanceof LocationCreateStruct )
+        // Check all locations if no specific placement was provided
+        if ( empty( $targets ) )
         {
-            throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
+            $targets = $this->persistence->locationHandler()->loadLocationsByContent( $object->id );
         }
 
-        if ( empty( $value->limitationValues ) )
+        foreach ( $targets as $target )
+        {
+            if ( !$target instanceof Location && !$target instanceof SPILocation )
+            {
+                throw new InvalidArgumentException( '$targets', 'Must contain objects of type: Location' );
+            }
+
+            // Single match is sufficient
+            if ( in_array( $target->id, $value->limitationValues ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Evaluate permissions for ContentCreateStruct against LocationCreateStruct placements.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $targets does not contain
+     *         objects of type LocationCreateStruct
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
+     * @param array $targets
+     *
+     * @return bool
+     */
+    protected function evaluateForContentCreateStruct( APILimitationValue $value, array $targets )
+    {
+        // If targets is empty return false as user does not have access
+        // to content w/o location with this limitation
+        if ( empty( $targets ) )
         {
             return false;
         }
 
-        /**
-         * Use $target if provided, optionally used to check the specific location instead of all
-         * e.g.: 'remove' in the context of removal of a specific location, or in case of 'create'
-         */
-        if ( $target instanceof Location )
+        foreach ( $targets as $target )
         {
-            return in_array( $target->id, $value->limitationValues );
-        }
-        if ( $target instanceof LocationCreateStruct )
-        {
-            return in_array( $target->parentLocationId, $value->limitationValues );
+            if ( !$target instanceof LocationCreateStruct )
+            {
+                throw new InvalidArgumentException(
+                    '$targets',
+                    'If $object is ContentCreateStruct must contain objects of type: LocationCreateStruct'
+                );
+            }
+
+            // For ContentCreateStruct all placements must match
+            if ( !in_array( $target->parentLocationId, $value->limitationValues ) )
+            {
+                return false;
+            }
         }
 
-        /**
-         * Check all locations if no specific placement was provided
-         *
-         * @var $object ContentInfo
-         */
-        $locations = $this->persistence->locationHandler()->loadLocationsByContent( $object->id );
-        foreach ( $locations as $location )
-        {
-            if ( in_array( $location->id, $value->limitationValues ) )
-                return true;
-        }
-        return false;
+        return true;
     }
 
     /**
