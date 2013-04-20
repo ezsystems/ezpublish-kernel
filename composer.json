@@ -1,7 +1,7 @@
 {
     "name": "ezsystems/ezpublish-kernel",
     "description": "eZ Publish API and kernel. This is the heart of eZ Publish 5.",
-    "version": "5.1-dev",
+    "version": "5.1.0-beta2",
     "homepage": "http://share.ez.no",
     "license": "GPL-2.0",
     "require": {
