@@ -55,6 +55,12 @@ class Configuration implements EventSubscriberInterface
      */
     private $options;
 
+    /**
+     * Disables the feature when set using setIsEnabled()
+     * @var bool
+     */
+    private $isEnabled = false;
+
     public function __construct(
         ConfigResolverInterface $configResolver,
         GatewayCachePurger $gatewayCachePurger,
@@ -70,6 +76,15 @@ class Configuration implements EventSubscriberInterface
         $this->container = $container;
         $this->urlAliasGenerator = $urlAliasGenerator;
         $this->options = $options;
+    }
+
+    /**
+     * Toggles the feature
+     * @param bool $isEnabled
+     */
+    public function setIsEnabled( $isEnabled )
+    {
+        $this->isEnabled = (bool)$isEnabled;
     }
 
     public static function getSubscribedEvents()
@@ -88,6 +103,11 @@ class Configuration implements EventSubscriberInterface
      */
     public function onBuildKernel( PreBuildKernelEvent $event )
     {
+        if ( !$this->isEnabled )
+        {
+            return;
+        }
+
         $databaseSettings = $this->configResolver->getParameter( "database" );
         $settings = array();
         foreach (
