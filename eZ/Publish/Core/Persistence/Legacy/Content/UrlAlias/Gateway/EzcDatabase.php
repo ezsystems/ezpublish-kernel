@@ -345,7 +345,7 @@ class EzcDatabase extends Gateway
         /** @var $query \ezcQueryUpdate */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
-            $this->dbHandler->quoteColumn( "ezurlalias_ml" )
+            $this->dbHandler->quoteTable( "ezurlalias_ml" )
         )->set(
             $this->dbHandler->quoteColumn( "is_original" ),
             $query->bindValue( 0, null, \PDO::PARAM_INT )
@@ -390,7 +390,7 @@ class EzcDatabase extends Gateway
         /** @var $query \ezcQueryUpdate */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
-            $this->dbHandler->quoteColumn( "ezurlalias_ml" )
+            $this->dbHandler->quoteTable( "ezurlalias_ml" )
         )->set(
             $this->dbHandler->quoteColumn( "lang_mask" ),
             $query->expr->bitAnd(
@@ -429,7 +429,7 @@ class EzcDatabase extends Gateway
         /** @var $query \ezcQueryUpdate */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
-            $this->dbHandler->quoteColumn( "ezurlalias_ml" )
+            $this->dbHandler->quoteTable( "ezurlalias_ml" )
         )->set(
             $this->dbHandler->quoteColumn( "is_original" ),
             $query->bindValue( 0, null, \PDO::PARAM_INT )
@@ -471,7 +471,7 @@ class EzcDatabase extends Gateway
         /** @var $query \ezcQueryUpdate */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
-            $this->dbHandler->quoteColumn( "ezurlalias_ml" )
+            $this->dbHandler->quoteTable( "ezurlalias_ml" )
         )->set(
             $this->dbHandler->quoteColumn( "parent" ),
             $query->bindValue( $newParentId, null, \PDO::PARAM_INT )
@@ -506,7 +506,7 @@ class EzcDatabase extends Gateway
     {
         /** @var $query \ezcQueryUpdate */
         $query = $this->dbHandler->createUpdateQuery();
-        $query->update( $this->dbHandler->quoteColumn( "ezurlalias_ml" ) );
+        $query->update( $this->dbHandler->quoteTable( "ezurlalias_ml" ) );
         $this->setQueryValues( $query, $values );
         $query->where(
             $query->expr->lAnd(
