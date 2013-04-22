@@ -65,6 +65,7 @@ class QueryBuilder
             $this->dbHandler->aliasedColumn( $query, 'creator_id', 'ezcontentobject_version' ),
             $this->dbHandler->aliasedColumn( $query, 'created', 'ezcontentobject_version' ),
             $this->dbHandler->aliasedColumn( $query, 'status', 'ezcontentobject_version' ),
+            // @todo: remove ezcontentobject_version.contentobject_id from query as it duplicates ezcontentobject.id
             $this->dbHandler->aliasedColumn( $query, 'contentobject_id', 'ezcontentobject_version' ),
             $this->dbHandler->aliasedColumn( $query, 'language_mask', 'ezcontentobject_version' ),
             $this->dbHandler->aliasedColumn( $query, 'initial_language_id', 'ezcontentobject_version' ),
@@ -74,6 +75,7 @@ class QueryBuilder
             $this->dbHandler->aliasedColumn( $query, 'data_type_string', 'ezcontentobject_attribute' ),
             $this->dbHandler->aliasedColumn( $query, 'language_code', 'ezcontentobject_attribute' ),
             $this->dbHandler->aliasedColumn( $query, 'language_id', 'ezcontentobject_attribute' ),
+            // @todo: remove ezcontentobject_attribute.version from query as it duplicates ezcontentobject_version.version
             $this->dbHandler->aliasedColumn( $query, 'version', 'ezcontentobject_attribute' ),
             // Content object field data
             $this->dbHandler->aliasedColumn( $query, 'data_float', 'ezcontentobject_attribute' ),
@@ -199,6 +201,7 @@ class QueryBuilder
             // Content main location
             $this->dbHandler->aliasedColumn( $query, 'main_node_id', 'ezcontentobject_tree' ),
             // Content object
+            // @todo: remove ezcontentobject.d from query as it duplicates ezcontentobject_version.contentobject_id
             $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject' ),
             $this->dbHandler->aliasedColumn( $query, 'contentclass_id', 'ezcontentobject' ),
             $this->dbHandler->aliasedColumn( $query, 'section_id', 'ezcontentobject' ),
