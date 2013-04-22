@@ -677,7 +677,7 @@ CREATE TABLE ezkeyword (
 
 DROP TABLE IF EXISTS ezkeyword_attribute_link;
 CREATE TABLE ezkeyword_attribute_link (
-  id integer nextval('ezkeyword_attribute_link_s'::text) NOT NULL,
+  id integer DEFAULT nextval('ezkeyword_attribute_link_s'::text) NOT NULL,
   keyword_id integer DEFAULT 0 NOT NULL,
   objectattribute_id integer DEFAULT 0 NOT NULL
 );
