@@ -649,19 +649,19 @@ class EzcDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        $limitations = array();
-        $values = array();
+        $limitationIdsSet = array();
+        $limitationValuesSet = array();
         while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
         {
-            $limitations[] = $row['ezpolicy_limitation_id'];
-            $values[] = $row['ezpolicy_limitation_value_id'];
+            $limitationIdsSet[$row['ezpolicy_limitation_id']] = true;
+            $limitationValuesSet[$row['ezpolicy_limitation_value_id']] = true;
         }
 
         $query = $this->handler->createDeleteQuery();
         $query
             ->deleteFrom( $this->handler->quoteTable( 'ezpolicy_limitation' ) )
             ->where(
-                $query->expr->in( $this->handler->quoteColumn( 'id' ), array_unique( $limitations ) )
+                $query->expr->in( $this->handler->quoteColumn( 'id' ), array_keys( $limitationIdsSet ) )
             );
         $query->prepare()->execute();
 
@@ -669,7 +669,7 @@ class EzcDatabase extends Gateway
         $query
             ->deleteFrom( $this->handler->quoteTable( 'ezpolicy_limitation_value' ) )
             ->where(
-                $query->expr->in( $this->handler->quoteColumn( 'id' ), array_unique( $values ) )
+                $query->expr->in( $this->handler->quoteColumn( 'id' ), array_keys( $limitationValuesSet ) )
             );
         $query->prepare()->execute();
     }
