@@ -653,24 +653,33 @@ class EzcDatabase extends Gateway
         $limitationValuesSet = array();
         while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
         {
-            $limitationIdsSet[$row['ezpolicy_limitation_id']] = true;
-            $limitationValuesSet[$row['ezpolicy_limitation_value_id']] = true;
+            if ( $row['ezpolicy_limitation_id'] !== null )
+                $limitationIdsSet[$row['ezpolicy_limitation_id']] = true;
+
+            if ( $row['ezpolicy_limitation_value_id'] !== null )
+                $limitationValuesSet[$row['ezpolicy_limitation_value_id']] = true;
         }
 
-        $query = $this->handler->createDeleteQuery();
-        $query
-            ->deleteFrom( $this->handler->quoteTable( 'ezpolicy_limitation' ) )
-            ->where(
-                $query->expr->in( $this->handler->quoteColumn( 'id' ), array_keys( $limitationIdsSet ) )
-            );
-        $query->prepare()->execute();
+        if ( !empty( $limitationIdsSet ) )
+        {
+            $query = $this->handler->createDeleteQuery();
+            $query
+                ->deleteFrom( $this->handler->quoteTable( 'ezpolicy_limitation' ) )
+                ->where(
+                    $query->expr->in( $this->handler->quoteColumn( 'id' ), array_keys( $limitationIdsSet ) )
+                );
+            $query->prepare()->execute();
+        }
 
-        $query = $this->handler->createDeleteQuery();
-        $query
-            ->deleteFrom( $this->handler->quoteTable( 'ezpolicy_limitation_value' ) )
-            ->where(
-                $query->expr->in( $this->handler->quoteColumn( 'id' ), array_keys( $limitationValuesSet ) )
-            );
-        $query->prepare()->execute();
+        if ( !empty( $limitationValuesSet ) )
+        {
+            $query = $this->handler->createDeleteQuery();
+            $query
+                ->deleteFrom( $this->handler->quoteTable( 'ezpolicy_limitation_value' ) )
+                ->where(
+                    $query->expr->in( $this->handler->quoteColumn( 'id' ), array_keys( $limitationValuesSet ) )
+                );
+            $query->prepare()->execute();
+        }
     }
 }
