@@ -247,7 +247,7 @@ CREATE TABLE ezgmaplocation (
   contentobject_version integer DEFAULT '0' NOT NULL,
   latitude double precision DEFAULT '0' NOT NULL,
   longitude double precision DEFAULT '0' NOT NULL,
-  address varying(150) DEFAULT NULL
+  address character varying(150) DEFAULT NULL
 );
 
 DROP TABLE IF EXISTS ezcobj_state;
