@@ -162,6 +162,11 @@ class Configuration implements EventSubscriberInterface
             ezxFormToken::setSecret( $this->container->getParameter( 'kernel.secret' ) );
             ezxFormToken::setFormField( $this->container->getParameter( 'form.type_extension.csrf.field_name' ) );
         }
+        // csrf protection is disabled, disable it in legacy extension as well.
+        else
+        {
+            ezxFormToken::setIsEnabled( false );
+        }
 
         // Register http cache content/cache event listener
         ezpEvent::getInstance()->attach( 'content/cache', array( $this->gatewayCachePurger, 'purge' ) );

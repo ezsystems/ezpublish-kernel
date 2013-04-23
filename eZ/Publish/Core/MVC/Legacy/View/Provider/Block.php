@@ -90,7 +90,7 @@ class Block extends Provider implements BlockViewProviderInterface
                     );
                     if ( is_array( $children ) && isset( $children[0] ) )
                     {
-                        return $children[0];
+                        return ezpEvent::getInstance()->filter( 'response/output', $children[0] );
                     }
                     return '';
                 },
