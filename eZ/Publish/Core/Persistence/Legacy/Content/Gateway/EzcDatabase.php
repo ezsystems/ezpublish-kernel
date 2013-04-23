@@ -906,14 +906,9 @@ class EzcDatabase extends Gateway
                     $query->bindValue( $userId, null, \PDO::PARAM_INT )
                 )
             )
-        )->groupBy(
-            $this->dbHandler->quoteColumn( 'id', 'ezcontentobject_version' )
         );
 
-        $statement = $query->prepare();
-        $statement->execute();
-
-        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+        return $this->listVersionsHelper( $query );
     }
 
     /**
@@ -931,14 +926,39 @@ class EzcDatabase extends Gateway
                 $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' ),
                 $query->bindValue( $contentId, null, \PDO::PARAM_INT )
             )
-        )->groupBy(
+        );
+
+        return $this->listVersionsHelper( $query );
+    }
+
+    /**
+     * Helper for {@see listVersions()} and {@see listVersionsForUser()} that filters duplicates
+     * that are the result of the cartesian product performed by createVersionInfoFindQuery()
+     *
+     * @param \ezcQuerySelect $query
+     * @return string[][]
+     */
+    private function listVersionsHelper( $query )
+    {
+        $query->orderBy(
             $this->dbHandler->quoteColumn( 'id', 'ezcontentobject_version' )
         );
 
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+        $results = array();
+        $previousId = null;
+        foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
+        {
+            if ( $row["ezcontentobject_version_id"] == $previousId )
+                continue;
+
+            $previousId = $row["ezcontentobject_version_id"];
+            $results[] = $row;
+        }
+
+        return $results;
     }
 
     /**
