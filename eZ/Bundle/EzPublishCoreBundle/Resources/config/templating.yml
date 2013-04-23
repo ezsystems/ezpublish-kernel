@@ -1,5 +1,6 @@
 parameters:
     twig.loader.string.class: Twig_Loader_String
+    twig.extension.intl.class: Twig_Extensions_Extension_Intl
 
     ezpublish.twig.extension.content.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ContentExtension
 
@@ -18,6 +19,11 @@ services:
         class: %twig.loader.string.class%
         tags:
             - {name: twig.loader}
+
+    twig.extension.intl:
+        class: %twig.extension.intl.class%
+        tags:
+            - {name: twig.extension}
 
     ezpublish.twig.extension.content:
         class: %ezpublish.twig.extension.content.class%
