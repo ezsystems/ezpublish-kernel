@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 use eZModule;
 use ezjscPacker;
 use eZINI;
+use ezpEvent;
 use Symfony\Component\HttpFoundation\Request;
 
 class Location extends Provider implements LocationViewProviderInterface
@@ -131,7 +132,7 @@ class Location extends Provider implements LocationViewProviderInterface
                         )
                     );
 
-                    return $moduleResult['content'];
+                    return ezpEvent::getInstance()->filter( 'response/output', $moduleResult['content'] );
                 },
                 false
             );

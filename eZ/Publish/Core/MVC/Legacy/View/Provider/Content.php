@@ -71,7 +71,7 @@ class Content extends Provider implements ContentViewProviderInterface
                     );
                     if ( is_array( $children ) && isset( $children[0] ) )
                     {
-                        return $children[0];
+                        return ezpEvent::getInstance()->filter( 'response/output', $children[0] );
                     }
                     return '';
                 },
