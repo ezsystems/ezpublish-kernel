@@ -46,6 +46,8 @@ class ViewTemplateListener implements EventSubscriberInterface
      * @see \eZ\Publish\Core\MVC\Symfony\View\Manager::renderContentView()
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent $event
+     *
+     * @throws \LogicException
      * @throws \InvalidArgumentException
      */
     public function onPreContentView( PreContentViewEvent $event )
@@ -54,9 +56,24 @@ class ViewTemplateListener implements EventSubscriberInterface
         $configHash = $contentView->getConfigHash();
         if ( $configHash !== null && isset( $configHash['params'] ) )
         {
+            $configResolver = $this->container->get( 'ezpublish.config.resolver' );
             foreach ( $configHash['params'] as &$param )
             {
-                if ( is_array( $param ) && isset( $param['service'] ) )
+                // Resolve config resolver parameters
+                // Supported syntax for parameters: $<paramName>[;<namespace>[;<scope>]]$
+                if ( is_string( $param ) && strpos( $param, '$' ) === 0 && substr( $param, -1 ) === '$' )
+                {
+                    $configResolverParams = explode( ';', substr( $param, 1, -1 ) );
+                    if ( count( $configResolverParams ) > 3 )
+                    {
+                        throw new \LogicException( "Config resolver parameters can't have more than 3 segments: \$paramName;namespace;scope\$" );
+                    }
+
+                    $namespace = isset( $configResolverParams[1] ) ? $configResolverParams[1] : null;
+                    $scope = isset( $configResolverParams[2] ) ? $configResolverParams[2] : null;
+                    $param = $configResolver->getParameter( $configResolverParams[0], $namespace, $scope );
+                }
+                else if ( is_array( $param ) && isset( $param['service'] ) )
                 {
                     $parameterProvider = $this->container->get( $param['service'] );
                     if ( !$parameterProvider instanceof ViewParameterProvider && !isset( $param['method'] ) )
