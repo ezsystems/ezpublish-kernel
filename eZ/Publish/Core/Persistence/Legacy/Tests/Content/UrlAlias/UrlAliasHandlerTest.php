@@ -2178,64 +2178,40 @@ class UrlAliasHandlerTest extends TestCase
     public function testLocationDeleted()
     {
         $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_location.php" );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_location_delete.php" );
 
         $countBeforeDeleting = $this->countRows();
 
-        $handler->locationDeleted( 315 );
+        $handler->locationDeleted( 5 );
 
         self::assertEquals(
-            $countBeforeDeleting - 6,
+            $countBeforeDeleting - 5,
             $this->countRows()
         );
 
         self::assertEmpty(
-            $handler->listURLAliasesForLocation( 315 )
+            $handler->listURLAliasesForLocation( 5 )
         );
 
         $removedAliases = array(
-            "jedan/dva/tri-history",
-            "jedan/dva/three",
-            "jedan/dva/drei",
-            "jedan/dva/tri",
-            "jedan/dva",
-            "jedan/two",
+            "moved-original-parent/moved-history",
+            "moved-original-parent/sub",
+            "moved-original-parent",
+            "moved-original-parent-history",
+            "custom-below/moved-original-parent-custom",
         );
         foreach ( $removedAliases as $path )
         {
             try
             {
                 $handler->lookup( $path );
-                $this->fail( "Alias not removed!" );
+                $this->fail( "Alias '$path' not removed!" );
             }
             catch ( NotFoundException $e )
             {
                 // Do nothing
             }
         }
-    }
-
-    /**
-     * Test for the locationDeleted() method.
-     *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::locationDeleted
-     */
-    public function testLocationDeletedRemovesCustomAliases()
-    {
-        $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_location_custom.php" );
-
-        $countBeforeDeleting = $this->countRows();
-
-        $handler->locationDeleted( 314 );
-
-        self::assertEquals(
-            $countBeforeDeleting - 2,
-            $this->countRows()
-        );
-
-        self::assertEmpty( $handler->listURLAliasesForLocation( 314 ) );
-        self::assertEmpty( $handler->listURLAliasesForLocation( 314, true ) );
     }
 
     /**
