@@ -185,10 +185,7 @@ class Repository implements RepositoryInterface
             'fieldType' => array(),
             'urlAlias' => array(),
             'urlWildcard' => array(),
-            'nameSchema' => array(
-                'limit' => 0,
-                'sequence' => ''
-            ),
+            'nameSchema' => array(),
             'languages' => array()
         );
 
