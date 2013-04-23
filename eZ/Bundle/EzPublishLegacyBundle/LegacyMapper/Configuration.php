@@ -59,7 +59,7 @@ class Configuration implements EventSubscriberInterface
      * Disables the feature when set using setIsEnabled()
      * @var bool
      */
-    private $isEnabled = false;
+    private $isEnabled = true;
 
     public function __construct(
         ConfigResolverInterface $configResolver,
