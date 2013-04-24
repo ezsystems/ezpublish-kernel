@@ -177,6 +177,6 @@ services:
 
     ezpublish_legacy.rest_listener:
         class: %ezpublish_legacy.rest_listener.class%
-        arguments: [@service_container]
+        arguments: [%ezpublish_rest.csrf_token_intention%]
         tags:
             - { name: kernel.event_subscriber }

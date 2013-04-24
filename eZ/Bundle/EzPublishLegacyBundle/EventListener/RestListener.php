@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the LocaleListener class.
+ * File containing the RestListener class.
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,28 +10,27 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Bundle\EzPublishRestBundle\RestEvents;
 use ezxFormToken;
 
 /**
- * Enhanced LocaleListener, injecting the converted locale extracted from eZ Publish configuration.
+ * This listener performs Legacy Stack specific tasks in REST context.
  */
 class RestListener implements EventSubscriberInterface
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * CSRF token intention string.
+     *
+     * @var string
      */
-    private $container;
+    private $csrfTokenIntention;
 
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param string $csrfTokenIntention
      */
-    public function __construct( ContainerInterface $container )
+    public function __construct( $csrfTokenIntention )
     {
-        $this->container = $container;
+        $this->csrfTokenIntention = $csrfTokenIntention;
     }
 
     /**
@@ -40,34 +39,16 @@ class RestListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            KernelEvents::REQUEST => 'onKernelRequest'
+            RestEvents::REST_CSRF_TOKEN_VALIDATED => 'setCsrfIntention'
         );
     }
 
-    public function onKernelRequest( GetResponseEvent $event )
-    {
-        if ( !$this->isRestRequest( $event->getRequest() ) )
-        {
-            return;
-        }
-
-        if ( !$this->container->getParameter( 'form.type_extension.csrf.enabled' ) )
-        {
-            return;
-        }
-
-        // Inject csrf intent string to make sure legacy & symfony stack work together
-        // TODO expose this in configuration? (also used in User controller)
-        ezxFormToken::setIntention( "rest" );
-    }
-
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return boolean
+     * Injects CSRF token intention to the ezxFormToken extension so that
+     * Legacy & Symfony stacks can work together.
      */
-    protected function isRestRequest( Request $request )
+    public function setCsrfIntention()
     {
-        return ( strpos( $request->getPathInfo(), '/api/ezp/v2/' ) === 0 );
+        ezxFormToken::setIntention( $this->csrfTokenIntention );
     }
 }
