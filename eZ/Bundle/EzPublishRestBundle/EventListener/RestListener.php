@@ -143,7 +143,10 @@ class RestListener implements EventSubscriberInterface
 
         if (
             !$event->getRequest()->headers->has( self::CSRF_TOKEN_HEADER )
-            || !$this->csrfProvider->isCsrfTokenValid( 'rest', $event->getRequest()->headers->get( self::CSRF_TOKEN_HEADER ) )
+            || !$this->csrfProvider->isCsrfTokenValid(
+                $this->container->getParameter( 'ezpublish_rest.csrf_token_intention' ),
+                $event->getRequest()->headers->get( self::CSRF_TOKEN_HEADER )
+            )
         )
         {
             throw new UnauthorizedException(
@@ -165,7 +168,12 @@ class RestListener implements EventSubscriberInterface
      */
     protected function isRestRequest( Request $request )
     {
-        return ( strpos( $request->getPathInfo(), '/api/ezp/v2/' ) === 0 );
+        return (
+            strpos(
+                $request->getPathInfo(),
+                $this->container->getParameter( 'ezpublish_rest.path_prefix' )
+            ) === 0
+        );
     }
 
     /**
