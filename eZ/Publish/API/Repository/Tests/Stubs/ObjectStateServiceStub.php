@@ -507,9 +507,6 @@ class ObjectStateServiceStub implements ObjectStateService
 
         $groupId = $objectState->getObjectStateGroup()->id;
 
-        $newStateId   = false;
-        $minStatePrio = PHP_INT_MAX;
-
         foreach ( $this->groupStateMap[$groupId] as $index => $stateId )
         {
             if ( $stateId == $objectState->id )
