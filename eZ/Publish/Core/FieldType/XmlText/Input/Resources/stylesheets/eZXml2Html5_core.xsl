@@ -15,6 +15,8 @@
 		
 		<a name="eztoc{translate($name, '.', '_')}" id="eztoc{translate($name, '.', '_')}"/>
 		<xsl:element name="h{$level}">
+			<xsl:copy-of select="@class"/>
+			<xsl:copy-of select="@align"/>
 			<xsl:apply-templates/>
 		</xsl:element>
 	</xsl:template>
@@ -25,7 +27,11 @@
 	            <xsl:apply-templates/>
 	        </xsl:when>
 	        <xsl:otherwise>
-	        	<p><xsl:apply-templates/></p>
+				<xsl:element name="p">
+					<xsl:copy-of select="@class"/>
+					<xsl:copy-of select="@align"/>
+					<xsl:apply-templates/>
+				</xsl:element>
 	        </xsl:otherwise>
 	    </xsl:choose>
 	</xsl:template>
@@ -66,7 +72,10 @@
 	</xsl:attribute-set>
 	
 	<xsl:template match="tr">
-		<tr><xsl:copy-of select="@*"/><xsl:apply-templates/></tr>
+		<xsl:element name="tr">
+			<xsl:copy-of select="@*"/>
+			<xsl:apply-templates/>
+		</xsl:element>
 	</xsl:template>
 	
 	<xsl:template match="td | th">
@@ -81,41 +90,38 @@
 			        <xsl:attribute name="style">vertical-align: top;</xsl:attribute>
 			    </xsl:otherwise>
 			</xsl:choose>
-			<xsl:if test="@xhtml:colspan">
-			    <xsl:attribute name="colspan"><xsl:value-of select="@xhtml:colspan"/></xsl:attribute>
-			</xsl:if>
-			<xsl:if test="@xhtml:rowspan">
-			    <xsl:attribute name="rowspan"><xsl:value-of select="@xhtml:rowspan"/></xsl:attribute>
-			</xsl:if>
-			<xsl:if test="@xhtml:width">
-			    <xsl:attribute name="width"><xsl:value-of select="@xhtml:width"/></xsl:attribute>
-			</xsl:if>
+			<xsl:copy-of select="@xhtml:colspan"/>
+			<xsl:copy-of select="@xhtml:rowspan"/>
+			<xsl:copy-of select="@xhtml:width"/>
+			<xsl:copy-of select="@class"/>
+			<xsl:copy-of select="@align"/>
 			<xsl:apply-templates/>
 		</xsl:copy>
 	</xsl:template>
 	
 	<xsl:template match="strong">
-		<b>
+		<xsl:element name="b">
 			<xsl:copy-of select="@*"/>
 			<xsl:apply-templates/>
-		</b>
+		</xsl:element>
 	</xsl:template>
 	
 	<xsl:template match="emphasize">
-		<i>
+		<xsl:element name="i">
 			<xsl:copy-of select="@*"/>
 			<xsl:apply-templates/>
-		</i>
+		</xsl:element>
 	</xsl:template>
 	
 	<xsl:template match="ol | ul | li">
 		<xsl:copy>
+			<xsl:copy-of select="@class"/>
 			<xsl:apply-templates/>
 		</xsl:copy>
 	</xsl:template>
 	
 	<xsl:template match="link">
-		<a>
+		<xsl:element name="a">
 			<xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute>
 			<xsl:attribute name="target">
 				<xsl:choose>
@@ -125,22 +131,23 @@
 					<xsl:otherwise>_self</xsl:otherwise>
 				</xsl:choose>
 			</xsl:attribute>
-			<xsl:if test="@title">
-				<xsl:attribute name="title"><xsl:value-of select="@title"/></xsl:attribute>
-			</xsl:if>
+			<xsl:copy-of select="@title"/>
+			<xsl:copy-of select="@class"/>
 			<xsl:apply-templates/>
-		</a>
+		</xsl:element>
 	</xsl:template>
 	
 	<xsl:template match="embed">
+		<xsl:copy-of select="@class"/>
+		<xsl:copy-of select="@align"/>
 		<xsl:value-of select="text()" disable-output-escaping="yes"/>
 	</xsl:template>
 	
 	<xsl:template match="literal">
-		<pre>
+		<xsl:element name="pre">
 			<xsl:copy-of select="@*"/>
 			<xsl:apply-templates/>
-		</pre>
+		</xsl:element>
 	</xsl:template>
 	
 	<!-- copy unknown elements as-is -->
