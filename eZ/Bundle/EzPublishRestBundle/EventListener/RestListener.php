@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use ezxFormToken;
+use eZ\Bundle\EzPublishRestBundle\RestEvents;
 
 use eZ\Publish\Core\REST\Server\Request as RESTRequest;
 
@@ -152,9 +152,10 @@ class RestListener implements EventSubscriberInterface
             );
         }
 
-        // Inject csrf intent string to make sure legacy & symfony stack work together
-        // TODO expose this in configuration? (also used in User controller)
-        ezxFormToken::setIntention( "rest" );
+        // Dispatching event so that CSRF token intention can be injected into Legacy Stack
+        /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher */
+        $eventDispatcher = $this->container->get( "event_dispatcher" );
+        $eventDispatcher->dispatch( RestEvents::REST_CSRF_TOKEN_VALIDATED );
     }
 
     /**
