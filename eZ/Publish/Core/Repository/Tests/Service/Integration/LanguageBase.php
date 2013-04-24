@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;
 use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Tests\BaseTest as APIBaseTest;
 
 /**
  * Test case for Language Service
@@ -349,7 +350,7 @@ abstract class LanguageBase extends BaseServiceTest
      */
     public function testLoadLanguageByIdThrowsNotFoundException()
     {
-        $this->repository->getContentLanguageService()->loadLanguageById( PHP_INT_MAX );
+        $this->repository->getContentLanguageService()->loadLanguageById( APIBaseTest::DB_INT_MAX );
     }
 
     /**

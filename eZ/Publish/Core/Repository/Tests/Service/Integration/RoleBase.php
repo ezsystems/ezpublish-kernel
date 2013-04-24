@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;
 use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Tests\BaseTest as APIBaseTest;
 
 /**
  * Test case for Role Service
@@ -528,7 +529,7 @@ abstract class RoleBase extends BaseServiceTest
     {
         $roleService = $this->repository->getRoleService();
 
-        $roleService->loadRole( PHP_INT_MAX );
+        $roleService->loadRole( APIBaseTest::DB_INT_MAX );
     }
 
     /**
@@ -635,7 +636,7 @@ abstract class RoleBase extends BaseServiceTest
     {
         $roleService = $this->repository->getRoleService();
 
-        $roleService->loadPoliciesByUserId( PHP_INT_MAX );
+        $roleService->loadPoliciesByUserId( APIBaseTest::DB_INT_MAX );
     }
 
     /**

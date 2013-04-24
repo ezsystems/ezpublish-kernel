@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
+use eZ\Publish\API\Repository\Tests\BaseTest as APIBaseTest;
 
 /**
  * Test case for Content service
@@ -108,7 +109,7 @@ abstract class SearchBase extends BaseServiceTest
 
         // Throws an exception because content with given id does not exist
         $searchResult = $searchService->findSingle(
-            new Criterion\ContentId( array( PHP_INT_MAX ) ),
+            new Criterion\ContentId( array( APIBaseTest::DB_INT_MAX ) ),
             array( "languages" => array( "eng-GB" ) ),
             false
         );

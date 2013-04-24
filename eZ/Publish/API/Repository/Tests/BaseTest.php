@@ -23,6 +23,11 @@ use ArrayObject;
 abstract class BaseTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Maximum integer number accepted by the different backends
+     */
+    const DB_INT_MAX = 2147483647;
+
+    /**
      * @var \eZ\Publish\API\Repository\Tests\SetupFactory
      */
     private $setupFactory;

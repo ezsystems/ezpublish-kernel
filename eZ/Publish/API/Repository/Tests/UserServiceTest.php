@@ -56,7 +56,7 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $nonExistingGroupId = $this->generateId(  'group', PHP_INT_MAX );
+        $nonExistingGroupId = $this->generateId(  'group', self::DB_INT_MAX );
         /* BEGIN: Use Case */
         $userService = $repository->getUserService();
 
@@ -1073,12 +1073,12 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $nonExistingUserId = $this->generateId( 'useer', PHP_INT_MAX );
+        $nonExistingUserId = $this->generateId( 'user', self::DB_INT_MAX );
         /* BEGIN: Use Case */
         $userService = $repository->getUserService();
 
         // This call will fail with a "NotFoundException", because no user with
-        // an id equal to PHP_INT_MAX should exist.
+        // an id equal to self::DB_INT_MAX should exist.
         $userService->loadUser( $nonExistingUserId );
         /* END: Use Case */
     }

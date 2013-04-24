@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;
 use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Tests\BaseTest as APIBaseTest;
 
 /**
  * Test case for Trash Service
@@ -285,7 +286,7 @@ abstract class TrashBase extends BaseServiceTest
     {
         $trashService = $this->repository->getTrashService();
 
-        $trashItem = new TrashItem( array( "id" => PHP_INT_MAX, "parentLocationId" => PHP_INT_MAX ) );
+        $trashItem = new TrashItem( array( "id" => APIBaseTest::DB_INT_MAX, "parentLocationId" => APIBaseTest::DB_INT_MAX ) );
         $trashService->recover( $trashItem );
     }
 
@@ -353,8 +354,8 @@ abstract class TrashBase extends BaseServiceTest
 
         $newParentLocation = new Location(
             array(
-                "id" => PHP_INT_MAX,
-                "parentLocationId" => PHP_INT_MAX
+                "id" => APIBaseTest::DB_INT_MAX,
+                "parentLocationId" => APIBaseTest::DB_INT_MAX
             )
         );
         $trashService->recover( $trashItem, $newParentLocation );
@@ -394,7 +395,7 @@ abstract class TrashBase extends BaseServiceTest
     {
         $trashService = $this->repository->getTrashService();
 
-        $trashItem = new TrashItem( array( "id" => PHP_INT_MAX ) );
+        $trashItem = new TrashItem( array( "id" => APIBaseTest::DB_INT_MAX ) );
         $trashService->deleteTrashItem( $trashItem );
     }
 
