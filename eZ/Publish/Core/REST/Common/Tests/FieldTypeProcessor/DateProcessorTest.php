@@ -34,6 +34,14 @@ class DateProcessorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @todo Remove when support for PHP 5.3.3 ends
+     */
+    public function testSkip()
+    {
+        $this->markTestSkipped( "Skipping segmentation fault with PHP 5.3.3" );
+    }
+
+    /**
      * @dataProvider fieldSettingsHashes
      */
     public function testPreProcessFieldSettingsHash( $inputSettings, $outputSettings )
