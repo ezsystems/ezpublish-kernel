@@ -76,12 +76,16 @@ class LegacyStorage extends Gateway
             foreach ( $linkTags as $link )
             {
                 $urlId = $link->getAttribute( 'url_id' );
-                $linkTagsById[$urlId] = $link;
+                if ( !empty( $urlId ) )
+                    $linkTagsById[$urlId] = $link;
             }
 
-            foreach ( $this->getLinksUrl( $linkTagsById ) as $id => $url )
+            if ( !empty( $linkTagsById ) )
             {
-                $linkTagsById[$id]->setAttribute( 'url', $url );
+                foreach ( $this->getLinksUrl( $linkTagsById ) as $id => $url )
+                {
+                    $linkTagsById[$id]->setAttribute( 'url', $url );
+                }
             }
         }
     }
