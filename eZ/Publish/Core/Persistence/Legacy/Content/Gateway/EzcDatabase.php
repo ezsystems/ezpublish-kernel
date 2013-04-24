@@ -614,19 +614,19 @@ class EzcDatabase extends Gateway
             $q->bindValue( $field->languageCode )
         )->set(
             $this->dbHandler->quoteColumn( 'version' ),
-            $q->bindValue( $field->versionNo )
+            $q->bindValue( $field->versionNo, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'data_float' ),
             $q->bindValue( $value->dataFloat )
         )->set(
             $this->dbHandler->quoteColumn( 'data_int' ),
-            $q->bindValue( $value->dataInt )
+            $q->bindValue( $value->dataInt, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'data_text' ),
             $q->bindValue( $value->dataText )
         )->set(
             $this->dbHandler->quoteColumn( 'sort_key_int' ),
-            $q->bindValue( $value->sortKeyInt )
+            $q->bindValue( $value->sortKeyInt, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'sort_key_string' ),
             $q->bindValue( $value->sortKeyString )
