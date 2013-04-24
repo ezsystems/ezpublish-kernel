@@ -83,7 +83,7 @@ class SectionLimitationType implements SPILimitationTypeInterface
         {
             $object = $object->getContentInfo();
         }
-        else if ( !$object instanceof ContentInfo && !$object instanceof $object )
+        else if ( !$object instanceof ContentInfo && !$object instanceof ContentCreateStruct )
         {
             throw new InvalidArgumentException(
                 '$object',
