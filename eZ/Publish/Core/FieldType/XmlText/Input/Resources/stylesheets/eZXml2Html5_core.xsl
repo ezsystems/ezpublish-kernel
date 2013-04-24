@@ -14,6 +14,9 @@
 
 <a name="eztoc{translate($name, '.', '_')}" id="eztoc{translate($name, '.', '_')}"/>
 <xsl:element name="h{$level}">
+<xsl:if test="@class">
+	<xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute>
+</xsl:if>
 <xsl:apply-templates/>
 </xsl:element>
 </xsl:template>
@@ -23,7 +26,14 @@
         <xsl:when test="( ul | ol | table ) or (name(..)='li')">
             <xsl:apply-templates/>
         </xsl:when>
-        <xsl:otherwise><p><xsl:apply-templates/></p></xsl:otherwise>
+        <xsl:otherwise>
+			<xsl:element name="p">
+			<xsl:if test="@class">
+				<xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute>
+			</xsl:if>
+			<xsl:apply-templates/>
+			</xsl:element>
+		</xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
@@ -63,7 +73,13 @@
 </xsl:attribute-set>
 
 <xsl:template match="tr">
-<tr><xsl:copy-of select="@*"/><xsl:apply-templates/></tr>
+	<xsl:element name="tr">
+	<xsl:if test="@class">
+		<xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute>
+	</xsl:if>
+	<xsl:copy-of select="@*"/>
+	<xsl:apply-templates/>
+	</xsl:element>
 </xsl:template>
 
 <xsl:template match="td | th">
@@ -87,32 +103,78 @@
 <xsl:if test="@xhtml:width">
     <xsl:attribute name="width"><xsl:value-of select="@xhtml:width"/></xsl:attribute>
 </xsl:if>
+<xsl:if test="@class">
+	<xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute>
+</xsl:if>
 <xsl:apply-templates/>
 </xsl:copy>
 </xsl:template>
 
 <xsl:template match="strong">
-<b><xsl:copy-of select="@*"/><xsl:apply-templates/></b>
+	<xsl:element name="b">
+	<xsl:if test="@class">
+		<xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute>
+	</xsl:if>
+	<xsl:copy-of select="@*"/>
+	<xsl:apply-templates/>
+	</xsl:element>
 </xsl:template>
 
 <xsl:template match="emphasize">
-<i><xsl:copy-of select="@*"/><xsl:apply-templates/></i>
+	<xsl:element name="i">
+	<xsl:if test="@class">
+		<xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute>
+	</xsl:if>
+	<xsl:copy-of select="@*"/>
+	<xsl:apply-templates/>
+	</xsl:element>
 </xsl:template>
 
 <xsl:template match="ol | ul | li">
-<xsl:copy><xsl:apply-templates/></xsl:copy>
+	<xsl:copy>
+	<xsl:if test="@class">
+		<xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute>
+	</xsl:if>
+	<xsl:apply-templates />
+	</xsl:copy>
 </xsl:template>
 
 <xsl:template match="link">
-<a><xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute><xsl:attribute name="target"><xsl:choose><xsl:when test="@target"><xsl:value-of select="@target"/></xsl:when><xsl:otherwise>_self</xsl:otherwise></xsl:choose></xsl:attribute><xsl:if test="@title"><xsl:attribute name="title"><xsl:value-of select="@title"/></xsl:attribute></xsl:if><xsl:apply-templates/></a>
+	<xsl:element name="a">
+	<xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute>
+	<xsl:attribute name="target">
+	<xsl:choose>
+	<xsl:when test="@target">
+		<xsl:value-of select="@target"/>
+	</xsl:when>
+	<xsl:otherwise>_self</xsl:otherwise>
+	</xsl:choose>
+	</xsl:attribute>
+	<xsl:if test="@title">
+		<xsl:attribute name="title"><xsl:value-of select="@title"/></xsl:attribute>
+	</xsl:if>
+	<xsl:if test="@class">
+		<xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute>
+	</xsl:if>
+	<xsl:apply-templates/>
+	</xsl:element>
 </xsl:template>
 
 <xsl:template match="embed">
+<xsl:if test="@class">
+	<xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute>
+</xsl:if>
 <xsl:value-of select="text()" disable-output-escaping="yes"/>
 </xsl:template>
 
 <xsl:template match="literal">
-<pre><xsl:copy-of select="@*"/><xsl:apply-templates/></pre>
+<xsl:element name="pre">
+<xsl:if test="@class">
+	<xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute>
+</xsl:if>
+<xsl:copy-of select="@*"/>
+<xsl:apply-templates/>
+</xsl:element>
 </xsl:template>
 
 <!-- copy unknown elements as-is -->
