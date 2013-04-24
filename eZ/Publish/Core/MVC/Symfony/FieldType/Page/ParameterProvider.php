@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\MVC\Symfony\FieldType\Page;
 
 use eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderInterface;
 use eZ\Publish\Core\FieldType\Page\PageService;
+use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * View parameter provider for Page fieldtype.
@@ -27,7 +28,7 @@ class ParameterProvider implements ParameterProviderInterface
         $this->pageService = $pageService;
     }
 
-    public function getViewParameters()
+    public function getViewParameters( Field $field )
     {
         return array(
             'pageService'   => $this->pageService

@@ -211,7 +211,7 @@ class ContentExtension extends Twig_Extension
         {
             $params['parameters'] += $parameterProviderRegistry
                 ->getParameterProvider( $fieldDefinition->fieldTypeIdentifier )
-                ->getViewParameters();
+                ->getViewParameters( $field );
         }
 
         // make sure we can easily add class="<fieldtypeidentifier>-field" to the
