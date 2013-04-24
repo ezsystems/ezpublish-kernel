@@ -70,29 +70,31 @@ class LegacyStorage extends Gateway
 
         /** @var $linkTagsById \DOMElement[] */
         $linkTagsById = array();
-        $linkIds = array();
         $linkTags = $field->value->data->getElementsByTagName( 'link' );
         if ( $linkTags->length > 0 )
         {
             foreach ( $linkTags as $link )
             {
                 $urlId = $link->getAttribute( 'url_id' );
-                $linkIds[] = $urlId;
-                $linkTagsById[$urlId] = $link;
+                if ( !empty( $urlId ) )
+                    $linkTagsById[$urlId] = $link;
             }
 
-            foreach ( $this->getLinksUrl( $linkIds ) as $id => $url )
+            if ( !empty( $linkTagsById ) )
             {
-                $linkTagsById[$id]->setAttribute( 'url', $url );
+                foreach ( $this->getLinksUrl( $linkTagsById ) as $id => $url )
+                {
+                    $linkTagsById[$id]->setAttribute( 'url', $url );
+                }
             }
         }
     }
 
     /**
-     * Fetches rows in ezurl table referenced by IDs in $linkIds array.
+     * Fetches rows in ezurl table referenced by IDs in $linkIds set.
      * Returns as hash with URL id as key and corresponding URL as value.
      *
-     * @param array $linkIds
+     * @param array $linkIds Set of link Ids
      *
      * @return array
      */
@@ -103,7 +105,7 @@ class LegacyStorage extends Gateway
         $q
             ->select( "id", "url" )
             ->from( UrlStorage::URL_TABLE )
-            ->where( $q->expr->in( 'id', $linkIds ) );
+            ->where( $q->expr->in( 'id', array_keys( $linkIds ) ) );
 
         $statement = $q->prepare();
         $statement->execute();
