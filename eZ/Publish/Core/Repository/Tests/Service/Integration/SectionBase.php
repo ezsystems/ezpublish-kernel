@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;
+use eZ\Publish\API\Repository\Tests\BaseTest as APIBaseTest;
 
 /**
  * Test case for Section Service using InMemory storage class
@@ -213,7 +214,7 @@ abstract class SectionBase extends BaseServiceTest
     {
         $sectionService = $this->repository->getSectionService();
 
-        $sectionService->loadSection( PHP_INT_MAX );
+        $sectionService->loadSection( APIBaseTest::DB_INT_MAX );
     }
 
     /**
@@ -344,7 +345,7 @@ abstract class SectionBase extends BaseServiceTest
     {
         $sectionService = $this->repository->getSectionService();
 
-        $section = new Section( array( 'id' => PHP_INT_MAX ) );
+        $section = new Section( array( 'id' => APIBaseTest::DB_INT_MAX ) );
 
         $sectionService->deleteSection( $section );
     }
