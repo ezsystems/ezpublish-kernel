@@ -36,7 +36,7 @@ class ContentExtension extends Twig_Extension
      *
      * @var array|\Twig_Template[]
      */
-    protected $renderFieldRessources;
+    protected $renderFieldResources;
 
     /**
      * Array of Twig template resources for ez_render_fielddefinition_settings
@@ -103,11 +103,11 @@ class ContentExtension extends Twig_Extension
         {
             return $b['priority'] - $a['priority'];
         };
-        $this->renderFieldRessources = $resolver->getParameter( 'field_templates' );
+        $this->renderFieldResources = $resolver->getParameter( 'field_templates' );
         $this->renderFieldDefinitionSettingsResources = $resolver->getParameter(
             'fielddefinition_settings_templates'
         );
-        usort( $this->renderFieldRessources, $comp );
+        usort( $this->renderFieldResources, $comp );
         usort( $this->renderFieldDefinitionSettingsResources, $comp );
 
         $this->blocks = array();
@@ -211,7 +211,7 @@ class ContentExtension extends Twig_Extension
         {
             $params['parameters'] += $parameterProviderRegistry
                 ->getParameterProvider( $fieldDefinition->fieldTypeIdentifier )
-                ->getViewParameters();
+                ->getViewParameters( $field );
         }
 
         // make sure we can easily add class="<fieldtypeidentifier>-field" to the
@@ -306,7 +306,7 @@ class ContentExtension extends Twig_Extension
         // Getting instance of Twig_Template that will be used to render blocks
         if ( !$this->template instanceof Twig_Template )
         {
-            $tpl = reset( $this->renderFieldRessources );
+            $tpl = reset( $this->renderFieldResources );
             $this->template = $this->environment->loadTemplate( $tpl['template'] );
         }
 
@@ -411,7 +411,7 @@ class ContentExtension extends Twig_Extension
                 return array( $fieldBlockName => $block );
             }
         }
-        return $this->getBlockByName( $fieldBlockName, 'renderFieldRessources' );
+        return $this->getBlockByName( $fieldBlockName, 'renderFieldResources' );
     }
 
     /**
