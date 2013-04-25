@@ -56,11 +56,6 @@ class BinaryProcessor extends BinaryInputProcessor
      */
     protected function generateUrl( $path )
     {
-        if ( preg_match( '((?:^|/)([0-9a-f]+)(?:\.[a-z0-9]+)?)', $path, $matches ) )
-        {
-            $path = $matches[1];
-        }
-
         return str_replace(
             '{path}',
             $path,
