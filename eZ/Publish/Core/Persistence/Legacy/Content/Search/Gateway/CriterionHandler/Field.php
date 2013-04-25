@@ -178,6 +178,7 @@ class Field extends CriterionHandler
                 case Criterion\Operator::GTE:
                 case Criterion\Operator::LT:
                 case Criterion\Operator::LTE:
+                case Criterion\Operator::LIKE:
                     $operatorFunction = $this->comparatorMap[$criterion->operator];
                     $filter = $subSelect->expr->$operatorFunction(
                         $column,
