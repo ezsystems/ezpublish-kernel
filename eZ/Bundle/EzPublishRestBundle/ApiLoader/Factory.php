@@ -171,6 +171,14 @@ class Factory
 
     public function buildFieldTypeProcessorRegistry()
     {
+        $urlPrefix = '';
+        if ( $this->container->isScopeActive( 'request' ) )
+        {
+            $urlPrefix = $this->container->get( 'request' )->getUriForPath( '/' );
+        }
+        $binaryIOService = $this->container->get(
+            'ezpublish.fieldtype.ezbinaryfile.ioservice'
+        );
         return new Common\FieldTypeProcessorRegistry(
             array(
                 'ezimage' => new FieldTypeProcessor\ImageProcessor(
@@ -195,6 +203,10 @@ class Factory
                 'ezobjectrelation' => new FieldTypeProcessor\RelationProcessor(),
                 'eztime' => new FieldTypeProcessor\TimeProcessor(),
                 'ezxmltext' => new FieldTypeProcessor\XmlTextProcessor(),
+                'ezbinaryfile' => new FieldTypeProcessor\BinaryProcessor(
+                    sys_get_temp_dir(),
+                    $urlPrefix . $binaryIOService->getInternalPath( '{path}' )
+                ),
             )
         );
     }

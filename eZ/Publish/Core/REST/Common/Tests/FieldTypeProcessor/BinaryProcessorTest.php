@@ -13,20 +13,23 @@ use eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryProcessor;
 
 class BinaryProcessorTest extends BinaryInputProcessorTest
 {
+    const TEMPLATE_URL = 'http://ez.no/subdir/var/rest_test/storage/original/{path}';
+
     public function testPostProcessValueHash()
     {
+        $path = 'application/815b3aa9.pdf';
         $processor = $this->getProcessor();
 
         $inputHash = array(
-            'path' => 'var/some_site/12ace8436c64ceb907536640b58788f0.pdf',
+            'path' => $path,
         );
 
         $outputHash = $processor->postProcessValueHash( $inputHash );
 
         $this->assertEquals(
             array(
-                'path' => 'var/some_site/12ace8436c64ceb907536640b58788f0.pdf',
-                'url' => 'http://example.com/binaries/12ace8436c64ceb907536640b58788f0',
+                'path' => $path,
+                'url' => str_replace( '{path}', $path, self::TEMPLATE_URL )
             ),
             $outputHash
         );
@@ -41,7 +44,7 @@ class BinaryProcessorTest extends BinaryInputProcessorTest
     {
         return new BinaryProcessor(
             $this->getTempDir(),
-            'http://example.com/binaries/{path}'
+            self::TEMPLATE_URL
         );
     }
 }
