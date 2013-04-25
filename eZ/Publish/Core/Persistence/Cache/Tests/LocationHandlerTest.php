@@ -757,6 +757,12 @@ class LocationHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->at( 0 ) )
             ->method( 'clear' )
+            ->with( 'content', 30 )
+            ->will( $this->returnValue( true ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'clear' )
             ->with( 'content', 'info', 30 )
             ->will( $this->returnValue( true ) );
 
