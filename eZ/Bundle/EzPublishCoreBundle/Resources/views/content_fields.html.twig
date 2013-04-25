@@ -69,20 +69,23 @@
 {% endspaceless %}
 {% endblock %}
 
-{# @todo:
- # - handle default format
- #}
 {% block ezdatetime_field %}
 {% spaceless %}
-    {% set field_value = field.value.value|date() %}
-    {{ block( 'simple_block_field' ) }}
+    {% if field.value.value %}
+        {% if fieldSettings.useSeconds %}
+            {% set field_value = field.value.value|localizeddate( 'short', 'medium', parameters.locale ) %}
+        {% else %}
+            {% set field_value = field.value.value|localizeddate( 'short', 'short', parameters.locale ) %}
+        {% endif %}
+        {{ block( 'simple_block_field' ) }}
+    {% endif %}
 {% endspaceless %}
 {% endblock %}
 
 {% block ezdate_field %}
 {% spaceless %}
     {% if field.value.date %}
-        {% set field_value = field.value.date|date( "l d F Y" ) %}
+        {% set field_value = field.value.date|localizeddate( 'short', 'none', parameters.locale ) %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
 {% endspaceless %}
@@ -92,9 +95,9 @@
 {% spaceless %}
     {% if field.value.time %}
         {% if fieldSettings.useSeconds %}
-            {% set field_value = field.value.time|date( "g:i:s a", "UTC" ) %}
+            {% set field_value = field.value.time|localizeddate( 'none', 'medium', parameters.locale ) %}
         {% else %}
-            {% set field_value = field.value.time|date( "g:i a", "UTC" ) %}
+            {% set field_value = field.value.time|localizeddate( 'none', 'short', parameters.locale ) %}
         {% endif %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
