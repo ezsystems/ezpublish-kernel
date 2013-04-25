@@ -58,7 +58,9 @@ interface Converter
      * "sort_key_int" or "sort_key_string". This column is then used for
      * filtering and sorting for this type.
      *
-     * @return string
+     * If the indexing is not supported, this method must return false.
+     *
+     * @return string|false
      */
     public function getIndexColumn();
 }
