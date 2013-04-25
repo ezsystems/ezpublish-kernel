@@ -152,6 +152,9 @@ class Field extends CriterionHandler
         $whereExpressions = array();
         foreach ( $fieldInformations as $fieldInformation )
         {
+            if ( $fieldInformation['column'] === false )
+                continue;
+
             $column = $this->dbHandler->quoteColumn( $fieldInformation['column'] );
             switch ( $criterion->operator )
             {
