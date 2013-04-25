@@ -221,7 +221,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     {
         $this->logger->logCall( __METHOD__, array( 'location' => $locationId, 'section' => $sectionId ) );
         $this->persistenceFactory->getLocationHandler()->setSectionForSubtree( $locationId, $sectionId );
-        $this->cache->clear( 'content', 'info' );
+        $this->cache->clear( 'content' );//TIMBER!
     }
 
     /**
@@ -231,6 +231,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     {
         $this->logger->logCall( __METHOD__, array( 'location' => $locationId, 'content' => $contentId ) );
         $this->persistenceFactory->getLocationHandler()->changeMainLocation( $contentId, $locationId );
+        $this->cache->clear( 'content', $contentId );
         $this->cache->clear( 'content', 'info', $contentId );
     }
 }

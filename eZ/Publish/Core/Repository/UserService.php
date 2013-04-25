@@ -680,8 +680,7 @@ class UserService implements UserServiceInterface
      */
     public function updateUser( APIUser $user, UserUpdateStruct $userUpdateStruct )
     {
-        if ( !is_numeric( $user->id ) )
-            throw new InvalidArgumentValue( "id", $user->id, "User" );
+        $loadedUser = $this->loadUser( $user->id );
 
         // We need to determine if we have anything to update.
         // UserUpdateStruct is specific as some of the new content is in
@@ -718,11 +717,10 @@ class UserService implements UserServiceInterface
         if ( $userUpdateStruct->enabled !== null && !is_bool( $userUpdateStruct->enabled ) )
             throw new InvalidArgumentValue( "enabled", $userUpdateStruct->enabled, "UserUpdateStruct" );
 
-        if ( $userUpdateStruct->maxLogin !== null && !is_numeric( $userUpdateStruct->maxLogin ) )
+        if ( $userUpdateStruct->maxLogin !== null && !is_int( $userUpdateStruct->maxLogin ) )
             throw new InvalidArgumentValue( "maxLogin", $userUpdateStruct->maxLogin, "UserUpdateStruct" );
 
         $contentService = $this->repository->getContentService();
-        $loadedUser = $this->loadUser( $user->id );
 
         if ( !$this->repository->canUser( 'content', 'edit', $loadedUser ) )
             throw new UnauthorizedException( 'content', 'edit' );

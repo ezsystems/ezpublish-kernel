@@ -104,7 +104,9 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
         $this->logger->logCall( __METHOD__, array( 'section' => $sectionId, 'content' => $contentId ) );
         $return = $this->persistenceFactory->getSectionHandler()->assign( $sectionId, $contentId );
 
+        $this->cache->clear( 'content', $contentId );
         $this->cache->clear( 'content', 'info', $contentId );
+
         return $return;
     }
 
