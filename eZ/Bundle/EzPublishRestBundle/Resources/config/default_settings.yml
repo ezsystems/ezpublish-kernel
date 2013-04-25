@@ -1,0 +1,6 @@
+parameters:
+    # Intention string used by the CSRF protection in REST context.
+    ezpublish_rest.csrf_token_intention: rest
+
+    # URI part that all REST routes begin with. By this a REST request is recognized.
+    ezpublish_rest.path_prefix: /api/ezp/v2

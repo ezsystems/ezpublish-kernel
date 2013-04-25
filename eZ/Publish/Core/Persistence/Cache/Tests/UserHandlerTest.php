@@ -21,6 +21,8 @@ use eZ\Publish\SPI\Persistence\User\Policy;
 class UserHandlerTest extends HandlerTest
 {
     /**
+     * Commented lines represent cached functions covered by specific unit tests further down.
+     *
      * @return array
      */
     function providerForUnCachedMethods()
@@ -29,7 +31,7 @@ class UserHandlerTest extends HandlerTest
             //array( 'create', array( new User ) ),
             array( 'load', array( 14 ) ),
             array( 'loadByLogin', array( 'admin', true ) ),
-            array( 'update', array( new User ) ),
+            //array( 'update', array( new User ) ),
             //array( 'delete', array( 14 ) ),
             //array( 'createRole', array( new Role ) ),
             //array( 'loadRole', array( 22 ) ),
@@ -111,6 +113,37 @@ class UserHandlerTest extends HandlerTest
 
         $handler = $this->persistenceHandler->userHandler();
         $handler->create( new User( array( "id" => 42 ) ) );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::update
+     */
+    public function testUpdate()
+    {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
+
+        $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler' );
+        $this->persistenceFactoryMock
+            ->expects( $this->once() )
+            ->method( 'getUserHandler' )
+            ->will( $this->returnValue( $innerHandlerMock ) );
+
+        $innerHandlerMock
+            ->expects( $this->once() )
+            ->method(  'update' )
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User' ) )
+            ->will(
+                $this->returnValue( true )
+            );
+
+        $this->cacheMock
+            ->expects( $this->at( 0 ) )
+            ->method( 'clear' )
+            ->with( 'content', 42 )
+            ->will( $this->returnValue( true ) );
+
+        $handler = $this->persistenceHandler->userHandler();
+        $handler->update( new User( array( "id" => 42 ) ) );
     }
 
     /**
