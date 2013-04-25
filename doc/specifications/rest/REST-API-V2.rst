@@ -3651,11 +3651,10 @@ Copy Content Type
 List Content Types
 ``````````````````
 :Resource: /content/types
-:Method: GET
+:Method: GET (not implemented)
 :Description: Returns a list of content types
 :Parameters:
-    :identifier: retrieves the content type for the given identifer
-    :remoteId: retieves the content type for the given remoteId
+    :q:        TBD
     :limit:    only <limit> items will be returned started by offset
     :offset:   offset of the result set
     :orderby:   one of (name | lastmodified)
@@ -3704,6 +3703,40 @@ Get Content Type
 :ErrorCodes:
     :401: If the user is not authorized to read this content type
     :404: If the content type does not exist
+
+Load Content Type by remote id
+``````````````````````````````
+:Resource: /content/types
+:Method: GET
+:Description: loads the content type for a given remote id
+:Parameters: :remoteId: the remote id of the content type. If present the content type with the given remote id is returned
+:Response:
+
+.. code:: http
+
+          HTTP/1.1 307 Temporary Redirect
+          Location: /content/types/<id>
+
+:Error Codes:
+    :401: If the user is not authorized to read this content type
+    :404: If the content type with the given remote id does not exist
+
+Load Contenttype by identifier
+``````````````````````````````
+:Resource: /content/types
+:Method: GET
+:Description: loads the content type for a given identifier
+:Parameters: :identifier: the identifier of the content type. If present the content type with the given identifier is returned
+:Response:
+
+.. code:: http
+
+          HTTP/1.1 307 Temporary Redirect
+          Location: /content/types/<id>
+
+:Error Codes:
+    :401: If the user is not authorized to read this content type
+    :404: If the content type with the given identifier does not exist
 
 
 Create Draft
