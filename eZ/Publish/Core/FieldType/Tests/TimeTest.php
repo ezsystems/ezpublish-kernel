@@ -139,6 +139,7 @@ class TimeTest extends FieldTypeTest
     public function provideValidInputForAcceptValue()
     {
         $dateTime = new DateTime();
+        $secondsInDay = 24 * 60 * 60;
 
         return array(
             array(
@@ -160,7 +161,8 @@ class TimeTest extends FieldTypeTest
             array(
                 // Set $dateTime to proper time for correct offset
                 $dateTime->setTimestamp( 1372896001 )->getTimestamp(),
-                new TimeValue( $dateTime->getOffset() + 1 ),
+                // Correct for negative offset
+                new TimeValue( ( $secondsInDay + $dateTime->getOffset() + 1 ) % $secondsInDay ),
             ),
             array(
                 TimeValue::fromTimestamp( $timestamp = 1346149200 ),
