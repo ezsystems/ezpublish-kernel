@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
 use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
 use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
@@ -577,6 +578,7 @@ class UserServiceStub implements UserService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove the user group from the user
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the user is not in the given user group
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If $userGroup is the last assigned user group
      */
     public function unAssignUserFromUserGroup( User $user, UserGroup $userGroup )
     {
@@ -587,6 +589,10 @@ class UserServiceStub implements UserService
         if ( false === isset( $this->user2groups[$user->id][$userGroup->id] ) )
         {
             throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
+        }
+        if ( 1 === count( $this->user2groups[$user->id] ) )
+        {
+            throw new BadStateExceptionStub( 'What error code should be used?' );
         }
         unset( $this->user2groups[$user->id][$userGroup->id] );
     }

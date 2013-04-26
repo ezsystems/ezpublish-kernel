@@ -705,6 +705,7 @@ abstract class UserBase extends BaseServiceTest
     /**
      * Test removing a user from user group
      * @covers \eZ\Publish\API\Repository\UserService::unAssignUserFromUserGroup
+     * @depends testAssignUserToUserGroup
      */
     public function testUnAssignUserFromUserGroup()
     {
@@ -714,6 +715,11 @@ abstract class UserBase extends BaseServiceTest
         $user = $userService->loadUser( 14 );
         $userGroup = $userService->loadUserGroup( 12 );
 
+        // first assign another user group as we can't remove all users groups
+        $userGroup = $userService->loadUserGroup( 42 );
+        $userService->assignUserToUserGroup( $user, $userGroup );
+
+        // un-assign original group
         $userService->unAssignUserFromUserGroup( $user, $userGroup );
 
         try
@@ -743,6 +749,21 @@ abstract class UserBase extends BaseServiceTest
             if ( $hasRemovedLocation )
                 self::fail( "Failed removing a user from user group" );
         }
+    }
+
+    /**
+     * Test removing a user from user group throwing BadState for removing last group
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @covers \eZ\Publish\API\Repository\UserService::unAssignUserFromUserGroup
+     */
+    public function testUnAssignUserFromUserGroupThrowsBadStateException()
+    {
+        $userService = $this->repository->getUserService();
+        $user = $userService->loadUser( 14 );
+        $userGroup = $userService->loadUserGroup( 12 );
+
+        // un-assign original group, should throw BadState
+        $userService->unAssignUserFromUserGroup( $user, $userGroup );
     }
 
     /**
