@@ -239,6 +239,6 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
      */
     public function valueSchema()
     {
-        self::VALUE_SCHEMA_LOCATION_ID;
+        return self::VALUE_SCHEMA_LOCATION_ID;
     }
 }
