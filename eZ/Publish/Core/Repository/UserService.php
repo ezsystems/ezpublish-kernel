@@ -846,6 +846,7 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove the user group from the user
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the user is not in the given user group
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If $userGroup is the last assigned user group
      */
     public function unAssignUserFromUserGroup( APIUser $user, APIUserGroup $userGroup )
     {
@@ -870,6 +871,10 @@ class UserService implements UserServiceInterface
         {
             if ( $userLocation->parentLocationId == $loadedGroup->getVersionInfo()->getContentInfo()->mainLocationId )
             {
+                // Throw this specific BadState when we know argument is valid
+                if ( count( $userLocations ) === 1 )
+                    throw new BadStateException( "user", "user only has one user group, cannot unassign from last group" );
+
                 $this->repository->beginTransaction();
                 try
                 {
