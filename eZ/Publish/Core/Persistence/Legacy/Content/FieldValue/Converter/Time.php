@@ -44,7 +44,7 @@ class Time implements Converter
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
         $storageFieldValue->dataInt = ( $value->data !== null ? $value->data : null );
-        $storageFieldValue->sortKeyInt = $value->sortKey;
+        $storageFieldValue->sortKeyInt = (int)$value->sortKey;
     }
 
     /**
