@@ -1390,9 +1390,12 @@ class EzcDatabase extends Gateway
         if ( isset( $relationType ) )
         {
             $query->where(
-                $query->expr->bitAnd(
-                    $this->dbHandler->quoteColumn( 'relation_type', 'ezcontentobject_link' ),
-                    $query->bindValue( $relationType, null, \PDO::PARAM_INT )
+                $query->expr->gt(
+                    $query->expr->bitAnd(
+                        $this->dbHandler->quoteColumn( 'relation_type', 'ezcontentobject_link' ),
+                        $query->bindValue( $relationType, null, \PDO::PARAM_INT )
+                    ),
+                    0
                 )
             );
         }
@@ -1441,9 +1444,12 @@ class EzcDatabase extends Gateway
         if ( isset( $relationType ) )
         {
             $query->where(
-                $query->expr->bitAnd(
-                    $this->dbHandler->quoteColumn( 'relation_type', 'ezcontentobject_link' ),
-                    $query->bindValue( $relationType, null, \PDO::PARAM_INT )
+                $query->expr->gt(
+                    $query->expr->bitAnd(
+                        $this->dbHandler->quoteColumn( 'relation_type', 'ezcontentobject_link' ),
+                        $query->bindValue( $relationType, null, \PDO::PARAM_INT )
+                    ),
+                    0
                 )
             );
         }
