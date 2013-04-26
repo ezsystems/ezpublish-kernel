@@ -722,7 +722,7 @@ class RoleServiceTest extends BaseTest
         $policyCreate->addLimitation(
             new LanguageLimitation(
                 array(
-                    'limitationValues' => array( 28, 29 )
+                    'limitationValues' => array( 'eng-US', 'eng-GB' )
                 )
             )
         );
