@@ -1672,6 +1672,34 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test for the unAssignUserFromUserGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::unAssignUserFromUserGroup()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUnAssignUserFromUserGroup
+     */
+    public function testUnAssignUserFromUserGroupThrowsBadStateArgumentException()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $editorsGroupId = $this->generateId( 'group', 13 );
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+        // $administratorGroupId is the ID of the "Administrator" group in an
+        // eZ Publish demo installation
+
+        // This call will fail with an "InvalidArgumentException", because the
+        // user is not assigned to the "Administrator" group
+        $userService->unAssignUserFromUserGroup(
+            $user,
+            $userService->loadUserGroup( $editorsGroupId )
+        );
+        /* END: Use Case */
+    }
+
+    /**
      * Create a user group fixture in a variable named <b>$userGroup</b>,
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
