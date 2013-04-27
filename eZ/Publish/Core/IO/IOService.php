@@ -52,7 +52,6 @@ class IOService
      *
      * @param \eZ\Publish\Core\IO\Handler $handler
      * @param MimeTypeDetector $mimeTypeDetector
-     * @param MimeTypeDetector $mimeTypeDetector
      * @param array $settings
      */
     public function __construct( Handler $handler, MimeTypeDetector $mimeTypeDetector, array $settings = array() )
