@@ -234,7 +234,7 @@ class PageService
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Block $block
      *
-     * @return \eZ\Publish\Core\FieldType\Page\Parts\Item[]|null
+     * @return \eZ\Publish\Core\FieldType\Page\Parts\Item|null
      */
     public function getLastValidBlockItem( Block $block )
     {
