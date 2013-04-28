@@ -36,6 +36,10 @@ class SessionTest extends ValueObjectVisitorBaseTest
             "csrfToken"
         );
 
+        $this->getVisitorMock()->expects( $this->once() )
+            ->method( 'setStatus' )
+            ->with( $this->equalTo( 201 ) );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
