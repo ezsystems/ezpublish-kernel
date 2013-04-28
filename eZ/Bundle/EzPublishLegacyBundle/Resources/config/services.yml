@@ -165,7 +165,12 @@ services:
 
     ezpublish_legacy.setup_wizard.configuration_dumper:
         class: %ezpublish_legacy.setup_wizard.configuration_dumper.class%
-        arguments: [@filesystem, %ezpublish_legacy.setup_wizard.configuration_dumper.environments%, %kernel.root_dir%, %kernel.cache_dir%]
+        arguments:
+            - @filesystem
+            - %ezpublish_legacy.setup_wizard.configuration_dumper.environments%
+            - %kernel.root_dir%
+            - %kernel.cache_dir%
+            - @?sensio.distribution.webconfigurator
 
     # Image alias generator using legacy
     ezpublish_legacy.fieldType.ezimage.variation_service:
