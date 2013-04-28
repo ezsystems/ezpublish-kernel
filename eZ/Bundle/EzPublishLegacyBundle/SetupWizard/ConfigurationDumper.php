@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\SetupWizard;
 
+use Sensio\Bundle\DistributionBundle\Configurator\Configurator;
 use eZ\Publish\Core\MVC\Symfony\ConfigDumperInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Filesystem\Filesystem;
@@ -19,6 +20,11 @@ class ConfigurationDumper implements ConfigDumperInterface
      * @var \Symfony\Component\Filesystem\Filesystem
      */
     protected $fs;
+
+    /**
+     * @var \Sensio\Bundle\DistributionBundle\Configurator\Configurator
+     */
+    protected $sensioConfigurator;
 
     /**
      * Path to root dir (kernel.root_dir)
@@ -42,12 +48,13 @@ class ConfigurationDumper implements ConfigDumperInterface
      */
     protected $envs;
 
-    public function __construct( Filesystem $fs, array $envs, $rootDir, $cacheDir )
+    public function __construct( Filesystem $fs, array $envs, $rootDir, $cacheDir, Configurator $sensioConfigurator = null )
     {
         $this->fs = $fs;
         $this->rootDir = $rootDir;
         $this->cacheDir = $cacheDir;
         $this->envs = array_fill_keys( $envs, true );
+        $this->sensioConfigurator = $sensioConfigurator;
     }
 
     /**
@@ -95,6 +102,18 @@ class ConfigurationDumper implements ConfigDumperInterface
             }
 
             file_put_contents( $configFile, Yaml::dump( $envConfigArray, 7 ) );
+        }
+
+        // Handling %secret%
+        if ( $this->sensioConfigurator !== null )
+        {
+            $this->sensioConfigurator->mergeParameters(
+                array(
+                    // Step #1 is SecretStep
+                    'secret' => $this->sensioConfigurator->getStep( 1 )->secret
+                )
+            );
+            $this->sensioConfigurator->write();
         }
 
         $this->clearCache();
