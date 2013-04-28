@@ -34,6 +34,8 @@ class UserSession extends ValueObjectVisitor
         //@todo Needs refactoring, disabling certain headers should not be done this way
         $visitor->setHeader( 'Accept-Patch', false );
 
+        $visitor->setStatus( 201 );
+
         $generator->startObjectElement( 'Session' );
 
         $generator->startAttribute(
