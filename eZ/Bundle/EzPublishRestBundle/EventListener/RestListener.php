@@ -128,6 +128,10 @@ class RestListener implements EventSubscriberInterface
         if ( !$this->container->getParameter( 'form.type_extension.csrf.enabled' ) )
             return;
 
+        // skip CSRF validation if no session is running
+        if ( !$event->getRequest()->getSession()->isStarted() )
+            return;
+
         if ( $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
             return;
 
