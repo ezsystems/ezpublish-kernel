@@ -452,7 +452,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the removeByAction() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::removeByAction
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::removeCustomAlias
      */
     public function testRemoveCustomAliasFails()
     {
