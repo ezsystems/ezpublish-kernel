@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use eZ\Publish\Core\Repository\SearchService;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
