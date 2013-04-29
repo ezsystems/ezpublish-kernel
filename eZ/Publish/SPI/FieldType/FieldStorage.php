@@ -103,6 +103,7 @@ interface FieldStorage
     /**
      * Get index data for external data for search backend
      *
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      *
