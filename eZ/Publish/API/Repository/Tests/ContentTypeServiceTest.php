@@ -2073,6 +2073,17 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
+        usort(
+            $types,
+            function ( $a, $b )
+            {
+                if ( $a->id == $b->id )
+                {
+                    return 0;
+                }
+                return ( $a->id < $b->id ) ? -1 : 1;
+            }
+        );
         $this->assertEquals(
             array(
                 $contentTypeService->loadContentType( $this->generateId( 'type', 3 ) ),
