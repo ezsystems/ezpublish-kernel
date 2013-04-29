@@ -23,7 +23,7 @@ class ViewController extends Controller
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\View\Manager
      */
-    private $viewManager;
+    protected $viewManager;
 
     public function __construct( ViewManager $viewManager )
     {
@@ -81,20 +81,19 @@ class ViewController extends Controller
      */
     public function viewLocation( $locationId, $viewType, $layout = false, array $params = array() )
     {
-        if ( !$this->isGranted( new AuthorizationAttribute( 'content', 'read' ) ) )
-            throw new AccessDeniedException();
+        $this->performAccessChecks();
 
         try
         {
             $response = $this->buildResponse();
 
-            $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
             $response->headers->set( 'X-Location-Id', $locationId );
             $response->setContent(
-                $this->viewManager->renderLocation(
-                    $location,
+                $this->renderLocation(
+                    $this->getRepository()->getLocationService()->loadLocation( $locationId ),
                     $viewType,
-                    $params + array( 'noLayout' => !$layout )
+                    $layout,
+                    $params
                 )
             );
 
@@ -102,28 +101,7 @@ class ViewController extends Controller
         }
         catch ( \Exception $e )
         {
-            $event = new APIContentExceptionEvent(
-                $e,
-                array(
-                    'contentId'    => null,
-                    'locationId'   => $locationId,
-                    'viewType'     => $viewType
-                )
-            );
-            $this->getEventDispatcher()->dispatch( MVCEvents::API_CONTENT_EXCEPTION, $event );
-            if ( $event->hasContentView() )
-            {
-                $response->setContent(
-                    $this->viewManager->renderContentView(
-                        $event->getContentView(),
-                        $params
-                    )
-                );
-
-                return $response;
-            }
-
-            throw $e;
+            $this->handleViewException( $response, $params, $e, $viewType, null, $locationId );
         }
     }
 
@@ -143,8 +121,7 @@ class ViewController extends Controller
      */
     public function viewContent( $contentId, $viewType, $layout = false, array $params = array() )
     {
-        if ( !$this->isGranted( new AuthorizationAttribute( 'content', 'read' ) ) )
-            throw new AccessDeniedException();
+        $this->performAccessChecks();
 
         try
         {
@@ -163,39 +140,75 @@ class ViewController extends Controller
             }
 
             $response->setContent(
-                $this->viewManager->renderContent(
-                    $content,
-                    $viewType,
-                    $params + array( 'noLayout' => !$layout )
-                )
+                $this->renderContent( $content, $viewType, $layout, $params )
             );
 
             return $response;
         }
         catch ( \Exception $e )
         {
-            $event = new APIContentExceptionEvent(
-                $e,
-                array(
-                    'contentId'    => $contentId,
-                    'locationId'   => null,
-                    'viewType'     => $viewType
+            $this->handleViewException( $response, $params, $e, $viewType, $contentId );
+        }
+    }
+
+    protected function handleViewException( $response, $params, \Exception $e, $viewType, $contentId = null, $locationId = null )
+    {
+        $event = new APIContentExceptionEvent(
+            $e,
+            array(
+                'contentId'    => $contentId,
+                'locationId'   => $locationId,
+                'viewType'     => $viewType
+            )
+        );
+        $this->getEventDispatcher()->dispatch( MVCEvents::API_CONTENT_EXCEPTION, $event );
+        if ( $event->hasContentView() )
+        {
+            $response->setContent(
+                $this->viewManager->renderContentView(
+                    $event->getContentView(),
+                    $params
                 )
             );
-            $this->getEventDispatcher()->dispatch( MVCEvents::API_CONTENT_EXCEPTION, $event );
-            if ( $event->hasContentView() )
-            {
-                $response->setContent(
-                    $this->viewManager->renderContentView(
-                        $event->getContentView(),
-                        $params
-                    )
-                );
 
-                return $response;
-            }
-
-            throw $e;
+            return $response;
         }
+
+        throw $e;
+    }
+
+    /**
+     * Creates the content to be returned when viewing a Location
+     *
+     * @param Location $location
+     * @param string $viewType
+     * @param boolean $layout
+     * @param array $params
+     */
+    protected function renderLocation( $location, $viewType, $layout = false, array $params = array() )
+    {
+        return $this->viewManager->renderLocation( $location, $viewType, $params + array( 'noLayout' => !$layout ) );
+    }
+
+    /**
+     * Creates the content to be returned when viewing a Content
+     *
+     * @param Content $content
+     * @param string $viewType
+     * @param boolean $layout
+     * @param array $params
+     */
+    protected function renderContent( $content, $viewType, $layout = false, array $params = array() )
+    {
+        return $this->viewManager->renderContent( $content, $viewType, $params + array( 'noLayout' => !$layout ) );
+    }
+
+    /**
+     * Performs the access checks
+     */
+    protected function performAccessChecks()
+    {
+        if ( !$this->isGranted( new AuthorizationAttribute( 'content', 'read' ) ) )
+            throw new AccessDeniedException();
     }
 }
