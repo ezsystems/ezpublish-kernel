@@ -12,3 +12,4 @@ services:
             - [var_dir, storage_dir]
         calls:
             - [setLegacyKernelClosure, [@ezpublish_legacy.kernel]]
+            - [setLogger, [@?logger]]

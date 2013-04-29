@@ -43,9 +43,15 @@ class IOService
     protected $mimeTypeDetector;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\Core\IO\Handler $handler
+     * @param MimeTypeDetector $mimeTypeDetector
      * @param array $settings
      */
     public function __construct( Handler $handler, MimeTypeDetector $mimeTypeDetector, array $settings = array() )
