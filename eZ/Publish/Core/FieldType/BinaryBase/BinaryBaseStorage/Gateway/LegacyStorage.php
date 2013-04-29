@@ -424,7 +424,10 @@ abstract class LegacyStorage extends Gateway
                     $files
                 )
             )
-        )->groupBy( $connection->quoteColumn( 'filename' ) );
+        )->groupBy(
+            $connection->quoteColumn( 'filename' ),
+            $connection->quoteColumn( 'mime_type' )
+        );
 
         $statement = $selectQuery->prepare();
         $statement->execute();
