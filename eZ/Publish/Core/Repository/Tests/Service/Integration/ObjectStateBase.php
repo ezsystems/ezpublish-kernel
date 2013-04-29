@@ -15,6 +15,7 @@ use eZ\Publish\Core\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;
 use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Tests\BaseTest as APIBaseTest;
 
 /**
  * Test case for object state Service
@@ -247,7 +248,7 @@ abstract class ObjectStateBase extends BaseServiceTest
      */
     public function testLoadObjectStateGroupThrowsNotFoundException()
     {
-        $this->repository->getObjectStateService()->loadObjectStateGroup( PHP_INT_MAX );
+        $this->repository->getObjectStateService()->loadObjectStateGroup( APIBaseTest::DB_INT_MAX );
     }
 
     /**
@@ -599,7 +600,7 @@ abstract class ObjectStateBase extends BaseServiceTest
      */
     public function testLoadObjectStateThrowsNotFoundException()
     {
-        $this->repository->getObjectStateService()->loadObjectState( PHP_INT_MAX );
+        $this->repository->getObjectStateService()->loadObjectState( APIBaseTest::DB_INT_MAX );
     }
 
     /**

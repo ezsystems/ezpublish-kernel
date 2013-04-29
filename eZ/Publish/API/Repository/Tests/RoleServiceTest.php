@@ -209,7 +209,7 @@ class RoleServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $nonExistingRoleId = $this->generateId( 'role', PHP_INT_MAX );
+        $nonExistingRoleId = $this->generateId( 'role', self::DB_INT_MAX );
         /* BEGIN: Use Case */
 
         $roleService = $repository->getRoleService();
@@ -1386,12 +1386,12 @@ class RoleServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $nonExistingUserId = $this->generateId( 'user', PHP_INT_MAX );
+        $nonExistingUserId = $this->generateId( 'user', self::DB_INT_MAX );
         /* BEGIN: Use Case */
         $roleService = $repository->getRoleService();
 
         // This call will fail with a "NotFoundException", because hopefully no
-        // user with an ID equal to PHP_INT_MAX exists.
+        // user with an ID equal to self::DB_INT_MAX exists.
         $roleService->loadPoliciesByUserId( $nonExistingUserId );
         /* END: Use Case */
     }
