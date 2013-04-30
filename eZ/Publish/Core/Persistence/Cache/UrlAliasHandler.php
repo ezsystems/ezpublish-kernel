@@ -27,7 +27,14 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     /**
      * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler::publishUrlAliasForLocation
      */
-    public function publishUrlAliasForLocation( $locationId, $parentLocationId, $name, $languageCode, $alwaysAvailable = false )
+    public function publishUrlAliasForLocation(
+        $locationId,
+        $parentLocationId,
+        $name,
+        $languageCode,
+        $alwaysAvailable = false,
+        $updatePathIdentificationString = false
+    )
     {
         $this->logger->logCall(
             __METHOD__,
@@ -43,7 +50,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         $this->cache->clear( 'urlAlias', 'location', $locationId  );
 
         $this->persistenceFactory->getUrlAliasHandler()->publishUrlAliasForLocation(
-            $locationId, $parentLocationId, $name, $languageCode, $alwaysAvailable
+            $locationId, $parentLocationId, $name, $languageCode, $alwaysAvailable, $updatePathIdentificationString
         );
     }
 
