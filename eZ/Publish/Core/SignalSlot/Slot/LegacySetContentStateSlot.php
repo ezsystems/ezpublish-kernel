@@ -11,6 +11,9 @@ namespace eZ\Publish\Core\SignalSlot\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Slot\AbstractLegacySlot;
+use eZContentCacheManager;
+use eZContentObject;
+use eZSearch;
 
 /**
  * A legacy slot handling SetContentStateSignal.
@@ -33,8 +36,9 @@ class LegacySetContentStateSlot extends AbstractLegacySlot
         $kernel->runCallback(
             function () use ( $signal )
             {
-                \eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
-                \eZSearch::updateObjectState( $signal->contentId, array( $signal->objectStateId ) );
+                eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
+                eZSearch::updateObjectState( $signal->contentId, array( $signal->objectStateId ) );
+                eZContentObject::clearCache();// Clear all object memory cache to free memory
             },
             false
         );

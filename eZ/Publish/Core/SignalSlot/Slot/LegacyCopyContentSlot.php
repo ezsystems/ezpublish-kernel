@@ -11,6 +11,9 @@ namespace eZ\Publish\Core\SignalSlot\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Slot\AbstractLegacySlot;
+use eZContentCacheManager;
+use eZContentObject;
+use eZSearch;
 
 /**
  * A legacy slot handling CopyContentSignal.
@@ -33,9 +36,10 @@ class LegacyCopyContentSlot extends AbstractLegacySlot
         $kernel->runCallback(
             function () use ( $signal )
             {
-                \eZContentCacheManager::clearContentCacheIfNeeded( $signal->dstContentId );
-                $object = \eZContentObject::fetch( $signal->dstContentId );
-                \eZSearch::addObject( $object, false );
+                eZContentCacheManager::clearContentCacheIfNeeded( $signal->dstContentId );
+                $object = eZContentObject::fetch( $signal->dstContentId );
+                eZSearch::addObject( $object, false );
+                eZContentObject::clearCache();// Clear all object memory cache to free memory
             },
             false
         );
