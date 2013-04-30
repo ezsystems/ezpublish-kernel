@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\SignalSlot\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Slot\AbstractLegacySlot;
+use eZContentCacheManager;
+use eZContentObject;
 
 /**
  * A legacy slot handling UpdateLocationSignal.
@@ -33,7 +35,8 @@ class LegacyUpdateLocationSlot extends AbstractLegacySlot
         $kernel->runCallback(
             function () use ( $signal )
             {
-                \eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
+                eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
+                eZContentObject::clearCache();// Clear all object memory cache to free memory
             },
             false
         );
