@@ -326,8 +326,6 @@ class Legacy implements IOHandlerInterface
             $file->mimeType = $metaData['datatype'];
         }
 
-        $file->uri = $file->uri;
-
         return $file;
     }
 
