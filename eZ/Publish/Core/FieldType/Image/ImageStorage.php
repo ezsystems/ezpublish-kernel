@@ -217,6 +217,7 @@ class ImageStorage extends GatewayBasedStorage
      */
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
+        /** @var \eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway $gateway */
         $gateway = $this->getGateway( $context );
 
         $fieldXmls = $gateway->getXmlForImages( $versionInfo->versionNo, $fieldIds );
@@ -236,7 +237,11 @@ class ImageStorage extends GatewayBasedStorage
                 {
                     $localPath = $this->IOService->getExternalPath( $storedFilePath );
                     $binaryFile = $this->IOService->loadBinaryFile( $localPath );
-                    $this->IOService->deleteBinaryFile( $binaryFile );
+                    // If file can't be loaded it might be already deleted for some other language
+                    if ( $binaryFile !== false )
+                    {
+                        $this->IOService->deleteBinaryFile( $binaryFile );
+                    }
                 }
             }
         }
