@@ -17,6 +17,7 @@ use eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZContentObject;
 use eZTemplate;
+use ezpEvent;
 
 class Content extends Provider implements ContentViewProviderInterface
 {
