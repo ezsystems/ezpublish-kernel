@@ -236,7 +236,8 @@ class Repository implements RepositoryInterface
      *
      * Example use:
      *     $location = $repository->sudo(
-     *         function( $repo ) use ( $locationId ){
+     *         function ( $repo ) use ( $locationId )
+     *         {
      *             return $repo->getLocationService()->loadLocation( $locationId )
      *         }
      *     );

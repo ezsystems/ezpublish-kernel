@@ -211,7 +211,7 @@ class RepositoryTest extends BaseServiceMockTest
             ->method( $this->anything() );
 
         $result = $mockedRepository->sudo(
-            function( $repo )
+            function ( $repo )
             {
                 return $repo->hasAccess( "test-module", "test-function" );
             }

@@ -391,7 +391,7 @@ class Legacy implements IOHandlerInterface
 
         return $this->getLegacyKernel()->runCallback(
             /** @var $clusterHandler \eZClusterFileHandlerInterface */
-            function() use( $clusterHandler, $metadataHandler )
+            function () use( $clusterHandler, $metadataHandler )
             {
                 $temporaryFileName = $clusterHandler->fetchUnique();
                 $metadata = $metadataHandler->extract( $temporaryFileName );

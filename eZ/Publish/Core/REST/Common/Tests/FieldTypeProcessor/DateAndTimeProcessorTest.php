@@ -23,7 +23,7 @@ class DateAndTimeProcessorTest extends PHPUnit_Framework_TestCase
     public function fieldSettingsHashes()
     {
         return array_map(
-            function( $constantName )
+            function ( $constantName )
             {
                 return array(
                     array( "defaultType" => $constantName ),
