@@ -3485,6 +3485,7 @@ If publish = true:
 
 :Error Codes:
     :400: - If the Input does not match the input schema definition,
+          - If validation on a field definition fails
           - If publish = true and the input is not complete e.g. no field definitions are provided
     :401: If the user is not authorized to create this content type
     :403: If a content type with same identifier already exists
