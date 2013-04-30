@@ -46,7 +46,7 @@ class DateAndTime implements Converter
         // @todo: One should additionally store the timezone here. This could
         // be done in a backwards compatible way, I think…
         $storageFieldValue->dataInt = ( $value->data !== null ? $value->data['timestamp'] : null );
-        $storageFieldValue->sortKeyInt = $value->sortKey;
+        $storageFieldValue->sortKeyInt = (int)$value->sortKey;
     }
 
     /**

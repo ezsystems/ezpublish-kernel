@@ -31,6 +31,7 @@ abstract class CriterionHandler
         CriterionOperator::GTE => "gte",
         CriterionOperator::LT => "lt",
         CriterionOperator::LTE => "lte",
+        CriterionOperator::LIKE => "like",
     );
 
     /**

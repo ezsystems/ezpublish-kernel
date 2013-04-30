@@ -299,7 +299,7 @@ configuration can be found in the inline documentation.
 The test client is configured in ``eZ/Publish/Core/REST/common.php``.
 Details can also be found in the inline documentation.
 
-You can find addtional details on extending throughout this document.
+You can find additional details on extending throughout this document.
 
 Running The Tests
 =================

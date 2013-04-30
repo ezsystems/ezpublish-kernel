@@ -17,11 +17,13 @@ parameters:
 services:
     ezpublish.api.role.limitation_type.content_type:
         class: %ezpublish.api.role.limitation_type.content_type.class%
+        arguments: [@ezpublish.api.persistence_handler]
         tags:
             - {name: ezpublish.limitationType, alias: Class}
 
     ezpublish.api.role.limitation_type.language:
         class: %ezpublish.api.role.limitation_type.language.class%
+        arguments: [@ezpublish.api.persistence_handler]
         tags:
             - {name: ezpublish.limitationType, alias: Language}
 
@@ -33,6 +35,7 @@ services:
 
     ezpublish.api.role.limitation_type.owner:
         class: %ezpublish.api.role.limitation_type.owner.class%
+        arguments: [@ezpublish.api.persistence_handler]
         tags:
             - {name: ezpublish.limitationType, alias: Owner}
 
@@ -62,11 +65,13 @@ services:
 
     ezpublish.api.role.limitation_type.section:
         class: %ezpublish.api.role.limitation_type.section.class%
+        arguments: [@ezpublish.api.persistence_handler]
         tags:
             - {name: ezpublish.limitationType, alias: Section}
 
     ezpublish.api.role.limitation_type.new_section:
         class: %ezpublish.api.role.limitation_type.new_section.class%
+        arguments: [@ezpublish.api.persistence_handler]
         tags:
             - {name: ezpublish.limitationType, alias: NewSection}
 

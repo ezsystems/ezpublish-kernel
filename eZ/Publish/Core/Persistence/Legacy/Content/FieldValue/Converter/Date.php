@@ -44,7 +44,7 @@ class Date implements Converter
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
         $storageFieldValue->dataInt = ( $value->data !== null ? $value->data["timestamp"] : null );
-        $storageFieldValue->sortKeyInt = $value->sortKey;
+        $storageFieldValue->sortKeyInt = (int)$value->sortKey;
     }
 
     /**

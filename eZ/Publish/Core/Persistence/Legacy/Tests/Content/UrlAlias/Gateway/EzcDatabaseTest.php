@@ -392,49 +392,77 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * Test for the removeByAction() method.
+     * Test for the remove() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::removeByAction
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::remove
      */
-    public function testRemoveByAction()
+    public function testRemove()
     {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_reparent.php" );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_remove.php" );
         $gateway = $this->getGateway();
 
-        $gateway->removeByAction( "eznode:315" );
+        $gateway->remove( "eznode:314" );
 
-        self::assertEquals(
-            array(
-                "action" => "nop:",
-                "action_type" => "nop",
-                "alias_redirects" => "1",
-                "id" => "3",
-                "is_alias" => "0",
-                "is_original" => "0",
-                "lang_mask" => "1",
-                "link" => "3",
-                "parent" => "2",
-                "text" => "new-location",
-                "text_md5" => "1cdf796099b4596aed1c1c86c102526f"
-            ),
-            $gateway->loadRow( 2, "1cdf796099b4596aed1c1c86c102526f" )
-        );
-        self::assertEquals(
-            array(
-                "action" => "nop:",
-                "action_type" => "nop",
-                "alias_redirects" => "1",
-                "id" => "6",
-                "is_alias" => "0",
-                "is_original" => "0",
-                "lang_mask" => "1",
-                "link" => "6",
-                "parent" => "0",
-                "text" => "old-location-historized",
-                "text_md5" => "e504bfae32f8c3ecd2922bcd1b9a8b6a"
-            ),
-            $gateway->loadRow( 0, "e504bfae32f8c3ecd2922bcd1b9a8b6a" )
-        );
+        self::assertEmpty( $gateway->loadRow( 0, "d5189de027922f81005951e6efe0efd5" ) );
+        self::assertEmpty( $gateway->loadRow( 0, "a59d9f07e3d5fcf77911155650956a73" ) );
+        self::assertEmpty( $gateway->loadRow( 0, "6449cba11bb134a57af94c8cb7f6c99c" ) );
+        self::assertNotEmpty( $gateway->loadRow( 0, "0a06c09b6dd9a4606b4eb6d60ab188f0" ) );
+        self::assertNotEmpty( $gateway->loadRow( 0, "82f2bce3283a0806a398fe78beda17d9" ) );
+        self::assertNotEmpty( $gateway->loadRow( 0, "863d659d9fec68e5ab117b5f585a4ee7" ) );
+    }
+
+    /**
+     * Test for the remove() method.
+     *
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::remove
+     */
+    public function testRemoveWithId()
+    {
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_remove.php" );
+        $gateway = $this->getGateway();
+
+        $gateway->remove( "eznode:315", 6 );
+
+        self::assertEmpty( $gateway->loadRow( 0, "0a06c09b6dd9a4606b4eb6d60ab188f0" ) );
+        self::assertEmpty( $gateway->loadRow( 0, "82f2bce3283a0806a398fe78beda17d9" ) );
+        self::assertNotEmpty( $gateway->loadRow( 0, "863d659d9fec68e5ab117b5f585a4ee7" ) );
+        self::assertNotEmpty( $gateway->loadRow( 0, "d5189de027922f81005951e6efe0efd5" ) );
+        self::assertNotEmpty( $gateway->loadRow( 0, "a59d9f07e3d5fcf77911155650956a73" ) );
+        self::assertNotEmpty( $gateway->loadRow( 0, "6449cba11bb134a57af94c8cb7f6c99c" ) );
+    }
+
+    /**
+     * Test for the removeCustomAlias() method.
+     *
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::removeCustomAlias
+     */
+    public function testRemoveCustomAlias()
+    {
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_remove.php" );
+        $gateway = $this->getGateway();
+
+        $result = $gateway->removeCustomAlias( 0, "6449cba11bb134a57af94c8cb7f6c99c" );
+
+        self::assertTrue( $result );
+        self::assertNotEmpty( $gateway->loadRow( 0, "d5189de027922f81005951e6efe0efd5" ) );
+        self::assertNotEmpty( $gateway->loadRow( 0, "a59d9f07e3d5fcf77911155650956a73" ) );
+        self::assertEmpty( $gateway->loadRow( 0, "6449cba11bb134a57af94c8cb7f6c99c" ) );
+    }
+
+    /**
+     * Test for the removeByAction() method.
+     *
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::removeCustomAlias
+     */
+    public function testRemoveCustomAliasFails()
+    {
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_remove.php" );
+        $gateway = $this->getGateway();
+
+        $result = $gateway->removeCustomAlias( 0, "d5189de027922f81005951e6efe0efd5" );
+
+        self::assertFalse( $result );
+        self::assertNotEmpty( $gateway->loadRow( 0, "d5189de027922f81005951e6efe0efd5" ) );
     }
 
     /**

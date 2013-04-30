@@ -28,16 +28,26 @@ interface Type
     const VALUE_SCHEMA_LOCATION_PATH = 2;
 
     /**
-     * Accepts a Limitation value
+     * Accepts a Limitation value and checks for structural validity.
      *
-     * Makes sure LimitationValue object is of correct type and that ->limitationValues
-     * is valid according to valueSchema().
+     * Makes sure LimitationValue object and ->limitationValues is of correct type.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected type/structure
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
+     */
+    public function acceptValue( APILimitationValue $limitationValue );
+
+    /**
+     * Makes sure LimitationValue->limitationValues is valid according to valueSchema().
+     *
+     * Make sure {@link acceptValue()} is checked first!
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
      *
-     * @return boolean
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function acceptValue( APILimitationValue $limitationValue );
+    public function validate( APILimitationValue $limitationValue );
 
     /**
      * Create the Limitation Value

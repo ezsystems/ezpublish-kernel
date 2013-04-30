@@ -56,7 +56,7 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $nonExistingGroupId = $this->generateId(  'group', PHP_INT_MAX );
+        $nonExistingGroupId = $this->generateId(  'group', self::DB_INT_MAX );
         /* BEGIN: Use Case */
         $userService = $repository->getUserService();
 
@@ -1073,12 +1073,12 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $nonExistingUserId = $this->generateId( 'user', PHP_INT_MAX );
+        $nonExistingUserId = $this->generateId( 'user', self::DB_INT_MAX );
         /* BEGIN: Use Case */
         $userService = $repository->getUserService();
 
         // This call will fail with a "NotFoundException", because no user with
-        // an id equal to PHP_INT_MAX should exist.
+        // an id equal to self::DB_INT_MAX should exist.
         $userService->loadUser( $nonExistingUserId );
         /* END: Use Case */
     }
@@ -1667,6 +1667,34 @@ class UserServiceTest extends BaseTest
         $userService->unAssignUserFromUserGroup(
             $user,
             $userService->loadUserGroup( $administratorGroupId )
+        );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the unAssignUserFromUserGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::unAssignUserFromUserGroup()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUnAssignUserFromUserGroup
+     */
+    public function testUnAssignUserFromUserGroupThrowsBadStateArgumentException()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $editorsGroupId = $this->generateId( 'group', 13 );
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+        // $administratorGroupId is the ID of the "Administrator" group in an
+        // eZ Publish demo installation
+
+        // This call will fail with an "InvalidArgumentException", because the
+        // user is not assigned to the "Administrator" group
+        $userService->unAssignUserFromUserGroup(
+            $user,
+            $userService->loadUserGroup( $editorsGroupId )
         );
         /* END: Use Case */
     }

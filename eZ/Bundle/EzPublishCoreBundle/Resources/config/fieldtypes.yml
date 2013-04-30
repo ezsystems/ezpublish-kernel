@@ -40,6 +40,7 @@ parameters:
     ezpublish.fieldType.ezpage.parameterProvider.class: eZ\Publish\Core\MVC\Symfony\FieldType\Page\ParameterProvider
     ezpublish.fieldType.ezpage.block.class: eZ\Publish\Core\FieldType\Page\Parts\Block
     ezpublish.fieldType.ezpage.zone.class: eZ\Publish\Core\FieldType\Page\Parts\Zone
+    ezpublish.fieldType.locale.parameterProvider.class: eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProvider\LocaleParameterProvider
 
     ezpublish.fieldType.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\Type
     ezpublish.fieldType.ezgmaplocation.externalStorage.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage
@@ -301,6 +302,14 @@ parameters:
 services:
     ezpublish.fieldType.parameterProviderRegistry:
         class: %ezpublish.fieldType.parameterProviderRegistry.class%
+
+    ezpublish.fieldType.ezdatetime.parameterProvider:
+        class: %ezpublish.fieldType.locale.parameterProvider.class%
+        arguments: [@service_container, @ezpublish.locale.converter]
+        tags:
+            - {name: ezpublish.fieldType.parameterProvider, alias: ezdatetime}
+            - {name: ezpublish.fieldType.parameterProvider, alias: ezdate}
+            - {name: ezpublish.fieldType.parameterProvider, alias: eztime}
 
     ezpublish.fieldType:
         class: %ezpublish.fieldType.class%

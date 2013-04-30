@@ -19,7 +19,11 @@ class ParameterProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetViewParameters()
     {
         $pageService = $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Page\\PageService' );
+        $field = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Field' );
         $parameterProvider = new ParameterProvider( $pageService );
-        $this->assertSame( array( 'pageService' => $pageService ), $parameterProvider->getViewParameters() );
+        $this->assertSame(
+            array( 'pageService' => $pageService ),
+            $parameterProvider->getViewParameters( $field )
+        );
     }
 }

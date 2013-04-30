@@ -152,6 +152,9 @@ class Field extends CriterionHandler
         $whereExpressions = array();
         foreach ( $fieldInformations as $fieldInformation )
         {
+            if ( $fieldInformation['column'] === false )
+                continue;
+
             $column = $this->dbHandler->quoteColumn( $fieldInformation['column'] );
             switch ( $criterion->operator )
             {
@@ -175,6 +178,7 @@ class Field extends CriterionHandler
                 case Criterion\Operator::GTE:
                 case Criterion\Operator::LT:
                 case Criterion\Operator::LTE:
+                case Criterion\Operator::LIKE:
                     $operatorFunction = $this->comparatorMap[$criterion->operator];
                     $filter = $subSelect->expr->$operatorFunction(
                         $column,

@@ -680,8 +680,7 @@ class UserService implements UserServiceInterface
      */
     public function updateUser( APIUser $user, UserUpdateStruct $userUpdateStruct )
     {
-        if ( !is_numeric( $user->id ) )
-            throw new InvalidArgumentValue( "id", $user->id, "User" );
+        $loadedUser = $this->loadUser( $user->id );
 
         // We need to determine if we have anything to update.
         // UserUpdateStruct is specific as some of the new content is in
@@ -718,11 +717,10 @@ class UserService implements UserServiceInterface
         if ( $userUpdateStruct->enabled !== null && !is_bool( $userUpdateStruct->enabled ) )
             throw new InvalidArgumentValue( "enabled", $userUpdateStruct->enabled, "UserUpdateStruct" );
 
-        if ( $userUpdateStruct->maxLogin !== null && !is_numeric( $userUpdateStruct->maxLogin ) )
+        if ( $userUpdateStruct->maxLogin !== null && !is_int( $userUpdateStruct->maxLogin ) )
             throw new InvalidArgumentValue( "maxLogin", $userUpdateStruct->maxLogin, "UserUpdateStruct" );
 
         $contentService = $this->repository->getContentService();
-        $loadedUser = $this->loadUser( $user->id );
 
         if ( !$this->repository->canUser( 'content', 'edit', $loadedUser ) )
             throw new UnauthorizedException( 'content', 'edit' );
@@ -848,6 +846,7 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove the user group from the user
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the user is not in the given user group
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If $userGroup is the last assigned user group
      */
     public function unAssignUserFromUserGroup( APIUser $user, APIUserGroup $userGroup )
     {
@@ -872,6 +871,10 @@ class UserService implements UserServiceInterface
         {
             if ( $userLocation->parentLocationId == $loadedGroup->getVersionInfo()->getContentInfo()->mainLocationId )
             {
+                // Throw this specific BadState when we know argument is valid
+                if ( count( $userLocations ) === 1 )
+                    throw new BadStateException( "user", "user only has one user group, cannot unassign from last group" );
+
                 $this->repository->beginTransaction();
                 try
                 {

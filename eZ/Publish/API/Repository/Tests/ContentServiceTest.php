@@ -449,7 +449,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $nonExistentContentId = $this->generateId( 'object', PHP_INT_MAX );
+        $nonExistentContentId = $this->generateId( 'object', self::DB_INT_MAX );
         /* BEGIN: Use Case */
         $contentService = $repository->getContentService();
 
@@ -569,7 +569,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $nonExistentContentId = $this->generateId( 'object', PHP_INT_MAX );
+        $nonExistentContentId = $this->generateId( 'object', self::DB_INT_MAX );
         /* BEGIN: Use Case */
         $contentService = $repository->getContentService();
 
@@ -682,7 +682,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $nonExistentContentId = $this->generateId( 'object', PHP_INT_MAX );
+        $nonExistentContentId = $this->generateId( 'object', self::DB_INT_MAX );
         /* BEGIN: Use Case */
         $contentService = $repository->getContentService();
 

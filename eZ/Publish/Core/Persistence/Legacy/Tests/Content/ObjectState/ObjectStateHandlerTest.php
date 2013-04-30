@@ -14,6 +14,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
+use eZ\Publish\API\Repository\Tests\BaseTest as APIBaseTest;
 
 /**
  * Test case for Object state Handler
@@ -111,10 +112,10 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
 
         $gatewayMock->expects( $this->once() )
             ->method( 'loadObjectStateGroupData' )
-            ->with( $this->equalTo( PHP_INT_MAX ) )
+            ->with( $this->equalTo( APIBaseTest::DB_INT_MAX ) )
             ->will( $this->returnValue( array() ) );
 
-        $handler->loadGroup( PHP_INT_MAX );
+        $handler->loadGroup( APIBaseTest::DB_INT_MAX );
     }
 
     /**
@@ -393,10 +394,10 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
 
         $gatewayMock->expects( $this->once() )
             ->method( 'loadObjectStateData' )
-            ->with( $this->equalTo( PHP_INT_MAX ) )
+            ->with( $this->equalTo( APIBaseTest::DB_INT_MAX ) )
             ->will( $this->returnValue( array() ) );
 
-        $handler->load( PHP_INT_MAX );
+        $handler->load( APIBaseTest::DB_INT_MAX );
     }
 
     /**
@@ -594,10 +595,10 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
 
         $gatewayMock->expects( $this->once() )
             ->method( 'loadObjectStateData' )
-            ->with( $this->equalTo( PHP_INT_MAX ) )
+            ->with( $this->equalTo( APIBaseTest::DB_INT_MAX ) )
             ->will( $this->returnValue( array() ) );
 
-        $handler->delete( PHP_INT_MAX );
+        $handler->delete( APIBaseTest::DB_INT_MAX );
     }
 
     /**
