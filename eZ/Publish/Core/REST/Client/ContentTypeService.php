@@ -273,8 +273,13 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      *
      * The content type is created in the state STATUS_DRAFT.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the identifier or remoteId in the content type create struct already exists
-     *         or there is a dublicate field identifier
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException In case when
+     *         - array of content type groups does not contain at least one content type group
+     *         - identifier or remoteId in the content type create struct already exists
+     *         - there is a duplicate field identifier in the content type create struct
+     *         - content type create struct does not contain at least one field definition create struct
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
+     *         if a field definition in the $contentTypeCreateStruct is not valid
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
      * @param array $contentTypeGroups Required array of {@link ContentTypeGroup} to link type with (must contain one)
