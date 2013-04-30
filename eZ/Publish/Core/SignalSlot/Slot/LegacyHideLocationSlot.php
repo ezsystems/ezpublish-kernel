@@ -11,6 +11,9 @@ namespace eZ\Publish\Core\SignalSlot\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Slot\AbstractLegacySlot;
+use eZContentObject;
+use eZContentObjectTreeNode;
+use eZSearch;
 
 /**
  * A legacy slot handling HideLocationSignal.
@@ -33,9 +36,10 @@ class LegacyHideLocationSlot extends AbstractLegacySlot
         $kernel->runCallback(
             function () use ( $signal )
             {
-                $node = \eZContentObjectTreeNode::fetch( $signal->locationId );
-                \eZContentObjectTreeNode::clearViewCacheForSubtree( $node );
-                \eZSearch::updateNodeVisibility( $signal->locationId, 'hide' );
+                $node = eZContentObjectTreeNode::fetch( $signal->locationId );
+                eZContentObjectTreeNode::clearViewCacheForSubtree( $node );
+                eZSearch::updateNodeVisibility( $signal->locationId, 'hide' );
+                eZContentObject::clearCache();// Clear all object memory cache to free memory
             },
             false
         );
