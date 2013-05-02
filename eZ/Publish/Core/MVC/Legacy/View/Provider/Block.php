@@ -48,20 +48,6 @@ class Block extends Provider implements BlockViewProviderInterface
         $logger = $this->logger;
         $legacyBlockClosure = function ( array $params ) use ( $block, $legacyKernel, $logger )
         {
-            // Additional parameters (aka user parameters in legacy) are expected to be scalar
-            foreach ( $params as $paramName => $param )
-            {
-                if ( !is_scalar( $param ) )
-                {
-                    unset( $params[$paramName] );
-                    if ( $logger !== null )
-                        $logger->notice(
-                            "'$paramName' is not scalar, cannot pass it to legacy content module. Skipping.",
-                            array( __METHOD__ )
-                        );
-                }
-            }
-
             return $legacyKernel->runCallback(
                 function () use ( $block, $params )
                 {
@@ -71,23 +57,25 @@ class Block extends Provider implements BlockViewProviderInterface
                      */
                     $funcObject = $tpl->fetchFunctionObject( 'block_view_gui' );
                     $children = array();
-                    $params['block'] = array(
-                        array(
-                            eZTemplate::TYPE_ARRAY,
-                            // eZTemplate::TYPE_OBJECT does not exist because
-                            // it's not possible to create "inline" objects in
-                            // legacy template engine (ie objects are always
-                            // stored in a tpl variable).
-                            // TYPE_ARRAY is used here to allow to directly
-                            // retrieve the object without creating a variable.
-                            // (TYPE_STRING, TYPE_BOOLEAN, ... have the same
-                            // behaviour, see eZTemplate::elementValue())
-                            new BlockAdapter( $block )
-                        )
-                    );
                     $funcObject->process(
                         $tpl, $children, 'block_view_gui', false,
-                        $params, array(), '', ''
+                        array(
+                            'block' => array(
+                                array(
+                                    eZTemplate::TYPE_ARRAY,
+                                    // eZTemplate::TYPE_OBJECT does not exist because
+                                    // it's not possible to create "inline" objects in
+                                    // legacy template engine (ie objects are always
+                                    // stored in a tpl variable).
+                                    // TYPE_ARRAY is used here to allow to directly
+                                    // retrieve the object without creating a variable.
+                                    // (TYPE_STRING, TYPE_BOOLEAN, ... have the same
+                                    // behaviour, see eZTemplate::elementValue())
+                                    new BlockAdapter( $block )
+                                )
+                            )
+                        ),
+                        array(), '', ''
                     );
                     if ( is_array( $children ) && isset( $children[0] ) )
                     {
