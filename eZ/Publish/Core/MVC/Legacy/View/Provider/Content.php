@@ -43,7 +43,8 @@ class Content extends Provider implements ContentViewProviderInterface
                      */
                     $funcObject = $tpl->fetchFunctionObject( 'content_view_gui' );
 
-                    $tpl->setVariable( 'object_parameters', $params["objectParameters"], 'ContentView' );
+                    if ( isset( $params['objectParameters'] ) )
+                        $tpl->setVariable( 'object_parameters', $params["objectParameters"], 'ContentView' );
 
                     $children = array();
                     $params['content_object'] = array(
