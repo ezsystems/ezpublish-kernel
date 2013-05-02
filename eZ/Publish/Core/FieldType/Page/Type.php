@@ -68,10 +68,10 @@ class Type extends FieldType
                 switch ( $name )
                 {
                     case 'defaultLayout':
-                        if ( !in_array( $value, $this->pageService->getAvailableZoneTypes() ) )
+                        if ( !in_array( $value, $this->pageService->getAvailableZoneLayouts() ) )
                         {
                             $validationErrors[] = new ValidationError(
-                                "Setting '%setting%' is of unknown type",
+                                "Layout '{$value}' for setting '%setting%' is not available",
                                 null,
                                 array(
                                     'setting' => $name
