@@ -45,8 +45,7 @@ class Block extends Provider implements BlockViewProviderInterface
     public function getView( PageBlock $block )
     {
         $legacyKernel = $this->getLegacyKernel();
-        $logger = $this->logger;
-        $legacyBlockClosure = function ( array $params ) use ( $block, $legacyKernel, $logger )
+        $legacyBlockClosure = function ( array $params ) use ( $block, $legacyKernel )
         {
             return $legacyKernel->runCallback(
                 function () use ( $block, $params )
