@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router as SiteAccessRouter;
@@ -23,7 +24,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  * kernel.request listener, triggers SiteAccess matching.
  * Should be triggered as early as possible.
  */
-class SiteAccessMatchListener
+class SiteAccessMatchListener implements EventSubscriberInterface
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router
@@ -39,6 +40,14 @@ class SiteAccessMatchListener
     {
         $this->siteAccessRouter = $siteAccessRouter;
         $this->eventDispatcher = $eventDispatcher;
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return array(
+            // Should take place just after FragmentListener (priority 48) in order to get rebuilt request attributes in case of subrequest
+            KernelEvents::REQUEST => array( 'onKernelRequest', 45 ),
+        );
     }
 
     /**
@@ -69,6 +78,13 @@ class SiteAccessMatchListener
         }
 
         $siteaccess = $request->attributes->get( 'siteaccess' );
+        // If $siteaccess is a string, then we most likely have a serialized siteaccess object from a fragment (sub-request).
+        if ( is_string( $siteaccess ) )
+        {
+            $siteaccess = unserialize( $siteaccess );
+            $request->attributes->set( 'siteaccess', $siteaccess );
+        }
+
         if ( $siteaccess instanceof SiteAccess )
         {
             $siteAccessEvent = new PostSiteAccessMatchEvent( $siteaccess, $request, $event->getRequestType() );
