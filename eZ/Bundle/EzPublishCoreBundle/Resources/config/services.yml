@@ -8,6 +8,12 @@ parameters:
     ezpublish.controller.content.view.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController
     ezpublish.controller.page.view.class: eZ\Publish\Core\MVC\Symfony\Controller\PageController
     ezpublish.data_collector.spi.persistence.class: eZ\Bundle\EzPublishCoreBundle\Collector\SPIPersistenceDataCollector
+    ezpublish.siteaccess_aware.fragment_renderer.class: eZ\Bundle\EzPublishCoreBundle\Fragment\SiteAccessAwareFragmentRenderer
+
+    # FragmentRenderer overrides
+    fragment.renderer.esi.class: eZ\Bundle\EzPublishCoreBundle\Fragment\EsiFragmentRenderer
+    fragment.renderer.inline.class: eZ\Bundle\EzPublishCoreBundle\Fragment\InlineFragmentRenderer
+    fragment.renderer.hinclude.class: eZ\Bundle\EzPublishCoreBundle\Fragment\HincludeFragmentRenderer
 
 services:
     # Siteaccess is injected in the container at runtime
