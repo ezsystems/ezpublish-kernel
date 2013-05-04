@@ -28,10 +28,19 @@ class PostSiteAccessMatchEvent extends Event
      */
     private $request;
 
-    public function __construct( SiteAccess $siteAccess, Request $request )
+    /**
+     * The request type the kernel is currently processing.  One of
+     * HttpKernelInterface::MASTER_REQUEST and HttpKernelInterface::SUB_REQUEST
+     *
+     * @var integer
+     */
+    private $requestType;
+
+    public function __construct( SiteAccess $siteAccess, Request $request, $requestType )
     {
         $this->siteAccess = $siteAccess;
         $this->request = $request;
+        $this->requestType = $requestType;
     }
 
     /**
@@ -50,5 +59,16 @@ class PostSiteAccessMatchEvent extends Event
     public function getSiteAccess()
     {
         return $this->siteAccess;
+    }
+
+    /**
+     * Returns the request type the kernel is currently processing
+     *
+     * @return integer  One of HttpKernelInterface::MASTER_REQUEST and
+     *                  HttpKernelInterface::SUB_REQUEST
+     */
+    public function getRequestType()
+    {
+        return $this->requestType;
     }
 }

@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\EventListener;
 
+use Symfony\Component\HttpKernel\KernelEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router as SiteAccessRouter;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
@@ -45,9 +46,6 @@ class SiteAccessMatchListener
      */
     public function onKernelRequest( GetResponseEvent $event )
     {
-        if ( $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
-            return;
-
         $request = $event->getRequest();
 
         if ( !$request->attributes->has( 'siteaccess' ) )
@@ -73,7 +71,7 @@ class SiteAccessMatchListener
         $siteaccess = $request->attributes->get( 'siteaccess' );
         if ( $siteaccess instanceof SiteAccess )
         {
-            $siteAccessEvent = new PostSiteAccessMatchEvent( $siteaccess, $request );
+            $siteAccessEvent = new PostSiteAccessMatchEvent( $siteaccess, $request, $event->getRequestType() );
             $this->eventDispatcher->dispatch( MVCEvents::SITEACCESS, $siteAccessEvent );
         }
     }
