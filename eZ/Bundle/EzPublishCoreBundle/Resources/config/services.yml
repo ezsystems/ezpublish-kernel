@@ -1,5 +1,5 @@
 parameters:
-    ezpublish.siteaccess.class: eZ\Bundle\EzPublishCoreBundle\SiteAccess
+    ezpublish.siteaccess.class: eZ\Publish\Core\MVC\Symfony\SiteAccess
     ezpublish.siteaccess.default.name: default
     ezpublish.config.resolver.dynamic.class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver
     ezpublish.config.resolver.chain.class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver
