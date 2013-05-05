@@ -44,6 +44,26 @@ class SiteAccessListener implements EventSubscriberInterface
         $this->container->set( 'ezpublish.siteaccess', $siteAccess );
         $this->container->get( 'ezpublish.urlalias_generator' )->setSiteAccess( $siteAccess );
 
+        // We already have semanticPathinfo (sub-request)
+        if ( $request->attributes->has( 'semanticPathinfo' ) )
+        {
+            $vpString = $request->attributes->get( 'viewParametersString' );
+            if ( !empty( $vpString ) )
+            {
+                $request->attributes->set(
+                    'viewParameters',
+                    $this->generateViewParametersArray( $vpString )
+                );
+            }
+            else
+            {
+                $request->attributes->set( 'viewParametersString', '' );
+                $request->attributes->set( 'viewParameters', array() );
+            }
+
+            return;
+        }
+
         // Analyse the pathinfo if needed since it might contain the siteaccess (i.e. like in URI mode)
         $pathinfo = $request->getPathInfo();
         if ( $siteAccess->matcher instanceof URILexer )
@@ -83,8 +103,26 @@ class SiteAccessListener implements EventSubscriberInterface
             return array( $pathinfo, array(), '' );
         }
 
-        $viewParameters = array();
         $vpString = substr( $pathinfo, $vpStart + 1 );
+        $viewParameters = $this->generateViewParametersArray( $vpString );
+
+        // Now remove the view parameters string from $semanticPathinfo
+        $pathinfo = substr( $pathinfo, 0, $vpStart );
+        return array( $pathinfo, $viewParameters, "/$vpString" );
+    }
+
+    /**
+     * Generates the view parameters array from the view parameters string.
+     *
+     * @param $vpString
+     *
+     * @return array
+     */
+    private function generateViewParametersArray( $vpString )
+    {
+        $vpString = trim( $vpString, '/' );
+        $viewParameters = array();
+
         $vpSegments = explode( '/', $vpString );
         for ( $i = 0, $iMax = count( $vpSegments ); $i < $iMax; ++$i )
         {
@@ -118,8 +156,6 @@ class SiteAccessListener implements EventSubscriberInterface
             }
         }
 
-        // Now remove the view parameters string from $semanticPathinfo
-        $pathinfo = substr( $pathinfo, 0, $vpStart );
-        return array( $pathinfo, $viewParameters, "/$vpString" );
+        return $viewParameters;
     }
 }
