@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\FieldType\Page;
 
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\Page\PageService;
+use eZ\Publish\Core\FieldType\Page\HashConverter;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -33,11 +34,18 @@ class Type extends FieldType
     protected $pageService;
 
     /**
-     * @param \eZ\Publish\Core\FieldType\Page\PageService $pageService
+     * @var \eZ\Publish\Core\FieldType\Page\HashConverter
      */
-    public function __construct( PageService $pageService )
+    protected $hashConverter;
+
+    /**
+     * @param \eZ\Publish\Core\FieldType\Page\PageService $pageService
+     * @param \eZ\Publish\Core\FieldType\Page\HashConverter $hashConverter
+     */
+    public function __construct( PageService $pageService, HashConverter $hashConverter )
     {
         $this->pageService = $pageService;
+        $this->hashConverter = $hashConverter;
     }
 
     /**
@@ -122,7 +130,7 @@ class Type extends FieldType
         {
             return null;
         }
-        return new Value( unserialize( $hash ) );
+        return $this->hashConverter->convertToValue( $hash );
     }
 
     /**
@@ -138,7 +146,7 @@ class Type extends FieldType
         {
             return null;
         }
-        return serialize( $value->page );
+        return $this->hashConverter->convertFromValue( $value );
     }
 
     /**
