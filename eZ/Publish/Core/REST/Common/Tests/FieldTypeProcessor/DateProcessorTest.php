@@ -34,6 +34,7 @@ class DateProcessorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\REST\Common\FieldTypeProcessor\DateProcessor::preProcessFieldSettingsHash
      * @dataProvider fieldSettingsHashes
      */
     public function testPreProcessFieldSettingsHash( $inputSettings, $outputSettings )
@@ -47,6 +48,7 @@ class DateProcessorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\REST\Common\FieldTypeProcessor\DateProcessor::postProcessFieldSettingsHash
      * @dataProvider fieldSettingsHashes
      */
     public function testPostProcessFieldSettingsHash( $outputSettings, $inputSettings )

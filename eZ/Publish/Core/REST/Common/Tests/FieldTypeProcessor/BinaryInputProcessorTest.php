@@ -52,6 +52,9 @@ abstract class BinaryInputProcessorTest extends PHPUnit_Framework_TestCase
         return $this->tempDir;
     }
 
+    /**
+     * @covers \eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryInputProcessor::preProcessValueHash
+     */
     public function testPreProcessValueHashMissingKey()
     {
         $processor = $this->getProcessor();
@@ -63,6 +66,9 @@ abstract class BinaryInputProcessorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( $inputHash, $outputHash );
     }
 
+    /**
+     * @covers \eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryInputProcessor::preProcessValueHash
+     */
     public function testPreProcessValueHash()
     {
         $processor = $this->getProcessor();
