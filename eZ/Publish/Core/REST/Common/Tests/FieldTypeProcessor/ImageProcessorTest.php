@@ -13,6 +13,9 @@ use eZ\Publish\Core\REST\Common\FieldTypeProcessor\ImageProcessor;
 
 class ImageProcessorTest extends BinaryInputProcessorTest
 {
+    /**
+     * @covers \eZ\Publish\Core\REST\Common\FieldTypeProcessor\ImageProcessor::postProcessValueHash
+     */
     public function testPostProcessValueHash()
     {
         $processor = $this->getProcessor();
@@ -46,7 +49,7 @@ class ImageProcessorTest extends BinaryInputProcessorTest
     /**
      * Returns the processor under test
      *
-     * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryInputProcessor
+     * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\ImageProcessor
      */
     protected function getProcessor()
     {
