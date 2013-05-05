@@ -18,5 +18,11 @@ class FragmentUriGenerator
     {
         if ( $request->attributes->has( 'siteaccess' ) )
             $reference->attributes['siteaccess'] = serialize( $request->attributes->get( 'siteaccess' ) );
+
+        if ( $request->attributes->has( 'semanticPathinfo' ) )
+            $reference->attributes['semanticPathinfo'] = $request->attributes->get( 'semanticPathinfo' );
+
+        if ( $request->attributes->has( 'viewParametersString' ) )
+            $reference->attributes['viewParametersString'] = $request->attributes->get( 'viewParametersString' );
     }
 }
