@@ -42,6 +42,7 @@ class SiteAccessListener implements EventSubscriberInterface
         $request = $event->getRequest();
         $siteAccess = $event->getSiteAccess();
         $this->container->set( 'ezpublish.siteaccess', $siteAccess );
+        $this->container->get( 'ezpublish.urlalias_generator' )->setSiteAccess( $siteAccess );
 
         // Analyse the pathinfo if needed since it might contain the siteaccess (i.e. like in URI mode)
         $pathinfo = $request->getPathInfo();
