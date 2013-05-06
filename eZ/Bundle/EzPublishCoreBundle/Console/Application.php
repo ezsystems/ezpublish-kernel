@@ -9,7 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Console;
 
-use eZ\Bundle\EzPublishCoreBundle\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application as BaseApplication;
 use Symfony\Component\Console\Input\InputInterface;
