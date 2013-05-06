@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router as SiteAccessRouter;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
@@ -22,7 +24,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  * kernel.request listener, triggers SiteAccess matching.
  * Should be triggered as early as possible.
  */
-class SiteAccessMatchListener
+class SiteAccessMatchListener implements EventSubscriberInterface
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router
@@ -40,17 +42,31 @@ class SiteAccessMatchListener
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    public static function getSubscribedEvents()
+    {
+        return array(
+            // Should take place just after FragmentListener (priority 48) in order to get rebuilt request attributes in case of subrequest
+            KernelEvents::REQUEST => array( 'onKernelRequest', 45 ),
+        );
+    }
+
     /**
      * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
      */
     public function onKernelRequest( GetResponseEvent $event )
     {
-        if ( $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
-            return;
-
         $request = $event->getRequest();
 
-        if ( !$request->attributes->has( 'siteaccess' ) )
+        // We have a serialized siteaccess object from a fragment (sub-request), we need to get it back.
+        if ( $request->attributes->has( 'serialized_siteaccess' ) )
+        {
+            $request->attributes->set(
+                'siteaccess',
+                unserialize( $request->attributes->get( 'serialized_siteaccess' ) )
+            );
+            $request->attributes->remove( 'serialized_siteaccess' );
+        }
+        else if ( !$request->attributes->has( 'siteaccess' ) )
         {
             $request->attributes->set(
                 'siteaccess',
@@ -73,7 +89,7 @@ class SiteAccessMatchListener
         $siteaccess = $request->attributes->get( 'siteaccess' );
         if ( $siteaccess instanceof SiteAccess )
         {
-            $siteAccessEvent = new PostSiteAccessMatchEvent( $siteaccess, $request );
+            $siteAccessEvent = new PostSiteAccessMatchEvent( $siteaccess, $request, $event->getRequestType() );
             $this->eventDispatcher->dispatch( MVCEvents::SITEACCESS, $siteAccessEvent );
         }
     }

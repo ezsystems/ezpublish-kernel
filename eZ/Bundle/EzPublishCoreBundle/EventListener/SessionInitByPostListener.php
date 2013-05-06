@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -39,7 +40,7 @@ class SessionInitByPostListener implements EventSubscriberInterface
 
     public function onSiteAccessMatch( PostSiteAccessMatchEvent $event )
     {
-        if ( !$this->container->has( 'session' ) )
+        if ( !$this->container->has( 'session' ) || $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
         {
             return;
         }

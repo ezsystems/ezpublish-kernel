@@ -48,7 +48,7 @@ class SessionSetDynamicNameListener implements EventSubscriberInterface
 
     public function onSiteAccessMatch( PostSiteAccessMatchEvent $event )
     {
-        if ( !$this->container->has( 'session' ) )
+        if ( !$this->container->has( 'session' ) || $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
         {
             return;
         }
