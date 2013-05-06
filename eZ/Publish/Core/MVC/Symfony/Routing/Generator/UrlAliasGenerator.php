@@ -131,6 +131,7 @@ class UrlAliasGenerator extends Generator
             $path = $this->siteAccess->matcher->analyseLink( $path );
         }
 
+        $path = $path ?: '/';
         return $path . $queryString;
     }
 
