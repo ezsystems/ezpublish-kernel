@@ -57,7 +57,16 @@ class SiteAccessMatchListener implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        if ( !$request->attributes->has( 'siteaccess' ) )
+        // We have a serialized siteaccess object from a fragment (sub-request), we need to get it back.
+        if ( $request->attributes->has( 'serialized_siteaccess' ) )
+        {
+            $request->attributes->set(
+                'siteaccess',
+                unserialize( $request->attributes->get( 'serialized_siteaccess' ) )
+            );
+            $request->attributes->remove( 'serialized_siteaccess' );
+        }
+        else if ( !$request->attributes->has( 'siteaccess' ) )
         {
             $request->attributes->set(
                 'siteaccess',
@@ -78,13 +87,6 @@ class SiteAccessMatchListener implements EventSubscriberInterface
         }
 
         $siteaccess = $request->attributes->get( 'siteaccess' );
-        // If $siteaccess is a string, then we most likely have a serialized siteaccess object from a fragment (sub-request).
-        if ( is_string( $siteaccess ) )
-        {
-            $siteaccess = unserialize( $siteaccess );
-            $request->attributes->set( 'siteaccess', $siteaccess );
-        }
-
         if ( $siteaccess instanceof SiteAccess )
         {
             $siteAccessEvent = new PostSiteAccessMatchEvent( $siteaccess, $request, $event->getRequestType() );

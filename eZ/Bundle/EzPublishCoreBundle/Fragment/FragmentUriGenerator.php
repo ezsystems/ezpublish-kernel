@@ -25,8 +25,10 @@ class FragmentUriGenerator
 {
     public function generateFragmentUri( ControllerReference $reference, Request $request )
     {
+        // Serialize the siteaccess to get it back after.
+        // @see eZ\Publish\Core\MVC\Symfony\EventListener\SiteAccessMatchListener
         if ( $request->attributes->has( 'siteaccess' ) )
-            $reference->attributes['siteaccess'] = serialize( $request->attributes->get( 'siteaccess' ) );
+            $reference->attributes['serialized_siteaccess'] = serialize( $request->attributes->get( 'siteaccess' ) );
 
         if ( $request->attributes->has( 'semanticPathinfo' ) )
             $reference->attributes['semanticPathinfo'] = $request->attributes->get( 'semanticPathinfo' );
