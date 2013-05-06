@@ -12,6 +12,15 @@ namespace eZ\Bundle\EzPublishCoreBundle\Fragment;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
+/**
+ * FragmentUriGenerator is used from fragment renderers (for sub-requests), when a controller reference is used.
+ * e.g.:
+ * {{ render_esi( controller( 'ez_content:viewLocation', {'locationId': 123} ) ) }}
+ *
+ * It adds request attributes we want to keep trace of in the controller reference.
+ *
+ * @see Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer
+ */
 class FragmentUriGenerator
 {
     public function generateFragmentUri( ControllerReference $reference, Request $request )
