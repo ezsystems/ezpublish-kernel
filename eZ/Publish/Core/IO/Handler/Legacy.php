@@ -50,6 +50,13 @@ class Legacy implements IOHandlerInterface
     private $legacyKernel;
 
     /**
+     * Closure containing legacy kernel bootstrap
+     *
+     * @var \Closure
+     */
+    private $legacyKernelClosure;
+
+    /**
      * The storage directory where data is stored
      * Example: var/site/storage
      * @var string
@@ -73,7 +80,7 @@ class Legacy implements IOHandlerInterface
 
     public function setLegacyKernelClosure( \Closure $kernelClosure )
     {
-        $this->legacyKernel = $kernelClosure();
+        $this->legacyKernelClosure = $kernelClosure;
     }
 
     public function setLegacyKernel( LegacyKernel $kernel )
@@ -86,6 +93,12 @@ class Legacy implements IOHandlerInterface
      */
     protected function getLegacyKernel()
     {
+        if ( !isset( $this->legacyKernel ) && isset( $this->legacyKernelClosure ) )
+        {
+            $kernelClosure = $this->legacyKernelClosure;
+            $this->legacyKernel = $kernelClosure();
+        }
+
         return $this->legacyKernel;
     }
 
