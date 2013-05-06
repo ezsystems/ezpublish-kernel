@@ -101,7 +101,6 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     {
         try
         {
-            $this->generator->setSiteAccess( $request->attributes->get( 'siteaccess' ) );
             $urlAlias = $this->getUrlAlias(
                 $request->attributes->get( 'semanticPathinfo', $request->getPathInfo() )
             );

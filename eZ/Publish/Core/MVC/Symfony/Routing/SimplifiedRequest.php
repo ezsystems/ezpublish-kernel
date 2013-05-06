@@ -97,4 +97,11 @@ class SimplifiedRequest extends ValueObject
         unset( $elements['path'], $elements['query'], $elements['user'], $elements['pass'], $elements['fragment'] );
         return new static( $elements );
     }
+
+    public function __sleep()
+    {
+        // Clean up headers for serialization not have a too heavy string (i.e. for ESI/Hinclude tags).
+        $this->headers = array();
+        return array( 'scheme', 'host', 'port', 'pathinfo', 'queryParams', 'languages', 'headers' );
+    }
 }
