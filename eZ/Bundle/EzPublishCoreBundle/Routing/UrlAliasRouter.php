@@ -23,6 +23,11 @@ class UrlAliasRouter extends BaseUrlAliasRouter
 
     protected $rootLocationId;
 
+    public function setRootLocationId( $rootLocationId )
+    {
+        $this->rootLocationId = $rootLocationId;
+    }
+
     public function setContainer( ContainerInterface $container )
     {
         $this->container = $container;
@@ -44,9 +49,6 @@ class UrlAliasRouter extends BaseUrlAliasRouter
         if ( $configResolver->getParameter( 'url_alias_router' ) === false )
             throw new ResourceNotFoundException( "Config says to bypass UrlAliasRouter" );
 
-        $this->rootLocationId = $configResolver->getParameter( 'content.tree_root.location_id' );
-        $this->generator->setRootLocationId( $this->rootLocationId );
-        $this->generator->setExcludedUriPrefixes( $configResolver->getParameter( 'content.tree_root.excluded_uri_prefixes' ) );
         return parent::matchRequest( $request );
     }
 

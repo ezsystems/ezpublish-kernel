@@ -288,6 +288,11 @@ class UrlAliasGeneratorTest extends \PHPUnit_Framework_TestCase
                 '/something'
             ),
             array(
+                new UrlAlias( array( 'path' => '/my/root-folder' ) ),
+                false,
+                '/'
+            ),
+            array(
                 new UrlAlias( array( 'path' => '/outside/tree/foo/bar' ) ),
                 true,
                 '/outside/tree/foo/bar'
