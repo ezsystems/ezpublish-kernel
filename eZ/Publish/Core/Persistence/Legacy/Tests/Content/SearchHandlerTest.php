@@ -316,6 +316,37 @@ class SearchHandlerTest extends LanguageAwareTestCase
     }
 
     /**
+     * Issue with offsetting to the nonexistent results produces \ezcQueryInvalidParameterException exception.
+     *
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase::find
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findContent
+     */
+    public function testFindWithOffsetToNonexistent()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->findContent(
+            new Query(
+                array(
+                    'criterion' => new Criterion\ContentId( 10 ),
+                    'offset'    => 1000,
+                    'limit'     => null,
+                )
+            )
+        );
+
+        $this->assertEquals(
+            1,
+            $result->totalCount
+        );
+        $this->assertEquals(
+            0,
+            count( $result->searchHits )
+        );
+    }
+
+    /**
      * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase::find
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findContent
