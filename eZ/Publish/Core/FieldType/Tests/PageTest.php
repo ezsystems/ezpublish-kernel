@@ -12,6 +12,9 @@ namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Page\Type as PageType;
 use eZ\Publish\Core\FieldType\Page\Value as PageValue;
 use eZ\Publish\Core\FieldType\Page\Parts\Page as Page;
+use eZ\Publish\Core\FieldType\Page\Parts;
+use eZ\Publish\Core\FieldType\Page\HashConverter;
+use DateTime;
 
 /**
  * @group fieldType
@@ -26,6 +29,13 @@ class PageTest extends FieldTypeTest
       * @var \PHPUnit_Framework_MockObject_MockObject
       */
     private $pageServiceMock;
+
+    /**
+     * @var \eZ\Publish\Core\FieldType\Page\Parts\Page
+     */
+    protected $pageReference;
+
+    protected $hashReference;
 
     private function getPageServiceMock()
     {
@@ -56,7 +66,100 @@ class PageTest extends FieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         return new PageType(
-            $this->getPageServiceMock()
+            $this->getPageServiceMock(),
+            new HashConverter
+        );
+    }
+
+    protected function getPageReference()
+    {
+        return new Parts\Page(
+            array(
+                "layout" => "2ZonesLayout1",
+                "zones" => array(
+                    new Parts\Zone(
+                        array(
+                            "id" => "6c7f907b831a819ed8562e3ddce5b264",
+                            "identifier" => "left",
+                            "blocks" => array(
+                                new Parts\Block(
+                                    array(
+                                        "id" => "1e1e355c8da3c92e80354f243c6dd37b",
+                                        "name" => "Campaign",
+                                        "type" => "Campaign",
+                                        "view" => "default",
+                                        "overflowId" => "",
+                                        "zoneId" => "6c7f907b831a819ed8562e3ddce5b264",
+                                        "items" => array(
+                                            new Parts\Item(
+                                                array(
+                                                    "contentId" => 10,
+                                                    "locationId" => 20,
+                                                    "priority" => 30,
+                                                    "publicationDate" => new DateTime( "@1" ),
+                                                    "visibilityDate" => new DateTime( "@2" ),
+                                                    "hiddenDate" => new DateTime( "@3" ),
+                                                    "rotationUntilDate" => new DateTime( "@4" ),
+                                                    "movedTo" => "67dd4d9b898d89733e776c714039ae33",
+                                                    "action" => "modify",
+                                                    "blockId" => "594491ab539125dc271807a83724e608",
+                                                    "attributes" => array( "name" => "value" ),
+                                                )
+                                            )
+                                        ),
+                                        "attributes" => array( "name2" => "value2" )
+                                    )
+                                ),
+                            ),
+                            "attributes" => array( "name3" => "value3" )
+                        )
+                    ),
+                ),
+                "attributes" => array( "name4" => "value4" )
+            )
+        );
+    }
+
+    protected function getHashReference()
+    {
+        $dateTime = new DateTime( "@0" );
+
+        return array(
+            "layout" => "2ZonesLayout1",
+            "zones" => array(
+                array(
+                    "id" => "6c7f907b831a819ed8562e3ddce5b264",
+                    "identifier" => "left",
+                    "blocks" => array(
+                        array(
+                            "id" => "1e1e355c8da3c92e80354f243c6dd37b",
+                            "name" => "Campaign",
+                            "type" => "Campaign",
+                            "view" => "default",
+                            "overflowId" => "",
+                            "zoneId" => "6c7f907b831a819ed8562e3ddce5b264",
+                            "items" => array(
+                                array(
+                                    "contentId" => 10,
+                                    "locationId" => 20,
+                                    "priority" => 30,
+                                    "publicationDate" => $dateTime->setTimestamp( 1 )->format( \DateTime::RFC850 ),
+                                    "visibilityDate" => $dateTime->setTimestamp( 2 )->format( \DateTime::RFC850 ),
+                                    "hiddenDate" => $dateTime->setTimestamp( 3 )->format( \DateTime::RFC850 ),
+                                    "rotationUntilDate" => $dateTime->setTimestamp( 4 )->format( \DateTime::RFC850 ),
+                                    "movedTo" => "67dd4d9b898d89733e776c714039ae33",
+                                    "action" => "modify",
+                                    "blockId" => "594491ab539125dc271807a83724e608",
+                                    "attributes" => array( "name" => "value" ),
+                                )
+                            ),
+                            "attributes" => array( "name2" => "value2" ),
+                        ),
+                    ),
+                    "attributes" => array( "name3" => "value3" ),
+                ),
+            ),
+            "attributes" => array( "name4" => "value4" ),
         );
     }
 
@@ -218,8 +321,8 @@ class PageTest extends FieldTypeTest
                 null
             ),
             array(
-                new PageValue( new Page() ),
-                serialize( new Page() ),
+                new PageValue( $this->getPageReference() ),
+                $this->getHashReference(),
             )
         );
     }
@@ -267,8 +370,8 @@ class PageTest extends FieldTypeTest
                 null
             ),
             array(
-                serialize( new Page() ),
-                new PageValue( new Page() )
+                $this->getHashReference(),
+                new PageValue( $this->getPageReference() )
             )
         );
     }
