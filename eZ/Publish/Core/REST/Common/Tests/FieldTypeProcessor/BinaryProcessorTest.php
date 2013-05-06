@@ -15,6 +15,9 @@ class BinaryProcessorTest extends BinaryInputProcessorTest
 {
     const TEMPLATE_URL = 'http://ez.no/subdir/var/rest_test/storage/original/{path}';
 
+    /**
+     * @covers \eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryProcessor::postProcessValueHash
+     */
     public function testPostProcessValueHash()
     {
         $path = 'application/815b3aa9.pdf';
@@ -38,7 +41,7 @@ class BinaryProcessorTest extends BinaryInputProcessorTest
     /**
      * Returns the processor under test
      *
-     * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryInputProcessor
+     * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryProcessor
      */
     protected function getProcessor()
     {

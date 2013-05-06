@@ -297,12 +297,11 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::loadByIdentifier
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @todo remove when PHP 5.3.3 is out of support
      */
-    public function testLoadByIdentifierThrowsNotFoundException()
+    public function testSkip()
     {
-        $this->handler->loadByIdentifier( 'unknown', 2 );
+        $this->markTestSkipped( "Skipping to avoid segmentation fault with PHP 5.3.3" );
     }
 
     /**
@@ -322,6 +321,15 @@ class ObjectStateHandlerTest extends HandlerTest
         $this->assertEquals( array( 'eng-US' => 'Test' ), $updatedState->name );
         $this->assertEquals( array( 'eng-US' => 'Test description' ), $updatedState->description );
         $this->assertEquals( 0, $updatedState->priority );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::loadByIdentifier
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadByIdentifierThrowsNotFoundException()
+    {
+        $this->handler->loadByIdentifier( 'unknown', 2 );
     }
 
     /**
