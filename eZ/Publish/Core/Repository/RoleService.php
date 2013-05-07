@@ -165,9 +165,6 @@ class RoleService implements RoleServiceInterface
      */
     public function updateRole( APIRole $role, RoleUpdateStruct $roleUpdateStruct )
     {
-        if ( !is_numeric( $role->id ) )
-            throw new InvalidArgumentValue( "id", $role->id, "Role" );
-
         if ( $roleUpdateStruct->identifier !== null && !is_string( $roleUpdateStruct->identifier ) )
             throw new InvalidArgumentValue( "identifier", $roleUpdateStruct->identifier, "RoleUpdateStruct" );
 
@@ -224,9 +221,6 @@ class RoleService implements RoleServiceInterface
      */
     public function addPolicy( APIRole $role, APIPolicyCreateStruct $policyCreateStruct )
     {
-        if ( !is_numeric( $role->id ) )
-            throw new InvalidArgumentValue( "id", $role->id, "Role" );
-
         if ( !is_string( $policyCreateStruct->module ) || empty( $policyCreateStruct->module ) )
             throw new InvalidArgumentValue( "module", $policyCreateStruct->module, "PolicyCreateStruct" );
 
@@ -274,12 +268,6 @@ class RoleService implements RoleServiceInterface
      */
     public function removePolicy( APIRole $role, APIPolicy $policy )
     {
-        if ( !is_numeric( $role->id ) )
-            throw new InvalidArgumentValue( "id", $role->id, "Role" );
-
-        if ( !is_numeric( $policy->id ) )
-            throw new InvalidArgumentValue( "id", $policy->id, "Policy" );
-
         if ( $this->repository->hasAccess( 'role', 'update' ) !== true )
             throw new UnauthorizedException( 'role', 'update' );
 
@@ -313,12 +301,6 @@ class RoleService implements RoleServiceInterface
      */
     public function updatePolicy( APIPolicy $policy, APIPolicyUpdateStruct $policyUpdateStruct )
     {
-        if ( !is_numeric( $policy->id ) )
-            throw new InvalidArgumentValue( "id", $policy->id, "Policy" );
-
-        if ( !is_numeric( $policy->roleId ) )
-            throw new InvalidArgumentValue( "roleId", $policy->roleId, "Policy" );
-
         if ( !is_string( $policy->module ) )
             throw new InvalidArgumentValue( "module", $policy->module, "Policy" );
 
@@ -364,9 +346,6 @@ class RoleService implements RoleServiceInterface
      */
     public function loadRole( $id )
     {
-        if ( !is_numeric( $id ) )
-            throw new InvalidArgumentValue( "id", $id );
-
         if ( $this->repository->hasAccess( 'role', 'read' ) !== true )
             throw new UnauthorizedException( 'role', 'read' );
 
@@ -428,9 +407,6 @@ class RoleService implements RoleServiceInterface
      */
     public function deleteRole( APIRole $role )
     {
-        if ( !is_numeric( $role->id ) )
-            throw new InvalidArgumentValue( "id", $role->id, "Role" );
-
         if ( $this->repository->hasAccess( 'role', 'delete' ) !== true )
             throw new UnauthorizedException( 'role', 'delete' );
 
@@ -454,15 +430,12 @@ class RoleService implements RoleServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
      *
-     * @param int $userId
+     * @param mixed $userId
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
     public function loadPoliciesByUserId( $userId )
     {
-        if ( !is_numeric( $userId ) )
-            throw new InvalidArgumentValue( "userId", $userId );
-
         $spiPolicies = $this->userHandler->loadPoliciesByUserId( $userId );
 
         $policies = array();
@@ -488,12 +461,6 @@ class RoleService implements RoleServiceInterface
      */
     public function assignRoleToUserGroup( APIRole $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null )
     {
-        if ( !is_numeric( $role->id ) )
-            throw new InvalidArgumentValue( "id", $role->id, "Role" );
-
-        if ( !is_numeric( $userGroup->id ) )
-            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
-
         if ( $this->repository->canUser( 'role', 'assign', $userGroup, $role ) !== true )
             throw new UnauthorizedException( 'role', 'assign' );
 
@@ -528,12 +495,6 @@ class RoleService implements RoleServiceInterface
      */
     public function unassignRoleFromUserGroup( APIRole $role, UserGroup $userGroup )
     {
-        if ( !is_numeric( $role->id ) )
-            throw new InvalidArgumentValue( "id", $role->id, "Role" );
-
-        if ( !is_numeric( $userGroup->id ) )
-            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
-
         if ( $this->repository->canUser( 'role', 'assign', $userGroup, $role ) !== true )
             throw new UnauthorizedException( 'role', 'assign' );
 
@@ -566,12 +527,6 @@ class RoleService implements RoleServiceInterface
      */
     public function assignRoleToUser( APIRole $role, User $user, RoleLimitation $roleLimitation = null )
     {
-        if ( !is_numeric( $role->id ) )
-            throw new InvalidArgumentValue( "id", $role->id, "Role" );
-
-        if ( !is_numeric( $user->id ) )
-            throw new InvalidArgumentValue( "id", $user->id, "User" );
-
         if ( $this->repository->canUser( 'role', 'assign', $user, $role ) !== true )
             throw new UnauthorizedException( 'role', 'assign' );
 
@@ -606,12 +561,6 @@ class RoleService implements RoleServiceInterface
      */
     public function unassignRoleFromUser( APIRole $role, User $user )
     {
-        if ( !is_numeric( $role->id ) )
-            throw new InvalidArgumentValue( "id", $role->id, "Role" );
-
-        if ( !is_numeric( $user->id ) )
-            throw new InvalidArgumentValue( "id", $user->id, "User" );
-
         if ( $this->repository->canUser( 'role', 'assign', $user, $role ) !== true )
             throw new UnauthorizedException( 'role', 'assign' );
 
@@ -644,9 +593,6 @@ class RoleService implements RoleServiceInterface
      */
     public function getRoleAssignments( APIRole $role )
     {
-        if ( !is_numeric( $role->id ) )
-            throw new InvalidArgumentValue( "id", $role->id, "Role" );
-
         if ( $this->repository->hasAccess( 'role', 'read' ) !== true )
             throw new UnauthorizedException( 'role', 'read' );
 
@@ -719,9 +665,6 @@ class RoleService implements RoleServiceInterface
      */
     public function getRoleAssignmentsForUser( User $user, $inherited = false )
     {
-        if ( !is_numeric( $user->id ) )
-            throw new InvalidArgumentValue( "id", $user->id, "User" );
-
         if ( $this->repository->hasAccess( 'role', 'read' ) !== true )
             throw new UnauthorizedException( 'role', 'read' );
 
@@ -749,9 +692,6 @@ class RoleService implements RoleServiceInterface
      */
     public function getRoleAssignmentsForUserGroup( UserGroup $userGroup )
     {
-        if ( !is_numeric( $userGroup->id ) )
-            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
-
         if ( $this->repository->hasAccess( 'role', 'read' ) !== true )
             throw new UnauthorizedException( 'role', 'read' );
 
@@ -842,7 +782,7 @@ class RoleService implements RoleServiceInterface
 
         return new Role(
             array(
-                'id' => (int)$role->id,
+                'id' => $role->id,
                 'identifier' => $role->identifier,
                 'policies' => $rolePolicies
             )
@@ -871,8 +811,8 @@ class RoleService implements RoleServiceInterface
 
         return new Policy(
             array(
-                'id' => (int)$policy->id,
-                'roleId' => $role !== null ? (int)$role->id : (int)$policy->roleId,
+                'id' => $policy->id,
+                'roleId' => $role !== null ? $role->id : $policy->roleId,
                 'module' => $policy->module,
                 'function' => $policy->function,
                 'limitations' => $policyLimitations
