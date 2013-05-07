@@ -45,31 +45,6 @@ class ImageProcessor extends BinaryInputProcessor
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public function postProcessValueHash( $outgoingValueHash )
-    {
-        if ( !is_array( $outgoingValueHash ) )
-        {
-            return $outgoingValueHash;
-        }
-
-        $outgoingValueHash['variants'] = array();
-        foreach ( $this->variants as $variant => $mimeType )
-        {
-            $outgoingValueHash['variants'][] = array(
-                'variant' => $variant,
-                'contentType' => $mimeType,
-                'url' => $this->generateUrl(
-                    $outgoingValueHash['path'],
-                    $variant
-                ),
-            );
-        }
-        return $outgoingValueHash;
-    }
-
-    /**
      * Generates a URL for $path in $variant
      *
      * @param string $path
