@@ -63,8 +63,7 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
                         "emptyarray" => array(
                             "default" => array()
                         ),
-                        "nodefault" => array(
-                        ),
+                        "nodefault" => array(),
                     )
                 )
             );
@@ -81,8 +80,7 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                array(
-                ),
+                array(),
                 array(
                     "true" => true,
                     "false" => false,
