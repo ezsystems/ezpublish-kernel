@@ -168,6 +168,8 @@ class RoleService implements RoleServiceInterface
         if ( $roleUpdateStruct->identifier !== null && !is_string( $roleUpdateStruct->identifier ) )
             throw new InvalidArgumentValue( "identifier", $roleUpdateStruct->identifier, "RoleUpdateStruct" );
 
+        $loadedRole = $this->loadRole( $role->id );
+
         if ( $this->repository->hasAccess( 'role', 'update' ) !== true )
             throw new UnauthorizedException( 'role', 'update' );
 
@@ -176,16 +178,20 @@ class RoleService implements RoleServiceInterface
             try
             {
                 $existingRole = $this->loadRoleByIdentifier( $roleUpdateStruct->identifier );
-                if ( $existingRole !== null )
-                    throw new InvalidArgumentException( "roleUpdateStruct", "role with specified identifier already exists" );
+
+                if ( $existingRole->id != $loadedRole->id )
+                {
+                    throw new InvalidArgumentException(
+                        "\$roleUpdateStruct",
+                        "Role with provided identifier already exists"
+                    );
+                }
             }
             catch ( APINotFoundException $e )
             {
                 // Do nothing
             }
         }
-
-        $loadedRole = $this->loadRole( $role->id );
 
         $this->repository->beginTransaction();
         try
@@ -194,7 +200,7 @@ class RoleService implements RoleServiceInterface
                 new SPIRoleUpdateStruct(
                     array(
                         'id' => $loadedRole->id,
-                        'identifier' => $roleUpdateStruct->identifier ?: $role->identifier
+                        'identifier' => $roleUpdateStruct->identifier ?: $loadedRole->identifier
                     )
                 )
             );
