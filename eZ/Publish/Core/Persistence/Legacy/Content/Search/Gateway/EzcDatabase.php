@@ -114,7 +114,7 @@ class EzcDatabase extends Gateway
         $limit = $limit !== null ? $limit : self::MAX_LIMIT;
 
         $count = $this->getResultCount( $criterion, $sort, $translations );
-        if ( $count === 0 || $limit === 0 )
+        if ( $limit === 0 || $count <= $offset )
         {
             return array( 'count' => $count, 'rows' => array() );
         }
