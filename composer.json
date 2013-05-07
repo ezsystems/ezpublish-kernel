@@ -11,6 +11,10 @@
     ],
     "require": {
         "php": ">=5.3.3",
+        "ext-xsl": "*",
+        "ext-mbstring": "*",
+        "ext-intl": "*",
+        "ext-gd": "*",
         "zetacomponents/archive": "dev-fixUnpackPHP55",
         "zetacomponents/authentication": "@dev",
         "zetacomponents/authentication-database-tiein": "@dev",
