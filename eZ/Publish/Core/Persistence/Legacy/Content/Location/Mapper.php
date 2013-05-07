@@ -34,18 +34,18 @@ class Mapper
     {
         $location = $location ?: new Location();
 
-        $location->id = $data[$prefix . 'node_id'];
-        $location->priority = $data[$prefix . 'priority'];
-        $location->hidden = $data[$prefix . 'is_hidden'];
-        $location->invisible = $data[$prefix . 'is_invisible'];
+        $location->id = (int)$data[$prefix . 'node_id'];
+        $location->priority = (int)$data[$prefix . 'priority'];
+        $location->hidden = (bool)$data[$prefix . 'is_hidden'];
+        $location->invisible = (bool)$data[$prefix . 'is_invisible'];
         $location->remoteId = $data[$prefix . 'remote_id'];
-        $location->contentId = $data[$prefix . 'contentobject_id'];
-        $location->parentId = $data[$prefix . 'parent_node_id'];
+        $location->contentId = (int)$data[$prefix . 'contentobject_id'];
+        $location->parentId = (int)$data[$prefix . 'parent_node_id'];
         $location->pathIdentificationString = $data[$prefix . 'path_identification_string'];
         $location->pathString = $data[$prefix . 'path_string'];
-        $location->depth = $data[$prefix . 'depth'];
-        $location->sortField = $data[$prefix . 'sort_field'];
-        $location->sortOrder = $data[$prefix . 'sort_order'];
+        $location->depth = (int)$data[$prefix . 'depth'];
+        $location->sortField = (int)$data[$prefix . 'sort_field'];
+        $location->sortOrder = (int)$data[$prefix . 'sort_order'];
 
         return $location;
     }

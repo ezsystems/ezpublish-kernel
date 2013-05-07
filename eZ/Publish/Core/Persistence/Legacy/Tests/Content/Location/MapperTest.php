@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\LocationHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\MapperTest class
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 /**
  * Test case for Location\Mapper
  */
-class LocationHandlerTest extends TestCase
+class MapperTest extends TestCase
 {
     /**
      * Location data from the database
@@ -49,8 +49,8 @@ class LocationHandlerTest extends TestCase
     protected $locationValues = array(
         'id' => 77,
         'priority' => 0,
-        'hidden' => 0,
-        'invisible' => 0,
+        'hidden' => false,
+        'invisible' => false,
         'remoteId' => 'dbc2f3c8716c12f32c379dbf0b1cb133',
         'contentId' => 75,
         'parentId' => 2,
