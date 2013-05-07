@@ -29,18 +29,6 @@ class ImageProcessorTest extends BinaryInputProcessorTest
         $this->assertEquals(
             array(
                 'path' => 'var/some_site/223-1-eng-US/Cool-File.jpg',
-                'variants' => array(
-                    array(
-                        'variant' => 'original',
-                        'contentType' => 'image/jpeg',
-                        'url' => 'http://example.com/images/223-1/original',
-                    ),
-                    array(
-                        'variant' => 'thumbnail',
-                        'contentType' => 'image/png',
-                        'url' => 'http://example.com/images/223-1/thumbnail',
-                    ),
-                ),
             ),
             $outputHash
         );
