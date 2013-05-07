@@ -129,7 +129,7 @@ class LocationService implements APILocationService, Sessionable
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
      *
-     * @param int $locationId
+     * @param mixed $locationId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */

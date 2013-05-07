@@ -62,7 +62,7 @@ class LocationServiceStub implements LocationService
     /**
      * Instantiates a new location create class
      *
-     * @param int $parentLocationId the parent under which the new location should be created
+     * @param mixed $parentLocationId the parent under which the new location should be created
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      */
@@ -208,7 +208,7 @@ class LocationServiceStub implements LocationService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
      *
-     * @param int $locationId
+     * @param mixed $locationId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
@@ -416,7 +416,7 @@ class LocationServiceStub implements LocationService
     /**
      * Returns all location children based on their ID
      *
-     * @param int $locationId
+     * @param mixed $locationId
      *
      * @return array Of {@link Location}
      */
