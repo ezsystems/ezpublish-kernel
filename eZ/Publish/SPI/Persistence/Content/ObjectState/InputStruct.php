@@ -54,5 +54,4 @@ class InputStruct extends ValueObject
      * @var string[]
      */
     public $description;
-
 }
