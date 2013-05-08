@@ -122,8 +122,6 @@ class PageTest extends FieldTypeTest
 
     protected function getHashReference()
     {
-        $dateTime = new DateTime( "@0" );
-
         return array(
             "layout" => "2ZonesLayout1",
             "zones" => array(
@@ -143,10 +141,10 @@ class PageTest extends FieldTypeTest
                                     "contentId" => 10,
                                     "locationId" => 20,
                                     "priority" => 30,
-                                    "publicationDate" => $dateTime->setTimestamp( 1 )->format( \DateTime::RFC850 ),
-                                    "visibilityDate" => $dateTime->setTimestamp( 2 )->format( \DateTime::RFC850 ),
-                                    "hiddenDate" => $dateTime->setTimestamp( 3 )->format( \DateTime::RFC850 ),
-                                    "rotationUntilDate" => $dateTime->setTimestamp( 4 )->format( \DateTime::RFC850 ),
+                                    "publicationDate" => "Thursday, 01-Jan-70 00:00:01 GMT+0000",
+                                    "visibilityDate" => "Thursday, 01-Jan-70 00:00:02 GMT+0000",
+                                    "hiddenDate" => "Thursday, 01-Jan-70 00:00:03 GMT+0000",
+                                    "rotationUntilDate" => "Thursday, 01-Jan-70 00:00:04 GMT+0000",
                                     "movedTo" => "67dd4d9b898d89733e776c714039ae33",
                                     "action" => "modify",
                                     "blockId" => "594491ab539125dc271807a83724e608",
