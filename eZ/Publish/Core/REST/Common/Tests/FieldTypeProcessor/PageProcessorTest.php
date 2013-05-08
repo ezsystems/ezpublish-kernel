@@ -18,38 +18,83 @@ class PageProcessorTest extends PHPUnit_Framework_TestCase
     protected $incomingValue;
     protected $outgoingValue;
 
-    protected function setUp()
+    public function fieldValueHashes()
     {
-        parent::setUp();
-
-        $this->incomingValue = array(
-            "zones" => array(
+        return array(
+            array( null, null ),
+            array( array(), array() ),
+            array(
                 array(
-                    "action" => "ACTION_ADD",
-                    "blocks" => array(
+                    "zones" => array(
                         array(
-                            "action" => "ACTION_MODIFY",
-                            "items" => array(
+                            "action" => "ACTION_ADD",
+                        )
+                    ),
+                ),
+                array(
+                    "zones" => array(
+                        array(
+                            "action" => Base::ACTION_ADD,
+                        )
+                    )
+                )
+            ),
+            array(
+                array(
+                    "zones" => array(
+                        array(
+                            "action" => "ACTION_ADD",
+                            "blocks" => array(
                                 array(
-                                    "action" => "ACTION_REMOVE"
+                                    "action" => "ACTION_MODIFY",
+                                )
+                            )
+                        )
+                    ),
+                ),
+                array(
+                    "zones" => array(
+                        array(
+                            "action" => Base::ACTION_ADD,
+                            "blocks" => array(
+                                array(
+                                    "action" => Base::ACTION_MODIFY,
                                 )
                             )
                         )
                     )
                 )
             ),
-        );
-
-        $this->outgoingValue = array(
-            "zones" => array(
+            array(
                 array(
-                    "action" => Base::ACTION_ADD,
-                    "blocks" => array(
+                    "zones" => array(
                         array(
-                            "action" => Base::ACTION_MODIFY,
-                            "items" => array(
+                            "action" => "ACTION_ADD",
+                            "blocks" => array(
                                 array(
-                                    "action" => Base::ACTION_REMOVE
+                                    "action" => "ACTION_MODIFY",
+                                    "items" => array(
+                                        array(
+                                            "action" => "ACTION_REMOVE"
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    ),
+                ),
+                array(
+                    "zones" => array(
+                        array(
+                            "action" => Base::ACTION_ADD,
+                            "blocks" => array(
+                                array(
+                                    "action" => Base::ACTION_MODIFY,
+                                    "items" => array(
+                                        array(
+                                            "action" => Base::ACTION_REMOVE
+                                        )
+                                    )
                                 )
                             )
                         )
@@ -61,27 +106,29 @@ class PageProcessorTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers \eZ\Publish\Core\REST\Common\FieldTypeProcessor\PageProcessor::preProcessValueHash
+     * @dataProvider fieldValueHashes
      */
-    public function testPreProcessValueHash()
+    public function testPreProcessValueHash( $inputValue, $outputValue )
     {
         $processor = $this->getProcessor();
 
         $this->assertEquals(
-            $this->outgoingValue,
-            $processor->preProcessValueHash( $this->incomingValue )
+            $outputValue,
+            $processor->preProcessValueHash( $inputValue )
         );
     }
 
     /**
      * @covers \eZ\Publish\Core\REST\Common\FieldTypeProcessor\PageProcessor::postProcessValueHash
+     * @dataProvider fieldValueHashes
      */
-    public function testPostProcessValueHash()
+    public function testPostProcessValueHash( $outputValue, $inputValue )
     {
         $processor = $this->getProcessor();
 
         $this->assertEquals(
-            $this->incomingValue,
-            $processor->postProcessValueHash( $this->outgoingValue )
+            $outputValue,
+            $processor->postProcessValueHash( $inputValue )
         );
     }
 
