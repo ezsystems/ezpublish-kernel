@@ -19,25 +19,38 @@ class PageProcessor extends FieldTypeProcessor
      */
     public function preProcessValueHash( $incomingValueHash )
     {
-        foreach ( $incomingValueHash["zones"] as &$zone )
+        if ( isset( $incomingValueHash["zones"] ) )
         {
-            if ( isset( $zone["action"] ) )
+            foreach ( $incomingValueHash["zones"] as &$zone )
             {
-                $zone["action"] = $this->getConstantValue( $zone["action"] );
-            }
-
-            foreach ( $zone["blocks"] as &$block )
-            {
-                if ( isset( $block["action"] ) )
+                if ( isset( $zone["action"] ) )
                 {
-                    $block["action"] = $this->getConstantValue( $block["action"] );
+                    $zone["action"] = $this->getConstantValue( $zone["action"] );
                 }
 
-                foreach ( $block["items"] as &$item )
+                if ( !isset( $zone["blocks"] ) )
                 {
-                    if ( isset( $item["action"] ) )
+                    continue;
+                }
+
+                foreach ( $zone["blocks"] as &$block )
+                {
+                    if ( isset( $block["action"] ) )
                     {
-                        $item["action"] = $this->getConstantValue( $item["action"] );
+                        $block["action"] = $this->getConstantValue( $block["action"] );
+                    }
+
+                    if ( !isset( $block["items"] ) )
+                    {
+                        continue;
+                    }
+
+                    foreach ( $block["items"] as &$item )
+                    {
+                        if ( isset( $item["action"] ) )
+                        {
+                            $item["action"] = $this->getConstantValue( $item["action"] );
+                        }
                     }
                 }
             }
@@ -51,25 +64,38 @@ class PageProcessor extends FieldTypeProcessor
      */
     public function postProcessValueHash( $outgoingValueHash )
     {
-        foreach ( $outgoingValueHash["zones"] as &$zone )
+        if ( isset( $outgoingValueHash["zones"] ) )
         {
-            if ( isset( $zone["action"] ) )
+            foreach ( $outgoingValueHash["zones"] as &$zone )
             {
-                $zone["action"] = $this->getConstantName( $zone["action"] );
-            }
-
-            foreach ( $zone["blocks"] as &$block )
-            {
-                if ( isset( $block["action"] ) )
+                if ( isset( $zone["action"] ) )
                 {
-                    $block["action"] = $this->getConstantName( $block["action"] );
+                    $zone["action"] = $this->getConstantName( $zone["action"] );
                 }
 
-                foreach ( $block["items"] as &$item )
+                if ( !isset( $zone["blocks"] ) )
                 {
-                    if ( isset( $item["action"] ) )
+                    continue;
+                }
+
+                foreach ( $zone["blocks"] as &$block )
+                {
+                    if ( isset( $block["action"] ) )
                     {
-                        $item["action"] = $this->getConstantName( $item["action"] );
+                        $block["action"] = $this->getConstantName( $block["action"] );
+                    }
+
+                    if ( !isset( $block["items"] ) )
+                    {
+                        continue;
+                    }
+
+                    foreach ( $block["items"] as &$item )
+                    {
+                        if ( isset( $item["action"] ) )
+                        {
+                            $item["action"] = $this->getConstantName( $item["action"] );
+                        }
                     }
                 }
             }
