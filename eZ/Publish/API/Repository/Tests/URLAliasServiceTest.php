@@ -382,7 +382,7 @@ class URLAliasServiceTest extends BaseTest
      * Test for the createGlobalUrlAlias() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\URLAliasService::createGlobalUrlAlias($resource, $path, $languageCode, $forward, $alwaysAvailable)
+     * @see \eZ\Publish\API\Repository\URLAliasService::createGlobalUrlAlias($resource, $path, $languageCode, $forwarding, $alwaysAvailable)
      *
      */
     public function testCreateGlobalUrlAliasWithAlwaysAvailable()
@@ -428,6 +428,106 @@ class URLAliasServiceTest extends BaseTest
             ),
             $createdUrlAlias
         );
+    }
+
+    /**
+     * Test for the createUrlAlias() method.
+     *
+     * @see \eZ\Publish\API\Repository\URLAliasService::createGlobalUrlAlias($resource, $path, $languageCode, $forwarding, $alwaysAvailable)
+     */
+    public function testCreateGlobalUrlAliasForLocation()
+    {
+        $repository = $this->getRepository();
+
+        $locationId = $this->generateId( 'location', 5 );
+        $locationService = $repository->getLocationService();
+        $location = $locationService->loadLocation( $locationId );
+
+        /* BEGIN: Use Case */
+        // $locationId is the ID of an existing location
+
+        $urlAliasService = $repository->getURLAliasService();
+
+        $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
+            'module:content/view/full/' . $locationId, '/Home/My-New-Site-global', 'eng-US', false, true
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
+            $createdUrlAlias
+        );
+        return array( $createdUrlAlias, $location->id );
+    }
+
+    /**
+     * Test for the createUrlAlias() method.
+     *
+     * @see \eZ\Publish\API\Repository\URLAliasService::createGlobalUrlAlias($resource, $path, $languageCode, $forwarding, $alwaysAvailable)
+     */
+    public function testCreateGlobalUrlAliasForLocationVariation()
+    {
+        $repository = $this->getRepository();
+
+        $locationId = $this->generateId( 'location', 5 );
+        $locationService = $repository->getLocationService();
+        $location = $locationService->loadLocation( $locationId );
+
+        /* BEGIN: Use Case */
+        // $locationId is the ID of an existing location
+
+        $urlAliasService = $repository->getURLAliasService();
+
+        $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
+            'eznode:' . $locationId, '/Home/My-New-Site-global', 'eng-US', false, true
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
+            $createdUrlAlias
+        );
+        return array( $createdUrlAlias, $location->id );
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\URLAlias
+     *
+     * @depends testCreateGlobalUrlAliasForLocation
+     *
+     * @return void
+     */
+    public function testCreateGlobalUrlAliasForLocationPropertyValues( $testData )
+    {
+        list( $createdUrlAlias, $locationId ) = $testData;
+
+        $this->assertNotNull( $createdUrlAlias->id );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'type' => URLAlias::LOCATION,
+                'destination' => $locationId,
+                'path' => '/Home/My-New-Site-global',
+                'languageCodes' => array( 'eng-US' ),
+                'alwaysAvailable' => true,
+                'isHistory' => false,
+                'isCustom' => true,
+                'forward' => false,
+            ),
+            $createdUrlAlias
+        );
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\URLAlias
+     *
+     * @depends testCreateGlobalUrlAliasForLocationVariation
+     *
+     * @return void
+     */
+    public function testCreateGlobalUrlAliasForLocationVariationPropertyValues( $testData )
+    {
+        $this->testCreateGlobalUrlAliasForLocationPropertyValues( $testData );
     }
 
     /**
