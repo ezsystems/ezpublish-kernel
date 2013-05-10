@@ -316,7 +316,7 @@ class URLAliasServiceStub implements URLAliasService
      *
      * @internal
      *
-     * @param \eZ\Publish\API\Repository\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      *
      * @return void
      */
