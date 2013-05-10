@@ -19,4 +19,3 @@ use Exception;
 abstract class NotFoundException extends Exception
 {
 }
-
