@@ -43,10 +43,6 @@ class SetupFactory extends APILegacySetupFactory
             $serviceSettings['persistence_handler']['alias'] = 'persistence_handler_inmemory';
             $serviceSettings['io_handler']['alias'] = 'io_handler_inmemory';
 
-            // Needed for URLAliasService tests
-            //$serviceSettings['inner_repository']['arguments']['service_settings']['language']['languages'][] = 'eng-US';
-            //$serviceSettings['inner_repository']['arguments']['service_settings']['language']['languages'][] = 'eng-GB';
-
             static::$memoryServiceContainer = new ServiceContainer(
                 $serviceSettings,
                 $this->getDependencyConfiguration()
