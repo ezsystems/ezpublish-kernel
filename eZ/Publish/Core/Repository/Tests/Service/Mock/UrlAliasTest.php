@@ -11,7 +11,10 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias as SPIUrlAlias;
+use eZ\Publish\API\Repository\Values\Content\UrlAlias;
 use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\ForbiddenException;
 
 /**
  * Mock test case for UrlAlias Service
@@ -1793,6 +1796,331 @@ class UrlAliasTest extends BaseServiceMockTest
         self::assertEmpty( $urlAliases );
     }
 
+    /**
+     * Test for the listGlobalAliases() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\URLAliasService::listGlobalAliases
+     */
+    public function testListGlobalAliases()
+    {
+        $urlAliasService = $this->getRepository()->getURLAliasService();
+        $configuration = array(
+            "prioritizedLanguageList" => array( "ger-DE" ),
+            "showAllTranslations" => true,
+        );
+        $this->setConfiguration( $urlAliasService, $configuration );
+        $urlAliasHandler = $this->getPersistenceMockHandler( 'Content\\UrlAlias\\Handler' );
+
+        $urlAliasHandler->expects(
+            $this->once()
+        )->method(
+            "listGlobalURLAliases"
+        )->with(
+            $this->equalTo( null ),
+            $this->equalTo( 0 ),
+            $this->equalTo( -1 )
+        )->will(
+            $this->returnValue(
+                array(
+                    new SPIUrlAlias(
+                        array(
+                            "pathData" => array(
+                                array(
+                                    "always-available" => true,
+                                    "translations" => array(
+                                        "ger-DE" => "squirrel",
+                                    )
+                                ),
+                            ),
+                            "languageCodes" => array( "ger-DE" ),
+                            "alwaysAvailable" => true,
+                        )
+                    )
+                )
+            )
+        );
+
+        $urlAliases = $urlAliasService->listGlobalAliases();
+
+        self::assertCount( 1, $urlAliases );
+        self::assertInstanceOf(
+            "eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias",
+            $urlAliases[0]
+        );
+    }
+
+    /**
+     * Test for the listGlobalAliases() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\URLAliasService::listGlobalAliases
+     */
+    public function testListGlobalAliasesEmpty()
+    {
+        $urlAliasService = $this->getRepository()->getURLAliasService();
+        $configuration = array(
+            "prioritizedLanguageList" => array( "eng-GB" ),
+            "showAllTranslations" => false,
+        );
+        $this->setConfiguration( $urlAliasService, $configuration );
+        $urlAliasHandler = $this->getPersistenceMockHandler( 'Content\\UrlAlias\\Handler' );
+
+        $urlAliasHandler->expects(
+            $this->once()
+        )->method(
+            "listGlobalURLAliases"
+        )->with(
+            $this->equalTo( null ),
+            $this->equalTo( 0 ),
+            $this->equalTo( -1 )
+        )->will(
+            $this->returnValue(
+                array(
+                    new SPIUrlAlias(
+                        array(
+                            "pathData" => array(
+                                array(
+                                    "always-available" => false,
+                                    "translations" => array(
+                                        "ger-DE" => "squirrel",
+                                    )
+                                ),
+                            ),
+                            "languageCodes" => array( "ger-DE" ),
+                            "alwaysAvailable" => false,
+                        )
+                    )
+                )
+            )
+        );
+
+        $urlAliases = $urlAliasService->listGlobalAliases();
+
+        self::assertCount( 0, $urlAliases );
+    }
+
+    /**
+     * Test for the listGlobalAliases() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\URLAliasService::listGlobalAliases
+     */
+    public function testListGlobalAliasesWithParameters()
+    {
+        $urlAliasService = $this->getRepository()->getURLAliasService();
+        $urlAliasHandler = $this->getPersistenceMockHandler( 'Content\\UrlAlias\\Handler' );
+
+        $urlAliasHandler->expects(
+            $this->once()
+        )->method(
+            "listGlobalURLAliases"
+        )->with(
+            $this->equalTo( "languageCode" ),
+            $this->equalTo( "offset" ),
+            $this->equalTo( "limit" )
+        )->will(
+            $this->returnValue( array() )
+        );
+
+        $urlAliases = $urlAliasService->listGlobalAliases( "languageCode", "offset", "limit" );
+
+        self::assertEmpty( $urlAliases );
+    }
+
+    /**
+     * Test for the lookup() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\URLAliasService::lookup
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLookupThrowsNotFoundException()
+    {
+        $urlAliasService = $this->getRepository()->getURLAliasService();
+        $urlAliasHandler = $this->getPersistenceMockHandler( 'Content\\UrlAlias\\Handler' );
+
+        $urlAliasHandler->expects(
+            $this->once()
+        )->method(
+            "lookup"
+        )->with(
+            $this->equalTo( "url" )
+        )->will(
+            $this->throwException( new NotFoundException( "UrlAlias", "url" ) )
+        );
+
+        $urlAliasService->lookup( "url" );
+    }
+
+    public function providerForTestLookupThrowsNotFoundExceptionPath()
+    {
+        return array(
+            // alias does not exist in requested language
+            array( "ein/dva", array( "cro-HR", "ger-DE" ), "ger-DE" ),
+            // alias exists in requested language but the language is not in prioritized languages list
+            array( "ein/dva", array( "ger-DE" ), "eng-GB" ),
+            // alias path is not matched
+            array( "jedan/dva", array( "cro-HR", "ger-DE" ), "cro-HR" ),
+            // path is not loadable for prioritized languages list
+            array( "ein/dva", array( "cro-HR" ), "cro-HR" ),
+        );
+    }
+
+    /**
+     * Test for the lookup() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\URLAliasService::lookup
+     * @dataProvider providerForTestLookupThrowsNotFoundExceptionPath
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLookupThrowsNotFoundExceptionPathNotMatchedOrNotLoadable( $url, $prioritizedLanguageList, $languageCode )
+    {
+        $urlAliasService = $this->getRepository()->getURLAliasService();
+        $configuration = array(
+            "prioritizedLanguageList" => $prioritizedLanguageList,
+            "showAllTranslations" => false,
+        );
+        $this->setConfiguration( $urlAliasService, $configuration );
+        $urlAliasHandler = $this->getPersistenceMockHandler( 'Content\\UrlAlias\\Handler' );
+
+        $urlAliasHandler->expects(
+            $this->once()
+        )->method(
+            "lookup"
+        )->with(
+            $this->equalTo( $url )
+        )->will(
+            $this->returnValue(
+                new SPIUrlAlias(
+                    array(
+                        "pathData" => array(
+                            array(
+                                "always-available" => false,
+                                "translations" => array( "ger-DE" => "ein" )
+                            ),
+                            array(
+                                "always-available" => false,
+                                "translations" => array(
+                                    "cro-HR" => "dva",
+                                    "eng-GB" => "two",
+                                )
+                            )
+                        ),
+                        "languageCodes" => array( "eng-GB", "cro-HR" ),
+                        "alwaysAvailable" => false,
+                    )
+                )
+            )
+        );
+
+        $urlAliasService->lookup( $url, $languageCode );
+    }
+
+    public function providerForTestLookup()
+    {
+        return array(
+            // showAllTranslations setting is true
+            array( array( "ger-DE" ), true, false, null ),
+            // alias is always available
+            array( array( "ger-DE" ), false, true, null ),
+            // works with available language code
+            array( array( "cro-HR" ), false, false, "eng-GB" ),
+        );
+    }
+
+    /**
+     * Test for the lookup() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\URLAliasService::lookup
+     * @dataProvider providerForTestLookup
+     */
+    public function testLookup( $prioritizedLanguageList, $showAllTranslations, $alwaysAvailable, $languageCode )
+    {
+        $urlAliasService = $this->getRepository()->getURLAliasService();
+        $configuration = array(
+            "prioritizedLanguageList" => $prioritizedLanguageList,
+            "showAllTranslations" => $showAllTranslations,
+        );
+        $this->setConfiguration( $urlAliasService, $configuration );
+        $urlAliasHandler = $this->getPersistenceMockHandler( 'Content\\UrlAlias\\Handler' );
+
+        $urlAliasHandler->expects(
+            $this->once()
+        )->method(
+            "lookup"
+        )->with(
+            $this->equalTo( "jedan/dva" )
+        )->will(
+            $this->returnValue(
+                new SPIUrlAlias(
+                    array(
+                        "pathData" => array(
+                            array(
+                                "always-available" => $alwaysAvailable,
+                                "translations" => array( "cro-HR" => "jedan" )
+                            ),
+                            array(
+                                "always-available" => $alwaysAvailable,
+                                "translations" => array(
+                                    "cro-HR" => "dva",
+                                    "eng-GB" => "two",
+                                )
+                            )
+                        ),
+                        "languageCodes" => array( "eng-GB", "cro-HR" ),
+                        "alwaysAvailable" => $alwaysAvailable,
+                    )
+                )
+            )
+        );
+
+        $urlAlias = $urlAliasService->lookup( "jedan/dva", $languageCode );
+
+        self::assertInstanceOf(
+            "eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias",
+            $urlAlias
+        );
+    }
+
+    /**
+     * Test for the reverseLookup() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\URLAliasService::reverseLookup
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testReverseLookupThrowsNotFoundException()
+    {
+        $mockedService = $this->getPartlyMockedURLAliasServiceService( array( "listLocationAliases" ) );
+        $configuration = array(
+            "prioritizedLanguageList" => array( "ger-DE" ),
+            "showAllTranslations" => false,
+        );
+        $this->setConfiguration( $mockedService, $configuration );
+
+        $languageCode = "eng-GB";
+        $location = $this->getLocationStub();
+
+        $mockedService->expects(
+            $this->once()
+        )->method(
+            "listLocationAliases"
+        )->with(
+            $this->equalTo( $location ),
+            $this->equalTo( false ),
+            $this->equalTo( $languageCode )
+        )->will(
+            $this->returnValue(
+                array(
+                    new UrlAlias(
+                        array(
+                            "languageCodes" => array( "eng-GB" ),
+                            "alwaysAvailable" => false,
+                        )
+                    )
+                )
+            )
+        );
+
+        $mockedService->reverseLookup( $location, $languageCode );
+    }
+
     public function providerForTestReverseLookup()
     {
         return $this->providerForTestListAutogeneratedLocationAliasesPath();
@@ -1825,19 +2153,16 @@ class UrlAliasTest extends BaseServiceMockTest
         );
 
         $location = $this->getLocationStub();
-        $urlAlias = $urlAliasService->reverseLookup( $location, null );
+        $urlAlias = $urlAliasService->reverseLookup( $location );
 
-        if ( $urlAlias->languageCodes === array( $reverseLookupLanguageCode ) )
-        {
-            self::assertEquals(
-                $paths[$reverseLookupLanguageCode],
-                $urlAlias->path
-            );
-        }
-        else
-        {
-            self::fail();
-        }
+        self::assertEquals(
+            array( $reverseLookupLanguageCode ),
+            $urlAlias->languageCodes
+        );
+        self::assertEquals(
+            $paths[$reverseLookupLanguageCode],
+            $urlAlias->path
+        );
     }
 
     public function providerForTestReverseLookupAlwaysAvailablePath()
@@ -1876,7 +2201,7 @@ class UrlAliasTest extends BaseServiceMockTest
         );
 
         $location = $this->getLocationStub();
-        $urlAlias = $urlAliasService->reverseLookup( $location, null );
+        $urlAlias = $urlAliasService->reverseLookup( $location );
 
         self::assertEquals(
             reset( $paths ),
@@ -1889,11 +2214,12 @@ class UrlAliasTest extends BaseServiceMockTest
      *
      * @covers \eZ\Publish\Core\Repository\URLAliasService::createUrlAlias
      */
-    public function testCreateUrlAliasBehaviour()
+    public function testCreateUrlAlias()
     {
         $location = $this->getLocationStub();
         $urlAliasService = $this->getRepository()->getURLAliasService();
         $urlAliasHandler = $this->getPersistenceMockHandler( 'Content\\UrlAlias\\Handler' );
+
         $urlAliasHandler->expects(
             $this->once()
         )->method(
@@ -1908,7 +2234,13 @@ class UrlAliasTest extends BaseServiceMockTest
             $this->returnValue( new SPIUrlAlias )
         );
 
-        $urlAlias = $urlAliasService->createUrlAlias( $location, "path", "languageCode", "forwarding", "alwaysAvailable" );
+        $urlAlias = $urlAliasService->createUrlAlias(
+            $location,
+            "path",
+            "languageCode",
+            "forwarding",
+            "alwaysAvailable"
+        );
 
         self::assertInstanceOf(
             "eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias",
@@ -1917,15 +2249,51 @@ class UrlAliasTest extends BaseServiceMockTest
     }
 
     /**
+     * Test for the createUrlAlias() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\URLAliasService::createUrlAlias
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testCreateUrlAliasThrowsInvalidArgumentException()
+    {
+        $location = $this->getLocationStub();
+        $urlAliasService = $this->getRepository()->getURLAliasService();
+        $urlAliasHandler = $this->getPersistenceMockHandler( 'Content\\UrlAlias\\Handler' );
+
+        $urlAliasHandler->expects(
+            $this->once()
+        )->method(
+            "createCustomUrlAlias"
+        )->with(
+            $this->equalTo( $location->id ),
+            $this->equalTo( "path" ),
+            $this->equalTo( "forwarding" ),
+            $this->equalTo( "languageCode" ),
+            $this->equalTo( "alwaysAvailable" )
+        )->will(
+            $this->throwException( new ForbiddenException )
+        );
+
+        $urlAliasService->createUrlAlias(
+            $location,
+            "path",
+            "languageCode",
+            "forwarding",
+            "alwaysAvailable"
+        );
+    }
+
+    /**
      * Test for the createGlobalUrlAlias() method.
      *
      * @covers \eZ\Publish\Core\Repository\URLAliasService::createGlobalUrlAlias
      */
-    public function testCreateGlobalUrlAliasBehaviour()
+    public function testCreateGlobalUrlAlias()
     {
         $resource = "module:content/search";
         $urlAliasService = $this->getRepository()->getURLAliasService();
         $urlAliasHandler = $this->getPersistenceMockHandler( 'Content\\UrlAlias\\Handler' );
+
         $urlAliasHandler->expects(
             $this->once()
         )->method(
@@ -1940,11 +2308,130 @@ class UrlAliasTest extends BaseServiceMockTest
             $this->returnValue( new SPIUrlAlias )
         );
 
-        $urlAlias = $urlAliasService->createGlobalUrlAlias( $resource, "path", "languageCode", "forwarding", "alwaysAvailable" );
+        $urlAlias = $urlAliasService->createGlobalUrlAlias(
+            $resource,
+            "path",
+            "languageCode",
+            "forwarding",
+            "alwaysAvailable"
+        );
 
         self::assertInstanceOf(
             "eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias",
             $urlAlias
+        );
+    }
+
+    /**
+     * Test for the createGlobalUrlAlias() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\URLAliasService::createGlobalUrlAlias
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testCreateGlobalUrlAliasThrowsInvalidArgumentExceptionResource()
+    {
+        $urlAliasService = $this->getRepository()->getURLAliasService();
+        $urlAliasService->createGlobalUrlAlias(
+            "invalid/resource",
+            "path",
+            "languageCode",
+            "forwarding",
+            "alwaysAvailable"
+        );
+    }
+
+    /**
+     * Test for the createGlobalUrlAlias() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\URLAliasService::createGlobalUrlAlias
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testCreateGlobalUrlAliasThrowsInvalidArgumentExceptionPath()
+    {
+        $resource = "module:content/search";
+        $urlAliasService = $this->getRepository()->getURLAliasService();
+        $urlAliasHandler = $this->getPersistenceMockHandler( 'Content\\UrlAlias\\Handler' );
+
+        $urlAliasHandler->expects(
+            $this->once()
+        )->method(
+            "createGlobalUrlAlias"
+        )->with(
+            $this->equalTo( $resource ),
+            $this->equalTo( "path" ),
+            $this->equalTo( "forwarding" ),
+            $this->equalTo( "languageCode" ),
+            $this->equalTo( "alwaysAvailable" )
+        )->will(
+            $this->throwException( new ForbiddenException )
+        );
+
+        $urlAliasService->createGlobalUrlAlias(
+            $resource,
+            "path",
+            "languageCode",
+            "forwarding",
+            "alwaysAvailable"
+        );
+    }
+
+    /**
+     * Test for the createGlobalUrlAlias() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\URLAliasService::createGlobalUrlAlias
+     */
+    public function testCreateGlobalUrlAliasForLocation()
+    {
+        $mockedService = $this->getPartlyMockedURLAliasServiceService( array( "createUrlAlias" ) );
+        $location = $this->getLocationStub();
+        $locationServiceMock = $this->getMock(
+            "eZ\\Publish\\Core\\Repository\\LocationService",
+            array(), array(), "", false
+        );
+
+        $locationServiceMock->expects(
+            $this->exactly( 2 )
+        )->method(
+            "loadLocation"
+        )->with(
+            $this->equalTo( 42 )
+        )->will(
+            $this->returnValue( $location )
+        );
+
+        $this->getRepositoryMock()->expects(
+            $this->exactly( 2 )
+        )->method(
+            "getLocationService"
+        )->will(
+            $this->returnValue( $locationServiceMock )
+        );
+
+        $mockedService->expects(
+            $this->exactly( 2 )
+        )->method(
+            "createUrlAlias"
+        )->with(
+            $this->equalTo( $location ),
+            $this->equalTo( "path" ),
+            $this->equalTo( "languageCode" ),
+            $this->equalTo( "forwarding" ),
+            $this->equalTo( "alwaysAvailable" )
+        );
+
+        $mockedService->createGlobalUrlAlias(
+            "eznode:42",
+            "path",
+            "languageCode",
+            "forwarding",
+            "alwaysAvailable"
+        );
+        $mockedService->createGlobalUrlAlias(
+            "module:content/view/full/42",
+            "path",
+            "languageCode",
+            "forwarding",
+            "alwaysAvailable"
         );
     }
 
@@ -1984,6 +2471,26 @@ class UrlAliasTest extends BaseServiceMockTest
      */
     protected function getPartlyMockedURLAliasServiceService( array $methods = null )
     {
+        $languageServiceMock = $this->getMock(
+            "eZ\\Publish\\Core\\Repository\\LanguageService",
+            array(), array(), "", false
+        );
+        $languageServiceMock->expects(
+            $this->once()
+        )->method(
+            "getPrioritizedLanguageCodeList"
+        )->will(
+            $this->returnValue( array( "eng-GB" ) )
+        );
+
+        $this->getRepositoryMock()->expects(
+            $this->once()
+        )->method(
+            "getContentLanguageService"
+        )->will(
+            $this->returnValue( $languageServiceMock )
+        );
+
         return $this->getMock(
             "eZ\\Publish\\Core\\Repository\\URLAliasService",
             $methods,
