@@ -145,7 +145,7 @@ class URLAliasService implements URLAliasServiceInterface
 
         $path = $this->cleanUrl( $path );
 
-        if ( $matches[1] === "eznode" || 0 === strpos( $matches[2], "module:content/view/full/" ) )
+        if ( $matches[1] === "eznode" || 0 === strpos( $resource, "module:content/view/full/" ) )
         {
             if ( $matches[1] === "eznode" )
             {
@@ -158,7 +158,7 @@ class URLAliasService implements URLAliasServiceInterface
             }
 
             return $this->createUrlAlias(
-                $locationId,
+                $this->repository->getLocationService()->loadLocation( $locationId ),
                 $path,
                 $languageCode,
                 $forwarding,
