@@ -151,56 +151,60 @@ class Field extends CriterionHandler
         $whereExpressions = array();
         foreach ( $fieldInformations as $fieldInformation )
         {
-            if ( $fieldInformation['column'] === false )
-                continue;
+            $subExpressions = array();
+            $subExpressions[] = $subSelect->expr->in(
+                $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
+                $fieldInformation['ids']
+            );
 
-            $column = $this->dbHandler->quoteColumn( $fieldInformation['column'] );
-            switch ( $criterion->operator )
+            // If field does not support filtering we leave out filter expression,
+            // but keep field ids expression so they are included in the result.
+            if ( $fieldInformation['column'] !== false )
             {
-                case Criterion\Operator::IN:
-                    $filter = $subSelect->expr->in(
-                        $column,
-                        $criterion->value
-                    );
-                    break;
+                $column = $this->dbHandler->quoteColumn( $fieldInformation['column'] );
+                switch ( $criterion->operator )
+                {
+                    case Criterion\Operator::IN:
+                        $subExpressions[] = $subSelect->expr->in(
+                            $column,
+                            $criterion->value
+                        );
+                        break;
 
-                case Criterion\Operator::BETWEEN:
-                    $filter = $subSelect->expr->between(
-                        $column,
-                        $subSelect->bindValue( $criterion->value[0] ),
-                        $subSelect->bindValue( $criterion->value[1] )
-                    );
-                    break;
+                    case Criterion\Operator::BETWEEN:
+                        $subExpressions[] = $subSelect->expr->between(
+                            $column,
+                            $subSelect->bindValue( $criterion->value[0] ),
+                            $subSelect->bindValue( $criterion->value[1] )
+                        );
+                        break;
 
-                case Criterion\Operator::EQ:
-                case Criterion\Operator::GT:
-                case Criterion\Operator::GTE:
-                case Criterion\Operator::LT:
-                case Criterion\Operator::LTE:
-                case Criterion\Operator::LIKE:
-                    $operatorFunction = $this->comparatorMap[$criterion->operator];
-                    $filter = $subSelect->expr->$operatorFunction(
-                        $column,
-                        $subSelect->bindValue( $criterion->value )
-                    );
-                    break;
+                    case Criterion\Operator::EQ:
+                    case Criterion\Operator::GT:
+                    case Criterion\Operator::GTE:
+                    case Criterion\Operator::LT:
+                    case Criterion\Operator::LTE:
+                    case Criterion\Operator::LIKE:
+                        $operatorFunction = $this->comparatorMap[$criterion->operator];
+                        $subExpressions[] = $subSelect->expr->$operatorFunction(
+                            $column,
+                            $subSelect->bindValue( $criterion->value )
+                        );
+                        break;
 
-                default:
-                    throw new RuntimeException( 'Unknown operator.' );
+                    default:
+                        throw new RuntimeException( 'Unknown operator.' );
+                }
             }
 
-            $whereExpressions[] = $subSelect->expr->lAnd(
-                $subSelect->expr->in(
-                    $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
-                    $fieldInformation['ids']
-                ),
-                $filter
-            );
-        }
-
-        if ( empty( $whereExpressions ) )
-        {
-            return false;
+            if ( isset( $subExpressions[1] ) )
+            {
+                $whereExpressions[] = $subSelect->expr->lAnd( $subExpressions );
+            }
+            else
+            {
+                $whereExpressions[] = $subExpressions[0];
+            }
         }
 
         if ( isset( $whereExpressions[1] ) )
