@@ -138,38 +138,36 @@ class EzcDatabase extends Gateway
      */
     protected function getQueryCondition( Criterion $criterion, ezcQuerySelect $query, $translations )
     {
-        $condition = $query->expr->lAnd(
-            $this->criteriaConverter->convertCriteria( $query, $criterion ),
-            $query->expr->eq(
-                'ezcontentobject_version.status',
-                VersionInfo::STATUS_PUBLISHED
-            )
-        );
+        $expressions = array();
+        $expressions[] = $query->expr->eq( 'ezcontentobject_version.status', VersionInfo::STATUS_PUBLISHED );
 
-        if ( $translations === null )
+        $criteriaExpression = $this->criteriaConverter->convertCriteria( $query, $criterion );
+        if ( $criteriaExpression !== false )
         {
-            return $condition;
+            $expressions[] = $query->expr->lAnd( $criteriaExpression );
         }
 
-        $translationQuery = $query->subSelect();
-        $translationQuery->select(
-            $this->handler->quoteColumn( 'contentobject_id' )
-        )->from(
-            $this->handler->quoteTable( 'ezcontentobject_attribute' )
-        )->where(
-            $translationQuery->expr->in(
-                $this->handler->quoteColumn( 'language_code' ),
-                $translations
-            )
-        );
+        if ( $translations !== null )
+        {
+            $translationQuery = $query->subSelect();
+            $translationQuery->select(
+                $this->handler->quoteColumn( 'contentobject_id' )
+            )->from(
+                $this->handler->quoteTable( 'ezcontentobject_attribute' )
+            )->where(
+                $translationQuery->expr->in(
+                    $this->handler->quoteColumn( 'language_code' ),
+                    $translations
+                )
+            );
 
-        return $query->expr->lAnd(
-            $condition,
-            $query->expr->in(
+            $expressions[] = $query->expr->in(
                 $this->handler->quoteColumn( 'id' ),
                 $translationQuery
-            )
-        );
+            );
+        }
+
+        return $query->expr->lAnd( $expressions );
     }
 
     /**
