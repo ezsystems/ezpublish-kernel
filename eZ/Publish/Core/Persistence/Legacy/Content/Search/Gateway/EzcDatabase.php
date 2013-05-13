@@ -98,9 +98,6 @@ class EzcDatabase extends Gateway
     /**
      * Returns a list of object satisfying the $criterion.
      *
-     * @todo Check Query recreation in this method. Something breaks if we reuse
-     *       the query, after we have added the applyJoin() stuff here.
-     *
      * @param Criterion $criterion
      * @param int $offset
      * @param int|null $limit
