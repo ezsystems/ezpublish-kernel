@@ -9,25 +9,39 @@ php:
 
 # execute unit tests, integration test stubs and integration tests using legacy storage engine
 env:
-  - TEST_CONFIG="phpunit.xml"
-  - TEST_CONFIG="phpunit-integration.xml"
-  - TEST_CONFIG="phpunit-integration-legacy.xml"
-  - TEST_CONFIG="phpunit-integration-legacy-solr.xml"
+  - TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
+  - TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York"
+  - TEST_CONFIG="phpunit-integration.xml" TIMEZONE="Asia/Calcutta"
+  - TEST_CONFIG="phpunit-integration.xml" TIMEZONE="America/New_York"
+  - TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Asia/Calcutta"
+  - TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
 
 matrix:
   allow_failures:
     - php: 5.5
   exclude:
-    - php: 5.5
-      env: TEST_CONFIG="phpunit-integration.xml"
-    - php: 5.5
-      env: TEST_CONFIG="phpunit-integration-legacy.xml"
-    - php: 5.5
-      env: TEST_CONFIG="phpunit-integration-legacy-solr.xml"
+    - php: 5.3.3
+      env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York"
+    - php: 5.3.3
+      env: TEST_CONFIG="phpunit-integration.xml" TIMEZONE="Asia/Calcutta"
+    - php: 5.3.3
+      env: TEST_CONFIG="phpunit-integration.xml" TIMEZONE="America/New_York"
     - php: 5.3
-      env: TEST_CONFIG="phpunit-integration-legacy.xml"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Asia/Calcutta"
     - php: 5.3
-      env: TEST_CONFIG="phpunit-integration-legacy-solr.xml"
+      env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
+    - php: 5.4
+      env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York"
+    - php: 5.4
+      env: TEST_CONFIG="phpunit-integration.xml" TIMEZONE="Asia/Calcutta"
+    - php: 5.5
+      env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York"
+    - php: 5.5
+      env: TEST_CONFIG="phpunit-integration.xml" TIMEZONE="America/New_York"
+    - php: 5.5
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Asia/Calcutta"
+    - php: 5.5
+      env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
 
 # test only master (+ Pull requests)
 branches:
@@ -42,7 +56,7 @@ before_script:
   - "if [ \"$TEST_CONFIG\" = \"phpunit-integration-legacy-solr.xml\" ] ; then curl https://raw.github.com/patrickallaert/travis-solr/master/travis-solr.sh | SOLR_VERSION=3.6.2 SOLR_CONFS=eZ/Publish/Core/Persistence/Solr/Content/Search/schema.xml bash ; fi"
 
 # execute phpunit as the script command
-script: "phpunit -d memory_limit=-1 -c $TEST_CONFIG"
+script: "phpunit -d date.timezone=$TIMEZONE -d memory_limit=-1 -c $TEST_CONFIG"
 
 # disable mail notifications
 notification:
