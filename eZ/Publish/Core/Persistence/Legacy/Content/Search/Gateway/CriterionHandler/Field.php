@@ -52,7 +52,7 @@ class Field extends CriterionHandler
     /**
      * Check if this criterion handler accepts to handle the given criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion$criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
      * @return boolean
      */
@@ -131,19 +131,18 @@ class Field extends CriterionHandler
      *
      * accept() must be called before calling this method.
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter$converter
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter $converter
      * @param \ezcQuerySelect $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion$criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
-     * @return \ezcQueryExpression
+     * @return \ezcQueryExpression|boolean false if criteria could not be converted
      */
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
     {
         $fieldInformations = $this->getFieldInformation( $criterion->target );
 
         $subSelect = $query->subSelect();
-        $subSelect
-        ->select(
+        $subSelect->select(
             $this->dbHandler->quoteColumn( 'contentobject_id' )
         )->from(
             $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
@@ -197,6 +196,11 @@ class Field extends CriterionHandler
                 ),
                 $filter
             );
+        }
+
+        if ( empty( $whereExpressions ) )
+        {
+            return false;
         }
 
         if ( isset( $whereExpressions[1] ) )
