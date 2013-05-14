@@ -260,7 +260,24 @@ class Handler implements BaseContentHandler
         }
         $this->fieldHandler->createExistingFieldsInNewVersion( $content );
 
-        // Create name
+        // Create relations for new version
+        $relations = $this->contentGateway->loadRelations( $contentId, $srcVersion );
+        foreach ( $relations as $relation )
+        {
+            $this->contentGateway->insertRelation(
+                new RelationCreateStruct(
+                    array(
+                        "sourceContentId" => $contentId,
+                        "sourceContentVersionNo" => $content->versionInfo->versionNo,
+                        "sourceFieldDefinitionId" => $relation["ezcontentobject_link_contentclassattribute_id"],
+                        "destinationContentId" => $relation["ezcontentobject_link_to_contentobject_id"],
+                        "type" => (int)$relation["ezcontentobject_link_relation_type"],
+                    )
+                )
+            );
+        }
+
+        // Create content names for new version
         foreach ( $content->versionInfo->names as $language => $name )
         {
             $this->contentGateway->setName(

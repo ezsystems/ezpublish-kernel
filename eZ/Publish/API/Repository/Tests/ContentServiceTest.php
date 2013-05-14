@@ -2597,15 +2597,10 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
-     * Test for the addRelation() method.
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\Relation[] $relations
-     *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::addRelation()
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
      */
-    public function testAddRelationSetsExpectedRelations( $relations )
+    protected function assertExpectedRelations( $relations )
     {
         $this->assertEquals(
             array(
@@ -2621,6 +2616,81 @@ class ContentServiceTest extends BaseContentServiceTest
                 'destinationContentInfo' => $relations[0]->destinationContentInfo->remoteId,
             )
         );
+    }
+
+    /**
+     * Test for the addRelation() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Relation[] $relations
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::addRelation()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
+     */
+    public function testAddRelationSetsExpectedRelations( $relations )
+    {
+        $this->assertExpectedRelations( $relations );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelationSetsExpectedRelations
+     */
+    public function testCreateContentDraftFromContentWithRelations()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        // RemoteId of the "Media" content of an eZ Publish demo installation
+        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
+        $draft = $this->createContentDraftVersion1();
+        $media = $contentService->loadContentInfoByRemoteId( $mediaRemoteId );
+
+        // Create relation between new content object and "Media" page
+        $contentService->addRelation(
+            $draft->getVersionInfo(),
+            $media
+        );
+
+        $content = $contentService->publishVersion( $draft->versionInfo );
+        $newDraft = $contentService->createContentDraft( $content->contentInfo );
+
+        return $contentService->loadRelations( $newDraft->getVersionInfo() );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Relation[] $relations
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraftWithRelations
+     */
+    public function testCreateContentDraftWithRelationsCreatesRelations( $relations )
+    {
+        $this->assertEquals(
+            1,
+            count( $relations )
+        );
+
+        return $relations;
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Relation[] $relations
+     *
+     * @return void
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraftWithRelationsCreatesRelations
+     */
+    public function testCreateContentDraftWithRelationsCreatesExpectedRelations( $relations )
+    {
+        $this->assertExpectedRelations( $relations );
     }
 
     /**
