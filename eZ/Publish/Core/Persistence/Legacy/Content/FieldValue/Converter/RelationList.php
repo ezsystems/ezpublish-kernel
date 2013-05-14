@@ -239,7 +239,8 @@ class RelationList implements Converter
                 $this->db->aliasedColumn( $q, 'current_version', 'ezcontentobject' ),
                 $this->db->aliasedColumn( $q, 'contentclass_id', 'ezcontentobject' ),
                 $this->db->aliasedColumn( $q, 'node_id', 'ezcontentobject_tree' ),
-                $this->db->aliasedColumn( $q, 'parent_node_id', 'ezcontentobject_tree' )
+                $this->db->aliasedColumn( $q, 'parent_node_id', 'ezcontentobject_tree' ),
+                $this->db->aliasedColumn( $q, 'identifier', 'ezcontentclass' )
             )
             ->from( $this->db->quoteTable( 'ezcontentobject' ) )
             ->leftJoin(
@@ -255,9 +256,18 @@ class RelationList implements Converter
                     )
                 )
             )
+            ->leftJoin(
+                $this->db->quoteTable( 'ezcontentclass' ),
+                $q->expr->lAnd(
+                    $q->expr->eq(
+                        $this->db->quoteColumn( 'id', 'ezcontentclass' ),
+                        $this->db->quoteColumn( 'contentclass_id', 'ezcontentobject' )
+                    )
+                )
+            )
             ->where(
                 $q->expr->in(
-                    $this->db->quoteColumn( 'id' ),
+                    $this->db->quoteColumn( 'id', 'ezcontentobject' ),
                     $destinationContentIds
                 )
             );
@@ -293,7 +303,7 @@ class RelationList implements Converter
             'node-id' => 'ezcontentobject_tree_node_id',
             'parent-node-id' => 'ezcontentobject_tree_parent_node_id',
             'contentclass-id' => 'ezcontentobject_contentclass_id',
-            //'contentclass-identifier' => 'contentclass_identifier',@todo Re add
+            'contentclass-identifier' => 'ezcontentclass_identifier',
             // 'is-modified' => 'is_modified',// deprecated and not used
             'contentobject-remote-id' => 'ezcontentobject_remote_id'
         );
