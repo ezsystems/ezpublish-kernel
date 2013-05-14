@@ -36,7 +36,12 @@ class ParentLocation extends MultipleValued
      */
     public function matchContentInfo( ContentInfo $contentInfo )
     {
-        $location = $this->repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
+        $location = $this->repository->sudo(
+            function ( $repository ) use ( $contentInfo )
+            {
+                return $repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
+            }
+        );
         return isset( $this->values[$location->parentLocationId] );
     }
 }
