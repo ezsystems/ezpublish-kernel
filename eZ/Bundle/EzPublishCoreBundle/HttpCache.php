@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache as BaseHttpCache;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
-abstract class HttpCache extends BaseHttpCache
+class HttpCache extends BaseHttpCache
 {
     protected function createStore()
     {
