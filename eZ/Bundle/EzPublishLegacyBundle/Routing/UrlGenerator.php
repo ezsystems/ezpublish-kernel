@@ -63,8 +63,8 @@ class UrlGenerator extends Generator
                     throw new \InvalidArgumentException( "Legacy module '$moduleName' doesn't exist. Cannot generate URL." );
 
                 $moduleViews = $module->attribute( 'views' );
-                if ( !isset( $moduleViews[$viewName] ) )
-                    throw new \InvalidArgumentException( "Legacy module '$moduleName' doesn't have any view named '$viewName'. Cannot generate URL." );
+                if ( !isset( $moduleViews[$viewName] ) && !isset( $module->Module['function'] ) )
+                    throw new \InvalidArgumentException( "Legacy module '$moduleName' doesn't have any view named '$viewName'. It doesn't define any function either. Cannot generate URL." );
 
                 $unorderedParams = '';
                 foreach ( $parameters as $paramName => $paramValue )
