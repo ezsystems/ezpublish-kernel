@@ -225,7 +225,7 @@ class Type extends FieldType
     {
         $validationErrors = array();
 
-        foreach ( $validatorConfiguration as $validatorIdentifier => $parameters )
+        foreach ( (array)$validatorConfiguration as $validatorIdentifier => $parameters )
         {
             switch ( $validatorIdentifier )
             {
