@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
@@ -26,6 +27,103 @@ class RestListenerTest extends PHPUnit_Framework_TestCase
     const VALID_TOKEN = 'valid';
     const INVALID_TOKEN = 'invalid';
     const INTENTION = 'rest';
+
+    /**
+     * @dataProvider onKernelExceptionViewProvider
+     */
+    public function testOnKernelExceptionView(
+        $name,
+        ContainerInterface $container,
+        RESTRequest $request,
+        CsrfProviderInterface $csrfProvider,
+        GetResponseForExceptionEvent $event,
+        $visit
+    )
+    {
+        $listener = $this->getMock(
+            'eZ\\Bundle\\EzPublishRestBundle\\EventListener\\RestListener',
+            array( 'visitResult' ), array( $container, $request, $csrfProvider )
+        );
+        $listener->expects( $this->exactly( $visit ) )
+            ->method( 'visitResult' )
+            ->will( $this->returnValue( new Response() ) );
+        $listener->onKernelExceptionView( $event );
+    }
+
+    public function onKernelExceptionViewProvider()
+    {
+        $request = $this->getRequestMock();
+        $csrfProvider = $this->getCsrfProviderMock();
+        $tests = array();
+        $tests[] = array(
+            'sub request',
+            $this->getContainerMock( true ),
+            $request,
+            $csrfProvider,
+            $this->getGetResponseForExceptionEventMock(
+                HttpKernelInterface::SUB_REQUEST
+            ),
+            0
+        );
+        $tests[] = array(
+            'master request but not a REST request',
+            $this->getContainerMock( true ),
+            $request,
+            $csrfProvider,
+            $this->getGetResponseForExceptionEventMock(
+                HttpKernelInterface::MASTER_REQUEST
+            ),
+            0
+        );
+
+        $event = $this->getGetResponseForExceptionEventMock(
+            HttpKernelInterface::MASTER_REQUEST,
+            'http://example.com' . self::REST_PREFIX . '/'
+        );
+        // checking that the exception is visited and that
+        // we stop the propagation of the event
+        $event->expects( $this->once() )
+            ->method( 'getException' );
+        $event->expects( $this->once() )
+            ->method( 'setResponse' );
+        $event->expects( $this->once() )
+            ->method( 'stopPropagation' );
+
+        $tests[] = array(
+            'master request',
+            $this->getContainerMock( true ),
+            $request,
+            $csrfProvider,
+            $event,
+            1
+        );
+
+        return $tests;
+    }
+
+    protected function getGetResponseForExceptionEventMock(
+        $requestType = HttpKernelInterface::MASTER_REQUEST,
+        $uri = 'http://example.com/not/a/rest/request'
+    )
+    {
+        $event = $this->getMockBuilder( 'Symfony\\Component\\HttpKernel\\Event\\GetResponseForExceptionEvent' )
+            ->disableOriginalConstructor()
+            ->setMethods( array( 'getRequest', 'getRequestType' ) )
+            ->getMock();
+
+        $event->expects( $this->once() )
+            ->method( 'getRequestType' )
+            ->will( $this->returnValue( $requestType ) );
+
+        $requestType === HttpKernelInterface::MASTER_REQUEST ? $calls = 1 : $calls = 0;
+        $request = Request::create( $uri );
+        $event->expects( $this->exactly( $calls ) )
+            ->method( 'getRequest' )
+            ->will( $this->returnValue( $request ) );
+
+        return $event;
+    }
+
 
     /**
      * @dataProvider onKernelResultViewProvider
