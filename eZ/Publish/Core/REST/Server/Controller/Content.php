@@ -19,6 +19,8 @@ use eZ\Publish\Core\REST\Server\Controller as RestController;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
+use eZ\Publish\API\Repository\Exceptions\ContentValidationException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 
@@ -293,10 +295,21 @@ class Content extends RestController
             )
         );
 
-        $content = $this->contentService->createContent(
-            $contentCreate->contentCreateStruct,
-            array( $contentCreate->locationCreateStruct )
-        );
+        try
+        {
+            $content = $this->contentService->createContent(
+                $contentCreate->contentCreateStruct,
+                array( $contentCreate->locationCreateStruct )
+            );
+        }
+        catch ( ContentValidationException $e )
+        {
+            throw new BadRequestException( $e->getMessage() );
+        }
+        catch ( ContentFieldValidationException $e )
+        {
+            throw new BadRequestException( $e->getMessage() );
+        }
 
         $contentValue = null;
         $contentType = null;
@@ -503,7 +516,18 @@ class Content extends RestController
             throw new ForbiddenException( 'Only version in status DRAFT can be updated' );
         }
 
-        $this->contentService->updateContent( $versionInfo, $contentUpdateStruct );
+        try
+        {
+            $this->contentService->updateContent( $versionInfo, $contentUpdateStruct );
+        }
+        catch ( ContentValidationException $e )
+        {
+            throw new BadRequestException( $e->getMessage() );
+        }
+        catch ( ContentFieldValidationException $e )
+        {
+            throw new BadRequestException( $e->getMessage() );
+        }
 
         $languages = null;
         if ( isset( $this->request->variables['languages'] ) )
