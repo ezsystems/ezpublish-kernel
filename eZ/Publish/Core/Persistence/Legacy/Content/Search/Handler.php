@@ -18,7 +18,6 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
@@ -97,13 +96,13 @@ class Handler implements SearchHandlerInterface
 
         if ( count( $query->facetBuilders ) )
         {
-            throw new NotImplementedException( "Facettes are not supported by the legacy search engine." );
+            throw new NotImplementedException( "Facets are not supported by the legacy search engine." );
         }
 
-        $data  = $this->gateway->find( $query->criterion, $query->offset, $query->limit, $query->sortClauses, null );
+        $data = $this->gateway->find( $query->criterion, $query->offset, $query->limit, $query->sortClauses, null );
 
         $result = new SearchResult();
-        $result->time       = microtime( true ) - $start;
+        $result->time = microtime( true ) - $start;
         $result->totalCount = $data['count'];
 
         foreach ( $this->contentMapper->extractContentFromRows( $data['rows'] ) as $content )
