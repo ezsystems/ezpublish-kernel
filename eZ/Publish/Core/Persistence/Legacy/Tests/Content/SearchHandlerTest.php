@@ -20,6 +20,7 @@ use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText;
 
 /**
  * Test case for ContentSearchHandler
@@ -146,7 +147,8 @@ class SearchHandlerTest extends LanguageAwareTestCase
                                 array(
                                     'ezint' => new Integer(),
                                     'ezstring' => new TextLine(),
-                                    'ezprice' => new Integer()
+                                    'ezprice' => new Integer(),
+                                    'ezxmltext' => new XmlText()
                                 )
                             )
                         ),
@@ -1178,6 +1180,47 @@ class SearchHandlerTest extends LanguageAwareTestCase
 
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
+            array_map(
+                function ( $hit )
+                {
+                    return $hit->valueObject->versionInfo->contentInfo->id;
+                },
+                $result->searchHits
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Field
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testFieldFilterOnUnsupportedField()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->findContent(
+            new Query(
+                array(
+                    'criterion' => new Criterion\LogicalAnd(
+                        array(
+                            new Criterion\ContentTypeIdentifier(
+                                'folder'
+                            ),
+                            new Criterion\Field(
+                                'description',
+                                Criterion\Operator::EQ,
+                                'will not be matched as ezxmltext (folder/description) does not support filtering'
+                            )
+                        )
+                    ),
+                    'limit' => 5,
+                )
+            )
+        );
+
+        $this->assertEquals(
+            array( 41, 45, 49, 50, 51 ),
             array_map(
                 function ( $hit )
                 {

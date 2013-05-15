@@ -36,20 +36,29 @@ class LogicalAnd extends CriterionHandler
      *
      * accept() must be called before calling this method.
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter$converter
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter $converter
      * @param \ezcQuerySelect $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion$criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
-     * @return \ezcQueryExpression
+     * @return \ezcQueryExpression|boolean false if criteria could not be converted
      */
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
     {
-        $subexpressions = array();
+        $subExpressions = array();
         foreach ( $criterion->criteria as $subCriterion )
         {
-            $subexpressions[] = $converter->convertCriteria( $query, $subCriterion );
+            $subExpression = $converter->convertCriteria( $query, $subCriterion );
+            if ( $subExpression !== false )
+            {
+                $subExpressions[] = $subExpression;
+            }
         }
-        return $query->expr->lAnd( $subexpressions );
+
+        if ( empty( $subExpressions ) )
+        {
+            return false;
+        }
+
+        return $query->expr->lAnd( $subExpressions );
     }
 }
-

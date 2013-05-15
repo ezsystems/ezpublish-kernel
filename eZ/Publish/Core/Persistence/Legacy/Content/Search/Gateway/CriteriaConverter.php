@@ -43,7 +43,7 @@ class CriteriaConverter
      * @param \ezcQuerySelect $query
      * @param Criterion $criterion
      *
-     * @return \ezcQueryExpression
+     * @return \ezcQueryExpression|boolean false if criteria could not be converted
      */
     public function convertCriteria( ezcQuerySelect $query, Criterion $criterion )
     {

@@ -40,13 +40,18 @@ class LogicalNot extends CriterionHandler
      * @param \ezcQuerySelect $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion$criterion
      *
-     * @return \ezcQueryExpression
+     * @return \ezcQueryExpression|boolean false if criteria could not be converted
      */
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
     {
-        return $query->expr->not(
-            $converter->convertCriteria( $query, $criterion->criteria[0] )
-        );
+        $expression = $converter->convertCriteria( $query, $criterion->criteria[0] );
+
+        if ( $expression === false )
+        {
+            return false;
+        }
+
+        return $query->expr->not( $expression );
     }
 }
 

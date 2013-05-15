@@ -51,7 +51,7 @@ class ContentTypeIdentifier extends CriterionHandler
             )->from(
                 $this->dbHandler->quoteTable( 'ezcontentclass' )
             )->where(
-                $query->expr->in(
+                $subSelect->expr->in(
                     $this->dbHandler->quoteColumn( 'identifier' ),
                     $criterion->value
                 )
