@@ -9,12 +9,16 @@ php:
 
 # execute unit tests, integration test stubs and integration tests using legacy storage engine
 env:
-  - TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
-  - TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York"
-  - TEST_CONFIG="phpunit-integration.xml" TIMEZONE="Asia/Calcutta"
-  - TEST_CONFIG="phpunit-integration.xml" TIMEZONE="America/New_York"
-  - TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Asia/Calcutta"
-  - TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
+  global:
+    - DB_NAME="testdb"
+  matrix:
+    - TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
+    - TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York"
+    - TEST_CONFIG="phpunit-integration.xml" TIMEZONE="Asia/Calcutta"
+    - TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Europe/Oslo"
+    - TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" TIMEZONE="Asia/Calcutta"
+    - TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York"
+    - TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
 
 matrix:
   allow_failures:
@@ -29,19 +33,27 @@ matrix:
     - php: 5.3.3
       env: TEST_CONFIG="phpunit-integration.xml" TIMEZONE="America/New_York"
     - php: 5.3
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Asia/Calcutta"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" TIMEZONE="Asia/Calcutta"
+    - php: 5.3
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Europe/Oslo"
     - php: 5.3
       env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
     - php: 5.4
       env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York"
     - php: 5.4
       env: TEST_CONFIG="phpunit-integration.xml" TIMEZONE="Asia/Calcutta"
+    - php: 5.4
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York"
+    - php: 5.4
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Europe/Oslo"
     - php: 5.5
       env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York"
     - php: 5.5
-      env: TEST_CONFIG="phpunit-integration.xml" TIMEZONE="America/New_York"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Europe/Oslo"
     - php: 5.5
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Asia/Calcutta"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" TIMEZONE="Asia/Calcutta"
+    - php: 5.5
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York"
     - php: 5.5
       env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
 
@@ -52,6 +64,8 @@ branches:
 
 # setup requirements for running unit tests
 before_script:
+  - if [ $DB == "mysql" ]; then mysql -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;" -uroot ; fi
+  - if [ $DB == "postgresql" ]; then psql -c "CREATE DATABASE $DB_NAME;" -U postgres ; psql -c "CREATE EXTENSION pgcrypto;" -U postgres $DB_NAME ; fi
   - cp config.php-DEVELOPMENT config.php
   - ./composer_install_github_key.sh
   - composer install --dev --prefer-source
