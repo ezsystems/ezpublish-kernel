@@ -28,7 +28,7 @@ use eZ\Publish\Core\IO\MetadataHandler;
 class IOService
 {
     /**
-     * @var \eZ\Publish\SPI\IO\Handler
+     * @var \eZ\Publish\Core\IO\Handler
      */
     protected $ioHandler;
 

@@ -207,6 +207,7 @@ class Factory
                     sys_get_temp_dir(),
                     $urlPrefix . $binaryIOService->getInternalPath( '{path}' )
                 ),
+                'ezpage' => new FieldTypeProcessor\PageProcessor(),
             )
         );
     }

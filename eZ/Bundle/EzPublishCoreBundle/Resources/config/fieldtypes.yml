@@ -40,6 +40,7 @@ parameters:
     ezpublish.fieldType.ezpage.parameterProvider.class: eZ\Publish\Core\MVC\Symfony\FieldType\Page\ParameterProvider
     ezpublish.fieldType.ezpage.block.class: eZ\Publish\Core\FieldType\Page\Parts\Block
     ezpublish.fieldType.ezpage.zone.class: eZ\Publish\Core\FieldType\Page\Parts\Zone
+    ezpublish.fieldType.ezpage.hashConverter.class: eZ\Publish\Core\FieldType\Page\HashConverter
     ezpublish.fieldType.locale.parameterProvider.class: eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProvider\LocaleParameterProvider
 
     ezpublish.fieldType.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\Type
@@ -521,9 +522,12 @@ services:
     ezpublish.fieldType.ezpage:
         class: %ezpublish.fieldType.ezpage.class%
         parent: ezpublish.fieldType
-        arguments: [@ezpublish.fieldType.ezpage.pageService]
+        arguments: [@ezpublish.fieldType.ezpage.pageService, @ezpublish.fieldType.ezpage.hashConverter]
         tags:
             - {name: ezpublish.fieldType, alias: ezpage}
+
+    ezpublish.fieldType.ezpage.hashConverter:
+        class: %ezpublish.fieldType.ezpage.hashConverter.class%
 
     ezpublish.fieldType.ezpage.pageService.factory:
         class: %ezpublish.fieldType.ezpage.pageService.factory.class%

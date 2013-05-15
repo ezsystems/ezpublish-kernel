@@ -22,7 +22,7 @@ class RelationListProcessorTest extends PHPUnit_Framework_TestCase
     public function fieldSettingsHashes()
     {
         return array_map(
-            function( $constantName )
+            function ( $constantName )
             {
                 return array(
                     array( "selectionMethod" => $constantName ),
@@ -34,6 +34,7 @@ class RelationListProcessorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\REST\Common\FieldTypeProcessor\RelationListProcessor::preProcessFieldSettingsHash
      * @dataProvider fieldSettingsHashes
      */
     public function testPreProcessFieldSettingsHash( $inputSettings, $outputSettings )
@@ -47,6 +48,7 @@ class RelationListProcessorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\REST\Common\FieldTypeProcessor\RelationListProcessor::postProcessFieldSettingsHash
      * @dataProvider fieldSettingsHashes
      */
     public function testPostProcessFieldSettingsHash( $outputSettings, $inputSettings )

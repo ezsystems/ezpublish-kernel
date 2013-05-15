@@ -11,6 +11,9 @@ namespace eZ\Publish\Core\SignalSlot\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Slot\AbstractLegacySlot;
+use eZContentCacheManager;
+use eZContentObject;
+use eZSearch;
 
 /**
  * A legacy slot handling SwapLocationSignal.
@@ -33,9 +36,10 @@ class LegacySwapLocationSlot extends AbstractLegacySlot
         $kernel->runCallback(
             function () use ( $signal )
             {
-                \eZContentCacheManager::clearContentCacheIfNeeded( $signal->content1Id );
-                \eZContentCacheManager::clearContentCacheIfNeeded( $signal->content2Id );
-                \eZSearch::swapNode( $signal->location1Id, $signal->location2Id );
+                eZContentCacheManager::clearContentCacheIfNeeded( $signal->content1Id );
+                eZContentCacheManager::clearContentCacheIfNeeded( $signal->content2Id );
+                eZSearch::swapNode( $signal->location1Id, $signal->location2Id );
+                eZContentObject::clearCache();// Clear all object memory cache to free memory
             },
             false
         );

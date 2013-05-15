@@ -49,6 +49,14 @@ class Handler implements HandlerInterface
     }
 
     /**
+     * @return Backend
+     */
+    public function getBackend()
+    {
+        return $this->backend;
+    }
+
+    /**
      * @return \eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function contentHandler()

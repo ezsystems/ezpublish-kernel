@@ -155,6 +155,10 @@ class LegacyStorage extends Gateway
             $connection->quoteTable( 'ezcontentobject_attribute' )
         )->where(
             $selectQuery->expr->lAnd(
+                $selectQuery->expr->eq(
+                    $connection->quoteColumn( 'version', 'ezcontentobject_attribute' ),
+                    $selectQuery->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                ),
                 $selectQuery->expr->in(
                     $connection->quoteColumn( 'id', 'ezcontentobject_attribute' ),
                     $fieldIds

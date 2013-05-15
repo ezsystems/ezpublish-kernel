@@ -161,6 +161,13 @@ interface FieldType
     public function validateFieldSettings( $fieldSettings );
 
     /**
+     * Applies the default values to the fieldSettings of a FieldDefinitionCreateStruct
+     *
+     * @param mixed $fieldSettings
+     */
+    public function applyDefaultSettings( &$fieldSettings );
+
+    /**
      * Indicates if the field type supports indexing and sort keys for searching
      *
      * @return boolean

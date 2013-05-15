@@ -32,6 +32,12 @@ class Backend
     protected $data = array();
 
     /**
+     * For use to revert back to inital state
+     * @var array
+     */
+    protected $initialData = array();
+
+    /**
      * Stack of data for transactions
      *
      * Current data is always kept in $data, this is for rollbacks and transaction count.
@@ -57,6 +63,15 @@ class Backend
     public function __construct( array $data )
     {
         $this->data = $data + $this->data;
+        $this->initialData = $this->data;
+    }
+
+    /**
+     * Reset data structure
+     */
+    public function resetData()
+    {
+        $this->data = $this->initialData;
     }
 
     /**

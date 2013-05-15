@@ -9,49 +9,33 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration\InMemory;
 
-use RuntimeException;
-
 /**
  * Utils class for InMemory test
  */
 abstract class Utils
 {
     /**
-     * @param string $persistenceHandler
-     * @param string $ioHandler
-     * @param string $dsn
-     *
-     * @throws \RuntimeException
-     *
-     * @return \eZ\Publish\Core\Base\ServiceContainer
+     * @var \eZ\Publish\API\Repository\Tests\SetupFactory
      */
-    protected static function getServiceContainer(
-        $persistenceHandler = 'persistence_handler_inmemory',
-        $ioHandler = 'io_handler_inmemory',
-        $dsn = 'sqlite://:memory:'
-    )
-    {
-        // Get configuration config
-        if ( !( $settings = include ( 'config.php' ) ) )
-        {
-            throw new RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
-        }
-
-        $settings['base']['Configuration']['UseCache'] = false;
-        $settings['service']['persistence_handler']['alias'] = $persistenceHandler;
-        $settings['service']['io_handler']['alias'] = $ioHandler;
-        $settings['service']['parameters']['legacy_dsn'] = $dsn;
-
-        // Return Service Container
-        return require 'container.php';
-
-    }
+    static $setupFactory;
 
     /**
      * @return \eZ\Publish\API\Repository\Repository
      */
-    public static function getRepository()
+    final public static function getRepository()
     {
-        return self::getServiceContainer()->get( 'inner_repository' );
+        if ( static::$setupFactory === null )
+            static::$setupFactory = static::getSetupFactory();
+
+        // Return repository
+        return static::$setupFactory->getRepository();
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Tests\SetupFactory
+     */
+    protected static function getSetupFactory()
+    {
+        return new SetupFactory();
     }
 }

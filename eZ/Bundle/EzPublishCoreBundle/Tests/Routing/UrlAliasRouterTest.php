@@ -124,11 +124,10 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
                 $this->returnValueMap(
                     array(
                         array( 'url_alias_router', null, null, true ),
-                        array( 'content.tree_root.location_id', null, null, $rootLocationId ),
-                        array( 'content.tree_root.excluded_uri_prefixes', null, null, array() ),
                     )
                 )
             );
+        $this->router->setRootLocationId( $rootLocationId );
 
         $prefix = '/root/prefix';
         $this->urlALiasGenerator
@@ -185,6 +184,7 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
                     )
                 )
             );
+        $this->router->setRootLocationId( 123 );
 
         $pathInfo = '/shared/content/foo-bar';
         $destinationId = 789;

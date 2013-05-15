@@ -27,7 +27,7 @@ class MediaProcessorTest extends PHPUnit_Framework_TestCase
     public function fieldSettingsHashes()
     {
         return array_map(
-            function( $constantName )
+            function ( $constantName )
             {
                 return array(
                     array( "mediaType" => $constantName ),
@@ -39,6 +39,7 @@ class MediaProcessorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\REST\Common\FieldTypeProcessor\MediaProcessor::preProcessFieldSettingsHash
      * @dataProvider fieldSettingsHashes
      */
     public function testPreProcessFieldSettingsHash( $inputSettings, $outputSettings )
@@ -52,6 +53,7 @@ class MediaProcessorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\REST\Common\FieldTypeProcessor\MediaProcessor::postProcessFieldSettingsHash
      * @dataProvider fieldSettingsHashes
      */
     public function testPostProcessFieldSettingsHash( $outputSettings, $inputSettings )
@@ -65,7 +67,7 @@ class MediaProcessorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\DateAndTimeProcessor
+     * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\MediaProcessor
      */
     protected function getProcessor()
     {

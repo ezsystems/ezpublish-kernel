@@ -573,6 +573,9 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "FieldType '{$fieldDefinitionCreateStruct->fieldTypeIdentifier}' is not searchable"
             );
         }
+
+        $fieldType->applyDefaultSettings( $fieldDefinitionCreateStruct->fieldSettings );
+
         $validationErrors = array_merge(
             $validationErrors,
             $fieldType->validateValidatorConfiguration( $fieldDefinitionCreateStruct->validatorConfiguration ),

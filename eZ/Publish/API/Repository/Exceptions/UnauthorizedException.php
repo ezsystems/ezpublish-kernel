@@ -17,4 +17,3 @@ use Exception;
 abstract class UnauthorizedException extends Exception
 {
 }
-

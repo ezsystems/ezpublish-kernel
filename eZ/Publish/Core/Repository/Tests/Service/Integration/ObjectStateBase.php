@@ -514,9 +514,9 @@ abstract class ObjectStateBase extends BaseServiceTest
             $createdState
         );
 
+        $this->assertNotNull( $createdState->id );
         $this->assertPropertiesCorrect(
             array(
-                'id' => 3,
                 'identifier' => 'test',
                 'priority' => 0,
                 'defaultLanguageCode' => 'eng-GB',
