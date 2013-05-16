@@ -24,9 +24,15 @@ class Section extends MultipleValued
      */
     public function matchLocation( Location $location )
     {
-        $section = $this->repository->getSectionService()->loadSection(
-            $location->getContentInfo()->sectionId
+        $section = $this->repository->sudo(
+            function ( $repository ) use ( $location )
+            {
+                return $repository->getSectionService()->loadSection(
+                    $location->getContentInfo()->sectionId
+                );
+            }
         );
+
         return isset( $this->values[$section->identifier] );
     }
 
@@ -39,9 +45,15 @@ class Section extends MultipleValued
      */
     public function matchContentInfo( ContentInfo $contentInfo )
     {
-        $section = $this->repository->getSectionService()->loadSection(
-            $contentInfo->sectionId
+        $section = $this->repository->sudo(
+            function ( $repository ) use ( $contentInfo )
+            {
+                return $repository->getSectionService()->loadSection(
+                    $contentInfo->sectionId
+                );
+            }
         );
+
         return isset( $this->values[$section->identifier] );
     }
 }

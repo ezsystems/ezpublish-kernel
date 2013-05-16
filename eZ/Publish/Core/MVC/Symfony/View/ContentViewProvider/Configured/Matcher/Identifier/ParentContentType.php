@@ -24,10 +24,15 @@ class ParentContentType extends MultipleValued
      */
     public function matchLocation( APILocation $location )
     {
-        $parent = $this->repository->getLocationService()->loadLocation( $location->parentLocationId );
-        $parentContentType = $this->repository
-            ->getContentTypeService()
-            ->loadContentType( $parent->getContentInfo()->contentTypeId );
+        $parentContentType = $this->repository->sudo(
+            function ( $repository ) use ( $location )
+            {
+                $parent = $repository->getLocationService()->loadLocation( $location->parentLocationId );
+                return $repository
+                    ->getContentTypeService()
+                    ->loadContentType( $parent->getContentInfo()->contentTypeId );
+            }
+        );
 
         return isset( $this->values[$parentContentType->identifier] );
     }
@@ -41,8 +46,12 @@ class ParentContentType extends MultipleValued
      */
     public function matchContentInfo( ContentInfo $contentInfo )
     {
-        return $this->matchLocation(
-            $this->repository->getLocationService()->loadLocation( $contentInfo->mainLocationId )
+        $location = $this->repository->sudo(
+            function ( $repository ) use ( $contentInfo )
+            {
+                return $repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
+            }
         );
+        return $this->matchLocation( $location );
     }
 }
