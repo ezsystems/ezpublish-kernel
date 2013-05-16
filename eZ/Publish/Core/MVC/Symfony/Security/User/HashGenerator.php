@@ -26,7 +26,7 @@ class HashGenerator implements HashGeneratorInterface
     protected $userIdentity;
 
     /**
-     * @var \eZ\Publish\API\Repository\Repository
+     * @var \eZ\Publish\Core\Repository\Repository
      */
     protected $repository;
 
@@ -44,7 +44,12 @@ class HashGenerator implements HashGeneratorInterface
     public function generate()
     {
         $user = $this->repository->getCurrentUser();
-        $roles = $this->repository->getRoleService()->getRoleAssignmentsForUser( $user, true );
+        $roles = $this->repository->sudo(
+            function ( $repository ) use ( $user )
+            {
+                $repository->getRoleService()->getRoleAssignmentsForUser( $user, true );
+            }
+        );
         $roleIds = array();
         foreach ( $roles as $roleAssignment )
         {
