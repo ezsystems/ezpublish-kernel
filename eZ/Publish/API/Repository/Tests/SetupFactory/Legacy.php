@@ -255,13 +255,12 @@ class Legacy extends SetupFactory
     {
         if ( !self::$schemaInitialized )
         {
-            $dbHandler = $this->getDatabaseHandler();
             $statements = $this->getSchemaStatements();
 
             $this->applyStatements( $statements );
-        }
 
-        self::$schemaInitialized = true;
+            self::$schemaInitialized = true;
+        }
     }
 
     /**
