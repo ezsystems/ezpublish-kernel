@@ -32,7 +32,7 @@ class Content implements Parser
                 ->info( 'Content related configuration' )
                 ->children()
                     ->booleanNode( 'view_cache' )->defaultValue( true )->end()
-                    ->booleanNode( 'ttl_cache' )->defaultValue( false )->end()
+                    ->booleanNode( 'ttl_cache' )->defaultValue( true )->end()
                     ->scalarNode( 'default_ttl' )->info( 'Default value for TTL cache, in seconds' )->defaultValue( 60 )->end()
                     ->arrayNode( 'tree_root' )
                         ->canBeUnset()
