@@ -102,6 +102,16 @@ class LegacyKernelController
             );
         }
 
+        // Handles Content-Type header sent by legacy stack
+        $contentTypeHeaders = preg_grep( '/^content-type: (.*)/i', headers_list() );
+        if( !empty( $contentTypeHeaders ) )
+        {
+            $response->headers->set(
+                'Content-Type',
+                $contentTypeHeaders
+            );
+        }
+
         return $response;
     }
 }
