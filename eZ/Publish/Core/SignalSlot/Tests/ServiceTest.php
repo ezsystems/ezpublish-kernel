@@ -8,6 +8,10 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
+use eZ\Publish\Core\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use \PHPUnit_Framework_TestCase;
@@ -95,4 +99,74 @@ abstract class ServiceTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue( $result === $return );
     }
+
+    /**
+     * Creates a content info from $contentId and $remoteId
+     *
+     * @param mixed $contentId
+     * @param mixed $remoteId
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
+     */
+    protected function getContentInfo( $contentId, $remoteId )
+    {
+        return new ContentInfo(
+            array( 'id' => $contentId, 'remoteId' => $remoteId )
+        );
+    }
+
+    /**
+     * Creates a version info object from $contentInfo and $versionNo
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param int $versionNo
+     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
+     */
+    protected function getVersionInfo( ContentInfo $contentInfo, $versionNo )
+    {
+        return new VersionInfo(
+            array(
+                'contentInfo' => $contentInfo,
+                'versionNo' => $versionNo
+            )
+        );
+    }
+
+    /**
+     * Creates a content object from $versionInfo
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected function getContent( VersionInfo $versionInfo )
+    {
+        return new Content(
+            array(
+                'versionInfo' => $versionInfo,
+                'internalFields' => array()
+            )
+        );
+    }
+
+    /**
+     * Creates a User object from $userId, $userRemoteId and $userVersionNo
+     *
+     * @param mixed $userId
+     * @param mixed $userRemoteId
+     * @param int $userVersionNo
+     * @return \eZ\Publish\Core\Repository\Values\User\User
+     */
+    protected function getUser( $userId, $userRemoteId, $userVersionNo )
+    {
+        return new User(
+            array(
+                'content' => $this->getContent(
+                    $this->getVersionInfo(
+                        $this->getContentInfo( $userId, $userRemoteId ),
+                        $userVersionNo
+                    )
+                )
+            )
+        );
+    }
+
 }

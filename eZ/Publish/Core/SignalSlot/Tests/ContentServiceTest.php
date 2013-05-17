@@ -25,7 +25,6 @@ use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\ContentService;
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
-use \PHPUnit_Framework_TestCase;
 
 class ContentServiceTest extends ServiceTest
 {
@@ -39,33 +38,6 @@ class ContentServiceTest extends ServiceTest
     protected function getSignalSlotService( $coreService, SignalDispatcher $dispatcher )
     {
         return new ContentService( $coreService, $dispatcher );
-    }
-
-    protected function getContentInfo( $contentId, $remoteId )
-    {
-        return new ContentInfo(
-            array( 'id' => $contentId, 'remoteId' => $remoteId )
-        );
-    }
-
-    protected function getVersionInfo( ContentInfo $contentInfo, $versionNo )
-    {
-        return new VersionInfo(
-            array(
-                'contentInfo' => $contentInfo,
-                'versionNo' => $versionNo
-            )
-        );
-    }
-
-    protected function getContent( VersionInfo $versionInfo )
-    {
-        return new Content(
-            array(
-                'versionInfo' => $versionInfo,
-                'internalFields' => array()
-            )
-        );
     }
 
     public function serviceProvider()
@@ -104,16 +76,7 @@ class ContentServiceTest extends ServiceTest
         );
         $translationValues = new TranslationValues();
 
-        $user = new User(
-            array(
-                'content' => $this->getContent(
-                    $this->getVersionInfo(
-                        $this->getContentInfo( $userId, md5( 'Sauron' ) ),
-                        $userVersionNo
-                    )
-                )
-            )
-        );
+        $user = $this->getUser( $userId, md5( 'Sauron' ), $userVersionNo );
         $usersDraft = array( $versionInfo );
 
         $copiedContent = $this->getContent(
