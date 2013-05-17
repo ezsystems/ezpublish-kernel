@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Content Search handler class
+ * File containing the FieldValueMapper class
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -21,7 +21,7 @@ abstract class FieldValueMapper
      *
      * @param Field $field
      *
-     * @return void
+     * @return boolean
      */
     abstract public function canMap( Field $field );
 
@@ -30,7 +30,7 @@ abstract class FieldValueMapper
      *
      * @param Field $field
      *
-     * @return void
+     * @return mixed
      */
     abstract public function map( Field $field );
 }
