@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
 
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
@@ -164,7 +165,11 @@ class Field extends CriterionHandler
         foreach ( $fieldsInformation as $fieldTypeIdentifier => $fieldsInfo )
         {
             if ( $fieldsInfo['column'] === false )
-                continue;
+            {
+                throw new NotImplementedException(
+                    "A field of type '{$fieldTypeIdentifier}' is not searchable in the legacy search engine."
+                );
+            }
 
             $column = $this->dbHandler->quoteColumn( $fieldsInfo['column'] );
             switch ( $criterion->operator )
