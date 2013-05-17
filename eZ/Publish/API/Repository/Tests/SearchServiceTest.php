@@ -415,7 +415,7 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
-     * @expectedException \OutOfBoundsException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testInvalidFieldIdentifierRange()
     {
@@ -437,7 +437,7 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
-     * @expectedException \OutOfBoundsException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testInvalidFieldIdentifierIn()
     {
@@ -461,6 +461,28 @@ class SearchServiceTest extends BaseTest
     /**
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
+    public function testFindContentWithNonSearchableField()
+    {
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $searchService->findContent(
+            new Query(
+                array(
+                    'criterion' => new Criterion\Field(
+                        'tag_cloud_url',
+                        Criterion\Operator::EQ,
+                        'http://nimbus.com'
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                )
+            )
+        );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
     public function testFindSingleFailMultiple()
     {
         $repository    = $this->getRepository();
@@ -469,6 +491,23 @@ class SearchServiceTest extends BaseTest
         $searchService->findSingle(
             new Criterion\ContentId(
                 array( 4, 10 )
+            )
+        );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testFindSingleWithNonSearchableField()
+    {
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $searchService->findSingle(
+            new Criterion\Field(
+                'tag_cloud_url',
+                Criterion\Operator::EQ,
+                'http://nimbus.com'
             )
         );
     }
