@@ -14,6 +14,10 @@ use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\SignalSlot\Signal\SectionService\CreateSectionSignal;
+use eZ\Publish\Core\SignalSlot\Signal\SectionService\UpdateSectionSignal;
+use eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionSignal;
+use eZ\Publish\Core\SignalSlot\Signal\SectionService\DeleteSectionSignal;
 
 /**
  * SectionService class
@@ -64,7 +68,7 @@ class SectionService implements SectionServiceInterface
     {
         $returnValue = $this->service->createSection( $sectionCreateStruct );
         $this->signalDispatcher->emit(
-            new Signal\SectionService\CreateSectionSignal(
+            new CreateSectionSignal(
                 array(
                     'sectionId' => $returnValue->id,
                 )
@@ -88,7 +92,7 @@ class SectionService implements SectionServiceInterface
     {
         $returnValue = $this->service->updateSection( $section, $sectionUpdateStruct );
         $this->signalDispatcher->emit(
-            new Signal\SectionService\UpdateSectionSignal(
+            new UpdateSectionSignal(
                 array(
                     'sectionId' => $section->id,
                 )
@@ -164,7 +168,7 @@ class SectionService implements SectionServiceInterface
     {
         $returnValue = $this->service->assignSection( $contentInfo, $section );
         $this->signalDispatcher->emit(
-            new Signal\SectionService\AssignSectionSignal(
+            new AssignSectionSignal(
                 array(
                     'contentId' => $contentInfo->id,
                     'sectionId' => $section->id,
@@ -188,7 +192,7 @@ class SectionService implements SectionServiceInterface
     {
         $returnValue = $this->service->deleteSection( $section );
         $this->signalDispatcher->emit(
-            new Signal\SectionService\DeleteSectionSignal(
+            new DeleteSectionSignal(
                 array(
                     'sectionId' => $section->id,
                 )
