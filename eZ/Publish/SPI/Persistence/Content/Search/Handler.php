@@ -24,6 +24,8 @@ interface Handler
      *
      * @todo define structs for the field filters
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Query criterion is not applicable to its target
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
@@ -36,6 +38,7 @@ interface Handler
      * Performs a query for a single content object
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
      * @todo define structs for the field filters
