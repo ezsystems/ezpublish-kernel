@@ -13,6 +13,7 @@ use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\Field;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * Visits the Field criterion
@@ -37,19 +38,25 @@ class FieldIn extends Field
     /**
      * Map field value to a proper Solr representation
      *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
+     *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
      *
-     * @return void
+     * @return string
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
         $fieldTypes = $this->getFieldTypes();
+
         $criterion->value = (array)$criterion->value;
 
         if ( !isset( $fieldTypes[$criterion->target] ) )
         {
-            throw new \OutOfBoundsException( "Content type field {$criterion->target} not found." );
+            throw new InvalidArgumentException(
+                "\$criterion->target",
+                "No searchable fields found for the given criterion target '{$criterion->target}'."
+            );
         }
 
         $queries = array();

@@ -20,6 +20,7 @@ use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url;
 
 /**
  * Test case for ContentSearchHandler
@@ -146,7 +147,8 @@ class SearchHandlerTest extends LanguageAwareTestCase
                                 array(
                                     'ezint' => new Integer(),
                                     'ezstring' => new TextLine(),
-                                    'ezprice' => new Integer()
+                                    'ezprice' => new Integer(),
+                                    'ezurl' => new Url()
                                 )
                             )
                         ),
@@ -418,6 +420,43 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $content = $locator->findSingle( new Criterion\ContentId( 10 ) );
 
         $this->assertEquals( 10, $content->versionInfo->contentInfo->id );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findSingle
+     */
+    public function testFindSingleWithNonSearchableField()
+    {
+        $locator = $this->getContentSearchHandler();
+        $locator->findSingle(
+            new Criterion\Field(
+                'tag_cloud_url',
+                Criterion\Operator::EQ,
+                'http://nimbus.com'
+            )
+        );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findSingle
+     */
+    public function testFindContentWithNonSearchableField()
+    {
+        $locator = $this->getContentSearchHandler();
+        $locator->findContent(
+            new Query(
+                array(
+                    'criterion' => new Criterion\Field(
+                        'tag_cloud_url',
+                        Criterion\Operator::EQ,
+                        'http://nimbus.com'
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                )
+            )
+        );
     }
 
     /**

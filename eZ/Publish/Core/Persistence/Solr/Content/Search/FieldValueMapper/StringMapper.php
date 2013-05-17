@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Content Search handler class
+ * File containing the StringMapper class
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -24,7 +24,7 @@ class StringMapper extends FieldValueMapper
      *
      * @param Field $field
      *
-     * @return void
+     * @return boolean
      */
     public function canMap( Field $field )
     {
@@ -39,7 +39,7 @@ class StringMapper extends FieldValueMapper
      *
      * @param Field $field
      *
-     * @return void
+     * @return mixed
      */
     public function map( Field $field )
     {
