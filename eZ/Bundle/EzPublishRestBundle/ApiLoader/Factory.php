@@ -259,6 +259,7 @@ class Factory
                 $urlHandler,
                 $fieldTypeSerializer
             ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentImageVariation'       => new Output\ValueObjectVisitor\ContentImageVariation( $urlHandler ),
 
             // UserGroup
 
