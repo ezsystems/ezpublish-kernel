@@ -50,8 +50,9 @@ abstract class Field extends CriterionVisitor
     /**
      * Create from content type handler and field registry
      *
-     * @param FieldRegistry $fieldRegistry
-     * @param ContentTypeHandler $contentTypeHandler
+     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry $fieldRegistry
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator $nameGenerator
      *
      * @return void
      */
@@ -65,7 +66,7 @@ abstract class Field extends CriterionVisitor
     /**
      * Get field type information
      *
-     * @return void
+     * @return array
      */
     protected function getFieldTypes()
     {
@@ -80,7 +81,13 @@ abstract class Field extends CriterionVisitor
             {
                 foreach ( $contentType->fieldDefinitions as $fieldDefinition )
                 {
+                    if ( !$fieldDefinition->isSearchable )
+                    {
+                        continue;
+                    }
+
                     $fieldType = $this->fieldRegistry->getType( $fieldDefinition->fieldType );
+
                     foreach ( $fieldType->getIndexDefinition() as $name => $type )
                     {
                         $this->fieldTypes[$fieldDefinition->identifier][] =
@@ -96,4 +103,3 @@ abstract class Field extends CriterionVisitor
         return $this->fieldTypes;
     }
 }
-

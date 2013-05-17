@@ -9,12 +9,14 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
 
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use ezcQuerySelect;
 use RuntimeException;
 
@@ -67,12 +69,14 @@ class Field extends CriterionHandler
      * The returned information is returned as an array of the attribute
      * identifier and the sort column, which should be used.
      *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given $fieldIdentifier.
+     *
      * @caching
      * @param string $fieldIdentifier
      *
      * @return array
      */
-    protected function getFieldInformation( $fieldIdentifier )
+    protected function getFieldsInformation( $fieldIdentifier )
     {
         $query = $this->dbHandler->createSelectQuery();
         $query
@@ -88,6 +92,10 @@ class Field extends CriterionHandler
                     $query->expr->eq(
                         $this->dbHandler->quoteColumn( 'identifier', 'ezcontentclass_attribute' ),
                         $query->bindValue( $fieldIdentifier )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'is_searchable', 'ezcontentclass_attribute' ),
+                        $query->bindValue( 1, null, \PDO::PARAM_INT )
                     )
                 )
             );
@@ -96,7 +104,10 @@ class Field extends CriterionHandler
         $statement->execute();
         if ( !( $rows = $statement->fetchAll( \PDO::FETCH_ASSOC ) ) )
         {
-            throw new \OutOfBoundsException( "Content type field $fieldIdentifier not found." );
+            throw new InvalidArgumentException(
+                "\$criterion->target",
+                "No searchable fields found for the given criterion target '{$fieldIdentifier}'."
+            );
         }
 
         $fieldMapArray = array();
@@ -131,6 +142,8 @@ class Field extends CriterionHandler
      *
      * accept() must be called before calling this method.
      *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
+     *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter$converter
      * @param \ezcQuerySelect $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion$criterion
@@ -139,23 +152,26 @@ class Field extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
     {
-        $fieldInformations = $this->getFieldInformation( $criterion->target );
+        $fieldsInformation = $this->getFieldsInformation( $criterion->target );
 
         $subSelect = $query->subSelect();
-        $subSelect
-        ->select(
+        $subSelect->select(
             $this->dbHandler->quoteColumn( 'contentobject_id' )
         )->from(
             $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
         );
 
         $whereExpressions = array();
-        foreach ( $fieldInformations as $fieldInformation )
+        foreach ( $fieldsInformation as $fieldTypeIdentifier => $fieldsInfo )
         {
-            if ( $fieldInformation['column'] === false )
-                continue;
+            if ( $fieldsInfo['column'] === false )
+            {
+                throw new NotImplementedException(
+                    "A field of type '{$fieldTypeIdentifier}' is not searchable in the legacy search engine."
+                );
+            }
 
-            $column = $this->dbHandler->quoteColumn( $fieldInformation['column'] );
+            $column = $this->dbHandler->quoteColumn( $fieldsInfo['column'] );
             switch ( $criterion->operator )
             {
                 case Criterion\Operator::IN:
@@ -193,7 +209,7 @@ class Field extends CriterionHandler
             $whereExpressions[] = $subSelect->expr->lAnd(
                 $subSelect->expr->in(
                     $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
-                    $fieldInformation['ids']
+                    $fieldsInfo['ids']
                 ),
                 $filter
             );
