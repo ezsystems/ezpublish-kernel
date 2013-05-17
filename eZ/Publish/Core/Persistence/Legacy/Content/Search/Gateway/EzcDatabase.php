@@ -100,6 +100,7 @@ class EzcDatabase extends Gateway
      *
      * @todo Check Query recreation in this method. Something breaks if we reuse
      *       the query, after we have added the applyJoin() stuff here.
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
      *
      * @param Criterion $criterion
      * @param int $offset
