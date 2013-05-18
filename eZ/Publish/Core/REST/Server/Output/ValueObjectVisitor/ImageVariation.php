@@ -12,19 +12,19 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
-class ContentImageVariation extends ValueObjectVisitor
+class ImageVariation extends ValueObjectVisitor
 {
     /**
-     * @param \eZ\Publish\Core\REST\Server\Values\ContentImageVariation $data
+     * @param \eZ\Publish\SPI\Variation\Values\ImageVariation $data
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
         $generator->startObjectElement( 'ContentImageVariation' );
 
-        $generator->startValueElement( 'uri', $data->uri );
+        $generator->startValueElement( 'uri', "/" . $data->uri );
         $generator->endValueElement( 'uri' );
 
-        $generator->startValueElement( 'contentType', $data->contentType );
+        $generator->startValueElement( 'contentType', $data->mimeType );
         $generator->endValueElement( 'contentType' );
 
         $generator->startValueElement( 'width', $data->width );

@@ -26,6 +26,7 @@ use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\IO\IOService;
+use eZ\Publish\SPI\Variation\VariationHandler as ImageVariationHandler;
 
 /**
  * Content controller
@@ -41,10 +42,15 @@ class Content extends RestController
 
     /**
      * IO Service
-     *
+     * This argument is actually the instance of IOService configured for images only...
      * @var \eZ\Publish\Core\IO\IOService
      */
     protected $IOService;
+
+    /**
+     * @var ImageVariationHandler
+     */
+    protected $imageVariationHandler;
 
     /**
      * Construct controller
@@ -54,11 +60,13 @@ class Content extends RestController
      */
     public function __construct(
         Repository $repository,
-        IOService $IOService
+        IOService $IOService,
+        ImageVariationHandler $imageVariationHandler
     )
     {
         $this->repository = $repository;
         $this->IOService = $IOService;
+        $this->imageVariationHandler = $imageVariationHandler;
     }
 
     /**
@@ -731,9 +739,61 @@ class Content extends RestController
         return new Values\RestExecutedView(
             array(
                 'identifier'    => $viewInput->identifier,
-                'searchResults' => $this->searchService->findContent( $viewInput->query ),
+                'searchResults' => $this->repository->getSearchService()->findContent( $viewInput->query ),
             )
         );
+    }
+
+    /**
+     * Returns data about the image variation $variationIdentifier of image field $fieldId.
+     * Will generate the alias if it hasn't been generated yet.
+     *
+     * @param int $fieldId
+     * @param string $variationIdentifier
+     * @throws NotFoundException if the content or image field aren't found
+     */
+    public function getImageVariation()
+    {
+        $urlArguments = $this->urlHandler->parse( 'getImageVariation', $this->request->path );
+        $fieldId = $urlArguments['fieldId'];
+        $contentId = $urlArguments['contentId'];
+        $variationIdentifier = $urlArguments['variationIdentifier'];
+
+        $content = $this->repository->getContentService()->loadContent( $contentId );
+
+        $fieldFound = false;
+        /** @var $field \eZ\Publish\API\Repository\Values\Content\Field */
+        foreach( $content->getFields() as $field )
+        {
+            if ( $field->id == $fieldId )
+            {
+                $fieldFound = true;
+                break;
+            }
+        }
+
+        if ( !$fieldFound )
+        {
+            throw new Exceptions\NotFoundException( "No image field with ID $fieldId could be found" );
+        }
+
+        if ( !isset( $this->imageVariationService ) )
+            $this->imageVariationService = $this->container->get( 'ezpublish.fieldType.ezimage.variation_service' );
+
+        $versionInfo = $this->repository->getContentService()->loadVersionInfo( $content->contentInfo );
+
+        try
+        {
+            return $this->imageVariationHandler->getVariation(
+                $field, $versionInfo, $variationIdentifier
+            );
+        }
+        catch ( InvalidVariationException $e )
+        {
+            throw new Exceptions\NotFoundException( $e->getMessage(), 0, $e );
+        }
+
+        return $variation;
     }
 
     /**

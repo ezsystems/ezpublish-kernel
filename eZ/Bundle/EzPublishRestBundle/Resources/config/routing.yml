@@ -79,6 +79,15 @@ ezpublish_rest_loadContent:
     requirements:
         contentId: \d+
 
+ezpublish_rest_getContentImageVariant:
+    path: /content/image/{contentId}/{fieldId}/{variationIdentifier}
+    defaults:
+        _controller: ezpublish_rest.controller.content:getImageVariation
+    methods: [GET]
+    requirements:
+        fieldId: \d+
+        contentId: \d+
+
 ezpublish_rest_deleteContent:
     path: /content/objects/{contentId}
     defaults:
