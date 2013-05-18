@@ -24,7 +24,7 @@ use eZ\Publish\API\Repository\Exceptions\ContentValidationException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 
-use eZ\Publish\API\Repository;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\IO\IOService;
 
 /**
@@ -49,8 +49,8 @@ class Content extends RestController
     /**
      * Construct controller
      *
-     * @param \eZ\Publish\API\Repository $repository
-     * @param \eZ\Publish\Core\IO\IOService $searchService
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\Core\IO\IOService $IOService
      */
     public function __construct(
         Repository $repository,
@@ -75,7 +75,7 @@ class Content extends RestController
             throw new BadRequestException( "'remoteId' parameter is required." );
         }
 
-        $contentInfo = $this->getContentService()->loadContentInfoByRemoteId( $this->request->variables['remoteId'] );
+        $contentInfo = $this->repository->getContentService()->loadContentInfoByRemoteId( $this->request->variables['remoteId'] );
 
         return new Values\TemporaryRedirect(
             $this->urlHandler->generate(
@@ -99,9 +99,9 @@ class Content extends RestController
 
         $urlValues = $this->urlHandler->parse( 'object', $requestPath );
 
-        $contentInfo = $this->getContentService()->loadContentInfo( $urlValues['object'] );
-        $mainLocation = $this->getLocationService()->loadLocation( $contentInfo->mainLocationId );
-        $contentType = $this->getContentTypeService()->loadContentType( $contentInfo->contentTypeId );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo( $urlValues['object'] );
+        $mainLocation = $this->repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
+        $contentType = $this->repository->getContentTypeService()->loadContentType( $contentInfo->contentTypeId );
 
         $contentVersion = null;
         $relations = null;
@@ -113,8 +113,8 @@ class Content extends RestController
                 $languages = explode( ',', $this->request->variables['languages'] );
             }
 
-            $contentVersion = $this->getContentService()->loadContent( $urlValues['object'], $languages );
-            $relations = $this->getContentService()->loadRelations( $contentVersion->getVersionInfo() );
+            $contentVersion = $this->repository->getContentService()->loadContent( $urlValues['object'], $languages );
+            $relations = $this->repository->getContentService()->loadRelations( $contentVersion->getVersionInfo() );
         }
 
         return new Values\RestContent(
@@ -143,13 +143,13 @@ class Content extends RestController
 
         $values = $this->urlHandler->parse( 'object', $this->request->path );
         $contentId = (int)$values['object'];
-        $contentInfo = $this->getContentService()->loadContentInfo( $contentId );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo( $contentId );
 
         // update section
         if ( $updateStruct->sectionId !== null )
         {
-            $section = $this->getSectionService->loadSection( $updateStruct->sectionId );
-            $this->getSectionService->assignSection( $contentInfo, $section );
+            $section = $this->repository->getSectionService->loadSection( $updateStruct->sectionId );
+            $this->repository->getSectionService->assignSection( $contentInfo, $section );
             $updateStruct->sectionId = null;
         }
 
@@ -162,15 +162,15 @@ class Content extends RestController
             if ( $propertyName !== 'sectionId' && $propertyValue !== null )
             {
                 // update content
-                $this->getContentService()->updateContentMetadata( $contentInfo, $updateStruct );
-                $contentInfo = $this->getContentService()->loadContentInfo( $contentId );
+                $this->repository->getContentService()->updateContentMetadata( $contentInfo, $updateStruct );
+                $contentInfo = $this->repository->getContentService()->loadContentInfo( $contentId );
                 break;
             }
         }
 
         try
         {
-            $locationInfo = $this->getLocationService()->loadLocation( $contentInfo->mainLocationId );
+            $locationInfo = $this->repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
         }
         catch ( NotFoundException $e )
         {
@@ -192,8 +192,8 @@ class Content extends RestController
     {
         $urlValues = $this->urlHandler->parse( 'objectCurrentVersion', $this->request->path );
 
-        $versionInfo = $this->getContentService()->loadVersionInfo(
-            $this->getContentService()->loadContentInfo( $urlValues['object'] )
+        $versionInfo = $this->repository->getContentService()->loadVersionInfo(
+            $this->repository->getContentService()->loadContentInfo( $urlValues['object'] )
         );
 
         return new Values\TemporaryRedirect(
@@ -225,19 +225,19 @@ class Content extends RestController
             $languages = explode( ',', $this->request->variables['languages'] );
         }
 
-        $content = $this->getContentService()->loadContent(
+        $content = $this->repository->getContentService()->loadContent(
             $urlValues['object'],
             $languages,
             $urlValues['version']
         );
-        $contentType = $this->getContentTypeService()->loadContentType(
+        $contentType = $this->repository->getContentTypeService()->loadContentType(
             $content->getVersionInfo()->getContentInfo()->contentTypeId
         );
 
         return new Values\Version(
             $content,
             $contentType,
-            $this->getContentService()->loadRelations( $content->getVersionInfo() ),
+            $this->repository->getContentService()->loadRelations( $content->getVersionInfo() ),
             $this->request->path
         );
     }
@@ -264,7 +264,7 @@ class Content extends RestController
 
         try
         {
-            $content = $this->getContentService()->createContent(
+            $content = $this->repository->getContentService()->createContent(
                 $contentCreate->contentCreateStruct,
                 array( $contentCreate->locationCreateStruct )
             );
@@ -284,10 +284,10 @@ class Content extends RestController
         if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.content' )
         {
             $contentValue = $content;
-            $contentType = $this->getContentTypeService()->loadContentType(
+            $contentType = $this->repository->getContentTypeService()->loadContentType(
                 $content->getVersionInfo()->getContentInfo()->contentTypeId
             );
-            $relations = $this->getContentService()->loadRelations( $contentValue->getVersionInfo() );
+            $relations = $this->repository->getContentService()->loadRelations( $contentValue->getVersionInfo() );
         }
 
         return new Values\CreatedContent(
@@ -313,8 +313,8 @@ class Content extends RestController
     {
         $urlValues = $this->urlHandler->parse( 'object', $this->request->path );
 
-        $this->getContentService()->deleteContent(
-            $this->getContentService()->loadContentInfo( $urlValues['object'] )
+        $this->repository->getContentService()->deleteContent(
+            $this->repository->getContentService()->loadContentInfo( $urlValues['object'] )
         );
 
         return new Values\NoContent();
@@ -331,9 +331,9 @@ class Content extends RestController
         $destinationValues = $this->urlHandler->parse( 'location', $this->request->destination );
 
         $parentLocationParts = explode( '/', $destinationValues['location'] );
-        $copiedContent = $this->getContentService()->copyContent(
-            $this->getContentService()->loadContentInfo( $urlValues['object'] ),
-            $this->getLocationService()->newLocationCreateStruct( array_pop( $parentLocationParts ) )
+        $copiedContent = $this->repository->getContentService()->copyContent(
+            $this->repository->getContentService()->loadContentInfo( $urlValues['object'] ),
+            $this->repository->getLocationService()->newLocationCreateStruct( array_pop( $parentLocationParts ) )
         );
 
         return new Values\ResourceCreated(
@@ -355,8 +355,8 @@ class Content extends RestController
         $urlValues = $this->urlHandler->parse( 'objectVersions', $this->request->path );
 
         return new Values\VersionList(
-            $this->getContentService()->loadVersions(
-                $this->getContentService()->loadContentInfo( $urlValues['object'] )
+            $this->repository->getContentService()->loadVersions(
+                $this->repository->getContentService()->loadContentInfo( $urlValues['object'] )
             ),
             $this->request->path
         );
@@ -371,8 +371,8 @@ class Content extends RestController
     {
         $urlValues = $this->urlHandler->parse( 'objectVersion', $this->request->path );
 
-        $versionInfo = $this->getContentService()->loadVersionInfo(
-            $this->getContentService()->loadContentInfo( $urlValues['object'] ),
+        $versionInfo = $this->repository->getContentService()->loadVersionInfo(
+            $this->repository->getContentService()->loadContentInfo( $urlValues['object'] ),
             $urlValues['version']
         );
 
@@ -381,7 +381,7 @@ class Content extends RestController
             throw new ForbiddenException( 'Version in status PUBLISHED cannot be deleted' );
         }
 
-        $this->getContentService()->deleteVersion(
+        $this->repository->getContentService()->deleteVersion(
             $versionInfo
         );
 
@@ -397,11 +397,11 @@ class Content extends RestController
     {
         $urlValues = $this->urlHandler->parse( 'objectVersion', $this->request->path );
 
-        $contentInfo = $this->getContentService()->loadContentInfo( $urlValues['object'] );
-        $contentType = $this->getContentTypeService()->loadContentType( $contentInfo->contentTypeId );
-        $contentDraft = $this->getContentService()->createContentDraft(
+        $contentInfo = $this->repository->getContentService()->loadContentInfo( $urlValues['object'] );
+        $contentType = $this->repository->getContentTypeService()->loadContentType( $contentInfo->contentTypeId );
+        $contentDraft = $this->repository->getContentService()->createContentDraft(
             $contentInfo,
-            $this->getContentService()->loadVersionInfo(
+            $this->repository->getContentService()->loadVersionInfo(
                 $contentInfo, $urlValues['version']
             )
         );
@@ -411,7 +411,7 @@ class Content extends RestController
                 'version' => new Values\Version(
                     $contentDraft,
                     $contentType,
-                    $this->getContentService()->loadRelations( $contentDraft->getVersionInfo() )
+                    $this->repository->getContentService()->loadRelations( $contentDraft->getVersionInfo() )
                 )
             )
         );
@@ -426,9 +426,9 @@ class Content extends RestController
     {
         $urlValues = $this->urlHandler->parse( 'objectCurrentVersion', $this->request->path );
 
-        $contentInfo = $this->getContentService()->loadContentInfo( $urlValues['object'] );
-        $contentType = $this->getContentTypeService()->loadContentType( $contentInfo->contentTypeId );
-        $versionInfo = $this->getContentService()->loadVersionInfo(
+        $contentInfo = $this->repository->getContentService()->loadContentInfo( $urlValues['object'] );
+        $contentType = $this->repository->getContentTypeService()->loadContentType( $contentInfo->contentTypeId );
+        $versionInfo = $this->repository->getContentService()->loadVersionInfo(
             $contentInfo
         );
 
@@ -437,14 +437,14 @@ class Content extends RestController
             throw new ForbiddenException( 'Current version is already in status DRAFT' );
         }
 
-        $contentDraft = $this->getContentService()->createContentDraft( $contentInfo );
+        $contentDraft = $this->repository->getContentService()->createContentDraft( $contentInfo );
 
         return new Values\CreatedVersion(
             array(
                 'version' => new Values\Version(
                     $contentDraft,
                     $contentType,
-                    $this->getContentService()->loadRelations( $contentDraft->getVersionInfo() )
+                    $this->repository->getContentService()->loadRelations( $contentDraft->getVersionInfo() )
                 )
             )
         );
@@ -473,8 +473,8 @@ class Content extends RestController
             )
         );
 
-        $versionInfo = $this->getContentService()->loadVersionInfo(
-            $this->getContentService()->loadContentInfo( $urlValues['object'] ),
+        $versionInfo = $this->repository->getContentService()->loadVersionInfo(
+            $this->repository->getContentService()->loadContentInfo( $urlValues['object'] ),
             $urlValues['version']
         );
 
@@ -485,7 +485,7 @@ class Content extends RestController
 
         try
         {
-            $this->getContentService()->updateContent( $versionInfo, $contentUpdateStruct );
+            $this->repository->getContentService()->updateContent( $versionInfo, $contentUpdateStruct );
         }
         catch ( ContentValidationException $e )
         {
@@ -503,19 +503,19 @@ class Content extends RestController
         }
 
         // Reload the content to handle languages GET parameter
-        $content = $this->getContentService()->loadContent(
+        $content = $this->repository->getContentService()->loadContent(
             $urlValues['object'],
             $languages,
             $versionInfo->versionNo
         );
-        $contentType = $this->getContentTypeService()->loadContentType(
+        $contentType = $this->repository->getContentTypeService()->loadContentType(
             $content->getVersionInfo()->getContentInfo()->contentTypeId
         );
 
         return new Values\Version(
             $content,
             $contentType,
-            $this->getContentService()->loadRelations( $content->getVersionInfo() ),
+            $this->repository->getContentService()->loadRelations( $content->getVersionInfo() ),
             $this->request->path
         );
     }
@@ -529,8 +529,8 @@ class Content extends RestController
     {
         $urlValues = $this->urlHandler->parse( 'objectVersion', $this->request->path );
 
-        $versionInfo = $this->getContentService()->loadVersionInfo(
-            $this->getContentService()->loadContentInfo( $urlValues['object'] ),
+        $versionInfo = $this->repository->getContentService()->loadVersionInfo(
+            $this->repository->getContentService()->loadContentInfo( $urlValues['object'] ),
             $urlValues['version']
         );
 
@@ -539,7 +539,7 @@ class Content extends RestController
             throw new ForbiddenException( 'Only version in status DRAFT can be published' );
         }
 
-        $this->getContentService()->publishVersion(
+        $this->repository->getContentService()->publishVersion(
             $versionInfo
         );
 
@@ -555,7 +555,7 @@ class Content extends RestController
     {
         $urlValues = $this->urlHandler->parse( 'objectrelations', $this->request->path );
 
-        $contentInfo = $this->getContentService()->loadContentInfo( $urlValues['object'] );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo( $urlValues['object'] );
         return new Values\TemporaryRedirect(
             $this->urlHandler->generate(
                 'objectVersionRelations',
@@ -582,9 +582,9 @@ class Content extends RestController
         $offset = isset( $this->request->variables['offset'] ) ? (int)$this->request->variables['offset'] : 0;
         $limit = isset( $this->request->variables['limit'] ) ? (int)$this->request->variables['limit'] : -1;
 
-        $relationList = $this->getContentService()->loadRelations(
-            $this->getContentService()->loadVersionInfo(
-                $this->getContentService()->loadContentInfo( $urlValues['object'] ),
+        $relationList = $this->repository->getContentService()->loadRelations(
+            $this->repository->getContentService()->loadVersionInfo(
+                $this->repository->getContentService()->loadContentInfo( $urlValues['object'] ),
                 $urlValues['version']
             )
         );
@@ -612,9 +612,9 @@ class Content extends RestController
     {
         $urlValues = $this->urlHandler->parse( 'objectVersionRelation', $this->request->path );
 
-        $relationList = $this->getContentService()->loadRelations(
-            $this->getContentService()->loadVersionInfo(
-                $this->getContentService()->loadContentInfo( $urlValues['object'] ),
+        $relationList = $this->repository->getContentService()->loadRelations(
+            $this->repository->getContentService()->loadVersionInfo(
+                $this->repository->getContentService()->loadContentInfo( $urlValues['object'] ),
                 $urlValues['version']
             )
         );
@@ -639,12 +639,12 @@ class Content extends RestController
     {
         $urlValues = $this->urlHandler->parse( 'objectVersionRelation', $this->request->path );
 
-        $versionInfo = $this->getContentService()->loadVersionInfo(
-            $this->getContentService()->loadContentInfo( $urlValues['object'] ),
+        $versionInfo = $this->repository->getContentService()->loadVersionInfo(
+            $this->repository->getContentService()->loadContentInfo( $urlValues['object'] ),
             $urlValues['version']
         );
 
-        $versionRelations = $this->getContentService()->loadRelations( $versionInfo );
+        $versionRelations = $this->repository->getContentService()->loadRelations( $versionInfo );
         foreach ( $versionRelations as $relation )
         {
             if ( $relation->id == $urlValues['relation'] )
@@ -659,7 +659,7 @@ class Content extends RestController
                     throw new ForbiddenException( "Relation of type COMMON can only be removed from drafts" );
                 }
 
-                $this->getContentService()->deleteRelation( $versionInfo, $relation->getDestinationContentInfo() );
+                $this->repository->getContentService()->deleteRelation( $versionInfo, $relation->getDestinationContentInfo() );
                 return new Values\NoContent();
             }
         }
@@ -682,8 +682,8 @@ class Content extends RestController
             )
         );
 
-        $contentInfo = $this->getContentService()->loadContentInfo( $urlValues['object'] );
-        $versionInfo = $this->getContentService()->loadVersionInfo( $contentInfo, $urlValues['version'] );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo( $urlValues['object'] );
+        $versionInfo = $this->repository->getContentService()->loadVersionInfo( $contentInfo, $urlValues['version'] );
         if ( $versionInfo->status !== VersionInfo::STATUS_DRAFT )
         {
             throw new ForbiddenException( "Relation of type COMMON can only be added to drafts" );
@@ -691,14 +691,14 @@ class Content extends RestController
 
         try
         {
-            $destinationContentInfo = $this->getContentService()->loadContentInfo( $destinationContentId );
+            $destinationContentInfo = $this->repository->getContentService()->loadContentInfo( $destinationContentId );
         }
         catch ( NotFoundException $e )
         {
             throw new ForbiddenException( $e->getMessage() );
         }
 
-        $existingRelations = $this->getContentService()->loadRelations( $versionInfo );
+        $existingRelations = $this->repository->getContentService()->loadRelations( $versionInfo );
         foreach ( $existingRelations as $existingRelation )
         {
             if ( $existingRelation->getDestinationContentInfo()->id == $destinationContentId )
@@ -707,7 +707,7 @@ class Content extends RestController
             }
         }
 
-        $relation = $this->getContentService()->addRelation( $versionInfo, $destinationContentInfo );
+        $relation = $this->repository->getContentService()->addRelation( $versionInfo, $destinationContentInfo );
         return new Values\CreatedRelation(
             array(
                 'relation' => new Values\RestRelation( $relation, $urlValues['object'], $urlValues['version'] )
