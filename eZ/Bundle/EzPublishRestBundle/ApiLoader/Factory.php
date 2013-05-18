@@ -179,6 +179,11 @@ class Factory
         $binaryIOService = $this->container->get(
             'ezpublish.fieldtype.ezbinaryfile.ioservice'
         );
+
+        $configResolver = $this->container->get( 'ezpublish.config.resolver' );
+        $variationsIdentifiers = array_keys( $configResolver->getParameter( 'image_variations' ) );
+        sort( $variationsIdentifiers );
+
         return new Common\FieldTypeProcessorRegistry(
             array(
                 'ezimage' => new FieldTypeProcessor\ImageProcessor(
@@ -189,12 +194,7 @@ class Factory
                     // @todo get configuration
                     'http://example.com/fancy_site/{variant}/images/{path}',
                     // Image variants (names only)
-                    // @todo get configuration
-                    array(
-                        'original' => 'image/jpeg',
-                        'gallery' => 'image/jpeg',
-                        'thumbnail' => 'image/png',
-                    )
+                    $variationsIdentifiers
                 ),
                 'ezdatetime' => new FieldTypeProcessor\DateAndTimeProcessor(),
                 'ezdate' => new FieldTypeProcessor\DateProcessor(),

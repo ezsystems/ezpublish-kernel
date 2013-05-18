@@ -19,16 +19,13 @@ class ImageProcessor extends BinaryInputProcessor
     protected $urlTemplate;
 
     /**
-     * Array of variant names and content types
+     * Array of variants identifiers
      *
      * <code>
-     * array(
-     *      'small' => 'image/jpeg',
-     *      'thumbnail' => 'image/png',
-     * )
+     * array( 'small', 'thumbnail', 'large' )
      * </code>
      *
-     * @var string[][]
+     * @var string[]
      */
     protected $variants;
 
@@ -42,6 +39,21 @@ class ImageProcessor extends BinaryInputProcessor
         parent::__construct( $temporaryDirectory );
         $this->urlTemplate = $urlTemplate;
         $this->variants = $variants;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function postProcessValueHash( $outgoingValueHash )
+    {
+        if ( !is_array( $outgoingValueHash ) )
+        {
+            return $outgoingValueHash;
+        }
+
+        $outgoingValueHash['path'] = '/' . $outgoingValueHash['path'];
+        $outgoingValueHash['variants'] = $this->variants;
+        return $outgoingValueHash;
     }
 
     /**
