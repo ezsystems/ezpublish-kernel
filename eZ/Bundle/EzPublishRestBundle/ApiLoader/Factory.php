@@ -255,11 +255,11 @@ class Factory
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\VersionList'                 => new Output\ValueObjectVisitor\VersionList( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedVersion'              => new Output\ValueObjectVisitor\CreatedVersion( $urlHandler, $fieldTypeSerializer ),
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo'           => new Output\ValueObjectVisitor\VersionInfo( $urlHandler ),
+            '\\eZ\\Publish\\SPI\\Variation\\Values\\ImageVariation'                  => new Output\ValueObjectVisitor\ImageVariation( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\Version'                     => new Output\ValueObjectVisitor\Version(
                 $urlHandler,
                 $fieldTypeSerializer
             ),
-            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentImageVariation'       => new Output\ValueObjectVisitor\ContentImageVariation( $urlHandler ),
 
             // UserGroup
 
