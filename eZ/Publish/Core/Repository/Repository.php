@@ -37,7 +37,7 @@ class Repository implements RepositoryInterface
      *
      * @var \eZ\Publish\API\Repository\Values\User\User
      */
-    protected $user;
+    protected $currentUser;
 
     /**
      * Flag to specify if current execution is sudo mode, only set by {@see sudo()}.
@@ -205,12 +205,12 @@ class Repository implements RepositoryInterface
      */
     public function getCurrentUser()
     {
-        if ( !$this->user instanceof User )
+        if ( !$this->currentUser instanceof User )
         {
-            $this->user = $this->getUserService()->loadAnonymousUser();
+            $this->currentUser = $this->getUserService()->loadAnonymousUser();
         }
 
-        return $this->user;
+        return $this->currentUser;
     }
 
     /**
@@ -225,7 +225,7 @@ class Repository implements RepositoryInterface
         if ( !$user->id )
             throw new InvalidArgumentValue( '$user->id', $user->id );
 
-        $this->user = $user;
+        $this->currentUser = $user;
     }
 
     /**
