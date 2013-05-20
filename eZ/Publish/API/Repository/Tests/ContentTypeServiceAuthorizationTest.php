@@ -188,7 +188,6 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
-     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceAuthorizationTest::testAddFieldDefinition
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAddFieldDefinition
      */
