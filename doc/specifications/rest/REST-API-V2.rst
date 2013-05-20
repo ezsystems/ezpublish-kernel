@@ -1565,13 +1565,16 @@ Load an image variation
 :Resource: /content/image/<imageVariationId>/<variationIdentifier>
 :Method: GET
 :Description: Loads an image variation
-:Response:
-
-:Headers:
+:Request:
+    :Headers:
         :Accept:
              :application/vnd.ez.api.ImageVariation+xml:  if set the image is returned in xml format
              :application/vnd.ez.api.ImageVariation+json:  if set the image is returned in json format
 :Response:
+    :Headers:
+        :Content-Type:
+             :application/vnd.ez.api.ImageVariation+xml:  the ImageVariation in XML format
+             :application/vnd.ez.api.ImageVariation+json:  the ImageVariation in JSON format
 
 .. code:: http
 
@@ -1579,7 +1582,7 @@ Load an image variation
         Content-Type: <depending on Accept header>
         Content-Length: xxx
 
-..code:: xml
+.. code:: xml
 
         <ImageVariation href="/content/image/123-12345/large" media-type="application/vnd.ez.api.ImageVariation+xml">
             <uri>/var/ezdemo_site/storage/images/media/images/challenge-accepted/35804-1-eng-GB/Challenge-accepted.jpg</uri>
