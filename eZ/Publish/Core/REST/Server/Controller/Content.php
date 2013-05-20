@@ -755,8 +755,13 @@ class Content extends RestController
     public function getImageVariation()
     {
         $urlArguments = $this->urlHandler->parse( 'getImageVariation', $this->request->path );
-        $fieldId = $urlArguments['fieldId'];
-        $contentId = $urlArguments['contentId'];
+
+        $idArray = explode( '-', $urlArguments['imageVariationId'] );
+        if ( count( $idArray ) != 2 )
+        {
+            throw new Exceptions\NotFoundException( "Invalid image variation ID {$urlArguments['imageVariationId']}" );
+        }
+        list( $contentId, $fieldId ) = $idArray;
         $variationIdentifier = $urlArguments['variationIdentifier'];
 
         $content = $this->repository->getContentService()->loadContent( $contentId );

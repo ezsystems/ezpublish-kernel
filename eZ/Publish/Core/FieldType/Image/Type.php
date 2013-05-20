@@ -317,6 +317,7 @@ class Type extends FieldType
             'fileName' => $value->fileName,
             'fileSize' => $value->fileSize,
             'path' => $value->path,
+            'imageVariationId' => $value->imageVariationId,
         );
     }
 
@@ -369,6 +370,9 @@ class Type extends FieldType
                     : null ),
                 'path' => ( isset( $fieldValue->data['path'] )
                     ? $fieldValue->data['path']
+                    : null ),
+                'imageVariationId' => ( isset( $fieldValue->data['imageVariationId'] )
+                    ? $fieldValue->data['imageVariationId']
                     : null ),
             )
         );

@@ -192,7 +192,7 @@ class Factory
                     sys_get_temp_dir(),
                     // URL schema for image links
                     // @todo get configuration
-                    'http://example.com/fancy_site/{variant}/images/{path}',
+                    $this->container->get( 'ezpublish_rest.url_handler' ),
                     // Image variants (names only)
                     $variationsIdentifiers
                 ),
