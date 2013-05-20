@@ -57,9 +57,14 @@ class Value extends BaseValue
     public $path;
 
     /**
+     * @var mixed
+     */
+    public $imageVariationId;
+
+    /**
      * Construct a new Value object.
      *
-     * @param array $fileData
+     * @param array $imageData
      */
     public function __construct( array $imageData = array() )
     {

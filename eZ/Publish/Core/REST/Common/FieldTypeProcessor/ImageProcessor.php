@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
+use eZ\Publish\Core\REST\Common\UrlHandler;
+
 class ImageProcessor extends BinaryInputProcessor
 {
     /**
@@ -30,14 +32,19 @@ class ImageProcessor extends BinaryInputProcessor
     protected $variants;
 
     /**
+     * @var \eZ\Publish\Core\REST\Common\UrlHandler
+     */
+    protected $urlHandler;
+
+    /**
      * @param string $temporaryDirectory
-     * @param string $urlTemplate
+     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param array $variants
      */
-    public function __construct( $temporaryDirectory, $urlTemplate, array $variants )
+    public function __construct( $temporaryDirectory, $urlHandler, array $variants )
     {
         parent::__construct( $temporaryDirectory );
-        $this->urlTemplate = $urlTemplate;
+        $this->urlHandler = $urlHandler;
         $this->variants = $variants;
     }
 
@@ -52,7 +59,19 @@ class ImageProcessor extends BinaryInputProcessor
         }
 
         $outgoingValueHash['path'] = '/' . $outgoingValueHash['path'];
-        $outgoingValueHash['variants'] = $this->variants;
+        foreach( $this->variants as $variationIdentifier )
+        {
+            $outgoingValueHash['variants'][$variationIdentifier] = array(
+                'href' => $this->urlHandler->generate(
+                    'getImageVariation',
+                    array(
+                        'imageVariationId' => $outgoingValueHash['imageVariationId'],
+                        'variationIdentifier' => $variationIdentifier
+                    )
+                ),
+            );
+        }
+
         return $outgoingValueHash;
     }
 

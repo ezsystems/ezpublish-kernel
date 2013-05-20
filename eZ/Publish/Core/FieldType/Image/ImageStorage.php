@@ -206,6 +206,7 @@ class ImageStorage extends GatewayBasedStorage
             }
 
             $field->value->data['fileSize'] = $binaryFile->size;
+            $field->value->data['imageVariationId'] = $versionInfo->contentInfo->id . '-' . $field->id;
         }
     }
 
