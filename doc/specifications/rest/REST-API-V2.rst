@@ -212,6 +212,7 @@ In the content module there are the root collections objects, locations, trash a
 /content/objects/<ID>/versions/<no>/relations/<ID>    .                   load relation details   .                            delete relation
 /content/objects/<ID>/locations                       create location     load locations of cont- .                            .
                                                                           ent
+/content/image/<variationId>/<variationIdentifier>    .                   get variation           .                            .
 /content/locations                                    .                   list/find locations     .                            .
 /content/locations/<path>                             .                   load a location         update location              delete location  copy subtree
 /content/locations/<path>/children                    .                   load children           .                            .
@@ -1558,6 +1559,39 @@ Delete a relation
     :401: If the user is not authorized to delete this relation
     :403: If the relation is not of type COMMON or the given version is not a draft
 
+
+Load an image variation
+```````````````````````
+:Resource: /content/image/<imageVariationId>/<variationIdentifier>
+:Method: GET
+:Description: Loads an image variation
+:Response:
+
+:Headers:
+        :Accept:
+             :application/vnd.ez.api.ImageVariation+xml:  if set the image is returned in xml format
+             :application/vnd.ez.api.ImageVariation+json:  if set the image is returned in json format
+:Response:
+
+.. code:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: <depending on Accept header>
+        Content-Length: xxx
+
+..code:: xml
+
+        <ImageVariation href="/content/image/123-12345/large" media-type="application/vnd.ez.api.ImageVariation+xml">
+            <uri>/var/ezdemo_site/storage/images/media/images/challenge-accepted/35804-1-eng-GB/Challenge-accepted.jpg</uri>
+            <content-type>image/jpg</content-type>
+            <width>640</width>
+            <height>400</height>
+            <fileSize>90387</fileSize>
+        </ImageVariation>
+
+:Error Codes:
+    :404: If the imageVariationIdentifier or variationId aren't found
+    :401: If the user is not authorized to read this object
 
 
 Managing Locations
