@@ -212,7 +212,8 @@ In the content module there are the root collections objects, locations, trash a
 /content/objects/<ID>/versions/<no>/relations/<ID>    .                   load relation details   .                            delete relation
 /content/objects/<ID>/locations                       create location     load locations of cont- .                            .
                                                                           ent
-/content/image/<variationId>/<variationIdentifier>    .                   get variation           .                            .
+/content/binary/images/<imageId>/variations/<variati- .                   get variation           .                            .
+onIdentifier>
 /content/locations                                    .                   list/find locations     .                            .
 /content/locations/<path>                             .                   load a location         update location              delete location  copy subtree
 /content/locations/<path>/children                    .                   load children           .                            .
@@ -1562,7 +1563,7 @@ Delete a relation
 
 Load an image variation
 ```````````````````````
-:Resource: /content/binary/image/<imageId>/<variationIdentifier>
+:Resource: /content/binary/images/<imageId>/variations/<variationIdentifier>
 :Method: GET
 :Description: Loads an image variation
 :Request:
@@ -1584,7 +1585,7 @@ Load an image variation
 
 .. code:: xml
 
-        <ImageVariation href="/content/image/123-12345/large" media-type="application/vnd.ez.api.ImageVariation+xml">
+        <ImageVariation href="/content/binary/images/123-12345/variations/large" media-type="application/vnd.ez.api.ImageVariation+xml">
             <uri>/var/ezdemo_site/storage/images/media/images/challenge-accepted/35804-1-eng-GB/Challenge-accepted.jpg</uri>
             <contentType>image/jpg</contentType>
             <width>640</width>
