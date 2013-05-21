@@ -20,6 +20,17 @@ class ImageVariation extends ValueObjectVisitor
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
         $generator->startObjectElement( 'ContentImageVariation' );
+        $generator->startAttribute(
+            'href',
+            $this->urlHandler->generate(
+                'getImageVariation',
+                array(
+                    'imageVariationId' => 'fake-id',
+                    'variationIdentifier' => $data->name
+                )
+            )
+        );
+        $generator->endAttribute( 'href' );
 
         $generator->startValueElement( 'uri', "/" . $data->uri );
         $generator->endValueElement( 'uri' );
