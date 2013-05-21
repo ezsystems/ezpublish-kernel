@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
 use eZ\Publish\Core\Repository\Values\User\User;
+use eZ\Publish\Core\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\Content;
@@ -163,6 +164,28 @@ abstract class ServiceTest extends PHPUnit_Framework_TestCase
                     $this->getVersionInfo(
                         $this->getContentInfo( $userId, $userRemoteId ),
                         $userVersionNo
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * Returns a new UserGroup
+     *
+     * @param mixed $groupId
+     * @param mixed $groupRemoteId
+     * @param int $groupVersioNo
+     * @return \eZ\Publish\Core\Repository\Values\User\UserGroup
+     */
+    protected function getUserGroup( $groupId, $groupRemoteId, $groupVersioNo )
+    {
+        return new UserGroup(
+            array(
+                'content' => $this->getContent(
+                    $this->getVersionInfo(
+                        $this->getContentInfo( $groupId, $groupRemoteId ),
+                        $groupVersioNo
                     )
                 )
             )

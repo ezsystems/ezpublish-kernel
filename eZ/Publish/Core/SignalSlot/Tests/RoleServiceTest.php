@@ -14,7 +14,6 @@ use eZ\Publish\Core\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\Core\Repository\Values\User\Role;
 use eZ\Publish\Core\Repository\Values\User\Policy;
-use eZ\Publish\Core\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
 use eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
@@ -58,16 +57,7 @@ class RoleServiceTest extends ServiceTest
         $policyCreateStruct = new PolicyCreateStruct();
         $policyUpdateStruct = new PolicyUpdateStruct();
 
-        $userGroup = new UserGroup(
-            array(
-                'content' => $this->getContent(
-                    $this->getVersionInfo(
-                        $this->getContentInfo( $userGroupId, md5( 'user group' ) ),
-                        3
-                    )
-                )
-            )
-        );
+        $userGroup = $this->getUserGroup( $userGroupId, md5( 'user group' ), 3 );
         $roleLimitation = new SectionLimitation();
 
         $user = $this->getUser( $userId, md5( 'user' ), 4 );
