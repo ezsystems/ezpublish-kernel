@@ -10,9 +10,13 @@
 namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor\ImageProcessor;
+use eZ\Publish\Core\REST\Common\UrlHandler;
 
 class ImageProcessorTest extends BinaryInputProcessorTest
 {
+    /** @var UrlHandler */
+    protected $urlHandler;
+
     /**
      * @covers \eZ\Publish\Core\REST\Common\FieldTypeProcessor\ImageProcessor::postProcessValueHash
      */
@@ -22,13 +26,21 @@ class ImageProcessorTest extends BinaryInputProcessorTest
 
         $inputHash = array(
             'path' => 'var/some_site/223-1-eng-US/Cool-File.jpg',
+            'imageId' => '223-12345'
         );
 
         $outputHash = $processor->postProcessValueHash( $inputHash );
 
+        $expectedVariations = array();
+        foreach ( $this->getVariations() as $variation )
+        {
+            $expectedVariations[$variation] = array( 'href' => null );
+        }
         $this->assertEquals(
             array(
-                'path' => 'var/some_site/223-1-eng-US/Cool-File.jpg',
+                'path' => '/var/some_site/223-1-eng-US/Cool-File.jpg',
+                'imageId' => '223-12345',
+                'variants' => $expectedVariations,
             ),
             $outputHash
         );
@@ -43,11 +55,22 @@ class ImageProcessorTest extends BinaryInputProcessorTest
     {
         return new ImageProcessor(
             $this->getTempDir(),
-            'http://example.com/images/{fieldId}-{versionNo}/{variant}',
-            array(
-                'original' => 'image/jpeg',
-                'thumbnail' => 'image/png',
-            )
+            $this->getUrlHandlerMock(),
+            $this->getVariations()
         );
+    }
+
+    protected function getUrlHandlerMock()
+    {
+        if ( !isset( $this->urlHandler ) )
+        {
+            $this->urlHandler = $this->getMock( 'eZ\\Publish\\Core\\REST\\Common\\UrlHandler' );
+        }
+        return $this->urlHandler;
+    }
+
+    protected function getVariations()
+    {
+        return array( 'small', 'medium', 'large' );
     }
 }
