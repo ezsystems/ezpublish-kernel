@@ -65,7 +65,7 @@ class ImageProcessor extends BinaryInputProcessor
                 'href' => $this->urlHandler->generate(
                     'getImageVariation',
                     array(
-                        'imageVariationId' => $outgoingValueHash['imageVariationId'],
+                        'imageId' => $outgoingValueHash['imageId'],
                         'variationIdentifier' => $variationIdentifier
                     )
                 ),

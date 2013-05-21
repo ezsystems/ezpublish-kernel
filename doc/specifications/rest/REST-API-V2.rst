@@ -1562,7 +1562,7 @@ Delete a relation
 
 Load an image variation
 ```````````````````````
-:Resource: /content/binary/image/<imageVariationId>/<variationIdentifier>
+:Resource: /content/binary/image/<imageId>/<variationIdentifier>
 :Method: GET
 :Description: Loads an image variation
 :Request:
@@ -1593,7 +1593,8 @@ Load an image variation
         </ImageVariation>
 
 :Error Codes:
-    :404: If the imageVariationIdentifier or variationId aren't found
+    :404: If imageId doesn't match any image
+    :404: if variationIdentifier doesn't match any known variation
     :401: If the user is not authorized to read this object
 
 

@@ -57,9 +57,10 @@ class Value extends BaseValue
     public $path;
 
     /**
+     * External image ID (required by REST for now, see https://jira.ez.no/browse/EZP-20831)
      * @var mixed
      */
-    public $imageVariationId;
+    public $imageId;
 
     /**
      * Construct a new Value object.
