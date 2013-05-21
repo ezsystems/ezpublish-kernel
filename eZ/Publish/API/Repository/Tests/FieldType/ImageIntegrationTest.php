@@ -49,6 +49,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                 'path' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
                 'alternativeText' => 'My icy flower at night',
                 'fileSize' => filesize( $path ),
+                'imageId' => null,
             ),
             'update' => array(
                 'fileName' => 'Blue-Blue-Blue.png',
@@ -179,6 +180,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
 
         // Will change during storage
         unset( $expectedData['path'] );
+        unset( $expectedData['imageId'] );
 
         $this->assertPropertiesCorrect(
             $expectedData,
