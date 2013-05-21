@@ -25,7 +25,7 @@ class ImageVariation extends ValueObjectVisitor
             $this->urlHandler->generate(
                 'getImageVariation',
                 array(
-                    'imageVariationId' => 'fake-id',
+                    'imageId' => 'fake-id',
                     'variationIdentifier' => $data->name
                 )
             )

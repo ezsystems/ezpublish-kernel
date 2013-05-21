@@ -28,7 +28,7 @@ class eZPublish extends Pattern
         'locationChildren'          => '/content/locations{&location}/children',
         'locationUrlAliases'        => '/content/locations{&location}/urlaliases',
         'location'                  => '/content/locations{&location}',
-        'getImageVariation'         => '/content/binary/image/{imageVariationId}/{variationIdentifier}',
+        'getImageVariation'         => '/content/binary/image/{imageId}/{variationIdentifier}',
         'objects'                   => '/content/objects',
         'objectByRemote'            => '/content/objects?remoteId={object}',
         'object'                    => '/content/objects/{object}',

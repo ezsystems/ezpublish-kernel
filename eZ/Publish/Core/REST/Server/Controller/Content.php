@@ -756,10 +756,10 @@ class Content extends RestController
     {
         $urlArguments = $this->urlHandler->parse( 'getImageVariation', $this->request->path );
 
-        $idArray = explode( '-', $urlArguments['imageVariationId'] );
+        $idArray = explode( '-', $urlArguments['imageId'] );
         if ( count( $idArray ) != 2 )
         {
-            throw new Exceptions\NotFoundException( "Invalid image variation ID {$urlArguments['imageVariationId']}" );
+            throw new Exceptions\NotFoundException( "Invalid image ID {$urlArguments['imageId']}" );
         }
         list( $contentId, $fieldId ) = $idArray;
         $variationIdentifier = $urlArguments['variationIdentifier'];
@@ -795,7 +795,7 @@ class Content extends RestController
         }
         catch ( InvalidVariationException $e )
         {
-            throw new Exceptions\NotFoundException( $e->getMessage(), 0, $e );
+            throw new Exceptions\NotFoundException( "Invalid image variation $variationIdentifier", 0, $e );
         }
 
         return $variation;
