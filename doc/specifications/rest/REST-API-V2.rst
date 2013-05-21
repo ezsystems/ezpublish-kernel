@@ -1562,7 +1562,7 @@ Delete a relation
 
 Load an image variation
 ```````````````````````
-:Resource: /content/image/<imageVariationId>/<variationIdentifier>
+:Resource: /content/binary/image/<imageVariationId>/<variationIdentifier>
 :Method: GET
 :Description: Loads an image variation
 :Request:
@@ -1579,14 +1579,14 @@ Load an image variation
 .. code:: http
 
         HTTP/1.1 200 OK
-        Content-Type: <depending on Accept header>
+        Content-Type: application/vnd.ez.no.ImageVariation+xml
         Content-Length: xxx
 
 .. code:: xml
 
         <ImageVariation href="/content/image/123-12345/large" media-type="application/vnd.ez.api.ImageVariation+xml">
             <uri>/var/ezdemo_site/storage/images/media/images/challenge-accepted/35804-1-eng-GB/Challenge-accepted.jpg</uri>
-            <content-type>image/jpg</content-type>
+            <contentType>image/jpg</contentType>
             <width>640</width>
             <height>400</height>
             <fileSize>90387</fileSize>

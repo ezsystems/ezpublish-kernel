@@ -79,8 +79,8 @@ ezpublish_rest_loadContent:
     requirements:
         contentId: \d+
 
-ezpublish_rest_getContentImageVariation:
-    path: /content/image/{imageVariationId}/{variationIdentifier}
+ezpublish_rest_binary_getContentImageVariation:
+    path: /content/binary/image/{imageVariationId}/{variationIdentifier}
     defaults:
         _controller: ezpublish_rest.controller.content:getImageVariation
     methods: [GET]
