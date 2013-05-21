@@ -85,7 +85,6 @@ services:
         parent: ezpublish_rest.controller.base
         arguments:
             - @ezpublish.api.repository
-            - @ezpublish.fieldType.ezimage.IOService
             - @ezpublish.fieldType.ezimage.variation_service
 
     ezpublish_rest.controller.content_type:

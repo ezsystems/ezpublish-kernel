@@ -25,8 +25,7 @@ use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\Core\IO\IOService;
-use eZ\Publish\SPI\Variation\VariationHandler as ImageVariationHandler;
+use eZ\Publish\SPI\Variation\VariationHandler;
 
 /**
  * Content controller
@@ -41,13 +40,6 @@ class Content extends RestController
     protected $repository;
 
     /**
-     * IO Service
-     * This argument is actually the instance of IOService configured for images only...
-     * @var \eZ\Publish\Core\IO\IOService
-     */
-    protected $IOService;
-
-    /**
      * @var ImageVariationHandler
      */
     protected $imageVariationHandler;
@@ -56,16 +48,14 @@ class Content extends RestController
      * Construct controller
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \eZ\Publish\Core\IO\IOService $IOService
+     * @param \eZ\Publish\SPI\Variation\VariationHandler $imageVariationHandler
      */
     public function __construct(
         Repository $repository,
-        IOService $IOService,
-        ImageVariationHandler $imageVariationHandler
+        VariationHandler $imageVariationHandler
     )
     {
         $this->repository = $repository;
-        $this->IOService = $IOService;
         $this->imageVariationHandler = $imageVariationHandler;
     }
 
