@@ -13,6 +13,13 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * Base class for file variations (i.e. image aliases)
+ *
+ * @property-read int $fileSize Number of bytes for current variation
+ * @property-read string $mimeType The MIME type (for example "image/png")
+ * @property-read string $fileName The name of the file (for example "my_image.png")
+ * @property-read string $dirPath The path to the file (for example "var/storage/images/test/199-2-eng-GB")
+ * @property-read string $uri Complete path + name of image file (for example "var/storage/images/test/199-2-eng-GB/apple.png")
+ * @property-read \DateTime $lastModified When the variation was last modified
  */
 class Variation extends ValueObject
 {

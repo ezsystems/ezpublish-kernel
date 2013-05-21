@@ -9,6 +9,13 @@
 
 namespace eZ\Publish\SPI\Variation\Values;
 
+/**
+ * @property-read int $width The width as number of pixels (for example "320")
+ * @property-read int $height The height as number of pixels (for example "256")
+ * @property-read string $name The name of the image alias (for example "original")
+ * @property-read mixed $info Extra information about the image, depending on the image type
+ * @property-read mixed $imageId
+ */
 class ImageVariation extends Variation
 {
     /**
