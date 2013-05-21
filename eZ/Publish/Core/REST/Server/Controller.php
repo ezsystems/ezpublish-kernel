@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server;
 
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\REST\Common\UrlHandler\eZPublish as UrlHandler;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher as InputDispatcher;
 use eZ\Publish\Core\REST\Server\Request as HttpRequest;
@@ -36,6 +37,13 @@ abstract class Controller
      */
     protected $container;
 
+    /**
+     * Repository
+     *
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    protected $repository;
+
     public function setInputDispatcher( InputDispatcher $inputDispatcher )
     {
         $this->inputDispatcher = $inputDispatcher;
@@ -54,5 +62,10 @@ abstract class Controller
     public function setContainer( Container $container )
     {
         $this->container = $container;
+    }
+
+    public function setRepository( Repository $repository )
+    {
+        $this->repository = $repository;
     }
 }

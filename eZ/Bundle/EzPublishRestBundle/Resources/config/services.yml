@@ -1,5 +1,6 @@
 parameters:
     ezpublish_rest.controller.base.class: eZ\Publish\Core\REST\Server\Controller
+    ezpublish_rest.controller.binary_content.class: eZ\Publish\Core\REST\Server\Controller\BinaryContent
     ezpublish_rest.controller.content.class: eZ\Publish\Core\REST\Server\Controller\Content
     ezpublish_rest.controller.content_type.class: eZ\Publish\Core\REST\Server\Controller\ContentType
     ezpublish_rest.controller.location.class: eZ\Publish\Core\REST\Server\Controller\Location
@@ -69,6 +70,7 @@ services:
             - [ setUrlHandler, [@ezpublish_rest.url_handler] ]
             - [ setRequest, [@ezpublish_rest.request] ]
             - [ setContainer, [@service_container] ]
+            - [ setRepository, [@ezpublish.api.repository] ]
 
     ezpublish_rest.controller.root:
         class: %ezpublish_rest.controller.root.class%
@@ -80,12 +82,15 @@ services:
         arguments:
             - @ezpublish.api.service.section
 
+    ezpublish_rest.controller.binary_content:
+        class: %ezpublish_rest.controller.binary_content.class%
+        parent: ezpublish_rest.controller.base
+        arguments:
+            - @ezpublish.fieldType.ezimage.variation_service
+
     ezpublish_rest.controller.content:
         class: %ezpublish_rest.controller.content.class%
         parent: ezpublish_rest.controller.base
-        arguments:
-            - @ezpublish.api.repository
-            - @ezpublish.fieldType.ezimage.variation_service
 
     ezpublish_rest.controller.content_type:
         class: %ezpublish_rest.controller.content_type.class%
