@@ -19,6 +19,8 @@ env:
 matrix:
   allow_failures:
     - php: 5.5
+    - php: 5.3.3
+      env: TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
   exclude:
     - php: 5.3.3
       env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York"
