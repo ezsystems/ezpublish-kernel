@@ -104,6 +104,7 @@ class AliasGenerator implements VariationHandler
                         'uri'          => $aliasArray['url'],
                         'width'        => $aliasArray['width'],
                         'height'       => $aliasArray['height'],
+                        'imageId'      => sprintf( '%d-%d', $versionInfo->contentInfo->id, $field->id )
                     )
                 );
 

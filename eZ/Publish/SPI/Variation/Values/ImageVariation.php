@@ -40,4 +40,9 @@ class ImageVariation extends Variation
      * @var mixed
      */
     protected $info;
+
+    /**
+     * @var mixed
+     */
+    protected $imageId;
 }
