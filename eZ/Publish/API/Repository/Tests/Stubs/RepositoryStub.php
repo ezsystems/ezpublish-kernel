@@ -130,6 +130,11 @@ class RepositoryStub implements Repository
      */
     public function getCurrentUser()
     {
+        if ( !$this->currentUser instanceof User )
+        {
+            $this->currentUser = $this->getUserService()->loadAnonymousUser();
+        }
+
         return $this->currentUser;
     }
 
