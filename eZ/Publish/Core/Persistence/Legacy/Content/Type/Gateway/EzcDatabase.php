@@ -1057,7 +1057,7 @@ class EzcDatabase extends Gateway
                     )
                 )
             )
-        );
+        )->orderBy( $this->dbHandler->quoteColumn( 'placement', 'ezcontentclass_attribute' ) );
 
         return $q;
     }
