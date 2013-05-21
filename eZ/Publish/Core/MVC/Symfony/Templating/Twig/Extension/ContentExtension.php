@@ -341,13 +341,13 @@ class ContentExtension extends Twig_Extension
     }
 
     /**
-     * Returns the image variant object for $field/$versionInfo
+     * Returns the image variation object for $field/$versionInfo
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param string $variationName
      *
-     * @return \eZ\Publish\API\Repository\Values\File\ImageVariant
+     * @return \eZ\Publish\SPI\Variation\Values\Variation
      */
     public function getImageVariation( Field $field, VersionInfo $versionInfo, $variationName )
     {
