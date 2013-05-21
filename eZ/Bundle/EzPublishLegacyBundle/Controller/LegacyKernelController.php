@@ -108,7 +108,8 @@ class LegacyKernelController
         {
             $response->headers->set(
                 'Content-Type',
-                $contentTypeHeaders
+                $contentTypeHeaders,
+                true
             );
         }
 
