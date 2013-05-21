@@ -32,7 +32,7 @@ class AliasGenerator implements VariationHandler
     private $aliasHandlers;
 
     /**
-     * Image variant objects, indexed by <fieldId>-<versionNo>-<variantName>.
+     * Image variation objects, indexed by <fieldId>-<versionNo>-<variationName>.
      * Storing them avoids to run the legacy kernel each time if there are similar images variations required.
      *
      * @var \eZ\Publish\SPI\Variation\Values\ImageVariation[]
@@ -54,7 +54,7 @@ class AliasGenerator implements VariationHandler
     }
 
     /**
-     * Returns an image variant object.
+     * Returns an image variation object.
      * Variation creation will be done through the legacy eZImageAliasHandler, using the legacy kernel.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field

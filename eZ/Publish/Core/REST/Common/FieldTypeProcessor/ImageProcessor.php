@@ -21,7 +21,7 @@ class ImageProcessor extends BinaryInputProcessor
     protected $urlTemplate;
 
     /**
-     * Array of variants identifiers
+     * Array of variations identifiers
      *
      * <code>
      * array( 'small', 'thumbnail', 'large' )
@@ -29,7 +29,7 @@ class ImageProcessor extends BinaryInputProcessor
      *
      * @var string[]
      */
-    protected $variants;
+    protected $variations;
 
     /**
      * @var \eZ\Publish\Core\REST\Common\UrlHandler
@@ -39,13 +39,13 @@ class ImageProcessor extends BinaryInputProcessor
     /**
      * @param string $temporaryDirectory
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
-     * @param array $variants
+     * @param array $variations array of variations identifiers
      */
-    public function __construct( $temporaryDirectory, $urlHandler, array $variants )
+    public function __construct( $temporaryDirectory, $urlHandler, array $variations )
     {
         parent::__construct( $temporaryDirectory );
         $this->urlHandler = $urlHandler;
-        $this->variants = $variants;
+        $this->variations = $variations;
     }
 
     /**
@@ -59,9 +59,9 @@ class ImageProcessor extends BinaryInputProcessor
         }
 
         $outgoingValueHash['path'] = '/' . $outgoingValueHash['path'];
-        foreach ( $this->variants as $variationIdentifier )
+        foreach ( $this->variations as $variationIdentifier )
         {
-            $outgoingValueHash['variants'][$variationIdentifier] = array(
+            $outgoingValueHash['variations'][$variationIdentifier] = array(
                 'href' => $this->urlHandler->generate(
                     'getImageVariation',
                     array(
@@ -76,14 +76,14 @@ class ImageProcessor extends BinaryInputProcessor
     }
 
     /**
-     * Generates a URL for $path in $variant
+     * Generates a URL for $path in $variation
      *
      * @param string $path
-     * @param string $variant
+     * @param string $variation
      *
      * @return string
      */
-    protected function generateUrl( $path, $variant )
+    protected function generateUrl( $path, $variation )
     {
         $fieldId = '';
         $versionNo = '';
@@ -97,12 +97,12 @@ class ImageProcessor extends BinaryInputProcessor
 
         return str_replace(
             array(
-                '{variant}',
+                '{variation}',
                 '{fieldId}',
                 '{versionNo}',
             ),
             array(
-                $variant,
+                $variation,
                 $fieldId,
                 $versionNo
             ),

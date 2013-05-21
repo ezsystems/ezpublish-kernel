@@ -40,7 +40,7 @@ class ImageProcessorTest extends BinaryInputProcessorTest
             array(
                 'path' => '/var/some_site/223-1-eng-US/Cool-File.jpg',
                 'imageId' => '223-12345',
-                'variants' => $expectedVariations,
+                'variations' => $expectedVariations,
             ),
             $outputHash
         );

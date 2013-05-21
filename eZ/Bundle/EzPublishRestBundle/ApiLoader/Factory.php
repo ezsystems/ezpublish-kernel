@@ -193,7 +193,7 @@ class Factory
                     // URL schema for image links
                     // @todo get configuration
                     $this->container->get( 'ezpublish_rest.url_handler' ),
-                    // Image variants (names only)
+                    // Image variations (names only)
                     $variationsIdentifiers
                 ),
                 'ezdatetime' => new FieldTypeProcessor\DateAndTimeProcessor(),
