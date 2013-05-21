@@ -318,6 +318,7 @@ class ImageTest extends FieldTypeTest
                         'fileName' => 'Sindelfingen-Squirrels.jpg',
                         'fileSize' => 23,
                         'alternativeText' => 'This is so Sindelfingen!',
+                        'imageId' => '123-12345'
                     )
                 ),
                 array(
@@ -325,6 +326,7 @@ class ImageTest extends FieldTypeTest
                     'fileName' => 'Sindelfingen-Squirrels.jpg',
                     'fileSize' => 23,
                     'alternativeText' => 'This is so Sindelfingen!',
+                    'imageId' => '123-12345'
                 ),
             ),
         );
