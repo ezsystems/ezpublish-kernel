@@ -77,9 +77,6 @@ class BinaryContent extends RestController
             throw new Exceptions\NotFoundException( "No image field with ID $fieldId could be found" );
         }
 
-        if ( !isset( $this->imageVariationService ) )
-            $this->imageVariationService = $this->container->get( 'ezpublish.fieldType.ezimage.variation_service' );
-
         $versionInfo = $this->repository->getContentService()->loadVersionInfo( $content->contentInfo );
 
         try
