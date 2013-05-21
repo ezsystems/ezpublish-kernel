@@ -24,41 +24,11 @@ use eZ\Publish\API\Repository\Exceptions\ContentValidationException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\SPI\Variation\VariationHandler;
-
 /**
  * Content controller
  */
 class Content extends RestController
 {
-    /**
-     * Repository
-     *
-     * @var \eZ\Publish\API\Repository
-     */
-    protected $repository;
-
-    /**
-     * @var ImageVariationHandler
-     */
-    protected $imageVariationHandler;
-
-    /**
-     * Construct controller
-     *
-     * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \eZ\Publish\SPI\Variation\VariationHandler $imageVariationHandler
-     */
-    public function __construct(
-        Repository $repository,
-        VariationHandler $imageVariationHandler
-    )
-    {
-        $this->repository = $repository;
-        $this->imageVariationHandler = $imageVariationHandler;
-    }
-
     /**
      * Loads a content info by remote ID
      *

@@ -79,14 +79,6 @@ ezpublish_rest_loadContent:
     requirements:
         contentId: \d+
 
-ezpublish_rest_binary_getContentImageVariation:
-    path: /content/binary/images/{imageId}/variations/{variationIdentifier}
-    defaults:
-        _controller: ezpublish_rest.controller.content:getImageVariation
-    methods: [GET]
-    requirements:
-        imageId: \d+-\d+
-
 ezpublish_rest_deleteContent:
     path: /content/objects/{contentId}
     defaults:
@@ -217,6 +209,16 @@ ezpublish_rest_createDraftFromCurrentVersion:
     methods: [COPY]
     requirements:
         contentId: \d+
+
+# Binary content
+
+ezpublish_rest_binaryContent_getImageVariation:
+    path: /content/binary/images/{imageId}/variations/{variationIdentifier}
+    defaults:
+        _controller: ezpublish_rest.controller.binary_content:getImageVariation
+    methods: [GET]
+    requirements:
+        imageId: \d+-\d+
 
 
 # Views
