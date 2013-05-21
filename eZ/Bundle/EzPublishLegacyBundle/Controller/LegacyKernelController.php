@@ -103,12 +103,18 @@ class LegacyKernelController
         }
 
         // Handles Content-Type header sent by legacy stack
-        $contentTypeHeaders = preg_grep( '/^content-type: (.*)/i', headers_list() );
+        $pattern = '/^content-type: (.*)/i';
+        $contentTypeHeaders = preg_grep( $pattern, headers_list() );
         if( !empty( $contentTypeHeaders ) )
         {
+            // reset array keys
+            $contentTypeHeaders = array_values( $contentTypeHeaders );
+            // extract header value
+            preg_match( $pattern, $contentTypeHeaders[0], $headerValue );
+            // re-set header
             $response->headers->set(
                 'Content-Type',
-                $contentTypeHeaders,
+                $headerValue[1],
                 true
             );
         }
