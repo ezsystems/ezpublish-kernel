@@ -705,63 +705,6 @@ class Content extends RestController
     }
 
     /**
-     * Returns data about the image variation $variationIdentifier of image field $fieldId.
-     * Will generate the alias if it hasn't been generated yet.
-     *
-     * @param int $fieldId
-     * @param string $variationIdentifier
-     * @throws NotFoundException if the content or image field aren't found
-     */
-    public function getImageVariation()
-    {
-        $urlArguments = $this->urlHandler->parse( 'getImageVariation', $this->request->path );
-
-        $idArray = explode( '-', $urlArguments['imageId'] );
-        if ( count( $idArray ) != 2 )
-        {
-            throw new Exceptions\NotFoundException( "Invalid image ID {$urlArguments['imageId']}" );
-        }
-        list( $contentId, $fieldId ) = $idArray;
-        $variationIdentifier = $urlArguments['variationIdentifier'];
-
-        $content = $this->repository->getContentService()->loadContent( $contentId );
-
-        $fieldFound = false;
-        /** @var $field \eZ\Publish\API\Repository\Values\Content\Field */
-        foreach( $content->getFields() as $field )
-        {
-            if ( $field->id == $fieldId )
-            {
-                $fieldFound = true;
-                break;
-            }
-        }
-
-        if ( !$fieldFound )
-        {
-            throw new Exceptions\NotFoundException( "No image field with ID $fieldId could be found" );
-        }
-
-        if ( !isset( $this->imageVariationService ) )
-            $this->imageVariationService = $this->container->get( 'ezpublish.fieldType.ezimage.variation_service' );
-
-        $versionInfo = $this->repository->getContentService()->loadVersionInfo( $content->contentInfo );
-
-        try
-        {
-            return $this->imageVariationHandler->getVariation(
-                $field, $versionInfo, $variationIdentifier
-            );
-        }
-        catch ( InvalidVariationException $e )
-        {
-            throw new Exceptions\NotFoundException( "Invalid image variation $variationIdentifier", 0, $e );
-        }
-
-        return $variation;
-    }
-
-    /**
      * Extracts the requested media type from $request
      *
      * @return string
