@@ -179,8 +179,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $expectedData = $fixtureData['create'];
 
         // Will change during storage
-        unset( $expectedData['path'] );
-        unset( $expectedData['imageId'] );
+        unset( $expectedData['path'], $expectedData['imageId'] );
 
         $this->assertPropertiesCorrect(
             $expectedData,
