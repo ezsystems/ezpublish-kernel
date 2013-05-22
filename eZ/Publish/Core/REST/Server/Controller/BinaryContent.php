@@ -63,7 +63,7 @@ class BinaryContent extends RestController
 
         $fieldFound = false;
         /** @var $field \eZ\Publish\API\Repository\Values\Content\Field */
-        foreach( $content->getFields() as $field )
+        foreach ( $content->getFields() as $field )
         {
             if ( $field->id == $fieldId )
             {
