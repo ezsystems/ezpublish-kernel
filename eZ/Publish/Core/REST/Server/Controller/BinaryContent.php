@@ -89,7 +89,5 @@ class BinaryContent extends RestController
         {
             throw new Exceptions\NotFoundException( "Invalid image variation $variationIdentifier", 0, $e );
         }
-
-        return $variation;
     }
 }
