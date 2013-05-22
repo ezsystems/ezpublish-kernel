@@ -193,49 +193,48 @@ Overview
 
 In the content module there are the root collections objects, locations, trash and sections
 
-===================================================== =================== ======================= ============================ ================ ==============
-        :Resource:                                          POST                GET                  PATCH/PUT                   DELETE            COPY
------------------------------------------------------ ------------------- ----------------------- ---------------------------- ---------------- --------------
-/                                                     .                   list root resources     .                            .
-/content/objects                                      create new content  .                       .                            .
-/content/objects/<ID>                                 .                   load content            update content meta data     delete content   copy content
-/content/objects/<ID>/<lang_code>                     .                   .                       .                            delete language
-                                                                                                                               from content
-/content/objects/<ID>/versions                        .                   load all versions       .                            .
-                                                                          (version infos)
-/content/objects/<ID>/currentversion                  .                   redirect to current v.  .                            .                 create draft
-                                                                                                                                                 from current
-                                                                                                                                                 version
-/content/objects/<ID>/versions/<no>                   .                   get a specific version  update a version/draft       delete version    create draft
-                                                                                                                                                 from version
-/content/objects/<ID>/versions/<no>/relations         create new relation load relations of vers. .                            .
-/content/objects/<ID>/versions/<no>/relations/<ID>    .                   load relation details   .                            delete relation
-/content/objects/<ID>/locations                       create location     load locations of cont- .                            .
-                                                                          ent
-/content/binary/images/<imageId>/variations/<variati- .                   get variation           .                            .
-onIdentifier>
-/content/locations                                    .                   list/find locations     .                            .
-/content/locations/<path>                             .                   load a location         update location              delete location  copy subtree
-/content/locations/<path>/children                    .                   load children           .                            .
-/content/views                                        create view         list views              .                            .
-/content/views/<ID>                                   .                   get view                .                            delete view
-/content/views/<ID>/results                           .                   get view results        .                            .
-/content/sections                                     create section      list all sections       .                            .
-/content/sections/<ID>                                .                   load section            update section               delete section
-/content/trash                                        .                   list trash items        .                            empty trash
-/content/trash/<ID>                                   .                   load trash item         untrash item                 delete from trsh
-/content/objectstategroups                            create objectstate  list objectstategroups  .                            .
-                                                      group
-/content/objectstategroups/<ID>                       .                   get objectstate group   update objectstategroup      delete osg.
-/content/objectstategroups/<ID>/objectstates          create object state list object states      .                            .
-/content/objectstategroups/<ID>/objectstates/<ID>     .                   get object state        update objectstate           delete objectst.
-/content/objects/<ID>/objectstates                    .                   get object states of    update objectstates of       .
-                                                                          content                 content
-/content/urlaliases                                   create url alias    list url aliases        .                            .
-/content/urlaliases/<ID>                              .                   get url alias           .                            delete url wc.
-/content/urlwildcards                                 create url wildcard list url wildcards      .                            .
-/content/urlwildcards/<ID>                            .                   get url wildcard        .                            delete url wc.
-===================================================== =================== ======================= ============================ ================ ==============
+================================================================= =================== ======================= ============================ ================ ==============
+        :Resource:                                                      POST                GET                  PATCH/PUT                   DELETE            COPY
+----------------------------------------------------------------- ------------------- ----------------------- ---------------------------- ---------------- --------------
+/                                                                 .                   list root resources     .                            .
+/content/objects                                                  create new content  .                       .                            .
+/content/objects/<ID>                                             .                   load content            update content meta data     delete content   copy content
+/content/objects/<ID>/<lang_code>                                 .                   .                       .                            delete language
+                                                                                                                                           from content
+/content/objects/<ID>/versions                                    .                   load all versions       .                            .
+                                                                                      (version infos)
+/content/objects/<ID>/currentversion                              .                   redirect to current v.  .                            .                 create draft
+                                                                                                                                                             from current
+                                                                                                                                                             version
+/content/objects/<ID>/versions/<no>                               .                   get a specific version  update a version/draft       delete version    create draft
+                                                                                                                                                             from version
+/content/objects/<ID>/versions/<no>/relations                     create new relation load relations of vers. .                            .
+/content/objects/<ID>/versions/<no>/relations/<ID>                .                   load relation details   .                            delete relation
+/content/objects/<ID>/locations                                   create location     load locations of cont- .                            .
+                                                                                      ent
+/content/binary/images/<imageId>/variations/<variationIdentifier> .                   get variation           .                            .
+/content/locations                                                .                   list/find locations     .                            .
+/content/locations/<path>                                         .                   load a location         update location              delete location  copy subtree
+/content/locations/<path>/children                                .                   load children           .                            .
+/content/views                                                    create view         list views              .                            .
+/content/views/<ID>                                               .                   get view                .                            delete view
+/content/views/<ID>/results                                       .                   get view results        .                            .
+/content/sections                                                 create section      list all sections       .                            .
+/content/sections/<ID>                                            .                   load section            update section               delete section
+/content/trash                                                    .                   list trash items        .                            empty trash
+/content/trash/<ID>                                               .                   load trash item         untrash item                 delete from trsh
+/content/objectstategroups                                        create objectstate  list objectstategroups  .                            .
+                                                                  group
+/content/objectstategroups/<ID>                                   .                   get objectstate group   update objectstategroup      delete osg.
+/content/objectstategroups/<ID>/objectstates                      create object state list object states      .                            .
+/content/objectstategroups/<ID>/objectstates/<ID>                 .                   get object state        update objectstate           delete objectst.
+/content/objects/<ID>/objectstates                                .                   get object states of    update objectstates of       .
+                                                                                      content                 content
+/content/urlaliases                                               create url alias    list url aliases        .                            .
+/content/urlaliases/<ID>                                          .                   get url alias           .                            delete url wc.
+/content/urlwildcards                                             create url wildcard list url wildcards      .                            .
+/content/urlwildcards/<ID>                                        .                   get url wildcard        .                            delete url wc.
+================================================================= =================== ======================= ============================ ================ ==============
 
 
 Specification
