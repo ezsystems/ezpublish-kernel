@@ -192,7 +192,7 @@ class SearchHandler implements SearchHandlerInterface
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @return \eZ\Publish\SPI\Persistence\Content
      */
     public function findSingle( Criterion $criterion, array $fieldFilters = array() )
     {
