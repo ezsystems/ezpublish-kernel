@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
-use eZ\Publish\Core\Persistence\Legacy\Content;
 use eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
@@ -155,7 +154,7 @@ class ContentUpdater
      *
      * @param mixed $contentTypeId
      *
-     * @return Content[]
+     * @return \eZ\Publish\SPI\Persistence\Content[]
      */
     protected function loadContentObjects( $contentTypeId )
     {

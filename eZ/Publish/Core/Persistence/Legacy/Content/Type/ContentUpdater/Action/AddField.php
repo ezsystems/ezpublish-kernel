@@ -66,7 +66,7 @@ class AddField extends Action
     /**
      * Applies the action to the given $content
      *
-     * @param Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content $content
      *
      * @todo Handle external field data
      *
