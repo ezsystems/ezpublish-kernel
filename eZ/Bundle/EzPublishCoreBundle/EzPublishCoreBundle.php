@@ -40,9 +40,9 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new LocalePass );
         $container->addCompilerPass( new ContentViewPass );
         $container->addCompilerPass( new LocationViewPass );
-        $container->addCompilerPass( new BlockViewPass );
+        $container->addCompilerPass(new BlockViewPass );
 
-        $securityExtension = $container->getExtension( 'security' );
+        $securityExtension = $container->getExtension('security' );
         $securityExtension->addSecurityListenerFactory( new EzPublishSecurityFactory );
         $securityExtension->addSecurityListenerFactory( new HttpBasicFactory );
     }
