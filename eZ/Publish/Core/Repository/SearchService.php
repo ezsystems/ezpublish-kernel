@@ -186,6 +186,9 @@ class SearchService implements SearchServiceInterface
      * @uses \eZ\Publish\API\Repository::hasAccess()
      * @throws \RuntimeException If empty array of limitations are provided from hasAccess()
      *
+     * @param string $module
+     * @param string $function
+     *
      * @return boolean|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
     public function getPermissionsCriterion( $module = 'content', $function = 'read' )
