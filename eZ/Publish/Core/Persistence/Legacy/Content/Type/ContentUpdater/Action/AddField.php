@@ -111,7 +111,7 @@ class AddField extends Action
                 $this->contentGateway->updateNonTranslatableField(
                     $field,
                     $storageValue,
-                    $content->contentInfo->id
+                    $content->versionInfo->contentInfo->id
                 );
             }
         }
