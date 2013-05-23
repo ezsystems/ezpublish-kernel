@@ -79,6 +79,8 @@ class SearchService implements SearchServiceInterface
      */
     public function findContent( Query $query, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
+        $query = clone $query;
+
         if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $query->criterion ) )
         {
             return new SearchResult( array( 'time' => 0, 'totalCount' => 0 ) );
