@@ -109,7 +109,7 @@ abstract class Gateway
     /**
      * Inserts an existing field.
      *
-     * Used to insert a field with an exsting ID but a new version number.
+     * Used to insert a field with an existing ID but a new version number.
      *
      * @param Content $content
      * @param Field $field
