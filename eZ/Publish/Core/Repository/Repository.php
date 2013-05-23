@@ -159,6 +159,13 @@ class Repository implements RepositoryInterface
     protected $serviceSettings;
 
     /**
+     * Instance of domain mapper
+     *
+     * @var \eZ\Publish\Core\Repository\DomainMapper
+     */
+    protected $domainMapper;
+
+    /**
      * Constructor
      *
      * Construct repository object with provided storage engine
@@ -684,6 +691,27 @@ class Repository implements RepositoryInterface
 
         $this->relationProcessor = new RelationProcessor( $this, $this->persistenceHandler );
         return $this->relationProcessor;
+    }
+
+    /**
+     * Get RelationProcessor
+     *
+     * @access private Internal service for the Core Services
+     *
+     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
+     *
+     * @return \eZ\Publish\Core\Repository\DomainMapper
+     */
+    public function getDomainMapper()
+    {
+        if ( $this->domainMapper !== null )
+            return $this->domainMapper;
+
+        $this->domainMapper = new DomainMapper(
+            $this,
+            $this->persistenceHandler->contentLanguageHandler()
+        );
+        return $this->domainMapper;
     }
 
     /**

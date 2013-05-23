@@ -485,7 +485,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ( $contentTypeCreateStruct->remoteId === null )
         {
-            $contentTypeCreateStruct->remoteId = md5( uniqid( get_class( $contentTypeCreateStruct ), true ) );
+            $contentTypeCreateStruct->remoteId = $this->repository->getDomainMapper()->getUniqueHash( $contentTypeCreateStruct );
         }
 
         $initialLanguageId = $this->repository->getContentLanguageService()->loadLanguage(

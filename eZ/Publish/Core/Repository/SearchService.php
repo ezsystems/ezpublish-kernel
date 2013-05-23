@@ -32,7 +32,7 @@ class SearchService implements SearchServiceInterface
     const MAX_LIMIT = 1073741824;
 
     /**
-     * @var \eZ\Publish\API\Repository\Repository
+     * @var \eZ\Publish\Core\Repository\Repository
      */
     protected $repository;
 
@@ -93,7 +93,7 @@ class SearchService implements SearchServiceInterface
 
         foreach ( $result->searchHits as $hit )
         {
-            $hit->valueObject = $this->repository->getContentService()->buildContentDomainObject(
+            $hit->valueObject = $this->repository->getDomainMapper()->buildContentDomainObject(
                 $hit->valueObject
             );
         }
@@ -123,7 +123,7 @@ class SearchService implements SearchServiceInterface
             throw new NotFoundException( 'Content', '*' );
         }
 
-        return $this->repository->getContentService()->buildContentDomainObject(
+        return $this->repository->getDomainMapper()->buildContentDomainObject(
             $this->searchHandler->findSingle( $criterion, $fieldFilters )
         );
     }
