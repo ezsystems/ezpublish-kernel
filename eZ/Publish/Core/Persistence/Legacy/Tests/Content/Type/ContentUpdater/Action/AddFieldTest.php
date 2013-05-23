@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\ContentUpdater\A
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField;
 use eZ\Publish\SPI\Persistence\Content;
-use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 
 /**
  * Test case for Content Type Updater.
@@ -85,8 +84,10 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
         $this->getFieldValueConverterMock()
             ->expects( $this->once() )
             ->method( 'toStorageValue' )
-            ->with( $this->equalTo( $this->getFieldReference()->value ) )
-            ->will( $this->returnValue( new StorageFieldValue() ) );
+            ->with(
+                $this->equalTo( $this->getFieldReference()->value ),
+                $this->isInstanceOf( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue" )
+            );
 
         $this->getContentGatewayMock()->expects( $this->any() )// "any" is workaround for failure, should be once
             ->method( 'insertNewField' )
@@ -99,7 +100,8 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
             )->will( $this->returnValue( 23 ) );
 
         $this->getContentStorageHandlerMock()->expects( $this->once() )
-            ->method( 'storeFieldData' );
+            ->method( 'storeFieldData' )
+            ->will( $this->returnValue( false ) );
 
         $action->apply( $content );
 
@@ -123,19 +125,60 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function testApplyUnTranslatableField()
-    {
-        self::markTestIncomplete( "@todo Test Action/AddField with untranslatable field" );
-    }
-
-    /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField::apply
-     *
-     * @return void
-     */
     public function testApplyUpdatingStorageHandler()
     {
-        self::markTestIncomplete( "@todo Test Action/AddField with Storage Handler that returns true" );
+        $action = $this->getAddFieldAction();
+        $content = $this->getContentFixture();
+        $field = $this->getFieldReference();
+        $insertedField = $this->getFieldReference();
+        $insertedField->id = 23;
+
+        $this->getFieldValueConverterMock()
+            ->expects( $this->exactly( 2 ) )
+            ->method( 'toStorageValue' )
+            ->with(
+                $this->equalTo( $field->value ),
+                $this->isInstanceOf( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue" )
+            );
+
+        // "any" is workaround for failure, should be once
+        $this->getContentGatewayMock()->expects( $this->any() )
+            ->method( 'insertNewField' )
+            ->with(
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ),
+                $this->equalTo( $field ),
+                $this->isInstanceOf(
+                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue'
+                )
+            )->will( $this->returnValue( 23 ) );
+
+        $this->getContentGatewayMock()->expects( $this->once() )
+            ->method( 'updateNonTranslatableField' )
+            ->with(
+                $this->equalTo( $insertedField ),
+                $this->isInstanceOf( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue" ),
+                $this->equalTo( "contentId" )
+            );
+
+        $this->getContentStorageHandlerMock()->expects( $this->once() )
+            ->method( 'storeFieldData' )
+            ->will( $this->returnValue( true ) );
+
+        $action->apply( $content );
+
+        $this->assertEquals(
+            1,
+            count( $content->fields ),
+            'Field not added to content'
+        );
+        $this->assertInstanceOf(
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Field',
+            $content->fields[0]
+        );
+        $this->assertEquals(
+            23,
+            $content->fields[0]->id
+        );
     }
 
     /**
@@ -143,9 +186,58 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function testApplyUpdatingStorageHandlerUnTranslatableField()
+    public function testApplyUpdatingStorageHandlerTranslatableField()
     {
-        self::markTestIncomplete( "@todo Test Action/AddField with Storage Handler that returns true and untranslatable field" );
+        // Prepare action for translatable field
+        $action = $this->getAddFieldAction( true );
+        $content = $this->getContentFixture();
+        $field = $this->getFieldReference();
+        $insertedField = $this->getFieldReference();
+        $insertedField->id = 23;
+
+        $this->getFieldValueConverterMock()
+            ->expects( $this->exactly( 2 ) )
+            ->method( 'toStorageValue' )
+            ->with(
+                $this->equalTo( $field->value ),
+                $this->isInstanceOf( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue" )
+            );
+
+        // "any" is workaround for failure, should be once
+        $this->getContentGatewayMock()->expects( $this->any() )
+            ->method( 'insertNewField' )
+            ->with(
+                $this->equalTo( $content ),
+                $this->equalTo( $field ),
+                $this->isInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue' )
+            )->will( $this->returnValue( 23 ) );
+
+        $this->getContentGatewayMock()->expects( $this->once() )
+            ->method( 'updateField' )
+            ->with(
+                $this->equalTo( $insertedField ),
+                $this->isInstanceOf( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue" )
+            );
+
+        $this->getContentStorageHandlerMock()->expects( $this->once() )
+            ->method( 'storeFieldData' )
+            ->will( $this->returnValue( true ) );
+
+        $action->apply( $content );
+
+        $this->assertEquals(
+            1,
+            count( $content->fields ),
+            'Field not added to content'
+        );
+        $this->assertInstanceOf(
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Field',
+            $content->fields[0]
+        );
+        $this->assertEquals(
+            23,
+            $content->fields[0]->id
+        );
     }
 
     /**
@@ -155,8 +247,13 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
      */
     protected function getContentFixture()
     {
+        $contentInfo = new Content\ContentInfo();
+        $contentInfo->id = "contentId";
+        $versionInfo = new Content\VersionInfo();
+        $versionInfo->contentInfo = $contentInfo;
+
         $content = new Content();
-        $content->versionInfo = new Content\VersionInfo();
+        $content->versionInfo = $versionInfo;
         $content->fields = array();
         $content->versionInfo->versionNo = 3;
         return $content;
@@ -165,7 +262,7 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a Content Gateway mock
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected function getContentGatewayMock()
     {
@@ -181,7 +278,7 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a FieldValue converter mock
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter
      */
     protected function getFieldValueConverterMock()
     {
@@ -197,7 +294,7 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a Content StorageHandler mock
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
     protected function getContentStorageHandlerMock()
     {
@@ -217,12 +314,15 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a FieldDefinition fixture
      *
+     * @param bool $isTranslatable
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      */
-    protected function getFieldDefinitionFixture()
+    protected function getFieldDefinitionFixture( $isTranslatable = false )
     {
         $fieldDef = new Content\Type\FieldDefinition();
         $fieldDef->id = 42;
+        $fieldDef->isTranslatable = $isTranslatable;
         $fieldDef->fieldType = 'ezstring';
         $fieldDef->defaultValue = new Content\FieldValue();
         return $fieldDef;
@@ -246,15 +346,17 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns the AddField action to test
      *
+     * @param bool $isTranslatable
+     *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField
      */
-    protected function getAddFieldAction()
+    protected function getAddFieldAction( $isTranslatable = false )
     {
         if ( !isset( $this->addFieldAction ) )
         {
             $this->addFieldAction = new AddField(
                 $this->getContentGatewayMock(),
-                $this->getFieldDefinitionFixture(),
+                $this->getFieldDefinitionFixture( $isTranslatable ),
                 $this->getFieldValueConverterMock(),
                 $this->getContentStorageHandlerMock()
             );
