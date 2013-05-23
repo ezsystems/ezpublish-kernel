@@ -88,32 +88,36 @@ class LegacySetupController
         // we disable injection of settings to Legacy Kernel during setup
         $this->legacyMapper->setIsEnabled( false );
 
-        /** @var $request \Symfony\Component\HttpFoundation\Request */
-        $request = $this->container->get( 'request' );
-        $currentStep = $request->request->get( 'eZSetup_current_step' );
-
-        $response = new Response();
+        /** @var $request \Symfony\Component\HttpFoundation\ParameterBag */
+        $request = $this->container->get( 'request' )->request;
 
         // inject the extra ezpublish-community folders we want permissions checked for
-        if ( $currentStep == 'Welcome' || $currentStep == 'SystemCheck' )
+        switch ( $request->get( 'eZSetup_current_step' ) )
         {
-            $this->getLegacyKernel()->runCallback(
-                function ()
-                {
-                    $directoriesCheckList = eZINI::instance( 'setup.ini' )->variable( 'directory_permissions', 'CheckList' );
-                    $injectedSettings = array();
-                    // checked folders are relative to the ezpublish_legacy folder
-                    $injectedSettings['setup.ini']['directory_permissions']['CheckList'] =
-                        "../ezpublish/logs;../ezpublish/cache;../ezpublish/config;" . $directoriesCheckList;
-                    eZINI::injectSettings( $injectedSettings );
-                }
-            );
+            case "Welcome":
+            case "SystemCheck":
+                $this->getLegacyKernel()->runCallback(
+                    function ()
+                    {
+                        eZINI::injectSettings(
+                            array(
+                                "setup.ini" => array(
+                                    // checked folders are relative to the ezpublish_legacy folder
+                                    "directory_permissions" => array(
+                                        "CheckList" => "../ezpublish/logs;../ezpublish/cache;../ezpublish/config;" .
+                                            eZINI::instance( 'setup.ini' )->variable( 'directory_permissions', 'CheckList' )
+                                    )
+                                )
+                            )
+                        );
+                    }
+                );
         }
 
-        /** @var \ezpKernelResult $result */
-        $result = $this->getLegacyKernel()->run();
-        $result->getContent();
-        $response->setContent( $result->getContent() );
+        $response = new Response();
+        $response->setContent(
+            $this->getLegacyKernel()->run()->getContent()
+        );
 
         // After the latest step, we can re-use both POST data and written INI settings
         // to generate a local ezpublish_<env>.yml
@@ -131,26 +135,25 @@ class LegacySetupController
         // Check that eZ Publish Legacy was actually installed, since one step can run several steps
         if ( $this->legacyConfigResolver->getParameter( 'SiteAccessSettings.CheckValidity' ) == 'false' )
         {
-            $chosenSitePackage = $request->request->get( 'P_chosen_site_package-0' );
+            $chosenSitePackage = $request->get( 'P_chosen_site_package-0' );
 
             // match mode (host, url or port)
-            $accessType = $request->request->get( 'P_site_extra_data_access_type-' . $chosenSitePackage );
-            if ( $accessType == 'hostname' || $accessType == 'port' )
+            switch ( $request->get( 'P_site_extra_data_access_type-' . $chosenSitePackage ) )
             {
-                $adminSiteaccess = $chosenSitePackage . '_admin';
-            }
-            else if ( $accessType === 'url' )
-            {
-                $adminSiteaccess = $request->request->get( 'P_site_extra_data_admin_access_type_value-' . $chosenSitePackage );
+                case "hostname":
+                case "port":
+                    $adminSiteaccess = $chosenSitePackage . '_admin';
+                    break;
+                case "url":
+                    $adminSiteaccess = $request->get( 'P_site_extra_data_admin_access_type_value-' . $chosenSitePackage );
             }
 
-            /** @var $configurationConverter \eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfigurationConverter */
-            $configurationConverter = $this->container->get( 'ezpublish_legacy.setup_wizard.configuration_converter' );
             /** @var $configurationDumper \eZ\Bundle\EzpublishLegacyBundle\SetupWizard\ConfigurationDumper */
             $configurationDumper = $this->container->get( 'ezpublish_legacy.setup_wizard.configuration_dumper' );
             $configurationDumper->addEnvironment( $this->container->get( 'kernel' )->getEnvironment() );
             $configurationDumper->dump(
-                $configurationConverter->fromLegacy( $chosenSitePackage, $adminSiteaccess ),
+                $this->container->get( 'ezpublish_legacy.setup_wizard.configuration_converter' )
+                    ->fromLegacy( $chosenSitePackage, $adminSiteaccess ),
                 ConfigDumperInterface::OPT_BACKUP_CONFIG
             );
         }
