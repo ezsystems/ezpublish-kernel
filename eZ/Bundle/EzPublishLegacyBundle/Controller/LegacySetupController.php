@@ -115,46 +115,44 @@ class LegacySetupController
         $result->getContent();
         $response->setContent( $result->getContent() );
 
-        // After the registration step, we can re-use both POST data and written INI settings
+        // After the latest step, we can re-use both POST data and written INI settings
         // to generate a local ezpublish_<env>.yml
-        if ( $currentStep == 'Registration' )
-        {
-            // Clear INI cache since setup has written new files
-            $this->getLegacyKernel()->runCallback(
-                function ()
-                {
-                    eZINI::injectSettings( array() );
-                    eZCache::clearByTag( 'ini' );
-                    eZINI::resetAllInstances();
-                }
-            );
 
-            // Check that eZ Publish Legacy was actually installed, since one step can run several steps
-            if ( $this->legacyConfigResolver->getParameter( 'SiteAccessSettings.CheckValidity' ) == 'false' )
+        // Clear INI cache since setup has written new files
+        $this->getLegacyKernel()->runCallback(
+            function ()
             {
-                $chosenSitePackage = $request->request->get( 'P_chosen_site_package-0' );
-
-                // match mode (host, url or port)
-                $accessType = $request->request->get( 'P_site_extra_data_access_type-' . $chosenSitePackage );
-                if ( $accessType == 'hostname' || $accessType == 'port' )
-                {
-                    $adminSiteaccess = $chosenSitePackage . '_admin';
-                }
-                else if ( $accessType === 'url' )
-                {
-                    $adminSiteaccess = $request->request->get( 'P_site_extra_data_admin_access_type_value-' . $chosenSitePackage );
-                }
-
-                /** @var $configurationConverter \eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfigurationConverter */
-                $configurationConverter = $this->container->get( 'ezpublish_legacy.setup_wizard.configuration_converter' );
-                /** @var $configurationDumper \eZ\Bundle\EzpublishLegacyBundle\SetupWizard\ConfigurationDumper */
-                $configurationDumper = $this->container->get( 'ezpublish_legacy.setup_wizard.configuration_dumper' );
-                $configurationDumper->addEnvironment( $this->container->get( 'kernel' )->getEnvironment() );
-                $configurationDumper->dump(
-                    $configurationConverter->fromLegacy( $chosenSitePackage, $adminSiteaccess ),
-                    ConfigDumperInterface::OPT_BACKUP_CONFIG
-                );
+                eZINI::injectSettings( array() );
+                eZCache::clearByTag( 'ini' );
+                eZINI::resetAllInstances();
             }
+        );
+
+        // Check that eZ Publish Legacy was actually installed, since one step can run several steps
+        if ( $this->legacyConfigResolver->getParameter( 'SiteAccessSettings.CheckValidity' ) == 'false' )
+        {
+            $chosenSitePackage = $request->request->get( 'P_chosen_site_package-0' );
+
+            // match mode (host, url or port)
+            $accessType = $request->request->get( 'P_site_extra_data_access_type-' . $chosenSitePackage );
+            if ( $accessType == 'hostname' || $accessType == 'port' )
+            {
+                $adminSiteaccess = $chosenSitePackage . '_admin';
+            }
+            else if ( $accessType === 'url' )
+            {
+                $adminSiteaccess = $request->request->get( 'P_site_extra_data_admin_access_type_value-' . $chosenSitePackage );
+            }
+
+            /** @var $configurationConverter \eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfigurationConverter */
+            $configurationConverter = $this->container->get( 'ezpublish_legacy.setup_wizard.configuration_converter' );
+            /** @var $configurationDumper \eZ\Bundle\EzpublishLegacyBundle\SetupWizard\ConfigurationDumper */
+            $configurationDumper = $this->container->get( 'ezpublish_legacy.setup_wizard.configuration_dumper' );
+            $configurationDumper->addEnvironment( $this->container->get( 'kernel' )->getEnvironment() );
+            $configurationDumper->dump(
+                $configurationConverter->fromLegacy( $chosenSitePackage, $adminSiteaccess ),
+                ConfigDumperInterface::OPT_BACKUP_CONFIG
+            );
         }
 
         return $response;
