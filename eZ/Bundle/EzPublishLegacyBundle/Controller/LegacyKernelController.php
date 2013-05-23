@@ -81,7 +81,7 @@ class LegacyKernelController
 
         $moduleResult = $result->getAttribute( 'module_result' );
 
-        if ( isset( $this->legacyLayout ) && !$legacyMode )
+        if ( isset( $this->legacyLayout ) && !$legacyMode && !isset( $moduleResult['pagelayout'] ) )
         {
             $response = $this->render(
                 $this->legacyLayout,
