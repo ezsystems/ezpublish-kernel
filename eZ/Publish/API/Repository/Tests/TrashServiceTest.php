@@ -12,6 +12,7 @@ namespace eZ\Publish\API\Repository\Tests;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for operations in the TrashService using in memory storage.
@@ -131,7 +132,7 @@ class TrashServiceTest extends BaseTrashServiceTest
                 $locationService->loadLocationByRemoteId( $remoteId );
                 $this->fail( "Location '{$remoteId}' should exist.'" );
             }
-            catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
+            catch ( NotFoundException $e )
             {
                 // echo $e->getFile(), ' +', $e->getLine(), PHP_EOL;
             }
@@ -258,6 +259,16 @@ class TrashServiceTest extends BaseTrashServiceTest
             $location->pathString,
             $locationReloaded->pathString
         );
+
+        // Trash item should be removed after being recovered
+        try
+        {
+            $trashService->loadTrashItem( $trashItem->id );
+        }
+        catch ( NotFoundException $e )
+        {
+            // All well
+        }
     }
 
     /**
@@ -301,10 +312,20 @@ class TrashServiceTest extends BaseTrashServiceTest
                     )
                 );
             }
-            catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
+            catch ( NotFoundException $e )
             {
                 // All well
             }
+        }
+
+        // Trash item should be removed after being recovered
+        try
+        {
+            $trashService->loadTrashItem( $trashItem->id );
+        }
+        catch ( NotFoundException $e )
+        {
+            // All well
         }
     }
 
@@ -351,6 +372,16 @@ class TrashServiceTest extends BaseTrashServiceTest
             ),
             $location
         );
+
+        // Trash item should be removed after being recovered
+        try
+        {
+            $trashService->loadTrashItem( $trashItem->id );
+        }
+        catch ( NotFoundException $e )
+        {
+            // All well
+        }
     }
 
     /**
@@ -389,6 +420,16 @@ class TrashServiceTest extends BaseTrashServiceTest
             $childCount + 1,
             $locationService->getLocationChildCount( $location )
         );
+
+        // Trash item should be removed after being recovered
+        try
+        {
+            $trashService->loadTrashItem( $trashItem->id );
+        }
+        catch ( NotFoundException $e )
+        {
+            // All well
+        }
     }
 
     /**
