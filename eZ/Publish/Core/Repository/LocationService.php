@@ -10,6 +10,8 @@
 
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\Core\Repository\DomainMapper;
+use eZ\Publish\Core\Repository\NameSchemaService;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -59,13 +61,31 @@ class LocationService implements LocationServiceInterface
     protected $settings;
 
     /**
+     * @var \eZ\Publish\Core\Repository\DomainMapper
+     */
+    protected $domainMapper;
+
+    /**
+     * @var \eZ\Publish\Core\Repository\NameSchemaService
+     */
+    protected $nameSchemaService;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
      * @param array $settings
+     * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
+     * @param \eZ\Publish\Core\Repository\NameSchemaService $nameSchemaService
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct(
+        RepositoryInterface $repository,
+        Handler $handler,
+        array $settings = array(),
+        DomainMapper $domainMapper,
+        NameSchemaService $nameSchemaService
+    )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
@@ -73,6 +93,8 @@ class LocationService implements LocationServiceInterface
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
+        $this->domainMapper = $domainMapper;
+        $this->nameSchemaService = $nameSchemaService;
     }
 
     /**
@@ -137,7 +159,7 @@ class LocationService implements LocationServiceInterface
             );
 
             $content = $this->repository->getContentService()->loadContent( $newLocation->contentId );
-            $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
+            $urlAliasNames = $this->nameSchemaService->resolveUrlAliasSchema( $content );
             foreach ( $urlAliasNames as $languageCode => $name )
             {
                 $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
@@ -410,7 +432,7 @@ class LocationService implements LocationServiceInterface
             }
         }
 
-        $spiLocationCreateStruct = $this->repository->getDomainMapper()->buildSPILocationCreateStruct(
+        $spiLocationCreateStruct = $this->domainMapper->buildSPILocationCreateStruct(
             $locationCreateStruct,
             $parentLocation,
             $content->contentInfo->mainLocationId !== null ? $content->contentInfo->mainLocationId : true,
@@ -423,7 +445,7 @@ class LocationService implements LocationServiceInterface
         {
             $newLocation = $this->persistenceHandler->locationHandler()->create( $spiLocationCreateStruct );
 
-            $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
+            $urlAliasNames = $this->nameSchemaService->resolveUrlAliasSchema( $content );
             foreach ( $urlAliasNames as $languageCode => $name )
             {
                 $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
@@ -667,7 +689,7 @@ class LocationService implements LocationServiceInterface
             $this->persistenceHandler->locationHandler()->move( $location->id, $newParentLocation->id );
 
             $content = $this->repository->getContentService()->loadContent( $location->contentId );
-            $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
+            $urlAliasNames = $this->nameSchemaService->resolveUrlAliasSchema( $content );
             foreach ( $urlAliasNames as $languageCode => $name )
             {
                 $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(

@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\Core\Repository\DomainMapper;
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -47,13 +48,19 @@ class SearchService implements SearchServiceInterface
     protected $settings;
 
     /**
+     * @var \eZ\Publish\Core\Repository\DomainMapper
+     */
+    protected $domainMapper;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandler
      * @param array $settings
+     * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
      */
-    public function __construct( RepositoryInterface $repository, Handler $searchHandler, array $settings = array() )
+    public function __construct( RepositoryInterface $repository, Handler $searchHandler, array $settings = array(), DomainMapper $domainMapper )
     {
         $this->repository = $repository;
         $this->searchHandler = $searchHandler;
@@ -61,6 +68,7 @@ class SearchService implements SearchServiceInterface
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
+        $this->domainMapper = $domainMapper;
     }
 
     /**
@@ -95,7 +103,7 @@ class SearchService implements SearchServiceInterface
 
         foreach ( $result->searchHits as $hit )
         {
-            $hit->valueObject = $this->repository->getDomainMapper()->buildContentDomainObject(
+            $hit->valueObject = $this->domainMapper->buildContentDomainObject(
                 $hit->valueObject
             );
         }
@@ -125,7 +133,7 @@ class SearchService implements SearchServiceInterface
             throw new NotFoundException( 'Content', '*' );
         }
 
-        return $this->repository->getDomainMapper()->buildContentDomainObject(
+        return $this->domainMapper->buildContentDomainObject(
             $this->searchHandler->findSingle( $criterion, $fieldFilters )
         );
     }

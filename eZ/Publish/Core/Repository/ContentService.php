@@ -13,6 +13,9 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\Persistence\Handler;
+use eZ\Publish\Core\Repository\DomainMapper;
+use eZ\Publish\Core\Repository\RelationProcessor;
+use eZ\Publish\Core\Repository\NameSchemaService;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
@@ -73,13 +76,38 @@ class ContentService implements ContentServiceInterface
     protected $settings;
 
     /**
+     * @var \eZ\Publish\Core\Repository\DomainMapper
+     */
+    protected $domainMapper;
+
+    /**
+     * @var \eZ\Publish\Core\Repository\RelationProcessor
+     */
+    protected $relationProcessor;
+
+    /**
+     * @var \eZ\Publish\Core\Repository\NameSchemaService
+     */
+    protected $nameSchemaService;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
      * @param array $settings
+     * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
+     * @param \eZ\Publish\Core\Repository\RelationProcessor $relationProcessor
+     * @param \eZ\Publish\Core\Repository\NameSchemaService $nameSchemaService
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct(
+        RepositoryInterface $repository,
+        Handler $handler,
+        array $settings = array(),
+        DomainMapper $domainMapper,
+        RelationProcessor $relationProcessor,
+        NameSchemaService $nameSchemaService
+    )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
@@ -87,6 +115,9 @@ class ContentService implements ContentServiceInterface
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
+        $this->domainMapper = $domainMapper;
+        $this->relationProcessor = $relationProcessor;
+        $this->nameSchemaService = $nameSchemaService;
     }
 
     /**
@@ -137,7 +168,7 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        return $this->repository->getDomainMapper()->buildContentInfoDomainObject( $spiContentInfo );
+        return $this->domainMapper->buildContentInfoDomainObject( $spiContentInfo );
     }
 
     /**
@@ -219,7 +250,7 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        $versionInfo = $this->repository->getDomainMapper()->buildVersionInfoDomainObject( $spiVersionInfo );
+        $versionInfo = $this->domainMapper->buildVersionInfoDomainObject( $spiVersionInfo );
         if ( !$this->repository->canUser( 'content', 'versionread', $versionInfo ) )
             throw new UnauthorizedException( 'content', 'versionread' );
 
@@ -359,7 +390,7 @@ class ContentService implements ContentServiceInterface
             }
         }
 
-        return $this->repository->getDomainMapper()->buildContentDomainObject( $spiContent );
+        return $this->domainMapper->buildContentDomainObject( $spiContent );
     }
 
     /**
@@ -449,7 +480,7 @@ class ContentService implements ContentServiceInterface
         }
         else
         {
-            $contentCreateStruct->remoteId = $this->repository->getDomainMapper()->getUniqueHash( $contentCreateStruct );
+            $contentCreateStruct->remoteId = $this->domainMapper->getUniqueHash( $contentCreateStruct );
         }
 
         $spiLocationCreateStructs = $this->buildSPILocationCreateStructs( $locationCreateStructs );
@@ -560,7 +591,7 @@ class ContentService implements ContentServiceInterface
                     continue;
                 }
 
-                $this->repository->getRelationProcessor()->appendFieldRelations(
+                $this->relationProcessor->appendFieldRelations(
                     $inputRelations,
                     $locationIdToContentIdMapping,
                     $fieldType,
@@ -593,7 +624,7 @@ class ContentService implements ContentServiceInterface
 
         $spiContentCreateStruct = new SPIContentCreateStruct(
             array(
-                "name" => $this->repository->getNameSchemaService()->resolve(
+                "name" => $this->nameSchemaService->resolve(
                     $contentCreateStruct->contentType->nameSchema,
                     $contentCreateStruct->contentType,
                     $fieldValues,
@@ -631,7 +662,7 @@ class ContentService implements ContentServiceInterface
         try
         {
             $spiContent = $this->persistenceHandler->contentHandler()->create( $spiContentCreateStruct );
-            $this->repository->getRelationProcessor()->processFieldRelations(
+            $this->relationProcessor->processFieldRelations(
                 $inputRelations,
                 $spiContent->versionInfo->contentInfo->id,
                 $spiContent->versionInfo->versionNo,
@@ -655,7 +686,7 @@ class ContentService implements ContentServiceInterface
             throw $e;
         }
 
-        return $this->repository->getDomainMapper()->buildContentDomainObject( $spiContent );
+        return $this->domainMapper->buildContentDomainObject( $spiContent );
     }
 
     /**
@@ -688,7 +719,7 @@ class ContentService implements ContentServiceInterface
                 $locationCreateStruct->parentLocationId
             );
 
-            $spiLocationCreateStructs[] = $this->repository->getDomainMapper()->buildSPILocationCreateStruct(
+            $spiLocationCreateStructs[] = $this->domainMapper->buildSPILocationCreateStruct(
                 $locationCreateStruct,
                 $parentLocation,
                 $mainLocation,
@@ -826,7 +857,7 @@ class ContentService implements ContentServiceInterface
      */
     protected function publishUrlAliasesForContent( APIContent $content, $updatePathIdentificationString = true )
     {
-        $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
+        $urlAliasNames = $this->nameSchemaService->resolveUrlAliasSchema( $content );
         $locations = $this->repository->getLocationService()->loadLocations(
             $content->getVersionInfo()->getContentInfo()
         );
@@ -970,7 +1001,7 @@ class ContentService implements ContentServiceInterface
             throw $e;
         }
 
-        return $this->repository->getDomainMapper()->buildContentDomainObject( $spiContent );
+        return $this->domainMapper->buildContentDomainObject( $spiContent );
     }
 
     /**
@@ -1000,7 +1031,7 @@ class ContentService implements ContentServiceInterface
         $versionInfoList = array();
         foreach ( $spiVersionInfoList as $spiVersionInfo )
         {
-            $versionInfo = $this->repository->getDomainMapper()->buildVersionInfoDomainObject( $spiVersionInfo );
+            $versionInfo = $this->domainMapper->buildVersionInfoDomainObject( $spiVersionInfo );
             if ( !$this->repository->canUser( 'content', 'versionread', $versionInfo ) )
                 throw new UnauthorizedException( 'content', 'versionread' );
 
@@ -1190,7 +1221,7 @@ class ContentService implements ContentServiceInterface
                     continue;
                 }
 
-                $this->repository->getRelationProcessor()->appendFieldRelations(
+                $this->relationProcessor->appendFieldRelations(
                     $inputRelations,
                     $locationIdToContentIdMapping,
                     $fieldType,
@@ -1224,7 +1255,7 @@ class ContentService implements ContentServiceInterface
 
         $spiContentUpdateStruct = new SPIContentUpdateStruct(
             array(
-                "name" => $this->repository->getNameSchemaService()->resolveNameSchema(
+                "name" => $this->nameSchemaService->resolveNameSchema(
                     $content,
                     $fieldValues,
                     $languageCodes,
@@ -1248,7 +1279,7 @@ class ContentService implements ContentServiceInterface
                 $versionInfo->versionNo,
                 $spiContentUpdateStruct
             );
-            $this->repository->getRelationProcessor()->processFieldRelations(
+            $this->relationProcessor->processFieldRelations(
                 $inputRelations,
                 $spiContent->versionInfo->contentInfo->id,
                 $spiContent->versionInfo->versionNo,
@@ -1263,7 +1294,7 @@ class ContentService implements ContentServiceInterface
             throw $e;
         }
 
-        return $this->repository->getDomainMapper()->buildContentDomainObject(
+        return $this->domainMapper->buildContentDomainObject(
             $spiContent,
             $contentType
         );
@@ -1361,7 +1392,7 @@ class ContentService implements ContentServiceInterface
             $versionInfo->versionNo,
             $metadataUpdateStruct
         );
-        $content = $this->repository->getDomainMapper()->buildContentDomainObject( $spiContent );
+        $content = $this->domainMapper->buildContentDomainObject( $spiContent );
 
         $this->publishUrlAliasesForContent( $content );
 
@@ -1424,7 +1455,7 @@ class ContentService implements ContentServiceInterface
         $versions = array();
         foreach ( $spiVersionInfoList as $spiVersionInfo )
         {
-            $versionInfo = $this->repository->getDomainMapper()->buildVersionInfoDomainObject( $spiVersionInfo );
+            $versionInfo = $this->domainMapper->buildVersionInfoDomainObject( $spiVersionInfo );
             if ( !$this->repository->canUser( 'content', 'versionread', $versionInfo ) )
                 throw new UnauthorizedException( 'content', 'versionread' );
 
@@ -1469,7 +1500,7 @@ class ContentService implements ContentServiceInterface
             );
 
             $content = $this->internalPublishVersion(
-                $this->repository->getDomainMapper()->buildVersionInfoDomainObject( $spiContent->versionInfo ),
+                $this->domainMapper->buildVersionInfoDomainObject( $spiContent->versionInfo ),
                 $spiContent->versionInfo->creationDate
             );
 
@@ -1513,7 +1544,7 @@ class ContentService implements ContentServiceInterface
         foreach ( $spiRelations as $spiRelation )
         {
             // @todo Should relations really be loaded w/o checking permissions just because User needs to be accessible??
-            $relations[] = $this->repository->getDomainMapper()->buildRelationDomainObject(
+            $relations[] = $this->domainMapper->buildRelationDomainObject(
                 $spiRelation,
                 $contentInfo,
                 $this->internalLoadContentInfo( $spiRelation->destinationContentId )
@@ -1552,7 +1583,7 @@ class ContentService implements ContentServiceInterface
         foreach ( $spiRelations as $spiRelation )
         {
             // @todo Should relations really be loaded w/o checking permissions just because User needs to be accessible??
-            $relation = $this->repository->getDomainMapper()->buildRelationDomainObject(
+            $relation = $this->domainMapper->buildRelationDomainObject(
                 $spiRelation,
                 $this->internalLoadContentInfo( $spiRelation->sourceContentId ),
                 $contentInfo
@@ -1622,7 +1653,7 @@ class ContentService implements ContentServiceInterface
             throw $e;
         }
 
-        return $this->repository->getDomainMapper()->buildRelationDomainObject( $spiRelation, $sourceContentInfo, $destinationContent );
+        return $this->domainMapper->buildRelationDomainObject( $spiRelation, $sourceContentInfo, $destinationContent );
     }
 
     /**

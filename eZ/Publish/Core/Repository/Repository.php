@@ -436,7 +436,14 @@ class Repository implements RepositoryInterface
         if ( $this->contentService !== null )
             return $this->contentService;
 
-        $this->contentService = new ContentService( $this, $this->persistenceHandler, $this->serviceSettings['content'] );
+        $this->contentService = new ContentService(
+            $this,
+            $this->persistenceHandler,
+            $this->serviceSettings['content'],
+            $this->getDomainMapper(),
+            $this->getRelationProcessor(),
+            $this->getNameSchemaService()
+        );
         return $this->contentService;
     }
 
@@ -476,7 +483,8 @@ class Repository implements RepositoryInterface
         $this->contentTypeService = new ContentTypeService(
             $this,
             $this->persistenceHandler->contentTypeHandler(),
-            $this->serviceSettings['contentType']
+            $this->serviceSettings['contentType'],
+            $this->getDomainMapper()
         );
         return $this->contentTypeService;
     }
@@ -493,7 +501,13 @@ class Repository implements RepositoryInterface
         if ( $this->locationService !== null )
             return $this->locationService;
 
-        $this->locationService = new LocationService( $this, $this->persistenceHandler, $this->serviceSettings['location'] );
+        $this->locationService = new LocationService(
+            $this,
+            $this->persistenceHandler,
+            $this->serviceSettings['location'],
+            $this->getDomainMapper(),
+            $this->getNameSchemaService()
+        );
         return $this->locationService;
     }
 
@@ -510,7 +524,12 @@ class Repository implements RepositoryInterface
         if ( $this->trashService !== null )
             return $this->trashService;
 
-        $this->trashService = new TrashService( $this, $this->persistenceHandler, $this->serviceSettings['trash'] );
+        $this->trashService = new TrashService(
+            $this,
+            $this->persistenceHandler,
+            $this->serviceSettings['trash'],
+            $this->getNameSchemaService()
+        );
         return $this->trashService;
     }
 
@@ -638,7 +657,8 @@ class Repository implements RepositoryInterface
         $this->searchService = new SearchService(
             $this,
             $this->persistenceHandler->searchHandler(),
-            $this->serviceSettings['search']
+            $this->serviceSettings['search'],
+            $this->getDomainMapper()
         );
         return $this->searchService;
     }
@@ -666,7 +686,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\Core\Repository\NameSchemaService
      */
-    public function getNameSchemaService()
+    protected function getNameSchemaService()
     {
         if ( $this->nameSchemaService !== null )
             return $this->nameSchemaService;
@@ -684,7 +704,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\Core\Repository\RelationProcessor
      */
-    public function getRelationProcessor()
+    protected function getRelationProcessor()
     {
         if ( $this->relationProcessor !== null )
             return $this->relationProcessor;
@@ -702,7 +722,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\Core\Repository\DomainMapper
      */
-    public function getDomainMapper()
+    protected function getDomainMapper()
     {
         if ( $this->domainMapper !== null )
             return $this->domainMapper;

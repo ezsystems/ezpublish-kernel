@@ -36,7 +36,12 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
-        $service = new SearchService( $repositoryMock, $searchHandlerMock );
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            array(),
+            $this->getDomainMapperMock()
+        );
 
         $repositoryMock->expects( $this->once() )
             ->method( "hasAccess" )
@@ -63,14 +68,15 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
-        $service = new SearchService( $repositoryMock, $searchHandlerMock );
         $domainMapperMock = $this->getDomainMapperMock();
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            array(),
+            $domainMapperMock
+        );
 
         $repositoryMock->expects( $this->never() )->method( "hasAccess" );
-
-        $repositoryMock->expects( $this->once() )
-            ->method( "getDomainMapper" )
-            ->will( $this->returnValue( $domainMapperMock ) );
 
         $serviceQuery = new Query;
         $handlerQuery = new Query( array( "limit" => SearchService::MAX_LIMIT ) );
@@ -121,17 +127,18 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
-        $service = new SearchService( $repositoryMock, $searchHandlerMock );
         $domainMapperMock = $this->getDomainMapperMock();
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            array(),
+            $domainMapperMock
+        );
 
         $repositoryMock->expects( $this->once() )
             ->method( "hasAccess" )
             ->with( $this->equalTo( "content" ), $this->equalTo( "read" ) )
             ->will( $this->returnValue( true ) );
-
-        $repositoryMock->expects( $this->once() )
-            ->method( "getDomainMapper" )
-            ->will( $this->returnValue( $domainMapperMock ) );
 
         $criterionMock = $this
             ->getMockBuilder( "eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion" )
@@ -185,7 +192,12 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
-        $service = new SearchService( $repositoryMock, $searchHandlerMock );
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            array(),
+            $this->getDomainMapperMock()
+        );
 
         $repositoryMock->expects( $this->once() )
             ->method( "hasAccess" )
@@ -274,7 +286,12 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
-        $service = new SearchService( $repositoryMock, $searchHandlerMock );
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            array(),
+            $this->getDomainMapperMock()
+        );
 
         $repositoryMock->expects( $this->once() )
             ->method( "hasAccess" )
@@ -301,7 +318,12 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
-        $service = new SearchService( $repositoryMock, $searchHandlerMock );
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            array(),
+            $this->getDomainMapperMock()
+        );
 
         $repositoryMock->expects( $this->once() )
             ->method( "hasAccess" )
@@ -327,17 +349,18 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
-        $service = new SearchService( $repositoryMock, $searchHandlerMock );
         $domainMapperMock = $this->getDomainMapperMock();
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            array(),
+            $domainMapperMock
+        );
 
         $repositoryMock->expects( $this->once() )
             ->method( "hasAccess" )
             ->with( $this->equalTo( "content" ), $this->equalTo( "read" ) )
             ->will( $this->returnValue( true ) );
-
-        $repositoryMock->expects( $this->once() )
-            ->method( "getDomainMapper" )
-            ->will( $this->returnValue( $domainMapperMock ) );
 
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
         $criterionMock = $this
@@ -372,14 +395,9 @@ class SearchTest extends BaseServiceMockTest
      */
     public function testFindSingleWithLimitedPermission( $criterionMock, $serviceCriterion, $handlerCriterion )
     {
-        $repositoryMock = $this->getRepositoryMock();
         $mockedService = $this->getPartlyMockedSearchService( array( "getPermissionsCriterion" ) );
         $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
         $domainMapperMock = $this->getDomainMapperMock();
-
-        $repositoryMock->expects( $this->once() )
-            ->method( "getDomainMapper" )
-            ->will( $this->returnValue( $domainMapperMock ) );
 
         $fieldFilters = array();
         $spiContent = new SPIContent;
@@ -624,7 +642,12 @@ class SearchTest extends BaseServiceMockTest
 
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
         /** @var \eZ\Publish\API\Repository\Repository */
-        $service = new SearchService( $repositoryMock, $searchHandlerMock );
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            array(),
+            $this->getDomainMapperMock()
+        );
         $result = $service->findContent( $serviceQuery, $fieldFilters, true );
 
         $this->assertEquals( new SearchResult(), $result );
@@ -650,11 +673,6 @@ class SearchTest extends BaseServiceMockTest
 
         $domainMapperMock = $this->getDomainMapperMock();
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $repositoryMock */
-        $repositoryMock->expects( $this->once() )
-            ->method( "getDomainMapper" )
-            ->will( $this->returnValue( $domainMapperMock ) );
-
         $domainMapperMock->expects( $this->once() )
             ->method( "buildContentDomainObject" )
             ->with( $this->equalTo( $spiContent ) )
@@ -668,21 +686,33 @@ class SearchTest extends BaseServiceMockTest
 
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
         /** @var \eZ\Publish\API\Repository\Repository $repositoryMock */
-        $service = new SearchService( $repositoryMock, $searchHandlerMock );
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            array(),
+            $domainMapperMock
+        );
         $result = $service->findSingle( $serviceCriterion, $fieldFilters, true );
 
         $this->assertEquals( $contentMock, $result );
     }
 
+    protected $domainMapperMock;
+
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\DomainMapper
      */
     protected function getDomainMapperMock()
     {
-        return $this
-            ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\DomainMapper" )
-            ->disableOriginalConstructor()
-            ->getMock();
+        if ( !isset( $this->domainMapperMock ) )
+        {
+            $this->domainMapperMock = $this
+                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\DomainMapper" )
+                ->disableOriginalConstructor()
+                ->getMock();
+        }
+
+        return $this->domainMapperMock;
     }
 
     /**
@@ -701,7 +731,9 @@ class SearchTest extends BaseServiceMockTest
             $methods,
             array(
                 $this->getRepositoryMock(),
-                $this->getPersistenceMock()->searchHandler()
+                $this->getPersistenceMock()->searchHandler(),
+                array(),
+                $this->getDomainMapperMock()
             )
         );
     }

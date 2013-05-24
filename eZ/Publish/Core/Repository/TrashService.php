@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\Persistence\Handler;
+use eZ\Publish\Core\Repository\NameSchemaService;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
@@ -48,13 +49,24 @@ class TrashService implements TrashServiceInterface
     protected $settings;
 
     /**
+     * @var \eZ\Publish\Core\Repository\NameSchemaService
+     */
+    protected $nameSchemaService;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
      * @param array $settings
+     * @param \eZ\Publish\Core\Repository\NameSchemaService $nameSchemaService
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct(
+        RepositoryInterface $repository,
+        Handler $handler,
+        array $settings = array(),
+        NameSchemaService $nameSchemaService
+    )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
@@ -62,6 +74,7 @@ class TrashService implements TrashServiceInterface
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
+        $this->nameSchemaService = $nameSchemaService;
     }
 
     /**
@@ -162,7 +175,7 @@ class TrashService implements TrashServiceInterface
             );
 
             $content = $this->repository->getContentService()->loadContent( $trashItem->contentId );
-            $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
+            $urlAliasNames = $this->nameSchemaService->resolveUrlAliasSchema( $content );
 
             // Publish URL aliases for recovered location
             foreach ( $urlAliasNames as $languageCode => $name )
