@@ -114,7 +114,10 @@ class TrashHandler implements TrashHandlerInterface
         }
 
         $struct->parentId = $newParent->id;
-        return $this->handler->locationHandler()->create( $struct )->id;
+        $recoveredLocation = $this->handler->locationHandler()->create( $struct )->id;
+        $this->backend->delete( 'Content\\Location\\Trashed', $trashedId );
+
+        return $recoveredLocation;
     }
 
     /**
