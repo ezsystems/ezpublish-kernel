@@ -173,7 +173,7 @@ class LanguageService implements APILanguageService, Sessionable
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if language could not be found
      *
-     * @param int $languageId
+     * @param mixed $languageId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
      */

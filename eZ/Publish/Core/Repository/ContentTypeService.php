@@ -172,11 +172,6 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function loadContentTypeGroup( $contentTypeGroupId )
     {
-        if ( !is_numeric( $contentTypeGroupId ) )
-        {
-            throw new InvalidArgumentValue( '$contentTypeGroupId', $contentTypeGroupId );
-        }
-
         $spiGroup = $this->contentTypeHandler->loadGroup(
             $contentTypeGroupId
         );
@@ -810,17 +805,12 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If a content type with the given id and status DEFINED can not be found
      *
-     * @param int $contentTypeId
+     * @param mixed $contentTypeId
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     public function loadContentType( $contentTypeId )
     {
-        if ( !is_numeric( $contentTypeId ) )
-        {
-            throw new InvalidArgumentValue( '$contentTypeId', $contentTypeId );
-        }
-
         $spiContentType = $this->contentTypeHandler->load(
             $contentTypeId,
             SPIContentType::STATUS_DEFINED
@@ -879,7 +869,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the content type draft owned by the current user can not be found
      *
-     * @param int $contentTypeId
+     * @param mixed $contentTypeId
      *
      * @todo Use another exception when user of draft is someone else
      *
@@ -887,11 +877,6 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function loadContentTypeDraft( $contentTypeId )
     {
-        if ( !is_numeric( $contentTypeId ) )
-        {
-            throw new InvalidArgumentValue( '$contentTypeId', $contentTypeId );
-        }
-
         $spiContentType = $this->contentTypeHandler->load(
             $contentTypeId,
             SPIContentType::STATUS_DRAFT

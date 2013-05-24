@@ -106,9 +106,6 @@ class UserService implements UserServiceInterface
      */
     public function createUserGroup( APIUserGroupCreateStruct $userGroupCreateStruct, APIUserGroup $parentGroup )
     {
-        if ( !is_numeric( $parentGroup->id ) )
-            throw new InvalidArgumentValue( "id", $parentGroup->id, "UserGroup" );
-
         $contentService = $this->repository->getContentService();
         $locationService = $this->repository->getLocationService();
         $contentTypeService = $this->repository->getContentTypeService();
@@ -147,7 +144,7 @@ class UserService implements UserServiceInterface
     /**
      * Loads a user group for the given id
      *
-     * @param int $id
+     * @param mixed $id
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      *
@@ -156,9 +153,6 @@ class UserService implements UserServiceInterface
      */
     public function loadUserGroup( $id )
     {
-        if ( !is_numeric( $id ) )
-            throw new InvalidArgumentValue( "id", $id );
-
         $content = $this->repository->getContentService()->loadContent( $id );
 
         return $this->buildDomainUserGroupObject( $content );
@@ -175,9 +169,6 @@ class UserService implements UserServiceInterface
      */
     public function loadSubUserGroups( APIUserGroup $userGroup )
     {
-        if ( !is_numeric( $userGroup->id ) )
-            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
-
         $locationService = $this->repository->getLocationService();
 
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
@@ -211,7 +202,7 @@ class UserService implements UserServiceInterface
     /**
      * Returns (searches) subgroups of a user group described by its main location
      *
-     * @param int $locationId
+     * @param mixed $locationId
      * @param int|null $sortField
      * @param int $sortOrder
      * @param int $offset
@@ -252,9 +243,6 @@ class UserService implements UserServiceInterface
      */
     public function deleteUserGroup( APIUserGroup $userGroup )
     {
-        if ( !is_numeric( $userGroup->id ) )
-            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
-
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
 
         $this->repository->beginTransaction();
@@ -281,12 +269,6 @@ class UserService implements UserServiceInterface
      */
     public function moveUserGroup( APIUserGroup $userGroup, APIUserGroup $newParent )
     {
-        if ( !is_numeric( $userGroup->id ) )
-            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
-
-        if ( !is_numeric( $newParent->id ) )
-            throw new InvalidArgumentValue( "id", $newParent->id, "UserGroup" );
-
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
         $loadedNewParent = $this->loadUserGroup( $newParent->id );
 
@@ -335,9 +317,6 @@ class UserService implements UserServiceInterface
      */
     public function updateUserGroup( APIUserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct )
     {
-        if ( !is_numeric( $userGroup->id ) )
-            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
-
         if ( $userGroupUpdateStruct->contentUpdateStruct === null &&
             $userGroupUpdateStruct->contentMetadataUpdateStruct === null )
         {
@@ -538,7 +517,7 @@ class UserService implements UserServiceInterface
     /**
      * Loads a user
      *
-     * @param int $userId
+     * @param mixed $userId
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
@@ -546,9 +525,6 @@ class UserService implements UserServiceInterface
      */
     public function loadUser( $userId )
     {
-        if ( !is_numeric( $userId ) )
-            throw new InvalidArgumentValue( "userId", $userId );
-
         /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
         $content = $this->repository->getContentService()->internalLoadContent( $userId );
         // Get spiUser value from Field Value
@@ -790,12 +766,6 @@ class UserService implements UserServiceInterface
      */
     public function assignUserToUserGroup( APIUser $user, APIUserGroup $userGroup )
     {
-        if ( !is_numeric( $user->id ) )
-            throw new InvalidArgumentValue( "id", $user->id, "User" );
-
-        if ( !is_numeric( $userGroup->id ) )
-            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
-
         $loadedUser = $this->loadUser( $user->id );
         $loadedGroup = $this->loadUserGroup( $userGroup->id );
         $locationService = $this->repository->getLocationService();
@@ -850,12 +820,6 @@ class UserService implements UserServiceInterface
      */
     public function unAssignUserFromUserGroup( APIUser $user, APIUserGroup $userGroup )
     {
-        if ( !is_numeric( $user->id ) )
-            throw new InvalidArgumentValue( "id", $user->id, "User" );
-
-        if ( !is_numeric( $userGroup->id ) )
-            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
-
         $loadedUser = $this->loadUser( $user->id );
         $loadedGroup = $this->loadUserGroup( $userGroup->id );
         $locationService = $this->repository->getLocationService();

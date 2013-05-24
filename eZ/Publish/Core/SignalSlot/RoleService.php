@@ -251,7 +251,7 @@ class RoleService implements RoleServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
      *
-     * @param int $userId
+     * @param mixed $userId
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */

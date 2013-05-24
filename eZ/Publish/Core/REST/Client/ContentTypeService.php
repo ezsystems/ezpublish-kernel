@@ -408,7 +408,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the content type draft owned by the current user can not be found
      *
-     * @param int $contentTypeId
+     * @param mixed $contentTypeId
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
@@ -506,7 +506,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If a content type with the given id and status DEFINED can not be found
      *
-     * @param int $contentTypeId
+     * @param mixed $contentTypeId
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
