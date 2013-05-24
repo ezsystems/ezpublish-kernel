@@ -260,10 +260,10 @@ class TrashServiceTest extends BaseTrashServiceTest
             $locationReloaded->pathString
         );
 
-        // Trash item should be removed after being recovered
         try
         {
             $trashService->loadTrashItem( $trashItem->id );
+            $this->fail( "Trash item was not removed after being recovered." );
         }
         catch ( NotFoundException $e )
         {
@@ -318,10 +318,10 @@ class TrashServiceTest extends BaseTrashServiceTest
             }
         }
 
-        // Trash item should be removed after being recovered
         try
         {
             $trashService->loadTrashItem( $trashItem->id );
+            $this->fail( "Trash item was not removed after being recovered." );
         }
         catch ( NotFoundException $e )
         {
@@ -373,10 +373,10 @@ class TrashServiceTest extends BaseTrashServiceTest
             $location
         );
 
-        // Trash item should be removed after being recovered
         try
         {
             $trashService->loadTrashItem( $trashItem->id );
+            $this->fail( "Trash item was not removed after being recovered." );
         }
         catch ( NotFoundException $e )
         {
@@ -421,10 +421,10 @@ class TrashServiceTest extends BaseTrashServiceTest
             $locationService->getLocationChildCount( $location )
         );
 
-        // Trash item should be removed after being recovered
         try
         {
             $trashService->loadTrashItem( $trashItem->id );
+            $this->fail( "Trash item was not removed after being recovered." );
         }
         catch ( NotFoundException $e )
         {
