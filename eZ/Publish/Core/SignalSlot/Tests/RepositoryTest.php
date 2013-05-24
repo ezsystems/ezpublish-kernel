@@ -162,13 +162,6 @@ class RepositoryTest extends PHPUnit_Framework_TestCase
                 false
             ),
             array(
-                'getNameSchemaService',
-                array(),
-                $this->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\NameSchemaService' )
-                    ->disableOriginalConstructor()
-                    ->getMock()
-            ),
-            array(
                 'beginTransaction',
                 array(),
                 true
