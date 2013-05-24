@@ -194,7 +194,7 @@ class ContentService implements ContentServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the version with the given number does not exist
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
-     * @param int $contentId
+     * @param mixed $contentId
      * @param int $versionNo the version number. If not given the current version is returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
@@ -677,6 +677,7 @@ class ContentService implements ContentServiceInterface
     protected function buildSPILocationCreateStructs( array $locationCreateStructs )
     {
         $spiLocationCreateStructs = array();
+        $locationService = $this->repository->getLocationService();
 
         $parentLocationIdCache = array();
         foreach ( $locationCreateStructs as $index => $locationCreateStruct )
@@ -691,7 +692,7 @@ class ContentService implements ContentServiceInterface
             }
             $parentLocationIdCache[] = $parentLocation->id;
 
-            if ( $locationCreateStruct->priority !== null && !is_numeric( $locationCreateStruct->priority ) )
+            if ( $locationCreateStruct->priority !== null && !is_int( $locationCreateStruct->priority ) )
             {
                 throw new InvalidArgumentValue( "priority", $locationCreateStruct->priority, "LocationCreateStruct" );
             }
@@ -706,12 +707,12 @@ class ContentService implements ContentServiceInterface
                 throw new InvalidArgumentValue( "remoteId", $locationCreateStruct->remoteId, "LocationCreateStruct" );
             }
 
-            if ( $locationCreateStruct->sortField !== null && !is_numeric( $locationCreateStruct->sortField ) )
+            if ( $locationCreateStruct->sortField !== null && !$locationService->isValidSortField( $locationCreateStruct->sortField ) )
             {
                 throw new InvalidArgumentValue( "sortField", $locationCreateStruct->sortField, "LocationCreateStruct" );
             }
 
-            if ( $locationCreateStruct->sortOrder !== null && !is_numeric( $locationCreateStruct->sortOrder ) )
+            if ( $locationCreateStruct->sortOrder !== null && !$locationService->isValidSortOrder( $locationCreateStruct->sortOrder ) )
             {
                 throw new InvalidArgumentValue( "sortOrder", $locationCreateStruct->sortOrder, "LocationCreateStruct" );
             }

@@ -59,7 +59,7 @@ class TrashServiceStub implements TrashService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the trashed location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the location with the given id does not exist
      *
-     * @param int $trashItemId
+     * @param mixed $trashItemId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */

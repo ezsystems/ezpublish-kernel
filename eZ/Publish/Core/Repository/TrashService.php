@@ -72,15 +72,12 @@ class TrashService implements TrashServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the trashed location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the location with the given id does not exist
      *
-     * @param int $trashItemId
+     * @param mixed $trashItemId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
     public function loadTrashItem( $trashItemId )
     {
-        if ( !is_numeric( $trashItemId ) )
-            throw new InvalidArgumentValue( "trashItemId", $trashItemId );
-
         if ( $this->repository->hasAccess( 'content', 'restore' ) !== true )
             throw new UnauthorizedException( 'content', 'restore' );
 
@@ -312,16 +309,16 @@ class TrashService implements TrashServiceInterface
         return new TrashItem(
             array(
                 'contentInfo' => $this->repository->getContentService()->loadContentInfo( $spiTrashItem->contentId ),
-                'id' => (int)$spiTrashItem->id,
-                'priority' => (int)$spiTrashItem->priority,
-                'hidden' => (bool)$spiTrashItem->hidden,
-                'invisible' => (bool)$spiTrashItem->invisible,
+                'id' => $spiTrashItem->id,
+                'priority' => $spiTrashItem->priority,
+                'hidden' => $spiTrashItem->hidden,
+                'invisible' => $spiTrashItem->invisible,
                 'remoteId' => $spiTrashItem->remoteId,
-                'parentLocationId' => (int)$spiTrashItem->parentId,
+                'parentLocationId' => $spiTrashItem->parentId,
                 'pathString' => $spiTrashItem->pathString,
-                'depth' => (int)$spiTrashItem->depth,
-                'sortField' => (int)$spiTrashItem->sortField,
-                'sortOrder' => (int)$spiTrashItem->sortOrder,
+                'depth' => $spiTrashItem->depth,
+                'sortField' => $spiTrashItem->sortField,
+                'sortOrder' => $spiTrashItem->sortOrder,
             )
         );
     }

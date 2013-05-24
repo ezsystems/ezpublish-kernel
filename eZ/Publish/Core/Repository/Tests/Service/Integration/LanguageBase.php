@@ -334,16 +334,6 @@ abstract class LanguageBase extends BaseServiceTest
     }
 
     /**
-     * Test service method for loading language by ID throwing InvalidArgumentException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguageById
-     */
-    public function testLoadLanguageByIdThrowsInvalidArgumentException()
-    {
-        $this->repository->getContentLanguageService()->loadLanguageById( 'test' );
-    }
-
-    /**
      * Test service method for loading language by ID throwing NotFoundException
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguageById

@@ -107,7 +107,7 @@ class UserService implements APIUserService, Sessionable
     /**
      * Loads a user group for the given id
      *
-     * @param int $id
+     * @param mixed $id
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      *
@@ -202,7 +202,7 @@ class UserService implements APIUserService, Sessionable
     /**
      * Loads a user
      *
-     * @param int $userId
+     * @param mixed $userId
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
