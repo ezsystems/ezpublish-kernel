@@ -268,28 +268,89 @@ class TrashHandlerTest extends HandlerTest
     /**
      * @group trashHandler
      * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::trashSubtree
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testTrashLocation()
+    {
+        $trashed = $this->trashHandler->trashSubtree( $this->locations[0]->id );
+        $trashedId = $trashed->id;
+        unset( $trashed );
+
+        $trashed = $this->trashHandler->loadTrashItem( $trashedId );
+        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trashed', $trashed );
+        foreach ( $this->locations[0] as $property => $value )
+        {
+            self::assertEquals( $value, $trashed->$property, "Property {$property} did not match" );
+        }
+
+        $locationHandler = $this->persistenceHandler->locationHandler();
+        $locationHandler->load( $this->locations[0]->id );
+    }
+
+    /**
+     * @group trashHandler
+     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::trashSubtree
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testTrashSubtree()
     {
-        $this->markTestIncomplete();
+        $this->trashHandler->trashSubtree( $this->locations[0]->id );
+
+        $locationHandler = $this->persistenceHandler->locationHandler();
+        $locationHandler->load( $this->locations[1]->id );
     }
 
     /**
      * @group trashHandler
-     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::untrashLocation
+     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::recover
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testUntrashLocation()
     {
-        $this->markTestIncomplete();
+        $locationHandler = $this->persistenceHandler->locationHandler();
+        $location = $locationHandler->load( $this->locations[0]->id );
+
+        $trashed = $this->trashHandler->trashSubtree( $location->id );
+        $locationId = $this->trashHandler->recover( $trashed->id, $location->parentId );
+
+        self::assertEquals(
+            $location,
+            $locationHandler->load( $locationId )
+        );
+        $this->trashHandler->loadTrashItem( $trashed->id );
     }
 
     /**
      * @group trashHandler
-     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::listTrashed
+     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::findTrashItems
      */
-    public function testListTrashed()
+    public function testFindTrashItems()
     {
-        $this->markTestIncomplete();
+        $trashedItems = $this->trashHandler->findTrashItems();
+
+        self::assertCount( 0, $trashedItems );
+
+        $this->trashHandler->trashSubtree( $this->locations[0]->id );
+
+        $trashedItems = $this->trashHandler->findTrashItems();
+
+        self::assertCount( 5, $trashedItems );
+
+        $sorter = function ( $a, $b )
+        {
+            return strcmp( $a->id, $b->id );
+        };
+        usort( $this->locations, $sorter );
+        usort( $trashedItems, $sorter );
+
+        foreach ( $trashedItems as $index => $trashedItem )
+        {
+            self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trashed', $trashedItem );
+            foreach ( $this->locations[$index] as $property => $value )
+            {
+                self::assertEquals( $value, $trashedItem->$property, "Property {$property} did not match" );
+            }
+        }
     }
 
     /**
@@ -298,15 +359,31 @@ class TrashHandlerTest extends HandlerTest
      */
     public function testEmptyTrash()
     {
-        $this->markTestIncomplete();
+        $this->trashHandler->trashSubtree( $this->locations[0]->id );
+        $trashedItems = $this->trashHandler->findTrashItems();
+
+        self::assertCount( 5, $trashedItems );
+
+        $this->trashHandler->emptyTrash();
+        $trashedItems = $this->trashHandler->findTrashItems();
+
+        self::assertEmpty( $trashedItems );
     }
 
     /**
      * @group trashHandler
-     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::emptyOne
+     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::deleteTrashItem
      */
-    public function testEmptyOne()
+    public function testDeleteTrashItem()
     {
-        $this->markTestIncomplete();
+        $trashed = $this->trashHandler->trashSubtree( $this->locations[0]->id );
+        $trashedItems = $this->trashHandler->findTrashItems();
+
+        self::assertCount( 5, $trashedItems );
+
+        $this->trashHandler->deleteTrashItem( $trashed->id );
+        $trashedItems = $this->trashHandler->findTrashItems();
+
+        self::assertCount( 4, $trashedItems );
     }
 }
