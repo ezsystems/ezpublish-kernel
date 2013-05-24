@@ -8,7 +8,6 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
-use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup;
@@ -22,7 +21,6 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\ContentTypeService;
-use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
 use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class ContentTypeServiceTest extends ServiceTest

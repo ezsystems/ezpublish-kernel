@@ -15,7 +15,6 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\TrashService;
-use eZ\Publish\API\Repository\TrashService as SectionServiceInterface;
 use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class TrashServiceTest extends ServiceTest

@@ -13,7 +13,6 @@ use eZ\Publish\API\Repository\Values\Content\URLAlias;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\URLAliasService;
-use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
 use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class URLAliasServiceTest extends ServiceTest

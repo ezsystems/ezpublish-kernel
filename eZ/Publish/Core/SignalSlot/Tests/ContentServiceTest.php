@@ -8,10 +8,6 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
@@ -23,7 +19,6 @@ use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\ContentService;
-use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class ContentServiceTest extends ServiceTest

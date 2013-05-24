@@ -16,7 +16,6 @@ use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\UserService;
-use eZ\Publish\API\Repository\UserService as UserServiceInterface;
 use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class UserServiceTest extends ServiceTest

@@ -14,7 +14,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Visibility;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\SearchService;
-use eZ\Publish\API\Repository\SearchService as SectionServiceInterface;
 use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class SearchServiceTest extends ServiceTest

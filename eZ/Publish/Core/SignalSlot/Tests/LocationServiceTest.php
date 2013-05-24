@@ -9,14 +9,12 @@
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
 use eZ\Publish\Core\Repository\Values\Content\Location;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\LocationService;
-use eZ\Publish\API\Repository\LocationService as SectionServiceInterface;
 use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class LocationServiceTest extends ServiceTest

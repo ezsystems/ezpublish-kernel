@@ -13,7 +13,6 @@ use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\URLWildcardService;
-use eZ\Publish\API\Repository\URLWildcardService as SectionServiceInterface;
 use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class URLWildcardServiceTest extends ServiceTest

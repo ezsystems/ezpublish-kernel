@@ -12,7 +12,6 @@ use eZ\Publish\Core\FieldType\TextLine\Type;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\FieldTypeService;
-use eZ\Publish\API\Repository\FieldTypeService as SectionServiceInterface;
 use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class FieldTypeServiceTest extends ServiceTest

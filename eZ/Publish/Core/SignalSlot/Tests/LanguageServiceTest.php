@@ -13,7 +13,6 @@ use eZ\Publish\API\Repository\Values\Content\Language;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\LanguageService;
-use eZ\Publish\API\Repository\LanguageService as SectionServiceInterface;
 use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class LanguageServiceTest extends ServiceTest

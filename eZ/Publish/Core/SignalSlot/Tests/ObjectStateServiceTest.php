@@ -17,7 +17,6 @@ use eZ\Publish\Core\Repository\Values\ObjectState\ObjectStateGroup;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\ObjectStateService;
-use eZ\Publish\API\Repository\ObjectStateService as ObjectStateServiceInterface;
 use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class ObjectStateServiceTest extends ServiceTest

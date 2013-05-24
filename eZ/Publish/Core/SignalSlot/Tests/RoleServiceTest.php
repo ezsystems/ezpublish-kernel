@@ -20,7 +20,6 @@ use eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\RoleService;
-use eZ\Publish\API\Repository\RoleService as RoleServiceInterface;
 use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class RoleServiceTest extends ServiceTest

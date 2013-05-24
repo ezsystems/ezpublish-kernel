@@ -11,11 +11,9 @@ namespace eZ\Publish\Core\SignalSlot\Tests;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Section;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\SectionService;
-use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
 use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class SectionServiceTest extends ServiceTest
