@@ -39,8 +39,8 @@ class SearchTest extends BaseServiceMockTest
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
-            array(),
-            $this->getDomainMapperMock()
+            $this->getDomainMapperMock(),
+            array()
         );
 
         $repositoryMock->expects( $this->once() )
@@ -72,8 +72,8 @@ class SearchTest extends BaseServiceMockTest
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
-            array(),
-            $domainMapperMock
+            $domainMapperMock,
+            array()
         );
 
         $repositoryMock->expects( $this->never() )->method( "hasAccess" );
@@ -131,8 +131,8 @@ class SearchTest extends BaseServiceMockTest
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
-            array(),
-            $domainMapperMock
+            $domainMapperMock,
+            array()
         );
 
         $repositoryMock->expects( $this->once() )
@@ -195,8 +195,8 @@ class SearchTest extends BaseServiceMockTest
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
-            array(),
-            $this->getDomainMapperMock()
+            $this->getDomainMapperMock(),
+            array()
         );
 
         $repositoryMock->expects( $this->once() )
@@ -289,8 +289,8 @@ class SearchTest extends BaseServiceMockTest
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
-            array(),
-            $this->getDomainMapperMock()
+            $this->getDomainMapperMock(),
+            array()
         );
 
         $repositoryMock->expects( $this->once() )
@@ -321,8 +321,8 @@ class SearchTest extends BaseServiceMockTest
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
-            array(),
-            $this->getDomainMapperMock()
+            $this->getDomainMapperMock(),
+            array()
         );
 
         $repositoryMock->expects( $this->once() )
@@ -353,8 +353,8 @@ class SearchTest extends BaseServiceMockTest
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
-            array(),
-            $domainMapperMock
+            $domainMapperMock,
+            array()
         );
 
         $repositoryMock->expects( $this->once() )
@@ -645,8 +645,8 @@ class SearchTest extends BaseServiceMockTest
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
-            array(),
-            $this->getDomainMapperMock()
+            $this->getDomainMapperMock(),
+            array()
         );
         $result = $service->findContent( $serviceQuery, $fieldFilters, true );
 
@@ -689,8 +689,8 @@ class SearchTest extends BaseServiceMockTest
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
-            array(),
-            $domainMapperMock
+            $domainMapperMock,
+            array()
         );
         $result = $service->findSingle( $serviceCriterion, $fieldFilters, true );
 
@@ -732,8 +732,8 @@ class SearchTest extends BaseServiceMockTest
             array(
                 $this->getRepositoryMock(),
                 $this->getPersistenceMock()->searchHandler(),
-                array(),
-                $this->getDomainMapperMock()
+                $this->getDomainMapperMock(),
+                array()
             )
         );
     }

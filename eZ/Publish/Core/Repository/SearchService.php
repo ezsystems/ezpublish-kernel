@@ -60,15 +60,20 @@ class SearchService implements SearchServiceInterface
      * @param array $settings
      * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
      */
-    public function __construct( RepositoryInterface $repository, Handler $searchHandler, array $settings = array(), DomainMapper $domainMapper )
+    public function __construct(
+        RepositoryInterface $repository,
+        Handler $searchHandler,
+        DomainMapper $domainMapper,
+        array $settings = array()
+    )
     {
         $this->repository = $repository;
         $this->searchHandler = $searchHandler;
+        $this->domainMapper = $domainMapper;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
-        $this->domainMapper = $domainMapper;
     }
 
     /**

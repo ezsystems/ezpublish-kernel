@@ -95,29 +95,29 @@ class ContentService implements ContentServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
-     * @param array $settings
      * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
      * @param \eZ\Publish\Core\Repository\RelationProcessor $relationProcessor
      * @param \eZ\Publish\Core\Repository\NameSchemaService $nameSchemaService
+     * @param array $settings
      */
     public function __construct(
         RepositoryInterface $repository,
         Handler $handler,
-        array $settings = array(),
         DomainMapper $domainMapper,
         RelationProcessor $relationProcessor,
-        NameSchemaService $nameSchemaService
+        NameSchemaService $nameSchemaService,
+        array $settings = array()
     )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
+        $this->domainMapper = $domainMapper;
+        $this->relationProcessor = $relationProcessor;
+        $this->nameSchemaService = $nameSchemaService;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
-        $this->domainMapper = $domainMapper;
-        $this->relationProcessor = $relationProcessor;
-        $this->nameSchemaService = $nameSchemaService;
     }
 
     /**

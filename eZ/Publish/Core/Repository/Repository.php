@@ -439,10 +439,10 @@ class Repository implements RepositoryInterface
         $this->contentService = new ContentService(
             $this,
             $this->persistenceHandler,
-            $this->serviceSettings['content'],
             $this->getDomainMapper(),
             $this->getRelationProcessor(),
-            $this->getNameSchemaService()
+            $this->getNameSchemaService(),
+            $this->serviceSettings['content']
         );
         return $this->contentService;
     }
@@ -483,8 +483,8 @@ class Repository implements RepositoryInterface
         $this->contentTypeService = new ContentTypeService(
             $this,
             $this->persistenceHandler->contentTypeHandler(),
-            $this->serviceSettings['contentType'],
-            $this->getDomainMapper()
+            $this->getDomainMapper(),
+            $this->serviceSettings['contentType']
         );
         return $this->contentTypeService;
     }
@@ -504,9 +504,9 @@ class Repository implements RepositoryInterface
         $this->locationService = new LocationService(
             $this,
             $this->persistenceHandler,
-            $this->serviceSettings['location'],
             $this->getDomainMapper(),
-            $this->getNameSchemaService()
+            $this->getNameSchemaService(),
+            $this->serviceSettings['location']
         );
         return $this->locationService;
     }
@@ -527,8 +527,8 @@ class Repository implements RepositoryInterface
         $this->trashService = new TrashService(
             $this,
             $this->persistenceHandler,
-            $this->serviceSettings['trash'],
-            $this->getNameSchemaService()
+            $this->getNameSchemaService(),
+            $this->serviceSettings['trash']
         );
         return $this->trashService;
     }
@@ -657,8 +657,8 @@ class Repository implements RepositoryInterface
         $this->searchService = new SearchService(
             $this,
             $this->persistenceHandler->searchHandler(),
-            $this->serviceSettings['search'],
-            $this->getDomainMapper()
+            $this->getDomainMapper(),
+            $this->serviceSettings['search']
         );
         return $this->searchService;
     }

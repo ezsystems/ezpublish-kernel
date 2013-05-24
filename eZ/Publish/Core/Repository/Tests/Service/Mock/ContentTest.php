@@ -310,10 +310,10 @@ class ContentTest extends BaseServiceMockTest
             array(
                 $this->getRepositoryMock(),
                 $this->getPersistenceMock(),
-                array(),
                 $this->getDomainMapperMock(),
                 $this->getRelationProcessorMock(),
-                $this->getNameSchemaServiceMock()
+                $this->getNameSchemaServiceMock(),
+                array()
             )
         );
     }

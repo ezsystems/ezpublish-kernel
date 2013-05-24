@@ -81,18 +81,23 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param array $settings
      * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
+     * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $contentTypeHandler, array $settings = array(), DomainMapper $domainMapper )
+    public function __construct(
+        RepositoryInterface $repository,
+        Handler $contentTypeHandler,
+        DomainMapper $domainMapper,
+        array $settings = array()
+    )
     {
         $this->repository = $repository;
         $this->contentTypeHandler = $contentTypeHandler;
+        $this->domainMapper = $domainMapper;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
-        $this->domainMapper = $domainMapper;
     }
 
     /**
