@@ -26,8 +26,55 @@ use eZ\Publish\Core\Repository\Values\User\Policy;
 class SearchTest extends BaseServiceMockTest
 {
     /**
+     * Test for the __construct() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\SearchService::__construct
+     */
+    public function testConstructor()
+    {
+        $repositoryMock = $this->getRepositoryMock();
+        /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        $domainMapperMock = $this->getDomainMapperMock();
+        $settings = array( "teh setting" );
+
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            $domainMapperMock,
+            $settings
+        );
+
+        $this->assertAttributeSame(
+            $repositoryMock,
+            "repository",
+            $service
+        );
+
+        $this->assertAttributeSame(
+            $searchHandlerMock,
+            "searchHandler",
+            $service
+        );
+
+        $this->assertAttributeSame(
+            $domainMapperMock,
+            "domainMapper",
+            $service
+        );
+
+        $this->assertAttributeSame(
+            $settings,
+            "settings",
+            $service
+        );
+    }
+
+    /**
      * Test for the findContent() method.
      *
+     * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
+     * @covers \eZ\Publish\Core\Repository\SearchService::getPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findContent
      * @expectedException \RuntimeException
      */
@@ -61,6 +108,8 @@ class SearchTest extends BaseServiceMockTest
     /**
      * Test for the findContent() method.
      *
+     * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
+     * @covers \eZ\Publish\Core\Repository\SearchService::getPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findContent
      */
     public function testFindContentNoPermissionsFilter()
@@ -120,6 +169,8 @@ class SearchTest extends BaseServiceMockTest
     /**
      * Test for the findContent() method.
      *
+     * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
+     * @covers \eZ\Publish\Core\Repository\SearchService::getPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findContent
      */
     public function testFindContentWithPermission()
@@ -185,6 +236,8 @@ class SearchTest extends BaseServiceMockTest
     /**
      * Test for the findContent() method.
      *
+     * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
+     * @covers \eZ\Publish\Core\Repository\SearchService::getPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findContent
      */
     public function testFindContentWithNoPermission()
@@ -245,6 +298,7 @@ class SearchTest extends BaseServiceMockTest
     /**
      * Test for the findContent() method.
      *
+     * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findContent
      * @dataProvider criterionProvider
      */
@@ -278,6 +332,8 @@ class SearchTest extends BaseServiceMockTest
     /**
      * Test for the findSingle() method.
      *
+     * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
+     * @covers \eZ\Publish\Core\Repository\SearchService::getPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findSingle
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
@@ -310,6 +366,8 @@ class SearchTest extends BaseServiceMockTest
     /**
      * Test for the findSingle() method.
      *
+     * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
+     * @covers \eZ\Publish\Core\Repository\SearchService::getPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findSingle
      * @expectedException \RuntimeException
      */
@@ -342,6 +400,8 @@ class SearchTest extends BaseServiceMockTest
     /**
      * Test for the findSingle() method.
      *
+     * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
+     * @covers \eZ\Publish\Core\Repository\SearchService::getPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findSingle
      */
     public function testFindSingle()
@@ -390,6 +450,7 @@ class SearchTest extends BaseServiceMockTest
     /**
      * Test for the findSingle() method.
      *
+     * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findSingle
      * @dataProvider criterionProvider
      */
@@ -572,6 +633,30 @@ class SearchTest extends BaseServiceMockTest
                     ),
                 )
             ),
+            array(
+                $criterionMock, 1,
+                $criterionMock,
+                array(
+                    array(
+                        'limitation' => $limitationMock,
+                        'policies' => array( new Policy( array( 'limitations' => "*" ) ) ),
+                    ),
+                )
+            ),
+            array(
+                $criterionMock, 2,
+                new Criterion\LogicalOr( array( $criterionMock, $criterionMock ) ),
+                array(
+                    array(
+                        'limitation' => $limitationMock,
+                        'policies' => array( new Policy( array( 'limitations' => "*" ) ) ),
+                    ),
+                    array(
+                        'limitation' => $limitationMock,
+                        'policies' => array( new Policy( array( 'limitations' => "*" ) ) ),
+                    ),
+                )
+            ),
         );
     }
 
@@ -616,7 +701,9 @@ class SearchTest extends BaseServiceMockTest
     /**
      * Test for the findSingle() method.
      *
-     * @covers \eZ\Publish\Core\Repository\SearchService::findSingle
+     * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
+     * @covers \eZ\Publish\Core\Repository\SearchService::getPermissionsCriterion
+     * @covers \eZ\Publish\Core\Repository\SearchService::findContent
      * @dataProvider providerForTestFindSingleWithPermissionsCriterion
      */
     public function testFindSingleWithPermissionsCriterion( $criterionMock, $limitationCount, $criteria, $permissionSets )
@@ -656,7 +743,9 @@ class SearchTest extends BaseServiceMockTest
     /**
      * Test for the findContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\SearchService::findContent
+     * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
+     * @covers \eZ\Publish\Core\Repository\SearchService::getPermissionsCriterion
+     * @covers \eZ\Publish\Core\Repository\SearchService::findSingle
      * @dataProvider providerForTestFindSingleWithPermissionsCriterion
      */
     public function testFindContentWithPermissionsCriterion( $criterionMock, $limitationCount, $criteria, $permissionSets )
