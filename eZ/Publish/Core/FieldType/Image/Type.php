@@ -128,7 +128,7 @@ class Type extends FieldType
         {
             throw new InvalidArgumentType(
                 '$inputValue->fileSize',
-                'string',
+                'integer',
                 $inputValue->fileSize
             );
         }
