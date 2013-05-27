@@ -47,7 +47,7 @@ class HashGenerator implements HashGeneratorInterface
         $roles = $this->repository->sudo(
             function ( $repository ) use ( $user )
             {
-                $repository->getRoleService()->getRoleAssignmentsForUser( $user, true );
+                return $repository->getRoleService()->getRoleAssignmentsForUser( $user, true );
             }
         );
         $roleIds = array();
