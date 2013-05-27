@@ -58,7 +58,8 @@ class RequestEventListener implements EventSubscriberInterface
                 array( 'onKernelRequestSetup', 190 ),
                 array( 'onKernelRequestForward', 10 ),
                 array( 'onKernelRequestRedirect', 0 ),
-                array( 'onKernelRequestUserHash', 7 ),
+                // onKernelRequestUserHash needs to be just after SiteAccessMatchListener (prio 45)
+                array( 'onKernelRequestUserHash', 44 ),
             )
         );
     }
@@ -170,8 +171,14 @@ class RequestEventListener implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        if ( !$request->isMethod( 'AUTHENTICATE' ) || !$request->headers->has( 'X-User-Hash' ) )
+        if (
+            !$request->isMethod( 'AUTHENTICATE' )
+            || !$request->headers->has( 'X-User-Hash' )
+        )
+        {
             return;
+        }
+
 
         // We must have a session at that point since we're supposed to be connected
         if ( !$request->hasSession() )

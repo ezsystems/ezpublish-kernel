@@ -23,6 +23,11 @@ abstract class HttpCache extends BaseHttpCache
      */
     const ANONYMOUS_HASH = '917f736fbbbb1ae450a40be4c1dce175';
 
+    /**
+     * @var Generated user hash.
+     */
+    private $userHash;
+
     public function handle( Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true )
     {
         // Forbid direct AUTHENTICATE requests to get user hash
@@ -41,17 +46,21 @@ abstract class HttpCache extends BaseHttpCache
      */
     private function generateUserHash( Request $request )
     {
+        if ( isset( $this->userHash ) )
+            return $this->userHash;
+
         // X-User-Hash is purely internal and should never be used from outside
         if ( $request->headers->has( 'X-User-Hash' ) )
             $request->headers->remove( 'X-User-Hash' );
 
         if ( !$request->cookies->has( 'is_logged_in' ) )
-            return static::ANONYMOUS_HASH;
+            return $this->userHash = static::ANONYMOUS_HASH;
 
         // Forward the request to the kernel to generate the user hash
-        $forwardReq = Request::create( '/_ez_user', 'AUTHENTICATE', array(), $request->cookies->all(), array(), $request->server->all() );
+        $forwardReq = clone $request;
+        $forwardReq->setMethod( 'AUTHENTICATE' );
         $forwardReq->headers->set( 'X-User-Hash', '' );
-        return $this->forward( $forwardReq )->getContent();
+        return $this->userHash = $this->forward( $forwardReq )->getContent();
     }
 
     protected function createStore()
