@@ -5,8 +5,3 @@ _ezpublishLocation:
         _controller: ez_content:viewLocation
         viewType: full
         layout: true
-
-_ezpublishUserHash:
-    pattern: /_ez_user
-    requirements:
-        method: AUTHENTICATE
