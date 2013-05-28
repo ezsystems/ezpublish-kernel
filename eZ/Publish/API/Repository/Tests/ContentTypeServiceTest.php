@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
@@ -1481,6 +1482,14 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     public function testRemoveFieldDefinitionRemovesFieldFromContent()
     {
         $repository = $this->getRepository();
+
+        if ( $repository instanceof RepositoryStub )
+        {
+            $this->markTestSkipped(
+                'Test can not be run against memory stubs.'
+            );
+        }
+
         $contentTypeService = $repository->getContentTypeService();
         $contentService = $repository->getContentService();
 
@@ -1577,6 +1586,14 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     public function testAddFieldDefinitionAddsFieldToContent()
     {
         $repository = $this->getRepository();
+
+        if ( $repository instanceof RepositoryStub )
+        {
+            $this->markTestSkipped(
+                'Test can not be run against memory stubs.'
+            );
+        }
+
         $contentTypeService = $repository->getContentTypeService();
         $contentService = $repository->getContentService();
 
