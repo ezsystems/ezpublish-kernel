@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler;
+use eZ\Publish\Core\Repository\DomainMapper;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException;
 use eZ\Publish\API\Repository\Values\User\User;
@@ -71,16 +72,28 @@ class ContentTypeService implements ContentTypeServiceInterface
     protected $settings;
 
     /**
+     * @var \eZ\Publish\Core\Repository\DomainMapper
+     */
+    protected $domainMapper;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $contentTypeHandler, array $settings = array() )
+    public function __construct(
+        RepositoryInterface $repository,
+        Handler $contentTypeHandler,
+        DomainMapper $domainMapper,
+        array $settings = array()
+    )
     {
         $this->repository = $repository;
         $this->contentTypeHandler = $contentTypeHandler;
+        $this->domainMapper = $domainMapper;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
@@ -485,7 +498,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ( $contentTypeCreateStruct->remoteId === null )
         {
-            $contentTypeCreateStruct->remoteId = md5( uniqid( get_class( $contentTypeCreateStruct ), true ) );
+            $contentTypeCreateStruct->remoteId = $this->domainMapper->getUniqueHash( $contentTypeCreateStruct );
         }
 
         $initialLanguageId = $this->repository->getContentLanguageService()->loadLanguage(

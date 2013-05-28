@@ -239,6 +239,60 @@ class ContentTest extends BaseServiceMockTest
         $contentService->deleteContent( $contentInfo );
     }
 
+    protected $domainMapperMock;
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\DomainMapper
+     */
+    protected function getDomainMapperMock()
+    {
+        if ( !isset( $this->domainMapperMock ) )
+        {
+            $this->domainMapperMock = $this
+                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\DomainMapper" )
+                ->disableOriginalConstructor()
+                ->getMock();
+        }
+
+        return $this->domainMapperMock;
+    }
+
+    protected $relationProcessorMock;
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\RelationProcessor
+     */
+    protected function getRelationProcessorMock()
+    {
+        if ( !isset( $this->relationProcessorMock ) )
+        {
+            $this->relationProcessorMock = $this
+                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\RelationProcessor" )
+                ->disableOriginalConstructor()
+                ->getMock();
+        }
+
+        return $this->relationProcessorMock;
+    }
+
+    protected $nameSchemaServiceMock;
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\NameSchemaService
+     */
+    protected function getNameSchemaServiceMock()
+    {
+        if ( !isset( $this->nameSchemaServiceMock ) )
+        {
+            $this->nameSchemaServiceMock = $this
+                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\NameSchemaService" )
+                ->disableOriginalConstructor()
+                ->getMock();
+        }
+
+        return $this->nameSchemaServiceMock;
+    }
+
     /**
      * Returns the content service to test with $methods mocked
      *
@@ -255,7 +309,11 @@ class ContentTest extends BaseServiceMockTest
             $methods,
             array(
                 $this->getRepositoryMock(),
-                $this->getPersistenceMock()
+                $this->getPersistenceMock(),
+                $this->getDomainMapperMock(),
+                $this->getRelationProcessorMock(),
+                $this->getNameSchemaServiceMock(),
+                array()
             )
         );
     }

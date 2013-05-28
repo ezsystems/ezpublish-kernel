@@ -142,7 +142,7 @@ class FileSizeValidatorTest extends PHPUnit_Framework_TestCase
      */
     public function testValidateCorrectValues( $size )
     {
-        $this->markTestIncomplete( 'BinaryFile field type does not use this validator anymore.' );
+        $this->markTestSkipped( 'BinaryFile field type does not use this validator anymore.' );
         $validator = new FileSizeValidator;
         $validator->maxFileSize = 4096;
         $this->assertTrue( $validator->validate( $this->getBinaryFileValue( $size ) ) );
@@ -156,7 +156,7 @@ class FileSizeValidatorTest extends PHPUnit_Framework_TestCase
      */
     protected function getBinaryFileValue( $size )
     {
-        $this->markTestIncomplete( 'BinaryFile field type does not use this validator anymore.' );
+        $this->markTestSkipped( 'BinaryFile field type does not use this validator anymore.' );
         $value = new BinaryFileValue( $this->getMock( 'eZ\\Publish\\API\\Repository\\IOService' ) );
         $value->file = new BinaryFile( array( "size" => $size ) );
 
@@ -180,7 +180,7 @@ class FileSizeValidatorTest extends PHPUnit_Framework_TestCase
      */
     public function testValidateWrongValues( $size, $message, $values )
     {
-        $this->markTestIncomplete( 'BinaryFile field type does not use this validator anymore.' );
+        $this->markTestSkipped( 'BinaryFile field type does not use this validator anymore.' );
         $validator = new FileSizeValidator;
         $validator->maxFileSize = $this->getMaxFileSize();
         $this->assertFalse( $validator->validate( $this->getBinaryFileValue( $size ) ) );

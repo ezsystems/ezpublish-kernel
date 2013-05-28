@@ -31,7 +31,7 @@ abstract class NameSchemaBase extends BaseServiceTest
     public function testResolve( $nameSchema, $expectedName )
     {
         /** @var $service \eZ\Publish\Core\Repository\NameSchemaService */
-        $service = $this->repository->getNameSchemaService();
+        $service = new NameSchemaService( $this->repository );
 
         list( $content, $contentType ) = $this->buildTestObjects();
 
@@ -52,7 +52,7 @@ abstract class NameSchemaBase extends BaseServiceTest
     public function testResolveWithSettings()
     {
         /** @var $service \eZ\Publish\Core\Repository\NameSchemaService */
-        $service = $this->repository->getNameSchemaService();
+        $service = new NameSchemaService( $this->repository );
 
         $this->setConfiguration(
             $service,
