@@ -658,6 +658,23 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::listVersionNumbers
+     *
+     * @return void
+     */
+    public function testListVersionNumbers()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $res = $gateway->listVersionNumbers( 226 );
+
+        $this->assertEquals( array( 1, 2 ), $res );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::listVersionsForUser
      *
      * @return void
@@ -1047,10 +1064,10 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $beforeCount = $this->countContentFields();
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->deleteField( 8, 1 );
+        $gateway->deleteField( 22 );
 
         $this->assertEquals(
-            $beforeCount - 1,
+            $beforeCount - 2,
             $this->countContentFields()
         );
 
@@ -1059,7 +1076,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             $this->getDatabaseHandler()->createSelectQuery()
                 ->select( '*' )
                 ->from( 'ezcontentobject_attribute' )
-                ->where( 'id=8 AND version=1' )
+                ->where( 'id=22' )
         );
     }
 
