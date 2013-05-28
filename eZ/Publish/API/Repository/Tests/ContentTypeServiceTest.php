@@ -1280,7 +1280,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     /**
      * Test for the addFieldDefinition() method.
      *
-     * @return void
+     * @return array
      * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      */
@@ -1389,7 +1389,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     /**
      * Test for the removeFieldDefinition() method.
      *
-     * @return void
+     * @return array
      * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      */
@@ -1422,6 +1422,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     /**
      * Test for the removeFieldDefinition() method.
      *
+     * @param array $data
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testRemoveFieldDefinition
@@ -1472,6 +1473,221 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     }
 
     /**
+     * Test for the removeFieldDefinition() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testRemoveFieldDefinition
+     */
+    public function testRemoveFieldDefinitionRemovesFieldFromContent()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+
+        // Create ContentType
+        $contentTypeDraft = $this->createContentTypeDraft();
+        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+        $publishedType = $contentTypeService->loadContentType( $contentTypeDraft->id );
+
+        // Create multi-language Content in all 3 possible versions
+        $contentDraft = $this->createContentDraft();
+        $archivedContent = $contentService->publishVersion( $contentDraft->versionInfo );
+        $contentDraft = $contentService->createContentDraft( $archivedContent->contentInfo );
+        $publishedContent = $contentService->publishVersion( $contentDraft->versionInfo );
+        $draftContent = $contentService->createContentDraft( $publishedContent->contentInfo );
+
+        // Remove field definition from ContentType
+        $contentTypeDraft = $contentTypeService->createContentTypeDraft( $publishedType );
+        $bodyField = $contentTypeDraft->getFieldDefinition( 'body' );
+        $contentTypeService->removeFieldDefinition( $contentTypeDraft, $bodyField );
+        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+
+        // Reload all versions
+        $contentVersion1Archived = $contentService->loadContent(
+            $archivedContent->contentInfo->id,
+            null,
+            $archivedContent->versionInfo->versionNo
+        );
+        $contentVersion2Published = $contentService->loadContent(
+            $publishedContent->contentInfo->id,
+            null,
+            $publishedContent->versionInfo->versionNo
+        );
+        $contentVersion3Draft = $contentService->loadContent(
+            $draftContent->contentInfo->id,
+            null,
+            $draftContent->versionInfo->versionNo
+        );
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
+            $contentVersion1Archived
+        );
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
+            $contentVersion2Published
+        );
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
+            $contentVersion3Draft
+        );
+
+        return array(
+            $contentVersion1Archived,
+            $contentVersion2Published,
+            $contentVersion3Draft
+        );
+    }
+
+    /**
+     * Test for the removeFieldDefinition() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content[] $data
+     * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testRemoveFieldDefinitionRemovesFieldFromContent
+     */
+    public function testRemoveFieldDefinitionRemovesFieldFromContentRemoved( $data )
+    {
+        list(
+            $contentVersion1Archived,
+            $contentVersion1Published,
+            $contentVersion2Draft
+        ) = $data;
+
+        $this->assertFalse(
+            isset( $contentVersion1Archived->fields["body"] ),
+            "The field was not removed from archived version."
+        );
+        $this->assertFalse(
+            isset( $contentVersion1Published->fields["body"] ),
+            "The field was not removed from published version."
+        );
+        $this->assertFalse(
+            isset( $contentVersion2Draft->fields["body"] ),
+            "The field was not removed from draft version."
+        );
+    }
+
+    /**
+     * Test for the addFieldDefinition() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAddFieldDefinition
+     */
+    public function testAddFieldDefinitionAddsFieldToContent()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+
+        // Create ContentType
+        $contentTypeDraft = $this->createContentTypeDraft();
+        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+        $publishedType = $contentTypeService->loadContentType( $contentTypeDraft->id );
+
+        // Create multi-language Content in all 3 possible versions
+        $contentDraft = $this->createContentDraft();
+        $archivedContent = $contentService->publishVersion( $contentDraft->versionInfo );
+        $contentDraft = $contentService->createContentDraft( $archivedContent->contentInfo );
+        $publishedContent = $contentService->publishVersion( $contentDraft->versionInfo );
+        $draftContent = $contentService->createContentDraft( $publishedContent->contentInfo );
+
+        // Add field definition to ContentType
+        $contentTypeDraft = $contentTypeService->createContentTypeDraft( $publishedType );
+
+        $fieldDefinitionCreateStruct = $contentTypeService->newFieldDefinitionCreateStruct(
+            'byline', 'ezstring'
+        );
+        $fieldDefinitionCreateStruct->names = array(
+            'eng-US' => 'Byline',
+        );
+        $fieldDefinitionCreateStruct->descriptions = array(
+            'eng-US' => 'Byline of the blog post',
+        );
+        $fieldDefinitionCreateStruct->fieldGroup = 'blog-meta';
+        $fieldDefinitionCreateStruct->position = 1;
+        $fieldDefinitionCreateStruct->isTranslatable = true;
+        $fieldDefinitionCreateStruct->isRequired = true;
+        $fieldDefinitionCreateStruct->isInfoCollector = false;
+        $fieldDefinitionCreateStruct->validatorConfiguration = array(
+            'StringLengthValidator' => array(
+                'minStringLength' => 0,
+                'maxStringLength' => 0,
+            ),
+        );
+        $fieldDefinitionCreateStruct->fieldSettings = array();
+        $fieldDefinitionCreateStruct->isSearchable = true;
+
+        $contentTypeService->addFieldDefinition( $contentTypeDraft, $fieldDefinitionCreateStruct );
+        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+
+        // Reload all versions
+        $contentVersion1Archived = $contentService->loadContent(
+            $archivedContent->contentInfo->id,
+            null,
+            $archivedContent->versionInfo->versionNo
+        );
+        $contentVersion2Published = $contentService->loadContent(
+            $publishedContent->contentInfo->id,
+            null,
+            $publishedContent->versionInfo->versionNo
+        );
+        $contentVersion3Draft = $contentService->loadContent(
+            $draftContent->contentInfo->id,
+            null,
+            $draftContent->versionInfo->versionNo
+        );
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
+            $contentVersion1Archived
+        );
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
+            $contentVersion2Published
+        );
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
+            $contentVersion3Draft
+        );
+
+        return array(
+            $contentVersion1Archived,
+            $contentVersion2Published,
+            $contentVersion3Draft
+        );
+    }
+
+    /**
+     * Test for the addFieldDefinition() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content[] $data
+     * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAddFieldDefinitionAddsFieldToContent
+     */
+    public function testAddFieldDefinitionAddsFieldToContentAdded( array $data )
+    {
+        list(
+            $contentVersion1Archived,
+            $contentVersion1Published,
+            $contentVersion2Draft
+            ) = $data;
+
+        $this->assertTrue(
+            isset( $contentVersion1Archived->fields["byline"] ),
+            "New field was not added to archived version."
+        );
+        $this->assertTrue(
+            isset( $contentVersion1Published->fields["byline"] ),
+            "New field was not added to published version."
+        );
+        $this->assertTrue(
+            isset( $contentVersion2Draft->fields["byline"] ),
+            "New field was not added to draft version."
+        );
+    }
+
+    /**
      * Test for the newFieldDefinitionUpdateStruct() method.
      *
      * @return void
@@ -1497,7 +1713,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     /**
      * Test for the updateFieldDefinition() method.
      *
-     * @return void
+     * @return array
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeDraft
      */
@@ -1555,6 +1771,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     /**
      * Test for the updateFieldDefinition() method.
      *
+     * @param array $data
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateFieldDefinition
@@ -1704,7 +1921,6 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     /**
      * Test for the loadContentType() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentType()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      * @group user
@@ -1733,7 +1949,6 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     /**
      * Test for the loadContentType() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentType()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentType
      */
@@ -1971,7 +2186,6 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     /**
      * Test for the loadContentTypeByRemoteId() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeByRemoteId()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentType
      */
@@ -2037,7 +2251,6 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     /**
      * Test for the loadContentTypes() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypes()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentType
      */
@@ -2096,7 +2309,6 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     /**
      * Test for the createContentTypeDraft() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeDraft()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentType
      */
