@@ -118,13 +118,6 @@ class Repository implements RepositoryInterface
     protected $fieldTypeService;
 
     /**
-     * Instance of name schema resolver service
-     *
-     * @var \eZ\Publish\Core\Repository\NameSchemaService
-     */
-    protected $nameSchemaService;
-
-    /**
      * Instance of URL alias service
      *
      * @var \eZ\Publish\Core\Repository\UrlAliasService
@@ -448,20 +441,6 @@ class Repository implements RepositoryInterface
 
         $this->fieldTypeService = new FieldTypeService( $this->repository->getFieldTypeService(), $this->signalDispatcher );
         return $this->fieldTypeService;
-    }
-
-    /**
-     * Get NameSchemaResolverService
-     *
-     * @access private Internal service for the Core Services
-     *
-     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
-     *
-     * @return \eZ\Publish\Core\Repository\NameSchemaService
-     */
-    public function getNameSchemaService()
-    {
-        return $this->repository->getNameSchemaService();
     }
 
     /**
