@@ -37,7 +37,7 @@ abstract class Action
     /**
      * Applies the action to the given $content
      *
-     * @param Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content $content
      *
      * @return void
      */
