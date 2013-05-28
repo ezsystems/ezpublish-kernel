@@ -111,6 +111,7 @@ class TextLine implements Converter
 
         $fieldDef->fieldTypeConstraints->validators = $validatorConstraints;
         $fieldDef->defaultValue->data = $storageDef->dataText1 ?: null;
+        $fieldDef->defaultValue->sortKey = $storageDef->dataText1 ?: "";
     }
 
     /**
