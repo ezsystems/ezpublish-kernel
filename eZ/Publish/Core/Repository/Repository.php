@@ -159,6 +159,13 @@ class Repository implements RepositoryInterface
     protected $serviceSettings;
 
     /**
+     * Instance of domain mapper
+     *
+     * @var \eZ\Publish\Core\Repository\DomainMapper
+     */
+    protected $domainMapper;
+
+    /**
      * Constructor
      *
      * Construct repository object with provided storage engine
@@ -429,7 +436,14 @@ class Repository implements RepositoryInterface
         if ( $this->contentService !== null )
             return $this->contentService;
 
-        $this->contentService = new ContentService( $this, $this->persistenceHandler, $this->serviceSettings['content'] );
+        $this->contentService = new ContentService(
+            $this,
+            $this->persistenceHandler,
+            $this->getDomainMapper(),
+            $this->getRelationProcessor(),
+            $this->getNameSchemaService(),
+            $this->serviceSettings['content']
+        );
         return $this->contentService;
     }
 
@@ -469,6 +483,7 @@ class Repository implements RepositoryInterface
         $this->contentTypeService = new ContentTypeService(
             $this,
             $this->persistenceHandler->contentTypeHandler(),
+            $this->getDomainMapper(),
             $this->serviceSettings['contentType']
         );
         return $this->contentTypeService;
@@ -486,7 +501,13 @@ class Repository implements RepositoryInterface
         if ( $this->locationService !== null )
             return $this->locationService;
 
-        $this->locationService = new LocationService( $this, $this->persistenceHandler, $this->serviceSettings['location'] );
+        $this->locationService = new LocationService(
+            $this,
+            $this->persistenceHandler,
+            $this->getDomainMapper(),
+            $this->getNameSchemaService(),
+            $this->serviceSettings['location']
+        );
         return $this->locationService;
     }
 
@@ -503,7 +524,12 @@ class Repository implements RepositoryInterface
         if ( $this->trashService !== null )
             return $this->trashService;
 
-        $this->trashService = new TrashService( $this, $this->persistenceHandler, $this->serviceSettings['trash'] );
+        $this->trashService = new TrashService(
+            $this,
+            $this->persistenceHandler,
+            $this->getNameSchemaService(),
+            $this->serviceSettings['trash']
+        );
         return $this->trashService;
     }
 
@@ -631,6 +657,7 @@ class Repository implements RepositoryInterface
         $this->searchService = new SearchService(
             $this,
             $this->persistenceHandler->searchHandler(),
+            $this->getDomainMapper(),
             $this->serviceSettings['search']
         );
         return $this->searchService;
@@ -659,7 +686,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\Core\Repository\NameSchemaService
      */
-    public function getNameSchemaService()
+    protected function getNameSchemaService()
     {
         if ( $this->nameSchemaService !== null )
             return $this->nameSchemaService;
@@ -677,13 +704,34 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\Core\Repository\RelationProcessor
      */
-    public function getRelationProcessor()
+    protected function getRelationProcessor()
     {
         if ( $this->relationProcessor !== null )
             return $this->relationProcessor;
 
         $this->relationProcessor = new RelationProcessor( $this, $this->persistenceHandler );
         return $this->relationProcessor;
+    }
+
+    /**
+     * Get RelationProcessor
+     *
+     * @access private Internal service for the Core Services
+     *
+     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
+     *
+     * @return \eZ\Publish\Core\Repository\DomainMapper
+     */
+    protected function getDomainMapper()
+    {
+        if ( $this->domainMapper !== null )
+            return $this->domainMapper;
+
+        $this->domainMapper = new DomainMapper(
+            $this,
+            $this->persistenceHandler->contentLanguageHandler()
+        );
+        return $this->domainMapper;
     }
 
     /**

@@ -10,6 +10,8 @@
 
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\Core\Repository\DomainMapper;
+use eZ\Publish\Core\Repository\NameSchemaService;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -17,7 +19,6 @@ use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
-use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
@@ -45,7 +46,7 @@ use DateTime;
 class LocationService implements LocationServiceInterface
 {
     /**
-     * @var \eZ\Publish\API\Repository\Repository
+     * @var \eZ\Publish\Core\Repository\Repository
      */
     protected $repository;
 
@@ -60,16 +61,36 @@ class LocationService implements LocationServiceInterface
     protected $settings;
 
     /**
+     * @var \eZ\Publish\Core\Repository\DomainMapper
+     */
+    protected $domainMapper;
+
+    /**
+     * @var \eZ\Publish\Core\Repository\NameSchemaService
+     */
+    protected $nameSchemaService;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
+     * @param \eZ\Publish\Core\Repository\NameSchemaService $nameSchemaService
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct(
+        RepositoryInterface $repository,
+        Handler $handler,
+        DomainMapper $domainMapper,
+        NameSchemaService $nameSchemaService,
+        array $settings = array()
+    )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
+        $this->domainMapper = $domainMapper;
+        $this->nameSchemaService = $nameSchemaService;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
@@ -138,7 +159,7 @@ class LocationService implements LocationServiceInterface
             );
 
             $content = $this->repository->getContentService()->loadContent( $newLocation->contentId );
-            $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
+            $urlAliasNames = $this->nameSchemaService->resolveUrlAliasSchema( $content );
             foreach ( $urlAliasNames as $languageCode => $name )
             {
                 $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
@@ -364,6 +385,7 @@ class LocationService implements LocationServiceInterface
 
     /**
      * Creates the new $location in the content repository for the given content
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create this location
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the content is already below the specified parent
      *                                        or the parent is a sub location of the location of the content
@@ -374,98 +396,56 @@ class LocationService implements LocationServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $locationCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created Location
-     *
      */
     public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
     {
-        $contentInfo = $this->repository->getContentService()->loadContentInfo( $contentInfo->id );
+        $content = $this->repository->getContentService()->loadContent( $contentInfo->id );
+        $parentLocation = $this->loadLocation( $locationCreateStruct->parentLocationId );
 
-        if ( $locationCreateStruct->priority !== null && !is_int( $locationCreateStruct->priority ) )
-            throw new InvalidArgumentValue( "priority", $locationCreateStruct->priority, "LocationCreateStruct" );
-
-        if ( !is_bool( $locationCreateStruct->hidden ) )
-            throw new InvalidArgumentValue( "hidden", $locationCreateStruct->hidden, "LocationCreateStruct" );
-
-        if ( $locationCreateStruct->remoteId !== null && ( !is_string( $locationCreateStruct->remoteId ) || empty( $locationCreateStruct->remoteId ) ) )
-            throw new InvalidArgumentValue( "remoteId", $locationCreateStruct->remoteId, "LocationCreateStruct" );
-
-        if ( $locationCreateStruct->sortField !== null && !$this->isValidSortField( $locationCreateStruct->sortField ) )
-            throw new InvalidArgumentValue( "sortField", $locationCreateStruct->sortField, "LocationCreateStruct" );
-
-        if ( $locationCreateStruct->sortOrder !== null && !$this->isValidSortOrder( $locationCreateStruct->sortOrder ) )
-            throw new InvalidArgumentValue( "sortOrder", $locationCreateStruct->sortOrder, "LocationCreateStruct" );
-
-        // check for existence of location with provided remote ID
-        if ( $locationCreateStruct->remoteId !== null )
+        if ( !$this->repository->canUser( 'content', 'create', $content->contentInfo, $parentLocation ) )
         {
-            try
-            {
-                $existingLocation = $this->loadLocationByRemoteId( $locationCreateStruct->remoteId );
-                if ( $existingLocation !== null )
-                    throw new InvalidArgumentException( "locationCreateStruct", "location with provided remote ID already exists" );
-            }
-            catch ( APINotFoundException $e )
-            {
-            }
+            throw new UnauthorizedException( 'content', 'create' );
         }
-        else
-        {
-            $locationCreateStruct->remoteId = md5( uniqid( get_class( $this ), true ) );
-        }
-
-        $loadedParentLocation = $this->loadLocation( $locationCreateStruct->parentLocationId );
 
         // Check if the parent is a sub location of one of the existing content locations (this also solves the
         // situation where parent location actually one of the content locations),
         // or if the content already has location below given location create struct parent
-        $existingContentLocations = $this->loadLocations( $contentInfo );
+        $existingContentLocations = $this->loadLocations( $content->contentInfo );
         if ( !empty( $existingContentLocations ) )
         {
             foreach ( $existingContentLocations as $existingContentLocation )
             {
-                if ( stripos( $loadedParentLocation->pathString, $existingContentLocation->pathString ) !== false )
-                    throw new InvalidArgumentException( "locationCreateStruct", "specified parent is a sub location of one of the existing content locations" );
-                if ( $loadedParentLocation->id == $existingContentLocation->parentLocationId )
-                    throw new InvalidArgumentException( "locationCreateStruct", "content is already below the specified parent" );
+                if ( stripos( $parentLocation->pathString, $existingContentLocation->pathString ) !== false )
+                {
+                    throw new InvalidArgumentException(
+                        "\$locationCreateStruct",
+                        "Specified parent is a sub location of one of the existing content locations."
+                    );
+                }
+                if ( $parentLocation->id == $existingContentLocation->parentLocationId )
+                {
+                    throw new InvalidArgumentException(
+                        "\$locationCreateStruct",
+                        "Content is already below the specified parent."
+                    );
+                }
             }
         }
 
-        if ( !$this->repository->canUser( 'content', 'create', $contentInfo, $loadedParentLocation ) )
-            throw new UnauthorizedException( 'content', 'create' );
-
-        $createStruct = new CreateStruct();
-        $createStruct->priority = $locationCreateStruct->priority !== null ? $locationCreateStruct->priority : null;
-
-        // if we declare the new location as hidden, it is automatically invisible
-        // otherwise, it remains unhidden, and picks up visibility from parent
-        if ( $locationCreateStruct->hidden === true )
-        {
-            $createStruct->hidden = true;
-            $createStruct->invisible = true;
-        }
-        else if ( $loadedParentLocation->hidden || $loadedParentLocation->invisible )
-        {
-            $createStruct->invisible = true;
-        }
-
-        $createStruct->remoteId = trim( $locationCreateStruct->remoteId );
-        $createStruct->contentId = $contentInfo->id;
-        $createStruct->contentVersion = $contentInfo->currentVersionNo;
-
-        if ( $contentInfo->mainLocationId !== null )
-            $createStruct->mainLocationId = $contentInfo->mainLocationId;
-
-        $createStruct->sortField = $locationCreateStruct->sortField !== null ? $locationCreateStruct->sortField : APILocation::SORT_FIELD_NAME;
-        $createStruct->sortOrder = $locationCreateStruct->sortOrder !== null ? $locationCreateStruct->sortOrder : APILocation::SORT_ORDER_ASC;
-        $createStruct->parentId = $loadedParentLocation->id;
+        $spiLocationCreateStruct = $this->domainMapper->buildSPILocationCreateStruct(
+            $locationCreateStruct,
+            $parentLocation,
+            $content->contentInfo->mainLocationId !== null ? $content->contentInfo->mainLocationId : true,
+            $content->contentInfo->id,
+            $content->contentInfo->currentVersionNo
+        );
 
         $this->repository->beginTransaction();
         try
         {
-            $newLocation = $this->persistenceHandler->locationHandler()->create( $createStruct );
-            $content = $this->repository->getContentService()->loadContent( $newLocation->contentId );
+            $newLocation = $this->persistenceHandler->locationHandler()->create( $spiLocationCreateStruct );
 
-            $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
+            $urlAliasNames = $this->nameSchemaService->resolveUrlAliasSchema( $content );
             foreach ( $urlAliasNames as $languageCode => $name )
             {
                 $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
@@ -709,7 +689,7 @@ class LocationService implements LocationServiceInterface
             $this->persistenceHandler->locationHandler()->move( $location->id, $newParentLocation->id );
 
             $content = $this->repository->getContentService()->loadContent( $location->contentId );
-            $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
+            $urlAliasNames = $this->nameSchemaService->resolveUrlAliasSchema( $content );
             foreach ( $urlAliasNames as $languageCode => $name )
             {
                 $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
