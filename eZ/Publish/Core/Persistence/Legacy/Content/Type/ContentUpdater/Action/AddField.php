@@ -101,8 +101,6 @@ class AddField extends Action
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      *
-     * @todo Handle external field data
-     *
      * @return void
      */
     protected function insertField( Content $content, Field $field )
