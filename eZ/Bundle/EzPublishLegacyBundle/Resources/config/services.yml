@@ -46,6 +46,13 @@ parameters:
     ezpublish_legacy.rest_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\RestListener
 
 services:
+    # Legacy Debug
+    data_collector.legacy_data:
+        class: eZ\Bundle\EzPublishLegacyBundle\Collector\LegacyDebugCollector
+        arguments: [@service_container][@twig]
+        tags:
+            - { name: data_collector, template: "EzPublishLegacyBundle:Collector:legacydebug", id: "legacy_data", priority: 300 }
+        
     ezpublish_legacy.kernel:
         alias: ezpublish_legacy.kernel.lazy
 
