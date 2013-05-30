@@ -69,3 +69,4 @@ services:
                 name: data_collector
                 template: "EzPublishCoreBundle:Profiler:layout"
                 id: "ezpublish.spi.persistence"
+                priority: 300

@@ -46,7 +46,8 @@ class SPIPersistenceDataCollector extends DataCollector
         $this->data = array(
             'count' => $this->logger->getCount(),
             'calls' => $this->logger->getCalls(),
-            'handlers' => $this->logger->getLoadedUnCachedHandlers()
+            'handlers' => $this->logger->getLoadedUnCachedHandlers(),
+            'templates' => $this->getTemplateList()
         );
     }
 
@@ -129,5 +130,26 @@ class SPIPersistenceDataCollector extends DataCollector
             $count[$handler] = ( isset($count[$handler]) ? $count[$handler] : 0 ) + 1;
         }
         return count( $count );
+    }
+
+    /**
+     * Returns templates list
+     *
+     * @return array
+     */
+    public function getTemplates()
+    {
+        return $this->data['templates'];
+    }
+
+    /**
+     * Returns all templates loaded via eZ 5 stack
+     *
+     * @return array
+     */
+    public function getTemplateList()
+    {
+        $templateList = DebugKernel::getTemplatesList();
+        return $templateList;
     }
 }
