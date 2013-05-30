@@ -195,6 +195,7 @@ abstract class Type extends FieldType
             'fileSize' => $value->fileSize,
             'path' => $value->path,
             'mimeType' => $value->mimeType,
+            'uri' => $value->uri,
         );
     }
 
@@ -258,6 +259,9 @@ abstract class Type extends FieldType
                     : null ),
                 'mimeType' => ( isset( $fieldValue->externalData['mimeType'] )
                     ? $fieldValue->externalData['mimeType']
+                    : null ),
+                'uri' => ( isset( $fieldValue->externalData['uri'] )
+                    ? $fieldValue->externalData['uri']
                     : null ),
             )
         );

@@ -28,7 +28,7 @@ class Value extends BaseValue
     /**
      * The alternative image text (for example "Picture of an apple.").
      *
-     * @var string
+     * @var string|null
      */
     public $alternativeText;
 

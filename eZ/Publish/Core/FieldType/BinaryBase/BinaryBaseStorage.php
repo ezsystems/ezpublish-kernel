@@ -182,6 +182,7 @@ class BinaryBaseStorage extends GatewayBasedStorage
             if ( ( $binaryFile = $this->IOService->loadBinaryFile( $field->value->externalData['path'] ) ) !== false )
             {
                 $field->value->externalData['fileSize'] = $binaryFile->size;
+                $field->value->externalData['uri'] = $this->IOService->getInternalPath( $binaryFile->uri );
             }
             else
             {

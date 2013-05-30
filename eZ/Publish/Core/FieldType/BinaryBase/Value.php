@@ -48,6 +48,12 @@ abstract class Value extends BaseValue
     public $mimeType;
 
     /**
+     * HTTP URI
+     * @var string
+     */
+    public $uri;
+
+    /**
      * Construct a new Value object.
      *
      * @param array $fileData
