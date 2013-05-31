@@ -54,7 +54,11 @@ class MediaTest extends BinaryBaseTest
         $baseInput = parent::provideInvalidInputForAcceptValue();
         $binaryFileInput = array(
             array(
-                new MediaValue( array( 'path' => '/foo/bar' ) ),
+                new MediaValue(),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+            array(
+                new MediaValue( array( 'id' => '/foo/bar' ) ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
@@ -96,7 +100,7 @@ class MediaTest extends BinaryBaseTest
                 __FILE__,
                 new MediaValue(
                     array(
-                        'path' => __FILE__,
+                        'id' => __FILE__,
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => filesize( __FILE__ ),
                         'hasController' => false,
@@ -104,14 +108,15 @@ class MediaTest extends BinaryBaseTest
                         'loop' => false,
                         'width' => 0,
                         'height' => 0,
+                        'uri' => '',
                     )
                 ),
             ),
             array(
-                array( 'path' => __FILE__ ),
+                array( 'id' => __FILE__ ),
                 new MediaValue(
                     array(
-                        'path' => __FILE__,
+                        'id' => __FILE__,
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => filesize( __FILE__ ),
                         'hasController' => false,
@@ -119,17 +124,18 @@ class MediaTest extends BinaryBaseTest
                         'loop' => false,
                         'width' => 0,
                         'height' => 0,
+                        'uri' => '',
                     )
                 ),
             ),
             array(
                 array(
-                    'path' => __FILE__,
+                    'id' => __FILE__,
                     'fileSize' => 23,
                 ),
                 new MediaValue(
                     array(
-                        'path' => __FILE__,
+                        'id' => __FILE__,
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => 23,
                         'hasController' => false,
@@ -137,17 +143,18 @@ class MediaTest extends BinaryBaseTest
                         'loop' => false,
                         'width' => 0,
                         'height' => 0,
+                        'uri' => '',
                     )
                 ),
             ),
             array(
                 array(
-                    'path' => __FILE__,
+                    'id' => __FILE__,
                     'mimeType' => 'application/text+php',
                 ),
                 new MediaValue(
                     array(
-                        'path' => __FILE__,
+                        'id' => __FILE__,
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => filesize( __FILE__ ),
                         'mimeType' => 'application/text+php',
@@ -156,17 +163,18 @@ class MediaTest extends BinaryBaseTest
                         'loop' => false,
                         'width' => 0,
                         'height' => 0,
+                        'uri' => '',
                     )
                 ),
             ),
             array(
                 array(
-                    'path' => __FILE__,
+                    'id' => __FILE__,
                     'hasController' => true,
                 ),
                 new MediaValue(
                     array(
-                        'path' => __FILE__,
+                        'id' => __FILE__,
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => filesize( __FILE__ ),
                         'hasController' => true,
@@ -174,17 +182,18 @@ class MediaTest extends BinaryBaseTest
                         'loop' => false,
                         'width' => 0,
                         'height' => 0,
+                        'uri' => '',
                     )
                 ),
             ),
             array(
                 array(
-                    'path' => __FILE__,
+                    'id' => __FILE__,
                     'autoplay' => true,
                 ),
                 new MediaValue(
                     array(
-                        'path' => __FILE__,
+                        'id' => __FILE__,
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => filesize( __FILE__ ),
                         'hasController' => false,
@@ -192,17 +201,18 @@ class MediaTest extends BinaryBaseTest
                         'loop' => false,
                         'width' => 0,
                         'height' => 0,
+                        'uri' => '',
                     )
                 ),
             ),
             array(
                 array(
-                    'path' => __FILE__,
+                    'id' => __FILE__,
                     'loop' => true,
                 ),
                 new MediaValue(
                     array(
-                        'path' => __FILE__,
+                        'id' => __FILE__,
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => filesize( __FILE__ ),
                         'hasController' => false,
@@ -210,17 +220,18 @@ class MediaTest extends BinaryBaseTest
                         'loop' => true,
                         'width' => 0,
                         'height' => 0,
+                        'uri' => '',
                     )
                 ),
             ),
             array(
                 array(
-                    'path' => __FILE__,
+                    'id' => __FILE__,
                     'width' => 23,
                 ),
                 new MediaValue(
                     array(
-                        'path' => __FILE__,
+                        'id' => __FILE__,
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => filesize( __FILE__ ),
                         'hasController' => false,
@@ -228,17 +239,18 @@ class MediaTest extends BinaryBaseTest
                         'loop' => false,
                         'width' => 23,
                         'height' => 0,
+                        'uri' => '',
                     )
                 ),
             ),
             array(
                 array(
-                    'path' => __FILE__,
+                    'id' => __FILE__,
                     'height' => 42,
                 ),
                 new MediaValue(
                     array(
-                        'path' => __FILE__,
+                        'id' => __FILE__,
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => filesize( __FILE__ ),
                         'hasController' => false,
@@ -246,6 +258,7 @@ class MediaTest extends BinaryBaseTest
                         'loop' => false,
                         'width' => 0,
                         'height' => 42,
+                        'uri' => '',
                     )
                 ),
             ),
@@ -268,7 +281,7 @@ class MediaTest extends BinaryBaseTest
      *      array(
      *          new BinaryFileValue(
      *                  array(
-     *                  'path' => 'some/file/here',
+     *                  'id' => 'some/file/here',
      *                  'fileName' => 'sindelfingen.jpg',
      *                  'fileSize' => 2342,
      *                  'downloadCount' => 0,
@@ -276,7 +289,7 @@ class MediaTest extends BinaryBaseTest
      *              )
      *          ),
      *          array(
-     *              'path' => 'some/file/here',
+     *              'id' => 'some/file/here',
      *              'fileName' => 'sindelfingen.jpg',
      *              'fileSize' => 2342,
      *              'downloadCount' => 0,
@@ -299,7 +312,7 @@ class MediaTest extends BinaryBaseTest
             array(
                 new MediaValue(
                     array(
-                        'path' => __FILE__,
+                        'id' => __FILE__,
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => filesize( __FILE__ ),
                         'mimeType' => 'text/plain',
@@ -308,10 +321,11 @@ class MediaTest extends BinaryBaseTest
                         'loop' => true,
                         'width' => 0,
                         'height' => 0,
+                        'uri' => 'http://' . basename( __FILE__ ),
                     )
                 ),
                 array(
-                    'path' => __FILE__,
+                    'id' => __FILE__,
                     'fileName' => basename( __FILE__ ),
                     'fileSize' => filesize( __FILE__ ),
                     'mimeType' => 'text/plain',
@@ -320,6 +334,7 @@ class MediaTest extends BinaryBaseTest
                     'loop' => true,
                     'width' => 0,
                     'height' => 0,
+                    'uri' => 'http://' . basename( __FILE__ ),
                 )
             ),
         );
@@ -340,7 +355,7 @@ class MediaTest extends BinaryBaseTest
      *      ),
      *      array(
      *          array(
-     *              'path' => 'some/file/here',
+     *              'id' => 'some/file/here',
      *              'fileName' => 'sindelfingen.jpg',
      *              'fileSize' => 2342,
      *              'downloadCount' => 0,
@@ -348,7 +363,7 @@ class MediaTest extends BinaryBaseTest
      *          ),
      *          new BinaryFileValue(
      *                  array(
-     *                  'path' => 'some/file/here',
+     *                  'id' => 'some/file/here',
      *                  'fileName' => 'sindelfingen.jpg',
      *                  'fileSize' => 2342,
      *                  'downloadCount' => 0,
@@ -371,7 +386,7 @@ class MediaTest extends BinaryBaseTest
             ),
             array(
                 array(
-                    'path' => __FILE__,
+                    'id' => __FILE__,
                     'fileName' => basename( __FILE__ ),
                     'fileSize' => filesize( __FILE__ ),
                     'mimeType' => 'text/plain',
@@ -383,7 +398,7 @@ class MediaTest extends BinaryBaseTest
                 ),
                 new MediaValue(
                     array(
-                        'path' => __FILE__,
+                        'id' => __FILE__,
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => filesize( __FILE__ ),
                         'mimeType' => 'text/plain',

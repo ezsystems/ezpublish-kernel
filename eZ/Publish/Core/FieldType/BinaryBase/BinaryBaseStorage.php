@@ -92,23 +92,24 @@ class BinaryBaseStorage extends GatewayBasedStorage
         // no mimeType means we are dealing with an input, local file
         if ( !isset( $field->value->externalData['mimeType'] ) )
         {
-            $field->value->externalData['mimeType'] = $this->mimeTypeDetector->getFromPath( $field->value->externalData['path'] );
+            $field->value->externalData['mimeType'] = $this->mimeTypeDetector->getFromPath( $field->value->externalData['id'] );
         }
 
         $storedValue = $field->value->externalData;
         $storagePath = $this->pathGenerator->getStoragePathForField( $field, $versionInfo );
 
         // The file referenced in externalData MAY be an existing IOService file which we can use
-        if ( ( $this->IOService->loadBinaryFile( $storedValue['path'] ) === false ) &&
+        if ( ( $this->IOService->loadBinaryFile( $storedValue['id'] ) === false ) &&
              ( $this->IOService->loadBinaryFile( $storagePath ) === false ) )
         {
             $createStruct = $this->IOService->newBinaryCreateStructFromLocalFile(
-                $storedValue['path']
+                $storedValue['id']
             );
-            $createStruct->uri = $storagePath;
-            $this->IOService->createBinaryFile( $createStruct );
-            $storedValue['path'] = $createStruct->uri;
+            $createStruct->id = $storagePath;
+            $binaryFile = $this->IOService->createBinaryFile( $createStruct );
+            $storedValue['id'] = $binaryFile->id;
             $storedValue['mimeType'] = $createStruct->mimeType;
+            $storedValue['uri'] = $binaryFile->uri;
         }
 
         $field->value->externalData = $storedValue;
@@ -124,7 +125,7 @@ class BinaryBaseStorage extends GatewayBasedStorage
             return false;
 
         // field translations have their own file reference, but to the original file
-        $originalField->value->externalData['path'];
+        $originalField->value->externalData['id'];
 
         return $this->getGateway( $context )->storeFileReference( $versionInfo, $field );
     }
@@ -152,12 +153,12 @@ class BinaryBaseStorage extends GatewayBasedStorage
 
         $gateway->removeFileReference( $fieldId, $versionNo );
 
-        $fileCounts = $gateway->countFileReferences( array( $fileReference['path'] ) );
+        $fileCounts = $gateway->countFileReferences( array( $fileReference['id'] ) );
 
-        if ( $fileCounts[$fileReference['path']] === 0 )
+        if ( $fileCounts[$fileReference['id']] === 0 )
         {
             $this->IOService->deleteBinaryFile(
-                $this->IOService->loadBinaryFile( $fileReference['path'] )
+                $this->IOService->loadBinaryFile( $fileReference['id'] )
             );
         }
     }
@@ -179,14 +180,14 @@ class BinaryBaseStorage extends GatewayBasedStorage
         $field->value->externalData = $this->getGateway( $context )->getFileReferenceData( $field->id, $versionInfo->versionNo );
         if ( $field->value->externalData !== null )
         {
-            if ( ( $binaryFile = $this->IOService->loadBinaryFile( $field->value->externalData['path'] ) ) !== false )
+            if ( ( $binaryFile = $this->IOService->loadBinaryFile( $field->value->externalData['id'] ) ) !== false )
             {
                 $field->value->externalData['fileSize'] = $binaryFile->size;
-                $field->value->externalData['uri'] = $this->IOService->getInternalPath( $binaryFile->uri );
+                $field->value->externalData['uri'] = $binaryFile->uri;
             }
             else
             {
-                throw new \RuntimeException( "Failed loading binary file {$field->value->externalData['path']}" );
+                throw new \RuntimeException( "Failed loading binary file {$field->value->externalData['id']}" );
             }
         }
     }

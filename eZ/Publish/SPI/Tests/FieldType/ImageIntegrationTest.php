@@ -160,7 +160,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             array(
                 'data'         => null,
                 'externalData' => array(
-                    'path' => __DIR__ . '/_fixtures/image.jpg',
+                    'id' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
                     'fileName' => 'Ice-Flower.jpg',
                     'alternativeText' => 'An icy flower.',
                 ),
@@ -183,8 +183,8 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $this->assertNotNull( $field->value->data );
 
         $this->assertTrue(
-            file_exists( $path = $this->getStorageDir() . '/' . $field->value->data['path'] ),
-            "Stored file $path doesn't exist"
+            file_exists( $field->value->data['uri'] ),
+            "Stored file " . $field->value->data['uri'] . " doesn't exist"
         );
 
         $this->assertEquals( 'Ice-Flower.jpg', $field->value->data['fileName'] );
@@ -207,9 +207,10 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             array(
                 'data'         => null,
                 'externalData' => array(
-                    'path' => __DIR__ . '/_fixtures/image.png',
+                    'id' => ( $path = __DIR__ . '/_fixtures/image.png' ),
                     'fileName' => 'Blueish-Blue.jpg',
                     'alternativeText' => 'This blue is so blueish.',
+                    'uri' => $path
                 ),
                 'sortKey'      => '',
             )
@@ -233,15 +234,15 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $this->assertNotNull( $field->value->data );
 
         $this->assertTrue(
-            file_exists( ( $path = $this->getStorageDir() . '/' . $field->value->data['path'] ) ),
-            "Stored file $path exists"
+            file_exists( $field->value->data['uri'] ),
+            "Stored file ".$field->value->data['uri']." exists"
         );
 
         // Check old files not removed before update
         // need to stay there for reference integrity
         $this->assertEquals(
             2,
-            count( glob( dirname( $path ) . '/*' ) )
+            count( glob( dirname( $field->value->data['uri'] ) . '/*' ) )
         );
 
         $this->assertEquals( 'Blueish-Blue.jpg', $field->value->data['fileName'] );

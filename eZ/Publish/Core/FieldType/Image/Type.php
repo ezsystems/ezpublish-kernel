@@ -292,11 +292,12 @@ class Type extends FieldType
         }
 
         return array(
+            'id' => $value->id,
             'alternativeText' => $value->alternativeText,
             'fileName' => $value->fileName,
             'fileSize' => $value->fileSize,
-            'path' => $value->path,
             'imageId' => $value->imageId,
+            'uri' => $value->uri
         );
     }
 
@@ -337,6 +338,9 @@ class Type extends FieldType
         // there might be more data in the persistence value than needed here
         $result = $this->fromHash(
             array(
+                'id' => ( isset( $fieldValue->data['id'] )
+                    ? $fieldValue->data['id']
+                    : null ),
                 'alternativeText' => ( isset( $fieldValue->data['alternativeText'] )
                     ? $fieldValue->data['alternativeText']
                     : null ),
@@ -346,8 +350,8 @@ class Type extends FieldType
                 'fileSize' => ( isset( $fieldValue->data['fileSize'] )
                     ? $fieldValue->data['fileSize']
                     : null ),
-                'path' => ( isset( $fieldValue->data['path'] )
-                    ? $fieldValue->data['path']
+                'uri' => ( isset( $fieldValue->data['uri'] )
+                    ? $fieldValue->data['uri']
                     : null ),
                 'imageId' => ( isset( $fieldValue->data['imageId'] )
                     ? $fieldValue->data['imageId']

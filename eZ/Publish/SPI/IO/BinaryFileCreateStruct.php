@@ -12,8 +12,36 @@ namespace eZ\Publish\SPI\IO;
 /**
  * Create struct for BinaryFile objects
  */
-class BinaryFileCreateStruct extends BinaryFile
+class BinaryFileCreateStruct
 {
+    /**
+     * File size, in bytes
+     * @var int
+     */
+    public $size;
+
+    /**
+     * File modification time
+     * @var \DateTime
+     */
+    public $mtime;
+
+    /**
+     * The file's mime type
+     * If not provided, will be auto-detected by the IOService
+     * Example: text/xml
+     * @var string
+     */
+    public $mimeType;
+
+    /**
+     * Unique identifier for this file
+     * Ex: images/media/images/ez-logo/209-1-eng-GB/eZ-Logo.gif,
+     *     or original/application/2b042138835bb5f48beb9c9df6e86de4.pdf
+     * @var mixed
+     */
+    public $id;
+
     /**
      * @var resource
      */

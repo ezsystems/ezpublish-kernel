@@ -46,7 +46,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     {
         return array(
             'create' => array(
-                'path' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                'id' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
                 'fileName' => 'Icy-Night-Flower-Binary.jpg',
                 'fileSize' => filesize( $path ),
                 'mimeType' => 'image/jpeg',
@@ -54,7 +54,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                 // 'width' by intention (will be set to defaults)
             ),
             'update' => array(
-                'path' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                'id' => ( $path = __DIR__ . '/_fixtures/image.png' ),
                 'fileName' => 'Blue-Blue-Blue-Sindelfingen.png',
                 'fileSize' => filesize( $path ),
                 // Left out 'mimeType' by intention (will be auto-detected)
@@ -193,7 +193,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
         $expectedData = $fixtureData['create'];
 
         // Will change during storage
-        unset( $expectedData['path'] );
+        unset( $expectedData['id'] );
 
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -201,11 +201,11 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
         );
 
         $this->assertTrue(
-            file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->path ),
+            file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->id ),
             "File $path exists."
         );
 
-        self::$loadedMediaPath = $field->value->path;
+        self::$loadedMediaPath = $field->value->id;
     }
 
     /**
@@ -234,14 +234,14 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
         return array(
             array(
                 array(
-                    'path' => '/foo/bar/sindelfingen.pdf',
+                    'id' => '/foo/bar/sindelfingen.pdf',
                 ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
             ),
             array(
                 new MediaValue(
                     array(
-                        'path' => '/foo/bar/sindelfingen.pdf',
+                        'id' => '/foo/bar/sindelfingen.pdf',
                     )
                 ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
@@ -277,7 +277,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
         $fixtureData = $this->getFixtureData();
         $expectedData = $fixtureData['update'];
         // Will change during storage
-        unset( $expectedData['path'] );
+        unset( $expectedData['id'] );
 
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -285,7 +285,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
         );
 
         $this->assertTrue(
-            file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->path ),
+            file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->id ),
             "File $path exists."
         );
     }
@@ -330,7 +330,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
 
         $this->assertEquals(
             self::$loadedMediaPath,
-            $field->value->path
+            $field->value->id
         );
     }
 
@@ -357,15 +357,22 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     public function provideToHashData()
     {
         $fixture = $this->getFixtureData();
+
+        $fixture['create']['uri'] = $fixture['create']['id'];
+
         // Defaults set by type
         $fixture['create']['hasController'] = false;
         $fixture['create']['autoplay'] = false;
         $fixture['create']['loop'] = false;
         $fixture['create']['width'] = 0;
         $fixture['create']['height'] = 0;
+
+        $fieldValue = $this->getValidCreationFieldData();
+        $fieldValue->uri = $fixture['create']['uri'];
+
         return array(
             array(
-                $this->getValidCreationFieldData(),
+                $fieldValue,
                 $fixture['create'],
             ),
         );
@@ -381,10 +388,15 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     public function provideFromHashData()
     {
         $fixture = $this->getFixtureData();
+        $fixture['create']['uri'] = $fixture['create']['id'];
+
+        $fieldValue = $this->getValidCreationFieldData();
+        $fieldValue->uri = $fixture['create']['uri'];
+
         return array(
             array(
                 $fixture['create'],
-                $this->getValidCreationFieldData()
+                $fieldValue
             ),
         );
     }

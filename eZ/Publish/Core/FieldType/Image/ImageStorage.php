@@ -120,14 +120,14 @@ class ImageStorage extends GatewayBasedStorage
             if ( !$binaryFile = $this->IOService->loadBinaryFile( $targetPath ) )
             {
                 $binaryFileCreateStruct = $this->IOService->newBinaryCreateStructFromLocalFile(
-                    $field->value->externalData['path']
+                    $field->value->externalData['id']
                 );
-                $binaryFileCreateStruct->uri = $targetPath;
+                $binaryFileCreateStruct->id = $targetPath;
                 $binaryFile = $this->IOService->createBinaryFile( $binaryFileCreateStruct );
             }
-            $field->value->externalData['path'] = $this->IOService->getInternalPath( $binaryFile->uri );
             $field->value->externalData['mimeType'] = $binaryFile->mimeType;
             $field->value->externalData['imageId'] = $versionInfo->contentInfo->id . '-' . $field->id;
+            $field->value->externalData['uri'] = $binaryFile->uri;
 
             $field->value->data = array_merge(
                 $field->value->externalData,
@@ -147,7 +147,7 @@ class ImageStorage extends GatewayBasedStorage
                 return true;
             }
 
-            $binaryFile = $this->IOService->loadBinaryFile( $this->IOService->getExternalPath( $field->value->data['path'] ) );
+            $binaryFile = $this->IOService->loadBinaryFile( $this->IOService->getExternalPath( $field->value->data['id'] ) );
             $field->value->data = array_merge(
                 $field->value->data,
                 $this->IOService->getMetadata( $this->imageSizeMetadataHandler, $binaryFile ),
@@ -156,7 +156,7 @@ class ImageStorage extends GatewayBasedStorage
             $field->value->externalData = null;
         }
 
-        $this->getGateway( $context )->storeImageReference( $field->value->data['path'], $field->id );
+        $this->getGateway( $context )->storeImageReference( $field->value->data['uri'], $field->id );
 
         // Data has been updated and needs to be stored!
         return true;
@@ -200,14 +200,17 @@ class ImageStorage extends GatewayBasedStorage
     {
         if ( $field->value->data !== null )
         {
-            $path = $this->IOService->getExternalPath( $field->value->data['path'] );
-            if ( ( $binaryFile = $this->IOService->loadBinaryFile( $path ) ) === false )
+            // @todo wrap this within a dedicated service that uses the handler + service under the hood
+            // Required since images are stored with their full path, e.g. uri with a Legacy compatible IO handler
+            $binaryFileId = $this->IOService->getExternalPath( $field->value->data['id'] );
+            if ( ( $binaryFile = $this->IOService->loadBinaryFile( $binaryFileId ) ) === false )
             {
-                throw new NotFoundException( '$field->value->data[path]', $path );
+                throw new NotFoundException( '$field->value->data[id]', $field->value->data['id'] );
             }
 
             $field->value->data['fileSize'] = $binaryFile->size;
             $field->value->data['imageId'] = $versionInfo->contentInfo->id . '-' . $field->id;
+            $field->value->data['uri'] = $binaryFile->uri;
         }
     }
 
@@ -237,8 +240,9 @@ class ImageStorage extends GatewayBasedStorage
                 $gateway->removeImageReferences( $storedFilePath, $versionInfo->versionNo, $fieldId );
                 if ( $gateway->countImageReferences( $storedFilePath ) === 0 )
                 {
-                    $localPath = $this->IOService->getExternalPath( $storedFilePath );
-                    $binaryFile = $this->IOService->loadBinaryFile( $localPath );
+                    // @todo See todo above about full uri
+                    $binaryFileId = $this->IOService->getExternalPath( $storedFilePath );
+                    $binaryFile = $this->IOService->loadBinaryFile( $binaryFileId );
                     // If file can't be loaded it might be already deleted for some other language
                     if ( $binaryFile !== false )
                     {

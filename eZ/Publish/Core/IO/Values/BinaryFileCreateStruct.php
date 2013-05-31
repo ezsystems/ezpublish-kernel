@@ -20,7 +20,7 @@ class BinaryFileCreateStruct extends ValueObject
      * URI the binary file should be stored to
      * @var string
      */
-    public $uri;
+    public $id;
 
     /**
      * The size of the file

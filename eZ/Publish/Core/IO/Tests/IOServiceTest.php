@@ -95,7 +95,7 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
         );
 
         self::assertInstanceOf( 'eZ\\Publish\\Core\\IO\\Values\\BinaryFileCreateStruct', $binaryCreateStruct );
-        self::assertNull( $binaryCreateStruct->uri );
+        self::assertNull( $binaryCreateStruct->id );
         self::assertTrue( is_resource( $binaryCreateStruct->inputStream ) );
         self::assertEquals( filesize( __FILE__ ), $binaryCreateStruct->size );
         self::assertEquals( 'text/x-php', $binaryCreateStruct->mimeType );
@@ -111,8 +111,8 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateBinaryFile( BinaryFileCreateStruct $createStruct )
     {
-        $createStruct->uri = "my/path.php";
-        $uri = $this->getPrefixedUri( $createStruct->uri );
+        $createStruct->id = "my/path.php";
+        $uri = $this->getPrefixedUri( $createStruct->id );
 
         $spiBinaryFile = new SPIBinaryFile;
         $spiBinaryFile->uri = $uri;
@@ -126,7 +126,7 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
 
         $binaryFile = $this->getIOService()->createBinaryFile( $createStruct );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\IO\Values\\BinaryFile', $binaryFile );
-        self::assertEquals( $createStruct->uri, $binaryFile->uri );
+        self::assertEquals( $createStruct->id, $binaryFile->uri );
         self::assertEquals( $createStruct->mimeType, $binaryFile->mimeType );
         self::assertEquals( $createStruct->size, $binaryFile->size );
 

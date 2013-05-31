@@ -24,6 +24,13 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 class BinaryFile extends ValueObject
 {
     /**
+     * Unique ID
+     * Ex: media/images/ez-logo/209-1-eng-GB/eZ-Logo.gif, or application/2b042138835bb5f48beb9c9df6e86de4.pdf
+     * @var mixed
+     */
+    protected $id;
+
+    /**
      * File size, in bytes
      * @var int
      */
@@ -47,5 +54,4 @@ class BinaryFile extends ValueObject
      * @var string
      */
     public $mimeType;
-
 }

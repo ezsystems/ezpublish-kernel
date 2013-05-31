@@ -170,17 +170,17 @@ class InMemory implements IoHandlerInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
      *
-     * @param string $uri
+     * @param string $spiBinaryFileId
      *
      * @return \eZ\Publish\SPI\IO\BinaryFile
      */
-    public function load( $uri )
+    public function load( $spiBinaryFileId )
     {
-        if ( !isset( $this->storage[$uri] ) )
+        if ( !isset( $this->storage[$spiBinaryFileId] ) )
         {
-            throw new NotFoundException( 'BinaryFile', $uri );
+            throw new NotFoundException( 'BinaryFile', $spiBinaryFileId );
         }
-        return $this->storage[$uri];
+        return $this->storage[$spiBinaryFileId];
     }
 
     /**
@@ -188,19 +188,19 @@ class InMemory implements IoHandlerInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
      *
-     * @param string $uri
+     * @param string $spiBinaryFileId
      *
      * @return resource
      */
-    public function getFileResource( $uri )
+    public function getFileResource( $spiBinaryFileId )
     {
-        if ( !isset( $this->storage[$uri] ) )
+        if ( !isset( $this->storage[$spiBinaryFileId] ) )
         {
-            throw new NotFoundException( 'BinaryFile', $uri );
+            throw new NotFoundException( 'BinaryFile', $spiBinaryFileId );
         }
-        $uri = 'data://' . $this->storage[$uri]->mimeType . ';base64,' . $this->data[$uri];
+        $spiBinaryFileId = 'data://' . $this->storage[$spiBinaryFileId]->mimeType . ';base64,' . $this->data[$spiBinaryFileId];
 
-        return fopen( $uri, 'rb' );
+        return fopen( $spiBinaryFileId, 'rb' );
     }
 
     /**
@@ -208,22 +208,22 @@ class InMemory implements IoHandlerInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the file couldn't be found
      *
-     * @param string $uri
+     * @param string $spiBinaryFileId
      *
      * @return string
      */
-    public function getFileContents( $uri )
+    public function getFileContents( $spiBinaryFileId )
     {
-        if ( !isset( $this->storage[$uri] ) )
+        if ( !isset( $this->storage[$spiBinaryFileId] ) )
         {
-            throw new NotFoundException( 'BinaryFile', $uri );
+            throw new NotFoundException( 'BinaryFile', $spiBinaryFileId );
         }
-        return base64_decode( $this->data[$uri] );
+        return base64_decode( $this->data[$spiBinaryFileId] );
     }
 
-    public function getInternalPath( $path )
+    public function getInternalPath( $spiBinaryFileId )
     {
-        return $this->storagePrefix . $path;
+        return $this->storagePrefix . $spiBinaryFileId;
     }
 
     public function getExternalPath( $path )
@@ -236,9 +236,16 @@ class InMemory implements IoHandlerInterface
         return substr( $path, strlen( $this->storagePrefix ) + 1 );
     }
 
-    public function getMetadata( MetadataHandler $metadataHandler, $path )
+    public function getMetadata( MetadataHandler $metadataHandler, $spiBinaryFileId )
     {
         // @todo This won't work. InternalPath is NOT a path. Need to write it to disk somehow.
-        return $metadataHandler->extract( $this->getInternalPath( $path ) );
+        return $metadataHandler->extract( $this->getInternalPath( $spiBinaryFileId ) );
     }
+
+    public function getUri( $spiBinaryFileId )
+    {
+        // @todo Not implemented, would require a Front controller
+        return 'todo:$path';
+    }
+
 }

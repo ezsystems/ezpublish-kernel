@@ -26,6 +26,14 @@ use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
 class Value extends BaseValue
 {
     /**
+     * Image id
+     *
+     * @var mixed
+     * @required
+     */
+    public $id;
+
+    /**
      * The alternative image text (for example "Picture of an apple.").
      *
      * @var string|null
@@ -49,12 +57,10 @@ class Value extends BaseValue
     public $fileSize;
 
     /**
-     * Path string, where the image is located
-     *
+     * The image's HTTP URI
      * @var string
-     * @required
      */
-    public $path;
+    public $uri;
 
     /**
      * External image ID (required by REST for now, see https://jira.ez.no/browse/EZP-20831)
@@ -105,10 +111,11 @@ class Value extends BaseValue
         }
         return new static(
             array(
-                'path' => $path,
+                'id' => $path,
                 'fileName' => basename( $path ),
                 'fileSize' => filesize( $path ),
                 'alternativeText' => '',
+                'uri' => '',
             )
         );
     }

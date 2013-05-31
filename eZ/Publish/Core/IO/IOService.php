@@ -81,7 +81,6 @@ class IOService
             throw new InvalidArgumentException( "uploadedFile", "failed to get file resource" );
 
         $binaryCreateStruct = new BinaryFileCreateStruct();
-        $binaryCreateStruct->uri = $uploadedFile['tmp_name'];
         $binaryCreateStruct->size = $uploadedFile['size'];
         $binaryCreateStruct->inputStream = $fileHandle;
         $binaryCreateStruct->mimeType = $uploadedFile['type'];
@@ -132,8 +131,8 @@ class IOService
      */
     public function createBinaryFile( BinaryFileCreateStruct $binaryFileCreateStruct )
     {
-        if ( empty( $binaryFileCreateStruct->uri ) || !is_string( $binaryFileCreateStruct->uri ) )
-            throw new InvalidArgumentValue( "uri", $binaryFileCreateStruct->uri, "BinaryFileCreateStruct" );
+        if ( empty( $binaryFileCreateStruct->id ) || !is_string( $binaryFileCreateStruct->id ) )
+            throw new InvalidArgumentValue( "id", $binaryFileCreateStruct->id, "BinaryFileCreateStruct" );
 
         if ( !is_int( $binaryFileCreateStruct->size ) || $binaryFileCreateStruct->size < 0 )
             throw new InvalidArgumentValue( "size", $binaryFileCreateStruct->size, "BinaryFileCreateStruct" );
@@ -163,30 +162,30 @@ class IOService
      */
     public function deleteBinaryFile( BinaryFile $binaryFile )
     {
-        if ( empty( $binaryFile->uri ) || !is_string( $binaryFile->uri ) )
-            throw new InvalidArgumentValue( "uri", $binaryFile->uri, "BinaryFile" );
+        if ( empty( $binaryFile->id ) || !is_string( $binaryFile->id ) )
+            throw new InvalidArgumentValue( "binaryFileId", $binaryFile->id, "BinaryFile" );
 
-        $this->ioHandler->delete( $this->getPrefixedUri( $binaryFile->uri ) );
+        $this->ioHandler->delete( $this->getPrefixedUri( $binaryFile->id ) );
     }
 
     /**
      * Loads the binary file with $id
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If the id is invalid
-     * @param string $uri
+     * @param string $binaryFileId
      * @return BinaryFile|bool the file, or false if it doesn't exist
      */
-    public function loadBinaryFile( $uri )
+    public function loadBinaryFile( $binaryFileId )
     {
-        if ( empty( $uri ) || !is_string( $uri ) )
-            throw new InvalidArgumentValue( "binaryFileId", $uri );
+        if ( empty( $binaryFileId ) || !is_string( $binaryFileId ) )
+            throw new InvalidArgumentValue( "binaryFileId", $binaryFileId );
 
         // @todo An absolute path can in no case be loaded, but throwing an exception is a bit too much at this stage
-        if ( $uri[0] === '/' )
+        if ( $binaryFileId[0] === '/' )
             return false;
 
         try
         {
-            $spiBinaryFile = $this->ioHandler->load( $this->getPrefixedUri( $uri ) );
+            $spiBinaryFile = $this->ioHandler->load( $this->getPrefixedUri( $binaryFileId ) );
         }
         catch ( NotFoundException $e )
         {
@@ -207,11 +206,11 @@ class IOService
      */
     public function getFileInputStream( BinaryFile $binaryFile )
     {
-        if ( empty( $binaryFile->uri ) || !is_string( $binaryFile->uri ) )
-            throw new InvalidArgumentValue( "uri", $binaryFile->uri, "BinaryFile" );
+        if ( empty( $binaryFile->id ) || !is_string( $binaryFile->id ) )
+            throw new InvalidArgumentValue( "binaryFileId", $binaryFile->id, "BinaryFile" );
 
         return $this->ioHandler->getFileResource(
-            $this->getPrefixedUri( $binaryFile->uri )
+            $this->getPrefixedUri( $binaryFile->id )
         );
     }
 
@@ -226,35 +225,45 @@ class IOService
      */
     public function getFileContents( BinaryFile $binaryFile )
     {
-        if ( empty( $binaryFile->uri ) || !is_string( $binaryFile->uri ) )
-            throw new InvalidArgumentValue( "uri", $binaryFile->uri, "BinaryFile" );
+        if ( empty( $binaryFile->id ) || !is_string( $binaryFile->id ) )
+            throw new InvalidArgumentValue( "binaryFileId", $binaryFile->id, "BinaryFile" );
 
         return $this->ioHandler->getFileContents(
-            $this->getPrefixedUri( $binaryFile->uri )
+            $this->getPrefixedUri( $binaryFile->id )
         );
     }
 
     /**
      * Returns the internal, handler level path to $externalPath
-     * @param string $externalPath
+     * @param string $externalId
      * @return string
      */
-    public function getInternalPath( $externalPath )
+    public function getInternalPath( $externalId )
     {
         $path = $this->ioHandler->getInternalPath(
-            $this->getPrefixedUri( $externalPath )
+            $this->getPrefixedUri( $externalId )
         );
         return $path;
     }
 
     /**
      * Returns the external path to $internalPath
-     * @param string $internalPath
+     * @param string $internalId
      * @return string
      */
-    public function getExternalPath( $internalPath )
+    public function getExternalPath( $internalId )
     {
-        return $this->removeUriPrefix( $this->ioHandler->getExternalPath( $internalPath ) );
+        return $this->removeUriPrefix( $this->ioHandler->getExternalPath( $internalId ) );
+    }
+
+    /**
+     * Returns the public HTTP uri for $path
+     * @param string $path
+     * @return string
+     */
+    public function getUri( $id )
+    {
+        return $this->ioHandler->getUri( $id );
     }
 
     /**
@@ -267,7 +276,7 @@ class IOService
     {
         return $this->ioHandler->getMetadata(
             $metadataHandler,
-            $this->getPrefixedUri( $binaryFile->uri )
+            $this->getPrefixedUri( $binaryFile->id )
         );
     }
 
@@ -282,7 +291,7 @@ class IOService
     {
         $spiBinaryCreateStruct = new SPIBinaryFileCreateStruct();
 
-        $spiBinaryCreateStruct->uri = $this->getPrefixedUri( $binaryFileCreateStruct->uri );
+        $spiBinaryCreateStruct->id = $this->getPrefixedUri( $binaryFileCreateStruct->id );
         $spiBinaryCreateStruct->size = $binaryFileCreateStruct->size;
         $spiBinaryCreateStruct->setInputStream( $binaryFileCreateStruct->inputStream );
         $spiBinaryCreateStruct->mimeType = $binaryFileCreateStruct->mimeType;
@@ -306,7 +315,7 @@ class IOService
         else
         {
             $mimeType = $this->mimeTypeDetector->getFromBuffer(
-                $this->ioHandler->getFileContents( $spiBinaryFile->uri )
+                $this->ioHandler->getFileContents( $spiBinaryFile->id )
             );
         }
 
@@ -314,43 +323,44 @@ class IOService
             array(
                 'size' => (int)$spiBinaryFile->size,
                 'mtime' => $spiBinaryFile->mtime,
-                'uri' => $this->removeUriPrefix( $spiBinaryFile->uri ),
+                'id' => $this->removeUriPrefix( $spiBinaryFile->id ),
                 'mimeType' => $mimeType,
+                'uri' => $spiBinaryFile->uri
             )
         );
     }
 
     /**
      * Returns $uri prefixed with what is configured in the service
-     * @param string $uri
+     * @param string $binaryFileId
      * @return string
      */
-    protected function getPrefixedUri( $uri )
+    protected function getPrefixedUri( $binaryFileId )
     {
         $prefix = '';
         if ( isset( $this->settings['prefix'] ) )
             $prefix = $this->settings['prefix'] . DIRECTORY_SEPARATOR;
-        return $prefix . $uri;
+        return $prefix . $binaryFileId;
     }
 
     /**
-     * @param $uri
+     * @param mixed $spiBinaryFileId
      * @return string
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
-    protected function removeUriPrefix( $uri )
+    protected function removeUriPrefix( $spiBinaryFileId )
     {
         if ( !isset( $this->settings['prefix'] ) )
         {
-            return $uri;
+            return $spiBinaryFileId;
         }
 
-        if ( strpos( $uri, $this->settings['prefix'] . DIRECTORY_SEPARATOR ) !== 0 )
+        if ( strpos( $spiBinaryFileId, $this->settings['prefix'] . DIRECTORY_SEPARATOR ) !== 0 )
         {
-            throw new InvalidArgumentException( '$uri', "Prefix {$this->settings['prefix']} not found in {$uri}" );
+            throw new InvalidArgumentException( '$id', "Prefix {$this->settings['prefix']} not found in {$spiBinaryFileId}" );
         }
 
-        $uri = substr( $uri, strlen( $this->settings['prefix'] ) + 1 );
-        return $uri;
+        $spiBinaryFileId = substr( $spiBinaryFileId, strlen( $this->settings['prefix'] ) + 1 );
+        return $spiBinaryFileId;
     }
 }

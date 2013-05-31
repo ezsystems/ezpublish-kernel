@@ -38,7 +38,7 @@ abstract class LegacyStorage extends Gateway
     {
         return array(
             'filename' => array(
-                'name' => 'path',
+                'name' => 'id',
                 'cast' => 'strval',
             ),
             'mime_type' => array(
@@ -99,7 +99,7 @@ abstract class LegacyStorage extends Gateway
         )->set(
             $connection->quoteColumn( 'filename' ),
             $insertQuery->bindValue(
-                $this->removeMimeFromPath( $field->value->externalData['path'] )
+                $this->removeMimeFromPath( $field->value->externalData['id'] )
             )
         )->set(
             $connection->quoteColumn( 'mime_type' ),
@@ -232,15 +232,13 @@ abstract class LegacyStorage extends Gateway
             return null;
         }
 
-        $propertyMap = $this->getPropertyMapping();
-
         $convertedResult = array();
         foreach ( reset( $result ) as $column => $value )
         {
             $convertedResult[$this->toPropertyName( $column )] = $this->castToPropertyValue( $value, $column );
         }
-        $convertedResult['path'] = $this->prependMimeToPath(
-            $convertedResult['path'],
+        $convertedResult['id'] = $this->prependMimeToPath(
+            $convertedResult['id'],
             $convertedResult['mimeType']
         );
 

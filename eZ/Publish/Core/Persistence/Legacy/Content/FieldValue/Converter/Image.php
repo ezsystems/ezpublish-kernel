@@ -97,7 +97,7 @@ class Image implements Converter
      */
     protected function createLegacyXml( array $data )
     {
-        $pathInfo = pathinfo( $data['path'] );
+        $pathInfo = pathinfo( $data['uri'] );
         return $this->fillXml( $data, $pathInfo, time() );
     }
 
@@ -136,7 +136,7 @@ EOT;
             htmlspecialchars( $pathInfo['extension'] ), // suffix="%s"
             htmlspecialchars( $pathInfo['filename'] ), // basename="%s"
             htmlspecialchars( $pathInfo['dirname'] ), // dirpath
-            htmlspecialchars( $imageData['path'] ), // url
+            htmlspecialchars( $imageData['uri'] ), // url
             htmlspecialchars( $pathInfo['basename'] ), // @todo: Needs original file name, for whatever reason?
             htmlspecialchars( $imageData['mime'] ), // mime_type
             htmlspecialchars( $imageData['width'] ), // width
@@ -200,7 +200,7 @@ EOT;
             return null;
         }
 
-        $extractedData['path'] = $url;
+        $extractedData['id'] = $url;
 
         if ( !$ezimageTag->hasAttribute( 'filename' ) )
         {

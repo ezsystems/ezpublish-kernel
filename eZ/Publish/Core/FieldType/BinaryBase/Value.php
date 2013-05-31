@@ -19,12 +19,18 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 abstract class Value extends BaseValue
 {
     /**
-     * Path string, where the binary file is located
+     * @todo This doesn't really make sense here...
+     * What is the point of exposing this ? It makes no sense as seen from outside (no storage dir nor prefix)
+     * but a path *also* doesn't make sense when we move to a cloud/remote storage
+     * On the other hand, this property IS required when INPUTING files, as they need to be read from
+     * somewhere. It makes no harm, but is still confusing.
+     *
+     * Unique file ID
      *
      * @var string
      * @required
      */
-    public $path;
+    public $id;
 
     /**
      * Display file name
@@ -86,6 +92,6 @@ abstract class Value extends BaseValue
      */
     public function __toString()
     {
-        return (string)$this->path;
+        return (string)$this->uri;
     }
 }

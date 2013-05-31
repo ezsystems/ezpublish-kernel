@@ -160,11 +160,12 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
             array(
                 'data'         => null,
                 'externalData' => array(
-                    'path' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                    'id' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
                     'fileName' => 'Ice-Flower-Binary.jpg',
                     'fileSize' => filesize( $path ),
                     'mimeType' => 'image/jpeg',
                     'downloadCount' => 0,
+                    'uri' => __DIR__ . '/_fixtures/image.jpg',
                 ),
                 'sortKey'      => '',
             )
@@ -184,7 +185,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     {
         $this->assertNotNull( $field->value->externalData );
 
-        $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['path'];
+        $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id'];
         $this->assertTrue(
             file_exists( $path ),
             "Stored file $path exists"
@@ -211,11 +212,12 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
             array(
                 'data'         => null,
                 'externalData' => array(
-                    'path' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                    'id' => ( $path = __DIR__ . '/_fixtures/image.png' ),
                     'fileName' => 'Blueish-Blue-Binary.jpg',
                     'fileSize' => filesize( $path ),
                     'mimeType' => 'image/png',
                     'downloadCount' => 23,
+                    'uri' => __DIR__ . '/_fixtures/image.jpg'
                 ),
                 'sortKey'      => '',
             )
@@ -239,7 +241,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
         $this->assertNotNull( $field->value->externalData );
 
         $this->assertTrue(
-            file_exists( ( $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['path'] ) ),
+            file_exists( ( $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id'] ) ),
             "Stored file $path exists"
         );
 

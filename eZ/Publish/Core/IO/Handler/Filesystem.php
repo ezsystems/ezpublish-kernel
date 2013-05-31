@@ -65,7 +65,7 @@ class Filesystem implements IOHandlerInterface
      * Creates and stores a new BinaryFile based on the BinaryFileCreateStruct $file
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If the target path already exists
-     * @throws \RuntimeException If the directory in $createStruct->uri exists but is a file
+     * @throws \RuntimeException If the directory in $createStruct->spiBinaryFileIdi exists but is a file
      *
      * @param \eZ\Publish\SPI\IO\BinaryFileCreateStruct $createStruct
      *
@@ -73,16 +73,16 @@ class Filesystem implements IOHandlerInterface
      */
     public function create( BinaryFileCreateStruct $createStruct )
     {
-        if ( $this->exists( $createStruct->uri ) )
+        if ( $this->exists( $createStruct->id ) )
         {
             throw new InvalidArgumentException(
-                "\$createFilestruct->uri",
-                "file '{$createStruct->uri}' already exists"
+                "\$createFilestruct->id",
+                "file '{$createStruct->id}' already exists"
             );
         }
 
-        $storagePath = $this->getStoragePath( $createStruct->uri );
-        $outputDirectory = dirname( $createStruct->uri );
+        $storagePath = $this->getStoragePath( $createStruct->id );
+        $outputDirectory = dirname( $createStruct->id );
         if ( file_exists( $outputDirectory ) && !is_dir( $outputDirectory ) )
         {
             throw new RuntimeException( "Directory $outputDirectory exists but is a file" );
@@ -94,7 +94,7 @@ class Filesystem implements IOHandlerInterface
 
         $outputStream = fopen( $storagePath, 'wb' );
         stream_copy_to_stream( $createStruct->getInputStream(), $outputStream );
-        return $this->load( $createStruct->uri );
+        return $this->load( $createStruct->id );
     }
 
     /**
@@ -124,15 +124,15 @@ class Filesystem implements IOHandlerInterface
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If the file doesn't exist
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      */
-    public function delete( $path )
+    public function delete( $spiBinaryFileId )
     {
-        if ( !$this->exists( $path ) )
+        if ( !$this->exists( $spiBinaryFileId ) )
         {
-            throw new NotFoundException( 'BinaryFile', $path );
+            throw new NotFoundException( 'BinaryFile', $spiBinaryFileId );
         }
-        unlink( $this->getStoragePath( $path ) );
+        unlink( $this->getStoragePath( $spiBinaryFileId ) );
     }
 
     /**
@@ -141,35 +141,35 @@ class Filesystem implements IOHandlerInterface
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If the source path doesn't exist
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If the target path already exists
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      * @param \eZ\Publish\SPI\IO\BinaryFileUpdateStruct $updateFileStruct
      *
      * @return \eZ\Publish\SPI\IO\BinaryFile The updated BinaryFile
      */
-    public function update( $path, BinaryFileUpdateStruct $updateFileStruct )
+    public function update( $spiBinaryFileId, BinaryFileUpdateStruct $updateFileStruct )
     {
-        if ( !$this->exists( $path ) )
+        if ( !$this->exists( $spiBinaryFileId ) )
         {
-            throw new NotFoundException( 'BinaryFile', $path );
+            throw new NotFoundException( 'BinaryFile', $spiBinaryFileId );
         }
 
-        $sourceStoragePath = $this->getStoragePath( $path );
+        $sourceStoragePath = $this->getStoragePath( $spiBinaryFileId );
 
-        if ( !isset( $updateFileStruct->uri ) || $updateFileStruct->uri == $path )
+        if ( !isset( $updateFileStruct->id ) || $updateFileStruct->id == $spiBinaryFileId )
         {
-            $destinationStoragePath = $this->getStoragePath( $path );
+            $destinationStoragePath = $this->getStoragePath( $spiBinaryFileId );
         }
         else
         {
-            if ( $this->exists( $updateFileStruct->uri ) )
+            if ( $this->exists( $updateFileStruct->id ) )
             {
                 throw new InvalidArgumentException(
-                    "\$updateFileStruct->uri",
-                    "File '{$updateFileStruct->uri}' already exists"
+                    "\$updateFileStruct->id",
+                    "File '{$updateFileStruct->id}' already exists"
                 );
             }
 
-            $destinationStoragePath = $this->getStoragePath( $updateFileStruct->uri );
+            $destinationStoragePath = $this->getStoragePath( $updateFileStruct->id );
         }
 
         // path
@@ -196,13 +196,13 @@ class Filesystem implements IOHandlerInterface
     /**
      * Checks if the BinaryFile with path $path exists
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      *
      * @return boolean
      */
-    public function exists( $path )
+    public function exists( $spiBinaryFileId )
     {
-        return file_exists( $this->getStoragePath( $path ) );
+        return file_exists( $this->getStoragePath( $spiBinaryFileId ) );
     }
 
     /**
@@ -210,23 +210,24 @@ class Filesystem implements IOHandlerInterface
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If no file identified by $path exists
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      *
      * @return \eZ\Publish\SPI\IO\BinaryFile
      */
-    public function load( $path )
+    public function load( $spiBinaryFileId )
     {
-        if ( !$this->exists( $path ) )
+        if ( !$this->exists( $spiBinaryFileId ) )
         {
-            throw new NotFoundException( 'BinaryFile', $path );
+            throw new NotFoundException( 'BinaryFile', $spiBinaryFileId );
         }
 
-        $storagePath = $this->getStoragePath( $path );
+        $storagePath = $this->getStoragePath( $spiBinaryFileId );
         $file = new BinaryFile();
-        $file->uri = $path;
+        $file->id = $spiBinaryFileId;
         $file->mtime = new DateTime();
         $file->mtime->setTimestamp( filemtime( $storagePath ) );
         $file->size = filesize( $storagePath );
+        $file->uri = $this->getUri( $spiBinaryFileId );
 
         return $file;
     }
@@ -234,17 +235,17 @@ class Filesystem implements IOHandlerInterface
     /**
      * Returns a file resource to the BinaryFile identified by $path
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      *
      * @return resource
      */
-    public function getFileResource( $path )
+    public function getFileResource( $spiBinaryFileId )
     {
-        if ( !$this->exists( $path ) )
+        if ( !$this->exists( $spiBinaryFileId ) )
         {
-            throw new NotFoundException( "BinaryFile", $path );
+            throw new NotFoundException( "BinaryFile", $spiBinaryFileId );
         }
-        return fopen( $this->getStoragePath( $path ), 'rb' );
+        return fopen( $this->getStoragePath( $spiBinaryFileId ), 'rb' );
     }
 
     /**
@@ -252,34 +253,34 @@ class Filesystem implements IOHandlerInterface
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException if the file couldn't be found
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      *
      * @return string
      */
-    public function getFileContents( $path )
+    public function getFileContents( $spiBinaryFileId )
     {
-        if ( !$this->exists( $path ) )
+        if ( !$this->exists( $spiBinaryFileId ) )
         {
-            throw new NotFoundException( 'BinaryFile', $path );
+            throw new NotFoundException( 'BinaryFile', $spiBinaryFileId );
         }
 
-        return file_get_contents( $this->getStoragePath( $path ) );
+        return file_get_contents( $this->getStoragePath( $spiBinaryFileId ) );
     }
 
     /**
      * Returns the internal, handler level path to $path
-     * @param string $path
+     * @param string $spiBinaryFileId
      * @return string
 */
-    public function getInternalPath( $path )
+    public function getInternalPath( $spiBinaryFileId )
     {
         if ( !isset( $this->prefix ) )
         {
-            return $path;
+            return $spiBinaryFileId;
         }
         else
         {
-            return $this->prefix . DIRECTORY_SEPARATOR . $path;
+            return $this->prefix . DIRECTORY_SEPARATOR . $spiBinaryFileId;
         }
     }
 
@@ -292,13 +293,13 @@ class Filesystem implements IOHandlerInterface
      * Executes $metadataHandler on $path, and returns the metadata array
      *
      * @param MetadataHandler $metadataHandler
-     * @param string          $path
+     * @param string          $spiBinaryFileId
      *
      * @return array
      */
-    public function getMetadata( MetadataHandler $metadataHandler, $path )
+    public function getMetadata( MetadataHandler $metadataHandler, $spiBinaryFileId )
     {
-        return $metadataHandler->extract( $this->getStoragePath( $path ) );
+        return $metadataHandler->extract( $this->getStoragePath( $spiBinaryFileId ) );
     }
 
     /**
@@ -313,18 +314,23 @@ class Filesystem implements IOHandlerInterface
         return $path;
     }
 
-    protected function removePrefix( $uri )
+    protected function removePrefix( $spiBinaryFileId )
     {
         if ( !isset( $this->prefix ) )
         {
-            return $uri;
+            return $spiBinaryFileId;
         }
 
-        if ( strpos( $uri, $this->prefix . DIRECTORY_SEPARATOR ) !== 0 )
+        if ( strpos( $spiBinaryFileId, $this->prefix . DIRECTORY_SEPARATOR ) !== 0 )
         {
-            throw new InvalidArgumentException( '$uri', "Prefix {$this->prefix} not found in {$uri}" );
+            throw new InvalidArgumentException( '$uri', "Prefix {$this->prefix} not found in {$spiBinaryFileId}" );
         }
 
-        return substr( $uri, strlen( $this->prefix ) + 1 );
+        return substr( $spiBinaryFileId, strlen( $this->prefix ) + 1 );
+    }
+
+    public function getUri( $spiBinaryFileId )
+    {
+        return $this->prefix . '/' . $spiBinaryFileId;
     }
 }
