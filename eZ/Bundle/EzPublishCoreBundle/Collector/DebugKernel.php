@@ -9,6 +9,8 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Collector;
 
+use \eZTemplate;
+
 class DebugKernel
 {
     /**
@@ -46,4 +48,40 @@ class DebugKernel
         return self::$templateList;
     }
 
+    /**
+     * Returns array of loaded legacy templates
+     *
+     * @return array
+     **/
+    public static function getLegacyTemplatesList( $container )
+    {
+        $legacyKernel = $container->get( 'ezpublish_legacy.kernel' );
+        $templateStats = $legacyKernel()->runCallback(
+            function ()
+            {
+                return \eZTemplate::templatesUsageStatistics();
+            }
+        );
+
+        foreach ( $templateStats as $tplInfo )
+        {
+            $requestedTpl = $tplInfo["requested-template-name"];
+            $actualTpl    = $tplInfo["actual-template-name"];
+            $fullPath     = $tplInfo["template-filename"];
+
+            self::$templateList["full"][$actualTpl] = array(
+                "loaded" => $requestedTpl,
+                "fullPath" => $fullPath
+            );
+            if ( !isset( self::$templateList["compact"][$requestedTpl] ) )
+            {
+                self::$templateList["compact"][$requestedTpl] = 1;
+            }
+            else
+            {
+                self::$templateList["compact"][$requestedTpl]++;
+            }
+        }
+        return self::$templateList;
+    }
 }

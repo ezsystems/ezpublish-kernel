@@ -14,13 +14,18 @@
         </div>
         <hr />
         <div class="sf-toolbar-info-piece">
-            <b>eZ 5 Templates</b>
+            <b>{% if collector.legacyMode %}eZ Legacy Templates{% else %}eZ 5 Templates{% endif %}</b>
         </div>
-        {% for tpl, count in collector.templates.compact %}
-            <div class="sf-toolbar-info-piece">
-                <span class="sf-toolbar-status sf-toolbar-status-green">{{ count }}</span> {{ tpl }}
-            </div>
+        {% for tpl, count in collector.templates.compact|slice(0, 10) %}
+        <div class="sf-toolbar-info-piece">
+            <span class="sf-toolbar-status sf-toolbar-status-green">{{ count }}</span> {{ tpl }}
+        </div>
         {% endfor %}
+        {% if collector.templates.compact|length > 10 %}
+        <div class="sf-toolbar-info-piece">
+            <b>Please check profiler page for more ...</b>
+        </div>
+        {% endif %}
     {% endset %}
 
     {% include 'WebProfilerBundle:Profiler:toolbar_item.html.twig' with { 'link': profiler_url } %}
@@ -40,6 +45,24 @@
     <h2>eZ Publish Usage Information</h2>
 
     <h3>Loaded templates</h3>
+    {% if collector.legacyMode %}
+    <table>
+        <tr>
+            <th>Order</th>
+            <th>Requested template</th>
+            <th>Override Template</th>
+            <th>Template path</th>
+        </tr>
+        {% for tpl, info in collector.templates.full %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ tpl }}</td>
+            <td>{% if tpl != info.loaded %}{{ info.loaded }}{% else %}{% endif %}</td>
+            <td>{{ info.fullPath }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
     <table>
         <tr>
             <th>Order</th>
@@ -54,6 +77,7 @@
         </tr>
         {% endfor %}
     </table>
+    {% endif %}
 
     <table>
         <tr>

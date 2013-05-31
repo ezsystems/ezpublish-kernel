@@ -63,7 +63,7 @@ services:
     # SPI profiling
     ezpublish.data_collector.spi.persistence:
         class: %ezpublish.data_collector.spi.persistence.class%
-        arguments: [ @ezpublish.spi.persistence.cache.persistenceLogger ]
+        arguments: [ @ezpublish.spi.persistence.cache.persistenceLogger, @service_container ]
         tags:
             -
                 name: data_collector
