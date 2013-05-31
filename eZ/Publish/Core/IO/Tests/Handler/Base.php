@@ -339,7 +339,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
 
         $struct = new BinaryFileCreateStruct();
         $struct->size = filesize( $localFile );
-        $struct->uri = $repositoryPath;
+        $struct->id = $repositoryPath;
         $struct->mimeType = $this->getMimeTypeFromPath( $localFile );
 
         $inputStream = fopen( $localFile, 'rb' );
