@@ -339,7 +339,7 @@ class IOService
     {
         $prefix = '';
         if ( isset( $this->settings['prefix'] ) )
-            $prefix = $this->settings['prefix'] . DIRECTORY_SEPARATOR;
+            $prefix = $this->settings['prefix'] . '/';
         return $prefix . $binaryFileId;
     }
 
@@ -355,7 +355,7 @@ class IOService
             return $spiBinaryFileId;
         }
 
-        if ( strpos( $spiBinaryFileId, $this->settings['prefix'] . DIRECTORY_SEPARATOR ) !== 0 )
+        if ( strpos( $spiBinaryFileId, $this->settings['prefix'] . '/' ) !== 0 )
         {
             throw new InvalidArgumentException( '$id', "Prefix {$this->settings['prefix']} not found in {$spiBinaryFileId}" );
         }
