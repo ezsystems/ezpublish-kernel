@@ -7,7 +7,7 @@ parameters:
     ezpublish.controller.base.class: eZ\Publish\Core\MVC\Symfony\Controller\Controller
     ezpublish.controller.content.view.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController
     ezpublish.controller.page.view.class: eZ\Publish\Core\MVC\Symfony\Controller\PageController
-    ezpublish.data_collector.spi.persistence.class: eZ\Bundle\EzPublishCoreBundle\Collector\SPIPersistenceDataCollector
+    ezpublish.debug.data_collector.class: eZ\Bundle\EzPublishCoreBundle\Collector\EzPublishDataCollector
 
     # FragmentRenderer overrides
     fragment.renderer.esi.class: eZ\Bundle\EzPublishCoreBundle\Fragment\EsiFragmentRenderer
@@ -60,13 +60,13 @@ services:
     ez_page:
         alias: ezpublish.controller.page.view
 
-    # SPI profiling
-    ezpublish.data_collector.spi.persistence:
-        class: %ezpublish.data_collector.spi.persistence.class%
+    # EzPublish profiling
+    ezpublish.debug.data_collector:
+        class: %ezpublish.debug.data_collector.class%
         arguments: [ @ezpublish.spi.persistence.cache.persistenceLogger, @service_container ]
         tags:
             -
                 name: data_collector
                 template: "EzPublishCoreBundle:Profiler:layout"
-                id: "ezpublish.spi.persistence"
+                id: "ezpublish.debug.toolbar"
                 priority: 300

@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the SPIPersistenceDataCollector class.
+ * File containing the EzPublishDataCollector class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -16,15 +16,19 @@ use Symfony\Component\HttpFoundation\Response;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
 /**
+ * Collects list of templates from eZ 5 stack or Legacy Stack
  * Collects number of calls made to SPI Persistence as logged by eZ\Publish\Core\Persistence\Cache\*.
  */
-class SPIPersistenceDataCollector extends DataCollector
+class EzPublishDataCollector extends DataCollector
 {
     /**
      * @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger
      */
     protected $logger;
 
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
     protected $container;
 
     /**
@@ -54,7 +58,7 @@ class SPIPersistenceDataCollector extends DataCollector
             'calls' => $this->logger->getCalls(),
             'handlers' => $this->logger->getLoadedUnCachedHandlers(),
             'templates' => $this->getTemplateList( $currentSA ),
-            'legacyMode' => $currentSA
+            'legacyMode' => $this->getIsLegacyMode( $currentSA )
         );
     }
 
@@ -67,7 +71,7 @@ class SPIPersistenceDataCollector extends DataCollector
      */
     public function getName()
     {
-        return 'ezpublish.spi.persistence';
+        return 'ezpublish.debug.toolbar';
     }
 
     /**
@@ -160,6 +164,18 @@ class SPIPersistenceDataCollector extends DataCollector
     }
 
     /**
+     * Returns a boolean
+     *
+     * @param string $currentSA get current siteaccess name
+     *
+     * @return boolean
+     */
+    public function getIsLegacyMode( $currentSA )
+    {
+        return $this->container->getParameter( "ezsettings.$currentSA.legacy_mode" );
+    }
+
+    /**
      * Returns all templates loaded via eZ 5 stack or Legacy stack
      *
      * @param String  $currentSA get current siteaccess name
@@ -168,7 +184,7 @@ class SPIPersistenceDataCollector extends DataCollector
      */
     public function getTemplateList( $currentSA )
     {
-        $isLegacyMode = $this->container->getParameter( "ezsettings.$currentSA.legacy_mode" );
+        $isLegacyMode = $this->getIsLegacyMode( $currentSA );
         if ( $isLegacyMode )
         {
             $templateList = DebugKernel::getLegacyTemplatesList( $this->container );
