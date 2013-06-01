@@ -66,7 +66,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
         $binaryFile = $this->IOHandler->create( $struct );
 
         self::assertInstanceOf( 'eZ\\Publish\\SPI\\IO\\BinaryFile', $binaryFile );
-        self::assertEquals( $repositoryPath, $binaryFile->uri );
+        self::assertEquals( $repositoryPath, $binaryFile->id );
         self::assertEquals( 1928, $binaryFile->size );
         self::assertInstanceOf( 'DateTime', $binaryFile->mtime );
         self::assertNotEquals( 0, $binaryFile->mtime->getTimestamp() );
@@ -108,7 +108,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
 
         $newFilePath = __DIR__ . DIRECTORY_SEPARATOR . 'ezplogo2.png';
         $updateStruct = new BinaryFileUpdateStruct();
-        $updateStruct->uri = $secondPath;
+        $updateStruct->id = $secondPath;
         $updateStruct->setInputStream( fopen( $newFilePath, 'rb' ) );
         $updateStruct->size = filesize( $newFilePath );
 
@@ -150,7 +150,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
     public function testUpdateNonExistingSource()
     {
         $updateStruct = new BinaryFileUpdateStruct();
-        $updateStruct->uri = 'images/testUpdateSourceNotFoundTarget.png';
+        $updateStruct->id = 'images/testUpdateSourceNotFoundTarget.png';
 
         $this->IOHandler->update( 'images/testUpdateSourceNotFoundSource.png', $updateStruct );
     }
@@ -174,7 +174,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
         self::assertTrue( $this->IOHandler->exists( $secondPath ) );
 
         $updateStruct = new BinaryFileUpdateStruct();
-        $updateStruct->uri = $secondPath;
+        $updateStruct->id = $secondPath;
 
         $this->IOHandler->update( $firstPath, $updateStruct );
     }
@@ -233,7 +233,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
 
         self::assertInstanceOf( 'eZ\\Publish\\SPI\\IO\\BinaryFile', $loadedFile );
 
-        self::assertEquals( 'images/load.gif', $loadedFile->uri );
+        self::assertEquals( 'images/load.gif', $loadedFile->id );
         self::assertEquals( 1928, $loadedFile->size );
         self::assertInstanceOf( 'DateTime', $loadedFile->mtime );
     }
@@ -301,8 +301,8 @@ abstract class Base extends PHPUnit_Framework_TestCase
     public function testGetMetadata( BinaryFile $binaryFile )
     {
         // @todo Add @depends on createFile
-        $path = $binaryFile->uri;
-        $internalPath = $this->IOHandler->getInternalPath( $path );
+        $id = $binaryFile->id;
+        $internalPath = $this->IOHandler->getInternalPath( $id );
 
         $metadataHandlerMock = $this->getMock( 'eZ\\Publish\\Core\\IO\\MetadataHandler' );
         $expectedMetadata = array( 'some' => 1, 'meta' => 2 );
@@ -313,7 +313,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
 
         $metadata = $this->IOHandler->getMetadata(
             $metadataHandlerMock,
-            $path
+            $id
         );
 
         self::assertEquals( $metadata, $expectedMetadata );

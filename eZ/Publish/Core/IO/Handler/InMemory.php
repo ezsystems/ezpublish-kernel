@@ -54,42 +54,42 @@ class InMemory implements IoHandlerInterface
      */
     public function create( BinaryFileCreateStruct $createStruct )
     {
-        if ( isset( $this->storage[$createStruct->uri] ) )
+        if ( isset( $this->storage[$createStruct->id] ) )
         {
             throw new InvalidArgumentException(
-                "\$createFilestruct->uri",
-                "file '{$createStruct->uri}' already exists"
+                "\$createFilestruct->id",
+                "file '{$createStruct->id}' already exists"
             );
         }
 
-        $this->data[$createStruct->uri] = base64_encode(
+        $this->data[$createStruct->id] = base64_encode(
             fread( $createStruct->getInputStream(), $createStruct->size )
         );
 
         $binaryFile = new BinaryFile();
-        $binaryFile->uri = $createStruct->uri;
+        $binaryFile->id = $createStruct->id;
         $binaryFile->mtime = new DateTime;
         $binaryFile->size = $createStruct->size;
 
-        return $this->storage[$binaryFile->uri] = $binaryFile;
+        return $this->storage[$binaryFile->id] = $binaryFile;
     }
 
     /**
-     * Deletes the existing BinaryFile with path $uri
+     * Deletes the existing BinaryFile with path $id
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the file doesn't exist
      *
-     * @param string $uri
+     * @param string $id
      */
-    public function delete( $uri )
+    public function delete( $id )
     {
-        if ( !isset( $this->storage[$uri] ) )
+        if ( !isset( $this->storage[$id] ) )
         {
-            throw new NotFoundException( 'BinaryFile', $uri );
+            throw new NotFoundException( 'BinaryFile', $id );
         }
 
-        unset( $this->storage[$uri] );
-        unset( $this->data[$uri] );
+        unset( $this->storage[$id] );
+        unset( $this->data[$id] );
     }
 
     /**
@@ -103,54 +103,54 @@ class InMemory implements IoHandlerInterface
      *
      * @return \eZ\Publish\Core\IO\Values\BinaryFile The updated BinaryFile
      */
-    public function update( $uri, BinaryFileUpdateStruct $updateFileStruct )
+    public function update( $id, BinaryFileUpdateStruct $updateFileStruct )
     {
-        if ( !isset( $this->storage[$uri] ) )
+        if ( !isset( $this->storage[$id] ) )
         {
-            throw new NotFoundException( 'BinaryFile', $uri );
+            throw new NotFoundException( 'BinaryFile', $id );
         }
 
         // path
-        if ( $updateFileStruct->uri !== null && $updateFileStruct->uri != $uri )
+        if ( $updateFileStruct->id !== null && $updateFileStruct->id != $id )
         {
-            if ( isset( $this->storage[$updateFileStruct->uri] ) )
+            if ( isset( $this->storage[$updateFileStruct->id] ) )
             {
                 throw new InvalidArgumentException(
-                    "\$updateFileStruct->uri",
-                    "file '{$updateFileStruct->uri}' already exists"
+                    "\$updateFileStruct->id",
+                    "file '{$updateFileStruct->id}' already exists"
                 );
             }
 
-            $oldUri = $uri;
-            $newUri = $updateFileStruct->uri;
+            $oldId = $id;
+            $newId = $updateFileStruct->id;
 
-            $this->storage[$newUri] = $this->storage[$oldUri];
-            $this->data[$newUri] = $this->data[$oldUri];
+            $this->storage[$newId] = $this->storage[$oldId];
+            $this->data[$newId] = $this->data[$oldId];
 
-            $this->storage[$newUri]->uri = $newUri;
+            $this->storage[$newId]->id = $newId;
 
-            unset( $this->storage[$oldUri] );
-            unset( $this->data[$oldUri] );
+            unset( $this->storage[$oldId] );
+            unset( $this->data[$oldId] );
 
-            $uri = $newUri;
+            $id = $newId;
         }
 
         $resource = $updateFileStruct->getInputStream();
         if ( $resource !== null )
         {
-            $this->data[$uri] = base64_encode( fread( $resource, $updateFileStruct->size ) );
+            $this->data[$id] = base64_encode( fread( $resource, $updateFileStruct->size ) );
             if ( $updateFileStruct->size !== null )
             {
-                $this->storage[$uri]->size = $updateFileStruct->size;
+                $this->storage[$id]->size = $updateFileStruct->size;
             }
         }
 
-        if ( $updateFileStruct->mtime !== null && $updateFileStruct->mtime !== $this->storage[$uri]->mtime )
+        if ( $updateFileStruct->mtime !== null && $updateFileStruct->mtime !== $this->storage[$id]->mtime )
         {
-            $this->storage[$uri]->mtime = $updateFileStruct->mtime;
+            $this->storage[$id]->mtime = $updateFileStruct->mtime;
         }
 
-        return $this->storage[$uri];
+        return $this->storage[$id];
     }
 
     /**
@@ -160,13 +160,13 @@ class InMemory implements IoHandlerInterface
      *
      * @return boolean
      */
-    public function exists( $uri )
+    public function exists( $id )
     {
-        return isset( $this->storage[$uri] );
+        return isset( $this->storage[$id] );
     }
 
     /**
-     * Loads the BinaryFile identified by $uri
+     * Loads the BinaryFile identified by $id
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
      *
@@ -184,7 +184,7 @@ class InMemory implements IoHandlerInterface
     }
 
     /**
-     * Returns a file resource to the BinaryFile identified by $uri
+     * Returns a file resource to the BinaryFile identified by $id
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
      *

@@ -103,11 +103,11 @@ class Filesystem implements IOHandlerInterface
      */
     private function createFolderStructure( $folderPath )
     {
-        $folderParts = explode( DIRECTORY_SEPARATOR, $folderPath );
+        $folderParts = explode( '/', $folderPath );
         foreach ( $folderParts as $key => $folderPart )
         {
             $folderString = implode(
-                DIRECTORY_SEPARATOR,
+                '/',
                 array_slice( $folderParts, 0, $key + 1 )
             );
             $folderStringStoragePath = $this->getStoragePath( $folderString );
@@ -280,7 +280,7 @@ class Filesystem implements IOHandlerInterface
         }
         else
         {
-            return $this->prefix . DIRECTORY_SEPARATOR . $spiBinaryFileId;
+            return $this->prefix . '/' . $spiBinaryFileId;
         }
     }
 
@@ -310,7 +310,7 @@ class Filesystem implements IOHandlerInterface
     protected function getStoragePath( $path )
     {
         if ( $this->storageDirectory )
-            $path = $this->storageDirectory . DIRECTORY_SEPARATOR . $path;
+            $path = $this->storageDirectory . '/' . $path;
         return $path;
     }
 
@@ -321,7 +321,7 @@ class Filesystem implements IOHandlerInterface
             return $spiBinaryFileId;
         }
 
-        if ( strpos( $spiBinaryFileId, $this->prefix . DIRECTORY_SEPARATOR ) !== 0 )
+        if ( strpos( $spiBinaryFileId, $this->prefix . '/' ) !== 0 )
         {
             throw new InvalidArgumentException( '$uri', "Prefix {$this->prefix} not found in {$spiBinaryFileId}" );
         }
@@ -331,6 +331,6 @@ class Filesystem implements IOHandlerInterface
 
     public function getUri( $spiBinaryFileId )
     {
-        return $this->prefix . '/' . $spiBinaryFileId;
+        return ( $this->prefix ? $this->prefix . '/' : '') . $spiBinaryFileId;
     }
 }

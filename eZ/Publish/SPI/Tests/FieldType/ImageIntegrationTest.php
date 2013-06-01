@@ -183,7 +183,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $this->assertNotNull( $field->value->data );
 
         $this->assertTrue(
-            file_exists( $field->value->data['uri'] ),
+            file_exists( $this->getStorageDir() . '/' . $field->value->data['uri'] ),
             "Stored file " . $field->value->data['uri'] . " doesn't exist"
         );
 
@@ -233,8 +233,9 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     {
         $this->assertNotNull( $field->value->data );
 
+        $storagePath = $this->getStorageDir() . '/' . $field->value->data['uri'];
         $this->assertTrue(
-            file_exists( $field->value->data['uri'] ),
+            file_exists( $storagePath ),
             "Stored file ".$field->value->data['uri']." exists"
         );
 
@@ -242,7 +243,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         // need to stay there for reference integrity
         $this->assertEquals(
             2,
-            count( glob( dirname( $field->value->data['uri'] ) . '/*' ) )
+            count( glob( dirname( $storagePath ) . '/*' ) )
         );
 
         $this->assertEquals( 'Blueish-Blue.jpg', $field->value->data['fileName'] );
