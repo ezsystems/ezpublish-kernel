@@ -144,7 +144,7 @@ class ImageStorage extends GatewayBasedStorage
             {
                 // Store empty value only with content meta data
                 $field->value->data = $contentMetaData;
-                return true;
+                return false;
             }
 
             $binaryFile = $this->IOService->loadBinaryFile( $this->IOService->getExternalPath( $field->value->data['id'] ) );
