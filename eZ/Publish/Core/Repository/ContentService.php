@@ -553,9 +553,8 @@ class ContentService implements ContentServiceInterface
         $allFieldErrors = array();
         $inputRelations = array();
         $locationIdToContentIdMapping = array();
-        $fieldDefinitions = $contentCreateStruct->contentType->getFieldDefinitions();
 
-        foreach ( $fieldDefinitions as $fieldDefinition )
+        foreach ( $contentCreateStruct->contentType->getFieldDefinitions() as $fieldDefinition )
         {
             /** @var $fieldType \eZ\Publish\Core\FieldType\FieldType */
             $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
