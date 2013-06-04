@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
 use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
@@ -25,7 +26,7 @@ class AddField extends Action
     /**
      * Field definition of the field to add
      *
-     * @var mixed
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      */
     protected $fieldDefinition;
 
@@ -66,16 +67,44 @@ class AddField extends Action
     /**
      * Applies the action to the given $content
      *
-     * @param Content $content
-     *
-     * @todo Handle external field data
-     *
-     * @return void
+     * @param \eZ\Publish\SPI\Persistence\Content $content
      */
     public function apply( Content $content )
     {
-        $field = $this->createField( $content );
+        $languageCodeSet = array();
+        $versionNumbers = $this->contentGateway->listVersionNumbers(
+            $content->versionInfo->contentInfo->id
+        );
 
+        foreach ( $content->fields as $field )
+        {
+            if ( isset( $languageCodeSet[$field->languageCode] ) )
+            {
+                continue;
+            }
+
+            $languageCodeSet[$field->languageCode] = true;
+
+            foreach ( $versionNumbers as $versionNo )
+            {
+                $this->insertField(
+                    $content,
+                    $this->createField( $versionNo, $field->languageCode )
+                );
+            }
+        }
+    }
+
+    /**
+     * Inserts given $field and appends it to the given $content field collection.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     *
+     * @return void
+     */
+    protected function insertField( Content $content, Field $field )
+    {
         $storageValue = new StorageFieldValue();
         $this->fieldValueConverter->toStorageValue(
             $field->value,
@@ -111,7 +140,7 @@ class AddField extends Action
                 $this->contentGateway->updateNonTranslatableField(
                     $field,
                     $storageValue,
-                    $content->contentInfo->id
+                    $content->versionInfo->contentInfo->id
                 );
             }
         }
@@ -120,20 +149,23 @@ class AddField extends Action
     }
 
     /**
-     * @param \eZ\Publish\SPI\Persistence\Content $content
+     *
+     *
+     * @param int $versionNo
+     * @param string $languageCode
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Field
-     *
-     * @todo Handle ->languageCode
      */
-    protected function createField( Content $content )
+    protected function createField( $versionNo, $languageCode )
     {
-        $field = new Content\Field();
+        $field = new Field();
+
         $field->fieldDefinitionId = $this->fieldDefinition->id;
         $field->type = $this->fieldDefinition->fieldType;
         $field->value = clone $this->fieldDefinition->defaultValue;
-        $field->versionNo = $content->versionInfo->versionNo;
-        //$field->languageCode = $content->initialLanguageId;
+        $field->versionNo = $versionNo;
+        $field->languageCode = $languageCode;
+
         return $field;
     }
 }

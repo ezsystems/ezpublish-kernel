@@ -308,7 +308,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * @internal LocationHandler is injected into property to avoid circular dependency
+     * @todo remove circular dependency with LocationHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Handler
      */
@@ -369,6 +369,8 @@ class Handler implements HandlerInterface
 
     /**
      * Returns a field handler
+     *
+     * @todo remove circular dependency with ContentTypeHandler
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
      */
@@ -524,10 +526,12 @@ class Handler implements HandlerInterface
     }
 
     /**
+     * @todo remove circular dependency with FieldHandler
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Handler
      */
     public function contentTypeHandler()
     {
+        $this->getFieldHandler();
         if ( !isset( $this->contentTypeHandler ) )
         {
             $this->contentTypeHandler = new Content\Type\MemoryCachingHandler(
@@ -626,10 +630,13 @@ class Handler implements HandlerInterface
     }
 
     /**
+     * @todo remove circular dependency with ContentHandler
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function locationHandler()
     {
+        $this->contentHandler();
         if ( !isset( $this->locationHandler ) )
         {
             $this->locationHandler = new LocationHandler(

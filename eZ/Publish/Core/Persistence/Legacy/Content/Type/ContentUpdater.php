@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
-use eZ\Publish\Core\Persistence\Legacy\Content;
 use eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
@@ -78,7 +77,7 @@ class ContentUpdater
      * @param \eZ\Publish\SPI\Persistence\Content\Type $fromType
      * @param \eZ\Publish\SPI\Persistence\Content\Type $toType
      *
-     * @return ContentUpdater\Action[]
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action[]
      */
     public function determineActions( Type $fromType, Type $toType )
     {
@@ -135,7 +134,7 @@ class ContentUpdater
      * Applies all given updates
      *
      * @param mixed $contentTypeId
-     * @param ContentUpdater\Action[] $actions
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action[] $actions
      *
      * @return void
      */
@@ -155,7 +154,7 @@ class ContentUpdater
      *
      * @param mixed $contentTypeId
      *
-     * @return Content[]
+     * @return \eZ\Publish\SPI\Persistence\Content[]
      */
     protected function loadContentObjects( $contentTypeId )
     {

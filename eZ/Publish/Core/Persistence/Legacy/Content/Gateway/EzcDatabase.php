@@ -962,6 +962,33 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Returns all version numbers for the given $contentId
+     *
+     * @param mixed $contentId
+     *
+     * @return int[]
+     */
+    public function listVersionNumbers( $contentId )
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query->selectDistinct(
+            $this->dbHandler->quoteColumn( 'version' )
+        )->from(
+            $this->dbHandler->quoteTable( 'ezcontentobject_version' )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_COLUMN );
+    }
+
+    /**
      * Returns last version number for content identified by $contentId
      *
      * @param int $contentId
@@ -1118,25 +1145,18 @@ class EzcDatabase extends Gateway
      * Deletes the field with the given $fieldId
      *
      * @param int $fieldId
-     * @param int $version
      *
      * @return void
      */
-    public function deleteField( $fieldId, $version )
+    public function deleteField( $fieldId )
     {
         $query = $this->dbHandler->createDeleteQuery();
         $query->deleteFrom(
             $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
         )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'id' ),
-                    $query->bindValue( $fieldId, null, \PDO::PARAM_INT )
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'version' ),
-                    $query->bindValue( $version, null, \PDO::PARAM_INT )
-                )
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'id' ),
+                $query->bindValue( $fieldId, null, \PDO::PARAM_INT )
             )
         );
 
