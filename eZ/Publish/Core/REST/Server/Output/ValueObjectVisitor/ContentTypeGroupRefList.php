@@ -59,6 +59,7 @@ class ContentTypeGroupRefList extends ValueObjectVisitor
             );
             $generator->endAttribute( 'href' );
 
+            // Unlinking last group is not allowed
             if ( $groupCount > 1 )
             {
                 $generator->startHashElement( 'unlink' );
