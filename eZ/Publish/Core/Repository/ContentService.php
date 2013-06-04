@@ -614,8 +614,11 @@ class ContentService implements ContentServiceInterface
                 );
                 $fieldValues[$fieldDefinition->identifier][$languageCode] = $fieldValue;
 
-                // Only non-empty value fields and untranslatable fields in main language
-                if ( !$isEmptyValue && ( $fieldDefinition->isTranslatable || $isLanguageMain ) )
+                // Only non-empty value for: translatable field or in main language
+                if (
+                    ( !$isEmptyValue && $fieldDefinition->isTranslatable ) ||
+                    ( !$isEmptyValue && $isLanguageMain )
+                )
                 {
                     $spiFields[] = new SPIField(
                         array(
