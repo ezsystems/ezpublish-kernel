@@ -687,6 +687,7 @@ class ContentTest extends BaseServiceMockTest
             ->method( "getContentTypeService" )
             ->will( $this->returnValue( $contentTypeServiceMock ) );
 
+        $that = $this;
         $repositoryMock->expects( $this->once() )
             ->method( "canUser" )
             ->with(
@@ -696,9 +697,9 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo( $locationCreateStructs )
             )->will(
                 $this->returnCallback(
-                    function () use ( $contentCreateStruct )
+                    function () use ( $that, $contentCreateStruct )
                     {
-                        $this->assertEquals( $contentCreateStruct, func_get_arg( 2 ) );
+                        $that->assertEquals( $contentCreateStruct, func_get_arg( 2 ) );
                         return true;
                     }
                 )
@@ -709,9 +710,9 @@ class ContentTest extends BaseServiceMockTest
             ->with( $this->isInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentCreateStruct" ) )
             ->will(
                 $this->returnCallback(
-                    function ( $object ) use ( $contentCreateStruct )
+                    function ( $object ) use ( $that, $contentCreateStruct )
                     {
-                        $this->assertEquals( $contentCreateStruct, $object );
+                        $that->assertEquals( $contentCreateStruct, $object );
                         return "hash";
                     }
                 )
@@ -739,13 +740,14 @@ class ContentTest extends BaseServiceMockTest
                 )
             );
 
+        $emptyValue = self::EMPTY_FIELD_VALUE;
         $fieldTypeMock->expects( $this->any() )
             ->method( "isEmptyValue" )
             ->will(
                 $this->returnCallback(
-                    function ( ValueStub $value )
+                    function ( ValueStub $value ) use ( $emptyValue )
                     {
-                        return self::EMPTY_FIELD_VALUE === (string)$value;
+                        return $emptyValue === (string)$value;
                     }
                 )
             );
@@ -1321,6 +1323,7 @@ class ContentTest extends BaseServiceMockTest
             ->method( "getContentTypeService" )
             ->will( $this->returnValue( $contentTypeServiceMock ) );
 
+        $that = $this;
         $repositoryMock->expects( $this->once() )
             ->method( "canUser" )
             ->with(
@@ -1330,9 +1333,9 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo( array() )
             )->will(
                 $this->returnCallback(
-                    function () use ( $contentCreateStruct )
+                    function () use ( $that, $contentCreateStruct )
                     {
-                        $this->assertEquals( $contentCreateStruct, func_get_arg( 2 ) );
+                        $that->assertEquals( $contentCreateStruct, func_get_arg( 2 ) );
                         return true;
                     }
                 )
@@ -1343,9 +1346,9 @@ class ContentTest extends BaseServiceMockTest
             ->with( $this->isInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentCreateStruct" ) )
             ->will(
                 $this->returnCallback(
-                    function ( $object ) use ( $contentCreateStruct )
+                    function ( $object ) use ( $that, $contentCreateStruct )
                     {
-                        $this->assertEquals( $contentCreateStruct, $object );
+                        $that->assertEquals( $contentCreateStruct, $object );
                         return "hash";
                     }
                 )
@@ -1556,6 +1559,7 @@ class ContentTest extends BaseServiceMockTest
             ->method( "getContentTypeService" )
             ->will( $this->returnValue( $contentTypeServiceMock ) );
 
+        $that = $this;
         $repositoryMock->expects( $this->once() )
             ->method( "canUser" )
             ->with(
@@ -1565,9 +1569,9 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo( array() )
             )->will(
                 $this->returnCallback(
-                    function () use ( $contentCreateStruct )
+                    function () use ( $that, $contentCreateStruct )
                     {
-                        $this->assertEquals( $contentCreateStruct, func_get_arg( 2 ) );
+                        $that->assertEquals( $contentCreateStruct, func_get_arg( 2 ) );
                         return true;
                     }
                 )
@@ -1578,9 +1582,9 @@ class ContentTest extends BaseServiceMockTest
             ->with( $this->isInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentCreateStruct" ) )
             ->will(
                 $this->returnCallback(
-                    function ( $object ) use ( $contentCreateStruct )
+                    function ( $object ) use ( $that, $contentCreateStruct )
                     {
-                        $this->assertEquals( $contentCreateStruct, $object );
+                        $that->assertEquals( $contentCreateStruct, $object );
                         return "hash";
                     }
                 )
@@ -1597,13 +1601,14 @@ class ContentTest extends BaseServiceMockTest
                 )
             );
 
+        $emptyValue = self::EMPTY_FIELD_VALUE;
         $fieldTypeMock->expects( $this->any() )
             ->method( "isEmptyValue" )
             ->will(
                 $this->returnCallback(
-                    function ( ValueStub $value )
+                    function ( ValueStub $value ) use ( $emptyValue )
                     {
-                        return self::EMPTY_FIELD_VALUE === (string)$value;
+                        return $emptyValue === (string)$value;
                     }
                 )
             );
@@ -1757,6 +1762,7 @@ class ContentTest extends BaseServiceMockTest
             ->method( "getContentTypeService" )
             ->will( $this->returnValue( $contentTypeServiceMock ) );
 
+        $that = $this;
         $repositoryMock->expects( $this->once() )
             ->method( "canUser" )
             ->with(
@@ -1766,9 +1772,9 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo( array() )
             )->will(
                 $this->returnCallback(
-                    function () use ( $contentCreateStruct )
+                    function () use ( $that, $contentCreateStruct )
                     {
-                        $this->assertEquals( $contentCreateStruct, func_get_arg( 2 ) );
+                        $that->assertEquals( $contentCreateStruct, func_get_arg( 2 ) );
                         return true;
                     }
                 )
@@ -1779,9 +1785,9 @@ class ContentTest extends BaseServiceMockTest
             ->with( $this->isInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentCreateStruct" ) )
             ->will(
                 $this->returnCallback(
-                    function ( $object ) use ( $contentCreateStruct )
+                    function ( $object ) use ( $that, $contentCreateStruct )
                     {
-                        $this->assertEquals( $contentCreateStruct, $object );
+                        $that->assertEquals( $contentCreateStruct, $object );
                         return "hash";
                     }
                 )
@@ -1814,6 +1820,7 @@ class ContentTest extends BaseServiceMockTest
         );
         $allFieldErrors = array();
         $validateCount = 0;
+        $emptyValue = self::EMPTY_FIELD_VALUE;
         foreach ( $contentType->getFieldDefinitions() as $fieldDefinition )
         {
             foreach ( $fieldValues[$fieldDefinition->identifier] as $languageCode => $value )
@@ -1833,9 +1840,9 @@ class ContentTest extends BaseServiceMockTest
                     ->method( "isEmptyValue" )
                     ->will(
                         $this->returnCallback(
-                            function ( ValueStub $value )
+                            function ( ValueStub $value ) use ( $emptyValue )
                             {
-                                return self::EMPTY_FIELD_VALUE === (string)$value;
+                                return $emptyValue === (string)$value;
                             }
                         )
                     );
@@ -2107,6 +2114,7 @@ class ContentTest extends BaseServiceMockTest
             ->method( "getContentTypeService" )
             ->will( $this->returnValue( $contentTypeServiceMock ) );
 
+        $that = $this;
         $repositoryMock->expects( $this->once() )
             ->method( "canUser" )
             ->with(
@@ -2116,9 +2124,9 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo( $locationCreateStructs )
             )->will(
                 $this->returnCallback(
-                    function () use ( $contentCreateStruct )
+                    function () use ( $that, $contentCreateStruct )
                     {
-                        $this->assertEquals( $contentCreateStruct, func_get_arg( 2 ) );
+                        $that->assertEquals( $contentCreateStruct, func_get_arg( 2 ) );
                         return true;
                     }
                 )
@@ -2129,9 +2137,9 @@ class ContentTest extends BaseServiceMockTest
             ->with( $this->isInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentCreateStruct" ) )
             ->will(
                 $this->returnCallback(
-                    function ( $object ) use ( $contentCreateStruct )
+                    function ( $object ) use ( $that, $contentCreateStruct )
                     {
-                        $this->assertEquals( $contentCreateStruct, $object );
+                        $that->assertEquals( $contentCreateStruct, $object );
                         return "hash";
                     }
                 )
@@ -2726,6 +2734,7 @@ class ContentTest extends BaseServiceMockTest
                 )
             );
 
+        $emptyValue = self::EMPTY_FIELD_VALUE;
         $fieldTypeMock->expects( $this->any() )
             ->method( "toPersistenceValue" )
             ->will(
@@ -2741,9 +2750,9 @@ class ContentTest extends BaseServiceMockTest
             ->method( "isEmptyValue" )
             ->will(
                 $this->returnCallback(
-                    function ( ValueStub $value )
+                    function ( ValueStub $value ) use ( $emptyValue )
                     {
-                        return self::EMPTY_FIELD_VALUE === (string)$value;
+                        return $emptyValue === (string)$value;
                     }
                 )
             );
@@ -4469,13 +4478,14 @@ class ContentTest extends BaseServiceMockTest
                 )
             );
 
+        $emptyValue = self::EMPTY_FIELD_VALUE;
         $fieldTypeMock->expects( $this->any() )
             ->method( "isEmptyValue" )
             ->will(
                 $this->returnCallback(
-                    function ( ValueStub $value )
+                    function ( ValueStub $value ) use ( $emptyValue )
                     {
-                        return self::EMPTY_FIELD_VALUE === (string)$value;
+                        return $emptyValue === (string)$value;
                     }
                 )
             );
@@ -4682,6 +4692,7 @@ class ContentTest extends BaseServiceMockTest
         );
         $allFieldErrors = array();
         $validateCount = 0;
+        $emptyValue = self::EMPTY_FIELD_VALUE;
         foreach ( $contentType->getFieldDefinitions() as $fieldDefinition )
         {
             foreach ( $fieldValues[$fieldDefinition->identifier] as $languageCode => $value )
@@ -4701,9 +4712,9 @@ class ContentTest extends BaseServiceMockTest
                     ->method( "isEmptyValue" )
                     ->will(
                         $this->returnCallback(
-                            function ( ValueStub $value )
+                            function ( ValueStub $value ) use ( $emptyValue )
                             {
-                                return self::EMPTY_FIELD_VALUE === (string)$value;
+                                return $emptyValue === (string)$value;
                             }
                         )
                     );
