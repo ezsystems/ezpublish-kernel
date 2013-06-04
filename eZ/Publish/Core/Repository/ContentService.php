@@ -1162,6 +1162,8 @@ class ContentService implements ContentServiceInterface
      */
     public function updateContent( APIVersionInfo $versionInfo, APIContentUpdateStruct $contentUpdateStruct )
     {
+        $contentUpdateStruct = clone $contentUpdateStruct;
+
         /** @var $content \eZ\Publish\Core\Repository\Values\Content\Content */
         $content = $this->loadContent(
             $versionInfo->getContentInfo()->id,
