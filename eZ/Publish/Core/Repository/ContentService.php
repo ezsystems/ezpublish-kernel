@@ -1226,6 +1226,7 @@ class ContentService implements ContentServiceInterface
                 $isLanguageNew = !in_array( $languageCode, $content->versionInfo->languageCodes );
                 $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $mainLanguageCode;
                 $isFieldUpdated = isset( $fields[$fieldDefinition->identifier][$valueLanguageCode] );
+                $isProcessed = isset( $fieldValues[$fieldDefinition->identifier][$valueLanguageCode] );
 
                 if ( !$isFieldUpdated && !$isLanguageNew )
                 {
@@ -1293,7 +1294,7 @@ class ContentService implements ContentServiceInterface
                 );
                 $fieldValues[$fieldDefinition->identifier][$languageCode] = $fieldValue;
 
-                if ( !$isRetained && !( $isCopiedValue || ( $isLanguageNew && $isEmptyValue ) ) )
+                if ( !$isRetained && !( $isCopiedValue || ( $isLanguageNew && $isEmptyValue ) ) && !$isProcessed )
                 {
                     $spiFields[] = new SPIField(
                         array(
