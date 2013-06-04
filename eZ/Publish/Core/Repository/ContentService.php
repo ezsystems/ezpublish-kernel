@@ -621,17 +621,7 @@ class ContentService implements ContentServiceInterface
             )
         );
 
-        $objectStateHandler = $this->persistenceHandler->objectStateHandler();
-        $defaultObjectStatesMap = array();
-        foreach ( $objectStateHandler->loadAllGroups() as $objectStateGroup )
-        {
-            foreach ( $objectStateHandler->loadObjectStates( $objectStateGroup->id ) as $objectState )
-            {
-                // Only register the first object state which is the default one.
-                $defaultObjectStatesMap[$objectStateGroup->id] = $objectState;
-                break;
-            }
-        }
+        $defaultObjectStates = $this->getDefaultObjectStates();
 
         $this->repository->beginTransaction();
         try
@@ -644,9 +634,9 @@ class ContentService implements ContentServiceInterface
                 $contentCreateStruct->contentType
             );
 
-            foreach ( $defaultObjectStatesMap as $objectStateGroupId => $objectState )
+            foreach ( $defaultObjectStates as $objectStateGroupId => $objectState )
             {
-                $objectStateHandler->setContentState(
+                $this->persistenceHandler->objectStateHandler()->setContentState(
                     $spiContent->versionInfo->contentInfo->id,
                     $objectStateGroupId,
                     $objectState->id
@@ -662,6 +652,29 @@ class ContentService implements ContentServiceInterface
         }
 
         return $this->domainMapper->buildContentDomainObject( $spiContent );
+    }
+
+    /**
+     * Returns an array of default content states with content state group id as key.
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState[]
+     */
+    protected function getDefaultObjectStates()
+    {
+        $defaultObjectStatesMap = array();
+        $objectStateHandler = $this->persistenceHandler->objectStateHandler();
+
+        foreach ( $objectStateHandler->loadAllGroups() as $objectStateGroup )
+        {
+            foreach ( $objectStateHandler->loadObjectStates( $objectStateGroup->id ) as $objectState )
+            {
+                // Only register the first object state which is the default one.
+                $defaultObjectStatesMap[$objectStateGroup->id] = $objectState;
+                break;
+            }
+        }
+
+        return $defaultObjectStatesMap;
     }
 
     /**
