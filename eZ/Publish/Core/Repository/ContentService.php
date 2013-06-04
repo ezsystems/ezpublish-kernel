@@ -467,6 +467,10 @@ class ContentService implements ContentServiceInterface
             $contentCreateStruct->alwaysAvailable = false;
         }
 
+        $contentCreateStruct->contentType = $this->repository->getContentTypeService()->loadContentType(
+            $contentCreateStruct->contentType->id
+        );
+
         if ( !$this->repository->canUser( 'content', 'create', $contentCreateStruct, $locationCreateStructs ) )
         {
             throw new UnauthorizedException( 'content', 'create' );
