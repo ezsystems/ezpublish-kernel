@@ -15,7 +15,6 @@ namespace eZ\Publish\SPI\Persistence;
  *  - Version metadata
  *  - Content metadata
  *  - Fields
- *  - Locations
  */
 class Content extends ValueObject
 {

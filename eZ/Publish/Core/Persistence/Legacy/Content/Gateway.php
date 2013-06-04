@@ -109,7 +109,7 @@ abstract class Gateway
     /**
      * Inserts an existing field.
      *
-     * Used to insert a field with an exsting ID but a new version number.
+     * Used to insert a field with an existing ID but a new version number.
      *
      * @param Content $content
      * @param Field $field
@@ -204,6 +204,15 @@ abstract class Gateway
     abstract public function listVersions( $contentId );
 
     /**
+     * Returns all version numbers for the given $contentId
+     *
+     * @param mixed $contentId
+     *
+     * @return int[]
+     */
+    abstract public function listVersionNumbers( $contentId );
+
+    /**
      * Returns last version number for content identified by $contentId
      *
      * @param int $contentId
@@ -247,11 +256,10 @@ abstract class Gateway
      * Deletes the field with the given $fieldId
      *
      * @param int $fieldId
-     * @param int $version
      *
      * @return void
      */
-    abstract public function deleteField( $fieldId, $version );
+    abstract public function deleteField( $fieldId );
 
     /**
      * Deletes all fields of $contentId in all versions.
