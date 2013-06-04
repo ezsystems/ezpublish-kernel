@@ -527,14 +527,14 @@ class ContentService implements ContentServiceInterface
                 $isLanguageMain = $languageCode === $contentCreateStruct->mainLanguageCode;
                 if ( isset( $fields[$fieldDefinition->identifier][$valueLanguageCode] ) )
                 {
-                    $fieldValue = $fieldType->acceptValue(
-                        $fields[$fieldDefinition->identifier][$valueLanguageCode]->value
-                    );
+                    $fieldValue = $fields[$fieldDefinition->identifier][$valueLanguageCode]->value;
                 }
                 else
                 {
-                    $fieldValue = $fieldType->acceptValue( $fieldDefinition->defaultValue );
+                    $fieldValue = $fieldDefinition->defaultValue;
                 }
+
+                $fieldValue = $fieldType->acceptValue( $fieldValue );
 
                 if ( $fieldType->isEmptyValue( $fieldValue ) )
                 {
@@ -612,9 +612,7 @@ class ContentService implements ContentServiceInterface
                 "fields" => $spiFields,
                 "alwaysAvailable" => $contentCreateStruct->alwaysAvailable,
                 "remoteId" => $contentCreateStruct->remoteId,
-                "modified" => isset( $contentCreateStruct->modificationDate ) ?
-                    $contentCreateStruct->modificationDate->getTimestamp() :
-                    time(),
+                "modified" => isset( $contentCreateStruct->modificationDate ) ? $contentCreateStruct->modificationDate->getTimestamp() : time(),
                 "initialLanguageId" => $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
                     $contentCreateStruct->mainLanguageCode
                 )->id
@@ -1220,9 +1218,7 @@ class ContentService implements ContentServiceInterface
 
             foreach ( $languageCodes as $languageCode )
             {
-                $isCopiedValue = false;
-                $isEmptyValue = false;
-                $isRetained = false;
+                $isCopied = $isEmpty = $isRetained = false;
                 $isLanguageNew = !in_array( $languageCode, $content->versionInfo->languageCodes );
                 $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $mainLanguageCode;
                 $isFieldUpdated = isset( $fields[$fieldDefinition->identifier][$valueLanguageCode] );
@@ -1231,36 +1227,27 @@ class ContentService implements ContentServiceInterface
                 if ( !$isFieldUpdated && !$isLanguageNew )
                 {
                     $isRetained = true;
-                    $fieldValue = $fieldType->acceptValue(
-                        $content->getField( $fieldDefinition->identifier, $valueLanguageCode )->value
-                    );
+                    $fieldValue = $content->getField( $fieldDefinition->identifier, $valueLanguageCode )->value;
                 }
                 else if ( !$isFieldUpdated && $isLanguageNew && !$fieldDefinition->isTranslatable )
                 {
-                    $isCopiedValue = true;
-                    $fieldValue = $fieldType->acceptValue(
-                        $content->getField(
-                            $fieldDefinition->identifier,
-                            $fieldDefinition->isTranslatable ?
-                                $languageCode :
-                                $content->contentInfo->mainLanguageCode
-                        )->value
-                    );
+                    $isCopied = true;
+                    $fieldValue = $content->getField( $fieldDefinition->identifier, $valueLanguageCode )->value;
                 }
                 else if ( $isFieldUpdated )
                 {
-                    $fieldValue = $fieldType->acceptValue(
-                        $fields[$fieldDefinition->identifier][$valueLanguageCode]->value
-                    );
+                    $fieldValue = $fields[$fieldDefinition->identifier][$valueLanguageCode]->value;
                 }
                 else
                 {
-                    $fieldValue = $fieldType->acceptValue( $fieldDefinition->defaultValue );
+                    $fieldValue = $fieldDefinition->defaultValue;
                 }
+
+                $fieldValue = $fieldType->acceptValue( $fieldValue );
 
                 if ( $fieldType->isEmptyValue( $fieldValue ) )
                 {
-                    $isEmptyValue = true;
+                    $isEmpty = true;
                     if ( $fieldDefinition->isRequired )
                     {
                         throw new ContentValidationException(
@@ -1294,21 +1281,23 @@ class ContentService implements ContentServiceInterface
                 );
                 $fieldValues[$fieldDefinition->identifier][$languageCode] = $fieldValue;
 
-                if ( !$isRetained && !( $isCopiedValue || ( $isLanguageNew && $isEmptyValue ) ) && !$isProcessed )
+                if ( $isRetained || $isCopied || ( $isLanguageNew && $isEmpty ) || $isProcessed )
                 {
-                    $spiFields[] = new SPIField(
-                        array(
-                            "id" => $isLanguageNew ?
-                                null :
-                                $content->getField( $fieldDefinition->identifier, $languageCode )->id,
-                            "fieldDefinitionId" => $fieldDefinition->id,
-                            "type" => $fieldDefinition->fieldTypeIdentifier,
-                            "value" => $fieldType->toPersistenceValue( $fieldValue ),
-                            "languageCode" => $languageCode,
-                            "versionNo" => $versionInfo->versionNo
-                        )
-                    );
+                    continue;
                 }
+
+                $spiFields[] = new SPIField(
+                    array(
+                        "id" => $isLanguageNew ?
+                            null :
+                            $content->getField( $fieldDefinition->identifier, $languageCode )->id,
+                        "fieldDefinitionId" => $fieldDefinition->id,
+                        "type" => $fieldDefinition->fieldTypeIdentifier,
+                        "value" => $fieldType->toPersistenceValue( $fieldValue ),
+                        "languageCode" => $languageCode,
+                        "versionNo" => $versionInfo->versionNo
+                    )
+                );
             }
         }
 
