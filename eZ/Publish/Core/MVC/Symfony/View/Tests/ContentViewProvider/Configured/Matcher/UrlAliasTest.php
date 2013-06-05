@@ -77,11 +77,18 @@ class UrlAliasTest extends BaseTest
             ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\URLAliasService' )
             ->disableOriginalConstructor()
             ->getMock();
-        $urlAliasServiceMock->expects( $this->once() )
+        $urlAliasServiceMock->expects( $this->at( 0 ) )
             ->method( 'listLocationAliases' )
             ->with(
                 $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' ),
-                $this->isType( 'boolean' )
+                true
+            )
+            ->will( $this->returnValue( array() ) );
+        $urlAliasServiceMock->expects( $this->at( 1 ) )
+            ->method( 'listLocationAliases' )
+            ->with(
+                $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' ),
+                false
             )
             ->will( $this->returnValue( $urlAliasList ) );
 
@@ -121,22 +128,27 @@ class UrlAliasTest extends BaseTest
         return array(
             array(
                 'foo/url',
-                $this->generateRepositoryMockForUrlAlias( 'foo/url' ),
+                $this->generateRepositoryMockForUrlAlias( '/foo/url' ),
+                true
+            ),
+            array(
+                '/foo/url',
+                $this->generateRepositoryMockForUrlAlias( '/foo/url' ),
                 true
             ),
             array(
                 'foo/url',
-                $this->generateRepositoryMockForUrlAlias( 'bar/url' ),
+                $this->generateRepositoryMockForUrlAlias( '/bar/url' ),
                 false
             ),
             array(
                 array( 'foo/url', 'baz' ),
-                $this->generateRepositoryMockForUrlAlias( 'bar/url' ),
+                $this->generateRepositoryMockForUrlAlias( '/bar/url' ),
                 false
             ),
             array(
-                array( 'foo/url', 'baz' ),
-                $this->generateRepositoryMockForUrlAlias( 'baz' ),
+                array( 'foo/url   ', 'baz   ' ),
+                $this->generateRepositoryMockForUrlAlias( '/baz' ),
                 true
             )
         );
