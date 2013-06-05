@@ -111,6 +111,21 @@ interface FieldType
     public function getEmptyValue();
 
     /**
+     * Returns if the given $value is considered empty by the field type
+     *
+     * Usually, only the value returned by {@link getEmptyValue()} is
+     * considered empty but that is not always the case.
+     *
+     * Note: This function assumes that $value is valid so this function can only
+     * be used reliably on $values that came from the API, not from the user.
+     *
+     * @param mixed $value
+     *
+     * @return boolean
+     */
+    public function isEmptyValue( $value );
+
+    /**
      * Converts an $hash to the Value defined by the field type
      *
      * This is the reverse operation to {@link toHash()}.
