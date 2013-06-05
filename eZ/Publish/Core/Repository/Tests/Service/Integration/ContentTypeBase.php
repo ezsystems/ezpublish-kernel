@@ -13,6 +13,7 @@ use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Exceptions;
+use eZ\Publish\API\Repository\Tests\BaseTest as APIBaseTest;
 use eZ\Publish\Core\FieldType\XmlText\Value as XmlValue;
 
 /**
@@ -270,7 +271,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $contentTypeService = $this->repository->getContentTypeService();
 
         // Throws exception
-        $loadedGroup = $contentTypeService->loadContentTypeGroup( PHP_INT_MAX );
+        $loadedGroup = $contentTypeService->loadContentTypeGroup( APIBaseTest::DB_INT_MAX );
         /* END: Use Case */
     }
 
@@ -1777,7 +1778,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $contentTypeService = $this->repository->getContentTypeService();
 
         $loadedContentType = $contentTypeService->loadContentType(
-            PHP_INT_MAX
+            APIBaseTest::DB_INT_MAX
         );
         /* END: Use Case */
     }
@@ -1969,7 +1970,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $contentTypeService = $this->repository->getContentTypeService();
 
         $loadedContentType = $contentTypeService->loadContentTypeDraft(
-            PHP_INT_MAX
+            APIBaseTest::DB_INT_MAX
         );
         /* END: Use Case */
     }

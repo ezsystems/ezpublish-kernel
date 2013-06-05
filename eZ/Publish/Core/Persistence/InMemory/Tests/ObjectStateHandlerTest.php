@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\InMemory\Tests;
 
 use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Tests\BaseTest as APIBaseTest;
 
 /**
  * Test case for ObjectStateHandler using in memory storage.
@@ -30,14 +31,6 @@ class ObjectStateHandlerTest extends HandlerTest
         parent::setUp();
 
         $this->handler = $this->persistenceHandler->objectStateHandler();
-    }
-
-    /**
-     * Removes stuff created in setUp().
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
     }
 
     /**
@@ -80,7 +73,7 @@ class ObjectStateHandlerTest extends HandlerTest
      */
     public function testLoadGroupThrowsNotFoundException()
     {
-        $this->handler->loadGroup( PHP_INT_MAX );
+        $this->handler->loadGroup( APIBaseTest::DB_INT_MAX );
     }
 
     /**
@@ -281,7 +274,7 @@ class ObjectStateHandlerTest extends HandlerTest
      */
     public function testLoadThrowsNotFoundException()
     {
-        $this->handler->load( PHP_INT_MAX );
+        $this->handler->load( APIBaseTest::DB_INT_MAX );
     }
 
     /**
@@ -304,12 +297,11 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::loadByIdentifier
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @todo remove when PHP 5.3.3 is out of support
      */
-    public function testLoadByIdentifierThrowsNotFoundException()
+    public function testSkip()
     {
-        $this->handler->loadByIdentifier( 'unknown', 2 );
+        $this->markTestSkipped( "Skipping to avoid segmentation fault with PHP 5.3.3" );
     }
 
     /**
@@ -329,6 +321,15 @@ class ObjectStateHandlerTest extends HandlerTest
         $this->assertEquals( array( 'eng-US' => 'Test' ), $updatedState->name );
         $this->assertEquals( array( 'eng-US' => 'Test description' ), $updatedState->description );
         $this->assertEquals( 0, $updatedState->priority );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::loadByIdentifier
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadByIdentifierThrowsNotFoundException()
+    {
+        $this->handler->loadByIdentifier( 'unknown', 2 );
     }
 
     /**
@@ -372,7 +373,7 @@ class ObjectStateHandlerTest extends HandlerTest
      */
     public function testDeleteThrowsNotFoundException()
     {
-        $this->handler->delete( PHP_INT_MAX );
+        $this->handler->delete( APIBaseTest::DB_INT_MAX );
     }
 
     /**

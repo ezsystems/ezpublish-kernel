@@ -146,12 +146,12 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function load( $contentTypeId, $status = Type::STATUS_DEFINED )
     {
-        if ( isset( $this->contentTypes[$contentTypeId][$status] ) )
+        if ( isset( $this->contentTypes['id'][$contentTypeId][$status] ) )
         {
-            return $this->contentTypes[$contentTypeId][$status];
+            return $this->contentTypes['id'][$contentTypeId][$status];
         }
 
-        return $this->contentTypes[$contentTypeId][$status] =
+        return $this->contentTypes['id'][$contentTypeId][$status] =
             $this->innerHandler->load( $contentTypeId, $status );
     }
 

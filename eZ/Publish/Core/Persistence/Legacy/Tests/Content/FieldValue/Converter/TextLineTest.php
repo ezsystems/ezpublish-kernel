@@ -162,5 +162,6 @@ class TextLineTest extends PHPUnit_Framework_TestCase
             $fieldDef->fieldTypeConstraints->validators
         );
         self::assertSame( $defaultText, $fieldDef->defaultValue->data );
+        self::assertSame( $defaultText, $fieldDef->defaultValue->sortKey );
     }
 }

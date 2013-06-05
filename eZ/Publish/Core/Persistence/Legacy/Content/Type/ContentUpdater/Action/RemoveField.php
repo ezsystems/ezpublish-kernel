@@ -23,7 +23,7 @@ class RemoveField extends Action
     /**
      * Field definition of the field to remove
      *
-     * @var mixed
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      */
     protected $fieldDefinition;
 
@@ -54,7 +54,7 @@ class RemoveField extends Action
     /**
      * Applies the action to the given $content
      *
-     * @param Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content $content
      *
      * @return void
      */
@@ -66,9 +66,7 @@ class RemoveField extends Action
         {
             if ( $field->fieldDefinitionId == $this->fieldDefinition->id )
             {
-                $this->contentGateway->deleteField(
-                    $field->id, $field->versionNo
-                );
+                $this->contentGateway->deleteField( $field->id );
                 $fieldIdsToRemoveMap[$field->type][] = $field->id;
             }
         }

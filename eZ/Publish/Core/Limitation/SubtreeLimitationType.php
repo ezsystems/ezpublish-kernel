@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Limitation;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -18,43 +19,81 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation as APISubtreeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
-use eZ\Publish\SPI\Persistence\Handler as SPIPersistenceHandler;
+use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 
 /**
  * SubtreeLimitation is a Content Limitation & a Role Limitation
  */
-class SubtreeLimitationType implements SPILimitationTypeInterface
+class SubtreeLimitationType extends AbstractPersistenceLimitationType implements SPILimitationTypeInterface
 {
     /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
-     */
-    protected $persistence;
-
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Handler $persistence
-     */
-    public function __construct( SPIPersistenceHandler $persistence )
-    {
-        $this->persistence = $persistence;
-    }
-
-    /**
-     * Accepts a Limitation value
+     * Accepts a Limitation value and checks for structural validity.
      *
-     * Makes sure LimitationValue object is of correct type and that ->limitationValues
-     * is valid according to valueSchema().
+     * Makes sure LimitationValue object and ->limitationValues is of correct type.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected type/structure
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
-     *
-     * @return boolean
      */
     public function acceptValue( APILimitationValue $limitationValue )
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+        if ( !$limitationValue instanceof APISubtreeLimitation )
+        {
+            throw new InvalidArgumentType( "\$limitationValue", "APISubtreeLimitation", $limitationValue );
+        }
+        else if ( !is_array( $limitationValue->limitationValues ) )
+        {
+            throw new InvalidArgumentType( "\$limitationValue->limitationValues", "array", $limitationValue->limitationValues );
+        }
+
+        foreach ( $limitationValue->limitationValues as $key => $path )
+        {
+            if ( !is_string( $path ) )
+            {
+                throw new InvalidArgumentType( "\$limitationValue->limitationValues[{$key}]", "string", $path );
+            }
+        }
+    }
+
+    /**
+     * Makes sure LimitationValue->limitationValues is valid according to valueSchema().
+     *
+     * Make sure {@link acceptValue()} is checked first!
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validate( APILimitationValue $limitationValue )
+    {
+        $validationErrors = array();
+        foreach ( $limitationValue->limitationValues as $key => $path )
+        {
+            try
+            {
+                $pathArray = explode( '/', trim( '/', $path ) );
+                $subtreeRootLocationId = end( $pathArray );
+                $this->persistence->locationHandler()->load( $subtreeRootLocationId );
+            }
+            catch ( APINotFoundException $e )
+            {
+                $validationErrors[] = new ValidationError(
+                    "limitationValues[%key%] => '%value%' does not exist in the backend",
+                    null,
+                    array(
+                        "value" => $path,
+                        "key" => $key
+                    )
+                );
+            }
+        }
+        return $validationErrors;
     }
 
     /**
@@ -80,38 +119,28 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject|null $target The location, parent or "assignment" value object
+     * @param \eZ\Publish\API\Repository\Values\ValueObject[] $targets An array of location, parent or "assignment" value objects
      *
      * @return boolean
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, ValueObject $target = null )
+    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = array() )
     {
         if ( !$value instanceof APISubtreeLimitation )
         {
             throw new InvalidArgumentException( '$value', 'Must be of type: APISubtreeLimitation' );
         }
 
-        if ( $object instanceof Content )
+        if ( $object instanceof ContentCreateStruct )
+        {
+            return $this->evaluateForContentCreateStruct( $value, $targets );
+        }
+        else if ( $object instanceof Content )
         {
             $object = $object->getVersionInfo()->getContentInfo();
         }
         else if ( $object instanceof VersionInfo )
         {
             $object = $object->getContentInfo();
-        }
-        else if ( $object instanceof ContentCreateStruct )
-        {
-            // If target is null return false as user does not have access to content w/o location with this limitation
-            if ( $target === null )
-                return false;
-
-            if ( !$target instanceof LocationCreateStruct )
-            {
-                throw new InvalidArgumentException(
-                    '$object',
-                    'Cannot be ContentCreateStruct unless $target is LocationCreateStruct'
-                );
-            }
         }
         else if ( !$object instanceof ContentInfo )
         {
@@ -121,43 +150,85 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
             );
         }
 
-        if ( $target !== null && !$target instanceof Location && !$target instanceof LocationCreateStruct )
+        // Check all locations if no specific placement was provided
+        if ( empty( $targets ) )
         {
-            // Since this limitation is used as role limitation, "wrong" $target simply returns false
-            return false;
+            $targets = $this->persistence->locationHandler()->loadLocationsByContent( $object->id );
         }
 
-        if ( empty( $value->limitationValues ) )
+        foreach ( $targets as $target )
         {
-            return false;
-        }
+            if ( !$target instanceof Location && !$target instanceof SPILocation )
+            {
+                // Since this limitation is used as role limitation, "wrong" $target simply returns false
+                return false;
+            }
 
-        // Load location in case of LocationCreateStruct for the path comparison below
-        if ( $target instanceof LocationCreateStruct )
-        {
-            $target = $this->persistence->locationHandler()->load( $target->parentLocationId );
-        }
-
-        /**
-         * Use $target if provided, optionally used to check the specific location instead of all
-         * e.g.: 'remove' in the context of removal of a specific location, or in case of 'create'
-         *
-         * @var $object ContentInfo
-         */
-        $locations = $target !== null ?
-            array( $target ) :
-            $this->persistence->locationHandler()->loadLocationsByContent( $object->id );
-        foreach ( $locations as $location )
-        {
             foreach ( $value->limitationValues as $limitationPathString )
             {
-                if ( $location->pathString === $limitationPathString )
+                if ( $target->pathString === $limitationPathString )
+                {
                     return true;
-                if ( strpos( $location->pathString, $limitationPathString ) === 0 )
+                }
+                if ( strpos( $target->pathString, $limitationPathString ) === 0 )
+                {
                     return true;
+                }
             }
         }
+
         return false;
+    }
+
+    /**
+     * Evaluate permissions for ContentCreateStruct against LocationCreateStruct placements.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $targets does not contain
+     *         objects of type LocationCreateStruct
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
+     * @param array $targets
+     *
+     * @return bool
+     */
+    protected function evaluateForContentCreateStruct( APILimitationValue $value, array $targets )
+    {
+        // If targets is empty return false as user does not have access
+        // to content w/o location with this limitation
+        if ( empty( $targets ) )
+        {
+            return false;
+        }
+
+        foreach ( $targets as $target )
+        {
+            if ( !$target instanceof LocationCreateStruct )
+            {
+                throw new InvalidArgumentException(
+                    '$targets',
+                    'If $object is ContentCreateStruct must contain objects of type: LocationCreateStruct'
+                );
+            }
+
+            $target = $this->persistence->locationHandler()->load( $target->parentLocationId );
+
+            // For ContentCreateStruct all placements must match
+            foreach ( $value->limitationValues as $limitationPathString )
+            {
+                if ( $target->pathString === $limitationPathString )
+                {
+                    continue 2;
+                }
+                if ( strpos( $target->pathString, $limitationPathString ) === 0 )
+                {
+                    continue 2;
+                }
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -188,6 +259,6 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
      */
     public function valueSchema()
     {
-        self::VALUE_SCHEMA_LOCATION_PATH;
+        return self::VALUE_SCHEMA_LOCATION_PATH;
     }
 }

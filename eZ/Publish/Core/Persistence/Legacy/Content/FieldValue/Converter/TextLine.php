@@ -96,15 +96,22 @@ class TextLine implements Converter
 
         if ( isset( $storageDef->dataInt1 ) )
         {
-            $validatorConstraints[self::STRING_LENGTH_VALIDATOR_IDENTIFIER]["maxStringLength"] = (int)$storageDef->dataInt1;
+            $validatorConstraints[self::STRING_LENGTH_VALIDATOR_IDENTIFIER]["maxStringLength"] =
+                $storageDef->dataInt1 != 0 ?
+                    (int)$storageDef->dataInt1 :
+                    false;
         }
         if ( isset( $storageDef->dataInt2 ) )
         {
-            $validatorConstraints[self::STRING_LENGTH_VALIDATOR_IDENTIFIER]["minStringLength"] = (int)$storageDef->dataInt2;
+            $validatorConstraints[self::STRING_LENGTH_VALIDATOR_IDENTIFIER]["minStringLength"] =
+                $storageDef->dataInt2 != 0 ?
+                    (int)$storageDef->dataInt2 :
+                    false;
         }
 
         $fieldDef->fieldTypeConstraints->validators = $validatorConstraints;
         $fieldDef->defaultValue->data = $storageDef->dataText1 ?: null;
+        $fieldDef->defaultValue->sortKey = $storageDef->dataText1 ?: "";
     }
 
     /**

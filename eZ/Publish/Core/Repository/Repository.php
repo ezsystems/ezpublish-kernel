@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use Exception;
 use RuntimeException;
 
@@ -36,7 +37,14 @@ class Repository implements RepositoryInterface
      *
      * @var \eZ\Publish\API\Repository\Values\User\User
      */
-    protected $user;
+    protected $currentUser;
+
+    /**
+     * Flag to specify if current execution is sudo mode, only set by {@see sudo()}.
+     *
+     * @var bool
+     */
+    private $sudoFlag = false;
 
     /**
      * Instance of content service
@@ -151,6 +159,13 @@ class Repository implements RepositoryInterface
     protected $serviceSettings;
 
     /**
+     * Instance of domain mapper
+     *
+     * @var \eZ\Publish\Core\Repository\DomainMapper
+     */
+    protected $domainMapper;
+
+    /**
      * Constructor
      *
      * Construct repository object with provided storage engine
@@ -177,10 +192,7 @@ class Repository implements RepositoryInterface
             'fieldType' => array(),
             'urlAlias' => array(),
             'urlWildcard' => array(),
-            'nameSchema' => array(
-                'limit' => 0,
-                'sequence' => ''
-            ),
+            'nameSchema' => array(),
             'languages' => array()
         );
 
@@ -200,12 +212,12 @@ class Repository implements RepositoryInterface
      */
     public function getCurrentUser()
     {
-        if ( !$this->user instanceof User )
+        if ( !$this->currentUser instanceof User )
         {
-            $this->user = $this->getUserService()->loadAnonymousUser();
+            $this->currentUser = $this->getUserService()->loadAnonymousUser();
         }
 
-        return $this->user;
+        return $this->currentUser;
     }
 
     /**
@@ -220,7 +232,49 @@ class Repository implements RepositoryInterface
         if ( !$user->id )
             throw new InvalidArgumentValue( '$user->id', $user->id );
 
-        $this->user = $user;
+        $this->currentUser = $user;
+    }
+
+    /**
+     * Allows API execution to be performed with full access sand-boxed
+     *
+     * The closure sandbox will do a catch all on exceptions and rethrow after
+     * re-setting the sudo flag.
+     *
+     * Example use:
+     *     $location = $repository->sudo(
+     *         function ( $repo ) use ( $locationId )
+     *         {
+     *             return $repo->getLocationService()->loadLocation( $locationId )
+     *         }
+     *     );
+     *
+     * @access private This function is not official API atm, and can change anytime.
+     *
+     * @param \Closure $callback
+     *
+     * @throws \RuntimeException Thrown on recursive sudo() use.
+     * @throws \Exception Re throws exceptions thrown inside $callback
+     * @return mixed
+     */
+    final public function sudo( \Closure $callback )
+    {
+        if ( $this->sudoFlag === true )
+            throw new RuntimeException( "Recursive sudo use detected, abort abort!" );
+
+        $this->sudoFlag = true;
+        try
+        {
+            $returnValue = $callback( $this );
+        }
+        catch ( Exception $e  )
+        {
+            $this->sudoFlag = false;
+            throw $e;
+        }
+
+        $this->sudoFlag = false;
+        return $returnValue;
     }
 
     /**
@@ -236,6 +290,10 @@ class Repository implements RepositoryInterface
      */
     public function hasAccess( $module, $function, User $user = null )
     {
+        // Full access if sudoFlag is set by {@see sudo()}
+        if ( $this->sudoFlag === true )
+            return true;
+
         if ( $user === null )
             $user = $this->getCurrentUser();
 
@@ -297,16 +355,33 @@ class Repository implements RepositoryInterface
      * @param string $module The module, aka controller identifier to check permissions on
      * @param string $function The function, aka the controller action to check permissions on
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
+     * @param mixed $targets The location, parent or "assignment" value object, or an array of the same
      *
      * @return boolean
      */
-    public function canUser( $module, $function, ValueObject $object, ValueObject $target = null )
+    public function canUser( $module, $function, ValueObject $object, $targets = null )
     {
         $permissionSets = $this->hasAccess( $module, $function );
         if ( $permissionSets === false || $permissionSets === true )
         {
             return $permissionSets;
+        }
+
+        if ( $targets === null )
+        {
+            $targets = array();
+        }
+        else if ( $targets instanceof ValueObject )
+        {
+            $targets = array( $targets );
+        }
+        else if ( !is_array( $targets ) )
+        {
+            throw new InvalidArgumentType(
+                "\$targets",
+                "null|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject[]",
+                $targets
+            );
         }
 
         $roleService = $this->getRoleService();
@@ -319,7 +394,7 @@ class Repository implements RepositoryInterface
             if ( $permissionSet['limitation'] instanceof Limitation )
             {
                 $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
-                if ( !$type->evaluate( $permissionSet['limitation'], $currentUser, $object, $target ) )
+                if ( !$type->evaluate( $permissionSet['limitation'], $currentUser, $object, $targets ) )
                     continue;
             }
 
@@ -336,7 +411,7 @@ class Repository implements RepositoryInterface
                 foreach ( $limitations as $limitation )
                 {
                     $type = $roleService->getLimitationType( $limitation->getIdentifier() );
-                    if ( !$type->evaluate( $limitation, $currentUser, $object, $target ) )
+                    if ( !$type->evaluate( $limitation, $currentUser, $object, $targets ) )
                     {
                         $limitationsPass = false;
                         break;// Break to next policy, all limitations must pass
@@ -361,7 +436,14 @@ class Repository implements RepositoryInterface
         if ( $this->contentService !== null )
             return $this->contentService;
 
-        $this->contentService = new ContentService( $this, $this->persistenceHandler, $this->serviceSettings['content'] );
+        $this->contentService = new ContentService(
+            $this,
+            $this->persistenceHandler,
+            $this->getDomainMapper(),
+            $this->getRelationProcessor(),
+            $this->getNameSchemaService(),
+            $this->serviceSettings['content']
+        );
         return $this->contentService;
     }
 
@@ -401,6 +483,7 @@ class Repository implements RepositoryInterface
         $this->contentTypeService = new ContentTypeService(
             $this,
             $this->persistenceHandler->contentTypeHandler(),
+            $this->getDomainMapper(),
             $this->serviceSettings['contentType']
         );
         return $this->contentTypeService;
@@ -418,7 +501,13 @@ class Repository implements RepositoryInterface
         if ( $this->locationService !== null )
             return $this->locationService;
 
-        $this->locationService = new LocationService( $this, $this->persistenceHandler, $this->serviceSettings['location'] );
+        $this->locationService = new LocationService(
+            $this,
+            $this->persistenceHandler,
+            $this->getDomainMapper(),
+            $this->getNameSchemaService(),
+            $this->serviceSettings['location']
+        );
         return $this->locationService;
     }
 
@@ -435,7 +524,12 @@ class Repository implements RepositoryInterface
         if ( $this->trashService !== null )
             return $this->trashService;
 
-        $this->trashService = new TrashService( $this, $this->persistenceHandler, $this->serviceSettings['trash'] );
+        $this->trashService = new TrashService(
+            $this,
+            $this->persistenceHandler,
+            $this->getNameSchemaService(),
+            $this->serviceSettings['trash']
+        );
         return $this->trashService;
     }
 
@@ -563,6 +657,7 @@ class Repository implements RepositoryInterface
         $this->searchService = new SearchService(
             $this,
             $this->persistenceHandler->searchHandler(),
+            $this->getDomainMapper(),
             $this->serviceSettings['search']
         );
         return $this->searchService;
@@ -591,7 +686,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\Core\Repository\NameSchemaService
      */
-    public function getNameSchemaService()
+    protected function getNameSchemaService()
     {
         if ( $this->nameSchemaService !== null )
             return $this->nameSchemaService;
@@ -609,13 +704,34 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\Core\Repository\RelationProcessor
      */
-    public function getRelationProcessor()
+    protected function getRelationProcessor()
     {
         if ( $this->relationProcessor !== null )
             return $this->relationProcessor;
 
         $this->relationProcessor = new RelationProcessor( $this, $this->persistenceHandler );
         return $this->relationProcessor;
+    }
+
+    /**
+     * Get RelationProcessor
+     *
+     * @access private Internal service for the Core Services
+     *
+     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
+     *
+     * @return \eZ\Publish\Core\Repository\DomainMapper
+     */
+    protected function getDomainMapper()
+    {
+        if ( $this->domainMapper !== null )
+            return $this->domainMapper;
+
+        $this->domainMapper = new DomainMapper(
+            $this,
+            $this->persistenceHandler->contentLanguageHandler()
+        );
+        return $this->domainMapper;
     }
 
     /**

@@ -52,6 +52,17 @@ interface Handler
     public function loadLocationsByContent( $contentId, $rootLocationId = null );
 
     /**
+     * Loads all parent Locations for unpublished Content by given $contentId.
+     *
+     * @access private This method is stopgap solution and will be removed once loading draft Locations is implemented.
+     *
+     * @param mixed $contentId
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location[]
+     */
+    public function loadParentLocationsForDraftContent( $contentId );
+
+    /**
      * Copy location object identified by $sourceId, into destination identified by $destinationParentId.
      *
      * Performs a deep copy of the location identified by $sourceId and all of

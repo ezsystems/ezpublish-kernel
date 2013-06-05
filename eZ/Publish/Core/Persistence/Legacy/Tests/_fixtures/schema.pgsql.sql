@@ -247,7 +247,7 @@ CREATE TABLE ezgmaplocation (
   contentobject_version integer DEFAULT '0' NOT NULL,
   latitude double precision DEFAULT '0' NOT NULL,
   longitude double precision DEFAULT '0' NOT NULL,
-  address varying(150) DEFAULT NULL
+  address character varying(150) DEFAULT NULL
 );
 
 DROP TABLE IF EXISTS ezcobj_state;
@@ -677,7 +677,7 @@ CREATE TABLE ezkeyword (
 
 DROP TABLE IF EXISTS ezkeyword_attribute_link;
 CREATE TABLE ezkeyword_attribute_link (
-  id integer nextval('ezkeyword_attribute_link_s'::text) NOT NULL,
+  id integer DEFAULT nextval('ezkeyword_attribute_link_s'::text) NOT NULL,
   keyword_id integer DEFAULT 0 NOT NULL,
   objectattribute_id integer DEFAULT 0 NOT NULL
 );
@@ -851,8 +851,8 @@ CREATE INDEX ezuser_role_role_id ON ezuser_role USING btree (role_id);
 CREATE INDEX ezkeyword_keyword ON ezkeyword USING btree (keyword);
 CREATE INDEX ezkeyword_id ON ezkeyword USING btree (keyword,id);
 
-CREATE INDEX ezkeyword_attr_link_kid_oaid ON ezkeyword USING btree (keyword_id,objectattribute_id);
-CREATE INDEX ezkeyword_attr_link_oaid ON ezkeyword USING btree (objectattribute_id);
+CREATE INDEX ezkeyword_attr_link_kid_oaid ON ezkeyword_attribute_link USING btree (keyword_id,objectattribute_id);
+CREATE INDEX ezkeyword_attr_link_oaid ON ezkeyword_attribute_link USING btree (objectattribute_id);
 
 ALTER TABLE ONLY ezcobj_state
     ADD CONSTRAINT ezcobj_state_pkey PRIMARY KEY (id);

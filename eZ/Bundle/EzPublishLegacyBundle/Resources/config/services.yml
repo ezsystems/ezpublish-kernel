@@ -43,6 +43,8 @@ parameters:
     # Overriding base PageService for ezpage fieldtype.
     ezpublish.fieldType.ezpage.pageService.class: eZ\Bundle\EzPublishLegacyBundle\FieldType\Page\PageService
 
+    ezpublish_legacy.rest_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\RestListener
+
 services:
     ezpublish_legacy.kernel:
         alias: ezpublish_legacy.kernel.lazy
@@ -83,10 +85,10 @@ services:
 
     ezpublish_legacy.controller:
         class: %ezpublish_legacy.controller.class%
-        arguments: 
+        arguments:
             - @ezpublish_legacy.kernel
             - @templating
-            - @ezpublish.config.resolver            
+            - @ezpublish.config.resolver
 
     ezpublish_legacy.treemenu.controller:
         class: %ezpublish_legacy.treemenu.controller.class%
@@ -100,7 +102,11 @@ services:
     ezpublish_legacy.setup.controller:
         class: %ezpublish_legacy.setup.controller.class%
         parent: ezpublish.controller.base
-        arguments: [@ezpublish_legacy.kernel, @ezpublish_legacy.config.resolver, @ezpublish_legacy.persistence_cache_purger]
+        arguments:
+            - @ezpublish_legacy.kernel
+            - @ezpublish_legacy.config.resolver
+            - @ezpublish_legacy.persistence_cache_purger
+            - @ezpublish_legacy.configuration_mapper
 
     ezpublish_legacy.router:
         class: %ezpublish_legacy.router.class%
@@ -132,6 +138,7 @@ services:
             - @ezpublish.http_cache.purger
             - @ezpublish_legacy.persistence_cache_purger
             - @service_container
+            - @ezpublish.urlalias_generator
             - %ezpublish_legacy.configuration_mapper.options%
         tags:
             - { name: kernel.event_subscriber }
@@ -158,7 +165,12 @@ services:
 
     ezpublish_legacy.setup_wizard.configuration_dumper:
         class: %ezpublish_legacy.setup_wizard.configuration_dumper.class%
-        arguments: [@filesystem, %ezpublish_legacy.setup_wizard.configuration_dumper.environments%, %kernel.root_dir%, %kernel.cache_dir%]
+        arguments:
+            - @filesystem
+            - %ezpublish_legacy.setup_wizard.configuration_dumper.environments%
+            - %kernel.root_dir%
+            - %kernel.cache_dir%
+            - @?sensio.distribution.webconfigurator
 
     # Image alias generator using legacy
     ezpublish_legacy.fieldType.ezimage.variation_service:
@@ -167,3 +179,9 @@ services:
 
     ezpublish.fieldType.ezimage.variation_service:
         alias: ezpublish_legacy.fieldType.ezimage.variation_service
+
+    ezpublish_legacy.rest_listener:
+        class: %ezpublish_legacy.rest_listener.class%
+        arguments: [%ezpublish_rest.csrf_token_intention%]
+        tags:
+            - { name: kernel.event_subscriber }

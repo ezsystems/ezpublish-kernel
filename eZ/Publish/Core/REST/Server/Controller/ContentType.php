@@ -15,6 +15,7 @@ use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+use eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use eZ\Publish\Core\REST\Server\Values;
@@ -290,6 +291,10 @@ class ContentType extends RestController
         catch ( InvalidArgumentException $e )
         {
             throw new ForbiddenException( $e->getMessage() );
+        }
+        catch ( ContentTypeFieldDefinitionValidationException $e )
+        {
+            throw new BadRequestException( $e->getMessage() );
         }
 
         if ( isset( $this->request->variables['publish'] ) && $this->request->variables['publish'] === 'true' )
@@ -593,6 +598,8 @@ class ContentType extends RestController
             new Message(
                 array(
                     'Content-Type' => $this->request->contentType,
+                    // @todo Needs refactoring! Temporary solution so parser has access to URL
+                    'Url' => $this->request->path
                 ),
                 $this->request->body
             )

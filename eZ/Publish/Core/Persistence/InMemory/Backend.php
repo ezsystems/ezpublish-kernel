@@ -32,6 +32,12 @@ class Backend
     protected $data = array();
 
     /**
+     * For use to revert back to inital state
+     * @var array
+     */
+    protected $initialData = array();
+
+    /**
      * Stack of data for transactions
      *
      * Current data is always kept in $data, this is for rollbacks and transaction count.
@@ -57,6 +63,15 @@ class Backend
     public function __construct( array $data )
     {
         $this->data = $data + $this->data;
+        $this->initialData = $this->data;
+    }
+
+    /**
+     * Reset data structure
+     */
+    public function resetData()
+    {
+        $this->data = $this->initialData;
     }
 
     /**
@@ -404,23 +419,40 @@ class Backend
     {
         foreach ( $match as $matchProperty => $matchValue )
         {
-            if ( !isset( $item[$matchProperty] ) )
+            if ( $matchProperty === 'or' )
+            {
+                // ignore empty and invalid 'or' expression
+                if ( empty( $matchValue ) || !is_array( $matchValue ) )
+                {
+                    continue;
+                }
+                // valid 'or' expression, continue on first match
+                else
+                {
+                    foreach ( $matchValue as $subMatchValue )
+                    {
+                        if ( $this->match( $item, $subMatchValue ) )
+                            continue 2;
+                    }
+                    return false;
+                }
+            }
+            else if ( !isset( $item[$matchProperty] ) )
+            {
                 return false;
-
-            if ( is_array( $item[$matchProperty] ) )
+            }
+            else if ( is_array( $item[$matchProperty] ) )
             {
                 // sub match. When $matchValue is array, assume it's a joined
                 // list of value objects and look if one of them matches
                 if ( is_array( $matchValue ) )
                 {
-                    $hasSubMatch = false;
                     foreach ( $item[$matchProperty] as $subItem )
                     {
                         if ( $this->match( $subItem, $matchValue ) )
-                            $hasSubMatch = true;
+                            continue 2;
                     }
-                    if ( !$hasSubMatch )
-                        return false;
+                    return false;
                 }
                 // otherwise check if match value is part of array
                 else if ( !in_array( $matchValue, $item[$matchProperty] ) )
@@ -437,7 +469,7 @@ class Backend
             }
             // Use of wildcards like in SQL, at the start and/or end of $matchValue
             // i.e. %/5/% (for pathString)
-            else if ( $ends = substr( $matchValue, -1 ) === "%" || substr( $matchValue, 0, 1 ) === "%" )
+            else if ( ( $ends = substr( $matchValue, -1 ) === "%" ) || substr( $matchValue, 0, 1 ) === "%" )
             {
                 $starts = substr( $matchValue, 0, 1 ) === "%";
                 if ( $starts ) $matchValue = substr( $matchValue, 1 );

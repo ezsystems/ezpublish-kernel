@@ -10,23 +10,28 @@
 namespace eZ\Publish\Core\MVC\Symfony\Routing;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RequestContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\Route as SymfonyRoute;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 {
     const URL_ALIAS_ROUTE_NAME = 'ez_urlalias';
+
+    const LOCATION_VIEW_CONTROLLER = 'ezpublish.controller.content.view:viewLocation';
 
     /**
      * @var \Symfony\Component\Routing\RequestContext
@@ -67,7 +72,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     {
         $this->lazyRepository = $lazyRepository;
         $this->generator = $generator;
-        $this->requestContext = isset( $requestContext ) ? $requestContext : new RequestContext();
+        $this->requestContext = $requestContext !== null ? $requestContext : new RequestContext();
         $this->logger = $logger;
     }
 
@@ -91,17 +96,13 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      * @return array An array of parameters
      *
      * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException If no matching resource could be found
-     * @throws MethodNotAllowedException If a matching resource was found but the request method is not allowed
      */
     public function matchRequest( Request $request )
     {
         try
         {
-            $urlAlias = $this->getRepository()->getURLAliasService()->lookup(
-                $request->attributes->get(
-                    'semanticPathinfo',
-                    $request->getPathInfo()
-                )
+            $urlAlias = $this->getUrlAlias(
+                $request->attributes->get( 'semanticPathinfo', $request->getPathInfo() )
             );
 
             $params = array(
@@ -111,7 +112,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
             {
                 case UrlAlias::LOCATION:
                     $params += array(
-                        '_controller' => 'ezpublish.controller.content.view:viewLocation',
+                        '_controller' => static::LOCATION_VIEW_CONTROLLER,
                         'locationId' => $urlAlias->destination,
                         'viewType' => ViewManager::VIEW_TYPE_FULL,
                         'layout' => true,
@@ -121,14 +122,15 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 
                     if ( $urlAlias->isHistory === true )
                     {
-                        $activeUrlAlias = $this->getRepository()->getURLAliasService()->reverseLookup(
-                            $this->getRepository()->getLocationService()->loadLocation(
-                                $urlAlias->destination
+                        $request->attributes->set(
+                            'semanticPathinfo',
+                            $this->generate(
+                                $this->generator->loadLocation( $urlAlias->destination )
                             )
                         );
-
-                        $request->attributes->set( 'semanticPathinfo', $activeUrlAlias->path );
                         $request->attributes->set( 'needsRedirect', true );
+                        // Specify not to prepend siteaccess while redirecting when applicable since it would be already present (see UrlAliasGenerator::doGenerate())
+                        $request->attributes->set( 'prependSiteaccessOnRedirect', false );
                     }
 
                     if ( isset( $this->logger ) )
@@ -138,7 +140,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 
                 case UrlAlias::RESOURCE:
                 case UrlAlias::VIRTUAL:
-                    $request->attributes->set( 'semanticPathinfo', "/$urlAlias->destination" );
+                    $request->attributes->set( 'semanticPathinfo', '/' . trim( $urlAlias->destination, '/' ) );
                     // In URLAlias terms, "forward" means "redirect".
                     if ( $urlAlias->forward )
                         $request->attributes->set( 'needsRedirect', true );
@@ -153,6 +155,17 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
         {
             throw new ResourceNotFoundException( $e->getMessage(), $e->getCode(), $e );
         }
+    }
+
+    /**
+     * Returns the UrlAlias object to use, starting from the request.
+     *
+     * @param $pathinfo
+     * @return URLAlias
+     */
+    protected function getUrlAlias( $pathinfo )
+    {
+        return $this->getRepository()->getURLAliasService()->lookup( $pathinfo );
     }
 
     /**
@@ -228,6 +241,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     public function setContext( RequestContext $context )
     {
         $this->requestContext = $context;
+        $this->generator->setRequestContext( $context );
     }
 
     public function getContext()
@@ -276,7 +290,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 
         if ( $name instanceof SymfonyRoute )
         {
-            return 'Route with pattern ' . $name->getPattern();
+            return 'Route with pattern ' . $name->getPath();
         }
 
         return $name;

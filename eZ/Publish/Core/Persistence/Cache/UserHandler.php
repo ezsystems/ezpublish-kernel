@@ -29,7 +29,12 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     public function create( User $user )
     {
         $this->logger->logCall( __METHOD__, array( 'struct' => $user ) );
-        return $this->persistenceFactory->getUserHandler()->create( $user );
+        $return = $this->persistenceFactory->getUserHandler()->create( $user );
+
+        // Clear corresponding content cache as creation of the User changes it's external data
+        $this->cache->clear( 'content', $user->id );
+
+        return $return;
     }
 
     /**
@@ -56,7 +61,12 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     public function update( User $user )
     {
         $this->logger->logCall( __METHOD__, array( 'struct' => $user ) );
-        return $this->persistenceFactory->getUserHandler()->update( $user );
+        $return = $this->persistenceFactory->getUserHandler()->update( $user );
+
+        // Clear corresponding content cache as update of the User changes it's external data
+        $this->cache->clear( 'content', $user->id );
+
+        return $return;
     }
 
     /**
@@ -68,6 +78,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
         $return = $this->persistenceFactory->getUserHandler()->delete( $userId );
 
         // user id == content id == group id
+        $this->cache->clear( 'content', $userId );
         $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', $userId );
         $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', 'inherited', $userId );
 

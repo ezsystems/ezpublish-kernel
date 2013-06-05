@@ -12,7 +12,6 @@ namespace eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * Base class for field types, the most basic storage unit of data inside eZ Publish.
@@ -172,6 +171,23 @@ abstract class FieldType implements FieldTypeInterface
         }
 
         return array();
+    }
+
+    /**
+     * Applies the default values to the fieldSettings of a FieldDefinitionCreateStruct
+     *
+     * @param mixed $fieldSettings
+     */
+    public function applyDefaultSettings( &$fieldSettings )
+    {
+        foreach ( $this->getSettingsSchema() as $settingName => $settingConfiguration )
+        {
+            // Checking that a default entry exists in the settingsSchema but that no value has been provided
+            if ( !array_key_exists( $settingName, $fieldSettings ) && array_key_exists( "default", $settingConfiguration ) )
+            {
+                $fieldSettings[$settingName] = $settingConfiguration["default"];
+            }
+        }
     }
 
     /**
@@ -369,7 +385,7 @@ abstract class FieldType implements FieldTypeInterface
      * Not intended for \eZ\Publish\API\Repository\Values\Content\Relation::COMMON type relations,
      * there is an API for handling those.
      *
-     * @param \eZ\Publish\Core\FieldType\Value $fieldValue
+     * @param mixed $fieldValue
      *
      * @return array Hash with relation type as key and array of destination content ids as value.
      *
@@ -388,7 +404,7 @@ abstract class FieldType implements FieldTypeInterface
      *  )
      * </code>
      */
-    public function getRelations( BaseValue $fieldValue )
+    public function getRelations( $fieldValue )
     {
         return array();
     }

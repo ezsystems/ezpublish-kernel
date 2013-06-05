@@ -20,6 +20,8 @@ abstract class Gateway
     /**
      * Returns a list of object satisfying the $criterion.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
+     *
      * @param Criterion $criterion
      * @param int $offset
      * @param int|null $limit

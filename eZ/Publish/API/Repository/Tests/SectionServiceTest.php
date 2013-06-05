@@ -175,7 +175,7 @@ class SectionServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $nonExistentSectionId = $this->generateId( 'section', PHP_INT_MAX );
+        $nonExistentSectionId = $this->generateId( 'section', self::DB_INT_MAX );
         /* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
 

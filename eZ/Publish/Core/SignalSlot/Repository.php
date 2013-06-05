@@ -118,13 +118,6 @@ class Repository implements RepositoryInterface
     protected $fieldTypeService;
 
     /**
-     * Instance of name schema resolver service
-     *
-     * @var \eZ\Publish\Core\Repository\NameSchemaService
-     */
-    protected $nameSchemaService;
-
-    /**
      * Instance of URL alias service
      *
      * @var \eZ\Publish\Core\Repository\UrlAliasService
@@ -176,6 +169,33 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Allows API execution to be performed with full access sand-boxed
+     *
+     * The closure sandbox will do a catch all on exceptions and rethrow after
+     * re-setting the sudo flag.
+     *
+     * Example use:
+     *     $location = $repository->sudo(
+     *         function ( $repo ) use ( $locationId )
+     *         {
+     *             return $repo->getLocationService()->loadLocation( $locationId )
+     *         }
+     *     );
+     *
+     * @access private This function is not official API atm, and can change anytime.
+     *
+     * @param \Closure $callback
+     *
+     * @throws \RuntimeException Thrown on recursive sudo() use.
+     * @throws \Exception Re throws exceptions thrown inside $callback
+     * @return mixed
+     */
+    public function sudo( \Closure $callback )
+    {
+        return $this->repository->sudo( $callback );
+    }
+
+    /**
      * Check if user has access to a given module / function
      *
      * Low level function, use canUser instead if you have objects to check against.
@@ -203,13 +223,13 @@ class Repository implements RepositoryInterface
      * @param string $module The module, aka controller identifier to check permissions on
      * @param string $function The function, aka the controller action to check permissions on
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
+     * @param mixed $targets The location, parent or "assignment" value object, or an array of the same
      *
      * @return boolean
      */
-    public function canUser( $module, $function, ValueObject $object, ValueObject $target = null )
+    public function canUser( $module, $function, ValueObject $object, $targets = null )
     {
-        return $this->repository->canUser( $module, $function, $object, $target );
+        return $this->repository->canUser( $module, $function, $object, $targets );
     }
 
     /**
@@ -421,20 +441,6 @@ class Repository implements RepositoryInterface
 
         $this->fieldTypeService = new FieldTypeService( $this->repository->getFieldTypeService(), $this->signalDispatcher );
         return $this->fieldTypeService;
-    }
-
-    /**
-     * Get NameSchemaResolverService
-     *
-     * @access private Internal service for the Core Services
-     *
-     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
-     *
-     * @return \eZ\Publish\Core\Repository\NameSchemaService
-     */
-    public function getNameSchemaService()
-    {
-        return $this->repository->getNameSchemaService();
     }
 
     /**

@@ -136,6 +136,7 @@ class ConfigurationConverter
             $imageMagickExecutablePath = $this->getParameter( 'ImageMagick', 'ExecutablePath', 'image.ini', $defaultSiteaccess );
             $imageMagickExecutable = $this->getParameter( 'ImageMagick', 'Executable', 'image.ini', $defaultSiteaccess );
             $settings['ezpublish']['imagemagick']['path'] = rtrim( $imageMagickExecutablePath, '/\\' ) . '/' . $imageMagickExecutable;
+            $settings['ezpublish']['imagemagick']['filters'] = $this->getImageMagickFilters( $defaultSiteaccess );
         }
         else
         {
@@ -354,6 +355,31 @@ class ConfigurationConverter
             $variations[$imageAliasIdentifier] = $variationSettings;
         }
         return $variations;
+    }
+
+    /**
+     * Returns the ImageMagick filter settings for the siteaccess
+     *
+     * @param string $defaultSiteaccess
+     * @return array
+     */
+    protected function getImageMagickFilters( $defaultSiteaccess )
+    {
+        $filters = array();
+        $imageSettings = $this->getGroup( 'ImageMagick', 'image.ini', $defaultSiteaccess );
+        if ( is_array( $imageSettings['Filters'] ) )
+        {
+            foreach ( $imageSettings['Filters'] as $filterString )
+            {
+                if ( strstr( $filterString, '=' ) !== false )
+                {
+                    list( $filterName, $filter ) = explode( '=', $filterString );
+                    // replace format from "-command %1x%2" to "-command {1}x{2}"
+                    $filters[$filterName] = preg_replace( '/%(\\d)/', '{$1}', $filter );
+                }
+            }
+        }
+        return $filters;
     }
 
     protected function mapDatabaseType( $databaseType )

@@ -614,19 +614,19 @@ class EzcDatabase extends Gateway
             $q->bindValue( $field->languageCode )
         )->set(
             $this->dbHandler->quoteColumn( 'version' ),
-            $q->bindValue( $field->versionNo )
+            $q->bindValue( $field->versionNo, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'data_float' ),
             $q->bindValue( $value->dataFloat )
         )->set(
             $this->dbHandler->quoteColumn( 'data_int' ),
-            $q->bindValue( $value->dataInt )
+            $q->bindValue( $value->dataInt, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'data_text' ),
             $q->bindValue( $value->dataText )
         )->set(
             $this->dbHandler->quoteColumn( 'sort_key_int' ),
-            $q->bindValue( $value->sortKeyInt )
+            $q->bindValue( $value->sortKeyInt, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'sort_key_string' ),
             $q->bindValue( $value->sortKeyString )
@@ -906,14 +906,9 @@ class EzcDatabase extends Gateway
                     $query->bindValue( $userId, null, \PDO::PARAM_INT )
                 )
             )
-        )->groupBy(
-            $this->dbHandler->quoteColumn( 'id', 'ezcontentobject_version' )
         );
 
-        $statement = $query->prepare();
-        $statement->execute();
-
-        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+        return $this->listVersionsHelper( $query );
     }
 
     /**
@@ -931,14 +926,66 @@ class EzcDatabase extends Gateway
                 $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' ),
                 $query->bindValue( $contentId, null, \PDO::PARAM_INT )
             )
-        )->groupBy(
+        );
+
+        return $this->listVersionsHelper( $query );
+    }
+
+    /**
+     * Helper for {@see listVersions()} and {@see listVersionsForUser()} that filters duplicates
+     * that are the result of the cartesian product performed by createVersionInfoFindQuery()
+     *
+     * @param \ezcQuerySelect $query
+     * @return string[][]
+     */
+    private function listVersionsHelper( $query )
+    {
+        $query->orderBy(
             $this->dbHandler->quoteColumn( 'id', 'ezcontentobject_version' )
         );
 
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+        $results = array();
+        $previousId = null;
+        foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
+        {
+            if ( $row["ezcontentobject_version_id"] == $previousId )
+                continue;
+
+            $previousId = $row["ezcontentobject_version_id"];
+            $results[] = $row;
+        }
+
+        return $results;
+    }
+
+    /**
+     * Returns all version numbers for the given $contentId
+     *
+     * @param mixed $contentId
+     *
+     * @return int[]
+     */
+    public function listVersionNumbers( $contentId )
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query->selectDistinct(
+            $this->dbHandler->quoteColumn( 'version' )
+        )->from(
+            $this->dbHandler->quoteTable( 'ezcontentobject_version' )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_COLUMN );
     }
 
     /**
@@ -1098,25 +1145,18 @@ class EzcDatabase extends Gateway
      * Deletes the field with the given $fieldId
      *
      * @param int $fieldId
-     * @param int $version
      *
      * @return void
      */
-    public function deleteField( $fieldId, $version )
+    public function deleteField( $fieldId )
     {
         $query = $this->dbHandler->createDeleteQuery();
         $query->deleteFrom(
             $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
         )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'id' ),
-                    $query->bindValue( $fieldId, null, \PDO::PARAM_INT )
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'version' ),
-                    $query->bindValue( $version, null, \PDO::PARAM_INT )
-                )
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'id' ),
+                $query->bindValue( $fieldId, null, \PDO::PARAM_INT )
             )
         );
 
@@ -1370,9 +1410,12 @@ class EzcDatabase extends Gateway
         if ( isset( $relationType ) )
         {
             $query->where(
-                $query->expr->bitAnd(
-                    $this->dbHandler->quoteColumn( 'relation_type', 'ezcontentobject_link' ),
-                    $query->bindValue( $relationType, null, \PDO::PARAM_INT )
+                $query->expr->gt(
+                    $query->expr->bitAnd(
+                        $this->dbHandler->quoteColumn( 'relation_type', 'ezcontentobject_link' ),
+                        $query->bindValue( $relationType, null, \PDO::PARAM_INT )
+                    ),
+                    0
                 )
             );
         }
@@ -1421,9 +1464,12 @@ class EzcDatabase extends Gateway
         if ( isset( $relationType ) )
         {
             $query->where(
-                $query->expr->bitAnd(
-                    $this->dbHandler->quoteColumn( 'relation_type', 'ezcontentobject_link' ),
-                    $query->bindValue( $relationType, null, \PDO::PARAM_INT )
+                $query->expr->gt(
+                    $query->expr->bitAnd(
+                        $this->dbHandler->quoteColumn( 'relation_type', 'ezcontentobject_link' ),
+                        $query->bindValue( $relationType, null, \PDO::PARAM_INT )
+                    ),
+                    0
                 )
             );
         }

@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Limitation;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -16,44 +17,79 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation as APIObjectStateLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
-use eZ\Publish\SPI\Persistence\Handler as SPIPersistenceHandler;
+use eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * ObjectStateLimitation is a Content limitation
  */
-class ObjectStateLimitationType implements SPILimitationTypeInterface
+class ObjectStateLimitationType extends AbstractPersistenceLimitationType implements SPILimitationTypeInterface
 {
     /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
-     */
-    protected $persistence;
-
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Handler $persistence
-     */
-    public function __construct( SPIPersistenceHandler $persistence )
-    {
-        $this->persistence = $persistence;
-    }
-
-    /**
-     * Accepts a Limitation value
+     * Accepts a Limitation value and checks for structural validity.
      *
-     * Makes sure LimitationValue object is of correct type and that ->limitationValues
-     * is valid according to valueSchema().
+     * Makes sure LimitationValue object and ->limitationValues is of correct type.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected type/structure
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
-     *
-     * @return boolean
      */
     public function acceptValue( APILimitationValue $limitationValue )
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+        if ( !$limitationValue instanceof APIObjectStateLimitation )
+        {
+            throw new InvalidArgumentType( "\$limitationValue", "APIObjectStateLimitation", $limitationValue );
+        }
+        else if ( !is_array( $limitationValue->limitationValues ) )
+        {
+            throw new InvalidArgumentType( "\$limitationValue->limitationValues", "array", $limitationValue->limitationValues );
+        }
+
+        foreach ( $limitationValue->limitationValues as $key => $id )
+        {
+            if ( !is_string( $id ) && !is_int( $id ) )
+            {
+                throw new InvalidArgumentType( "\$limitationValue->limitationValues[{$key}]", "int|string", $id );
+            }
+        }
+    }
+
+    /**
+     * Makes sure LimitationValue->limitationValues is valid according to valueSchema().
+     *
+     * Make sure {@link acceptValue()} is checked first!
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validate( APILimitationValue $limitationValue )
+    {
+        $validationErrors = array();
+        foreach ( $limitationValue->limitationValues as $key => $id )
+        {
+            try
+            {
+                $this->persistence->objectStateHandler()->load( $id );
+            }
+            catch ( APINotFoundException $e )
+            {
+                $validationErrors[] = new ValidationError(
+                    "limitationValues[%key%] => '%value%' does not exist in the backend",
+                    null,
+                    array(
+                        "value" => $id,
+                        "key" => $key
+                    )
+                );
+            }
+        }
+        return $validationErrors;
     }
 
     /**
@@ -79,11 +115,11 @@ class ObjectStateLimitationType implements SPILimitationTypeInterface
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject|null $target The location, parent or "assignment" value object
+     * @param \eZ\Publish\API\Repository\Values\ValueObject[] $targets An array of location, parent or "assignment" value objects
      *
      * @return boolean
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, ValueObject $target = null )
+    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = array() )
     {
         if ( !$value instanceof APIObjectStateLimitation )
         {

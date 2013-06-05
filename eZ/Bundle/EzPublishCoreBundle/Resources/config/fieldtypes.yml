@@ -32,12 +32,16 @@ parameters:
     ezpublish.fieldType.ezxmltext.converter.html5.class: eZ\Publish\Core\FieldType\XmlText\Converter\Html5
     ezpublish.fieldType.ezxmltext.converter.html5.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5.xsl
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5
+    ezpublish.fieldType.ezxmlText.converter.embedToHtml5.excludedAttributes: [view, node_id, object_id]
+    ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EzLinkToHtml5
     ezpublish.fieldType.ezpage.class: eZ\Publish\Core\FieldType\Page\Type
     ezpublish.fieldType.ezpage.pageService.class: eZ\Bundle\EzPublishCoreBundle\FieldType\Page\PageService
     ezpublish.fieldType.ezpage.pageService.factory.class: eZ\Publish\Core\MVC\Symfony\FieldType\Page\PageServiceFactory
     ezpublish.fieldType.ezpage.parameterProvider.class: eZ\Publish\Core\MVC\Symfony\FieldType\Page\ParameterProvider
     ezpublish.fieldType.ezpage.block.class: eZ\Publish\Core\FieldType\Page\Parts\Block
     ezpublish.fieldType.ezpage.zone.class: eZ\Publish\Core\FieldType\Page\Parts\Zone
+    ezpublish.fieldType.ezpage.hashConverter.class: eZ\Publish\Core\FieldType\Page\HashConverter
+    ezpublish.fieldType.locale.parameterProvider.class: eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProvider\LocaleParameterProvider
 
     ezpublish.fieldType.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\Type
     ezpublish.fieldType.ezgmaplocation.externalStorage.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage
@@ -300,6 +304,14 @@ services:
     ezpublish.fieldType.parameterProviderRegistry:
         class: %ezpublish.fieldType.parameterProviderRegistry.class%
 
+    ezpublish.fieldType.ezdatetime.parameterProvider:
+        class: %ezpublish.fieldType.locale.parameterProvider.class%
+        arguments: [@service_container, @ezpublish.locale.converter]
+        tags:
+            - {name: ezpublish.fieldType.parameterProvider, alias: ezdatetime}
+            - {name: ezpublish.fieldType.parameterProvider, alias: ezdate}
+            - {name: ezpublish.fieldType.parameterProvider, alias: eztime}
+
     ezpublish.fieldType:
         class: %ezpublish.fieldType.class%
         abstract: true
@@ -494,18 +506,28 @@ services:
 
     ezpublish.fieldType.ezxmltext.converter.html5:
         class: %ezpublish.fieldType.ezxmltext.converter.html5.class%
-        arguments: [%ezpublish.fieldType.ezxmltext.converter.html5.resources%, [@ezpublish.fieldType.ezxmltext.converter.embedToHtml5]]
+        arguments: [%ezpublish.fieldType.ezxmltext.converter.html5.resources%, [@ezpublish.fieldType.ezxmltext.converter.embedToHtml5, @ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5]]
 
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5:
         class: %ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class%
-        arguments: [@ezpublish.view_manager,@ezpublish.api.repository]
+        arguments:
+            - @ezpublish.view_manager
+            - @ezpublish.api.repository
+            - %ezpublish.fieldType.ezxmlText.converter.embedToHtml5.excludedAttributes%
+
+    ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5:
+        class: %ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5.class%
+        arguments: [@ezpublish.api.repository, @?logger]
 
     ezpublish.fieldType.ezpage:
         class: %ezpublish.fieldType.ezpage.class%
         parent: ezpublish.fieldType
-        arguments: [@ezpublish.fieldType.ezpage.pageService]
+        arguments: [@ezpublish.fieldType.ezpage.pageService, @ezpublish.fieldType.ezpage.hashConverter]
         tags:
             - {name: ezpublish.fieldType, alias: ezpage}
+
+    ezpublish.fieldType.ezpage.hashConverter:
+        class: %ezpublish.fieldType.ezpage.hashConverter.class%
 
     ezpublish.fieldType.ezpage.pageService.factory:
         class: %ezpublish.fieldType.ezpage.pageService.factory.class%

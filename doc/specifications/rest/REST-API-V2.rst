@@ -937,7 +937,7 @@ Get Current Version
 .. code:: http
 
     HTTP/1.1 307 Temporary Redirect
-    Location: /content/objects/<ID>/version/<current_version_no>
+    Location: /content/objects/<ID>/versions/<current_version_no>
 
 :Error Codes:
      :404: If the resource does not exist
@@ -1157,7 +1157,7 @@ XML Example
 
 Update Version
 ``````````````
-:Resource: /content/objects/<ID>/version/<versionNo>
+:Resource: /content/objects/<ID>/versions/<versionNo>
 :Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
 :Description: A specific draft is updated.
 :Parameters:
@@ -1343,7 +1343,7 @@ Create a Draft from current Version
 
 Delete Content Version
 ``````````````````````
-:Resource: /content/objects/<ID>/version/<versionNo>
+:Resource: /content/objects/<ID>/versions/<versionNo>
 :Method: DELETE
 :Description: The version is deleted
 :Response:
@@ -1359,7 +1359,7 @@ Delete Content Version
 
 Publish a content version
 `````````````````````````
-:Resource: /content/objects/<ID>/version/<versionNo>
+:Resource: /content/objects/<ID>/versions/<versionNo>
 :Method: PUBLISH or POST with header X-HTTP-Method-Override: PUBLISH
 :Description: The content version is published
 :Response:
@@ -3485,6 +3485,7 @@ If publish = true:
 
 :Error Codes:
     :400: - If the Input does not match the input schema definition,
+          - If validation on a field definition fails
           - If publish = true and the input is not complete e.g. no field definitions are provided
     :401: If the user is not authorized to create this content type
     :403: If a content type with same identifier already exists
@@ -8485,14 +8486,14 @@ FieldDefinition XML Schema
                   </xsd:documentation>
                 </xsd:annotation>
               </xsd:element>
-              <xsd:element name="fieldSettings" type="xsd:anyType">
+              <xsd:element name="fieldSettings" type="fieldSettingsType">
                 <xsd:annotation>
                   <xsd:documentation>
                     Settings of the field
                   </xsd:documentation>
                 </xsd:annotation>
               </xsd:element>
-              <xsd:element name="validatorConfiguration" type="xsd:anyType">
+              <xsd:element name="validatorConfiguration" type="validatorConfigurationType">
                 <xsd:annotation>
                   <xsd:documentation>
                     Validator configuration of the field
@@ -8601,14 +8602,14 @@ FieldDefinitionCreate XML Schema
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="fieldSettings" type="xsd:anyType">
+          <xsd:element name="fieldSettings" type="fieldSettingsType">
             <xsd:annotation>
               <xsd:documentation>
                 Settings of the field
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="validatorConfiguration" type="xsd:anyType">
+          <xsd:element name="validatorConfiguration" type="validatorConfigurationType">
             <xsd:annotation>
               <xsd:documentation>
                 Validator configuration of the field
@@ -8695,14 +8696,14 @@ FieldDefinitionUpdate XML Schema
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="fieldSettings" type="xsd:anyType">
+          <xsd:element name="fieldSettings" type="fieldSettingsType">
             <xsd:annotation>
               <xsd:documentation>
                 If set the settings of the field are changed
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="validatorConfiguration" type="xsd:anyType">
+          <xsd:element name="validatorConfiguration" type="validatorConfigurationType">
             <xsd:annotation>
               <xsd:documentation>
                 If set the validatorConfiguration of the field is changed

@@ -847,7 +847,7 @@ class RoleServiceStub implements RoleService
      * Returns list of role assignments for specific role and content.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param int $contentId
+     * @param mixed $contentId
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[]
      */
@@ -929,8 +929,8 @@ class RoleServiceStub implements RoleService
     /**
      * Returns the associated limitation or <b>NULL</b>.
      *
-     * @param int $roleId
-     * @param int $contentId
+     * @param mixed $roleId
+     * @param mixed $contentId
      * @param string $limitationIdentifier
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation

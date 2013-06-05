@@ -376,6 +376,10 @@ return array(
         array( 'contentobject_id' => 14, 'contentobject_version' => 4, 'from_node_id' => -1, 'id' => 211, 'is_main' => 1, 'op_code' => 2, 'parent_node' => 13, 'parent_remote_id' => '', 'remote_id' => 0, 'sort_field' => 1, 'sort_order' => 1 ),
         array( 'contentobject_id' => 225, 'contentobject_version' => 1, 'from_node_id' => 0, 'id' => 212, 'is_main' => 1, 'op_code' => 2, 'parent_node' => 5, 'parent_remote_id' => '', 'remote_id' => 0, 'sort_field' => 1, 'sort_order' => 1 ),
         array( 'contentobject_id' => 11, 'contentobject_version' => 2, 'from_node_id' => -1, 'id' => 213, 'is_main' => 1, 'op_code' => 2, 'parent_node' => 5, 'parent_remote_id' => '', 'remote_id' => 0, 'sort_field' => 1, 'sort_order' => 1 ),
-    )
+        array( 'contentobject_id' => 226, 'contentobject_version' => 1, 'from_node_id' => -1, 'id' => 214, 'is_main' => 1, 'op_code' => 3, 'parent_node' => 77, 'parent_remote_id' => '', 'remote_id' => 0, 'sort_field' => 1, 'sort_order' => 1 ),
+    ),
+    'ezcontentobject' => array(
+        array( 'id' => 226, 'status' => 0 ),
+    ),
 );
 

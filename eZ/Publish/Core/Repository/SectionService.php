@@ -126,9 +126,6 @@ class SectionService implements SectionServiceInterface
      */
     public function updateSection( Section $section, SectionUpdateStruct $sectionUpdateStruct )
     {
-        if ( !is_numeric( $section->id ) )
-            throw new InvalidArgumentValue( "id", $section->id, "Section" );
-
         if ( $sectionUpdateStruct->name !== null && !is_string( $sectionUpdateStruct->name ) )
             throw new InvalidArgumentValue( "name", $section->name, "Section" );
 
@@ -179,15 +176,12 @@ class SectionService implements SectionServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if section could not be found
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
      *
-     * @param int $sectionId
+     * @param mixed $sectionId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
     public function loadSection( $sectionId )
     {
-        if ( !is_numeric( $sectionId ) )
-            throw new InvalidArgumentValue( "sectionId", $sectionId );
-
         if ( $this->repository->hasAccess( 'section', 'view' ) !== true )
             throw new UnauthorizedException( 'section', 'view' );
 
@@ -249,9 +243,6 @@ class SectionService implements SectionServiceInterface
      */
     public function countAssignedContents( Section $section )
     {
-        if ( !is_numeric( $section->id ) )
-            throw new InvalidArgumentValue( "id", $section->id, "Section" );
-
         return $this->sectionHandler->assignmentsCount( $section->id );
     }
 
@@ -266,12 +257,6 @@ class SectionService implements SectionServiceInterface
      */
     public function assignSection( ContentInfo $contentInfo, Section $section )
     {
-        if ( !is_numeric( $contentInfo->id ) )
-            throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
-
-        if ( !is_numeric( $section->id ) )
-            throw new InvalidArgumentValue( "id", $section->id, "Section" );
-
         $loadedContentInfo = $this->repository->getContentService()->loadContentInfo( $contentInfo->id );
         $loadedSection = $this->loadSection( $section->id );
 
@@ -314,9 +299,6 @@ class SectionService implements SectionServiceInterface
      */
     public function deleteSection( Section $section )
     {
-        if ( !is_numeric( $section->id ) )
-            throw new InvalidArgumentValue( "id", $section->id, "Section" );
-
         $loadedSection = $this->loadSection( $section->id );
 
         if ( $this->repository->canUser( 'section', 'edit', $loadedSection ) !== true )
@@ -369,7 +351,7 @@ class SectionService implements SectionServiceInterface
     {
         return new Section(
             array(
-                'id' => (int)$spiSection->id,
+                'id' => $spiSection->id,
                 'identifier' => $spiSection->identifier,
                 'name' => $spiSection->name
             )

@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
 use eZ\Publish\Core\REST\Server\Input\Parser\FieldDefinitionUpdate;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 
 /**
  * @todo Test with fieldSettings and validatorConfiguration when specified
@@ -92,6 +94,23 @@ class FieldDefinitionUpdateTest extends BaseTest
             $result->descriptions,
             'descriptions not created correctly'
         );
+
+        $this->assertEquals(
+            array( 'textRows' => 24 ),
+            $result->fieldSettings,
+            'fieldSettings not created correctly'
+        );
+
+        $this->assertEquals(
+            array(
+                'StringLengthValidator' => array(
+                    'minStringLength' => 12,
+                    'maxStringLength' => 24
+                )
+            ),
+            $result->validatorConfiguration,
+            'validatorConfiguration not created correctly'
+        );
     }
 
     /**
@@ -134,8 +153,48 @@ class FieldDefinitionUpdateTest extends BaseTest
         return new FieldDefinitionUpdate(
             $this->getUrlHandler(),
             $this->getContentTypeServiceMock(),
+            $this->getFieldTypeParserMock(),
             $this->getParserTools()
         );
+    }
+
+    /**
+     * Get the FieldTypeParser mock object
+     *
+     * @return \eZ\Publish\Core\REST\Common\Input\FieldTypeParser
+     */
+    protected function getFieldTypeParserMock()
+    {
+        $fieldTypeParserMock = $this->getMock(
+            'eZ\\Publish\\Core\\REST\\Common\\Input\\FieldTypeParser',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $fieldTypeParserMock->expects( $this->any() )
+            ->method( 'parseValue' )
+            ->will( $this->returnValue( 'New title' ) );
+
+        $fieldTypeParserMock->expects( $this->any() )
+            ->method( 'parseFieldSettings' )
+            ->will( $this->returnValue( array( 'textRows' => 24 ) ) );
+
+        $fieldTypeParserMock->expects( $this->any() )
+            ->method( 'parseValidatorConfiguration' )
+            ->will(
+                $this->returnValue(
+                    array(
+                        'StringLengthValidator' => array(
+                            'minStringLength' => 12,
+                            'maxStringLength' => 24
+                        )
+                    )
+                )
+            );
+
+        return $fieldTypeParserMock;
     }
 
     /**
@@ -161,6 +220,26 @@ class FieldDefinitionUpdateTest extends BaseTest
                 )
             );
 
+        $contentTypeServiceMock->expects( $this->any() )
+            ->method( 'loadContentTypeDraft' )
+            ->with( $this->equalTo( 42 ) )
+            ->will(
+                $this->returnValue(
+                    new ContentType(
+                        array(
+                            "fieldDefinitions" => array(
+                                new FieldDefinition(
+                                    array(
+                                        "id" => 24,
+                                        "fieldTypeIdentifier" => "ezstring"
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+
         return $contentTypeServiceMock;
     }
 
@@ -172,6 +251,7 @@ class FieldDefinitionUpdateTest extends BaseTest
     protected function getInputArray()
     {
         return array(
+            '__url' => '/content/types/42/draft/fieldDefinitions/24',
             'identifier' => 'title',
             'fieldGroup' => 'content',
             'position' => '1',
@@ -195,7 +275,16 @@ class FieldDefinitionUpdateTest extends BaseTest
                         '#text' => 'This is the title'
                     )
                 )
-            )
+            ),
+            'fieldSettings' => array(
+                'textRows' => 24
+            ),
+            'validatorConfiguration' => array(
+                'StringLengthValidator' => array(
+                    'minStringLength' => '12',
+                    'maxStringLength' => '24'
+                )
+            ),
         );
     }
 }

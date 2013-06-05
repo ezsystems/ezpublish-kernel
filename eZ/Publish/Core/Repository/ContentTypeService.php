@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler;
+use eZ\Publish\Core\Repository\DomainMapper;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException;
 use eZ\Publish\API\Repository\Values\User\User;
@@ -44,6 +45,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\ContentTypeFieldDefinitionValidationException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\FieldType\ValidationError;
 use DateTime;
 use Exception;
 
@@ -70,16 +72,28 @@ class ContentTypeService implements ContentTypeServiceInterface
     protected $settings;
 
     /**
+     * @var \eZ\Publish\Core\Repository\DomainMapper
+     */
+    protected $domainMapper;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $contentTypeHandler, array $settings = array() )
+    public function __construct(
+        RepositoryInterface $repository,
+        Handler $contentTypeHandler,
+        DomainMapper $domainMapper,
+        array $settings = array()
+    )
     {
         $this->repository = $repository;
         $this->contentTypeHandler = $contentTypeHandler;
+        $this->domainMapper = $domainMapper;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
@@ -171,11 +185,6 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function loadContentTypeGroup( $contentTypeGroupId )
     {
-        if ( !is_numeric( $contentTypeGroupId ) )
-        {
-            throw new InvalidArgumentValue( '$contentTypeGroupId', $contentTypeGroupId );
-        }
-
         $spiGroup = $this->contentTypeHandler->loadGroup(
             $contentTypeGroupId
         );
@@ -489,7 +498,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ( $contentTypeCreateStruct->remoteId === null )
         {
-            $contentTypeCreateStruct->remoteId = md5( uniqid( get_class( $contentTypeCreateStruct ), true ) );
+            $contentTypeCreateStruct->remoteId = $this->domainMapper->getUniqueHash( $contentTypeCreateStruct );
         }
 
         $initialLanguageId = $this->repository->getContentLanguageService()->loadLanguage(
@@ -560,6 +569,32 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     protected function buildSPIFieldDefinitionCreate( FieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
     {
+        /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
+        $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
+            $fieldDefinitionCreateStruct->fieldTypeIdentifier
+        );
+
+        $validationErrors = array();
+        if ( $fieldDefinitionCreateStruct->isSearchable && !$fieldType->isSearchable() )
+        {
+            $validationErrors[] = new ValidationError(
+                "FieldType '{$fieldDefinitionCreateStruct->fieldTypeIdentifier}' is not searchable"
+            );
+        }
+
+        $fieldType->applyDefaultSettings( $fieldDefinitionCreateStruct->fieldSettings );
+
+        $validationErrors = array_merge(
+            $validationErrors,
+            $fieldType->validateValidatorConfiguration( $fieldDefinitionCreateStruct->validatorConfiguration ),
+            $fieldType->validateFieldSettings( $fieldDefinitionCreateStruct->fieldSettings )
+        );
+
+        if ( !empty( $validationErrors ) )
+        {
+            throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
+        }
+
         $spiFieldDefinition = new SPIFieldDefinition(
             array(
                 "id" => null,
@@ -578,26 +613,6 @@ class ContentTypeService implements ContentTypeServiceInterface
                 //"defaultValue"
             )
         );
-        /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
-        $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
-            $fieldDefinitionCreateStruct->fieldTypeIdentifier
-        );
-
-        $validationErrors = $fieldType->validateValidatorConfiguration(
-            $fieldDefinitionCreateStruct->validatorConfiguration
-        );
-        if ( !empty( $validationErrors ) )
-        {
-            throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
-        }
-
-        $validationErrors = $fieldType->validateFieldSettings(
-            $fieldDefinitionCreateStruct->fieldSettings
-        );
-        if ( !empty( $validationErrors ) )
-        {
-            throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
-        }
 
         $spiFieldDefinition->fieldTypeConstraints->validators = $fieldDefinitionCreateStruct->validatorConfiguration;
         $spiFieldDefinition->fieldTypeConstraints->fieldSettings = $fieldDefinitionCreateStruct->fieldSettings;
@@ -634,13 +649,19 @@ class ContentTypeService implements ContentTypeServiceInterface
             ? $fieldDefinition->fieldSettings
             : $fieldDefinitionUpdateStruct->fieldSettings;
 
-        $validationErrors = $fieldType->validateValidatorConfiguration( $validatorConfiguration );
-        if ( !empty( $validationErrors ) )
+        $validationErrors = array();
+        if ( $fieldDefinitionUpdateStruct->isSearchable && !$fieldType->isSearchable() )
         {
-            throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
+            $validationErrors[] = new ValidationError(
+                "FieldType '{$fieldDefinition->fieldTypeIdentifier}' is not searchable"
+            );
         }
+        $validationErrors = array_merge(
+            $validationErrors,
+            $fieldType->validateValidatorConfiguration( $validatorConfiguration ),
+            $fieldType->validateFieldSettings( $fieldSettings )
+        );
 
-        $validationErrors = $fieldType->validateFieldSettings( $fieldSettings );
         if ( !empty( $validationErrors ) )
         {
             throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
@@ -797,17 +818,12 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If a content type with the given id and status DEFINED can not be found
      *
-     * @param int $contentTypeId
+     * @param mixed $contentTypeId
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     public function loadContentType( $contentTypeId )
     {
-        if ( !is_numeric( $contentTypeId ) )
-        {
-            throw new InvalidArgumentValue( '$contentTypeId', $contentTypeId );
-        }
-
         $spiContentType = $this->contentTypeHandler->load(
             $contentTypeId,
             SPIContentType::STATUS_DEFINED
@@ -866,7 +882,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the content type draft owned by the current user can not be found
      *
-     * @param int $contentTypeId
+     * @param mixed $contentTypeId
      *
      * @todo Use another exception when user of draft is someone else
      *
@@ -874,11 +890,6 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function loadContentTypeDraft( $contentTypeId )
     {
-        if ( !is_numeric( $contentTypeId ) )
-        {
-            throw new InvalidArgumentValue( '$contentTypeId', $contentTypeId );
-        }
-
         $spiContentType = $this->contentTypeHandler->load(
             $contentTypeId,
             SPIContentType::STATUS_DRAFT

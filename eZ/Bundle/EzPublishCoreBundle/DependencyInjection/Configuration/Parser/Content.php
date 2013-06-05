@@ -32,8 +32,21 @@ class Content implements Parser
                 ->info( 'Content related configuration' )
                 ->children()
                     ->booleanNode( 'view_cache' )->defaultValue( true )->end()
-                    ->booleanNode( 'ttl_cache' )->defaultValue( false )->end()
+                    ->booleanNode( 'ttl_cache' )->defaultValue( true )->end()
                     ->scalarNode( 'default_ttl' )->info( 'Default value for TTL cache, in seconds' )->defaultValue( 60 )->end()
+                    ->arrayNode( 'tree_root' )
+                        ->canBeUnset()
+                        ->children()
+                            ->integerNode( 'location_id' )
+                                ->info( "Root locationId for routing and link generation.\nUseful for multisite apps with one repository." )
+                                ->isRequired()
+                            ->end()
+                            ->arrayNode( 'excluded_uri_prefixes' )
+                                ->info( "URI prefixes that are allowed to be outside the content tree\n(useful for content sharing between multiple sites).\nPrefixes are not case sensitive" )
+                                ->example( array( '/media/images', '/products' ) )
+                            ->end()
+                        ->end()
+                    ->end()
                 ->end()
             ->end();
     }
@@ -55,6 +68,15 @@ class Content implements Parser
                 $container->setParameter( "ezsettings.$sa.content.view_cache", $settings['content']['view_cache'] );
                 $container->setParameter( "ezsettings.$sa.content.ttl_cache", $settings['content']['ttl_cache'] );
                 $container->setParameter( "ezsettings.$sa.content.default_ttl", $settings['content']['default_ttl'] );
+
+                if ( isset( $settings['content']['tree_root'] ) )
+                {
+                    $container->setParameter( "ezsettings.$sa.content.tree_root.location_id", $settings['content']['tree_root']['location_id'] );
+                    if ( isset( $settings['content']['tree_root']['excluded_uri_prefixes'] ) )
+                    {
+                        $container->setParameter( "ezsettings.$sa.content.tree_root.excluded_uri_prefixes", $settings['content']['tree_root']['excluded_uri_prefixes'] );
+                    }
+                }
             }
         }
     }

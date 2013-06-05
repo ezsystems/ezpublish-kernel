@@ -23,6 +23,7 @@ use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruc
 use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
 use eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\SPI\Persistence\User\Policy as SPIPolicy;
@@ -74,7 +75,34 @@ class RoleService implements RoleServiceInterface
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             'limitationTypes' => array(),
-            'limitationMap' => array(),
+            'limitationMap' => array(
+                // @todo Inject these dynamically by activated eZ Controllers, see PR #252
+                'content' => array(
+                    // @todo 'State' incorrect, it's dynamic pr state group, see eZContentObjectStateGroup::limitations()
+                    'read' => array( 'Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true ),
+                    'diff' => array( 'Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true ),
+                    'view_embed' => array( 'Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true ),
+                    'create' => array( 'Class' => true, 'Section' => true, 'ParentOwner' => true, 'ParentGroup' => true, 'ParentClass' => true, 'ParentDepth' => true, 'Node' => true, 'Subtree' => true, 'Language' => true ),
+                    'edit' => array( 'Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'Language' => true, 'State' => true ),
+                    'manage_locations' => array( 'Class' => true, 'Section' => true, 'Owner' => true, 'Subtree' => true ),
+                    'hide' => array( 'Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'Language' => true ),
+                    'translate' => array( 'Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true, 'Language' => true ),
+                    'remove' => array( 'Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true, 'State' => true ),
+                    // @todo 'Status' Limitation and Limitation type is missing
+                    'versionremove' => array( 'Class' => true, 'Section' => true, 'Owner' => true, 'Status' => true, 'Node' => true, 'Subtree' => true ),
+                    'pdf' => array( 'Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true ),
+                ),
+                'section' => array(
+                    'assign' => array( 'Class' => true, 'Section' => true, 'Owner' => true, 'NewSection' => true ),
+                ),
+                'state' => array(
+                    // @todo 'NewState' Limitation and Limitation type is missing (like 'NewSection')
+                    'assign' => array( 'Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true, 'NewState' => true ),
+                ),
+                'user' => array(
+                    'login' => array( 'SiteAccess' => true ),
+                )
+            ),
         );
     }
 
@@ -137,11 +165,10 @@ class RoleService implements RoleServiceInterface
      */
     public function updateRole( APIRole $role, RoleUpdateStruct $roleUpdateStruct )
     {
-        if ( !is_numeric( $role->id ) )
-            throw new InvalidArgumentValue( "id", $role->id, "Role" );
-
         if ( $roleUpdateStruct->identifier !== null && !is_string( $roleUpdateStruct->identifier ) )
             throw new InvalidArgumentValue( "identifier", $roleUpdateStruct->identifier, "RoleUpdateStruct" );
+
+        $loadedRole = $this->loadRole( $role->id );
 
         if ( $this->repository->hasAccess( 'role', 'update' ) !== true )
             throw new UnauthorizedException( 'role', 'update' );
@@ -151,16 +178,20 @@ class RoleService implements RoleServiceInterface
             try
             {
                 $existingRole = $this->loadRoleByIdentifier( $roleUpdateStruct->identifier );
-                if ( $existingRole !== null )
-                    throw new InvalidArgumentException( "roleUpdateStruct", "role with specified identifier already exists" );
+
+                if ( $existingRole->id != $loadedRole->id )
+                {
+                    throw new InvalidArgumentException(
+                        "\$roleUpdateStruct",
+                        "Role with provided identifier already exists"
+                    );
+                }
             }
             catch ( APINotFoundException $e )
             {
                 // Do nothing
             }
         }
-
-        $loadedRole = $this->loadRole( $role->id );
 
         $this->repository->beginTransaction();
         try
@@ -169,7 +200,7 @@ class RoleService implements RoleServiceInterface
                 new SPIRoleUpdateStruct(
                     array(
                         'id' => $loadedRole->id,
-                        'identifier' => $roleUpdateStruct->identifier ?: $role->identifier
+                        'identifier' => $roleUpdateStruct->identifier ?: $loadedRole->identifier
                     )
                 )
             );
@@ -196,9 +227,6 @@ class RoleService implements RoleServiceInterface
      */
     public function addPolicy( APIRole $role, APIPolicyCreateStruct $policyCreateStruct )
     {
-        if ( !is_numeric( $role->id ) )
-            throw new InvalidArgumentValue( "id", $role->id, "Role" );
-
         if ( !is_string( $policyCreateStruct->module ) || empty( $policyCreateStruct->module ) )
             throw new InvalidArgumentValue( "module", $policyCreateStruct->module, "PolicyCreateStruct" );
 
@@ -246,12 +274,6 @@ class RoleService implements RoleServiceInterface
      */
     public function removePolicy( APIRole $role, APIPolicy $policy )
     {
-        if ( !is_numeric( $role->id ) )
-            throw new InvalidArgumentValue( "id", $role->id, "Role" );
-
-        if ( !is_numeric( $policy->id ) )
-            throw new InvalidArgumentValue( "id", $policy->id, "Policy" );
-
         if ( $this->repository->hasAccess( 'role', 'update' ) !== true )
             throw new UnauthorizedException( 'role', 'update' );
 
@@ -285,12 +307,6 @@ class RoleService implements RoleServiceInterface
      */
     public function updatePolicy( APIPolicy $policy, APIPolicyUpdateStruct $policyUpdateStruct )
     {
-        if ( !is_numeric( $policy->id ) )
-            throw new InvalidArgumentValue( "id", $policy->id, "Policy" );
-
-        if ( !is_numeric( $policy->roleId ) )
-            throw new InvalidArgumentValue( "roleId", $policy->roleId, "Policy" );
-
         if ( !is_string( $policy->module ) )
             throw new InvalidArgumentValue( "module", $policy->module, "Policy" );
 
@@ -336,9 +352,6 @@ class RoleService implements RoleServiceInterface
      */
     public function loadRole( $id )
     {
-        if ( !is_numeric( $id ) )
-            throw new InvalidArgumentValue( "id", $id );
-
         if ( $this->repository->hasAccess( 'role', 'read' ) !== true )
             throw new UnauthorizedException( 'role', 'read' );
 
@@ -400,9 +413,6 @@ class RoleService implements RoleServiceInterface
      */
     public function deleteRole( APIRole $role )
     {
-        if ( !is_numeric( $role->id ) )
-            throw new InvalidArgumentValue( "id", $role->id, "Role" );
-
         if ( $this->repository->hasAccess( 'role', 'delete' ) !== true )
             throw new UnauthorizedException( 'role', 'delete' );
 
@@ -426,15 +436,12 @@ class RoleService implements RoleServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
      *
-     * @param int $userId
+     * @param mixed $userId
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
     public function loadPoliciesByUserId( $userId )
     {
-        if ( !is_numeric( $userId ) )
-            throw new InvalidArgumentValue( "userId", $userId );
-
         $spiPolicies = $this->userHandler->loadPoliciesByUserId( $userId );
 
         $policies = array();
@@ -460,12 +467,6 @@ class RoleService implements RoleServiceInterface
      */
     public function assignRoleToUserGroup( APIRole $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null )
     {
-        if ( !is_numeric( $role->id ) )
-            throw new InvalidArgumentValue( "id", $role->id, "Role" );
-
-        if ( !is_numeric( $userGroup->id ) )
-            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
-
         if ( $this->repository->canUser( 'role', 'assign', $userGroup, $role ) !== true )
             throw new UnauthorizedException( 'role', 'assign' );
 
@@ -500,12 +501,6 @@ class RoleService implements RoleServiceInterface
      */
     public function unassignRoleFromUserGroup( APIRole $role, UserGroup $userGroup )
     {
-        if ( !is_numeric( $role->id ) )
-            throw new InvalidArgumentValue( "id", $role->id, "Role" );
-
-        if ( !is_numeric( $userGroup->id ) )
-            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
-
         if ( $this->repository->canUser( 'role', 'assign', $userGroup, $role ) !== true )
             throw new UnauthorizedException( 'role', 'assign' );
 
@@ -538,12 +533,6 @@ class RoleService implements RoleServiceInterface
      */
     public function assignRoleToUser( APIRole $role, User $user, RoleLimitation $roleLimitation = null )
     {
-        if ( !is_numeric( $role->id ) )
-            throw new InvalidArgumentValue( "id", $role->id, "Role" );
-
-        if ( !is_numeric( $user->id ) )
-            throw new InvalidArgumentValue( "id", $user->id, "User" );
-
         if ( $this->repository->canUser( 'role', 'assign', $user, $role ) !== true )
             throw new UnauthorizedException( 'role', 'assign' );
 
@@ -578,12 +567,6 @@ class RoleService implements RoleServiceInterface
      */
     public function unassignRoleFromUser( APIRole $role, User $user )
     {
-        if ( !is_numeric( $role->id ) )
-            throw new InvalidArgumentValue( "id", $role->id, "Role" );
-
-        if ( !is_numeric( $user->id ) )
-            throw new InvalidArgumentValue( "id", $user->id, "User" );
-
         if ( $this->repository->canUser( 'role', 'assign', $user, $role ) !== true )
             throw new UnauthorizedException( 'role', 'assign' );
 
@@ -616,9 +599,6 @@ class RoleService implements RoleServiceInterface
      */
     public function getRoleAssignments( APIRole $role )
     {
-        if ( !is_numeric( $role->id ) )
-            throw new InvalidArgumentValue( "id", $role->id, "Role" );
-
         if ( $this->repository->hasAccess( 'role', 'read' ) !== true )
             throw new UnauthorizedException( 'role', 'read' );
 
@@ -691,9 +671,6 @@ class RoleService implements RoleServiceInterface
      */
     public function getRoleAssignmentsForUser( User $user, $inherited = false )
     {
-        if ( !is_numeric( $user->id ) )
-            throw new InvalidArgumentValue( "id", $user->id, "User" );
-
         if ( $this->repository->hasAccess( 'role', 'read' ) !== true )
             throw new UnauthorizedException( 'role', 'read' );
 
@@ -721,9 +698,6 @@ class RoleService implements RoleServiceInterface
      */
     public function getRoleAssignmentsForUserGroup( UserGroup $userGroup )
     {
-        if ( !is_numeric( $userGroup->id ) )
-            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
-
         if ( $this->repository->hasAccess( 'role', 'read' ) !== true )
             throw new UnauthorizedException( 'role', 'read' );
 
@@ -814,7 +788,7 @@ class RoleService implements RoleServiceInterface
 
         return new Role(
             array(
-                'id' => (int)$role->id,
+                'id' => $role->id,
                 'identifier' => $role->identifier,
                 'policies' => $rolePolicies
             )
@@ -843,8 +817,8 @@ class RoleService implements RoleServiceInterface
 
         return new Policy(
             array(
-                'id' => (int)$policy->id,
-                'roleId' => $role !== null ? (int)$role->id : (int)$policy->roleId,
+                'id' => $policy->id,
+                'roleId' => $role !== null ? $role->id : $policy->roleId,
                 'module' => $policy->module,
                 'function' => $policy->function,
                 'limitations' => $policyLimitations
@@ -955,13 +929,13 @@ class RoleService implements RoleServiceInterface
             return array();
 
         $types = array();
-        foreach ( $this->settings['limitationMap'][$module][$function] as $identifier )
+        foreach ( array_keys( $this->settings['limitationMap'][$module][$function] ) as $identifier )
         {
             if ( !isset( $this->settings['limitationTypes'][$identifier] ) )
             {
                 throw new \eZ\Publish\Core\Base\Exceptions\BadStateException(
                     '$identifier',
-                    "'{$identifier}' does not exists but was configured as limitation on {$module}/{$function}"
+                    "limitationType[{$identifier}] is not configured but was configured on limitationMap[{$module}][{$function}]"
                 );
             }
             $types[$identifier] = $this->settings['limitationTypes'][$identifier];
@@ -972,6 +946,7 @@ class RoleService implements RoleServiceInterface
     /**
      * Creates SPI Role value object from provided API role create struct
      *
+     * @uses buildPersistencePolicyObject()
      * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role
@@ -999,6 +974,7 @@ class RoleService implements RoleServiceInterface
     /**
      * Creates SPI Policy value object from provided module, function and limitations
      *
+     * @uses validateLimitation()
      * @param string $module
      * @param string $function
      * @param \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations
@@ -1011,10 +987,33 @@ class RoleService implements RoleServiceInterface
         if ( $module !== '*' && $function !== '*' && !empty( $limitations ) )
         {
             $limitationsToCreate = array();
+            $allValidationErrors = array();
             foreach ( $limitations as $limitation )
             {
+                if ( isset( $limitationsToCreate[$limitation->getIdentifier()] ) )
+                {
+                    throw new InvalidArgumentException(
+                        "limitations",
+                        "'{$limitation->getIdentifier()}' was found several times among the limitations"
+                    );
+                }
+
+                $validationErrors = $this->validateLimitation( $module, $function, $limitation );
                 $limitationsToCreate[$limitation->getIdentifier()] = $limitation->limitationValues;
+
+                if ( !empty( $validationErrors ) )
+                {
+                    $allValidationErrors[$limitation->getIdentifier()] = $validationErrors;
+                }
             }
+        }
+
+        if ( !empty( $allValidationErrors ) )
+        {
+            throw new InvalidArgumentException(
+                "limitations",
+                "Some validations did not validate:\n " . var_export( $allValidationErrors, true )
+            );
         }
 
         return new SPIPolicy(
@@ -1024,5 +1023,52 @@ class RoleService implements RoleServiceInterface
                 'limitations' => $limitationsToCreate
             )
         );
+    }
+
+    /**
+     * Validate limitation on module function
+     *
+     * @param string $module
+     * @param string $function
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If limitation is not valid for module/function
+     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException If the Role settings is in a bad state
+     * @return array
+     */
+    protected function validateLimitation( $module, $function, Limitation $limitation )
+    {
+        if ( empty( $this->settings['limitationMap'][$module][$function] ) )
+            $validLimitations = array();
+        else
+            $validLimitations = $this->settings['limitationMap'][$module][$function];
+
+        $identifier = $limitation->getIdentifier();
+        if ( !isset( $validLimitations[$identifier] ) )
+        {
+            throw new InvalidArgumentException(
+                "policy",
+                "The limitation {$identifier} is not valid on {$module}/{$function}"
+            );
+        }
+
+        if ( !isset( $this->settings['limitationTypes'][$identifier] ) )
+        {
+            throw new \eZ\Publish\Core\Base\Exceptions\BadStateException(
+                '$identifier',
+                "limitationType[{$identifier}] is not configured but was configured on limitationMap[{$module}][{$function}]"
+            );
+        }
+
+        /**
+         * @var $type \eZ\Publish\SPI\Limitation\Type
+         */
+        $type = $this->settings['limitationTypes'][$identifier];
+
+        // This will throw if it does not pass
+        $type->acceptValue( $limitation );
+
+        // This return array of validation errors
+        return $type->validate( $limitation );
     }
 }

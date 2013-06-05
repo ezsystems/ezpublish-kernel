@@ -33,14 +33,6 @@ class LanguageHandlerTest extends HandlerTest
     }
 
     /**
-     * Removes stuff created in setUp().
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
-    }
-
-    /**
      * Test load function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\LanguageHandler::load

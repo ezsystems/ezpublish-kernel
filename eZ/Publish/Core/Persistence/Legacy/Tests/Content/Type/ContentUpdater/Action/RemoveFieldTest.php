@@ -71,10 +71,7 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
 
         $this->getContentGatewayMock()->expects( $this->once() )
             ->method( 'deleteField' )
-            ->with(
-                $this->equalTo( 3 ),
-                $this->equalTo( 13 )
-            );
+            ->with( $this->equalTo( 3 ) );
 
         $this->getContentStorageHandlerMock()->expects( $this->once() )
             ->method( 'deleteFieldData' )
@@ -119,7 +116,7 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a Content Gateway mock
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected function getContentGatewayMock()
     {
@@ -135,7 +132,7 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a Content StorageHandler mock
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
     protected function getContentStorageHandlerMock()
     {

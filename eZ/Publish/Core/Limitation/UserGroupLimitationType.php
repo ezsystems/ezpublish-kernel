@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Limitation;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -17,43 +18,84 @@ use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Values\User\Limitation\UserGroupLimitation as APIUserGroupLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
-use eZ\Publish\SPI\Persistence\Handler as SPIPersistenceHandler;
+use eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * UserGroupLimitation is a Content Limitation
  */
-class UserGroupLimitationType implements SPILimitationTypeInterface
+class UserGroupLimitationType extends AbstractPersistenceLimitationType implements SPILimitationTypeInterface
 {
     /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
-     */
-    protected $persistence;
-
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Handler $persistence
-     */
-    public function __construct( SPIPersistenceHandler $persistence )
-    {
-        $this->persistence = $persistence;
-    }
-
-    /**
-     * Accepts a Limitation value
+     * Accepts a Limitation value and checks for structural validity.
      *
-     * Makes sure LimitationValue object is of correct type and that ->limitationValues
-     * is valid according to valueSchema().
+     * Makes sure LimitationValue object and ->limitationValues is of correct type.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected type/structure
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
-     *
-     * @return boolean
      */
     public function acceptValue( APILimitationValue $limitationValue )
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+        if ( !$limitationValue instanceof APIUserGroupLimitation )
+        {
+            throw new InvalidArgumentType( "\$limitationValue", "APIUserGroupLimitation", $limitationValue );
+        }
+        else if ( !is_array( $limitationValue->limitationValues ) )
+        {
+            throw new InvalidArgumentType( "\$limitationValue->limitationValues", "array", $limitationValue->limitationValues );
+        }
+
+        foreach ( $limitationValue->limitationValues as $key => $value )
+        {
+            // Accept a true value for b/c with 5.0
+            if ( $value === true )
+            {
+                $limitationValue->limitationValues[$key] = 1;
+            }
+            // Cast integers passed as string to int
+            else if ( is_string( $value ) && ctype_digit( $value ) )
+            {
+                $limitationValue->limitationValues[$key] = (int)$value;
+            }
+            else if ( !is_int( $value ) )
+            {
+                throw new InvalidArgumentType( "\$limitationValue->limitationValues[{$key}]", "int", $value );
+            }
+        }
+    }
+
+    /**
+     * Makes sure LimitationValue->limitationValues is valid according to valueSchema().
+     *
+     * Make sure {@link acceptValue()} is checked first!
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validate( APILimitationValue $limitationValue )
+    {
+        $validationErrors = array();
+        foreach ( $limitationValue->limitationValues as $key => $value )
+        {
+            if ( $value !== 1 )
+            {
+                $validationErrors[] = new ValidationError(
+                    "limitationValues[%key%] => '%value%' must be 1 (owner)",
+                    null,
+                    array(
+                        "value" => $value,
+                        "key" => $key
+                    )
+                );
+            }
+        }
+        return $validationErrors;
     }
 
     /**
@@ -79,11 +121,11 @@ class UserGroupLimitationType implements SPILimitationTypeInterface
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject|null $target The location, parent or "assignment" value object
+     * @param \eZ\Publish\API\Repository\Values\ValueObject[] $targets An array of location, parent or "assignment" value objects
      *
      * @return boolean
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, ValueObject $target = null )
+    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = array() )
     {
         if ( !$value instanceof APIUserGroupLimitation )
         {

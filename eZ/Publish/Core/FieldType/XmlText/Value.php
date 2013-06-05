@@ -19,9 +19,7 @@ class Value extends BaseValue
 {
     const EMPTY_VALUE = <<<EOT
 <?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />
+<section/>
 EOT;
 
     /**
@@ -52,6 +50,6 @@ EOT;
      */
     public function __toString()
     {
-        return isset( $this->xml ) ? $this->xml->saveXML() : self::EMPTY_VALUE;
+        return isset( $this->xml ) ? (string)$this->xml->saveXML() : self::EMPTY_VALUE;
     }
 }

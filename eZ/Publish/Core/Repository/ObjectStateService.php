@@ -133,9 +133,6 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function loadObjectStateGroup( $objectStateGroupId )
     {
-        if ( !is_numeric( $objectStateGroupId ) )
-            throw new InvalidArgumentValue( "objectStateGroupId", $objectStateGroupId );
-
         $spiObjectStateGroup = $this->objectStateHandler->loadGroup( $objectStateGroupId );
 
         return $this->buildDomainObjectStateGroupObject( $spiObjectStateGroup );
@@ -171,9 +168,6 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function loadObjectStates( APIObjectStateGroup $objectStateGroup )
     {
-        if ( !is_numeric( $objectStateGroup->id ) )
-            throw new InvalidArgumentValue( "id", $objectStateGroup->id, "ObjectStateGroup" );
-
         $spiObjectStates = $this->objectStateHandler->loadObjectStates( $objectStateGroup->id );
 
         $objectStates = array();
@@ -198,9 +192,6 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function updateObjectStateGroup( APIObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct )
     {
-        if ( !is_numeric( $objectStateGroup->id ) )
-            throw new InvalidArgumentValue( "id", $objectStateGroup->id, "ObjectStateGroup" );
-
         if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
             throw new UnauthorizedException( 'state', 'administrate' );
 
@@ -219,7 +210,7 @@ class ObjectStateService implements ObjectStateServiceInterface
             try
             {
                 $existingObjectStateGroup = $this->objectStateHandler->loadGroupByIdentifier( $inputStruct->identifier );
-                if ( $existingObjectStateGroup->id != $objectStateGroup->id )
+                if ( $existingObjectStateGroup->id != $loadedObjectStateGroup->id )
                 {
                     throw new InvalidArgumentException(
                         "objectStateGroupUpdateStruct",
@@ -260,9 +251,6 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function deleteObjectStateGroup( APIObjectStateGroup $objectStateGroup )
     {
-        if ( !is_numeric( $objectStateGroup->id ) )
-            throw new InvalidArgumentValue( "id", $objectStateGroup->id, "ObjectStateGroup" );
-
         if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
             throw new UnauthorizedException( 'state', 'administrate' );
 
@@ -325,11 +313,11 @@ class ObjectStateService implements ObjectStateServiceInterface
         {
             $spiObjectState = $this->objectStateHandler->create( $objectStateGroup->id, $inputStruct );
 
-            if ( is_numeric( $objectStateCreateStruct->priority ) )
+            if ( is_int( $objectStateCreateStruct->priority ) )
             {
                 $this->objectStateHandler->setPriority(
                     $spiObjectState->id,
-                    (int)$objectStateCreateStruct->priority
+                    $objectStateCreateStruct->priority
                 );
 
                 // Reload the object state to have the updated priority,
@@ -359,9 +347,6 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function loadObjectState( $stateId )
     {
-        if ( !is_numeric( $stateId ) )
-            throw new InvalidArgumentValue( "stateId", $stateId );
-
         $spiObjectState = $this->objectStateHandler->load( $stateId );
 
         return $this->buildDomainObjectStateObject( $spiObjectState );
@@ -380,9 +365,6 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function updateObjectState( APIObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct )
     {
-        if ( !is_numeric( $objectState->id ) )
-            throw new InvalidArgumentValue( "id", $objectState->id, "ObjectState" );
-
         if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
             throw new UnauthorizedException( 'state', 'administrate' );
 
@@ -405,7 +387,7 @@ class ObjectStateService implements ObjectStateServiceInterface
                     $loadedObjectState->getObjectStateGroup()->id
                 );
 
-                if ( $existingObjectState->id != $objectState->id )
+                if ( $existingObjectState->id != $loadedObjectState->id )
                 {
                     throw new InvalidArgumentException(
                         "objectStateUpdateStruct",
@@ -447,10 +429,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function setPriorityOfObjectState( APIObjectState $objectState, $priority )
     {
-        if ( !is_numeric( $objectState->id ) )
-            throw new InvalidArgumentValue( "id", $objectState->id, "ObjectState" );
-
-        if ( !is_numeric( $priority ) )
+        if ( !is_int( $priority ) )
             throw new InvalidArgumentValue( "priority", $priority );
 
         if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
@@ -463,7 +442,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         {
             $this->objectStateHandler->setPriority(
                 $loadedObjectState->id,
-                (int)$priority
+                $priority
             );
             $this->repository->commit();
         }
@@ -484,9 +463,6 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function deleteObjectState( APIObjectState $objectState )
     {
-        if ( !is_numeric( $objectState->id ) )
-            throw new InvalidArgumentValue( "id", $objectState->id, "ObjectState" );
-
         if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
             throw new UnauthorizedException( 'state', 'administrate' );
 
@@ -517,15 +493,6 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function setContentState( ContentInfo $contentInfo, APIObjectStateGroup $objectStateGroup, APIObjectState $objectState )
     {
-        if ( !is_numeric( $contentInfo->id ) )
-            throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
-
-        if ( !is_numeric( $objectStateGroup->id ) )
-            throw new InvalidArgumentValue( "id", $objectStateGroup->id, "ObjectStateGroup" );
-
-        if ( !is_numeric( $objectState->id ) )
-            throw new InvalidArgumentValue( "id", $objectState->id, "ObjectState" );
-
         if ( $this->repository->canUser( 'state', 'assign', $contentInfo, $objectState ) !== true )
             throw new UnauthorizedException( 'state', 'assign' );
 
@@ -563,12 +530,6 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function getContentState( ContentInfo $contentInfo, APIObjectStateGroup $objectStateGroup )
     {
-        if ( !is_numeric( $contentInfo->id ) )
-            throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
-
-        if ( !is_numeric( $objectStateGroup->id ) )
-            throw new InvalidArgumentValue( "id", $objectStateGroup->id, "ObjectStateGroup" );
-
         $spiObjectState = $this->objectStateHandler->getContentState(
             $contentInfo->id,
             $objectStateGroup->id
@@ -586,9 +547,6 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function getContentCount( APIObjectState $objectState )
     {
-        if ( !is_numeric( $objectState->id ) )
-            throw new InvalidArgumentValue( "id", $objectState->id, "ObjectState" );
-
         return $this->objectStateHandler->getContentCount(
             $objectState->id
         );
@@ -658,9 +616,9 @@ class ObjectStateService implements ObjectStateServiceInterface
 
         return new ObjectState(
             array(
-                'id' => (int)$spiObjectState->id,
+                'id' => $spiObjectState->id,
                 'identifier' => $spiObjectState->identifier,
-                'priority' => (int)$spiObjectState->priority,
+                'priority' => $spiObjectState->priority,
                 'defaultLanguageCode' => $spiObjectState->defaultLanguage,
                 'languageCodes' => $spiObjectState->languageCodes,
                 'names' => $spiObjectState->name,
@@ -681,7 +639,7 @@ class ObjectStateService implements ObjectStateServiceInterface
     {
         return new ObjectStateGroup(
             array(
-                'id' => (int)$spiObjectStateGroup->id,
+                'id' => $spiObjectStateGroup->id,
                 'identifier' => $spiObjectStateGroup->identifier,
                 'defaultLanguageCode' => $spiObjectStateGroup->defaultLanguage,
                 'languageCodes' => $spiObjectStateGroup->languageCodes,

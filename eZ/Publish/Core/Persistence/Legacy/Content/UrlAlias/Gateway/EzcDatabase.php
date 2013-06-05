@@ -12,7 +12,6 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
-use eZ\Publish\SPI\Persistence\Content\UrlAlias;
 use ezcQuery;
 
 /**
@@ -345,7 +344,7 @@ class EzcDatabase extends Gateway
         /** @var $query \ezcQueryUpdate */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
-            $this->dbHandler->quoteColumn( "ezurlalias_ml" )
+            $this->dbHandler->quoteTable( "ezurlalias_ml" )
         )->set(
             $this->dbHandler->quoteColumn( "is_original" ),
             $query->bindValue( 0, null, \PDO::PARAM_INT )
@@ -390,7 +389,7 @@ class EzcDatabase extends Gateway
         /** @var $query \ezcQueryUpdate */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
-            $this->dbHandler->quoteColumn( "ezurlalias_ml" )
+            $this->dbHandler->quoteTable( "ezurlalias_ml" )
         )->set(
             $this->dbHandler->quoteColumn( "lang_mask" ),
             $query->expr->bitAnd(
@@ -429,7 +428,7 @@ class EzcDatabase extends Gateway
         /** @var $query \ezcQueryUpdate */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
-            $this->dbHandler->quoteColumn( "ezurlalias_ml" )
+            $this->dbHandler->quoteTable( "ezurlalias_ml" )
         )->set(
             $this->dbHandler->quoteColumn( "is_original" ),
             $query->bindValue( 0, null, \PDO::PARAM_INT )
@@ -471,7 +470,7 @@ class EzcDatabase extends Gateway
         /** @var $query \ezcQueryUpdate */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
-            $this->dbHandler->quoteColumn( "ezurlalias_ml" )
+            $this->dbHandler->quoteTable( "ezurlalias_ml" )
         )->set(
             $this->dbHandler->quoteColumn( "parent" ),
             $query->bindValue( $newParentId, null, \PDO::PARAM_INT )
@@ -506,7 +505,7 @@ class EzcDatabase extends Gateway
     {
         /** @var $query \ezcQueryUpdate */
         $query = $this->dbHandler->createUpdateQuery();
-        $query->update( $this->dbHandler->quoteColumn( "ezurlalias_ml" ) );
+        $query->update( $this->dbHandler->quoteTable( "ezurlalias_ml" ) );
         $this->setQueryValues( $query, $values );
         $query->where(
             $query->expr->lAnd(
@@ -608,18 +607,37 @@ class EzcDatabase extends Gateway
      */
     public function getNextId()
     {
+        $sequence = $this->dbHandler->getSequenceName(
+            'ezurlalias_ml_incr', 'id'
+        );
         /** @var $query \ezcQueryInsert */
         $query = $this->dbHandler->createInsertQuery();
         $query->insertInto(
             $this->dbHandler->quoteTable( "ezurlalias_ml_incr" )
-        )->set(
-            $this->dbHandler->quoteColumn( "id" ),
-            $query->bindValue( null, null, \PDO::PARAM_NULL )
-        )->prepare()->execute();
-
-        return $this->dbHandler->lastInsertId(
-            $this->dbHandler->getSequenceName( "ezurlalias_ml_incr", "id" )
         );
+        // ezcDatabase does not abstract the "auto increment id"
+        // INSERT INTO ezurlalias_ml_incr VALUES(DEFAULT) is not an option due
+        // to this mysql bug: http://bugs.mysql.com/bug.php?id=42270
+        // as a result we are forced to check which database is currently used
+        // to generate the correct SQL query
+        // see https://jira.ez.no/browse/EZP-20652
+        if ( $this->dbHandler->getName() === 'pgsql' )
+        {
+            $query->set(
+                $this->dbHandler->quoteColumn( "id" ),
+                "nextval('{$sequence}')"
+            );
+        }
+        else
+        {
+            $query->set(
+                $this->dbHandler->quoteColumn( "id" ),
+                $query->bindValue( null, null, \PDO::PARAM_NULL )
+            );
+        }
+        $query->prepare()->execute();
+
+        return $this->dbHandler->lastInsertId( $sequence );
     }
 
     /**
@@ -916,7 +934,7 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Converts single row matched by composite primary key to NOP type row.
+     * Deletes single custom alias row matched by composite primary key.
      *
      * @param mixed $parentId
      * @param string $textMD5
@@ -925,21 +943,11 @@ class EzcDatabase extends Gateway
      */
     public function removeCustomAlias( $parentId, $textMD5 )
     {
-        /** @var $query \ezcQueryUpdate */
-        $query = $this->dbHandler->createUpdateQuery();
-        $query->update( $this->dbHandler->quoteColumn( "ezurlalias_ml" ) );
-        $this->setQueryValues(
-            $query,
-            array(
-                "lang_mask" => 1,
-                "action" => "nop:",
-                "action_type" => "nop",
-                "is_alias" => 0,
-                "is_original" => 0,
-                "alias_redirects" => 1
-            )
-        );
-        $query->where(
+        /** @var $query \ezcQueryDelete */
+        $query = $this->dbHandler->createDeleteQuery();
+        $query->deleteFrom(
+            $this->dbHandler->quoteTable( 'ezurlalias_ml' )
+        )->where(
             $query->expr->lAnd(
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( "parent" ),
@@ -962,40 +970,44 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Converts all rows with given $action to NOP type rows.
+     * Deletes all rows with given $action and optionally $id.
+     *
+     * If $id is set only autogenerated entries will be removed.
      *
      * @param mixed $action
+     * @param mixed|null $id
      *
      * @return boolean
      */
-    public function removeByAction( $action )
+    public function remove( $action, $id = null )
     {
-        /** @var $query \ezcQueryUpdate */
-        $query = $this->dbHandler->createUpdateQuery();
-        $query->update( $this->dbHandler->quoteColumn( "ezurlalias_ml" ) );
-        $this->setQueryValues(
-            $query,
-            array(
-                "lang_mask" => 1,
-                "action" => "nop:",
-                "action_type" => "nop",
-                "is_alias" => 0,
-                "is_original" => 0,
-                "alias_redirects" => 1
+        /** @var $query \ezcQueryDelete */
+        $query = $this->dbHandler->createDeleteQuery();
+        $query->deleteFrom(
+            $this->dbHandler->quoteTable( 'ezurlalias_ml' )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( "action" ),
+                $query->bindValue( $action, null, \PDO::PARAM_STR )
             )
         );
-        $query->set(
-            $this->dbHandler->quoteColumn( "link" ),
-            $this->dbHandler->quoteColumn( "id" )
-        );
-        $query->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "action" ),
-                    $query->bindValue( $action, null, \PDO::PARAM_STR )
+
+        if ( $id !== null )
+        {
+            $query->where(
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( "is_alias" ),
+                        $query->bindValue( 0, null, \PDO::PARAM_INT )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( "id" ),
+                        $query->bindValue( $id, null, \PDO::PARAM_INT )
+                    )
                 )
-            )
-        );
+            );
+        }
+
         $query->prepare()->execute();
     }
 

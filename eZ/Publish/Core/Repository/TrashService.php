@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\Persistence\Handler;
+use eZ\Publish\Core\Repository\NameSchemaService;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
@@ -48,16 +49,28 @@ class TrashService implements TrashServiceInterface
     protected $settings;
 
     /**
+     * @var \eZ\Publish\Core\Repository\NameSchemaService
+     */
+    protected $nameSchemaService;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param \eZ\Publish\Core\Repository\NameSchemaService $nameSchemaService
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct(
+        RepositoryInterface $repository,
+        Handler $handler,
+        NameSchemaService $nameSchemaService,
+        array $settings = array()
+    )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
+        $this->nameSchemaService = $nameSchemaService;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
@@ -72,15 +85,12 @@ class TrashService implements TrashServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the trashed location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the location with the given id does not exist
      *
-     * @param int $trashItemId
+     * @param mixed $trashItemId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
     public function loadTrashItem( $trashItemId )
     {
-        if ( !is_numeric( $trashItemId ) )
-            throw new InvalidArgumentValue( "trashItemId", $trashItemId );
-
         if ( $this->repository->hasAccess( 'content', 'restore' ) !== true )
             throw new UnauthorizedException( 'content', 'restore' );
 
@@ -165,7 +175,7 @@ class TrashService implements TrashServiceInterface
             );
 
             $content = $this->repository->getContentService()->loadContent( $trashItem->contentId );
-            $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
+            $urlAliasNames = $this->nameSchemaService->resolveUrlAliasSchema( $content );
 
             // Publish URL aliases for recovered location
             foreach ( $urlAliasNames as $languageCode => $name )
@@ -312,16 +322,16 @@ class TrashService implements TrashServiceInterface
         return new TrashItem(
             array(
                 'contentInfo' => $this->repository->getContentService()->loadContentInfo( $spiTrashItem->contentId ),
-                'id' => (int)$spiTrashItem->id,
-                'priority' => (int)$spiTrashItem->priority,
-                'hidden' => (bool)$spiTrashItem->hidden,
-                'invisible' => (bool)$spiTrashItem->invisible,
+                'id' => $spiTrashItem->id,
+                'priority' => $spiTrashItem->priority,
+                'hidden' => $spiTrashItem->hidden,
+                'invisible' => $spiTrashItem->invisible,
                 'remoteId' => $spiTrashItem->remoteId,
-                'parentLocationId' => (int)$spiTrashItem->parentId,
+                'parentLocationId' => $spiTrashItem->parentId,
                 'pathString' => $spiTrashItem->pathString,
-                'depth' => (int)$spiTrashItem->depth,
-                'sortField' => (int)$spiTrashItem->sortField,
-                'sortOrder' => (int)$spiTrashItem->sortOrder,
+                'depth' => $spiTrashItem->depth,
+                'sortField' => $spiTrashItem->sortField,
+                'sortOrder' => $spiTrashItem->sortOrder,
             )
         );
     }

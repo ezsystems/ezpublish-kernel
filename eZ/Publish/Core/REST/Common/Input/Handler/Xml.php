@@ -72,6 +72,9 @@ class Xml extends Handler
 
     protected $fieldTypeHashElements = array(
         'fieldValue',
+        'defaultValue',
+        'fieldSettings',
+        'validatorConfiguration',
     );
 
     /**

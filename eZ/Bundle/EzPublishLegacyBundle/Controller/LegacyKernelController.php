@@ -27,9 +27,9 @@ class LegacyKernelController
 
     /**
      * Template declaration to wrap legacy responses in a Twig pagelayout (optional)
-     * Either a template declaration string or null/false to use legacy pagelayout 
+     * Either a template declaration string or null/false to use legacy pagelayout
      * Default is null.
-     * 
+     *
      * @var mixed
      */
     private $legacyLayout;
@@ -39,7 +39,7 @@ class LegacyKernelController
      *       Injection can be done through "parent service" feature for DIC : http://symfony.com/doc/master/components/dependency_injection/parentservices.html
      * @param \Closure $kernelClosure
      * @param \Symfony\Component\Templating\EngineInterface $templateEngine
-     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver     
+     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      * @param mixed $legacyLayout
      */
     public function __construct( \Closure $kernelClosure, EngineInterface $templateEngine, ConfigResolverInterface $configResolver )
@@ -81,16 +81,27 @@ class LegacyKernelController
 
         $moduleResult = $result->getAttribute( 'module_result' );
 
-        if ( isset( $this->legacyLayout ) && !$legacyMode )
+        if ( isset( $this->legacyLayout ) && !$legacyMode && !isset( $moduleResult['pagelayout'] ) )
         {
-            return $this->render(
+            $response = $this->render(
                 $this->legacyLayout,
                 array( 'module_result' => $moduleResult )
             );
         }
+        else
+        {
+            $response = new Response( $result->getContent() );
+        }
 
-        return new Response(
-            $result->getContent()
-        );
+        // Handling error codes sent from the legacy stack
+        if ( isset( $moduleResult['errorCode'] ) )
+        {
+            $response->setStatusCode(
+                $moduleResult['errorCode'],
+                isset( $moduleResult['errorMessage'] ) ? $moduleResult['errorMessage'] : null
+            );
+        }
+
+        return $response;
     }
 }

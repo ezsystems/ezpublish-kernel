@@ -26,42 +26,6 @@ abstract class RepositoryTest extends BaseServiceTest
     }
 
     /**
-     * Test repository method
-     * @covers \eZ\Publish\API\Repository\Repository::canUser
-     */
-    public function testCanUser()
-    {
-        self::markTestIncomplete( "Not implemented: " . __METHOD__ );
-    }
-
-    /**
-     * Test repository method
-     * @covers \eZ\Publish\API\Repository\Repository::hasAccess
-     */
-    public function testHasAccess()
-    {
-        self::markTestIncomplete( "Not implemented: " . __METHOD__ );
-    }
-
-    /**
-     * Test repository method
-     * @covers \eZ\Publish\API\Repository\Repository::setCurrentUser
-     */
-    public function testSetCurrentUser()
-    {
-        self::markTestIncomplete( "Not implemented: " . __METHOD__ );
-    }
-
-    /**
-     * Test repository method
-     * @covers \eZ\Publish\API\Repository\Repository::getCurrentUser
-     */
-    public function testGetCurrentUser()
-    {
-        self::markTestIncomplete( "Not implemented: " . __METHOD__ );
-    }
-
-    /**
      * Test service method
      * @covers \eZ\Publish\API\Repository\Repository::getContentService
      */

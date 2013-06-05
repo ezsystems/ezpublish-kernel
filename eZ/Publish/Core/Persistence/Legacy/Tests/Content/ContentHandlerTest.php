@@ -22,6 +22,7 @@ use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Content\Handler;
 use eZ\Publish\API\Repository\Values\Content\Relation as RelationValue;
+use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
@@ -368,7 +369,16 @@ class ContentHandlerTest extends TestCase
                 $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ),
                 $this->equalTo( 3 ),
                 $this->equalTo( 14 )
-            )->will( $this->returnValue( new VersionInfo( array( "names" => array() ) ) ) );
+            )->will(
+                $this->returnValue(
+                    new VersionInfo(
+                        array(
+                            "names" => array(),
+                            "versionNo" => 3
+                        )
+                    )
+                )
+            );
 
         $gatewayMock->expects( $this->once() )
             ->method( 'insertVersion' )
@@ -385,6 +395,36 @@ class ContentHandlerTest extends TestCase
         $fieldHandlerMock->expects( $this->once() )
             ->method( 'createExistingFieldsInNewVersion' )
             ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ) );
+
+        $relationData = array(
+            array(
+                "ezcontentobject_link_contentclassattribute_id" => 0,
+                "ezcontentobject_link_to_contentobject_id" => 42,
+                "ezcontentobject_link_relation_type" => 1
+            )
+        );
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadRelations' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( 2 )
+            )
+            ->will( $this->returnValue( $relationData ) );
+
+        $relationStruct = new RelationCreateStruct(
+            array(
+                "sourceContentId" => 23,
+                "sourceContentVersionNo" => 3,
+                "sourceFieldDefinitionId" => 0,
+                "destinationContentId" => 42,
+                "type" => 1
+            )
+        );
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'insertRelation' )
+            ->with( $this->equalTo( $relationStruct ) );
 
         $result = $handler->createDraftFromVersion( 23, 2, 14 );
 

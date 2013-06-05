@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\Core\Repository\DomainMapper;
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -32,7 +33,7 @@ class SearchService implements SearchServiceInterface
     const MAX_LIMIT = 1073741824;
 
     /**
-     * @var \eZ\Publish\API\Repository\Repository
+     * @var \eZ\Publish\Core\Repository\Repository
      */
     protected $repository;
 
@@ -47,16 +48,28 @@ class SearchService implements SearchServiceInterface
     protected $settings;
 
     /**
+     * @var \eZ\Publish\Core\Repository\DomainMapper
+     */
+    protected $domainMapper;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandler
      * @param array $settings
+     * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
      */
-    public function __construct( RepositoryInterface $repository, Handler $searchHandler, array $settings = array() )
+    public function __construct(
+        RepositoryInterface $repository,
+        Handler $searchHandler,
+        DomainMapper $domainMapper,
+        array $settings = array()
+    )
     {
         $this->repository = $repository;
         $this->searchHandler = $searchHandler;
+        $this->domainMapper = $domainMapper;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
@@ -68,6 +81,8 @@ class SearchService implements SearchServiceInterface
      *
      * @todo define structs for the field filters
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if query is not valid
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
@@ -77,6 +92,8 @@ class SearchService implements SearchServiceInterface
      */
     public function findContent( Query $query, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
+        $query = clone $query;
+
         if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $query->criterion ) )
         {
             return new SearchResult( array( 'time' => 0, 'totalCount' => 0 ) );
@@ -88,9 +105,10 @@ class SearchService implements SearchServiceInterface
         }
 
         $result = $this->searchHandler->findContent( $query, $fieldFilters );
+
         foreach ( $result->searchHits as $hit )
         {
-            $hit->valueObject = $this->repository->getContentService()->buildContentDomainObject(
+            $hit->valueObject = $this->domainMapper->buildContentDomainObject(
                 $hit->valueObject
             );
         }
@@ -102,6 +120,7 @@ class SearchService implements SearchServiceInterface
      * Performs a query for a single content object
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if criterion is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than one result matching the criterions
      *
      * @todo define structs for the field filters
@@ -119,7 +138,7 @@ class SearchService implements SearchServiceInterface
             throw new NotFoundException( 'Content', '*' );
         }
 
-        return $this->repository->getContentService()->buildContentDomainObject(
+        return $this->domainMapper->buildContentDomainObject(
             $this->searchHandler->findSingle( $criterion, $fieldFilters )
         );
     }
@@ -179,6 +198,9 @@ class SearchService implements SearchServiceInterface
      *
      * @uses \eZ\Publish\API\Repository::hasAccess()
      * @throws \RuntimeException If empty array of limitations are provided from hasAccess()
+     *
+     * @param string $module
+     * @param string $function
      *
      * @return boolean|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */

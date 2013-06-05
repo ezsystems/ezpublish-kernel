@@ -492,7 +492,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $createStructFix = $this->getContenTypeCreateStructFixture();
+        $createStructFix = $this->getContentTypeCreateStructFixture();
         $createStructClone = clone $createStructFix;
 
         $mapperMock = $this->getMapperMock(
@@ -1258,7 +1258,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct
      */
-    protected function getContenTypeCreateStructFixture()
+    protected function getContentTypeCreateStructFixture()
     {
         $struct = new CreateStruct();
         $struct->status = 1;

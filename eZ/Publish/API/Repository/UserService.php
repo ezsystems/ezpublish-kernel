@@ -48,7 +48,7 @@ interface UserService
     /**
      * Loads a user group for the given id
      *
-     * @param int $id
+     * @param mixed $id
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      *
@@ -126,7 +126,7 @@ interface UserService
     /**
      * Loads a user
      *
-     * @param int $userId
+     * @param mixed $userId
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
@@ -202,6 +202,7 @@ interface UserService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove the user group from the user
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the user is not in the given user group
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If $userGroup is the last assigned user group
      */
     public function unAssignUserFromUserGroup( User $user, UserGroup $userGroup );
 

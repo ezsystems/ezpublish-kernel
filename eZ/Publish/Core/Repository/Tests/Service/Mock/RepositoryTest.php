@@ -193,6 +193,33 @@ class RepositoryTest extends BaseServiceMockTest
         self::assertEquals( false, $result );
     }
 
+    /**
+     * Test for the sudo() & hasAccess() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\Repository::sudo
+     * @covers \eZ\Publish\API\Repository\Repository::hasAccess
+     * @dataProvider providerForTestHasAccessReturnsFalse
+     */
+    public function testHasAccessReturnsFalseButSudoSoTrue( array $roles, array $roleAssignments )
+    {
+        /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
+        $userHandlerMock = $this->getPersistenceMock()->userHandler();
+        $mockedRepository = $this->getRepository();
+
+        $userHandlerMock
+            ->expects( $this->never() )
+            ->method( $this->anything() );
+
+        $result = $mockedRepository->sudo(
+            function ( $repo )
+            {
+                return $repo->hasAccess( "test-module", "test-function" );
+            }
+        );
+
+        self::assertEquals( true, $result );
+    }
+
     public function providerForTestHasAccessReturnsPermissionSets()
     {
         return array(
@@ -714,7 +741,7 @@ class RepositoryTest extends BaseServiceMockTest
             $limitation
                 ->expects( $this->once() )
                 ->method( "evaluate" )
-                ->with( $permissionSets[$i]["limitation"], $userMock, $valueObject, $valueObject )
+                ->with( $permissionSets[$i]["limitation"], $userMock, $valueObject, array( $valueObject ) )
                 ->will( $this->returnValue( $roleLimitationEvaluations[$i] ) );
             $roleServiceMock
                 ->expects( $this->at( $invocation++ ) )
@@ -739,7 +766,7 @@ class RepositoryTest extends BaseServiceMockTest
                     $limitation
                         ->expects( $this->once() )
                         ->method( "evaluate" )
-                        ->with( $limitations[$k], $userMock, $valueObject, $valueObject )
+                        ->with( $limitations[$k], $userMock, $valueObject, array( $valueObject ) )
                         ->will( $this->returnValue( $policyLimitationEvaluations[$i][$j][$k] ) );
                     $roleServiceMock
                         ->expects( $this->at( $invocation++ ) )
@@ -767,6 +794,35 @@ class RepositoryTest extends BaseServiceMockTest
             $userCan,
             $repositoryMock->canUser( "test-module", "test-function", $valueObject, $valueObject )
         );
+    }
+
+    /**
+     * Test for the canUser() method.
+     *
+     * @covers \eZ\Publish\API\Repository\Repository::canUser
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testCanUserThrowsInvalidArgumentException()
+    {
+        $repositoryMock = $this->getMock(
+            "eZ\\Publish\\Core\\Repository\\Repository",
+            array( "hasAccess" ),
+            array(),
+            "",
+            false
+        );
+
+        $repositoryMock
+            ->expects( $this->once() )
+            ->method( "hasAccess" )
+            ->with( $this->equalTo( "test-module" ), $this->equalTo( "test-function" ) )
+            ->will( $this->returnValue( array() ) );
+
+        /** @var $valueObject \eZ\Publish\API\Repository\Values\ValueObject */
+        $valueObject = $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ValueObject" );
+
+        /** @var $repositoryMock \eZ\Publish\Core\Repository\Repository */
+        $repositoryMock->canUser( "test-module", "test-function", $valueObject, "This is not a target" );
     }
 
     /**

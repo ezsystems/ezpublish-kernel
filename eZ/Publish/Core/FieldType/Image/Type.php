@@ -128,7 +128,7 @@ class Type extends FieldType
         {
             throw new InvalidArgumentType(
                 '$inputValue->fileSize',
-                'string',
+                'integer',
                 $inputValue->fileSize
             );
         }
@@ -225,7 +225,7 @@ class Type extends FieldType
     {
         $validationErrors = array();
 
-        foreach ( $validatorConfiguration as $validatorIdentifier => $parameters )
+        foreach ( (array)$validatorConfiguration as $validatorIdentifier => $parameters )
         {
             switch ( $validatorIdentifier )
             {
@@ -242,7 +242,7 @@ class Type extends FieldType
                         );
                         break;
                     }
-                    if ( !is_int( $parameters['maxFileSize'] ) && !is_bool( $parameters['maxFileSize'] ) )
+                    if ( !is_int( $parameters['maxFileSize'] ) && $parameters['maxFileSize'] !== false )
                     {
                         $validationErrors[] = new ValidationError(
                             "Validator %validator% expects parameter %parameter% to be of %type%.",

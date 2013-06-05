@@ -65,6 +65,34 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
+     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::loadParentLocationsForDraftContent
+     */
+    public function loadParentLocationsForDraftContent( $contentId )
+    {
+        $cache = $this->cache->getItem( 'content', 'locations', "{$contentId}/parentLocationsForDraftContent" );
+        $locationIds = $cache->get();
+        if ( $cache->isMiss() )
+        {
+            $this->logger->logCall( __METHOD__, array( 'content' => $contentId ) );
+            $locations = $this->persistenceFactory->getLocationHandler()->loadParentLocationsForDraftContent( $contentId );
+
+            $locationIds = array();
+            foreach ( $locations as $location )
+                $locationIds[] = $location->id;
+
+            $cache->set( $locationIds );
+        }
+        else
+        {
+            $locations = array();
+            foreach ( $locationIds as $locationId )
+                $locations[] = $this->load( $locationId );
+        }
+
+        return $locations;
+    }
+
+    /**
      * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::loadByRemoteId
      */
     public function loadByRemoteId( $remoteId )
@@ -193,7 +221,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     {
         $this->logger->logCall( __METHOD__, array( 'location' => $locationId, 'section' => $sectionId ) );
         $this->persistenceFactory->getLocationHandler()->setSectionForSubtree( $locationId, $sectionId );
-        $this->cache->clear( 'content', 'info' );
+        $this->cache->clear( 'content' );//TIMBER!
     }
 
     /**
@@ -203,6 +231,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     {
         $this->logger->logCall( __METHOD__, array( 'location' => $locationId, 'content' => $contentId ) );
         $this->persistenceFactory->getLocationHandler()->changeMainLocation( $contentId, $locationId );
+        $this->cache->clear( 'content', $contentId );
         $this->cache->clear( 'content', 'info', $contentId );
     }
 }

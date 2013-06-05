@@ -21,6 +21,13 @@ class UrlAliasRouter extends BaseUrlAliasRouter
      */
     protected $container;
 
+    protected $rootLocationId;
+
+    public function setRootLocationId( $rootLocationId )
+    {
+        $this->rootLocationId = $rootLocationId;
+    }
+
     public function setContainer( ContainerInterface $container )
     {
         $this->container = $container;
@@ -36,11 +43,31 @@ class UrlAliasRouter extends BaseUrlAliasRouter
 
     public function matchRequest( Request $request )
     {
+        $configResolver = $this->getConfigResolver();
         // UrlAliasRouter might be disabled from configuration.
         // An example is for running the admin interface: it needs to be entirely run through the legacy kernel.
-        if ( $this->getConfigResolver()->getParameter( 'url_alias_router' ) === false )
+        if ( $configResolver->getParameter( 'url_alias_router' ) === false )
             throw new ResourceNotFoundException( "Config says to bypass UrlAliasRouter" );
 
         return parent::matchRequest( $request );
+    }
+
+    /**
+     * Will return the right UrlAlias in regards to configured root location.
+     *
+     * @param string $pathinfo
+     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     */
+    protected function getUrlAlias( $pathinfo )
+    {
+        if ( $this->rootLocationId === null || $this->generator->isUriPrefixExcluded( $pathinfo ) )
+        {
+            return parent::getUrlAlias( $pathinfo );
+        }
+
+        return $this
+            ->getRepository()
+            ->getURLAliasService()
+            ->lookup( $this->generator->getPathPrefixByRootLocationId( $this->rootLocationId ) . $pathinfo );
     }
 }

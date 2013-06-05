@@ -31,6 +31,7 @@ abstract class CriterionHandler
         CriterionOperator::GTE => "gte",
         CriterionOperator::LT => "lt",
         CriterionOperator::LTE => "lte",
+        CriterionOperator::LIKE => "like",
     );
 
     /**
@@ -63,7 +64,9 @@ abstract class CriterionHandler
      * Generate query expression for a Criterion this handler accepts
      *
      * accept() must be called before calling this method.
-     * 
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
+     *
      * @param CriteriaConverter $converter
      * @param \ezcQuerySelect $query
      * @param Criterion $criterion

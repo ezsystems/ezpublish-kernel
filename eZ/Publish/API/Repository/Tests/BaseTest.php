@@ -14,12 +14,19 @@ use PHPUnit_Framework_TestCase;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 use eZ\Publish\Core\REST\Client\Sessionable;
+use DateTime;
+use ArrayObject;
 
 /**
  * Base class for api specific tests.
  */
 abstract class BaseTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * Maximum integer number accepted by the different backends
+     */
+    const DB_INT_MAX = 2147483647;
+
     /**
      * @var \eZ\Publish\API\Repository\Tests\SetupFactory
      */
@@ -29,11 +36,6 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @var \eZ\Publish\API\Repository\Repository
      */
     private $repository;
-
-    /**
-     * @var \eZ\Publish\API\Repository\Tests\IdManager
-     */
-    private $idManager;
 
     /**
      * @return void
@@ -218,13 +220,21 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
     private function assertPropertiesEqual( $propertyName, $expectedValue, $actualValue )
     {
-        if ( $expectedValue instanceof \ArrayObject )
+        if ( $expectedValue instanceof ArrayObject )
         {
             $expectedValue = $expectedValue->getArrayCopy();
         }
-        if ( $actualValue instanceof \ArrayObject )
+        else if ( $expectedValue instanceof DateTime )
+        {
+            $expectedValue = $expectedValue->format( DateTime::RFC850 );
+        }
+        if ( $actualValue instanceof ArrayObject )
         {
             $actualValue = $actualValue->getArrayCopy();
+        }
+        else if ( $actualValue instanceof DateTime )
+        {
+            $actualValue = $actualValue->format( DateTime::RFC850 );
         }
 
         $this->assertEquals(

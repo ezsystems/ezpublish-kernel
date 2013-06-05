@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\Core\REST\Common\Exceptions;
@@ -28,6 +29,13 @@ class FieldDefinitionCreate extends Base
     protected $contentTypeService;
 
     /**
+     * FieldType parser
+     *
+     * @var \eZ\Publish\Core\REST\Common\Input\FieldTypeParser
+     */
+    protected $fieldTypeParser;
+
+    /**
      * Parser tools
      *
      * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
@@ -39,12 +47,14 @@ class FieldDefinitionCreate extends Base
      *
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
+     * @param \eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( UrlHandler $urlHandler, ContentTypeService $contentTypeService, ParserTools $parserTools )
+    public function __construct( UrlHandler $urlHandler, ContentTypeService $contentTypeService, FieldTypeParser $fieldTypeParser, ParserTools $parserTools )
     {
         parent::__construct( $urlHandler );
         $this->contentTypeService = $contentTypeService;
+        $this->fieldTypeParser = $fieldTypeParser;
         $this->parserTools = $parserTools;
     }
 
@@ -134,11 +144,27 @@ class FieldDefinitionCreate extends Base
         // @todo XSD says that defaultValue is mandatory, but content type can be created without it
         if ( array_key_exists( 'defaultValue', $data ) )
         {
-            $fieldDefinitionCreate->defaultValue = $data['defaultValue'];
+            $fieldDefinitionCreate->defaultValue = $this->fieldTypeParser->parseValue(
+                $data['fieldType'],
+                $data['defaultValue']
+            );
         }
 
-        //@todo fieldSettings - Not specified
-        //@todo validatorConfiguration - Not specified
+        if ( array_key_exists( 'validatorConfiguration', $data ) )
+        {
+            $fieldDefinitionCreate->validatorConfiguration = $this->fieldTypeParser->parseValidatorConfiguration(
+                $data['fieldType'],
+                $data['validatorConfiguration']
+            );
+        }
+
+        if ( array_key_exists( 'fieldSettings', $data ) )
+        {
+            $fieldDefinitionCreate->fieldSettings = $this->fieldTypeParser->parseFieldSettings(
+                $data['fieldType'],
+                $data['fieldSettings']
+            );
+        }
 
         return $fieldDefinitionCreate;
     }

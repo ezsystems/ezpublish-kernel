@@ -8,6 +8,7 @@ parameters:
     ezpublish.siteaccess.matcher_builder.class: eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder
     ezpublish.siteaccess_router.class: eZ\Publish\Core\MVC\Symfony\SiteAccess\Router
     ezpublish.siteaccess_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\SiteAccessListener
+    ezpublish.siteaccess_listener.routing.class: eZ\Bundle\EzPublishCoreBundle\EventListener\RoutingListener
     ezpublish.request_redirect_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\RequestEventListener
     ezpublish.siteaccess_match_listener.class: eZ\Publish\Core\MVC\Symfony\EventListener\SiteAccessMatchListener
 
@@ -22,7 +23,7 @@ services:
         class: %ezpublish.siteaccess_match_listener.class%
         arguments: [@ezpublish.siteaccess_router, @event_dispatcher]
         tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 200 }
+            - { name: kernel.event_subscriber }
 
     ezpublish.url_generator.base:
         class: %ezpublish.url_generator.base.class%
@@ -40,7 +41,7 @@ services:
 
     ezpublish.urlalias_generator:
         class: %ezpublish.urlalias_generator.class%
-        arguments: [@ezpublish.api.repository.lazy, @router]
+        arguments: [@ezpublish.api.repository.lazy, @router, @?logger]
         parent: ezpublish.url_generator.base
 
     ezpublish.siteaccess.matcher_builder:
@@ -59,6 +60,12 @@ services:
 
     ezpublish.siteaccess_listener:
         class: %ezpublish.siteaccess_listener.class%
+        arguments: [@service_container]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish.siteaccess_listener.routing:
+        class: %ezpublish.siteaccess_listener.routing.class%
         arguments: [@service_container]
         tags:
             - { name: kernel.event_subscriber }

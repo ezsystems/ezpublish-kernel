@@ -226,6 +226,24 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test finding content with multiple ids using OR expression
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\Backend::find
+     * @group inMemoryBackend
+     */
+    public function testFindMultipleIdsUsingOR()
+    {
+        $list = $this->backend->find( 'Content\\VersionInfo', array( 'or' => array( array( 'id' => 3 ), array( 'id' => 5 ) ) ) );
+        self::assertEquals( 2, count( $list ) );
+
+        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo', $list[0] );
+        self::assertEquals( $list[0]->id, 3 );
+
+        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo', $list[1] );
+        self::assertEquals( $list[1]->id, 5 );
+    }
+
+    /**
      * Test finding content with results
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::find
@@ -422,59 +440,59 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test finding content with results using several levels of join
+     * Test finding content with results using join with multiple items
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\Backend::find
      * @group inMemoryBackend
      */
-    public function testFindSubJoin()
+    public function testFindJoinWithSeveral()
     {
-        self::markTestIncomplete( "Reimplement this test as Fields are not version sub joins any more" );
         /**
          * @var \eZ\Publish\SPI\Persistence\Content[] $list
          */
         $list = $this->backend->find(
-            'Content\\ContentInfo',
-            array( "locations" => array( 'id' => 2 ) ),
+            'Content',
             array(
-                'version' => array(
+                "id" => 1,
+            ),
+            array(
+                'versionInfo' => array(
                     'type' => 'Content\\VersionInfo',
+                    'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
                     'single' => true,
-                    'match' => array( '_contentId' => 'id', 'versionNo' => 'currentVersionNo' ),
                     'sub' => array(
-                        'fields' => array(
-                            'type' => 'Content\\Field',
-                            'match' => array( '_contentId' => '_contentId', 'versionNo' => 'versionNo' ),
-                        )
+                        'contentInfo' => array(
+                            'type' => 'Content\\ContentInfo',
+                            'match' => array( 'id' => '_contentId' ),
+                            'single' => true
+                        ),
                     )
                 ),
+                'fields' => array(
+                    'type' => 'Content\\Field',
+                    'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
+                )
             )
         );
+
         $this->assertEquals( 1, count( $list ) );
-        foreach ( $list as $content )
-        {
-            $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content', $content );
-            $this->assertEquals( 1, $content->id );
-            $locations = $this->backend->find(
-                'Content\\Location',
-                array( 'contentId' => $content->versionInfo->contentInfo->id )
-            );
-            $this->assertEquals( 1, count( $locations ) );
-            foreach ( $locations as $location )
-            {
-                $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location', $location );
-                $this->assertEquals( 2, $location->id );
-                $this->assertEquals( 1, $location->contentId );
-            }
-            $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo', $content->version );
-            $this->assertEquals( 3, count( $content->version->fields ) );
-            $this->assertEquals( array( "eng-GB" => "bar0" ), $content->version->name );
-            foreach ( $content->version->fields as $field )
-            {
-                $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field', $field );
-                $this->assertEquals( $content->currentVersionNo, $field->versionNo );
-            }
-        }
+        $content = $list[0];
+        $this->assertTrue( $content instanceof Content );
+
+        $contentInfos = $this->backend->find( 'Content\\ContentInfo', array( 'id' => 1 ) );
+        $versionInfos = $this->backend->find( 'Content\\VersionInfo', array( 'id' => 1 ) );
+        $versionInfos[0]->contentInfo = $contentInfos[0];
+        $this->assertEquals(
+            $versionInfos[0],
+            $content->versionInfo
+        );
+
+        $this->assertEquals( 3, count( $content->fields ) );
+        $fields = $this->backend->find(
+            'Content\\Field',
+            array( '_contentId' => 1, 'versionNo' => 1 )
+        );
+        $this->assertEquals( $fields, $content->fields );
     }
 
     /**

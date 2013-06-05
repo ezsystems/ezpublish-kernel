@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNo
 use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
+use eZ\Publish\API\Repository\Tests\BaseTest as APIBaseTest;
 
 /**
  * Test case for Location Service
@@ -273,7 +274,7 @@ abstract class LocationBase extends BaseServiceTest
     public function testLoadLocationThrowsNotFoundException()
     {
         $locationService = $this->repository->getLocationService();
-        $locationService->loadLocation( PHP_INT_MAX );
+        $locationService->loadLocation( APIBaseTest::DB_INT_MAX );
     }
 
     /**

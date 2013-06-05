@@ -50,7 +50,7 @@ class TextLineTest extends FieldTypeTest
                 ),
                 'maxStringLength' => array(
                     'type' => 'int',
-                    'default' => null
+                    'default' => false
                 )
             )
         );

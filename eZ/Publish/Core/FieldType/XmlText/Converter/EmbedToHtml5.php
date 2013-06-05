@@ -20,6 +20,12 @@ use DOMDocument;
 class EmbedToHtml5 implements Converter
 {
     /**
+     * List of disallowed attributes
+     * @var array
+     */
+    protected $excludedAttributes = array();
+
+    /**
      * @var \eZ\Publish\Core\MVC\Symfony\View\Manager
      */
     protected $viewManager;
@@ -29,46 +35,40 @@ class EmbedToHtml5 implements Converter
      */
     protected $repository;
 
-    public function __construct( Manager $viewManager, Repository $repository )
+    public function __construct( Manager $viewManager, Repository $repository, array $excludedAttributes )
     {
         $this->viewManager = $viewManager;
         $this->repository = $repository;
+        $this->excludedAttributes = array_fill_keys( $excludedAttributes, true );
     }
 
     /**
-     * Converts embed elements in $xmlDoc from internal representation to HTML5
-     *
+     * Process embed tags for a single tag type (embed or embed-inline)
      * @param \DOMDocument $xmlDoc
-     *
-     * @return null
+     * @param $tagName string name of the tag to extract
      */
-    public function convert( DOMDocument $xmlDoc )
+    protected function processTag( DOMDocument $xmlDoc, $tagName )
     {
-        foreach ( $xmlDoc->getElementsByTagName( "embed" ) as $embed )
+        foreach ( $xmlDoc->getElementsByTagName( $tagName ) as $embed )
         {
             if ( !$view = $embed->getAttribute( "view" ) )
             {
-                $view = "embed";
+                $view = $tagName;
             }
 
             $embedContent = null;
             $parameters = array(
                 "noLayout" => true,
+                "objectParameters" => array()
             );
 
-            if ( $attribute = $embed->getAttribute( "size" ) )
+            foreach ( $embed->attributes as $attribute )
             {
-                $parameters["size"] = $attribute;
-            }
-
-            $customNS = "http://ez.no/namespaces/ezpublish3/custom/";
-            if ( $attribute = $embed->getAttributeNS( $customNS, "offset" ) )
-            {
-                $parameters["offset"] = $attribute;
-            }
-            if ( $attribute = $embed->getAttributeNS( $customNS, "limit" ) )
-            {
-                $parameters["limit"] = $attribute;
+                // We only consider tags in the custom namespace, and skip disallowed names
+                if ( !isset( $this->excludedAttributes[$attribute->localName] ) )
+                {
+                    $parameters["objectParameters"][$attribute->localName] = $attribute->nodeValue;
+                }
             }
 
             if ( $contentId = $embed->getAttribute( "object_id" ) )
@@ -91,5 +91,18 @@ class EmbedToHtml5 implements Converter
             if ( $embedContent !== null )
                 $embed->appendChild( $xmlDoc->createCDATASection( $embedContent ) );
         }
+    }
+
+    /**
+     * Converts embed elements in $xmlDoc from internal representation to HTML5
+     *
+     * @param \DOMDocument $xmlDoc
+     *
+     * @return null
+     */
+    public function convert( DOMDocument $xmlDoc )
+    {
+        $this->processTag( $xmlDoc, 'embed' );
+        $this->processTag( $xmlDoc, 'embed-inline' );
     }
 }

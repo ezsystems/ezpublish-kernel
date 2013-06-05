@@ -34,7 +34,7 @@ class Handler implements BaseContentTypeHandler
     protected $contentTypeGateway;
 
     /**
-     * Mappper for Type objects.
+     * Mapper for Type objects.
      *
      * @var Mapper
      */

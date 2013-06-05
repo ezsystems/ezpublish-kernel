@@ -41,6 +41,18 @@
     </xsd:sequence>
   </xsd:complexType>
 
+  <xsd:complexType name="fieldSettingsType" mixed="true">
+    <xsd:sequence>
+      <xsd:element name="value" type="valueType" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="validatorConfigurationType" mixed="true">
+    <xsd:sequence>
+      <xsd:element name="value" type="valueType" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
   <xsd:complexType name="fieldInputValueType">
     <xsd:annotation>
       <xsd:documentation>

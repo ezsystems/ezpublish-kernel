@@ -23,7 +23,7 @@ class MultipleIdentifierMapper extends IdentifierMapper
      *
      * @param Field $field
      *
-     * @return void
+     * @return boolean
      */
     public function canMap( Field $field )
     {
@@ -35,7 +35,7 @@ class MultipleIdentifierMapper extends IdentifierMapper
      *
      * @param Field $field
      *
-     * @return void
+     * @return mixed
      */
     public function map( Field $field )
     {

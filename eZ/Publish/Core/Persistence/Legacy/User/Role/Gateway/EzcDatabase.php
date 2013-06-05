@@ -649,28 +649,37 @@ class EzcDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        $limitations = array();
-        $values = array();
+        $limitationIdsSet = array();
+        $limitationValuesSet = array();
         while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
         {
-            $limitations[] = $row['ezpolicy_limitation_id'];
-            $values[] = $row['ezpolicy_limitation_value_id'];
+            if ( $row['ezpolicy_limitation_id'] !== null )
+                $limitationIdsSet[$row['ezpolicy_limitation_id']] = true;
+
+            if ( $row['ezpolicy_limitation_value_id'] !== null )
+                $limitationValuesSet[$row['ezpolicy_limitation_value_id']] = true;
         }
 
-        $query = $this->handler->createDeleteQuery();
-        $query
-            ->deleteFrom( $this->handler->quoteTable( 'ezpolicy_limitation' ) )
-            ->where(
-                $query->expr->in( $this->handler->quoteColumn( 'id' ), array_unique( $limitations ) )
-            );
-        $query->prepare()->execute();
+        if ( !empty( $limitationIdsSet ) )
+        {
+            $query = $this->handler->createDeleteQuery();
+            $query
+                ->deleteFrom( $this->handler->quoteTable( 'ezpolicy_limitation' ) )
+                ->where(
+                    $query->expr->in( $this->handler->quoteColumn( 'id' ), array_keys( $limitationIdsSet ) )
+                );
+            $query->prepare()->execute();
+        }
 
-        $query = $this->handler->createDeleteQuery();
-        $query
-            ->deleteFrom( $this->handler->quoteTable( 'ezpolicy_limitation_value' ) )
-            ->where(
-                $query->expr->in( $this->handler->quoteColumn( 'id' ), array_unique( $values ) )
-            );
-        $query->prepare()->execute();
+        if ( !empty( $limitationValuesSet ) )
+        {
+            $query = $this->handler->createDeleteQuery();
+            $query
+                ->deleteFrom( $this->handler->quoteTable( 'ezpolicy_limitation_value' ) )
+                ->where(
+                    $query->expr->in( $this->handler->quoteColumn( 'id' ), array_keys( $limitationValuesSet ) )
+                );
+            $query->prepare()->execute();
+        }
     }
 }

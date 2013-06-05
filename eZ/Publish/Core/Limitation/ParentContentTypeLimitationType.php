@@ -9,49 +9,85 @@
 
 namespace eZ\Publish\Core\Limitation;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
-use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Values\User\Limitation\ParentContentTypeLimitation as APIParentContentTypeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
-use eZ\Publish\SPI\Persistence\Handler as SPIPersistenceHandler;
+use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 
 /**
  * ParentContentTypeLimitation is a Content limitation
  */
-class ParentContentTypeLimitationType implements SPILimitationTypeInterface
+class ParentContentTypeLimitationType extends AbstractPersistenceLimitationType implements SPILimitationTypeInterface
 {
     /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
-     */
-    protected $persistence;
-
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Handler $persistence
-     */
-    public function __construct( SPIPersistenceHandler $persistence )
-    {
-        $this->persistence = $persistence;
-    }
-
-    /**
-     * Accepts a Limitation value
+     * Accepts a Limitation value and checks for structural validity.
      *
-     * Makes sure LimitationValue object is of correct type and that ->limitationValues
-     * is valid according to valueSchema().
+     * Makes sure LimitationValue object and ->limitationValues is of correct type.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected type/structure
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
-     *
-     * @return boolean
      */
     public function acceptValue( APILimitationValue $limitationValue )
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+        if ( !$limitationValue instanceof APIParentContentTypeLimitation )
+        {
+            throw new InvalidArgumentType( "\$limitationValue", "APIParentContentTypeLimitation", $limitationValue );
+        }
+        else if ( !is_array( $limitationValue->limitationValues ) )
+        {
+            throw new InvalidArgumentType( "\$limitationValue->limitationValues", "array", $limitationValue->limitationValues );
+        }
+
+        foreach ( $limitationValue->limitationValues as $key => $id )
+        {
+            if ( !is_string( $id ) && !is_int( $id ) )
+            {
+                throw new InvalidArgumentType( "\$limitationValue->limitationValues[{$key}]", "int|string", $id );
+            }
+        }
+    }
+
+    /**
+     * Makes sure LimitationValue->limitationValues is valid according to valueSchema().
+     *
+     * Make sure {@link acceptValue()} is checked first!
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validate( APILimitationValue $limitationValue )
+    {
+        $validationErrors = array();
+        foreach ( $limitationValue->limitationValues as $key => $id )
+        {
+            try
+            {
+                $this->persistence->contentTypeHandler()->load( $id );
+            }
+            catch ( APINotFoundException $e )
+            {
+                $validationErrors[] = new ValidationError(
+                    "limitationValues[%key%] => '%value%' does not exist in the backend",
+                    null,
+                    array(
+                        "value" => $id,
+                        "key" => $key
+                    )
+                );
+            }
+        }
+        return $validationErrors;
     }
 
     /**
@@ -77,31 +113,51 @@ class ParentContentTypeLimitationType implements SPILimitationTypeInterface
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject|null $target The location, parent or "assignment" value object
+     * @param \eZ\Publish\API\Repository\Values\ValueObject[] $targets An array of location, parent or "assignment" value objects
      *
      * @return boolean
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, ValueObject $target = null )
+    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = array() )
     {
         if ( !$value instanceof APIParentContentTypeLimitation )
             throw new InvalidArgumentException( '$value', 'Must be of type: APIParentContentTypeLimitation' );
 
-        if ( $target instanceof LocationCreateStruct )
+        if ( empty( $targets ) )
         {
-            $spiLocation = $this->persistence->locationHandler()->load( $target->parentLocationId );
-            $spiContentInfo = $this->persistence->contentHandler()->loadContentInfo( $spiLocation->contentId );
-            return in_array( $spiContentInfo->contentTypeId, $value->limitationValues );
+            return false;
         }
 
-        if ( $target !== null && !$target instanceof Location )
-            throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
-        else if ( $target === null )
-            return false;
+        foreach ( $targets as $target )
+        {
+            if ( $target instanceof LocationCreateStruct )
+            {
+                $target = $this->persistence->locationHandler()->load( $target->parentLocationId );
+            }
 
-        /**
-         * @var $target Location
-         */
-        return in_array( $target->getContentInfo()->contentTypeId, $value->limitationValues );
+            if ( $target instanceof Location )
+            {
+                $contentTypeId = $target->getContentInfo()->contentTypeId;
+            }
+            else if ( $target instanceof SPILocation )
+            {
+                $spiContentInfo = $this->persistence->contentHandler()->loadContentInfo( $target->contentId );
+                $contentTypeId = $spiContentInfo->contentTypeId;
+            }
+            else
+            {
+                throw new InvalidArgumentException(
+                    '$targets',
+                    'Must contain objects of type: Location or LocationCreateStruct'
+                );
+            }
+
+            if ( !in_array( $contentTypeId, $value->limitationValues ) )
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

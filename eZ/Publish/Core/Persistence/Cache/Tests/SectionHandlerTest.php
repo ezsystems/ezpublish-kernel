@@ -22,8 +22,15 @@ class SectionHandlerTest extends HandlerTest
     public function testAssign()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
+
         $this->cacheMock
-            ->expects( $this->once() )
+            ->expects( $this->at( 0 ) )
+            ->method( 'clear' )
+            ->with( 'content', 44 )
+            ->will( $this->returnValue( null ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 1 ) )
             ->method( 'clear' )
             ->with( 'content', 'info', 44 )
             ->will( $this->returnValue( null ) );

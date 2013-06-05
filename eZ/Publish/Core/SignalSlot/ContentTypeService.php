@@ -187,6 +187,8 @@ class ContentTypeService implements ContentTypeServiceInterface
      *         - identifier or remoteId in the content type create struct already exists
      *         - there is a duplicate field identifier in the content type create struct
      *         - content type create struct does not contain at least one field definition create struct
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
+     *         if a field definition in the $contentTypeCreateStruct is not valid
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $contentTypeGroups Required array of
@@ -212,7 +214,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If a content type with the given id and status DEFINED can not be found
      *
-     * @param int $contentTypeId
+     * @param mixed $contentTypeId
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
@@ -254,7 +256,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the content type draft owned by the current user can not be found
      *
-     * @param int $contentTypeId
+     * @param mixed $contentTypeId
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */

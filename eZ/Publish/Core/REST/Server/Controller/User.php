@@ -999,7 +999,9 @@ class User extends RestController
             $session->getName(),
             $session->getId(),
             isset( $csrfProvider ) ?
-                $csrfProvider->generateCsrfToken( 'rest' ) :
+                $csrfProvider->generateCsrfToken(
+                    $this->container->getParameter( 'ezpublish_rest.csrf_token_intention' )
+                ) :
                 ""
         );
     }

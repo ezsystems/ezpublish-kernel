@@ -449,6 +449,29 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * Returns all version numbers for the given $contentId
+     *
+     * @param mixed $contentId
+     *
+     * @return int[]
+     */
+    public function listVersionNumbers( $contentId )
+    {
+        try
+        {
+            return $this->innerGateway->listVersionNumbers( $contentId );
+        }
+        catch ( \ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( \PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
      * Returns last version number for content identified by $contentId
      *
      * @param int $contentId
@@ -548,15 +571,14 @@ class ExceptionConversion extends Gateway
      * Deletes the field with the given $fieldId
      *
      * @param int $fieldId
-     * @param int $version
      *
      * @return void
      */
-    public function deleteField( $fieldId, $version )
+    public function deleteField( $fieldId )
     {
         try
         {
-            return $this->innerGateway->deleteField( $fieldId, $version );
+            return $this->innerGateway->deleteField( $fieldId );
         }
         catch ( \ezcDbException $e )
         {

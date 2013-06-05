@@ -58,7 +58,7 @@ class LegacyStorageEngineFactory
     public function registerFieldType( $fieldTypeServiceId, $fieldTypeAlias )
     {
         $container = $this->container;
-        $this->fieldTypes[$fieldTypeAlias] = function() use ( $container, $fieldTypeServiceId )
+        $this->fieldTypes[$fieldTypeAlias] = function () use ( $container, $fieldTypeServiceId )
         {
             return $container->get( $fieldTypeServiceId );
         };

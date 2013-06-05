@@ -110,8 +110,36 @@ class URLAliasServiceStub implements URLAliasService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function createGlobalUrlAlias( $resource, $path, $languageCode, $forward = false, $alwaysAvailable = false )
+    public function createGlobalUrlAlias( $resource, $path, $languageCode, $forwarding = false, $alwaysAvailable = false )
     {
+        if ( !preg_match( "#^([a-zA-Z0-9_]+):(.+)$#", $resource, $matches ) )
+        {
+            throw new Exceptions\InvalidArgumentExceptionStub(
+                'What error code should be used?'
+            );
+        }
+
+        if ( $matches[1] === "eznode" || 0 === strpos( $resource, "module:content/view/full/" ) )
+        {
+            if ( $matches[1] === "eznode" )
+            {
+                $locationId = $matches[2];
+            }
+            else
+            {
+                $resourcePath = explode( "/", $matches[2] );
+                $locationId = end( $resourcePath );
+            }
+
+            return $this->createUrlAlias(
+                $this->repository->getLocationService()->loadLocation( $locationId ),
+                $path,
+                $languageCode,
+                $forwarding,
+                $alwaysAvailable
+            );
+        }
+
         $this->checkAliasNotExists( $path, $languageCode, true );
 
         $data = array(
@@ -127,7 +155,7 @@ class URLAliasServiceStub implements URLAliasService
             'alwaysAvailable' => $alwaysAvailable,
             'isHistory' => false,
             'isCustom' => true,
-            'forward' => $forward,
+            'forward' => $forwarding,
         );
         return ( $this->aliases[$data['id']] = new URLAlias( $data ) );
     }
@@ -288,7 +316,7 @@ class URLAliasServiceStub implements URLAliasService
      *
      * @internal
      *
-     * @param \eZ\Publish\API\Repository\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      *
      * @return void
      */

@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;
 use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Tests\BaseTest as APIBaseTest;
 
 /**
  * Test case for Role Service
@@ -228,16 +229,16 @@ abstract class RoleBase extends BaseServiceTest
         $roleService = $this->repository->getRoleService();
 
         $limitation1 = new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
-        $limitation1->limitationValues = array( '12', '13', '14' );
+        $limitation1->limitationValues = array( '1', '3', '13' );
 
         $limitation2 = new \eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation();
-        $limitation2->limitationValues = array( '5', '6' );
+        $limitation2->limitationValues = array( '2', '3' );
 
         $limitation3 = new \eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation();
-        $limitation3->limitationValues = array( '1' );
+        $limitation3->limitationValues = array( '1', '2' );
 
         $limitation4 = new \eZ\Publish\API\Repository\Values\User\Limitation\UserGroupLimitation();
-        $limitation4->limitationValues = array( '1', '2' );
+        $limitation4->limitationValues = array( '1' );
 
         $policyCreateStruct1 = $roleService->newPolicyCreateStruct( 'content', 'read' );
         $policyCreateStruct1->addLimitation( $limitation1 );
@@ -416,10 +417,10 @@ abstract class RoleBase extends BaseServiceTest
         $policyCount = count( $role->getPolicies() );
 
         $limitation1 = new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
-        $limitation1->limitationValues = array( '12', '13', '14' );
+        $limitation1->limitationValues = array( '1', '3', '13' );
 
         $limitation2 = new \eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation();
-        $limitation2->limitationValues = array( '5', '6' );
+        $limitation2->limitationValues = array( '2', '3' );
 
         $policyCreateStruct = $roleService->newPolicyCreateStruct( 'content', 'read' );
         $policyCreateStruct->addLimitation( $limitation1 );
@@ -467,10 +468,14 @@ abstract class RoleBase extends BaseServiceTest
 
         $role = $roleService->loadRole( 1 );
         $policies = $role->getPolicies();
-        $policy = $policies[2];
+        $policy = $policies[0];
+
+        // Verify we get correct data from backend
+        self::assertEquals( 'content', $policy->module );
+        self::assertEquals( 'read', $policy->function );
 
         $limitation = new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
-        $limitation->limitationValues = array( '12', '13', '14' );
+        $limitation->limitationValues = array( '1', '3', '13' );
 
         $policyUpdateStruct = $roleService->newPolicyUpdateStruct();
         $policyUpdateStruct->addLimitation( $limitation );
@@ -524,7 +529,7 @@ abstract class RoleBase extends BaseServiceTest
     {
         $roleService = $this->repository->getRoleService();
 
-        $roleService->loadRole( PHP_INT_MAX );
+        $roleService->loadRole( APIBaseTest::DB_INT_MAX );
     }
 
     /**
@@ -631,7 +636,7 @@ abstract class RoleBase extends BaseServiceTest
     {
         $roleService = $this->repository->getRoleService();
 
-        $roleService->loadPoliciesByUserId( PHP_INT_MAX );
+        $roleService->loadPoliciesByUserId( APIBaseTest::DB_INT_MAX );
     }
 
     /**

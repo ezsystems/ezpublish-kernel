@@ -11,7 +11,11 @@ namespace eZ\Publish\SPI\Persistence\Content\Search;
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
- * Base class for document fields
+ * Base class for document fields.
+ *
+ * @property-read $name
+ * @property-read $value
+ * @property-read $type
  */
 class Field extends ValueObject
 {

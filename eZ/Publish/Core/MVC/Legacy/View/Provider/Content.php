@@ -17,6 +17,7 @@ use eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZContentObject;
 use eZTemplate;
+use ezpEvent;
 
 class Content extends Provider implements ContentViewProviderInterface
 {
@@ -41,34 +42,40 @@ class Content extends Provider implements ContentViewProviderInterface
                      * @var \eZObjectForwarder
                      */
                     $funcObject = $tpl->fetchFunctionObject( 'content_view_gui' );
+
+                    if ( isset( $params['objectParameters'] ) )
+                        $tpl->setVariable( 'object_parameters', $params["objectParameters"], 'ContentView' );
+
                     $children = array();
-                    $params['content_object'] = array(
-                        array(
-                            eZTemplate::TYPE_ARRAY,
-                            // eZTemplate::TYPE_OBJECT does not exist because
-                            // it's not possible to create "inline" objects in
-                            // legacy template engine (ie objects are always
-                            // stored in a tpl variable).
-                            // TYPE_ARRAY is used here to allow to directly
-                            // retrieve the object without creating a variable.
-                            // (TYPE_STRING, TYPE_BOOLEAN, ... have the same
-                            // behaviour, see eZTemplate::elementValue())
-                            eZContentObject::fetch( $contentInfo->id )
-                        )
-                    );
-                    $params['view'] = array(
-                        array(
-                            eZTemplate::TYPE_STRING,
-                            $viewType
-                        )
-                    );
                     $funcObject->process(
                         $tpl, $children, 'content_view_gui', false,
-                        $params, array(), '', ''
+                        array(
+                            'content_object' => array(
+                                array(
+                                    eZTemplate::TYPE_ARRAY,
+                                    // eZTemplate::TYPE_OBJECT does not exist because
+                                    // it's not possible to create "inline" objects in
+                                    // legacy template engine (ie objects are always
+                                    // stored in a tpl variable).
+                                    // TYPE_ARRAY is used here to allow to directly
+                                    // retrieve the object without creating a variable.
+                                    // (TYPE_STRING, TYPE_BOOLEAN, ... have the same
+                                    // behaviour, see eZTemplate::elementValue())
+                                    eZContentObject::fetch( $contentInfo->id )
+                                )
+                            ),
+                            'view' => array(
+                                array(
+                                    eZTemplate::TYPE_STRING,
+                                    $viewType
+                                )
+                            )
+                        ),
+                        array(), '', ''
                     );
                     if ( is_array( $children ) && isset( $children[0] ) )
                     {
-                        return $children[0];
+                        return ezpEvent::getInstance()->filter( 'response/output', $children[0] );
                     }
                     return '';
                 },

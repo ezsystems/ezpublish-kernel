@@ -81,6 +81,34 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
+     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::loadParentLocationsForDraftContent
+     */
+    public function loadParentLocationsForDraftContent( $contentId )
+    {
+        $locations = $this->backend->find(
+            'Content\\Location',
+            array( 'contentId' => $contentId )
+        );
+
+        $parentLocations = array();
+        foreach ( $locations as $location )
+        {
+            $parentLocation = $this->backend->find(
+                "Content\\Location",
+                array( "id" => $location->parentId )
+            );
+            $contentInfo = $this->backend->load( 'Content\\ContentInfo', $location->contentId );
+            if ( $contentInfo->isPublished )
+            {
+                continue;
+            }
+            $parentLocations[] = $parentLocation[0];
+        }
+
+        return $parentLocations;
+    }
+
+    /**
      * Loads the data for the location identified by $remoteId.
      *
      * @param string $remoteId

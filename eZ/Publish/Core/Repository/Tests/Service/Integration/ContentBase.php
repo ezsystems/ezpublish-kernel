@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Tests\BaseTest as APIBaseTest;
 
 /**
  * Test case for Content service
@@ -160,7 +161,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         // Throws an exception because given contentId does not exist
-        $contentInfo = $contentService->loadContentInfo( PHP_INT_MAX );
+        $contentInfo = $contentService->loadContentInfo( APIBaseTest::DB_INT_MAX );
         /* END: Use Case */
     }
 
@@ -351,7 +352,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         // Throws an exception because version with given number does not exists
-        $versionInfo = $contentService->loadVersionInfoById( 4, PHP_INT_MAX );
+        $versionInfo = $contentService->loadVersionInfoById( 4, APIBaseTest::DB_INT_MAX );
         /* END: Use Case */
     }
 
@@ -472,8 +473,8 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        // Throws an exception because content with id PHP_INT_MAX does not exist
-        $content = $contentService->loadContent( PHP_INT_MAX );
+        // Throws an exception because content with id APIBaseTest::DB_INT_MAX does not exist
+        $content = $contentService->loadContent( APIBaseTest::DB_INT_MAX );
         /* END: Use Case */
     }
 
@@ -488,8 +489,8 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        // Throws an exception because version number PHP_INT_MAX for content with id 4 does not exist
-        $content = $contentService->loadContent( 4, null, PHP_INT_MAX );
+        // Throws an exception because version number APIBaseTest::DB_INT_MAX for content with id 4 does not exist
+        $content = $contentService->loadContent( 4, null, APIBaseTest::DB_INT_MAX );
         /* END: Use Case */
     }
 
@@ -2182,52 +2183,6 @@ abstract class ContentBase extends BaseServiceTest
         $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
 
         $contentService->deleteVersion( $draftContent->versionInfo );
-    }
-
-    /**
-     * Test for the deleteContent() method.
-     *
-     * @depends testLoadContent
-     * @covers \eZ\Publish\Core\Repository\ContentService::deleteContent
-     */
-    public function testDeleteContent()
-    {
-        /* BEGIN: Use Case */
-        $contentService = $this->repository->getContentService();
-
-        $contentInfo = $contentService->loadContentInfo( 4 );
-
-        $contentService->deleteContent( $contentInfo );
-        /* END: Use Case */
-
-        try
-        {
-            $contentService->loadContent( $contentInfo->id );
-
-            $this->fail( "Content was not successfully deleted!" );
-        }
-        catch ( NotFoundException $e )
-        {
-            // Do nothing
-        }
-    }
-
-    /**
-     * Test for the deleteContent() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\ContentService::deleteContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testDeleteContentThrowsUnauthorizedException()
-    {
-        $contentService = $this->repository->getContentService();
-
-        $contentInfo = $contentService->loadContentInfo( 4 );
-
-        // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
-
-        $contentService->deleteContent( $contentInfo );
     }
 
     /**

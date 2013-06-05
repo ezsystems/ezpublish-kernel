@@ -12,6 +12,9 @@ namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Page\Type as PageType;
 use eZ\Publish\Core\FieldType\Page\Value as PageValue;
 use eZ\Publish\Core\FieldType\Page\Parts\Page as Page;
+use eZ\Publish\Core\FieldType\Page\Parts;
+use eZ\Publish\Core\FieldType\Page\HashConverter;
+use DateTime;
 
 /**
  * @group fieldType
@@ -23,9 +26,16 @@ class PageTest extends FieldTypeTest
       * Page service mock.
       *
       * @see getPageServiceMock()
-      * @var \eZ\Publish\Core\FieldType\Page\PageService
+      * @var \PHPUnit_Framework_MockObject_MockObject
       */
     private $pageServiceMock;
+
+    /**
+     * @var \eZ\Publish\Core\FieldType\Page\Parts\Page
+     */
+    protected $pageReference;
+
+    protected $hashReference;
 
     private function getPageServiceMock()
     {
@@ -35,6 +45,9 @@ class PageTest extends FieldTypeTest
                 ->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\Page\\PageService' )
                 ->disableOriginalConstructor()
                 ->getMock();
+            $this->pageServiceMock->expects( $this->any() )
+                ->method( "getAvailableZoneLayouts" )
+                ->will( $this->returnValue( array( "2ZonesLayout1", "2ZonesLayout2" ) ) );
         }
         return $this->pageServiceMock;
     }
@@ -53,7 +66,98 @@ class PageTest extends FieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         return new PageType(
-            $this->getPageServiceMock()
+            $this->getPageServiceMock(),
+            new HashConverter
+        );
+    }
+
+    protected function getPageReference()
+    {
+        return new Parts\Page(
+            array(
+                "layout" => "2ZonesLayout1",
+                "zones" => array(
+                    new Parts\Zone(
+                        array(
+                            "id" => "6c7f907b831a819ed8562e3ddce5b264",
+                            "identifier" => "left",
+                            "blocks" => array(
+                                new Parts\Block(
+                                    array(
+                                        "id" => "1e1e355c8da3c92e80354f243c6dd37b",
+                                        "name" => "Campaign",
+                                        "type" => "Campaign",
+                                        "view" => "default",
+                                        "overflowId" => "",
+                                        "zoneId" => "6c7f907b831a819ed8562e3ddce5b264",
+                                        "items" => array(
+                                            new Parts\Item(
+                                                array(
+                                                    "contentId" => 10,
+                                                    "locationId" => 20,
+                                                    "priority" => 30,
+                                                    "publicationDate" => new DateTime( "@1" ),
+                                                    "visibilityDate" => new DateTime( "@2" ),
+                                                    "hiddenDate" => new DateTime( "@3" ),
+                                                    "rotationUntilDate" => new DateTime( "@4" ),
+                                                    "movedTo" => "67dd4d9b898d89733e776c714039ae33",
+                                                    "action" => "modify",
+                                                    "blockId" => "594491ab539125dc271807a83724e608",
+                                                    "attributes" => array( "name" => "value" ),
+                                                )
+                                            )
+                                        ),
+                                        "attributes" => array( "name2" => "value2" )
+                                    )
+                                ),
+                            ),
+                            "attributes" => array( "name3" => "value3" )
+                        )
+                    ),
+                ),
+                "attributes" => array( "name4" => "value4" )
+            )
+        );
+    }
+
+    protected function getHashReference()
+    {
+        return array(
+            "layout" => "2ZonesLayout1",
+            "zones" => array(
+                array(
+                    "id" => "6c7f907b831a819ed8562e3ddce5b264",
+                    "identifier" => "left",
+                    "blocks" => array(
+                        array(
+                            "id" => "1e1e355c8da3c92e80354f243c6dd37b",
+                            "name" => "Campaign",
+                            "type" => "Campaign",
+                            "view" => "default",
+                            "overflowId" => "",
+                            "zoneId" => "6c7f907b831a819ed8562e3ddce5b264",
+                            "items" => array(
+                                array(
+                                    "contentId" => 10,
+                                    "locationId" => 20,
+                                    "priority" => 30,
+                                    "publicationDate" => "Thursday, 01-Jan-70 00:00:01 GMT+0000",
+                                    "visibilityDate" => "Thursday, 01-Jan-70 00:00:02 GMT+0000",
+                                    "hiddenDate" => "Thursday, 01-Jan-70 00:00:03 GMT+0000",
+                                    "rotationUntilDate" => "Thursday, 01-Jan-70 00:00:04 GMT+0000",
+                                    "movedTo" => "67dd4d9b898d89733e776c714039ae33",
+                                    "action" => "modify",
+                                    "blockId" => "594491ab539125dc271807a83724e608",
+                                    "attributes" => array( "name" => "value" ),
+                                )
+                            ),
+                            "attributes" => array( "name2" => "value2" ),
+                        ),
+                    ),
+                    "attributes" => array( "name3" => "value3" ),
+                ),
+            ),
+            "attributes" => array( "name4" => "value4" ),
         );
     }
 
@@ -215,8 +319,8 @@ class PageTest extends FieldTypeTest
                 null
             ),
             array(
-                new PageValue( new Page() ),
-                serialize( new Page() ),
+                new PageValue( $this->getPageReference() ),
+                $this->getHashReference(),
             )
         );
     }
@@ -264,9 +368,86 @@ class PageTest extends FieldTypeTest
                 null
             ),
             array(
-                serialize( new Page() ),
-                new PageValue( new Page() )
+                $this->getHashReference(),
+                new PageValue( $this->getPageReference() )
             )
+        );
+    }
+
+    /**
+     * Provide data sets with field settings which are considered valid by the
+     * {@link validateFieldSettings()} method.
+     *
+     * ATTENTION: This is a default implementation, which must be overwritten
+     * if a FieldType supports field settings!
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of field settings.
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(),
+     *      ),
+     *      array(
+     *          array( 'rows' => 2 )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideValidFieldSettings()
+    {
+        return array(
+            array(
+                array()
+            ),
+            array(
+                array( "defaultLayout" => "2ZonesLayout1" )
+            ),
+        );
+    }
+
+    /**
+     * Provide data sets with field settings which are considered invalid by the
+     * {@link validateFieldSettings()} method. The method must return a
+     * non-empty array of validation error when receiving such field settings.
+     *
+     * ATTENTION: This is a default implementation, which must be overwritten
+     * if a FieldType supports field settings!
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of field settings.
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          true,
+     *      ),
+     *      array(
+     *          array( 'nonExistentKey' => 2 )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInValidFieldSettings()
+    {
+        return array(
+            array(
+                // non-existent setting
+                array( 'isMultiple' => true )
+            ),
+            array(
+                // non-available layout
+                array( "defaultLayout" => "2ZonesLayout3" )
+            ),
         );
     }
 }

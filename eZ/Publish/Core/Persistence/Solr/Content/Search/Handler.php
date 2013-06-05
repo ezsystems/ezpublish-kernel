@@ -88,7 +88,13 @@ class Handler implements SearchHandlerInterface
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
      */
-    public function __construct( Gateway $gateway, FieldRegistry $fieldRegistry, LocationHandler $locationHandler, ContentTypeHandler $contentTypeHandler, ObjectStateHandler $objectStateHandler )
+    public function __construct(
+        Gateway $gateway,
+        FieldRegistry $fieldRegistry,
+        LocationHandler $locationHandler,
+        ContentTypeHandler $contentTypeHandler,
+        ObjectStateHandler $objectStateHandler
+    )
     {
         $this->gateway            = $gateway;
         $this->fieldRegistry      = $fieldRegistry;
@@ -101,6 +107,8 @@ class Handler implements SearchHandlerInterface
      * Finds content objects for the given query.
      *
      * @todo define structs for the field filters
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Query criterion is not applicable to its target
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      * @param array $fieldFilters - a map of filters for the returned fields.
@@ -117,6 +125,7 @@ class Handler implements SearchHandlerInterface
      * Performs a query for a single content object
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
      * @todo define structs for the field filters
@@ -124,7 +133,7 @@ class Handler implements SearchHandlerInterface
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @return \eZ\Publish\SPI\Persistence\Content
      */
     public function findSingle( Criterion $criterion, array $fieldFilters = array() )
     {

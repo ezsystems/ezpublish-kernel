@@ -47,7 +47,7 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
     protected function getRepositoryMock()
     {
         return $this
-            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Repository' )
+            ->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\Repository' )
             ->disableOriginalConstructor()
             ->getMock();
     }

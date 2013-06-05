@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\SignalSlot\Slot;
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Slot\AbstractLegacySlot;
 use eZContentCacheManager;
+use eZContentObject;
 use eZSearch;
 
 /**
@@ -37,6 +38,7 @@ class LegacyAssignSectionSlot extends AbstractLegacySlot
             {
                 eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
                 eZSearch::updateObjectsSection( array( $signal->contentId ), $signal->sectionId );
+                eZContentObject::clearCache();// Clear all object memory cache to free memory
             },
             false
         );

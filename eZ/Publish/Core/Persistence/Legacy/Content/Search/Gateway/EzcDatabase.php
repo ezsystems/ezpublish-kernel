@@ -98,8 +98,7 @@ class EzcDatabase extends Gateway
     /**
      * Returns a list of object satisfying the $criterion.
      *
-     * @todo Check Query recreation in this method. Something breaks if we reuse
-     *       the query, after we have added the applyJoin() stuff here.
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
      *
      * @param Criterion $criterion
      * @param int $offset
@@ -114,7 +113,7 @@ class EzcDatabase extends Gateway
         $limit = $limit !== null ? $limit : self::MAX_LIMIT;
 
         $count = $this->getResultCount( $criterion, $sort, $translations );
-        if ( $count === 0 || $limit === 0 )
+        if ( $limit === 0 || $count <= $offset )
         {
             return array( 'count' => $count, 'rows' => array() );
         }

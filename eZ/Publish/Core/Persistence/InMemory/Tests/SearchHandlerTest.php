@@ -21,6 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
@@ -181,6 +182,42 @@ class SearchHandlerTest extends HandlerTest
         $content = $result->searchHits[0]->valueObject;
         $this->assertEquals( 14, $content->versionInfo->contentInfo->ownerId );
         $this->assertEquals( array( 'eng-GB' => 'test' ), $content->versionInfo->names );
+        $this->assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo", $content->versionInfo );
+    }
+
+    /**
+     * Test findContent function using Or expression
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\SearchHandler::findContent
+     */
+    public function testFindContentLogicalOr()
+    {
+        $result = $this->persistenceHandler->searchHandler()->findContent(
+            new Query(
+                array(
+                    'criterion' => new LogicalOr(
+                        array(
+                            new LocationRemoteId( 'f3e90596361e31d496d4026eb624c983' ),
+                            new LocationRemoteId( '3f6d92f8044aed134f32153517850f5a' )
+                        )
+                    ),
+                )
+            )
+        );
+
+        $this->assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchResult', $result );
+        $this->assertEquals( 2, $result->totalCount );
+        $this->assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchHit', $result->searchHits[0] );
+        $this->assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchHit', $result->searchHits[1] );
+
+        $content = $result->searchHits[0]->valueObject;
+        $this->assertEquals( 14, $content->versionInfo->contentInfo->ownerId );
+        $this->assertEquals( array( 'eng-GB' => 'eZ Publish' ), $content->versionInfo->names );
+        $this->assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo", $content->versionInfo );
+
+        $content = $result->searchHits[1]->valueObject;
+        $this->assertEquals( 14, $content->versionInfo->contentInfo->ownerId );
+        $this->assertEquals( array( 'eng-US' => 'Users' ), $content->versionInfo->names );
         $this->assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo", $content->versionInfo );
     }
 

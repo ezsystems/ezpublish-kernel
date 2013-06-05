@@ -243,9 +243,12 @@ class EzcDatabase extends Gateway
                     $this->dbHandler->quoteColumn( "default_language_id" ),
                     $query->bindValue( $id, null, \PDO::PARAM_INT )
                 ),
-                $query->expr->bitAnd(
-                    $this->dbHandler->quoteColumn( "language_mask" ),
-                    $query->bindValue( $id, null, \PDO::PARAM_INT )
+                $query->expr->gt(
+                    $query->expr->bitAnd(
+                        $this->dbHandler->quoteColumn( "language_mask" ),
+                        $query->bindValue( $id, null, \PDO::PARAM_INT )
+                    ),
+                    0
                 )
             )
         );
@@ -267,9 +270,12 @@ class EzcDatabase extends Gateway
                     $this->dbHandler->quoteColumn( "default_language_id" ),
                     $query->bindValue( $id, null, \PDO::PARAM_INT )
                 ),
-                $query->expr->bitAnd(
-                    $this->dbHandler->quoteColumn( "language_mask" ),
-                    $query->bindValue( $id, null, \PDO::PARAM_INT )
+                $query->expr->gt(
+                    $query->expr->bitAnd(
+                        $this->dbHandler->quoteColumn( "language_mask" ),
+                        $query->bindValue( $id, null, \PDO::PARAM_INT )
+                    ),
+                    0
                 )
             )
         );
@@ -286,9 +292,12 @@ class EzcDatabase extends Gateway
         )->from(
             $this->dbHandler->quoteTable( "ezcobj_state_group_language" )
         )->where(
-            $query->expr->bitAnd(
-                $this->dbHandler->quoteColumn( "language_id" ),
-                $query->bindValue( $id, null, \PDO::PARAM_INT )
+            $query->expr->gt(
+                $query->expr->bitAnd(
+                    $this->dbHandler->quoteColumn( "language_id" ),
+                    $query->bindValue( $id, null, \PDO::PARAM_INT )
+                ),
+                0
             )
         );
 
@@ -304,9 +313,12 @@ class EzcDatabase extends Gateway
         )->from(
             $this->dbHandler->quoteTable( "ezcobj_state_language" )
         )->where(
-            $query->expr->bitAnd(
-                $this->dbHandler->quoteColumn( "language_id" ),
-                $query->bindValue( $id, null, \PDO::PARAM_INT )
+            $query->expr->gt(
+                $query->expr->bitAnd(
+                    $this->dbHandler->quoteColumn( "language_id" ),
+                    $query->bindValue( $id, null, \PDO::PARAM_INT )
+                ),
+                0
             )
         );
 
@@ -327,9 +339,12 @@ class EzcDatabase extends Gateway
                     $this->dbHandler->quoteColumn( "initial_language_id" ),
                     $query->bindValue( $id, null, \PDO::PARAM_INT )
                 ),
-                $query->expr->bitAnd(
-                    $this->dbHandler->quoteColumn( "language_mask" ),
-                    $query->bindValue( $id, null, \PDO::PARAM_INT )
+                $query->expr->gt(
+                    $query->expr->bitAnd(
+                        $this->dbHandler->quoteColumn( "language_mask" ),
+                        $query->bindValue( $id, null, \PDO::PARAM_INT )
+                    ),
+                    0
                 )
             )
         );
@@ -346,9 +361,12 @@ class EzcDatabase extends Gateway
         )->from(
             $this->dbHandler->quoteTable( "ezcontentclass_name" )
         )->where(
-            $query->expr->bitAnd(
-                $this->dbHandler->quoteColumn( "language_id" ),
-                $query->bindValue( $id, null, \PDO::PARAM_INT )
+            $query->expr->gt(
+                $query->expr->bitAnd(
+                    $this->dbHandler->quoteColumn( "language_id" ),
+                    $query->bindValue( $id, null, \PDO::PARAM_INT )
+                ),
+                0
             )
         );
 
@@ -369,9 +387,12 @@ class EzcDatabase extends Gateway
                     $this->dbHandler->quoteColumn( "initial_language_id" ),
                     $query->bindValue( $id, null, \PDO::PARAM_INT )
                 ),
-                $query->expr->bitAnd(
-                    $this->dbHandler->quoteColumn( "language_mask" ),
-                    $query->bindValue( $id, null, \PDO::PARAM_INT )
+                $query->expr->gt(
+                    $query->expr->bitAnd(
+                        $this->dbHandler->quoteColumn( "language_mask" ),
+                        $query->bindValue( $id, null, \PDO::PARAM_INT )
+                    ),
+                    0
                 )
             )
         );
@@ -388,9 +409,12 @@ class EzcDatabase extends Gateway
         )->from(
             $this->dbHandler->quoteTable( "ezcontentobject_attribute" )
         )->where(
-            $query->expr->bitAnd(
-                $this->dbHandler->quoteColumn( "language_id" ),
-                $query->bindValue( $id, null, \PDO::PARAM_INT )
+            $query->expr->gt(
+                $query->expr->bitAnd(
+                    $this->dbHandler->quoteColumn( "language_id" ),
+                    $query->bindValue( $id, null, \PDO::PARAM_INT )
+                ),
+                0
             )
         );
 
@@ -406,9 +430,12 @@ class EzcDatabase extends Gateway
         )->from(
             $this->dbHandler->quoteTable( "ezcontentobject_name" )
         )->where(
-            $query->expr->bitAnd(
-                $this->dbHandler->quoteColumn( "language_id" ),
-                $query->bindValue( $id, null, \PDO::PARAM_INT )
+            $query->expr->gt(
+                $query->expr->bitAnd(
+                    $this->dbHandler->quoteColumn( "language_id" ),
+                    $query->bindValue( $id, null, \PDO::PARAM_INT )
+                ),
+                0
             )
         );
 
@@ -429,9 +456,12 @@ class EzcDatabase extends Gateway
                     $this->dbHandler->quoteColumn( "initial_language_id" ),
                     $query->bindValue( $id, null, \PDO::PARAM_INT )
                 ),
-                $query->expr->bitAnd(
-                    $this->dbHandler->quoteColumn( "language_mask" ),
-                    $query->bindValue( $id, null, \PDO::PARAM_INT )
+                $query->expr->gt(
+                    $query->expr->bitAnd(
+                        $this->dbHandler->quoteColumn( "language_mask" ),
+                        $query->bindValue( $id, null, \PDO::PARAM_INT )
+                    ),
+                    0
                 )
             )
         );
@@ -448,9 +478,12 @@ class EzcDatabase extends Gateway
         )->from(
             $this->dbHandler->quoteTable( "ezurlalias_ml" )
         )->where(
-            $query->expr->bitAnd(
-                $this->dbHandler->quoteColumn( "lang_mask" ),
-                $query->bindValue( $id, null, \PDO::PARAM_INT )
+            $query->expr->gt(
+                $query->expr->bitAnd(
+                    $this->dbHandler->quoteColumn( "lang_mask" ),
+                    $query->bindValue( $id, null, \PDO::PARAM_INT )
+                ),
+                0
             )
         );
 
