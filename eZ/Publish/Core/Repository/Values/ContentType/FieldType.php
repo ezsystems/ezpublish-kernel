@@ -140,6 +140,16 @@ class FieldType implements FieldTypeInterface
     }
 
     /**
+     * Potentially builds and checks the type and structure of the $inputValue.
+     *
+     * @return \eZ\Publish\Core\FieldType\Value The potentially converted and structurally plausible value.
+     */
+    public function acceptValue( $inputValue )
+    {
+        return $this->internalFieldType->acceptValue( $inputValue );
+    }
+
+    /**
      * Converts an $hash to the Value defined by the field type
      *
      * @param mixed $hash
