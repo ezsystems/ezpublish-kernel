@@ -1120,7 +1120,7 @@ XML Example
         </names>
         <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
       </VersionInfo>
-      <Fields>
+      <fields>
         <field>
           <id>1234</id>
           <fieldDefinitionIdentifier>title</fieldDefinitionIdentifier>
@@ -1143,7 +1143,7 @@ XML Example
             </value>
           </fieldValue>
         </field>
-      </Fields>
+      </fields>
       <Relations  href="/content/objects/23/relations"  media-type="application/vnd.ez.api.RelationList+xml">>
         <Relation href="/content/objects/23/relations/32" media-type="application/vnd.ez.api.Relation+xml">
           <SourceContent href="/content/objects/23"
@@ -1251,7 +1251,7 @@ XML Example
         </names>
         <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
       </VersionInfo>
-      <Fields>
+      <fields>
         <field>
           <id>1234</id>
           <fieldDefinitionIdentifier>title</fieldDefinitionIdentifier>
@@ -1273,7 +1273,7 @@ XML Example
             </authors>
           </fieldValue>
         </field>
-      </Fields>
+      </fields>
       <Relations>
         <Relation href="/content/object/32/versions/2/relations/43" media-type="application/vnd.ez.api.Relation+xml">
           <SourceContent href="/content/objects/23"
@@ -2104,7 +2104,7 @@ Perform a query on articles with a specific title.
                       <Content href="/content/objects/23"
                         media-type="application/vnd.ez.api.ContentInfo+xml" />
                     </VersionInfo>
-                    <Fields>
+                    <fields>
                       <field>
                         <id>1234</id>
                         <fieldDefinitionIdentifier>title</fieldDefinitionIdentifier>
@@ -2118,7 +2118,7 @@ Perform a query on articles with a specific title.
                         <languageCode>eng-UK</languageCode>
                         <fieldValue>This is a summary</fieldValue>
                       </field>
-                    </Fields>
+                    </fields>
                     <Relations />
                   </Version>
                 </CurrentVersion>
@@ -4292,7 +4292,7 @@ Creating a top level group
           <initialLanguageCode>eng-UK</initialLanguageCode>
           <Content href="/content/objects/4" media-type="application/vnd.ez.api.ContentInfo+xml" />
         </VersionInfo>
-        <Fields>
+        <fields>
           <field>
             <id>1234</id>
             <fieldDefinitionIdentifier>name</fieldDefinitionIdentifier>
@@ -4305,7 +4305,7 @@ Creating a top level group
             <languageCode>eng-UK</languageCode>
             <fieldValue>Main Group</fieldValue>
           </field>
-        </Fields>
+        </fields>
         <Relations />
       </Content>
       <SubGroups href="/user/groups/1/5/subgroups" media-type="application/vnd.ez.api.UserGroupList+xml"/>
@@ -4375,7 +4375,7 @@ Creating a top level group
           <initialLanguageCode>eng-UK</initialLanguageCode>
           <Content href="/content/objects/123" media-type="application/vnd.ez.api.ContentInfo+xml" />
         </VersionInfo>
-        <Fields>
+        <fields>
           <field>
             <id>1234</id>
             <fieldDefinitionIdentifier>name</fieldDefinitionIdentifier>
@@ -4388,7 +4388,7 @@ Creating a top level group
             <languageCode>eng-UK</languageCode>
             <fieldValue>This is the description of the user group</fieldValue>
           </field>
-        </Fields>
+        </fields>
         <Relations />
       </Content>
       <ParentUserGroup href="/user/groups/1/5" media-type="application/vnd.ez.api.UserGroup+xml" />
@@ -4490,7 +4490,7 @@ XML Example
           <initialLanguageCode>eng-UK</initialLanguageCode>
           <Content href="/content/objects/123" media-type="application/vnd.ez.api.ContentInfo+xml" />
         </VersionInfo>
-        <Fields>
+        <fields>
           <field>
             <id>1234</id>
             <fieldDefinitionIdentifier>name</fieldDefinitionIdentifier>
@@ -4503,7 +4503,7 @@ XML Example
             <languageCode>eng-UK</languageCode>
             <fieldValue>This is another description of the user group</fieldValue>
           </field>
-        </Fields>
+        </fields>
         <Relations />
       </Content>
       <ParentUserGroup href="/user/groups/1/5" media-type="application/vnd.ez.api.UserGroup+xml" />
@@ -6401,7 +6401,7 @@ Version
           <xsd:extension base="ref">
             <xsd:all>
               <xsd:element name="VersionInfo" type="versionInfoType" />
-              <xsd:element name="Fields" minOccurs="0">
+              <xsd:element name="fields" minOccurs="0">
                 <xsd:complexType>
                   <xsd:sequence>
                     <xsd:element name="field" type="fieldOutputValueType"
