@@ -93,7 +93,7 @@ class FieldTypeParser
         }
 
         $fieldType = $this->fieldTypeService->getFieldType( $fieldTypeIdentifier );
-        return $fieldType->fromHash( $value );
+        return $fieldType->acceptValue( $value );
     }
 
     /**
