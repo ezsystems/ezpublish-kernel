@@ -3537,7 +3537,7 @@ XML Example
             <value languageCode="eng-US">This is the title</value>
           </descriptions>
         </FieldDefinition>
-       <FieldDefinition>
+        <FieldDefinition>
           <identifier>summary</identifier>
           <fieldType>ezxmltext</fieldType>
           <fieldGroup>content</fieldGroup>
@@ -3545,7 +3545,9 @@ XML Example
           <isTranslatable>true</isTranslatable>
           <isRequired>false</isRequired>
           <isInfoCollector>false</isInfoCollector>
-          <defaultValue></defaultValue>
+          <defaultValue>
+            <value key="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;section/&gt;</value>
+          </defaultValue>
           <isSearchable>true</isSearchable>
           <names>
             <value languageCode="eng-US">Summary</value>
@@ -3619,7 +3621,9 @@ XML Example
           <isTranslatable>true</isTranslatable>
           <isRequired>false</isRequired>
           <isInfoCollector>false</isInfoCollector>
-          <defaultValue></defaultValue>
+          <defaultValue>
+            <value key="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;section/&gt;</value>
+          </defaultValue>
           <isSearchable>true</isSearchable>
           <names>
             <value languageCode="eng-US">Summary</value>
