@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\Persistence;
 
 use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface;
 use eZ\Publish\Core\Persistence\FieldType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use ArrayObject;
 use RuntimeException;
 
 /**
@@ -40,11 +42,18 @@ class FieldTypeRegistry
      * expected, in case of callable factory it should return the FieldType object.
      * The FieldType object must comply to the {@link \eZ\Publish\SPI\FieldType\FieldType} interface.
      *
-     * @param array $fieldTypeMap A map where key is field type identifier and value is
+     * @param array|\ArrayObject $fieldTypeMap A map where key is field type identifier and value is
      *              a callable factory to get FieldType OR FieldType object.
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType If $fieldTypeMap is of wrong type
      */
-    public function __construct( array $fieldTypeMap )
+    public function __construct( $fieldTypeMap )
     {
+        if ( !$fieldTypeMap instanceof ArrayObject && !is_array( $fieldTypeMap ) )
+        {
+            throw new InvalidArgumentType( '\$fieldTypeMap', 'array|\ArrayObject', $fieldTypeMap );
+        }
+
         $this->coreFieldTypeMap = $fieldTypeMap;
     }
 
@@ -76,12 +85,19 @@ class FieldTypeRegistry
      * The FieldType object must comply to the {@link \eZ\Publish\SPI\FieldType\FieldType} interface.
      *
      * @param $identifier
-     * @param mixed $fieldType Callable or FieldType instance.
+     * @param callable|\eZ\Publish\SPI\FieldType\FieldType $fieldType Callable or FieldType instance.
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType If $fieldTypeMap is of wrong type
      *
      * @return void
      */
     public function register( $identifier, $fieldType )
     {
+        if ( !$fieldType instanceof FieldTypeInterface && !is_callable( $fieldType ) )
+        {
+            throw new InvalidArgumentType( '\$fieldType', 'callable|\eZ\Publish\SPI\FieldType\FieldType', $fieldType );
+        }
+
         $this->coreFieldTypeMap[$identifier] = $fieldType;
     }
 
@@ -99,17 +115,22 @@ class FieldTypeRegistry
     {
         if ( !isset( $this->coreFieldTypeMap[$identifier] ) )
         {
+            // Get array copy in case of ArrayObject
+            if ( $this->coreFieldTypeMap instanceof ArrayObject )
+                $array = $this->coreFieldTypeMap->getArrayCopy();
+            else
+                $array = $this->coreFieldTypeMap;
+
             throw new RuntimeException(
                 "Provided \$identifier is unknown: '{$identifier}', have: "
-                . var_export( array_keys( $this->coreFieldTypeMap ), true )
+                . var_export( array_keys( $array ), true )
             );
         }
 
         $fieldType = $this->coreFieldTypeMap[$identifier];
-
-        if ( !$this->coreFieldTypeMap[$identifier] instanceof FieldTypeInterface )
+        if ( !$fieldType instanceof FieldTypeInterface )
         {
-            if ( !is_callable( $this->coreFieldTypeMap[$identifier] ) )
+            if ( !is_callable( $fieldType ) )
             {
                 throw new RuntimeException( "FieldType '$identifier' is not callable or instance" );
             }
