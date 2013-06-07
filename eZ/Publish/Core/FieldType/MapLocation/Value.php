@@ -57,6 +57,9 @@ class Value extends BaseValue
      */
     public function __toString()
     {
+        if ( is_array( $this->address ) )
+            return implode( ", ", $this->address );
+
         return (string)$this->address;
     }
 }
