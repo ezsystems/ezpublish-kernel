@@ -347,6 +347,10 @@ abstract class BaseIntegrationTest extends TestCase
                         )
                     )
                 ),
+                // Language with id=2 is eng-US
+                // This is probably a mistake, as the fields are given with eng-GB, but it has a nice
+                // side effect of testing creation with empty value.
+                // TODO: change to eng-GB (8) and/or find a more obvious way to test creation with empty value
                 'initialLanguageId' => 2,
                 'remoteId'          => microtime(),
                 'modified'          => time(),
