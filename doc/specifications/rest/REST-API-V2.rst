@@ -3595,6 +3595,7 @@ XML Example
       <defaultAlwaysAvailable>true</defaultAlwaysAvailable>
       <defaultSortField>PATH</defaultSortField>
       <defaultSortOrder>ASC</defaultSortOrder>
+      <ContentTypeGroups href="/content/types/32/groups" media-type="application/vnd.ez.api.ContentTypeGroupRefList"/>
       <FieldDefinitions href="/content/types/32/draft/fielddefinitions" media-type="application/vnd.ez.api.FieldDefinitionList+xml">
         <FieldDefinition href="/content/types/32/draft/fielddefinitions/34" media-type="application/vnd.ez.api.FieldDefinition+xml">
           <id>34</id>
@@ -3828,6 +3829,7 @@ XML Example
       <defaultAlwaysAvailable>true</defaultAlwaysAvailable>
       <defaultSortField>PATH</defaultSortField>
       <defaultSortOrder>ASC</defaultSortOrder>
+      <ContentTypeGroups href="/content/types/32/groups" media-type="application/vnd.ez.api.ContentTypeGroupRefList"/>
     </ContentType>
 
 Add Field definition
@@ -7978,6 +7980,7 @@ ContentType XML Schema
                   </xsd:documentation>
                 </xsd:annotation>
               </xsd:element>
+              <xsd:element name="ContentTypeGroups" type="ref"/>
               <xsd:element name="names" type="multiLanguageValuesType" />
               <xsd:element name="descriptions" type="multiLanguageValuesType" />
               <xsd:element name="creationDate" type="xsd:dateTime">
