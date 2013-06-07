@@ -292,6 +292,7 @@ XML Example
     <Root>
       <content href="/content/objects" media-type=""/>
       <contentTypes href="/content/types" media-type="application/vnd.ez.api.ContentTypeInfoList+xml"/>
+      <contentTypeGroups href="/content/typegroups" media-type="application/vnd.ez.api.ContentTypeGroupList+xml"/>
       <users href="/user/users" media-type="application/vnd.ez.api.UserRefList+xml"/>
       <roles href="/user/roles" media-type="application/vnd.ez.api.RoleList+xml"/>
       <rootLocation href="/content/locations/1" media-type="application/vnd.ez.api.Location+xml"/>
@@ -300,6 +301,12 @@ XML Example
       <trash href="/content/trash" media-type="application/vnd.ez.api.LocationList+xml"/>
       <sections href="/content/sections" media-type="application/vnd.ez.api.SectionList+xml"/>
       <views href="/content/views" media-type="application/vnd.ez.api.RefList+xml"/>
+      <userPolicies href="/user/policies" media-type="application/vnd.ez.api.RefList+xml"/>
+      <sessions href="/user/sessions"/>
+      <locationByRemoteId href="/content/locations?remoteId={}" mediaType="application/vnd.ez.api.Location+xml"/>
+      <contentByRemoteId href="/content/objects?remoteId={}" mediaType="application/vnd.ez.api.ContentInfo+xml"/>
+      <contentTypeByIdentifer href="/content/types?identifier={}" mediaType="application/vnd.ez.api.ContentType+xml"/>
+      <contentTypeGroupByIdentifer href="/content/typegroups?identifier={}" mediaType="application/vnd.ez.api.ContentTypeGroup+xml"/>
     </Root>
 
 JSON Example
@@ -4144,6 +4151,7 @@ Resource                                      POST                  GET         
 /user/roles/<ID>                              .                     load role             update role           delete role
 /user/roles/<ID>/policies                     create policy         load policies         .                     delete all policies from role
 /user/roles/<ID>/policies/<ID>                .                     load policy           update policy         delete policy
+/user/policies                                .                     load policies fr user .                     .               
 /user/sessions                                create session        .                     .                     .
 /user/sessions/<sessionID>                    .                     .                     .                     delete session
 ============================================= ===================== ===================== ===================== =======================
@@ -7128,8 +7136,8 @@ LocationCreate XML Schema
           </xsd:element>
           <xsd:element name="remoteId" type="xsd:string"
             minOccurs="0" />
-          <xsd:element name="sortField" type="sortFieldType" />
-          <xsd:element name="sortOrder" type="sortOrderType" />
+          <xsd:element name="sortField" type="sortFieldType"  minOccurs="0"/>
+          <xsd:element name="sortOrder" type="sortOrderType"  minOccurs="0"/>
         </xsd:all>
       </xsd:complexType>
       <xsd:element name="LocationCreate" type="vnd.ez.api.LocationCreate" />
@@ -7168,8 +7176,8 @@ LocationUpdate XML Schema
           </xsd:element>
           <xsd:element name="remoteId" type="xsd:string"
             minOccurs="0" />
-          <xsd:element name="sortField" type="sortFieldType" />
-          <xsd:element name="sortOrder" type="sortOrderType" />
+          <xsd:element name="sortField" type="sortFieldType" minOccurs="0" />
+          <xsd:element name="sortOrder" type="sortOrderType"  minOccurs="0"/>
         </xsd:all>
       </xsd:complexType>
       <xsd:element name="LocationUpdate" type="vnd.ez.api.LocationUpdate" />
@@ -8145,17 +8153,16 @@ ContentTypeCreate XML Schema
 
       <xsd:complexType name="vnd.ez.api.ContentTypeCreate">
         <xsd:all>
-          <xsd:element name="identifier" type="xsd:string"
-            minOccurs="0" maxOccurs="1">
+          <xsd:element name="identifier" type="xsd:string">
             <xsd:annotation>
               <xsd:documentation>
                 String identifier of a content type
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="names" type="multiLanguageValuesType" />
-          <xsd:element name="descriptions" type="multiLanguageValuesType" />
-          <xsd:element name="modificationDate" type="xsd:dateTime">
+          <xsd:element name="names" type="multiLanguageValuesType" minOccurs="0"/>
+          <xsd:element name="descriptions" type="multiLanguageValuesType" minOccurs="0" />
+          <xsd:element name="modificationDate" type="xsd:dateTime" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 If set this date is used as modification
@@ -8163,7 +8170,7 @@ ContentTypeCreate XML Schema
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="User" type="ref">
+          <xsd:element name="User" type="ref" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 The user under which this creation should
@@ -8190,7 +8197,7 @@ ContentTypeCreate XML Schema
                   </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="nameSchema" type="xsd:string">
+          <xsd:element name="nameSchema" type="xsd:string" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 Name schema.
@@ -8212,7 +8219,7 @@ ContentTypeCreate XML Schema
                   </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="isContainer" type="xsd:boolean">
+          <xsd:element name="isContainer" type="xsd:boolean" minOccurs="0" default="false">
             <xsd:annotation>
               <xsd:documentation>
                 Determines if the type is a container
@@ -8226,7 +8233,7 @@ ContentTypeCreate XML Schema
                   </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="defaultAlwaysAvailable" type="xsd:boolean"
+          <xsd:element name="defaultAlwaysAvailable" type="xsd:boolean" minOccurs="0"
             default="true">
             <xsd:annotation>
               <xsd:documentation>
@@ -8238,7 +8245,7 @@ ContentTypeCreate XML Schema
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="defaultSortField" type="sortFieldType">
+          <xsd:element name="defaultSortField" type="sortFieldType" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 Specifies which property the child
@@ -8247,7 +8254,7 @@ ContentTypeCreate XML Schema
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="defaultSortOrder" type="sortOrderType">
+          <xsd:element name="defaultSortOrder" type="sortOrderType" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 Specifies whether the sort order should
@@ -8257,7 +8264,7 @@ ContentTypeCreate XML Schema
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="FieldDefinitions">
+          <xsd:element name="FieldDefinitions" minOccurs="0">
             <xsd:complexType>
               <xsd:sequence>
                 <xsd:element name="FieldDefinition" type="vnd.ez.api.FieldDefinitionCreate"></xsd:element>
@@ -8562,14 +8569,14 @@ FieldDefinitionCreate XML Schema
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="fieldGroup" type="xsd:string">
+          <xsd:element name="fieldGroup" type="xsd:string" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 Field group name
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="position" type="xsd:int">
+          <xsd:element name="position" type="xsd:int" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 the position of the field definition in
@@ -8577,21 +8584,21 @@ FieldDefinitionCreate XML Schema
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="isTranslatable" type="xsd:boolean">
+          <xsd:element name="isTranslatable" type="xsd:boolean" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
-                If the field type is translatable
+                If the field is translatable
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="isRequired" type="xsd:boolean">
+          <xsd:element name="isRequired" type="xsd:boolean" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 Is the field required
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="isInfoCollector" type="xsd:boolean">
+          <xsd:element name="isInfoCollector" type="xsd:boolean" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 the flag if this attribute is used for
@@ -8599,28 +8606,28 @@ FieldDefinitionCreate XML Schema
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="defaultValue" type="fieldValueType">
+          <xsd:element name="defaultValue" type="fieldValueType" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 Default value of the field
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="fieldSettings" type="fieldSettingsType">
+          <xsd:element name="fieldSettings" type="fieldSettingsType" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 Settings of the field
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="validatorConfiguration" type="validatorConfigurationType">
+          <xsd:element name="validatorConfiguration" type="validatorConfigurationType" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 Validator configuration of the field
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="isSearchable" type="xsd:boolean">
+          <xsd:element name="isSearchable" type="xsd:boolean" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 Indicates if th the content is
@@ -8657,14 +8664,14 @@ FieldDefinitionUpdate XML Schema
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="fieldGroup" type="xsd:string">
+          <xsd:element name="fieldGroup" type="xsd:string" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 If set the field group is changed
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="position" type="xsd:int">
+          <xsd:element name="position" type="xsd:int" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 If set the the position of the field definition in
@@ -8672,49 +8679,49 @@ FieldDefinitionUpdate XML Schema
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="isTranslatable" type="xsd:boolean">
+          <xsd:element name="isTranslatable" type="xsd:boolean" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 If set the translatable flag is set to this value
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="isRequired" type="xsd:boolean">
+          <xsd:element name="isRequired" type="xsd:boolean" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 If set the required flag is set to this value
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="isInfoCollector" type="xsd:boolean">
+          <xsd:element name="isInfoCollector" type="xsd:boolean" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 If set the info collection flag is set to this value
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="defaultValue" type="fieldValueType">
+          <xsd:element name="defaultValue" type="fieldValueType" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 If set the default value of the field is changed
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="fieldSettings" type="fieldSettingsType">
+          <xsd:element name="fieldSettings" type="fieldSettingsType" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 If set the settings of the field are changed
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="validatorConfiguration" type="validatorConfigurationType">
+          <xsd:element name="validatorConfiguration" type="validatorConfigurationType" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 If set the validatorConfiguration of the field is changed
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="isSearchable" type="xsd:boolean">
+          <xsd:element name="isSearchable" type="xsd:boolean" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
                 If set the searchable flag is set to this value
