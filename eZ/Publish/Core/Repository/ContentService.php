@@ -434,7 +434,7 @@ class ContentService implements ContentServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the content in the given location
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is a provided remoteId which exists in the system
      *                                                                        or there is no location provided (4.x) or multiple locations
-     *                                                                        are under the same parent
+     *                                                                        are under the same parent or if the a field value is not accepted by the field type
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $contentCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing or is set to an empty value
      *
@@ -445,6 +445,16 @@ class ContentService implements ContentServiceInterface
      */
     public function createContent( APIContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array() )
     {
+        if ( $contentCreateStruct->mainLanguageCode === null )
+        {
+            throw new InvalidArgumentException( "\$contentCreateStruct", "'mainLanguageCode' property must be set" );
+        }
+
+        if ( $contentCreateStruct->contentType === null )
+        {
+            throw new InvalidArgumentException( "\$contentCreateStruct", "'contentType' property must be set" );
+        }
+
         $contentCreateStruct = clone $contentCreateStruct;
 
         if ( $contentCreateStruct->ownerId === null )
@@ -456,6 +466,10 @@ class ContentService implements ContentServiceInterface
         {
             $contentCreateStruct->alwaysAvailable = false;
         }
+
+        $contentCreateStruct->contentType = $this->repository->getContentTypeService()->loadContentType(
+            $contentCreateStruct->contentType->id
+        );
 
         if ( !$this->repository->canUser( 'content', 'create', $contentCreateStruct, $locationCreateStructs ) )
         {
@@ -490,58 +504,16 @@ class ContentService implements ContentServiceInterface
             $contentCreateStruct->sectionId = 1;
         }
 
-        $fields = array();
-        $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
-            $contentCreateStruct->mainLanguageCode
-        );
-        $languageCodes = array( $contentCreateStruct->mainLanguageCode => true );
-
-        // Map fields to array $fields[$field->fieldDefIdentifier][$field->languageCode]
-        // Check for inconsistencies along the way and throw exceptions where needed
-        foreach ( $contentCreateStruct->fields as $field )
-        {
-            if ( !isset( $languageCodes[$field->languageCode] ) )
-            {
-                $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode( $field->languageCode );
-                $languageCodes[$field->languageCode] = true;
-            }
-
-            $fieldDefinition = $contentCreateStruct->contentType->getFieldDefinition( $field->fieldDefIdentifier );
-
-            if ( $fieldDefinition === null )
-            {
-                throw new ContentValidationException(
-                    "Field definition '{$field->fieldDefIdentifier}' does not exist in given ContentType"
-                );
-            }
-
-            if ( $fieldDefinition->isTranslatable )
-            {
-                $fields[$field->fieldDefIdentifier][$field->languageCode] = $field;
-            }
-            else
-            {
-                if ( $field->languageCode != $contentCreateStruct->mainLanguageCode )
-                {
-                    throw new ContentValidationException(
-                        "A value is set for non translatable field definition '{$field->fieldDefIdentifier}' with language '{$field->languageCode}'"
-                    );
-                }
-
-                $fields[$field->fieldDefIdentifier][$contentCreateStruct->mainLanguageCode] = $field;
-            }
-        }
-
-        $languageCodes = array_keys( $languageCodes );
+        $languageCodes = $this->getLanguageCodesForCreate( $contentCreateStruct );
+        $fields = $this->mapFieldsForCreate( $contentCreateStruct );
 
         $fieldValues = array();
         $spiFields = array();
         $allFieldErrors = array();
         $inputRelations = array();
         $locationIdToContentIdMapping = array();
-        $fieldDefinitions = $contentCreateStruct->contentType->getFieldDefinitions();
 
-        foreach ( $fieldDefinitions as $fieldDefinition )
+        foreach ( $contentCreateStruct->contentType->getFieldDefinitions() as $fieldDefinition )
         {
             /** @var $fieldType \eZ\Publish\Core\FieldType\FieldType */
             $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
@@ -555,14 +527,14 @@ class ContentService implements ContentServiceInterface
                 $isLanguageMain = $languageCode === $contentCreateStruct->mainLanguageCode;
                 if ( isset( $fields[$fieldDefinition->identifier][$valueLanguageCode] ) )
                 {
-                    $fieldValue = $fieldType->acceptValue(
-                        $fields[$fieldDefinition->identifier][$valueLanguageCode]->value
-                    );
+                    $fieldValue = $fields[$fieldDefinition->identifier][$valueLanguageCode]->value;
                 }
                 else
                 {
-                    $fieldValue = $fieldType->acceptValue( $fieldDefinition->defaultValue );
+                    $fieldValue = $fieldDefinition->defaultValue;
                 }
+
+                $fieldValue = $fieldType->acceptValue( $fieldValue );
 
                 if ( $fieldType->isEmptyValue( $fieldValue ) )
                 {
@@ -600,8 +572,11 @@ class ContentService implements ContentServiceInterface
                 );
                 $fieldValues[$fieldDefinition->identifier][$languageCode] = $fieldValue;
 
-                // Only non-empty value fields and untranslatable fields in main language
-                if ( !$isEmptyValue && ( $fieldDefinition->isTranslatable || $isLanguageMain ) )
+                // Only non-empty value for: translatable field or in main language
+                if (
+                    ( !$isEmptyValue && $fieldDefinition->isTranslatable ) ||
+                    ( !$isEmptyValue && $isLanguageMain )
+                )
                 {
                     $spiFields[] = new SPIField(
                         array(
@@ -637,26 +612,14 @@ class ContentService implements ContentServiceInterface
                 "fields" => $spiFields,
                 "alwaysAvailable" => $contentCreateStruct->alwaysAvailable,
                 "remoteId" => $contentCreateStruct->remoteId,
-                "modified" => isset( $contentCreateStruct->modificationDate ) ?
-                    $contentCreateStruct->modificationDate->getTimestamp() :
-                    time(),
+                "modified" => isset( $contentCreateStruct->modificationDate ) ? $contentCreateStruct->modificationDate->getTimestamp() : time(),
                 "initialLanguageId" => $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
                     $contentCreateStruct->mainLanguageCode
                 )->id
             )
         );
 
-        $objectStateHandler = $this->persistenceHandler->objectStateHandler();
-        $defaultObjectStatesMap = array();
-        foreach ( $objectStateHandler->loadAllGroups() as $objectStateGroup )
-        {
-            foreach ( $objectStateHandler->loadObjectStates( $objectStateGroup->id ) as $objectState )
-            {
-                // Only register the first object state which is the default one.
-                $defaultObjectStatesMap[$objectStateGroup->id] = $objectState;
-                break;
-            }
-        }
+        $defaultObjectStates = $this->getDefaultObjectStates();
 
         $this->repository->beginTransaction();
         try
@@ -669,9 +632,9 @@ class ContentService implements ContentServiceInterface
                 $contentCreateStruct->contentType
             );
 
-            foreach ( $defaultObjectStatesMap as $objectStateGroupId => $objectState )
+            foreach ( $defaultObjectStates as $objectStateGroupId => $objectState )
             {
-                $objectStateHandler->setContentState(
+                $this->persistenceHandler->objectStateHandler()->setContentState(
                     $spiContent->versionInfo->contentInfo->id,
                     $objectStateGroupId,
                     $objectState->id
@@ -687,6 +650,135 @@ class ContentService implements ContentServiceInterface
         }
 
         return $this->domainMapper->buildContentDomainObject( $spiContent );
+    }
+
+    /**
+     * Returns an array of default content states with content state group id as key.
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState[]
+     */
+    protected function getDefaultObjectStates()
+    {
+        $defaultObjectStatesMap = array();
+        $objectStateHandler = $this->persistenceHandler->objectStateHandler();
+
+        foreach ( $objectStateHandler->loadAllGroups() as $objectStateGroup )
+        {
+            foreach ( $objectStateHandler->loadObjectStates( $objectStateGroup->id ) as $objectState )
+            {
+                // Only register the first object state which is the default one.
+                $defaultObjectStatesMap[$objectStateGroup->id] = $objectState;
+                break;
+            }
+        }
+
+        return $defaultObjectStatesMap;
+    }
+
+    /**
+     * Returns all language codes used in given $fields.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if no field value is set in main language
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct $contentCreateStruct
+     *
+     * @return string[]
+     */
+    protected function getLanguageCodesForCreate( APIContentCreateStruct $contentCreateStruct )
+    {
+        $languageCodes = array();
+
+        foreach ( $contentCreateStruct->fields as $field )
+        {
+            if ( $field->languageCode === null || isset( $languageCodes[$field->languageCode] ) )
+            {
+                continue;
+            }
+
+            $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
+                $field->languageCode
+            );
+            $languageCodes[$field->languageCode] = true;
+        }
+
+        if ( !isset( $languageCodes[$contentCreateStruct->mainLanguageCode] ) )
+        {
+            $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
+                $contentCreateStruct->mainLanguageCode
+            );
+            $languageCodes[$contentCreateStruct->mainLanguageCode] = true;
+        }
+
+        return array_keys( $languageCodes );
+    }
+
+    /**
+     * Returns an array of fields like $fields[$field->fieldDefIdentifier][$field->languageCode].
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException If field definition does not exist in the ContentType
+     *                                                                          or value is set for non-translatable field in language
+     *                                                                          other than main
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct $contentCreateStruct
+     *
+     * @return array
+     */
+    protected function mapFieldsForCreate( APIContentCreateStruct $contentCreateStruct )
+    {
+        $fields = array();
+
+        foreach ( $contentCreateStruct->fields as $field )
+        {
+            $fieldDefinition = $contentCreateStruct->contentType->getFieldDefinition( $field->fieldDefIdentifier );
+
+            if ( $fieldDefinition === null )
+            {
+                throw new ContentValidationException(
+                    "Field definition '{$field->fieldDefIdentifier}' does not exist in given ContentType"
+                );
+            }
+
+            if ( $field->languageCode === null )
+            {
+                $field = $this->cloneField(
+                    $field,
+                    array( "languageCode" => $contentCreateStruct->mainLanguageCode )
+                );
+            }
+
+            if ( !$fieldDefinition->isTranslatable && ( $field->languageCode != $contentCreateStruct->mainLanguageCode ) )
+            {
+                throw new ContentValidationException(
+                    "A value is set for non translatable field definition '{$field->fieldDefIdentifier}' with language '{$field->languageCode}'"
+                );
+            }
+
+            $fields[$field->fieldDefIdentifier][$field->languageCode] = $field;
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Clones $field with overriding specific properties from given $overrides array.
+     *
+     * @param Field $field
+     * @param array $overrides
+     *
+     * @return Field
+     */
+    private function cloneField( Field $field, array $overrides = array() )
+    {
+        $fieldData = array_merge(
+            array(
+                'id' => $field->id,
+                'value' => $field->value,
+                'languageCode' => $field->languageCode,
+                'fieldDefIdentifier' => $field->fieldDefIdentifier,
+            ),
+            $overrides
+        );
+        return new Field( $fieldData );
     }
 
     /**
@@ -1081,6 +1173,8 @@ class ContentService implements ContentServiceInterface
      */
     public function updateContent( APIVersionInfo $versionInfo, APIContentUpdateStruct $contentUpdateStruct )
     {
+        $contentUpdateStruct = clone $contentUpdateStruct;
+
         /** @var $content \eZ\Publish\Core\Repository\Values\Content\Content */
         $content = $this->loadContent(
             $versionInfo->getContentInfo()->id,
@@ -1098,53 +1192,17 @@ class ContentService implements ContentServiceInterface
         if ( !$this->repository->canUser( 'content', 'edit', $content ) )
             throw new UnauthorizedException( 'content', 'edit' );
 
-        $languageCodes = array_fill_keys( $content->versionInfo->languageCodes, true );
-        $initialLanguageCode = $contentUpdateStruct->initialLanguageCode ?: $content->contentInfo->mainLanguageCode;
-        if ( !isset( $languageCodes[$initialLanguageCode] ) )
-        {
-            $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode( $initialLanguageCode );
-        }
+        $mainLanguageCode = $content->contentInfo->mainLanguageCode;
+        $languageCodes = $this->getLanguageCodesForUpdate( $contentUpdateStruct, $content );
+        $contentType = $this->repository->getContentTypeService()->loadContentType(
+            $content->contentInfo->contentTypeId
+        );
+        $fields = $this->mapFieldsForUpdate(
+            $contentUpdateStruct,
+            $contentType,
+            $mainLanguageCode
+        );
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Field[] $fields */
-        $fields = array();
-        $contentType = $this->repository->getContentTypeService()->loadContentType( $content->contentInfo->contentTypeId );
-
-        foreach ( $contentUpdateStruct->fields as $field )
-        {
-            $fieldDefinition = $contentType->getFieldDefinition( $field->fieldDefIdentifier );
-            if ( $fieldDefinition === null )
-            {
-                throw new ContentValidationException(
-                    "Field definition '{$field->fieldDefIdentifier}' does not exist in given ContentType"
-                );
-            }
-
-            $fieldLanguageCode = $field->languageCode ?: $initialLanguageCode;
-
-            if ( !isset( $languageCodes[$fieldLanguageCode] ) )
-            {
-                $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode( $field->languageCode );
-                $languageCodes[$fieldLanguageCode] = true;
-            }
-
-            if ( $fieldDefinition->isTranslatable )
-            {
-                $fields[$field->fieldDefIdentifier][$fieldLanguageCode] = $field;
-            }
-            else
-            {
-                if ( $fieldLanguageCode != $initialLanguageCode )
-                {
-                    throw new ContentValidationException(
-                        "A value is set for non translatable field definition '{$field->fieldDefIdentifier}' with language '{$fieldLanguageCode}'"
-                    );
-                }
-
-                $fields[$field->fieldDefIdentifier][$initialLanguageCode] = $field;
-            }
-        }
-
-        $languageCodes = array_keys( $languageCodes );
         $fieldValues = array();
         $spiFields = array();
         $allFieldErrors = array();
@@ -1160,43 +1218,36 @@ class ContentService implements ContentServiceInterface
 
             foreach ( $languageCodes as $languageCode )
             {
-                $isCopiedValue = false;
-                $isEmptyValue = false;
+                $isCopied = $isEmpty = $isRetained = false;
                 $isLanguageNew = !in_array( $languageCode, $content->versionInfo->languageCodes );
-                $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $initialLanguageCode;
+                $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $mainLanguageCode;
                 $isFieldUpdated = isset( $fields[$fieldDefinition->identifier][$valueLanguageCode] );
+                $isProcessed = isset( $fieldValues[$fieldDefinition->identifier][$valueLanguageCode] );
 
                 if ( !$isFieldUpdated && !$isLanguageNew )
                 {
-                    continue;
+                    $isRetained = true;
+                    $fieldValue = $content->getField( $fieldDefinition->identifier, $valueLanguageCode )->value;
                 }
-
-                if ( !$isFieldUpdated && $isLanguageNew && !$fieldDefinition->isTranslatable )
+                else if ( !$isFieldUpdated && $isLanguageNew && !$fieldDefinition->isTranslatable )
                 {
-                    $isCopiedValue = true;
-                    $fieldValue = $fieldType->acceptValue(
-                        $content->getField(
-                            $fieldDefinition->identifier,
-                            $fieldDefinition->isTranslatable ?
-                                $languageCode :
-                                $content->contentInfo->mainLanguageCode
-                        )->value
-                    );
+                    $isCopied = true;
+                    $fieldValue = $content->getField( $fieldDefinition->identifier, $valueLanguageCode )->value;
                 }
                 else if ( $isFieldUpdated )
                 {
-                    $fieldValue = $fieldType->acceptValue(
-                        $fields[$fieldDefinition->identifier][$valueLanguageCode]->value
-                    );
+                    $fieldValue = $fields[$fieldDefinition->identifier][$valueLanguageCode]->value;
                 }
                 else
                 {
-                    $fieldValue = $fieldType->acceptValue( $fieldDefinition->defaultValue );
+                    $fieldValue = $fieldDefinition->defaultValue;
                 }
+
+                $fieldValue = $fieldType->acceptValue( $fieldValue );
 
                 if ( $fieldType->isEmptyValue( $fieldValue ) )
                 {
-                    $isEmptyValue = true;
+                    $isEmpty = true;
                     if ( $fieldDefinition->isRequired )
                     {
                         throw new ContentValidationException(
@@ -1230,21 +1281,23 @@ class ContentService implements ContentServiceInterface
                 );
                 $fieldValues[$fieldDefinition->identifier][$languageCode] = $fieldValue;
 
-                if ( !( $isCopiedValue || ( $isLanguageNew && $isEmptyValue ) ) )
+                if ( $isRetained || $isCopied || ( $isLanguageNew && $isEmpty ) || $isProcessed )
                 {
-                    $spiFields[] = new SPIField(
-                        array(
-                            "id" => $isLanguageNew ?
-                                null :
-                                $content->getField( $fieldDefinition->identifier, $languageCode )->id,
-                            "fieldDefinitionId" => $fieldDefinition->id,
-                            "type" => $fieldDefinition->fieldTypeIdentifier,
-                            "value" => $fieldType->toPersistenceValue( $fieldValue ),
-                            "languageCode" => $languageCode,
-                            "versionNo" => $versionInfo->versionNo
-                        )
-                    );
+                    continue;
                 }
+
+                $spiFields[] = new SPIField(
+                    array(
+                        "id" => $isLanguageNew ?
+                            null :
+                            $content->getField( $fieldDefinition->identifier, $languageCode )->id,
+                        "fieldDefinitionId" => $fieldDefinition->id,
+                        "type" => $fieldDefinition->fieldTypeIdentifier,
+                        "value" => $fieldType->toPersistenceValue( $fieldValue ),
+                        "languageCode" => $languageCode,
+                        "versionNo" => $versionInfo->versionNo
+                    )
+                );
             }
         }
 
@@ -1265,7 +1318,7 @@ class ContentService implements ContentServiceInterface
                 "fields" => $spiFields,
                 "modificationDate" => time(),
                 "initialLanguageId" => $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
-                    $initialLanguageCode
+                    $contentUpdateStruct->initialLanguageCode
                 )->id
             )
         );
@@ -1298,6 +1351,106 @@ class ContentService implements ContentServiceInterface
             $spiContent,
             $contentType
         );
+    }
+
+    /**
+     * Returns all language codes used in given $fields.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if no field value exists in initial language
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct $contentUpdateStruct
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return array
+     */
+    protected function getLanguageCodesForUpdate( APIContentUpdateStruct $contentUpdateStruct, APIContent $content )
+    {
+        if ( $contentUpdateStruct->initialLanguageCode !== null )
+        {
+            $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
+                $contentUpdateStruct->initialLanguageCode
+            );
+        }
+        else
+        {
+            $contentUpdateStruct->initialLanguageCode = $content->contentInfo->mainLanguageCode;
+        }
+
+        $languageCodes = array_fill_keys( $content->versionInfo->languageCodes, true );
+        $languageCodes[$contentUpdateStruct->initialLanguageCode] = true;
+
+        foreach ( $contentUpdateStruct->fields as $field )
+        {
+            if ( $field->languageCode === null || isset( $languageCodes[$field->languageCode] ) )
+            {
+                continue;
+            }
+
+            $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
+                $field->languageCode
+            );
+            $languageCodes[$field->languageCode] = true;
+        }
+
+        return array_keys( $languageCodes );
+    }
+
+    /**
+     * Returns an array of fields like $fields[$field->fieldDefIdentifier][$field->languageCode].
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException If field definition does not exist in the ContentType
+     *                                                                          or value is set for non-translatable field in language
+     *                                                                          other than main
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct $contentUpdateStruct
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     * @param string $mainLanguageCode
+     *
+     * @return array
+     */
+    protected function mapFieldsForUpdate(
+        APIContentUpdateStruct $contentUpdateStruct,
+        ContentType $contentType,
+        $mainLanguageCode
+    )
+    {
+        $fields = array();
+
+        foreach ( $contentUpdateStruct->fields as $field )
+        {
+            $fieldDefinition = $contentType->getFieldDefinition( $field->fieldDefIdentifier );
+
+            if ( $fieldDefinition === null )
+            {
+                throw new ContentValidationException(
+                    "Field definition '{$field->fieldDefIdentifier}' does not exist in given ContentType"
+                );
+            }
+
+            if ( $field->languageCode === null )
+            {
+                if ( $fieldDefinition->isTranslatable )
+                {
+                    $languageCode = $contentUpdateStruct->initialLanguageCode;
+                }
+                else
+                {
+                    $languageCode = $mainLanguageCode;
+                }
+                $field = $this->cloneField( $field, array( "languageCode" => $languageCode ) );
+            }
+
+            if ( !$fieldDefinition->isTranslatable && ( $field->languageCode != $mainLanguageCode ) )
+            {
+                throw new ContentValidationException(
+                    "A value is set for non translatable field definition '{$field->fieldDefIdentifier}' with language '{$field->languageCode}'"
+                );
+            }
+
+            $fields[$field->fieldDefIdentifier][$field->languageCode] = $field;
+        }
+
+        return $fields;
     }
 
     /**
