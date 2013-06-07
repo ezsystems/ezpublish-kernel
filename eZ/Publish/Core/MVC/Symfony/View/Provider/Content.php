@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
  *
  * Content view providers select a view for a given content, depending on its own internal rules.
  */
-interface Content extends ViewProviderInterface
+interface Content
 {
     /**
      * Returns a ContentView object corresponding to $contentInfo, or null if not applicable
