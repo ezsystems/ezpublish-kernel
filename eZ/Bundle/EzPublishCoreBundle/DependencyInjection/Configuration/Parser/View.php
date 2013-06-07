@@ -58,6 +58,15 @@ EOT
                                 ->useAttributeAsKey( "key" )
                                 ->prototype( "variable" )->end()
                             ->end()
+                            ->scalarNode( 'controller' )
+                                ->info(
+<<<EOT
+Use custom controller instead of the default one to display a content matching your rules.
+You can use the controller reference notation supported by Symfony.
+EOT
+                                )
+                                ->example( 'MyBundle:MyControllerClass:view' )
+                            ->end()
                         ->end()
                     ->end()
                 ->end()
@@ -77,3 +86,4 @@ EOT
         $this->registerInternalConfigArray( static::NODE_KEY, $config, $container, self::MERGE_FROM_SECOND_LEVEL );
     }
 }
+
