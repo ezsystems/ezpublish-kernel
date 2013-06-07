@@ -1,10 +1,4 @@
 
-==========================
-eZ Publish REST API V2 RFC
-==========================
-
-.. sectnum::
-
 .. contents:: Table of Contents
 
 General considerations
@@ -154,7 +148,7 @@ Example request headers:
 
 .. code:: http
 
-    DELETE /user/sessions/<sessionID>
+    DELETE /user/sessions/<sessionID> HTTP/1.1
     X-CSRF-Token: <csrfToken>
 
 If an unsafe request is missing CSRF token, or it has wrong value, a response error must be given:
@@ -923,7 +917,8 @@ Example
 
 .. code:: http
 
-    COPY /content/objects/23 HTTP/1.1
+    POST /content/objects/23 HTTP/1.1
+    X-HTTP-Method-Override: COPY
     Host: api.example.com
     Destination: /content/locations/1/4/78
 
@@ -2353,7 +2348,7 @@ XML Example
 
 .. code:: http
 
-    GET /content/sections
+    GET /content/sections HTTP/1.1
     Host: api.example.net
     If-None-Match: "43450986749098765"
     Accept: application/vnd.ez.api.SectionList+xml
@@ -4058,7 +4053,7 @@ XML Example
 
 .. code:: http
 
-    POST /content/types/32/groups?/content/typegroups/10
+    POST /content/types/32/groups?/content/typegroups/10 HTTP/1.1
     Accept: application/vnd.ez.api.ContentTypeGroupRefList+xml
 
 .. code:: http
@@ -4108,7 +4103,7 @@ XML Example
 
 .. code:: http
 
-    DELETE /content/types/32/groups/7
+    DELETE /content/types/32/groups/7 HTTP/1.1
     Accept: application/vnd.ez.api.ContentTypeGroupRefList+xml
 
 .. code:: http
