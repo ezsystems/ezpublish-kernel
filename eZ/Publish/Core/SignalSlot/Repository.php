@@ -389,19 +389,6 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Get IO Service
-     *
-     * Get service object to perform operations on binary files
-     *
-     * @return \eZ\Publish\API\Repository\IOService
-     */
-    public function getIOService()
-    {
-        // @todo FIXME: IOService is to be deprecated
-        return $this->repository->getIOService();
-    }
-
-    /**
      * Get RoleService
      *
      * @return \eZ\Publish\API\Repository\RoleService

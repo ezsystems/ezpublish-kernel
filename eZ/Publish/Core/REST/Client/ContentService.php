@@ -392,7 +392,8 @@ class ContentService implements APIContentService, Sessionable
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the content in the given location
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is a provided remoteId which exists in the system
-     *                                                            or (4.x) there is no location provided
+     *                                                                        or there is no location provided (4.x) or multiple locations
+     *                                                                        are under the same parent or if the a field value is not accepted by the field type
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $contentCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing
      *

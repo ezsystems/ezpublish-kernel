@@ -24,12 +24,17 @@ class UrlAlias extends MultipleValued
      */
     public function matchLocation( Location $location )
     {
-        $locationUrls = $this->repository->getURLAliasService()->listLocationAliases( $location, true );
+        $urlAliasService = $this->repository->getURLAliasService();
+        $locationUrls = array_merge(
+            $urlAliasService->listLocationAliases( $location ),
+            $urlAliasService->listLocationAliases( $location, false )
+        );
+
         foreach ( $this->values as $pattern => $val )
         {
             foreach ( $locationUrls as $urlAlias )
             {
-                if ( strpos( $urlAlias->path, $pattern ) === 0 )
+                if ( strpos( $urlAlias->path, "/$pattern" ) === 0 )
                 {
                     return true;
                 }
