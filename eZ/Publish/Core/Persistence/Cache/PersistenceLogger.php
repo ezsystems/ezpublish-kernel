@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\Persistence\Cache;
 
 /**
  * Log un-cached use of SPI Persistence
+ *
+ * Stops logging details when reaching $maxLogCalls to conserve memory use
  */
 class PersistenceLogger
 {
@@ -20,6 +22,11 @@ class PersistenceLogger
      * @var int
      */
     protected $count = 0;
+
+    /**
+     * @var bool
+     */
+    protected $logCalls = true;
 
     /**
      * @var array
@@ -32,17 +39,29 @@ class PersistenceLogger
     protected $unCachedHandlers = array();
 
     /**
+     * @param bool $logCalls Flag to enable logging of calls or not, should be disabled in prod
+     */
+    public function __construct( $logCalls = true )
+    {
+        $this->logCalls = $logCalls;
+    }
+
+    /**
+     * Log SPI calls with method name and arguments until $maxLogCalls is reached.
+     *
      * @param string $method
      * @param array $arguments
      */
-    public function logCall( $method, array $arguments = array() )//, $microTime = 0 )
+    public function logCall( $method, array $arguments = array() )
     {
         $this->count++;
-        $this->calls[] = array(
-            'method' => $method,
-            'arguments' => $arguments,
-            //'microTime' => $microTime
-        );
+        if ( $this->logCalls )
+        {
+            $this->calls[] = array(
+                'method' => $method,
+                'arguments' => $arguments
+            );
+        }
     }
 
     /**
@@ -52,7 +71,11 @@ class PersistenceLogger
      */
     public function logUnCachedHandler( $handler )
     {
-        $this->unCachedHandlers[] = $handler;
+        if ( !isset( $this->unCachedHandlers[$handler] ) )
+        {
+            $this->unCachedHandlers[$handler] = 0;
+        }
+        $this->unCachedHandlers[$handler]++;
     }
 
     /**
@@ -69,6 +92,14 @@ class PersistenceLogger
     public function getCount()
     {
         return $this->count;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCallsLoggingEnabled()
+    {
+        return $this->logCalls;
     }
 
     /**

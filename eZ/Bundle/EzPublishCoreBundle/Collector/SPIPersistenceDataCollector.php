@@ -45,6 +45,7 @@ class SPIPersistenceDataCollector extends DataCollector
     {
         $this->data = array(
             'count' => $this->logger->getCount(),
+            'calls_logging_enabled' => $this->logger->isCallsLoggingEnabled(),
             'calls' => $this->logger->getCalls(),
             'handlers' => $this->logger->getLoadedUnCachedHandlers()
         );
@@ -70,6 +71,18 @@ class SPIPersistenceDataCollector extends DataCollector
     public function getCount()
     {
         return $this->data['count'];
+    }
+
+    /**
+     * Returns flag to indicate if logging of calls is enabled or not
+     *
+     * Typically not enabled in prod.
+     *
+     * @return bool
+     */
+    public function getCallsLoggingEnabled()
+    {
+        return $this->data['calls_logging_enabled'];
     }
 
     /**
@@ -104,14 +117,11 @@ class SPIPersistenceDataCollector extends DataCollector
      */
     public function getHandlers()
     {
-        $count = array();
         $handlers = array();
-        foreach ( $this->data['handlers'] as $handler )
+        foreach ( $this->data['handlers'] as $handler => $count )
         {
             list( $class, $method ) = explode( '::', $handler );
-
-            $count[$method] = ( isset($count[$method]) ? $count[$method] : 0 ) + 1;
-            $handlers[$method] = $method . '(' . $count[$method] . ')';
+            $handlers[$method] = $method . '(' . $count . ')';
         }
         return $handlers;
     }
@@ -123,11 +133,6 @@ class SPIPersistenceDataCollector extends DataCollector
      */
     public function getHandlersCount()
     {
-        $count = array();
-        foreach ( $this->data['handlers'] as $handler )
-        {
-            $count[$handler] = ( isset($count[$handler]) ? $count[$handler] : 0 ) + 1;
-        }
-        return count( $count );
+        return array_sum( $this->data['handlers'] );
     }
 }

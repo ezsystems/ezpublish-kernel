@@ -11,6 +11,8 @@ parameters:
     ezpublish.spi.persistence.cache.searchHandler.class: eZ\Publish\Core\Persistence\Cache\SearchHandler
     ezpublish.spi.persistence.cache.urlAliasHandler.class: eZ\Publish\Core\Persistence\Cache\UrlAliasHandler
     ezpublish.spi.persistence.cache.persistenceLogger.class: eZ\Publish\Core\Persistence\Cache\PersistenceLogger
+    # Make sure logging is only enabled for debug by default
+    ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging: %kernel.debug%
     ezpublish.spi.persistence.default_id: synthetical-parameter-set-in-RegisterStorageEnginePass
 
     # storage engines
@@ -117,6 +119,8 @@ services:
 
     ezpublish.spi.persistence.cache.persistenceLogger:
         class: %ezpublish.spi.persistence.cache.persistenceLogger.class%
+        arguments:
+            - %ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging%
 
     ezpublish.spi.persistence.cache.abstractHandler:
         class: %ezpublish.spi.persistence.cache.abstractHandler.class%
