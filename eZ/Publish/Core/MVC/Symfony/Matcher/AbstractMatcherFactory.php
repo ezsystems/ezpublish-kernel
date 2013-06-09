@@ -33,7 +33,7 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
     protected $matchConfig;
 
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\ViewProviderMatcher[]
+     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface[]
      */
     protected $matchers;
 
@@ -68,7 +68,8 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
      *                                  static::MATCHER_RELATIVE_NAMESPACE namespace (if available).
      *
      * @throws InvalidArgumentException
-     * @return \eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher
+     *
+     * @return \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface
      */
     protected function getMatcher( $matcherIdentifier )
     {
@@ -97,6 +98,17 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
         return $this->matchers[$matcherIdentifier];
     }
 
+    /**
+     * Checks if $valueObject has a usable configuration for $viewType.
+     * If so, the configuration hash will be returned.
+     *
+     * $valueObject can be for example a Location or a Content object.
+     *
+     * @param string $viewType
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $valueObject
+     *
+     * @return array|null The matched configuration as a hash, containing template or controller to use, or null if not matched.
+     */
     public function match( $viewType, ValueObject $valueObject )
     {
         if ( !isset( $this->matchConfig[$viewType] ) )
