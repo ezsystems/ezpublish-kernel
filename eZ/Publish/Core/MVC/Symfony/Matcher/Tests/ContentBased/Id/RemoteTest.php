@@ -1,38 +1,38 @@
 <?php
 /**
- * File containing the LocationTest class.
+ * File containing the RemoteTest class.
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\Matcher\Id;
+namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\Matcher\Id;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\Location as LocationIdMatcher;
+use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\Remote as RemoteIdMatcher;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
+use eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\BaseTest;
 
-class LocationTest extends BaseTest
+class RemoteTest extends BaseTest
 {
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\Location
+     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\Remote
      */
     private $matcher;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->matcher = new LocationIdMatcher;
+        $this->matcher = new RemoteIdMatcher;
     }
 
     /**
      * @dataProvider matchLocationProvider
-     * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\Location::matchLocation
-     * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
+     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\Remote::matchLocation
+     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
      *
-     * @param int|int[] $matchingConfig
+     * @param string|string[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param boolean $expectedResult
      */
@@ -46,23 +46,23 @@ class LocationTest extends BaseTest
     {
         return array(
             array(
-                123,
-                $this->getLocationMock( array( 'id' => 123 ) ),
+                'foo',
+                $this->getLocationMock( array( 'remoteId' => 'foo' ) ),
                 true
             ),
             array(
-                123,
-                $this->getLocationMock( array( 'id' => 456 ) ),
+                'foo',
+                $this->getLocationMock( array( 'remoteId' => 'bar' ) ),
                 false
             ),
             array(
-                array( 123, 789 ),
-                $this->getLocationMock( array( 'id' => 456 ) ),
+                array( 'foo', 'baz' ),
+                $this->getLocationMock( array( 'remoteId' => 'bar' ) ),
                 false
             ),
             array(
-                array( 123, 789 ),
-                $this->getLocationMock( array( 'id' => 789 ) ),
+                array( 'foo', 'baz' ),
+                $this->getLocationMock( array( 'remoteId' => 'baz' ) ),
                 true
             )
         );
@@ -70,10 +70,10 @@ class LocationTest extends BaseTest
 
     /**
      * @dataProvider matchContentInfoProvider
-     * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\Location::matchContentInfo
-     * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
+     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\Remote::matchContentInfo
+     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
      *
-     * @param int|int[] $matchingConfig
+     * @param string|string[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param boolean $expectedResult
      */
@@ -87,23 +87,23 @@ class LocationTest extends BaseTest
     {
         return array(
             array(
-                123,
-                $this->getContentInfoMock( array( 'mainLocationId' => 123 ) ),
+                'foo',
+                $this->getContentInfoMock( array( 'remoteId' => 'foo' ) ),
                 true
             ),
             array(
-                123,
-                $this->getContentInfoMock( array( 'mainLocationId' => 456 ) ),
+                'foo',
+                $this->getContentInfoMock( array( 'remoteId' => 'bar' ) ),
                 false
             ),
             array(
-                array( 123, 789 ),
-                $this->getContentInfoMock( array( 'mainLocationId' => 456 ) ),
+                array( 'foo', 'baz' ),
+                $this->getContentInfoMock( array( 'remoteId' => 'bar' ) ),
                 false
             ),
             array(
-                array( 123, 789 ),
-                $this->getContentInfoMock( array( 'mainLocationId' => 789 ) ),
+                array( 'foo', 'baz' ),
+                $this->getContentInfoMock( array( 'remoteId' => 'baz' ) ),
                 true
             )
         );

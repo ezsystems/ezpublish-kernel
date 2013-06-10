@@ -7,15 +7,15 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\MVC\Symfony\View\Tests\BlockViewProvider\Matcher\Id;
+namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\Block\Id;
 
-use eZ\Publish\Core\MVC\Symfony\View\BlockViewProvider\Configured\Matcher\Id\Block as BlockIdMatcher;
+use eZ\Publish\Core\MVC\Symfony\Matcher\Block\Id\Block as BlockIdMatcher;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 
 class BlockTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\BlockViewProvider\Configured\Matcher
+     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\Block\MatcherInterface
      */
     private $matcher;
 

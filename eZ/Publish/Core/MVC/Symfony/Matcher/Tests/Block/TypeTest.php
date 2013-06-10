@@ -1,28 +1,28 @@
 <?php
 /**
- * File containing the ViewTest class.
+ * File containing the TypeTest class.
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\MVC\Symfony\View\Tests\BlockViewProvider\Matcher;
+namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\Block;
 
-use eZ\Publish\Core\MVC\Symfony\View\BlockViewProvider\Configured\Matcher\View as BlockViewMatcher;
+use eZ\Publish\Core\MVC\Symfony\Matcher\Block\Type as BlockTypeMatcher;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 
-class ViewTest extends \PHPUnit_Framework_TestCase
+class TypeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\BlockViewProvider\Configured\Matcher
+     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\Block\MatcherInterface
      */
     private $matcher;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->matcher = new BlockViewMatcher;
+        $this->matcher = new BlockTypeMatcher;
     }
 
     /**
@@ -44,25 +44,25 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $data[] = array(
             'foo',
-            $this->generateBlockForView( 'foo' ),
+            $this->generateBlockForType( 'foo' ),
             true
         );
 
         $data[] = array(
             'foo',
-            $this->generateBlockForView( 'bar' ),
+            $this->generateBlockForType( 'bar' ),
             false
         );
 
         $data[] = array(
             array( 'foo', 'baz' ),
-            $this->generateBlockForView( 'bar' ),
+            $this->generateBlockForType( 'bar' ),
             false
         );
 
         $data[] = array(
             array( 'foo', 'baz' ),
-            $this->generateBlockForView( 'baz' ),
+            $this->generateBlockForType( 'baz' ),
             true
         );
 
@@ -70,13 +70,13 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $view
+     * @param $type
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Block
      */
-    private function generateBlockForView( $view )
+    private function generateBlockForType( $type )
     {
         return new Block(
-            array( 'view' => $view )
+            array( 'type' => $type )
         );
     }
 }

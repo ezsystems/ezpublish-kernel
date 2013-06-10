@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\MVC\Symfony\View\Tests\BlockViewProvider\Configured\Matcher;
+namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\Block;
 
 use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
 
@@ -63,6 +63,6 @@ class MultipleValuedTest extends \PHPUnit_Framework_TestCase
 
     private function getMultipleValuedMatcherMock()
     {
-        return $this->getMockForAbstractClass( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\BlockViewProvider\\Configured\\Matcher\\MultipleValued' );
+        return $this->getMockForAbstractClass( 'eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\Block\\MultipleValued' );
     }
 }
