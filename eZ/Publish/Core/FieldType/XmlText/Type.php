@@ -18,6 +18,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use DOMDocument;
+use RuntimeException;
 
 /**
  * XmlText field type.
@@ -182,6 +183,11 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
+        if ( !isset( $hash["xml"] ) )
+        {
+            throw new RuntimeException( "'xml' index is missing in hash." );
+        }
+
         $doc = new DOMDocument;
         $doc->loadXML( $hash['xml'] );
         return new Value( $doc );

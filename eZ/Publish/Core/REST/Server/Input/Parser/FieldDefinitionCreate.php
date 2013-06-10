@@ -15,6 +15,7 @@ use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\Core\REST\Common\Exceptions;
+use Exception;
 
 /**
  * Parser for FieldDefinitionCreate
@@ -64,6 +65,7 @@ class FieldDefinitionCreate extends Base
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      *
+     * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser If an error is found while parsing
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
@@ -144,10 +146,17 @@ class FieldDefinitionCreate extends Base
         // @todo XSD says that defaultValue is mandatory, but content type can be created without it
         if ( array_key_exists( 'defaultValue', $data ) )
         {
-            $fieldDefinitionCreate->defaultValue = $this->fieldTypeParser->parseValue(
-                $data['fieldType'],
-                $data['defaultValue']
-            );
+            try
+            {
+                $fieldDefinitionCreate->defaultValue = $this->fieldTypeParser->parseValue(
+                    $data['fieldType'],
+                    $data['defaultValue']
+                );
+            }
+            catch ( Exception $e )
+            {
+                throw new Exceptions\Parser( "Invalid 'defaultValue' element for FieldDefinitionCreate.", 0, $e );
+            }
         }
 
         if ( array_key_exists( 'validatorConfiguration', $data ) )
