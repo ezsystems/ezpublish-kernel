@@ -173,6 +173,7 @@ class EzcDatabase extends Gateway
      * Generates a language mask for $version
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
+     * @param string $initialLanguageCode
      * @param boolean $alwaysAvailable
      *
      * @return int
