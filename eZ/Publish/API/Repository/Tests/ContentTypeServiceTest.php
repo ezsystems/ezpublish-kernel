@@ -2456,10 +2456,6 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      */
     public function testCreateContentTypeDraftThrowsBadStateException()
     {
-        $this->markTestIncomplete(
-            'Behavior to test is: If a draft *by a different user* exists, throw BadState. Cannot be tested on current fixture, since additional, privileged user is missing.'
-        );
-
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
