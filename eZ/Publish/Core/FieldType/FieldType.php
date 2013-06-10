@@ -183,7 +183,7 @@ abstract class FieldType implements FieldTypeInterface
         foreach ( $this->getSettingsSchema() as $settingName => $settingConfiguration )
         {
             // Checking that a default entry exists in the settingsSchema but that no value has been provided
-            if ( !array_key_exists( $settingName, $fieldSettings ) && array_key_exists( "default", $settingConfiguration ) )
+            if ( !array_key_exists( $settingName, (array)$fieldSettings ) && array_key_exists( "default", $settingConfiguration ) )
             {
                 $fieldSettings[$settingName] = $settingConfiguration["default"];
             }
