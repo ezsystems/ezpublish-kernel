@@ -7,16 +7,16 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\Matcher\Identifier;
+namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\Matcher\Id;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Identifier\ParentContentType as ParentContentTypeMatcher;
-use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
+use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentContentType as ParentContentTypeMatcher;
+use eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\BaseTest;
 use eZ\Publish\API\Repository\Repository;
 
 class ParentContentTypeTest extends BaseTest
 {
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Identifier\ParentContentType
+     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentContentType
      */
     private $matcher;
 
@@ -27,15 +27,15 @@ class ParentContentTypeTest extends BaseTest
     }
 
     /**
-     * Returns a Repository mock configured to return the appropriate Section object with given section identifier
+     * Returns a Repository mock configured to return the appropriate ContentType object with given id.
      *
-     * @param string $contentTypeIdentifier
+     * @param int $contentTypeId
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function generateRepositoryMockForContentTypeIdentifier( $contentTypeIdentifier )
+    private function generateRepositoryMockForContentTypeId( $contentTypeId )
     {
-        $parentContentInfo = $this->getContentInfoMock( array( "contentTypeId" => 42 ) );
+        $parentContentInfo = $this->getContentInfoMock( array( "contentTypeId" => $contentTypeId ) );
         $parentLocation = $this->getLocationMock();
         $parentLocation->expects( $this->once() )
             ->method( 'getContentInfo' )
@@ -59,46 +59,22 @@ class ParentContentTypeTest extends BaseTest
                 $this->returnValue( $this->getLocationMock() )
             );
 
-        $contentTypeServiceMock = $this
-            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\ContentTypeService' )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $contentTypeServiceMock->expects( $this->once() )
-            ->method( 'loadContentType' )
-            ->with( 42 )
-            ->will(
-                $this->returnValue(
-                    $this
-                        ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' )
-                        ->setConstructorArgs(
-                            array(
-                                array( 'identifier' => $contentTypeIdentifier )
-                            )
-                        )
-                        ->getMockForAbstractClass()
-                )
-            );
-
         $repository = $this->getRepositoryMock();
         $repository
             ->expects( $this->any() )
             ->method( 'getLocationService' )
             ->will( $this->returnValue( $locationServiceMock ) );
-        $repository
-            ->expects( $this->once() )
-            ->method( 'getContentTypeService' )
-            ->will( $this->returnValue( $contentTypeServiceMock ) );
 
         return $repository;
     }
 
     /**
      * @dataProvider matchLocationProvider
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Identifier\ParentContentType::matchLocation
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentContentType::matchLocation
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
      * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
      *
-     * @param string|string[] $matchingConfig
+     * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param boolean $expectedResult
      *
@@ -118,23 +94,23 @@ class ParentContentTypeTest extends BaseTest
     {
         return array(
             array(
-                'foo',
-                $this->generateRepositoryMockForContentTypeIdentifier( 'foo' ),
+                123,
+                $this->generateRepositoryMockForContentTypeId( 123 ),
                 true
             ),
             array(
-                'foo',
-                $this->generateRepositoryMockForContentTypeIdentifier( 'bar' ),
+                123,
+                $this->generateRepositoryMockForContentTypeId( 456 ),
                 false
             ),
             array(
-                array( 'foo', 'baz' ),
-                $this->generateRepositoryMockForContentTypeIdentifier( 'bar' ),
+                array( 123, 789 ),
+                $this->generateRepositoryMockForContentTypeId( 456 ),
                 false
             ),
             array(
-                array( 'foo', 'baz' ),
-                $this->generateRepositoryMockForContentTypeIdentifier( 'baz' ),
+                array( 123, 789 ),
+                $this->generateRepositoryMockForContentTypeId( 789 ),
                 true
             )
         );
@@ -142,11 +118,11 @@ class ParentContentTypeTest extends BaseTest
 
     /**
      * @dataProvider matchLocationProvider
-     * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Identifier\ParentContentType::matchContentInfo
-     * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
+     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentContentType::matchContentInfo
+     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
      * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
      *
-     * @param string|string[] $matchingConfig
+     * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param boolean $expectedResult
      *

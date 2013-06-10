@@ -7,17 +7,17 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\Matcher\Id;
+namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\Matcher\Id;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ContentType as ContentTypeIdMatcher;
+use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentType as ContentTypeIdMatcher;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
+use eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\BaseTest;
 
 class ContentTypeTest extends BaseTest
 {
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ContentType
+     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentType
      */
     private $matcher;
 
@@ -29,8 +29,8 @@ class ContentTypeTest extends BaseTest
 
     /**
      * @dataProvider matchLocationProvider
-     * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ContentType::matchLocation
-     * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
+     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentType::matchLocation
+     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
      *
      * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
@@ -109,8 +109,8 @@ class ContentTypeTest extends BaseTest
 
     /**
      * @dataProvider matchContentInfoProvider
-     * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ContentType::matchContentInfo
-     * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
+     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentType::matchContentInfo
+     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
      *
      * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo

@@ -7,15 +7,15 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\MVC\Symfony\View\Tests\BlockViewProvider\Matcher\Id;
+namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\Block\Id;
 
-use eZ\Publish\Core\MVC\Symfony\View\BlockViewProvider\Configured\Matcher\Id\Zone as ZoneIdMatcher;
+use eZ\Publish\Core\MVC\Symfony\Matcher\Block\Id\Zone as ZoneIdMatcher;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 
 class ZoneTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\BlockViewProvider\Configured\Matcher
+     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\Block\MatcherInterface
      */
     private $matcher;
 

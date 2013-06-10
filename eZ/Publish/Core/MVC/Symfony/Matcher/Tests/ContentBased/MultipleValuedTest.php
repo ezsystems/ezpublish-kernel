@@ -7,16 +7,16 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\Matcher;
+namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\Matcher;
 
-use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
+use eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\BaseTest;
 
 class MultipleValuedTest extends BaseTest
 {
     /**
      * @dataProvider matchingConfigProvider
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::getValues
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::getValues
      */
     public function testSetMatchingConfig( $matchingConfig )
     {
@@ -51,7 +51,7 @@ class MultipleValuedTest extends BaseTest
 
     /**
      * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::getRepository
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::getRepository
      */
     public function testInjectRepository()
     {
@@ -62,6 +62,6 @@ class MultipleValuedTest extends BaseTest
 
     private function getMultipleValuedMatcherMock()
     {
-        return $this->getMockForAbstractClass( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider\\Configured\\Matcher\\MultipleValued' );
+        return $this->getMockForAbstractClass( 'eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\ContentBased\\MultipleValued' );
     }
 }

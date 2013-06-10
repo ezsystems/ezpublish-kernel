@@ -7,18 +7,18 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\Matcher\Identifier;
+namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\Matcher\Identifier;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Identifier\Section as SectionIdentifierMatcher;
+use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Identifier\Section as SectionIdentifierMatcher;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
+use eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\BaseTest;
 use eZ\Publish\API\Repository\Repository;
 
 class SectionTest extends BaseTest
 {
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Identifier\Section
+     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Identifier\Section
      */
     private $matcher;
 
@@ -67,8 +67,8 @@ class SectionTest extends BaseTest
 
     /**
      * @dataProvider matchSectionProvider
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Identifier\Section::matchLocation
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Identifier\Section::matchLocation
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
      * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
      *
      * @param string|string[] $matchingConfig
@@ -124,8 +124,8 @@ class SectionTest extends BaseTest
 
     /**
      * @dataProvider matchSectionProvider
-     * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Identifier\Section::matchContentInfo
-     * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
+     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Identifier\Section::matchContentInfo
+     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
      * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
      *
      * @param string|string[] $matchingConfig

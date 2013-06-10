@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured;
+namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased;
 
 abstract class BaseTest extends \PHPUnit_Framework_TestCase
 {
