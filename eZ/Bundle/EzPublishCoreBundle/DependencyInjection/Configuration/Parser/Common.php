@@ -68,7 +68,6 @@ class Common extends AbstractParser
             ->end()
             ->booleanNode( 'legacy_mode' )
                 ->info( 'Whether to use legacy mode or not. If true, will let the legacy kernel handle url aliases.' )
-                ->defaultValue( false )
             ->end()
             ->scalarNode( 'session_name' )
                 ->info( 'The session name. If you want a session name per siteaccess, use "{siteaccess_hash}" token. Will override default session name from framework.session.name' )
