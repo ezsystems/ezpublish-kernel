@@ -69,7 +69,7 @@ class LegacyTest extends BaseHandlerTest
      */
     public function testUpdateMtime()
     {
-        self::markTestIncomplete( "Not supported by Legacy io handler, aka incomplete" );
+        self::markTestSkipped( "Not supported by Legacy io handler" );
     }
 
     /**
@@ -77,6 +77,6 @@ class LegacyTest extends BaseHandlerTest
      */
     public function testUpdateCtime()
     {
-        self::markTestIncomplete( "Not supported by Legacy io handler, aka incomplete" );
+        self::markTestSkipped( "Not supported by Legacy io handler" );
     }
 }
