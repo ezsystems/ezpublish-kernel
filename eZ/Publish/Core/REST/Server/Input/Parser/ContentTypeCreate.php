@@ -174,6 +174,11 @@ class ContentTypeCreate extends Base
 
         foreach ( $data['FieldDefinitions']['FieldDefinition'] as $fieldDefinitionData )
         {
+            if ( !is_array( $fieldDefinitionData ) )
+            {
+                throw new Exceptions\Parser( "Invalid 'FieldDefinition' element for ContentTypeCreate." );
+            }
+
             $contentTypeCreateStruct->addFieldDefinition(
                 $this->fieldDefinitionCreateParser->parse( $fieldDefinitionData, $parsingDispatcher )
             );
