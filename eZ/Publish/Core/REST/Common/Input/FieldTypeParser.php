@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\REST\Common\Input;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry;
-
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\FieldTypeService;
