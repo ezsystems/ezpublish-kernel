@@ -296,6 +296,10 @@ class ContentType extends RestController
         {
             throw new BadRequestException( $e->getMessage() );
         }
+        catch ( Exceptions\Parser $e )
+        {
+            throw new BadRequestException( $e->getMessage() );
+        }
 
         if ( isset( $this->request->variables['publish'] ) && $this->request->variables['publish'] === 'true' )
         {
