@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Matcher;
 
-use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MatcherInterface;
+use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MatcherInterface as ContentBasedMatcherInterface;
 use InvalidArgumentException;
 
 abstract class ContentBasedMatcherFactory extends AbstractMatcherFactory
@@ -19,7 +19,7 @@ abstract class ContentBasedMatcherFactory extends AbstractMatcherFactory
     protected function getMatcher( $matcherIdentifier )
     {
         $matcher = parent::getMatcher( $matcherIdentifier );
-        if ( !$matcher instanceof MatcherInterface )
+        if ( !$matcher instanceof ContentBasedMatcherInterface )
         {
             throw new InvalidArgumentException(
                 'Content based Matcher must implement eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\ContentBased\\MatcherInterface.'
