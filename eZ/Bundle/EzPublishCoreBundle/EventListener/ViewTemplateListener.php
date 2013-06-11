@@ -16,6 +16,7 @@ use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
 use eZ\Bundle\EzPublishCoreBundle\Templating\ViewParameterProvider;
 use eZ\Bundle\EzPublishCoreBundle\Templating\ParameterWrapper;
 use InvalidArgumentException;
+use LogicException;
 
 class ViewTemplateListener implements EventSubscriberInterface
 {
@@ -66,7 +67,7 @@ class ViewTemplateListener implements EventSubscriberInterface
                     $configResolverParams = explode( ';', substr( $param, 1, -1 ) );
                     if ( count( $configResolverParams ) > 3 )
                     {
-                        throw new \LogicException( "Config resolver parameters can't have more than 3 segments: \$paramName;namespace;scope\$" );
+                        throw new LogicException( "Config resolver parameters can't have more than 3 segments: \$paramName;namespace;scope\$" );
                     }
 
                     $namespace = isset( $configResolverParams[1] ) ? $configResolverParams[1] : null;

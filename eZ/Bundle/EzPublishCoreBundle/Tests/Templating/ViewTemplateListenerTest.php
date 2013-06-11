@@ -102,4 +102,76 @@ class ViewTemplateListenerTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals( $expectedParams, $contentView->getParameters() );
     }
+
+    /**
+     * @expectedException LogicException
+     * @dataProvider configResolverFailProvider
+     *
+     * @covers eZ\Bundle\EzPublishCoreBundle\EventListener\ViewTemplateListener::onPreContentView
+     */
+    public function testOnPreContentViewConfigResolverFail( $params )
+    {
+        $contentView = new ContentView;
+        $contentView->setConfigHash( array( 'params' => $params ) );
+        $listener = new ViewTemplateListener( $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' ) );
+        $listener->onPreContentView( new PreContentViewEvent( $contentView ) );
+    }
+
+    public function configResolverFailProvider()
+    {
+        return array(
+            array( array( 'some_var' => '$foo;bar;baz;bat$' ) ),
+            array( array( 'some_var' => '$foo;bar;baz;bat;truc$' ) ),
+            array( array( 'some_var' => '$foo;bar;baz;bat;truc;muche$' ) ),
+        );
+    }
+
+    /**
+     * @covers eZ\Bundle\EzPublishCoreBundle\EventListener\ViewTemplateListener::onPreContentView
+     */
+    public function testOnPreContentViewConfigResolver()
+    {
+        $params = array(
+            'var1' => '$foo$',
+            'var2' => '$foo;custom_namespace$',
+            'var3' => '$foo;custom_namespace;forced_scope$',
+        );
+        $val1 = 'bar1';
+        $val2 = 'bar2';
+        $val3 = 'bar3';
+
+        $contentView = new ContentView;
+        $contentView->setConfigHash( array( 'params' => $params ) );
+
+        $configResolverMock = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
+        $configResolverMock
+            ->expects( $this->exactly( 3 ) )
+            ->method( 'getParameter' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'foo', null, null, $val1 ),
+                        array( 'foo', 'custom_namespace', null, $val2 ),
+                        array( 'foo', 'custom_namespace', 'forced_scope', $val3 ),
+                    )
+                )
+            );
+
+        $containerMock = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
+        $containerMock
+            ->expects( $this->once() )
+            ->method( 'get' )
+            ->with( 'ezpublish.config.resolver' )
+            ->will( $this->returnValue( $configResolverMock ) );
+
+        $listener = new ViewTemplateListener( $containerMock );
+        $listener->onPreContentView( new PreContentViewEvent( $contentView ) );
+
+        $expectedParams = array(
+            'var1' => $val1,
+            'var2' => $val2,
+            'var3' => $val3,
+        );
+        $this->assertEquals( $expectedParams, $contentView->getParameters() );
+    }
 }
