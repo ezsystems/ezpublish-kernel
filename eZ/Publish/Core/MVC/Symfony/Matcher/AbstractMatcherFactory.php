@@ -74,17 +74,18 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
      */
     protected function getMatcher( $matcherIdentifier )
     {
-        // Caching the matcher instance in memory
-        if ( isset( $this->matchers[$matcherIdentifier] ) )
-        {
-            return $this->matchers[$matcherIdentifier];
-        }
-
         // Not a FQ class name, so take the relative namespace.
         if ( $matcherIdentifier[0] !== '\\' && defined( 'static::MATCHER_RELATIVE_NAMESPACE' ) )
         {
             $matcherIdentifier = static::MATCHER_RELATIVE_NAMESPACE . "\\$matcherIdentifier";
         }
+
+        // Retrieving the matcher instance from in-memory cache
+        if ( isset( $this->matchers[$matcherIdentifier] ) )
+        {
+            return $this->matchers[$matcherIdentifier];
+        }
+
         if ( !class_exists( $matcherIdentifier ) )
         {
             throw new InvalidArgumentException( "Invalid matcher class '$matcherIdentifier'" );
