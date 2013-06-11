@@ -76,11 +76,12 @@ class ViewTemplateListenerTest extends \PHPUnit_Framework_TestCase
 
         $containerMock = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
         $containerMock
-            ->expects( $this->exactly( 2 ) )
+            ->expects( $this->exactly( 3 ) )
             ->method( 'get' )
             ->will(
                 $this->returnValueMap(
                     array(
+                        array( 'ezpublish.config.resolver', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' ) ),
                         array( 'some_defined_service', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $viewParameterProvider1 ),
                         array( 'another_service', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $viewParameterProvider2 ),
                     )
