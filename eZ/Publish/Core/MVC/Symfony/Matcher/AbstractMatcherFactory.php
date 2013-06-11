@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\MVC\RepositoryAwareInterface;
 use SplObjectStorage;
+use InvalidArgumentException;
 
 /**
  * Base for MatcherFactory classes.
