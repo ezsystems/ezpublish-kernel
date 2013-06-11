@@ -613,9 +613,8 @@ class LocationHandlerTest extends HandlerTest
         $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'getItem' )
-            ->with( 'location', 33 )
-            ->will( $this->returnValue( $cacheItemMock ) );
+            ->method( 'clear' )
+            ->with( 'location', 33 );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
         $this->persistenceFactoryMock
@@ -628,11 +627,6 @@ class LocationHandlerTest extends HandlerTest
             ->method( 'update' )
             ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\UpdateStruct' ), 33 )
             ->will( $this->returnValue( new Location(  array( 'id' => 33  ) ) ) );
-
-        $cacheItemMock
-            ->expects( $this->once() )
-            ->method( 'set' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location' ) );
 
         $cacheItemMock
             ->expects( $this->never() )

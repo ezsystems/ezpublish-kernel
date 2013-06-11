@@ -179,11 +179,10 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     public function update( UpdateStruct $struct, $locationId )
     {
         $this->logger->logCall( __METHOD__, array( 'location' => $locationId, 'struct' => $struct ) );
-        $this->cache
-            ->getItem( 'location', $locationId )
-            ->set( $location = $this->persistenceFactory->getLocationHandler()->update( $struct, $locationId ) );
+        $updated = $this->persistenceFactory->getLocationHandler()->update( $struct, $locationId );
+        $this->cache->clear( 'location', $locationId );
 
-        return $location;
+        return $updated;
     }
 
     /**
