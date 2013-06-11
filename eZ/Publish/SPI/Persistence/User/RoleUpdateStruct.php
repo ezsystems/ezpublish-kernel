@@ -40,7 +40,7 @@ class RoleUpdateStruct extends ValueObject
     public $name;
 
     /**
-     * Name of the role
+     * Description of the role
      *
      * @since 5.0
      * @var string[]
