@@ -193,6 +193,8 @@ abstract class Type extends FieldType
     {
         return array(
             'id' => $value->id,
+            // Kept for BC with eZ Publish 5.0 (EZP-20948)
+            'path' => $value->id,
             'fileName' => $value->fileName,
             'fileSize' => $value->fileSize,
             'mimeType' => $value->mimeType,

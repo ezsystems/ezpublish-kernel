@@ -313,6 +313,7 @@ class MediaTest extends BinaryBaseTest
                 new MediaValue(
                     array(
                         'id' => __FILE__,
+                        'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => filesize( __FILE__ ),
                         'mimeType' => 'text/plain',
@@ -326,6 +327,37 @@ class MediaTest extends BinaryBaseTest
                 ),
                 array(
                     'id' => __FILE__,
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => filesize( __FILE__ ),
+                    'mimeType' => 'text/plain',
+                    'hasController' => false,
+                    'autoplay' => false,
+                    'loop' => true,
+                    'width' => 0,
+                    'height' => 0,
+                    'uri' => 'http://' . basename( __FILE__ ),
+                )
+            ),
+            // BC with 5.0 (EZP-20948). Path can be used as input instead of ID.
+            array(
+                new MediaValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
+                        'mimeType' => 'text/plain',
+                        'hasController' => false,
+                        'autoplay' => false,
+                        'loop' => true,
+                        'width' => 0,
+                        'height' => 0,
+                        'uri' => 'http://' . basename( __FILE__ ),
+                    )
+                ),
+                array(
+                    'id' => __FILE__,
+                    'path' => __FILE__,
                     'fileName' => basename( __FILE__ ),
                     'fileSize' => filesize( __FILE__ ),
                     'mimeType' => 'text/plain',
@@ -410,6 +442,33 @@ class MediaTest extends BinaryBaseTest
                     )
                 ),
             ),
+            // BC with 5.0 (EZP-20948). Path can be used as input instead of ID.
+            array(
+                array(
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => filesize( __FILE__ ),
+                    'mimeType' => 'text/plain',
+                    'hasController' => false,
+                    'autoplay' => false,
+                    'loop' => true,
+                    'width' => 0,
+                    'height' => 0,
+                ),
+                new MediaValue(
+                    array(
+                        'id' => __FILE__,
+                        'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
+                        'mimeType' => 'text/plain',
+                        'hasController' => false,
+                        'autoplay' => false,
+                        'loop' => true,
+                        'width' => 0,
+                        'height' => 0,
+                    )
+                ),
+            )
             // @todo: Test for REST upload hash
         );
     }

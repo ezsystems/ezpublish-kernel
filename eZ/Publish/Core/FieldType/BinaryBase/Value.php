@@ -15,6 +15,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * Base value for binary field types
+ * @property string $path Used for BC with 5.0 (EZP-20948). Equivalent to $id.
  */
 abstract class Value extends BaseValue
 {
@@ -66,6 +67,13 @@ abstract class Value extends BaseValue
      */
     public function __construct( array $fileData = array() )
     {
+        // BC with 5.0 (EZP-20948)
+        if ( isset( $fileData['path'] ) )
+        {
+            $fileData['id'] = $fileData['path'];
+            unset( $fileData['path'] );
+        }
+
         foreach ( $fileData as $key => $value )
         {
             try
@@ -93,5 +101,21 @@ abstract class Value extends BaseValue
     public function __toString()
     {
         return (string)$this->uri;
+    }
+
+    public function __get( $propertyName )
+    {
+        if ( $propertyName == 'path' )
+            return $this->id;
+
+        throw new PropertyNotFoundException( $propertyName, get_class( $this ) );
+    }
+
+    public function __set( $propertyName, $propertyValue )
+    {
+        if ( $propertyName == 'path' )
+            $this->id = $propertyValue;
+
+        throw new PropertyNotFoundException( $propertyName, get_class( $this ) );
     }
 }

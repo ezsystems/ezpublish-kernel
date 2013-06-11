@@ -298,6 +298,7 @@ class ImageTest extends FieldTypeTest
                 ),
                 array(
                     'id' => $this->getImageInputPath(),
+                    'path' => $this->getImageInputPath(),
                     'fileName' => 'Sindelfingen-Squirrels.jpg',
                     'fileSize' => 23,
                     'alternativeText' => 'This is so Sindelfingen!',
@@ -305,6 +306,28 @@ class ImageTest extends FieldTypeTest
                     'uri' => 'http://' . $this->getImageInputPath(),
                 ),
             ),
+            // BC with 5.0 (EZP-20948). Path can be used as input instead of ID.
+            array(
+                new ImageValue(
+                    array(
+                        'path' => $this->getImageInputPath(),
+                        'fileName' => 'Sindelfingen-Squirrels.jpg',
+                        'fileSize' => 23,
+                        'alternativeText' => 'This is so Sindelfingen!',
+                        'imageId' => '123-12345',
+                        'uri' => 'http://' . $this->getImageInputPath(),
+                    )
+                ),
+                array(
+                    'id' => $this->getImageInputPath(),
+                    'path' => $this->getImageInputPath(),
+                    'fileName' => 'Sindelfingen-Squirrels.jpg',
+                    'fileSize' => 23,
+                    'alternativeText' => 'This is so Sindelfingen!',
+                    'imageId' => '123-12345',
+                    'uri' => 'http://' . $this->getImageInputPath(),
+                ),
+            )
         );
     }
 
@@ -368,6 +391,25 @@ class ImageTest extends FieldTypeTest
                     )
                 ),
             ),
+            // BC with 5.0 (EZP-20948). Path can be used as input instead of ID.
+            array(
+                array(
+                    'path' => $this->getImageInputPath(),
+                    'fileName' => 'Sindelfingen-Squirrels.jpg',
+                    'fileSize' => 23,
+                    'alternativeText' => 'This is so Sindelfingen!',
+                    'uri' => 'http://' . $this->getImageInputPath(),
+                ),
+                new ImageValue(
+                    array(
+                        'id' => $this->getImageInputPath(),
+                        'fileName' => 'Sindelfingen-Squirrels.jpg',
+                        'fileSize' => 23,
+                        'alternativeText' => 'This is so Sindelfingen!',
+                        'uri' => 'http://' . $this->getImageInputPath(),
+                    )
+                ),
+            )
             // @todo: Provide REST upload tests
         );
     }

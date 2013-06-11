@@ -16,9 +16,7 @@ use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
 /**
  * Value for Image field type
  *
- * @property string $fileName Display file name of the image.
- * @property string $path Path where the image can be found
- * @property string $alternativeText Alternative text for the image
+ * @property string $path Used for BC with 5.0 (EZP-20948). Equivalent to $id.
  *
  * @todo Mime type?
  * @todo Dimensions?
@@ -75,6 +73,13 @@ class Value extends BaseValue
      */
     public function __construct( array $imageData = array() )
     {
+        // BC with 5.0 (EZP-20948)
+        if ( isset( $imageData['path'] ) )
+        {
+            $imageData['id'] = $imageData['path'];
+            unset( $imageData['path'] );
+        }
+
         foreach ( $imageData as $key => $value )
         {
             try
@@ -136,5 +141,21 @@ class Value extends BaseValue
     public function __toString()
     {
         return (string)$this->fileName;
+    }
+
+    public function __get( $propertyName )
+    {
+        if ( $propertyName == 'path' )
+            return $this->id;
+
+        throw new PropertyNotFoundException( $propertyName, get_class( $this ) );
+    }
+
+    public function __set( $propertyName, $propertyValue )
+    {
+        if ( $propertyName == 'path' )
+            $this->id = $propertyValue;
+
+        throw new PropertyNotFoundException( $propertyName, get_class( $this ) );
     }
 }
