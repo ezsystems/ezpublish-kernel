@@ -191,15 +191,15 @@ class ConfiguredTest extends \PHPUnit_Framework_TestCase
     protected function getPartiallyMockedViewProvider( array $matchingConfig = array() )
     {
         return $this
-               ->getMockBuilder( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\Provider\\Location\\Configured' )
-               ->setConstructorArgs(
-                       array(
-                            $this->repositoryMock,
-                            $matchingConfig
-                       )
-                   )
-               ->setMethods( array( 'getMatcher' ) )
-               ->getMock();
+            ->getMockBuilder( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\Provider\\Location\\Configured' )
+            ->setConstructorArgs(
+                array(
+                    $this->repositoryMock,
+                    $matchingConfig
+                )
+            )
+            ->setMethods( array( 'getMatcher' ) )
+            ->getMock();
     }
 
     /**
@@ -208,9 +208,9 @@ class ConfiguredTest extends \PHPUnit_Framework_TestCase
     protected function getRepositoryMock()
     {
         return $this
-               ->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\Repository' )
-               ->disableOriginalConstructor()
-               ->getMock();
+            ->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\Repository' )
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -221,9 +221,9 @@ class ConfiguredTest extends \PHPUnit_Framework_TestCase
     protected function getLocationMock( array $properties = array() )
     {
         return $this
-               ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' )
-               ->setConstructorArgs( array( $properties ) )
-               ->getMockForAbstractClass();
+            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' )
+            ->setConstructorArgs( array( $properties ) )
+            ->getMockForAbstractClass();
     }
 
     /**
@@ -233,9 +233,9 @@ class ConfiguredTest extends \PHPUnit_Framework_TestCase
      */
     protected function getContentInfoMock( array $properties = array() )
     {
-        return $this->
-                   getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' )
-               ->setConstructorArgs( array( $properties ) )
-               ->getMockForAbstractClass();
+        return $this
+            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' )
+            ->setConstructorArgs( array( $properties ) )
+            ->getMockForAbstractClass();
     }
 }

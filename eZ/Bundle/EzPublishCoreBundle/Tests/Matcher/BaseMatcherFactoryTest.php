@@ -11,7 +11,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Matcher;
 
 abstract class BaseMatcherFactoryTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @param string $matcherServiceIdentifier
      *
@@ -25,19 +24,19 @@ abstract class BaseMatcherFactoryTest extends \PHPUnit_Framework_TestCase
         ->method( 'getParameter' )
         ->with( $this->logicalOr( 'location_view', 'content_view' ) )
         ->will(
-                $this->returnValue(
-                    array(
-                         'full' => array(
-                             'matchRule' => array(
-                                 'template'    => 'my_template.html.twig',
-                                 'match'            => array(
-                                     $matcherServiceIdentifier   => 'someValue'
-                                 )
-                             )
-                         )
+            $this->returnValue(
+                array(
+                    'full' => array(
+                        'matchRule' => array(
+                            'template'    => 'my_template.html.twig',
+                            'match'            => array(
+                                $matcherServiceIdentifier   => 'someValue'
+                            )
+                        )
                     )
                 )
-            );
+            )
+        );
 
         return $resolverMock;
     }
@@ -50,9 +49,9 @@ abstract class BaseMatcherFactoryTest extends \PHPUnit_Framework_TestCase
     protected function getLocationMock( array $properties = array() )
     {
         return $this
-               ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' )
-               ->setConstructorArgs( array( $properties ) )
-               ->getMockForAbstractClass();
+            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' )
+            ->setConstructorArgs( array( $properties ) )
+            ->getMockForAbstractClass();
     }
 
     /**
@@ -63,8 +62,8 @@ abstract class BaseMatcherFactoryTest extends \PHPUnit_Framework_TestCase
     protected function getContentInfoMock( array $properties = array() )
     {
         return $this
-               ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' )
-               ->setConstructorArgs( array( $properties ) )
-               ->getMockForAbstractClass();
+            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' )
+            ->setConstructorArgs( array( $properties ) )
+            ->getMockForAbstractClass();
     }
 }
