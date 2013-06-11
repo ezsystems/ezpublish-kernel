@@ -104,12 +104,13 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
      *
      * $valueObject can be for example a Location or a Content object.
      *
-     * @param string $viewType
      * @param \eZ\Publish\API\Repository\Values\ValueObject $valueObject
+     *
+     * @param string $viewType
      *
      * @return array|null The matched configuration as a hash, containing template or controller to use, or null if not matched.
      */
-    public function match( $viewType, ValueObject $valueObject )
+    public function match( ValueObject $valueObject, $viewType )
     {
         if ( !isset( $this->matchConfig[$viewType] ) )
         {

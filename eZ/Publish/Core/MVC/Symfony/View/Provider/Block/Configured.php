@@ -25,7 +25,7 @@ class Configured extends BaseConfigured implements BlockProvider
      */
     public function getView( Block $block )
     {
-        $viewConfig = $this->matcherFactory->match( 'block', $block );
+        $viewConfig = $this->matcherFactory->match( $block, 'block' );
         if ( empty( $viewConfig ) )
         {
             return;
