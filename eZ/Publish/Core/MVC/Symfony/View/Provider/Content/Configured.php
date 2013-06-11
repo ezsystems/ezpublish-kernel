@@ -25,7 +25,7 @@ class Configured extends BaseConfigured implements ContentViewProvider
      */
     public function getView( ContentInfo $contentInfo, $viewType )
     {
-        $viewConfig = $this->matcherFactory->match( $viewType, $contentInfo );
+        $viewConfig = $this->matcherFactory->match( $contentInfo, $viewType );
         if ( empty( $viewConfig ) )
         {
             return;

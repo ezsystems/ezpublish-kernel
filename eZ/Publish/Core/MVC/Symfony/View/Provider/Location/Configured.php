@@ -27,7 +27,7 @@ class Configured extends BaseConfigured implements LocationViewProvider
      */
     public function getView( Location $location, $viewType )
     {
-        $viewConfig = $this->matcherFactory->match( $viewType, $location );
+        $viewConfig = $this->matcherFactory->match( $location, $viewType );
         if ( empty( $viewConfig ) )
         {
             return;
