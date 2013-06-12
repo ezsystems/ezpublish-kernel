@@ -10,7 +10,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\Core\MVC\Symfony\Controller\Manager as ControllerManager;
+use eZ\Publish\Core\MVC\Symfony\Controller\ManagerInterface as ControllerManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -22,7 +22,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class ViewControllerListener implements EventSubscriberInterface
 {
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Controller\Manager
+     * @var \eZ\Publish\Core\MVC\Symfony\Controller\ManagerInterface
      */
     private $controllerManager;
 
@@ -43,7 +43,7 @@ class ViewControllerListener implements EventSubscriberInterface
 
     public function __construct(
         ControllerResolverInterface $controllerResolver,
-        ControllerManager $controllerManager,
+        ControllerManagerInterface $controllerManager,
         Repository $repository,
         LoggerInterface $logger
     )
