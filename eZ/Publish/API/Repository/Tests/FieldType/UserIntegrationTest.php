@@ -392,4 +392,46 @@ class UserIntegrationTest extends BaseIntegrationTest
             ),
         );
     }
+
+    public function testRemoveFieldDefinition()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $content = $this->testPublishContent();
+        $countBeforeRemoval = count( $content->getFields() );
+
+        $contentType = $contentTypeService->loadContentType( $content->contentInfo->contentTypeId );
+        $contentTypeDraft = $contentTypeService->createContentTypeDraft( $contentType );
+
+        $userFieldDefinition = null;
+        foreach ( $contentTypeDraft->getFieldDefinitions() as $fieldDefinition )
+        {
+            if ( $fieldDefinition->fieldTypeIdentifier === "ezuser" )
+            {
+                $userFieldDefinition = $fieldDefinition;
+                break;
+            }
+        }
+
+        if ( $userFieldDefinition === null )
+        {
+            $this->fail( "'ezuser' field definition was not found" );
+        }
+
+        $contentTypeService->removeFieldDefinition( $contentTypeDraft, $userFieldDefinition );
+        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+
+        $content = $contentService->loadContent( $content->id );
+
+        $this->assertCount( $countBeforeRemoval - 1, $content->getFields() );
+        $this->assertNull( $content->getFieldValue( $userFieldDefinition->identifier ) );
+    }
+
+    public function testAddFieldDefinition()
+    {
+        $this->markTestIncomplete(
+            "Currently cannot be tested since user can be properly created only through UserService"
+        );
+    }
 }

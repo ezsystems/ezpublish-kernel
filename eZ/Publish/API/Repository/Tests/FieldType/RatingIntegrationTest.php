@@ -314,4 +314,18 @@ class RatingIntegrationTest extends BaseIntegrationTest
             array( new RatingValue ),
         );
     }
+
+    /**
+     * Overriding since Rating field type is never considered to be empty.
+     */
+    public function testAddFieldDefinition()
+    {
+        $content = $this->addFieldDefinition();
+
+        $this->assertCount( 2, $content->getFields() );
+        $this->assertEquals(
+            $this->getRepository()->getFieldTypeService()->buildFieldType( $this->getTypeName() )->getEmptyValue(),
+            $content->getFieldValue( "data" )
+        );
+    }
 }
