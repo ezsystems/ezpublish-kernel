@@ -24,7 +24,7 @@ class EmailAddress implements Converter
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @return Mail
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\EmailAddress
      */
     public static function create()
     {
