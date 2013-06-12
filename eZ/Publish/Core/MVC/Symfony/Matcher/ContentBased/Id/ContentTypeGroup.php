@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued;
-use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class ContentTypeGroup extends MultipleValued
@@ -22,7 +22,7 @@ class ContentTypeGroup extends MultipleValued
      *
      * @return boolean
      */
-    public function matchLocation( Location $location )
+    public function matchLocation( APILocation $location )
     {
         return $this->matchContentInfo( $location->getContentInfo() );
     }
