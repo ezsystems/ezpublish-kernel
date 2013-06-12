@@ -89,6 +89,9 @@ class Country implements Converter
         $fieldDef->defaultValue->data = empty( $storageDef->dataText5 )
             ? null
             : explode( ",", $storageDef->dataText5 );
+        // TODO This will contain comma separated country codes, which is correct for value but not for sort key.
+        // Sort key should contain comma separated lowercased country names.
+        $fieldDef->defaultValue->sortKey = $storageDef->dataText5;
     }
 
     /**

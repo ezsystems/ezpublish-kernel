@@ -250,7 +250,12 @@ EOT;
                         )
                     )
                 ),
-                'defaultValue' => new FieldValue( array( 'data' => array() ) )
+                'defaultValue' => new FieldValue(
+                    array(
+                        'data' => array(),
+                        'sortKey' => ''
+                    )
+                )
             )
         );
 

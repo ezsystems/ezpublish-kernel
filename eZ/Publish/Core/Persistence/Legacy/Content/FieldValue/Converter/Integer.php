@@ -112,6 +112,7 @@ class Integer implements Converter
         }
 
         $fieldDef->defaultValue->data = $storageDef->dataInt3;
+        $fieldDef->defaultValue->sortKey = ( $storageDef->dataInt3 === null ? 0 : $storageDef->dataInt3 );
     }
 
     /**

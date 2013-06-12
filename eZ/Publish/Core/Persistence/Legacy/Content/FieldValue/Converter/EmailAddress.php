@@ -77,6 +77,7 @@ class EmailAddress implements Converter
         $validatorConstraints = array( self::VALIDATOR_IDENTIFIER => array() );
         $fieldDef->fieldTypeConstraints->validators = $validatorConstraints;
         $fieldDef->defaultValue->data = isset( $storageDef->dataText1 ) ? $storageDef->dataText1 : '';
+        $fieldDef->defaultValue->sortKey = $fieldDef->defaultValue->data;
     }
 
     /**
