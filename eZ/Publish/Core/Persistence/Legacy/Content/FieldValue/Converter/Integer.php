@@ -111,7 +111,7 @@ class Integer implements Converter
             }
         }
 
-        $fieldDef->defaultValue->data = isset( $storageDef->dataInt3 ) ? $storageDef->dataInt3 : 0;
+        $fieldDef->defaultValue->data = $storageDef->dataInt3;
     }
 
     /**
