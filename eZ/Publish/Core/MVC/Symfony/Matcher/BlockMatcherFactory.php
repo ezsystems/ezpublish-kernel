@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Matcher;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
-use eZ\Publish\Core\MVC\Symfony\Matcher\Block\MatcherInterface;
+use eZ\Publish\Core\MVC\Symfony\Matcher\Block\MatcherInterface as BlockMatcherInterface;
 use eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface as BaseMatcherInterface;
 use InvalidArgumentException;
 
@@ -22,7 +22,7 @@ class BlockMatcherFactory extends AbstractMatcherFactory
     protected function getMatcher( $matcherIdentifier )
     {
         $matcher = parent::getMatcher( $matcherIdentifier );
-        if ( !$matcher instanceof MatcherInterface )
+        if ( !$matcher instanceof BlockMatcherInterface )
         {
             throw new InvalidArgumentException(
                 'Matcher for Blocks must implement eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\Block\\MatcherInterface.'
