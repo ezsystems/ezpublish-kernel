@@ -330,7 +330,8 @@ class Factory
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestExecutedView'            => new Output\ValueObjectVisitor\RestExecutedView(
                 $urlHandler,
                 $repository->getLocationService(),
-                $repository->getContentService()
+                $repository->getContentService(),
+                $repository->getContentTypeService()
             ),
 
             // Object state
