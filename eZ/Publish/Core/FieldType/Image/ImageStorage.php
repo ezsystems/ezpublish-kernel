@@ -127,6 +127,7 @@ class ImageStorage extends GatewayBasedStorage
             }
             $field->value->externalData['path'] = $this->IOService->getInternalPath( $binaryFile->uri );
             $field->value->externalData['mimeType'] = $binaryFile->mimeType;
+            $field->value->externalData['imageId'] = $versionInfo->contentInfo->id . '-' . $field->id;
 
             $field->value->data = array_merge(
                 $field->value->externalData,
