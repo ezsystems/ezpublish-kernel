@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the LocationMatcherFactoryTest class.
+ * File containing the ContentMatcherFactoryTest class.
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests;
 
-class LocationMatcherFactoryTest extends ContentBasedMatcherFactoryTest
+class ContentMatcherFactoryTest extends ContentBasedMatcherFactoryTest
 {
-    protected $matcherFactoryClass = 'eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\LocationMatcherFactory';
+    protected $matcherFactoryClass = 'eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\ContentMatcherFactory';
 
     /**
      * Returns a valid ValueObject (supported by current MatcherFactory), that will match the test rules.
@@ -21,7 +21,7 @@ class LocationMatcherFactoryTest extends ContentBasedMatcherFactoryTest
      */
     protected function getMatchableValueObject()
     {
-        return $this->getLocationMock( array( 'id' => 456 ) );
+        return $this->getContentInfoMock( array( 'id' => 456 ) );
     }
 
     /**
@@ -32,11 +32,11 @@ class LocationMatcherFactoryTest extends ContentBasedMatcherFactoryTest
      */
     protected function getNonMatchableValueObject()
     {
-        return $this->getLocationMock( array( 'id' => 123456789 ) );
+        return $this->getContentInfoMock( array( 'id' => 123456789 ) );
     }
 
     protected function getMatcherClass()
     {
-        return 'Id\\Location';
+        return 'Id\\Content';
     }
 }
