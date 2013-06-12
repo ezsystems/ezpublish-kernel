@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\MVC\Symfony\Matcher\Block\MatcherInterface;
 use eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface as BaseMatcherInterface;
+use InvalidArgumentException;
 
 class BlockMatcherFactory extends AbstractMatcherFactory
 {
@@ -34,8 +35,10 @@ class BlockMatcherFactory extends AbstractMatcherFactory
     /**
      * Checks if $valueObject matches $matcher rules.
      *
-     * @param \eZ\Publish\Core\MVC\Symfony\Matcher\Block\MatcherInterface $matcher
+     * @param \eZ\Publish\Core\MVC\Symfony\Matcher\Block\MatcherInterface|\eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface $matcher
      * @param ValueObject $valueObject
+     *
+     * @throws InvalidArgumentException
      *
      * @return bool
      */
