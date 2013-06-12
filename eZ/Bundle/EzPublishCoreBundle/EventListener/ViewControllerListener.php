@@ -21,6 +21,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class ViewControllerListener implements EventSubscriberInterface
 {
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\Controller\Manager
+     */
     private $controllerManager;
 
     /**
@@ -38,7 +41,12 @@ class ViewControllerListener implements EventSubscriberInterface
      */
     private $logger;
 
-    public function __construct( ControllerResolverInterface $controllerResolver, ControllerManager $controllerManager, Repository $repository, LoggerInterface $logger )
+    public function __construct(
+        ControllerResolverInterface $controllerResolver,
+        ControllerManager $controllerManager,
+        Repository $repository,
+        LoggerInterface $logger
+    )
     {
         $this->controllerManager = $controllerManager;
         $this->controllerResolver = $controllerResolver;
@@ -51,11 +59,16 @@ class ViewControllerListener implements EventSubscriberInterface
         return array( KernelEvents::CONTROLLER => 'getController' );
     }
 
+    /**
+     * Detects if there is a custom controller to use to render a Location/Content.
+     *
+     * @param FilterControllerEvent $event
+     */
     public function getController( FilterControllerEvent $event )
     {
         $request = $event->getRequest();
-        $originalController = $request->attributes->get( '_controller' );
-        if ( strpos( $originalController, 'ez_content:' ) === false )
+        // Only taking content related controller (i.e. ez_content:viewLocation or ez_content:viewContent)
+        if ( strpos( $request->attributes->get( '_controller' ), 'ez_content:' ) === false )
         {
             return;
         }
@@ -68,7 +81,7 @@ class ViewControllerListener implements EventSubscriberInterface
         }
         else if ( $request->attributes->has( 'contentId' ) )
         {
-            $valueObject = $this->repository->getContentService()->loadContent(
+            $valueObject = $this->repository->getContentService()->loadContentInfo(
                 $request->attributes->get( 'contentId' )
             );
         }

@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Controller;
 
-use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\Core\MVC\Symfony\Matcher\MatcherFactoryInterface;
+use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBasedMatcherFactory;
 use Psr\Log\LoggerInterface;
 use InvalidArgumentException;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
@@ -25,16 +25,16 @@ class Manager implements ManagerInterface
     protected $logger;
 
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherFactoryInterface
+     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBasedMatcherFactory
      */
     protected $locationMatcherFactory;
 
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherFactoryInterface
+     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBasedMatcherFactory
      */
     protected $contentMatcherFactory;
 
-    public function __construct( MatcherFactoryInterface $locationMatcherFactory, MatcherFactoryInterface $contentMatcherFactory, LoggerInterface $logger )
+    public function __construct( ContentBasedMatcherFactory $locationMatcherFactory, ContentBasedMatcherFactory $contentMatcherFactory, LoggerInterface $logger )
     {
         $this->locationMatcherFactory = $locationMatcherFactory;
         $this->contentMatcherFactory = $contentMatcherFactory;
@@ -53,25 +53,29 @@ class Manager implements ManagerInterface
      */
     public function getControllerReference( ValueObject $valueObject, $viewType )
     {
+        $matchedType = null;
         if ( $valueObject instanceof Location )
         {
             $matcherProp = 'locationMatcherFactory';
+            $matchedType = 'Location';
         }
-        else if ( $valueObject instanceof Content )
+        else if ( $valueObject instanceof ContentInfo )
         {
             $matcherProp = 'contentMatcherFactory';
+            $matchedType = 'Content';
         }
         else
         {
             throw new InvalidArgumentException( 'Unsupported value object to match against' );
         }
 
-        $configHash = $this->$matcherProp->match( $viewType, $valueObject );
+        $configHash = $this->$matcherProp->match( $valueObject, $viewType );
         if ( !is_array( $configHash ) || !isset( $configHash['controller'] ) )
         {
             return;
         }
 
+        $this->logger->debug( "Matched custom controller '{$configHash['controller']}' for $matchedType #$valueObject->id" );
         return new ControllerReference( $configHash['controller'] );
     }
 }
