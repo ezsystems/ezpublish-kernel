@@ -300,6 +300,11 @@ abstract class LegacyStorage extends Gateway
      */
     public function removeFileReferences( array $fieldIds, $versionNo )
     {
+        if ( empty( $fieldIds ) )
+        {
+            return;
+        }
+
         $connection = $this->getConnection();
 
         $deleteQuery = $connection->createDeleteQuery();
@@ -361,6 +366,11 @@ abstract class LegacyStorage extends Gateway
      */
     public function getReferencedFiles( array $fieldIds, $versionNo )
     {
+        if ( empty( $fieldIds ) )
+        {
+            return array();
+        }
+
         $connection = $this->getConnection();
 
         $selectQuery = $connection->createSelectQuery();
@@ -404,6 +414,11 @@ abstract class LegacyStorage extends Gateway
      */
     public function countFileReferences( array $files )
     {
+        if ( empty( $files ) )
+        {
+            return array();
+        }
+
         $connection = $this->getConnection();
 
         $selectQuery = $connection->createSelectQuery();
