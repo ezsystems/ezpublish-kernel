@@ -116,7 +116,7 @@ class EzLinkToHtml5 implements Converter
                     }
                 }
             }
-            
+
             if ( $link->hasAttribute( 'anchor_name' ) )
             {
                 $link->setAttribute( 'url', "#" . $link->getAttribute( 'anchor_name' ) );
