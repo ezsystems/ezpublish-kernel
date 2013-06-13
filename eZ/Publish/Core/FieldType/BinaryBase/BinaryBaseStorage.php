@@ -201,6 +201,11 @@ class BinaryBaseStorage extends GatewayBasedStorage
      */
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
+        if ( empty( $fieldIds ) )
+        {
+            return;
+        }
+
         $gateway = $this->getGateway( $context );
 
         $referencedFiles = $gateway->getReferencedFiles( $fieldIds, $versionInfo->versionNo );
