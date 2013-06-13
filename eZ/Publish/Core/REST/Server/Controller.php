@@ -10,10 +10,11 @@
 namespace eZ\Publish\Core\REST\Server;
 
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\Core\REST\Common\UrlHandler\eZPublish as UrlHandler;
+use Symfony\Component\Routing\RouterInterface;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher as InputDispatcher;
 use eZ\Publish\Core\REST\Server\Request as HttpRequest;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
+use eZ\Publish\Core\REST\Common\UrlHandler as RequestParser;
 
 abstract class Controller
 {
@@ -28,7 +29,7 @@ abstract class Controller
     protected $inputDispatcher;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler\eZPublish
+     * @var \Symfony\Component\Routing\RouterInterface
      */
     protected $urlHandler;
 
@@ -36,6 +37,11 @@ abstract class Controller
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
     protected $container;
+
+    /**
+     * @var \eZ\Publish\Core\REST\Common\UrlHandler
+     */
+    protected $requestParser;
 
     /**
      * Repository
@@ -49,7 +55,7 @@ abstract class Controller
         $this->inputDispatcher = $inputDispatcher;
     }
 
-    public function setUrlHandler( UrlHandler $urlHandler )
+    public function setUrlHandler( RouterInterface $urlHandler )
     {
         $this->urlHandler = $urlHandler;
     }
@@ -67,5 +73,10 @@ abstract class Controller
     public function setRepository( Repository $repository )
     {
         $this->repository = $repository;
+    }
+
+    public function setRequestParser( RequestParser $requestParser )
+    {
+        $this->requestParser = $requestParser;
     }
 }
