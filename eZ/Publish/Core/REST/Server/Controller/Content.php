@@ -47,9 +47,9 @@ class Content extends RestController
 
         return new Values\TemporaryRedirect(
             $this->urlHandler->generate(
-                'object',
+                'ezpublish_rest_loadContent',
                 array(
-                    'object' => $contentInfo->id
+                    'contentId' => $contentInfo->id
                 )
             )
         );
