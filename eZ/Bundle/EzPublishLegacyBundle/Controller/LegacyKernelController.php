@@ -10,7 +10,7 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 
 use DateTime;
-use Symfony\Component\HttpFoundation\Response;
+use eZ\Bundle\EzPublishLegacyBundle\LegacyResponse;
 use Symfony\Component\Templating\EngineInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
@@ -57,11 +57,11 @@ class LegacyKernelController
      * @param string $view The view name
      * @param array $parameters An array of parameters to pass to the view
      *
-     * @return Response A Response instance
+     * @return LegacyResponse A LegacyResponse instance
      */
     public function render( $view, array $parameters = array() )
     {
-        $response = new Response();
+        $response = new LegacyResponse();
         $response->setContent( $this->templateEngine->render( $view, $parameters ) );
         return $response;
     }
@@ -88,13 +88,15 @@ class LegacyKernelController
                 $this->legacyLayout,
                 array( 'module_result' => $moduleResult )
             );
+
+            $response->setModuleResult( $moduleResult );
         }
         else
         {
-            $response = new Response( $result->getContent() );
+            $response = new LegacyResponse( $result->getContent() );
         }
 
-        // Handling error codes sent from the legacy stack
+        // Handling error codes sent by the legacy stack
         if ( isset( $moduleResult['errorCode'] ) )
         {
             $response->setStatusCode(
