@@ -175,6 +175,8 @@ XML;
         self::assertHttpResponseCodeEquals( $response, 201 );
         self::assertStringStartsWith( "/api/ezp/v2/content/objects/", $response->getHeader( 'Location' ) );
 
+        $this->addCreatedElement( $response->getHeader( 'Location' ) );
+
         return $response->getHeader( 'Location' );
     }
 
