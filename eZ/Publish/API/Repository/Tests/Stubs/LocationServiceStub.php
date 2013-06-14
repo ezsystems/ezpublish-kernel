@@ -193,7 +193,7 @@ class LocationServiceStub implements LocationService
             throw new Exceptions\InvalidArgumentExceptionStub;
         }
 
-        if ( $location->parentLocationId !== $location->id )
+        if ( $location->parentLocationId !== $location->id && $location->parentLocationId !== 1 )
         {
             $this->checkContentNotInPath(
                 $contentInfo,

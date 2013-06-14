@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
@@ -90,6 +91,51 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content );
 
         return $content;
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * Tests made for issue #EZP-20955 where Anonymous user is granted access to create content
+     * and should have access to do that.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentCreateStruct
+     * @group user
+     * @group field-type
+     */
+    function testCreateContentAndPublishWithPrivilegedAnonymousUser()
+    {
+        if ( $this->isVersion4() )
+        {
+            $this->markTestSkipped( "This test requires eZ Publish 5" );
+        }
+
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+
+        // get user with additional rights
+        $user = $this->createAnonymousWithAdditonalRights();
+        $repository->setCurrentUser( $user );
+
+        // Create a new content object:
+        $contentCreate = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier( "folder" ), "eng-GB"
+        );
+
+        $contentCreate->setField( "name", "Folder 1" );
+
+        $content = $contentService->createContent(
+            $contentCreate,
+            array( $locationService->newLocationCreateStruct( 2 ) )
+        );
+
+        $contentService->publishVersion(
+            $content->getVersionInfo()
+        );
     }
 
     /**
@@ -4383,5 +4429,39 @@ class ContentServiceTest extends BaseContentServiceTest
                 )
             ),
         );
+    }
+
+    /**
+     * Creates a pseudo editor with a limitation to objects in the "Media/Images"
+     * subtree.
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    private function createAnonymousWithAdditonalRights()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Inline */
+        $roleService = $repository->getRoleService();
+        $userService = $repository->getUserService();
+
+        $user = $userService->loadAnonymousUser();
+        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+
+        // Assign "Editor" role with limitation to standard Section
+        $roleService->assignRoleToUser(
+            $role,
+            $user,
+            new SectionLimitation(
+                array(
+                    'limitationValues' => array( 1 )
+                )
+            )
+        );
+
+        $pseudoEditor = $userService->loadUser( $user->id );
+        /* END: Inline */
+
+        return $pseudoEditor;
     }
 }

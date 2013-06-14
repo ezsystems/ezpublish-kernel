@@ -421,6 +421,21 @@ class ContentServiceStub implements ContentService
      */
     public function createContent( ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array() )
     {
+        if ( empty( $contentCreateStruct->sectionId ) )
+        {
+            if ( isset( $locationCreateStructs[0] ) )
+            {
+                $location = $this->repository->getLocationService()->loadLocation(
+                    $locationCreateStructs[0]->parentLocationId
+                );
+                $contentCreateStruct->sectionId = $location->contentInfo->sectionId;
+            }
+            else
+            {
+                $contentCreateStruct->sectionId = 1;
+            }
+        }
+
         if ( false === $this->repository->hasAccess( 'content', 'create' ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
