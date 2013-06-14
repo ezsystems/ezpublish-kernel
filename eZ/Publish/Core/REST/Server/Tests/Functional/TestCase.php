@@ -94,13 +94,13 @@ class TestCase extends \PHPUnit_Framework_TestCase
         return "application/vnd.ez.api.$typeString";
     }
 
-    protected function addCreatedContent( $contentId )
+    protected function addCreatedElement( $href )
     {
         $testCase =& $this;
-        self::$createdContent[$contentId] = function() use ( $contentId, $testCase )
+        self::$createdContent[$href] = function() use ( $href, $testCase )
         {
-            $response = $testCase->sendHttpRequest(
-                $testCase->createHttpRequest( 'DELETE', "/api/ezp/v2/content/objects/{$contentId}" )
+            $testCase->sendHttpRequest(
+                $testCase->createHttpRequest( 'DELETE', $href )
             );
         };
     }

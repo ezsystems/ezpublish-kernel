@@ -46,7 +46,7 @@ XML;
         self::assertHttpResponseCodeEquals( $response, 201 );
 
         $contentInfo = json_decode( $response->getContent() );
-        $this->addCreatedContent( $contentInfo->Content->_id );
+        $this->addCreatedElement( $contentInfo->Content->_href );
         return $contentInfo->Content->_href;
     }
 
@@ -161,7 +161,7 @@ XML;
     /**
      * @covers COPY /content/objects/<contentId>
      * @depends testPublishContent
-     * @return string the copied content REST ID
+     * @return string the copied content href
      */
     public function testCopyContent( $restContentHref )
     {
