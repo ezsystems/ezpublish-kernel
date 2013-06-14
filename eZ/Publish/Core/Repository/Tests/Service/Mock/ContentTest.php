@@ -661,6 +661,7 @@ class ContentTest extends BaseServiceMockTest
                 "contentType" => $contentType,
                 "alwaysAvailable" => false,
                 "ownerId" => 169,
+                "sectionId" => 1
             )
         );
 
@@ -1294,6 +1295,7 @@ class ContentTest extends BaseServiceMockTest
                 "contentType" => $contentType,
                 "alwaysAvailable" => false,
                 "ownerId" => 169,
+                "sectionId" => 1
             )
         );
 
@@ -1535,6 +1537,7 @@ class ContentTest extends BaseServiceMockTest
                 "contentType" => $contentType,
                 "alwaysAvailable" => false,
                 "ownerId" => 169,
+                "sectionId" => 1
             )
         );
 
@@ -1738,6 +1741,7 @@ class ContentTest extends BaseServiceMockTest
                 "contentType" => $contentType,
                 "alwaysAvailable" => false,
                 "ownerId" => 169,
+                "sectionId" => 1
             )
         );
 
@@ -1959,7 +1963,7 @@ class ContentTest extends BaseServiceMockTest
         $handlerMock = $this->getPersistenceMock()->contentHandler();
         $domainMapperMock = $this->getDomainMapperMock();
         $spiLocationCreateStruct = new SPILocation\CreateStruct();
-        $parentLocation = new Location();
+        $parentLocation = new Location( array( 'contentInfo' => new ContentInfo( array( 'sectionId' => 1 ) ) ) );
 
         $locationServiceMock->expects( $this->at( 0 ) )
             ->method( "loadLocation" )
@@ -2090,6 +2094,7 @@ class ContentTest extends BaseServiceMockTest
                 "contentType" => $contentType,
                 "alwaysAvailable" => false,
                 "ownerId" => 169,
+                "sectionId" => 1
             )
         );
 
