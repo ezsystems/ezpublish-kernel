@@ -70,10 +70,17 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $responseCode = $response->getStatusCode();
         if ( $responseCode != $expected )
         {
-            $body = json_decode( $response->getContent() );
-            $errorMessageString =  ( ( $body instanceof \StdClass ) && isset( $body->ErrorMessage ) )
-                ? ". Error message: {$body->ErrorMessage->errorDescription}"
-                : null;
+            $errorMessageString = '';
+            if ( $response->getHeader( 'Content-Type' ) == 'application/vnd.ez.api.ErrorMessage+xml' )
+            {
+                $body = \simplexml_load_string( $response->getContent() );
+                $errorMessageString = $body->errorDescription;
+            }
+            elseif ( ( $response->getHeader( 'Content-Type' ) == 'application/vnd.ez.api.ErrorMessage+json' ) )
+            {
+                $body = json_decode( $response->getContent() );
+                $errorMessageString =  "Error message: {$body->ErrorMessage->errorDescription}";
+            }
 
             self::assertEquals( $expected, $responseCode, $errorMessageString );
         }
@@ -85,7 +92,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         self::assertNotNull( $header, "Response has a $response header" );
         if ( $expectedValue !== null )
         {
-            self::assertEquals( $header, $expectedValue, "Header $header matches the expected value" );
+            self::assertEquals( $header, $expectedValue );
         }
     }
 
