@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 
+use DateTime;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Templating\EngineInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
@@ -100,6 +101,31 @@ class LegacyKernelController
                 $moduleResult['errorCode'],
                 isset( $moduleResult['errorMessage'] ) ? $moduleResult['errorMessage'] : null
             );
+        }
+
+        // Handling headers sent by the legacy stack
+        foreach ( headers_list() as $header )
+        {
+            $headerArray = explode( ": ", $header, 2 );
+            $headerName = strtolower( $headerArray[0] );
+            $headerValue = $headerArray[1];
+
+            switch ( $headerName )
+            {
+                // max-age and s-maxage are skipped because they are values of the cache-control header
+                case "etag":
+                    $response->setEtag( $headerValue );
+                    break;
+                case "last-modified":
+                    $response->setLastModified( new DateTime( $headerValue ) );
+                    break;
+                case "expires":
+                    $response->setExpires( new DateTime( $headerValue ) );
+                    break;
+                default;
+                    $response->headers->set( $headerName, $headerValue, true );
+                    break;
+            }
         }
 
         return $response;
