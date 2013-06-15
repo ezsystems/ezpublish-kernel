@@ -103,10 +103,10 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
     protected function addCreatedElement( $href )
     {
-        $testCase =& $this;
+        $testCase = $this;
         self::$createdContent[$href] = function() use ( $href, $testCase )
         {
-            $testCase->sendHttpRequest(
+            $response = $testCase->sendHttpRequest(
                 $testCase->createHttpRequest( 'DELETE', $href )
             );
         };
@@ -119,7 +119,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
     private static function clearCreatedContent( array $contentArray )
     {
-        foreach ( $contentArray as $contentId => $callback )
+        foreach ( array_reverse( $contentArray ) as $contentId => $callback )
         {
             $callback();
         }
