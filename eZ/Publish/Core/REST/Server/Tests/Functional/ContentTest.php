@@ -3,7 +3,7 @@ namespace eZ\Publish\Core\Server\Tests\Functional;
 
 use eZ\Publish\Core\REST\Server\Tests\Functional\TestCase as RESTFunctionalTestCase;
 
-class Content extends RESTFunctionalTestCase
+class ContentTest extends RESTFunctionalTestCase
 {
 
     /**
