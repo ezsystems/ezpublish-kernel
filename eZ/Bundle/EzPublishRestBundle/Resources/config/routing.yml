@@ -514,18 +514,18 @@ ezpublish_rest_deleteContentTypeDraft:
     requirements:
         contentTypeId: \d+
 
-ezpublish_rest_loadFieldDefinitionList:
+ezpublish_rest_loadContentTypeFieldDefinitionList:
     path: /content/types/{contentTypeId}/fieldDefinitions
     defaults:
-        _controller: ezpublish_rest.controller.content_type:loadFieldDefinitionList
+        _controller: ezpublish_rest.controller.content_type:loadContentTypeFieldDefinitionList
     methods: [GET]
     requirements:
         contentTypeId: \d+
 
-ezpublish_rest_loadFieldDefinition:
+ezpublish_rest_loadContentTypeFieldDefinition:
     path: /content/types/{contentTypeId}/fieldDefinitions/{fieldDefinitionId}
     defaults:
-        _controller: ezpublish_rest.controller.content_type:loadFieldDefinition
+        _controller: ezpublish_rest.controller.content_type:loadContentTypeFieldDefinition
     methods: [GET]
     requirements:
         contentTypeId: \d+
@@ -555,44 +555,44 @@ ezpublish_rest_publishContentTypeDraft:
     requirements:
         contentTypeId: \d+
 
-ezpublish_rest_loadDraftFieldDefinitionList:
+ezpublish_rest_loadContentTypeDraftFieldDefinitionList:
     path: /content/types/{contentTypeId}/draft/fieldDefinitions
     defaults:
-        _controller: ezpublish_rest.controller.content_type:loadDraftFieldDefinitionList
+        _controller: ezpublish_rest.controller.content_type:loadContentTypeDraftFieldDefinitionList
     methods: [GET]
     requirements:
         contentTypeId: \d+
 
-ezpublish_rest_addFieldDefinition:
+ezpublish_rest_addContentTypeDraftFieldDefinition:
     path: /content/types/{contentTypeId}/draft/fieldDefinitions
     defaults:
-        _controller: ezpublish_rest.controller.content_type:addFieldDefinition
+        _controller: ezpublish_rest.controller.content_type:addContentTypeDraftFieldDefinition
     methods: [POST]
     requirements:
         contentTypeId: \d+
 
-ezpublish_rest_loadDraftFieldDefinition:
+ezpublish_rest_loadContentTypeDraftFieldDefinition:
     path: /content/types/{contentTypeId}/draft/fieldDefinitions/{fieldDefinitionId}
     defaults:
-        _controller: ezpublish_rest.controller.content_type:loadDraftFieldDefinition
+        _controller: ezpublish_rest.controller.content_type:loadContentTypeDraftFieldDefinition
     methods: [GET]
     requirements:
         contentTypeId: \d+
         fieldDefinitionId: \d+
 
-ezpublish_rest_updateFieldDefinition:
+ezpublish_rest_updateContentTypeDraftFieldDefinition:
     path: /content/types/{contentTypeId}/draft/fieldDefinitions/{fieldDefinitionId}
     defaults:
-        _controller: ezpublish_rest.controller.content_type:updateFieldDefinition
+        _controller: ezpublish_rest.controller.content_type:updateContentTypeDraftFieldDefinition
     methods: [PATCH]
     requirements:
         contentTypeId: \d+
         fieldDefinitionId: \d+
 
-ezpublish_rest_removeFieldDefinition:
+ezpublish_rest_removeContentTypeDraftFieldDefinition:
     path: /content/types/{contentTypeId}/draft/fieldDefinitions/{fieldDefinitionId}
     defaults:
-        _controller: ezpublish_rest.controller.content_type:removeFieldDefinition
+        _controller: ezpublish_rest.controller.content_type:removeContentTypeDraftFieldDefinition
     methods: [DELETE]
     requirements:
         contentTypeId: \d+
