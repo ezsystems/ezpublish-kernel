@@ -84,7 +84,7 @@ class Location extends RestController
         }
 
         return new Values\TemporaryRedirect(
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'location',
                 array(
                     'location' => rtrim( $location->pathString, '/' )
@@ -100,7 +100,7 @@ class Location extends RestController
      */
     public function createLocation()
     {
-        $values = $this->urlHandler->parse( 'objectLocations', $this->request->path );
+        $values = $this->requestParser->parse( 'objectLocations', $this->request->path );
 
         $locationCreateStruct = $this->inputDispatcher->parse(
             new Message(
@@ -130,7 +130,7 @@ class Location extends RestController
      */
     public function loadLocation()
     {
-        $values = $this->urlHandler->parse( 'location', $this->request->path );
+        $values = $this->requestParser->parse( 'location', $this->request->path );
         return new Values\RestLocation(
             $location = $this->locationService->loadLocation(
                 $this->extractLocationIdFromPath( $values['location'] )
@@ -146,7 +146,7 @@ class Location extends RestController
      */
     public function deleteSubtree()
     {
-        $values = $this->urlHandler->parse( 'location', $this->request->path );
+        $values = $this->requestParser->parse( 'location', $this->request->path );
         $location = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $values['location'] ) );
         $this->locationService->deleteLocation( $location );
 
@@ -160,16 +160,16 @@ class Location extends RestController
      */
     public function copySubtree()
     {
-        $values = $this->urlHandler->parse( 'location', $this->request->path );
+        $values = $this->requestParser->parse( 'location', $this->request->path );
         $location = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $values['location'] ) );
 
-        $destinationValues = $this->urlHandler->parse( 'location', $this->request->destination );
+        $destinationValues = $this->requestParser->parse( 'location', $this->request->destination );
         $destinationLocation = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $destinationValues['location'] ) );
 
         $newLocation = $this->locationService->copySubtree( $location, $destinationLocation );
 
         return new Values\ResourceCreated(
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'location',
                 array(
                     'location' => rtrim( $newLocation->pathString, '/' ),
@@ -187,7 +187,7 @@ class Location extends RestController
      */
     public function moveSubtree()
     {
-        $values = $this->urlHandler->parse( 'location', $this->request->path );
+        $values = $this->requestParser->parse( 'location', $this->request->path );
 
         $locationToMove = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath( $values['location'] )
@@ -197,7 +197,7 @@ class Location extends RestController
         try
         {
             // First check to see if the destination is for moving within another subtree
-            $destinationValues = $this->urlHandler->parse( 'location', $this->request->destination );
+            $destinationValues = $this->requestParser->parse( 'location', $this->request->destination );
             $destinationLocationId = $this->extractLocationIdFromPath( $destinationValues['location'] );
         }
         catch ( Exceptions\InvalidArgumentException $e )
@@ -205,7 +205,7 @@ class Location extends RestController
             try
             {
                 // If parsing of destination fails, let's try to see if destination is trash
-                $this->urlHandler->parse( 'trashItems', $this->request->destination );
+                $this->requestParser->parse( 'trashItems', $this->request->destination );
             }
             catch ( Exceptions\InvalidArgumentException $e )
             {
@@ -224,7 +224,7 @@ class Location extends RestController
             // Reload the location to get the new position is subtree
             $locationToMove = $this->locationService->loadLocation( $locationToMove->id );
             return new Values\ResourceCreated(
-                $this->urlHandler->generate(
+                $this->requestParser->generate(
                     'location',
                     array(
                         'location' => rtrim( $locationToMove->pathString, '/' ),
@@ -236,7 +236,7 @@ class Location extends RestController
         // We're trashing the subtree
         $trashItem = $this->trashService->trash( $locationToMove );
         return new Values\ResourceCreated(
-            $this->urlHandler->generate( 'trash', array( 'trash' => $trashItem->id ) )
+            $this->requestParser->generate( 'trash', array( 'trash' => $trashItem->id ) )
         );
     }
 
@@ -247,12 +247,12 @@ class Location extends RestController
      */
     public function swapLocation()
     {
-        $values = $this->urlHandler->parse( 'location', $this->request->path );
+        $values = $this->requestParser->parse( 'location', $this->request->path );
 
         $locationId = $this->extractLocationIdFromPath( $values['location'] );
         $location = $this->locationService->loadLocation( $locationId );
 
-        $destinationValues = $this->urlHandler->parse( 'location', $this->request->destination );
+        $destinationValues = $this->requestParser->parse( 'location', $this->request->destination );
         $destinationLocation = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $destinationValues['location'] ) );
 
         $this->locationService->swapLocation( $location, $destinationLocation );
@@ -262,6 +262,7 @@ class Location extends RestController
 
     /**
      * Loads a location by remote ID
+     * @todo remove, or use in loadLocation with filter
      *
      * @return \eZ\Publish\Core\REST\Server\Values\LocationList
      */
@@ -287,7 +288,7 @@ class Location extends RestController
      */
     public function loadLocationsForContent()
     {
-        $values = $this->urlHandler->parse( 'objectLocations', $this->request->path );
+        $values = $this->requestParser->parse( 'objectLocations', $this->request->path );
         $restLocations = array();
         foreach (
             $this->locationService->loadLocations(
@@ -314,7 +315,7 @@ class Location extends RestController
         $questionMark = strpos( $this->request->path, '?' );
         $requestPath = $questionMark !== false ? substr( $this->request->path, 0, $questionMark ) : $this->request->path;
 
-        $values = $this->urlHandler->parse( 'locationChildren', $requestPath );
+        $values = $this->requestParser->parse( 'locationChildren', $requestPath );
 
         $offset = isset( $this->request->variables['offset'] ) ? (int)$this->request->variables['offset'] : 0;
         $limit = isset( $this->request->variables['limit'] ) ? (int)$this->request->variables['limit'] : -1;
@@ -340,13 +341,26 @@ class Location extends RestController
     }
 
     /**
+     * Extracts and returns an item id from a path, e.g. /1/2/58 => 58
+     *
+     * @param string $path
+     *
+     * @return mixed
+     */
+    private function extractLocationIdFromPath( $path )
+    {
+        $pathParts = explode( '/', $path );
+        return array_pop( $pathParts );
+    }
+
+    /**
      * Updates a location
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RestLocation
      */
     public function updateLocation()
     {
-        $values = $this->urlHandler->parse( 'location', $this->request->path );
+        $values = $this->requestParser->parse( 'location', $this->request->path );
 
         $locationUpdate = $this->inputDispatcher->parse(
             new Message(
@@ -374,18 +388,5 @@ class Location extends RestController
             $location = $this->locationService->updateLocation( $location, $locationUpdate->locationUpdateStruct ),
             $this->locationService->getLocationChildCount( $location )
         );
-    }
-
-    /**
-     * Extracts and returns an item id from a path, e.g. /1/2/58 => 58
-     *
-     * @param string $path
-     *
-     * @return mixed
-     */
-    private function extractLocationIdFromPath( $path )
-    {
-        $pathParts = explode( '/', $path );
-        return array_pop( $pathParts );
     }
 }
