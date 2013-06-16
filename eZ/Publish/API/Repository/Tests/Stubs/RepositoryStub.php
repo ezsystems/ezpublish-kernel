@@ -12,6 +12,7 @@ namespace eZ\Publish\API\Repository\Tests\Stubs;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -193,6 +194,12 @@ class RepositoryStub implements Repository
                 if ( $policy->function !== $function && $policy->function !== "*" )
                     continue;
 
+                /*if ( $policy->function === $function && $roleLimitation === null && empty( $policy->limitations ) )
+                {
+                    --$this->permissionChecks;
+                    return true;
+                }*/
+
                 $permissionSet['policies'][] = $policy;
             }
 
@@ -258,12 +265,17 @@ class RepositoryStub implements Repository
         {
             $contentInfoValue = $object->contentInfo;
         }
+        else if ( $object instanceof ContentCreateStruct )
+        {
+            $contentInfoValue = $object;
+        }
         else if ( $object instanceof Location )
         {
             $locations = array( $object );
+            $contentInfoValue = $object->contentInfo;
         }
 
-        if ( null !== $contentInfoValue && true === $contentInfoValue->published )
+        if ( $contentInfoValue instanceof ContentInfo && true === $contentInfoValue->published )
         {
             $locationService = $this->getLocationService();
             $locations = $locationService->loadLocations( $contentInfoValue );
@@ -277,6 +289,26 @@ class RepositoryStub implements Repository
 
         foreach ( $permissionSets as $permissionSet )
         {
+            /**
+             * @var \eZ\Publish\API\Repository\Values\User\Policy $policy
+             */
+            foreach ( $permissionSet['policies'] as $policy )
+            {
+                foreach ( $policy->limitations as $limitation )
+                {
+                    if (
+                        $limitation instanceof Limitation\SectionLimitation &&
+                        !in_array(
+                            $contentInfoValue->sectionId,
+                            $limitation->limitationValues
+                        )
+                    )
+                    {
+                        continue 3;
+                    }
+                }
+            }
+
             /**
              * @var \eZ\Publish\API\Repository\Values\User\Limitation[] $permissionSet
              */
@@ -298,13 +330,21 @@ class RepositoryStub implements Repository
                 }
                 else if ( $permissionSet['limitation']->getIdentifier() == Limitation::SECTION )
                 {
-                    if ( in_array( $contentInfoValue->sectionId, $permissionSet['limitation']->limitationValues ) )
+                    if (
+                        $contentInfoValue !== null &&
+                        in_array( $contentInfoValue->sectionId, $permissionSet['limitation']->limitationValues )
+                    )
                     {
                         --$this->permissionChecks;
                         return true;
                     }
                 }
             }
+            /*else if ( $permissionSet['limitation'] === null )
+            {
+                --$this->permissionChecks;
+                return true;
+            }*/
         }
 
         --$this->permissionChecks;
