@@ -48,7 +48,7 @@ class ConfigurationDumper implements ConfigDumperInterface
      */
     protected $envs;
 
-    public function __construct( Filesystem $fs, array $envs, $rootDir, $cacheDir, Configurator $sensioConfigurator = null )
+    public function __construct( Filesystem $fs, array $envs, $rootDir, $cacheDir, Configurator $sensioConfigurator )
     {
         $this->fs = $fs;
         $this->rootDir = $rootDir;
@@ -105,16 +105,13 @@ class ConfigurationDumper implements ConfigDumperInterface
         }
 
         // Handling %secret%
-        if ( $this->sensioConfigurator !== null )
-        {
-            $this->sensioConfigurator->mergeParameters(
-                array(
-                    // Step #1 is SecretStep
-                    'secret' => $this->sensioConfigurator->getStep( 1 )->secret
-                )
-            );
-            $this->sensioConfigurator->write();
-        }
+        $this->sensioConfigurator->mergeParameters(
+            array(
+                // Step #1 is SecretStep
+                'secret' => $this->sensioConfigurator->getStep( 1 )->secret
+            )
+        );
+        $this->sensioConfigurator->write();
 
         $this->clearCache();
     }
