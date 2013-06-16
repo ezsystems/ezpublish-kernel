@@ -22,6 +22,8 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     private $httpAuth;
 
+    protected static $testSuffix;
+
     protected function setUp()
     {
         parent::setUp();
@@ -130,4 +132,59 @@ class TestCase extends \PHPUnit_Framework_TestCase
      * @var array
      */
     private static $createdContent = array();
+
+    /**
+     * @param string $parentLocationId The REST id of the parent location
+     * @return array created Content, as an array
+     */
+    protected function createFolder( $text, $parentLocationId )
+    {
+        if ( !isset( self::$testSuffix ) )
+        {
+            self::$testSuffix = uniqid();
+        }
+
+        $text = $text . "_" . self::$testSuffix;
+        $body = <<< XML
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentCreate>
+  <ContentType href="/content/types/1" />
+  <mainLanguageCode>eng-GB</mainLanguageCode>
+  <LocationCreate>
+    <ParentLocation href="{$parentLocationId}" />
+    <priority>0</priority>
+    <hidden>false</hidden>
+    <sortField>PATH</sortField>
+    <sortOrder>ASC</sortOrder>
+  </LocationCreate>
+  <Section href="/content/sections/1" />
+  <alwaysAvailable>true</alwaysAvailable>
+  <remoteId>{$text}</remoteId>
+  <User href="/user/users/14" />
+  <modificationDate>2012-09-30T12:30:00</modificationDate>
+  <fields>
+    <field>
+      <fieldDefinitionIdentifier>name</fieldDefinitionIdentifier>
+      <languageCode>eng-GB</languageCode>
+      <fieldValue>{$text}</fieldValue>
+    </field>
+  </fields>
+</ContentCreate>
+XML;
+
+        $request = $this->createHttpRequest( "POST", "/api/ezp/v2/content/objects", "ContentCreate+xml", "Content+json" );
+        $request->setContent( $body );
+
+        $response = $this->sendHttpRequest( $request );
+
+        $content = json_decode( $response->getContent(), true );
+
+        $this->sendHttpRequest(
+            $request = $this->createHttpRequest( "PUBLISH", $content['Content']['CurrentVersion']['Version']['_href'] )
+        );
+
+        $this->addCreatedElement( $content['Content']['_href'], true );
+
+        return $content['Content'];
+    }
 }
