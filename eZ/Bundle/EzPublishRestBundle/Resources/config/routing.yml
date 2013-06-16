@@ -982,37 +982,37 @@ ezpublish_rest_createUser:
         groupId: "[0-9/]+"
 
 ezpublish_rest_loadRoleAssignmentsForUserGroup:
-    path: /user/groups/{groupId}/roles
+    path: /user/groups/{groupPath}/roles
     defaults:
         _controller: ezpublish_rest.controller.role:loadRoleAssignmentsForUserGroup
     methods: [GET]
     requirements:
-        groupId: "[0-9/]+"
+        groupPath: "[0-9/]+"
 
 ezpublish_rest_assignRoleToUserGroup:
-    path: /user/groups/{groupId}/roles
+    path: /user/groups/{groupPath}/roles
     defaults:
         _controller: ezpublish_rest.controller.role:assignRoleToUserGroup
     methods: [POST]
     requirements:
-        groupId: "[0-9/]+"
+        groupPath: "[0-9/]+"
 
 ezpublish_rest_loadRoleAssignmentForUserGroup:
-    path: /user/groups/{groupId}/roles/{roleId}
+    path: /user/groups/{groupPath}/roles/{roleId}
     defaults:
         _controller: ezpublish_rest.controller.role:loadRoleAssignmentForUserGroup
     methods: [GET]
     requirements:
-        groupId: "[0-9/]+"
+        groupPath: "[0-9/]+"
         roleId: \d+
 
 ezpublish_rest_unassignRoleFromUserGroup:
-    path: /user/groups/{groupId}/roles/{roleId}
+    path: /user/groups/{groupPath}/roles/{roleId}
     defaults:
         _controller: ezpublish_rest.controller.role:unassignRoleFromUserGroup
     methods: [DELETE]
     requirements:
-        groupId: "[0-9/]+"
+        groupPath: "[0-9/]+"
         roleId: \d+
 
 ezpublish_rest_createSession:
