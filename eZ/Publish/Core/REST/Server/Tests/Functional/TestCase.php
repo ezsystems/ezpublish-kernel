@@ -145,7 +145,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         }
 
         $text = $text . "_" . self::$testSuffix;
-        $body = <<< XML
+        $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentCreate>
   <ContentType href="/content/types/1" />
@@ -172,8 +172,18 @@ class TestCase extends \PHPUnit_Framework_TestCase
 </ContentCreate>
 XML;
 
+        return $this->createContent( $xml );
+    }
+
+    /**
+     * @param $xml
+     *
+     * @return array Content key of the Content struct array
+     */
+    protected function createContent( $xml )
+    {
         $request = $this->createHttpRequest( "POST", "/api/ezp/v2/content/objects", "ContentCreate+xml", "Content+json" );
-        $request->setContent( $body );
+        $request->setContent( $xml );
 
         $response = $this->sendHttpRequest( $request );
 
@@ -186,5 +196,15 @@ XML;
         $this->addCreatedElement( $content['Content']['_href'], true );
 
         return $content['Content'];
+    }
+
+    /**
+     * Converts a REST href to an ID
+     * @param string $href
+     * @return string
+     */
+    protected function hrefToId( $href )
+    {
+        return str_replace( '/api/ezp/v2', '', $href );
     }
 }

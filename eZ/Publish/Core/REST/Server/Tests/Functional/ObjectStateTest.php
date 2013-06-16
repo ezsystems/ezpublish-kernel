@@ -143,7 +143,7 @@ XML;
      */
     public function testSetObjectStatesForContent( $objectStateHref )
     {
-        $objectStateId = str_replace( '/api/ezp/v2', '', $objectStateHref );
+        $objectStateId = $this->hrefToId( $objectStateHref );
         $folder = $this->createFolder( __FUNCTION__, '/content/locations/1/2' );
 
         $xml = <<< XML
