@@ -15,7 +15,6 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
-use eZ\Publish\Core\IO\IOService;
 
 /**
  * Base FileType class for Binary field types (i.e. BinaryBase & Media)
