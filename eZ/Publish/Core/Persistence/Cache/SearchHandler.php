@@ -24,7 +24,7 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
      */
     function findContent( Query $query, array $fieldFilters = array() )
     {
-        $this->logger->logCall( __METHOD__, array( 'query' => $query, 'fieldFilters' => $fieldFilters ) );
+        $this->logger->logCall( __METHOD__, array( 'query' => get_class( $query ), 'fieldFilters' => $fieldFilters ) );
         return $this->persistenceFactory->getSearchHandler()->findContent( $query, $fieldFilters );
     }
 
@@ -33,7 +33,7 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
      */
     public function findSingle( Criterion $criterion, array $fieldFilters = array() )
     {
-        $this->logger->logCall( __METHOD__, array( 'criterion' => $criterion, 'fieldFilters' => $fieldFilters ) );
+        $this->logger->logCall( __METHOD__, array( 'criterion' => get_class( $criterion ), 'fieldFilters' => $fieldFilters ) );
         return $this->persistenceFactory->getSearchHandler()->findSingle( $criterion, $fieldFilters );
     }
 
@@ -48,7 +48,7 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
                 'prefix' => $prefix,
                 'fieldPaths' => $fieldPaths,
                 'limit' => $limit,
-                'filter' => $filter
+                'filter' => ( $filter === null ? 'null' : get_class( $filter ) )
             )
         );
 
