@@ -14,12 +14,24 @@ use PHPUnit_Framework_TestCase;
 class FieldTypeMockTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testApplyDefaultSettingsThrowsInvalidArgumentException()
+    {
+        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
+        $stub = $this->getMockForAbstractClass( "\\eZ\\Publish\\Core\\FieldType\\FieldType" );
+
+        $stub->applyDefaultSettings( new \DateTime );
+    }
+
+    /**
      * @dataProvider providerForTestApplyDefaultSettings
      *
      * @covers \eZ\Publish\Core\FieldType\FieldType::applyDefaultSettings
      */
     public function testApplyDefaultSettings( $initialSettings, $expectedSettings )
     {
+        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
         $stub = $this->getMockForAbstractClass(
             "\\eZ\\Publish\\Core\\FieldType\\FieldType",
             array(),
@@ -141,6 +153,17 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
                 $array
             ),
         );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testApplyDefaultValidatorConfigurationEmptyThrowsInvalidArgumentException()
+    {
+        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
+        $stub = $this->getMockForAbstractClass( "\\eZ\\Publish\\Core\\FieldType\\FieldType" );
+
+        $stub->applyDefaultValidatorConfiguration( new \DateTime );
     }
 
     public function testApplyDefaultValidatorConfigurationEmpty()
