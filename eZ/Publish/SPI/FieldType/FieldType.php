@@ -148,6 +148,15 @@ interface FieldType
     public function validateValidatorConfiguration( $validatorConfiguration );
 
     /**
+     * Applies the default values to the given $validatorConfiguration of a FieldDefinitionCreateStruct
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param mixed $validatorConfiguration
+     */
+    public function applyDefaultValidatorConfiguration( &$validatorConfiguration );
+
+    /**
      * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
      *
      * This methods determines if the given $fieldSettings are structurally

@@ -142,4 +142,108 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
             ),
         );
     }
+
+    public function testApplyDefaultValidatorConfigurationEmpty()
+    {
+        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
+        $stub = $this->getMockForAbstractClass(
+            "\\eZ\\Publish\\Core\\FieldType\\FieldType",
+            array(),
+            "",
+            true,
+            true,
+            true,
+            array( "getValidatorConfigurationSchema" )
+        );
+
+        $stub
+            ->expects( $this->any() )
+            ->method( "getValidatorConfigurationSchema" )
+            ->will(
+                $this->returnValue( array() )
+            );
+
+        $validatorConfiguration = null;
+        $stub->applyDefaultValidatorConfiguration( $validatorConfiguration );
+        $this->assertSame(
+            null,
+            $validatorConfiguration
+        );
+    }
+
+    /**
+     * @dataProvider providerForTestApplyDefaultValidatorConfiguration
+     */
+    public function testApplyDefaultValidatorConfiguration( $initialConfiguration, $expectedConfiguration )
+    {
+        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
+        $stub = $this->getMockForAbstractClass(
+            "\\eZ\\Publish\\Core\\FieldType\\FieldType",
+            array(),
+            "",
+            true,
+            true,
+            true,
+            array( "getValidatorConfigurationSchema" )
+        );
+
+        $stub
+            ->expects( $this->any() )
+            ->method( "getValidatorConfigurationSchema" )
+            ->will(
+                $this->returnValue(
+                    array(
+                        "TestValidator" => array(
+                            "valueClick" => array(
+                                "default" => 1
+                            ),
+                            "valueClack" => array(
+                                "default" => 0
+                            ),
+                        )
+                    )
+                )
+            );
+
+        $validatorConfiguration = $initialConfiguration;
+        $stub->applyDefaultValidatorConfiguration( $validatorConfiguration );
+        $this->assertSame(
+            $expectedConfiguration,
+            $validatorConfiguration
+        );
+    }
+
+    public function providerForTestApplyDefaultValidatorConfiguration()
+    {
+        $defaultConfiguration = array(
+            "TestValidator" => array(
+                "valueClick" => 1,
+                "valueClack" => 0
+            )
+        );
+
+        return array(
+            array(
+                null,
+                $defaultConfiguration,
+            ),
+            array(
+                array(),
+                $defaultConfiguration,
+            ),
+            array(
+                array(
+                    "TestValidator" => array(
+                        "valueClick" => 100
+                    )
+                ),
+                array(
+                    "TestValidator" => array(
+                        "valueClick" => 100,
+                        "valueClack" => 0
+                    )
+                ),
+            )
+        );
+    }
 }

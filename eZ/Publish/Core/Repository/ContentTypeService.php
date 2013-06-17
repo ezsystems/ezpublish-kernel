@@ -583,6 +583,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         $fieldType->applyDefaultSettings( $fieldDefinitionCreateStruct->fieldSettings );
+        $fieldType->applyDefaultValidatorConfiguration( $fieldDefinitionCreateStruct->validatorConfiguration );
 
         $validationErrors = array_merge(
             $validationErrors,

@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * Base class for field types, the most basic storage unit of data inside eZ Publish.
@@ -146,6 +147,39 @@ abstract class FieldType implements FieldTypeInterface
         }
 
         return $validationErrors;
+    }
+
+    /**
+     * Applies the default values to the given $validatorConfiguration of a FieldDefinitionCreateStruct
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param mixed $validatorConfiguration
+     */
+    public function applyDefaultValidatorConfiguration( &$validatorConfiguration )
+    {
+        if ( $validatorConfiguration !== null && !is_array( $validatorConfiguration ) )
+        {
+            throw new InvalidArgumentType( "\$validatorConfiguration", "array|null", $validatorConfiguration );
+        }
+
+        foreach ( $this->getValidatorConfigurationSchema() as $validatorName => $configurationSchema )
+        {
+            // Set configuration of specific validator to empty array if it is not already provided
+            if ( !isset( $validatorConfiguration[$validatorName] ) )
+            {
+                $validatorConfiguration[$validatorName] = array();
+            }
+
+            foreach ( $configurationSchema as $settingName => $settingConfiguration )
+            {
+                // Check that a default entry exists in the configuration schema for the validator but that no value has been provided
+                if ( !isset( $validatorConfiguration[$validatorName][$settingName] ) && isset( $settingConfiguration["default"] ) )
+                {
+                    $validatorConfiguration[$validatorName][$settingName] = $settingConfiguration["default"];
+                }
+            }
+        }
     }
 
     /**
