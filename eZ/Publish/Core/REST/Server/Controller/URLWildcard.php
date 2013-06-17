@@ -42,12 +42,13 @@ class URLWildcard extends RestController
     /**
      * Returns the URL wildcard with the given id
      *
+     * @param $urlWildcardId
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\URLWildcard
      */
-    public function loadURLWildcard()
+    public function loadURLWildcard( $urlWildcardId )
     {
-        $values = $this->urlHandler->parse( 'urlWildcard', $this->request->path );
-        return $this->urlWildcardService->load( $values['urlwildcard'] );
+        return $this->urlWildcardService->load( $urlWildcardId );
     }
 
     /**
@@ -101,11 +102,10 @@ class URLWildcard extends RestController
      *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function deleteURLWildcard()
+    public function deleteURLWildcard( $urlWildcardId)
     {
-        $values = $this->urlHandler->parse( 'urlWildcard', $this->request->path );
         $this->urlWildcardService->remove(
-            $this->urlWildcardService->load( $values['urlwildcard'] )
+            $this->urlWildcardService->load( $urlWildcardId )
         );
 
         return new Values\NoContent();
