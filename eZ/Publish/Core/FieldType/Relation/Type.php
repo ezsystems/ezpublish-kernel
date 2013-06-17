@@ -37,7 +37,7 @@ class Type extends FieldType
         ),
         'selectionRoot' => array(
             'type' => 'string',
-            'default' => '',
+            'default' => null,
         ),
     );
 
@@ -50,38 +50,54 @@ class Type extends FieldType
      */
     public function validateFieldSettings( $fieldSettings )
     {
-        $validationResult = array();
+        $validationErrors = array();
 
-        foreach ( array_keys( $fieldSettings ) as $setting )
+        foreach ( $fieldSettings as $name => $value )
         {
-            if ( !in_array( $setting, array_keys( $this->settingsSchema ) ) )
+            if ( !isset( $this->settingsSchema[$name] ) )
             {
-                $validationResult[] = new ValidationError(
-                    "Unknown setting %setting%",
+                $validationErrors[] = new ValidationError(
+                    "Setting '%setting%' is unknown",
                     null,
-                    array( 'setting' => $setting )
+                    array(
+                        "setting" => $name
+                    )
                 );
+                continue;
+            }
+
+            switch ( $name )
+            {
+                case "selectionMethod":
+                    if ( $value !== self::SELECTION_BROWSE && $value !== self::SELECTION_DROPDOWN )
+                    {
+                        $validationErrors[] = new ValidationError(
+                            "Setting '%setting%' must be either %selection_browse% or %selection_dropdown%",
+                            null,
+                            array(
+                                "setting" => $name,
+                                "selection_browse" => self::SELECTION_BROWSE,
+                                "selection_dropdown" => self::SELECTION_DROPDOWN
+                            )
+                        );
+                    }
+                    break;
+                case "selectionRoot":
+                    if ( !is_int( $value ) && !is_string( $value ) && $value !== null )
+                    {
+                        $validationErrors[] = new ValidationError(
+                            "Setting '%setting%' value must be of either null, string or integer",
+                            null,
+                            array(
+                                "setting" => $name
+                            )
+                        );
+                    }
+                    break;
             }
         }
-        if ( !isset( $fieldSettings['selectionMethod'] ) ||
-            ( $fieldSettings['selectionMethod'] !== self::SELECTION_BROWSE && $fieldSettings['selectionMethod'] !== self::SELECTION_DROPDOWN ) )
-        {
-            $validationResult[] = new ValidationError(
-                "Setting selection method must be either %selection_browse% or %selection_dropdown%",
-                null,
-                array( 'selection_browse' => self::SELECTION_BROWSE, 'selection_dropdown' => self::SELECTION_DROPDOWN )
-            );
-        }
 
-        if ( !isset( $fieldSettings['selectionRoot'] ) ||
-            ( !is_string( $fieldSettings['selectionRoot'] ) && !is_numeric( $fieldSettings['selectionRoot'] ) ) )
-        {
-            $validationResult[] = new ValidationError(
-                "Setting selection root must be either a string or numeric integer"
-            );
-        }
-
-        return $validationResult;
+        return $validationErrors;
     }
 
     /**

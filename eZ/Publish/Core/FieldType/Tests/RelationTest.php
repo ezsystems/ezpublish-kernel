@@ -58,7 +58,7 @@ class RelationTest extends FieldTypeTest
             ),
             'selectionRoot' => array(
                 'type' => 'string',
-                'default' => '',
+                'default' => null,
             ),
         );
     }
@@ -324,18 +324,6 @@ class RelationTest extends FieldTypeTest
                     'unknownKey' => 23,
                     'selectionMethod' => RelationType::SELECTION_BROWSE,
                     'selectionRoot' => 42
-                )
-            ),
-            array(
-                // Missing selectionMethod
-                array(
-                    'selectionRoot' => 42
-                )
-            ),
-            array(
-                // Missing selectionRoot
-                array(
-                    'selectionMethod' => RelationType::SELECTION_BROWSE,
                 )
             ),
             array(
