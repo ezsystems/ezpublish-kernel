@@ -41,19 +41,21 @@
         {% endif %}
     </table>
 
-    <h3>Uncached SPI calls</h3>
-    <table>
-        <tr>
-            <th>Class</th>
-            <th>Method</th>
-            <th>Arguments</th>
-        </tr>
-        {% for call in collector.calls %}
+    {% if collector.callsLoggingEnabled %}
+        <h3>Uncached SPI calls</h3>
+        <table>
             <tr>
-                <td>{{ call.class }}</td>
-                <td>{{ call.method }}</td>
-                <td>{{ call.arguments }}</td>
+                <th>Class</th>
+                <th>Method</th>
+                <th>Arguments</th>
             </tr>
-        {% endfor %}
-    </table>
+            {% for call in collector.calls %}
+                <tr>
+                    <td>{{ call.class }}</td>
+                    <td>{{ call.method }}</td>
+                    <td>{{ call.arguments }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
 {% endblock %}
