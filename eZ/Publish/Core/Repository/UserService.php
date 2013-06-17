@@ -580,15 +580,42 @@ class UserService implements UserServiceInterface
      */
     public function loadUserByCredentials( $login, $password )
     {
-        if ( !is_string( $login ) || empty( $login ) )
-            throw new InvalidArgumentValue( "login", $login );
-
         if ( !is_string( $password ) || empty( $password ) )
             throw new InvalidArgumentValue( "password", $password );
 
         // Randomize login time to protect against timing attacks
         usleep( mt_rand( 0, 30000 ) );
 
+        $user = $this->loadUserByLogin( $login );
+
+        $passwordHash = $this->createPasswordHash(
+            $login,
+            $password,
+            $this->settings['siteName'],
+            $user->hashAlgorithm
+        );
+
+        if ( $user->passwordHash !== $passwordHash )
+            throw new NotFoundException( "user", $login );
+
+        return $user;
+    }
+
+    /**
+     * Loads a user for the given login
+     * 
+     * @param string $login
+     * 
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     * 
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
+     */
+    public function loadUserByLogin( $login )
+    {
+        if ( !is_string( $login ) || empty( $login ) )
+            throw new InvalidArgumentValue( "login", $login );
+
+        var_dump($this->userHandler);
         $spiUsers = $this->userHandler->loadByLogin( $login );
 
         if ( empty( $spiUsers ) )
@@ -600,16 +627,6 @@ class UserService implements UserServiceInterface
             // user with the same login
             throw new BadStateException( "login", 'found several users with same login' );
         }
-
-        $passwordHash = $this->createPasswordHash(
-            $login,
-            $password,
-            $this->settings['siteName'],
-            $spiUsers[0]->hashAlgorithm
-        );
-
-        if ( $spiUsers[0]->passwordHash !== $passwordHash )
-            throw new NotFoundException( "user", $login );
 
         return $this->buildDomainUserObject( $spiUsers[0] );
     }
