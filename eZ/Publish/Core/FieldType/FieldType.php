@@ -123,6 +123,9 @@ abstract class FieldType implements FieldTypeInterface
     /**
      * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
      *
+     * This method expects that given $validatorConfiguration is complete, for this purpose method
+     * {@link self::applyDefaultValidatorConfiguration()} is provided.
+     *
      * This is a base implementation, returning a validation error for each
      * specified validator, since by default no validators are supported.
      * Overwrite in derived types, if validation is supported.
@@ -151,6 +154,9 @@ abstract class FieldType implements FieldTypeInterface
 
     /**
      * Applies the default values to the given $validatorConfiguration of a FieldDefinitionCreateStruct
+     *
+     * This is a base implementation, expecting best practice validator configuration format used by
+     * field types in standard eZ publish installation. Overwrite in derived types if needed.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
@@ -185,6 +191,9 @@ abstract class FieldType implements FieldTypeInterface
     /**
      * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
      *
+     * This method expects that given $fieldSettings are complete, for this purpose method
+     * {@link self::applyDefaultSettings()} is provided.
+     *
      * @param mixed $fieldSettings
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
@@ -209,6 +218,9 @@ abstract class FieldType implements FieldTypeInterface
 
     /**
      * Applies the default values to the fieldSettings of a FieldDefinitionCreateStruct
+     *
+     * This is a base implementation, expecting best practice field settings format used by
+     * field types in standard eZ publish installation. Overwrite in derived types if needed.
      *
      * @param mixed $fieldSettings
      */
