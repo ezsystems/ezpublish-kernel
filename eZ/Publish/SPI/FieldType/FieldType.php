@@ -172,6 +172,8 @@ interface FieldType
     /**
      * Applies the default values to the fieldSettings of a FieldDefinitionCreateStruct
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
      * @param mixed $fieldSettings
      */
     public function applyDefaultSettings( &$fieldSettings );

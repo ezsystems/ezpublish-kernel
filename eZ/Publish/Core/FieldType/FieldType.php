@@ -222,10 +222,17 @@ abstract class FieldType implements FieldTypeInterface
      * This is a base implementation, expecting best practice field settings format used by
      * field types in standard eZ publish installation. Overwrite in derived types if needed.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
      * @param mixed $fieldSettings
      */
     public function applyDefaultSettings( &$fieldSettings )
     {
+        if ( $fieldSettings !== null && !is_array( $fieldSettings ) )
+        {
+            throw new InvalidArgumentType( "\$fieldSettings", "array|null", $fieldSettings );
+        }
+
         foreach ( $this->getSettingsSchema() as $settingName => $settingConfiguration )
         {
             // Checking that a default entry exists in the settingsSchema but that no value has been provided
