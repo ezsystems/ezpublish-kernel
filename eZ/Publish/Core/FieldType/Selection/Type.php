@@ -51,18 +51,6 @@ class Type extends FieldType
     {
         $validationErrors = array();
 
-        if ( !is_array( $fieldSettings ) )
-        {
-            $validationErrors[] = new ValidationError(
-                "FieldType '%fieldType%' expects settings to be a hash map",
-                null,
-                array(
-                    "fieldType" => $this->getFieldTypeIdentifier()
-                )
-            );
-            return $validationErrors;
-        }
-
         foreach ( $fieldSettings as $settingKey => $settingValue )
         {
             switch ( $settingKey )
