@@ -245,7 +245,7 @@ class Location extends RestController
         return new Values\ResourceCreated(
             $this->urlHandler->generate(
                 'ezpublish_rest_loadTrashItem',
-                array( 'trashId' => $trashItem->id )
+                array( 'trashItemId' => $trashItem->id )
             )
         );
     }

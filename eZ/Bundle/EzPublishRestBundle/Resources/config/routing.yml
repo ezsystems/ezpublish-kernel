@@ -641,28 +641,28 @@ ezpublish_rest_emptyTrash:
     methods: [DELETE]
 
 ezpublish_rest_loadTrashItem:
-    path: /content/trash/{trashId}
+    path: /content/trash/{trashItemId}
     defaults:
         _controller: ezpublish_rest.controller.trash:loadTrashItem
     methods: [GET]
     requirements:
-        trashId: \d+
+        trashItemId: \d+
 
 ezpublish_rest_deleteTrashItem:
-    path: /content/trash/{trashId}
+    path: /content/trash/{trashItemId}
     defaults:
         _controller: ezpublish_rest.controller.trash:deleteTrashItem
     methods: [DELETE]
     requirements:
-        trashId: \d+
+        trashItemId: \d+
 
 ezpublish_rest_restoreTrashItem:
-    path: /content/trash/{trashId}
+    path: /content/trash/{trashItemId}
     defaults:
         _controller: ezpublish_rest.controller.trash:restoreTrashItem
     methods: [MOVE]
     requirements:
-        trashId: \d+
+        trashItemId: \d+
 
 
 # URL wildcards
