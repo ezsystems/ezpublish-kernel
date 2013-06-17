@@ -471,6 +471,21 @@ class ContentService implements ContentServiceInterface
             $contentCreateStruct->contentType->id
         );
 
+        if ( empty( $contentCreateStruct->sectionId ) )
+        {
+            if ( isset( $locationCreateStructs[0] ) )
+            {
+                $location = $this->repository->getLocationService()->loadLocation(
+                    $locationCreateStructs[0]->parentLocationId
+                );
+                $contentCreateStruct->sectionId = $location->contentInfo->sectionId;
+            }
+            else
+            {
+                $contentCreateStruct->sectionId = 1;
+            }
+        }
+
         if ( !$this->repository->canUser( 'content', 'create', $contentCreateStruct, $locationCreateStructs ) )
         {
             throw new UnauthorizedException( 'content', 'create' );
@@ -498,11 +513,6 @@ class ContentService implements ContentServiceInterface
         }
 
         $spiLocationCreateStructs = $this->buildSPILocationCreateStructs( $locationCreateStructs );
-
-        if ( empty( $contentCreateStruct->sectionId ) )
-        {
-            $contentCreateStruct->sectionId = 1;
-        }
 
         $languageCodes = $this->getLanguageCodesForCreate( $contentCreateStruct );
         $fields = $this->mapFieldsForCreate( $contentCreateStruct );
