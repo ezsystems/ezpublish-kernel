@@ -90,11 +90,11 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
     protected function assertHttpResponseHasHeader( HttpResponse $response, $header, $expectedValue = null )
     {
-        $header = $response->getHeader( $header );
-        self::assertNotNull( $header, "Response has a $response header" );
+        $headerValue = $response->getHeader( $header );
+        self::assertNotNull( $headerValue, "Failed asserting that response has a $header header" );
         if ( $expectedValue !== null )
         {
-            self::assertEquals( $header, $expectedValue );
+            self::assertEquals( $headerValue, $expectedValue );
         }
     }
 
