@@ -615,7 +615,6 @@ class UserService implements UserServiceInterface
         if ( !is_string( $login ) || empty( $login ) )
             throw new InvalidArgumentValue( "login", $login );
 
-        var_dump($this->userHandler);
         $spiUsers = $this->userHandler->loadByLogin( $login );
 
         if ( empty( $spiUsers ) )
