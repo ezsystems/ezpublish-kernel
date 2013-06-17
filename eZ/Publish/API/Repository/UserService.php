@@ -156,7 +156,7 @@ interface UserService
     public function loadUserByCredentials( $login, $password );
 
     /**
-     * Loads a user for the given login (e-mail or username)
+     * Loads a user for the given login
      * 
      * @param string $login
      * 
