@@ -108,7 +108,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $testCase = $this;
         self::$createdContent[$href] = function() use ( $href, $testCase )
         {
-            $response = $testCase->sendHttpRequest(
+            $testCase->sendHttpRequest(
                 $testCase->createHttpRequest( 'DELETE', $href )
             );
         };
@@ -116,22 +116,17 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
     public static function tearDownAfterClass()
     {
-        self::clearCreatedContent( self::$createdContent );
+        self::clearCreatedElement( self::$createdContent );
     }
 
-    private static function clearCreatedContent( array $contentArray )
+    private static function clearCreatedElement( array $contentArray )
     {
-        foreach ( array_reverse( $contentArray ) as $contentId => $callback )
+        echo "\n";
+        foreach ( array_reverse( $contentArray ) as $href => $callback )
         {
             $callback();
         }
     }
-
-    /**
-     * List of REST contentId (/content/objects/12345) created by tests
-     * @var array
-     */
-    private static $createdContent = array();
 
     /**
      * @param string $parentLocationId The REST id of the parent location
@@ -202,6 +197,22 @@ XML;
     }
 
     /**
+     * @param string $contentHref
+     *
+     * @return array
+     */
+    protected function getContentLocations( $contentHref )
+    {
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest( "GET", "$contentHref/locations", '', 'LocationList+json' )
+        );
+        self::assertHttpResponseCodeEquals( $response, 200 );
+        $folderLocations = json_decode( $response->getContent(), true );
+
+        return $folderLocations;
+    }
+
+    /**
      * Converts a REST href to an ID
      * @param string $href
      * @return string
@@ -210,4 +221,10 @@ XML;
     {
         return str_replace( '/api/ezp/v2', '', $href );
     }
+
+    /**
+     * List of REST contentId (/content/objects/12345) created by tests
+     * @var array
+     */
+    private static $createdContent = array();
 }

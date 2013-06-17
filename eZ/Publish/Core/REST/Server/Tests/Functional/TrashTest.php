@@ -134,20 +134,4 @@ class TrashTest extends RESTFunctionalTestCase
 
         return $trashHref;
     }
-
-    /**
-     * @param string $contentHref
-     *
-     * @return array
-     */
-    private function getContentLocations( $contentHref )
-    {
-        $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "$contentHref/locations", '', 'LocationList+json' )
-        );
-        self::assertHttpResponseCodeEquals( $response, 200 );
-        $folderLocations = json_decode( $response->getContent(), true );
-
-        return $folderLocations;
-    }
 }
