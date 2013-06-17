@@ -38,7 +38,7 @@ class Type extends FieldType
         $validationErrors = array();
         $validator = new EmailAddressValidator();
 
-        foreach ( (array)$validatorConfiguration as $validatorIdentifier => $constraints )
+        foreach ( $validatorConfiguration as $validatorIdentifier => $constraints )
         {
             if ( $validatorIdentifier !== 'EmailAddressValidator' )
             {

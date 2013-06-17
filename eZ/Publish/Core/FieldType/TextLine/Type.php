@@ -45,7 +45,7 @@ class Type extends FieldType
     {
         $validationErrors = array();
 
-        foreach ( (array)$validatorConfiguration as $validatorIdentifier => $constraints )
+        foreach ( $validatorConfiguration as $validatorIdentifier => $constraints )
         {
             if ( $validatorIdentifier !== 'StringLengthValidator' )
             {

@@ -188,7 +188,7 @@ class Type extends FieldType
     {
         $validationErrors = array();
 
-        foreach ( (array)$fieldSettings as $name => $value )
+        foreach ( $fieldSettings as $name => $value )
         {
             if ( isset( $this->settingsSchema[$name] ) )
             {

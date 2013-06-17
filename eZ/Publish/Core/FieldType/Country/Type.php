@@ -283,27 +283,9 @@ class Type extends FieldType
     {
         $validationErrors = array();
 
-        foreach ( (array)$fieldSettings as $name => $value )
+        foreach ( $fieldSettings as $name => $value )
         {
-            if ( isset( $this->settingsSchema[$name] ) )
-            {
-                switch ( $name )
-                {
-                    case "isMultiple":
-                        if ( !is_bool( $value ) )
-                        {
-                            $validationErrors[] = new ValidationError(
-                                "Setting '%setting%' value must be of boolean type",
-                                null,
-                                array(
-                                    "setting" => $name
-                                )
-                            );
-                        }
-                        break;
-                }
-            }
-            else
+            if ( !isset( $this->settingsSchema[$name] ) )
             {
                 $validationErrors[] = new ValidationError(
                     "Setting '%setting%' is unknown",
@@ -312,6 +294,23 @@ class Type extends FieldType
                         "setting" => $name
                     )
                 );
+                continue;
+            }
+
+            switch ( $name )
+            {
+                case "isMultiple":
+                    if ( !is_bool( $value ) )
+                    {
+                        $validationErrors[] = new ValidationError(
+                            "Setting '%setting%' value must be of boolean type",
+                            null,
+                            array(
+                                "setting" => $name
+                            )
+                        );
+                    }
+                    break;
             }
         }
 
