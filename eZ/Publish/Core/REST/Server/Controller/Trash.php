@@ -89,15 +89,14 @@ class Trash extends RestController
     /**
      * Returns the trash item given by id
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\RestTrashItem
+     * @param $trashItemId
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
+     * @return \eZ\Publish\Core\REST\Server\Values\RestTrashItem
      */
-    public function loadTrashItem()
+    public function loadTrashItem( $trashItemId )
     {
-        $values = $this->urlHandler->parse( 'trash', $this->request->path );
         return new Values\RestTrashItem(
-            $trashItem = $this->trashService->loadTrashItem( $values['trash'] ),
+            $trashItem = $this->trashService->loadTrashItem( $trashItemId ),
             $this->locationService->getLocationChildCount( $trashItem )
         );
     }
@@ -119,11 +118,10 @@ class Trash extends RestController
      *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function deleteTrashItem()
+    public function deleteTrashItem( $trashItemId )
     {
-        $values = $this->urlHandler->parse( 'trash', $this->request->path );
         $this->trashService->deleteTrashItem(
-            $this->trashService->loadTrashItem( $values['trash'] )
+            $this->trashService->loadTrashItem( $trashItemId )
         );
 
         return new Values\NoContent();
@@ -132,9 +130,12 @@ class Trash extends RestController
     /**
      * Restores a trashItem
      *
+     * @param $trashItemId
+     *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
-    public function restoreTrashItem()
+    public function restoreTrashItem( $trashItemId )
     {
         $requestDestination = null;
         try
@@ -149,7 +150,7 @@ class Trash extends RestController
         $parentLocation = null;
         if ( $requestDestination !== null )
         {
-            $destinationValues = $this->urlHandler->parse( 'location', $requestDestination );
+            $destinationValues = $this->requestParser->parse( 'location', $requestDestination );
 
             $locationPath = $destinationValues['location'];
             $locationPathParts = explode( '/', $locationPath );
@@ -164,8 +165,7 @@ class Trash extends RestController
             }
         }
 
-        $values = $this->urlHandler->parse( 'trash', $this->request->path );
-        $trashItem = $this->trashService->loadTrashItem( $values['trash'] );
+        $trashItem = $this->trashService->loadTrashItem( $trashItemId );
 
         if ( $requestDestination === null )
         {
@@ -184,9 +184,9 @@ class Trash extends RestController
         $location = $this->trashService->recover( $trashItem, $parentLocation );
         return new Values\ResourceCreated(
             $this->urlHandler->generate(
-                'location',
+                'ezpublish_rest_loadLocation',
                 array(
-                    'location' => rtrim( $location->pathString, '/' ),
+                    'locationPath' => rtrim( $location->pathString, '/' ),
                 )
             )
         );
