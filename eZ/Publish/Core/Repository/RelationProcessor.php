@@ -105,7 +105,7 @@ class RelationProcessor
                 {
                     $relations[$relationType][$fieldDefinitionId] = array();
                 }
-                $relations[$relationType][$fieldDefinitionId] += array_flip( $destinationIds );
+                $relations[$relationType][$fieldDefinitionId] += array_flip( array_filter($destinationIds) );
             }
             // Using bitwise operators as Legacy Stack stores COMMON, LINK and EMBED relation types
             // in the same entry using bitmask
