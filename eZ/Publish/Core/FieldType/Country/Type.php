@@ -133,13 +133,19 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
-     * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field value for which an action is performed
+     * @param \eZ\Publish\Core\FieldType\Country\Value $fieldValue The field value for which an action is performed
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
     public function validate( FieldDefinition $fieldDefinition, $fieldValue )
     {
         $validationErrors = array();
+
+        if ( $this->isEmptyValue( $fieldValue ) )
+        {
+            return $validationErrors;
+        }
+
         $fieldSettings = $fieldDefinition->fieldSettings;
 
         if ( ( !isset( $fieldSettings["isMultiple"] ) || $fieldSettings["isMultiple"] === false )

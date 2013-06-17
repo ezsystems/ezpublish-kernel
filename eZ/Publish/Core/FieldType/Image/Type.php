@@ -180,13 +180,19 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
-     * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field value for which an action is performed
+     * @param \eZ\Publish\Core\FieldType\Image\Value $fieldValue The field value for which an action is performed
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
     public function validate( FieldDefinition $fieldDefinition, $fieldValue )
     {
         $errors = array();
+
+        if ( $this->isEmptyValue( $fieldValue ) )
+        {
+            return $errors;
+        }
+
         foreach ( (array)$fieldDefinition->getValidatorConfiguration() as $validatorIdentifier => $parameters )
         {
             switch ( $validatorIdentifier )
@@ -198,7 +204,7 @@ class Type extends FieldType
                         break;
                     }
                     // Database stores maxFileSize in MB
-                    if ( $fieldValue !== null && ( $parameters['maxFileSize'] * 1024 * 1024 ) < $fieldValue->fileSize )
+                    if ( ( $parameters['maxFileSize'] * 1024 * 1024 ) < $fieldValue->fileSize )
                     {
                         $errors[] = new ValidationError(
                             "The file size cannot exceed %size% byte.",
