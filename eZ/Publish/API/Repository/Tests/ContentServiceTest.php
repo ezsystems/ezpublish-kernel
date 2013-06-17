@@ -1793,6 +1793,40 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the deleteContent() method.
+     *
+     * Test for issue EZP-21057:
+     * "contentService: Unable to delete a content with an empty file attribute"
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::deleteContent()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     */
+    public function testDeleteContentWithEmptyBinaryField()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        /* BEGIN: Use Case */
+        $contentVersion = $this->createContentVersion1EmptyBinaryField();
+
+        // Load the locations for this content object
+        $locations = $locationService->loadLocations( $contentVersion->contentInfo );
+
+        // This will delete the content, all versions and the associated locations
+        $contentService->deleteContent( $contentVersion->contentInfo );
+        /* END: Use Case */
+
+        foreach ( $locations as $location )
+        {
+            $locationService->loadLocation( $location->id );
+        }
+    }
+
+    /**
      * Test for the loadContentDrafts() method.
      *
      * @return void
