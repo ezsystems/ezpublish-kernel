@@ -338,22 +338,6 @@ class RelationListTest extends FieldTypeTest
     {
         return array(
             array(
-                // Missing mandatory keys 'selectionMethod' and 'selectionDefaultLocation'
-                array()
-            ),
-            array(
-                // Missing mandatory key 'selectionDefaultLocation'
-                array(
-                    'selectionMethod' => RelationList::SELECTION_DROPDOWN,
-                )
-            ),
-            array(
-                // Missing mandatory key 'selectionMethod'
-                array(
-                    'selectionDefaultLocation' => 23
-                )
-            ),
-            array(
                 // Invalid value for 'selectionMethod'
                 array(
                     'selectionMethod' => true,
