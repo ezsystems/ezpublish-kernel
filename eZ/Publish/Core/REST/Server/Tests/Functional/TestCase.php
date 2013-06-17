@@ -186,12 +186,15 @@ XML;
         $request->setContent( $xml );
 
         $response = $this->sendHttpRequest( $request );
+        self::assertHttpResponseCodeEquals( $response, 201 );
 
         $content = json_decode( $response->getContent(), true );
 
-        $this->sendHttpRequest(
+        $response = $this->sendHttpRequest(
             $request = $this->createHttpRequest( "PUBLISH", $content['Content']['CurrentVersion']['Version']['_href'] )
         );
+
+        self::assertHttpResponseCodeEquals( $response, 204 );
 
         $this->addCreatedElement( $content['Content']['_href'], true );
 
