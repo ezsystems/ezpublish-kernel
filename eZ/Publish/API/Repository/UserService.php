@@ -156,6 +156,17 @@ interface UserService
     public function loadUserByCredentials( $login, $password );
 
     /**
+     * Loads a user for the given login
+     *
+     * @param string $login
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
+     */
+    public function loadUserByLogin( $login );
+
+    /**
      * This method deletes a user
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
