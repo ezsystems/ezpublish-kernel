@@ -211,7 +211,11 @@ class Field extends CriterionHandler
                     $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
                     $fieldsInfo['ids']
                 ),
-                $filter
+                $filter,
+                $subSelect->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_attribute' ),
+                    $this->dbHandler->quoteColumn( 'current_version', 'ezcontentobject' )
+                )
             );
         }
 
