@@ -131,14 +131,14 @@ class User extends RestController
     /**
      * Loads a user group for the given path
      *
+     * @param $groupPath
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\RestUserGroup
      */
-    public function loadUserGroup()
+    public function loadUserGroup( $groupPath )
     {
-        $urlValues = $this->requestParser->parse( 'group', $this->request->path );
-
         $userGroupLocation = $this->locationService->loadLocation(
-            $this->extractLocationIdFromPath( $urlValues['group'] )
+            $this->extractLocationIdFromPath( $groupPath )
         );
 
         $userGroup = $this->userService->loadUserGroup(
@@ -159,15 +159,13 @@ class User extends RestController
     /**
      * Loads a user for the given ID
      *
+     * @param $userId
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\RestUser
      */
-    public function loadUser()
+    public function loadUser( $userId )
     {
-        $urlValues = $this->requestParser->parse( 'user', $this->request->path );
-
-        $user = $this->userService->loadUser(
-            $urlValues['user']
-        );
+        $user = $this->userService->loadUser( $userId );
 
         $userContentInfo = $user->getVersionInfo()->getContentInfo();
         $userMainLocation = $this->locationService->loadLocation( $userContentInfo->mainLocationId );
@@ -184,33 +182,17 @@ class User extends RestController
 
     /**
      * Create a new user group under the given parent
-     * To create a top level group use /user/groups/subgroups
+     * To create a top level group use /user/groups/1/5/subgroups
      *
+     * @param $groupPath
+     *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedUserGroup
      */
-    public function createUserGroup()
+    public function createUserGroup( $groupPath )
     {
-        try
-        {
-            $urlValues = $this->requestParser->parse( 'groupSubgroups', $this->request->path );
-            $userGroupPath = $urlValues['group'];
-        }
-        catch ( RestInvalidArgumentException $e )
-        {
-            try
-            {
-                $this->requestParser->parse( 'rootUserGroupSubGroups', $this->request->path );
-                //@todo Load from settings instead of using hardcoded value
-                $userGroupPath = '/1/5';
-            }
-            catch ( RestInvalidArgumentException $e )
-            {
-                throw new Exceptions\BadRequestException( 'Unrecognized user group resource' );
-            }
-        }
-
         $userGroupLocation = $this->locationService->loadLocation(
-            $this->extractLocationIdFromPath( $userGroupPath )
+            $this->extractLocationIdFromPath( $groupPath )
         );
 
         $createdUserGroup = $this->userService->createUserGroup(
@@ -245,14 +227,15 @@ class User extends RestController
     /**
      * Create a new user group in the given group
      *
+     * @param $groupPath
+     *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedUser
      */
-    public function createUser()
+    public function createUser( $groupPath )
     {
-        $urlValues = $this->requestParser->parse( 'groupUsers', $this->request->path );
-
         $userGroupLocation = $this->locationService->loadLocation(
-            $this->extractLocationIdFromPath( $urlValues['group'] )
+            $this->extractLocationIdFromPath( $groupPath )
         );
         $userGroup = $this->userService->loadUserGroup( $userGroupLocation->contentId );
 
@@ -292,14 +275,14 @@ class User extends RestController
     /**
      * Updates a user group
      *
+     * @param $groupPath
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\RestUserGroup
      */
-    public function updateUserGroup()
+    public function updateUserGroup( $groupPath )
     {
-        $urlValues = $this->requestParser->parse( 'group', $this->request->path );
-
         $userGroupLocation = $this->locationService->loadLocation(
-            $this->extractLocationIdFromPath( $urlValues['group'] )
+            $this->extractLocationIdFromPath( $groupPath )
         );
 
         $userGroup = $this->userService->loadUserGroup(
@@ -343,13 +326,13 @@ class User extends RestController
     /**
      * Updates a user
      *
+     * @param $userPath
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\RestUser
      */
-    public function updateUser()
+    public function updateUser( $userPath )
     {
-        $urlValues = $this->requestParser->parse( 'user', $this->request->path );
-
-        $user = $this->userService->loadUser( $urlValues['user'] );
+        $user = $this->userService->loadUser( $userPath );
 
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
@@ -388,14 +371,15 @@ class User extends RestController
     /**
      * Given user group is deleted
      *
+     * @param $groupPath
+     *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function deleteUserGroup()
+    public function deleteUserGroup( $groupPath )
     {
-        $urlValues = $this->requestParser->parse( 'group', $this->request->path );
-
         $userGroupLocation = $this->locationService->loadLocation(
-            $this->extractLocationIdFromPath( $urlValues['group'] )
+            $this->extractLocationIdFromPath( $groupPath )
         );
 
         $userGroup = $this->userService->loadUserGroup(
@@ -417,15 +401,14 @@ class User extends RestController
     /**
      * Given user is deleted
      *
+     * @param $userId
+     *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function deleteUser()
+    public function deleteUser( $userId )
     {
-        $urlValues = $this->requestParser->parse( 'user', $this->request->path );
-
-        $user = $this->userService->loadUser(
-            $urlValues['user']
-        );
+        $user = $this->userService->loadUser( $userId );
 
         if ( $user->id == $this->repository->getCurrentUser()->id )
         {
@@ -625,14 +608,14 @@ class User extends RestController
     /**
      * Loads drafts assigned to user
      *
+     * @param $userId
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\VersionList
      */
-    public function loadUserDrafts()
+    public function loadUserDrafts( $userId )
     {
-        $urlValues = $this->requestParser->parse( 'userDrafts', $this->request->path );
-
         $contentDrafts = $this->contentService->loadContentDrafts(
-            $this->userService->loadUser( $urlValues['user'] )
+            $this->userService->loadUser( $userId )
         );
 
         return new Values\VersionList( $contentDrafts, $this->request->path );
@@ -641,14 +624,15 @@ class User extends RestController
     /**
      * Moves the user group to another parent
      *
+     * @param $groupPath
+     *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
-    public function moveUserGroup()
+    public function moveUserGroup( $groupPath )
     {
-        $urlValues = $this->requestParser->parse( 'group', $this->request->path );
-
         $userGroupLocation = $this->locationService->loadLocation(
-            $this->extractLocationIdFromPath( $urlValues['group'] )
+            $this->extractLocationIdFromPath( $groupPath )
         );
 
         $userGroup = $this->userService->loadUserGroup(
@@ -680,10 +664,10 @@ class User extends RestController
         $this->userService->moveUserGroup( $userGroup, $destinationGroup );
 
         return new Values\ResourceCreated(
-            $this->requestParser->generate(
-                'group',
+            $this->urlHandler->generate(
+                'ezpublish_rest_loadUserGroup',
                 array(
-                    'group' => $destinationGroupLocation->pathString . $userGroupLocation->id
+                    'groupPath' => $destinationGroupLocation->pathString . $userGroupLocation->id
                 )
             )
         );
