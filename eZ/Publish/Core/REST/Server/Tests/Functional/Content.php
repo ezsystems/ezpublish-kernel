@@ -131,6 +131,7 @@ XML;
     /**
      * @depends testPublishContent
      * @covers GET /content/objects/<contentId>/currentversion
+     * @covers \eZ\Publish\Core\REST\Server\Controller\Content::redirectCurrentVersion
      */
     public function testRedirectCurrentVersion( $restContentHref )
     {
