@@ -14,6 +14,7 @@ use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use eZ\Publish\SPI\Persistence\User\Policy;
 use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Role;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * Base class for content type gateways.
@@ -23,7 +24,7 @@ class EzcDatabase extends Gateway
     /**
      * Database handler
      *
-     * @var EzcDbHandler
+     * @var \EzcDbHandler
      */
     protected $handler;
 
@@ -454,6 +455,8 @@ class EzcDatabase extends Gateway
     /**
      * Update role
      *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     *
      * @param \eZ\Publish\SPI\Persistence\User\RoleUpdateStruct $role
      */
     public function updateRole( RoleUpdateStruct $role )
@@ -470,7 +473,13 @@ class EzcDatabase extends Gateway
                     $query->bindValue( $role->id, null, \PDO::PARAM_INT )
                 )
             );
-        $query->prepare()->execute();
+        $statement = $query->prepare();
+        $statement->execute();
+
+        if ( $statement->rowCount() < 1 )
+        {
+            throw new NotFoundException( 'role', $role->id );
+        }
     }
 
     /**

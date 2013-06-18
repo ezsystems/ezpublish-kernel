@@ -199,6 +199,8 @@ class ExceptionConversion extends Gateway
     /**
      * Update role
      *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     *
      * @param RoleUpdateStruct $role
      */
     public function updateRole( RoleUpdateStruct $role )

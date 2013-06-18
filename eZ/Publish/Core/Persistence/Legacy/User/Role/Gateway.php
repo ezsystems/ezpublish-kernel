@@ -83,6 +83,8 @@ abstract class Gateway
     /**
      * Update role
      *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     *
      * @param RoleUpdateStruct $role
      */
     abstract public function updateRole( RoleUpdateStruct $role );
