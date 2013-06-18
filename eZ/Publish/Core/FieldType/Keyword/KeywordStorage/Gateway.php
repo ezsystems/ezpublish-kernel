@@ -36,5 +36,10 @@ abstract class Gateway extends StorageGateway
      * @return mixed
      */
     abstract public function getContentTypeId( Field $field );
+
+    /**
+     * @see \eZ\Publish\SPI\FieldType\FieldStorage::deleteFieldData()
+     */
+    abstract public function deleteFieldData( $fieldId );
 }
 

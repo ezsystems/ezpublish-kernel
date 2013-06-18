@@ -82,6 +82,7 @@ class TextBlock implements Converter
             )
         );
         $fieldDef->defaultValue->data = null;
+        $fieldDef->defaultValue->sortKey = "";
     }
 
     /**

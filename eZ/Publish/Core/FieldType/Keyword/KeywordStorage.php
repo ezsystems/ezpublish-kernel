@@ -57,14 +57,19 @@ class KeywordStorage extends GatewayBasedStorage
     }
 
     /**
-     * @param array $fieldId
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param array $fieldIds
      * @param array $context
      *
      * @return boolean
      */
-    public function deleteFieldData( VersionInfo $versionInfo, array $fieldId, array $context )
+    public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
-        // @todo: What about deleting keywords?
+        $gateway = $this->getGateway( $context );
+        foreach ( $fieldIds as $fieldId )
+        {
+            $gateway->deleteFieldData( $fieldId );
+        }
     }
 
     /**
