@@ -14,6 +14,7 @@ use eZ\Publish\Core\SignalSlot\Slot\AbstractLegacySlot;
 use eZContentCacheManager;
 use eZContentObject;
 use eZSearch;
+use eZContentOperationCollection;
 
 /**
  * A legacy slot handling DeleteLocationSignal.
@@ -37,6 +38,7 @@ class LegacyDeleteLocationSlot extends AbstractLegacySlot
             function () use ( $signal )
             {
                 eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId, true, array( $signal->locationId ) );
+                eZContentOperationCollection::registerSearchObject( $signal->contentId );
                 eZSearch::removeNodes( array( $signal->locationId ) );
                 eZContentObject::clearCache();// Clear all object memory cache to free memory
             },
