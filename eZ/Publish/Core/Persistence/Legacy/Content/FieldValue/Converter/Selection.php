@@ -107,10 +107,14 @@ class Selection implements Converter
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
         $options = array();
+        $simpleXml = simplexml_load_string( $storageDef->dataText5 );
 
-        foreach ( simplexml_load_string( $storageDef->dataText5 )->options->option as $option )
+        if ( $simpleXml !== false )
         {
-            $options[(int)$option["id"]] = (string)$option["name"];
+            foreach ( $simpleXml->options->option as $option )
+            {
+                $options[(int)$option["id"]] = (string)$option["name"];
+            }
         }
 
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(

@@ -26,7 +26,7 @@ class Value extends BaseValue
     /**
      * Construct a new Value object and initialize its $email
      *
-     * @param string $text
+     * @param string $email
      */
     public function __construct( $email = '' )
     {
