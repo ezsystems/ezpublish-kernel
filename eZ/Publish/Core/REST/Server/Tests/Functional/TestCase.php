@@ -36,7 +36,6 @@ class TestCase extends \PHPUnit_Framework_TestCase
         if ( !$this->httpAuth = getenv( 'EZP_TEST_REST_AUTH' ) )
         {
             self::markTestSkipped( "Set the EZP_TEST_REST_AUTH (admin:publish) to your eZ Publish test instance" );
-
         }
 
         $this->httpClient = new \Buzz\Client\Curl();
@@ -78,10 +77,10 @@ class TestCase extends \PHPUnit_Framework_TestCase
                 $body = \simplexml_load_string( $response->getContent() );
                 $errorMessageString = $body->errorDescription;
             }
-            elseif ( ( $response->getHeader( 'Content-Type' ) == 'application/vnd.ez.api.ErrorMessage+json' ) )
+            else if ( ( $response->getHeader( 'Content-Type' ) == 'application/vnd.ez.api.ErrorMessage+json' ) )
             {
                 $body = json_decode( $response->getContent() );
-                $errorMessageString =  "Error message: {$body->ErrorMessage->errorDescription}";
+                $errorMessageString = "Error message: {$body->ErrorMessage->errorDescription}";
             }
 
             self::assertEquals( $expected, $responseCode, $errorMessageString );
@@ -121,7 +120,6 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
     private static function clearCreatedElement( array $contentArray )
     {
-        echo "\n";
         foreach ( array_reverse( $contentArray ) as $href => $callback )
         {
             $callback();

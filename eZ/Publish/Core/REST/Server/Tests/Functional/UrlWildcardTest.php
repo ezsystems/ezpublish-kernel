@@ -60,7 +60,6 @@ XML;
         self::assertHttpResponseCodeEquals( $response, 200 );
     }
 
-
     /**
      * @param $urlWildcardHref
      * @depends testCreateUrlWildcard
