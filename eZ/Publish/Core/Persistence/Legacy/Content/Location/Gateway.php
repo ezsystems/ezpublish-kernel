@@ -212,10 +212,12 @@ abstract class Gateway
     /**
      * Updates an existing location.
      *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId
      *
-     * @return boolean
+     * @return void
      */
     abstract public function update( UpdateStruct $location, $locationId );
 
