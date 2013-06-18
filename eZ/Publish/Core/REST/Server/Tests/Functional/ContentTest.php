@@ -334,13 +334,16 @@ XML;
 
     /**
      * Returns the Content key from the decoded JSON of $restContentId's contentInfo
+     *
      * @param string $restContentId /api/ezp/v2/content/objects/<contentId>
+     *
+     * @throws \InvalidArgumentException
      * @return array
      */
     private function loadContent( $restContentId )
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'GET', $restContentId, '', 'ContentInfo+json')
+            $this->createHttpRequest( 'GET', $restContentId, '', 'ContentInfo+json' )
         );
 
         if ( $response->getStatusCode() != 200 )
