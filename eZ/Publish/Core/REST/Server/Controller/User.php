@@ -992,12 +992,12 @@ class User extends RestController
 
     /**
      * Deletes given session.
+     *
+     * @param string $sessionId
+     * @throws RestNotFoundException
      */
-    public function deleteSession()
+    public function deleteSession( $sessionId )
     {
-        $urlValues = $this->requestParser->parse( "userSession", $this->request->path );
-        $sessionId = $urlValues["sessionId"];
-
         /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
         $session = $this->container->get( 'session' );
         if ( !$session->isStarted() || $session->getId() != $sessionId )
