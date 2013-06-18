@@ -206,7 +206,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'status' => '0',
                     'workflow_event_pos' => '0',
                     'version' => '1',
-                    'language_mask' => '1',
+                    'language_mask' => '5',
                     'initial_language_id' => '4',
                     // Not needed, according to field mapping document
                     // 'user_id',
@@ -376,7 +376,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $struct->creatorId = 23;
         $struct->fields = array();
         $struct->modificationDate = 234567;
-        $struct->initialLanguageId = 3;
+        $struct->initialLanguageId = 2;
         return $struct;
     }
 
@@ -417,7 +417,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             array(
                 array(
                     'creator_id' => '23',
-                    'initial_language_id' => '3',
+                    'initial_language_id' => '2',
                     'modified' => '234567',
                 )
             ),

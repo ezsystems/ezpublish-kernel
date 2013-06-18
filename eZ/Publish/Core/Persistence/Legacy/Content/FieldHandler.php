@@ -106,6 +106,7 @@ class FieldHandler
         $fieldsToCopy = array();
         $languageCodes = array();
         $fields = $this->getFieldMap( $content->fields, $languageCodes );
+        $languageCodes[$content->versionInfo->contentInfo->mainLanguageCode] = true;
         $contentType = $this->typeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
 
         foreach ( $contentType->fieldDefinitions as $fieldDefinition )
@@ -394,6 +395,8 @@ class FieldHandler
         $languageCodes = $existingLanguageCodes = $this->getLanguageCodes( $content->versionInfo->languageIds );
         $contentFieldMap = $this->getFieldMap( $content->fields );
         $updateFieldMap = $this->getFieldMap( $updateStruct->fields, $languageCodes );
+        $initialLanguageCode = $this->languageHandler->load( $updateStruct->initialLanguageId )->languageCode;
+        $languageCodes[$initialLanguageCode] = true;
         $contentType = $this->typeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
 
         foreach ( $contentType->fieldDefinitions as $fieldDefinition )

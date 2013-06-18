@@ -29,6 +29,13 @@ class LanguageHandlerMock implements LanguageHandler
                 'name' => 'British english'
             )
         );
+        $this->languages[] = new Language(
+            array(
+                'id' => 8,
+                'languageCode' => 'ger-DE',
+                'name' => 'German'
+            )
+        );
     }
 
     /**
