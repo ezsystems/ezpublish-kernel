@@ -14,6 +14,7 @@ use eZ\Publish\Core\SignalSlot\Slot\AbstractLegacySlot;
 use eZContentCacheManager;
 use eZContentObject;
 use eZSearch;
+use eZContentOperationCollection;
 
 /**
  * A legacy slot handling DeleteVersionSignal.
@@ -37,9 +38,8 @@ class LegacyDeleteVersionSlot extends AbstractLegacySlot
             function () use ( $signal )
             {
                 eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
-                eZSearch::removeObjectById( $signal->contentId, false );
-                $object = eZContentObject::fetch( $signal->contentId );
-                eZSearch::addObject( $object, false );
+                eZSearch::removeObjectById( $signal->contentId, null );
+                eZContentOperationCollection::registerSearchObject( $signal->contentId );
                 eZContentObject::clearCache();// Clear all object memory cache to free memory
             },
             false
