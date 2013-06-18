@@ -271,7 +271,38 @@ EOT;
      * @group selection
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection::toFieldDefinition
      */
-    public function testToFieldDefinitionSingle()
+    public function testToFieldDefinitionSingleEmpty()
     {
+        $storageFieldDefinition = new StorageFieldDefinition();
+        $storageFieldDefinition->dataInt1 = 0;
+        $storageFieldDefinition->dataText5 = <<<EOT
+<?xml version="1.0" encoding="utf-8"?>
+<ezselection>
+  <options>
+  </options>
+</ezselection>
+EOT;
+
+        $expectedFieldDefinition = new PersistenceFieldDefinition(
+            array(
+                'fieldTypeConstraints' => new FieldTypeConstraints(
+                    array(
+                        'fieldSettings' => new FieldSettings(
+                            array(
+                                'isMultiple' => false,
+                                'options' => array()
+                            )
+                        )
+                    )
+                ),
+                'defaultValue' => new FieldValue( array( 'data' => array() ) )
+            )
+        );
+
+        $actualFieldDefinition = new PersistenceFieldDefinition();
+
+        $this->converter->toFieldDefinition( $storageFieldDefinition, $actualFieldDefinition );
+
+        $this->assertEquals( $expectedFieldDefinition, $actualFieldDefinition );
     }
 }

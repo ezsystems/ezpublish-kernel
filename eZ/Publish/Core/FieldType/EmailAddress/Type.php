@@ -38,7 +38,7 @@ class Type extends FieldType
         $validationErrors = array();
         $validator = new EmailAddressValidator();
 
-        foreach ( (array)$validatorConfiguration as $validatorIdentifier => $constraints )
+        foreach ( $validatorConfiguration as $validatorIdentifier => $constraints )
         {
             if ( $validatorIdentifier !== 'EmailAddressValidator' )
             {
@@ -63,14 +63,21 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
-     * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field value for which an action is performed
+     * @param \eZ\Publish\Core\FieldType\EmailAddress\Value $fieldValue The field value for which an action is performed
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
     public function validate( FieldDefinition $fieldDefinition, $fieldValue )
     {
+        $errors = array();
+
+        if ( $this->isEmptyValue( $fieldValue ) )
+        {
+            return $errors;
+        }
+
         $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
-        $constraints = isset($validatorConfiguration['EmailAddressValidator']) ?
+        $constraints = isset( $validatorConfiguration['EmailAddressValidator'] ) ?
             $validatorConfiguration['EmailAddressValidator'] :
             array();
         $validator = new EmailAddressValidator();

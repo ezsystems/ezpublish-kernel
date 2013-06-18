@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * Base class for field types, the most basic storage unit of data inside eZ Publish.
@@ -122,6 +123,9 @@ abstract class FieldType implements FieldTypeInterface
     /**
      * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
      *
+     * This method expects that given $validatorConfiguration is complete, for this purpose method
+     * {@link self::applyDefaultValidatorConfiguration()} is provided.
+     *
      * This is a base implementation, returning a validation error for each
      * specified validator, since by default no validators are supported.
      * Overwrite in derived types, if validation is supported.
@@ -149,7 +153,46 @@ abstract class FieldType implements FieldTypeInterface
     }
 
     /**
+     * Applies the default values to the given $validatorConfiguration of a FieldDefinitionCreateStruct
+     *
+     * This is a base implementation, expecting best practice validator configuration format used by
+     * field types in standard eZ publish installation. Overwrite in derived types if needed.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param mixed $validatorConfiguration
+     */
+    public function applyDefaultValidatorConfiguration( &$validatorConfiguration )
+    {
+        if ( $validatorConfiguration !== null && !is_array( $validatorConfiguration ) )
+        {
+            throw new InvalidArgumentType( "\$validatorConfiguration", "array|null", $validatorConfiguration );
+        }
+
+        foreach ( $this->getValidatorConfigurationSchema() as $validatorName => $configurationSchema )
+        {
+            // Set configuration of specific validator to empty array if it is not already provided
+            if ( !isset( $validatorConfiguration[$validatorName] ) )
+            {
+                $validatorConfiguration[$validatorName] = array();
+            }
+
+            foreach ( $configurationSchema as $settingName => $settingConfiguration )
+            {
+                // Check that a default entry exists in the configuration schema for the validator but that no value has been provided
+                if ( !isset( $validatorConfiguration[$validatorName][$settingName] ) && isset( $settingConfiguration["default"] ) )
+                {
+                    $validatorConfiguration[$validatorName][$settingName] = $settingConfiguration["default"];
+                }
+            }
+        }
+    }
+
+    /**
      * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * This method expects that given $fieldSettings are complete, for this purpose method
+     * {@link self::applyDefaultSettings()} is provided.
      *
      * @param mixed $fieldSettings
      *
@@ -176,10 +219,20 @@ abstract class FieldType implements FieldTypeInterface
     /**
      * Applies the default values to the fieldSettings of a FieldDefinitionCreateStruct
      *
+     * This is a base implementation, expecting best practice field settings format used by
+     * field types in standard eZ publish installation. Overwrite in derived types if needed.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
      * @param mixed $fieldSettings
      */
     public function applyDefaultSettings( &$fieldSettings )
     {
+        if ( $fieldSettings !== null && !is_array( $fieldSettings ) )
+        {
+            throw new InvalidArgumentType( "\$fieldSettings", "array|null", $fieldSettings );
+        }
+
         foreach ( $this->getSettingsSchema() as $settingName => $settingConfiguration )
         {
             // Checking that a default entry exists in the settingsSchema but that no value has been provided

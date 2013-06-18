@@ -58,46 +58,66 @@ class Type extends FieldType
      */
     public function validateFieldSettings( $fieldSettings )
     {
-        $validationResult = array();
+        $validationErrors = array();
 
-        foreach ( array_keys( $fieldSettings ) as $setting )
+        foreach ( $fieldSettings as $name => $value )
         {
-            if ( !in_array( $setting, array_keys( $this->settingsSchema ) ) )
+            if ( !isset( $this->settingsSchema[$name] ) )
             {
-                $validationResult[] = new ValidationError(
-                    "Unknown setting %setting%",
+                $validationErrors[] = new ValidationError(
+                    "Setting '%setting%' is unknown",
                     null,
-                    array( 'setting' => $setting )
+                    array(
+                        "setting" => $name
+                    )
                 );
+                continue;
+            }
+
+            switch ( $name )
+            {
+                case "selectionMethod":
+                    if ( $value !== self::SELECTION_BROWSE && $value !== self::SELECTION_DROPDOWN )
+                    {
+                        $validationErrors[] = new ValidationError(
+                            "Setting '%setting%' must be either %selection_browse% or %selection_dropdown%",
+                            null,
+                            array(
+                                "setting" => $name,
+                                "selection_browse" => self::SELECTION_BROWSE,
+                                "selection_dropdown" => self::SELECTION_DROPDOWN
+                            )
+                        );
+                    }
+                    break;
+                case "selectionDefaultLocation":
+                    if ( !is_int( $value ) && !is_string( $value ) && $value !== null )
+                    {
+                        $validationErrors[] = new ValidationError(
+                            "Setting '%setting%' value must be of either null, string or integer",
+                            null,
+                            array(
+                                "setting" => $name
+                            )
+                        );
+                    }
+                    break;
+                case "selectionContentTypes":
+                    if ( !is_array( $value ) )
+                    {
+                        $validationErrors[] = new ValidationError(
+                            "Setting '%setting%' value must be of array type",
+                            null,
+                            array(
+                                "setting" => $name
+                            )
+                        );
+                    }
+                    break;
             }
         }
 
-        if ( !isset( $fieldSettings['selectionMethod'] )
-            || ( $fieldSettings['selectionMethod'] !== self::SELECTION_BROWSE && $fieldSettings['selectionMethod'] !== self::SELECTION_DROPDOWN ) )
-        {
-            $validationResult[] = new ValidationError(
-                "Setting selection method must be either %selection_browse% or %selection_dropdown%",
-                null,
-                array( 'selection_browse' => self::SELECTION_BROWSE, 'selection_dropdown' => self::SELECTION_DROPDOWN )
-            );
-        }
-
-        if ( !isset( $fieldSettings['selectionDefaultLocation'] )
-            || ( !is_string( $fieldSettings['selectionDefaultLocation'] ) && !is_numeric( $fieldSettings['selectionDefaultLocation'] ) ) )
-        {
-            $validationResult[] = new ValidationError(
-                "Setting selectionDefaultLocation must be either a string or numeric integer"
-            );
-        }
-
-        if ( isset( $fieldSettings['selectionContentTypes'] ) && !is_array( $fieldSettings['selectionContentTypes'] ) )
-        {
-            $validationResult[] = new ValidationError(
-                "Setting selectionContentTypes must be a array"
-            );
-        }
-
-        return $validationResult;
+        return $validationErrors;
     }
 
     /**

@@ -45,7 +45,7 @@ class Type extends FieldType
     {
         $validationErrors = array();
 
-        foreach ( (array)$validatorConfiguration as $validatorIdentifier => $constraints )
+        foreach ( $validatorConfiguration as $validatorIdentifier => $constraints )
         {
             if ( $validatorIdentifier !== 'StringLengthValidator' )
             {
@@ -97,18 +97,23 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
-     * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field value for which an action is performed
+     * @param \eZ\Publish\Core\FieldType\TextLine\Value $fieldValue The field value for which an action is performed
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
     public function validate( FieldDefinition $fieldDefinition, $fieldValue )
     {
+        $validationErrors = array();
+
+        if ( $this->isEmptyValue( $fieldValue ) )
+        {
+            return $validationErrors;
+        }
+
         $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
         $constraints = isset( $validatorConfiguration['StringLengthValidator'] )
             ? $validatorConfiguration['StringLengthValidator']
             : array();
-
-        $validationErrors = array();
 
         if ( isset( $constraints['maxStringLength'] ) &&
             $constraints['maxStringLength'] !== false &&
