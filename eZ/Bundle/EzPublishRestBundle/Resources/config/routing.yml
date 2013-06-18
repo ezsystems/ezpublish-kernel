@@ -247,70 +247,70 @@ ezpublish_rest_createObjectStateGroup:
     methods: [POST]
 
 ezpublish_rest_loadObjectStateGroup:
-    path: /content/objectstategroups/{objectStateGroupId}
+    path: /content/objectstategroups/{objectStategroupPath}
     defaults:
         _controller: ezpublish_rest.controller.object_state:loadObjectStateGroup
     methods: [GET]
     requirements:
-        objectStateGroupId: \d+
+        objectStategroupPath: \d+
 
 ezpublish_rest_updateObjectStateGroup:
-    path: /content/objectstategroups/{objectStateGroupId}
+    path: /content/objectstategroups/{objectStategroupPath}
     defaults:
         _controller: ezpublish_rest.controller.object_state:updateObjectStateGroup
     methods: [PATCH]
     requirements:
-        objectStateGroupId: \d+
+        objectStategroupPath: \d+
 
 ezpublish_rest_deleteObjectStateGroup:
-    path: /content/objectstategroups/{objectStateGroupId}
+    path: /content/objectstategroups/{objectStategroupPath}
     defaults:
         _controller: ezpublish_rest.controller.object_state:deleteObjectStateGroup
     methods: [DELETE]
     requirements:
-        objectStateGroupId: \d+
+        objectStategroupPath: \d+
 
 ezpublish_rest_loadObjectStates:
-    path: /content/objectstategroups/{objectStateGroupId}/objectstates
+    path: /content/objectstategroups/{objectStategroupPath}/objectstates
     defaults:
         _controller: ezpublish_rest.controller.object_state:loadObjectStates
     methods: [GET]
     requirements:
-        objectStateGroupId: \d+
+        objectStategroupPath: \d+
 
 ezpublish_rest_createObjectState:
-    path: /content/objectstategroups/{objectStateGroupId}/objectstates
+    path: /content/objectstategroups/{objectStategroupPath}/objectstates
     defaults:
         _controller: ezpublish_rest.controller.object_state:createObjectState
     methods: [POST]
     requirements:
-        objectStateGroupId: \d+
+        objectStategroupPath: \d+
 
 ezpublish_rest_loadObjectState:
-    path: /content/objectstategroups/{objectStateGroupId}/objectstates/{objectStateId}
+    path: /content/objectstategroups/{objectStategroupPath}/objectstates/{objectStateId}
     defaults:
         _controller: ezpublish_rest.controller.object_state:loadObjectState
     methods: [GET]
     requirements:
-        objectStateGroupId: \d+
+        objectStategroupPath: \d+
         objectStateId: \d+
 
 ezpublish_rest_updateObjectState:
-    path: /content/objectstategroups/{objectStateGroupId}/objectstates/{objectStateId}
+    path: /content/objectstategroups/{objectStategroupPath}/objectstates/{objectStateId}
     defaults:
         _controller: ezpublish_rest.controller.object_state:updateObjectState
     methods: [PATCH]
     requirements:
-        objectStateGroupId: \d+
+        objectStategroupPath: \d+
         objectStateId: \d+
 
 ezpublish_rest_deleteObjectState:
-    path: /content/objectstategroups/{objectStateGroupId}/objectstates/{objectStateId}
+    path: /content/objectstategroups/{objectStategroupPath}/objectstates/{objectStateId}
     defaults:
         _controller: ezpublish_rest.controller.object_state:deleteObjectState
     methods: [DELETE]
     requirements:
-        objectStateGroupId: \d+
+        objectStategroupPath: \d+
         objectStateId: \d+
 
 ezpublish_rest_getObjectStatesForContent:
@@ -428,44 +428,44 @@ ezpublish_rest_createContentTypeGroup:
     methods: [POST]
 
 ezpublish_rest_loadContentTypeGroup:
-    path: /content/typegroups/{contentTypeGroupId}
+    path: /content/typegroups/{contentTypegroupPath}
     defaults:
         _controller: ezpublish_rest.controller.content_type:loadContentTypeGroup
     methods: [GET]
     requirements:
-        contentTypeGroupId: \d+
+        contentTypegroupPath: \d+
 
 ezpublish_rest_updateContentTypeGroup:
-    path: /content/typegroups/{contentTypeGroupId}
+    path: /content/typegroups/{contentTypegroupPath}
     defaults:
         _controller: ezpublish_rest.controller.content_type:updateContentTypeGroup
     methods: [PATCH]
     requirements:
-        contentTypeGroupId: \d+
+        contentTypegroupPath: \d+
 
 ezpublish_rest_deleteContentTypeGroup:
-    path: /content/typegroups/{contentTypeGroupId}
+    path: /content/typegroups/{contentTypegroupPath}
     defaults:
         _controller: ezpublish_rest.controller.content_type:deleteContentTypeGroup
     methods: [DELETE]
     requirements:
-        contentTypeGroupId: \d+
+        contentTypegroupPath: \d+
 
 ezpublish_rest_listContentTypesForGroup:
-    path: /content/typegroups/{contentTypeGroupId}/types
+    path: /content/typegroups/{contentTypegroupPath}/types
     defaults:
         _controller: ezpublish_rest.controller.content_type:listContentTypesForGroup
     methods: [GET]
     requirements:
-        contentTypeGroupId: \d+
+        contentTypegroupPath: \d+
 
 ezpublish_rest_createContentType:
-    path: /content/typegroups/{contentTypeGroupId}/types
+    path: /content/typegroups/{contentTypegroupPath}/types
     defaults:
         _controller: ezpublish_rest.controller.content_type:createContentType
     methods: [POST]
     requirements:
-        contentTypeGroupId: \d+
+        contentTypegroupPath: \d+
 
 ezpublish_rest_listContentTypes:
     # @todo: Handle all GET parameters
@@ -616,13 +616,13 @@ ezpublish_rest_linkContentTypeToGroup:
         contentTypeId: \d+
 
 ezpublish_rest_unlinkContentTypeFromGroup:
-    path: /content/types/{contentTypeId}/groups/{contentTypeGroupId}
+    path: /content/types/{contentTypeId}/groups/{contentTypegroupPath}
     defaults:
         _controller: ezpublish_rest.controller.content_type:unlinkContentTypeFromGroup
     methods: [DELETE]
     requirements:
         contentTypeId: \d+
-        contentTypeGroupId: \d+
+        contentTypegroupPath: \d+
 
 
 # Trash
@@ -849,13 +849,13 @@ ezpublish_rest_assignUserToUserGroup:
         userId: \d+
 
 ezpublish_rest_unassignUserFromUserGroup:
-    path: /user/users/{userId}/groups/{groupId}
+    path: /user/users/{userId}/groups/{groupPath}
     defaults:
         _controller: ezpublish_rest.controller.user:unassignUserFromUserGroup
     methods: [DELETE]
     requirements:
         userId: \d+
-        groupId: \d+
+        groupPath: \d+
 
 ezpublish_rest_loadUserDrafts:
     path: /user/users/{userId}/drafts
@@ -918,68 +918,68 @@ ezpublish_rest_createRootUserGroup:
     methods: [POST]
 
 ezpublish_rest_loadUserGroup:
-    path: /user/groups/{groupId}
+    path: /user/groups/{groupPath}
     defaults:
         _controller: ezpublish_rest.controller.user:loadUserGroup
     methods: [GET]
     requirements:
-        groupId: "[0-9/]+"
+        groupPath: "[0-9/]+"
 
 ezpublish_rest_updateUserGroup:
-    path: /user/groups/{groupId}
+    path: /user/groups/{groupPath}
     defaults:
         _controller: ezpublish_rest.controller.user:updateUserGroup
     methods: [PATCH]
     requirements:
-        groupId: "[0-9/]+"
+        groupPath: "[0-9/]+"
 
 ezpublish_rest_deleteUserGroup:
-    path: /user/groups/{groupId}
+    path: /user/groups/{groupPath}
     defaults:
         _controller: ezpublish_rest.controller.user:deleteUserGroup
     methods: [DELETE]
     requirements:
-        groupId: "[0-9/]+"
+        groupPath: "[0-9/]+"
 
 ezpublish_rest_moveUserGroup:
-    path: /user/groups/{groupId}
+    path: /user/groups/{groupPath}
     defaults:
         _controller: ezpublish_rest.controller.user:moveUserGroup
     methods: [MOVE]
     requirements:
-        groupId: "[0-9/]+"
+        groupPath: "[0-9/]+"
 
 ezpublish_rest_loadSubUserGroups:
-    path: /user/groups/{groupId}/subgroups
+    path: /user/groups/{groupPath}/subgroups
     defaults:
         _controller: ezpublish_rest.controller.user:loadSubUserGroups
     methods: [GET]
     requirements:
-        groupId: "[0-9/]+"
+        groupPath: "[0-9/]+"
 
 ezpublish_rest_createUserGroup:
-    path: /user/groups/{groupId}/subgroups
+    path: /user/groups/{groupPath}/subgroups
     defaults:
         _controller: ezpublish_rest.controller.user:createUserGroup
     methods: [POST]
     requirements:
-        groupId: "[0-9/]+"
+        groupPath: "[0-9/]+"
 
 ezpublish_rest_loadUsersFromGroup:
-    path: /user/groups/{groupId}/users
+    path: /user/groups/{groupPath}/users
     defaults:
         _controller: ezpublish_rest.controller.user:loadUsersFromGroup
     methods: [GET]
     requirements:
-        groupId: "[0-9/]+"
+        groupPath: "[0-9/]+"
 
 ezpublish_rest_createUser:
-    path: /user/groups/{groupId}/users
+    path: /user/groups/{groupPath}/users
     defaults:
         _controller: ezpublish_rest.controller.user:createUser
     methods: [POST]
     requirements:
-        groupId: "[0-9/]+"
+        groupPath: "[0-9/]+"
 
 ezpublish_rest_loadRoleAssignmentsForUserGroup:
     path: /user/groups/{groupPath}/roles
