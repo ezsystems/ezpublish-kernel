@@ -404,7 +404,7 @@ class Handler implements SearchHandlerInterface
         $document[] = new Field(
             'group',
             $contentType->groupIds,
-            new FieldType\IdentifierField()
+            new FieldType\MultipleIdentifierField()
         );
 
         foreach ( $content->fields as $field )
