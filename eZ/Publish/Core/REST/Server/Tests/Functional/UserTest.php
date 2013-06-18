@@ -23,7 +23,7 @@ class UserTest extends RESTFunctionalTestCase
      */
     public function testCreateUserGroup()
     {
-        $text = __FUNCTION__ . "_" . self::$testSuffix;
+        $text = $this->addTestSuffix( __FUNCTION__ );
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <UserGroupCreate>
@@ -80,7 +80,7 @@ XML;
      */
     public function testUpdateUserGroup( $groupHref )
     {
-        $text = __FUNCTION__ . "_" . self::$testSuffix;
+        $text = $this->addTestSuffix( __FUNCTION__ );
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <UserGroupUpdate>
@@ -113,7 +113,7 @@ XML;
      */
     public function testCreateUser( $userGroupHref )
     {
-        $text = __FUNCTION__ . "_" . self::$testSuffix;
+        $text = $this->addTestSuffix( __FUNCTION__ );
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <UserCreate>
@@ -173,7 +173,7 @@ XML;
      */
     public function testUpdateUser( $userHref )
     {
-        $text = __FUNCTION__ . "_" . self::$testSuffix;
+        $text = $this->addTestSuffix( __FUNCTION__ );
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <UserUpdate>
@@ -217,7 +217,7 @@ XML;
      */
     public function testLoadUserByRemoteId()
     {
-        $remoteId = "testCreateUser_" . self::$testSuffix;
+        $remoteId = $this->addTestSuffix( "testCreateUser" );
         $response = $this->sendHttpRequest(
             $this->createHttpRequest( "GET", "/api/ezp/v2/user/users?remoteId=$remoteId" )
         );
@@ -243,7 +243,7 @@ XML;
      */
     public function testLoadUserGroupByRemoteId( $groupHref )
     {
-        $remoteId = "testCreateUserGroup_" . self::$testSuffix;
+        $remoteId = $this->addTestSuffix( "testCreateUserGroup" );
         $response = $this->sendHttpRequest(
             $this->createHttpRequest( "GET", "/api/ezp/v2/user/groups?remoteId=$remoteId" )
         );

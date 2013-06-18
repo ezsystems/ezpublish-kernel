@@ -23,7 +23,7 @@ class UrlWildcardTest extends RESTFunctionalTestCase
      */
     public function testCreateUrlWildcard()
     {
-        $text = __FUNCTION__ . "_" . self::$testSuffix;
+        $text = $this->addTestSuffix( __FUNCTION__ );
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <UrlWildcardCreate>

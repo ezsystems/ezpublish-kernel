@@ -15,7 +15,7 @@ class LocationTest extends RESTFunctionalTestCase
         $content = $this->createFolder( 'testCreateLocation', '/content/locations/1/2' );
         $contentHref = $content['_href'];
 
-        $remoteId = "testCreatelocation_" . self::$testSuffix;
+        $remoteId = $this->addTestSuffix( "testCreatelocation" );
 
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -46,7 +46,7 @@ XML;
     public function testRedirectLocationByRemoteId( $locationHref )
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "/api/ezp/v2/content/locations?remoteId=testCreateLocation_" . self::$testSuffix )
+            $this->createHttpRequest( "GET", "/api/ezp/v2/content/locations?remoteId=" . $this->addTestSuffix( 'testCreateLocation' ) )
         );
 
         self::assertHttpResponseCodeEquals( $response, 307 );
