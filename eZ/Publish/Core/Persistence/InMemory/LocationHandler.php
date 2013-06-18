@@ -419,7 +419,7 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function update( UpdateStruct $location, $locationId )
     {
-        return $this->backend->update(
+        $this->backend->update(
             'Content\\Location',
             $locationId,
             (array)$location

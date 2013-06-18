@@ -960,10 +960,12 @@ class EzcDatabase extends Gateway
     /**
      * Updates an existing location.
      *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId
      *
-     * @return boolean
+     * @return void
      */
     public function update( UpdateStruct $location, $locationId )
     {
@@ -993,7 +995,13 @@ class EzcDatabase extends Gateway
                     $locationId
                 )
             );
-        $query->prepare()->execute();
+        $statement = $query->prepare();
+        $statement->execute();
+
+        if ( $statement->rowCount() < 1 )
+        {
+            throw new NotFound( 'location', $locationId );
+        }
     }
 
     /**
