@@ -13,7 +13,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Slot\AbstractLegacySlot;
 use eZContentCacheManager;
 use eZContentObject;
-use eZSearch;
+use eZContentOperationCollection;
 
 /**
  * A legacy slot handling PublishVersionSignal.
@@ -37,8 +37,7 @@ class LegacyPublishVersionSlot extends AbstractLegacySlot
             function () use ( $signal )
             {
                 eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
-                $object = eZContentObject::fetch( $signal->contentId );
-                eZSearch::addObject( $object, false );
+                eZContentOperationCollection::registerSearchObject( $signal->contentId );
                 eZContentObject::clearCache();// Clear all object memory cache to free memory
             },
             false

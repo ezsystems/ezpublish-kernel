@@ -13,6 +13,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Slot\AbstractLegacySlot;
 use eZContentObject;
 use eZContentObjectTreeNode;
+use eZContentOperationCollection;
 
 /**
  * A legacy slot handling MoveSubtreeSignal.
@@ -37,7 +38,7 @@ class LegacyMoveSubtreeSlot extends AbstractLegacySlot
             {
                 $node = eZContentObjectTreeNode::fetch( $signal->locationId );
                 eZContentObjectTreeNode::clearViewCacheForSubtree( $node );
-                // @todo What about eZSearch in this case?
+                eZContentOperationCollection::registerSearchObject( $node->attribute( 'contentobject_id' ) );
                 eZContentObject::clearCache();// Clear all object memory cache to free memory
             },
             false

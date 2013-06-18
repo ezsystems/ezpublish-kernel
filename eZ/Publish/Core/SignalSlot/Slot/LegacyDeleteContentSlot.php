@@ -37,7 +37,7 @@ class LegacyDeleteContentSlot extends AbstractLegacySlot
             function () use ( $signal )
             {
                 eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
-                eZSearch::removeObjectById( $signal->contentId, false );
+                eZSearch::removeObjectById( $signal->contentId, null );
                 eZContentObject::clearCache();// Clear all object memory cache to free memory
             },
             false
