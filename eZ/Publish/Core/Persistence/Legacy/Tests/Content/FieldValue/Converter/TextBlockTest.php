@@ -123,6 +123,8 @@ EOT;
         );
 
         $this->converter->toFieldDefinition( $storageDef, $fieldDef );
+
+        self::assertSame( "", $fieldDef->defaultValue->sortKey );
         self::assertNull( $fieldDef->fieldTypeConstraints->validators );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertSame(

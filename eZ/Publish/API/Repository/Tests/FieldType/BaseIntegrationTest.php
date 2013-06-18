@@ -820,6 +820,76 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         }
     }
 
+    protected function removeFieldDefinition()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $content = $this->testPublishContent();
+
+        $contentType = $contentTypeService->loadContentType( $content->contentInfo->contentTypeId );
+        $contentTypeDraft = $contentTypeService->createContentTypeDraft( $contentType );
+        $fieldDefinition = $contentTypeDraft->getFieldDefinition( "data" );
+
+        $contentTypeService->removeFieldDefinition( $contentTypeDraft, $fieldDefinition );
+        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+
+        return $contentService->loadContent( $content->id );
+    }
+
+    /**
+     * Tests removal of field definition from the ContentType of the Content.
+     */
+    public function testRemoveFieldDefinition()
+    {
+        $content = $this->removeFieldDefinition();
+
+        $this->assertCount( 1, $content->getFields() );
+        $this->assertNull( $content->getFieldValue( "data" ) );
+    }
+
+    protected function addFieldDefinition()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $content = $this->removeFieldDefinition();
+
+        $contentType = $contentTypeService->loadContentType( $content->contentInfo->contentTypeId );
+        $contentTypeDraft = $contentTypeService->createContentTypeDraft( $contentType );
+
+        $fieldDefinitionCreateStruct = $contentTypeService->newFieldDefinitionCreateStruct(
+            "data",
+            $this->getTypeName()
+        );
+        $fieldDefinitionCreateStruct->validatorConfiguration = $this->getValidValidatorConfiguration();
+        $fieldDefinitionCreateStruct->fieldSettings = $this->getValidFieldSettings();
+        $fieldDefinitionCreateStruct->defaultValue = null;
+
+        $contentTypeService->addFieldDefinition( $contentTypeDraft, $fieldDefinitionCreateStruct );
+        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+
+        return $contentService->loadContent( $content->id );
+    }
+
+    /**
+     * Tests addition of field definition from the ContentType of the Content.
+     */
+    public function testAddFieldDefinition()
+    {
+        $content = $this->addFieldDefinition();
+
+        $this->assertCount( 2, $content->getFields() );
+
+        $this->assertTrue(
+            $this->getRepository()->getFieldTypeService()->buildFieldType(
+                $this->getTypeName()
+            )->isEmptyValue(
+                $content->getFieldValue( "data" )
+            )
+        );
+    }
+
     /**
      * @dataProvider provideToHashData
      */

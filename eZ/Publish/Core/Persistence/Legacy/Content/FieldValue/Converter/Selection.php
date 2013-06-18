@@ -123,6 +123,7 @@ class Selection implements Converter
         // @todo: Can Selection store a default value in the DB?
         $fieldDef->defaultValue = new FieldValue();
         $fieldDef->defaultValue->data = array();
+        $fieldDef->defaultValue->sortKey = "";
     }
 
     /**

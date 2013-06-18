@@ -24,7 +24,7 @@ class EmailAddress implements Converter
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @return Mail
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\EmailAddress
      */
     public static function create()
     {
@@ -77,6 +77,7 @@ class EmailAddress implements Converter
         $validatorConstraints = array( self::VALIDATOR_IDENTIFIER => array() );
         $fieldDef->fieldTypeConstraints->validators = $validatorConstraints;
         $fieldDef->defaultValue->data = isset( $storageDef->dataText1 ) ? $storageDef->dataText1 : '';
+        $fieldDef->defaultValue->sortKey = $fieldDef->defaultValue->data;
     }
 
     /**
