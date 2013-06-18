@@ -20,6 +20,7 @@
             <file>eZ/Publish/API/Repository/Tests/LanguageServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/ContentTypeServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/ContentServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/NonRedundantFieldSetTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/LocationServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/UserServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/RoleServiceTest.php</file>

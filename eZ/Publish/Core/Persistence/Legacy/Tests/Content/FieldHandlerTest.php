@@ -130,6 +130,8 @@ class FieldHandlerTest extends LanguageAwareTestCase
             }
         }
 
+        /** @var $copyField */
+        /** @var $originalField */
         $storageHandlerMock->expects( $this->at( $callNo ) )
             ->method( 'copyFieldData' )
             ->with(
@@ -185,6 +187,106 @@ class FieldHandlerTest extends LanguageAwareTestCase
             );
 
         $fieldHandler->createNewFields( $this->getContentPartialFieldsFixture() );
+    }
+
+    /**
+     * @param bool $storageHandlerUpdatesFields
+     *
+     * @return void
+     */
+    protected function assertCreateNewFieldsForMainLanguage( $storageHandlerUpdatesFields = false )
+    {
+        $typeHandlerMock = $this->getTypeHandlerMock();
+        $contentGatewayMock = $this->getContentGatewayMock();
+        $fieldTypeMock = $this->getFieldTypeMock();
+        $storageHandlerMock = $this->getStorageHandlerMock();
+
+        $typeHandlerMock->expects( $this->once() )
+            ->method( "load" )
+            ->with( $this->equalTo( 1 ) )
+            ->will( $this->returnValue( $this->getContentTypeFixture() ) );
+
+        $fieldTypeMock->expects( $this->exactly( 3 ) )
+            ->method( "getEmptyValue" )
+            ->will( $this->returnValue( new FieldValue() ) );
+
+        $contentGatewayMock->expects( $this->exactly( 3 ) )
+            ->method( 'insertNewField' )
+            ->with(
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ),
+                $this->isInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue' )
+            )->will( $this->returnValue( 42 ) );
+
+        $callNo = 0;
+        $fieldValue = new FieldValue();
+        foreach ( array( 1, 2, 3 ) as $fieldDefinitionId )
+        {
+            $field = new Field(
+                array(
+                    "id" => 42,
+                    "fieldDefinitionId" => $fieldDefinitionId,
+                    "type" => "some-type",
+                    "versionNo" => 1,
+                    "value" => $fieldValue,
+                    "languageCode" => "eng-GB"
+                )
+            );
+            $storageHandlerMock->expects( $this->at( $callNo++ ) )
+                ->method( 'storeFieldData' )
+                ->with(
+                    $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
+                    $this->equalTo( $field )
+                )->will( $this->returnValue( $storageHandlerUpdatesFields ) );
+        }
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::createNewFields
+     *
+     * @return void
+     */
+    public function testCreateNewFieldsForMainLanguage()
+    {
+        $fieldHandler = $this->getFieldHandler();
+        $mapperMock = $this->getMapperMock();
+
+        $this->assertCreateNewFieldsForMainLanguage( false );
+
+        $mapperMock->expects( $this->exactly( 3 ) )
+            ->method( 'convertToStorageValue' )
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) )
+            ->will( $this->returnValue( new StorageFieldValue() ) );
+
+        $fieldHandler->createNewFields( $this->getContentNoFieldsFixture() );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::createNewFields
+     *
+     * @return void
+     */
+    public function testCreateNewFieldsForMainLanguageUpdatingStorageHandler()
+    {
+        $fieldHandler = $this->getFieldHandler();
+        $contentGatewayMock = $this->getContentGatewayMock();
+        $mapperMock = $this->getMapperMock();
+
+        $this->assertCreateNewFieldsForMainLanguage( true );
+
+        $mapperMock->expects( $this->exactly( 6 ) )
+            ->method( 'convertToStorageValue' )
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) )
+            ->will( $this->returnValue( new StorageFieldValue() ) );
+
+        $contentGatewayMock->expects( $this->exactly( 3 ) )
+            ->method( "updateField" )
+            ->with(
+                $this->isInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\Field" ),
+                $this->isInstanceOf( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue" )
+            );
+
+        $fieldHandler->createNewFields( $this->getContentNoFieldsFixture() );
     }
 
     /**
@@ -370,6 +472,8 @@ class FieldHandlerTest extends LanguageAwareTestCase
                 )->will( $this->returnValue( $storageHandlerUpdatesFields ) );
         }
 
+        /** @var $copyField */
+        /** @var $originalField */
         $storageHandlerMock->expects( $this->at( $callNo ) )
             ->method( 'copyFieldData' )
             ->with(
@@ -406,7 +510,12 @@ class FieldHandlerTest extends LanguageAwareTestCase
         );
         $fieldHandler->updateFields(
             $this->getContentFixture(),
-            new UpdateStruct( array( "fields" => array( $field ) ) )
+            new UpdateStruct(
+                array(
+                    "initialLanguageId" => 8,
+                    "fields" => array( $field ),
+                )
+            )
         );
     }
 
@@ -445,7 +554,12 @@ class FieldHandlerTest extends LanguageAwareTestCase
         );
         $fieldHandler->updateFields(
             $this->getContentFixture(),
-            new UpdateStruct( array( "fields" => array( $field ) ) )
+            new UpdateStruct(
+                array(
+                    "initialLanguageId" => 8,
+                    "fields" => array( $field ),
+                )
+            )
         );
     }
 
@@ -567,6 +681,122 @@ class FieldHandlerTest extends LanguageAwareTestCase
     }
 
     /**
+     * @param boolean $storageHandlerUpdatesFields
+     *
+     * @return void
+     */
+    public function assertUpdateFieldsForInitialLanguage( $storageHandlerUpdatesFields = false )
+    {
+        $storageHandlerMock = $this->getStorageHandlerMock();
+        $typeHandlerMock = $this->getTypeHandlerMock();
+
+        $typeHandlerMock->expects( $this->once() )
+            ->method( "load" )
+            ->with( $this->equalTo( 1 ) )
+            ->will( $this->returnValue( $this->getContentTypeFixture() ) );
+
+        $callNo = 0;
+        $fieldValue = new FieldValue();
+        $fieldsToCopy = array();
+        foreach ( array( 1, 2, 3 ) as $fieldDefinitionId )
+        {
+            $field = new Field(
+                array(
+                    "fieldDefinitionId" => $fieldDefinitionId,
+                    "type" => "some-type",
+                    "versionNo" => 1,
+                    "value" => $fieldValue,
+                    "languageCode" => "eng-US"
+                )
+            );
+            // These fields are copied from main language
+            if ( $fieldDefinitionId == 2 || $fieldDefinitionId == 3 )
+            {
+                $originalField = clone $field;
+                $originalField->languageCode = "eng-GB";
+                $fieldsToCopy[] = array(
+                    "copy" => clone $field,
+                    "original" => $originalField
+                );
+                continue;
+            }
+            // This field is inserted as empty
+            $field->value = null;
+            $storageHandlerMock->expects( $this->at( $callNo++ ) )
+                ->method( 'storeFieldData' )
+                ->with(
+                    $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
+                    $this->equalTo( $field )
+                )->will( $this->returnValue( $storageHandlerUpdatesFields ) );
+        }
+
+        foreach ( $fieldsToCopy as $fieldToCopy )
+        {
+            $storageHandlerMock->expects( $this->at( $callNo++ ) )
+                ->method( 'copyFieldData' )
+                ->with(
+                    $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
+                    $this->equalTo( $fieldToCopy["copy"] ),
+                    $this->equalTo( $fieldToCopy["original"] )
+                )->will( $this->returnValue( $storageHandlerUpdatesFields ) );
+        }
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
+     *
+     * @return void
+     */
+    public function testUpdateFieldsForInitialLanguage()
+    {
+        $fieldHandler = $this->getFieldHandler();
+        $mapperMock = $this->getMapperMock();
+
+        $this->assertUpdateFieldsForInitialLanguage( false );
+
+        $mapperMock->expects( $this->exactly( 3 ) )
+            ->method( 'convertToStorageValue' )
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) )
+            ->will( $this->returnValue( new StorageFieldValue() ) );
+
+        $struct = new UpdateStruct();
+        // Language with id=2 is eng-US
+        $struct->initialLanguageId = 2;
+        $fieldHandler->updateFields( $this->getContentSingleLanguageFixture(), $struct );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
+     *
+     * @return void
+     */
+    public function testUpdateFieldsForInitialLanguageUpdatingStorageHandler()
+    {
+        $fieldHandler = $this->getFieldHandler();
+        $mapperMock = $this->getMapperMock();
+        $contentGatewayMock = $this->getContentGatewayMock();
+
+        $this->assertUpdateFieldsForInitialLanguage( true );
+
+        $mapperMock->expects( $this->exactly( 6 ) )
+            ->method( 'convertToStorageValue' )
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) )
+            ->will( $this->returnValue( new StorageFieldValue() ) );
+
+        $contentGatewayMock->expects( $this->exactly( 3 ) )
+            ->method( 'updateField' )
+            ->with(
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ),
+                $this->isInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue' )
+            );
+
+        $struct = new UpdateStruct();
+        // Language with id=2 is eng-US
+        $struct->initialLanguageId = 2;
+        $fieldHandler->updateFields( $this->getContentSingleLanguageFixture(), $struct );
+    }
+
+    /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::deleteFields
      *
      * @return void
@@ -633,6 +863,65 @@ class FieldHandlerTest extends LanguageAwareTestCase
         $content->fields = array(
             $firstFieldUs,
             $secondFieldGb
+        );
+
+        return $content;
+    }
+
+    /**
+     * Returns a Content fixture
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content
+     */
+    protected function getContentNoFieldsFixture()
+    {
+        $content = new Content;
+        $content->versionInfo = new VersionInfo;
+        $content->versionInfo->versionNo = 1;
+        $content->versionInfo->languageIds = array( 2, 4 );
+        $content->versionInfo->contentInfo = new ContentInfo;
+        $content->versionInfo->contentInfo->id = 42;
+        $content->versionInfo->contentInfo->contentTypeId = 1;
+        $content->versionInfo->contentInfo->mainLanguageCode = "eng-GB";
+        $content->fields = array();
+
+        return $content;
+    }
+
+    /**
+     * Returns a Content fixture
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content
+     */
+    protected function getContentSingleLanguageFixture()
+    {
+        $content = new Content;
+        $content->versionInfo = new VersionInfo;
+        $content->versionInfo->versionNo = 1;
+        $content->versionInfo->languageIds = array( 4 );
+        $content->versionInfo->contentInfo = new ContentInfo;
+        $content->versionInfo->contentInfo->id = 42;
+        $content->versionInfo->contentInfo->contentTypeId = 1;
+        $content->versionInfo->contentInfo->mainLanguageCode = "eng-GB";
+
+        $field = new Field();
+        $field->type = 'some-type';
+        $field->value = new FieldValue;
+        $field->languageCode = "eng-GB";
+
+        $firstField = clone $field;
+        $firstField->fieldDefinitionId = 1;
+
+        $secondField = clone $field;
+        $secondField->fieldDefinitionId = 2;
+
+        $thirdField = clone $field;
+        $thirdField->fieldDefinitionId = 3;
+
+        $content->fields = array(
+            $firstField,
+            $secondField,
+            $thirdField
         );
 
         return $content;
@@ -726,6 +1015,9 @@ class FieldHandlerTest extends LanguageAwareTestCase
     protected function getUpdateStructFixture()
     {
         $struct = new UpdateStruct();
+
+        // Language with id=2 is eng-US
+        $struct->initialLanguageId = 2;
 
         $content = $this->getContentFixture();
 

@@ -153,7 +153,9 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'language_mask' ),
             $q->bindValue(
                 $this->generateLanguageMask(
-                    $struct->fields, $struct->alwaysAvailable
+                    $struct->fields,
+                    $this->languageHandler->load( $struct->initialLanguageId )->languageCode,
+                    $struct->alwaysAvailable
                 ),
                 null,
                 \PDO::PARAM_INT
@@ -171,13 +173,14 @@ class EzcDatabase extends Gateway
      * Generates a language mask for $version
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
+     * @param string $initialLanguageCode
      * @param boolean $alwaysAvailable
      *
      * @return int
      */
-    protected function generateLanguageMask( array $fields, $alwaysAvailable )
+    protected function generateLanguageMask( array $fields, $initialLanguageCode, $alwaysAvailable )
     {
-        $languages = array();
+        $languages = array( $initialLanguageCode => true );
         foreach ( $fields as $field )
         {
             if ( isset( $languages[$field->languageCode] ) )
@@ -227,7 +230,11 @@ class EzcDatabase extends Gateway
             $q->bindValue( $versionInfo->status, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'initial_language_id' ),
-            $q->bindValue( $this->languageHandler->loadByLanguageCode( $versionInfo->initialLanguageCode )->id, null, \PDO::PARAM_INT )
+            $q->bindValue(
+                $this->languageHandler->loadByLanguageCode( $versionInfo->initialLanguageCode )->id,
+                null,
+                \PDO::PARAM_INT
+            )
         )->set(
             $this->dbHandler->quoteColumn( 'contentobject_id' ),
             $q->bindValue( $versionInfo->contentInfo->id, null, \PDO::PARAM_INT )
@@ -239,7 +246,9 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'language_mask' ),
             $q->bindValue(
                 $this->generateLanguageMask(
-                    $fields, $versionInfo->contentInfo->alwaysAvailable
+                    $fields,
+                    $versionInfo->initialLanguageCode,
+                    $versionInfo->contentInfo->alwaysAvailable
                 ),
                 null,
                 \PDO::PARAM_INT
@@ -351,7 +360,15 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'language_mask' ),
             $q->expr->bitOr(
                 $this->dbHandler->quoteColumn( 'language_mask' ),
-                $q->bindValue( $this->generateLanguageMask( $struct->fields, false ), null, \PDO::PARAM_INT )
+                $q->bindValue(
+                    $this->generateLanguageMask(
+                        $struct->fields,
+                        $this->languageHandler->load( $struct->initialLanguageId )->languageCode,
+                        false
+                    ),
+                    null,
+                    \PDO::PARAM_INT
+                )
             )
         )->where(
             $q->expr->lAnd(

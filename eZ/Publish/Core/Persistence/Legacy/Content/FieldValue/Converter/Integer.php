@@ -44,7 +44,7 @@ class Integer implements Converter
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
         $storageFieldValue->dataInt = $value->data;
-        $storageFieldValue->sortKeyInt = $value->sortKey;
+        $storageFieldValue->sortKeyInt = (int)$value->sortKey;
     }
 
     /**
