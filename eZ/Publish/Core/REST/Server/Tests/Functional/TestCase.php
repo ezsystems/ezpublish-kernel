@@ -130,14 +130,9 @@ class TestCase extends \PHPUnit_Framework_TestCase
      * @param string $parentLocationId The REST id of the parent location
      * @return array created Content, as an array
      */
-    protected function createFolder( $text, $parentLocationId )
+    protected function createFolder( $string, $parentLocationId )
     {
-        if ( !isset( self::$testSuffix ) )
-        {
-            self::$testSuffix = uniqid();
-        }
-
-        $text = $text . "_" . self::$testSuffix;
+        $string = $this->addTestSuffix( $string );
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentCreate>
@@ -152,14 +147,14 @@ class TestCase extends \PHPUnit_Framework_TestCase
   </LocationCreate>
   <Section href="/content/sections/1" />
   <alwaysAvailable>true</alwaysAvailable>
-  <remoteId>{$text}</remoteId>
+  <remoteId>{$string}</remoteId>
   <User href="/user/users/14" />
   <modificationDate>2012-09-30T12:30:00</modificationDate>
   <fields>
     <field>
       <fieldDefinitionIdentifier>name</fieldDefinitionIdentifier>
       <languageCode>eng-GB</languageCode>
-      <fieldValue>{$text}</fieldValue>
+      <fieldValue>{$string}</fieldValue>
     </field>
   </fields>
 </ContentCreate>
@@ -218,6 +213,15 @@ XML;
     protected function hrefToId( $href )
     {
         return str_replace( '/api/ezp/v2', '', $href );
+    }
+
+    protected function addTestSuffix( $string )
+    {
+        if ( !isset( self::$testSuffix ) )
+        {
+            self::$testSuffix = uniqid();
+        }
+        return $string . '_' . self::$testSuffix;
     }
 
     /**

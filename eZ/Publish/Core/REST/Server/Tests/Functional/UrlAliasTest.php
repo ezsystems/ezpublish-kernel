@@ -37,7 +37,7 @@ class UrlAliasTest extends RESTFunctionalTestCase
     {
         $locationId = $this->hrefToId( $locationHref );
 
-        $text = __FUNCTION__ . '_' . self::$testSuffix;
+        $text = $this->addTestSuffix( __FUNCTION__ );
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <UrlAliasCreate type="LOCATION">
@@ -73,7 +73,7 @@ XML;
      */
     public function testCreateGlobalUrlAlias()
     {
-        $text = __FUNCTION__ . '_' . self::$testSuffix;
+        $text = $this->addTestSuffix( __FUNCTION__ );
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <UrlAliasCreate type="RESOURCE">

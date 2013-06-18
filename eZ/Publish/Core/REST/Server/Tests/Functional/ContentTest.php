@@ -13,6 +13,7 @@ class ContentTest extends RESTFunctionalTestCase
     public function testCreateContent()
     {
         $request = $this->createHttpRequest( "POST", "/api/ezp/v2/content/objects", 'ContentCreate+xml', 'ContentInfo+json' );
+        $string = $this->addTestSuffix( __FUNCTION__ );
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentCreate>
@@ -27,14 +28,14 @@ class ContentTest extends RESTFunctionalTestCase
   </LocationCreate>
   <Section href="/content/sections/1" />
   <alwaysAvailable>true</alwaysAvailable>
-  <remoteId>testCreateContent</remoteId>
+  <remoteId>{$string}</remoteId>
   <User href="/user/users/14" />
   <modificationDate>2012-09-30T12:30:00</modificationDate>
   <fields>
     <field>
       <fieldDefinitionIdentifier>name</fieldDefinitionIdentifier>
       <languageCode>eng-GB</languageCode>
-      <fieldValue>testCreateContent</fieldValue>
+      <fieldValue>{$string}</fieldValue>
     </field>
   </fields>
 </ContentCreate>
@@ -44,10 +45,11 @@ XML;
         $response = $this->sendHttpRequest( $request );
 
         self::assertHttpResponseCodeEquals( $response, 201 );
+        self::assertHttpResponseHasHeader( $response, 'Location' );
 
-        $contentInfo = json_decode( $response->getContent() );
-        $this->addCreatedElement( $contentInfo->Content->_href );
-        return $contentInfo->Content->_href;
+        $href = $response->getHeader( 'Location' );
+        $this->addCreatedElement( $href );
+        return $href;
     }
 
     /**
@@ -72,7 +74,7 @@ XML;
     public function testRedirectContent( $restContentHref )
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'GET', '/api/ezp/v2/content/objects?remoteId=testCreateContent' )
+            $this->createHttpRequest( 'GET', '/api/ezp/v2/content/objects?remoteId=' . $this->addTestSuffix( 'testCreateContent' ) )
         );
 
         self::assertHttpResponseCodeEquals( $response, 307 );
@@ -97,11 +99,12 @@ XML;
      */
     public function testUpdateContentMetadata( $restContentHref )
     {
+        $string = $this->addTestSuffix( __FUNCTION__ );
         $content = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentUpdate>
   <Owner href="/user/users/10"/>
-  <remoteId>testUpdateContentMetadata</remoteId>
+  <remoteId>{$string}</remoteId>
 </ContentUpdate>
 XML;
         $request = $this->createHttpRequest( 'PATCH', $restContentHref, "ContentUpdate+xml", "ContentInfo+json" );
@@ -246,7 +249,7 @@ XML;
      */
     public function testUpdateVersion( $restContentVersionHref )
     {
-        $body = <<< XML
+        $xml = <<< XML
 <VersionUpdate>
     <fields>
         <field>
@@ -258,8 +261,10 @@ XML;
 </VersionUpdate>
 XML;
 
+        $request = $this->createHttpRequest( 'PATCH', $restContentVersionHref, 'VersionUpdate+xml', 'Version+json' );
+        $request->setContent( $xml );
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'PATCH', $restContentVersionHref, 'VersionUpdate+xml', 'Version+json' )
+            $request
         );
 
         self::assertHttpResponseCodeEquals( $response, 200 );
@@ -335,23 +340,23 @@ XML;
     /**
      * Returns the Content key from the decoded JSON of $restContentId's contentInfo
      *
-     * @param string $restContentId /api/ezp/v2/content/objects/<contentId>
      *
      * @throws \InvalidArgumentException
+     * @param string $restContentHref /api/ezp/v2/content/objects/<contentId>
      * @return array
      */
-    private function loadContent( $restContentId )
+    private function loadContent( $restContentHref )
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'GET', $restContentId, '', 'ContentInfo+json' )
+            $this->createHttpRequest( 'GET', $restContentHref, '', 'ContentInfo+json')
         );
 
         if ( $response->getStatusCode() != 200 )
         {
-            throw new \InvalidArgumentException( "Content with ID $restContentId could not be loaded" );
+            throw new \InvalidArgumentException( "Content with ID $restContentHref could not be loaded" );
         }
 
-        $array = json_decode( $response->getContent(), 'true' );
+        $array = json_decode( $response->getContent(), true );
         return $array['Content'];
     }
 
