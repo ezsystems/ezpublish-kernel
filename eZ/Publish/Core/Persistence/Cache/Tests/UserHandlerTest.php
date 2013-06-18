@@ -523,33 +523,23 @@ class UserHandlerTest extends HandlerTest
         $innerHandler
             ->expects( $this->once() )
             ->method( 'updateRole' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\RoleUpdateStruct' ) )
-            ->will(
-                $this->returnValue(
-                    new Role(
-                        array( 'id' => 33, 'name' => 'Old Intranet', 'identifier' => 'old_intranet'  )
-                    )
-                )
-            );
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\RoleUpdateStruct' ) );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $roleUpdateStruct = new RoleUpdateStruct();
+        $roleUpdateStruct->id = 42;
+
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'getItem' )
-            ->with( 'user', 'role', 33 )
-            ->will( $this->returnValue( $cacheItemMock ) );
+            ->method( 'clear' )
+            ->with( 'user', 'role', $roleUpdateStruct->id )
+            ->will( $this->returnValue( true ) );
 
-        $cacheItemMock
-            ->expects( $this->once() )
-            ->method( 'set' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role' ) );
-
-        $cacheItemMock
+        $this->cacheMock
             ->expects( $this->never() )
-            ->method( 'get' );
+            ->method( 'getItem' );
 
         $handler = $this->persistenceHandler->userHandler();
-        $handler->updateRole( new RoleUpdateStruct() );
+        $handler->updateRole( $roleUpdateStruct );
     }
 
     /**

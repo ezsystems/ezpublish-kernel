@@ -169,11 +169,9 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     public function updateRole( RoleUpdateStruct $struct )
     {
         $this->logger->logCall( __METHOD__, array( 'struct' => $struct ) );
-        $role = $this->persistenceFactory->getUserHandler()->updateRole( $struct );
+        $this->persistenceFactory->getUserHandler()->updateRole( $struct );
 
-        $this->cache->getItem( 'user', 'role', $role->id )->set( $role );
-
-        return $role;
+        $this->cache->clear( 'user', 'role', $struct->id );
     }
 
     /**
