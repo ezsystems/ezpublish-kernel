@@ -348,7 +348,7 @@ XML;
     private function loadContent( $restContentHref )
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'GET', $restContentHref, '', 'ContentInfo+json')
+            $this->createHttpRequest( 'GET', $restContentHref, '', 'ContentInfo+json' )
         );
 
         if ( $response->getStatusCode() != 200 )
