@@ -15,7 +15,7 @@ use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Common;
 
-class SessionTest extends ValueObjectVisitorBaseTest
+class UserSessionTest extends ValueObjectVisitorBaseTest
 {
     /**
      * Test the Session visitor
@@ -36,9 +36,17 @@ class SessionTest extends ValueObjectVisitorBaseTest
             "csrfToken"
         );
 
-        $this->getVisitorMock()->expects( $this->once() )
+        $this->getVisitorMock()->expects( $this->at( 0 ) )
             ->method( 'setStatus' )
             ->with( $this->equalTo( 201 ) );
+
+        $this->getVisitorMock()->expects( $this->at( 1 ) )
+            ->method( 'setHeader' )
+            ->with( $this->equalTo( 'Content-Type' ), $this->equalTo( 'application/vnd.ez.api.Session+xml' ) );
+
+        $this->getVisitorMock()->expects( $this->at( 2 ) )
+            ->method( 'setHeader' )
+            ->with( $this->equalTo( 'Location' ), $this->matchesRegularExpression( '#/user/sessions/[a-z0-9]+#i' ) );
 
         $visitor->visit(
             $this->getVisitorMock(),
