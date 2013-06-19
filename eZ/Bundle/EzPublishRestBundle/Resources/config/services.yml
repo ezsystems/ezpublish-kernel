@@ -21,8 +21,19 @@ parameters:
     ezpublish_rest.field_type_parser.class: eZ\Publish\Core\REST\Common\Input\FieldTypeParser
     ezpublish_rest.listener.class: eZ\Bundle\EzPublishRestBundle\EventListener\RestListener
     ezpublish_rest.field_type_serializer.class: eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer
-    ezpublish_rest.field_type_processor_registry.class: eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry
     ezpublish_rest.request.class: eZ\Publish\Core\REST\Server\Request
+
+    ezpublish_rest.field_type_processor_registry.class: eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry
+    ezpublish_rest.field_type_processor.ezimage.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\ImageProcessor
+    ezpublish_rest.field_type_processor.ezdatetime.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\DateAndTimeProcessor
+    ezpublish_rest.field_type_processor.ezdate.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\DateProcessor
+    ezpublish_rest.field_type_processor.ezmedia.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\MediaProcessor
+    ezpublish_rest.field_type_processor.ezobjectrelationlist.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\RelationListProcessor
+    ezpublish_rest.field_type_processor.ezobjectrelation.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\RelationProcessor
+    ezpublish_rest.field_type_processor.eztime.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\TimeProcessor
+    ezpublish_rest.field_type_processor.ezxmltext.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\XmlTextProcessor
+    ezpublish_rest.field_type_processor.ezbinaryfile.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryProcessor
+    ezpublish_rest.field_type_processor.ezpage.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\PageProcessor
 
 services:
     ezpublish_rest.field_type_serializer:
@@ -40,10 +51,6 @@ services:
     ezpublish_rest.parser_tools:
         class: %ezpublish_rest.parser_tools.class%
 
-    ezpublish_rest.field_type_processor_registry:
-        class: %ezpublish_rest.field_type_processor_registry.class%
-        factory_service: ezpublish_rest.factory
-        factory_method: buildFieldTypeProcessorRegistry
 
     ezpublish_rest.field_type_parser:
         class: %ezpublish_rest.field_type_parser.class%
@@ -174,3 +181,64 @@ services:
     ezpublish_rest.request:
         class: %ezpublish_rest.request.class%
 
+    ezpublish_rest.field_type_processor_registry:
+        class: %ezpublish_rest.field_type_processor_registry.class%
+
+    ezpublish_rest.field_type_processor.ezimage:
+        class: %ezpublish_rest.field_type_processor.ezimage.class%
+        factory_service: ezpublish_rest.factory
+        factory_method: getImageFieldTypeProcessor
+        arguments:
+            # @todo change to @router
+            - @ezpublish_rest.url_handler
+        tags:
+            - { name: ezpublish_rest.field_type_processor, alias: ezimage }
+
+    ezpublish_rest.field_type_processor.ezdatetime:
+        class: %ezpublish_rest.field_type_processor.ezdatetime.class%
+        tags:
+            - { name: ezpublish_rest.field_type_processor, alias: ezdatetime }
+
+    ezpublish_rest.field_type_processor.ezdate:
+        class: %ezpublish_rest.field_type_processor.ezdate.class%
+        tags:
+            - { name: ezpublish_rest.field_type_processor, alias: ezdate }
+
+    ezpublish_rest.field_type_processor.ezmedia:
+        class: %ezpublish_rest.field_type_processor.ezmedia.class%
+        tags:
+            - { name: ezpublish_rest.field_type_processor, alias: ezmedia }
+
+    ezpublish_rest.field_type_processor.ezobjectrelationlist:
+        class: %ezpublish_rest.field_type_processor.ezobjectrelationlist.class%
+        tags:
+            - { name: ezpublish_rest.field_type_processor, alias: ezobjectrelationlist }
+
+    ezpublish_rest.field_type_processor.ezobjectrelation:
+        class: %ezpublish_rest.field_type_processor.ezobjectrelation.class%
+        tags:
+            - { name: ezpublish_rest.field_type_processor, alias: ezobjectrelation }
+
+    ezpublish_rest.field_type_processor.eztime:
+        class: %ezpublish_rest.field_type_processor.eztime.class%
+        tags:
+            - { name: ezpublish_rest.field_type_processor, alias: eztime }
+
+    ezpublish_rest.field_type_processor.ezxmltext:
+        class: %ezpublish_rest.field_type_processor.ezxmltext.class%
+        tags:
+            - { name: ezpublish_rest.field_type_processor, alias: ezxmltext }
+
+    ezpublish_rest.field_type_processor.ezbinaryfile:
+        class: %ezpublish_rest.field_type_processor.ezbinaryfile.class%
+        factory_service: ezpublish_rest.factory
+        factory_method: getBinaryFileFieldTypeProcessor
+        arguments:
+            - @ezpublish.fieldtype.ezbinaryfile.ioservice
+        tags:
+            - { name: ezpublish_rest.field_type_processor, alias: ezbinaryfile }
+
+    ezpublish_rest.field_type_processor.ezpage:
+        class: %ezpublish_rest.field_type_processor.ezpage.class%
+        tags:
+            - { name: ezpublish_rest.field_type_processor, alias: ezpage }
