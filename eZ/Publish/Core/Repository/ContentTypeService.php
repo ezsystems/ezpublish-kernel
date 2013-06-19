@@ -1310,9 +1310,10 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the identifier in already exists in the content type
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If 'ezuser' type field definition is being added
-     *                                                                 to the ContentType that already has 'ezuser' field definition
-     *                                                                 or has Content instances
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If field definition of the same non-repeatable type is being
+     *                                                                 added to the ContentType that already contains one
+     *                                                                 or 'ezuser' type field definition is being added to the
+     *                                                                 ContentType that has Content instances
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
@@ -1332,15 +1333,19 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
         }
 
-        if ( $fieldDefinitionCreateStruct->fieldTypeIdentifier === "ezuser" )
+        $fieldType = $this->repository->getFieldTypeService()->getFieldType(
+            $fieldDefinitionCreateStruct->fieldTypeIdentifier
+        );
+
+        if ( !$fieldType->isRepeatable() )
         {
             foreach ( $loadedContentTypeDraft->getFieldDefinitions() as $fieldDefinition )
             {
-                if ( $fieldDefinition->fieldTypeIdentifier === "ezuser" )
+                if ( $fieldDefinition->fieldTypeIdentifier === $fieldDefinitionCreateStruct->fieldTypeIdentifier )
                 {
                     throw new BadStateException(
                         "\$contentTypeDraft",
-                        "ContentType already contains 'ezuser' field type definition"
+                        "ContentType already contains field definition of non-repeatable field type '{$fieldDefinition->fieldTypeIdentifier}'"
                     );
                 }
             }

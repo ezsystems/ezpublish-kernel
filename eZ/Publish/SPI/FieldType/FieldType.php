@@ -186,6 +186,13 @@ interface FieldType
     public function isSearchable();
 
     /**
+     * Indicates if the field definition of this type can appear multiple times in the same ContentType.
+     *
+     * @return boolean
+     */
+    public function isRepeatable();
+
+    /**
      * Returns the empty value for this field type.
      *
      * This value will be used, if no value was provided for a field of this

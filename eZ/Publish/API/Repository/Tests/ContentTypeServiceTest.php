@@ -1390,13 +1390,16 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     /**
      * Test for the addFieldDefinition() method.
      *
+     * Testing that field definition of non-repeatable field type can not be added multiple
+     * times to the same ContentType.
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAddFieldDefinition
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @expectedExceptionMessage ContentType already contains 'ezuser' field type definition
+     * @expectedExceptionMessage ContentType already contains field definition of non-repeatable field type 'ezuser'
      */
-    public function testAddFieldDefinitionThrowsBadStateExceptionSecondUserAccount()
+    public function testAddFieldDefinitionThrowsBadStateExceptionNonRepeatableField()
     {
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
@@ -1423,13 +1426,16 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $fieldDefCreate->fieldSettings = array();
         $fieldDefCreate->isSearchable = false;
 
-        // Throws an exception because $userContentTypeDraft already contains 'ezuser' field type definition
+        // Throws an exception because $userContentTypeDraft already contains non-repeatable field type definition 'ezuser'
         $contentTypeService->addFieldDefinition( $userContentTypeDraft, $fieldDefCreate );
         /* END: Use Case */
     }
 
     /**
      * Test for the addFieldDefinition() method.
+     *
+     * Testing that field definition of 'ezuser' field type can not be added to the ContentType that
+     * already has Content instances.
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()

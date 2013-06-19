@@ -48,6 +48,16 @@ class Type extends FieldType
     }
 
     /**
+     * Indicates if the field definition of this type can appear multiple times in the same ContentType.
+     *
+     * @return boolean
+     */
+    public function isRepeatable()
+    {
+        return false;
+    }
+
+    /**
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
