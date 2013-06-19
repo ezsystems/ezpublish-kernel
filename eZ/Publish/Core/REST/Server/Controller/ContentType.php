@@ -337,8 +337,7 @@ class ContentType extends RestController
         return new Values\ResourceCreated(
             $this->urlHandler->generate(
                 'ezpublish_rest_loadContentType',
-                array( 'contentTypeId' => $copiedContentType->id
-                )
+                array( 'contentTypeId' => $copiedContentType->id )
             )
         );
     }
