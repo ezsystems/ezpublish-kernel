@@ -504,6 +504,9 @@ class Handler implements BaseContentTypeHandler
      * added. It does not update existing content objects depending on the
      * field (default) values.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If 'ezuser' type field definition is being added
+     *                                                                 to the ContentType that has Content instances
+     *
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
@@ -512,6 +515,14 @@ class Handler implements BaseContentTypeHandler
      */
     public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
     {
+        if ( $fieldDefinition->fieldType === "ezuser" && $this->contentTypeGateway->countInstancesOfType( $contentTypeId ) )
+        {
+            throw new BadStateException(
+                "\$contentTypeId",
+                "Field definition of 'ezuser' field type cannot be added because ContentType has Content instances"
+            );
+        }
+
         $storageFieldDef = new StorageFieldDefinition();
         $this->mapper->toStorageFieldDefinition(
             $fieldDefinition, $storageFieldDef

@@ -338,6 +338,9 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      * added. It does not update existing content objects depending on the
      * field (default) values.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If 'ezuser' type field definition is being added
+     *                                                                 to the ContentType that has Content instances
+     *
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition

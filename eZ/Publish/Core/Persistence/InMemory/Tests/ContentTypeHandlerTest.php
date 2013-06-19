@@ -563,6 +563,21 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test addFieldDefinition function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::addFieldDefinition
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     */
+    public function testAddFieldDefinitionThrowsBadStateException()
+    {
+        $handler = $this->persistenceHandler->ContentTypeHandler();
+        $field = new FieldDefinition();
+        $field->identifier = 'user_account';
+        $field->fieldType = 'ezuser';
+        $handler->addFieldDefinition( 1, 0, $field );
+    }
+
+    /**
+     * Test addFieldDefinition function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::addFieldDefinition
      * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testAddFieldDefinitionInvalidTypeId()
