@@ -1103,16 +1103,16 @@ class SearchHandlerTest extends LanguageAwareTestCase
                     array(
                         'criterion' => new Criterion\LogicalOr(
                             array(
-                                 new Criterion\Field(
-                                     'name',
-                                     Criterion\Operator::EQ,
-                                     'members'
-                                 ),
-                                 new Criterion\Field(
-                                     'price',
-                                     Criterion\Operator::BETWEEN,
-                                     array( 10000, 1000000 )
-                                 )
+                                new Criterion\Field(
+                                    'name',
+                                    Criterion\Operator::EQ,
+                                    'members'
+                                ),
+                                new Criterion\Field(
+                                    'price',
+                                    Criterion\Operator::BETWEEN,
+                                    array( 10000, 1000000 )
+                                )
                             )
                         ),
                         'limit' => 10,
