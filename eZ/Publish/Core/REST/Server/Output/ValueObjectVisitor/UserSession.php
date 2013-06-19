@@ -27,21 +27,22 @@ class UserSession extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
+        $visitor->setStatus( 201 );
+
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Session' ) );
+
+        $sessionHref = $this->urlHandler->generate( 'userSession', array( 'sessionId' => $data->sessionId ) );
+        $visitor->setHeader( 'Location', $sessionHref );
+
         // @deprecated Since 5.0, this cookie is used for legacy until Static cache support is removed along with this cookie
         $visitor->setHeader( 'Set-Cookie', 'is_logged_in=true; path=/' );
 
         //@todo Needs refactoring, disabling certain headers should not be done this way
         $visitor->setHeader( 'Accept-Patch', false );
 
-        $visitor->setStatus( 201 );
-
         $generator->startObjectElement( 'Session' );
 
-        $generator->startAttribute(
-            'href',
-            $this->urlHandler->generate( 'userSession', array( 'sessionId' => $data->sessionId ) )
-        );
+        $generator->startAttribute( 'href', $sessionHref );
         $generator->endAttribute( 'href' );
 
         $generator->startValueElement( 'name', $data->sessionName );
