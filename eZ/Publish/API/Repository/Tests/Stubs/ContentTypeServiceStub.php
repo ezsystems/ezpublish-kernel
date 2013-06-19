@@ -570,13 +570,13 @@ class ContentTypeServiceStub implements ContentTypeService
                     );
                 }
             }
-        }
 
-        if ( $this->contentService->loadContentInfoByContentType( $contentTypeDraft ) )
-        {
-            throw new BadStateExceptionStub(
-                "Field definition of 'ezuser' field type cannot be added because ContentType has Content instances"
-            );
+            if ( $this->contentService->loadContentInfoByContentType( $contentTypeDraft ) )
+            {
+                throw new BadStateExceptionStub(
+                    "Field definition of 'ezuser' field type cannot be added because ContentType has Content instances"
+                );
+            }
         }
 
         $data = $this->getTypeAsArray( $contentTypeDraft );
