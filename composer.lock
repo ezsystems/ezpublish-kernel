@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "3398e27831c582c397b602c690fe6e1a",
+    "hash": "a6338046d07d9daa74e4952be365e077",
     "packages": [
         {
             "name": "doctrine/common",
@@ -380,16 +380,16 @@
         },
         {
             "name": "tedivm/stash",
-            "version": "v0.10.3",
+            "version": "v0.10.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tedivm/Stash.git",
-                "reference": "v0.10.3"
+                "reference": "v0.10.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tedivm/Stash/zipball/v0.10.3",
-                "reference": "v0.10.3",
+                "url": "https://api.github.com/repos/tedivm/Stash/zipball/v0.10.4",
+                "reference": "v0.10.4",
                 "shasum": ""
             },
             "require": {
@@ -423,21 +423,21 @@
                 "scalability",
                 "sessions"
             ],
-            "time": "2013-03-30 23:24:06"
+            "time": "2013-06-13 07:13:33"
         },
         {
             "name": "tedivm/stash-bundle",
-            "version": "dev-master",
+            "version": "v0.2.1",
             "target-dir": "Tedivm/StashBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tedivm/TedivmStashBundle.git",
-                "reference": "0baf224cfbe75fd9b48001d9292325300f8bf9af"
+                "reference": "v0.2.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tedivm/TedivmStashBundle/zipball/0baf224cfbe75fd9b48001d9292325300f8bf9af",
-                "reference": "0baf224cfbe75fd9b48001d9292325300f8bf9af",
+                "url": "https://api.github.com/repos/tedivm/TedivmStashBundle/zipball/v0.2.1",
+                "reference": "v0.2.1",
                 "shasum": ""
             },
             "require": {
@@ -473,7 +473,7 @@
                 "sessions",
                 "symfony"
             ],
-            "time": "2013-04-08 16:53:09"
+            "time": "2013-06-16 23:57:16"
         },
         {
             "name": "twig/twig",
@@ -1961,7 +1961,6 @@
         "zetacomponents/php-generator": 20,
         "zetacomponents/signal-slot": 20,
         "zetacomponents/system-information": 20,
-        "tedivm/stash-bundle": 20,
         "ezsystems/ezpublish-legacy": 20
     },
     "platform": {

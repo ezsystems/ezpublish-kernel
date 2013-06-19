@@ -28,7 +28,7 @@
         "symfony-cmf/routing": "1.0.*",
         "qafoo/rmf": "1.0.*",
         "kriswallsmith/buzz": ">=0.9",
-        "tedivm/stash-bundle": "@dev",
+        "tedivm/stash-bundle": "0.2.*",
         "sensio/distribution-bundle": "2.2.*"
     },
     "require-dev": {
