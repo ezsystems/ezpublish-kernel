@@ -358,7 +358,6 @@ class ContentExtension extends Twig_Extension
         return $this->imageVariationService->getVariation( $field, $versionInfo, $variationName );
     }
 
-
     /**
      * @param Content $content
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
