@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
 use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -361,10 +360,10 @@ class ContentExtension extends Twig_Extension
 
 
     /**
-     * @param APIContent $content
+     * @param Content $content
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function contentTypeByContent( APIContent $content )
+    public function contentTypeByContent( Content $content )
     {
         $repository = $this->container->get( 'ezpublish.api.repository' );
         return $repository->getContentTypeService()->loadContentType( $content->contentInfo->contentTypeId );
