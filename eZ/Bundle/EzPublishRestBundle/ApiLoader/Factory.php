@@ -6,6 +6,7 @@ use eZ\Publish\Core\REST\Server\Output;
 use eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher;
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 use eZ\Publish\Core\REST\Common;
+use eZ\Publish\Core\IO\IOService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use eZ\Publish\API\Repository\Repository;
 
@@ -169,46 +170,38 @@ class Factory
         );
     }
 
-    public function buildFieldTypeProcessorRegistry()
+    public function getBinaryFileFieldTypeProcessor( IOService $binaryFileIOService )
     {
-        $urlPrefix = '';
-        if ( $this->container->isScopeActive( 'request' ) )
-        {
-            $urlPrefix = $this->container->get( 'request' )->getUriForPath( '/' );
-        }
-        $binaryIOService = $this->container->get(
-            'ezpublish.fieldtype.ezbinaryfile.ioservice'
-        );
+        $urlPrefix = $this->container->isScopeActive( 'request' ) ? $this->container->get( 'request' )->getUriForPath( '/' ) : '';
 
+        return new FieldTypeProcessor\BinaryProcessor(
+            sys_get_temp_dir(),
+            $urlPrefix . $binaryFileIOService->getInternalPath( '{path}' )
+        );
+    }
+
+    /**
+     * Factory for ezpublish_rest.field_type_processor.ezimage
+     *
+     * @param Common\UrlHandler $urlHandler
+     * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\ImageProcessor
+     */
+    public function getImageFieldTypeProcessor( \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler )
+    {
+        // @todo variation list seems to be empty, investigate
         $configResolver = $this->container->get( 'ezpublish.config.resolver' );
         $variationsIdentifiers = array_keys( $configResolver->getParameter( 'image_variations' ) );
         sort( $variationsIdentifiers );
 
-        return new Common\FieldTypeProcessorRegistry(
-            array(
-                'ezimage' => new FieldTypeProcessor\ImageProcessor(
-                    // Config for local temp dir
-                    // @todo get configuration
-                    sys_get_temp_dir(),
-                    // URL schema for image links
-                    // @todo get configuration
-                    $this->container->get( 'ezpublish_rest.url_handler' ),
-                    // Image variations (names only)
-                    $variationsIdentifiers
-                ),
-                'ezdatetime' => new FieldTypeProcessor\DateAndTimeProcessor(),
-                'ezdate' => new FieldTypeProcessor\DateProcessor(),
-                'ezmedia' => new FieldTypeProcessor\MediaProcessor(),
-                'ezobjectrelationlist' => new FieldTypeProcessor\RelationListProcessor(),
-                'ezobjectrelation' => new FieldTypeProcessor\RelationProcessor(),
-                'eztime' => new FieldTypeProcessor\TimeProcessor(),
-                'ezxmltext' => new FieldTypeProcessor\XmlTextProcessor(),
-                'ezbinaryfile' => new FieldTypeProcessor\BinaryProcessor(
-                    sys_get_temp_dir(),
-                    $urlPrefix . $binaryIOService->getInternalPath( '{path}' )
-                ),
-                'ezpage' => new FieldTypeProcessor\PageProcessor(),
-            )
+        return new FieldTypeProcessor\ImageProcessor(
+            // Config for local temp dir
+            // @todo get configuration
+            sys_get_temp_dir(),
+            // URL schema for image links
+            // @todo get configuration
+            $urlHandler,
+            // Image variations (names only)
+            $variationsIdentifiers
         );
     }
 

@@ -49,9 +49,6 @@ class Request extends RMFRequest
 
         $this->addHandler( 'destination', new PropertyHandler\Server( 'HTTP_DESTINATION' ) );
 
-        // @todo: ATTENTION, only used for test setup
-        $this->addHandler( 'testUser', new PropertyHandler\Server( 'HTTP_X_TEST_USER' ) );
-
         parent::__construct( $handlers );
     }
 }
