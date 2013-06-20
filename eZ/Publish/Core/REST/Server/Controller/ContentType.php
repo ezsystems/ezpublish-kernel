@@ -78,12 +78,12 @@ class ContentType extends RestController
     /**
      * Updates a content type group
      *
-     * @param $contentTypeGroupPath
+     * @param $contentTypeGroupId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function updateContentTypeGroup( $contentTypeGroupPath )
+    public function updateContentTypeGroup( $contentTypeGroupId )
     {
         $createStruct = $this->inputDispatcher->parse(
             new Message(
@@ -95,11 +95,11 @@ class ContentType extends RestController
         try
         {
             $this->contentTypeService->updateContentTypeGroup(
-                $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupPath ),
+                $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId ),
                 $this->mapToGroupUpdateStruct( $createStruct )
             );
 
-            return $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupPath );
+            return $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId );
         }
         catch ( InvalidArgumentException $e )
         {
@@ -110,14 +110,14 @@ class ContentType extends RestController
     /**
      * Returns a list of content types of the group
      *
-     * @param string $contentTypeGroupPath
+     * @param string $contentTypeGroupId
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeList|\eZ\Publish\Core\REST\Server\Values\ContentTypeInfoList
      */
-    public function listContentTypesForGroup( $contentTypeGroupPath )
+    public function listContentTypesForGroup( $contentTypeGroupId )
     {
         $contentTypes = $this->contentTypeService->loadContentTypes(
-            $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupPath )
+            $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId )
         );
 
         if ( $this->getMediaType( $this->request ) == 'application/vnd.ez.api.contenttypelist' )
@@ -131,14 +131,14 @@ class ContentType extends RestController
     /**
      * The given content type group is deleted
      *
-     * @param mixed $contentTypeGroupPath
+     * @param mixed $contentTypeGroupId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function deleteContentTypeGroup( $contentTypeGroupPath )
+    public function deleteContentTypeGroup( $contentTypeGroupId )
     {
-        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupPath );
+        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId );
 
         $contentTypes = $this->contentTypeService->loadContentTypes( $contentTypeGroup );
         if ( !empty( $contentTypes ) )
@@ -168,7 +168,7 @@ class ContentType extends RestController
                 $this->router->generate(
                     'ezpublish_rest_loadContentTypeGroup',
                     array(
-                        'contentTypeGroupPath' => $contentTypeGroup->id
+                        'contentTypeGroupId' => $contentTypeGroup->id
                     )
                 )
             );
@@ -182,13 +182,13 @@ class ContentType extends RestController
     /**
      * Returns the content type group given by id
      *
-     * @param $contentTypeGroupPath
+     * @param $contentTypeGroupId
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function loadContentTypeGroup( $contentTypeGroupPath )
+    public function loadContentTypeGroup( $contentTypeGroupId )
     {
-        return $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupPath );
+        return $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId );
     }
 
     /**
@@ -265,15 +265,15 @@ class ContentType extends RestController
     /**
      * Creates a new content type draft in the given content type group
      *
-     * @param $contentTypeGroupPath
+     * @param $contentTypeGroupId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedContentType
      */
-    public function createContentType( $contentTypeGroupPath )
+    public function createContentType( $contentTypeGroupId )
     {
-        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupPath );
+        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId );
 
         try
         {
@@ -841,16 +841,16 @@ class ContentType extends RestController
      * Removes the given group from the content type and returns the updated group list
      *
      * @param $contentTypeId
-     * @param $contentTypeGroupPath
+     * @param $contentTypeGroupId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeGroupRefList
      */
-    public function unlinkContentTypeFromGroup( $contentTypeId, $contentTypeGroupPath )
+    public function unlinkContentTypeFromGroup( $contentTypeId, $contentTypeGroupId )
     {
         $contentType = $this->contentTypeService->loadContentType( $contentTypeId );
-        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupPath );
+        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId );
 
         $existingContentTypeGroups = $contentType->getContentTypeGroups();
         $contentTypeInGroup = false;

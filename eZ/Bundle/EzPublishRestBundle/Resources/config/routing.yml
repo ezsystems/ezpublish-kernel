@@ -428,44 +428,44 @@ ezpublish_rest_createContentTypeGroup:
     methods: [POST]
 
 ezpublish_rest_loadContentTypeGroup:
-    path: /content/typegroups/{contentTypeGroupPath}
+    path: /content/typegroups/{contentTypeGroupId}
     defaults:
         _controller: ezpublish_rest.controller.content_type:loadContentTypeGroup
     methods: [GET]
     requirements:
-        contentTypeGroupPath: \d+
+        contentTypeGroupId: \d+
 
 ezpublish_rest_updateContentTypeGroup:
-    path: /content/typegroups/{contentTypeGroupPath}
+    path: /content/typegroups/{contentTypeGroupId}
     defaults:
         _controller: ezpublish_rest.controller.content_type:updateContentTypeGroup
     methods: [PATCH]
     requirements:
-        contentTypeGroupPath: \d+
+        contentTypeGroupId: \d+
 
 ezpublish_rest_deleteContentTypeGroup:
-    path: /content/typegroups/{contentTypeGroupPath}
+    path: /content/typegroups/{contentTypeGroupId}
     defaults:
         _controller: ezpublish_rest.controller.content_type:deleteContentTypeGroup
     methods: [DELETE]
     requirements:
-        contentTypeGroupPath: \d+
+        contentTypeGroupId: \d+
 
 ezpublish_rest_listContentTypesForGroup:
-    path: /content/typegroups/{contentTypeGroupPath}/types
+    path: /content/typegroups/{contentTypeGroupId}/types
     defaults:
         _controller: ezpublish_rest.controller.content_type:listContentTypesForGroup
     methods: [GET]
     requirements:
-        contentTypeGroupPath: \d+
+        contentTypeGroupId: \d+
 
 ezpublish_rest_createContentType:
-    path: /content/typegroups/{contentTypeGroupPath}/types
+    path: /content/typegroups/{contentTypeGroupId}/types
     defaults:
         _controller: ezpublish_rest.controller.content_type:createContentType
     methods: [POST]
     requirements:
-        contentTypeGroupPath: \d+
+        contentTypeGroupId: \d+
 
 ezpublish_rest_listContentTypes:
     # @todo: Handle all GET parameters
@@ -616,13 +616,13 @@ ezpublish_rest_linkContentTypeToGroup:
         contentTypeId: \d+
 
 ezpublish_rest_unlinkContentTypeFromGroup:
-    path: /content/types/{contentTypeId}/groups/{contentTypeGroupPath}
+    path: /content/types/{contentTypeId}/groups/{contentTypeGroupId}
     defaults:
         _controller: ezpublish_rest.controller.content_type:unlinkContentTypeFromGroup
     methods: [DELETE]
     requirements:
         contentTypeId: \d+
-        contentTypeGroupPath: \d+
+        contentTypeGroupId: \d+
 
 
 # Trash
