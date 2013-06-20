@@ -9,11 +9,18 @@
 
 namespace eZ\Publish\Core\REST\Common\Input;
 
+use eZ\Publish\Core\REST\Common\RequestParser as RequestParser;
+
 /**
  * Base class for input parser
  */
 abstract class Parser
 {
+    /**
+     * @var \eZ\Publish\Core\REST\Common\RequestParser
+     */
+    protected $requestParser;
+
     /**
      * Parse input structure
      *
@@ -23,4 +30,9 @@ abstract class Parser
      * @return \eZ\Publish\API\Repository\Values\ValueObject
      */
     abstract public function parse( array $data, ParsingDispatcher $parsingDispatcher );
+
+    public function setRequestParser( RequestParser $requestParser )
+    {
+        $this->requestParser = $requestParser;
+    }
 }
