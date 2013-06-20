@@ -124,7 +124,7 @@ class RoleListTest extends ValueObjectVisitorBaseTest
     protected function getRoleListVisitor()
     {
         return new ValueObjectVisitor\RoleList(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

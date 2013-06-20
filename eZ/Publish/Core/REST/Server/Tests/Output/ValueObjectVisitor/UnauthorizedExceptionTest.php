@@ -53,7 +53,7 @@ class UnauthorizedExceptionTest extends ExceptionTest
     protected function getExceptionVisitor()
     {
         return new ValueObjectVisitor\UnauthorizedException(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

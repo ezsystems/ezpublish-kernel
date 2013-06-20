@@ -40,7 +40,7 @@ class FieldDefinitionList extends RestContentTypeBase
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'typeFieldDefinitions'  . $urlTypeSuffix,
                 array(
                     'type' => $contentType->id

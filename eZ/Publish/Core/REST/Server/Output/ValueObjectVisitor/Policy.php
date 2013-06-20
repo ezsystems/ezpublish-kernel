@@ -33,7 +33,7 @@ class Policy extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'policy', array( 'role' => $data->roleId, 'policy' => $data->id ) )
+            $this->requestParser->generate( 'policy', array( 'role' => $data->roleId, 'policy' => $data->id ) )
         );
         $generator->endAttribute( 'href' );
 

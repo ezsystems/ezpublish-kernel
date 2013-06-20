@@ -119,7 +119,7 @@ class LimitationTest extends ValueObjectVisitorBaseTest
     protected function getLimitationVisitor()
     {
         return new ValueObjectVisitor\Limitation(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

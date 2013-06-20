@@ -242,7 +242,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
     protected function getRoleVisitor()
     {
         return new ValueObjectVisitor\Role(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

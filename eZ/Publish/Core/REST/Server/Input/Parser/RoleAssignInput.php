@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Exceptions;
 
@@ -31,12 +31,12 @@ class RoleAssignInput extends Base
     /**
      * Construct
      *
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( UrlHandler $urlHandler, ParserTools $parserTools )
+    public function __construct( RequestParser $requestParser, ParserTools $parserTools )
     {
-        parent::__construct( $urlHandler );
+        parent::__construct( $requestParser );
         $this->parserTools = $parserTools;
     }
 
@@ -62,7 +62,7 @@ class RoleAssignInput extends Base
 
         try
         {
-            $matches = $this->urlHandler->parse( 'role', $data['Role']['_href'] );
+            $matches = $this->requestParser->parse( 'role', $data['Role']['_href'] );
         }
         catch ( Exceptions\InvalidArgumentException $e )
         {

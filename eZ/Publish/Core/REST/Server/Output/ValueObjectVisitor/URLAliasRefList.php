@@ -40,7 +40,7 @@ class URLAliasRefList extends ValueObjectVisitor
 
             $generator->startAttribute(
                 'href',
-                $this->urlHandler->generate( 'urlAlias', array( 'urlalias' => $urlAlias->id ) )
+                $this->requestParser->generate( 'urlAlias', array( 'urlalias' => $urlAlias->id ) )
             );
             $generator->endAttribute( 'href' );
 

@@ -507,7 +507,7 @@ class ContentCreateTest extends BaseTest
     protected function getContentCreate()
     {
         return new ContentCreate(
-            $this->getUrlHandler(),
+            $this->getRequestParser(),
             $this->getContentServiceMock(),
             $this->getContentTypeServiceMock(),
             $this->getFieldTypeParserMock(),

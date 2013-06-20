@@ -34,7 +34,7 @@ class RoleAssignment extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'role', array( 'role' => $data->getRole()->id ) )
+            $this->requestParser->generate( 'role', array( 'role' => $data->getRole()->id ) )
         );
         $generator->endAttribute( 'href' );
 

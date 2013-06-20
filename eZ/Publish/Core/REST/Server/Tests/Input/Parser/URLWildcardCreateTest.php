@@ -96,6 +96,6 @@ class URLWildcardCreateTest extends BaseTest
      */
     protected function getURLWildcardCreate()
     {
-        return new URLWildcardCreate( $this->getUrlHandler(), $this->getParserTools() );
+        return new URLWildcardCreate( $this->getRequestParser(), $this->getParserTools() );
     }
 }

@@ -53,7 +53,7 @@ class InvalidArgumentExceptionTest extends ExceptionTest
     protected function getExceptionVisitor()
     {
         return new ValueObjectVisitor\InvalidArgumentException(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

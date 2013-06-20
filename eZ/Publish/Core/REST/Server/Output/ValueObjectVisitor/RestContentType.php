@@ -44,7 +44,7 @@ class RestContentType extends RestContentTypeBase
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'type' . $urlTypeSuffix,
                 array(
                     'type' => $contentType->id,
@@ -79,7 +79,7 @@ class RestContentType extends RestContentTypeBase
         $generator->startObjectElement( 'Creator', 'User' );
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'user',
                 array( 'user' => $contentType->creatorId )
             )
@@ -90,7 +90,7 @@ class RestContentType extends RestContentTypeBase
         $generator->startObjectElement( 'Modifier', 'User' );
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'user',
                 array( 'user' => $contentType->modifierId )
             )

@@ -38,7 +38,7 @@ class SetupFactory extends Repository\Tests\SetupFactory
     public function getIdManager()
     {
         return new IdManager(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 

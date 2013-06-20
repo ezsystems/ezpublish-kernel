@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Exceptions;
@@ -54,15 +54,15 @@ class UserUpdate extends Base
     /**
      * Construct
      *
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\UserService $userService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( UrlHandler $urlHandler, UserService $userService, ContentService $contentService, FieldTypeParser $fieldTypeParser, ParserTools $parserTools )
+    public function __construct( RequestParser $requestParser, UserService $userService, ContentService $contentService, FieldTypeParser $fieldTypeParser, ParserTools $parserTools )
     {
-        parent::__construct( $urlHandler );
+        parent::__construct( $requestParser );
         $this->userService = $userService;
         $this->contentService = $contentService;
         $this->fieldTypeParser = $fieldTypeParser;
@@ -110,7 +110,7 @@ class UserUpdate extends Base
                 throw new Exceptions\Parser( "Missing '_href' attribute for Section element in UserUpdate." );
             }
 
-            $sectionValues = $this->urlHandler->parse( 'section', $data['Section']['_href'] );
+            $sectionValues = $this->requestParser->parse( 'section', $data['Section']['_href'] );
             $parsedData['sectionId'] = $sectionValues['section'];
         }
 
@@ -121,7 +121,7 @@ class UserUpdate extends Base
 
         if ( array_key_exists( 'fields', $data ) )
         {
-            $urlValues = $this->urlHandler->parse( 'user', $data['__url'] );
+            $urlValues = $this->requestParser->parse( 'user', $data['__url'] );
 
             if ( !is_array( $data['fields'] ) || !array_key_exists( 'field', $data['fields'] ) || !is_array( $data['fields']['field'] ) )
             {

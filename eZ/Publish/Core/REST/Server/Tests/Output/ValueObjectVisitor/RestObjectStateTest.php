@@ -303,7 +303,7 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     protected function getObjectStateVisitor()
     {
         return new ValueObjectVisitor\RestObjectState(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

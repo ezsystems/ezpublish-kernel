@@ -13,7 +13,7 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Server\Values\RestContent as RestContentValue;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\LocationService;
@@ -45,13 +45,13 @@ class RestExecutedView extends ValueObjectVisitor
     protected $contentTypeService;
 
     /**
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      */
     public function __construct(
-        UrlHandler $urlHandler,
+        RequestParser $requestParser,
         LocationService $locationService,
         ContentService $contentService,
         ContentTypeService $contentTypeService
@@ -60,7 +60,7 @@ class RestExecutedView extends ValueObjectVisitor
         $this->locationService = $locationService;
         $this->contentService = $contentService;
         $this->contentTypeService = $contentTypeService;
-        parent::__construct( $urlHandler );
+        parent::__construct( $requestParser );
     }
 
     /**
@@ -77,7 +77,7 @@ class RestExecutedView extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'view', array( 'view' => $data->identifier ) )
+            $this->requestParser->generate( 'view', array( 'view' => $data->identifier ) )
         );
         $generator->endAttribute( 'href' );
 
@@ -93,7 +93,7 @@ class RestExecutedView extends ValueObjectVisitor
         $generator->startObjectElement( 'Result', $generator->getMediaType( 'ViewResult' ) );
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'viewResults', array( 'view' => $data->identifier ) )
+            $this->requestParser->generate( 'viewResults', array( 'view' => $data->identifier ) )
         );
         $generator->endAttribute( 'href' );
 

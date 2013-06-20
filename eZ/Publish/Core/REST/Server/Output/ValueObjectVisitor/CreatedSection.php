@@ -29,7 +29,7 @@ class CreatedSection extends Section
         parent::visit( $visitor, $generator, $data->section );
         $visitor->setHeader(
             'Location',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'section',
                 array( 'section' => $data->section->id )
             )

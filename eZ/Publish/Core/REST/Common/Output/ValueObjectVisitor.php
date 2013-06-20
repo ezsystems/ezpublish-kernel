@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Common\Output;
 
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
@@ -21,18 +21,18 @@ abstract class ValueObjectVisitor
     /**
      * URL handler for URL generation
      *
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
+     * @var \eZ\Publish\Core\REST\Common\RequestParser
      */
-    protected $urlHandler;
+    protected $requestParser;
 
     /**
      * Construct from used URL handler
      *
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      */
-    public function __construct( UrlHandler $urlHandler )
+    public function __construct( RequestParser $requestParser )
     {
-        $this->urlHandler = $urlHandler;
+        $this->requestParser = $requestParser;
     }
 
     /**

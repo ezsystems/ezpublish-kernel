@@ -39,7 +39,7 @@ class ContentUpdate extends Base
         {
             try
             {
-                $matches = $this->urlHandler->parse( 'section', $data['Section']['_href'] );
+                $matches = $this->requestParser->parse( 'section', $data['Section']['_href'] );
             }
             catch ( Exceptions\InvalidArgumentException $e )
             {

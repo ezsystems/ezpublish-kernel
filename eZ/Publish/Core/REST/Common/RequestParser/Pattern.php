@@ -1,19 +1,19 @@
 <?php
 /**
- * File containing the Pattern UrlHandler class
+ * File containing the Pattern RequestParser class
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Common\UrlHandler;
+namespace eZ\Publish\Core\REST\Common\RequestParser;
 
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Exceptions;
 
 /**
- * Pattern based URL Handler
+ * Pattern based Request parser
  *
  * Handles 2 types of patterns to be used in an URL:
  *
@@ -22,7 +22,7 @@ use eZ\Publish\Core\REST\Common\Exceptions;
  * - {&foo} matches the slash, too, and is used to match only those URL
  *   variables, which may have a slash
  */
-class Pattern implements UrlHandler
+class Pattern implements RequestParser
 {
     /**
      * Map of URL types to their URL patterns

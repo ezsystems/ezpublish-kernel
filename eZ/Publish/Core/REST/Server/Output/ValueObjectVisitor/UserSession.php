@@ -31,7 +31,7 @@ class UserSession extends ValueObjectVisitor
 
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Session' ) );
 
-        $sessionHref = $this->urlHandler->generate( 'userSession', array( 'sessionId' => $data->sessionId ) );
+        $sessionHref = $this->requestParser->generate( 'userSession', array( 'sessionId' => $data->sessionId ) );
         $visitor->setHeader( 'Location', $sessionHref );
 
         // @deprecated Since 5.0, this cookie is used for legacy until Static cache support is removed along with this cookie
@@ -58,7 +58,7 @@ class UserSession extends ValueObjectVisitor
         $generator->startAttribute(
             'href',
             // @todo check URL generator entry
-            $this->urlHandler->generate( 'user', array( 'user' => $data->user->id ) )
+            $this->requestParser->generate( 'user', array( 'user' => $data->user->id ) )
         );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'User' );

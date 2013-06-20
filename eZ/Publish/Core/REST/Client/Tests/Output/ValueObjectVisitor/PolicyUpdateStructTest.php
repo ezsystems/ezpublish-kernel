@@ -141,7 +141,7 @@ class PolicyUpdateStructTest extends ValueObjectVisitorBaseTest
     protected function getPolicyUpdateStructVisitor()
     {
         return new ValueObjectVisitor\PolicyUpdateStruct(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

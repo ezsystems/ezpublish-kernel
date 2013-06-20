@@ -34,7 +34,7 @@ class RestRelation extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'objectVersionRelation',
                 array(
                     'object' => $data->contentId,
@@ -48,7 +48,7 @@ class RestRelation extends ValueObjectVisitor
         $generator->startObjectElement( 'SourceContent', 'ContentInfo' );
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'object',
                 array(
                     'object' => $data->contentId,
@@ -61,7 +61,7 @@ class RestRelation extends ValueObjectVisitor
         $generator->startObjectElement( 'DestinationContent', 'ContentInfo' );
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'object',
                 array(
                     'object' => $data->relation->getDestinationContentInfo()->id,

@@ -330,7 +330,7 @@ class RestUserTest extends ValueObjectVisitorBaseTest
     protected function getUserVisitor()
     {
         return new ValueObjectVisitor\RestUser(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

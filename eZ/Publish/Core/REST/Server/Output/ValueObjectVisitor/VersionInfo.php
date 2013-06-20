@@ -52,7 +52,7 @@ class VersionInfo extends ValueObjectVisitor
 
         $generator->startObjectElement( 'Creator', 'User' );
         $generator->startAttribute(
-            'href', $this->urlHandler->generate( 'user', array( 'user' => $versionInfo->creatorId ) )
+            'href', $this->requestParser->generate( 'user', array( 'user' => $versionInfo->creatorId ) )
         );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Creator' );
@@ -80,7 +80,7 @@ class VersionInfo extends ValueObjectVisitor
         $generator->startObjectElement( 'Content', 'ContentInfo' );
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'object', array( 'object' => $versionInfo->getContentInfo()->id ) )
+            $this->requestParser->generate( 'object', array( 'object' => $versionInfo->getContentInfo()->id ) )
         );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Content' );

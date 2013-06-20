@@ -116,7 +116,7 @@ class RoleCreateStructTest extends ValueObjectVisitorBaseTest
     protected function getRoleCreateStructVisitor()
     {
         return new ValueObjectVisitor\RoleCreateStruct(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

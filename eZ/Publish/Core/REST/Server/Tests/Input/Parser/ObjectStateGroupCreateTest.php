@@ -197,7 +197,7 @@ class ObjectStateGroupCreateTest extends BaseTest
     protected function getObjectStateGroupCreate()
     {
         return new ObjectStateGroupCreate(
-            $this->getUrlHandler(),
+            $this->getRequestParser(),
             $this->getObjectStateServiceMock(),
             $this->getParserTools()
         );

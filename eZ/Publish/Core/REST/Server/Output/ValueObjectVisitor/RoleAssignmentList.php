@@ -34,8 +34,8 @@ class RoleAssignmentList extends ValueObjectVisitor
         $generator->startAttribute(
             'href',
             $data->isGroupAssignment ?
-                $this->urlHandler->generate( 'groupRoleAssignments', array( 'group' => $data->id ) ) :
-                $this->urlHandler->generate( 'userRoleAssignments', array( 'user' => $data->id ) )
+                $this->requestParser->generate( 'groupRoleAssignments', array( 'group' => $data->id ) ) :
+                $this->requestParser->generate( 'userRoleAssignments', array( 'user' => $data->id ) )
         );
         $generator->endAttribute( 'href' );
 

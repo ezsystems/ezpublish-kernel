@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Exceptions;
 
 use eZ\Publish\Core\REST\Common\Values\RestObjectState;
@@ -46,7 +46,7 @@ class ContentObjectStates extends Base
                 throw new Exceptions\Parser( "Missing '_href' attribute for ObjectState." );
             }
 
-            $values = $this->urlHandler->parse( 'objectstate', $rawStateData['_href'] );
+            $values = $this->requestParser->parse( 'objectstate', $rawStateData['_href'] );
 
             $states[] = new RestObjectState(
                 new ObjectState(

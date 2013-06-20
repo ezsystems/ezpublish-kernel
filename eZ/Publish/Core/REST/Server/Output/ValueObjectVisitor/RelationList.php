@@ -35,7 +35,7 @@ class RelationList extends ValueObjectVisitor
         $path = $data->path;
         if ( $path === null )
         {
-            $path = $this->urlHandler->generate(
+            $path = $this->requestParser->generate(
                 'objectVersionRelations',
                 array(
                     'object' => $data->contentId,

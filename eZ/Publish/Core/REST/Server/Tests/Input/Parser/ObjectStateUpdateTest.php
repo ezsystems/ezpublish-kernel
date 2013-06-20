@@ -108,7 +108,7 @@ class ObjectStateUpdateTest extends BaseTest
     protected function getObjectStateUpdate()
     {
         return new ObjectStateUpdate(
-            $this->getUrlHandler(),
+            $this->getRequestParser(),
             $this->getObjectStateServiceMock(),
             $this->getParserTools()
         );

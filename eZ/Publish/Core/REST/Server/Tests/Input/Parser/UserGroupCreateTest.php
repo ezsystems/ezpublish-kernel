@@ -303,7 +303,7 @@ class UserGroupCreateTest extends BaseTest
     protected function getUserGroupCreate()
     {
         return new UserGroupCreate(
-            $this->getUrlHandler(),
+            $this->getRequestParser(),
             $this->getUserServiceMock(),
             $this->getContentTypeServiceMock(),
             $this->getFieldTypeParserMock()

@@ -105,7 +105,7 @@ class FieldDefinitionListTest extends ValueObjectVisitorBaseTest
     protected function getContentVisitor()
     {
         return new ValueObjectVisitor\FieldDefinitionList(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

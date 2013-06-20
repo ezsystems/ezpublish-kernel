@@ -31,7 +31,7 @@ class CreatedFieldDefinition extends RestFieldDefinition
         parent::visit( $visitor, $generator, $restFieldDefinition );
         $visitor->setHeader(
             'Location',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'typeFieldDefinition' . $this->getUrlTypeSuffix( $restFieldDefinition->contentType->status ),
                 array(
                     'type' => $restFieldDefinition->contentType->id,

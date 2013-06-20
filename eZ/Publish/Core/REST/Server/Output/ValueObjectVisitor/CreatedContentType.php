@@ -31,7 +31,7 @@ class CreatedContentType extends RestContentType
         parent::visit( $visitor, $generator, $restContentType );
         $visitor->setHeader(
             'Location',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'type' . $this->getUrlTypeSuffix( $restContentType->contentType->status ),
                 array(
                     'type' => $restContentType->contentType->id,

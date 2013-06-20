@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Exceptions;
 
 /**
@@ -38,7 +38,7 @@ class RelationCreate extends Base
             throw new Exceptions\Parser( "Missing '_href' attribute for Destination element in RelationCreate." );
         }
 
-        $destinationParts = $this->urlHandler->parse( 'object', $data['Destination']['_href'] );
+        $destinationParts = $this->requestParser->parse( 'object', $data['Destination']['_href'] );
         return $destinationParts['object'];
     }
 }

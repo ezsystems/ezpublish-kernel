@@ -29,7 +29,7 @@ class CreatedVersion extends Version
         parent::visit( $visitor, $generator, $data->version );
         $visitor->setHeader(
             'Location',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'objectVersion',
                 array(
                     'object' => $data->version->content->id,

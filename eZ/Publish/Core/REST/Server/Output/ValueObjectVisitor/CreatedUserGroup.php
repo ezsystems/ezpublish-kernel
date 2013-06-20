@@ -29,7 +29,7 @@ class CreatedUserGroup extends RestUserGroup
         parent::visit( $visitor, $generator, $data->userGroup );
         $visitor->setHeader(
             'Location',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'group',
                 array( 'group' => rtrim( $data->userGroup->mainLocation->pathString, '/' ) )
             )

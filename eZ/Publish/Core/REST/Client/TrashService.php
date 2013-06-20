@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Common\Message;
@@ -48,24 +48,24 @@ class TrashService implements APITrashService, Sessionable
     private $outputVisitor;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
+     * @var \eZ\Publish\Core\REST\Common\RequestParser
      */
-    private $urlHandler;
+    private $requestParser;
 
     /**
      * @param \eZ\Publish\Core\REST\Client\LocationService $locationService
      * @param \eZ\Publish\Core\REST\Client\HttpClient $client
      * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      */
-    public function __construct( LocationService $locationService, HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( LocationService $locationService, HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, RequestParser $requestParser )
     {
         $this->locationService = $locationService;
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
         $this->outputVisitor   = $outputVisitor;
-        $this->urlHandler      = $urlHandler;
+        $this->requestParser   = $requestParser;
     }
 
     /**
@@ -154,7 +154,7 @@ class TrashService implements APITrashService, Sessionable
     {
         $response = $this->client->request(
             'DELETE',
-            $this->urlHandler->generate( 'trashItems' ),
+            $this->requestParser->generate( 'trashItems' ),
             new Message(
                 // @todo: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "Location" correct,
@@ -208,7 +208,7 @@ class TrashService implements APITrashService, Sessionable
     {
         $response = $this->client->request(
             'GET',
-            $this->urlHandler->generate( 'trashItems' ),
+            $this->requestParser->generate( 'trashItems' ),
             new Message(
                 array( 'Accept' => $this->outputVisitor->getMediaType( 'LocationList' ) )
             )

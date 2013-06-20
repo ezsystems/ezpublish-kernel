@@ -131,7 +131,7 @@ class VersionUpdateTest extends BaseTest
     protected function getVersionUpdate()
     {
         return new VersionUpdate(
-            $this->getUrlHandler(),
+            $this->getRequestParser(),
             $this->getContentServiceMock(),
             $this->getFieldTypeParserMock()
         );

@@ -37,7 +37,7 @@ class RestUserRoleAssignment extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'userRoleAssignment', array(
                     'user' => $data->id,
                     'role' => $role->id
@@ -55,7 +55,7 @@ class RestUserRoleAssignment extends ValueObjectVisitor
         $generator->startObjectElement( 'Role' );
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'role', array( 'role' => $role->id ) )
+            $this->requestParser->generate( 'role', array( 'role' => $role->id ) )
         );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Role' );

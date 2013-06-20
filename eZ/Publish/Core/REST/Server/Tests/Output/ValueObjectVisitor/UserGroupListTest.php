@@ -147,7 +147,7 @@ class UserGroupListTest extends ValueObjectVisitorBaseTest
     protected function getUserGroupListVisitor()
     {
         return new ValueObjectVisitor\UserGroupList(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

@@ -1,16 +1,16 @@
 <?php
 /**
- * File containing the eZPublish UrlHandler class
+ * File containing the eZPublish RequestParser class
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Common\UrlHandler;
+namespace eZ\Publish\Core\REST\Common\RequestParser;
 
 /**
- * Pattern based URL Handler pre-configured for eZ Publish
+ * Pattern based Request parser pre-configured for eZ Publish
  */
 class eZPublish extends Pattern
 {

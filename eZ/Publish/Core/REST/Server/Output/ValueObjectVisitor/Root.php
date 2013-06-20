@@ -35,53 +35,53 @@ class Root extends ValueObjectVisitor
         $generator->startHashElement( 'content' );
         $generator->startAttribute( 'media-type', '' );
         $generator->endAttribute( 'media-type' );
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'objects' ) );
+        $generator->startAttribute( 'href', $this->requestParser->generate( 'objects' ) );
         $generator->endAttribute( 'href' );
         $generator->endHashElement( 'content' );
 
         $generator->startObjectElement( 'contentTypes', 'ContentTypeInfoList' );
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'types' ) );
+        $generator->startAttribute( 'href', $this->requestParser->generate( 'types' ) );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'contentTypes' );
 
         $generator->startObjectElement( 'users', 'UserRefList' );
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'users' ) );
+        $generator->startAttribute( 'href', $this->requestParser->generate( 'users' ) );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'users' );
 
         $generator->startObjectElement( 'roles', 'RoleList' );
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'roles' ) );
+        $generator->startAttribute( 'href', $this->requestParser->generate( 'roles' ) );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'roles' );
 
         // @todo Load the locations of the following three items from settings
         $generator->startObjectElement( 'rootLocation', 'Location' );
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'location', array( 'location' => '/1/2' ) ) );
+        $generator->startAttribute( 'href', $this->requestParser->generate( 'location', array( 'location' => '/1/2' ) ) );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'rootLocation' );
 
         $generator->startObjectElement( 'rootUserGroup', 'UserGroup' );
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'group', array( 'group' => '/1/5' ) ) );
+        $generator->startAttribute( 'href', $this->requestParser->generate( 'group', array( 'group' => '/1/5' ) ) );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'rootUserGroup' );
 
         $generator->startObjectElement( 'rootMediaFolder', 'Location' );
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'location', array( 'location' => '/1/43' ) ) );
+        $generator->startAttribute( 'href', $this->requestParser->generate( 'location', array( 'location' => '/1/43' ) ) );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'rootMediaFolder' );
 
         $generator->startObjectElement( 'trash', 'Trash' );
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'trashItems' ) );
+        $generator->startAttribute( 'href', $this->requestParser->generate( 'trashItems' ) );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'trash' );
 
         $generator->startObjectElement( 'sections', 'SectionList' );
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'sections' ) );
+        $generator->startAttribute( 'href', $this->requestParser->generate( 'sections' ) );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'sections' );
 
         $generator->startObjectElement( 'views', 'RefList' );
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'views' ) );
+        $generator->startAttribute( 'href', $this->requestParser->generate( 'views' ) );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'views' );
 

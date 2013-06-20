@@ -33,7 +33,7 @@ class Role extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'role', array( 'role' => $data->id ) )
+            $this->requestParser->generate( 'role', array( 'role' => $data->id ) )
         );
         $generator->endAttribute( 'href' );
 
@@ -43,7 +43,7 @@ class Role extends ValueObjectVisitor
         $generator->startObjectElement( 'Policies', 'PolicyList' );
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'policies', array( 'role' => $data->id ) )
+            $this->requestParser->generate( 'policies', array( 'role' => $data->id ) )
         );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Policies' );

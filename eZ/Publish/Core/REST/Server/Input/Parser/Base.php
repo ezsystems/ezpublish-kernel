@@ -10,24 +10,24 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\Parser;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 
 abstract class Base extends Parser
 {
     /**
      * URL handler
      *
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
+     * @var \eZ\Publish\Core\REST\Common\RequestParser
      */
-    protected $urlHandler;
+    protected $requestParser;
 
     /**
      * Creates a new parser.
      *
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      */
-    public function __construct( UrlHandler $urlHandler )
+    public function __construct( RequestParser $requestParser )
     {
-        $this->urlHandler = $urlHandler;
+        $this->requestParser = $requestParser;
     }
 }

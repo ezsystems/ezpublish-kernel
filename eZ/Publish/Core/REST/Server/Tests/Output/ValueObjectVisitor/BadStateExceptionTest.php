@@ -53,7 +53,7 @@ class BadStateExceptionTest extends ExceptionTest
     protected function getExceptionVisitor()
     {
         return new ValueObjectVisitor\BadStateException(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

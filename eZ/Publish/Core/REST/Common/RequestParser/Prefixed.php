@@ -6,11 +6,11 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\REST\Common\UrlHandler;
+namespace eZ\Publish\Core\REST\Common\RequestParser;
 
-use eZ\Publish\Core\REST\Common\UrlHandler\eZPublish as EzPublishUrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser\eZPublish as EzPublishRequestParser;
 
-class Prefixed extends EzPublishUrlHandler
+class Prefixed extends EzPublishRequestParser
 {
     /**
      * @var string

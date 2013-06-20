@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 
 /**
  * Exception value object visitor
@@ -72,12 +72,12 @@ class Exception extends ValueObjectVisitor
     /**
      * Construct from debug flag
      *
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param boolean $debug
      */
-    public function __construct( UrlHandler $urlHandler, $debug = false )
+    public function __construct( RequestParser $requestParser, $debug = false )
     {
-        parent::__construct( $urlHandler );
+        parent::__construct( $requestParser );
         $this->debug = (bool)$debug;
     }
 

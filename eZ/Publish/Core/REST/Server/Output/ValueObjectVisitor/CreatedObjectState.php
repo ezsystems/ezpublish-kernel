@@ -29,7 +29,7 @@ class CreatedObjectState extends RestObjectState
         parent::visit( $visitor, $generator, $data->objectState );
         $visitor->setHeader(
             'Location',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'objectstate',
                 array(
                     'objectstategroup' => $data->objectState->groupId,

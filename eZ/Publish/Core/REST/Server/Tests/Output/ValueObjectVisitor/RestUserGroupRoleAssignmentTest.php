@@ -152,7 +152,7 @@ class RestUserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
     protected function getRestUserGroupRoleAssignmentVisitor()
     {
         return new ValueObjectVisitor\RestUserGroupRoleAssignment(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

@@ -124,7 +124,7 @@ class URLAliasListTest extends ValueObjectVisitorBaseTest
     protected function getURLAliasListVisitor()
     {
         return new ValueObjectVisitor\URLAliasList(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

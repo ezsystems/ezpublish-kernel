@@ -112,9 +112,9 @@ class Repository implements APIRepository
     private $outputVisitor;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
+     * @var \eZ\Publish\Core\REST\Common\RequestParser
      */
-    private $urlHandler;
+    private $requestParser;
 
     /**
      * @var \eZ\Publish\SPI\FieldType\FieldType[]
@@ -127,15 +127,15 @@ class Repository implements APIRepository
      * @param \eZ\Publish\Core\REST\Client\HttpClient $client
      * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\SPI\FieldType\FieldType[] $fieldTypes
      */
-    public function __construct( HttpClient $client, Common\Input\Dispatcher $inputDispatcher, Common\Output\Visitor $outputVisitor, Common\UrlHandler $urlHandler, array $fieldTypes )
+    public function __construct( HttpClient $client, Common\Input\Dispatcher $inputDispatcher, Common\Output\Visitor $outputVisitor, Common\RequestParser $requestParser, array $fieldTypes )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
         $this->outputVisitor   = $outputVisitor;
-        $this->urlHandler      = $urlHandler;
+        $this->requestParser   = $requestParser;
         $this->fieldTypes      = $fieldTypes;
     }
 
@@ -209,7 +209,7 @@ class Repository implements APIRepository
                 $this->client,
                 $this->inputDispatcher,
                 $this->outputVisitor,
-                $this->urlHandler,
+                $this->requestParser,
                 $this->getContentTypeService()
             );
         }
@@ -233,7 +233,7 @@ class Repository implements APIRepository
                 $this->client,
                 $this->inputDispatcher,
                 $this->outputVisitor,
-                $this->urlHandler
+                $this->requestParser
             );
         }
         return $this->languageService;
@@ -255,7 +255,7 @@ class Repository implements APIRepository
                 $this->client,
                 $this->inputDispatcher,
                 $this->outputVisitor,
-                $this->urlHandler
+                $this->requestParser
             );
         }
         return $this->contentTypeService;
@@ -276,7 +276,7 @@ class Repository implements APIRepository
                 $this->client,
                 $this->inputDispatcher,
                 $this->outputVisitor,
-                $this->urlHandler
+                $this->requestParser
             );
         }
         return $this->locationService;
@@ -299,7 +299,7 @@ class Repository implements APIRepository
                 $this->client,
                 $this->inputDispatcher,
                 $this->outputVisitor,
-                $this->urlHandler
+                $this->requestParser
             );
         }
         return $this->trashService;
@@ -320,7 +320,7 @@ class Repository implements APIRepository
                 $this->client,
                 $this->inputDispatcher,
                 $this->outputVisitor,
-                $this->urlHandler
+                $this->requestParser
             );
         }
         return $this->sectionService;
@@ -353,7 +353,7 @@ class Repository implements APIRepository
                 $this->client,
                 $this->inputDispatcher,
                 $this->outputVisitor,
-                $this->urlHandler
+                $this->requestParser
             );
         }
         return $this->userService;
@@ -374,7 +374,7 @@ class Repository implements APIRepository
                 $this->client,
                 $this->inputDispatcher,
                 $this->outputVisitor,
-                $this->urlHandler
+                $this->requestParser
             );
         }
         return $this->ioService;
@@ -394,7 +394,7 @@ class Repository implements APIRepository
                 $this->client,
                 $this->inputDispatcher,
                 $this->outputVisitor,
-                $this->urlHandler
+                $this->requestParser
             );
         }
         return $this->roleService;
@@ -413,7 +413,7 @@ class Repository implements APIRepository
                 $this->client,
                 $this->inputDispatcher,
                 $this->outputVisitor,
-                $this->urlHandler
+                $this->requestParser
             );
         }
         return $this->urlAliasService;
@@ -442,7 +442,7 @@ class Repository implements APIRepository
                 $this->client,
                 $this->inputDispatcher,
                 $this->outputVisitor,
-                $this->urlHandler
+                $this->requestParser
             );
         }
         return $this->objectStateService;

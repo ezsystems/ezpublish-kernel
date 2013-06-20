@@ -123,7 +123,7 @@ class ObjectStateGroupListTest extends ValueObjectVisitorBaseTest
     protected function getObjectStateGroupListVisitor()
     {
         return new ValueObjectVisitor\ObjectStateGroupList(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

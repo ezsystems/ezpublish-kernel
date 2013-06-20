@@ -202,7 +202,7 @@ class UserGroupUpdateTest extends BaseTest
     protected function getUserGroupUpdate()
     {
         return new UserGroupUpdate(
-            $this->getUrlHandler(),
+            $this->getRequestParser(),
             $this->getUserServiceMock(),
             $this->getContentServiceMock(),
             $this->getLocationServiceMock(),

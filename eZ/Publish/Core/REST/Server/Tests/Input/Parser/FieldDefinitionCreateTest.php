@@ -185,7 +185,7 @@ class FieldDefinitionCreateTest extends BaseTest
     protected function getFieldDefinitionCreate()
     {
         return new FieldDefinitionCreate(
-            $this->getUrlHandler(),
+            $this->getRequestParser(),
             $this->getContentTypeServiceMock(),
             $this->getFieldTypeParserMock(),
             $this->getParserTools()

@@ -57,7 +57,7 @@ class ResourceCreatedTest extends ValueObjectVisitorBaseTest
     protected function getResourceCreatedVisitor()
     {
         return new ValueObjectVisitor\ResourceCreated(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

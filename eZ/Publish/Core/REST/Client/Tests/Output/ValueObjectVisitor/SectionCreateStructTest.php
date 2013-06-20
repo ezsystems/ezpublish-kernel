@@ -142,7 +142,7 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
     protected function getSectionCreateStructVisitor()
     {
         return new ValueObjectVisitor\SectionCreateStruct(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

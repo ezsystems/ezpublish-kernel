@@ -181,7 +181,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
     protected function getLocationUpdateStructVisitor()
     {
         return new ValueObjectVisitor\LocationUpdateStruct(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

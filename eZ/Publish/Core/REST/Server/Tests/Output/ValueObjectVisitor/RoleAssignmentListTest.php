@@ -124,7 +124,7 @@ class RoleAssignmentListTest extends ValueObjectVisitorBaseTest
     protected function getRoleAssignmentListVisitor()
     {
         return new ValueObjectVisitor\RoleAssignmentList(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

@@ -227,7 +227,7 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
     protected function getSessionVisitor()
     {
         return new ValueObjectVisitor\UserSession(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

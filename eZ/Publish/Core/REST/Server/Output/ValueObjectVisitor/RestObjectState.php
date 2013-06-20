@@ -33,7 +33,7 @@ class RestObjectState extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'objectstate', array( 'objectstategroup' => $data->groupId, 'objectstate' => $data->objectState->id ) )
+            $this->requestParser->generate( 'objectstate', array( 'objectstategroup' => $data->groupId, 'objectstate' => $data->objectState->id ) )
         );
         $generator->endAttribute( 'href' );
 
@@ -50,7 +50,7 @@ class RestObjectState extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'objectstategroup', array( 'objectstategroup' => $data->groupId ) )
+            $this->requestParser->generate( 'objectstategroup', array( 'objectstategroup' => $data->groupId ) )
         );
         $generator->endAttribute( 'href' );
 

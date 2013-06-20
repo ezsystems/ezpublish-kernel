@@ -29,7 +29,7 @@ class CreatedRole extends Role
         parent::visit( $visitor, $generator, $data->role );
         $visitor->setHeader(
             'Location',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'role',
                 array( 'role' => $data->role->id )
             )

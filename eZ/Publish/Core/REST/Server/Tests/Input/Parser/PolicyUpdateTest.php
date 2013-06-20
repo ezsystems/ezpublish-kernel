@@ -148,7 +148,7 @@ class PolicyUpdateTest extends BaseTest
     protected function getPolicyUpdate()
     {
         return new PolicyUpdate(
-            $this->getUrlHandler(),
+            $this->getRequestParser(),
             $this->getRoleServiceMock(),
             $this->getParserTools()
         );

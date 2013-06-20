@@ -44,7 +44,7 @@ class UserGroupRefList extends ValueObjectVisitor
 
             $generator->startAttribute(
                 'href',
-                $this->urlHandler->generate(
+                $this->requestParser->generate(
                     'group',
                     array(
                         'group' => rtrim( $userGroup->mainLocation->pathString, '/' )
@@ -59,7 +59,7 @@ class UserGroupRefList extends ValueObjectVisitor
 
                 $generator->startAttribute(
                     'href',
-                    $this->urlHandler->generate(
+                    $this->requestParser->generate(
                         'userGroup',
                         array(
                             'user' => $data->userId,

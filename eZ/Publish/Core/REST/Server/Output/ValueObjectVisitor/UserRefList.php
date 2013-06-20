@@ -40,7 +40,7 @@ class UserRefList extends ValueObjectVisitor
         {
             $generator->startObjectElement( 'User' );
 
-            $generator->startAttribute( 'href', $this->urlHandler->generate( 'user', array( 'user' => $user->contentInfo->id ) ) );
+            $generator->startAttribute( 'href', $this->requestParser->generate( 'user', array( 'user' => $user->contentInfo->id ) ) );
             $generator->endAttribute( 'href' );
 
             $generator->endObjectElement( 'User' );

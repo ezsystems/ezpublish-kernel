@@ -225,7 +225,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
     protected function getLocationCreateStructVisitor()
     {
         return new ValueObjectVisitor\LocationCreateStruct(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

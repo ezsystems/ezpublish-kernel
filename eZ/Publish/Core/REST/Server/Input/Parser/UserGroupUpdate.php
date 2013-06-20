@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Values\RestUserGroupUpdateStruct;
@@ -54,15 +54,15 @@ class UserGroupUpdate extends Base
     /**
      * Construct
      *
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\UserService $userService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser
      */
-    public function __construct( UrlHandler $urlHandler, UserService $userService, ContentService $contentService, LocationService $locationService, FieldTypeParser $fieldTypeParser )
+    public function __construct( RequestParser $requestParser, UserService $userService, ContentService $contentService, LocationService $locationService, FieldTypeParser $fieldTypeParser )
     {
-        parent::__construct( $urlHandler );
+        parent::__construct( $requestParser );
         $this->userService = $userService;
         $this->contentService = $contentService;
         $this->locationService = $locationService;
@@ -93,7 +93,7 @@ class UserGroupUpdate extends Base
                 throw new Exceptions\Parser( "Missing '_href' attribute for Section element in UserGroupUpdate." );
             }
 
-            $sectionValues = $this->urlHandler->parse( 'section', $data['Section']['_href'] );
+            $sectionValues = $this->requestParser->parse( 'section', $data['Section']['_href'] );
             $parsedData['sectionId'] = $sectionValues['section'];
         }
 
@@ -104,7 +104,7 @@ class UserGroupUpdate extends Base
 
         if ( array_key_exists( 'fields', $data ) )
         {
-            $urlValues = $this->urlHandler->parse( 'group', $data['__url'] );
+            $urlValues = $this->requestParser->parse( 'group', $data['__url'] );
             $groupLocationParts = explode( '/', $urlValues['group'] );
 
             $groupLocation = $this->locationService->loadLocation( array_pop( $groupLocationParts ) );

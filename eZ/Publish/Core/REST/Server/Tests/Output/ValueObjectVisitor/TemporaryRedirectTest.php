@@ -55,7 +55,7 @@ class TemporaryRedirectTest extends ValueObjectVisitorBaseTest
     protected function getTemporaryRedirectVisitor()
     {
         return new ValueObjectVisitor\TemporaryRedirect(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

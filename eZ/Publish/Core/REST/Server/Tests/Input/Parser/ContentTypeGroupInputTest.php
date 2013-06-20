@@ -81,7 +81,7 @@ class ContentTypeGroupInputTest extends BaseTest
     protected function getContentTypeGroupInput()
     {
         return new ContentTypeGroupInput(
-            $this->getUrlHandler(),
+            $this->getRequestParser(),
             $this->getContentTypeServiceMock(),
             $this->getParserTools()
         );

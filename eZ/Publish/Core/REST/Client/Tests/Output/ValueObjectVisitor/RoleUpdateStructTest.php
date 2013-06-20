@@ -117,7 +117,7 @@ class RoleUpdateStructTest extends ValueObjectVisitorBaseTest
     protected function getRoleUpdateStructVisitor()
     {
         return new ValueObjectVisitor\RoleUpdateStruct(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

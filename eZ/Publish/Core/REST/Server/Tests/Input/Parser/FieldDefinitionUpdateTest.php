@@ -151,7 +151,7 @@ class FieldDefinitionUpdateTest extends BaseTest
     protected function getFieldDefinitionUpdate()
     {
         return new FieldDefinitionUpdate(
-            $this->getUrlHandler(),
+            $this->getRequestParser(),
             $this->getContentTypeServiceMock(),
             $this->getFieldTypeParserMock(),
             $this->getParserTools()

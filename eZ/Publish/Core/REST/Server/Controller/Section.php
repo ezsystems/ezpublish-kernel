@@ -80,6 +80,7 @@ class Section extends RestController
     /**
      * Create new section
      *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedSection
      */
     public function createSection()
@@ -110,22 +111,25 @@ class Section extends RestController
     /**
      * Loads a section
      *
+     * @param $sectionId
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function loadSection()
+    public function loadSection( $sectionId )
     {
-        $values = $this->urlHandler->parse( 'section', $this->request->path );
-        return $this->sectionService->loadSection( $values['section'] );
+        return $this->sectionService->loadSection( $sectionId );
     }
 
     /**
      * Updates a section
      *
+     * @param $sectionId
+     *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function updateSection()
+    public function updateSection( $sectionId )
     {
-        $values = $this->urlHandler->parse( 'section', $this->request->path );
         $createStruct = $this->inputDispatcher->parse(
             new Message(
                 array( 'Content-Type' => $this->request->contentType ),
@@ -136,7 +140,7 @@ class Section extends RestController
         try
         {
             return $this->sectionService->updateSection(
-                $this->sectionService->loadSection( $values['section'] ),
+                $this->sectionService->loadSection( $sectionId ),
                 $this->mapToUpdateStruct( $createStruct )
             );
         }
@@ -149,13 +153,14 @@ class Section extends RestController
     /**
      * Delete a section by ID
      *
+     * @param $sectionId
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function deleteSection()
+    public function deleteSection( $sectionId )
     {
-        $values = $this->urlHandler->parse( 'section', $this->request->path );
         $this->sectionService->deleteSection(
-            $this->sectionService->loadSection( $values['section'] )
+            $this->sectionService->loadSection( $sectionId )
         );
 
         return new NoContent();

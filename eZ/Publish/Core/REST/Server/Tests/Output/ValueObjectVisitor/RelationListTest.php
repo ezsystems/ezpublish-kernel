@@ -125,7 +125,7 @@ class RelationListTest extends ValueObjectVisitorBaseTest
     protected function getRelationListVisitor()
     {
         return new ValueObjectVisitor\RelationList(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

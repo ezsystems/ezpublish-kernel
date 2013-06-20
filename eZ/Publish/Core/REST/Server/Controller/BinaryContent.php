@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Controller;
 
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Common\Exceptions;
@@ -25,11 +25,6 @@ use eZ\Publish\SPI\Variation\VariationHandler;
 class BinaryContent extends RestController
 {
     /**
-     * @var \eZ\Publish\SPI\Variation\VariationHandler
-     */
-    protected $imageVariationHandler;
-
-    /**
      * Construct controller
      *
      * @param \eZ\Publish\SPI\Variation\VariationHandler $imageVariationHandler
@@ -43,21 +38,20 @@ class BinaryContent extends RestController
      * Returns data about the image variation $variationIdentifier of image field $fieldId.
      * Will generate the alias if it hasn't been generated yet.
      *
-     * @param int $fieldId
+     * @param mixed  $imageId
      * @param string $variationIdentifier
-     * @throws NotFoundException if the content or image field aren't found
+     *
+     * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
+     * @return \eZ\Publish\SPI\Variation\Values\Variation
      */
-    public function getImageVariation()
+    public function getImageVariation( $imageId, $variationIdentifier )
     {
-        $urlArguments = $this->urlHandler->parse( 'getImageVariation', $this->request->path );
-
-        $idArray = explode( '-', $urlArguments['imageId'] );
+        $idArray = explode( '-', $imageId );
         if ( count( $idArray ) != 2 )
         {
-            throw new Exceptions\NotFoundException( "Invalid image ID {$urlArguments['imageId']}" );
+            throw new Exceptions\NotFoundException( "Invalid image ID {$imageId}" );
         }
         list( $contentId, $fieldId ) = $idArray;
-        $variationIdentifier = $urlArguments['variationIdentifier'];
 
         $content = $this->repository->getContentService()->loadContent( $contentId );
 
@@ -90,4 +84,9 @@ class BinaryContent extends RestController
             throw new Exceptions\NotFoundException( "Invalid image variation $variationIdentifier", 0, $e );
         }
     }
+
+    /**
+     * @var \eZ\Publish\SPI\Variation\VariationHandler
+     */
+    protected $imageVariationHandler;
 }

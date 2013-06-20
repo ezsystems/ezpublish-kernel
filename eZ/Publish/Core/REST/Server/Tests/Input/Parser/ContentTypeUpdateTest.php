@@ -163,7 +163,7 @@ class ContentTypeUpdateTest extends BaseTest
     protected function getContentTypeUpdate()
     {
         return new ContentTypeUpdate(
-            $this->getUrlHandler(),
+            $this->getRequestParser(),
             $this->getContentTypeServiceMock(),
             $this->getParserTools()
         );

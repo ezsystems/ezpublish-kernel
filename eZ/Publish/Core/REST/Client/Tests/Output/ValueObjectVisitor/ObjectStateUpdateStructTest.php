@@ -141,7 +141,7 @@ class ObjectStateUpdateStructTest extends ValueObjectVisitorBaseTest
     protected function getObjectStateUpdateStructVisitor()
     {
         return new ValueObjectVisitor\ObjectStateUpdateStruct(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

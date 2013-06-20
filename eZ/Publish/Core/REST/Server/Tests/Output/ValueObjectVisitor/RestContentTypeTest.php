@@ -320,7 +320,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
     protected function getRestContentTypeVisitor()
     {
         return new ValueObjectVisitor\RestContentType(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

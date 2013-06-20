@@ -233,7 +233,7 @@ class UserUpdateTest extends BaseTest
     protected function getUserUpdate()
     {
         return new UserUpdate(
-            $this->getUrlHandler(),
+            $this->getRequestParser(),
             $this->getUserServiceMock(),
             $this->getContentServiceMock(),
             $this->getFieldTypeParserMock(),

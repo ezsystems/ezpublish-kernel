@@ -32,7 +32,7 @@ class ContentTypeGroupRefList extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'groupsOfType',
                 array(
                     'type' => $data->contentType->id
@@ -50,7 +50,7 @@ class ContentTypeGroupRefList extends ValueObjectVisitor
 
             $generator->startAttribute(
                 'href',
-                $this->urlHandler->generate(
+                $this->requestParser->generate(
                     'typegroup',
                     array(
                         'typegroup' => $contentTypeGroup->id
@@ -66,7 +66,7 @@ class ContentTypeGroupRefList extends ValueObjectVisitor
 
                 $generator->startAttribute(
                     'href',
-                    $this->urlHandler->generate(
+                    $this->requestParser->generate(
                         'groupOfType',
                         array(
                             'type' => $data->contentType->id,

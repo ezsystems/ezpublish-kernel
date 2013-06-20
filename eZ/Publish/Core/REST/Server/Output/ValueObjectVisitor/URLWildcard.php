@@ -32,7 +32,7 @@ class URLWildcard extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'urlWildcard', array( 'urlwildcard' => $data->id ) )
+            $this->requestParser->generate( 'urlWildcard', array( 'urlwildcard' => $data->id ) )
         );
         $generator->endAttribute( 'href' );
 

@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input;
 
 /**
@@ -23,9 +23,9 @@ abstract class BaseTest extends \eZ\Publish\Core\REST\Server\Tests\BaseTest
     protected $parsingDispatcherMock;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler\eZPublish
+     * @var \eZ\Publish\Core\REST\Common\RequestParser\eZPublish
      */
-    protected $urlHandler;
+    protected $requestParser;
 
     /**
      * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
@@ -53,17 +53,17 @@ abstract class BaseTest extends \eZ\Publish\Core\REST\Server\Tests\BaseTest
     }
 
     /**
-     * Get the URL handler
+     * Get the Request parser
      *
-     * @return \eZ\Publish\Core\REST\Common\UrlHandler\eZPublish
+     * @return \eZ\Publish\Core\REST\Common\RequestParser\eZPublish
      */
-    protected function getUrlHandler()
+    protected function getRequestParser()
     {
-        if ( !isset( $this->urlHandler ) )
+        if ( !isset( $this->requestParser ) )
         {
-            $this->urlHandler = new UrlHandler\eZPublish;
+            $this->requestParser = new RequestParser\eZPublish;
         }
-        return $this->urlHandler;
+        return $this->requestParser;
     }
 
     /**
