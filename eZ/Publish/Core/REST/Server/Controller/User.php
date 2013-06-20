@@ -124,7 +124,7 @@ class User extends RestController
     {
         //@todo Replace hardcoded value with one loaded from settings
         return new Values\PermanentRedirect(
-            $this->requestParser->generate( 'group', array( 'group' => '/1/5' ) )
+            $this->urlHandler->generate( 'ezpublish_rest_loadUserGroup', array( 'groupPath' => '/1/5' ) )
         );
     }
 
@@ -326,13 +326,13 @@ class User extends RestController
     /**
      * Updates a user
      *
-     * @param $userPath
+     * @param $userId
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RestUser
      */
-    public function updateUser( $userPath )
+    public function updateUser( $userId )
     {
-        $user = $this->userService->loadUser( $userPath );
+        $user = $this->userService->loadUser( $userId );
 
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
@@ -676,14 +676,14 @@ class User extends RestController
     /**
      * Returns a list of the sub groups
      *
+     * @param $groupPath
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\UserGroupList|\eZ\Publish\Core\REST\Server\Values\UserGroupRefList
      */
-    public function loadSubUserGroups()
+    public function loadSubUserGroups( $groupPath )
     {
-        $urlValues = $this->requestParser->parse( 'groupSubgroups', $this->request->path );
-
         $userGroupLocation = $this->locationService->loadLocation(
-            $this->extractLocationIdFromPath( $urlValues['group'] )
+            $this->extractLocationIdFromPath( $groupPath )
         );
 
         $userGroup = $this->userService->loadUserGroup(
@@ -721,13 +721,13 @@ class User extends RestController
      * The returned list includes the resources for unassigning
      * a user group if the user is in multiple groups.
      *
+     * @param $userId
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\UserGroupRefList
      */
-    public function loadUserGroupsOfUser()
+    public function loadUserGroupsOfUser( $userId )
     {
-        $urlValues = $this->requestParser->parse( 'userGroups', $this->request->path );
-
-        $user = $this->userService->loadUser( $urlValues['user'] );
+        $user = $this->userService->loadUser( $userId );
         $userGroups = $this->userService->loadUserGroupsOfUser( $user );
 
         $restUserGroups = array();
@@ -746,23 +746,20 @@ class User extends RestController
             );
         }
 
-        return new Values\UserGroupRefList( $restUserGroups, $this->request->path, $urlValues['user'] );
+        return new Values\UserGroupRefList( $restUserGroups, $this->request->path, $userId );
     }
 
     /**
      * Loads the users of the group with the given path
      *
+     * @param $groupPath
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\UserList|\eZ\Publish\Core\REST\Server\Values\UserRefList
      */
-    public function loadUsersFromGroup()
+    public function loadUsersFromGroup( $groupPath )
     {
-        $questionMark = strpos( $this->request->path, '?' );
-        $requestPath = $questionMark !== false ? substr( $this->request->path, 0, $questionMark ) : $this->request->path;
-
-        $urlValues = $this->requestParser->parse( 'groupUsers', $requestPath );
-
         $userGroupLocation = $this->locationService->loadLocation(
-            $this->extractLocationIdFromPath( $urlValues['group'] )
+            $this->extractLocationIdFromPath( $groupPath )
         );
 
         $userGroup = $this->userService->loadUserGroup(
@@ -805,14 +802,16 @@ class User extends RestController
     /**
      * Unassigns the user from a user group
      *
+     * @param $userId
+     * @param $groupPath
+     *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\UserGroupRefList
      */
-    public function unassignUserFromUserGroup()
+    public function unassignUserFromUserGroup( $userId, $groupPath )
     {
-        $urlValues = $this->requestParser->parse( 'userGroup', $this->request->path );
-
-        $user = $this->userService->loadUser( $urlValues['user'] );
-        $userGroupLocation = $this->locationService->loadLocation( trim( $urlValues['group'], '/' ) );
+        $user = $this->userService->loadUser( $userId );
+        $userGroupLocation = $this->locationService->loadLocation( trim( $groupPath, '/' ) );
 
         $userGroup = $this->userService->loadUserGroup(
             $userGroupLocation->contentId
@@ -847,21 +846,25 @@ class User extends RestController
 
         return new Values\UserGroupRefList(
             $restUserGroups,
-            $this->requestParser->generate( 'userGroups', array( 'user' => $urlValues['user'] ) ),
-            $urlValues['user']
+            $this->urlHandler->generate(
+                'ezpublish_rest_loadUserGroupsOfUser',
+                array( 'userId' => $userId )
+            ),
+            $userId
         );
     }
 
     /**
      * Assigns the user to a user group
      *
+     * @param $userId
+     *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\UserGroupRefList
      */
-    public function assignUserToUserGroup()
+    public function assignUserToUserGroup( $userId )
     {
-        $urlValues = $this->requestParser->parse( 'userGroupAssign', $this->request->path );
-
-        $user = $this->userService->loadUser( $urlValues['user'] );
+        $user = $this->userService->loadUser( $userId );
 
         try
         {
@@ -913,13 +916,19 @@ class User extends RestController
 
         return new Values\UserGroupRefList(
             $restUserGroups,
-            $this->requestParser->generate( 'userGroups', array( 'user' => $urlValues['user'] ) ),
-            $urlValues['user']
+            $this->urlHandler->generate(
+                'ezpublish_rest_loadUserGroupsOfUser',
+                array( 'userId' => $userId )
+            ),
+            $userId
         );
     }
 
     /**
      * Creates a new session based on the credentials provided as POST parameters
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException If the login or password are incorrect
+     * @return Values\UserSession|Values\Conflict|Values\SeeOther
      */
     public function createSession()
     {
@@ -955,8 +964,8 @@ class User extends RestController
             if ( $user->id == $currentUser->id )
             {
                 return new Values\SeeOther(
-                    $this->requestParser->generate(
-                        'userSession',
+                    $this->urlHandler->generate(
+                        'ezpublish_rest_deleteSession',
                         array( 'sessionId' => $session->getId() )
                     )
                 );
