@@ -370,6 +370,7 @@ XML;
         );
         $request->setContent( $xml );
         $response = $this->sendHttpRequest( $request );
+
         self::assertHttpResponseCodeEquals( $response, 201 );
         self::assertHttpResponseHasHeader( $response, 'Location' );
 

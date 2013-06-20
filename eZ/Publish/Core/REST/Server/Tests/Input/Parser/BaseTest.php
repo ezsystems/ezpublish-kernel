@@ -53,7 +53,7 @@ abstract class BaseTest extends \eZ\Publish\Core\REST\Server\Tests\BaseTest
     }
 
     /**
-     * Get the URL handler
+     * Get the Request parser
      *
      * @return \eZ\Publish\Core\REST\Common\RequestParser\eZPublish
      */
@@ -61,7 +61,7 @@ abstract class BaseTest extends \eZ\Publish\Core\REST\Server\Tests\BaseTest
     {
         if ( !isset( $this->requestParser ) )
         {
-            $this->requestParser = new UrlHandler\eZPublish;
+            $this->requestParser = new RequestParser\eZPublish;
         }
         return $this->requestParser;
     }

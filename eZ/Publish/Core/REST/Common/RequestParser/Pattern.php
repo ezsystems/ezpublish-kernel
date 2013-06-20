@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Pattern UrlHandler class
+ * File containing the Pattern RequestParser class
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -13,7 +13,7 @@ use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Exceptions;
 
 /**
- * Pattern based URL Handler
+ * Pattern based Request parser
  *
  * Handles 2 types of patterns to be used in an URL:
  *

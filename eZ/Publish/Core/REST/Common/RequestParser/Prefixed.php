@@ -8,9 +8,9 @@
  */
 namespace eZ\Publish\Core\REST\Common\RequestParser;
 
-use eZ\Publish\Core\REST\Common\RequestParser\eZPublish as EzPublishUrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser\eZPublish as EzPublishRequestParser;
 
-class Prefixed extends EzPublishUrlHandler
+class Prefixed extends EzPublishRequestParser
 {
     /**
      * @var string

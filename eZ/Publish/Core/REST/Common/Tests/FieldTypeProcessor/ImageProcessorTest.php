@@ -64,7 +64,7 @@ class ImageProcessorTest extends BinaryInputProcessorTest
     {
         if ( !isset( $this->requestParser ) )
         {
-            $this->requestParser = $this->getMock( 'eZ\\Publish\\Core\\REST\\Common\\UrlHandler' );
+            $this->requestParser = $this->getMock( 'eZ\\Publish\\Core\\REST\\Common\\RequestParser' );
         }
         return $this->requestParser;
     }

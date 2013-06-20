@@ -6,6 +6,7 @@ use eZ\Publish\Core\REST\Server\Output;
 use eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher;
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 use eZ\Publish\Core\REST\Common;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\IO\IOService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use eZ\Publish\API\Repository\Repository;
@@ -183,12 +184,12 @@ class Factory
     /**
      * Factory for ezpublish_rest.field_type_processor.ezimage
      *
-     * @param Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
+     *
      * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\ImageProcessor
      */
-    public function getImageFieldTypeProcessor( \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler )
+    public function getImageFieldTypeProcessor( RequestParser $requestParser )
     {
-        // @todo variation list seems to be empty, investigate
         $configResolver = $this->container->get( 'ezpublish.config.resolver' );
         $variationsIdentifiers = array_keys( $configResolver->getParameter( 'image_variations' ) );
         sort( $variationsIdentifiers );
@@ -199,7 +200,7 @@ class Factory
             sys_get_temp_dir(),
             // URL schema for image links
             // @todo get configuration
-            $urlHandler,
+            $requestParser,
             // Image variations (names only)
             $variationsIdentifiers
         );
