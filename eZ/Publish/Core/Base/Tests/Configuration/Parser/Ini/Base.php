@@ -161,7 +161,7 @@ empty-array[]';
     {
         $iniString = '
 [test]
-conditions[eZ\\Testing\\Filter_Get::dev]="uri\\0:content\\uri\\1:^v\\auth:?php\\params:%php"
+conditions[eZ\\Testing\\Filter_Get::dev]=uri\\0:content\\uri\\1:v\\auth:?php\\params:%php
 conditions[$user_object->check]=ezp/system/router\\eZ\\Testing\\Filter_Get::dev
 conditions[]=uri\\0:§£$content
 conditions[][]=subOne
@@ -201,7 +201,7 @@ legacy.dsn=sqlite://:memory:
         $expects = array(
             'test' => array(
                 'conditions' => array(
-                    'eZ\\Testing\\Filter_Get::dev' => 'uri\\0:content\\uri\\1:^v\\auth:?php\\params:%php',
+                    'eZ\\Testing\\Filter_Get::dev' => 'uri\\0:content\\uri\\1:v\\auth:?php\\params:%php',
                     '$user_object->check' => 'ezp/system/router\\eZ\\Testing\\Filter_Get::dev',
                     0 => 'uri\\0:§£$content',
                     1 => array( 'subOne' ),
