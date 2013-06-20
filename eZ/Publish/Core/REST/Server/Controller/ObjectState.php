@@ -56,6 +56,7 @@ class ObjectState extends RestController
     /**
      * Creates a new object state group
      *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedObjectStateGroup
      */
     public function createObjectStateGroup()
@@ -243,6 +244,7 @@ class ObjectState extends RestController
     /**
      * Updates an object state
      *
+     * @param $objectStateGroupId
      * @param $objectStateId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException

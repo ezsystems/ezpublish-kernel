@@ -80,6 +80,7 @@ class Section extends RestController
     /**
      * Create new section
      *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedSection
      */
     public function createSection()

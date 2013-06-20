@@ -100,6 +100,7 @@ class URLAlias extends RestController
     /**
      * Creates a new URL alias
      *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedURLAlias
      */
     public function createURLAlias()

@@ -284,6 +284,8 @@ class Content extends RestController
     /**
      * Creates a new content object as copy under the given parent location given in the destination header.
      *
+     * @param $contentId
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
     public function copyContent( $contentId )
@@ -419,7 +421,8 @@ class Content extends RestController
      * @param mixed $contentId
      * @param mixed $versionNumber
      *
-     * @throw ForbiddenException if the requested version isn't a draft
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException
      * @return \eZ\Publish\Core\REST\Server\Values\Version
      */
     public function updateVersion( $contentId, $versionNumber )
@@ -573,9 +576,10 @@ class Content extends RestController
      * Loads a relation for the given content object and version
      *
      * @param mixed $contentId
-     * @param int $versionNumber
+     * @param int   $versionNumber
      * @param mixed $relationId
      *
+     * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
      * @return \eZ\Publish\Core\REST\Server\Values\RestRelation
      */
     public function loadVersionRelation( $contentId, $versionNumber, $relationId )
@@ -602,11 +606,11 @@ class Content extends RestController
      * Deletes a relation of the given draft.
      *
      * @param mixed $contentId
-     * @param int $versionNumber
+     * @param int   $versionNumber
      * @param mixed $relationId
      *
-     * @throws ForbiddenException if the relation isn't of type COMMON
-     * @throws ForbiddenException if the version isn't  a draft
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function removeRelation( $contentId, $versionNumber, $relationId )

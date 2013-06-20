@@ -184,6 +184,8 @@ class Role extends RestController
     /**
      * Deletes all policies from a role
      *
+     * @param $roleId
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deletePolicies( $roleId )
@@ -379,7 +381,6 @@ class Role extends RestController
      * @param $userId
      * @param $roleId
      *
-     * @internal param $groupPath
      * @return \eZ\Publish\Core\REST\Server\Values\RoleAssignmentList
      */
     public function unassignRoleFromUser( $userId, $roleId )

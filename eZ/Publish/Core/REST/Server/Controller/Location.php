@@ -162,6 +162,8 @@ class Location extends RestController
     /**
      * Copies a subtree to a new destination
      *
+     * @param $locationPath
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
     public function copySubtree( $locationPath )
@@ -190,8 +192,9 @@ class Location extends RestController
     /**
      * Moves a subtree to a new location
      *
-     * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException if the Destination header cannot be parsed as location or trash
+     * @param $locationPath
      *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException if the Destination header cannot be parsed as location or trash
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
     public function moveSubtree( $locationPath )

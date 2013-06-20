@@ -1003,6 +1003,7 @@ class User extends RestController
      * Deletes given session.
      *
      * @param string $sessionId
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      * @throws RestNotFoundException
      */
     public function deleteSession( $sessionId )

@@ -66,6 +66,7 @@ class URLWildcard extends RestController
     /**
      * Creates a new URL wildcard
      *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedURLWildcard
      */
     public function createURLWildcard()
@@ -99,6 +100,8 @@ class URLWildcard extends RestController
 
     /**
      * The given URL wildcard is deleted
+     *
+     * @param $urlWildcardId
      *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */

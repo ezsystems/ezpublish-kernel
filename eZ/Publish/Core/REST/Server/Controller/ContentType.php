@@ -49,6 +49,7 @@ class ContentType extends RestController
     /**
      * Creates a new content type group
      *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedContentTypeGroup
      */
     public function createContentTypeGroup()
@@ -77,12 +78,12 @@ class ContentType extends RestController
     /**
      * Updates a content type group
      *
-     * @param $contentTypeGroupId
+     * @param $contentTypeGroupPath
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function updateContentTypeGroup( $contentTypeGroupId )
+    public function updateContentTypeGroup( $contentTypeGroupPath )
     {
         $createStruct = $this->inputDispatcher->parse(
             new Message(
@@ -94,11 +95,11 @@ class ContentType extends RestController
         try
         {
             $this->contentTypeService->updateContentTypeGroup(
-                $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId ),
+                $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupPath ),
                 $this->mapToGroupUpdateStruct( $createStruct )
             );
 
-            return $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId );
+            return $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupPath );
         }
         catch ( InvalidArgumentException $e )
         {
@@ -109,14 +110,14 @@ class ContentType extends RestController
     /**
      * Returns a list of content types of the group
      *
+     * @param string $contentTypeGroupPath
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeList|\eZ\Publish\Core\REST\Server\Values\ContentTypeInfoList
      */
-    public function listContentTypesForGroup()
+    public function listContentTypesForGroup( $contentTypeGroupPath )
     {
-        $urlValues = $this->requestParser->parse( 'grouptypes', $this->request->path );
-
         $contentTypes = $this->contentTypeService->loadContentTypes(
-            $this->contentTypeService->loadContentTypeGroup( $urlValues['typegroup'] )
+            $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupPath )
         );
 
         if ( $this->getMediaType( $this->request ) == 'application/vnd.ez.api.contenttypelist' )
@@ -130,14 +131,14 @@ class ContentType extends RestController
     /**
      * The given content type group is deleted
      *
-     * @param $contentTypeGroupId
+     * @param mixed $contentTypeGroupPath
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function deleteContentTypeGroup( $contentTypeGroupId )
+    public function deleteContentTypeGroup( $contentTypeGroupPath )
     {
-        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId );
+        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupPath );
 
         $contentTypes = $this->contentTypeService->loadContentTypes( $contentTypeGroup );
         if ( !empty( $contentTypes ) )
@@ -181,13 +182,13 @@ class ContentType extends RestController
     /**
      * Returns the content type group given by id
      *
-     * @param $contentTypeGroupId
+     * @param $contentTypeGroupPath
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function loadContentTypeGroup( $contentTypeGroupId )
+    public function loadContentTypeGroup( $contentTypeGroupPath )
     {
-        return $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId );
+        return $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupPath );
     }
 
     /**
@@ -264,11 +265,15 @@ class ContentType extends RestController
     /**
      * Creates a new content type draft in the given content type group
      *
+     * @param $contentTypeGroupPath
+     *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedContentType
      */
-    public function createContentType( $contentTypeGroupId )
+    public function createContentType( $contentTypeGroupPath )
     {
-        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId );
+        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupPath );
 
         try
         {
@@ -325,6 +330,8 @@ class ContentType extends RestController
     /**
      * Copies a content type. The identifier of the copy
      * is changed to copy_of_<identifier> and a new remoteId is generated.
+     *
+     * @param $contentTypeId
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
@@ -834,16 +841,16 @@ class ContentType extends RestController
      * Removes the given group from the content type and returns the updated group list
      *
      * @param $contentTypeId
-     * @param $contentTypeGroupId
+     * @param $contentTypeGroupPath
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeGroupRefList
      */
-    public function unlinkContentTypeFromGroup( $contentTypeId, $contentTypeGroupId )
+    public function unlinkContentTypeFromGroup( $contentTypeId, $contentTypeGroupPath )
     {
         $contentType = $this->contentTypeService->loadContentType( $contentTypeId );
-        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId );
+        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupPath );
 
         $existingContentTypeGroups = $contentType->getContentTypeGroups();
         $contentTypeInGroup = false;

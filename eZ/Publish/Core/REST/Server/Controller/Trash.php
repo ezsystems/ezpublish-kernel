@@ -116,6 +116,8 @@ class Trash extends RestController
     /**
      * Deletes the given trash item
      *
+     * @param $trashItemId
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteTrashItem( $trashItemId )
