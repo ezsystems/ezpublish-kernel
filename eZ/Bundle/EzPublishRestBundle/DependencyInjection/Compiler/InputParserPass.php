@@ -17,22 +17,22 @@ class InputParserPass implements CompilerPassInterface
 {
     public function process( ContainerBuilder $container )
     {
-        if ( !$container->hasDefinition( 'ezpublish_rest.input_parsing_dispatcher' ) )
+        if ( !$container->hasDefinition( 'ezpublish_rest.input.parsing_dispatcher' ) )
         {
             return;
         }
 
-        $definition = $container->getDefinition( 'input_parsing_dispatcher' );
+        $definition = $container->getDefinition( 'ezpublish_rest.input.parsing_dispatcher' );
 
         // @todo rethink the relationships between registries. Rename if required.
-        foreach ( $container->findTaggedServiceIds( 'ezpublish_rest.input_parser' ) as $id => $attributes )
+        foreach ( $container->findTaggedServiceIds( 'ezpublish_rest.input.parser' ) as $id => $attributes )
         {
             if ( !isset( $attributes[0]['contentType'] ) )
-                throw new \LogicException( 'ezpublish_rest.input_parser service tag needs a "contentType" attribute to identify the input parser. None given.' );
+                throw new \LogicException( 'ezpublish_rest.input.parser service tag needs a "contentType" attribute to identify the input parser. None given.' );
 
-            $definition->addParser(
-                'registerProcessor',
-                array( $attributes[0]["alias"], new Reference( $id ) )
+            $definition->addMethodCall(
+                'addParser',
+                array( $attributes[0]["contentType"], new Reference( $id ) )
             );
         }
 

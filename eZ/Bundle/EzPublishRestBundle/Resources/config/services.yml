@@ -362,6 +362,7 @@ services:
         factory_service: ezpublish_rest.factory
         arguments:
             - @ezpublish_rest.input.parsing_dispatcher
+            - []
             - @ezpublish_rest.request_parser
             - @ezpublish_rest.parser_tools
             - @ezpublish_rest.field_type_parser
