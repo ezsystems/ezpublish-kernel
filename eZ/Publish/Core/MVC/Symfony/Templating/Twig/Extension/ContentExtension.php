@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
@@ -143,7 +144,8 @@ class ContentExtension extends Twig_Extension
                 'renderFieldDefinitionSettings',
                 array( 'is_safe' => array( 'html' ) )
             ),
-            'ez_image_alias' => new Twig_Function_Method( $this, 'getImageVariation' )
+            'ez_image_alias' => new Twig_Function_Method( $this, 'getImageVariation' ),
+            'ez_content_by_contentinfo' => new Twig_Function_Method( $this, 'contentByContentInfo' )
         );
     }
 
@@ -355,6 +357,16 @@ class ContentExtension extends Twig_Extension
             $this->imageVariationService = $this->container->get( 'ezpublish.fieldType.ezimage.variation_service' );
 
         return $this->imageVariationService->getVariation( $field, $versionInfo, $variationName );
+    }
+
+    /**
+     * @param ContentInfo $contentInfo
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    public function contentByContentInfo( ContentInfo $contentInfo )
+    {
+        $repository = $this->container->get( 'ezpublish.api.repository' );
+        return $repository->getContentService()->loadContentByContentInfo( $contentInfo );
     }
 
     /**
