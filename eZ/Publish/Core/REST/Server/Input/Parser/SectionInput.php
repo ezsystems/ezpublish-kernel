@@ -29,12 +29,10 @@ class SectionInput extends Base
     /**
      * Construct
      *
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\SectionService $sectionService
      */
-    public function __construct( RequestParser $requestParser, SectionService $sectionService )
+    public function __construct( SectionService $sectionService )
     {
-        parent::__construct( $requestParser );
         $this->sectionService = $sectionService;
     }
 

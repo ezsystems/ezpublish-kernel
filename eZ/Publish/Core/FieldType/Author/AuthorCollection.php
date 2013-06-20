@@ -26,7 +26,6 @@ class AuthorCollection extends ArrayObject
     {
         // Call parent constructor without $elements because all author elements
         // must be given an id by $this->offsetSet()
-        parent::__construct();
         foreach ( $elements as $i => $author )
         {
             $this->offsetSet( $i, $author );

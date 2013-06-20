@@ -45,13 +45,11 @@ class FieldDefinitionUpdate extends Base
     /**
      * Construct
      *
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( RequestParser $requestParser, ContentTypeService $contentTypeService, FieldTypeParser $fieldTypeParser, ParserTools $parserTools )
+    public function __construct( ContentTypeService $contentTypeService, FieldTypeParser $fieldTypeParser, ParserTools $parserTools )
     {
-        parent::__construct( $requestParser );
         $this->contentTypeService = $contentTypeService;
         $this->fieldTypeParser = $fieldTypeParser;
         $this->parserTools = $parserTools;

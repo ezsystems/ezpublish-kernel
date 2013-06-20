@@ -38,13 +38,11 @@ class ContentTypeUpdate extends Base
     /**
      * Construct
      *
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( RequestParser $requestParser, ContentTypeService $contentTypeService, ParserTools $parserTools )
+    public function __construct( ContentTypeService $contentTypeService, ParserTools $parserTools )
     {
-        parent::__construct( $requestParser );
         $this->contentTypeService = $contentTypeService;
         $this->parserTools = $parserTools;
     }

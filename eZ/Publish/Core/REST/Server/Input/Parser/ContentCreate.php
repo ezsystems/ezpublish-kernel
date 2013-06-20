@@ -62,21 +62,18 @@ class ContentCreate extends Base
     /**
      * Construct
      *
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      * @param \eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser
      * @param \eZ\Publish\Core\REST\Server\Input\Parser\LocationCreate $locationCreateParser
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( RequestParser $requestParser,
-                                 ContentService $contentService,
+    public function __construct( ContentService $contentService,
                                  ContentTypeService $contentTypeService,
                                  FieldTypeParser $fieldTypeParser,
                                  LocationCreate $locationCreateParser,
                                  ParserTools $parserTools )
     {
-        parent::__construct( $requestParser );
         $this->contentService = $contentService;
         $this->contentTypeService = $contentTypeService;
         $this->fieldTypeParser = $fieldTypeParser;

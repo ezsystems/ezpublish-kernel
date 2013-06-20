@@ -35,13 +35,11 @@ class RoleInput extends Base
     /**
      * Construct
      *
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\RoleService $roleService
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( RequestParser $requestParser, RoleService $roleService, ParserTools $parserTools )
+    public function __construct( RoleService $roleService, ParserTools $parserTools )
     {
-        parent::__construct( $requestParser );
         $this->roleService = $roleService;
         $this->parserTools = $parserTools;
     }
