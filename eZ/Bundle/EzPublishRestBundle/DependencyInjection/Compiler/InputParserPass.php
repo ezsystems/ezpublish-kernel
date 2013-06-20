@@ -27,8 +27,8 @@ class InputParserPass implements CompilerPassInterface
         // @todo rethink the relationships between registries. Rename if required.
         foreach ( $container->findTaggedServiceIds( 'ezpublish_rest.input_parser' ) as $id => $attributes )
         {
-            if ( !isset( $attributes[0]['alias'] ) )
-                throw new \LogicException( 'ezpublish_rest.input_parser service tag needs an "alias" attribute to identify the field type. None given.' );
+            if ( !isset( $attributes[0]['contentType'] ) )
+                throw new \LogicException( 'ezpublish_rest.input_parser service tag needs a "contentType" attribute to identify the input parser. None given.' );
 
             $definition->addParser(
                 'registerProcessor',
