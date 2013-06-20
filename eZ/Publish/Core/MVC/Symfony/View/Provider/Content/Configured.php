@@ -9,14 +9,11 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Provider\Content;
 
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Configured as BaseConfigured;
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Content as ContentViewProvider;
-use eZ\Publish\Core\MVC\Symfony\View\Provider\ContentBasedConfigured as ProviderConfigured;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher;
-use eZ\Publish\API\Repository\Values\ValueObject;
-use InvalidArgumentException;
 
-class Configured extends ProviderConfigured implements ContentViewProvider
+class Configured extends BaseConfigured implements ContentViewProvider
 {
     /**
      * Returns a ContentView object corresponding to $contentInfo, or null if not applicable
@@ -28,20 +25,12 @@ class Configured extends ProviderConfigured implements ContentViewProvider
      */
     public function getView( ContentInfo $contentInfo, $viewType )
     {
-        if ( !isset( $this->matchConfig[$viewType] ) )
+        $viewConfig = $this->matcherFactory->match( $contentInfo, $viewType );
+        if ( empty( $viewConfig ) )
+        {
             return;
+        }
 
-        return $this->doMatch( $this->matchConfig[$viewType], $contentInfo );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function match( ViewProviderMatcher $matcher, ValueObject $valueObject )
-    {
-        if ( !$valueObject instanceof ContentInfo )
-            throw new InvalidArgumentException( 'Value object must be a valid ContentInfo instance' );
-
-        return $matcher->matchContentInfo( $valueObject );
+        return $this->buildContentView( $viewConfig );
     }
 }

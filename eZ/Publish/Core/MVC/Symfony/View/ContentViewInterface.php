@@ -73,4 +73,22 @@ interface ContentViewInterface
      * @return mixed
      */
     public function getParameter( $parameterName );
+
+    /**
+     * Injects the config hash that was used to match and generate the current view.
+     * Typically, the hash would have as keys:
+     *  - template : The template that has been matched
+     *  - match : The matching configuration, including the matcher "identifier" and what has been passed to it.
+     *  - matcher : The matcher object
+     *
+     * @param array $config
+     */
+    public function setConfigHash( array $config );
+
+    /**
+     * Returns the config hash.
+     *
+     * @return array|null
+     */
+    public function getConfigHash();
 }
