@@ -14,9 +14,6 @@ parameters:
     ezpublish_rest.controller.url_alias.class: eZ\Publish\Core\REST\Server\Controller\URLAlias
 
     ezpublish_rest.factory.class: eZ\Bundle\EzPublishRestBundle\ApiLoader\Factory
-    ezpublish_rest.input_parser.class: eZ\Publish\Core\REST\Server\Input\Parser
-    ezpublish_rest.input_dispatcher.class: eZ\Publish\Core\REST\Common\Input\Dispatcher
-    ezpublish_rest.input_parsing_dispatcher.class: eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
     ezpublish_rest.request_parser.class: eZ\Publish\Core\REST\Common\RequestParser\Prefixed
     ezpublish_rest.parser_tools.class: eZ\Publish\Core\REST\Common\Input\ParserTools
     ezpublish_rest.field_type_parser.class: eZ\Publish\Core\REST\Common\Input\FieldTypeParser
@@ -52,6 +49,66 @@ parameters:
 
     ezpublish_rest.output.value_object_visitor.dispatcher.class: eZ\Publish\Core\REST\Common\Output\ValueObjectVisitorDispatcher
     ezpublish_rest.output.value_object_visitor.Exception.InvalidArgumentException.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\InvalidArgumentException
+
+    ezpublish_rest.input_parser.class: eZ\Publish\Core\REST\Server\Input\Parser
+    ezpublish_rest.input_dispatcher.class: eZ\Publish\Core\REST\Common\Input\Dispatcher
+    ezpublish_rest.input_parsing_dispatcher.class: eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
+    ezpublish_rest.input_parser.ContentCreate.class: eZ\Publish\Core\REST\Input\Parser\ContentCreate
+    ezpublish_rest.input_parser.ContentUpdate.class: eZ\Publish\Core\REST\Input\Parser\ContentUpdate
+    ezpublish_rest.input_parser.ContentObjectStates.class: eZ\Publish\Core\REST\Input\Parser\ContentObjectStates
+    ezpublish_rest.input_parser.ContentTypeGroupInput.class: eZ\Publish\Core\REST\Input\Parser\ContentTypeGroupInput
+    ezpublish_rest.input_parser.ContentTypeCreate.class: eZ\Publish\Core\REST\Input\Parser\ContentTypeCreate
+    ezpublish_rest.input_parser.ContentTypeUpdate.class: eZ\Publish\Core\REST\Input\Parser\ContentTypeUpdate
+    ezpublish_rest.input_parser.FieldDefinitionUpdate.class: eZ\Publish\Core\REST\Input\Parser\FieldDefinitionUpdate
+    ezpublish_rest.input_parser.LocationCreate.class: eZ\Publish\Core\REST\Input\Parser\LocationCreate
+    ezpublish_rest.input_parser.LocationUpdate.class: eZ\Publish\Core\REST\Input\Parser\LocationUpdate
+    ezpublish_rest.input_parser.ObjectStateCreate.class: eZ\Publish\Core\REST\Input\Parser\ObjectStateCreate
+    ezpublish_rest.input_parser.ObjectStateGroupCreate.class: eZ\Publish\Core\REST\Input\Parser\ObjectStateGroupCreate
+    ezpublish_rest.input_parser.ObjectStateGroupUpdate.class: eZ\Publish\Core\REST\Input\Parser\ObjectStateGroupUpdate
+    ezpublish_rest.input_parser.ObjectStateUpdate.class: eZ\Publish\Core\REST\Input\Parser\ObjectStateUpdate
+    ezpublish_rest.input_parser.PolicyCreate.class: eZ\Publish\Core\REST\Input\Parser\PolicyCreate
+    ezpublish_rest.input_parser.PolicyUpdate.class: eZ\Publish\Core\REST\Input\Parser\PolicyUpdate
+    ezpublish_rest.input_parser.RelationCreate.class: eZ\Publish\Core\REST\Input\Parser\RelationCreate
+    ezpublish_rest.input_parser.RoleAssignInput.class: eZ\Publish\Core\REST\Input\Parser\RoleAssignInput
+    ezpublish_rest.input_parser.RoleInput.class: eZ\Publish\Core\REST\Input\Parser\RoleInput
+    ezpublish_rest.input_parser.SectionInput.class: eZ\Publish\Core\REST\Input\Parser\SectionInput
+    ezpublish_rest.input_parser.UserGroupUpdate.class: eZ\Publish\Core\REST\Input\Parser\UserGroupUpdate
+    ezpublish_rest.input_parser.UserUpdate.class: eZ\Publish\Core\REST\Input\Parser\UserUpdate
+    ezpublish_rest.input_parser.UrlWildcardCreate.class: eZ\Publish\Core\REST\Input\Parser\UrlWildcardCreate
+    ezpublish_rest.input_parser.UrlAliasCreate.class: eZ\Publish\Core\REST\Input\Parser\UrlAliasCreate
+    ezpublish_rest.input_parser.UserCreate.class: eZ\Publish\Core\REST\Input\Parser\UserCreate
+    ezpublish_rest.input_parser.UserGroupCreate.class: eZ\Publish\Core\REST\Input\Parser\UserGroupCreate
+    ezpublish_rest.input_parser.SessionInput.class: eZ\Publish\Core\REST\Input\Parser\SessionInput
+    ezpublish_rest.input_parser.VersionUpdate.class: eZ\Publish\Core\REST\Input\Parser\VersionUpdate
+    ezpublish_rest.input_parser.ViewInput.class: eZ\Publish\Core\REST\Input\Parser\ViewInput
+
+    ezpublish_rest.input_parser.internal.criterion.ContentId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\ContentId
+    ezpublish_rest.input_parser.internal.criterion.ContentRemoteId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\ContentRemoteId
+    ezpublish_rest.input_parser.internal.criterion.ContentTypeGroupId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\ContentTypeGroupId
+    ezpublish_rest.input_parser.internal.criterion.ContentTypeId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\ContentTypeId
+    ezpublish_rest.input_parser.internal.criterion.ContentTypeIdentifier.class: eZ\Publish\Core\REST\Input\Parser\Criterion\ContentTypeIdentifier
+    ezpublish_rest.input_parser.internal.criterion.DateMetadata.class: eZ\Publish\Core\REST\Input\Parser\Criterion\DateMetadata
+    ezpublish_rest.input_parser.internal.criterion.Field.class: eZ\Publish\Core\REST\Input\Parser\Criterion\Field
+    ezpublish_rest.input_parser.internal.criterion.FullText.class: eZ\Publish\Core\REST\Input\Parser\Criterion\FullText
+    ezpublish_rest.input_parser.internal.criterion.LanguageCode.class: eZ\Publish\Core\REST\Input\Parser\Criterion\LanguageCode
+    ezpublish_rest.input_parser.internal.criterion.LocationId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\LocationId
+    ezpublish_rest.input_parser.internal.criterion.LocationRemoteId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\LocationRemoteId
+    ezpublish_rest.input_parser.internal.criterion.LogicalAnd.class: eZ\Publish\Core\REST\Input\Parser\Criterion\LogicalAnd
+    ezpublish_rest.input_parser.internal.criterion.LogicalNot.class: eZ\Publish\Core\REST\Input\Parser\Criterion\LogicalNot
+    ezpublish_rest.input_parser.internal.criterion.LogicalOperator.class: eZ\Publish\Core\REST\Input\Parser\Criterion\LogicalOperator
+    ezpublish_rest.input_parser.internal.criterion.LogicalOr.class: eZ\Publish\Core\REST\Input\Parser\Criterion\LogicalOr
+    ezpublish_rest.input_parser.internal.criterion.MoreLikeThis.class: eZ\Publish\Core\REST\Input\Parser\Criterion\MoreLikeThis
+    ezpublish_rest.input_parser.internal.criterion.ObjectStateId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\ObjectStateId
+    ezpublish_rest.input_parser.internal.criterion.Operator.class: eZ\Publish\Core\REST\Input\Parser\Criterion\Operator
+    ezpublish_rest.input_parser.internal.criterion.ParentLocationId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\ParentLocationId
+    ezpublish_rest.input_parser.internal.criterion.ParentLocationRemoteId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\ParentLocationRemoteId
+    ezpublish_rest.input_parser.internal.criterion.SectionIdentifier.class: eZ\Publish\Core\REST\Input\Parser\Criterion\SectionIdentifier
+    ezpublish_rest.input_parser.internal.criterion.SectionId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\SectionId
+    ezpublish_rest.input_parser.internal.criterion.Status.class: eZ\Publish\Core\REST\Input\Parser\Criterion\Status
+    ezpublish_rest.input_parser.internal.criterion.Subtree.class: eZ\Publish\Core\REST\Input\Parser\Criterion\Subtree
+    ezpublish_rest.input_parser.internal.criterion.UrlAlias.class: eZ\Publish\Core\REST\Input\Parser\Criterion\UrlAlias
+    ezpublish_rest.input_parser.internal.criterion.UserMetadata.class: eZ\Publish\Core\REST\Input\Parser\Criterion\UserMetadata
+    ezpublish_rest.input_parser.internal.criterion.Visibility.class: eZ\Publish\Core\REST\Input\Parser\Criterion\Visibility
 
 services:
     ezpublish_rest.field_type_serializer:
@@ -197,42 +254,42 @@ services:
             # @todo change to @router
             - @ezpublish_rest.request_parser
         tags:
-            - { name: ezpublish_rest.field_type_processor, alias: application/vnd.ez.api.ezimage }
+            - { name: ezpublish_rest.field_type_processor, alias: ezimage }
 
     ezpublish_rest.field_type_processor.ezdatetime:
         class: %ezpublish_rest.field_type_processor.ezdatetime.class%
         tags:
-            - { name: ezpublish_rest.field_type_processor, alias: application/vnd.ez.api.ezdatetime }
+            - { name: ezpublish_rest.field_type_processor, alias: ezdatetime }
 
     ezpublish_rest.field_type_processor.ezdate:
         class: %ezpublish_rest.field_type_processor.ezdate.class%
         tags:
-            - { name: ezpublish_rest.field_type_processor, alias: application/vnd.ez.api.ezdate }
+            - { name: ezpublish_rest.field_type_processor, alias: ezdate }
 
     ezpublish_rest.field_type_processor.ezmedia:
         class: %ezpublish_rest.field_type_processor.ezmedia.class%
         tags:
-            - { name: ezpublish_rest.field_type_processor, alias: application/vnd.ez.api.ezmedia }
+            - { name: ezpublish_rest.field_type_processor, alias: ezmedia }
 
     ezpublish_rest.field_type_processor.ezobjectrelationlist:
         class: %ezpublish_rest.field_type_processor.ezobjectrelationlist.class%
         tags:
-            - { name: ezpublish_rest.field_type_processor, alias: application/vnd.ez.api.ezobjectrelationlist }
+            - { name: ezpublish_rest.field_type_processor, alias: ezobjectrelationlist }
 
     ezpublish_rest.field_type_processor.ezobjectrelation:
         class: %ezpublish_rest.field_type_processor.ezobjectrelation.class%
         tags:
-            - { name: ezpublish_rest.field_type_processor, alias: application/vnd.ez.api.ezobjectrelation }
+            - { name: ezpublish_rest.field_type_processor, alias: ezobjectrelation }
 
     ezpublish_rest.field_type_processor.eztime:
         class: %ezpublish_rest.field_type_processor.eztime.class%
         tags:
-            - { name: ezpublish_rest.field_type_processor, alias: application/vnd.ez.api.eztime }
+            - { name: ezpublish_rest.field_type_processor, alias: eztime }
 
     ezpublish_rest.field_type_processor.ezxmltext:
         class: %ezpublish_rest.field_type_processor.ezxmltext.class%
         tags:
-            - { name: ezpublish_rest.field_type_processor, alias: application/vnd.ez.api.ezxmltext }
+            - { name: ezpublish_rest.field_type_processor, alias: ezxmltext }
 
     ezpublish_rest.field_type_processor.ezbinaryfile:
         class: %ezpublish_rest.field_type_processor.ezbinaryfile.class%
@@ -241,12 +298,12 @@ services:
         arguments:
             - @ezpublish.fieldtype.ezbinaryfile.ioservice
         tags:
-            - { name: ezpublish_rest.field_type_processor, alias: application/vnd.ez.api.ezbinaryfile }
+            - { name: ezpublish_rest.field_type_processor, alias: ezbinaryfile }
 
     ezpublish_rest.field_type_processor.ezpage:
         class: %ezpublish_rest.field_type_processor.ezpage.class%
         tags:
-            - { name: ezpublish_rest.field_type_processor, alias: application/vnd.ez.api.ezpage }
+            - { name: ezpublish_rest.field_type_processor, alias: ezpage }
 
     ### OUTPUT
 
@@ -316,365 +373,427 @@ services:
         calls:
             - [ setRequestParser, [ @ezpublish_rest.request_parser ] ]
 
-    ezpublish_rest.input_parser.RoleInput:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\RoleInput
-        arguments:
-            - @ezpublish.api.service.role
-            - @ezpublish_rest.parser_tools
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.application/vnd.ez.api.RoleInput }]
-
-    ezpublish_rest.input_parser.SectionInput:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\SectionInput
-        arguments:
-            - @ezpublish.api.service.section
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.SectionInput }]
-
     ezpublish_rest.input_parser.ContentCreate:
         parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\ContentCreate
+        class: %ezpublish_rest.input_parser.ContentCreate.class%
         arguments:
             - @ezpublish.api.service.content
             - @ezpublish.api.service.content_type
             - @ezpublish_rest.field_type_parser
             - @ezpublish_rest.parser_tools
             - @ezpublish_rest.input_parser.LocationCreate
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.ContentCreate }]
-            
-    ezpublish_rest.input_parser.VersionUpdate:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\VersionUpdate
-        arguments:
-            - @ezpublish.api.service.content
-            - @ezpublish_rest.field_type_parser
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.VersionUpdate }]
-        
-    ezpublish_rest.input_parser.UserGroupCreate:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\UserGroupCreate
-        arguments:
-            - @ezpublish.api.service.user
-            - @ezpublish.api.service.content_type
-            - @ezpublish_rest.field_type_parser
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.UserGroupCreate }]
-
-    ezpublish_rest.input_parser.UserCreate:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\UserCreate
-        arguments:
-            - @ezpublish.api.service.user
-            - @ezpublish.api.service.content_type
-            - @ezpublish_rest.field_type_parser
-            - @ezpublish_rest.parser_tools
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.UserCreate }]
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.ContentCreate }
 
     ezpublish_rest.input_parser.ContentUpdate:
         parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\ContentUpdate
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.ContentUpdate }]
-
-    ezpublish_rest.input_parser.UserGroupUpdate:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\UserGroupUpdate
-        arguments:
-            - @ezpublish.api.service.user
-            - @ezpublish.api.service.content
-            - @ezpublish.api.service.location
-            - @ezpublish_rest.field_type_parser
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.UserGroupUpdate }]
-
-    ezpublish_rest.input_parser.UserUpdate:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\UserUpdate
-        arguments:
-            - @ezpublish.api.service.user
-            - @ezpublish.api.service.content
-            - @ezpublish_rest.field_type_parser
-            - @ezpublish_rest.parser_tools
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.UserUpdate }]
-
-    ezpublish_rest.input_parser.ContentTypeGroupInput:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeGroupInput
-        arguments:
-            - @ezpublish.api.service.content_type
-            - @ezpublish_rest.parser_tools
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.ContentTypeGroupInput }]
-
-    ezpublish_rest.input_parser.ContentTypeCreate:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeCreate
-        arguments:
-            - @ezpublish.api.service.content_type
-            - @ezpublish_rest.field_type_parser
-            - @ezpublish_rest.parser_tools
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.ContentTypeCreate }]
-
-    ezpublish_rest.input_parser.ContentTypeUpdate:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeUpdate
-        arguments:
-            - @ezpublish.api.service.content_type
-            - @ezpublish_rest.parser_tools
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.ContentTypeUpdate }]
-
-    # @todo fixme 'application/vnd.ez.api.FieldDefinitionCreate'  => $fieldDefinitionCreateParser,
-
-    ezpublish_rest.input_parser.FieldDefinitionUpdate:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\FieldDefinitionUpdate
-        arguments:
-            - @ezpublish.api.service.content_type
-            - @ezpublish_rest.field_type_parser
-            - @ezpublish_rest.parser_tools
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.FieldDefinitionUpdate }]
-
-    ezpublish_rest.input_parser.PolicyCreate:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\PolicyCreate
-        arguments:
-            - @ezpublish.api.service.role
-            - @ezpublish_rest.parser_tools
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.PolicyCreate }]
-
-    ezpublish_rest.input_parser.PolicyUpdate:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\PolicyUpdate
-        arguments:
-            - @ezpublish.api.service.role
-            - @ezpublish_rest.parser_tools
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.PolicyUpdate }]
-
-    ezpublish_rest.input_parser.RoleAssignInput:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\RoleAssignInput
-        arguments:
-            - @ezpublish_rest.parser_tools
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.RoleAssignInput }]
-
-    ezpublish_rest.input_parser.LocationCreate:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\LocationCreate
-        arguments:
-            - @ezpublish.api.service.location
-            - @ezpublish_rest.parser_tools
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.LocationCreate }]
-
-    ezpublish_rest.input_parser.LocationUpdate:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\LocationUpdate
-        arguments:
-            - @ezpublish.api.service.location
-            - @ezpublish_rest.parser_tools
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.LocationUpdate }]
-
-    ezpublish_rest.input_parser.ObjectStateGroupCreate:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateGroupCreate
-        arguments:
-            - @ezpublish.api.service.object_state
-            - @ezpublish_rest.parser_tools
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.ObjectStateGroupCreate }]
-
-    ezpublish_rest.input_parser.ObjectStateGroupUpdate:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateGroupUpdate
-        arguments:
-            - @ezpublish.api.service.object_state
-            - @ezpublish_rest.parser_tools
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.ObjectStateGroupUpdate }]
-
-    ezpublish_rest.input_parser.ObjectStateCreate:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateCreate
-        arguments:
-            - @ezpublish.api.service.object_state
-            - @ezpublish_rest.parser_tools
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.ObjectStateCreate }]
-
-    ezpublish_rest.input_parser.ObjectStateUpdate:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateUpdate
-        arguments:
-            - @ezpublish.api.service.object_state
-            - @ezpublish_rest.parser_tools
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.ObjectStateUpdate }]
+        class: %ezpublish_rest.input_parser.ContentUpdate.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.ContentUpdate }
 
     ezpublish_rest.input_parser.ContentObjectStates:
         parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\ContentObjectStates
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.ContentObjectStates }]
+        class: %ezpublish_rest.input_parser.ContentObjectStates.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.ContentObjectStates }
+
+    ezpublish_rest.input_parser.ContentTypeCreate:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.ContentTypeCreate.class%
+        arguments:
+            - @ezpublish.api.service.content_type
+            - @ezpublish_rest.field_type_parser
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.ContentTypeCreate }
+
+    ezpublish_rest.input_parser.ContentTypeGroupInput:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.ContentTypeGroupInput.class%
+        arguments:
+            - @ezpublish.api.service.content_type
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.ContentTypeGroupInput }
+
+    ezpublish_rest.input_parser.ContentTypeUpdate:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.ContentTypeUpdate.class%
+        arguments:
+            - @ezpublish.api.service.content_type
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.ContentTypeUpdate }
+
+    ezpublish_rest.input_parser.FieldDefinitionCreate:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.FieldDefinitionCreate.class%
+        arguments:
+            - @ezpublish.api.service.content_type
+            - @ezpublish_rest.field_type_parser
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.FieldDefinitionCreate }
+
+    ezpublish_rest.input_parser.FieldDefinitionUpdate:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.FieldDefinitionUpdate.class%
+        arguments:
+            - @ezpublish.api.service.content_type
+            - @ezpublish_rest.field_type_parser
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.FieldDefinitionUpdate }
+
+    ezpublish_rest.input_parser.LocationCreate:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.LocationCreate.class%
+        arguments:
+            - @ezpublish.api.service.location
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.LocationCreate }
+
+    ezpublish_rest.input_parser.LocationUpdate:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.LocationUpdate.class%
+        arguments:
+            - @ezpublish.api.service.location
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.LocationUpdate }
+
+    ezpublish_rest.input_parser.ObjectStateGroupCreate:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.ObjectStateGroupCreate.class%
+        arguments:
+            - @ezpublish.api.service.object_state
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.ObjectStateGroupCreate }
+
+    ezpublish_rest.input_parser.ObjectStateGroupUpdate:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.ObjectStateGroupUpdate.class%
+        arguments:
+            - @ezpublish.api.service.object_state
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.ObjectStateGroupUpdate }
+
+    ezpublish_rest.input_parser.ObjectStateCreate:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.ObjectStateCreate.class%
+        arguments:
+            - @ezpublish.api.service.object_state
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.ObjectStateCreate }
+
+    ezpublish_rest.input_parser.ObjectStateUpdate:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.ObjectStateUpdate.class%
+        arguments:
+            - @ezpublish.api.service.object_state
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.ObjectStateUpdate }
+
+    ezpublish_rest.input_parser.PolicyCreate:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.PolicyCreate.class%
+        arguments:
+            - @ezpublish.api.service.role
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.PolicyCreate }
+
+    ezpublish_rest.input_parser.PolicyUpdate:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.PolicyUpdate.class%
+        arguments:
+            - @ezpublish.api.service.role
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.PolicyUpdate }
 
     ezpublish_rest.input_parser.RelationCreate:
         parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\RelationCreate
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.v }]
+        class: %ezpublish_rest.input_parser.RelationCreate.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.RelationCreate }
 
-    ezpublish_rest.input_parser.ViewInput:
+    ezpublish_rest.input_parser.RoleAssignInput:
         parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\ViewInput
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.ViewInput }]
-
-    ezpublish_rest.input_parser.UrlWildcardCreate:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\URLWildcardCreate
+        class: %ezpublish_rest.input_parser.RoleAssignInput.class%
         arguments:
             - @ezpublish_rest.parser_tools
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.URLWildcardCreate }]
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.RoleAssignInput }
 
-    ezpublish_rest.input_parser.UrlAliasCreate:
+    ezpublish_rest.input_parser.RoleInput:
         parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\URLAliasCreate
+        class: %ezpublish_rest.input_parser.RoleInput.class%
         arguments:
+            - @ezpublish.api.service.role
             - @ezpublish_rest.parser_tools
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.URLAliasCreate }]
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.RoleInput }
+
+    ezpublish_rest.input_parser.SectionInput:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.SectionInput.class%
+        arguments:
+            - @ezpublish.api.service.section
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.SectionInput }
 
     ezpublish_rest.input_parser.SessionInput:
         parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Server\Input\Parser\SessionInput
+        class: %ezpublish_rest.input_parser.SessionInput.class%
         arguments:
             - @ezpublish_rest.parser_tools
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.SessionInput }]
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.SessionInput }
+
+    ezpublish_rest.input_parser.UserGroupUpdate:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.UserGroupUpdate.class%
+        arguments:
+            - @ezpublish.api.service.user
+            - @ezpublish.api.service.content
+            - @ezpublish.api.service.location
+            - @ezpublish_rest.field_type_parser
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.UserGroupUpdate }
+
+    ezpublish_rest.input_parser.UrlAliasCreate:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.UrlAliasCreate.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.UrlAliasCreate }
+
+    ezpublish_rest.input_parser.UrlWildcardCreate:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.UrlWildcardCreate.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.UrlWildcardCreate }
+
+    ezpublish_rest.input_parser.UserCreate:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.UserCreate.class%
+        arguments:
+            - @ezpublish.api.service.user
+            - @ezpublish.api.service.content_type
+            - @ezpublish_rest.field_type_parser
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.UserCreate }
+
+    ezpublish_rest.input_parser.UserGroupCreate:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.UserGroupCreate.class%
+        arguments:
+            - @ezpublish.api.service.user
+            - @ezpublish.api.service.content_type
+            - @ezpublish_rest.field_type_parser
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.UserGroupCreate }
+
+    ezpublish_rest.input_parser.UserUpdate:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.UserUpdate.class%
+        arguments:
+            - @ezpublish.api.service.user
+            - @ezpublish.api.service.content
+            - @ezpublish_rest.field_type_parser
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.UserUpdate }
+
+    ezpublish_rest.input_parser.ViewInput:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.ViewInput.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.ViewInput }
+
+    ezpublish_rest.input_parser.VersionUpdate:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.VersionUpdate.class%
+        arguments:
+            - @ezpublish.api.service.content
+            - @ezpublish_rest.field_type_parser
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.VersionUpdate }
 
     # internal Media-Types
     ezpublish_rest.input_parser.internal.criterion.ContentId:
         parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\ContentId
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.ContentId }]
+        class: %ezpublish_rest.input_parser.internal.criterion.ContentId.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.ContentId }
 
     ezpublish_rest.input_parser.internal.criterion.ContentRemoteId:
         parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\ContentRemoteId
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.ContentRemoteId }]
+        class: %ezpublish_rest.input_parser.internal.criterion.ContentRemoteId.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.ContentRemoteId }
 
     ezpublish_rest.input_parser.internal.criterion.ContentTypeGroupId:
         parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\ContentTypeGroupId
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.ContentTypeGroupId }]
+        class: %ezpublish_rest.input_parser.internal.criterion.ContentTypeGroupId.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.ContentTypeGroupId }
 
     ezpublish_rest.input_parser.internal.criterion.ContentTypeId:
         parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\ContentTypeId
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.ContentTypeId }]
+        class: %ezpublish_rest.input_parser.internal.criterion.ContentTypeId.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.ContentTypeId }
 
     ezpublish_rest.input_parser.internal.criterion.ContentTypeIdentifier:
         parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\ContentTypeIdentifier
+        class: %ezpublish_rest.input_parser.internal.criterion.ContentTypeIdentifier.class%
         arguments:
             - @ezpublish.api.service.content
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.ContentTypeIdentifier }]
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.ContentTypeIdentifier }
 
     ezpublish_rest.input_parser.internal.criterion.DateMetadata:
         parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\DateMetadata
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.DateMetadata }]
+        class: %ezpublish_rest.input_parser.internal.criterion.DateMetadata.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.DateMetadata }
 
     ezpublish_rest.input_parser.internal.criterion.Field:
         parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\Field
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.Field }]
+        class: %ezpublish_rest.input_parser.internal.criterion.Field.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.Field }
 
     ezpublish_rest.input_parser.internal.criterion.FullText:
         parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\FullText
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.FullText }]
-
-    ezpublish_rest.input_parser.internal.criterion.LocationId:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\LocationId
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.LocationId }]
-
-    ezpublish_rest.input_parser.internal.criterion.LocationRemoteId:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\LocationRemoteId
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.LocationRemoteId }]
-
-    ezpublish_rest.input_parser.internal.criterion.LogicalAnd:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\LogicalAnd
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.LogicalAnd }]
-
-    ezpublish_rest.input_parser.internal.criterion.LogicalNot:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\LogicalNot
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.LogicalNot }]
-
-    ezpublish_rest.input_parser.internal.criterion.LogicalOperator:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\LogicalOperator
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.LogicalOperator }]
-
-    ezpublish_rest.input_parser.internal.criterion.LogicalOr:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\LogicalOr
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.LogicalOr }]
-
-    ezpublish_rest.input_parser.internal.criterion.MoreLikeThis:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\MoreLikeThis
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.MoreLikeThis }]
-
-    ezpublish_rest.input_parser.internal.criterion.Operator:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\Operator
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.Operator }]
-
-    ezpublish_rest.input_parser.internal.criterion.ParentLocationId:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\ParentLocationId
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.ParentLocationId }]
-
-    ezpublish_rest.input_parser.internal.criterion.ParentLocationRemoteId:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\ParentLocationRemoteId
-        arguments:
-            - @ezpublish.api.service.location
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.ParentLocationRemoteId }]
-
-    ezpublish_rest.input_parser.internal.criterion.SectionIdentifier:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\SectionIdentifier
-        arguments:
-            - @ezpublish.api.service.section
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.SectionIdentifier }]
-
-    ezpublish_rest.input_parser.internal.criterion.SectionId:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\SectionId
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.SectionId }]
-
-    ezpublish_rest.input_parser.internal.criterion.Status:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\Status
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.Status }]
-
-    ezpublish_rest.input_parser.internal.criterion.Subtree:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\Subtree
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.Subtree }]
-
-    ezpublish_rest.input_parser.internal.criterion.UrlAlias:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\UrlAlias
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.UrlAlias }]
-
-    ezpublish_rest.input_parser.internal.criterion.UserMetadata:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\UserMetadata
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.UserMetadata }]
-
-    ezpublish_rest.input_parser.internal.criterion.ObjectStateId:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\ObjectStateId
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.ObjectStateId }]
-
-    ezpublish_rest.input_parser.internal.criterion.Visibility:
-        parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\Visibility
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.Visibility }]
+        class: %ezpublish_rest.input_parser.internal.criterion.FullText.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.FullText }
 
     ezpublish_rest.input_parser.internal.criterion.LanguageCode:
         parent: ezpublish_rest.input_parser
-        class: eZ\Publish\Core\REST\Input\Parser\Criterion\LanguageCode
-        tags: [ { name: ezpublish_rest.input_parser, alias: application/vnd.ez.api.internal.criterion.LanguageCode }]
+        class: %ezpublish_rest.input_parser.internal.criterion.LanguageCode.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.LanguageCode }
+    ezpublish_rest.input_parser.internal.criterion.LocationId:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.internal.criterion.LocationId.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.LocationId }
+
+    ezpublish_rest.input_parser.internal.criterion.LocationRemoteId:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.internal.criterion.LocationRemoteId.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.LocationRemoteId }
+
+    ezpublish_rest.input_parser.internal.criterion.LogicalAnd:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.internal.criterion.LogicalAnd.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.LogicalAnd }
+
+    ezpublish_rest.input_parser.internal.criterion.LogicalNot:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.internal.criterion.LogicalNot.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.LogicalNot }
+
+    ezpublish_rest.input_parser.internal.criterion.LogicalOperator:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.internal.criterion.LogicalOperator.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.LogicalOperator }
+
+    ezpublish_rest.input_parser.internal.criterion.LogicalOr:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.internal.criterion.LogicalOr.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.LogicalOr }
+
+    ezpublish_rest.input_parser.internal.criterion.MoreLikeThis:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.internal.criterion.MoreLikeThis.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.MoreLikeThis }
+
+    ezpublish_rest.input_parser.internal.criterion.Operator:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.internal.criterion.Operator.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.Operator }
+
+    ezpublish_rest.input_parser.internal.criterion.ParentLocationId:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.internal.criterion.ParentLocationId.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.ParentLocationId }
+
+    ezpublish_rest.input_parser.internal.criterion.ParentLocationRemoteId:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.internal.criterion.ParentLocationRemoteId.class%
+        arguments:
+            - @ezpublish.api.service.location
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.ParentLocationRemoteId }
+
+    ezpublish_rest.input_parser.internal.criterion.SectionIdentifier:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.internal.criterion.SectionIdentifier.class%
+        arguments:
+            - @ezpublish.api.service.section
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.SectionIdentifier }
+
+    ezpublish_rest.input_parser.internal.criterion.SectionId:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.internal.criterion.SectionId.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.SectionId }
+
+    ezpublish_rest.input_parser.internal.criterion.Status:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.internal.criterion.Status.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.Status }
+
+    ezpublish_rest.input_parser.internal.criterion.Subtree:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.internal.criterion.Subtree.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.Subtree }
+
+    ezpublish_rest.input_parser.internal.criterion.UrlcontentType:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.internal.criterion.UrlAlias.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.UrlAlias }
+
+    ezpublish_rest.input_parser.internal.criterion.UserMetadata:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.internal.criterion.UserMetadata.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.UserMetadata }
+
+    ezpublish_rest.input_parser.internal.criterion.ObjectStateId:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.internal.criterion.ObjectStateId.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.ObjectStateId }
+
+    ezpublish_rest.input_parser.internal.criterion.Visibility:
+        parent: ezpublish_rest.input_parser
+        class: %ezpublish_rest.input_parser.internal.criterion.Visibility.class%
+        tags:
+            - { name: ezpublish_rest.input_parser, contentType: application/vnd.ez.api.internal.Visibility }
