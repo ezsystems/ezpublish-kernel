@@ -144,7 +144,7 @@ class ContentUpdateTest extends BaseTest
      */
     protected function getContentUpdate()
     {
-        return new ContentUpdateParser( $this->getUrlHandler() );
+        return new ContentUpdateParser( $this->getRequestParser() );
     }
 
     /**

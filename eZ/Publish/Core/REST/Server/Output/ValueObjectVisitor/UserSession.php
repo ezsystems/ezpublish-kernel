@@ -58,7 +58,7 @@ class UserSession extends ValueObjectVisitor
         $generator->startAttribute(
             'href',
             // @todo check URL generator entry
-            $this->urlHandler->generate( 'user', array( 'user' => $data->user->id ) )
+            $this->requestParser->generate( 'user', array( 'user' => $data->user->id ) )
         );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'User' );

@@ -33,7 +33,7 @@ class Section extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'section', array( 'section' => $data->id ) )
+            $this->requestParser->generate( 'section', array( 'section' => $data->id ) )
         );
         $generator->endAttribute( 'href' );
 

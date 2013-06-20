@@ -38,7 +38,7 @@ class ContentObjectStates extends ValueObjectVisitor
             $generator->startObjectElement( 'ObjectState' );
             $generator->startAttribute(
                 'href',
-                $this->urlHandler->generate(
+                $this->requestParser->generate(
                     'objectstate',
                     array(
                         'objectstategroup' => $state->groupId,

@@ -33,7 +33,7 @@ class ContentTypeGroup extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'typegroup', array( 'typegroup' => $data->id ) )
+            $this->requestParser->generate( 'typegroup', array( 'typegroup' => $data->id ) )
         );
         $generator->endAttribute( 'href' );
 
@@ -52,7 +52,7 @@ class ContentTypeGroup extends ValueObjectVisitor
         $generator->startObjectElement( 'Creator', 'User' );
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'user', array( 'user' => $data->creatorId ) )
+            $this->requestParser->generate( 'user', array( 'user' => $data->creatorId ) )
         );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Creator' );
@@ -60,7 +60,7 @@ class ContentTypeGroup extends ValueObjectVisitor
         $generator->startObjectElement( 'Modifier', 'User' );
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'user', array( 'user' => $data->modifierId ) )
+            $this->requestParser->generate( 'user', array( 'user' => $data->modifierId ) )
         );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Modifier' );
@@ -68,7 +68,7 @@ class ContentTypeGroup extends ValueObjectVisitor
         $generator->startObjectElement( 'ContentTypes', 'ContentTypeInfoList' );
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'grouptypes', array( 'typegroup' => $data->id ) )
+            $this->requestParser->generate( 'grouptypes', array( 'typegroup' => $data->id ) )
         );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'ContentTypes' );

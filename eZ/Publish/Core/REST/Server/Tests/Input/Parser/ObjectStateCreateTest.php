@@ -241,7 +241,7 @@ class ObjectStateCreateTest extends BaseTest
     protected function getObjectStateCreate()
     {
         return new ObjectStateCreate(
-            $this->getUrlHandler(),
+            $this->getRequestParser(),
             $this->getObjectStateServiceMock(),
             $this->getParserTools()
         );

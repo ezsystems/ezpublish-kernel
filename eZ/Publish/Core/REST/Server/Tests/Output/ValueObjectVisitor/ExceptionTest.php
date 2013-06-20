@@ -179,7 +179,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
     protected function getExceptionVisitor()
     {
         return new ValueObjectVisitor\Exception(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\Base;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as ContentTypeIdCriterion;
@@ -28,10 +28,10 @@ class ContentTypeIdentifier extends Base
      */
     protected $contentTypeService;
 
-    public function __construct( UrlHandler $urlHandler, ContentTypeService $contentTypeService )
+    public function __construct( RequestParser $requestParser, ContentTypeService $contentTypeService )
     {
         $this->contentTypeService = $contentTypeService;
-        parent::__construct( $urlHandler );
+        parent::__construct( $requestParser );
     }
 
     /**

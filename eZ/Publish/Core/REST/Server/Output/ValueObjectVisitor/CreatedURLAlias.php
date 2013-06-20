@@ -29,7 +29,7 @@ class CreatedURLAlias extends URLAlias
         parent::visit( $visitor, $generator, $data->urlAlias );
         $visitor->setHeader(
             'Location',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'urlAlias',
                 array( 'urlalias' => $data->urlAlias->id )
             )

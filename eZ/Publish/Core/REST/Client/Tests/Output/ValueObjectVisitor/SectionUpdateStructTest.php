@@ -142,7 +142,7 @@ class SectionUpdateStructTest extends ValueObjectVisitorBaseTest
     protected function getSectionUpdateStructVisitor()
     {
         return new ValueObjectVisitor\SectionUpdateStruct(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

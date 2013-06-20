@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Common\UrlHandler;
+namespace eZ\Publish\Core\REST\Common\RequestParser;
 
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Exceptions;
 
 /**
@@ -22,7 +22,7 @@ use eZ\Publish\Core\REST\Common\Exceptions;
  * - {&foo} matches the slash, too, and is used to match only those URL
  *   variables, which may have a slash
  */
-class Pattern implements UrlHandler
+class Pattern implements RequestParser
 {
     /**
      * Map of URL types to their URL patterns

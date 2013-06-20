@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\REST\Common;
 /**
  * Interface for URL handlers
  */
-interface UrlHandler
+interface RequestParser
 {
     /**
      * Parse URL and return the IDs contained in the URL

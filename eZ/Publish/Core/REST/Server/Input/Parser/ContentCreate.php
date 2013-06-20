@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Common\Exceptions;
@@ -62,21 +62,21 @@ class ContentCreate extends Base
     /**
      * Construct
      *
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      * @param \eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser
      * @param \eZ\Publish\Core\REST\Server\Input\Parser\LocationCreate $locationCreateParser
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( UrlHandler $urlHandler,
+    public function __construct( RequestParser $requestParser,
                                  ContentService $contentService,
                                  ContentTypeService $contentTypeService,
                                  FieldTypeParser $fieldTypeParser,
                                  LocationCreate $locationCreateParser,
                                  ParserTools $parserTools )
     {
-        parent::__construct( $urlHandler );
+        parent::__construct( $requestParser );
         $this->contentService = $contentService;
         $this->contentTypeService = $contentTypeService;
         $this->fieldTypeParser = $fieldTypeParser;
@@ -116,7 +116,7 @@ class ContentCreate extends Base
             throw new Exceptions\Parser( "Missing 'mainLanguageCode' element for ContentCreate." );
         }
 
-        $contentTypeValues = $this->urlHandler->parse( 'type', $data['ContentType']['_href'] );
+        $contentTypeValues = $this->requestParser->parse( 'type', $data['ContentType']['_href'] );
         $contentType = $this->contentTypeService->loadContentType(
             $contentTypeValues['type']
         );
@@ -130,7 +130,7 @@ class ContentCreate extends Base
                 throw new Exceptions\Parser( "Missing '_href' attribute for Section element in ContentCreate." );
             }
 
-            $sectionValues = $this->urlHandler->parse( 'section', $data['Section']['_href'] );
+            $sectionValues = $this->requestParser->parse( 'section', $data['Section']['_href'] );
             $contentCreateStruct->sectionId = $sectionValues['section'];
         }
 
@@ -156,7 +156,7 @@ class ContentCreate extends Base
                 throw new Exceptions\Parser( "Missing '_href' attribute for User element in ContentCreate." );
             }
 
-            $userValues = $this->urlHandler->parse( 'user', $data['User']['_href'] );
+            $userValues = $this->requestParser->parse( 'user', $data['User']['_href'] );
             $contentCreateStruct->ownerId = $userValues['user'];
         }
 

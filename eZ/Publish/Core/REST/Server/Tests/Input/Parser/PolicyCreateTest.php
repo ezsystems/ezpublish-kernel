@@ -238,7 +238,7 @@ class PolicyCreateTest extends BaseTest
     protected function getPolicyCreate()
     {
         return new PolicyCreate(
-            $this->getUrlHandler(),
+            $this->getRequestParser(),
             $this->getRoleServiceMock(),
             $this->getParserTools()
         );

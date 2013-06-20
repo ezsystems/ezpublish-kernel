@@ -22,7 +22,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\User\User;
 
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Common\Message;
@@ -51,9 +51,9 @@ class ContentService implements APIContentService, Sessionable
     private $outputVisitor;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
+     * @var \eZ\Publish\Core\REST\Common\RequestParser
      */
-    private $urlHandler;
+    private $requestParser;
 
     /**
      * @var \eZ\Publish\Core\REST\Client\ContentTypeService
@@ -64,15 +64,15 @@ class ContentService implements APIContentService, Sessionable
      * @param \eZ\Publish\Core\REST\Client\HttpClient $client
      * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\Core\REST\Client\ContentTypeService $contentTypeService
      */
-    public function __construct( HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, UrlHandler $urlHandler, ContentTypeService $contentTypeService )
+    public function __construct( HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, RequestParser $requestParser, ContentTypeService $contentTypeService )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
         $this->outputVisitor   = $outputVisitor;
-        $this->urlHandler      = $urlHandler;
+        $this->requestParser      = $requestParser;
         $this->contentTypeService = $contentTypeService;
     }
 
@@ -135,7 +135,7 @@ class ContentService implements APIContentService, Sessionable
     {
         $response = $this->client->request(
             'GET',
-            $this->urlHandler->generate( 'objectByRemote', array( 'object' => $remoteId ) ),
+            $this->requestParser->generate( 'objectByRemote', array( 'object' => $remoteId ) ),
             new Message(
                 array( 'Accept' => $this->outputVisitor->getMediaType( 'ContentInfo' ) )
             )
@@ -165,7 +165,7 @@ class ContentService implements APIContentService, Sessionable
      */
     protected function completeContentInfo( Values\RestContentInfo $restContentInfo )
     {
-        $versionUrlValues = $this->urlHandler->parse(
+        $versionUrlValues = $this->requestParser->parse(
             'objectVersion',
             $this->fetchCurrentVersionUrl( $restContentInfo->currentVersionReference )
         );
@@ -323,13 +323,13 @@ class ContentService implements APIContentService, Sessionable
     public function loadContent( $contentId, array $languages = null, $versionNo = null )
     {
         // $contentId should already be a URL!
-        $contentIdValues = $this->urlHandler->parse( 'object', $contentId );
+        $contentIdValues = $this->requestParser->parse( 'object', $contentId );
 
         $url = '';
         if ( $versionNo === null )
         {
             $url = $this->fetchCurrentVersionUrl(
-                $this->urlHandler->generate(
+                $this->requestParser->generate(
                     'objectCurrentVersion',
                     array(
                         'object' => $contentIdValues['object'],
@@ -339,7 +339,7 @@ class ContentService implements APIContentService, Sessionable
         }
         else
         {
-            $url = $this->urlHandler->generate(
+            $url = $this->requestParser->generate(
                 'objectVersion',
                 array(
                     'object' => $contentIdValues['object'],

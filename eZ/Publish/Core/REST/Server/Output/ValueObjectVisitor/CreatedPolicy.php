@@ -29,7 +29,7 @@ class CreatedPolicy extends Policy
         parent::visit( $visitor, $generator, $data->policy );
         $visitor->setHeader(
             'Location',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'policy',
                 array(
                     'role' => $data->policy->roleId,

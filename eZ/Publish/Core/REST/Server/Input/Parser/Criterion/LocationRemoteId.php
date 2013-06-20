@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\Base;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId as LocationRemoteIdCriterion;
 

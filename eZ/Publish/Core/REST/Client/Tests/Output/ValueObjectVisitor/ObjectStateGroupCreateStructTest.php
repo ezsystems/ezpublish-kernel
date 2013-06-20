@@ -141,7 +141,7 @@ class ObjectStateGroupCreateStructTest extends ValueObjectVisitorBaseTest
     protected function getObjectStateGroupCreateStructVisitor()
     {
         return new ValueObjectVisitor\ObjectStateGroupCreateStruct(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

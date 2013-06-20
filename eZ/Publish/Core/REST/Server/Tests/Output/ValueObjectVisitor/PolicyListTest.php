@@ -124,7 +124,7 @@ class PolicyListTest extends ValueObjectVisitorBaseTest
     protected function getPolicyListVisitor()
     {
         return new ValueObjectVisitor\PolicyList(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

@@ -29,7 +29,7 @@ class CreatedRelation extends RestRelation
         parent::visit( $visitor, $generator, $data->relation );
         $visitor->setHeader(
             'Location',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'objectVersionRelation',
                 array(
                     'object' => $data->relation->contentId,

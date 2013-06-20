@@ -182,7 +182,7 @@ class PolicyCreateStructTest extends ValueObjectVisitorBaseTest
     protected function getPolicyCreateStructVisitor()
     {
         return new ValueObjectVisitor\PolicyCreateStruct(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

@@ -188,7 +188,7 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
     protected function getUserGroupRefListVisitor()
     {
         return new ValueObjectVisitor\UserGroupRefList(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

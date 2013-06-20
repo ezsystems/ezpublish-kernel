@@ -447,7 +447,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     protected function getLocationVisitor()
     {
         return new ValueObjectVisitor\RestLocation(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

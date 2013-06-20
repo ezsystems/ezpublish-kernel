@@ -14,7 +14,7 @@ use Symfony\Component\Routing\RouterInterface;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher as InputDispatcher;
 use eZ\Publish\Core\REST\Server\Request as HttpRequest;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
-use eZ\Publish\Core\REST\Common\UrlHandler as RequestParser;
+use eZ\Publish\Core\REST\Common\RequestParser as RequestParser;
 
 abstract class Controller
 {
@@ -39,7 +39,7 @@ abstract class Controller
     protected $container;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
+     * @var \eZ\Publish\Core\REST\Common\RequestParser
      */
     protected $requestParser;
 
@@ -55,9 +55,9 @@ abstract class Controller
         $this->inputDispatcher = $inputDispatcher;
     }
 
-    public function setRouter( RouterInterface $urlHandler )
+    public function setRouter( RouterInterface $router )
     {
-        $this->router = $urlHandler;
+        $this->router = $router;
     }
 
     public function setRequest( HttpRequest $request )

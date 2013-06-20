@@ -150,7 +150,7 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
     protected function getContentVisitor()
     {
         return new ValueObjectVisitor\RestFieldDefinition(
-            new Common\UrlHandler\eZPublish(),
+            new Common\RequestParser\eZPublish(),
             $this->fieldTypeSerializerMock
         );
     }

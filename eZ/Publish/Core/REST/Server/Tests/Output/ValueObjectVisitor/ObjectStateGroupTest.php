@@ -236,7 +236,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
     protected function getObjectStateGroupVisitor()
     {
         return new ValueObjectVisitor\ObjectStateGroup(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

@@ -164,7 +164,7 @@ class SectionTest extends ValueObjectVisitorBaseTest
     protected function getSectionVisitor()
     {
         return new ValueObjectVisitor\Section(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

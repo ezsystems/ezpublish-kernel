@@ -133,7 +133,7 @@ class TrashTest extends ValueObjectVisitorBaseTest
     protected function getTrashVisitor()
     {
         return new ValueObjectVisitor\Trash(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

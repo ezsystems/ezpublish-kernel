@@ -29,7 +29,7 @@ class CreatedURLWildcard extends URLWildcard
         parent::visit( $visitor, $generator, $data->urlWildcard );
         $visitor->setHeader(
             'Location',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'urlWildcard',
                 array( 'urlwildcard' => $data->urlWildcard->id )
             )

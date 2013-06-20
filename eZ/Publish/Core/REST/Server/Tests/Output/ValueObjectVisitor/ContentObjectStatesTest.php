@@ -93,7 +93,7 @@ class ContentObjectStatesTest extends ValueObjectVisitorBaseTest
     protected function getContentObjectStatesVisitor()
     {
         return new ValueObjectVisitor\ContentObjectStates(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

@@ -176,7 +176,7 @@ class VersionTest extends ValueObjectVisitorBaseTest
     protected function getVersionVisitor()
     {
         return new ValueObjectVisitor\Version(
-            new Common\UrlHandler\eZPublish(),
+            new Common\RequestParser\eZPublish(),
             $this->fieldTypeSerializerMock
         );
     }

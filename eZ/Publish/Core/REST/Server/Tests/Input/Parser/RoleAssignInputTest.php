@@ -199,7 +199,7 @@ class RoleAssignInputTest extends BaseTest
     protected function getRoleAssignInput()
     {
         return new RoleAssignInput(
-            $this->getUrlHandler(),
+            $this->getRequestParser(),
             $this->getParserTools()
         );
     }

@@ -32,7 +32,7 @@ class RestUser extends ValueObjectVisitor
 
         $generator->startObjectElement( 'User' );
 
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'user', array( 'user' => $contentInfo->id ) ) );
+        $generator->startAttribute( 'href', $this->requestParser->generate( 'user', array( 'user' => $contentInfo->id ) ) );
         $generator->endAttribute( 'href' );
 
         $generator->startAttribute( 'id', $contentInfo->id );
@@ -46,7 +46,7 @@ class RestUser extends ValueObjectVisitor
 
         $generator->startObjectElement( 'ContentType' );
 
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'type', array( 'type' => $contentInfo->contentTypeId ) ) );
+        $generator->startAttribute( 'href', $this->requestParser->generate( 'type', array( 'type' => $contentInfo->contentTypeId ) ) );
         $generator->endAttribute( 'href' );
 
         $generator->endObjectElement( 'ContentType' );
@@ -55,19 +55,19 @@ class RestUser extends ValueObjectVisitor
         $generator->endValueElement( 'name' );
 
         $generator->startObjectElement( 'Versions', 'VersionList' );
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'objectVersions', array( 'object' => $contentInfo->id ) ) );
+        $generator->startAttribute( 'href', $this->requestParser->generate( 'objectVersions', array( 'object' => $contentInfo->id ) ) );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Versions' );
 
         $generator->startObjectElement( 'Section' );
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'section', array( 'section' => $contentInfo->sectionId ) ) );
+        $generator->startAttribute( 'href', $this->requestParser->generate( 'section', array( 'section' => $contentInfo->sectionId ) ) );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Section' );
 
         $generator->startObjectElement( 'MainLocation', 'Location' );
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'location',
                 array(
                     'location' => rtrim( $data->mainLocation->pathString, '/' )
@@ -78,12 +78,12 @@ class RestUser extends ValueObjectVisitor
         $generator->endObjectElement( 'MainLocation' );
 
         $generator->startObjectElement( 'Locations', 'LocationList' );
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'objectLocations', array( 'object' => $contentInfo->id ) ) );
+        $generator->startAttribute( 'href', $this->requestParser->generate( 'objectLocations', array( 'object' => $contentInfo->id ) ) );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Locations' );
 
         $generator->startObjectElement( 'Owner', 'User' );
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'user', array( 'user' => $contentInfo->ownerId ) ) );
+        $generator->startAttribute( 'href', $this->requestParser->generate( 'user', array( 'user' => $contentInfo->ownerId ) ) );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Owner' );
 
@@ -119,7 +119,7 @@ class RestUser extends ValueObjectVisitor
         $generator->startObjectElement( 'UserGroups', 'UserGroupList' );
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'userGroups',
                 array(
                     'user' => $contentInfo->id
@@ -132,7 +132,7 @@ class RestUser extends ValueObjectVisitor
         $generator->startObjectElement( 'Roles', 'RoleAssignmentList' );
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'userRoleAssignments',
                 array(
                     'user' => $contentInfo->id

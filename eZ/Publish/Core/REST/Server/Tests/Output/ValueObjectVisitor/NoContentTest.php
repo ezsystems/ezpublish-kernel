@@ -52,7 +52,7 @@ class NoContentTest extends ValueObjectVisitorBaseTest
     protected function getNoContentVisitor()
     {
         return new ValueObjectVisitor\NoContent(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

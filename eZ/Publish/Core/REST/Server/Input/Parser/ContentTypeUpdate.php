@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\ContentTypeService;
@@ -38,13 +38,13 @@ class ContentTypeUpdate extends Base
     /**
      * Construct
      *
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( UrlHandler $urlHandler, ContentTypeService $contentTypeService, ParserTools $parserTools )
+    public function __construct( RequestParser $requestParser, ContentTypeService $contentTypeService, ParserTools $parserTools )
     {
-        parent::__construct( $urlHandler );
+        parent::__construct( $requestParser );
         $this->contentTypeService = $contentTypeService;
         $this->parserTools = $parserTools;
     }
@@ -138,7 +138,7 @@ class ContentTypeUpdate extends Base
                 throw new Exceptions\Parser( "Missing '_href' attribute for User element in ContentTypeUpdate." );
             }
 
-            $userValues = $this->urlHandler->parse( 'user', $data['User']['_href'] );
+            $userValues = $this->requestParser->parse( 'user', $data['User']['_href'] );
             $contentTypeUpdateStruct->modifierId = $userValues['user'];
         }
 

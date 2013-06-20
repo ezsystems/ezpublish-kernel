@@ -29,7 +29,7 @@ class CreatedLocation extends RestLocation
         parent::visit( $visitor, $generator, $data->restLocation );
         $visitor->setHeader(
             'Location',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'location',
                 array( 'location' => rtrim( $data->restLocation->location->pathString, '/' ) )
             )

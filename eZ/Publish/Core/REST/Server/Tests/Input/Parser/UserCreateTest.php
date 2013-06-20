@@ -437,7 +437,7 @@ class UserCreateTest extends BaseTest
     protected function getUserCreate()
     {
         return new UserCreate(
-            $this->getUrlHandler(),
+            $this->getRequestParser(),
             $this->getUserServiceMock(),
             $this->getContentTypeServiceMock(),
             $this->getFieldTypeParserMock(),

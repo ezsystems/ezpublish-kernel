@@ -10,12 +10,12 @@
 namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor\ImageProcessor;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 
 class ImageProcessorTest extends BinaryInputProcessorTest
 {
-    /** @var UrlHandler */
-    protected $urlHandler;
+    /** @var RequestParser */
+    protected $requestParser;
 
     /**
      * @covers \eZ\Publish\Core\REST\Common\FieldTypeProcessor\ImageProcessor::postProcessValueHash
@@ -55,18 +55,18 @@ class ImageProcessorTest extends BinaryInputProcessorTest
     {
         return new ImageProcessor(
             $this->getTempDir(),
-            $this->getUrlHandlerMock(),
+            $this->getRequestParserMock(),
             $this->getVariations()
         );
     }
 
-    protected function getUrlHandlerMock()
+    protected function getRequestParserMock()
     {
-        if ( !isset( $this->urlHandler ) )
+        if ( !isset( $this->requestParser ) )
         {
-            $this->urlHandler = $this->getMock( 'eZ\\Publish\\Core\\REST\\Common\\UrlHandler' );
+            $this->requestParser = $this->getMock( 'eZ\\Publish\\Core\\REST\\Common\\UrlHandler' );
         }
-        return $this->urlHandler;
+        return $this->requestParser;
     }
 
     protected function getVariations()

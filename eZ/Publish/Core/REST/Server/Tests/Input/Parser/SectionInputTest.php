@@ -73,7 +73,7 @@ class SectionInputTest extends BaseTest
      */
     protected function getSectionInput()
     {
-        return new SectionInput( $this->getUrlHandler(), $this->getSectionServiceMock() );
+        return new SectionInput( $this->getRequestParser(), $this->getSectionServiceMock() );
     }
 
     /**

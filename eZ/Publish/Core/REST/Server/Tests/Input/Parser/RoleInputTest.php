@@ -80,7 +80,7 @@ class RoleInputTest extends BaseTest
     protected function getRoleInput()
     {
         return new RoleInput(
-            $this->getUrlHandler(),
+            $this->getRequestParser(),
             $this->getRoleServiceMock(),
             $this->getParserTools()
         );

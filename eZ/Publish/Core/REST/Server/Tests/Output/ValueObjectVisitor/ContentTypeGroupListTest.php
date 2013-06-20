@@ -123,7 +123,7 @@ class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
     protected function getContentTypeGroupListVisitor()
     {
         return new ValueObjectVisitor\ContentTypeGroupList(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

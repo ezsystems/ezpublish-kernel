@@ -52,7 +52,7 @@ class ConflictTest extends ValueObjectVisitorBaseTest
     protected function getConflictVisitor()
     {
         return new ValueObjectVisitor\Conflict(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

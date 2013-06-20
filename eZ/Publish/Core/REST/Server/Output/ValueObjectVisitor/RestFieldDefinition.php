@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer;
@@ -29,12 +29,12 @@ class RestFieldDefinition extends RestContentTypeBase
     protected $fieldTypeSerializer;
 
     /**
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer $fieldTypeSerializer
      */
-    public function __construct( UrlHandler $urlHandler, FieldTypeSerializer $fieldTypeSerializer )
+    public function __construct( RequestParser $requestParser, FieldTypeSerializer $fieldTypeSerializer )
     {
-        parent::__construct( $urlHandler );
+        parent::__construct( $requestParser );
         $this->fieldTypeSerializer = $fieldTypeSerializer;
     }
 
@@ -63,7 +63,7 @@ class RestFieldDefinition extends RestContentTypeBase
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'typeFieldDefinition'  . $urlTypeSuffix,
                 array(
                     'type' => $contentType->id,

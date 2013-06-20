@@ -132,7 +132,7 @@ class ContentTypeInfoListTest extends ValueObjectVisitorBaseTest
     protected function getContentTypeInfoListVisitor()
     {
         return new ValueObjectVisitor\ContentTypeInfoList(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

@@ -53,7 +53,7 @@ class BadRequestExceptionTest extends ExceptionTest
     protected function getExceptionVisitor()
     {
         return new ValueObjectVisitor\BadRequestException(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

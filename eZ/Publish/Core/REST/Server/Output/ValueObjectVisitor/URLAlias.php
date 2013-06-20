@@ -33,7 +33,7 @@ class URLAlias extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'urlAlias', array( 'urlalias' => $data->id ) )
+            $this->requestParser->generate( 'urlAlias', array( 'urlalias' => $data->id ) )
         );
         $generator->endAttribute( 'href' );
 
@@ -48,7 +48,7 @@ class URLAlias extends ValueObjectVisitor
             $generator->startObjectElement( 'location', 'Location' );
             $generator->startAttribute(
                 'href',
-                $this->urlHandler->generate( 'locationById', array( 'location' => $data->destination ) )
+                $this->requestParser->generate( 'locationById', array( 'location' => $data->destination ) )
             );
             $generator->endAttribute( 'href' );
             $generator->endObjectElement( 'location' );

@@ -323,7 +323,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     protected function getContentTypeGroupVisitor()
     {
         return new ValueObjectVisitor\ContentTypeGroup(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

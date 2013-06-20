@@ -138,7 +138,7 @@ class ContentTypeGroupUpdateStructTest extends ValueObjectVisitorBaseTest
     protected function getContentTypeGroupUpdateStructVisitor()
     {
         return new ValueObjectVisitor\ContentTypeGroupUpdateStruct(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

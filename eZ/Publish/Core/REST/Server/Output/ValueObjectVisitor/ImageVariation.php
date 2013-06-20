@@ -22,7 +22,7 @@ class ImageVariation extends ValueObjectVisitor
         $generator->startObjectElement( 'ContentImageVariation' );
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'getImageVariation',
                 array(
                     'imageId' => $data->imageId,

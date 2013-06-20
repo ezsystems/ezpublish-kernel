@@ -71,6 +71,6 @@ class RelationCreateTest extends BaseTest
      */
     protected function getRelationCreate()
     {
-        return new RelationCreate( $this->getUrlHandler() );
+        return new RelationCreate( $this->getRequestParser() );
     }
 }

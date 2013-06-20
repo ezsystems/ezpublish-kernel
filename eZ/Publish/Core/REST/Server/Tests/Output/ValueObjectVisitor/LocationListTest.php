@@ -94,7 +94,7 @@ class LocationListTest extends ValueObjectVisitorBaseTest
     protected function getLocationListVisitor()
     {
         return new ValueObjectVisitor\LocationList(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\ObjectStateService;
@@ -35,13 +35,13 @@ class ObjectStateGroupCreate extends Base
     /**
      * Construct
      *
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\ObjectStateService $objectStateService
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( UrlHandler $urlHandler, ObjectStateService $objectStateService, ParserTools $parserTools )
+    public function __construct( RequestParser $requestParser, ObjectStateService $objectStateService, ParserTools $parserTools )
     {
-        parent::__construct( $urlHandler );
+        parent::__construct( $requestParser );
         $this->objectStateService = $objectStateService;
         $this->parserTools = $parserTools;
     }

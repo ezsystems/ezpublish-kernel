@@ -53,7 +53,7 @@ class ForbiddenExceptionTest extends ExceptionTest
     protected function getExceptionVisitor()
     {
         return new ValueObjectVisitor\ForbiddenException(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

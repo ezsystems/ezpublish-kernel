@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Controller;
 
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Common\Exceptions;

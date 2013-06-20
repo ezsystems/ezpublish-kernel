@@ -118,7 +118,7 @@ class LocationUpdateTest extends BaseTest
     protected function getLocationUpdate()
     {
         return new LocationUpdate(
-            $this->getUrlHandler(),
+            $this->getRequestParser(),
             $this->getLocationServiceMock(),
             $this->getParserTools()
         );

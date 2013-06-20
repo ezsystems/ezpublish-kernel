@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\ContentService;
@@ -37,13 +37,13 @@ class VersionUpdate extends Base
     /**
      * Construct from content service
      *
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser
      */
-    public function __construct( UrlHandler $urlHandler, ContentService $contentService, FieldTypeParser $fieldTypeParser )
+    public function __construct( RequestParser $requestParser, ContentService $contentService, FieldTypeParser $fieldTypeParser )
     {
-        parent::__construct( $urlHandler );
+        parent::__construct( $requestParser );
         $this->contentService = $contentService;
         $this->fieldTypeParser = $fieldTypeParser;
     }
@@ -77,7 +77,7 @@ class VersionUpdate extends Base
                 throw new Exceptions\Parser( "Invalid 'fields' element for VersionUpdate." );
             }
 
-            $urlValues = $this->urlHandler->parse( 'objectVersion', $data['__url'] );
+            $urlValues = $this->requestParser->parse( 'objectVersion', $data['__url'] );
 
             foreach ( $data['fields']['field'] as $fieldData )
             {

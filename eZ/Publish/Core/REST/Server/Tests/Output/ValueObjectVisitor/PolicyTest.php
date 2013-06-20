@@ -209,7 +209,7 @@ class PolicyTest extends ValueObjectVisitorBaseTest
     protected function getPolicyVisitor()
     {
         return new ValueObjectVisitor\Policy(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

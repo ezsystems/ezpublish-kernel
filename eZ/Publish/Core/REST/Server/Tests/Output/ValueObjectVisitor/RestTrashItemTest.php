@@ -405,7 +405,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
     protected function getTrashItemVisitor()
     {
         return new ValueObjectVisitor\RestTrashItem(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

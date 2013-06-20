@@ -252,7 +252,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     protected function getURLAliasVisitor()
     {
         return new ValueObjectVisitor\URLAlias(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

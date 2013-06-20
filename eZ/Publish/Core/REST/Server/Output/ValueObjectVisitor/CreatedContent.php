@@ -29,7 +29,7 @@ class CreatedContent extends RestContent
         parent::visit( $visitor, $generator, $data->content );
         $visitor->setHeader(
             'Location',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'object',
                 array( 'object' => $data->content->contentInfo->id )
             )

@@ -176,7 +176,7 @@ class ContentTypeGroupRefListTest extends ValueObjectVisitorBaseTest
     protected function getContentTypeGroupRefListVisitor()
     {
         return new ValueObjectVisitor\ContentTypeGroupRefList(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

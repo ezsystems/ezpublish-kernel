@@ -123,7 +123,7 @@ class URLWildcardListTest extends ValueObjectVisitorBaseTest
     protected function getURLWildcardListVisitor()
     {
         return new ValueObjectVisitor\URLWildcardList(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

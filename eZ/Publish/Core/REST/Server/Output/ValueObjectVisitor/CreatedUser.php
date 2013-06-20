@@ -29,7 +29,7 @@ class CreatedUser extends RestUser
         parent::visit( $visitor, $generator, $data->user );
         $visitor->setHeader(
             'Location',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'user',
                 array( 'user' => $data->user->contentInfo->id )
             )

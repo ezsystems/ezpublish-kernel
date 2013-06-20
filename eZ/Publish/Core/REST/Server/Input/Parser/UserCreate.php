@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Exceptions;
@@ -53,15 +53,15 @@ class UserCreate extends Base
     /**
      * Construct
      *
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\UserService $userService
      * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      * @param \eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( UrlHandler $urlHandler, UserService $userService, ContentTypeService $contentTypeService, FieldTypeParser $fieldTypeParser, ParserTools $parserTools )
+    public function __construct( RequestParser $requestParser, UserService $userService, ContentTypeService $contentTypeService, FieldTypeParser $fieldTypeParser, ParserTools $parserTools )
     {
-        parent::__construct( $urlHandler );
+        parent::__construct( $requestParser );
         $this->userService = $userService;
         $this->contentTypeService = $contentTypeService;
         $this->fieldTypeParser = $fieldTypeParser;
@@ -86,7 +86,7 @@ class UserCreate extends Base
                 throw new Exceptions\Parser( "Missing '_href' attribute for ContentType element in UserCreate." );
             }
 
-            $contentTypeValues = $this->urlHandler->parse( 'type', $data['ContentType']['_href'] );
+            $contentTypeValues = $this->requestParser->parse( 'type', $data['ContentType']['_href'] );
             $contentType = $this->contentTypeService->loadContentType(
                 $contentTypeValues['type']
             );
@@ -127,7 +127,7 @@ class UserCreate extends Base
                 throw new Exceptions\Parser( "Missing '_href' attribute for Section element in UserCreate." );
             }
 
-            $sectionValues = $this->urlHandler->parse( 'section', $data['Section']['_href'] );
+            $sectionValues = $this->requestParser->parse( 'section', $data['Section']['_href'] );
             $userCreateStruct->sectionId = $sectionValues['section'];
         }
 

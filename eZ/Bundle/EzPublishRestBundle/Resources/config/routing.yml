@@ -247,70 +247,70 @@ ezpublish_rest_createObjectStateGroup:
     methods: [POST]
 
 ezpublish_rest_loadObjectStateGroup:
-    path: /content/objectstategroups/{objectStategroupPath}
+    path: /content/objectstategroups/{objectStateGroupId}
     defaults:
         _controller: ezpublish_rest.controller.object_state:loadObjectStateGroup
     methods: [GET]
     requirements:
-        objectStategroupPath: \d+
+        objectStateGroupId: \d+
 
 ezpublish_rest_updateObjectStateGroup:
-    path: /content/objectstategroups/{objectStategroupPath}
+    path: /content/objectstategroups/{objectStateGroupId}
     defaults:
         _controller: ezpublish_rest.controller.object_state:updateObjectStateGroup
     methods: [PATCH]
     requirements:
-        objectStategroupPath: \d+
+        objectStateGroupId: \d+
 
 ezpublish_rest_deleteObjectStateGroup:
-    path: /content/objectstategroups/{objectStategroupPath}
+    path: /content/objectstategroups/{objectStateGroupId}
     defaults:
         _controller: ezpublish_rest.controller.object_state:deleteObjectStateGroup
     methods: [DELETE]
     requirements:
-        objectStategroupPath: \d+
+        objectStateGroupId: \d+
 
 ezpublish_rest_loadObjectStates:
-    path: /content/objectstategroups/{objectStategroupPath}/objectstates
+    path: /content/objectstategroups/{objectStateGroupId}/objectstates
     defaults:
         _controller: ezpublish_rest.controller.object_state:loadObjectStates
     methods: [GET]
     requirements:
-        objectStategroupPath: \d+
+        objectStateGroupId: \d+
 
 ezpublish_rest_createObjectState:
-    path: /content/objectstategroups/{objectStategroupPath}/objectstates
+    path: /content/objectstategroups/{objectStateGroupId}/objectstates
     defaults:
         _controller: ezpublish_rest.controller.object_state:createObjectState
     methods: [POST]
     requirements:
-        objectStategroupPath: \d+
+        objectStateGroupId: \d+
 
 ezpublish_rest_loadObjectState:
-    path: /content/objectstategroups/{objectStategroupPath}/objectstates/{objectStateId}
+    path: /content/objectstategroups/{objectStateGroupId}/objectstates/{objectStateId}
     defaults:
         _controller: ezpublish_rest.controller.object_state:loadObjectState
     methods: [GET]
     requirements:
-        objectStategroupPath: \d+
+        objectStateGroupId: \d+
         objectStateId: \d+
 
 ezpublish_rest_updateObjectState:
-    path: /content/objectstategroups/{objectStategroupPath}/objectstates/{objectStateId}
+    path: /content/objectstategroups/{objectStateGroupId}/objectstates/{objectStateId}
     defaults:
         _controller: ezpublish_rest.controller.object_state:updateObjectState
     methods: [PATCH]
     requirements:
-        objectStategroupPath: \d+
+        objectStateGroupId: \d+
         objectStateId: \d+
 
 ezpublish_rest_deleteObjectState:
-    path: /content/objectstategroups/{objectStategroupPath}/objectstates/{objectStateId}
+    path: /content/objectstategroups/{objectStateGroupId}/objectstates/{objectStateId}
     defaults:
         _controller: ezpublish_rest.controller.object_state:deleteObjectState
     methods: [DELETE]
     requirements:
-        objectStategroupPath: \d+
+        objectStateGroupId: \d+
         objectStateId: \d+
 
 ezpublish_rest_getObjectStatesForContent:

@@ -29,7 +29,7 @@ class CreatedContentTypeGroup extends ContentTypeGroup
         parent::visit( $visitor, $generator, $data->contentTypeGroup );
         $visitor->setHeader(
             'Location',
-            $this->urlHandler->generate(
+            $this->requestParser->generate(
                 'typegroup',
                 array( 'typegroup' => $data->contentTypeGroup->id )
             )

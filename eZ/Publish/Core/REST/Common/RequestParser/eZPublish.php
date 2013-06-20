@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Common\UrlHandler;
+namespace eZ\Publish\Core\REST\Common\RequestParser;
 
 /**
  * Pattern based URL Handler pre-configured for eZ Publish

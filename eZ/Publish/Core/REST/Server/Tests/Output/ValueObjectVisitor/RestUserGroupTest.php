@@ -370,7 +370,7 @@ class RestUserGroupTest extends ValueObjectVisitorBaseTest
     protected function getUserGroupVisitor()
     {
         return new ValueObjectVisitor\RestUserGroup(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

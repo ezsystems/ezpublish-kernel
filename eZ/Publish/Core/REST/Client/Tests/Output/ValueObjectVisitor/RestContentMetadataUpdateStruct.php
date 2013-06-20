@@ -211,7 +211,7 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
     protected function getSectionIncludingContentMetadataUpdateStructVisitor()
     {
         return new ValueObjectVisitor\SectionIncludingContentMetadataUpdateStruct(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

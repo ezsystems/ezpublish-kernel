@@ -93,6 +93,6 @@ class ContentObjectStatesTest extends BaseTest
      */
     protected function getParser()
     {
-        return new Parser\ContentObjectStates( $this->getUrlHandler() );
+        return new Parser\ContentObjectStates( $this->getRequestParser() );
     }
 }

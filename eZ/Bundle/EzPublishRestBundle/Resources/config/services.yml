@@ -16,7 +16,7 @@ parameters:
     ezpublish_rest.response_visitor_dispatcher.class: eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher
     ezpublish_rest.factory.class: eZ\Bundle\EzPublishRestBundle\ApiLoader\Factory
     ezpublish_rest.input_dispatcher.class: eZ\Publish\Core\REST\Common\Input\Dispatcher
-    ezpublish_rest.url_handler.class: eZ\Publish\Core\REST\Common\UrlHandler\Prefixed
+    ezpublish_rest.request_parser.class: eZ\Publish\Core\REST\Common\RequestParser\Prefixed
     ezpublish_rest.parser_tools.class: eZ\Publish\Core\REST\Common\Input\ParserTools
     ezpublish_rest.field_type_parser.class: eZ\Publish\Core\REST\Common\Input\FieldTypeParser
     ezpublish_rest.listener.class: eZ\Bundle\EzPublishRestBundle\EventListener\RestListener
@@ -42,8 +42,8 @@ services:
             - @ezpublish.api.service.field_type
             - @ezpublish_rest.field_type_processor_registry
 
-    ezpublish_rest.url_handler:
-        class: %ezpublish_rest.url_handler.class%
+    ezpublish_rest.request_parser:
+        class: %ezpublish_rest.request_parser.class%
         arguments:
             # Note: everything related to prefix will be removed when UrlGeneration is handled by Symfony instead
             - %ezpublish_rest.path_prefix%
@@ -74,8 +74,8 @@ services:
         abstract: true
         calls:
             - [ setInputDispatcher, [@ezpublish_rest.input_dispatcher] ]
-            - [ setUrlHandler, [@router] ]
-            - [ setRequestParser, [@ezpublish_rest.url_handler] ]
+            - [ setRouter, [@router] ]
+            - [ setRequestParser, [@ezpublish_rest.request_parser] ]
             - [ setRequest, [@ezpublish_rest.request] ]
             - [ setContainer, [@service_container] ]
             - [ setRepository, [@ezpublish.api.repository] ]
@@ -175,7 +175,7 @@ services:
         factory_service: ezpublish_rest.factory
         factory_method: buildResponseVisitorDispatcher
         arguments:
-            - @ezpublish_rest.url_handler
+            - @ezpublish_rest.request_parser
             - @ezpublish_rest.field_type_serializer
             - @ezpublish.api.repository
 

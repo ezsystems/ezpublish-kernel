@@ -143,7 +143,7 @@ class VersionListTest extends ValueObjectVisitorBaseTest
     protected function getVersionListVisitor()
     {
         return new ValueObjectVisitor\VersionList(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

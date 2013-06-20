@@ -34,7 +34,7 @@ class ContentList extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'objects' )
+            $this->requestParser->generate( 'objects' )
         );
         $generator->endAttribute( 'href' );
 

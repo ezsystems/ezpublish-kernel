@@ -73,6 +73,6 @@ class SessionInputTest extends BaseTest
      */
     protected function getSessionInput()
     {
-        return new SessionInput( $this->getUrlHandler() );
+        return new SessionInput( $this->getRequestParser() );
     }
 }

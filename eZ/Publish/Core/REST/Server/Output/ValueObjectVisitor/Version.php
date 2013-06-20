@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
@@ -29,12 +29,12 @@ class Version extends ValueObjectVisitor
     protected $fieldTypeSerializer;
 
     /**
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer $fieldTypeSerializer
      */
-    public function __construct( UrlHandler $urlHandler, FieldTypeSerializer $fieldTypeSerializer )
+    public function __construct( RequestParser $requestParser, FieldTypeSerializer $fieldTypeSerializer )
     {
-        parent::__construct( $urlHandler );
+        parent::__construct( $requestParser );
         $this->fieldTypeSerializer = $fieldTypeSerializer;
     }
 
@@ -60,7 +60,7 @@ class Version extends ValueObjectVisitor
         $path = $data->path;
         if ( $path == null )
         {
-            $path = $this->urlHandler->generate(
+            $path = $this->requestParser->generate(
                 'objectVersion',
                 array(
                     'object' => $content->id,

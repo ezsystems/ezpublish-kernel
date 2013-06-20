@@ -198,7 +198,7 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
     protected function getRelationVisitor()
     {
         return new ValueObjectVisitor\RestRelation(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

@@ -19,18 +19,18 @@ class IdManager
     /**
      * URL handler
      *
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
+     * @var \eZ\Publish\Core\REST\Common\RequestParser
      */
-    protected $urlHandler;
+    protected $requestParser;
 
     /**
-     * Creates a new ID manager based on $urlHandler
+     * Creates a new ID manager based on $requestParser
      *
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      */
-    public function __construct( Common\UrlHandler $urlHandler )
+    public function __construct( Common\RequestParser $requestParser )
     {
-        $this->urlHandler = $urlHandler;
+        $this->requestParser = $requestParser;
     }
 
     /**
@@ -46,7 +46,7 @@ class IdManager
      */
     public function generateId( $type, $rawId )
     {
-        return $this->urlHandler->generate(
+        return $this->requestParser->generate(
             $type,
             array(
                 $type => $rawId,
@@ -67,7 +67,7 @@ class IdManager
      */
     public function parseId( $type, $id )
     {
-        $values = $this->urlHandler->parse( $type, $id );
+        $values = $this->requestParser->parse( $type, $id );
         return $values[$type];
     }
 }

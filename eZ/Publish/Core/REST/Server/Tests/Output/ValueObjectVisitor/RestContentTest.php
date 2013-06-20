@@ -378,7 +378,7 @@ class RestContentTest extends ValueObjectVisitorBaseTest
     protected function getContentVisitor()
     {
         return new ValueObjectVisitor\RestContent(
-            new Common\UrlHandler\eZPublish()
+            new Common\RequestParser\eZPublish()
         );
     }
 }

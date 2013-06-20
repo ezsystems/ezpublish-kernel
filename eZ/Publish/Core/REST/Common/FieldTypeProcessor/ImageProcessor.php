@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
-use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\RequestParser;
 
 class ImageProcessor extends BinaryInputProcessor
 {
@@ -32,19 +32,19 @@ class ImageProcessor extends BinaryInputProcessor
     protected $variations;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
+     * @var \eZ\Publish\Core\REST\Common\RequestParser
      */
-    protected $urlHandler;
+    protected $requestParser;
 
     /**
      * @param string $temporaryDirectory
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param array $variations array of variations identifiers
      */
-    public function __construct( $temporaryDirectory, $urlHandler, array $variations )
+    public function __construct( $temporaryDirectory, $requestParser, array $variations )
     {
         parent::__construct( $temporaryDirectory );
-        $this->urlHandler = $urlHandler;
+        $this->requestParser = $requestParser;
         $this->variations = $variations;
     }
 
@@ -62,7 +62,7 @@ class ImageProcessor extends BinaryInputProcessor
         foreach ( $this->variations as $variationIdentifier )
         {
             $outgoingValueHash['variations'][$variationIdentifier] = array(
-                'href' => $this->urlHandler->generate(
+                'href' => $this->requestParser->generate(
                     'getImageVariation',
                     array(
                         'imageId' => $outgoingValueHash['imageId'],

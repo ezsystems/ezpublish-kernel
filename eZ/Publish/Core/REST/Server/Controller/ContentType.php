@@ -168,7 +168,7 @@ class ContentType extends RestController
                 $this->router->generate(
                     'ezpublish_rest_loadContentTypeGroup',
                     array(
-                        'contentTypeGroupId' => $contentTypeGroup->id
+                        'contentTypeGroupPath' => $contentTypeGroup->id
                     )
                 )
             );
