@@ -46,7 +46,7 @@ class Content extends RestController
         $contentInfo = $this->repository->getContentService()->loadContentInfoByRemoteId( $this->request->variables['remoteId'] );
 
         return new Values\TemporaryRedirect(
-            $this->urlHandler->generate(
+            $this->router->generate(
                 'ezpublish_rest_loadContent',
                 array(
                     'contentId' => $contentInfo->id
@@ -159,7 +159,7 @@ class Content extends RestController
         );
 
         return new Values\TemporaryRedirect(
-            $this->urlHandler->generate(
+            $this->router->generate(
                 'ezpublish_rest_loadContentInVersion',
                 array(
                     'contentId' => $contentId,
@@ -299,7 +299,7 @@ class Content extends RestController
         );
 
         return new Values\ResourceCreated(
-            $this->urlHandler->generate(
+            $this->router->generate(
                 'ezpublish_rest_loadContent',
                 array( 'contentId' => $copiedContent->id )
             )
@@ -431,7 +431,7 @@ class Content extends RestController
             new Message(
                 array(
                     'Content-Type' => $this->request->contentType,
-                    'Url' => $this->urlHandler->generate(
+                    'Url' => $this->router->generate(
                         'ezpublish_rest_updateVersion', array(
                             'contentId' => $contentId,
                             'versionNumber' => $versionNumber
@@ -528,7 +528,7 @@ class Content extends RestController
     {
         $contentInfo = $this->repository->getContentService()->loadContentInfo( $contentId );
         return new Values\TemporaryRedirect(
-            $this->urlHandler->generate(
+            $this->router->generate(
                 'ezpublish_rest_redirectCurrentVersionRelations',
                 array(
                     'contentId' => $contentId,

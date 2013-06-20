@@ -165,7 +165,7 @@ class ContentType extends RestController
             );
 
             return new Values\TemporaryRedirect(
-                $this->urlHandler->generate(
+                $this->router->generate(
                     'ezpublish_rest_loadContentTypeGroup',
                     array(
                         'contentTypeGroupId' => $contentTypeGroup->id
@@ -342,7 +342,7 @@ class ContentType extends RestController
         );
 
         return new Values\ResourceCreated(
-            $this->urlHandler->generate(
+            $this->router->generate(
                 'ezpublish_rest_loadContentType',
                 array( 'contentTypeId' => $copiedContentType->id )
             )

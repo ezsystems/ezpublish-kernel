@@ -85,7 +85,7 @@ class Location extends RestController
         }
 
         return new Values\TemporaryRedirect(
-            $this->urlHandler->generate(
+            $this->router->generate(
                 'ezpublish_rest_loadLocation',
                 array(
                     'locationPath' => trim( $location->pathString, '/' )
@@ -180,7 +180,7 @@ class Location extends RestController
         $newLocation = $this->locationService->copySubtree( $location, $destinationLocation );
 
         return new Values\ResourceCreated(
-            $this->urlHandler->generate(
+            $this->router->generate(
                 'ezpublish_rest_loadLocation',
                 array(
                     'locationPath' => trim( $newLocation->pathString, '/' ),
@@ -234,7 +234,7 @@ class Location extends RestController
             // Reload the location to get the new position is subtree
             $locationToMove = $this->locationService->loadLocation( $locationToMove->id );
             return new Values\ResourceCreated(
-                $this->urlHandler->generate(
+                $this->router->generate(
                     'ezpublish_rest_loadLocation',
                     array(
                         'locationPath' => rtrim( $locationToMove->pathString, '/' ),
@@ -246,7 +246,7 @@ class Location extends RestController
         // We're trashing the subtree
         $trashItem = $this->trashService->trash( $locationToMove );
         return new Values\ResourceCreated(
-            $this->urlHandler->generate(
+            $this->router->generate(
                 'ezpublish_rest_loadTrashItem',
                 array( 'trashItemId' => $trashItem->id )
             )

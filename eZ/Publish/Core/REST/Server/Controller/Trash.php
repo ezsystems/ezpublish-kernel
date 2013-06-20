@@ -185,7 +185,7 @@ class Trash extends RestController
 
         $location = $this->trashService->recover( $trashItem, $parentLocation );
         return new Values\ResourceCreated(
-            $this->urlHandler->generate(
+            $this->router->generate(
                 'ezpublish_rest_loadLocation',
                 array(
                     'locationPath' => rtrim( $location->pathString, '/' ),

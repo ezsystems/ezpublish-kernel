@@ -31,7 +31,7 @@ abstract class Controller
     /**
      * @var \Symfony\Component\Routing\RouterInterface
      */
-    protected $urlHandler;
+    protected $router;
 
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
@@ -55,9 +55,9 @@ abstract class Controller
         $this->inputDispatcher = $inputDispatcher;
     }
 
-    public function setUrlHandler( RouterInterface $urlHandler )
+    public function setRouter( RouterInterface $urlHandler )
     {
-        $this->urlHandler = $urlHandler;
+        $this->router = $urlHandler;
     }
 
     public function setRequest( HttpRequest $request )

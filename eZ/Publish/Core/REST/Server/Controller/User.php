@@ -124,7 +124,7 @@ class User extends RestController
     {
         //@todo Replace hardcoded value with one loaded from settings
         return new Values\PermanentRedirect(
-            $this->urlHandler->generate( 'ezpublish_rest_loadUserGroup', array( 'groupPath' => '/1/5' ) )
+            $this->router->generate( 'ezpublish_rest_loadUserGroup', array( 'groupPath' => '/1/5' ) )
         );
     }
 
@@ -664,7 +664,7 @@ class User extends RestController
         $this->userService->moveUserGroup( $userGroup, $destinationGroup );
 
         return new Values\ResourceCreated(
-            $this->urlHandler->generate(
+            $this->router->generate(
                 'ezpublish_rest_loadUserGroup',
                 array(
                     'groupPath' => $destinationGroupLocation->pathString . $userGroupLocation->id
@@ -846,7 +846,7 @@ class User extends RestController
 
         return new Values\UserGroupRefList(
             $restUserGroups,
-            $this->urlHandler->generate(
+            $this->router->generate(
                 'ezpublish_rest_loadUserGroupsOfUser',
                 array( 'userId' => $userId )
             ),
@@ -916,7 +916,7 @@ class User extends RestController
 
         return new Values\UserGroupRefList(
             $restUserGroups,
-            $this->urlHandler->generate(
+            $this->router->generate(
                 'ezpublish_rest_loadUserGroupsOfUser',
                 array( 'userId' => $userId )
             ),
@@ -964,7 +964,7 @@ class User extends RestController
             if ( $user->id == $currentUser->id )
             {
                 return new Values\SeeOther(
-                    $this->urlHandler->generate(
+                    $this->router->generate(
                         'ezpublish_rest_deleteSession',
                         array( 'sessionId' => $session->getId() )
                     )

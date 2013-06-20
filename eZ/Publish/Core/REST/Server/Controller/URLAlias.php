@@ -70,7 +70,7 @@ class URLAlias extends RestController
     {
         return new Values\URLAliasRefList(
             $this->urlAliasService->listGlobalAliases(),
-            $this->requestParser->generate( 'urlAliases' )
+            $this->router->generate( 'ezpublish_rest_listGlobalURLAliases' )
         );
     }
 
