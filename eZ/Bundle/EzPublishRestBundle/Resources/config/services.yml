@@ -33,7 +33,6 @@ parameters:
     ezpublish_rest.field_type_processor.ezbinaryfile.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryProcessor
     ezpublish_rest.field_type_processor.ezpage.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\PageProcessor
 
-<<<<<<< HEAD
     ezpublish_rest.output.visitor.dispatcher.class: eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher
     ezpublish_rest.output.visitor.class: eZ\Publish\Core\REST\Common\Output\Visitor
     ezpublish_rest.output.generator.json.class: eZ\Publish\Core\REST\Common\Output\Generator\Json
@@ -53,64 +52,68 @@ parameters:
 
     ezpublish_rest.input.dispatcher.class: eZ\Publish\Core\REST\Common\Input\Dispatcher
     ezpublish_rest.input.parsing_dispatcher.class: eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
-    ezpublish_rest.input.parser.class: eZ\Publish\Core\REST\Server\Input\Parser
-    ezpublish_rest.input.parser.ContentCreate.class: eZ\Publish\Core\REST\Input\Parser\ContentCreate
-    ezpublish_rest.input.parser.ContentUpdate.class: eZ\Publish\Core\REST\Input\Parser\ContentUpdate
-    ezpublish_rest.input.parser.ContentObjectStates.class: eZ\Publish\Core\REST\Input\Parser\ContentObjectStates
-    ezpublish_rest.input.parser.ContentTypeGroupInput.class: eZ\Publish\Core\REST\Input\Parser\ContentTypeGroupInput
-    ezpublish_rest.input.parser.ContentTypeCreate.class: eZ\Publish\Core\REST\Input\Parser\ContentTypeCreate
-    ezpublish_rest.input.parser.ContentTypeUpdate.class: eZ\Publish\Core\REST\Input\Parser\ContentTypeUpdate
-    ezpublish_rest.input.parser.FieldDefinitionCreate.class: eZ\Publish\Core\REST\Input\Parser\FieldDefinitionCreate
-    ezpublish_rest.input.parser.FieldDefinitionUpdate.class: eZ\Publish\Core\REST\Input\Parser\FieldDefinitionUpdate
-    ezpublish_rest.input.parser.LocationCreate.class: eZ\Publish\Core\REST\Input\Parser\LocationCreate
-    ezpublish_rest.input.parser.LocationUpdate.class: eZ\Publish\Core\REST\Input\Parser\LocationUpdate
-    ezpublish_rest.input.parser.ObjectStateCreate.class: eZ\Publish\Core\REST\Input\Parser\ObjectStateCreate
-    ezpublish_rest.input.parser.ObjectStateGroupCreate.class: eZ\Publish\Core\REST\Input\Parser\ObjectStateGroupCreate
-    ezpublish_rest.input.parser.ObjectStateGroupUpdate.class: eZ\Publish\Core\REST\Input\Parser\ObjectStateGroupUpdate
-    ezpublish_rest.input.parser.ObjectStateUpdate.class: eZ\Publish\Core\REST\Input\Parser\ObjectStateUpdate
-    ezpublish_rest.input.parser.PolicyCreate.class: eZ\Publish\Core\REST\Input\Parser\PolicyCreate
-    ezpublish_rest.input.parser.PolicyUpdate.class: eZ\Publish\Core\REST\Input\Parser\PolicyUpdate
-    ezpublish_rest.input.parser.RelationCreate.class: eZ\Publish\Core\REST\Input\Parser\RelationCreate
-    ezpublish_rest.input.parser.RoleAssignInput.class: eZ\Publish\Core\REST\Input\Parser\RoleAssignInput
-    ezpublish_rest.input.parser.RoleInput.class: eZ\Publish\Core\REST\Input\Parser\RoleInput
-    ezpublish_rest.input.parser.SectionInput.class: eZ\Publish\Core\REST\Input\Parser\SectionInput
-    ezpublish_rest.input.parser.UserGroupUpdate.class: eZ\Publish\Core\REST\Input\Parser\UserGroupUpdate
-    ezpublish_rest.input.parser.UserUpdate.class: eZ\Publish\Core\REST\Input\Parser\UserUpdate
-    ezpublish_rest.input.parser.UrlWildcardCreate.class: eZ\Publish\Core\REST\Input\Parser\UrlWildcardCreate
-    ezpublish_rest.input.parser.UrlAliasCreate.class: eZ\Publish\Core\REST\Input\Parser\UrlAliasCreate
-    ezpublish_rest.input.parser.UserCreate.class: eZ\Publish\Core\REST\Input\Parser\UserCreate
-    ezpublish_rest.input.parser.UserGroupCreate.class: eZ\Publish\Core\REST\Input\Parser\UserGroupCreate
-    ezpublish_rest.input.parser.SessionInput.class: eZ\Publish\Core\REST\Input\Parser\SessionInput
-    ezpublish_rest.input.parser.VersionUpdate.class: eZ\Publish\Core\REST\Input\Parser\VersionUpdate
-    ezpublish_rest.input.parser.ViewInput.class: eZ\Publish\Core\REST\Input\Parser\ViewInput
 
-    ezpublish_rest.input.parser.internal.criterion.ContentId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\ContentId
-    ezpublish_rest.input.parser.internal.criterion.ContentRemoteId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\ContentRemoteId
-    ezpublish_rest.input.parser.internal.criterion.ContentTypeGroupId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\ContentTypeGroupId
-    ezpublish_rest.input.parser.internal.criterion.ContentTypeId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\ContentTypeId
-    ezpublish_rest.input.parser.internal.criterion.ContentTypeIdentifier.class: eZ\Publish\Core\REST\Input\Parser\Criterion\ContentTypeIdentifier
-    ezpublish_rest.input.parser.internal.criterion.DateMetadata.class: eZ\Publish\Core\REST\Input\Parser\Criterion\DateMetadata
-    ezpublish_rest.input.parser.internal.criterion.Field.class: eZ\Publish\Core\REST\Input\Parser\Criterion\Field
-    ezpublish_rest.input.parser.internal.criterion.FullText.class: eZ\Publish\Core\REST\Input\Parser\Criterion\FullText
-    ezpublish_rest.input.parser.internal.criterion.LanguageCode.class: eZ\Publish\Core\REST\Input\Parser\Criterion\LanguageCode
-    ezpublish_rest.input.parser.internal.criterion.LocationId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\LocationId
-    ezpublish_rest.input.parser.internal.criterion.LocationRemoteId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\LocationRemoteId
-    ezpublish_rest.input.parser.internal.criterion.LogicalAnd.class: eZ\Publish\Core\REST\Input\Parser\Criterion\LogicalAnd
-    ezpublish_rest.input.parser.internal.criterion.LogicalNot.class: eZ\Publish\Core\REST\Input\Parser\Criterion\LogicalNot
-    ezpublish_rest.input.parser.internal.criterion.LogicalOperator.class: eZ\Publish\Core\REST\Input\Parser\Criterion\LogicalOperator
-    ezpublish_rest.input.parser.internal.criterion.LogicalOr.class: eZ\Publish\Core\REST\Input\Parser\Criterion\LogicalOr
-    ezpublish_rest.input.parser.internal.criterion.MoreLikeThis.class: eZ\Publish\Core\REST\Input\Parser\Criterion\MoreLikeThis
-    ezpublish_rest.input.parser.internal.criterion.ObjectStateId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\ObjectStateId
-    ezpublish_rest.input.parser.internal.criterion.Operator.class: eZ\Publish\Core\REST\Input\Parser\Criterion\Operator
-    ezpublish_rest.input.parser.internal.criterion.ParentLocationId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\ParentLocationId
-    ezpublish_rest.input.parser.internal.criterion.ParentLocationRemoteId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\ParentLocationRemoteId
-    ezpublish_rest.input.parser.internal.criterion.SectionIdentifier.class: eZ\Publish\Core\REST\Input\Parser\Criterion\SectionIdentifier
-    ezpublish_rest.input.parser.internal.criterion.SectionId.class: eZ\Publish\Core\REST\Input\Parser\Criterion\SectionId
-    ezpublish_rest.input.parser.internal.criterion.Status.class: eZ\Publish\Core\REST\Input\Parser\Criterion\Status
-    ezpublish_rest.input.parser.internal.criterion.Subtree.class: eZ\Publish\Core\REST\Input\Parser\Criterion\Subtree
-    ezpublish_rest.input.parser.internal.criterion.UrlAlias.class: eZ\Publish\Core\REST\Input\Parser\Criterion\UrlAlias
-    ezpublish_rest.input.parser.internal.criterion.UserMetadata.class: eZ\Publish\Core\REST\Input\Parser\Criterion\UserMetadata
-    ezpublish_rest.input.parser.internal.criterion.Visibility.class: eZ\Publish\Core\REST\Input\Parser\Criterion\Visibility
+    ezpublish_rest.input.handler.json.class: eZ\Publish\Core\REST\Common\Input\Handler\Json
+    ezpublish_rest.input.handler.xml.class: eZ\Publish\Core\REST\Common\Input\Handler\Xml
+
+    ezpublish_rest.input.parser.class: eZ\Publish\Core\REST\Server\Input\Parser
+    ezpublish_rest.input.parser.ContentCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\ContentCreate
+    ezpublish_rest.input.parser.ContentUpdate.class: eZ\Publish\Core\REST\Server\Input\Parser\ContentUpdate
+    ezpublish_rest.input.parser.ContentObjectStates.class: eZ\Publish\Core\REST\Server\Input\Parser\ContentObjectStates
+    ezpublish_rest.input.parser.ContentTypeGroupInput.class: eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeGroupInput
+    ezpublish_rest.input.parser.ContentTypeCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeCreate
+    ezpublish_rest.input.parser.ContentTypeUpdate.class: eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeUpdate
+    ezpublish_rest.input.parser.FieldDefinitionCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\FieldDefinitionCreate
+    ezpublish_rest.input.parser.FieldDefinitionUpdate.class: eZ\Publish\Core\REST\Server\Input\Parser\FieldDefinitionUpdate
+    ezpublish_rest.input.parser.LocationCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\LocationCreate
+    ezpublish_rest.input.parser.LocationUpdate.class: eZ\Publish\Core\REST\Server\Input\Parser\LocationUpdate
+    ezpublish_rest.input.parser.ObjectStateCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateCreate
+    ezpublish_rest.input.parser.ObjectStateGroupCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateGroupCreate
+    ezpublish_rest.input.parser.ObjectStateGroupUpdate.class: eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateGroupUpdate
+    ezpublish_rest.input.parser.ObjectStateUpdate.class: eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateUpdate
+    ezpublish_rest.input.parser.PolicyCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\PolicyCreate
+    ezpublish_rest.input.parser.PolicyUpdate.class: eZ\Publish\Core\REST\Server\Input\Parser\PolicyUpdate
+    ezpublish_rest.input.parser.RelationCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\RelationCreate
+    ezpublish_rest.input.parser.RoleAssignInput.class: eZ\Publish\Core\REST\Server\Input\Parser\RoleAssignInput
+    ezpublish_rest.input.parser.RoleInput.class: eZ\Publish\Core\REST\Server\Input\Parser\RoleInput
+    ezpublish_rest.input.parser.SectionInput.class: eZ\Publish\Core\REST\Server\Input\Parser\SectionInput
+    ezpublish_rest.input.parser.UserGroupUpdate.class: eZ\Publish\Core\REST\Server\Input\Parser\UserGroupUpdate
+    ezpublish_rest.input.parser.UserUpdate.class: eZ\Publish\Core\REST\Server\Input\Parser\UserUpdate
+    ezpublish_rest.input.parser.UrlWildcardCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\UrlWildcardCreate
+    ezpublish_rest.input.parser.UrlAliasCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\UrlAliasCreate
+    ezpublish_rest.input.parser.UserCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\UserCreate
+    ezpublish_rest.input.parser.UserGroupCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\UserGroupCreate
+    ezpublish_rest.input.parser.SessionInput.class: eZ\Publish\Core\REST\Server\Input\Parser\SessionInput
+    ezpublish_rest.input.parser.VersionUpdate.class: eZ\Publish\Core\REST\Server\Input\Parser\VersionUpdate
+    ezpublish_rest.input.parser.ViewInput.class: eZ\Publish\Core\REST\Server\Input\Parser\ViewInput
+
+    ezpublish_rest.input.parser.internal.criterion.ContentId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\ContentId
+    ezpublish_rest.input.parser.internal.criterion.ContentRemoteId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\ContentRemoteId
+    ezpublish_rest.input.parser.internal.criterion.ContentTypeGroupId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\ContentTypeGroupId
+    ezpublish_rest.input.parser.internal.criterion.ContentTypeId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\ContentTypeId
+    ezpublish_rest.input.parser.internal.criterion.ContentTypeIdentifier.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\ContentTypeIdentifier
+    ezpublish_rest.input.parser.internal.criterion.DateMetadata.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\DateMetadata
+    ezpublish_rest.input.parser.internal.criterion.Field.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\Field
+    ezpublish_rest.input.parser.internal.criterion.FullText.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\FullText
+    ezpublish_rest.input.parser.internal.criterion.LanguageCode.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\LanguageCode
+    ezpublish_rest.input.parser.internal.criterion.LocationId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\LocationId
+    ezpublish_rest.input.parser.internal.criterion.LocationRemoteId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\LocationRemoteId
+    ezpublish_rest.input.parser.internal.criterion.LogicalAnd.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\LogicalAnd
+    ezpublish_rest.input.parser.internal.criterion.LogicalNot.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\LogicalNot
+    ezpublish_rest.input.parser.internal.criterion.LogicalOperator.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\LogicalOperator
+    ezpublish_rest.input.parser.internal.criterion.LogicalOr.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\LogicalOr
+    ezpublish_rest.input.parser.internal.criterion.MoreLikeThis.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\MoreLikeThis
+    ezpublish_rest.input.parser.internal.criterion.ObjectStateId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\ObjectStateId
+    ezpublish_rest.input.parser.internal.criterion.Operator.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\Operator
+    ezpublish_rest.input.parser.internal.criterion.ParentLocationId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\ParentLocationId
+    ezpublish_rest.input.parser.internal.criterion.ParentLocationRemoteId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\ParentLocationRemoteId
+    ezpublish_rest.input.parser.internal.criterion.SectionIdentifier.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\SectionIdentifier
+    ezpublish_rest.input.parser.internal.criterion.SectionId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\SectionId
+    ezpublish_rest.input.parser.internal.criterion.Status.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\Status
+    ezpublish_rest.input.parser.internal.criterion.Subtree.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\Subtree
+    ezpublish_rest.input.parser.internal.criterion.UrlAlias.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\UrlAlias
+    ezpublish_rest.input.parser.internal.criterion.UserMetadata.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\UserMetadata
+    ezpublish_rest.input.parser.internal.criterion.Visibility.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\Visibility
 
 services:
     ezpublish_rest.field_type_serializer:
