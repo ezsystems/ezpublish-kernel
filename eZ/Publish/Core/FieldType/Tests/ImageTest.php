@@ -126,14 +126,6 @@ class ImageTest extends FieldTypeTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                array(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                new ImageValue(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
                 new ImageValue(
                     array(
                         'path' => 'non/existent/path',
@@ -209,6 +201,14 @@ class ImageTest extends FieldTypeTest
             array(
                 null,
                 new ImageValue,
+            ),
+            array(
+                array(),
+                new ImageValue()
+            ),
+            array(
+                new ImageValue(),
+                new ImageValue()
             ),
             array(
                 $this->getImageInputPath(),
