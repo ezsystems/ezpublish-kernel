@@ -373,6 +373,16 @@ services:
     ezpublish_rest.input.parsing_dispatcher:
         class: %ezpublish_rest.input.parsing_dispatcher.class%
 
+    ezpublish_rest.input.handler.json:
+        class: %ezpublish_rest.input.handler.json.class%
+        tags:
+            - { name: ezpublish_rest.input.handler, format: json }
+
+    ezpublish_rest.input.handler.xml:
+        class: %ezpublish_rest.input.handler.xml.class%
+        tags:
+            - { name: ezpublish_rest.input.handler, format: xml }
+
     ezpublish_rest.input.parser:
         class: %ezpublish_rest.input.parser.class%
         abstract: true
