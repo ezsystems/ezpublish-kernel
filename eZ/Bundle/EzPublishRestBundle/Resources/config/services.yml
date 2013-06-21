@@ -79,8 +79,8 @@ parameters:
     ezpublish_rest.input.parser.SectionInput.class: eZ\Publish\Core\REST\Server\Input\Parser\SectionInput
     ezpublish_rest.input.parser.UserGroupUpdate.class: eZ\Publish\Core\REST\Server\Input\Parser\UserGroupUpdate
     ezpublish_rest.input.parser.UserUpdate.class: eZ\Publish\Core\REST\Server\Input\Parser\UserUpdate
-    ezpublish_rest.input.parser.UrlWildcardCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\UrlWildcardCreate
-    ezpublish_rest.input.parser.UrlAliasCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\UrlAliasCreate
+    ezpublish_rest.input.parser.UrlWildcardCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\URLWildcardCreate
+    ezpublish_rest.input.parser.URLAliasCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\URLAliasCreate
     ezpublish_rest.input.parser.UserCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\UserCreate
     ezpublish_rest.input.parser.UserGroupCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\UserGroupCreate
     ezpublish_rest.input.parser.SessionInput.class: eZ\Publish\Core\REST\Server\Input\Parser\SessionInput
@@ -418,7 +418,7 @@ services:
         class: %ezpublish_rest.input.parser.ContentTypeCreate.class%
         arguments:
             - @ezpublish.api.service.content_type
-            - @ezpublish_rest.field_type_parser
+            - @ezpublish_rest.input.parser.FieldDefinitionCreate
             - @ezpublish_rest.parser_tools
         tags:
             - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.ContentTypeCreate }
@@ -583,17 +583,17 @@ services:
         tags:
             - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.UserGroupUpdate }
 
-    ezpublish_rest.input.parser.UrlAliasCreate:
+    ezpublish_rest.input.parser.URLAliasCreate:
         parent: ezpublish_rest.input.parser
-        class: %ezpublish_rest.input.parser.UrlAliasCreate.class%
+        class: %ezpublish_rest.input.parser.URLAliasCreate.class%
         arguments:
             - @ezpublish_rest.parser_tools
         tags:
             - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.UrlAliasCreate }
 
-    ezpublish_rest.input.parser.UrlWildcardCreate:
+    ezpublish_rest.input.parser.URLWildcardCreate:
         parent: ezpublish_rest.input.parser
-        class: %ezpublish_rest.input.parser.UrlWildcardCreate.class%
+        class: %ezpublish_rest.input.parser.URLWildcardCreate.class%
         arguments:
             - @ezpublish_rest.parser_tools
         tags:
@@ -675,7 +675,7 @@ services:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.ContentTypeIdentifier.class%
         arguments:
-            - @ezpublish.api.service.content
+            - @ezpublish.api.service.content_type
         tags:
             - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.ContentTypeIdentifier }
 
