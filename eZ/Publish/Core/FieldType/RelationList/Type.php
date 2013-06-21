@@ -192,6 +192,11 @@ class Type extends FieldType
             );
         }
 
+        if ( $this->isEmptyValue( $inputValue ) )
+        {
+            return $this->getEmptyValue();
+        }
+
         foreach ( $inputValue->destinationContentIds as $key => $destinationContentId )
         {
             if ( !is_integer( $destinationContentId ) && !is_string( $destinationContentId ) )

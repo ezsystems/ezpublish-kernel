@@ -90,11 +90,6 @@ class Type extends FieldType
      */
     protected function internalAcceptValue( $inputValue )
     {
-        if ( $inputValue === "" )
-        {
-            return $this->getEmptyValue();
-        }
-
         if ( is_string( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
@@ -108,7 +103,7 @@ class Type extends FieldType
             );
         }
 
-        if ( $inputValue->text === null || $inputValue->text === "" )
+        if ( $this->isEmptyValue( $inputValue ) )
         {
             return $this->getEmptyValue();
         }

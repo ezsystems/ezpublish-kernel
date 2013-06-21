@@ -98,9 +98,6 @@ class Type extends FieldType
     {
         if ( is_array( $inputValue ) )
         {
-            if ( empty( $inputValue ) )
-                return $this->getEmptyValue();
-
             $inputValue = $this->fromHash( $inputValue );
         }
 
@@ -111,6 +108,11 @@ class Type extends FieldType
                 'eZ\\Publish\\Core\\FieldType\\Country\\Value',
                 $inputValue
             );
+        }
+
+        if ( $this->isEmptyValue( $inputValue ) )
+        {
+            return $this->getEmptyValue();
         }
 
         if ( !is_array( $inputValue->countries ) )

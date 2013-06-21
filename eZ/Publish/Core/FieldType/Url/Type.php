@@ -83,6 +83,11 @@ class Type extends FieldType
             );
         }
 
+        if ( $this->isEmptyValue( $inputValue ) )
+        {
+            return $this->getEmptyValue();
+        }
+
         if ( !is_string( $inputValue->link ) )
         {
             throw new InvalidArgumentType(

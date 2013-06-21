@@ -79,6 +79,11 @@ class Type extends FieldType
             );
         }
 
+        if ( $this->isEmptyValue( $inputValue ) )
+        {
+            return $this->getEmptyValue();
+        }
+
         if ( !is_bool( $inputValue->bool ) )
         {
             throw new InvalidArgumentType(

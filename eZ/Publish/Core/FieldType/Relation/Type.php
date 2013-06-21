@@ -136,6 +136,11 @@ class Type extends FieldType
         return new Value();
     }
 
+    public function isEmptyValue( $value )
+    {
+        return $value === null || $value->destinationContentId === null;
+    }
+
     /**
      * Checks the type and structure of the $Value.
      *
@@ -167,7 +172,12 @@ class Type extends FieldType
             );
         }
 
-        if ( !is_integer( $inputValue->destinationContentId ) && !is_string( $inputValue->destinationContentId ) && $inputValue->destinationContentId !== null )
+        if ( $this->isEmptyValue( $inputValue ) )
+        {
+            return $this->getEmptyValue();
+        }
+
+        if ( !is_integer( $inputValue->destinationContentId ) && !is_string( $inputValue->destinationContentId ) )
         {
             throw new InvalidArgumentType(
                 '$inputValue->destinationContentId',

@@ -99,13 +99,18 @@ class Type extends FieldType
             );
         }
 
-        // Required parameter $fileName
-        if ( !isset( $inputValue->fileName ) || !is_string( $inputValue->fileName ) )
+        if ( $this->isEmptyValue( $inputValue ) )
+        {
+            return $this->getEmptyValue();
+        }
+
+        // Required parameter $path
+        if ( !isset( $inputValue->path ) || !file_exists( $inputValue->path ) )
         {
             throw new InvalidArgumentType(
-                '$inputValue->fileName',
+                '$inputValue->path',
                 'string',
-                $inputValue->fileName
+                $inputValue->path
             );
         }
 
@@ -130,18 +135,6 @@ class Type extends FieldType
         }
 
         return $inputValue;
-    }
-
-    /**
-     * Returns if the given $value is considered empty by the field type
-     *
-     * @param mixed $value
-     *
-     * @return boolean
-     */
-    public function isEmptyValue( $value )
-    {
-        return $value === null || $value->fileName === null;
     }
 
     /**

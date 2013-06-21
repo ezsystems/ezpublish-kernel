@@ -155,6 +155,11 @@ class Type extends FieldType
             );
         }
 
+        if ( $this->isEmptyValue( $inputValue ) )
+        {
+            return $this->getEmptyValue();
+        }
+
         return $inputValue;
     }
 

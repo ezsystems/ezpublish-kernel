@@ -114,6 +114,11 @@ class Type extends FieldType
             );
         }
 
+        if ( $this->isEmptyValue( $inputValue ) )
+        {
+            return $this->getEmptyValue();
+        }
+
         if ( isset( $inputValue->value ) && !$inputValue->value instanceof DateTime )
         {
             throw new InvalidArgumentType(

@@ -110,7 +110,12 @@ class Type extends FieldType
             );
         }
 
-        if ( isset( $inputValue->time ) && !is_int( $inputValue->time ) )
+        if ( $this->isEmptyValue( $inputValue ) )
+        {
+            return $this->getEmptyValue();
+        }
+
+        if ( !is_int( $inputValue->time ) )
         {
             throw new InvalidArgumentType(
                 '$inputValue->time',

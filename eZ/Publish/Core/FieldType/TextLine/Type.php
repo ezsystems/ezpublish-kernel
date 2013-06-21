@@ -209,9 +209,6 @@ class Type extends FieldType
     {
         if ( is_string( $inputValue ) )
         {
-            if ( trim( $inputValue, " " ) === "" )
-                return $this->getEmptyValue();
-
             $inputValue = new Value( $inputValue );
         }
         else if ( !$inputValue instanceof Value )
@@ -223,8 +220,7 @@ class Type extends FieldType
             );
         }
 
-        if ( $inputValue->text === null
-            || ( is_string( $inputValue->text ) && trim( $inputValue->text, " " ) === "" ) )
+        if ( $this->isEmptyValue( $inputValue ) )
         {
             return $this->getEmptyValue();
         }

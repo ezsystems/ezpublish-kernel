@@ -80,6 +80,11 @@ class Type extends FieldType
             );
         }
 
+        if ( $this->isEmptyValue( $inputValue ) )
+        {
+            return $this->getEmptyValue();
+        }
+
         if ( !$inputValue->authors instanceof AuthorCollection )
         {
             throw new InvalidArgumentType(
