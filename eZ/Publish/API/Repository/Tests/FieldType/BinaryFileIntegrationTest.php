@@ -220,14 +220,6 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     {
         return array(
             array(
-                array(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
-            ),
-            array(
-                new BinaryFileValue( array() ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
-            ),
-            array(
                 array(
                     'path' => '/foo/bar/sindelfingen.pdf',
                 ),
