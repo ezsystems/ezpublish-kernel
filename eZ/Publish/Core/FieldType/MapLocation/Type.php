@@ -70,7 +70,7 @@ class Type extends FieldType
      */
     public function isEmptyValue( $value )
     {
-        return $value === null || $value->latitude === null || $value->longitude === null;
+        return $value === null || ( $value->latitude === null && $value->longitude === null );
     }
 
     /**
