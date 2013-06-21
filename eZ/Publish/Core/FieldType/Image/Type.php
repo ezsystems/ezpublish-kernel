@@ -124,6 +124,16 @@ class Type extends FieldType
             );
         }
 
+        // Required parameter $fileName
+        if ( !isset( $inputValue->fileName ) || !is_string( $inputValue->fileName ) )
+        {
+            throw new InvalidArgumentType(
+                '$inputValue->fileName',
+                'integer',
+                $inputValue->fileName
+            );
+        }
+
         // Optional parameter $alternativeText
         if ( isset( $inputValue->alternativeText ) && !is_string( $inputValue->alternativeText ) )
         {
