@@ -1351,6 +1351,17 @@ class ContentTypeService implements ContentTypeServiceInterface
             }
         }
 
+        if (
+            $fieldDefinitionCreateStruct->fieldTypeIdentifier === "ezuser" &&
+            $this->contentTypeHandler->countInstancesOfContentType( $loadedContentTypeDraft->id )
+        )
+        {
+            throw new BadStateException(
+                "\$contentTypeId",
+                "Field definition of 'ezuser' field type cannot be added because ContentType has Content instances"
+            );
+        }
+
         $spiFieldDefinitionCreateStruct = $this->buildSPIFieldDefinitionCreate(
             $fieldDefinitionCreateStruct
         );

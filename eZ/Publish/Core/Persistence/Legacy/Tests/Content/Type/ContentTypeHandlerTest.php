@@ -1015,12 +1015,11 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::addFieldDefinition
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::countInstancesOfContentType
      *
      * @return void
      */
-    public function testAddFieldDefinitionThrowsBadStateException()
+    public function testCountInstancesOfContentType()
     {
         $gatewayMock = $this->getGatewayMock();
         $gatewayMock->expects( $this->once() )
@@ -1031,14 +1030,12 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
                 $this->returnValue( 42 )
             );
 
-        $fieldDef = new FieldDefinition(
-            array(
-                "fieldType" => "ezuser",
-            )
-        );
-
         $handler = $this->getHandler();
-        $handler->addFieldDefinition( 23, 1, $fieldDef );
+
+        $this->assertEquals(
+            42,
+            $handler->countInstancesOfContentType( 23 )
+        );
     }
 
     /**

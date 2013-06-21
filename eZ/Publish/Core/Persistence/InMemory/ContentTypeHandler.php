@@ -268,7 +268,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function delete( $contentTypeId, $status )
     {
-        if ( Type::STATUS_DEFINED === $status && $this->backend->count( 'Content\\ContentInfo', array( 'contentTypeId' => $contentTypeId ) ) )
+        if ( Type::STATUS_DEFINED === $status && $this->countInstancesOfContentType( $contentTypeId ) )
         {
             throw new BadStateException( '$contentTypeId', "Content of Type {$contentTypeId} still exists, can not delete" );
         }
@@ -449,14 +449,23 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
+     * Counts the number of Content instances of the ContentType identified by given $contentTypeId.
+     *
+     * @param mixed $contentTypeId
+     *
+     * @return int
+     */
+    public function countInstancesOfContentType( $contentTypeId )
+    {
+        return $this->backend->count( 'Content\\ContentInfo', array( 'contentTypeId' => $contentTypeId ) );
+    }
+
+    /**
      * Adds a new field definition to an existing Type.
      *
      * This method creates a new version of the Type with the $fieldDefinition
      * added. It does not update existing content objects depending on the
      * field (default) values.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If 'ezuser' type field definition is being added
-     *                                                                 to the ContentType that has Content instances
      *
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
@@ -471,14 +480,6 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         $list = $this->backend->find( 'Content\\Type', array( 'id' => $contentTypeId, 'status' => $status ) );
         if ( !isset( $list[0] ) )
             throw new NotFound( 'Content\\Type', "{$contentTypeId}' and status '{$status}" );
-
-        if ( $fieldDefinition->fieldType === "ezuser" && $this->backend->count( 'Content\\ContentInfo', array( 'contentTypeId' => $contentTypeId ) ) )
-        {
-            throw new BadStateException(
-                "\$contentTypeId",
-                "Field definition of 'ezuser' field type cannot be added because ContentType has Content instances"
-            );
-        }
 
         $fieldDefinitionArr = (array)$fieldDefinition;
         $fieldDefinitionArr['_typeId'] = $contentTypeId;

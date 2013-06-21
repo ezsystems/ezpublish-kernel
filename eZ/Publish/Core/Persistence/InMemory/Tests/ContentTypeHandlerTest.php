@@ -560,18 +560,18 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
-     * Test addFieldDefinition function
+     * Test countInstancesOfContentType function
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::addFieldDefinition
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::countInstancesOfContentType
      */
-    public function testAddFieldDefinitionThrowsBadStateException()
+    public function testCountInstancesOfContentType()
     {
         $handler = $this->persistenceHandler->ContentTypeHandler();
-        $field = new FieldDefinition();
-        $field->identifier = 'user_account';
-        $field->fieldType = 'ezuser';
-        $handler->addFieldDefinition( 1, 0, $field );
+
+        $this->assertEquals(
+            3,
+            $handler->countInstancesOfContentType( 1 )
+        );
     }
 
     /**

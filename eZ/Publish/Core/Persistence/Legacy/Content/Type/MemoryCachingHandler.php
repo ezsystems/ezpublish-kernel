@@ -332,14 +332,23 @@ class MemoryCachingHandler implements BaseContentTypeHandler
     }
 
     /**
+     * Counts the number of Content instances of the ContentType identified by given $contentTypeId.
+     *
+     * @param mixed $contentTypeId
+     *
+     * @return int
+     */
+    public function countInstancesOfContentType( $contentTypeId )
+    {
+        return $this->innerHandler->countInstancesOfContentType( $contentTypeId );
+    }
+
+    /**
      * Adds a new field definition to an existing Type.
      *
      * This method creates a new status of the Type with the $fieldDefinition
      * added. It does not update existing content objects depending on the
      * field (default) values.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If 'ezuser' type field definition is being added
-     *                                                                 to the ContentType that has Content instances
      *
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED

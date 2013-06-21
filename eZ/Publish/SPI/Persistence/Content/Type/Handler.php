@@ -197,6 +197,15 @@ interface Handler
     public function getFieldDefinition( $id, $status );
 
     /**
+     * Counts the number of Content instances of the ContentType identified by given $contentTypeId.
+     *
+     * @param mixed $contentTypeId
+     *
+     * @return int
+     */
+    public function countInstancesOfContentType( $contentTypeId );
+
+    /**
      * Adds a new field definition to an existing Type.
      *
      * This method creates a new version of the Type with the $fieldDefinition
