@@ -41,7 +41,7 @@ class ObjectStateCreateTest extends BaseTest
             )
         );
 
-        $objectStateCreate = $this->getObjectStateCreate();
+        $objectStateCreate = $this->getParser();
         $result = $objectStateCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -110,7 +110,7 @@ class ObjectStateCreateTest extends BaseTest
             )
         );
 
-        $objectStateCreate = $this->getObjectStateCreate();
+        $objectStateCreate = $this->getParser();
         $objectStateCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -143,7 +143,7 @@ class ObjectStateCreateTest extends BaseTest
             )
         );
 
-        $objectStateCreate = $this->getObjectStateCreate();
+        $objectStateCreate = $this->getParser();
         $objectStateCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -176,7 +176,7 @@ class ObjectStateCreateTest extends BaseTest
             )
         );
 
-        $objectStateCreate = $this->getObjectStateCreate();
+        $objectStateCreate = $this->getParser();
         $objectStateCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -202,7 +202,7 @@ class ObjectStateCreateTest extends BaseTest
             )
         );
 
-        $objectStateCreate = $this->getObjectStateCreate();
+        $objectStateCreate = $this->getParser();
         $objectStateCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -229,7 +229,7 @@ class ObjectStateCreateTest extends BaseTest
             )
         );
 
-        $objectStateCreate = $this->getObjectStateCreate();
+        $objectStateCreate = $this->getParser();
         $objectStateCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -238,10 +238,9 @@ class ObjectStateCreateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateCreate
      */
-    protected function getObjectStateCreate()
+    protected function internalGetParser()
     {
         return new ObjectStateCreate(
-            $this->getRequestParser(),
             $this->getObjectStateServiceMock(),
             $this->getParserTools()
         );

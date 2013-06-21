@@ -32,7 +32,7 @@ class VersionUpdateTest extends BaseTest
             '__url' => '/content/objects/42/versions/1'
         );
 
-        $VersionUpdate = $this->getVersionUpdate();
+        $VersionUpdate = $this->getParser();
         $result = $VersionUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -71,7 +71,7 @@ class VersionUpdateTest extends BaseTest
             '__url' => '/content/objects/42/versions/1'
         );
 
-        $VersionUpdate = $this->getVersionUpdate();
+        $VersionUpdate = $this->getParser();
         $VersionUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -95,7 +95,7 @@ class VersionUpdateTest extends BaseTest
             '__url' => '/content/objects/42/versions/1'
         );
 
-        $VersionUpdate = $this->getVersionUpdate();
+        $VersionUpdate = $this->getParser();
         $VersionUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -119,7 +119,7 @@ class VersionUpdateTest extends BaseTest
             '__url' => '/content/objects/42/versions/1'
         );
 
-        $VersionUpdate = $this->getVersionUpdate();
+        $VersionUpdate = $this->getParser();
         $VersionUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -128,10 +128,9 @@ class VersionUpdateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\VersionUpdate
      */
-    protected function getVersionUpdate()
+    protected function internalGetParser()
     {
         return new VersionUpdate(
-            $this->getRequestParser(),
             $this->getContentServiceMock(),
             $this->getFieldTypeParserMock()
         );

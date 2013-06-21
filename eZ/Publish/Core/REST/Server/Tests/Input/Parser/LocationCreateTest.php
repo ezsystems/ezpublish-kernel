@@ -31,7 +31,7 @@ class LocationCreateTest extends BaseTest
             'sortOrder' => 'ASC'
         );
 
-        $locationCreate = $this->getLocationCreate();
+        $locationCreate = $this->getParser();
         $result = $locationCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -93,7 +93,7 @@ class LocationCreateTest extends BaseTest
             'sortOrder' => 'ASC'
         );
 
-        $locationCreate = $this->getLocationCreate();
+        $locationCreate = $this->getParser();
         $locationCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -114,7 +114,7 @@ class LocationCreateTest extends BaseTest
             'sortOrder' => 'ASC'
         );
 
-        $locationCreate = $this->getLocationCreate();
+        $locationCreate = $this->getParser();
         $locationCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -136,7 +136,7 @@ class LocationCreateTest extends BaseTest
             'sortOrder' => 'ASC'
         );
 
-        $locationCreate = $this->getLocationCreate();
+        $locationCreate = $this->getParser();
         $locationCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -158,7 +158,7 @@ class LocationCreateTest extends BaseTest
             'sortField' => 'PATH'
         );
 
-        $locationCreate = $this->getLocationCreate();
+        $locationCreate = $this->getParser();
         $locationCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -167,10 +167,9 @@ class LocationCreateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\LocationCreate
      */
-    protected function getLocationCreate()
+    protected function internalGetParser()
     {
         return new LocationCreate(
-            $this->getRequestParser(),
             $this->getLocationServiceMock(),
             $this->getParserTools()
         );

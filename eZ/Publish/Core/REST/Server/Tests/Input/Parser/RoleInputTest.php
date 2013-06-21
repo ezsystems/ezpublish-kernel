@@ -42,7 +42,7 @@ class RoleInputTest extends BaseTest
             */
         );
 
-        $roleInput = $this->getRoleInput();
+        $roleInput = $this->getParser();
         $result = $roleInput->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -77,10 +77,9 @@ class RoleInputTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\RoleInput
      */
-    protected function getRoleInput()
+    protected function internalGetParser()
     {
         return new RoleInput(
-            $this->getRequestParser(),
             $this->getRoleServiceMock(),
             $this->getParserTools()
         );

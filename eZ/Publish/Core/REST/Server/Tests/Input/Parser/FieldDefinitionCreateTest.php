@@ -24,7 +24,7 @@ class FieldDefinitionCreateTest extends BaseTest
     {
         $inputArray = $this->getInputArray();
 
-        $fieldDefinitionCreate = $this->getFieldDefinitionCreate();
+        $fieldDefinitionCreate = $this->getParser();
         $result = $fieldDefinitionCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -128,7 +128,7 @@ class FieldDefinitionCreateTest extends BaseTest
         $inputArray = $this->getInputArray();
         unset( $inputArray['identifier'] );
 
-        $fieldDefinitionCreate = $this->getFieldDefinitionCreate();
+        $fieldDefinitionCreate = $this->getParser();
         $fieldDefinitionCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -143,7 +143,7 @@ class FieldDefinitionCreateTest extends BaseTest
         $inputArray = $this->getInputArray();
         unset( $inputArray['fieldType'] );
 
-        $fieldDefinitionCreate = $this->getFieldDefinitionCreate();
+        $fieldDefinitionCreate = $this->getParser();
         $fieldDefinitionCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -158,7 +158,7 @@ class FieldDefinitionCreateTest extends BaseTest
         $inputArray = $this->getInputArray();
         unset( $inputArray['names']['value'] );
 
-        $fieldDefinitionCreate = $this->getFieldDefinitionCreate();
+        $fieldDefinitionCreate = $this->getParser();
         $fieldDefinitionCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -173,7 +173,7 @@ class FieldDefinitionCreateTest extends BaseTest
         $inputArray = $this->getInputArray();
         unset( $inputArray['descriptions']['value'] );
 
-        $fieldDefinitionCreate = $this->getFieldDefinitionCreate();
+        $fieldDefinitionCreate = $this->getParser();
         $fieldDefinitionCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -182,10 +182,9 @@ class FieldDefinitionCreateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\FieldDefinitionCreate
      */
-    protected function getFieldDefinitionCreate()
+    protected function internalGetParser()
     {
         return new FieldDefinitionCreate(
-            $this->getRequestParser(),
             $this->getContentTypeServiceMock(),
             $this->getFieldTypeParserMock(),
             $this->getParserTools()

@@ -40,7 +40,7 @@ class ObjectStateGroupCreateTest extends BaseTest
             )
         );
 
-        $objectStateGroupCreate = $this->getObjectStateGroupCreate();
+        $objectStateGroupCreate = $this->getParser();
         $result = $objectStateGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -102,7 +102,7 @@ class ObjectStateGroupCreateTest extends BaseTest
             )
         );
 
-        $objectStateGroupCreate = $this->getObjectStateGroupCreate();
+        $objectStateGroupCreate = $this->getParser();
         $objectStateGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -134,7 +134,7 @@ class ObjectStateGroupCreateTest extends BaseTest
             )
         );
 
-        $objectStateGroupCreate = $this->getObjectStateGroupCreate();
+        $objectStateGroupCreate = $this->getParser();
         $objectStateGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -159,7 +159,7 @@ class ObjectStateGroupCreateTest extends BaseTest
             )
         );
 
-        $objectStateGroupCreate = $this->getObjectStateGroupCreate();
+        $objectStateGroupCreate = $this->getParser();
         $objectStateGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -185,7 +185,7 @@ class ObjectStateGroupCreateTest extends BaseTest
             )
         );
 
-        $objectStateGroupCreate = $this->getObjectStateGroupCreate();
+        $objectStateGroupCreate = $this->getParser();
         $objectStateGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -194,10 +194,9 @@ class ObjectStateGroupCreateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateGroupCreate
      */
-    protected function getObjectStateGroupCreate()
+    protected function internalGetParser()
     {
         return new ObjectStateGroupCreate(
-            $this->getRequestParser(),
             $this->getObjectStateServiceMock(),
             $this->getParserTools()
         );

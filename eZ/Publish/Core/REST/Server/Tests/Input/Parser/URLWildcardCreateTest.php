@@ -24,7 +24,7 @@ class URLWildcardCreateTest extends BaseTest
             'forward' => 'true'
         );
 
-        $urlWildcardCreate = $this->getURLWildcardCreate();
+        $urlWildcardCreate = $this->getParser();
         $result = $urlWildcardCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertEquals(
@@ -51,7 +51,7 @@ class URLWildcardCreateTest extends BaseTest
             'forward' => 'true'
         );
 
-        $urlWildcardCreate = $this->getURLWildcardCreate();
+        $urlWildcardCreate = $this->getParser();
         $urlWildcardCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -68,7 +68,7 @@ class URLWildcardCreateTest extends BaseTest
             'forward' => 'true'
         );
 
-        $urlWildcardCreate = $this->getURLWildcardCreate();
+        $urlWildcardCreate = $this->getParser();
         $urlWildcardCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -85,7 +85,7 @@ class URLWildcardCreateTest extends BaseTest
             'destinationUrl' => '/destination/url'
         );
 
-        $urlWildcardCreate = $this->getURLWildcardCreate();
+        $urlWildcardCreate = $this->getParser();
         $urlWildcardCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -94,8 +94,10 @@ class URLWildcardCreateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\URLWildcardCreate
      */
-    protected function getURLWildcardCreate()
+    protected function internalGetParser()
     {
-        return new URLWildcardCreate( $this->getRequestParser(), $this->getParserTools() );
+        $parser = new URLWildcardCreate( $this->getParserTools() );
+        $parser->setRequestParser( $this->getRequestParser() );
+        return $parser;
     }
 }

@@ -41,7 +41,7 @@ class UserUpdateTest extends BaseTest
             '__url' => '/user/users/14'
         );
 
-        $userUpdate = $this->getUserUpdate();
+        $userUpdate = $this->getParser();
         $result = $userUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -134,7 +134,7 @@ class UserUpdateTest extends BaseTest
             '__url' => '/user/users/14'
         );
 
-        $userUpdate = $this->getUserUpdate();
+        $userUpdate = $this->getParser();
         $userUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -159,7 +159,7 @@ class UserUpdateTest extends BaseTest
             '__url' => '/user/users/14'
         );
 
-        $userUpdate = $this->getUserUpdate();
+        $userUpdate = $this->getParser();
         $userUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -190,7 +190,7 @@ class UserUpdateTest extends BaseTest
             '__url' => '/user/users/14'
         );
 
-        $userUpdate = $this->getUserUpdate();
+        $userUpdate = $this->getParser();
         $userUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -221,7 +221,7 @@ class UserUpdateTest extends BaseTest
             '__url' => '/user/users/14'
         );
 
-        $userUpdate = $this->getUserUpdate();
+        $userUpdate = $this->getParser();
         $userUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -230,10 +230,9 @@ class UserUpdateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\UserUpdate
      */
-    protected function getUserUpdate()
+    protected function internalGetParser()
     {
         return new UserUpdate(
-            $this->getRequestParser(),
             $this->getUserServiceMock(),
             $this->getContentServiceMock(),
             $this->getFieldTypeParserMock(),

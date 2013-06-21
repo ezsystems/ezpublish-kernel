@@ -44,7 +44,7 @@ class UserCreateTest extends BaseTest
             )
         );
 
-        $userCreate = $this->getUserCreate();
+        $userCreate = $this->getParser();
         $result = $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -122,7 +122,7 @@ class UserCreateTest extends BaseTest
             )
         );
 
-        $userCreate = $this->getUserCreate();
+        $userCreate = $this->getParser();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -156,7 +156,7 @@ class UserCreateTest extends BaseTest
             )
         );
 
-        $userCreate = $this->getUserCreate();
+        $userCreate = $this->getParser();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -190,7 +190,7 @@ class UserCreateTest extends BaseTest
             )
         );
 
-        $userCreate = $this->getUserCreate();
+        $userCreate = $this->getParser();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -224,7 +224,7 @@ class UserCreateTest extends BaseTest
             )
         );
 
-        $userCreate = $this->getUserCreate();
+        $userCreate = $this->getParser();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -258,7 +258,7 @@ class UserCreateTest extends BaseTest
             )
         );
 
-        $userCreate = $this->getUserCreate();
+        $userCreate = $this->getParser();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -291,7 +291,7 @@ class UserCreateTest extends BaseTest
             )
         );
 
-        $userCreate = $this->getUserCreate();
+        $userCreate = $this->getParser();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -318,7 +318,7 @@ class UserCreateTest extends BaseTest
             'enabled' => 'true',
         );
 
-        $userCreate = $this->getUserCreate();
+        $userCreate = $this->getParser();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -356,7 +356,7 @@ class UserCreateTest extends BaseTest
             )
         );
 
-        $userCreate = $this->getUserCreate();
+        $userCreate = $this->getParser();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -391,7 +391,7 @@ class UserCreateTest extends BaseTest
             )
         );
 
-        $userCreate = $this->getUserCreate();
+        $userCreate = $this->getParser();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -425,7 +425,7 @@ class UserCreateTest extends BaseTest
             )
         );
 
-        $userCreate = $this->getUserCreate();
+        $userCreate = $this->getParser();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -434,10 +434,9 @@ class UserCreateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\UserCreate
      */
-    protected function getUserCreate()
+    protected function internalGetParser()
     {
         return new UserCreate(
-            $this->getRequestParser(),
             $this->getUserServiceMock(),
             $this->getContentTypeServiceMock(),
             $this->getFieldTypeParserMock(),

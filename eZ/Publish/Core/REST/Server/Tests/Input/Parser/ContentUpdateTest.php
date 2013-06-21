@@ -24,7 +24,7 @@ class ContentUpdateTest extends BaseTest
     {
         $inputArray = $this->getValidInputData();
 
-        $contentUpdateParser = $this->getContentUpdate();
+        $contentUpdateParser = $this->getParser();
         $result = $contentUpdateParser->parse(
             $inputArray,
             $this->getParsingDispatcherMock()
@@ -63,7 +63,7 @@ class ContentUpdateTest extends BaseTest
         $inputArray = $this->getValidInputData();
         $inputArray[$element]['_href'] = '/invalid/section/uri';
 
-        $contentUpdateParser = $this->getContentUpdate();
+        $contentUpdateParser = $this->getParser();
 
         try
         {
@@ -105,7 +105,7 @@ class ContentUpdateTest extends BaseTest
         $inputArray = $this->getValidInputData();
         $inputArray[$element] = 42;
 
-        $contentUpdateParser = $this->getContentUpdate();
+        $contentUpdateParser = $this->getParser();
 
         try
         {
@@ -142,9 +142,9 @@ class ContentUpdateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ContentUpdate
      */
-    protected function getContentUpdate()
+    protected function internalGetParser()
     {
-        return new ContentUpdateParser( $this->getRequestParser() );
+        return new ContentUpdateParser();
     }
 
     /**

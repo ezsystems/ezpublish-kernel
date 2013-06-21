@@ -27,7 +27,7 @@ class ContentTypeGroupInputTest extends BaseTest
             'modificationDate' => '2012-12-31T12:00:00'
         );
 
-        $contentTypeGroupInput = $this->getContentTypeGroupInput();
+        $contentTypeGroupInput = $this->getParser();
         $result = $contentTypeGroupInput->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -69,7 +69,7 @@ class ContentTypeGroupInputTest extends BaseTest
             'modificationDate' => '2012-12-31T12:00:00'
         );
 
-        $contentTypeGroupInput = $this->getContentTypeGroupInput();
+        $contentTypeGroupInput = $this->getParser();
         $contentTypeGroupInput->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -78,10 +78,9 @@ class ContentTypeGroupInputTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeGroupInput
      */
-    protected function getContentTypeGroupInput()
+    protected function internalGetParser()
     {
         return new ContentTypeGroupInput(
-            $this->getRequestParser(),
             $this->getContentTypeServiceMock(),
             $this->getParserTools()
         );

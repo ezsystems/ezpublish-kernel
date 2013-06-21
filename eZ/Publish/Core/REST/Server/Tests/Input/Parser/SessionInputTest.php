@@ -24,7 +24,7 @@ class SessionInputTest extends BaseTest
             'password' => 'Password Bar',
         );
 
-        $sessionInput = $this->getSessionInput();
+        $sessionInput = $this->getParser();
         $result = $sessionInput->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertEquals(
@@ -46,7 +46,7 @@ class SessionInputTest extends BaseTest
             'login' => 'Login Foo',
         );
 
-        $sessionInput = $this->getSessionInput();
+        $sessionInput = $this->getParser();
         $sessionInput->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -62,7 +62,7 @@ class SessionInputTest extends BaseTest
             'password' => 'Password Bar',
         );
 
-        $sessionInput = $this->getSessionInput();
+        $sessionInput = $this->getParser();
         $sessionInput->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -71,8 +71,8 @@ class SessionInputTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\SessionInput
      */
-    protected function getSessionInput()
+    protected function internalGetParser()
     {
-        return new SessionInput( $this->getRequestParser() );
+        return new SessionInput();
     }
 }

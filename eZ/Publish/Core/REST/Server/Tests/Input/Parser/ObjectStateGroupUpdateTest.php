@@ -40,7 +40,7 @@ class ObjectStateGroupUpdateTest extends BaseTest
             )
         );
 
-        $objectStateGroupUpdate = $this->getObjectStateGroupUpdate();
+        $objectStateGroupUpdate = $this->getParser();
         $result = $objectStateGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -96,7 +96,7 @@ class ObjectStateGroupUpdateTest extends BaseTest
             )
         );
 
-        $objectStateGroupUpdate = $this->getObjectStateGroupUpdate();
+        $objectStateGroupUpdate = $this->getParser();
         $objectStateGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -105,10 +105,9 @@ class ObjectStateGroupUpdateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateGroupUpdate
      */
-    protected function getObjectStateGroupUpdate()
+    protected function internalGetParser()
     {
         return new ObjectStateGroupUpdate(
-            $this->getRequestParser(),
             $this->getObjectStateServiceMock(),
             $this->getParserTools()
         );
