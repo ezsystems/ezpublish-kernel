@@ -100,7 +100,7 @@ abstract class Type extends FieldType
             throw new InvalidArgumentValue(
                 '$inputValue->path',
                 $inputValue->path,
-                __CLASS__
+                get_class( $this )
             );
         }
 
