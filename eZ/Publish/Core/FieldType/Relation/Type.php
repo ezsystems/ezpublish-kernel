@@ -263,8 +263,12 @@ class Type extends FieldType
      */
     public function getRelations( $fieldValue )
     {
-        return array(
-            Relation::FIELD => array( $fieldValue->destinationContentId )
-        );
+        $relations = array();
+        if ( $fieldValue->destinationContentId !== null )
+        {
+            $relations[Relation::FIELD] = array( $fieldValue->destinationContentId );
+        }
+
+        return $relations;
     }
 }
