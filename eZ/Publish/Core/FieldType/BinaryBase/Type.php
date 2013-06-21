@@ -89,13 +89,18 @@ abstract class Type extends FieldType
             );
         }
 
+        if ( $this->isEmptyValue( $inputValue ) )
+        {
+            return $this->getEmptyValue();
+        }
+
         // Required parameter $path
         if ( !isset( $inputValue->path ) || !file_exists( $inputValue->path ) )
         {
             throw new InvalidArgumentValue(
                 '$inputValue->path',
-                'Path to an existing file',
-                $inputValue->path
+                $inputValue->path,
+                __CLASS__
             );
         }
 
@@ -111,7 +116,7 @@ abstract class Type extends FieldType
             );
         }
 
-        // Required parameter $fileSize
+        // Optional parameter $fileSize
         if ( isset( $inputValue->fileSize ) && !is_int( $inputValue->fileSize ) )
         {
             throw new InvalidArgumentType(
@@ -136,6 +141,11 @@ abstract class Type extends FieldType
         if ( !isset( $value->fileName ) )
         {
             $value->fileName = basename( $value->path );
+        }
+
+        if ( !isset( $value->fileSize ) )
+        {
+            $value->fileSize = filesize( $value->path );
         }
     }
 
