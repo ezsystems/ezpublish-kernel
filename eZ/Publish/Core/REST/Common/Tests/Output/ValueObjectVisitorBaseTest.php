@@ -36,6 +36,11 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     private $requestParser;
 
     /**
+     * @var \Symfony\Component\Routing\RouterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $routerMock;
+
+    /**
      * Gets the visitor mock
      *
      * @return \eZ\Publish\Core\REST\Common\Output\Visitor
@@ -100,6 +105,7 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     {
         $visitor = $this->internalGetVisitor();
         $visitor->setRequestParser( $this->getRequestParser() );
+        $visitor->setRouter( $this->getRouterMock() );
         return $visitor;
     }
 
@@ -113,6 +119,19 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
             $this->requestParser = new RequestParser;
         }
         return $this->requestParser;
+    }
+
+    /**
+     * @return \Symfony\Component\Routing\RouterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getRouterMock()
+    {
+        if ( !isset( $this->routerMock ) )
+        {
+            $this->routerMock = $this->getMock( 'Symfony\\Component\\Routing\\RouterInterface' );
+        }
+
+        return $this->routerMock;
     }
 
     /**
