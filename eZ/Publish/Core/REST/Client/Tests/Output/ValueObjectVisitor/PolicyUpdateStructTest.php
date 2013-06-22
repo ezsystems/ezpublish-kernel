@@ -24,7 +24,7 @@ class PolicyUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getPolicyUpdateStructVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -138,10 +138,8 @@ class PolicyUpdateStructTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\PolicyUpdateStruct
      */
-    protected function getPolicyUpdateStructVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\PolicyUpdateStruct(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\PolicyUpdateStruct;
     }
 }

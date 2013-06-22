@@ -130,10 +130,8 @@ class TrashTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Trash
      */
-    protected function getTrashVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Trash(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\Trash;
     }
 }

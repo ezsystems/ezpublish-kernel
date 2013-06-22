@@ -444,10 +444,8 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestLocation
      */
-    protected function getLocationVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\RestLocation(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\Location;
     }
 }

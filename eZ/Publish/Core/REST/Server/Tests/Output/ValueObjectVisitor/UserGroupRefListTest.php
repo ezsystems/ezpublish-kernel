@@ -185,10 +185,8 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\UserGroupRefList
      */
-    protected function getUserGroupRefListVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\UserGroupRefList(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\UserGroupRefList;
     }
 }

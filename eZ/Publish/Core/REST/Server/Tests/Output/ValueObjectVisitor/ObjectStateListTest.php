@@ -121,10 +121,8 @@ class ObjectStateListTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ObjectStateList
      */
-    protected function getObjectStateListVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\ObjectStateList(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\ObjectStateList;
     }
 }

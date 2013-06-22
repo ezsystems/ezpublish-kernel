@@ -49,10 +49,8 @@ class ConflictTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Conflict
      */
-    protected function getConflictVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Conflict(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\Conflict;
     }
 }

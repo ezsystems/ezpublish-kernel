@@ -101,10 +101,8 @@ class URLAliasRefListTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\URLAliasRefList
      */
-    protected function getURLAliasRefListVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\URLAliasRefList(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\URLAliasRefList;
     }
 }

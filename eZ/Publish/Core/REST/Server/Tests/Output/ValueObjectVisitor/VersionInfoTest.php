@@ -271,10 +271,8 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\VersionInfo
      */
-    protected function getVersionInfoVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\VersionInfo(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\VersionInfo;
     }
 }

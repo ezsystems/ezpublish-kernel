@@ -24,7 +24,7 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testVisitComplete()
     {
-        $visitor   = $this->getSectionIncludingContentMetadataUpdateStructVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -120,7 +120,7 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testVisitNoSectionUpdate()
     {
-        $visitor   = $this->getSectionIncludingContentMetadataUpdateStructVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -158,7 +158,7 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testVisitNoOwnerUpdate()
     {
-        $visitor   = $this->getSectionIncludingContentMetadataUpdateStructVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -208,10 +208,8 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
     /**
      * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\SectionIncludingContentMetadataUpdateStruct
      */
-    protected function getSectionIncludingContentMetadataUpdateStructVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\SectionIncludingContentMetadataUpdateStruct(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\SectionIncludingContentMetadataUpdateStruct;
     }
 }

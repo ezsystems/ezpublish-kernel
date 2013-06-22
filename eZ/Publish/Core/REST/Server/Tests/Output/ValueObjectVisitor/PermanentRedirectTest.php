@@ -52,10 +52,8 @@ class PermanentRedirectTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\PermanentRedirect
      */
-    protected function getPermanentRedirectVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\PermanentRedirect(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\PermanentRedirect;
     }
 }

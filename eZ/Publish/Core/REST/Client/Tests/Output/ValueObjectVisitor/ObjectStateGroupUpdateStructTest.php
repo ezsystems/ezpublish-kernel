@@ -25,7 +25,7 @@ class ObjectStateGroupUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getObjectStateGroupUpdateStructVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -138,10 +138,8 @@ class ObjectStateGroupUpdateStructTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\ObjectStateGroupUpdateStruct
      */
-    protected function getObjectStateGroupUpdateStructVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\ObjectStateGroupUpdateStruct(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\ObjectStateGroupUpdateStruct;
     }
 }

@@ -163,10 +163,8 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\URLWildcard
      */
-    protected function getURLWildcardVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\URLWildcard(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\URLWildcard;
     }
 }

@@ -375,10 +375,8 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestContent
      */
-    protected function getContentVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\RestContent(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\Content;
     }
 }

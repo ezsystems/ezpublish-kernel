@@ -224,10 +224,8 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\UserSession
      */
-    protected function getSessionVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\UserSession(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\Session;
     }
 }

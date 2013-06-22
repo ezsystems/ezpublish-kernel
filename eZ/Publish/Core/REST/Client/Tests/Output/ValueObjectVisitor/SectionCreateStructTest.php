@@ -24,7 +24,7 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getSectionCreateStructVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -139,10 +139,8 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\SectionCreateStruct
      */
-    protected function getSectionCreateStructVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\SectionCreateStruct(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\SectionCreateStruct;
     }
 }

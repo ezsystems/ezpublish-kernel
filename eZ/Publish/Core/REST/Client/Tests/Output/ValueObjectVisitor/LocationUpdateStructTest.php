@@ -25,7 +25,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getLocationUpdateStructVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -178,10 +178,8 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\LocationUpdateStruct
      */
-    protected function getLocationUpdateStructVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\LocationUpdateStruct(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\LocationUpdateStruct;
     }
 }

@@ -121,10 +121,8 @@ class SectionListTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\SectionList
      */
-    protected function getSectionListVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\SectionList(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\SectionList;
     }
 }

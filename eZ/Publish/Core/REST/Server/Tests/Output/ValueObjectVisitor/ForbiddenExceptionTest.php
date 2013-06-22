@@ -50,10 +50,8 @@ class ForbiddenExceptionTest extends ExceptionTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ForbiddenException
      */
-    protected function getExceptionVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\ForbiddenException(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\Exception;
     }
 }

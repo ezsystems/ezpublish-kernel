@@ -52,10 +52,8 @@ class TemporaryRedirectTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\TemporaryRedirect
      */
-    protected function getTemporaryRedirectVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\TemporaryRedirect(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\TemporaryRedirect;
     }
 }

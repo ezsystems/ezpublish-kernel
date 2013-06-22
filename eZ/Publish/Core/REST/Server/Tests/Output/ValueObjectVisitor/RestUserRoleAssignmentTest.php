@@ -149,10 +149,8 @@ class RestUserRoleAssignmentTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestUserRoleAssignment
      */
-    protected function getRestUserRoleAssignmentVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\RestUserRoleAssignment(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\RestUserRoleAssignment;
     }
 }
