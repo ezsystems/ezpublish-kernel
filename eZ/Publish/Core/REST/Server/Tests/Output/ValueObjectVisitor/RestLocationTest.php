@@ -26,7 +26,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getLocationVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -446,6 +446,6 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Location;
+        return new ValueObjectVisitor\RestLocation;
     }
 }

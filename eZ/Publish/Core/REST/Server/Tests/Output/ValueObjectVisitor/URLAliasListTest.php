@@ -25,7 +25,7 @@ class URLAliasListTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getURLAliasListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -92,7 +92,7 @@ class URLAliasListTest extends ValueObjectVisitorBaseTest
      */
     public function testURLAliasListVisitsChildren()
     {
-        $visitor   = $this->getURLAliasListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );

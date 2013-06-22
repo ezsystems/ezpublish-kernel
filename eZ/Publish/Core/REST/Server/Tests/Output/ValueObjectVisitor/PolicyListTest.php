@@ -25,7 +25,7 @@ class PolicyListTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getPolicyListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -92,7 +92,7 @@ class PolicyListTest extends ValueObjectVisitorBaseTest
      */
     public function testPolicyListVisitsChildren()
     {
-        $visitor   = $this->getPolicyListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );

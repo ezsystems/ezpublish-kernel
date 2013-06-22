@@ -25,7 +25,7 @@ class ContentTypeListTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getContentTypeListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -92,7 +92,7 @@ class ContentTypeListTest extends ValueObjectVisitorBaseTest
      */
     public function testContentTypeListVisitsChildren()
     {
-        $visitor   = $this->getContentTypeListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );

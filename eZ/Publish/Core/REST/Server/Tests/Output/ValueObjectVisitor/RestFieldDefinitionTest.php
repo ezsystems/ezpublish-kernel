@@ -38,7 +38,7 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
      */
     public function testVisitRestFieldDefinition()
     {
-        $visitor   = $this->getContentVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -149,6 +149,6 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Content;
+        return new ValueObjectVisitor\RestFieldDefinition( $this->fieldTypeSerializerMock );
     }
 }

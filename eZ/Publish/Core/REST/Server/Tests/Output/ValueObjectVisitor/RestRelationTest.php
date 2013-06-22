@@ -26,7 +26,7 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getRelationVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -197,6 +197,6 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Relation;
+        return new ValueObjectVisitor\RestRelation;
     }
 }

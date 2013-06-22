@@ -25,7 +25,7 @@ class RestUserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getRestUserGroupRoleAssignmentVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );

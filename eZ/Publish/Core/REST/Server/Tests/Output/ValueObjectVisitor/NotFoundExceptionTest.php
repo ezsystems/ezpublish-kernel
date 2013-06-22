@@ -48,10 +48,10 @@ class NotFoundExceptionTest extends ExceptionTest
     /**
      * Get the exception visitor
      *
-     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Exception
+     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\NotFoundException
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Exception;
+        return new ValueObjectVisitor\NotFoundException();
     }
 }

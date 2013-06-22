@@ -26,7 +26,7 @@ class TrashTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getTrashVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -93,7 +93,7 @@ class TrashTest extends ValueObjectVisitorBaseTest
      */
     public function testTrashVisitsChildren()
     {
-        $visitor   = $this->getTrashVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );

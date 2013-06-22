@@ -23,7 +23,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
      */
     public function testVisitDefinedType()
     {
-        $visitor   = $this->getRestContentTypeVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );

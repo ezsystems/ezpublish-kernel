@@ -24,7 +24,7 @@ class ConflictTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor = $this->getConflictVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );

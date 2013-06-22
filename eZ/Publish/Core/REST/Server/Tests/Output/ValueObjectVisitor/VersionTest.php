@@ -40,7 +40,7 @@ class VersionTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getVersionVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -175,6 +175,6 @@ class VersionTest extends ValueObjectVisitorBaseTest
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Version;
+        return new ValueObjectVisitor\Version( $this->fieldTypeSerializerMock );
     }
 }

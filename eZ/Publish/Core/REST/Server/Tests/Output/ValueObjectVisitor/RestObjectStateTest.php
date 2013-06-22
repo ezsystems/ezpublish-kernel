@@ -25,7 +25,7 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getObjectStateVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -302,6 +302,6 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\ObjectState;
+        return new ValueObjectVisitor\RestObjectState;
     }
 }

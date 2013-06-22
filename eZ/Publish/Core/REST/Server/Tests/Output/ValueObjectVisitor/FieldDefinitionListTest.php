@@ -25,7 +25,7 @@ class FieldDefinitionListTest extends ValueObjectVisitorBaseTest
      */
     public function testVisitFieldDefinitionList()
     {
-        $visitor   = $this->getContentVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -104,6 +104,6 @@ class FieldDefinitionListTest extends ValueObjectVisitorBaseTest
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Content;
+        return new ValueObjectVisitor\FieldDefinitionList;
     }
 }

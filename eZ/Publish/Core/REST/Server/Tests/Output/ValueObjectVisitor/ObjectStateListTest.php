@@ -25,7 +25,7 @@ class ObjectStateListTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getObjectStateListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -92,7 +92,7 @@ class ObjectStateListTest extends ValueObjectVisitorBaseTest
      */
     public function testObjectStateListVisitsChildren()
     {
-        $visitor   = $this->getObjectStateListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );

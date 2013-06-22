@@ -48,10 +48,10 @@ class BadStateExceptionTest extends ExceptionTest
     /**
      * Gets the exception visitor
      *
-     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Exception
+     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\BadStateException
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Exception;
+        return new ValueObjectVisitor\BadStateException;
     }
 }

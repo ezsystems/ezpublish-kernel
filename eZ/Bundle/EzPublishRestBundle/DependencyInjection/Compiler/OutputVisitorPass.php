@@ -34,7 +34,7 @@ class OutputVisitorPass implements CompilerPassInterface
         {
             if ( !isset( $attributes[0]['regexps'] ) )
             {
-                throw new \LogicException( 'ezpublish_rest.output.visitor service tag needs a "regexps" array attribute to identify the field type. None given.' );
+                throw new \LogicException( 'ezpublish_rest.output.visitor service tag needs a "regexps" attribute to identify the Accept header. None given.' );
             }
 
             if ( is_array( $attributes[0]['regexps'] ) )

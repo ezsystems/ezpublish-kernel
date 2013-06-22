@@ -52,6 +52,6 @@ class ForbiddenExceptionTest extends ExceptionTest
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Exception;
+        return new ValueObjectVisitor\ForbiddenException();
     }
 }

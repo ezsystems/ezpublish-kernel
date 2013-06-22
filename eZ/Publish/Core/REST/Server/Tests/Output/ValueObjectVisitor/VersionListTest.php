@@ -26,7 +26,7 @@ class VersionListTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getVersionListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -93,7 +93,7 @@ class VersionListTest extends ValueObjectVisitorBaseTest
      */
     public function testVersionListVisitsChildren()
     {
-        $visitor   = $this->getVersionListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );

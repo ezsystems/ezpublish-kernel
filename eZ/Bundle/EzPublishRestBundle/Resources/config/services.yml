@@ -40,10 +40,10 @@ parameters:
     ezpublish_rest.output.generator.json.field_type_hash_generator.class: eZ\Publish\Core\REST\Common\Output\Generator\Json\FieldTypeHashGenerator
     ezpublish_rest.output.generator.xml.class: eZ\Publish\Core\REST\Common\Output\Generator\Xml
     ezpublish_rest.output.generator.xml.field_type_hash_generator.class: eZ\Publish\Core\REST\Common\Output\Generator\Xml\FieldTypeHashGenerator
-    ezpublish_rest.output.visitor.json.mapping:
+    ezpublish_rest.output.visitor.json.regexps:
         - '(^application/vnd\.ez\.api\.[A-Za-z]+\+json$)'
         - '(^application/json$)'
-    ezpublish_rest.output.visitor.xml.mapping:
+    ezpublish_rest.output.visitor.xml.regexps:
         - '(^application/vnd\.ez\.api\.[A-Za-z]+\+xml$)'
         - '(^application/xml$)'
         - '(^.*/.*$)'
@@ -265,7 +265,7 @@ services:
             - @ezpublish_rest.output.generator.json
             - @ezpublish_rest.output.value_object_visitor.dispatcher
         tags:
-            - { name: ezpublish_rest.output.visitor, regexps: ezpublish_rest.output.visitor.json.mapping }
+            - { name: ezpublish_rest.output.visitor, regexps: ezpublish_rest.output.visitor.json.regexps }
 
     ezpublish_rest.output.visitor.xml:
         class: %ezpublish_rest.output.visitor.class%
@@ -273,7 +273,7 @@ services:
             - @ezpublish_rest.output.generator.xml
             - @ezpublish_rest.output.value_object_visitor.dispatcher
         tags:
-            - { name: ezpublish_rest.output.visitor, regexps: ezpublish_rest.output.visitor.xml.mapping }
+            - { name: ezpublish_rest.output.visitor, regexps: ezpublish_rest.output.visitor.xml.regexps }
 
     # format output generators
     ezpublish_rest.output.generator.xml:

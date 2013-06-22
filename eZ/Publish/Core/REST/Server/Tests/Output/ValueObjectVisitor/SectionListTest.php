@@ -25,7 +25,7 @@ class SectionListTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getSectionListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -92,7 +92,7 @@ class SectionListTest extends ValueObjectVisitorBaseTest
      */
     public function testSectionListVisitsChildren()
     {
-        $visitor   = $this->getSectionListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );

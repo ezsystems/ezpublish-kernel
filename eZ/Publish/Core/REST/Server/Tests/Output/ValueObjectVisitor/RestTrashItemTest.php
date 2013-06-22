@@ -26,7 +26,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getTrashItemVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -404,6 +404,6 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\TrashItem;
+        return new ValueObjectVisitor\RestTrashItem;
     }
 }

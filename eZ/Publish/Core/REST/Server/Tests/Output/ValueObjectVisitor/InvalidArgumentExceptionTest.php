@@ -52,6 +52,6 @@ class InvalidArgumentExceptionTest extends ExceptionTest
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Exception;
+        return new ValueObjectVisitor\InvalidArgumentException();
     }
 }

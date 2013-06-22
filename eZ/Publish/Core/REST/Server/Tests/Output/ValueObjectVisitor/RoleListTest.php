@@ -25,7 +25,7 @@ class RoleListTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getRoleListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -92,7 +92,7 @@ class RoleListTest extends ValueObjectVisitorBaseTest
      */
     public function testRoleListVisitsChildren()
     {
-        $visitor   = $this->getRoleListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
