@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Common\Output;
 
 use eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitorDispatcher;
 
 /**
  * Visitor for view models
@@ -17,18 +18,9 @@ use eZ\Publish\Core\REST\Common\Message;
 class Visitor
 {
     /**
-     * Visitors for value objects
-     *
-     * Structure:
-     * <code>
-     *  array(
-     *      <class> => <ValueObjectVisitor>,
-     *      …
-     *  )
-     *
-     * @var array
+     * @var \eZ\Publish\Core\REST\Common\Output\ValueObjectVisitorDispatcher
      */
-    protected $visitors = array();
+    protected $valueObjectVisitorDispatcher = array();
 
     /**
      * Generator
@@ -111,31 +103,14 @@ class Visitor
      * Construct from Generator and an array of concrete view model visitors
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
-     * @param array $visitors
+     * @param \eZ\Publish\Core\REST\Common\Output\ValueObjectVisitorDispatcher $valueObjectVisitorDispatcher
+     *
+     * @internal param array $visitors
      */
-    public function __construct( Generator $generator, array $visitors )
+    public function __construct( Generator $generator, ValueObjectVisitorDispatcher $valueObjectVisitorDispatcher )
     {
         $this->generator = $generator;
-        foreach ( $visitors as $class => $visitor )
-        {
-            $this->addVisitor( $class, $visitor );
-        }
-    }
-
-    /**
-     * Adds a new visitor for the given class
-     *
-     * @param string $class
-     * @param \eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor $visitor
-     */
-    public function addVisitor( $class, ValueObjectVisitor $visitor )
-    {
-        if ( $class[0] === '\\' )
-        {
-            $class = substr( $class, 1 );
-        }
-
-        $this->visitors[$class] = $visitor;
+        $this->valueObjectVisitorDispatcher = $valueObjectVisitorDispatcher;
     }
 
     /**
@@ -225,30 +200,13 @@ class Visitor
     /**
      * Visit struct returned by controllers
      *
-     * Should be called from sub-visitors to visit nested objects.
+     * Can be called by sub-visitors to visit nested objects.
      *
-     * @param mixed $data
+     * @param object $data
      */
     public function visitValueObject( $data )
     {
-        if ( !is_object( $data ) )
-        {
-            throw new Exceptions\InvalidTypeException( $data );
-        }
-        $checkedClassNames = array();
-
-        $classname = get_class( $data );
-        do
-        {
-            $checkedClassNames[] = $classname;
-            if ( isset( $this->visitors[$classname] ) )
-            {
-                return $this->visitors[$classname]->visit( $this, $this->generator, $data );
-            }
-        }
-        while ( $classname = get_parent_class( $classname ) );
-
-        throw new Exceptions\NoVisitorFoundException( $checkedClassNames );
+        return $this->valueObjectVisitorDispatcher->visit( $this, $this->generator, $data );
     }
 
     /**

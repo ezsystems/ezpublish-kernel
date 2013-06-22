@@ -32,9 +32,9 @@ class RestFieldDefinition extends RestContentTypeBase
      * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer $fieldTypeSerializer
      */
-    public function __construct( RequestParser $requestParser, FieldTypeSerializer $fieldTypeSerializer )
+    public function __construct( FieldTypeSerializer $fieldTypeSerializer )
     {
-        parent::__construct( $requestParser );
+        parent::__construct();
         $this->fieldTypeSerializer = $fieldTypeSerializer;
     }
 

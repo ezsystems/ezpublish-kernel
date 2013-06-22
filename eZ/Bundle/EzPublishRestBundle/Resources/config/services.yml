@@ -13,7 +13,6 @@ parameters:
     ezpublish_rest.controller.url_wildcard.class: eZ\Publish\Core\REST\Server\Controller\URLWildcard
     ezpublish_rest.controller.url_alias.class: eZ\Publish\Core\REST\Server\Controller\URLAlias
 
-    ezpublish_rest.response_visitor_dispatcher.class: eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher
     ezpublish_rest.factory.class: eZ\Bundle\EzPublishRestBundle\ApiLoader\Factory
     ezpublish_rest.input_dispatcher.class: eZ\Publish\Core\REST\Common\Input\Dispatcher
     ezpublish_rest.request_parser.class: eZ\Publish\Core\REST\Common\RequestParser\Prefixed
@@ -34,6 +33,23 @@ parameters:
     ezpublish_rest.field_type_processor.ezxmltext.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\XmlTextProcessor
     ezpublish_rest.field_type_processor.ezbinaryfile.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryProcessor
     ezpublish_rest.field_type_processor.ezpage.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\PageProcessor
+
+    ezpublish_rest.output.visitor.dispatcher.class: eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher
+    ezpublish_rest.output.visitor.class: eZ\Publish\Core\REST\Common\Output\Visitor
+    ezpublish_rest.output.generator.json.class: eZ\Publish\REST\Common\Output\Generator\Json
+    ezpublish_rest.output.generator.json.field_type_hash_generator.class: eZ\Publish\REST\Common\Output\Generator\Json\FieldTypeHashGenerator
+    ezpublish_rest.output.generator.xml.field_type_hash_generator.class: eZ\Publish\REST\Common\Output\Generator\Xml\FieldTypeHashGenerator
+    ezpublish_rest.output.generator.xml.class: eZ\Publish\REST\Common\Output\Generator\Xml
+    ezpublish_rest.output.visitor.json.mapping:
+        - '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+json$)'
+        - '(^application/json$)'
+    ezpublish_rest.output.visitor.xml.mapping:
+        - '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+xml$)'
+        - '(^application/xml$)'
+        - '(^.*/.*$)'
+
+    ezpublish_rest.output.value_object_visitor.dispatcher.class: eZ\Publish\REST\Common\Output\ValueObjectVisitorDispatcher
+    ezpublish_rest.output.value_object_visitor.Exception.InvalidArgumentException.class: eZ\Publish\REST\Server\Output\ValueObjectVisitor\InvalidArgumentException
 
 services:
     ezpublish_rest.field_type_serializer:
@@ -170,15 +186,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    ezpublish_rest.response_visitor_dispatcher:
-        class: %ezpublish_rest.response_visitor_dispatcher.class%
-        factory_service: ezpublish_rest.factory
-        factory_method: buildResponseVisitorDispatcher
-        arguments:
-            - @ezpublish_rest.request_parser
-            - @ezpublish_rest.field_type_serializer
-            - @ezpublish.api.repository
-
     ezpublish_rest.request:
         class: %ezpublish_rest.request.class%
 
@@ -243,3 +250,54 @@ services:
         class: %ezpublish_rest.field_type_processor.ezpage.class%
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezpage }
+
+    ### OUTPUT
+
+    # Main REST output dispatcher
+    # Gets a <requestMatch> => output.visitor mapping with the ezpublish_rest.output.visitor tag.
+    ezpublish_rest.output.visitor.dispatcher:
+        class: %ezpublish_rest.output.visitor.dispatcher.class%
+
+    # format output visitors
+    ezpublish_rest.output.visitor.json:
+        class: %ezpublish_rest.output.visitor.class%
+        arguments:
+            - @ezpublish_rest.output.generator.json
+            - @ezpublish_rest.output.value_object_visitor.dispatcher
+        tags:
+            - { name: ezpublish_rest.output.visitor, regexps: %ezpublish_rest.output.visitor.json.mapping% }
+
+    ezpublish_rest.output.visitor.xml:
+        class: %ezpublish_rest.output.visitor.class%
+        arguments:
+            - @ezpublish_rest.output.generator.xml
+            - @@ezpublish_rest.output.value_object_visitor.dispatcher
+        tags:
+            - { name: ezpublish_rest.output.visitor, regexps: %ezpublish_rest.output.visitor.xml.mapping% }
+
+    # format output generators
+    ezpublish_rest.output.generator.xml:
+        class: %ezpublish_rest.output.generator.xml.class%
+        arguments:
+            - @ezpublish_rest.output.generator.xml.field_type_hash_generator
+
+    ezpublish_rest.output.generator.xml.field_type_hash_generator:
+        class: %ezpublish_rest.output.generator.xml.field_type_hash_generator.class%
+
+    ezpublish_rest.output.generator.json:
+        class: %ezpublish_rest.output.generator.json.class%
+        arguments:
+            - @ezpublish_rest.output.generator.json.field_type_hash_generator
+
+    ezpublish_rest.output.generator.json.field_type_hash_generator:
+        class: %ezpublish_rest.output.generator.json.field_type_hash_generator.class%
+
+    # value objects visitors
+    ezpublish_rest.output.value_object_visitor.dispatcher:
+        class: %ezpublish_rest.output.value_object_visitor.dispatcher.class%
+
+    ezpublish_rest.output.value_object_visitor.Exception.InvalidArgumentException:
+        class: %ezpublish_rest.output.value_object_visitor.Exception.InvalidArgumentException.class%
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException }
+
