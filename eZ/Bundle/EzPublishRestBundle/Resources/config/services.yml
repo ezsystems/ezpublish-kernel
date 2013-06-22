@@ -265,7 +265,7 @@ services:
             - @ezpublish_rest.output.generator.json
             - @ezpublish_rest.output.value_object_visitor.dispatcher
         tags:
-            - { name: ezpublish_rest.output.visitor, regexps: %ezpublish_rest.output.visitor.json.mapping% }
+            - { name: ezpublish_rest.output.visitor, regexps: ezpublish_rest.output.visitor.json.mapping }
 
     ezpublish_rest.output.visitor.xml:
         class: %ezpublish_rest.output.visitor.class%
@@ -273,7 +273,7 @@ services:
             - @ezpublish_rest.output.generator.xml
             - @ezpublish_rest.output.value_object_visitor.dispatcher
         tags:
-            - { name: ezpublish_rest.output.visitor, regexps: %ezpublish_rest.output.visitor.xml.mapping% }
+            - { name: ezpublish_rest.output.visitor, regexps: ezpublish_rest.output.visitor.xml.mapping }
 
     # format output generators
     ezpublish_rest.output.generator.xml:

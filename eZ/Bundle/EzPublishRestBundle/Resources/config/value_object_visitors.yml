@@ -88,7 +88,7 @@ parameters:
     # Relation
     ezpublish_rest.output.value_object_visitor.CreatedRelation.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\CreatedRelation
     ezpublish_rest.output.value_object_visitor.RestRelation.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestRelation
-   ezpublish_rest.output.value_object_visitor.RelationList.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RelationList
+    ezpublish_rest.output.value_object_visitor.RelationList.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RelationList
 
     # Field Definition
     ezpublish_rest.output.value_object_visitor.RestFieldDefinition.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestFieldDefinition

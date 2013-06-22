@@ -11,6 +11,7 @@ namespace eZ\Bundle\EzPublishRestBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 
 /**
  * Compiler pass for the ezpublish_rest.output.visitor tag.
@@ -36,9 +37,25 @@ class OutputVisitorPass implements CompilerPassInterface
                 throw new \LogicException( 'ezpublish_rest.output.visitor service tag needs a "regexps" array attribute to identify the field type. None given.' );
             }
 
-            $regexps = is_array( $attributes[0]['regexps'] )
-                ? $attributes[0]['regexps']
-                : $container->getParameter( trim( $attributes[0]['regexps'], '%' ) );
+            if ( is_array( $attributes[0]['regexps'] ) )
+            {
+                $regexps = $attributes[0]['regexps'];
+            }
+            else if ( is_string( $attributes[0]['regexps'] ) )
+            {
+                try
+                {
+                    $regexps = $container->getParameter( $attributes[0]['regexps'] );
+                }
+                catch ( InvalidArgumentException $e )
+                {
+                    throw new \LogicException( "The regexps attribute of the ezpublish_rest.output.visitor service tag can be a string matching a container parameter name. No parameter {$attributes[0]['regexps']} could be found." );
+                }
+            }
+            else
+            {
+                throw new \LogicException( 'ezpublish_rest.output.visitor service tag needs a "regexps" attribute, either as an array or a string. Invalid value.' );
+            }
 
             foreach ( $regexps as $regexp )
             {
