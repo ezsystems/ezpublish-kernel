@@ -42,7 +42,6 @@ class OutputVisitorPass implements CompilerPassInterface
 
             foreach ( $regexps as $regexp )
             {
-                echo "addVisitor( '$regexp, new Reference( $id ) )\n";
                 $definition->addMethodCall(
                     'addVisitor',
                     array( $regexp, new Reference( $id ) )
