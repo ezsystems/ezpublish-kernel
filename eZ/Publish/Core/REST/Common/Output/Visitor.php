@@ -111,6 +111,8 @@ class Visitor
     {
         $this->generator = $generator;
         $this->valueObjectVisitorDispatcher = $valueObjectVisitorDispatcher;
+        $this->valueObjectVisitorDispatcher->setOutputGenerator( $generator );
+        $this->valueObjectVisitorDispatcher->setOutputVisitor( $this );
     }
 
     /**
@@ -161,6 +163,7 @@ class Visitor
     {
         $this->generator->reset();
         $this->generator->startDocument( $data );
+
         $this->visitValueObject( $data );
 
         //@todo Needs refactoring!
@@ -206,7 +209,7 @@ class Visitor
      */
     public function visitValueObject( $data )
     {
-        return $this->valueObjectVisitorDispatcher->visit( $this, $this->generator, $data );
+        return $this->valueObjectVisitorDispatcher->visit( $data );
     }
 
     /**

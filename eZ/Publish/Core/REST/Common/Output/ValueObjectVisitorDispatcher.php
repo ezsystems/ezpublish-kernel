@@ -9,8 +9,8 @@
 namespace eZ\Publish\Core\REST\Common\Output;
 
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
-use eZ\Publish\Core\REST\Common\Output\Visitor;
-use eZ\Publish\Core\REST\Common\Output\Generator;
+use eZ\Publish\Core\REST\Common\Output\Visitor as OutputVisitor;
+use eZ\Publish\Core\REST\Common\Output\Generator as OutputGenerator;
 
 /**
  * Dispatches value objects to a visitor depending on the class name
@@ -21,6 +21,26 @@ class ValueObjectVisitorDispatcher
      * @var array[string=>ValueObjectVisitor]
      */
     private $visitors;
+
+    /**
+     * @var \eZ\Publish\Core\REST\Common\Output\Visitor $generator
+     */
+    private $outputVisitor;
+
+    /**
+     * @var \eZ\Publish\Core\REST\Common\Output\Generator $generator
+     */
+    private $outputGenerator;
+
+    public function setOutputVisitor( Visitor $outputVisitor )
+    {
+        $this->outputVisitor = $outputVisitor;
+    }
+
+    public function setOutputGenerator( Generator $outputGenerator )
+    {
+        $this->outputGenerator = $outputGenerator;
+    }
 
     /**
      * @param string $visitedClassName The FQN of the visited class
@@ -40,7 +60,7 @@ class ValueObjectVisitorDispatcher
      * @throws Exceptions\NoVisitorFoundException
      * @throws Exceptions\InvalidTypeException
      */
-    public function visit( Visitor $visitor, Generator $generator, $data )
+    public function visit( $data )
     {
         if ( !is_object( $data ) )
         {
@@ -54,7 +74,7 @@ class ValueObjectVisitorDispatcher
             $checkedClassNames[] = $className;
             if ( isset( $this->visitors[$className] ) )
             {
-                return $this->visitors[$className]->visit( $visitor, $generator, $data );
+                return $this->visitors[$className]->visit( $this->outputVisitor, $this->outputGenerator, $data );
             }
         }
         while ( $className = get_parent_class( $className ) );
