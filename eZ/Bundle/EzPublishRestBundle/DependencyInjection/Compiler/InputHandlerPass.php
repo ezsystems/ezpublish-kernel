@@ -13,6 +13,12 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * Container processor for the ezpublish_rest.input.handler service tag.
+ * Maps input formats (json, xml) to handlers.
+ *
+ * Tag attributes: format. Ex: json
+ */
 class InputHandlerPass implements CompilerPassInterface
 {
     public function process( ContainerBuilder $container )

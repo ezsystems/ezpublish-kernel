@@ -399,19 +399,19 @@ services:
             - @ezpublish_rest.input.parser.LocationCreate
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.ContentCreate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ContentCreate }
 
     ezpublish_rest.input.parser.ContentUpdate:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.ContentUpdate.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.ContentUpdate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ContentUpdate }
 
     ezpublish_rest.input.parser.ContentObjectStates:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.ContentObjectStates.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.ContentObjectStates }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ContentObjectStates }
 
     ezpublish_rest.input.parser.ContentTypeCreate:
         parent: ezpublish_rest.input.parser
@@ -421,7 +421,7 @@ services:
             - @ezpublish_rest.input.parser.FieldDefinitionCreate
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.ContentTypeCreate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ContentTypeCreate }
 
     ezpublish_rest.input.parser.ContentTypeGroupInput:
         parent: ezpublish_rest.input.parser
@@ -430,7 +430,7 @@ services:
             - @ezpublish.api.service.content_type
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.ContentTypeGroupInput }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ContentTypeGroupInput }
 
     ezpublish_rest.input.parser.ContentTypeUpdate:
         parent: ezpublish_rest.input.parser
@@ -439,7 +439,7 @@ services:
             - @ezpublish.api.service.content_type
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.ContentTypeUpdate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ContentTypeUpdate }
 
     ezpublish_rest.input.parser.FieldDefinitionCreate:
         parent: ezpublish_rest.input.parser
@@ -449,7 +449,7 @@ services:
             - @ezpublish_rest.field_type_parser
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.FieldDefinitionCreate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.FieldDefinitionCreate }
 
     ezpublish_rest.input.parser.FieldDefinitionUpdate:
         parent: ezpublish_rest.input.parser
@@ -459,7 +459,7 @@ services:
             - @ezpublish_rest.field_type_parser
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.FieldDefinitionUpdate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.FieldDefinitionUpdate }
 
     ezpublish_rest.input.parser.LocationCreate:
         parent: ezpublish_rest.input.parser
@@ -468,7 +468,7 @@ services:
             - @ezpublish.api.service.location
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.LocationCreate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.LocationCreate }
 
     ezpublish_rest.input.parser.LocationUpdate:
         parent: ezpublish_rest.input.parser
@@ -477,7 +477,7 @@ services:
             - @ezpublish.api.service.location
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.LocationUpdate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.LocationUpdate }
 
     ezpublish_rest.input.parser.ObjectStateGroupCreate:
         parent: ezpublish_rest.input.parser
@@ -486,7 +486,7 @@ services:
             - @ezpublish.api.service.object_state
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.ObjectStateGroupCreate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ObjectStateGroupCreate }
 
     ezpublish_rest.input.parser.ObjectStateGroupUpdate:
         parent: ezpublish_rest.input.parser
@@ -495,7 +495,7 @@ services:
             - @ezpublish.api.service.object_state
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.ObjectStateGroupUpdate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ObjectStateGroupUpdate }
 
     ezpublish_rest.input.parser.ObjectStateCreate:
         parent: ezpublish_rest.input.parser
@@ -504,7 +504,7 @@ services:
             - @ezpublish.api.service.object_state
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.ObjectStateCreate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ObjectStateCreate }
 
     ezpublish_rest.input.parser.ObjectStateUpdate:
         parent: ezpublish_rest.input.parser
@@ -513,7 +513,7 @@ services:
             - @ezpublish.api.service.object_state
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.ObjectStateUpdate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ObjectStateUpdate }
 
     ezpublish_rest.input.parser.PolicyCreate:
         parent: ezpublish_rest.input.parser
@@ -522,7 +522,7 @@ services:
             - @ezpublish.api.service.role
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.PolicyCreate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.PolicyCreate }
 
     ezpublish_rest.input.parser.PolicyUpdate:
         parent: ezpublish_rest.input.parser
@@ -531,13 +531,13 @@ services:
             - @ezpublish.api.service.role
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.PolicyUpdate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.PolicyUpdate }
 
     ezpublish_rest.input.parser.RelationCreate:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.RelationCreate.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.RelationCreate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.RelationCreate }
 
     ezpublish_rest.input.parser.RoleAssignInput:
         parent: ezpublish_rest.input.parser
@@ -545,7 +545,7 @@ services:
         arguments:
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.RoleAssignInput }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.RoleAssignInput }
 
     ezpublish_rest.input.parser.RoleInput:
         parent: ezpublish_rest.input.parser
@@ -554,7 +554,7 @@ services:
             - @ezpublish.api.service.role
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.RoleInput }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.RoleInput }
 
     ezpublish_rest.input.parser.SectionInput:
         parent: ezpublish_rest.input.parser
@@ -562,7 +562,7 @@ services:
         arguments:
             - @ezpublish.api.service.section
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.SectionInput }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.SectionInput }
 
     ezpublish_rest.input.parser.SessionInput:
         parent: ezpublish_rest.input.parser
@@ -570,7 +570,7 @@ services:
         arguments:
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.SessionInput }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.SessionInput }
 
     ezpublish_rest.input.parser.UserGroupUpdate:
         parent: ezpublish_rest.input.parser
@@ -581,7 +581,7 @@ services:
             - @ezpublish.api.service.location
             - @ezpublish_rest.field_type_parser
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.UserGroupUpdate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.UserGroupUpdate }
 
     ezpublish_rest.input.parser.URLAliasCreate:
         parent: ezpublish_rest.input.parser
@@ -589,7 +589,7 @@ services:
         arguments:
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.UrlAliasCreate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.UrlAliasCreate }
 
     ezpublish_rest.input.parser.URLWildcardCreate:
         parent: ezpublish_rest.input.parser
@@ -597,7 +597,7 @@ services:
         arguments:
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.UrlWildcardCreate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.UrlWildcardCreate }
 
     ezpublish_rest.input.parser.UserCreate:
         parent: ezpublish_rest.input.parser
@@ -608,7 +608,7 @@ services:
             - @ezpublish_rest.field_type_parser
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.UserCreate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.UserCreate }
 
     ezpublish_rest.input.parser.UserGroupCreate:
         parent: ezpublish_rest.input.parser
@@ -618,7 +618,7 @@ services:
             - @ezpublish.api.service.content_type
             - @ezpublish_rest.field_type_parser
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.UserGroupCreate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.UserGroupCreate }
 
     ezpublish_rest.input.parser.UserUpdate:
         parent: ezpublish_rest.input.parser
@@ -629,13 +629,13 @@ services:
             - @ezpublish_rest.field_type_parser
             - @ezpublish_rest.parser_tools
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.UserUpdate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.UserUpdate }
 
     ezpublish_rest.input.parser.ViewInput:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.ViewInput.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.ViewInput }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ViewInput }
 
     ezpublish_rest.input.parser.VersionUpdate:
         parent: ezpublish_rest.input.parser
@@ -644,32 +644,32 @@ services:
             - @ezpublish.api.service.content
             - @ezpublish_rest.field_type_parser
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.VersionUpdate }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.VersionUpdate }
 
     # internal Media-Types
     ezpublish_rest.input.parser.internal.criterion.ContentId:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.ContentId.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.ContentId }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.ContentId }
 
     ezpublish_rest.input.parser.internal.criterion.ContentRemoteId:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.ContentRemoteId.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.ContentRemoteId }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.ContentRemoteId }
 
     ezpublish_rest.input.parser.internal.criterion.ContentTypeGroupId:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.ContentTypeGroupId.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.ContentTypeGroupId }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.ContentTypeGroupId }
 
     ezpublish_rest.input.parser.internal.criterion.ContentTypeId:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.ContentTypeId.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.ContentTypeId }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.ContentTypeId }
 
     ezpublish_rest.input.parser.internal.criterion.ContentTypeIdentifier:
         parent: ezpublish_rest.input.parser
@@ -677,84 +677,84 @@ services:
         arguments:
             - @ezpublish.api.service.content_type
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.ContentTypeIdentifier }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.ContentTypeIdentifier }
 
     ezpublish_rest.input.parser.internal.criterion.DateMetadata:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.DateMetadata.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.DateMetadata }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.DateMetadata }
 
     ezpublish_rest.input.parser.internal.criterion.Field:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.Field.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.Field }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.Field }
 
     ezpublish_rest.input.parser.internal.criterion.FullText:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.FullText.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.FullText }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.FullText }
 
     ezpublish_rest.input.parser.internal.criterion.LanguageCode:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.LanguageCode.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.LanguageCode }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.LanguageCode }
     ezpublish_rest.input.parser.internal.criterion.LocationId:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.LocationId.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.LocationId }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.LocationId }
 
     ezpublish_rest.input.parser.internal.criterion.LocationRemoteId:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.LocationRemoteId.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.LocationRemoteId }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.LocationRemoteId }
 
     ezpublish_rest.input.parser.internal.criterion.LogicalAnd:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.LogicalAnd.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.LogicalAnd }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.LogicalAnd }
 
     ezpublish_rest.input.parser.internal.criterion.LogicalNot:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.LogicalNot.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.LogicalNot }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.LogicalNot }
 
     ezpublish_rest.input.parser.internal.criterion.LogicalOperator:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.LogicalOperator.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.LogicalOperator }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.LogicalOperator }
 
     ezpublish_rest.input.parser.internal.criterion.LogicalOr:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.LogicalOr.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.LogicalOr }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.LogicalOr }
 
     ezpublish_rest.input.parser.internal.criterion.MoreLikeThis:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.MoreLikeThis.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.MoreLikeThis }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.MoreLikeThis }
 
     ezpublish_rest.input.parser.internal.criterion.Operator:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.Operator.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.Operator }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.Operator }
 
     ezpublish_rest.input.parser.internal.criterion.ParentLocationId:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.ParentLocationId.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.ParentLocationId }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.ParentLocationId }
 
     ezpublish_rest.input.parser.internal.criterion.ParentLocationRemoteId:
         parent: ezpublish_rest.input.parser
@@ -762,7 +762,7 @@ services:
         arguments:
             - @ezpublish.api.service.location
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.ParentLocationRemoteId }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.ParentLocationRemoteId }
 
     ezpublish_rest.input.parser.internal.criterion.SectionIdentifier:
         parent: ezpublish_rest.input.parser
@@ -770,46 +770,46 @@ services:
         arguments:
             - @ezpublish.api.service.section
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.SectionIdentifier }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.SectionIdentifier }
 
     ezpublish_rest.input.parser.internal.criterion.SectionId:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.SectionId.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.SectionId }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.SectionId }
 
     ezpublish_rest.input.parser.internal.criterion.Status:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.Status.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.Status }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.Status }
 
     ezpublish_rest.input.parser.internal.criterion.Subtree:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.Subtree.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.Subtree }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.Subtree }
 
-    ezpublish_rest.input.parser.internal.criterion.UrlcontentType:
+    ezpublish_rest.input.parser.internal.criterion.UrlmediaType:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.UrlAlias.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.UrlAlias }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.UrlAlias }
 
     ezpublish_rest.input.parser.internal.criterion.UserMetadata:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.UserMetadata.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.UserMetadata }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.UserMetadata }
 
     ezpublish_rest.input.parser.internal.criterion.ObjectStateId:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.ObjectStateId.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.ObjectStateId }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.ObjectStateId }
 
     ezpublish_rest.input.parser.internal.criterion.Visibility:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.Visibility.class%
         tags:
-            - { name: ezpublish_rest.input.parser, contentType: application/vnd.ez.api.internal.Visibility }
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.Visibility }
