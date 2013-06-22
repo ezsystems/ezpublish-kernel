@@ -36,10 +36,10 @@ parameters:
 
     ezpublish_rest.output.visitor.dispatcher.class: eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher
     ezpublish_rest.output.visitor.class: eZ\Publish\Core\REST\Common\Output\Visitor
-    ezpublish_rest.output.generator.json.class: eZ\Publish\REST\Common\Output\Generator\Json
-    ezpublish_rest.output.generator.json.field_type_hash_generator.class: eZ\Publish\REST\Common\Output\Generator\Json\FieldTypeHashGenerator
-    ezpublish_rest.output.generator.xml.field_type_hash_generator.class: eZ\Publish\REST\Common\Output\Generator\Xml\FieldTypeHashGenerator
-    ezpublish_rest.output.generator.xml.class: eZ\Publish\REST\Common\Output\Generator\Xml
+    ezpublish_rest.output.generator.json.class: eZ\Publish\Core\REST\Common\Output\Generator\Json
+    ezpublish_rest.output.generator.json.field_type_hash_generator.class: eZ\Publish\Core\REST\Common\Output\Generator\Json\FieldTypeHashGenerator
+    ezpublish_rest.output.generator.xml.class: eZ\Publish\Core\REST\Common\Output\Generator\Xml
+    ezpublish_rest.output.generator.xml.field_type_hash_generator.class: eZ\Publish\Core\REST\Common\Output\Generator\Xml\FieldTypeHashGenerator
     ezpublish_rest.output.visitor.json.mapping:
         - '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+json$)'
         - '(^application/json$)'
@@ -48,8 +48,8 @@ parameters:
         - '(^application/xml$)'
         - '(^.*/.*$)'
 
-    ezpublish_rest.output.value_object_visitor.dispatcher.class: eZ\Publish\REST\Common\Output\ValueObjectVisitorDispatcher
-    ezpublish_rest.output.value_object_visitor.Exception.InvalidArgumentException.class: eZ\Publish\REST\Server\Output\ValueObjectVisitor\InvalidArgumentException
+    ezpublish_rest.output.value_object_visitor.dispatcher.class: eZ\Publish\Core\REST\Common\Output\ValueObjectVisitorDispatcher
+    ezpublish_rest.output.value_object_visitor.Exception.InvalidArgumentException.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\InvalidArgumentException
 
 services:
     ezpublish_rest.field_type_serializer:
@@ -271,7 +271,7 @@ services:
         class: %ezpublish_rest.output.visitor.class%
         arguments:
             - @ezpublish_rest.output.generator.xml
-            - @@ezpublish_rest.output.value_object_visitor.dispatcher
+            - @ezpublish_rest.output.value_object_visitor.dispatcher
         tags:
             - { name: ezpublish_rest.output.visitor, regexps: %ezpublish_rest.output.visitor.xml.mapping% }
 

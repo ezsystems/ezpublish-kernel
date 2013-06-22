@@ -27,19 +27,6 @@ class AcceptHeaderVisitorDispatcher
     protected $mapping = array();
 
     /**
-     * Construct from view handler mapping
-     *
-     * @param array $mapping
-     */
-    public function __construct( array $mapping )
-    {
-        foreach ( $mapping as $regexp => $visitor )
-        {
-            $this->addVisitor( $regexp, $visitor );
-        }
-    }
-
-    /**
      * Adds view handler
      *
      * @param string $regexp

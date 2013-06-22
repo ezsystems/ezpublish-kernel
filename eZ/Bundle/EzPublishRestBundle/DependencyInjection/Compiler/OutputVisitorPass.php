@@ -29,13 +29,20 @@ class OutputVisitorPass implements CompilerPassInterface
 
         $definition = $container->getDefinition( 'ezpublish_rest.output.visitor.dispatcher' );
 
-        foreach ( $container->findTaggedServiceIds( 'ezpublish_rest.output.visitor.dispatcher' ) as $id => $attributes )
+        foreach ( $container->findTaggedServiceIds( 'ezpublish_rest.output.visitor' ) as $id => $attributes )
         {
-            if ( !isset( $attributes[0]['regexps'] ) || !is_array( $attributes[0]['regexps'] ) )
-                throw new \LogicException( 'ezpublish_rest.output.visitor service tag needs a "regexps" array attribute to identify the field type. None given.' );
-
-            foreach( $attributes[0]['regexps'] as $regexp )
+            if ( !isset( $attributes[0]['regexps'] ) )
             {
+                throw new \LogicException( 'ezpublish_rest.output.visitor service tag needs a "regexps" array attribute to identify the field type. None given.' );
+            }
+
+            $regexps = is_array( $attributes[0]['regexps'] )
+                ? $attributes[0]['regexps']
+                : $container->getParameter( trim( $attributes[0]['regexps'], '%' ) );
+
+            foreach ( $regexps as $regexp )
+            {
+                echo "addVisitor( '$regexp, new Reference( $id ) )\n";
                 $definition->addMethodCall(
                     'addVisitor',
                     array( $regexp, new Reference( $id ) )

@@ -34,7 +34,6 @@ class RestFieldDefinition extends RestContentTypeBase
      */
     public function __construct( FieldTypeSerializer $fieldTypeSerializer )
     {
-        parent::__construct();
         $this->fieldTypeSerializer = $fieldTypeSerializer;
     }
 

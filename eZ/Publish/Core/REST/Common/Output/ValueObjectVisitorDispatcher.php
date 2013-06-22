@@ -26,7 +26,7 @@ class ValueObjectVisitorDispatcher
      * @param string $visitedClassName The FQN of the visited class
      * @param ValueObjectVisitor $visitor The visitor object
      */
-    public function registerVisitor( $visitedClassName, ValueObjectVisitor $visitor )
+    public function addVisitor( $visitedClassName, ValueObjectVisitor $visitor )
     {
         $this->visitors[$visitedClassName] = $visitor;
     }

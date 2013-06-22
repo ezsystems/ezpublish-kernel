@@ -58,7 +58,6 @@ class RestExecutedView extends ValueObjectVisitor
         $this->locationService = $locationService;
         $this->contentService = $contentService;
         $this->contentTypeService = $contentTypeService;
-        parent::__construct();
     }
 
     /**

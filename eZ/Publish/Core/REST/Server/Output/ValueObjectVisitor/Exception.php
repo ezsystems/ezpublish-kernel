@@ -76,7 +76,6 @@ class Exception extends ValueObjectVisitor
      */
     public function __construct( $debug = false )
     {
-        parent::__construct();
         $this->debug = (bool)$debug;
     }
 
