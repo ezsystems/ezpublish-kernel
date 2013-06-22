@@ -5,7 +5,8 @@
  * @copyright Copyright (C) 2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- */ 
+ */
+
 namespace eZ\Bundle\EzPublishRestBundle\Tests\DependencyInjection\Compiler;
 
 use eZ\Bundle\EzPublishRestBundle\DependencyInjection\Compiler\OutputVisitorPass;
@@ -22,7 +23,7 @@ class OutputVisitorPassTest extends PHPUnit_Framework_TestCase
         $regexp2 = array( '(^application/json$)' );
 
         $stringDefinition = new Definition();
-        $stringDefinition->addTag('ezpublish_rest.output.visitor', array( 'regexps' => 'ezpublish_rest.output.visitor.test1.regexps' ) );
+        $stringDefinition->addTag( 'ezpublish_rest.output.visitor', array( 'regexps' => 'ezpublish_rest.output.visitor.test1.regexps' ) );
 
         $arrayDefinition = new Definition();
         $arrayDefinition->addTag( 'ezpublish_rest.output.visitor', array( 'regexps' => array( $regexp1 ) ) );
