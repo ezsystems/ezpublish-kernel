@@ -51,6 +51,44 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
             )
         );
 
+        $routerMock = $this->getRouterMock();
+
+        $routerMock
+            ->expects( $this->at( 0 ) )
+            ->method( 'generate' )
+            ->with(
+                $this->equalTo( 'ezpublish_rest_loadContentTypeGroup' ),
+                $this->equalTo( array( 'contentTypeGroupId' => $contentTypeGroup->id ) )
+            )
+            ->will( $this->returnValue( "/content/typegroups/{$contentTypeGroup->id}" ) );
+
+        $routerMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'generate' )
+            ->with(
+                $this->equalTo( 'ezpublish_rest_loadUser' ),
+                $this->equalTo( array( 'userId' => $contentTypeGroup->creatorId ) )
+            )
+            ->will( $this->returnValue( "/user/users/{$contentTypeGroup->creatorId}" ) );
+
+        $routerMock
+            ->expects( $this->at( 2 ) )
+            ->method( 'generate' )
+            ->with(
+                $this->equalTo( 'ezpublish_rest_loadUser' ),
+                $this->equalTo( array( 'userId' => $contentTypeGroup->modifierId ) )
+            )
+            ->will( $this->returnValue( "/user/users/{$contentTypeGroup->modifierId}" ) );
+
+        $routerMock
+            ->expects( $this->at( 3 ) )
+            ->method( 'generate' )
+            ->with(
+                $this->equalTo( 'ezpublish_rest_listContentTypesForGroup' ),
+                $this->equalTo( array( 'contentTypeGroupId' => $contentTypeGroup->id ) )
+            )
+            ->will( $this->returnValue( "/content/typegroups/{$contentTypeGroup->id}/types" ) );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
@@ -200,7 +238,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     {
         $this->assertTag(
             array(
-                'tag'      => 'Creator'
+                'tag'  => 'Creator',
             ),
             $result,
             'Invalid <Creator> element.',
@@ -242,7 +280,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     {
         $this->assertTag(
             array(
-                'tag'      => 'Modifier'
+                'tag' => 'Modifier'
             ),
             $result,
             'Invalid <Modifier> element.',
@@ -284,7 +322,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     {
         $this->assertTag(
             array(
-                'tag'      => 'ContentTypes'
+                'tag' => 'ContentTypes'
             ),
             $result,
             'Invalid <ContentTypes> element.',

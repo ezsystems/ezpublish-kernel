@@ -124,7 +124,7 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     /**
      * @return \Symfony\Component\Routing\RouterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getRouterMock()
+    protected function getRouterMock()
     {
         if ( !isset( $this->routerMock ) )
         {
