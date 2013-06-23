@@ -46,7 +46,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $section = new Content\VersionInfo(
+        $versionInfo = new Content\VersionInfo(
             array(
                 'id' => 23,
                 'versionNo' => 5,
@@ -64,10 +64,22 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
             )
         );
 
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadUser',
+            array( 'userId' => $versionInfo->creatorId ),
+            "/user/users/{$versionInfo->creatorId}"
+        );
+
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContent',
+            array( 'contentId' => $versionInfo->contentInfo->id ),
+            "/content/objects/{$versionInfo->contentInfo->id}"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
-            $section
+            $versionInfo
         );
 
         $result = $generator->endDocument( null );
