@@ -188,6 +188,8 @@ services:
 
     ezpublish_rest.request:
         class: %ezpublish_rest.request.class%
+        arguments:
+            - @router
 
     ezpublish_rest.field_type_processor_registry:
         class: %ezpublish_rest.field_type_processor_registry.class%
