@@ -92,6 +92,15 @@ class VersionTest extends ValueObjectVisitorBaseTest
         $this->getVisitorMock()->expects( $this->exactly( 2 ) )
             ->method( 'visitValueObject' );
 
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContentInVersion',
+            array(
+                'contentId' => $version->content->id,
+                'versionNumber' => $version->content->versionInfo->versionNo,
+            ),
+            "/content/objects/{$version->content->id}/versions/{$version->content->versionInfo->versionNo}"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
