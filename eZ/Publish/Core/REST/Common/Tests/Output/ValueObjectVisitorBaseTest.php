@@ -135,6 +135,27 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     }
 
     /**
+     * Adds an expectation to the routerMock. Expectations must be added sequentially.
+     *
+     * @param string $routeName
+     * @param array $arguments
+     * @param string $returnValue
+     */
+    protected function addRouteExpectation( $routeName, $arguments, $returnValue )
+    {
+        static $callIndex = 0;
+
+        $this->routerMock
+            ->expects( $this->at( $callIndex++ ) )
+            ->method( 'generate' )
+            ->with(
+                $this->equalTo( $routeName ),
+                $this->equalTo( $arguments )
+            )
+            ->will( $this->returnValue( $returnValue ) );
+    }
+
+    /**
      * Must return an instance of the tested visitor object
      *
      * @return \eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor

@@ -53,41 +53,29 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
 
         $routerMock = $this->getRouterMock();
 
-        $routerMock
-            ->expects( $this->at( 0 ) )
-            ->method( 'generate' )
-            ->with(
-                $this->equalTo( 'ezpublish_rest_loadContentTypeGroup' ),
-                $this->equalTo( array( 'contentTypeGroupId' => $contentTypeGroup->id ) )
-            )
-            ->will( $this->returnValue( "/content/typegroups/{$contentTypeGroup->id}" ) );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContentTypeGroup',
+            array( 'contentTypeGroupId' => $contentTypeGroup->id ),
+            "/content/typegroups/{$contentTypeGroup->id}"
+        );
 
-        $routerMock
-            ->expects( $this->at( 1 ) )
-            ->method( 'generate' )
-            ->with(
-                $this->equalTo( 'ezpublish_rest_loadUser' ),
-                $this->equalTo( array( 'userId' => $contentTypeGroup->creatorId ) )
-            )
-            ->will( $this->returnValue( "/user/users/{$contentTypeGroup->creatorId}" ) );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadUser',
+            array( 'userId' => $contentTypeGroup->creatorId ),
+            "/user/users/{$contentTypeGroup->creatorId}"
+        );
 
-        $routerMock
-            ->expects( $this->at( 2 ) )
-            ->method( 'generate' )
-            ->with(
-                $this->equalTo( 'ezpublish_rest_loadUser' ),
-                $this->equalTo( array( 'userId' => $contentTypeGroup->modifierId ) )
-            )
-            ->will( $this->returnValue( "/user/users/{$contentTypeGroup->modifierId}" ) );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadUser',
+            array( 'userId' => $contentTypeGroup->modifierId ),
+            "/user/users/{$contentTypeGroup->modifierId}"
+        );
 
-        $routerMock
-            ->expects( $this->at( 3 ) )
-            ->method( 'generate' )
-            ->with(
-                $this->equalTo( 'ezpublish_rest_listContentTypesForGroup' ),
-                $this->equalTo( array( 'contentTypeGroupId' => $contentTypeGroup->id ) )
-            )
-            ->will( $this->returnValue( "/content/typegroups/{$contentTypeGroup->id}/types" ) );
+        $this->addRouteExpectation(
+            'ezpublish_rest_listContentTypesForGroup',
+            array( 'contentTypeGroupId' => $contentTypeGroup->id ),
+            "/content/typegroups/{$contentTypeGroup->id}/types"
+        );
 
         $visitor->visit(
             $this->getVisitorMock(),
