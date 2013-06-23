@@ -111,7 +111,7 @@ class Visitor
     {
         $this->generator = $generator;
         $this->valueObjectVisitorDispatcher = $valueObjectVisitorDispatcher;
-        $this->valueObjectVisitorDispatcher->setOutputGenerator( $generator );
+        $this->valueObjectVisitorDispatcher->setOutputGenerator( $this->generator );
         $this->valueObjectVisitorDispatcher->setOutputVisitor( $this );
     }
 
