@@ -308,11 +308,11 @@ abstract class FieldType implements FieldTypeInterface
     }
 
     /**
-     * Indicates if the field definition of this type can appear multiple times in one ContentType.
+     * Indicates if the field definition of this type can appear only once in the same ContentType.
      *
      * @return boolean
      */
-    public function isRepeatable()
+    public function isSingular()
     {
         return true;
     }

@@ -129,13 +129,13 @@ class FieldType implements FieldTypeInterface
     }
 
     /**
-     * Indicates if the field definition of this type can appear multiple times in the same ContentType.
+     * Indicates if the field definition of this type can appear only once in the same ContentType.
      *
      * @return boolean
      */
-    public function isRepeatable()
+    public function isSingular()
     {
-        return $this->internalFieldType->isRepeatable();
+        return $this->internalFieldType->isSingular();
     }
 
     /**
