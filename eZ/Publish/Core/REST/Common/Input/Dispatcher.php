@@ -106,6 +106,10 @@ class Dispatcher
         {
             $rootNodeArray['__url'] = $message->headers['Url'];
         }
+        if ( isset( $message->headers['__publish'] ) )
+        {
+            $rootNodeArray['__publish'] = $message->headers['__publish'];
+        }
 
         return $this->parsingDispatcher->parse(
             $rootNodeArray, $media

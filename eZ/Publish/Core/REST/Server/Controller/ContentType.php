@@ -275,6 +275,7 @@ class ContentType extends RestController
     public function createContentType( $contentTypeGroupId )
     {
         $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId );
+        $publish = ( $this->request->query->has( 'publish' ) && $this->request->query->get( 'publish' ) === 'true' );
 
         try
         {
@@ -283,6 +284,8 @@ class ContentType extends RestController
                     new Message(
                         array(
                             'Content-Type' => $this->request->headers->get( 'Content-Type' ),
+                            // @todo Needs refactoring! Temporary solution so parser has access to get parameters
+                            '__publish' => $publish
                         ),
                         $this->request->getContent()
                     )
@@ -303,7 +306,7 @@ class ContentType extends RestController
             throw new BadRequestException( $e->getMessage() );
         }
 
-        if ( $this->request->query->has( 'publish' ) && $this->request->query->get( 'publish' ) === 'true' )
+        if ( $publish )
         {
             $this->contentTypeService->publishContentTypeDraft( $contentTypeDraft, 'bla' );
 
