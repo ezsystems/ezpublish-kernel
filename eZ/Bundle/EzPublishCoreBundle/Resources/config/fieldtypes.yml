@@ -392,7 +392,6 @@ services:
     ezpublish.fieldType.ezimage:
         class: %ezpublish.fieldType.ezimage.class%
         parent: ezpublish.fieldType
-        arguments: [ @ezpublish.fieldType.ezimage.IOService ]
         tags:
             - {name: ezpublish.fieldType, alias: ezimage}
 
