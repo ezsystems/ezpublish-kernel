@@ -34,7 +34,7 @@ class ContentList extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate( 'objects' )
+            $this->router->generate( 'ezpublish_rest_redirectContent' )
         );
         $generator->endAttribute( 'href' );
 

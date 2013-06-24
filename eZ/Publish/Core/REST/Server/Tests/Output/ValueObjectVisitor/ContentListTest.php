@@ -33,6 +33,12 @@ class ContentListTest extends ValueObjectVisitorBaseTest
 
         $contentList = new ContentList( array() );
 
+        $this->addRouteExpectation(
+            'ezpublish_rest_redirectContent',
+            array(),
+            '/content/objects'
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
@@ -57,7 +63,7 @@ class ContentListTest extends ValueObjectVisitorBaseTest
     {
         $this->assertTag(
             array(
-                'tag'      => 'ContentList',
+                'tag' => 'ContentList',
             ),
             $result,
             'Invalid <ContentList> element.',
