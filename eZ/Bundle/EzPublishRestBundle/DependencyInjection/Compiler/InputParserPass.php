@@ -40,6 +40,5 @@ class InputParserPass implements CompilerPassInterface
                 array( $attributes[0]["mediaType"], new Reference( $id ) )
             );
         }
-
     }
 }
