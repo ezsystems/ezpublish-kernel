@@ -12,6 +12,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use InvalidArgumentException;
 
 class View extends AbstractParser
 {
@@ -20,7 +21,7 @@ class View extends AbstractParser
      *
      * @param \Symfony\Component\Config\Definition\Builder\NodeBuilder $nodeBuilder Node just under ezpublish.system.<siteaccess>
      *
-     * @return void
+     * @throws \InvalidArgumentException
      */
     public function addSemanticConfig( NodeBuilder $nodeBuilder )
     {
@@ -32,6 +33,7 @@ class View extends AbstractParser
                 ->prototype( "array" )
                     ->useAttributeAsKey( "key" )
                     ->normalizeKeys( false )
+                    ->info( "View selection rulesets, grouped by view type. Key is the view type (e.g. 'full', 'line', ...)" )
                     ->prototype( "array" )
                         ->children()
                             ->scalarNode( "template" )->isRequired()->info( "Your template path, as MyBundle:subdir:my_template.html.twig" )->end()
@@ -39,6 +41,31 @@ class View extends AbstractParser
                                 ->info( "Condition matchers configuration" )
                                 ->useAttributeAsKey( "key" )
                                 ->prototype( "variable" )->end()
+                            ->end()
+                            ->arrayNode( "params" )
+                                ->info(
+<<<EOT
+Arbitrary params that will be passed in the ContentView object, manageable by ViewProviders.
+Those params will NOT be passed to the resulting view template by default.
+EOT
+                                )
+                                ->example(
+                                    array(
+                                        "foo"        => "%some.parameter.reference%",
+                                        "osTypes"    => array( "osx", "linux", "losedows" ),
+                                    )
+                                )
+                                ->useAttributeAsKey( "key" )
+                                ->prototype( "variable" )->end()
+                            ->end()
+                            ->scalarNode( 'controller' )
+                                ->info(
+<<<EOT
+Use custom controller instead of the default one to display a content matching your rules.
+You can use the controller reference notation supported by Symfony.
+EOT
+                                )
+                                ->example( 'MyBundle:MyControllerClass:view' )
                             ->end()
                         ->end()
                     ->end()
@@ -59,3 +86,4 @@ class View extends AbstractParser
         $this->registerInternalConfigArray( static::NODE_KEY, $config, $container, self::MERGE_FROM_SECOND_LEVEL );
     }
 }
+

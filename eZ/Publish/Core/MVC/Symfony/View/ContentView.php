@@ -20,8 +20,8 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
  * The prototype of the closure must be :
  * <code>
  * namespace Foo;
- * use eZ\Publish\API\Repository\Values\Content\ContentInfo,
- *     eZ\Publish\API\Repository\Values\Content\Location;
+ * use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+ * use eZ\Publish\API\Repository\Values\Content\Location;
  *
  * // For a content
  * function ( ContentInfo $contentInfo, array $parameters = array() )
@@ -49,6 +49,11 @@ class ContentView implements ContentViewInterface
      * @var array
      */
     protected $parameters;
+
+    /**
+     * @var array
+     */
+    protected $configHash;
 
     /**
      * @param string|\Closure $templateIdentifier Valid path to the template. Can also be a closure.
@@ -140,5 +145,29 @@ class ContentView implements ContentViewInterface
     public function getTemplateIdentifier()
     {
         return $this->templateIdentifier;
+    }
+
+    /**
+     * Injects the config hash that was used to match and generate the current view.
+     * Typically, the hash would have as keys:
+     *  - template : The template that has been matched
+     *  - match : The matching configuration, including the matcher "identifier" and what has been passed to it.
+     *  - matcher : The matcher object
+     *
+     * @param array $config
+     */
+    public function setConfigHash( array $config )
+    {
+        $this->configHash = $config;
+    }
+
+    /**
+     * Returns the config hash.
+     *
+     * @return array|null
+     */
+    public function getConfigHash()
+    {
+        return $this->configHash;
     }
 }
