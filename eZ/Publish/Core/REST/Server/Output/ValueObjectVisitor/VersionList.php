@@ -43,7 +43,7 @@ class VersionList extends ValueObjectVisitor
             $generator->startObjectElement( 'Version' );
             $generator->startAttribute(
                 'href',
-                $this->requestParser->generate(
+                $this->router->generate(
                     'objectVersion',
                     array(
                         'object' => $version->getContentInfo()->id,
