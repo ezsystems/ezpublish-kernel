@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\FieldType\Image;
 
 use eZ\Publish\Core\FieldType\FieldType;
-use eZ\Publish\Core\IO\IOService;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
@@ -32,19 +31,6 @@ class Type extends FieldType
             )
         )
     );
-
-    /** @var IOService */
-    protected $IOService;
-
-    /**
-     * Creates a new Image FieldType
-     *
-     * @param IOService $IOService
-     */
-    public function __construct( IOService $IOService )
-    {
-        $this->IOService = $IOService;
-    }
 
     /**
      * Returns the field type identifier for this field type
@@ -156,22 +142,6 @@ class Type extends FieldType
     public function isEmptyValue( $value )
     {
         return $value === null || $value->fileName === null;
-    }
-
-    /**
-     * Returns if the given $path exists on the local disc or in the file
-     * storage
-     *
-     * @param string $path
-     *
-     * @return boolean
-     */
-    protected function fileExists( $path )
-    {
-        return (
-            ( substr( $path, 0, 1 ) === '/' && file_exists( $path ) )
-            || $this->IOService->loadBinaryFile( $path ) !== false
-        );
     }
 
     /**

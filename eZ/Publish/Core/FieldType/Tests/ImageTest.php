@@ -19,36 +19,9 @@ use ReflectionObject;
  */
 class ImageTest extends FieldTypeTest
 {
-    /**
-     * FileService mock
-     *
-     * @var \PHPUnit_Framework_Mock
-     */
-    private $IOServiceMock;
-
     public function getImageInputPath()
     {
         return __DIR__ . '/squirrel-developers.jpg';
-    }
-
-    /**
-     * Returns a mock for the FileService
-     *
-     * @return \eZ\Publish\Core\FieldType\FileService
-     */
-    protected function getIOServiceMock()
-    {
-        if ( !isset( $this->IOServiceMock) )
-        {
-            $this->IOServiceMock = $this->getMock(
-                'eZ\\Publish\\Core\\IO\\IOService',
-                array(),
-                array(),
-                '',
-                false
-            );
-        }
-        return $this->IOServiceMock;
     }
 
     /**
@@ -82,9 +55,7 @@ class ImageTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new ImageType(
-            $this->getIOServiceMock()
-        );
+        return new ImageType();
     }
 
     /**
