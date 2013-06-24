@@ -204,6 +204,7 @@ class Visitor
      * Can be called by sub-visitors to visit nested objects.
      *
      * @param object $data
+     * @return mixed
      */
     public function visitValueObject( $data )
     {

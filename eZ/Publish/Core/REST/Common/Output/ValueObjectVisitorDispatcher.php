@@ -18,17 +18,17 @@ use eZ\Publish\Core\REST\Common\Output\Generator as OutputGenerator;
 class ValueObjectVisitorDispatcher
 {
     /**
-     * @var array[string=>ValueObjectVisitor]
+     * @var ValueObjectVisitor[]
      */
     private $visitors;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\Output\Visitor $generator
+     * @var \eZ\Publish\Core\REST\Common\Output\Visitor
      */
     private $outputVisitor;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\Output\Generator $generator
+     * @var \eZ\Publish\Core\REST\Common\Output\Generator
      */
     private $outputGenerator;
 
@@ -44,7 +44,7 @@ class ValueObjectVisitorDispatcher
 
     /**
      * @param string $visitedClassName The FQN of the visited class
-     * @param ValueObjectVisitor $visitor The visitor object
+     * @param \eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor $visitor The visitor object
      */
     public function addVisitor( $visitedClassName, ValueObjectVisitor $visitor )
     {
@@ -52,13 +52,11 @@ class ValueObjectVisitorDispatcher
     }
 
     /**
-     * @param Visitor   $visitor
-     * @param Generator $generator
-     * @param object    $data
+     * @param object $data The visited object
      *
+     * @throws \eZ\Publish\Core\REST\Common\Output\Exceptions\NoVisitorFoundException
+     * @throws \eZ\Publish\Core\REST\Common\Output\Exceptions\InvalidTypeException
      * @return mixed
-     * @throws Exceptions\NoVisitorFoundException
-     * @throws Exceptions\InvalidTypeException
      */
     public function visit( $data )
     {

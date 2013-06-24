@@ -12,6 +12,10 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * Compiler pass for the ezpublish_rest.output.value_object_visitor tag.
+ * Maps an fully qualified class to a value object visitor.
+ */
 class ValueObjectVisitorPass implements CompilerPassInterface
 {
     public function process( ContainerBuilder $container )

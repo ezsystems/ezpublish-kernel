@@ -29,7 +29,6 @@ class RestFieldDefinition extends RestContentTypeBase
     protected $fieldTypeSerializer;
 
     /**
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer $fieldTypeSerializer
      */
     public function __construct( FieldTypeSerializer $fieldTypeSerializer )
