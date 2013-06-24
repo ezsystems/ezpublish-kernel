@@ -1015,11 +1015,11 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::countInstancesOfContentType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::getContentCount
      *
      * @return void
      */
-    public function testCountInstancesOfContentType()
+    public function testGetContentCount()
     {
         $gatewayMock = $this->getGatewayMock();
         $gatewayMock->expects( $this->once() )
@@ -1034,7 +1034,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             42,
-            $handler->countInstancesOfContentType( 23 )
+            $handler->getContentCount( 23 )
         );
     }
 

@@ -280,12 +280,12 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::countInstancesOfContentType
+     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::getContentCount
      */
-    public function countInstancesOfContentType( $contentTypeId )
+    public function getContentCount( $contentTypeId )
     {
         $this->logger->logCall( __METHOD__, array( 'contentTypeId' => $contentTypeId ) );
-        return $this->persistenceFactory->getContentTypeHandler()->countInstancesOfContentType( $contentTypeId );
+        return $this->persistenceFactory->getContentTypeHandler()->getContentCount( $contentTypeId );
     }
 
     /**

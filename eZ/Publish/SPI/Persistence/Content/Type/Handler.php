@@ -203,7 +203,7 @@ interface Handler
      *
      * @return int
      */
-    public function countInstancesOfContentType( $contentTypeId );
+    public function getContentCount( $contentTypeId );
 
     /**
      * Adds a new field definition to an existing Type.

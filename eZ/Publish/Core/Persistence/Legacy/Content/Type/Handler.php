@@ -504,7 +504,7 @@ class Handler implements BaseContentTypeHandler
      *
      * @return int
      */
-    public function countInstancesOfContentType( $contentTypeId )
+    public function getContentCount( $contentTypeId )
     {
         return $this->contentTypeGateway->countInstancesOfType( $contentTypeId );
     }

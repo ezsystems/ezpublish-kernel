@@ -338,9 +338,9 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      *
      * @return int
      */
-    public function countInstancesOfContentType( $contentTypeId )
+    public function getContentCount( $contentTypeId )
     {
-        return $this->innerHandler->countInstancesOfContentType( $contentTypeId );
+        return $this->innerHandler->getContentCount( $contentTypeId );
     }
 
     /**

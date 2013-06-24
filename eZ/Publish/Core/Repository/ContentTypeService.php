@@ -1353,7 +1353,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if (
             $fieldDefinitionCreateStruct->fieldTypeIdentifier === "ezuser" &&
-            $this->contentTypeHandler->countInstancesOfContentType( $loadedContentTypeDraft->id )
+            $this->contentTypeHandler->getContentCount( $loadedContentTypeDraft->id )
         )
         {
             throw new BadStateException(
