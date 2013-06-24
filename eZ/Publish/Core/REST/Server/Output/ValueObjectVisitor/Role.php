@@ -33,7 +33,7 @@ class Role extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate( 'role', array( 'role' => $data->id ) )
+            $this->router->generate( 'ezpublish_rest_loadRole', array( 'roleId' => $data->id ) )
         );
         $generator->endAttribute( 'href' );
 
@@ -43,7 +43,7 @@ class Role extends ValueObjectVisitor
         $generator->startObjectElement( 'Policies', 'PolicyList' );
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate( 'policies', array( 'role' => $data->id ) )
+            $this->router->generate( 'ezpublish_rest_loadPolicies', array( 'roleId' => $data->id ) )
         );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Policies' );
