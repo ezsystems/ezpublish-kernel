@@ -31,7 +31,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getExceptionVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -176,10 +176,8 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Exception
      */
-    protected function getExceptionVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Exception(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\Exception;
     }
 }

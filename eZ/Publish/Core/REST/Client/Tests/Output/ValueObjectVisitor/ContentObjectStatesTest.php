@@ -24,7 +24,7 @@ class ContentObjectStatesTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getContentObjectStatesVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -90,10 +90,8 @@ class ContentObjectStatesTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\ContentObjectStates
      */
-    protected function getContentObjectStatesVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\ContentObjectStates(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\ContentObjectStates;
     }
 }

@@ -24,7 +24,7 @@ class RestUserGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testVisitWithoutEmbeddedVersion()
     {
-        $visitor   = $this->getUserGroupVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -367,10 +367,8 @@ class RestUserGroupTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestUserGroup
      */
-    protected function getUserGroupVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\RestUserGroup(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\RestUserGroup;
     }
 }

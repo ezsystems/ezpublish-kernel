@@ -25,7 +25,7 @@ class RelationListTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getRelationListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -92,7 +92,7 @@ class RelationListTest extends ValueObjectVisitorBaseTest
      */
     public function testRelationListVisitsChildren()
     {
-        $visitor   = $this->getRelationListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -122,10 +122,8 @@ class RelationListTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RelationList
      */
-    protected function getRelationListVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\RelationList(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\RelationList;
     }
 }

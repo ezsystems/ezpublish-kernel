@@ -26,16 +26,6 @@ abstract class ValueObjectVisitor
     protected $requestParser;
 
     /**
-     * Construct from used URL handler
-     *
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
-     */
-    public function __construct( RequestParser $requestParser )
-    {
-        $this->requestParser = $requestParser;
-    }
-
-    /**
      * Visit struct returned by controllers
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
@@ -43,6 +33,11 @@ abstract class ValueObjectVisitor
      * @param mixed $data
      */
     abstract public function visit( Visitor $visitor, Generator $generator, $data );
+
+    public function setRequestParser( RequestParser $requestParser )
+    {
+        $this->requestParser = $requestParser;
+    }
 
     /**
      * Returns a string representation for the given $boolValue

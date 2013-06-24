@@ -24,7 +24,7 @@ class NoContentTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getNoContentVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -49,10 +49,8 @@ class NoContentTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\NoContent
      */
-    protected function getNoContentVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\NoContent(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\NoContent;
     }
 }

@@ -50,10 +50,8 @@ class InvalidArgumentExceptionTest extends ExceptionTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\InvalidArgumentException
      */
-    protected function getExceptionVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\InvalidArgumentException(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\InvalidArgumentException();
     }
 }

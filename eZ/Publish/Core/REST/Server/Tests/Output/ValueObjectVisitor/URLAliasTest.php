@@ -24,7 +24,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getURLAliasVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -249,10 +249,8 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\URLAlias
      */
-    protected function getURLAliasVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\URLAlias(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\URLAlias;
     }
 }

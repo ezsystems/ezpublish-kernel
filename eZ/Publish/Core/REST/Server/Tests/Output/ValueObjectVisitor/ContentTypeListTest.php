@@ -25,7 +25,7 @@ class ContentTypeListTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getContentTypeListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -92,7 +92,7 @@ class ContentTypeListTest extends ValueObjectVisitorBaseTest
      */
     public function testContentTypeListVisitsChildren()
     {
-        $visitor   = $this->getContentTypeListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -129,10 +129,8 @@ class ContentTypeListTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ContentTypeList
      */
-    protected function getContentTypeListVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\ContentTypeList(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\ContentTypeList;
     }
 }

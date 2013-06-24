@@ -45,13 +45,11 @@ class RestExecutedView extends ValueObjectVisitor
     protected $contentTypeService;
 
     /**
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      */
     public function __construct(
-        RequestParser $requestParser,
         LocationService $locationService,
         ContentService $contentService,
         ContentTypeService $contentTypeService
@@ -60,7 +58,6 @@ class RestExecutedView extends ValueObjectVisitor
         $this->locationService = $locationService;
         $this->contentService = $contentService;
         $this->contentTypeService = $contentTypeService;
-        parent::__construct( $requestParser );
     }
 
     /**

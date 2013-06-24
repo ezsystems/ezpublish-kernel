@@ -25,7 +25,7 @@ class FieldDefinitionListTest extends ValueObjectVisitorBaseTest
      */
     public function testVisitFieldDefinitionList()
     {
-        $visitor   = $this->getContentVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -102,10 +102,8 @@ class FieldDefinitionListTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\FieldDefinitionList
      */
-    protected function getContentVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\FieldDefinitionList(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\FieldDefinitionList;
     }
 }

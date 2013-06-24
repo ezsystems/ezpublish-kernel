@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\REST\Common\Tests\Output;
 use eZ\Publish\Core\REST\Server\Tests;
 
 use eZ\Publish\Core\REST\Common\Output\Generator;
+use eZ\Publish\Core\REST\Common\RequestParser\eZPublish as RequestParser;
 
 abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
 {
@@ -28,6 +29,11 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
      * @var \eZ\Publish\Core\REST\Common\Output\Generator\Xml
      */
     protected $generator;
+
+    /**
+     * @var \eZ\Publish\Core\REST\Common\RequestParser
+     */
+    private $requestParser;
 
     /**
      * Gets the visitor mock
@@ -89,4 +95,30 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
             "XPath expression '{$xpathExpression}' resulted in an empty node set."
         );
     }
+
+    protected function getVisitor()
+    {
+        $visitor = $this->internalGetVisitor();
+        $visitor->setRequestParser( $this->getRequestParser() );
+        return $visitor;
+    }
+
+    /**
+     * @return \eZ\Publish\Core\REST\Common\RequestParser
+     */
+    private function getRequestParser()
+    {
+        if ( !isset( $this->requestParser ) )
+        {
+            $this->requestParser = new RequestParser;
+        }
+        return $this->requestParser;
+    }
+
+    /**
+     * Must return an instance of the tested visitor object
+     *
+     * @return \eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor
+     */
+    abstract protected function internalGetVisitor();
 }

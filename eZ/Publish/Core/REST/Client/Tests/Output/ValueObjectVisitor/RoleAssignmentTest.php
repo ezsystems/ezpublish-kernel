@@ -27,7 +27,7 @@ class RoleAssignmentTest extends ValueObjectVisitorBaseTest
      */
     public function testVisitComplete()
     {
-        $visitor   = $this->getRoleAssignmentVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -102,10 +102,8 @@ class RoleAssignmentTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\RoleAssignment
      */
-    protected function getRoleAssignmentVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\RoleAssignment(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\RoleAssignment;
     }
 }

@@ -25,7 +25,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getLocationCreateStructVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -222,10 +222,8 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\LocationCreateStruct
      */
-    protected function getLocationCreateStructVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\LocationCreateStruct(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\LocationCreateStruct;
     }
 }

@@ -25,7 +25,7 @@ class ContentTypeGroupCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getContentTypeGroupCreateStructVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -135,10 +135,8 @@ class ContentTypeGroupCreateStructTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\ContentTypeGroupCreateStruct
      */
-    protected function getContentTypeGroupCreateStructVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\ContentTypeGroupCreateStruct(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\ContentTypeGroupCreateStruct;
     }
 }

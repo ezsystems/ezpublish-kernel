@@ -28,7 +28,7 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getUserGroupRefListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -185,10 +185,8 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\UserGroupRefList
      */
-    protected function getUserGroupRefListVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\UserGroupRefList(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\UserGroupRefList;
     }
 }

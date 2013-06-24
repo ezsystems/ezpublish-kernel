@@ -25,7 +25,7 @@ class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getContentTypeGroupListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -92,7 +92,7 @@ class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
      */
     public function testContentTypeGroupListVisitsChildren()
     {
-        $visitor   = $this->getContentTypeGroupListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -120,10 +120,8 @@ class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ContentTypeGroupList
      */
-    protected function getContentTypeGroupListVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\ContentTypeGroupList(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\ContentTypeGroupList;
     }
 }

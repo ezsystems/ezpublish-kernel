@@ -25,7 +25,7 @@ class URLWildcardListTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getURLWildcardListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -92,7 +92,7 @@ class URLWildcardListTest extends ValueObjectVisitorBaseTest
      */
     public function testURLWildcardListVisitsChildren()
     {
-        $visitor   = $this->getURLWildcardListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -120,10 +120,8 @@ class URLWildcardListTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\URLWildcardList
      */
-    protected function getURLWildcardListVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\URLWildcardList(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\URLWildcardList;
     }
 }

@@ -25,7 +25,7 @@ class RestUserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getRestUserGroupRoleAssignmentVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -149,10 +149,8 @@ class RestUserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestUserGroupRoleAssignment
      */
-    protected function getRestUserGroupRoleAssignmentVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\RestUserGroupRoleAssignment(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\RestUserGroupRoleAssignment;
     }
 }

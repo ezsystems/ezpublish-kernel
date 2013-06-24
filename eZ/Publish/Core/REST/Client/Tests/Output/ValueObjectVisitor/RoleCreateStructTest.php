@@ -24,7 +24,7 @@ class RoleCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getRoleCreateStructVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -113,10 +113,8 @@ class RoleCreateStructTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\RoleCreateStruct
      */
-    protected function getRoleCreateStructVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\RoleCreateStruct(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\RoleCreateStruct;
     }
 }

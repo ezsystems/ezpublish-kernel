@@ -24,7 +24,7 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getSessionVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -224,10 +224,8 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\UserSession
      */
-    protected function getSessionVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\UserSession(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\UserSession;
     }
 }

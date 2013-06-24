@@ -72,12 +72,10 @@ class Exception extends ValueObjectVisitor
     /**
      * Construct from debug flag
      *
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param boolean $debug
      */
-    public function __construct( RequestParser $requestParser, $debug = false )
+    public function __construct( $debug = false )
     {
-        parent::__construct( $requestParser );
         $this->debug = (bool)$debug;
     }
 

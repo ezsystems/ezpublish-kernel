@@ -24,7 +24,7 @@ class ResourceCreatedTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getResourceCreatedVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -54,10 +54,8 @@ class ResourceCreatedTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ResourceCreated
      */
-    protected function getResourceCreatedVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\ResourceCreated(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\ResourceCreated;
     }
 }

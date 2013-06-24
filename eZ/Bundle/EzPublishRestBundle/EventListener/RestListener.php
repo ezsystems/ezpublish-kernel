@@ -188,7 +188,7 @@ class RestListener implements EventSubscriberInterface
     protected function visitResult( $result )
     {
         // visit response
-        $viewDispatcher = $this->container->get( 'ezpublish_rest.response_visitor_dispatcher' );
+        $viewDispatcher = $this->container->get( 'ezpublish_rest.output.visitor.dispatcher' );
         $message = $viewDispatcher->dispatch( $this->container->get( 'ezpublish_rest.request' ), $result );
 
         // @todo It would be even better if visitors would return a Symfony message directly

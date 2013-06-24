@@ -25,7 +25,7 @@ class SectionListTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getSectionListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -92,7 +92,7 @@ class SectionListTest extends ValueObjectVisitorBaseTest
      */
     public function testSectionListVisitsChildren()
     {
-        $visitor   = $this->getSectionListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -121,10 +121,8 @@ class SectionListTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\SectionList
      */
-    protected function getSectionListVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\SectionList(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\SectionList;
     }
 }

@@ -24,7 +24,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getRoleVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -239,10 +239,8 @@ class RoleTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Role
      */
-    protected function getRoleVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Role(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\Role;
     }
 }

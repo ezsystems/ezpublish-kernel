@@ -24,7 +24,7 @@ class LocationListTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getLocationListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -91,10 +91,8 @@ class LocationListTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\LocationList
      */
-    protected function getLocationListVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\LocationList(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\LocationList;
     }
 }

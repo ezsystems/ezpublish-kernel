@@ -23,7 +23,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
      */
     public function testVisitDefinedType()
     {
-        $visitor   = $this->getRestContentTypeVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -317,10 +317,8 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestContentType
      */
-    protected function getRestContentTypeVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\RestContentType(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\RestContentType;
     }
 }

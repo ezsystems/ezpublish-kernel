@@ -24,7 +24,7 @@ class PolicyTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getPolicyVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -206,10 +206,8 @@ class PolicyTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Policy
      */
-    protected function getPolicyVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Policy(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\Policy;
     }
 }

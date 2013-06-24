@@ -50,10 +50,8 @@ class BadRequestExceptionTest extends ExceptionTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\BadRequestException
      */
-    protected function getExceptionVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\BadRequestException(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\BadRequestException;
     }
 }

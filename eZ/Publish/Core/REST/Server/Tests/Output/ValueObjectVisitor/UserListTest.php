@@ -28,7 +28,7 @@ class UserListTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getUserListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -95,7 +95,7 @@ class UserListTest extends ValueObjectVisitorBaseTest
      */
     public function testUserListVisitsChildren()
     {
-        $visitor   = $this->getUserListVisitor();
+        $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -144,10 +144,8 @@ class UserListTest extends ValueObjectVisitorBaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\UserList
      */
-    protected function getUserListVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\UserList(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\UserList;
     }
 }

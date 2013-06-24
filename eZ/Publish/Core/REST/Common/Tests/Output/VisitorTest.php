@@ -42,7 +42,7 @@ class VisitorTest extends PHPUnit_Framework_TestCase
         $visitor = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
             array( 'visitValueObject' ),
-            array( $generator, array() )
+            array( $generator, $this->getValueObjectDispatcherMock() )
         );
 
         $this->assertEquals(
@@ -73,7 +73,7 @@ class VisitorTest extends PHPUnit_Framework_TestCase
         $visitor = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
             array( 'visitValueObject' ),
-            array( $generator, array() )
+            array( $generator, $this->getValueObjectDispatcherMock() )
         );
 
         $this->assertEquals(
@@ -86,22 +86,17 @@ class VisitorTest extends PHPUnit_Framework_TestCase
     {
         $data = new stdClass();
 
-        $generator = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' );
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Common\Output\Generator $generatorMock */
+        $generatorMock = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' );
 
-        $visitor = $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-            array( 'visitValueObject' ),
-            array( $generator, array() )
-        );
-        $visitor
-            ->expects( $this->at( 0 ) )
-            ->method( 'visitValueObject' )
+        $valueObjectDispatcherMock = $this->getValueObjectDispatcherMock();
+        $valueObjectDispatcherMock
+            ->expects( $this->once() )
+            ->method( 'visit' )
             ->with( $data );
 
-        $this->assertEquals(
-            new Common\Message( array(), null ),
-            $visitor->visit( $data )
-        );
+        $visitor = new Common\Output\Visitor( $generatorMock, $valueObjectDispatcherMock );
+        $visitor->visit( $data );
     }
 
     public function testSetHeaders()
@@ -112,7 +107,7 @@ class VisitorTest extends PHPUnit_Framework_TestCase
         $visitor = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
             array( 'visitValueObject' ),
-            array( $generator, array() )
+            array( $generator, $this->getValueObjectDispatcherMock() )
         );
 
         $visitor->setHeader( 'Content-Type', 'text/xml' );
@@ -139,7 +134,7 @@ class VisitorTest extends PHPUnit_Framework_TestCase
         $visitor = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
             array( 'visitValueObject' ),
-            array( $generator, array() )
+            array( $generator, $this->getValueObjectDispatcherMock() )
         );
 
         $visitor->setHeader( 'Content-Type', 'text/xml' );
@@ -163,7 +158,7 @@ class VisitorTest extends PHPUnit_Framework_TestCase
         $visitor = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
             array( 'visitValueObject' ),
-            array( $generator, array() )
+            array( $generator, $this->getValueObjectDispatcherMock() )
         );
 
         $visitor->setHeader( 'Content-Type', 'text/xml' );
@@ -187,7 +182,7 @@ class VisitorTest extends PHPUnit_Framework_TestCase
         $visitor = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
             array( 'visitValueObject' ),
-            array( $generator, array() )
+            array( $generator, $this->getValueObjectDispatcherMock() )
         );
 
         $visitor->setHeader( 'Content-Type', 'text/xml' );
@@ -212,7 +207,7 @@ class VisitorTest extends PHPUnit_Framework_TestCase
         $visitor = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
             array( 'visitValueObject' ),
-            array( $generator, array() )
+            array( $generator, $this->getValueObjectDispatcherMock() )
         );
 
         $visitor->setStatus( 201 );
@@ -236,7 +231,7 @@ class VisitorTest extends PHPUnit_Framework_TestCase
         $visitor = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
             array( 'visitValueObject' ),
-            array( $generator, array() )
+            array( $generator, $this->getValueObjectDispatcherMock() )
         );
 
         $visitor->setStatus( 2342 );
@@ -260,7 +255,7 @@ class VisitorTest extends PHPUnit_Framework_TestCase
         $visitor = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
             array( 'visitValueObject' ),
-            array( $generator, array() )
+            array( $generator, $this->getValueObjectDispatcherMock() )
         );
 
         $visitor->setStatus( 201 );
@@ -279,97 +274,12 @@ class VisitorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\InvalidTypeException
+     * @return Common\Output\ValueObjectVisitorDispatcher|\PHPUnit_Framework_MockObject_MockObject
      */
-    public function testVisitValueObjectInvalidType()
+    public function getValueObjectDispatcherMock()
     {
-        $generator = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' );
-        $visitor = new Common\Output\Visitor( $generator, array() );
-
-        $visitor->visitValueObject( 42 );
-    }
-
-    /**
-     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\NoVisitorFoundException
-     */
-    public function testVisitValueObjectNoMatch()
-    {
-        $generator = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' );
-        $visitor = new Common\Output\Visitor( $generator, array() );
-
-        $data = new stdClass();
-        $visitor->visitValueObject( $data );
-    }
-
-    public function testVisitValueObjectDirectMatch()
-    {
-        $data = new stdClass();
-
-        $generator = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' );
-        $valueObjectVisitor = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\ValueObjectVisitor', array(), array(), '', false );
-
-        $visitor = new Common\Output\Visitor(
-            $generator,
-            array(
-                '\\stdClass' => $valueObjectVisitor,
-            )
+        return $this->getMock(
+            '\\eZ\\Publish\\Core\\REST\\Common\\Output\\ValueObjectVisitorDispatcher'
         );
-
-        $valueObjectVisitor
-            ->expects( $this->at( 0 ) )
-            ->method( 'visit' )
-            ->with( $visitor, $generator, $data );
-
-        $visitor->visitValueObject( $data );
-    }
-
-    public function testVisitValueObjectParentMatch()
-    {
-        $data = new ValueObject();
-
-        $generator = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' );
-        $valueObjectVisitor = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\ValueObjectVisitor', array(), array(), '', false );
-
-        $visitor = new Common\Output\Visitor(
-            $generator,
-            array(
-                '\\stdClass' => $valueObjectVisitor,
-            )
-        );
-
-        $valueObjectVisitor
-            ->expects( $this->at( 0 ) )
-            ->method( 'visit' )
-            ->with( $visitor, $generator, $data );
-
-        $visitor->visitValueObject( $data );
-    }
-
-    public function testVisitValueObjectSecondRuleParentMatch()
-    {
-        $data = new ValueObject();
-
-        $generator = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' );
-        $valueObjectVisitor1 = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\ValueObjectVisitor', array(), array(), '', false );
-        $valueObjectVisitor2 = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\ValueObjectVisitor', array(), array(), '', false );
-
-        $visitor = new Common\Output\Visitor(
-            $generator,
-            array(
-                '\\WontMatch' => $valueObjectVisitor1,
-                '\\stdClass'  => $valueObjectVisitor2,
-            )
-        );
-
-        $valueObjectVisitor1
-            ->expects( $this->never() )
-            ->method( 'visit' );
-
-        $valueObjectVisitor2
-            ->expects( $this->at( 0 ) )
-            ->method( 'visit' )
-            ->with( $visitor, $generator, $data );
-
-        $visitor->visitValueObject( $data );
     }
 }

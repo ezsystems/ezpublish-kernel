@@ -50,10 +50,8 @@ class UnauthorizedExceptionTest extends ExceptionTest
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\UnauthorizedException
      */
-    protected function getExceptionVisitor()
+    protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\UnauthorizedException(
-            new Common\RequestParser\eZPublish()
-        );
+        return new ValueObjectVisitor\UnauthorizedException;
     }
 }
