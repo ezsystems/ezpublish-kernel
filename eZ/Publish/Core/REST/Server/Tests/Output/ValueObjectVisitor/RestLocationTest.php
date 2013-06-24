@@ -55,6 +55,26 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
             0
         );
 
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadLocation',
+            array( 'locationPath' => '1/2/21/42' ),
+            '/content/locations/1/2/21/42'
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadLocation',
+            array( 'locationPath' => '1/2/21' ),
+            '/content/locations/1/2/21'
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadLocationChildren',
+            array( 'locationPath' => '1/2/21/42' ),
+            '/content/locations/1/2/21/42/children'
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContent', array( 'contentId' => $location->location->contentId ),
+            "/content/objects/{$location->location->contentId}"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,

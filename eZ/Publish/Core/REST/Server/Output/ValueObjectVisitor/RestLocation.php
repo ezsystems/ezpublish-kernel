@@ -33,7 +33,10 @@ class RestLocation extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate( 'location', array( 'location' => rtrim( $data->location->pathString, '/' ) ) )
+            $this->router->generate(
+                'ezpublish_rest_loadLocation',
+                array( 'locationPath' => trim( $data->location->pathString, '/' ) )
+            )
         );
         $generator->endAttribute( 'href' );
 
@@ -52,10 +55,10 @@ class RestLocation extends ValueObjectVisitor
         $generator->startObjectElement( 'ParentLocation', 'Location' );
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate(
-                'location',
+            $this->router->generate(
+                'ezpublish_rest_loadLocation',
                 array(
-                    'location' => '/' . implode( '/', array_slice( $data->location->path, 0, count( $data->location->path ) - 1 ) )
+                    'locationPath' => implode( '/', array_slice( $data->location->path, 0, count( $data->location->path ) - 1 ) )
                 )
             )
         );
@@ -77,10 +80,10 @@ class RestLocation extends ValueObjectVisitor
         $generator->startObjectElement( 'Children', 'LocationList' );
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate(
-                'locationChildren',
+            $this->router->generate(
+                'ezpublish_rest_loadLocationChildren',
                 array(
-                    'location' => rtrim( $data->location->pathString, '/' )
+                    'locationPath' => trim( $data->location->pathString, '/' )
                 )
             )
         );
@@ -88,7 +91,10 @@ class RestLocation extends ValueObjectVisitor
         $generator->endObjectElement( 'Children' );
 
         $generator->startObjectElement( 'Content' );
-        $generator->startAttribute( 'href', $this->requestParser->generate( 'object', array( 'object' => $data->location->contentId ) ) );
+        $generator->startAttribute(
+            'href',
+            $this->router->generate( 'ezpublish_rest_loadContent', array( 'contentId' => $data->location->contentId ) )
+        );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Content' );
 
