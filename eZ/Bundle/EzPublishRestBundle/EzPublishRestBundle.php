@@ -14,5 +14,7 @@ class EzPublishRestBundle extends Bundle
         $container->addCompilerPass( new Compiler\FieldTypeProcessorPass() );
         $container->addCompilerPass( new Compiler\InputHandlerPass() );
         $container->addCompilerPass( new Compiler\InputParserPass() );
+        $container->addCompilerPass( new Compiler\OutputVisitorPass() );
+        $container->addCompilerPass( new Compiler\ValueObjectVisitorPass() );
     }
 }
