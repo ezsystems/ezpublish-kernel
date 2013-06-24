@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\Reference;
  * Container compiler processor for the ezpublish_rest.input.parser service tag.
  * Maps input parsers to media types.
  *
- * Tag attributes: contentType. Ex: application/vnd.ez.api.Content
+ * Tag attributes: mediaType. Ex: application/vnd.ez.api.Content
  */
 class InputParserPass implements CompilerPassInterface
 {
@@ -33,7 +33,7 @@ class InputParserPass implements CompilerPassInterface
         foreach ( $container->findTaggedServiceIds( 'ezpublish_rest.input.parser' ) as $id => $attributes )
         {
             if ( !isset( $attributes[0]['mediaType'] ) )
-                throw new \LogicException( 'ezpublish_rest.input.parser service tag needs a "contentType" attribute to identify the input parser. None given.' );
+                throw new \LogicException( 'ezpublish_rest.input.parser service tag needs a "mediaType" attribute to identify the input parser. None given.' );
 
             $definition->addMethodCall(
                 'addParser',
