@@ -8,7 +8,7 @@ Typical use cases are access to:
 * Settings (either coming from ConfigResolver or ServiceContainer)
 * Current content's ContentType object
 * Current location's parent
-* Current's location children count
+* Current location's children count
 * Main location and alternative locations for the current content
 * etc…
 
