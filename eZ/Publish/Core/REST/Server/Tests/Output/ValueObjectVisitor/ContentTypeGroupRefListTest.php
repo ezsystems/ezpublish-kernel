@@ -22,6 +22,8 @@ class ContentTypeGroupRefListTest extends ValueObjectVisitorBaseTest
     /**
      * Test the ContentTypeGroupRefList visitor
      *
+     * @todo coverage test with one group (can't be deleted)
+     *
      * @return \DOMDocument
      */
     public function testVisit()
@@ -50,6 +52,42 @@ class ContentTypeGroupRefListTest extends ValueObjectVisitorBaseTest
                     )
                 )
             )
+        );
+
+        $this->addRouteExpectation(
+            'ezpublish_rest_listContentTypesForGroup',
+            array( 'contentTypeId' => $contentTypeGroupRefList->contentType->id ),
+            "/content/types/{$contentTypeGroupRefList->contentType->id}/groups"
+        );
+
+        // first iteration
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContentTypeGroup',
+            array( 'contentTypeGroupId' => $contentTypeGroupRefList->contentTypeGroups[0]->id ),
+            "/content/typegroups/{$contentTypeGroupRefList->contentTypeGroups[0]->id}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_unlinkContentTypeFromGroup',
+            array(
+                'contentTypeId' => $contentTypeGroupRefList->contentType->id,
+                'contentTypeGroupId' => $contentTypeGroupRefList->contentTypeGroups[0]->id
+            ),
+            "/content/types/{$contentTypeGroupRefList->contentType->id}/groups/{$contentTypeGroupRefList->contentTypeGroups[0]->id}"
+        );
+
+        // second iteration
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContentTypeGroup',
+            array( 'contentTypeGroupId' => $contentTypeGroupRefList->contentTypeGroups[1]->id ),
+            "/content/typegroups/{$contentTypeGroupRefList->contentTypeGroups[1]->id}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_unlinkContentTypeFromGroup',
+            array(
+                'contentTypeId' => $contentTypeGroupRefList->contentType->id,
+                'contentTypeGroupId' => $contentTypeGroupRefList->contentTypeGroups[1]->id
+            ),
+            "/content/types/{$contentTypeGroupRefList->contentType->id}/groups/{$contentTypeGroupRefList->contentTypeGroups[1]->id}"
         );
 
         $visitor->visit(
