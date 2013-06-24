@@ -308,6 +308,16 @@ abstract class FieldType implements FieldTypeInterface
     }
 
     /**
+     * Indicates if the field definition of this type can appear only once in the same ContentType.
+     *
+     * @return boolean
+     */
+    public function isSingular()
+    {
+        return true;
+    }
+
+    /**
      * Returns if the given $value is considered empty by the field type
      *
      * Default implementation, which performs a "==" check with the value

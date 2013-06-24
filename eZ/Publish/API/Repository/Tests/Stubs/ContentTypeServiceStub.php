@@ -536,6 +536,10 @@ class ContentTypeServiceStub implements ContentTypeService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the identifier in already exists in the content type
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If field definition of the same non-repeatable type is being
+     *                                                                 added to the ContentType that already contains one
+     *                                                                 or 'ezuser' type field definition is being added to the
+     *                                                                 ContentType that has Content instances
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
@@ -552,6 +556,26 @@ class ContentTypeServiceStub implements ContentTypeService
             if ( $fieldDefinition->identifier == $fieldDefinitionCreateStruct->identifier )
             {
                 throw new Exceptions\InvalidArgumentExceptionStub;
+            }
+        }
+
+        if ( $fieldDefinitionCreateStruct->fieldTypeIdentifier === "ezuser" )
+        {
+            foreach ( $contentTypeDraft->fieldDefinitions as $fieldDefinition )
+            {
+                if ( $fieldDefinition->fieldTypeIdentifier === "ezuser" )
+                {
+                    throw new Exceptions\BadStateExceptionStub(
+                        "ContentType already contains field definition of non-repeatable field type 'ezuser'"
+                    );
+                }
+            }
+
+            if ( $this->contentService->loadContentInfoByContentType( $contentTypeDraft ) )
+            {
+                throw new BadStateExceptionStub(
+                    "Field definition of 'ezuser' field type cannot be added because ContentType has Content instances"
+                );
             }
         }
 

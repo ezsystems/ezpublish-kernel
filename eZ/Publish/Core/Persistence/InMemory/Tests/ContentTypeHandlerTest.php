@@ -560,6 +560,21 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
+     * Test getContentCount function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::getContentCount
+     */
+    public function testGetContentCount()
+    {
+        $handler = $this->persistenceHandler->ContentTypeHandler();
+
+        $this->assertEquals(
+            3,
+            $handler->getContentCount( 1 )
+        );
+    }
+
+    /**
      * Test addFieldDefinition function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\ContentTypeHandler::addFieldDefinition
