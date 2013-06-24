@@ -37,10 +37,10 @@ class RestUserGroupRoleAssignment extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate(
-                'groupRoleAssignment', array(
-                    'group' => $data->id,
-                    'role' => $role->id
+            $this->router->generate(
+                'ezpublish_rest_loadRoleAssignmentForUserGroup', array(
+                    'groupPath' => trim( $data->id, '/' ),
+                    'roleId' => $role->id
                 )
             )
         );
@@ -55,7 +55,7 @@ class RestUserGroupRoleAssignment extends ValueObjectVisitor
         $generator->startObjectElement( 'Role' );
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate( 'role', array( 'role' => $role->id ) )
+            $this->router->generate( 'ezpublish_rest_loadRole', array( 'roleId' => $role->id ) )
         );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Role' );

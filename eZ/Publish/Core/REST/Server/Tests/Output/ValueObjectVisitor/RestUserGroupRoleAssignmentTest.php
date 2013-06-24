@@ -44,6 +44,20 @@ class RestUserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
             '/1/5/14'
         );
 
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadRoleAssignmentForUserGroup',
+            array(
+                'groupPath' => '1/5/14',
+                'roleId' => $userGroupRoleAssignment->roleAssignment->role->id
+            ),
+            "/user/groups/1/5/14/roles/{$userGroupRoleAssignment->roleAssignment->role->id}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadRole',
+            array( 'roleId' => $userGroupRoleAssignment->roleAssignment->role->id ),
+            "/user/roles/{$userGroupRoleAssignment->roleAssignment->role->id}"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
