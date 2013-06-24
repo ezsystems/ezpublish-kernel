@@ -623,6 +623,29 @@ class UserService implements UserServiceInterface
     }
 
     /**
+     * Loads a user for the given email
+     *
+     * Returns an array of Users since eZ Publish has under certain circumstances allowed
+     * several users having same email in the past (by means of a configuration option).
+     *
+     * @param string $email
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User[]
+     */
+    public function loadUsersByEmail( $email )
+    {
+        if ( !is_string( $email ) || empty( $email ) )
+            throw new InvalidArgumentValue( "email", $email );
+
+        $users = array();
+        foreach ( $this->userHandler->loadByEmail( $email ) as $spiUser )
+        {
+            $users[] = $this->buildDomainUserObject( $spiUser );
+        }
+        return $users;
+    }
+
+    /**
      * This method deletes a user
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
