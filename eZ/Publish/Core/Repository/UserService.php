@@ -578,7 +578,6 @@ class UserService implements UserServiceInterface
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if multiple users with same login were found
      */
     public function loadUserByCredentials( $login, $password )
     {
@@ -591,29 +590,18 @@ class UserService implements UserServiceInterface
         // Randomize login time to protect against timing attacks
         usleep( mt_rand( 0, 30000 ) );
 
-        $spiUsers = $this->userHandler->loadByLogin( $login );
-
-        if ( empty( $spiUsers ) )
-            throw new NotFoundException( "user", $login );
-
-        if ( count( $spiUsers ) > 1 )
-        {
-            // something went wrong, we should not have more than one
-            // user with the same login
-            throw new BadStateException( "login", 'found several users with same login' );
-        }
-
+        $spiUser = $this->userHandler->loadByLogin( $login );
         $passwordHash = $this->createPasswordHash(
             $login,
             $password,
             $this->settings['siteName'],
-            $spiUsers[0]->hashAlgorithm
+            $spiUser->hashAlgorithm
         );
 
-        if ( $spiUsers[0]->passwordHash !== $passwordHash )
+        if ( $spiUser->passwordHash !== $passwordHash )
             throw new NotFoundException( "user", $login );
 
-        return $this->buildDomainUserObject( $spiUsers[0] );
+        return $this->buildDomainUserObject( $spiUser );
     }
 
     /**
