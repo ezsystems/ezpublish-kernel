@@ -41,6 +41,11 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     private $routerMock;
 
     /**
+     * @var int
+     */
+    private $routerCallIndex = 0;
+
+    /**
      * Gets the visitor mock
      *
      * @return \eZ\Publish\Core\REST\Common\Output\Visitor
@@ -135,6 +140,15 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     }
 
     /**
+     * Resets the router mock and its expected calls index & list
+     */
+    protected function resetRouterMock()
+    {
+        $this->routerMock = null;
+        $this->routerMockCallIndex = 0;
+    }
+
+    /**
      * Adds an expectation to the routerMock. Expectations must be added sequentially.
      *
      * @param string $routeName
@@ -143,10 +157,8 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
      */
     protected function addRouteExpectation( $routeName, $arguments, $returnValue )
     {
-        static $callIndex = 0;
-
-        $this->routerMock
-            ->expects( $this->at( $callIndex++ ) )
+        $this->getRouterMock()
+            ->expects( $this->at( $this->routerCallIndex++ ) )
             ->method( 'generate' )
             ->with(
                 $this->equalTo( $routeName ),
