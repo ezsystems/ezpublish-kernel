@@ -40,7 +40,7 @@ class URLAliasRefList extends ValueObjectVisitor
 
             $generator->startAttribute(
                 'href',
-                $this->requestParser->generate( 'urlAlias', array( 'urlalias' => $urlAlias->id ) )
+                $this->router->generate( 'ezpublish_rest_loadUrlAlias', array( 'urlAliasId' => $urlAlias->id ) )
             );
             $generator->endAttribute( 'href' );
 
