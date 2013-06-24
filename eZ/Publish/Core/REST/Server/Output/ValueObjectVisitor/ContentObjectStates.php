@@ -38,11 +38,11 @@ class ContentObjectStates extends ValueObjectVisitor
             $generator->startObjectElement( 'ObjectState' );
             $generator->startAttribute(
                 'href',
-                $this->requestParser->generate(
-                    'objectstate',
+                $this->router->generate(
+                    'ezpublish_rest_loadObjectState',
                     array(
-                        'objectstategroup' => $state->groupId,
-                        'objectstate' => $state->objectState->id
+                        'objectStateGroupId' => $state->groupId,
+                        'objectStateId' => $state->objectState->id
                     )
                 )
             );

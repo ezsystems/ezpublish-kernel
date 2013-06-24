@@ -29,6 +29,7 @@ class ContentObjectStatesTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
+        // @todo Improve this test with values...
         $stateList = new ContentObjectStates( array() );
 
         $visitor->visit(
