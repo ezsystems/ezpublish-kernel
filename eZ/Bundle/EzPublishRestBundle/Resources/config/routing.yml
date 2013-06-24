@@ -230,6 +230,12 @@ ezpublish_rest_createView:
         _controller: ezpublish_rest.controller.content:createView
     methods: [POST]
 
+# @todo this doesn't actually exist. Must generate a 404.
+ezpublish_rest_loadView:
+    path: /content/views/{viewId}
+
+ezpublish_rest_loadViewResults:
+    path: /content/views/{viewId}/results
 
 # Object states
 
