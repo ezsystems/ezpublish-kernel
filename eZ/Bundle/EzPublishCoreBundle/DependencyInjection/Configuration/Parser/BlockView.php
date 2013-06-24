@@ -30,17 +30,31 @@ class BlockView extends View
         $nodeBuilder
             ->arrayNode( static::NODE_KEY )
                 ->info( static::INFO )
-                ->useAttributeAsKey( "key" )
-                ->normalizeKeys( false )
-                ->prototype( "array" )
-                    ->children()
-                        ->scalarNode( "template" )->isRequired()->info( "Your template path, as MyBundle:subdir:my_template.html.twig" )->end()
-                        ->arrayNode( "match" )
-                            ->info( "Condition matchers configuration" )
-                            ->useAttributeAsKey( "key" )
-                            ->prototype( "variable" )->end()
+                ->children()
+                    ->arrayNode( 'block' )
+                        ->useAttributeAsKey( "key" )
+                        ->normalizeKeys( false )
+                        ->prototype( "array" )
+                            ->children()
+                                ->scalarNode( "template" )->isRequired()->info( "Your template path, as MyBundle:subdir:my_template.html.twig" )->end()
+                                ->arrayNode( "match" )
+                                    ->info( "Condition matchers configuration" )
+                                    ->useAttributeAsKey( "key" )
+                                    ->prototype( "variable" )->end()
+                                ->end()
+                            ->end()
                         ->end()
                     ->end()
+                ->end()
+                ->beforeNormalization()
+                ->always()
+                    ->then(
+                        // Adding one 'block' level in order to match the other view internal config structure.
+                        function ( $v )
+                        {
+                            return array( 'block' => $v );
+                        }
+                    )
                 ->end()
             ->end();
     }

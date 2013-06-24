@@ -9,16 +9,11 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Provider\Location;
 
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Configured as BaseConfigured;
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProvider;
-use eZ\Publish\Core\MVC\Symfony\View\Provider\ContentBasedConfigured as ProviderConfigured;
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\MVC\Symfony\View\ContentView;
-use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher;
-use InvalidArgumentException;
 
-class Configured extends ProviderConfigured implements LocationViewProvider
+class Configured extends BaseConfigured implements LocationViewProvider
 {
     /**
      * Returns a ContentView object corresponding to $location, or null if not applicable
@@ -32,20 +27,12 @@ class Configured extends ProviderConfigured implements LocationViewProvider
      */
     public function getView( Location $location, $viewType )
     {
-        if ( !isset( $this->matchConfig[$viewType] ) )
+        $viewConfig = $this->matcherFactory->match( $location, $viewType );
+        if ( empty( $viewConfig ) )
+        {
             return;
+        }
 
-        return $this->doMatch( $this->matchConfig[$viewType], $location );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function match( ViewProviderMatcher $matcher, ValueObject $valueObject )
-    {
-        if ( !$valueObject instanceof Location )
-            throw new InvalidArgumentException( 'Value object must be a valid Location instance' );
-
-        return $matcher->matchLocation( $valueObject );
+        return $this->buildContentView( $viewConfig );
     }
 }

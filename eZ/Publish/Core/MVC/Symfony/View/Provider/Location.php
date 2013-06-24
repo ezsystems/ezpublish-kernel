@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Location as APIContentLocation;
  *
  * Location view providers select a view for a given location, depending on its own internal rules.
  */
-interface Location extends ViewProviderInterface
+interface Location
 {
     /**
      * Returns a ContentView object corresponding to $location, or null if not applicable

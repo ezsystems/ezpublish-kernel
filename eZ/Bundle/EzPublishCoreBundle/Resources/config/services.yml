@@ -14,6 +14,9 @@ parameters:
     fragment.renderer.inline.class: eZ\Bundle\EzPublishCoreBundle\Fragment\InlineFragmentRenderer
     fragment.renderer.hinclude.class: eZ\Bundle\EzPublishCoreBundle\Fragment\HincludeFragmentRenderer
 
+    ezpublish.controller_manager.class: eZ\Publish\Core\MVC\Symfony\Controller\Manager
+    ezpublish.controller_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener
+
 services:
     # Siteaccess is injected in the container at runtime
     ezpublish.siteaccess:
@@ -69,3 +72,13 @@ services:
                 name: data_collector
                 template: "EzPublishCoreBundle:Profiler:layout"
                 id: "ezpublish.spi.persistence"
+
+    ezpublish.controller_manager:
+        class: %ezpublish.controller_manager.class%
+        arguments: [@ezpublish.location_view.matcher_factory, @ezpublish.content_view.matcher_factory, @logger]
+
+    ezpublish.controller_listener:
+        class: %ezpublish.controller_listener.class%
+        arguments: [@controller_resolver, @ezpublish.controller_manager, @ezpublish.api.repository, @logger]
+        tags:
+            - { name: kernel.event_subscriber }
