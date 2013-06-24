@@ -26,7 +26,7 @@ class FieldDefinitionUpdateTest extends BaseTest
     {
         $inputArray = $this->getInputArray();
 
-        $fieldDefinitionUpdate = $this->getFieldDefinitionUpdate();
+        $fieldDefinitionUpdate = $this->getParser();
         $result = $fieldDefinitionUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -124,7 +124,7 @@ class FieldDefinitionUpdateTest extends BaseTest
         $inputArray = $this->getInputArray();
         unset( $inputArray['names']['value'] );
 
-        $fieldDefinitionUpdate = $this->getFieldDefinitionUpdate();
+        $fieldDefinitionUpdate = $this->getParser();
         $fieldDefinitionUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -139,7 +139,7 @@ class FieldDefinitionUpdateTest extends BaseTest
         $inputArray = $this->getInputArray();
         unset( $inputArray['descriptions']['value'] );
 
-        $fieldDefinitionUpdate = $this->getFieldDefinitionUpdate();
+        $fieldDefinitionUpdate = $this->getParser();
         $fieldDefinitionUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -148,10 +148,9 @@ class FieldDefinitionUpdateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\FieldDefinitionUpdate
      */
-    protected function getFieldDefinitionUpdate()
+    protected function internalGetParser()
     {
         return new FieldDefinitionUpdate(
-            $this->getRequestParser(),
             $this->getContentTypeServiceMock(),
             $this->getFieldTypeParserMock(),
             $this->getParserTools()

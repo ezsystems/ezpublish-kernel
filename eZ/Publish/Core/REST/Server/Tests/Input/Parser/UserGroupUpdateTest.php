@@ -40,7 +40,7 @@ class UserGroupUpdateTest extends BaseTest
             '__url' => '/user/groups/1/5'
         );
 
-        $userGroupUpdate = $this->getUserGroupUpdate();
+        $userGroupUpdate = $this->getParser();
         $result = $userGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -112,7 +112,7 @@ class UserGroupUpdateTest extends BaseTest
             '__url' => '/user/groups/1/5'
         );
 
-        $userGroupUpdate = $this->getUserGroupUpdate();
+        $userGroupUpdate = $this->getParser();
         $userGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -134,7 +134,7 @@ class UserGroupUpdateTest extends BaseTest
             '__url' => '/user/groups/1/5'
         );
 
-        $userGroupUpdate = $this->getUserGroupUpdate();
+        $userGroupUpdate = $this->getParser();
         $userGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -162,7 +162,7 @@ class UserGroupUpdateTest extends BaseTest
             '__url' => '/user/groups/1/5'
         );
 
-        $userGroupUpdate = $this->getUserGroupUpdate();
+        $userGroupUpdate = $this->getParser();
         $userGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -190,7 +190,7 @@ class UserGroupUpdateTest extends BaseTest
             '__url' => '/user/groups/1/5'
         );
 
-        $userGroupUpdate = $this->getUserGroupUpdate();
+        $userGroupUpdate = $this->getParser();
         $userGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -199,10 +199,9 @@ class UserGroupUpdateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\UserGroupUpdate
      */
-    protected function getUserGroupUpdate()
+    protected function internalGetParser()
     {
         return new UserGroupUpdate(
-            $this->getRequestParser(),
             $this->getUserServiceMock(),
             $this->getContentServiceMock(),
             $this->getLocationServiceMock(),

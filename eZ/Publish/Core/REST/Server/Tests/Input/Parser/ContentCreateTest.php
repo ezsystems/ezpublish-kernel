@@ -51,7 +51,7 @@ class ContentCreateTest extends BaseTest
             )
         );
 
-        $contentCreate = $this->getContentCreate();
+        $contentCreate = $this->getParser();
         $result = $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -159,7 +159,7 @@ class ContentCreateTest extends BaseTest
             )
         );
 
-        $contentCreate = $this->getContentCreate();
+        $contentCreate = $this->getParser();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -196,7 +196,7 @@ class ContentCreateTest extends BaseTest
             )
         );
 
-        $contentCreate = $this->getContentCreate();
+        $contentCreate = $this->getParser();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -234,7 +234,7 @@ class ContentCreateTest extends BaseTest
             )
         );
 
-        $contentCreate = $this->getContentCreate();
+        $contentCreate = $this->getParser();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -273,7 +273,7 @@ class ContentCreateTest extends BaseTest
             )
         );
 
-        $contentCreate = $this->getContentCreate();
+        $contentCreate = $this->getParser();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -311,7 +311,7 @@ class ContentCreateTest extends BaseTest
             )
         );
 
-        $contentCreate = $this->getContentCreate();
+        $contentCreate = $this->getParser();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -349,7 +349,7 @@ class ContentCreateTest extends BaseTest
             )
         );
 
-        $contentCreate = $this->getContentCreate();
+        $contentCreate = $this->getParser();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -377,7 +377,7 @@ class ContentCreateTest extends BaseTest
             )
         );
 
-        $contentCreate = $this->getContentCreate();
+        $contentCreate = $this->getParser();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -416,7 +416,7 @@ class ContentCreateTest extends BaseTest
             )
         );
 
-        $contentCreate = $this->getContentCreate();
+        $contentCreate = $this->getParser();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -456,7 +456,7 @@ class ContentCreateTest extends BaseTest
             )
         );
 
-        $contentCreate = $this->getContentCreate();
+        $contentCreate = $this->getParser();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -495,7 +495,7 @@ class ContentCreateTest extends BaseTest
             )
         );
 
-        $contentCreate = $this->getContentCreate();
+        $contentCreate = $this->getParser();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -504,10 +504,9 @@ class ContentCreateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ContentCreate
      */
-    protected function getContentCreate()
+    protected function internalGetParser()
     {
         return new ContentCreate(
-            $this->getRequestParser(),
             $this->getContentServiceMock(),
             $this->getContentTypeServiceMock(),
             $this->getFieldTypeParserMock(),

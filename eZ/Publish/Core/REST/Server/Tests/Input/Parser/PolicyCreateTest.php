@@ -44,7 +44,7 @@ class PolicyCreateTest extends BaseTest
             )
         );
 
-        $policyCreate = $this->getPolicyCreate();
+        $policyCreate = $this->getParser();
         $result = $policyCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -130,7 +130,7 @@ class PolicyCreateTest extends BaseTest
             )
         );
 
-        $policyCreate = $this->getPolicyCreate();
+        $policyCreate = $this->getParser();
         $policyCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -166,7 +166,7 @@ class PolicyCreateTest extends BaseTest
             )
         );
 
-        $policyCreate = $this->getPolicyCreate();
+        $policyCreate = $this->getParser();
         $policyCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -202,7 +202,7 @@ class PolicyCreateTest extends BaseTest
             )
         );
 
-        $policyCreate = $this->getPolicyCreate();
+        $policyCreate = $this->getParser();
         $policyCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -226,7 +226,7 @@ class PolicyCreateTest extends BaseTest
             )
         );
 
-        $policyCreate = $this->getPolicyCreate();
+        $policyCreate = $this->getParser();
         $policyCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -235,10 +235,9 @@ class PolicyCreateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\PolicyCreate
      */
-    protected function getPolicyCreate()
+    protected function internalGetParser()
     {
         return new PolicyCreate(
-            $this->getRequestParser(),
             $this->getRoleServiceMock(),
             $this->getParserTools()
         );

@@ -79,4 +79,17 @@ abstract class BaseTest extends \eZ\Publish\Core\REST\Server\Tests\BaseTest
         }
         return $this->parserTools;
     }
+
+    protected function getParser()
+    {
+        $parser = $this->internalGetParser();
+        $parser->setRequestParser( $this->getRequestParser() );
+        return $parser;
+    }
+
+    /**
+     * Must return the tested parser object.
+     * @return \eZ\Publish\Core\REST\Server\Input\Parser\Base
+     */
+    abstract protected function internalGetParser();
 }

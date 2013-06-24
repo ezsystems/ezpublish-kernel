@@ -40,7 +40,7 @@ class UserGroupCreateTest extends BaseTest
             )
         );
 
-        $userGroupCreate = $this->getUserGroupCreate();
+        $userGroupCreate = $this->getParser();
         $result = $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -114,7 +114,7 @@ class UserGroupCreateTest extends BaseTest
             )
         );
 
-        $userGroupCreate = $this->getUserGroupCreate();
+        $userGroupCreate = $this->getParser();
         $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -144,7 +144,7 @@ class UserGroupCreateTest extends BaseTest
             )
         );
 
-        $userGroupCreate = $this->getUserGroupCreate();
+        $userGroupCreate = $this->getParser();
         $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -173,7 +173,7 @@ class UserGroupCreateTest extends BaseTest
             )
         );
 
-        $userGroupCreate = $this->getUserGroupCreate();
+        $userGroupCreate = $this->getParser();
         $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -196,7 +196,7 @@ class UserGroupCreateTest extends BaseTest
             'remoteId' => 'remoteId12345678',
         );
 
-        $userGroupCreate = $this->getUserGroupCreate();
+        $userGroupCreate = $this->getParser();
         $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -230,7 +230,7 @@ class UserGroupCreateTest extends BaseTest
             )
         );
 
-        $userGroupCreate = $this->getUserGroupCreate();
+        $userGroupCreate = $this->getParser();
         $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -261,7 +261,7 @@ class UserGroupCreateTest extends BaseTest
             )
         );
 
-        $userGroupCreate = $this->getUserGroupCreate();
+        $userGroupCreate = $this->getParser();
         $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -291,7 +291,7 @@ class UserGroupCreateTest extends BaseTest
             )
         );
 
-        $userGroupCreate = $this->getUserGroupCreate();
+        $userGroupCreate = $this->getParser();
         $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -300,10 +300,9 @@ class UserGroupCreateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\UserGroupCreate
      */
-    protected function getUserGroupCreate()
+    protected function internalGetParser()
     {
         return new UserGroupCreate(
-            $this->getRequestParser(),
             $this->getUserServiceMock(),
             $this->getContentTypeServiceMock(),
             $this->getFieldTypeParserMock()

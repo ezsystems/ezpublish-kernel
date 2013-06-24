@@ -37,13 +37,11 @@ class VersionUpdate extends Base
     /**
      * Construct from content service
      *
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser
      */
-    public function __construct( RequestParser $requestParser, ContentService $contentService, FieldTypeParser $fieldTypeParser )
+    public function __construct( ContentService $contentService, FieldTypeParser $fieldTypeParser )
     {
-        parent::__construct( $requestParser );
         $this->contentService = $contentService;
         $this->fieldTypeParser = $fieldTypeParser;
     }

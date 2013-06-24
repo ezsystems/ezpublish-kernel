@@ -22,7 +22,7 @@ class ContentTypeUpdateTest extends BaseTest
     {
         $inputArray = $this->getInputArray();
 
-        $contentTypeUpdate = $this->getContentTypeUpdate();
+        $contentTypeUpdate = $this->getParser();
         $result = $contentTypeUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -121,7 +121,7 @@ class ContentTypeUpdateTest extends BaseTest
         $inputArray = $this->getInputArray();
         unset( $inputArray['names']['value'] );
 
-        $contentTypeUpdate = $this->getContentTypeUpdate();
+        $contentTypeUpdate = $this->getParser();
         $contentTypeUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -136,7 +136,7 @@ class ContentTypeUpdateTest extends BaseTest
         $inputArray = $this->getInputArray();
         unset( $inputArray['descriptions']['value'] );
 
-        $contentTypeUpdate = $this->getContentTypeUpdate();
+        $contentTypeUpdate = $this->getParser();
         $contentTypeUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -151,7 +151,7 @@ class ContentTypeUpdateTest extends BaseTest
         $inputArray = $this->getInputArray();
         unset( $inputArray['User']['_href'] );
 
-        $contentTypeUpdate = $this->getContentTypeUpdate();
+        $contentTypeUpdate = $this->getParser();
         $contentTypeUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -160,10 +160,9 @@ class ContentTypeUpdateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeUpdate
      */
-    protected function getContentTypeUpdate()
+    protected function internalGetParser()
     {
         return new ContentTypeUpdate(
-            $this->getRequestParser(),
             $this->getContentTypeServiceMock(),
             $this->getParserTools()
         );

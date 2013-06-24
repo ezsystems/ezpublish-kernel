@@ -42,7 +42,7 @@ class PolicyUpdateTest extends BaseTest
             )
         );
 
-        $policyUpdate = $this->getPolicyUpdate();
+        $policyUpdate = $this->getParser();
         $result = $policyUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -114,7 +114,7 @@ class PolicyUpdateTest extends BaseTest
             )
         );
 
-        $policyUpdate = $this->getPolicyUpdate();
+        $policyUpdate = $this->getParser();
         $policyUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -136,7 +136,7 @@ class PolicyUpdateTest extends BaseTest
             )
         );
 
-        $policyUpdate = $this->getPolicyUpdate();
+        $policyUpdate = $this->getParser();
         $policyUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -145,10 +145,9 @@ class PolicyUpdateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\PolicyUpdate
      */
-    protected function getPolicyUpdate()
+    protected function internalGetParser()
     {
         return new PolicyUpdate(
-            $this->getRequestParser(),
             $this->getRoleServiceMock(),
             $this->getParserTools()
         );

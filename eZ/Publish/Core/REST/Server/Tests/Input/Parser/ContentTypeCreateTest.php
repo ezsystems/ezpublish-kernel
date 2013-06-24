@@ -24,7 +24,7 @@ class ContentTypeCreateTest extends BaseTest
     {
         $inputArray = $this->getInputArray();
 
-        $contentTypeCreate = $this->getContentTypeCreate();
+        $contentTypeCreate = $this->getParser();
         $result = $contentTypeCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -132,7 +132,7 @@ class ContentTypeCreateTest extends BaseTest
         $inputArray = $this->getInputArray();
         unset( $inputArray['identifier'] );
 
-        $contentTypeCreate = $this->getContentTypeCreate();
+        $contentTypeCreate = $this->getParser();
         $contentTypeCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -147,7 +147,7 @@ class ContentTypeCreateTest extends BaseTest
         $inputArray = $this->getInputArray();
         unset( $inputArray['mainLanguageCode'] );
 
-        $contentTypeCreate = $this->getContentTypeCreate();
+        $contentTypeCreate = $this->getParser();
         $contentTypeCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -162,7 +162,7 @@ class ContentTypeCreateTest extends BaseTest
         $inputArray = $this->getInputArray();
         unset( $inputArray['names']['value'] );
 
-        $contentTypeCreate = $this->getContentTypeCreate();
+        $contentTypeCreate = $this->getParser();
         $contentTypeCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -177,7 +177,7 @@ class ContentTypeCreateTest extends BaseTest
         $inputArray = $this->getInputArray();
         unset( $inputArray['descriptions']['value'] );
 
-        $contentTypeCreate = $this->getContentTypeCreate();
+        $contentTypeCreate = $this->getParser();
         $contentTypeCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -192,7 +192,7 @@ class ContentTypeCreateTest extends BaseTest
         $inputArray = $this->getInputArray();
         unset( $inputArray['User']['_href'] );
 
-        $contentTypeCreate = $this->getContentTypeCreate();
+        $contentTypeCreate = $this->getParser();
         $contentTypeCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -207,7 +207,7 @@ class ContentTypeCreateTest extends BaseTest
         $inputArray = $this->getInputArray();
         unset( $inputArray['FieldDefinitions']['FieldDefinition'] );
 
-        $contentTypeCreate = $this->getContentTypeCreate();
+        $contentTypeCreate = $this->getParser();
         $contentTypeCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -216,10 +216,9 @@ class ContentTypeCreateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeCreate
      */
-    protected function getContentTypeCreate()
+    protected function internalGetParser()
     {
         return new ContentTypeCreate(
-            $this->getRequestParser(),
             $this->getContentTypeServiceMock(),
             $this->getFieldDefinitionCreateParserMock(),
             $this->getParserTools()

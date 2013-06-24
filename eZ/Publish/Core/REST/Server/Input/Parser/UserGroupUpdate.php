@@ -54,15 +54,13 @@ class UserGroupUpdate extends Base
     /**
      * Construct
      *
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\UserService $userService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser
      */
-    public function __construct( RequestParser $requestParser, UserService $userService, ContentService $contentService, LocationService $locationService, FieldTypeParser $fieldTypeParser )
+    public function __construct( UserService $userService, ContentService $contentService, LocationService $locationService, FieldTypeParser $fieldTypeParser )
     {
-        parent::__construct( $requestParser );
         $this->userService = $userService;
         $this->contentService = $contentService;
         $this->locationService = $locationService;

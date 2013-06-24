@@ -24,7 +24,7 @@ class SectionInputTest extends BaseTest
             'identifier' => 'Identifier Bar',
         );
 
-        $sectionInput = $this->getSectionInput();
+        $sectionInput = $this->getParser();
         $result = $sectionInput->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertEquals(
@@ -46,7 +46,7 @@ class SectionInputTest extends BaseTest
             'name'       => 'Name Foo',
         );
 
-        $sectionInput = $this->getSectionInput();
+        $sectionInput = $this->getParser();
         $sectionInput->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -62,7 +62,7 @@ class SectionInputTest extends BaseTest
             'identifier' => 'Identifier Bar',
         );
 
-        $sectionInput = $this->getSectionInput();
+        $sectionInput = $this->getParser();
         $sectionInput->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -71,9 +71,11 @@ class SectionInputTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\SectionInput
      */
-    protected function getSectionInput()
+    protected function internalGetParser()
     {
-        return new SectionInput( $this->getRequestParser(), $this->getSectionServiceMock() );
+        return new SectionInput(
+            $this->getSectionServiceMock()
+        );
     }
 
     /**

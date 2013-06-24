@@ -24,7 +24,7 @@ class RelationCreateTest extends BaseTest
             ),
         );
 
-        $relationCreate = $this->getRelationCreate();
+        $relationCreate = $this->getParser();
         $result = $relationCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertEquals(
@@ -44,7 +44,7 @@ class RelationCreateTest extends BaseTest
     {
         $inputArray = array();
 
-        $relationCreate = $this->getRelationCreate();
+        $relationCreate = $this->getParser();
         $relationCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -60,7 +60,7 @@ class RelationCreateTest extends BaseTest
             'Destination' => array()
         );
 
-        $relationCreate = $this->getRelationCreate();
+        $relationCreate = $this->getParser();
         $relationCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -69,8 +69,10 @@ class RelationCreateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\RelationCreate
      */
-    protected function getRelationCreate()
+    protected function internalGetParser()
     {
-        return new RelationCreate( $this->getRequestParser() );
+        $parser = new RelationCreate();
+        $parser->setRequestParser( $this->getRequestParser() );
+        return $parser;
     }
 }

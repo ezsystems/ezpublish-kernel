@@ -28,10 +28,9 @@ class SectionIdentifier extends Base
      */
     protected $sectionService;
 
-    public function __construct( RequestParser $requestParser, SectionService $sectionService )
+    public function __construct( SectionService $sectionService )
     {
         $this->sectionService = $sectionService;
-        parent::__construct( $requestParser );
     }
 
     /**

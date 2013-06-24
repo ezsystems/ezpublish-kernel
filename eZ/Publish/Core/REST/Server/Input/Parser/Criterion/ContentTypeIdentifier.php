@@ -28,10 +28,9 @@ class ContentTypeIdentifier extends Base
      */
     protected $contentTypeService;
 
-    public function __construct( RequestParser $requestParser, ContentTypeService $contentTypeService )
+    public function __construct( ContentTypeService $contentTypeService )
     {
         $this->contentTypeService = $contentTypeService;
-        parent::__construct( $requestParser );
     }
 
     /**

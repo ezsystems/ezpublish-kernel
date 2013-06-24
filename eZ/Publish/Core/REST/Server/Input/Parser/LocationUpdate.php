@@ -39,13 +39,11 @@ class LocationUpdate extends Base
     /**
      * Construct
      *
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( RequestParser $requestParser, LocationService $locationService, ParserTools $parserTools )
+    public function __construct( LocationService $locationService, ParserTools $parserTools )
     {
-        parent::__construct( $requestParser );
         $this->locationService = $locationService;
         $this->parserTools = $parserTools;
     }

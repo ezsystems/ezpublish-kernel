@@ -40,7 +40,7 @@ class RoleAssignInputTest extends BaseTest
             )
         );
 
-        $roleAssignInput = $this->getRoleAssignInput();
+        $roleAssignInput = $this->getParser();
         $result = $roleAssignInput->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -101,7 +101,7 @@ class RoleAssignInputTest extends BaseTest
             )
         );
 
-        $roleAssignInput = $this->getRoleAssignInput();
+        $roleAssignInput = $this->getParser();
         $roleAssignInput->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -133,7 +133,7 @@ class RoleAssignInputTest extends BaseTest
             )
         );
 
-        $roleAssignInput = $this->getRoleAssignInput();
+        $roleAssignInput = $this->getParser();
         $roleAssignInput->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -166,7 +166,7 @@ class RoleAssignInputTest extends BaseTest
             )
         );
 
-        $roleAssignInput = $this->getRoleAssignInput();
+        $roleAssignInput = $this->getParser();
         $roleAssignInput->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -187,7 +187,7 @@ class RoleAssignInputTest extends BaseTest
             )
         );
 
-        $roleAssignInput = $this->getRoleAssignInput();
+        $roleAssignInput = $this->getParser();
         $roleAssignInput->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -196,10 +196,9 @@ class RoleAssignInputTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\RoleAssignInput
      */
-    protected function getRoleAssignInput()
+    protected function internalGetParser()
     {
         return new RoleAssignInput(
-            $this->getRequestParser(),
             $this->getParserTools()
         );
     }

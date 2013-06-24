@@ -91,8 +91,8 @@ class ContentObjectStatesTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ContentObjectStates;
      */
-    protected function getParser()
+    protected function internalGetParser()
     {
-        return new Parser\ContentObjectStates( $this->getRequestParser() );
+        return new Parser\ContentObjectStates();
     }
 }

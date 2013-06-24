@@ -21,12 +21,7 @@ abstract class Base extends Parser
      */
     protected $requestParser;
 
-    /**
-     * Creates a new parser.
-     *
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
-     */
-    public function __construct( RequestParser $requestParser )
+    public function setRequestParser( RequestParser $requestParser )
     {
         $this->requestParser = $requestParser;
     }

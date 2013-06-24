@@ -35,13 +35,11 @@ class ObjectStateGroupCreate extends Base
     /**
      * Construct
      *
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\ObjectStateService $objectStateService
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( RequestParser $requestParser, ObjectStateService $objectStateService, ParserTools $parserTools )
+    public function __construct( ObjectStateService $objectStateService, ParserTools $parserTools )
     {
-        parent::__construct( $requestParser );
         $this->objectStateService = $objectStateService;
         $this->parserTools = $parserTools;
     }

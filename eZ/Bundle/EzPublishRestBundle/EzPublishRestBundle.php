@@ -4,17 +4,17 @@ namespace eZ\Bundle\EzPublishRestBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use eZ\Bundle\EzPublishRestBundle\DependencyInjection\Compiler\FieldTypeProcessorPass;
-use eZ\Bundle\EzPublishRestBundle\DependencyInjection\Compiler\OutputVisitorPass;
-use eZ\Bundle\EzPublishRestBundle\DependencyInjection\Compiler\ValueObjectVisitorPass;
+use eZ\Bundle\EzPublishRestBundle\DependencyInjection\Compiler;
 
 class EzPublishRestBundle extends Bundle
 {
     public function build( ContainerBuilder $container )
     {
         parent::build( $container );
-        $container->addCompilerPass( new FieldTypeProcessorPass() );
-        $container->addCompilerPass( new OutputVisitorPass() );
-        $container->addCompilerPass( new ValueObjectVisitorPass() );
+        $container->addCompilerPass( new Compiler\FieldTypeProcessorPass() );
+        $container->addCompilerPass( new Compiler\InputHandlerPass() );
+        $container->addCompilerPass( new Compiler\InputParserPass() );
+        $container->addCompilerPass( new Compiler\OutputVisitorPass() );
+        $container->addCompilerPass( new Compiler\ValueObjectVisitorPass() );
     }
 }

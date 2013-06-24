@@ -28,7 +28,7 @@ class LocationUpdateTest extends BaseTest
             'sortOrder' => 'ASC'
         );
 
-        $locationUpdate = $this->getLocationUpdate();
+        $locationUpdate = $this->getParser();
         $result = $locationUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
@@ -88,7 +88,7 @@ class LocationUpdateTest extends BaseTest
             'sortOrder' => 'ASC'
         );
 
-        $locationUpdate = $this->getLocationUpdate();
+        $locationUpdate = $this->getParser();
         $locationUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -106,7 +106,7 @@ class LocationUpdateTest extends BaseTest
             'sortField' => 'PATH'
         );
 
-        $locationUpdate = $this->getLocationUpdate();
+        $locationUpdate = $this->getParser();
         $locationUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -115,10 +115,9 @@ class LocationUpdateTest extends BaseTest
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\LocationUpdate
      */
-    protected function getLocationUpdate()
+    protected function internalGetParser()
     {
         return new LocationUpdate(
-            $this->getRequestParser(),
             $this->getLocationServiceMock(),
             $this->getParserTools()
         );

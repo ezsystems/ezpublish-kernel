@@ -31,12 +31,10 @@ class RoleAssignInput extends Base
     /**
      * Construct
      *
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( RequestParser $requestParser, ParserTools $parserTools )
+    public function __construct( ParserTools $parserTools )
     {
-        parent::__construct( $requestParser );
         $this->parserTools = $parserTools;
     }
 

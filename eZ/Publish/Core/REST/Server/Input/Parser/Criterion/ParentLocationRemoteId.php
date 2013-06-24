@@ -28,10 +28,9 @@ class ParentLocationRemoteId extends Base
      */
     protected $locationService;
 
-    public function __construct( RequestParser $requestParser, LocationService $locationService )
+    public function __construct( LocationService $locationService )
     {
         $this->locationService = $locationService;
-        parent::__construct( $requestParser );
     }
 
     /**

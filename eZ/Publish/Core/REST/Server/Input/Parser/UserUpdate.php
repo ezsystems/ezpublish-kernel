@@ -54,15 +54,13 @@ class UserUpdate extends Base
     /**
      * Construct
      *
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\API\Repository\UserService $userService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( RequestParser $requestParser, UserService $userService, ContentService $contentService, FieldTypeParser $fieldTypeParser, ParserTools $parserTools )
+    public function __construct( UserService $userService, ContentService $contentService, FieldTypeParser $fieldTypeParser, ParserTools $parserTools )
     {
-        parent::__construct( $requestParser );
         $this->userService = $userService;
         $this->contentService = $contentService;
         $this->fieldTypeParser = $fieldTypeParser;
