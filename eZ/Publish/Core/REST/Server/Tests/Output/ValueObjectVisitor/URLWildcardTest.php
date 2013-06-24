@@ -38,6 +38,12 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
             )
         );
 
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadURLWildcard',
+            array( 'urlWildcardId' => $urlWildcard->id ),
+            "/content/urlwildcards/{$urlWildcard->id}"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
