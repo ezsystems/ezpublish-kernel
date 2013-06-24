@@ -32,7 +32,7 @@ class RestTrashItem extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate( 'trash', array( 'trash' => $data->trashItem->id ) )
+            $this->router->generate( 'ezpublish_rest_loadTrashItem', array( 'trashItemId' => $data->trashItem->id ) )
         );
         $generator->endAttribute( 'href' );
 
@@ -54,10 +54,10 @@ class RestTrashItem extends ValueObjectVisitor
         $generator->startObjectElement( 'ParentLocation', 'Location' );
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate(
-                'location',
+            $this->router->generate(
+                'ezpublish_rest_loadLocation',
                 array(
-                    'location' => '/' . implode( '/', $pathStringParts )
+                    'locationPath' => implode( '/', $pathStringParts )
                 )
             )
         );
@@ -77,7 +77,10 @@ class RestTrashItem extends ValueObjectVisitor
         $generator->endValueElement( 'remoteId' );
 
         $generator->startObjectElement( 'Content' );
-        $generator->startAttribute( 'href', $this->requestParser->generate( 'object', array( 'object' => $data->trashItem->contentId ) ) );
+        $generator->startAttribute(
+            'href',
+            $this->router->generate( 'ezpublish_rest_loadContent', array( 'contentId' => $data->trashItem->contentId ) )
+        );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Content' );
 
