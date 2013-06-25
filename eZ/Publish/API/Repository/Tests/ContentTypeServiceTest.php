@@ -1388,6 +1388,94 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     }
 
     /**
+     * Test for the addFieldDefinition() method.
+     *
+     * Testing that field definition of non-repeatable field type can not be added multiple
+     * times to the same ContentType.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAddFieldDefinition
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @expectedExceptionMessage ContentType already contains field definition of non-repeatable field type 'ezuser'
+     */
+    public function testAddFieldDefinitionThrowsBadStateExceptionNonRepeatableField()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        /* BEGIN: Use Case */
+        $userContentType = $contentTypeService->loadContentTypeByIdentifier( "user" );
+        $userContentTypeDraft = $contentTypeService->createContentTypeDraft( $userContentType );
+
+        $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'second_user_account', 'ezuser'
+        );
+        $fieldDefCreate->names = array(
+            'eng-GB' => 'Second user account',
+        );
+        $fieldDefCreate->descriptions = array(
+            'eng-GB' => 'Second user account for the ContentType',
+        );
+        $fieldDefCreate->fieldGroup = 'users';
+        $fieldDefCreate->position = 1;
+        $fieldDefCreate->isTranslatable = false;
+        $fieldDefCreate->isRequired = true;
+        $fieldDefCreate->isInfoCollector = false;
+        $fieldDefCreate->validatorConfiguration = array();
+        $fieldDefCreate->fieldSettings = array();
+        $fieldDefCreate->isSearchable = false;
+
+        // Throws an exception because $userContentTypeDraft already contains non-repeatable field type definition 'ezuser'
+        $contentTypeService->addFieldDefinition( $userContentTypeDraft, $fieldDefCreate );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the addFieldDefinition() method.
+     *
+     * Testing that field definition of 'ezuser' field type can not be added to the ContentType that
+     * already has Content instances.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAddFieldDefinition
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @expectedExceptionMessage Field definition of 'ezuser' field type cannot be added because ContentType has Content instances
+     */
+    public function testAddFieldDefinitionThrowsBadStateExceptionContentInstances()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        /* BEGIN: Use Case */
+        $folderContentType = $contentTypeService->loadContentTypeByIdentifier( "folder" );
+        $folderContentTypeDraft = $contentTypeService->createContentTypeDraft( $folderContentType );
+
+        $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'user_account', 'ezuser'
+        );
+        $fieldDefCreate->names = array(
+            'eng-GB' => 'User account',
+        );
+        $fieldDefCreate->descriptions = array(
+            'eng-GB' => 'User account field definition for ContentType that has Content instances',
+        );
+        $fieldDefCreate->fieldGroup = 'users';
+        $fieldDefCreate->position = 1;
+        $fieldDefCreate->isTranslatable = false;
+        $fieldDefCreate->isRequired = true;
+        $fieldDefCreate->isInfoCollector = false;
+        $fieldDefCreate->validatorConfiguration = array();
+        $fieldDefCreate->fieldSettings = array();
+        $fieldDefCreate->isSearchable = false;
+
+        // Throws an exception because 'folder' ContentType has Content instances
+        $contentTypeService->addFieldDefinition( $folderContentTypeDraft, $fieldDefCreate );
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the removeFieldDefinition() method.
      *
      * @return array

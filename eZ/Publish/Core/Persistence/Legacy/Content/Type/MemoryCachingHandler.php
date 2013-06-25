@@ -332,6 +332,18 @@ class MemoryCachingHandler implements BaseContentTypeHandler
     }
 
     /**
+     * Counts the number of Content instances of the ContentType identified by given $contentTypeId.
+     *
+     * @param mixed $contentTypeId
+     *
+     * @return int
+     */
+    public function getContentCount( $contentTypeId )
+    {
+        return $this->innerHandler->getContentCount( $contentTypeId );
+    }
+
+    /**
      * Adds a new field definition to an existing Type.
      *
      * This method creates a new status of the Type with the $fieldDefinition

@@ -1310,6 +1310,10 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the identifier in already exists in the content type
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If field definition of the same non-repeatable type is being
+     *                                                                 added to the ContentType that already contains one
+     *                                                                 or 'ezuser' type field definition is being added to the
+     *                                                                 ContentType that has Content instances
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
@@ -1326,6 +1330,35 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new InvalidArgumentException(
                 "\$fieldDefinitionCreateStruct",
                 "Another FieldDefinition with identifier '{$fieldDefinitionCreateStruct->identifier}' exists in the ContentType"
+            );
+        }
+
+        $fieldType = $this->repository->getFieldTypeService()->getFieldType(
+            $fieldDefinitionCreateStruct->fieldTypeIdentifier
+        );
+
+        if ( !$fieldType->isSingular() )
+        {
+            foreach ( $loadedContentTypeDraft->getFieldDefinitions() as $fieldDefinition )
+            {
+                if ( $fieldDefinition->fieldTypeIdentifier === $fieldDefinitionCreateStruct->fieldTypeIdentifier )
+                {
+                    throw new BadStateException(
+                        "\$contentTypeDraft",
+                        "ContentType already contains field definition of non-repeatable field type '{$fieldDefinition->fieldTypeIdentifier}'"
+                    );
+                }
+            }
+        }
+
+        if (
+            $fieldDefinitionCreateStruct->fieldTypeIdentifier === "ezuser" &&
+            $this->contentTypeHandler->getContentCount( $loadedContentTypeDraft->id )
+        )
+        {
+            throw new BadStateException(
+                "\$contentTypeId",
+                "Field definition of 'ezuser' field type cannot be added because ContentType has Content instances"
             );
         }
 
