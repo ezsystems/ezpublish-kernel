@@ -87,14 +87,14 @@ XML;
   <fields>
     <field>
       <fieldDefinitionIdentifier>description</fieldDefinitionIdentifier>
-      <languageCode>eng-US</languageCode>
+      <languageCode>eng-GB</languageCode>
       <fieldValue>{$text}</fieldValue>
     </field>
   </fields>
 </UserGroupUpdate>
 XML;
         $request = $this->createHttpRequest(
-            "POST",
+            "PATCH",
             $groupHref,
             'UserGroupUpdate+xml',
             'UserGroup+json'
@@ -187,7 +187,7 @@ XML;
 </UserUpdate>
 XML;
         $request = $this->createHttpRequest(
-            "POST",
+            "PATCH",
             $userHref,
             'UserUpdate+xml',
             'User+json'
