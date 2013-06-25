@@ -32,6 +32,8 @@ class ObjectStateGroupListTest extends ValueObjectVisitorBaseTest
 
         $groupList = new ObjectStateGroupList( array() );
 
+        $this->addRouteExpectation( 'ezpublish_rest_loadObjectStateGroups', array(), '/content/objectstategroups' );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
