@@ -32,12 +32,12 @@ class CreatedFieldDefinition extends RestFieldDefinition
         $restFieldDefinition = $data->fieldDefinition;
 
         parent::visit( $visitor, $generator, $restFieldDefinition );
+
+        $draftUriPart = $this->getUrlTypeSuffix( $restFieldDefinition->contentType->status );
         $visitor->setHeader(
             'Location',
             $this->router->generate(
-                $restFieldDefinition->contentType->status == ContentType::STATUS_DRAFT
-                    ? 'ezpublish_rest_loadContentTypeDraftFieldDefinition'
-                    : 'ezpublish_rest_loadContentTypeFieldDefinition',
+                "ezpublish_rest_loadContentType{$draftUriPart}FieldDefinition",
                 array(
                     'contentTypeId' => $restFieldDefinition->contentType->id,
                     'fieldDefinitionId' => $restFieldDefinition->fieldDefinition->id

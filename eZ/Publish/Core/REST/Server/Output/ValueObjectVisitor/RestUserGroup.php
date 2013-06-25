@@ -53,7 +53,11 @@ class RestUserGroup extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->router->generate( 'ezpublish_rest_loadContentType', array( 'contentTypeId' => $contentInfo->contentTypeId ) ) );
+            $this->router->generate(
+                'ezpublish_rest_loadContentType',
+                array( 'contentTypeId' => $contentInfo->contentTypeId )
+            )
+        );
         $generator->endAttribute( 'href' );
 
         $generator->endObjectElement( 'ContentType' );

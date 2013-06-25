@@ -31,14 +31,25 @@ class RootTest extends ValueObjectVisitorBaseTest
 
         $role = new Root;
 
-
         $this->addRouteExpectation( 'ezpublish_rest_redirectContent', array(), '/content/objects' );
         $this->addRouteExpectation( 'ezpublish_rest_listContentTypes', array(), '/content/types' );
         $this->addRouteExpectation( 'ezpublish_rest_loadUsers', array(), '/user/users' );
         $this->addRouteExpectation( 'ezpublish_rest_listRoles', array(), '/user/roles' );
-        $this->addRouteExpectation( 'ezpublish_rest_loadLocation', array( 'locationPath' => '/1/2' ), '/content/locations/1/2' );
-        $this->addRouteExpectation( 'ezpublish_rest_loadUserGroup', array( 'groupPath' => '/1/5' ), '/user/groups/1/5' );
-        $this->addRouteExpectation( 'ezpublish_rest_loadLocation', array( 'locationPath' => '/1/43' ), '/content/locations/1/43' );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadLocation',
+            array( 'locationPath' => '/1/2' ),
+            '/content/locations/1/2'
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadUserGroup',
+            array( 'groupPath' => '/1/5' ),
+            '/user/groups/1/5'
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadLocation',
+            array( 'locationPath' => '/1/43' ),
+            '/content/locations/1/43'
+        );
         $this->addRouteExpectation( 'ezpublish_rest_loadTrashItems', array(), '/content/trash' );
         $this->addRouteExpectation( 'ezpublish_rest_listSections', array(), '/content/sections' );
         $this->addRouteExpectation( 'ezpublish_rest_createView', array(), '/content/views' );
