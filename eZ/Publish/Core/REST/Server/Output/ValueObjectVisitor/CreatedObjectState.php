@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
  * CreatedObjectState value object visitor
+ * @todo coverage add test
  */
 class CreatedObjectState extends RestObjectState
 {
@@ -29,11 +30,11 @@ class CreatedObjectState extends RestObjectState
         parent::visit( $visitor, $generator, $data->objectState );
         $visitor->setHeader(
             'Location',
-            $this->requestParser->generate(
-                'objectstate',
+            $this->router->generate(
+                'ezpublish_rest_loadObjectState',
                 array(
-                    'objectstategroup' => $data->objectState->groupId,
-                    'objectstate' => $data->objectState->objectState->id
+                    'objectStateGroupId' => $data->objectState->groupId,
+                    'objectStateId' => $data->objectState->objectState->id
                 )
             )
         );
