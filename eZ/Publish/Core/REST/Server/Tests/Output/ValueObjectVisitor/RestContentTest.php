@@ -34,6 +34,47 @@ class RestContentTest extends ValueObjectVisitorBaseTest
         $this->getVisitorMock()->expects( $this->never() )
             ->method( 'visitValueObject' );
 
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContent',
+            array( 'contentId' => $restContent->contentInfo->id ),
+            "/content/objects/{$restContent->contentInfo->id}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContentType',
+            array( 'contentTypeId' => $restContent->contentInfo->contentTypeId ),
+            "/content/types/{$restContent->contentInfo->contentTypeId}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContentVersions',
+            array( 'contentId' => $restContent->contentInfo->id ),
+            "/content/objects/{$restContent->contentInfo->id}/versions"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_redirectCurrentVersion',
+            array( 'contentId' => $restContent->contentInfo->id ),
+            "/content/objects/{$restContent->contentInfo->id}/currentversion"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadSection',
+            array( 'sectionId' => $restContent->contentInfo->sectionId ),
+            "/content/sections/{$restContent->contentInfo->sectionId}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadLocation',
+            array( 'locationPath' => $locationPath = trim( $restContent->mainLocation->pathString, '/' ) ),
+            "/content/locations/{$locationPath}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadLocationsForContent',
+            array( 'locationPath' => $restContent->contentInfo->id ),
+            "/content/objects/{$restContent->contentInfo->id}/locations"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadUser',
+            array( 'userId' => $restContent->contentInfo->ownerId ),
+            "/user/users/{$restContent->contentInfo->ownerId}"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
@@ -312,6 +353,7 @@ class RestContentTest extends ValueObjectVisitorBaseTest
         $restContent = $this->getBasicRestContent();
         $restContent->currentVersion = new Values\Content\Content(
             array(
+                'versionInfo' => new Values\Content\VersionInfo( array( 'versionNo' => 5 ) ),
                 'internalFields' => array()
             )
         );
@@ -323,6 +365,48 @@ class RestContentTest extends ValueObjectVisitorBaseTest
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'visitValueObject' )
             ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Server\\Values\\Version' ) );
+
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContent',
+            array( 'contentId' => $restContent->contentInfo->id ),
+            "/content/objects/{$restContent->contentInfo->id}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContentType',
+            array( 'contentTypeId' => $restContent->contentInfo->contentTypeId ),
+            "/content/types/{$restContent->contentInfo->contentTypeId}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContentVersions',
+            array( 'contentId' => $restContent->contentInfo->id ),
+            "/content/objects/{$restContent->contentInfo->id}/versions"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_redirectCurrentVersion',
+            array( 'contentId' => $restContent->contentInfo->id ),
+            "/content/objects/{$restContent->contentInfo->id}/currentversion"
+        );
+
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadSection',
+            array( 'sectionId' => $restContent->contentInfo->sectionId ),
+            "/content/sections/{$restContent->contentInfo->sectionId}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadLocation',
+            array( 'locationPath' => $locationPath = trim( $restContent->mainLocation->pathString, '/' ) ),
+            "/content/locations/{$locationPath}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadLocationsForContent',
+            array( 'locationPath' => $restContent->contentInfo->id ),
+            "/content/objects/{$restContent->contentInfo->id}/locations"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadUser',
+            array( 'userId' => $restContent->contentInfo->ownerId ),
+            "/user/users/{$restContent->contentInfo->ownerId}"
+        );
 
         $visitor->visit(
             $this->getVisitorMock(),
