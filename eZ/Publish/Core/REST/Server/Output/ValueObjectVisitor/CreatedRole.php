@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
  * CreatedRole value object visitor
+ * @todo coverage add unit test
  */
 class CreatedRole extends Role
 {
