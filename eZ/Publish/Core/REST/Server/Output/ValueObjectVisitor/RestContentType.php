@@ -44,10 +44,10 @@ class RestContentType extends RestContentTypeBase
 
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate(
-                'type' . $urlTypeSuffix,
+            $this->router->generate(
+                'ezpublish_rest_loadContentType' . $urlTypeSuffix,
                 array(
-                    'type' => $contentType->id,
+                    'contentTypeId' => $contentType->id,
                 )
             )
         );
@@ -79,9 +79,9 @@ class RestContentType extends RestContentTypeBase
         $generator->startObjectElement( 'Creator', 'User' );
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate(
-                'user',
-                array( 'user' => $contentType->creatorId )
+            $this->router->generate(
+                'ezpublish_rest_loadUser',
+                array( 'userId' => $contentType->creatorId )
             )
         );
         $generator->endAttribute( 'href' );
@@ -90,9 +90,9 @@ class RestContentType extends RestContentTypeBase
         $generator->startObjectElement( 'Modifier', 'User' );
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate(
-                'user',
-                array( 'user' => $contentType->modifierId )
+            $this->router->generate(
+                'ezpublish_rest_loadUser',
+                array( 'userId' => $contentType->modifierId )
             )
         );
         $generator->endAttribute( 'href' );

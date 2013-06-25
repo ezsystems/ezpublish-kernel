@@ -16,6 +16,10 @@ use eZ\Publish\Core\Repository\Values;
 use eZ\Publish\Core\REST\Common;
 use eZ\Publish\Core\REST\Server\Values\RestContentType;
 
+/**
+ * @todo coverage add unit test for testVisitDraftType
+ * @todo coverage cover fieldDefinitions (with Mock of Output\Visitor)
+ */
 class RestContentTypeTest extends ValueObjectVisitorBaseTest
 {
     /**
@@ -33,6 +37,22 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'visitValueObject' )
             ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Server\\Values\\FieldDefinitionList' ) );
+
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContentType',
+            array( 'contentTypeId' => $restContentType->contentType->id ),
+            "/content/types/{$restContentType->contentType->id}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadUser',
+            array( 'userId' => $restContentType->contentType->creatorId ),
+            "/user/users/{$restContentType->contentType->creatorId}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadUser',
+            array( 'userId' => $restContentType->contentType->modifierId ),
+            "/user/users/{$restContentType->contentType->modifierId}"
+        );
 
         $visitor->visit(
             $this->getVisitorMock(),
