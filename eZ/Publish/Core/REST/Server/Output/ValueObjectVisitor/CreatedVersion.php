@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
  * CreatedVersion value object visitor
+ * @todo coverage add unit test
  */
 class CreatedVersion extends Version
 {
@@ -29,11 +30,11 @@ class CreatedVersion extends Version
         parent::visit( $visitor, $generator, $data->version );
         $visitor->setHeader(
             'Location',
-            $this->requestParser->generate(
-                'objectVersion',
+            $this->router->generate(
+                'ezpublish_rest_loadContentInVersion',
                 array(
-                    'object' => $data->version->content->id,
-                    'version' => $data->version->content->getVersionInfo()->versionNo
+                    'contentId' => $data->version->content->id,
+                    'versionNumber' => $data->version->content->getVersionInfo()->versionNo
                 )
             )
         );
