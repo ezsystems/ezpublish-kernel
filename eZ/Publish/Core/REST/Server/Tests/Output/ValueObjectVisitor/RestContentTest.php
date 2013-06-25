@@ -66,7 +66,7 @@ class RestContentTest extends ValueObjectVisitorBaseTest
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocationsForContent',
-            array( 'locationPath' => $restContent->contentInfo->id ),
+            array( 'contentId' => $restContent->contentInfo->id ),
             "/content/objects/{$restContent->contentInfo->id}/locations"
         );
         $this->addRouteExpectation(
@@ -399,7 +399,7 @@ class RestContentTest extends ValueObjectVisitorBaseTest
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocationsForContent',
-            array( 'locationPath' => $restContent->contentInfo->id ),
+            array( 'contentId' => $restContent->contentInfo->id ),
             "/content/objects/{$restContent->contentInfo->id}/locations"
         );
         $this->addRouteExpectation(

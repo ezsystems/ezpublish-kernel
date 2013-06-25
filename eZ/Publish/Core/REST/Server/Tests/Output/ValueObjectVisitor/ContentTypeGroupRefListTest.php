@@ -56,7 +56,7 @@ class ContentTypeGroupRefListTest extends ValueObjectVisitorBaseTest
 
         $this->addRouteExpectation(
             'ezpublish_rest_listContentTypesForGroup',
-            array( 'contentTypeId' => $contentTypeGroupRefList->contentType->id ),
+            array( 'contentTypeGroupId' => $contentTypeGroupRefList->contentType->id ),
             "/content/types/{$contentTypeGroupRefList->contentType->id}/groups"
         );
 

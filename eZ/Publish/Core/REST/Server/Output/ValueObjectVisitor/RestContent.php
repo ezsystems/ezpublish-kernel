@@ -129,7 +129,7 @@ class RestContent extends ValueObjectVisitor
             'href',
             $this->router->generate(
                 'ezpublish_rest_loadLocationsForContent',
-                array( 'locationPath' => $contentInfo->id )
+                array( 'contentId' => $contentInfo->id )
             )
         );
         $generator->endAttribute( 'href' );

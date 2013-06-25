@@ -41,7 +41,7 @@ class URLAliasRefListTest extends ValueObjectVisitorBaseTest
         );
 
         $this->addRouteExpectation(
-            'ezpublish_rest_loadUrlAlias',
+            'ezpublish_rest_loadURLAlias',
             array( 'urlAliasId' => $urlAliasRefList->urlAliases[0]->id ),
             "/content/urlaliases/{$urlAliasRefList->urlAliases[0]->id}"
         );

@@ -36,7 +36,7 @@ class RestUserGroupTest extends ValueObjectVisitorBaseTest
 
         $userGroupPath = implode( '/', $restUserGroup->mainLocation->path );
         $this->addRouteExpectation(
-            'ezpublish_rest_loadGroup',
+            'ezpublish_rest_loadUserGroup',
             array( 'groupPath' => $userGroupPath ),
             "/user/groups/{$userGroupPath}"
         );
@@ -57,7 +57,7 @@ class RestUserGroupTest extends ValueObjectVisitorBaseTest
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocation',
-            array( 'location' => $userGroupPath ),
+            array( 'locationPath' => $userGroupPath ),
             "/content/locations/{$userGroupPath}"
         );
         $this->addRouteExpectation(
@@ -72,7 +72,7 @@ class RestUserGroupTest extends ValueObjectVisitorBaseTest
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadUserGroup',
-            array( 'group' => '1/2' ),
+            array( 'groupPath' => '1/2' ),
             "/user/groups/1/2"
         );
         $this->addRouteExpectation(

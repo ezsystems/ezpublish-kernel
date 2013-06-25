@@ -35,7 +35,7 @@ class ContentTypeGroupRefList extends ValueObjectVisitor
             $this->router->generate(
                 'ezpublish_rest_listContentTypesForGroup',
                 array(
-                    'contentTypeId' => $data->contentType->id
+                    'contentTypeGroupId' => $data->contentType->id
                 )
             )
         );
