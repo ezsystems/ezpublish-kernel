@@ -18,6 +18,9 @@ use eZ\Publish\Core\REST\Common;
 
 use eZ\Publish\Core\Repository\Values;
 
+/**
+ * @todo coverage add unit test for a content type draft
+ */
 class FieldDefinitionListTest extends ValueObjectVisitorBaseTest
 {
     /**
@@ -30,16 +33,22 @@ class FieldDefinitionListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $restContent = $this->getBasicFieldDefinitionList();
+        $fieldDefinitionList = $this->getBasicFieldDefinitionList();
 
         $this->getVisitorMock()->expects( $this->exactly( 2 ) )
             ->method( 'visitValueObject' )
             ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Server\\Values\\RestFieldDefinition' ) );
 
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContentTypeFieldDefinitionList',
+            array( 'contentTypeId' => $fieldDefinitionList->contentType->id ),
+            "/content/types/{$fieldDefinitionList->contentType->id}/fieldDefinitions"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
-            $restContent
+            $fieldDefinitionList
         );
 
         $result = $generator->endDocument( null );
