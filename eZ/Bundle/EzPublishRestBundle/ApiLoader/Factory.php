@@ -3,13 +3,12 @@ namespace eZ\Bundle\EzPublishRestBundle\ApiLoader;
 
 use eZ\Publish\Core\REST\Server\Input;
 use eZ\Publish\Core\REST\Server\Output;
-use eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher;
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 use eZ\Publish\Core\REST\Common;
-use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\IO\IOService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use eZ\Publish\API\Repository\Repository;
+use Symfony\Component\Routing\RouterInterface;
 
 class Factory
 {
@@ -46,11 +45,11 @@ class Factory
     /**
      * Factory for ezpublish_rest.field_type_processor.ezimage
      *
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
+     * @param \Symfony\Component\Routing\RouterInterface $router
      *
      * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\ImageProcessor
      */
-    public function getImageFieldTypeProcessor( RequestParser $requestParser )
+    public function getImageFieldTypeProcessor( RouterInterface $router )
     {
         $configResolver = $this->container->get( 'ezpublish.config.resolver' );
         $variationsIdentifiers = array_keys( $configResolver->getParameter( 'image_variations' ) );
@@ -62,7 +61,7 @@ class Factory
             sys_get_temp_dir(),
             // URL schema for image links
             // @todo get configuration
-            $requestParser,
+            $router,
             // Image variations (names only)
             $variationsIdentifiers
         );
