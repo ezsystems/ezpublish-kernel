@@ -40,7 +40,7 @@ class RelationListTest extends ValueObjectVisitorBaseTest
             ),
             "/content/objects/{$relationList->contentId}/versions/{$relationList->versionNo}/relations"
         );
-        
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
