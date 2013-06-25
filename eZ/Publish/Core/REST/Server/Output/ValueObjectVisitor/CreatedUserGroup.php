@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
  * CreatedUserGroup value object visitor
+ * @todo coverage add unit test
  */
 class CreatedUserGroup extends RestUserGroup
 {
@@ -29,9 +30,9 @@ class CreatedUserGroup extends RestUserGroup
         parent::visit( $visitor, $generator, $data->userGroup );
         $visitor->setHeader(
             'Location',
-            $this->requestParser->generate(
-                'group',
-                array( 'group' => rtrim( $data->userGroup->mainLocation->pathString, '/' ) )
+            $this->router->generate(
+                'ezpublish_rest_loadUserGroup',
+                array( 'groupPath' => trim( $data->userGroup->mainLocation->pathString, '/' ) )
             )
         );
         $visitor->setStatus( 201 );
