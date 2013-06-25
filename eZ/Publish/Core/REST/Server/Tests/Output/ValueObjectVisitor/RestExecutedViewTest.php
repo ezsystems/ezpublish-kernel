@@ -23,7 +23,7 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
     /**
      * Test the RestRelation visitor
      *
-     * @return string
+     * @return \DOMDocument
      */
     public function testVisit()
     {
@@ -49,6 +49,7 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
             array( 'viewId' => $view->identifier ),
             "/content/views/{$view->identifier}/results"
         );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
@@ -57,142 +58,42 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
 
         $result = $generator->endDocument( null );
 
+        print_r( $result );
+
         $this->assertNotNull( $result );
 
-        return $result;
+        $dom = new \DOMDocument();
+        $dom->loadXml( $result );
+
+        return $dom;
     }
 
-    /**
-     * @depends testVisit
-     */
-    public function testResultContainsRelationTag( $result )
+    public function provideXpathAssertions()
     {
-        $this->assertTag(
-            array(
-                'tag'      => 'View',
-            ),
-            $result,
-            'Invalid <View> tag.',
-            false
+        return array(
+            array( '/View' ),
+            array( '/View[@media-type="application/vnd.ez.api.View+xml"]' ),
+            array( '/View[@href="/content/views/test_view"]' ),
+            array( '/View/identifier' ),
+            array( '/View/identifier[text()="test_view"]' ),
+            array( '/View/Query' ),
+            array( '/View/Query[@media-type="application/vnd.ez.api.Query+xml"]' ),
+            array( '/View/Result' ),
+            array( '/View/Result[@media-type="application/vnd.ez.api.ViewResult+xml"]' ),
+            array( '/View/Result[@href="/content/views/test_view/results"]' ),
         );
     }
 
     /**
+     * @param string $xpath
+     * @param \DOMDocument $dom
+     *
      * @depends testVisit
+     * @dataProvider provideXpathAssertions
      */
-    public function testResultContainsRelationAttributes( $result )
+    public function testGeneratedXml( $xpath, \DOMDocument $dom )
     {
-        $this->assertTag(
-            array(
-                'tag'      => 'View',
-                'attributes' => array(
-                    'media-type' => 'application/vnd.ez.api.View+xml',
-                    'href'       => '/content/views/test_view',
-                )
-            ),
-            $result,
-            'Invalid <View> tag attributes.',
-            false
-        );
-    }
-
-    /**
-     * @depends testVisit
-     */
-    public function testResultContainsIdentifierTag( $result )
-    {
-        $this->assertTag(
-            array(
-                'tag' => 'identifier',
-            ),
-            $result,
-            'Invalid <identifier> tag.',
-            false
-        );
-    }
-
-    /**
-     * @depends testVisit
-     */
-    public function testResultContainsIdentifierAttributes( $result )
-    {
-        $this->assertTag(
-            array(
-                'tag'   => 'identifier',
-                'value' => 'test_view'
-            ),
-            $result,
-            'Invalid <identifier> tag attributes.',
-            false
-        );
-    }
-
-    /**
-     * @depends testVisit
-     */
-    public function testResultContainsQueryTag( $result )
-    {
-        $this->assertTag(
-            array(
-                'tag' => 'Query',
-            ),
-            $result,
-            'Invalid <Query> tag.',
-            false
-        );
-    }
-
-    /**
-     * @depends testVisit
-     */
-    public function testResultContainsQueryAttributes( $result )
-    {
-        $this->assertTag(
-            array(
-                'tag'   => 'Query',
-                'attributes' => array(
-                    'media-type' => 'application/vnd.ez.api.Query+xml'
-                )
-            ),
-            $result,
-            'Invalid <Query> tag attributes.',
-            false
-        );
-    }
-
-    /**
-     * @depends testVisit
-     */
-    public function testResultContainsResultTag( $result )
-    {
-        $this->assertTag(
-            array(
-                'tag' => 'Query',
-            ),
-            $result,
-            'Invalid <Result> tag.',
-            false
-        );
-    }
-
-    /**
-     * @depends testVisit
-     */
-    public function testResultContainsResultAttributes( $result )
-    {
-        $this->assertTag(
-            array(
-                'tag'   => 'Result',
-                'attributes' => array(
-                    'media-type' => 'application/vnd.ez.api.ViewResult+xml+xml',
-                    'href'       => '/content/views/test_view/results'
-                ),
-                'children' => 1
-            ),
-            $result,
-            'Invalid <Result> tag attributes.',
-            false
-        );
+        $this->assertXPath( $dom, $xpath );
     }
 
     /**
