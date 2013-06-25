@@ -58,8 +58,6 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
 
         $result = $generator->endDocument( null );
 
-        print_r( $result );
-
         $this->assertNotNull( $result );
 
         $dom = new \DOMDocument();
