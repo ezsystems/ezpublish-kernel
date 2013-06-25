@@ -78,10 +78,11 @@ abstract class Gateway
      * Find all content in the given subtree
      *
      * @param mixed $sourceId
+     * @param bool $onlyIds
      *
      * @return array
      */
-    abstract public function getSubtreeContent( $sourceId );
+    abstract public function getSubtreeContent( $sourceId, $onlyIds = false );
 
     /**
      * Returns data for the first level children of the location identified by given $locationId

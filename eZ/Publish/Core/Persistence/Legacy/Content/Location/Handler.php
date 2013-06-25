@@ -102,6 +102,18 @@ class Handler implements BaseLocationHandler
     }
 
     /**
+     * Loads the subtree ids of the location identified by $locationId.
+     *
+     * @param int $locationId
+     *
+     * @return array Location ids are in the index, Content ids in the value.
+     */
+    public function loadSubtreeIds( $locationId )
+    {
+        return $this->locationGateway->getSubtreeContent( $locationId, true );
+    }
+
+    /**
      * Loads the data for the location identified by $remoteId.
      *
      * @param string $remoteId
