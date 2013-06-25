@@ -22,8 +22,8 @@ class ImageVariation extends ValueObjectVisitor
         $generator->startObjectElement( 'ContentImageVariation' );
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate(
-                'getImageVariation',
+            $this->router->generate(
+                'ezpublish_rest_binaryContent_getImageVariation',
                 array(
                     'imageId' => $data->imageId,
                     'variationIdentifier' => $data->name
@@ -32,6 +32,7 @@ class ImageVariation extends ValueObjectVisitor
         );
         $generator->endAttribute( 'href' );
 
+        // @todo installation subfolder
         $generator->startValueElement( 'uri', "/" . $data->uri );
         $generator->endValueElement( 'uri' );
 
