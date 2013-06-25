@@ -29,9 +29,9 @@ class CreatedRole extends Role
         parent::visit( $visitor, $generator, $data->role );
         $visitor->setHeader(
             'Location',
-            $this->requestParser->generate(
-                'role',
-                array( 'role' => $data->role->id )
+            $this->router->generate(
+                'ezpublish_rest_loadRole',
+                array( 'roleId' => $data->role->id )
             )
         );
         $visitor->setStatus( 201 );
