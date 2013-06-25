@@ -29,12 +29,12 @@ class CreatedRelation extends RestRelation
         parent::visit( $visitor, $generator, $data->relation );
         $visitor->setHeader(
             'Location',
-            $this->requestParser->generate(
-                'objectVersionRelation',
+            $this->router->generate(
+                'ezpublish_rest_loadVersionRelation',
                 array(
-                    'object' => $data->relation->contentId,
-                    'version' => $data->relation->versionNo,
-                    'relation' => $data->relation->relation->id
+                    'contentId' => $data->relation->contentId,
+                    'versionNumber' => $data->relation->versionNo,
+                    'relationId' => $data->relation->relation->id
                 )
             )
         );
