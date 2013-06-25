@@ -87,7 +87,7 @@ class RestExecutedView extends ValueObjectVisitor
         // END Query
 
         // BEGIN Result
-        $generator->startObjectElement( 'Result', $generator->getMediaType( 'ViewResult' ) );
+        $generator->startObjectElement( 'Result', 'ViewResult' );
         $generator->startAttribute(
             'href',
             $this->requestParser->generate( 'viewResults', array( 'view' => $data->identifier ) )
