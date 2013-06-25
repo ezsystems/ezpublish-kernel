@@ -29,6 +29,7 @@ class LocationListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
+        // @todo coverage test with a list of values
         $locationList = new LocationList( array(), '/content/objects/42/locations' );
 
         $visitor->visit(
