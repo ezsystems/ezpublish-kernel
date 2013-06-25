@@ -30,7 +30,14 @@ class ObjectStateListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
+        // @todo coverage add actual object states + visitor mock for RestObjectState
         $stateList = new ObjectStateList( array(), 42 );
+
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadObjectStates',
+            array( 'objectStateGroupId' => $stateList->groupId ),
+            "/content/objectstategroups/{$stateList->groupId}/objectstates"
+        );
 
         $visitor->visit(
             $this->getVisitorMock(),
