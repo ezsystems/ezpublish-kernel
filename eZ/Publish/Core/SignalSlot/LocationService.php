@@ -80,6 +80,7 @@ class LocationService implements LocationServiceInterface
                 array(
                     'subtreeId' => $subtree->id,
                     'targetParentLocationId' => $targetParentLocation->id,
+                    'targetNewSubtreeId' => $returnValue->id,
                 )
             )
         );

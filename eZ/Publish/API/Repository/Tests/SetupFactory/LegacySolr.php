@@ -71,6 +71,7 @@ class LegacySolr extends Legacy
                         "solr-create-user" => new Slot\CreateUser( $repository, $persistenceHandler ),
                         "solr-create-user-group" => new Slot\CreateUserGroup( $repository, $persistenceHandler ),
                         "solr-move-user-group" => new Slot\MoveUserGroup( $repository, $persistenceHandler ),
+                        "solr-copy-subtree" => new Slot\CopySubtree( $repository, $persistenceHandler ),
                     )
                 ),
                 array(
@@ -79,6 +80,7 @@ class LegacySolr extends Legacy
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\DeleteVersionSignal" => array( "solr-delete-version" ),
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\CopyContentSignal" => array( "solr-copy-content" ),
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\DeleteLocationSignal" => array( "solr-delete-location" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\CopySubtreeSignal" => array( "solr-copy-subtree" ),
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\CreateUserSignal" => array( "solr-create-user" ),
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\CreateUserGroupSignal" => array( "solr-create-user-group" ),
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\MoveUserGroupSignal" => array( "solr-move-user-group" ),
