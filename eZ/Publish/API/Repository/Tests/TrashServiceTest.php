@@ -387,6 +387,45 @@ class TrashServiceTest extends BaseTrashServiceTest
     /**
      * Test for the recover() method.
      *
+     * @see \eZ\Publish\API\Repository\TrashService::recover($trashItem)
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
+     */
+    public function testRecoverIncrementsChildCountOnOriginalParent()
+    {
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocation( $this->generateId( 'location', 1 ) );
+
+        $trashItem = $this->createTrashItem();
+
+        /* BEGIN: Use Case */
+        $childCount = $locationService->getLocationChildCount( $location );
+
+        // Recover location with new location
+        $trashService->recover( $trashItem );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            $childCount + 1,
+            $locationService->getLocationChildCount( $location )
+        );
+
+        try
+        {
+            $trashService->loadTrashItem( $trashItem->id );
+            $this->fail( "Trash item was not removed after being recovered." );
+        }
+        catch ( NotFoundException $e )
+        {
+            // All well
+        }
+    }
+
+    /**
+     * Test for the recover() method.
+     *
      * @return void
      * @see \eZ\Publish\API\Repository\TrashService::recover($trashItem, $newParentLocation)
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecoverWithLocationCreateStructParameter

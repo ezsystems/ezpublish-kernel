@@ -108,16 +108,17 @@ class TrashService implements TrashServiceInterface
      */
     public function recover( TrashItem $trashItem, Location $newParentLocation = null )
     {
-        $returnValue = $this->service->recover( $trashItem, $newParentLocation );
+        $newLocation = $this->service->recover( $trashItem, $newParentLocation );
         $this->signalDispatcher->emit(
             new RecoverSignal(
                 array(
                     'trashItemId' => $trashItem->id,
                     'newParentLocationId' => $newParentLocation !== null ? $newParentLocation->id : null,
+                    'newLocationId' => $newLocation->id,
                 )
             )
         );
-        return $returnValue;
+        return $newLocation;
     }
 
     /**
