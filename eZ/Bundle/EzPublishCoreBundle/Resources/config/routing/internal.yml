@@ -2,6 +2,6 @@
 _ezpublishLocation:
     path: /content/location/{locationId}/{viewType}/{layout}
     defaults:
-        _controller: ezpublish.controller.content.view:viewLocation
+        _controller: ez_content:viewLocation
         viewType: full
         layout: true
