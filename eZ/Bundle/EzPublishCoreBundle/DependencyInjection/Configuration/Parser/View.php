@@ -36,7 +36,16 @@ class View extends AbstractParser
                     ->info( "View selection rulesets, grouped by view type. Key is the view type (e.g. 'full', 'line', ...)" )
                     ->prototype( "array" )
                         ->children()
-                            ->scalarNode( "template" )->isRequired()->info( "Your template path, as MyBundle:subdir:my_template.html.twig" )->end()
+                            ->scalarNode( "template" )->info( "Your template path, as MyBundle:subdir:my_template.html.twig" )->end()
+                            ->scalarNode( 'controller' )
+                                ->info(
+<<<EOT
+Use custom controller instead of the default one to display a content matching your rules.
+You can use the controller reference notation supported by Symfony.
+EOT
+                                )
+                                ->example( 'MyBundle:MyControllerClass:view' )
+                            ->end()
                             ->arrayNode( "match" )
                                 ->info( "Condition matchers configuration" )
                                 ->useAttributeAsKey( "key" )
@@ -57,15 +66,6 @@ EOT
                                 )
                                 ->useAttributeAsKey( "key" )
                                 ->prototype( "variable" )->end()
-                            ->end()
-                            ->scalarNode( 'controller' )
-                                ->info(
-<<<EOT
-Use custom controller instead of the default one to display a content matching your rules.
-You can use the controller reference notation supported by Symfony.
-EOT
-                                )
-                                ->example( 'MyBundle:MyControllerClass:view' )
                             ->end()
                         ->end()
                     ->end()
