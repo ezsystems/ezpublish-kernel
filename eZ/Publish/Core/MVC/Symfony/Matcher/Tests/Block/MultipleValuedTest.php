@@ -15,8 +15,8 @@ class MultipleValuedTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider matchingConfigProvider
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::getValues
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::getValues
      */
     public function testSetMatchingConfig( $matchingConfig )
     {
@@ -51,7 +51,7 @@ class MultipleValuedTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::getRepository
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::getRepository
      */
     public function testInjectRepository()
     {
