@@ -77,6 +77,13 @@ class LegacyKernelController
         $legacyMode = $this->configResolver->getParameter( 'legacy_mode' );
 
         $this->kernel->setUseExceptions( false );
+
+        // If we have a layout for legacy AND we're not in legacy mode, we ask the legacy kernel not to generate layout.
+        if ( isset( $this->legacyLayout ) && !$legacyMode )
+        {
+            $this->kernel->setUsePagelayout( false );
+        }
+
         $result = $this->kernel->run();
         $this->kernel->setUseExceptions( true );
 
