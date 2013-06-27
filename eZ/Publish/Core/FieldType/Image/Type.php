@@ -14,6 +14,8 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * The Image field type
@@ -48,15 +50,13 @@ class Type extends FieldType
      * It will be used to generate content name and url alias if current field is designated
      * to be used in the content name/urlAlias pattern.
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\Image\Value $value
      *
-     * @return mixed
+     * @return string
      */
-    public function getName( $value )
+    public function getName( SPIValue $value )
     {
-        $value = $this->acceptValue( $value );
-
-        return !empty( $value->alternativeText ) ? $value->alternativeText : $value->originalFilename;
+        return !empty( $value->alternativeText ) ? $value->alternativeText : $value->fileName;
     }
 
     /**
@@ -71,13 +71,13 @@ class Type extends FieldType
     }
 
     /**
-     * Implements the core of {@see acceptValue()}.
+     * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
-     * @param mixed $inputValue
+     * @param string|array|\eZ\Publish\Core\FieldType\Image\Value $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\Image\Value The potentially converted and structurally plausible value.
      */
-    protected function internalAcceptValue( $inputValue )
+    protected function createValueFromInput( $inputValue )
     {
         // default construction from array
         if ( is_array( $inputValue ) )
@@ -90,61 +90,80 @@ class Type extends FieldType
             $inputValue = Value::fromString( $inputValue );
         }
 
-        if ( !$inputValue instanceof Value )
+        return $inputValue;
+    }
+
+    /**
+     * Throws an exception if the given $value is not an instance of the supported value subtype.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the parameter is not an instance of the supported value subtype.
+     *
+     * @param mixed $value A value returned by {@see createValueFromInput()}.
+     *
+     * @return void
+     */
+    protected function checkValueType( $value )
+    {
+        if ( !$value instanceof Value )
         {
             throw new InvalidArgumentType(
-                '$inputValue',
+                '$value',
                 'eZ\\Publish\\Core\\FieldType\\Image\\Value',
-                $inputValue
+                $value
             );
         }
+    }
 
-        if ( $this->isEmptyValue( $inputValue ) )
-        {
-            return $this->getEmptyValue();
-        }
-
+    /**
+     * Throws an exception if value structure is not of expected format.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
+     *
+     * @param \eZ\Publish\Core\FieldType\Image\Value $value
+     *
+     * @return void
+     */
+    protected function checkValueStructure( BaseValue $value )
+    {
         // Required parameter $path
-        if ( !isset( $inputValue->path ) || !file_exists( $inputValue->path ) )
+        if ( !isset( $value->path ) || !file_exists( $value->path ) )
         {
             throw new InvalidArgumentType(
-                '$inputValue->path',
+                '$value->path',
                 'string',
-                $inputValue->path
+                $value->path
             );
         }
 
         // Required parameter $fileSize
-        if ( !isset( $inputValue->fileSize ) || !is_int( $inputValue->fileSize ) )
+        if ( !isset( $value->fileSize ) || !is_int( $value->fileSize ) )
         {
             throw new InvalidArgumentType(
-                '$inputValue->fileSize',
+                '$value->fileSize',
                 'integer',
-                $inputValue->fileSize
+                $value->fileSize
             );
         }
 
         // Required parameter $fileName
-        if ( !isset( $inputValue->fileName ) || !is_string( $inputValue->fileName ) )
+        if ( !isset( $value->fileName ) || !is_string( $value->fileName ) )
         {
             throw new InvalidArgumentType(
-                '$inputValue->fileName',
+                '$value->fileName',
                 'integer',
-                $inputValue->fileName
+                $value->fileName
             );
         }
 
         // Optional parameter $alternativeText
-        if ( isset( $inputValue->alternativeText ) && !is_string( $inputValue->alternativeText ) )
+        if ( isset( $value->alternativeText ) && !is_string( $value->alternativeText ) )
         {
             throw new InvalidArgumentType(
-                '$inputValue->alternativeText',
+                '$value->alternativeText',
                 'string',
-                $inputValue->alternativeText
+                $value->alternativeText
             );
         }
-
-        return $inputValue;
     }
 
     /**
@@ -157,7 +176,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( FieldDefinition $fieldDefinition, $fieldValue )
+    public function validate( FieldDefinition $fieldDefinition, SPIValue $fieldValue )
     {
         $errors = array();
 
@@ -250,11 +269,14 @@ class Type extends FieldType
 
     /**
      * @see \eZ\Publish\Core\FieldType::getSortInfo()
+     *
      * @todo Correct?
+     *
+     * @param \eZ\Publish\Core\FieldType\Image\Value $value
      *
      * @return boolean
      */
-    protected function getSortInfo( $value )
+    protected function getSortInfo( BaseValue $value )
     {
         return false;
     }
@@ -270,8 +292,7 @@ class Type extends FieldType
     {
         if ( $hash === null )
         {
-            // empty value
-            return null;
+            return $this->getEmptyValue();
         }
 
         return new Value( $hash );
@@ -284,7 +305,7 @@ class Type extends FieldType
      *
      * @return mixed
      */
-    public function toHash( $value )
+    public function toHash( SPIValue $value )
     {
         if ( $this->isEmptyValue( $value ) )
         {
@@ -303,11 +324,11 @@ class Type extends FieldType
     /**
      * Converts a $value to a persistence value
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\Image\Value $value
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function toPersistenceValue( $value )
+    public function toPersistenceValue( SPIValue $value )
     {
         // Store original data as external (to indicate they need to be stored)
         return new FieldValue(
@@ -324,14 +345,13 @@ class Type extends FieldType
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      *
-     * @return mixed
+     * @return \eZ\Publish\Core\FieldType\Image\Value
      */
     public function fromPersistenceValue( FieldValue $fieldValue )
     {
         if ( $fieldValue->data === null )
         {
-            // empty value
-            return null;
+            return $this->getEmptyValue();
         }
 
         // Restored data comes in $data, since it has already been processed

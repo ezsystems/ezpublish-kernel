@@ -279,7 +279,7 @@ class ImageTest extends FieldTypeTest
     {
         return array(
             array(
-                null,
+                new ImageValue(),
                 null,
             ),
             array(
@@ -343,7 +343,7 @@ class ImageTest extends FieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new ImageValue()
             ),
             array(
                 array(
