@@ -189,7 +189,7 @@ class BinaryFileTest extends BinaryBaseTest
     {
         return array(
             array(
-                null,
+                new BinaryFileValue,
                 null
             ),
             array(
@@ -254,7 +254,7 @@ class BinaryFileTest extends BinaryBaseTest
         return array(
             array(
                 null,
-                null
+                new BinaryFileValue
             ),
             array(
                 array(
