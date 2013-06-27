@@ -207,7 +207,7 @@ class FloatTest extends FieldTypeTest
     {
         return array(
             array(
-                null,
+                new FloatValue,
                 null,
             ),
             array(
@@ -257,7 +257,7 @@ class FloatTest extends FieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new FloatValue,
             ),
             array(
                 23.42,
