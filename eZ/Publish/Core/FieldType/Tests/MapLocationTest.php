@@ -236,7 +236,7 @@ class MapLocationTest extends FieldTypeTest
     {
         return array(
             array(
-                null,
+                new MapLocation\Value,
                 null,
             ),
             array(
@@ -298,7 +298,7 @@ class MapLocationTest extends FieldTypeTest
         return array(
             array(
                 null,
-                null
+                new MapLocation\Value
             ),
             array(
                 array(
