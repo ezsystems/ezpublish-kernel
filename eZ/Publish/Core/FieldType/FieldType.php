@@ -10,7 +10,8 @@
 namespace eZ\Publish\Core\FieldType;
 
 use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface;
-use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceValue;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
@@ -111,11 +112,11 @@ abstract class FieldType implements FieldTypeInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
-     * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field value for which an action is performed
+     * @param \eZ\Publish\Core\FieldType\Value $value The field value for which an action is performed
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( FieldDefinition $fieldDefinition, $fieldValue )
+    public function validate( FieldDefinition $fieldDefinition, SPIValue $value )
     {
         return array();
     }
@@ -255,11 +256,11 @@ abstract class FieldType implements FieldTypeInterface
      * For the legacy storage it is up to the field converters to set this
      * value in either sort_key_string or sort_key_int.
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\Value $value
      *
      * @return mixed
      */
-    protected function getSortInfo( $value )
+    protected function getSortInfo( Value $value )
     {
         throw new \RuntimeException( "Not implemented, yet." );
     }
@@ -267,16 +268,16 @@ abstract class FieldType implements FieldTypeInterface
     /**
      * Converts a $value to a persistence value
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\Value $value
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function toPersistenceValue( $value )
+    public function toPersistenceValue( SPIValue $value )
     {
         // @todo Evaluate if creating the sortKey in every case is really needed
         //       Couldn't this be retrieved with a method, which would initialize
         //       that info on request only?
-        return new FieldValue(
+        return new PersistenceValue(
             array(
                 "data" => $this->toHash( $value ),
                 "externalData" => null,
@@ -290,9 +291,9 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      *
-     * @return mixed
+     * @return \eZ\Publish\Core\FieldType\Value
      */
-    public function fromPersistenceValue( FieldValue $fieldValue )
+    public function fromPersistenceValue( PersistenceValue $fieldValue )
     {
         return $this->fromHash( $fieldValue->data );
     }
@@ -324,11 +325,11 @@ abstract class FieldType implements FieldTypeInterface
      * returned by {@link getEmptyValue()}. Overwrite in the specific field
      * type, if necessary.
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\Value $value
      *
      * @return boolean
      */
-    public function isEmptyValue( $value )
+    public function isEmptyValue( SPIValue $value )
     {
         return $value === null || $value == $this->getEmptyValue();
     }
@@ -361,17 +362,98 @@ abstract class FieldType implements FieldTypeInterface
             return $this->getEmptyValue();
         }
 
-        return $this->internalAcceptValue( $inputValue );
+        $value = $this->createValueFromInput( $inputValue );
+
+        $this->checkValueType( $value );
+
+        if ( $this->isEmptyValue( $value ) )
+        {
+            return $this->getEmptyValue();
+        }
+
+        $this->checkValueStructure( $value );
+
+        return $value;
     }
 
     /**
-     * Implements the core of {@see acceptValue()}.
+     * Inspects given $inputValue and potentially converts it into a dedicated value object.
+     *
+     * If given $inputValue could not be converted or is already an instance of dedicate value object,
+     * the method should simply return it.
+     *
+     * This is an operation method for {@see acceptValue()}.
+     *
+     * Example implementation:
+     * <code>
+     *  protected function createValueFromInput( $inputValue )
+     *  {
+     *      if ( is_array( $inputValue ) )
+     *      {
+     *          $inputValue = \eZ\Publish\Core\FieldType\CookieJar\Value( $inputValue );
+     *      }
+     *
+     *      return $inputValue;
+     *  }
+     * </code>
      *
      * @param mixed $inputValue
      *
-     * @return \eZ\Publish\Core\FieldType\Value The potentially converted and structurally plausible value.
+     * @return mixed The potentially converted input value.
      */
-    abstract protected function internalAcceptValue( $inputValue );
+    abstract protected function createValueFromInput( $inputValue );
+
+    /**
+     * Throws an exception if the given $value is not an instance of the supported value subtype.
+     *
+     * This is an operation method for {@see acceptValue()}.
+     *
+     * Example implementation:
+     * <code>
+     *  protected function checkValueType( $value )
+     *  {
+     *      if ( !$inputValue instanceof \eZ\Publish\Core\FieldType\CookieJar\Value ) )
+     *      {
+     *          throw new InvalidArgumentException( "Given value type is not supported." );
+     *      }
+     *  }
+     * </code>
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the parameter is not an instance of the supported value subtype.
+     *
+     * @param mixed $value A value returned by {@see createValueFromInput()}.
+     *
+     * @return void
+     */
+    abstract protected function checkValueType( $value );
+
+    /**
+     * Throws an exception if value structure is not of expected format.
+     *
+     * Note that this does not include validation after the rules
+     * from validators, but only plausibility checks for the general data
+     * format.
+     *
+     * This is an operation method for {@see acceptValue()}.
+     *
+     * Example implementation:
+     * <code>
+     *  protected function checkValueStructure( Value $value )
+     *  {
+     *      if ( !is_array( $value->cookies ) )
+     *      {
+     *          throw new InvalidArgumentException( "An array of assorted cookies was expected." );
+     *      }
+     *  }
+     * </code>
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
+     *
+     * @param \eZ\Publish\Core\FieldType\Value $value
+     *
+     * @return void
+     */
+    abstract protected function checkValueStructure( Value $value );
 
     /**
      * Converts the given $fieldSettings to a simple hash format
@@ -448,7 +530,7 @@ abstract class FieldType implements FieldTypeInterface
      * Not intended for \eZ\Publish\API\Repository\Values\Content\Relation::COMMON type relations,
      * there is an API for handling those.
      *
-     * @param mixed $fieldValue
+     * @param \eZ\Publish\Core\FieldType\Value $fieldValue
      *
      * @return array Hash with relation type as key and array of destination content ids as value.
      *
@@ -467,7 +549,7 @@ abstract class FieldType implements FieldTypeInterface
      *  )
      * </code>
      */
-    public function getRelations( $fieldValue )
+    public function getRelations( SPIValue $fieldValue )
     {
         return array();
     }
