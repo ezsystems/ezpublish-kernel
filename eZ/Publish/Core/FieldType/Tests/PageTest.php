@@ -315,7 +315,7 @@ class PageTest extends FieldTypeTest
     {
         return array(
             array(
-                null,
+                new PageValue(),
                 null
             ),
             array(
@@ -365,7 +365,7 @@ class PageTest extends FieldTypeTest
         return array(
             array(
                 null,
-                null
+                new PageValue(),
             ),
             array(
                 $this->getHashReference(),

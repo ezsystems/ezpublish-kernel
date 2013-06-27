@@ -15,6 +15,9 @@ use eZ\Publish\Core\FieldType\Page\HashConverter;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
+use eZ\Publish\Core\FieldType\Page\Parts\Page;
 
 class Type extends FieldType
 {
@@ -122,13 +125,13 @@ class Type extends FieldType
      *
      * @param mixed $hash
      *
-     * @return mixed
+     * @return \eZ\Publish\Core\FieldType\Page\Value
      */
     public function fromHash( $hash )
     {
         if ( $hash === null )
         {
-            return null;
+            return $this->getEmptyValue();
         }
         return $this->hashConverter->convertToValue( $hash );
     }
@@ -136,11 +139,11 @@ class Type extends FieldType
     /**
      * Converts a Value to a hash
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\Page\Value $value
      *
      * @return mixed
      */
-    public function toHash( $value )
+    public function toHash( SPIValue $value )
     {
         if ( $this->isEmptyValue( $value ) )
         {
@@ -154,13 +157,13 @@ class Type extends FieldType
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      *
-     * @return mixed
+     * @return \eZ\Publish\Core\FieldType\Page\Value
      */
     public function fromPersistenceValue( FieldValue $fieldValue )
     {
         if ( $fieldValue->data === null )
         {
-            return null;
+            return $this->getEmptyValue();
         }
 
         return new Value( $fieldValue->data );
@@ -169,23 +172,12 @@ class Type extends FieldType
     /**
      * Converts a $value to a persistence value
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\Page\Value $value
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function toPersistenceValue( $value )
+    public function toPersistenceValue( SPIValue $value )
     {
-        if ( $value === null )
-        {
-            return new FieldValue(
-                array(
-                    "data" => null,
-                    "externalData" => null,
-                    "sortKey" => null
-                )
-            );
-        }
-
         return new FieldValue(
             array(
                 "data" => $value->page,
@@ -207,11 +199,11 @@ class Type extends FieldType
      * For the legacy storage it is up to the field converters to set this
      * value in either sort_key_string or sort_key_int.
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\Page\Value $value
      *
      * @return mixed
      */
-    protected function getSortInfo( $value )
+    protected function getSortInfo( BaseValue $value )
     {
         return false;
     }
@@ -222,38 +214,66 @@ class Type extends FieldType
      * It will be used to generate content name and url alias if current field is designated
      * to be used in the content name/urlAlias pattern.
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\Page\Value $value
      *
-     * @return mixed
+     * @return string
      */
-    public function getName( $value )
+    public function getName( SPIValue $value )
     {
         return '';
     }
 
     /**
-     * Implements the core of {@see acceptValue()}.
+     * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
-     * @param mixed $inputValue
+     * @param \eZ\Publish\Core\FieldType\Page\Value $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\Page\Value The potentially converted and structurally plausible value.
      */
-    protected function internalAcceptValue( $inputValue )
+    protected function createValueFromInput( $inputValue )
     {
-        if ( !$inputValue instanceof Value )
+        return $inputValue;
+    }
+
+    /**
+     * Throws an exception if the given $value is not an instance of the supported value subtype.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the parameter is not an instance of the supported value subtype.
+     *
+     * @param mixed $value A value returned by {@see createValueFromInput()}.
+     *
+     * @return void
+     */
+    protected function checkValueType( $value )
+    {
+        if ( !$value instanceof Value )
         {
             throw new InvalidArgumentType(
-                '$inputValue',
+                '$value',
                 'eZ\\Publish\\Core\\FieldType\\Page\\Value',
-                $inputValue
+                $value
             );
         }
+    }
 
-        if ( $this->isEmptyValue( $inputValue ) )
+    /**
+     * Throws an exception if value structure is not of expected format.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
+     *
+     * @param \eZ\Publish\Core\FieldType\Page\Value $value
+     *
+     * @return void
+     */
+    protected function checkValueStructure( BaseValue $value )
+    {
+        if ( !$value->page instanceof Page )
         {
-            return $this->getEmptyValue();
+            throw new InvalidArgumentType(
+                "\$value->page",
+                "eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Page",
+                $value->page
+            );
         }
-
-        return $inputValue;
     }
 }
