@@ -139,6 +139,10 @@ class KeywordTest extends FieldTypeTest
                 new KeywordValue( array() ),
             ),
             array(
+                'foo',
+                new KeywordValue( array( 'foo' ) ),
+            ),
+            array(
                 array( 'foo' ),
                 new KeywordValue( array( 'foo' ) ),
             ),
