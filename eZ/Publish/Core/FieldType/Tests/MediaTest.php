@@ -293,7 +293,7 @@ class MediaTest extends BinaryBaseTest
     {
         return array(
             array(
-                null,
+                new MediaValue(),
                 null
             ),
             array(
@@ -367,7 +367,7 @@ class MediaTest extends BinaryBaseTest
         return array(
             array(
                 null,
-                null
+                new MediaValue(),
             ),
             array(
                 array(
