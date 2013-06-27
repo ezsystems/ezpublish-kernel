@@ -202,7 +202,7 @@ class DateTest extends FieldTypeTest
     {
         return array(
             array(
-                null,
+                new DateValue(),
                 null,
             ),
             array(
@@ -257,7 +257,7 @@ class DateTest extends FieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new DateValue(),
             ),
             array(
                 array(
