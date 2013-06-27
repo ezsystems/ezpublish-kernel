@@ -190,10 +190,6 @@ class EmailAddressTest extends FieldTypeTest
     {
         return array(
             array(
-                null,
-                null
-            ),
-            array(
                 new EmailAddressValue(),
                 '',
             ),
@@ -244,7 +240,7 @@ class EmailAddressTest extends FieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new EmailAddressValue(),
             ),
             array(
                 '',
