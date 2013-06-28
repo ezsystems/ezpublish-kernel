@@ -200,12 +200,44 @@ class ContentTypeCreateTest extends BaseTest
      * Test ContentTypeCreate parser throwing exception on invalid FieldDefinitions
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing or invalid 'FieldDefinitions' element for ContentTypeCreate.
+     * @expectedExceptionMessage Invalid 'FieldDefinitions' element for ContentTypeCreate.
      */
     public function testParseExceptionOnInvalidFieldDefinitions()
     {
         $inputArray = $this->getInputArray();
         unset( $inputArray['FieldDefinitions']['FieldDefinition'] );
+
+        $contentTypeCreate = $this->getParser();
+        $contentTypeCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+    }
+
+    /**
+     * Test ContentTypeCreate parser throwing exception on invalid FieldDefinitions
+     *
+     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedExceptionMessage ContentTypeCreate should provide at least one field definition.
+     */
+    public function testParseExceptionOnMissingFieldDefinitions()
+    {
+        $inputArray = $this->getInputArray();
+        // Field definitions are required only with immediate publish
+        $inputArray["__publish"] = true;
+        $inputArray['FieldDefinitions']['FieldDefinition'] = array();
+
+        $contentTypeCreate = $this->getParser();
+        $contentTypeCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+    }
+
+    /**
+     * Test ContentTypeCreate parser throwing exception on invalid FieldDefinitions
+     *
+     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedExceptionMessage Invalid 'FieldDefinition' element for ContentTypeCreate.
+     */
+    public function testParseExceptionOnInvalidFieldDefinition()
+    {
+        $inputArray = $this->getInputArray();
+        $inputArray['FieldDefinitions']['FieldDefinition'] = array( 'hi there' );
 
         $contentTypeCreate = $this->getParser();
         $contentTypeCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
