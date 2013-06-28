@@ -205,7 +205,9 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
         $ft = $this->getFieldType();
         $this->assertEquals(
             $value,
-            $ft->getName( $xml )
+            $ft->getName(
+                $ft->acceptValue( $xml )
+            )
         );
     }
 
