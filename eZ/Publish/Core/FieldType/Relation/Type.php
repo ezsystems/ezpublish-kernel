@@ -137,7 +137,7 @@ class Type extends FieldType
     }
 
     /**
-     * Implements the core of {@see isEmptyValue()}.
+     * Returns if the given $value is considered empty by the field type
      *
      * @param mixed $value
      *
