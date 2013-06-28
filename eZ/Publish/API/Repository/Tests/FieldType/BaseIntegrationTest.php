@@ -390,14 +390,6 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     abstract public function providerForTestIsNotEmptyValue();
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\FieldType::isEmptyValue
-     */
-    public function testIsEmptyValueWithNull()
-    {
-        $this->assertTrue( $this->getRepository()->getFieldTypeService()->buildFieldType( $this->getTypeName() )->isEmptyValue( null ) );
-    }
-
-    /**
      * @depends testCreateContentType
      */
     public function testContentTypeField( $contentType )

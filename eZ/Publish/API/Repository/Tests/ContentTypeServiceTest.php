@@ -915,8 +915,14 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     {
         foreach ( $expectedCreate as $propertyName => $propertyValue )
         {
+            if ( $propertyName === "defaultValue" && $propertyValue === null )
+            {
+                $fieldType = $this->getRepository()->getFieldTypeService()->buildFieldType( "ezstring" );
+                $propertyValue = $fieldType->acceptValue( $propertyValue );
+            }
+
             $this->assertEquals(
-                $expectedCreate->$propertyName,
+                $propertyValue,
                 $actualDefinition->$propertyName
             );
         }
@@ -2155,7 +2161,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 );
             }
 
-            $this->assertPropertiesCorrect(
+            $this->assertFieldDefinitionsEqual(
                 $expectedFieldDefinitions[$fieldDefinition->identifier],
                 $fieldDefinition
             );
