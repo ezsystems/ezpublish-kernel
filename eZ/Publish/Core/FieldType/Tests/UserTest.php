@@ -214,7 +214,7 @@ class UserTest extends FieldTypeTest
     {
         return array(
             array(
-                null,
+                new UserValue,
                 null
             ),
             array(
@@ -277,7 +277,7 @@ class UserTest extends FieldTypeTest
         return array(
             array(
                 null,
-                null
+                new UserValue,
             ),
             array(
                 $userData = array(
