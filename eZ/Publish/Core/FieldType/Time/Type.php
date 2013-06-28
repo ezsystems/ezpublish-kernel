@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\FieldType\Time;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 use DateTime;
 
 class Type extends FieldType
@@ -54,15 +56,15 @@ class Type extends FieldType
      * It will be used to generate content name and url alias if current field is designated
      * to be used in the content name/urlAlias pattern.
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\Time\Value $value
      *
-     * @return mixed
+     * @return string
      */
-    public function getName( $value )
+    public function getName( SPIValue $value )
     {
-        if ( $value === null )
+        if ( $this->isEmptyValue( $value ) )
         {
-            return '';
+            return "";
         }
 
         $dateTime = new DateTime( "@{$value->time}" );
@@ -81,50 +83,72 @@ class Type extends FieldType
     }
 
     /**
-     * Implements the core of {@see acceptValue()}.
+     * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
-     * @param mixed $inputValue
+     * @param string|int|\DateTime|\eZ\Publish\Core\FieldType\Time\Value $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\Time\Value The potentially converted and structurally plausible value.
      */
-    protected function internalAcceptValue( $inputValue )
+    protected function createValueFromInput( $inputValue )
     {
         if ( is_string( $inputValue ) )
         {
             $inputValue = Value::fromString( $inputValue );
         }
+
         if ( is_int( $inputValue ) )
         {
             $inputValue = Value::fromTimestamp( $inputValue );
         }
+
         if ( $inputValue instanceof DateTime )
         {
             $inputValue = Value::fromDateTime( $inputValue );
         }
-        else if ( !$inputValue instanceof Value )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue',
-                'eZ\\Publish\\Core\\FieldType\\Time\\Value',
-                $inputValue
-            );
-        }
-
-        if ( $this->isEmptyValue( $inputValue ) )
-        {
-            return $this->getEmptyValue();
-        }
-
-        if ( !is_int( $inputValue->time ) )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->time',
-                'DateTime',
-                $inputValue->time
-            );
-        }
 
         return $inputValue;
+    }
+
+    /**
+     * Throws an exception if the given $value is not an instance of the supported value subtype.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the parameter is not an instance of the supported value subtype.
+     *
+     * @param mixed $value A value returned by {@see createValueFromInput()}.
+     *
+     * @return void
+     */
+    protected function checkValueType( $value )
+    {
+        if ( !$value instanceof Value )
+        {
+            throw new InvalidArgumentType(
+                '$value',
+                'eZ\\Publish\\Core\\FieldType\\Time\\Value',
+                $value
+            );
+        }
+    }
+
+    /**
+     * Throws an exception if value structure is not of expected format.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
+     *
+     * @param \eZ\Publish\Core\FieldType\Time\Value $value
+     *
+     * @return void
+     */
+    public function checkValueStructure( BaseValue $value )
+    {
+        if ( !is_int( $value->time ) )
+        {
+            throw new InvalidArgumentType(
+                '$value->time',
+                'DateTime',
+                $value->time
+            );
+        }
     }
 
     /**
@@ -134,13 +158,8 @@ class Type extends FieldType
      *
      * @return array
      */
-    protected function getSortInfo( $value )
+    protected function getSortInfo( BaseValue $value )
     {
-        if ( $value === null || $value->time === null )
-        {
-            return null;
-        }
-
         return $value->time;
     }
 
@@ -155,7 +174,7 @@ class Type extends FieldType
     {
         if ( $hash === null )
         {
-            return null;
+            return $this->getEmptyValue();
         }
 
         return new Value( $hash );
@@ -168,7 +187,7 @@ class Type extends FieldType
      *
      * @return mixed
      */
-    public function toHash( $value )
+    public function toHash( SPIValue $value )
     {
         if ( $this->isEmptyValue( $value ) )
         {
