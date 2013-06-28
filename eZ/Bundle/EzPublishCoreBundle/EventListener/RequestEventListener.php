@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
+use eZ\Bundle\EzPublishCoreBundle\HttpCache;
 
 class RequestEventListener implements EventSubscriberInterface
 {
@@ -172,32 +173,20 @@ class RequestEventListener implements EventSubscriberInterface
         $request = $event->getRequest();
 
         if (
-            !$request->isMethod( 'AUTHENTICATE' )
-            || !$request->headers->has( 'X-User-Hash' )
+            $request->headers->get( 'X-HTTP-Override' ) !== 'AUTHENTICATE'
+            || $request->headers->get( 'Accept' ) !== HttpCache::USER_HASH_ACCEPT_HEADER
         )
         {
             return;
         }
 
-
         // We must have a session at that point since we're supposed to be connected
         if ( !$request->hasSession() )
             return;
 
-        $session = $request->getSession();
-        if ( $session->has( 'ez_user_hash' ) )
-        {
-            $userHash = $request->getSession()->get( 'ez_user_hash' );
-        }
-        else
-        {
-            /** @var $hashGenerator \eZ\Publish\SPI\HashGenerator */
-            $hashGenerator = $this->container->get( 'ezpublish.user.hash_generator' );
-            $userHash = $hashGenerator->generate();
-            // Store the user hash in session to avoid its generation for each single request
-            // TODO: Ensure to remove this session variable when logging out!
-            $session->set( 'ez_user_hash', $userHash );
-        }
+        /** @var $hashGenerator \eZ\Publish\SPI\HashGenerator */
+        $hashGenerator = $this->container->get( 'ezpublish.user.hash_generator' );
+        $userHash = $hashGenerator->generate();
 
         $event->setResponse( new Response( $userHash ) );
         $event->stopPropagation();
