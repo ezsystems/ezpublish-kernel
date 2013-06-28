@@ -34,7 +34,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-US" => "Name",
                 ),
@@ -57,7 +57,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-US" => "Summary",
                 ),
@@ -80,7 +80,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-US" => "Short name",
                 ),
@@ -103,7 +103,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-US" => "Description",
                 ),
@@ -126,7 +126,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Checkbox\Value,
                 "names" => array(
                     "eng-US" => "Display sub items",
                 ),
@@ -149,7 +149,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Page\Value,
                 "names" => array(
                     "eng-US" => "Call For Action",
                 ),
@@ -173,7 +173,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Keyword\Value,
                 "names" => array(
                     "eng-US" => "Tags",
                 ),
@@ -225,7 +225,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-US" => "Name",
                 ),
@@ -248,7 +248,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-US" => "Description",
                 ),
@@ -299,7 +299,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-US" => "First name",
                 ),
@@ -322,7 +322,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-US" => "Last name",
                 ),
@@ -345,7 +345,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\User\Value,
                 "names" => array(
                     "eng-US" => "User account",
                 ),
@@ -368,7 +368,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextBlock\Value,
                 "names" => array(
                     "eng-US" => "Signature",
                 ),
@@ -391,7 +391,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Image\Value,
                 "names" => array(
                     "eng-US" => "Image",
                 ),
@@ -442,7 +442,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-US" => "Subject",
                 ),
@@ -465,7 +465,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-US" => "Author",
                 ),
@@ -488,7 +488,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextBlock\Value,
                 "names" => array(
                     "eng-US" => "Message",
                 ),
@@ -539,7 +539,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-US" => "Name",
                 ),
@@ -562,7 +562,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-US" => "Index Page",
                 ),
@@ -585,7 +585,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-US" => "Default Page",
                 ),
@@ -608,7 +608,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-US" => "Debug Output",
                 ),
@@ -631,7 +631,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-US" => "Debug By IP",
                 ),
@@ -654,7 +654,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-US" => "Debug IP List",
                 ),
@@ -677,7 +677,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-US" => "Debug Redirection",
                 ),
@@ -700,7 +700,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-US" => "View Caching",
                 ),
@@ -723,7 +723,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-US" => "Template Cache",
                 ),
@@ -746,7 +746,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-US" => "Template Compile",
                 ),
@@ -769,7 +769,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-US" => "Image Small Size",
                 ),
@@ -792,7 +792,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-US" => "Image Medium Size",
                 ),
@@ -815,7 +815,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-US" => "Image Large Size",
                 ),
@@ -866,7 +866,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-US" => "Title",
                 ),
@@ -889,7 +889,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-US" => "Meta data",
                 ),
@@ -912,7 +912,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Image\Value,
                 "names" => array(
                     "eng-US" => "Image",
                 ),
@@ -935,7 +935,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-US" => "Sitestyle",
                 ),
@@ -958,7 +958,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-US" => "Email",
                 ),
@@ -981,7 +981,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-US" => "Site URL",
                 ),
@@ -1004,7 +1004,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Url\Value,
                 "names" => array(
                     "eng-US" => "Site map URL",
                 ),
@@ -1028,7 +1028,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Url\Value,
                 "names" => array(
                     "eng-US" => "Tag Cloud URL",
                 ),
@@ -1052,7 +1052,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-US" => "Login (label)",
                 ),
@@ -1076,7 +1076,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-US" => "Logout (label)",
                 ),
@@ -1100,7 +1100,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-US" => "My profile (label)",
                 ),
@@ -1124,7 +1124,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-US" => "Register new user (label)",
                 ),
@@ -1148,7 +1148,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-US" => "RSS feed",
                 ),
@@ -1172,7 +1172,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-US" => "Shopping basket (label)",
                 ),
@@ -1196,7 +1196,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-US" => "Site settings (label)",
                 ),
@@ -1220,7 +1220,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextBlock\Value,
                 "names" => array(
                     "eng-US" => "Footer text",
                 ),
@@ -1244,7 +1244,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Checkbox\Value,
                 "names" => array(
                     "eng-US" => "Hide \"Powered by\"",
                 ),
@@ -1268,7 +1268,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextBlock\Value,
                 "names" => array(
                     "eng-US" => "Footer Javascript",
                 ),
@@ -1320,7 +1320,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Title",
                 ),
@@ -1344,7 +1344,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Short title",
                 ),
@@ -1368,7 +1368,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Author\Value,
                 "names" => array(
                     "eng-GB" => "Author",
                 ),
@@ -1392,7 +1392,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Summary",
                 ),
@@ -1416,7 +1416,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Body",
                 ),
@@ -1440,7 +1440,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Image\Value,
                 "names" => array(
                     "eng-GB" => "Image",
                 ),
@@ -1464,7 +1464,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Caption (Image)",
                 ),
@@ -1488,7 +1488,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\DateAndTime\Value,
                 "names" => array(
                     "eng-GB" => "Publish date",
                 ),
@@ -1512,7 +1512,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Rating\Value,
                 "names" => array(
                     "eng-GB" => "Star Rating",
                 ),
@@ -1536,7 +1536,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Keyword\Value,
                 "names" => array(
                     "eng-GB" => "Tags",
                 ),
@@ -1560,7 +1560,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\MapLocation\Value,
                 "names" => array(
                     "eng-GB" => "Location",
                 ),
@@ -1584,7 +1584,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-GB" => "Comments",
                 ),
@@ -1636,7 +1636,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Name",
                 ),
@@ -1660,7 +1660,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Description",
                 ),
@@ -1684,7 +1684,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Keyword\Value,
                 "names" => array(
                     "eng-GB" => "Tags",
                 ),
@@ -1736,7 +1736,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Title",
                 ),
@@ -1760,7 +1760,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Body",
                 ),
@@ -1784,7 +1784,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\DateAndTime\Value,
                 "names" => array(
                     "eng-GB" => "Publication date",
                 ),
@@ -1808,7 +1808,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Keyword\Value,
                 "names" => array(
                     "eng-GB" => "Tags",
                 ),
@@ -1832,7 +1832,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-GB" => "Comments",
                 ),
@@ -1884,7 +1884,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Name",
                 ),
@@ -1908,7 +1908,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Product number",
                 ),
@@ -1932,7 +1932,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Short description",
                 ),
@@ -1956,7 +1956,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Description",
                 ),
@@ -1980,7 +1980,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-GB" => "Price",
                 ),
@@ -2004,7 +2004,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Image\Value,
                 "names" => array(
                     "eng-GB" => "Image",
                 ),
@@ -2028,7 +2028,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Caption (Image)",
                 ),
@@ -2052,7 +2052,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-GB" => "Additional options",
                 ),
@@ -2076,7 +2076,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Rating\Value,
                 "names" => array(
                     "eng-GB" => "Star Rating",
                 ),
@@ -2100,7 +2100,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Keyword\Value,
                 "names" => array(
                     "eng-GB" => "Tags",
                 ),
@@ -2124,7 +2124,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-GB" => "Comments",
                 ),
@@ -2176,7 +2176,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Name",
                 ),
@@ -2199,7 +2199,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Description",
                 ),
@@ -2222,7 +2222,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => true,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Sender name",
                 ),
@@ -2245,7 +2245,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => true,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Subject",
                 ),
@@ -2268,7 +2268,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => true,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextBlock\Value,
                 "names" => array(
                     "eng-GB" => "Message",
                 ),
@@ -2291,7 +2291,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => true,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\EmailAddress\Value,
                 "names" => array(
                     "eng-GB" => "Email",
                 ),
@@ -2314,7 +2314,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\EmailAddress\Value,
                 "names" => array(
                     "eng-GB" => "Recipient",
                 ),
@@ -2365,7 +2365,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Name",
                 ),
@@ -2389,7 +2389,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Page\Value,
                 "names" => array(
                     "eng-GB" => "Layout",
                 ),
@@ -2441,7 +2441,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Title",
                 ),
@@ -2465,7 +2465,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Body",
                 ),
@@ -2489,7 +2489,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Rating\Value,
                 "names" => array(
                     "eng-GB" => "Star Rating",
                 ),
@@ -2513,7 +2513,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Keyword\Value,
                 "names" => array(
                     "eng-GB" => "Tags",
                 ),
@@ -2537,7 +2537,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-GB" => "Comments",
                 ),
@@ -2561,7 +2561,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Checkbox\Value,
                 "names" => array(
                     "eng-GB" => "Display sub items",
                 ),
@@ -2613,7 +2613,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Name",
                 ),
@@ -2636,7 +2636,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Description",
                 ),
@@ -2659,7 +2659,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => true,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-GB" => "Question",
                 ),
@@ -2710,7 +2710,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Name",
                 ),
@@ -2734,7 +2734,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Description",
                 ),
@@ -2758,7 +2758,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\BinaryFile\Value,
                 "names" => array(
                     "eng-GB" => "File",
                 ),
@@ -2782,7 +2782,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Rating\Value,
                 "names" => array(
                     "eng-GB" => "Star Rating",
                 ),
@@ -2806,7 +2806,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Keyword\Value,
                 "names" => array(
                     "eng-GB" => "Tags",
                 ),
@@ -2830,7 +2830,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-GB" => "Comments",
                 ),
@@ -2882,7 +2882,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Name",
                 ),
@@ -2906,7 +2906,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Caption",
                 ),
@@ -2930,7 +2930,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Image\Value,
                 "names" => array(
                     "eng-GB" => "Image",
                 ),
@@ -2954,7 +2954,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Rating\Value,
                 "names" => array(
                     "eng-GB" => "Star Rating",
                 ),
@@ -2978,7 +2978,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Keyword\Value,
                 "names" => array(
                     "eng-GB" => "Tags",
                 ),
@@ -3030,7 +3030,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Name",
                 ),
@@ -3053,7 +3053,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Description",
                 ),
@@ -3076,7 +3076,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Url\Value,
                 "names" => array(
                     "eng-GB" => "Location",
                 ),
@@ -3099,7 +3099,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Checkbox\Value,
                 "names" => array(
                     "eng-GB" => "Open in new window",
                 ),
@@ -3150,7 +3150,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Name",
                 ),
@@ -3174,7 +3174,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Short description",
                 ),
@@ -3198,7 +3198,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Description",
                 ),
@@ -3222,7 +3222,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Relation\Value,
                 "names" => array(
                     "eng-GB" => "Image",
                 ),
@@ -3246,7 +3246,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Keyword\Value,
                 "names" => array(
                     "eng-GB" => "Tags",
                 ),
@@ -3298,7 +3298,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Name",
                 ),
@@ -3321,7 +3321,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Description",
                 ),
@@ -3372,7 +3372,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Subject",
                 ),
@@ -3395,7 +3395,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextBlock\Value,
                 "names" => array(
                     "eng-GB" => "Message",
                 ),
@@ -3418,7 +3418,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Checkbox\Value,
                 "names" => array(
                     "eng-GB" => "Sticky",
                 ),
@@ -3441,7 +3441,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-GB" => "Notify me about updates",
                 ),
@@ -3492,7 +3492,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Subject",
                 ),
@@ -3515,7 +3515,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextBlock\Value,
                 "names" => array(
                     "eng-GB" => "Message",
                 ),
@@ -3566,7 +3566,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Full title",
                 ),
@@ -3590,7 +3590,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Short title",
                 ),
@@ -3614,7 +3614,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Text",
                 ),
@@ -3638,7 +3638,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Keyword\Value,
                 "names" => array(
                     "eng-GB" => "Category",
                 ),
@@ -3662,7 +3662,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\DateAndTime\Value,
                 "names" => array(
                     "eng-GB" => "From Time",
                 ),
@@ -3686,7 +3686,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\DateAndTime\Value,
                 "names" => array(
                     "eng-GB" => "To Time",
                 ),
@@ -3710,7 +3710,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Keyword\Value,
                 "names" => array(
                     "eng-GB" => "Tags",
                 ),
@@ -3762,7 +3762,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Title",
                 ),
@@ -3786,7 +3786,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Selection\Value,
                 "names" => array(
                     "eng-GB" => "View",
                 ),
@@ -3838,7 +3838,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Name",
                 ),
@@ -3861,7 +3861,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "URL",
                 ),
@@ -3884,7 +3884,7 @@ return array(
                 "isRequired" => true,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Image\Value,
                 "names" => array(
                     "eng-GB" => "Image",
                 ),
@@ -3907,7 +3907,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => false,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextBlock\Value,
                 "names" => array(
                     "eng-GB" => "Image map",
                 ),
@@ -3930,7 +3930,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Keyword\Value,
                 "names" => array(
                     "eng-GB" => "Tags",
                 ),
@@ -3981,7 +3981,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Title",
                 ),
@@ -4004,7 +4004,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Description",
                 ),
@@ -4055,7 +4055,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\TextLine\Value,
                 "names" => array(
                     "eng-GB" => "Name",
                 ),
@@ -4079,7 +4079,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\XmlText\Value,
                 "names" => array(
                     "eng-GB" => "Caption",
                 ),
@@ -4103,7 +4103,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\BinaryFile\Value,
                 "names" => array(
                     "eng-GB" => "File",
                 ),
@@ -4127,7 +4127,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Rating\Value,
                 "names" => array(
                     "eng-GB" => "Star Rating",
                 ),
@@ -4151,7 +4151,7 @@ return array(
                 "isRequired" => false,
                 "isInfoCollector" => false,
                 "isSearchable" => true,
-                "defaultValue" => null,
+                "defaultValue" => new \eZ\Publish\Core\FieldType\Null\Value,
                 "names" => array(
                     "eng-GB" => "Comments",
                 ),

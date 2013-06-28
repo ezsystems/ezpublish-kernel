@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Exceptions;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Exception;
+use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 
 /**
  * Test case for operations in the ContentTypeService using in memory storage.
@@ -770,6 +771,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         );
         $titleFieldCreate->fieldSettings = array();
         $titleFieldCreate->isSearchable = true;
+        $titleFieldCreate->defaultValue = 'default title';
 
         $typeCreate->addFieldDefinition( $titleFieldCreate );
 
@@ -797,6 +799,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         );
         $bodyFieldCreate->fieldSettings = array();
         $bodyFieldCreate->isSearchable = true;
+        $bodyFieldCreate->defaultValue = 'default content';
 
         $typeCreate->addFieldDefinition( $bodyFieldCreate );
 
@@ -915,14 +918,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     {
         foreach ( $expectedCreate as $propertyName => $propertyValue )
         {
-            if ( $propertyName === "defaultValue" && $propertyValue === null )
-            {
-                $fieldType = $this->getRepository()->getFieldTypeService()->buildFieldType( "ezstring" );
-                $propertyValue = $fieldType->acceptValue( $propertyValue );
-            }
-
             $this->assertEquals(
-                $propertyValue,
+                $expectedCreate->$propertyName,
                 $actualDefinition->$propertyName
             );
         }
@@ -1324,6 +1321,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         );
         $fieldDefCreate->fieldSettings = array();
         $fieldDefCreate->isSearchable = true;
+        $fieldDefCreate->defaultValue = 'default tags';
 
         $contentTypeService->addFieldDefinition( $contentTypeDraft, $fieldDefCreate );
         /* END: Use Case */
@@ -2118,7 +2116,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'isRequired' => true,
                 'isInfoCollector' => false,
                 'isSearchable' => true,
-                'defaultValue' => null,
+                'defaultValue' => new TextLineValue,
                 'names' => array(
                     'eng-US' => 'Name',
                 ),
@@ -2133,7 +2131,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'isRequired' => false,
                 'isInfoCollector' => false,
                 'isSearchable' => true,
-                'defaultValue' => null,
+                'defaultValue' => new TextLineValue,
                 'names' => array(
                     'eng-US' => 'Description',
                 ),
@@ -2161,7 +2159,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 );
             }
 
-            $this->assertFieldDefinitionsEqual(
+            $this->assertPropertiesCorrect(
                 $expectedFieldDefinitions[$fieldDefinition->identifier],
                 $fieldDefinition
             );
