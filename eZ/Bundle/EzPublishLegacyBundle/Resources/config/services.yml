@@ -17,6 +17,7 @@ parameters:
     ezpublish_legacy.kernel_handler.cli.options: {}
 
     # See ezpublish_legacy.webconfigurator
+    ezpublish_legacy.webconfigurator.factory.class: eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfiguratorFactory
     ezpublish_legacy.webconfigurator.class: Sensio\Bundle\DistributionBundle\Configurator\Configurator
 
     ezpublish_legacy.router.class: eZ\Bundle\EzPublishLegacyBundle\Routing\FallbackRouter
@@ -176,10 +177,16 @@ services:
             - @ezpublish_legacy.webconfigurator
 
     # eZ alias for sensio.distribution.webconfigurator to make it available despite Bundle being disabled in prod env
+    # uses factory to make sure steps are injected only when service is needed
     ezpublish_legacy.webconfigurator:
         class: %ezpublish_legacy.webconfigurator.class%
+        factory_service: ezpublish_legacy.webconfigurator.factory
+        factory_method: buildWebConfigurator
         arguments:
             - %kernel.root_dir%
+
+    ezpublish_legacy.webconfigurator.factory:
+        class: %ezpublish_legacy.webconfigurator.factory.class%
 
     # Image alias generator using legacy
     ezpublish_legacy.fieldType.ezimage.variation_service:
