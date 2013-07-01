@@ -10,6 +10,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Stash\Driver\FileSystem;
@@ -40,6 +41,58 @@ abstract class Kernel extends BaseKernel
     private $cachePool;
 
     /**
+     * Flag indicating if the user hash is being generated.
+     *
+     * @var bool
+     */
+    private $generatingUserHash = false;
+
+    public function handle( Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true )
+    {
+        $isUserHashRequest = $this->isUserHashRequest( $request );
+        if ( $isUserHashRequest && !$this->canGenerateUserHash( $request ) )
+        {
+            return new Response( '', 405 );
+        }
+        else if ( $isUserHashRequest && !$this->generatingUserHash )
+        {
+            return new Response( '', 200, array( 'X-User-Hash' => $this->generateUserHash( $request ) ) );
+        }
+
+        return parent::handle( $request, $type, $catch );
+    }
+
+    /**
+     * Checks if $request is for pre-authentication (to generate current user's hash).
+     *
+     * @param Request $request
+     *
+     * @return bool
+     */
+    private function isUserHashRequest( Request $request )
+    {
+        return
+            $request->headers->get( 'X-HTTP-Override' ) === 'AUTHENTICATE'
+            && $request->headers->get( 'Accept' ) === static::USER_HASH_ACCEPT_HEADER;
+    }
+
+    /**
+     * Checks if current request is allowed to generate the user hash.
+     * Default behavior is to only accept local IP addresses:
+     *  - 127.0.0.1
+     *  - ::1
+     *  - fe80::1
+     *
+     * @param Request $request
+     *
+     * @return bool
+     */
+    protected function canGenerateUserHash( Request $request )
+    {
+        return in_array( $request->getClientIp(), array( '127.0.0.1', '::1', 'fe80::1' ) );
+    }
+
+    /**
      * Generates current user hash
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -68,12 +121,14 @@ abstract class Kernel extends BaseKernel
             $forwardReq = clone $request;
             $forwardReq->headers->set( 'X-HTTP-Override', 'AUTHENTICATE' );
             $forwardReq->headers->set( 'Accept', static::USER_HASH_ACCEPT_HEADER );
+            $this->generatingUserHash = true;
             $resp = $this->handle( $forwardReq );
             if ( !$resp->headers->has( 'X-User-Hash' ) )
             {
                 trigger_error( 'Could not generate user hash ! Fallback to anonymous hash.', E_USER_WARNING );
             }
             $stashItem->set( $resp->headers->get( 'X-User-Hash' ) );
+            $this->generatingUserHash = false;
         }
 
         // Store the user hash in memory for sub-requests (processed in the same thread).
