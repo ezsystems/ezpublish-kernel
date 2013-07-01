@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
+use eZ\Bundle\EzPublishCoreBundle\Kernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -20,7 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
-use eZ\Bundle\EzPublishCoreBundle\HttpCache;
 
 class RequestEventListener implements EventSubscriberInterface
 {
@@ -174,7 +174,7 @@ class RequestEventListener implements EventSubscriberInterface
 
         if (
             $request->headers->get( 'X-HTTP-Override' ) !== 'AUTHENTICATE'
-            || $request->headers->get( 'Accept' ) !== HttpCache::USER_HASH_ACCEPT_HEADER
+            || $request->headers->get( 'Accept' ) !== Kernel::USER_HASH_ACCEPT_HEADER
         )
         {
             return;
@@ -187,8 +187,11 @@ class RequestEventListener implements EventSubscriberInterface
         /** @var $hashGenerator \eZ\Publish\SPI\HashGenerator */
         $hashGenerator = $this->container->get( 'ezpublish.user.hash_generator' );
         $userHash = $hashGenerator->generate();
+        $this->container->get( 'logger' )->debug( "UserHash: $userHash" );
 
-        $event->setResponse( new Response( $userHash ) );
+        $response = new Response();
+        $response->headers->set( 'X-User-Hash', $userHash );
+        $event->setResponse( $response );
         $event->stopPropagation();
     }
 }

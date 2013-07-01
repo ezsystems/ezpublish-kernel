@@ -20,26 +20,6 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 abstract class HttpCache extends BaseHttpCache
 {
-    /**
-     * Hash for anonymous user.
-     */
-    const ANONYMOUS_HASH = '917f736fbbbb1ae450a40be4c1dce175';
-
-    /**
-     * Accept header value to be used to request the user hash to the backend application.
-     */
-    const USER_HASH_ACCEPT_HEADER = 'application/vnd.ez.UserHash+text';
-
-    /**
-     * @var Generated user hash.
-     */
-    private $userHash;
-
-    /**
-     * @var Pool
-     */
-    private $cachePool;
-
     public function handle( Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true )
     {
         // Forbid direct AUTHENTICATE requests to get user hash
@@ -53,66 +33,9 @@ abstract class HttpCache extends BaseHttpCache
 
         if ( $request->isMethodSafe() )
         {
-            $request->headers->set( 'X-User-Hash', $this->generateUserHash( $request ) );
+            $request->headers->set( 'X-User-Hash', $this->kernel->generateUserHash( $request ) );
         }
         return parent::handle( $request, $type, $catch );
-    }
-
-    /**
-     * Generates current user hash
-     *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return string
-     */
-    private function generateUserHash( Request $request )
-    {
-        if ( isset( $this->userHash ) )
-            return $this->userHash;
-
-        // X-User-Hash is purely internal and should never be used from outside
-        if ( $request->headers->has( 'X-User-Hash' ) )
-            $request->headers->remove( 'X-User-Hash' );
-
-        if ( !$request->cookies->has( 'is_logged_in' ) )
-            return $this->userHash = static::ANONYMOUS_HASH;
-
-        // We must have a session at that point since we're supposed to be connected, so HTTP_COOKIE must contain session id.
-        // HTTP_COOKIE header will be used as cache key to store the user hash.
-        // This will avoid to boot the kernel each time to retrieve the user hash.
-        $cookieString = $request->headers->get( 'cookie' );
-        $stashItem = $this->getCachePool()->getItem( "ez_user_hash/$cookieString" );
-        $userHash = $stashItem->get();
-        if ( $stashItem->isMiss() )
-        {
-            // Forward the request to the kernel to generate the user hash
-            $forwardReq = clone $request;
-            $forwardReq->headers->set( 'X-HTTP-Override', 'AUTHENTICATE' );
-            $forwardReq->headers->set( 'Accept', static::USER_HASH_ACCEPT_HEADER );
-            $userHash = $this->forward( $forwardReq )->getContent();
-            $stashItem->set( $userHash );
-        }
-
-        // Store the user hash in memory for sub-requests (processed in the same thread).
-        return $this->userHash = $userHash;
-    }
-
-    /**
-     * Returns the Stash cache pool.
-     *
-     * @return \Stash\Pool
-     */
-    public function getCachePool()
-    {
-        if ( isset( $this->cachePool ) )
-        {
-            return $this->cachePool;
-        }
-
-        return $this->cachePool = new StashPool(
-            new FileSystem(
-                array( 'path' => $this->kernel->getCacheDir() . '/stash' )
-            )
-        );
     }
 
     protected function createStore()
