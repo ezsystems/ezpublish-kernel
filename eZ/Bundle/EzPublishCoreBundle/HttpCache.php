@@ -127,6 +127,6 @@ abstract class HttpCache extends BaseHttpCache
      */
     protected function getInternalAllowedIPs()
     {
-        return array( '127.0.0.1', '::1' );
+        return array( '127.0.0.1', '::1', 'fe80::1' );
     }
 }
