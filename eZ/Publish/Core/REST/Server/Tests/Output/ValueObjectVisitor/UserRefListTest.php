@@ -50,6 +50,12 @@ class UserRefListTest extends ValueObjectVisitorBaseTest
             '/some/path'
         );
 
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadUser',
+            array( 'userId' => $UserRefList->users[0]->contentInfo->id ),
+            "/user/users/{$UserRefList->users[0]->contentInfo->id}"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,

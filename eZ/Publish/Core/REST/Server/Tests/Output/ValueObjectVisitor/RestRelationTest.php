@@ -53,6 +53,26 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
             1
         );
 
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadVersionRelation',
+            array(
+                'contentId' => $relation->contentId,
+                'versionNumber' => $relation->versionNo,
+                'relationId' => $relation->relation->id
+            ),
+            "/content/objects/{$relation->contentId}/versions/{$relation->versionNo}/relations/{$relation->relation->id}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContent',
+            array( 'contentId' => $relation->contentId ),
+            "/content/objects/{$relation->contentId}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContent',
+            array( 'contentId' => $relation->relation->getDestinationContentInfo()->id ),
+            "/content/objects/{$relation->relation->getDestinationContentInfo()->id}"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,

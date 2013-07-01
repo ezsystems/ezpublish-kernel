@@ -44,10 +44,10 @@ class UserGroupRefList extends ValueObjectVisitor
 
             $generator->startAttribute(
                 'href',
-                $this->requestParser->generate(
-                    'group',
+                $this->router->generate(
+                    'ezpublish_rest_loadUserGroup',
                     array(
-                        'group' => rtrim( $userGroup->mainLocation->pathString, '/' )
+                        'groupPath' => trim( $userGroup->mainLocation->pathString, '/' )
                     )
                 )
             );
@@ -59,11 +59,11 @@ class UserGroupRefList extends ValueObjectVisitor
 
                 $generator->startAttribute(
                     'href',
-                    $this->requestParser->generate(
-                        'userGroup',
+                    $this->router->generate(
+                        'ezpublish_rest_unassignUserFromUserGroup',
                         array(
-                            'user' => $data->userId,
-                            'group' => '/' . $userGroup->mainLocation->path[count( $userGroup->mainLocation->path ) - 1]
+                            'userId' => $data->userId,
+                            'groupPath' => $userGroup->mainLocation->path[count( $userGroup->mainLocation->path ) - 1]
                         )
                     )
                 );

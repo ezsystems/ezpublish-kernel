@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\REST\Common\Output;
 use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Basic ValueObjectVisitor
@@ -26,6 +27,11 @@ abstract class ValueObjectVisitor
     protected $requestParser;
 
     /**
+     * @var \Symfony\Component\Routing\RouterInterface
+     */
+    protected $router;
+
+    /**
      * Visit struct returned by controllers
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
@@ -33,6 +39,14 @@ abstract class ValueObjectVisitor
      * @param mixed $data
      */
     abstract public function visit( Visitor $visitor, Generator $generator, $data );
+
+    /**
+     * @param \Symfony\Component\Routing\RouterInterface $router
+     */
+    public function setRouter( RouterInterface $router )
+    {
+        $this->router = $router;
+    }
 
     public function setRequestParser( RequestParser $requestParser )
     {

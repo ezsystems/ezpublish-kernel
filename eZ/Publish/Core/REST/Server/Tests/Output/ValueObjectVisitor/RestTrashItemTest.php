@@ -55,6 +55,22 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
             0
         );
 
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadTrashItem',
+            array( 'trashItemId' => $trashItem->trashItem->id ),
+            "/content/trash/{$trashItem->trashItem->id}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadLocation',
+            array( 'locationPath' => '1/2/21' ),
+            "/content/locations/1/2/21"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContent',
+            array( 'contentId' => $trashItem->trashItem->contentInfo->id ),
+            "/content/objects/{$trashItem->trashItem->contentInfo->id}"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,

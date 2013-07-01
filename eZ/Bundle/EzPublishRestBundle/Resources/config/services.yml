@@ -197,8 +197,7 @@ services:
         factory_service: ezpublish_rest.factory
         factory_method: getImageFieldTypeProcessor
         arguments:
-            # @todo change to @router
-            - @ezpublish_rest.request_parser
+            - @router
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezimage }
 

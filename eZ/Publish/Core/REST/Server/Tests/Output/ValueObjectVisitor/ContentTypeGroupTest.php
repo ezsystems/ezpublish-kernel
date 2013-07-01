@@ -51,6 +51,32 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
             )
         );
 
+        $routerMock = $this->getRouterMock();
+
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContentTypeGroup',
+            array( 'contentTypeGroupId' => $contentTypeGroup->id ),
+            "/content/typegroups/{$contentTypeGroup->id}"
+        );
+
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadUser',
+            array( 'userId' => $contentTypeGroup->creatorId ),
+            "/user/users/{$contentTypeGroup->creatorId}"
+        );
+
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadUser',
+            array( 'userId' => $contentTypeGroup->modifierId ),
+            "/user/users/{$contentTypeGroup->modifierId}"
+        );
+
+        $this->addRouteExpectation(
+            'ezpublish_rest_listContentTypesForGroup',
+            array( 'contentTypeGroupId' => $contentTypeGroup->id ),
+            "/content/typegroups/{$contentTypeGroup->id}/types"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
@@ -200,7 +226,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     {
         $this->assertTag(
             array(
-                'tag'      => 'Creator'
+                'tag'  => 'Creator',
             ),
             $result,
             'Invalid <Creator> element.',
@@ -242,7 +268,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     {
         $this->assertTag(
             array(
-                'tag'      => 'Modifier'
+                'tag' => 'Modifier'
             ),
             $result,
             'Invalid <Modifier> element.',
@@ -284,7 +310,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     {
         $this->assertTag(
             array(
-                'tag'      => 'ContentTypes'
+                'tag' => 'ContentTypes'
             ),
             $result,
             'Invalid <ContentTypes> element.',

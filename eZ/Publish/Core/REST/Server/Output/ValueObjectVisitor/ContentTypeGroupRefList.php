@@ -32,10 +32,10 @@ class ContentTypeGroupRefList extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate(
-                'groupsOfType',
+            $this->router->generate(
+                'ezpublish_rest_listContentTypesForGroup',
                 array(
-                    'type' => $data->contentType->id
+                    'contentTypeGroupId' => $data->contentType->id
                 )
             )
         );
@@ -50,10 +50,10 @@ class ContentTypeGroupRefList extends ValueObjectVisitor
 
             $generator->startAttribute(
                 'href',
-                $this->requestParser->generate(
-                    'typegroup',
+                $this->router->generate(
+                    'ezpublish_rest_loadContentTypeGroup',
                     array(
-                        'typegroup' => $contentTypeGroup->id
+                        'contentTypeGroupId' => $contentTypeGroup->id
                     )
                 )
             );
@@ -66,11 +66,11 @@ class ContentTypeGroupRefList extends ValueObjectVisitor
 
                 $generator->startAttribute(
                     'href',
-                    $this->requestParser->generate(
-                        'groupOfType',
+                    $this->router->generate(
+                        'ezpublish_rest_unlinkContentTypeFromGroup',
                         array(
-                            'type' => $data->contentType->id,
-                            'group' => $contentTypeGroup->id
+                            'contentTypeId' => $data->contentType->id,
+                            'contentTypeGroupId' => $contentTypeGroup->id
                         )
                     )
                 );

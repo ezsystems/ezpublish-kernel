@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
  * CreatedLocation value object visitor
+ * @todo coverage add test
  */
 class CreatedLocation extends RestLocation
 {
@@ -29,9 +30,9 @@ class CreatedLocation extends RestLocation
         parent::visit( $visitor, $generator, $data->restLocation );
         $visitor->setHeader(
             'Location',
-            $this->requestParser->generate(
-                'location',
-                array( 'location' => rtrim( $data->restLocation->location->pathString, '/' ) )
+            $this->router->generate(
+                'ezpublish_rest_loadLocation',
+                array( 'locationPath' => trim( $data->restLocation->location->pathString, '/' ) )
             )
         );
         $visitor->setStatus( 201 );

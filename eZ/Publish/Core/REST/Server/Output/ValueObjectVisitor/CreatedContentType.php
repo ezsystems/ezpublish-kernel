@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
  * CreatedContentType value object visitor
+ * @todo coverage add test
  */
 class CreatedContentType extends RestContentType
 {
@@ -31,10 +32,10 @@ class CreatedContentType extends RestContentType
         parent::visit( $visitor, $generator, $restContentType );
         $visitor->setHeader(
             'Location',
-            $this->requestParser->generate(
-                'type' . $this->getUrlTypeSuffix( $restContentType->contentType->status ),
+            $this->router->generate(
+                'ezpublish_rest_loadContentType' . $this->getUrlTypeSuffix( $restContentType->contentType->status ),
                 array(
-                    'type' => $restContentType->contentType->id,
+                    'contentTypeId' => $restContentType->contentType->id,
                 )
             )
         );

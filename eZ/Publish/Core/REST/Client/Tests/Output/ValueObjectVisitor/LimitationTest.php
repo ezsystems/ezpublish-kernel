@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
@@ -28,7 +29,7 @@ class LimitationTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $contentTypeLimitation = new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
+        $contentTypeLimitation = new ContentTypeLimitation();
         $contentTypeLimitation->limitationValues = array( 1, 2, 3 );
 
         $visitor->visit(

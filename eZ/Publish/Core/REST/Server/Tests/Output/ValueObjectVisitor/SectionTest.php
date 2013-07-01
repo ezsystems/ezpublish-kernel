@@ -37,6 +37,12 @@ class SectionTest extends ValueObjectVisitorBaseTest
             )
         );
 
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadSection',
+            array( 'sectionId' => $section->id ),
+            "/content/sections/{$section->id}"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,

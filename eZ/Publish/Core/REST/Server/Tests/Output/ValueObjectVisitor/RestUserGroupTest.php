@@ -34,6 +34,63 @@ class RestUserGroupTest extends ValueObjectVisitorBaseTest
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'visitValueObject' );
 
+        $userGroupPath = implode( '/', $restUserGroup->mainLocation->path );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadUserGroup',
+            array( 'groupPath' => $userGroupPath ),
+            "/user/groups/{$userGroupPath}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContentType',
+            array( 'contentTypeId' => $restUserGroup->contentInfo->contentTypeId ),
+            "/content/types/{$restUserGroup->contentInfo->contentTypeId}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContentVersions',
+            array( 'contentId' => $restUserGroup->contentInfo->id ),
+            "/content/objects/{$restUserGroup->contentInfo->id}/versions"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadSection',
+            array( 'sectionId' => $restUserGroup->contentInfo->sectionId ),
+            "/content/sections/{$restUserGroup->contentInfo->sectionId}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadLocation',
+            array( 'locationPath' => $userGroupPath ),
+            "/content/locations/{$userGroupPath}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadLocationsForContent',
+            array( 'contentId' => $restUserGroup->contentInfo->id ),
+            "/content/objects/{$restUserGroup->contentInfo->id}/locations"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadUser',
+            array( 'userId' => $restUserGroup->contentInfo->ownerId ),
+            "/user/users/{$restUserGroup->contentInfo->ownerId}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadUserGroup',
+            array( 'groupPath' => '1/2' ),
+            "/user/groups/1/2"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadSubUserGroups',
+            array( 'groupPath' => $userGroupPath ),
+            "/user/groups/{$userGroupPath}/subgroups"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadUsersFromGroup',
+            array( 'groupPath' => $userGroupPath ),
+            "/user/groups/{$userGroupPath}/users"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadRoleAssignmentsForUserGroup',
+            array( 'groupPath' => $userGroupPath ),
+            "/user/groups/{$userGroupPath}/roles"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,

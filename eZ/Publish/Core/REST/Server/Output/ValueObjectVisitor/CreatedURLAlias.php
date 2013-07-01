@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
  * CreatedURLAlias value object visitor
+ * @todo coverage add unit test
  */
 class CreatedURLAlias extends URLAlias
 {
@@ -29,9 +30,9 @@ class CreatedURLAlias extends URLAlias
         parent::visit( $visitor, $generator, $data->urlAlias );
         $visitor->setHeader(
             'Location',
-            $this->requestParser->generate(
-                'urlAlias',
-                array( 'urlalias' => $data->urlAlias->id )
+            $this->router->generate(
+                'ezpublish_rest_loadURLAlias',
+                array( 'urlAliasId' => $data->urlAlias->id )
             )
         );
         $visitor->setStatus( 201 );

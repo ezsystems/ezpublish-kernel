@@ -35,11 +35,11 @@ class RelationList extends ValueObjectVisitor
         $path = $data->path;
         if ( $path === null )
         {
-            $path = $this->requestParser->generate(
-                'objectVersionRelations',
+            $path = $this->router->generate(
+                'ezpublish_rest_loadVersionRelations',
                 array(
-                    'object' => $data->contentId,
-                    'version' => $data->versionNo
+                    'contentId' => $data->contentId,
+                    'versionNumber' => $data->versionNo
                 )
             );
         }

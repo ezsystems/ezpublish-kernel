@@ -47,6 +47,9 @@ class RoleTest extends ValueObjectVisitorBaseTest
             )
         );
 
+        $this->addRouteExpectation( 'ezpublish_rest_loadRole', array( 'roleId' => $role->id ), "/user/roles/{$role->id}" );
+        $this->addRouteExpectation( 'ezpublish_rest_loadPolicies', array( 'roleId' => $role->id ), "/user/roles/{$role->id}/policies" );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,

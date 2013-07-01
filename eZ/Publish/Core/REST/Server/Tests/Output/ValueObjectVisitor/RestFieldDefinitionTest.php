@@ -55,6 +55,15 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
                 )
             );
 
+        $this->addRouteExpectation(
+            "ezpublish_rest_loadContentTypeFieldDefinition",
+            array(
+                'contentTypeId' => $restFieldDefinition->contentType->id,
+                'fieldDefinitionId' => $restFieldDefinition->fieldDefinition->id,
+            ),
+            "/content/types/{$restFieldDefinition->contentType->id}/fieldDefinitions/{$restFieldDefinition->fieldDefinition->id}"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,

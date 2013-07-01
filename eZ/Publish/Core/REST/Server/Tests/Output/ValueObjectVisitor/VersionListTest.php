@@ -13,8 +13,10 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\VersionList;
-use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\REST\Server\Values\Version as RestVersion;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\Values\ContentType;
 use eZ\Publish\Core\REST\Common;
 
 class VersionListTest extends ValueObjectVisitorBaseTest
@@ -31,7 +33,22 @@ class VersionListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $versionList = new VersionList( array(), '/some/path' );
+        $versionInfo = new VersionInfo(
+            array(
+                'versionNo' => 1,
+                'contentInfo' => new ContentInfo( array( 'id' => 12345 ) )
+            )
+        );
+        $versionList = new VersionList( array( $versionInfo ), '/some/path' );
+
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContentInVersion',
+            array(
+                'contentId' => $versionInfo->contentInfo->id,
+                'versionNumber' => $versionInfo->versionNo
+            ),
+            "/content/objects/{$versionInfo->contentInfo->id}/versions/{$versionInfo->versionNo}"
+        );
 
         $visitor->visit(
             $this->getVisitorMock(),

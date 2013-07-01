@@ -48,6 +48,20 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
             ->method( 'setHeader' )
             ->with( $this->equalTo( 'Location' ), $this->matchesRegularExpression( '#/user/sessions/[a-z0-9]+#i' ) );
 
+        $this->addRouteExpectation(
+            'ezpublish_rest_deleteSession',
+            array(
+                'sessionId' => $session->sessionId
+            ),
+            "/user/sessions/{$session->sessionId}"
+        );
+
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadUser',
+            array( 'userId' => $session->user->id ),
+            "/user/users/{$session->user->id}"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,

@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
  * CreatedSection value object visitor
+ * @todo coverage add unit test
  */
 class CreatedSection extends Section
 {
@@ -29,9 +30,9 @@ class CreatedSection extends Section
         parent::visit( $visitor, $generator, $data->section );
         $visitor->setHeader(
             'Location',
-            $this->requestParser->generate(
-                'section',
-                array( 'section' => $data->section->id )
+            $this->router->generate(
+                'ezpublish_rest_loadSection',
+                array( 'sectionId' => $data->section->id )
             )
         );
         $visitor->setStatus( 201 );

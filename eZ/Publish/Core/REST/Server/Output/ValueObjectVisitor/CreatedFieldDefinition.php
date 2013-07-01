@@ -9,11 +9,14 @@
 
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
  * CreatedFieldDefinition value object visitor
+ *
+ * @todo coverage add test
  */
 class CreatedFieldDefinition extends RestFieldDefinition
 {
@@ -29,13 +32,15 @@ class CreatedFieldDefinition extends RestFieldDefinition
         $restFieldDefinition = $data->fieldDefinition;
 
         parent::visit( $visitor, $generator, $restFieldDefinition );
+
+        $draftUriPart = $this->getUrlTypeSuffix( $restFieldDefinition->contentType->status );
         $visitor->setHeader(
             'Location',
-            $this->requestParser->generate(
-                'typeFieldDefinition' . $this->getUrlTypeSuffix( $restFieldDefinition->contentType->status ),
+            $this->router->generate(
+                "ezpublish_rest_loadContentType{$draftUriPart}FieldDefinition",
                 array(
-                    'type' => $restFieldDefinition->contentType->id,
-                    'fieldDefinition' => $restFieldDefinition->fieldDefinition->id
+                    'contentTypeId' => $restFieldDefinition->contentType->id,
+                    'fieldDefinitionId' => $restFieldDefinition->fieldDefinition->id
                 )
             )
         );

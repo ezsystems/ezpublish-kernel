@@ -34,12 +34,12 @@ class RestRelation extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate(
-                'objectVersionRelation',
+            $this->router->generate(
+                'ezpublish_rest_loadVersionRelation',
                 array(
-                    'object' => $data->contentId,
-                    'version' => $data->versionNo,
-                    'relation' => $data->relation->id
+                    'contentId' => $data->contentId,
+                    'versionNumber' => $data->versionNo,
+                    'relationId' => $data->relation->id
                 )
             )
         );
@@ -48,10 +48,10 @@ class RestRelation extends ValueObjectVisitor
         $generator->startObjectElement( 'SourceContent', 'ContentInfo' );
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate(
-                'object',
+            $this->router->generate(
+                'ezpublish_rest_loadContent',
                 array(
-                    'object' => $data->contentId,
+                    'contentId' => $data->contentId,
                 )
             )
         );
@@ -61,10 +61,10 @@ class RestRelation extends ValueObjectVisitor
         $generator->startObjectElement( 'DestinationContent', 'ContentInfo' );
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate(
-                'object',
+            $this->router->generate(
+                'ezpublish_rest_loadContent',
                 array(
-                    'object' => $data->relation->getDestinationContentInfo()->id,
+                    'contentId' => $data->relation->getDestinationContentInfo()->id,
                 )
             )
         );

@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
  * CreatedUser value object visitor
+ * @todo coverage add unit test
  */
 class CreatedUser extends RestUser
 {
@@ -29,9 +30,9 @@ class CreatedUser extends RestUser
         parent::visit( $visitor, $generator, $data->user );
         $visitor->setHeader(
             'Location',
-            $this->requestParser->generate(
-                'user',
-                array( 'user' => $data->user->contentInfo->id )
+            $this->router->generate(
+                'ezpublish_rest_loadUser',
+                array( 'userId' => $data->user->contentInfo->id )
             )
         );
         $visitor->setStatus( 201 );

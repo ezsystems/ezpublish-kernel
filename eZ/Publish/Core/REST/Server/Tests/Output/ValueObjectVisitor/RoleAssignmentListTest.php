@@ -23,7 +23,7 @@ class RoleAssignmentListTest extends ValueObjectVisitorBaseTest
      *
      * @return string
      */
-    public function testVisit()
+    public function testVisitUserRoleAssignmentList()
     {
         $visitor   = $this->getVisitor();
         $generator = $this->getGenerator();
@@ -31,6 +31,10 @@ class RoleAssignmentListTest extends ValueObjectVisitorBaseTest
         $generator->startDocument( null );
 
         $roleAssignmentList = new RoleAssignmentList( array(), '42' );
+
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadRoleAssignmentsForUser', array( 'userId' => 42 ), '/user/users/42/roles'
+        );
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -50,7 +54,7 @@ class RoleAssignmentListTest extends ValueObjectVisitorBaseTest
      *
      * @param string $result
      *
-     * @depends testVisit
+     * @depends testVisitUserRoleAssignmentList
      */
     public function testResultContainsRoleListElement( $result )
     {
@@ -69,9 +73,9 @@ class RoleAssignmentListTest extends ValueObjectVisitorBaseTest
      *
      * @param string $result
      *
-     * @depends testVisit
+     * @depends testVisitUserRoleAssignmentList
      */
-    public function testResultContainsRoleAssignmentListAttributes( $result )
+    public function testResultContainsUserRoleAssignmentListAttributes( $result )
     {
         $this->assertTag(
             array(
@@ -113,6 +117,62 @@ class RoleAssignmentListTest extends ValueObjectVisitorBaseTest
             $this->getVisitorMock(),
             $generator,
             $roleAssignmentList
+        );
+    }
+
+    /**
+     * Test the RoleAssignmentList visitor
+     *
+     * @return string
+     */
+    public function testVisitGroupRoleAssignmentList()
+    {
+        $this->resetRouterMock();
+
+        $visitor   = $this->getVisitor();
+        $generator = $this->getGenerator();
+
+        $generator->startDocument( null );
+
+        $roleAssignmentList = new RoleAssignmentList( array(), '/1/5/777', true );
+
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadRoleAssignmentsForUserGroup', array( 'groupPath' => '/1/5/777' ), '/user/groups/1/5/777/roles'
+        );
+
+        $visitor->visit(
+            $this->getVisitorMock(),
+            $generator,
+            $roleAssignmentList
+        );
+
+        $result = $generator->endDocument( null );
+
+        $this->assertNotNull( $result );
+
+        return $result;
+    }
+
+    /**
+     * Test if result contains RoleAssignmentList element attributes
+     *
+     * @param string $result
+     *
+     * @depends testVisitGroupRoleAssignmentList
+     */
+    public function testResultContainsGroupRoleAssignmentListAttributes( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag'      => 'RoleAssignmentList',
+                'attributes' => array(
+                    'media-type' => 'application/vnd.ez.api.RoleAssignmentList+xml',
+                    'href'       => '/user/groups/1/5/777/roles',
+                )
+            ),
+            $result,
+            'Invalid <RoleAssignmentList> attributes.',
+            false
         );
     }
 

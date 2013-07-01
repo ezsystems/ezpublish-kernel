@@ -32,7 +32,7 @@ class URLWildcard extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate( 'urlWildcard', array( 'urlwildcard' => $data->id ) )
+            $this->router->generate( 'ezpublish_rest_loadURLWildcard', array( 'urlWildcardId' => $data->id ) )
         );
         $generator->endAttribute( 'href' );
 

@@ -51,6 +51,17 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
             21
         );
 
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadObjectState',
+            array( 'objectStateGroupId' => $objectState->groupId, 'objectStateId' => $objectState->objectState->id ),
+            "/content/objectstategroups/{$objectState->groupId}/objectstates/{$objectState->objectState->id}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadObjectStateGroup',
+            array( 'objectStateGroupId' => $objectState->groupId ),
+            "/content/objectstategroups/{$objectState->groupId}"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,

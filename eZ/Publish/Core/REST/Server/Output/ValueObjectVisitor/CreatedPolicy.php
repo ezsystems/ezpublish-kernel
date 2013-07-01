@@ -14,6 +14,8 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
  * CreatedPolicy value object visitor
+ *
+ * @todo coverage add unit test
  */
 class CreatedPolicy extends Policy
 {
@@ -29,11 +31,11 @@ class CreatedPolicy extends Policy
         parent::visit( $visitor, $generator, $data->policy );
         $visitor->setHeader(
             'Location',
-            $this->requestParser->generate(
-                'policy',
+            $this->router->generate(
+                'ezpublish_rest_loadPolicy',
                 array(
-                    'role' => $data->policy->roleId,
-                    'policy' => $data->policy->id
+                    'roleId' => $data->policy->roleId,
+                    'policyId' => $data->policy->id
                 )
             )
         );

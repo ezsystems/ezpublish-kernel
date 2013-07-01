@@ -117,6 +117,7 @@ services:
         class: %ezpublish_rest.output.value_object_visitor.base.class%
         calls:
             - [ setRequestParser, [ @ezpublish_rest.request_parser ] ]
+            - [ setRouter, [ @router ] ]
 
     # Errors
     ezpublish_rest.output.value_object_visitor.InvalidArgumentException:

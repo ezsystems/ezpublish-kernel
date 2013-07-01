@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
-use eZ\Publish\Core\REST\Common\RequestParser;
+use Symfony\Component\Routing\RouterInterface;
 
 class ImageProcessor extends BinaryInputProcessor
 {
@@ -32,19 +32,19 @@ class ImageProcessor extends BinaryInputProcessor
     protected $variations;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\RequestParser
+     * @var RouterInterface
      */
-    protected $requestParser;
+    protected $router;
 
     /**
      * @param string $temporaryDirectory
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
+     * @param \Symfony\Component\Routing\RouterInterface $router
      * @param array $variations array of variations identifiers
      */
-    public function __construct( $temporaryDirectory, $requestParser, array $variations )
+    public function __construct( $temporaryDirectory, RouterInterface $router, array $variations )
     {
         parent::__construct( $temporaryDirectory );
-        $this->requestParser = $requestParser;
+        $this->router = $router;
         $this->variations = $variations;
     }
 
@@ -62,8 +62,8 @@ class ImageProcessor extends BinaryInputProcessor
         foreach ( $this->variations as $variationIdentifier )
         {
             $outgoingValueHash['variations'][$variationIdentifier] = array(
-                'href' => $this->requestParser->generate(
-                    'getImageVariation',
+                'href' => $this->router->generate(
+                    'ezpublish_rest_binaryContent_getImageVariation',
                     array(
                         'imageId' => $outgoingValueHash['imageId'],
                         'variationIdentifier' => $variationIdentifier

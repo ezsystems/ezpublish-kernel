@@ -34,6 +34,53 @@ class RestUserTest extends ValueObjectVisitorBaseTest
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'visitValueObject' );
 
+        $locationPath = implode( '/', $restUser->mainLocation->path );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadUser',
+            array( 'userId' => $restUser->contentInfo->id ),
+            "/user/users/{$restUser->contentInfo->id}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContentType',
+            array( 'contentTypeId' => $restUser->contentInfo->contentTypeId ),
+            "/content/types/{$restUser->contentInfo->contentTypeId}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContentVersions',
+            array( 'contentId' => $restUser->contentInfo->id ),
+            "/content/objects/{$restUser->contentInfo->id}/versions"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadSection',
+            array( 'sectionId' => $restUser->contentInfo->sectionId ),
+            "/content/sections/{$restUser->contentInfo->sectionId}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadLocation',
+            array( 'locationPath' => $locationPath ),
+            "/content/locations/{$locationPath}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadLocationsForContent',
+            array( 'contentId' => $restUser->contentInfo->id ),
+            "/content/objects/{$restUser->contentInfo->id}/locations"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadUser',
+            array( 'userId' => $restUser->contentInfo->ownerId ),
+            "/user/users/{$restUser->contentInfo->ownerId}"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadUserGroupsOfUser',
+            array( 'userId' => $restUser->contentInfo->id ),
+            "/user/users/{$restUser->contentInfo->id}/groups"
+        );
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadRoleAssignmentsForUser',
+            array( 'userId' => $restUser->contentInfo->id ),
+            "/user/users/{$restUser->contentInfo->id}/roles"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,

@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
  * CreatedURLWildcard value object visitor
+ * @todo coverage add unit test
  */
 class CreatedURLWildcard extends URLWildcard
 {
@@ -29,9 +30,9 @@ class CreatedURLWildcard extends URLWildcard
         parent::visit( $visitor, $generator, $data->urlWildcard );
         $visitor->setHeader(
             'Location',
-            $this->requestParser->generate(
-                'urlWildcard',
-                array( 'urlwildcard' => $data->urlWildcard->id )
+            $this->router->generate(
+                'ezpublish_rest_loadURLWildcard',
+                array( 'urlWildcardId' => $data->urlWildcard->id )
             )
         );
         $visitor->setStatus( 201 );

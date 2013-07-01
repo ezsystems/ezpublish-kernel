@@ -29,13 +29,24 @@ class ImageProcessorTest extends BinaryInputProcessorTest
             'imageId' => '223-12345'
         );
 
+        $routerMock = $this->getRouterMock();
+        foreach ( $this->getVariations() as $iteration => $variationIdentifier )
+        {
+            $expectedVariations[$variationIdentifier]['href'] = "/content/binary/images/{$inputHash['imageId']}/variations/{$variationIdentifier}";
+            $routerMock
+                ->expects( $this->at( $iteration ) )
+                ->method( 'generate' )
+                ->with(
+                    'ezpublish_rest_binaryContent_getImageVariation',
+                    array( 'imageId' => $inputHash['imageId'], 'variationIdentifier' => $variationIdentifier )
+                )
+                ->will(
+                    $this->returnValue( $expectedVariations[$variationIdentifier]['href'] )
+                );
+        }
+
         $outputHash = $processor->postProcessValueHash( $inputHash );
 
-        $expectedVariations = array();
-        foreach ( $this->getVariations() as $variation )
-        {
-            $expectedVariations[$variation] = array( 'href' => null );
-        }
         $this->assertEquals(
             array(
                 'path' => '/var/some_site/223-1-eng-US/Cool-File.jpg',
@@ -55,16 +66,19 @@ class ImageProcessorTest extends BinaryInputProcessorTest
     {
         return new ImageProcessor(
             $this->getTempDir(),
-            $this->getRequestParserMock(),
+            $this->getRouterMock(),
             $this->getVariations()
         );
     }
 
-    protected function getRequestParserMock()
+    /**
+     * @returns \Symfony\Component\Routing\RouterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getRouterMock()
     {
         if ( !isset( $this->requestParser ) )
         {
-            $this->requestParser = $this->getMock( 'eZ\\Publish\\Core\\REST\\Common\\RequestParser' );
+            $this->requestParser = $this->getMock( 'Symfony\\Component\\Routing\\RouterInterface' );
         }
         return $this->requestParser;
     }

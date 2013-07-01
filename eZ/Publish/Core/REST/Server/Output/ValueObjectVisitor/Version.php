@@ -58,11 +58,11 @@ class Version extends ValueObjectVisitor
         $path = $data->path;
         if ( $path == null )
         {
-            $path = $this->requestParser->generate(
-                'objectVersion',
+            $path = $this->router->generate(
+                'ezpublish_rest_loadContentInVersion',
                 array(
-                    'object' => $content->id,
-                    'version' => $versionInfo->versionNo,
+                    'contentId' => $content->id,
+                    'versionNumber' => $versionInfo->versionNo,
                 )
             );
         }

@@ -32,6 +32,8 @@ class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
 
         $contentTypeGroupList = new ContentTypeGroupList( array() );
 
+        $this->addRouteExpectation( 'ezpublish_rest_loadContentTypeGroupList', array(), '/content/typegroups' );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,

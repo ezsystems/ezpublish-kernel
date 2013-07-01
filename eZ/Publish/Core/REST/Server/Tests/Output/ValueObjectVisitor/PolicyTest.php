@@ -44,6 +44,12 @@ class PolicyTest extends ValueObjectVisitorBaseTest
             )
         );
 
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadPolicy',
+            array( 'roleId' => $policy->roleId, 'policyId' => $policy->id ),
+            "/user/roles/{$policy->roleId}/policies/{$policy->id}"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,

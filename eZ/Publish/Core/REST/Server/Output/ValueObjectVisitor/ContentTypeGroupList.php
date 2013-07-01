@@ -34,7 +34,7 @@ class ContentTypeGroupList extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate( 'typegroups' )
+            $this->router->generate( 'ezpublish_rest_loadContentTypeGroupList' )
         );
         $generator->endAttribute( 'href' );
 

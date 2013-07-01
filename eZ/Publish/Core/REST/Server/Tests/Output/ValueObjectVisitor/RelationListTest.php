@@ -32,6 +32,15 @@ class RelationListTest extends ValueObjectVisitorBaseTest
 
         $relationList = new RelationList( array(), 42, 21 );
 
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadVersionRelations',
+            array(
+                'contentId' => $relationList->contentId,
+                'versionNumber' => $relationList->versionNo
+            ),
+            "/content/objects/{$relationList->contentId}/versions/{$relationList->versionNo}/relations"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,

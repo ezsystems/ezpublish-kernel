@@ -36,6 +36,16 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     private $requestParser;
 
     /**
+     * @var \Symfony\Component\Routing\RouterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $routerMock;
+
+    /**
+     * @var int
+     */
+    private $routerCallIndex = 0;
+
+    /**
      * Gets the visitor mock
      *
      * @return \eZ\Publish\Core\REST\Common\Output\Visitor
@@ -100,6 +110,7 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     {
         $visitor = $this->internalGetVisitor();
         $visitor->setRequestParser( $this->getRequestParser() );
+        $visitor->setRouter( $this->getRouterMock() );
         return $visitor;
     }
 
@@ -113,6 +124,47 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
             $this->requestParser = new RequestParser;
         }
         return $this->requestParser;
+    }
+
+    /**
+     * @return \Symfony\Component\Routing\RouterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getRouterMock()
+    {
+        if ( !isset( $this->routerMock ) )
+        {
+            $this->routerMock = $this->getMock( 'Symfony\\Component\\Routing\\RouterInterface' );
+        }
+
+        return $this->routerMock;
+    }
+
+    /**
+     * Resets the router mock and its expected calls index & list
+     */
+    protected function resetRouterMock()
+    {
+        $this->routerMock = null;
+        $this->routerMockCallIndex = 0;
+    }
+
+    /**
+     * Adds an expectation to the routerMock. Expectations must be added sequentially.
+     *
+     * @param string $routeName
+     * @param array $arguments
+     * @param string $returnValue
+     */
+    protected function addRouteExpectation( $routeName, $arguments, $returnValue )
+    {
+        $this->getRouterMock()
+            ->expects( $this->at( $this->routerCallIndex++ ) )
+            ->method( 'generate' )
+            ->with(
+                $this->equalTo( $routeName ),
+                $this->equalTo( $arguments )
+            )
+            ->will( $this->returnValue( $returnValue ) );
     }
 
     /**

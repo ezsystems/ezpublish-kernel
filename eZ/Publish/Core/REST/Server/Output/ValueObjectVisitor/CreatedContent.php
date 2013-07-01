@@ -29,9 +29,9 @@ class CreatedContent extends RestContent
         parent::visit( $visitor, $generator, $data->content );
         $visitor->setHeader(
             'Location',
-            $this->requestParser->generate(
-                'object',
-                array( 'object' => $data->content->contentInfo->id )
+            $this->router->generate(
+                'ezpublish_rest_loadContent',
+                array( 'contentId' => $data->content->contentInfo->id )
             )
         );
         $visitor->setStatus( 201 );

@@ -74,7 +74,7 @@ class RestExecutedView extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate( 'view', array( 'view' => $data->identifier ) )
+            $this->router->generate( 'ezpublish_rest_loadView', array( 'viewId' => $data->identifier ) )
         );
         $generator->endAttribute( 'href' );
 
@@ -90,7 +90,7 @@ class RestExecutedView extends ValueObjectVisitor
         $generator->startObjectElement( 'Result', 'ViewResult' );
         $generator->startAttribute(
             'href',
-            $this->requestParser->generate( 'viewResults', array( 'view' => $data->identifier ) )
+            $this->router->generate( 'ezpublish_rest_loadViewResults', array( 'viewId' => $data->identifier ) )
         );
         $generator->endAttribute( 'href' );
 
