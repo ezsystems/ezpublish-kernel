@@ -11,8 +11,6 @@ namespace eZ\Bundle\EzPublishCoreBundle;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\RequestAwarePurger;
-use Stash\Driver\FileSystem;
-use Stash\Pool as StashPool;
 use Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache as BaseHttpCache;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
