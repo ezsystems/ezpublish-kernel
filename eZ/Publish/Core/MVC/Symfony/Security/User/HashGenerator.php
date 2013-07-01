@@ -12,13 +12,14 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\User;
 use eZ\Publish\SPI\HashGenerator as HashGeneratorInterface;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\SPI\User\Identity;
+use eZ\Publish\SPI\User\IdentityAware;
 
 /**
  * User hash generator.
  *
  * @todo Allow several services to plug-in and add information to the user identity (via a dedicated service tag)
  */
-class HashGenerator implements HashGeneratorInterface
+class HashGenerator implements HashGeneratorInterface, IdentityAware
 {
     /**
      * @var \eZ\Publish\SPI\User\Identity
@@ -30,10 +31,30 @@ class HashGenerator implements HashGeneratorInterface
      */
     protected $repository;
 
-    public function __construct( Identity $userIdentity, Repository $repository )
+    /**
+     * @var IdentityAware[]
+     */
+    protected $identityDefiners = array();
+
+    /**
+     * @param \eZ\Publish\SPI\User\IdentityAware $identityDefiner
+     */
+    public function setIdentityDefiner( IdentityAware $identityDefiner )
     {
-        $this->userIdentity = $userIdentity;
-        $this->repository = $repository;
+        $this->identityDefiners[] = $identityDefiner;
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\User\IdentityAware[]
+     */
+    public function getIdentityDefiners()
+    {
+        return $this->identityDefiners;
+    }
+
+    public function setIdentity( Identity $identity )
+    {
+        $this->userIdentity = $identity;
     }
 
     /**
@@ -43,20 +64,10 @@ class HashGenerator implements HashGeneratorInterface
      */
     public function generate()
     {
-        $user = $this->repository->getCurrentUser();
-        $roles = $this->repository->sudo(
-            function ( $repository ) use ( $user )
-            {
-                return $repository->getRoleService()->getRoleAssignmentsForUser( $user, true );
-            }
-        );
-        $roleIds = array();
-        foreach ( $roles as $roleAssignment )
+        foreach ( $this->getIdentityDefiners() as $identityDefiner )
         {
-            $roleIds[] = $roleAssignment->role->id;
+            $identityDefiner->setIdentity( $this->userIdentity );
         }
-
-        $this->userIdentity->setInformation( 'roleIdList', implode( '.', $roleIds ) );
 
         return $this->userIdentity->getHash();
     }

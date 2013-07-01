@@ -11,6 +11,10 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\User;
 
 use eZ\Publish\SPI\User\Identity as IdentityInterface;
 
+/**
+ * Represents a user "identity", or footprint.
+ * Instance can be transformed to a hash and used as an identity token.
+ */
 class Identity implements IdentityInterface
 {
     /**
