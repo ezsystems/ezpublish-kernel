@@ -59,8 +59,8 @@ class Trash extends RestController
      */
     public function loadTrashItems()
     {
-        $offset = isset( $this->request->variables['offset'] ) ? (int)$this->request->variables['offset'] : 0;
-        $limit = isset( $this->request->variables['limit'] ) ? (int)$this->request->variables['limit'] : -1;
+        $offset = $this->httpFoundationRequest->query->has( 'offset' ) ? (int)$this->httpFoundationRequest->query->get( 'offset' ) : 0;
+        $limit = $this->httpFoundationRequest->query->has( 'limit' ) ? (int)$this->httpFoundationRequest->query->get( 'limit' ) : -1;
 
         $query = new Query();
         $query->offset = $offset >= 0 ? $offset : null;
@@ -82,7 +82,7 @@ class Trash extends RestController
 
         return new Values\Trash(
             $trashItems,
-            $this->request->path
+            $this->httpFoundationRequest->getPathInfo()
         );
     }
 

@@ -70,18 +70,18 @@ class Location extends RestController
      */
     public function redirectLocation()
     {
-        if ( !isset( $this->request->variables['id'] ) && !isset( $this->request->variables['remoteId'] ) )
+        if ( !$this->httpFoundationRequest->query->has( 'id' ) && !$this->httpFoundationRequest->query->has( 'remoteId' ) )
         {
             throw new BadRequestException( "At least one of 'id' or 'remoteId' parameters is required." );
         }
 
-        if ( isset( $this->request->variables['id'] ) )
+        if ( $this->httpFoundationRequest->query->has( 'id' ) )
         {
-            $location = $this->locationService->loadLocation( $this->request->variables['id'] );
+            $location = $this->locationService->loadLocation( $this->httpFoundationRequest->query->get( 'id' ) );
         }
         else
         {
-            $location = $this->locationService->loadLocationByRemoteId( $this->request->variables['remoteId'] );
+            $location = $this->locationService->loadLocationByRemoteId( $this->httpFoundationRequest->query->get( 'remoteId' ) );
         }
 
         return new Values\TemporaryRedirect(
@@ -106,8 +106,8 @@ class Location extends RestController
     {
         $locationCreateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->contentType ),
-                $this->request->body
+                array( 'Content-Type' => $this->httpFoundationRequest->headers->get( 'Content-Type' ) ),
+                $this->httpFoundationRequest->getContent()
             )
         );
 
@@ -285,12 +285,12 @@ class Location extends RestController
             array(
                 new Values\RestLocation(
                     $location = $this->locationService->loadLocationByRemoteId(
-                        $this->request->variables['remoteId']
+                        $this->httpFoundationRequest->query->get( 'remoteId' )
                     ),
                     $this->locationService->getLocationChildCount( $location )
                 )
             ),
-            $this->request->path
+            $this->httpFoundationRequest->getPathInfo()
         );
     }
 
@@ -316,7 +316,7 @@ class Location extends RestController
             );
         }
 
-        return new Values\LocationList( $restLocations, $this->request->path );
+        return new Values\LocationList( $restLocations, $this->httpFoundationRequest->getPathInfo() );
     }
 
     /**
@@ -328,8 +328,8 @@ class Location extends RestController
      */
     public function loadLocationChildren( $locationPath )
     {
-        $offset = isset( $this->request->variables['offset'] ) ? (int)$this->request->variables['offset'] : 0;
-        $limit = isset( $this->request->variables['limit'] ) ? (int)$this->request->variables['limit'] : -1;
+        $offset = $this->httpFoundationRequest->query->has( 'offset' ) ? (int)$this->httpFoundationRequest->query->get( 'offset' ) : 0;
+        $limit = $this->httpFoundationRequest->query->has( 'limit' ) ? (int)$this->httpFoundationRequest->query->get( 'limit' ) : -1;
 
         $restLocations = array();
         foreach (
@@ -348,7 +348,7 @@ class Location extends RestController
             );
         }
 
-        return new Values\LocationList( $restLocations, $this->request->path );
+        return new Values\LocationList( $restLocations, $this->httpFoundationRequest->getPathInfo() );
     }
 
     /**
@@ -375,8 +375,8 @@ class Location extends RestController
     {
         $locationUpdate = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->contentType ),
-                $this->request->body
+                array( 'Content-Type' => $this->httpFoundationRequest->headers->get( 'Content-Type' ) ),
+                $this->httpFoundationRequest->getContent()
             )
         );
 

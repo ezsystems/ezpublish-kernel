@@ -198,8 +198,8 @@ class User extends RestController
         $createdUserGroup = $this->userService->createUserGroup(
             $this->inputDispatcher->parse(
                 new Message(
-                    array( 'Content-Type' => $this->request->contentType ),
-                    $this->request->body
+                    array( 'Content-Type' => $this->httpFoundationRequest->headers->get( 'Content-Type' ) ),
+                    $this->httpFoundationRequest->getContent()
                 )
             ),
             $this->userService->loadUserGroup(
@@ -241,8 +241,8 @@ class User extends RestController
 
         $userCreateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->contentType ),
-                $this->request->body
+                array( 'Content-Type' => $this->httpFoundationRequest->headers->get( 'Content-Type' ) ),
+                $this->httpFoundationRequest->getContent()
             )
         );
 
@@ -292,11 +292,11 @@ class User extends RestController
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
                 array(
-                    'Content-Type' => $this->request->contentType,
+                    'Content-Type' => $this->httpFoundationRequest->headers->get( 'Content-Type' ),
                     // @todo Needs refactoring! Temporary solution so parser has access to URL
-                    'Url' => $this->request->path
+                    'Url' => $this->httpFoundationRequest->getPathInfo()
                 ),
-                $this->request->body
+                $this->httpFoundationRequest->getContent()
             )
         );
 
@@ -337,11 +337,11 @@ class User extends RestController
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
                 array(
-                    'Content-Type' => $this->request->contentType,
+                    'Content-Type' => $this->httpFoundationRequest->headers->get( 'Content-Type' ),
                     // @todo Needs refactoring! Temporary solution so parser has access to URL
-                    'Url' => $this->request->path
+                    'Url' => $this->httpFoundationRequest->getPathInfo()
                 ),
-                $this->request->body
+                $this->httpFoundationRequest->getContent()
             )
         );
 
@@ -428,11 +428,11 @@ class User extends RestController
     public function loadUsers()
     {
         $restUsers = array();
-        if ( isset( $this->request->variables['roleId'] ) )
+        if ( $this->httpFoundationRequest->query->has( 'roleId' ) )
         {
              $restUsers = $this->loadUsersAssignedToRole();
         }
-        else if ( isset( $this->request->variables['remoteId'] ) )
+        else if ( $this->httpFoundationRequest->query->has( 'remoteId' ) )
         {
             $restUsers = array(
                 $this->loadUserByRemoteId()
@@ -441,10 +441,10 @@ class User extends RestController
 
         if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.userlist' )
         {
-            return new Values\UserList( $restUsers, $this->request->path );
+            return new Values\UserList( $restUsers, $this->httpFoundationRequest->getPathInfo() );
         }
 
-        return new Values\UserRefList( $restUsers, $this->request->path );
+        return new Values\UserRefList( $restUsers, $this->httpFoundationRequest->getPathInfo() );
     }
 
     /**
@@ -454,7 +454,7 @@ class User extends RestController
      */
     public function loadUsersAssignedToRole()
     {
-        $roleValues = $this->requestParser->parse( 'role', $this->request->variables['roleId'] );
+        $roleValues = $this->requestParser->parse( 'role', $this->httpFoundationRequest->query->get( 'roleId' ) );
 
         $role = $this->roleService->loadRole( $roleValues['role'] );
         $roleAssignments = $this->roleService->getRoleAssignments( $role );
@@ -490,7 +490,7 @@ class User extends RestController
      */
     public function loadUserByRemoteId()
     {
-        $contentInfo = $this->contentService->loadContentInfoByRemoteId( $this->request->variables['remoteId'] );
+        $contentInfo = $this->contentService->loadContentInfoByRemoteId( $this->httpFoundationRequest->query->get( 'remoteId' ) );
         $user = $this->userService->loadUser( $contentInfo->id );
         $userLocation = $this->locationService->loadLocation( $contentInfo->mainLocationId );
         $contentType = $this->contentTypeService->loadContentType( $contentInfo->contentTypeId );
@@ -512,9 +512,9 @@ class User extends RestController
     public function loadUserGroups()
     {
         $restUserGroups = array();
-        if ( isset( $this->request->variables['id'] ) )
+        if ( $this->httpFoundationRequest->query->has( 'id' ) )
         {
-            $userGroup = $this->userService->loadUserGroup( $this->request->variables['id'] );
+            $userGroup = $this->userService->loadUserGroup( $this->httpFoundationRequest->query->get( 'id' ) );
             $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
             $userGroupMainLocation = $this->locationService->loadLocation( $userGroupContentInfo->mainLocationId );
             $contentType = $this->contentTypeService->loadContentType( $userGroupContentInfo->contentTypeId );
@@ -529,11 +529,11 @@ class User extends RestController
                 )
             );
         }
-        else if ( isset( $this->request->variables['roleId'] ) )
+        else if ( $this->httpFoundationRequest->query->has( 'roleId' ) )
         {
              $restUserGroups = $this->loadUserGroupsAssignedToRole();
         }
-        else if ( isset( $this->request->variables['remoteId'] ) )
+        else if ( $this->httpFoundationRequest->query->has( 'remoteId' ) )
         {
             $restUserGroups = array(
                 $this->loadUserGroupByRemoteId()
@@ -542,10 +542,10 @@ class User extends RestController
 
         if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.usergrouplist' )
         {
-            return new Values\UserGroupList( $restUserGroups, $this->request->path );
+            return new Values\UserGroupList( $restUserGroups, $this->httpFoundationRequest->getPathInfo() );
         }
 
-        return new Values\UserGroupRefList( $restUserGroups, $this->request->path );
+        return new Values\UserGroupRefList( $restUserGroups, $this->httpFoundationRequest->getPathInfo() );
     }
 
     /**
@@ -555,7 +555,7 @@ class User extends RestController
      */
     public function loadUserGroupByRemoteId()
     {
-        $contentInfo = $this->contentService->loadContentInfoByRemoteId( $this->request->variables['remoteId'] );
+        $contentInfo = $this->contentService->loadContentInfoByRemoteId( $this->httpFoundationRequest->query->get( 'remoteId' ) );
         $userGroup = $this->userService->loadUserGroup( $contentInfo->id );
         $userGroupLocation = $this->locationService->loadLocation( $contentInfo->mainLocationId );
         $contentType = $this->contentTypeService->loadContentType( $contentInfo->contentTypeId );
@@ -576,7 +576,7 @@ class User extends RestController
      */
     public function loadUserGroupsAssignedToRole()
     {
-        $roleValues = $this->requestParser->parse( 'role', $this->request->variables['roleId'] );
+        $roleValues = $this->requestParser->parse( 'role', $this->httpFoundationRequest->query->get( 'roleId' ) );
 
         $role = $this->roleService->loadRole( $roleValues['role'] );
         $roleAssignments = $this->roleService->getRoleAssignments( $role );
@@ -618,7 +618,7 @@ class User extends RestController
             $this->userService->loadUser( $userId )
         );
 
-        return new Values\VersionList( $contentDrafts, $this->request->path );
+        return new Values\VersionList( $contentDrafts, $this->httpFoundationRequest->getPathInfo() );
     }
 
     /**
@@ -710,10 +710,10 @@ class User extends RestController
 
         if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.usergrouplist' )
         {
-            return new Values\UserGroupList( $restUserGroups, $this->request->path );
+            return new Values\UserGroupList( $restUserGroups, $this->httpFoundationRequest->getPathInfo() );
         }
 
-        return new Values\UserGroupRefList( $restUserGroups, $this->request->path );
+        return new Values\UserGroupRefList( $restUserGroups, $this->httpFoundationRequest->getPathInfo() );
     }
 
     /**
@@ -746,7 +746,7 @@ class User extends RestController
             );
         }
 
-        return new Values\UserGroupRefList( $restUserGroups, $this->request->path, $userId );
+        return new Values\UserGroupRefList( $restUserGroups, $this->httpFoundationRequest->getPathInfo(), $userId );
     }
 
     /**
@@ -766,8 +766,8 @@ class User extends RestController
             $userGroupLocation->contentId
         );
 
-        $offset = isset( $this->request->variables['offset'] ) ? (int)$this->request->variables['offset'] : 0;
-        $limit = isset( $this->request->variables['limit'] ) ? (int)$this->request->variables['limit'] : -1;
+        $offset = $this->httpFoundationRequest->query->has( 'offset' ) ? (int)$this->httpFoundationRequest->query->get( 'offset' ) : 0;
+        $limit = $this->httpFoundationRequest->query->has( 'limit' ) ? (int)$this->httpFoundationRequest->query->get( 'limit' ) : -1;
 
         $users = $this->userService->loadUsersOfUserGroup(
             $userGroup,
@@ -793,10 +793,10 @@ class User extends RestController
 
         if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.userlist' )
         {
-            return new Values\UserList( $restUsers, $this->request->path );
+            return new Values\UserList( $restUsers, $this->httpFoundationRequest->getPathInfo() );
         }
 
-        return new Values\UserRefList( $restUsers, $this->request->path );
+        return new Values\UserRefList( $restUsers, $this->httpFoundationRequest->getPathInfo() );
     }
 
     /**
@@ -869,7 +869,7 @@ class User extends RestController
         try
         {
             $userGroupLocation = $this->locationService->loadLocation(
-                $this->extractLocationIdFromPath( $this->request->variables['group'] )
+                $this->extractLocationIdFromPath( $this->httpFoundationRequest->query->get( 'group' ) )
             );
         }
         catch ( NotFoundException $e )
@@ -935,8 +935,8 @@ class User extends RestController
         /** @var $sessionInput \eZ\Publish\Core\REST\Server\Values\SessionInput */
         $sessionInput = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->contentType ),
-                $this->request->body
+                array( 'Content-Type' => $this->httpFoundationRequest->headers->get( 'Content-Type' ) ),
+                $this->httpFoundationRequest->getContent()
             )
         );
 

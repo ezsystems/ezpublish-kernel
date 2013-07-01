@@ -75,8 +75,8 @@ class Role extends RestController
                 'role' => $this->roleService->createRole(
                     $this->inputDispatcher->parse(
                         new Message(
-                            array( 'Content-Type' => $this->request->contentType ),
-                            $this->request->body
+                            array( 'Content-Type' => $this->httpFoundationRequest->headers->get( 'Content-Type' ) ),
+                            $this->httpFoundationRequest->getContent()
                         )
                     )
                 )
@@ -92,11 +92,11 @@ class Role extends RestController
     public function listRoles()
     {
         $roles = array();
-        if ( isset( $this->request->variables['identifier'] ) )
+        if ( $this->httpFoundationRequest->query->has( 'identifier' ) )
         {
             try
             {
-                $role = $this->roleService->loadRoleByIdentifier( $this->request->variables['identifier'] );
+                $role = $this->roleService->loadRoleByIdentifier( $this->httpFoundationRequest->query->get( 'identifier' ) );
                 $roles[] = $role;
             }
             catch ( APINotFoundException $e )
@@ -106,8 +106,8 @@ class Role extends RestController
         }
         else
         {
-            $offset = isset( $this->request->variables['offset'] ) ? (int)$this->request->variables['offset'] : 0;
-            $limit = isset( $this->request->variables['limit'] ) ? (int)$this->request->variables['limit'] : -1;
+            $offset = $this->httpFoundationRequest->query->has( 'offset' ) ? (int)$this->httpFoundationRequest->query->get( 'offset' ) : 0;
+            $limit = $this->httpFoundationRequest->query->has( 'limit' ) ? (int)$this->httpFoundationRequest->query->get( 'limit' ) : -1;
 
             $roles = array_slice(
                 $this->roleService->loadRoles(),
@@ -116,7 +116,7 @@ class Role extends RestController
             );
         }
 
-        return new Values\RoleList( $roles, $this->request->path );
+        return new Values\RoleList( $roles, $this->httpFoundationRequest->getPathInfo() );
     }
 
     /**
@@ -142,8 +142,8 @@ class Role extends RestController
     {
         $createStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->contentType ),
-                $this->request->body
+                array( 'Content-Type' => $this->httpFoundationRequest->headers->get( 'Content-Type' ) ),
+                $this->httpFoundationRequest->getContent()
             )
         );
         return $this->roleService->updateRole(
@@ -178,7 +178,7 @@ class Role extends RestController
     public function loadPolicies( $roleId )
     {
         $loadedRole = $this->roleService->loadRole( $roleId  );
-        return new Values\PolicyList( $loadedRole->getPolicies(), $this->request->path );
+        return new Values\PolicyList( $loadedRole->getPolicies(), $this->httpFoundationRequest->getPathInfo() );
     }
 
     /**
@@ -218,7 +218,7 @@ class Role extends RestController
                 return $policy;
         }
 
-        throw new Exceptions\NotFoundException( "Policy not found: '{$this->request->path}'." );
+        throw new Exceptions\NotFoundException( "Policy not found: '{$this->httpFoundationRequest->getPathInfo()}'." );
     }
 
     /**
@@ -232,8 +232,8 @@ class Role extends RestController
     {
         $createStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->contentType ),
-                $this->request->body
+                array( 'Content-Type' => $this->httpFoundationRequest->headers->get( 'Content-Type' ) ),
+                $this->httpFoundationRequest->getContent()
             )
         );
 
@@ -271,8 +271,8 @@ class Role extends RestController
     {
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->contentType ),
-                $this->request->body
+                array( 'Content-Type' => $this->httpFoundationRequest->headers->get( 'Content-Type' ) ),
+                $this->httpFoundationRequest->getContent()
             )
         );
 
@@ -288,7 +288,7 @@ class Role extends RestController
             }
         }
 
-        throw new Exceptions\NotFoundException( "Policy not found: '{$this->request->path}'." );
+        throw new Exceptions\NotFoundException( "Policy not found: '{$this->httpFoundationRequest->getPathInfo()}'." );
     }
 
     /**
@@ -320,7 +320,7 @@ class Role extends RestController
             return new Values\NoContent();
         }
 
-        throw new Exceptions\NotFoundException( "Policy not found: '{$this->request->path}'." );
+        throw new Exceptions\NotFoundException( "Policy not found: '{$this->httpFoundationRequest->getPathInfo()}'." );
     }
 
     /**
@@ -334,8 +334,8 @@ class Role extends RestController
     {
         $roleAssignment = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->contentType ),
-                $this->request->body
+                array( 'Content-Type' => $this->httpFoundationRequest->headers->get( 'Content-Type' ) ),
+                $this->httpFoundationRequest->getContent()
             )
         );
 
@@ -359,8 +359,8 @@ class Role extends RestController
     {
         $roleAssignment = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->contentType ),
-                $this->request->body
+                array( 'Content-Type' => $this->httpFoundationRequest->headers->get( 'Content-Type' ) ),
+                $this->httpFoundationRequest->getContent()
             )
         );
 
@@ -470,7 +470,7 @@ class Role extends RestController
             }
         }
 
-        throw new Exceptions\NotFoundException( "Role assignment not found: '{$this->request->path}'." );
+        throw new Exceptions\NotFoundException( "Role assignment not found: '{$this->httpFoundationRequest->getPathInfo()}'." );
     }
 
     /**
@@ -497,7 +497,7 @@ class Role extends RestController
             }
         }
 
-        throw new Exceptions\NotFoundException( "Role assignment not found: '{$this->request->path}'." );
+        throw new Exceptions\NotFoundException( "Role assignment not found: '{$this->httpFoundationRequest->getPathInfo()}'." );
     }
 
     /**
@@ -509,9 +509,9 @@ class Role extends RestController
     {
         return new Values\PolicyList(
             $this->roleService->loadPoliciesByUserId(
-                $this->request->variables['userId']
+                $this->httpFoundationRequest->query->get( 'userId' )
             ),
-            $this->request->path
+            $this->httpFoundationRequest->getPathInfo()
         );
     }
 

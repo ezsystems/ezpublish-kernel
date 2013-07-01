@@ -87,12 +87,12 @@ services:
 
     ezpublish_rest.controller.base:
         class: %ezpublish_rest.controller.base.class%
-        abstract: true
         calls:
             - [ setInputDispatcher, [@ezpublish_rest.input.dispatcher] ]
             - [ setRouter, [@router] ]
             - [ setRequestParser, [@ezpublish_rest.request_parser] ]
             - [ setRequest, [@ezpublish_rest.request] ]
+            - [ setHttpFoundationRequest, [@request=] ]
             - [ setContainer, [@service_container] ]
             - [ setRepository, [@ezpublish.api.repository] ]
 

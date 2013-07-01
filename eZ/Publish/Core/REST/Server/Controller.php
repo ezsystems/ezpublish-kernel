@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Repository;
 use Symfony\Component\Routing\RouterInterface;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher as InputDispatcher;
 use eZ\Publish\Core\REST\Server\Request as HttpRequest;
+use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use eZ\Publish\Core\REST\Common\RequestParser as RequestParser;
 
@@ -22,6 +23,11 @@ abstract class Controller
      * @var \eZ\Publish\Core\REST\Server\Request
      */
     protected $request;
+
+    /**
+     * @var \Symfony\Component\HttpFoundation\Request
+     */
+    protected $httpFoundationRequest;
 
     /**
      * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
@@ -63,6 +69,11 @@ abstract class Controller
     public function setRequest( HttpRequest $request )
     {
         $this->request = $request;
+    }
+
+    public function setHttpFoundationRequest( HttpFoundationRequest $httpFoundationRequest )
+    {
+        $this->httpFoundationRequest = $httpFoundationRequest;
     }
 
     public function setContainer( Container $container )
