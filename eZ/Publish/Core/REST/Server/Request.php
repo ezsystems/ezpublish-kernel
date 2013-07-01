@@ -8,9 +8,8 @@
  */
 namespace eZ\Publish\Core\REST\Server;
 
-use Qafoo\RMF\Request as RMFRequest;
+use Qafoo\RMF\Request\HTTP as RMFRequest;
 use Qafoo\RMF\Request\PropertyHandler;
-use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 
 /**
  * Encapsulated RMF HTTP Request for REST server
@@ -18,22 +17,14 @@ use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 class Request extends RMFRequest
 {
     /**
-     * @var Request
-     */
-    protected $httpFoundationRequest;
-
-    /**
      * Construct request from a set of handlers
      *
-     * @param array   $handlers
-     * @param Request $request
+     * @param array $handlers
      *
      * @return \eZ\Publish\Core\REST\Server\Request
      */
-    public function __construct( array $handlers = array(), HttpFoundationRequest $httpFoundationRequest )
+    public function __construct( array $handlers = array() )
     {
-        $this->httpFoundationRequest = $httpFoundationRequest;
-
         $this->addHandler( 'body', new PropertyHandler\RawBody() );
 
         $this->addHandler(
