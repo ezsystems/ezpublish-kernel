@@ -23,7 +23,7 @@ abstract class HttpCache extends BaseHttpCache
         // Forbid direct AUTHENTICATE requests to get user hash
         if (
             $request->headers->get( 'X-HTTP-Override' ) === 'AUTHENTICATE'
-            && $request->headers->get( 'Accept' ) === static::USER_HASH_ACCEPT_HEADER
+            && $request->headers->get( 'Accept' ) === Kernel::USER_HASH_ACCEPT_HEADER
         )
         {
             return new Response( '', 405 );
