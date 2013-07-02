@@ -46,8 +46,8 @@ class Identity implements IdentityInterface
     /**
      * Registers an information in the identity.
      *
-     * @param $informationName
-     * @param $informationValue
+     * @param string $informationName
+     * @param scalar $informationValue
      */
     public function setInformation( $informationName, $informationValue )
     {
