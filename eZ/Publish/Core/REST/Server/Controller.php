@@ -90,4 +90,23 @@ abstract class Controller
     {
         $this->requestParser = $requestParser;
     }
+
+    /**
+     * Extracts the requested media type from $request
+     * @todo refactor, maybe to a REST Request with an accepts('content-type') method
+     *
+     * @return string
+     */
+    protected function getMediaType()
+    {
+        foreach ( $this->httpFoundationRequest->getAcceptableContentTypes() as $mimeType )
+        {
+            if ( preg_match( '(^([a-z0-9-/.]+)\+.*$)', strtolower( $mimeType ), $matches ) )
+            {
+                return $matches[1];
+            }
+        }
+
+        return 'unknown/unknown';
+    }
 }

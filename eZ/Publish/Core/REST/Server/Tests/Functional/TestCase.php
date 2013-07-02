@@ -187,6 +187,9 @@ XML;
 
         $content = json_decode( $response->getContent(), true );
 
+        if ( !isset( $content['Content']['CurrentVersion']['Version'] ) )
+            self::fail( "Incomplete response (no version):\n" . $response->getContent() . "\n" );
+
         $response = $this->sendHttpRequest(
             $request = $this->createHttpRequest( "PUBLISH", $content['Content']['CurrentVersion']['Version']['_href'] )
         );

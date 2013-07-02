@@ -121,7 +121,7 @@ class ContentType extends RestController
             $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId )
         );
 
-        if ( $this->getMediaType( $this->request ) == 'application/vnd.ez.api.contenttypelist' )
+        if ( $this->getMediaType() == 'application/vnd.ez.api.contenttypelist' )
         {
             return new Values\ContentTypeList( $contentTypes, $this->httpFoundationRequest->getPathInfo() );
         }
@@ -231,7 +231,7 @@ class ContentType extends RestController
             );
         }
 
-        if ( $this->getMediaType( $this->request ) == 'application/vnd.ez.api.contenttypelist' )
+        if ( $this->getMediaType() == 'application/vnd.ez.api.contenttypelist' )
         {
             return new Values\ContentTypeList( $contentTypes, $this->httpFoundationRequest->getPathInfo() );
         }
@@ -902,22 +902,5 @@ class ContentType extends RestController
                 'modificationDate' => $createStruct->creationDate,
             )
         );
-    }
-
-    /**
-     * Extracts the requested media type from $request
-     *
-     * @return string
-     */
-    private function getMediaType()
-    {
-        foreach ( $this->request->mimetype as $mimeType )
-        {
-            if ( preg_match( '(^([a-z0-9-/.]+)\+.*$)', $mimeType['value'], $matches ) )
-            {
-                return $matches[1];
-            }
-        }
-        return 'unknown/unknown';
     }
 }

@@ -71,7 +71,7 @@ class Content extends RestController
 
         $contentVersion = null;
         $relations = null;
-        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.content' )
+        if ( $this->getMediaType() === 'application/vnd.ez.api.content' )
         {
             $languages = null;
             if ( $this->httpFoundationRequest->query->has( 'languages' ) )
@@ -245,7 +245,7 @@ class Content extends RestController
         $contentValue = null;
         $contentType = null;
         $relations = null;
-        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.content' )
+        if ( $this->getMediaType() === 'application/vnd.ez.api.content' )
         {
             $contentValue = $content;
             $contentType = $this->repository->getContentTypeService()->loadContentType(
@@ -292,9 +292,9 @@ class Content extends RestController
      */
     public function copyContent( $contentId )
     {
-        $destinationValues = $this->requestParser->parse( 'location', $this->request->destination );
+        $destination = $this->httpFoundationRequest->headers->get( 'Destination' );
 
-        $parentLocationParts = explode( '/', $destinationValues['location'] );
+        $parentLocationParts = explode( '/', $destination );
         $copiedContent = $this->repository->getContentService()->copyContent(
             $this->repository->getContentService()->loadContentInfo( $contentId ),
             $this->repository->getLocationService()->newLocationCreateStruct( array_pop( $parentLocationParts ) )
@@ -716,22 +716,5 @@ class Content extends RestController
                 'searchResults' => $this->repository->getSearchService()->findContent( $viewInput->query ),
             )
         );
-    }
-
-    /**
-     * Extracts the requested media type from $request
-     *
-     * @return string
-     */
-    protected function getMediaType()
-    {
-        foreach ( $this->request->mimetype as $mimeType )
-        {
-            if ( preg_match( '(^([a-z0-9-/.]+)\+.*$)', $mimeType['value'], $matches ) )
-            {
-                return $matches[1];
-            }
-        }
-        return 'unknown/unknown';
     }
 }

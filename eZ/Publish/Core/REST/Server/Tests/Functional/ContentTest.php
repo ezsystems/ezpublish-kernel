@@ -365,6 +365,10 @@ XML;
         }
 
         $array = json_decode( $response->getContent(), true );
+        if ( $array === null )
+        {
+            self::fail( "Error loading content. Response: " . $response->getContent() );
+        }
         return $array['Content'];
     }
 

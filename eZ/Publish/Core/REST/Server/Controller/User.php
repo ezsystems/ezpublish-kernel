@@ -439,7 +439,7 @@ class User extends RestController
             );
         }
 
-        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.userlist' )
+        if ( $this->getMediaType() === 'application/vnd.ez.api.userlist' )
         {
             return new Values\UserList( $restUsers, $this->httpFoundationRequest->getPathInfo() );
         }
@@ -540,7 +540,7 @@ class User extends RestController
             );
         }
 
-        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.usergrouplist' )
+        if ( $this->getMediaType() === 'application/vnd.ez.api.usergrouplist' )
         {
             return new Values\UserGroupList( $restUserGroups, $this->httpFoundationRequest->getPathInfo() );
         }
@@ -708,7 +708,7 @@ class User extends RestController
             );
         }
 
-        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.usergrouplist' )
+        if ( $this->getMediaType() === 'application/vnd.ez.api.usergrouplist' )
         {
             return new Values\UserGroupList( $restUserGroups, $this->httpFoundationRequest->getPathInfo() );
         }
@@ -791,7 +791,7 @@ class User extends RestController
             );
         }
 
-        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.userlist' )
+        if ( $this->getMediaType() === 'application/vnd.ez.api.userlist' )
         {
             return new Values\UserList( $restUsers, $this->httpFoundationRequest->getPathInfo() );
         }
@@ -1032,22 +1032,5 @@ class User extends RestController
     {
         $pathParts = explode( '/', $path );
         return array_pop( $pathParts );
-    }
-
-    /**
-     * Extracts the requested media type from $request
-     *
-     * @return string
-     */
-    protected function getMediaType()
-    {
-        foreach ( $this->request->mimetype as $mimeType )
-        {
-            if ( preg_match( '(^([a-z0-9-/.]+)\+.*$)', $mimeType['value'], $matches ) )
-            {
-                return $matches[1];
-            }
-        }
-        return 'unknown/unknown';
     }
 }
