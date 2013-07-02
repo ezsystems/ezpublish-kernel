@@ -33,7 +33,6 @@ proxies like Varnish.
 2. Reverse proxy does a sub-request (emulated in the case of *HttpCache*).
 
     Sub-request **must** have the following headers:
-
     * `X-HTTP-Override: AUTHENTICATE`
     * `Accept: application/vnd.ez.UserHash+text`
     * Original cookie (mainly to keep trace of the sessionId)
