@@ -114,7 +114,7 @@ abstract class Kernel extends BaseKernel
         // HTTP_COOKIE header will be used as cache key to store the user hash.
         // This will avoid to boot the kernel each time to retrieve the user hash.
         $stashItem = $this->getCachePool()->getItem( 'ez_user_hash/' . $request->headers->get( 'cookie' ) );
-        $userHash = $stashItem->get();
+        $this->userHash = $stashItem->get();
         if ( $stashItem->isMiss() )
         {
             // Forward the request to the kernel to generate the user hash
@@ -127,12 +127,13 @@ abstract class Kernel extends BaseKernel
             {
                 trigger_error( 'Could not generate user hash ! Fallback to anonymous hash.', E_USER_WARNING );
             }
-            $stashItem->set( $resp->headers->get( 'X-User-Hash' ) );
+            $this->userHash = $resp->headers->get( 'X-User-Hash' );
+            $stashItem->set( $this->userHash );
             $this->generatingUserHash = false;
         }
 
         // Store the user hash in memory for sub-requests (processed in the same thread).
-        return $this->userHash = $userHash;
+        return $this->userHash;
     }
 
     /**
