@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\User;
 
 use eZ\Publish\SPI\HashGenerator as HashGeneratorInterface;
-use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\SPI\User\Identity;
 use eZ\Publish\SPI\User\IdentityAware;
 
@@ -25,11 +24,6 @@ class HashGenerator implements HashGeneratorInterface, IdentityAware
      * @var \eZ\Publish\SPI\User\Identity
      */
     protected $userIdentity;
-
-    /**
-     * @var \eZ\Publish\Core\Repository\Repository
-     */
-    protected $repository;
 
     /**
      * @var IdentityAware[]
