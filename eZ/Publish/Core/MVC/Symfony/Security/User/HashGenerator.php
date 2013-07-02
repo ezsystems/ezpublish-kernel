@@ -46,9 +46,20 @@ class HashGenerator implements HashGeneratorInterface, IdentityAware
         return $this->identityDefiners;
     }
 
+    /**
+     * @param Identity $identity
+     */
     public function setIdentity( Identity $identity )
     {
         $this->userIdentity = $identity;
+    }
+
+    /**
+     * @return Identity
+     */
+    public function getIdentity()
+    {
+        return $this->userIdentity;
     }
 
     /**
