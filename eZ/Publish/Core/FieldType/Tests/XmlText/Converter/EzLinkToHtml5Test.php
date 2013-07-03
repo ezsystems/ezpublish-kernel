@@ -26,6 +26,25 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
     /**
      * @return array
      */
+    public function providerLinkXmlSample()
+    {
+        return array(
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>This is an <link url="/test">object link</link>.</paragraph></section>',
+                '/test',
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>This is an <link url="/test" anchor_name="anchor">object link</link>.</paragraph></section>',
+                '/test#anchor',
+            ),
+        );
+    }
+
+    /**
+     * @return array
+     */
     public function providerObjectLinkXmlSample()
     {
         return array(
@@ -35,7 +54,16 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
                 104,
                 106,
                 'test',
-            )
+                'test',
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>This is an <link object_id="104" anchor_name="anchor">object link</link>.</paragraph></section>',
+                104,
+                106,
+                'test',
+                'test#anchor',
+            ),
         );
     }
 
@@ -49,8 +77,16 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>This is a <link node_id="106">node link</link>.</paragraph></section>',
                 106,
-                'test'
-            )
+                'test',
+                'test',
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>This is a <link node_id="106" anchor_name="anchor">node link</link>.</paragraph></section>',
+                106,
+                'test',
+                'test#anchor',
+            ),
         );
     }
 
@@ -160,12 +196,54 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
 
     /**
      * Test setting of urls on links with node_id attributes
+     * @dataProvider providerLinkXmlSample
+     * @param $xmlString
+     * @param $url
+     */
+    public function testLink( $xmlString, $url )
+    {
+        $xmlDoc = new \DOMDocument();
+        $xmlDoc->loadXML( $xmlString );
+
+        $contentService = $this->getMockContentService();
+        $locationService = $this->getMockLocationService();
+        $urlAliasService = $this->getMockUrlAliasService();
+
+        $contentService->expects( $this->never() )
+            ->method( $this->anything() );
+
+        $locationService->expects( $this->never() )
+            ->method( $this->anything() );
+
+        $urlAliasService->expects( $this->never() )
+            ->method( $this->anything() );
+
+        $repository = $this->getMockRepository(
+            $contentService,
+            $locationService,
+            $urlAliasService
+        );
+
+        $converter = new EzLinkToHtml5( $repository );
+        $converter->convert( $xmlDoc );
+
+        $links = $xmlDoc->getElementsByTagName( 'link' );
+        foreach ( $links as $link )
+        {
+            // assumes only one link, or all pointing to same url
+            $this->assertEquals( $url, $link->getAttribute( 'url' ) );
+        }
+    }
+
+    /**
+     * Test setting of urls on links with node_id attributes
      * @dataProvider providerLocationLinkXmlSample
      * @param $xmlString
      * @param $locationId
+     * @param $rawUrl
      * @param $url
      */
-    public function testLocationLink( $xmlString, $locationId, $url )
+    public function testLocationLink( $xmlString, $locationId, $rawUrl, $url )
     {
         $xmlDoc = new \DOMDocument();
         $xmlDoc->loadXML( $xmlString );
@@ -190,7 +268,7 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
         $urlAlias->expects( $this->once() )
             ->method( '__get' )
             ->with( $this->equalTo( 'path' ) )
-            ->will( $this->returnValue( $url ) );
+            ->will( $this->returnValue( $rawUrl ) );
 
         $repository = $this->getMockRepository(
             $contentService,
@@ -219,9 +297,10 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
      * @param $xmlString
      * @param $contentId
      * @param $locationId
+     * @param $rawUrl
      * @param $url
      */
-    public function testObjectLink( $xmlString, $contentId, $locationId, $url )
+    public function testObjectLink( $xmlString, $contentId, $locationId, $rawUrl, $url )
     {
         $xmlDoc = new \DOMDocument();
         $xmlDoc->loadXML( $xmlString );
@@ -263,7 +342,7 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
         $urlAlias->expects( $this->once() )
             ->method( '__get' )
             ->with( $this->equalTo( 'path' ) )
-            ->will( $this->returnValue( $url ) );
+            ->will( $this->returnValue( $rawUrl ) );
 
         $repository = $this->getMockRepository(
             $contentService,
