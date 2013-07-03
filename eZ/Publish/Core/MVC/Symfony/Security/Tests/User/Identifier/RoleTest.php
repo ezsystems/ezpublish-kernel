@@ -10,9 +10,9 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\User\Identifier;
 
 use eZ\Publish\Core\MVC\Symfony\Security\User\Identity;
-use eZ\Publish\Core\MVC\Symfony\Security\User\IdentityDefiner\RoleId as RoleIdDefiner;
+use eZ\Publish\Core\MVC\Symfony\Security\User\IdentityDefiner\Role as RoleDefiner;
 
-class RoleIdTest extends \PHPUnit_Framework_TestCase
+class RoleTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -74,6 +74,11 @@ class RoleIdTest extends \PHPUnit_Framework_TestCase
                         array(
                             'id' => $roleId2
                         )
+                    ),
+                    'limitation' => $this->generateLimitationMock(
+                        array(
+                            'limitationValues' => array( '/1/2', '/1/2/43' )
+                        )
                     )
                 )
             ),
@@ -82,6 +87,11 @@ class RoleIdTest extends \PHPUnit_Framework_TestCase
                     'role' => $this->generateRoleMock(
                         array(
                             'id' => $roleId3
+                        )
+                    ),
+                    'limitation' => $this->generateLimitationMock(
+                        array(
+                            'limitationValues' => array( 'foo', 'bar' )
                         )
                     )
                 )
@@ -95,11 +105,13 @@ class RoleIdTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $returnedRoleAssigments ) );
 
         $this->assertSame( array(), $identity->getInformation() );
-        $definer = new RoleIdDefiner( $this->repositoryMock );
+        $definer = new RoleDefiner( $this->repositoryMock );
         $definer->setIdentity( $identity );
         $identityInfo = $identity->getInformation();
         $this->assertArrayHasKey( 'roleIdList', $identityInfo );
-        $this->assertSame( "$roleId1.$roleId2.$roleId3", $identityInfo['roleIdList'] );
+        $this->assertSame( "$roleId1|$roleId2|$roleId3", $identityInfo['roleIdList'] );
+        $this->assertArrayHasKey( 'roleLimitationList', $identityInfo );
+        $this->assertSame( "$roleId2:/1/2|/1/2/43,$roleId3:foo|bar", $identityInfo['roleLimitationList'] );
     }
 
     private function generateRoleAssignmentMock( array $properties = array() )
@@ -114,6 +126,14 @@ class RoleIdTest extends \PHPUnit_Framework_TestCase
     {
         return $this
             ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\User\\Role' )
+            ->setConstructorArgs( array( $properties ) )
+            ->getMockForAbstractClass();
+    }
+
+    private function generateLimitationMock( array $properties = array() )
+    {
+        return $this
+            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\User\\Limitation\\RoleLimitation' )
             ->setConstructorArgs( array( $properties ) )
             ->getMockForAbstractClass();
     }

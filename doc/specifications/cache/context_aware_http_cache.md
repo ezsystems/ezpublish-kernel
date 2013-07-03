@@ -6,7 +6,7 @@ However this cache management is only available for anonymous users due to HTTP 
 
 It is of course possible to make HTTP cache vary thanks to the `Vary` response header, but this header can only
 be based on one of the request headers (e.g. `Accept-Encoding`).
-Thus, to make the cache vary on a specific context (e.g. a hash based on a user roles), this context must be present
+Thus, to make the cache vary on a specific context (e.g. a hash based on a user roles and limitations), this context must be present
 in the original request.
 
 ## Solution

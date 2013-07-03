@@ -5,7 +5,7 @@ parameters:
     ezpublish.security.authentication_provider.basic.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\BasicAuthProvider
     ezpublish.user.identity.class: eZ\Publish\Core\MVC\Symfony\Security\User\Identity
     ezpublish.user.hash_generator.class: eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator
-    ezpublish.user.identity_definer.role_id.class: eZ\Publish\Core\MVC\Symfony\Security\User\IdentityDefiner\RoleId
+    ezpublish.user.identity_definer.role_id.class: eZ\Publish\Core\MVC\Symfony\Security\User\IdentityDefiner\Role
 
 services:
     ezpublish.security.user_provider:
