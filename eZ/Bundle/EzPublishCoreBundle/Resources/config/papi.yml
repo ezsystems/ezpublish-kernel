@@ -9,21 +9,6 @@ parameters:
     ezpublish.signalslot.repository.class: eZ\Publish\Core\SignalSlot\Repository
     ezpublish.signalslot.slot_factory.class: eZ\Publish\Core\SignalSlot\SlotFactory\ContainerSlotFactory
     ezpublish.signalslot.signal_dispatcher.class: eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher
-    ezpublish.signalslot.signal_dispatcher.mapping:
-        eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionSignal: [ezpublish.signalslot.legacy_slot.assign_section]
-        eZ\Publish\Core\SignalSlot\Signal\ContentService\CopyContentSignal: [ezpublish.signalslot.legacy_slot.copy_content]
-        eZ\Publish\Core\SignalSlot\Signal\LocationService\CreateLocationSignal: [ezpublish.signalslot.legacy_slot.create_location]
-        eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteContentSignal: [ezpublish.signalslot.legacy_slot.delete_content]
-        eZ\Publish\Core\SignalSlot\Signal\LocationService\DeleteLocationSignal: [ezpublish.signalslot.legacy_slot.delete_location]
-        eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteVersionSignal: [ezpublish.signalslot.legacy_slot.delete_version]
-        eZ\Publish\Core\SignalSlot\Signal\LocationService\HideLocationSignal: [ezpublish.signalslot.legacy_slot.hide_location]
-        eZ\Publish\Core\SignalSlot\Signal\LocationService\MoveSubtreeSignal: [ezpublish.signalslot.legacy_slot.move_subtree]
-        eZ\Publish\Core\SignalSlot\Signal\ContentService\PublishVersionSignal: [ezpublish.signalslot.legacy_slot.publish_version]
-        eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\SetContentStateSignal: [ezpublish.signalslot.legacy_slot.set_content_state]
-        eZ\Publish\Core\SignalSlot\Signal\LocationService\SwapLocationSignal: [ezpublish.signalslot.legacy_slot.swap_location]
-        eZ\Publish\Core\SignalSlot\Signal\LocationService\UnhideLocationSignal: [ezpublish.signalslot.legacy_slot.unhide_location]
-        eZ\Publish\Core\SignalSlot\Signal\LocationService\UpdateLocationSignal: [ezpublish.signalslot.legacy_slot.update_location]
-        eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\PublishContentTypeDraftSignal: [ezpublish.signalslot.legacy_slot.publish_content_type_draft]
     ezpublish.signalslot.legacy_slot.assign_section.class: eZ\Publish\Core\SignalSlot\Slot\LegacyAssignSectionSlot
     ezpublish.signalslot.legacy_slot.copy_content.class: eZ\Publish\Core\SignalSlot\Slot\LegacyCopyContentSlot
     ezpublish.signalslot.legacy_slot.create_location.class: eZ\Publish\Core\SignalSlot\Slot\LegacyCreateLocationSlot
@@ -165,9 +150,7 @@ services:
 
     ezpublish.signalslot.signal_dispatcher:
         class: %ezpublish.signalslot.signal_dispatcher.class%
-        arguments:
-            - @ezpublish.signalslot.slot_factory
-            - %ezpublish.signalslot.signal_dispatcher.mapping%
+        arguments: [@ezpublish.signalslot.slot_factory]
 
     ezpublish.signalslot.slot_factory:
         class: %ezpublish.signalslot.slot_factory.class%
@@ -176,55 +159,83 @@ services:
     ezpublish.signalslot.legacy_slot.assign_section:
         class: %ezpublish.signalslot.legacy_slot.assign_section.class%
         arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: SectionService\AssignSectionSignal }
 
     ezpublish.signalslot.legacy_slot.copy_content:
         class: %ezpublish.signalslot.legacy_slot.copy_content.class%
         arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: ContentService\CopyContentSignal }
 
     ezpublish.signalslot.legacy_slot.create_location:
         class: %ezpublish.signalslot.legacy_slot.create_location.class%
         arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: LocationService\CreateLocationSignal }
 
     ezpublish.signalslot.legacy_slot.delete_content:
         class: %ezpublish.signalslot.legacy_slot.delete_content.class%
         arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: ContentService\DeleteContentSignal }
 
     ezpublish.signalslot.legacy_slot.delete_location:
         class: %ezpublish.signalslot.legacy_slot.delete_location.class%
         arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: LocationService\DeleteLocationSignal }
 
     ezpublish.signalslot.legacy_slot.delete_version:
         class: %ezpublish.signalslot.legacy_slot.delete_version.class%
         arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: ContentService\DeleteVersionSignal }
 
     ezpublish.signalslot.legacy_slot.hide_location:
         class: %ezpublish.signalslot.legacy_slot.hide_location.class%
         arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: LocationService\HideLocationSignal }
 
     ezpublish.signalslot.legacy_slot.move_subtree:
         class: %ezpublish.signalslot.legacy_slot.move_subtree.class%
         arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: LocationService\MoveSubtreeSignal }
 
     ezpublish.signalslot.legacy_slot.publish_version:
         class: %ezpublish.signalslot.legacy_slot.publish_version.class%
         arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: ContentService\PublishVersionSignal }
 
     ezpublish.signalslot.legacy_slot.set_content_state:
         class: %ezpublish.signalslot.legacy_slot.set_content_state.class%
         arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: ObjectStateService\SetContentStateSignal }
 
     ezpublish.signalslot.legacy_slot.swap_location:
         class: %ezpublish.signalslot.legacy_slot.swap_location.class%
         arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: LocationService\SwapLocationSignal }
 
     ezpublish.signalslot.legacy_slot.unhide_location:
         class: %ezpublish.signalslot.legacy_slot.unhide_location.class%
         arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: LocationService\UpdateLocationSignal }
 
     ezpublish.signalslot.legacy_slot.update_location:
         class: %ezpublish.signalslot.legacy_slot.update_location.class%
         arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: LocationService\UpdateLocationSignal }
 
     ezpublish.signalslot.legacy_slot.publish_content_type_draft:
         class: %ezpublish.signalslot.legacy_slot.publish_content_type_draft.class%
         arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: ContentTypeService\PublishContentTypeDraftSignal }

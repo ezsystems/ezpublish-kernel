@@ -44,7 +44,25 @@ class DefaultSignalDispatcherTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $slot ) );
 
         $dispatcher = new SignalSlot\SignalDispatcher\DefaultSignalDispatcher( $factory );
-        $dispatcher->attach( get_class( $signal ), 'my_slot' );
+        $dispatcher->attach( '\\' . get_class( $signal ), 'my_slot' );
+        $dispatcher->emit( $signal );
+    }
+
+    public function testGetSlotSingleSlotRelative()
+    {
+        $signal = new SignalSlot\Signal\ContentService\PublishVersionSignal();
+
+        $slot = $this->getMock( '\\eZ\\Publish\\Core\\SignalSlot\\Slot' );
+
+        $factory = $this->getMock( '\\eZ\\Publish\\Core\\SignalSlot\\SlotFactory' );
+        $factory
+            ->expects( $this->once() )
+            ->method( 'getSlot' )
+            ->with( 'my_slot' )
+            ->will( $this->returnValue( $slot ) );
+
+        $dispatcher = new SignalSlot\SignalDispatcher\DefaultSignalDispatcher( $factory );
+        $dispatcher->attach( 'ContentService\\PublishVersionSignal', 'my_slot' );
         $dispatcher->emit( $signal );
     }
 
@@ -67,8 +85,8 @@ class DefaultSignalDispatcherTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $slot ) );
 
         $dispatcher = new SignalSlot\SignalDispatcher\DefaultSignalDispatcher( $factory );
-        $dispatcher->attach( get_class( $signal ), 'my_slot' );
-        $dispatcher->attach( get_class( $signal ), 'my_second_slot' );
+        $dispatcher->attach( '\\' . get_class( $signal ), 'my_slot' );
+        $dispatcher->attach( '\\' . get_class( $signal ), 'my_second_slot' );
         $dispatcher->emit( $signal );
     }
 
@@ -89,7 +107,28 @@ class DefaultSignalDispatcherTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $slot ) );
 
         $dispatcher = new SignalSlot\SignalDispatcher\DefaultSignalDispatcher( $factory );
-        $dispatcher->attach( get_class( $signal ), 'my_slot' );
+        $dispatcher->attach( '\\' . get_class( $signal ), 'my_slot' );
+        $dispatcher->emit( $signal );
+    }
+
+    public function testEmitSignalSingleSlotRelative()
+    {
+        $signal = new SignalSlot\Signal\ContentService\PublishVersionSignal();
+
+        $slot = $this->getMock( '\\eZ\\Publish\\Core\\SignalSlot\\Slot' );
+        $slot
+            ->expects( $this->once() )
+            ->method( 'receive' )
+            ->with( $signal );
+
+        $factory = $this->getMock( '\\eZ\\Publish\\Core\\SignalSlot\\SlotFactory' );
+        $factory
+            ->expects( $this->any() )
+            ->method( 'getSlot' )
+            ->will( $this->returnValue( $slot ) );
+
+        $dispatcher = new SignalSlot\SignalDispatcher\DefaultSignalDispatcher( $factory );
+        $dispatcher->attach( 'ContentService\\PublishVersionSignal', 'my_slot' );
         $dispatcher->emit( $signal );
     }
 
@@ -110,8 +149,8 @@ class DefaultSignalDispatcherTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $slot ) );
 
         $dispatcher = new SignalSlot\SignalDispatcher\DefaultSignalDispatcher( $factory );
-        $dispatcher->attach( get_class( $signal ), 'my_slot' );
-        $dispatcher->attach( get_class( $signal ), 'my_second_slot' );
+        $dispatcher->attach( '\\' . get_class( $signal ), 'my_slot' );
+        $dispatcher->attach( '\\' . get_class( $signal ), 'my_second_slot' );
         $dispatcher->emit( $signal );
     }
 }

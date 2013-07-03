@@ -26,6 +26,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class DefaultSignalDispatcher extends SignalDispatcher
 {
     /**
+     * Relative namespace for internal signals.
+     */
+    const RELATIVE_SIGNAL_NAMESPACE = 'eZ\\Publish\\Core\\SignalSlot\\Signal';
+
+    /**
      * Slot factory
      *
      * @var \eZ\Publish\Core\SignalSlot\SlotFactory
@@ -86,6 +91,15 @@ class DefaultSignalDispatcher extends SignalDispatcher
      */
     public function attach( $signalIdentifier, $slotIdentifier )
     {
+        if ( $signalIdentifier[0] === '\\' )
+        {
+            $signalIdentifier = substr( $signalIdentifier, 1 );
+        }
+        else
+        {
+            $signalIdentifier = static::RELATIVE_SIGNAL_NAMESPACE . "\\$signalIdentifier";
+        }
+
         $this->mapping[$signalIdentifier][] = $slotIdentifier;
     }
 }
