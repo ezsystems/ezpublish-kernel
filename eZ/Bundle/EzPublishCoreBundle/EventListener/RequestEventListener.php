@@ -59,8 +59,8 @@ class RequestEventListener implements EventSubscriberInterface
                 array( 'onKernelRequestSetup', 190 ),
                 array( 'onKernelRequestForward', 10 ),
                 array( 'onKernelRequestRedirect', 0 ),
-                // onKernelRequestUserHash needs to be just after SiteAccessMatchListener (prio 45)
-                array( 'onKernelRequestUserHash', 44 ),
+                // onKernelRequestUserHash needs to be just after Firewall (prio 8), so that user is already logged in the repository.
+                array( 'onKernelRequestUserHash', 7 ),
             )
         );
     }
