@@ -21,7 +21,7 @@ abstract class Kernel extends BaseKernel
     /**
      * Hash for anonymous user.
      */
-    const ANONYMOUS_HASH = '917f736fbbbb1ae450a40be4c1dce175';
+    const ANONYMOUS_HASH = '38015b703d82206ebc01d17a39c727e5';
 
     /**
      * Accept header value to be used to request the user hash to the backend application.

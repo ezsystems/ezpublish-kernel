@@ -103,8 +103,8 @@ sub vcl_recv {
     if (req.request == "GET") {
         # Pre-authenticate request to get shared cache, even when authenticated
         if (req.http.Cookie !~ "is_logged_in=" ) {
-            # User don't have "is_logged_in" cookie => Anonymous hash
-            set req.http.X-User-Hash = "917f736fbbbb1ae450a40be4c1dce175";
+            # User don't have "is_logged_in" cookie => Set a hardcoded anonymous hash
+            set req.http.X-User-Hash = "38015b703d82206ebc01d17a39c727e5";
         } else {
             # User is authenticated => fetch user hash
             curl.header_add("X-HTTP-Override: AUTHENTICATE");
