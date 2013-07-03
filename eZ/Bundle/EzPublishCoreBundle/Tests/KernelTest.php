@@ -162,6 +162,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::getCachePool
+     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::getCacheDriver
      */
     public function testGetCachePool()
     {
@@ -169,7 +170,13 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $kernel = $this
             ->getMockBuilder( 'eZ\\Bundle\\EzPublishCoreBundle\\Kernel' )
             ->disableOriginalConstructor()
+            ->setMethods( array( 'getCacheDriver' ) )
             ->getMockForAbstractClass();
+
+        $kernel
+            ->expects( $this->once() )
+            ->method( 'getCacheDriver' )
+            ->will( $this->returnValue( $this->getMock( 'Stash\\Driver\\DriverInterface' ) ) );
 
         $cachePool = $kernel->getCachePool();
         $this->assertInstanceOf( 'Stash\\Pool', $cachePool );

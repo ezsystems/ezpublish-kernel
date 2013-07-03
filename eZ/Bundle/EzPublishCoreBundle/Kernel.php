@@ -137,7 +137,7 @@ abstract class Kernel extends BaseKernel
     }
 
     /**
-     * Returns the Stash cache pool.
+     * Returns the Stash cache pool (for early requests like user hash generation).
      *
      * @return \Stash\Pool
      */
@@ -148,10 +148,21 @@ abstract class Kernel extends BaseKernel
             return $this->cachePool;
         }
 
-        return $this->cachePool = new StashPool(
-            new FileSystem(
-                array( 'path' => $this->getCacheDir() . '/stash' )
-            )
+        return $this->cachePool = new StashPool( $this->getCacheDriver() );
+    }
+
+    /**
+     * Returns the cache driver to use for the Stash pool.
+     * Override this method if you prefer to use another driver (e.g. \Stash\Driver\Apc).
+     *
+     * @see getCachePool
+     *
+     * @return \Stash\Driver\DriverInterface
+     */
+    protected function getCacheDriver()
+    {
+        return new FileSystem(
+            array( 'path' => $this->getCacheDir() . '/stash' )
         );
     }
 }
