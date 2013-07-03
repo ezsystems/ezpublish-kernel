@@ -306,6 +306,58 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
+     * Test load function
+     *
+     * @dataProvider providerForTestLoad
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ContentHandler::load
+     * @group contentHandler
+     */
+    public function testLoad( $id, $version, $expectedVersion )
+    {
+        $contentHandler = $this->persistenceHandler->contentHandler();
+
+        $content = $contentHandler->load( $id, $version );
+
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content', $content );
+
+        $this->assertEquals( $id, $content->versionInfo->contentInfo->id );
+        $this->assertEquals( $expectedVersion, $content->versionInfo->versionNo );
+    }
+
+    public function providerForTestLoad()
+    {
+        return array(
+            array( 1, null, 1 ),
+            array( 11, null, 2 ),
+            array( 11, 1, 1 ),
+            array( 41, null, 1 ),
+            array( 41, 1, 1 ),
+        );
+    }
+
+    /**
+     * Test load function for NotFound
+     *
+     * @dataProvider providerForTestLoadNotFound
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ContentHandler::load
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @group contentHandler
+     */
+    public function testLoadNotFound( $id, $version, $expectedVersion )
+    {
+        $this->testLoad( $id, $version, $expectedVersion );
+    }
+
+    public function providerForTestLoadNotFound()
+    {
+        return array(
+            array( 10000, null, null ),
+            array( 11, 3, null ),
+            array( 41, 2, null ),
+        );
+    }
+
+    /**
      * Test loadVersionInfo function
      *
      * @covers \eZ\Publish\Core\Persistence\InMemory\ContentHandler::loadVersionInfo

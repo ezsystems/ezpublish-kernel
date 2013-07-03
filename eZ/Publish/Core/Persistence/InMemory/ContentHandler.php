@@ -382,8 +382,12 @@ class ContentHandler implements ContentHandlerInterface
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Handler
      */
-    public function load( $id, $version, $translations = null )
+    public function load( $id, $version = null, $translations = null )
     {
+        if ( $version === null )
+        {
+            $version = $this->backend->load( 'Content\\ContentInfo', $id )->currentVersionNo;
+        }
         $res = $this->backend->find(
             'Content',
             array( 'id' => $id )
