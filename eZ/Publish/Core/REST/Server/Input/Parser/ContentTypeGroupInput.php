@@ -82,8 +82,7 @@ class ContentTypeGroupInput extends Base
                 throw new Exceptions\Parser( "Missing '_href' attribute for User element in ContentTypeGroupInput." );
             }
 
-            $userValues = $this->requestParser->parse( 'user', $data['User']['_href'] );
-            $contentTypeGroupCreateStruct->creatorId = $userValues['user'];
+            $contentTypeGroupCreateStruct->creatorId = $this->requestParser->parseHref( $data['User']['_href'], 'userId' );
         }
 
         return $contentTypeGroupCreateStruct;

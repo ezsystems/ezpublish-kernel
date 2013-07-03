@@ -800,7 +800,7 @@ class ContentType extends RestController
 
         try
         {
-            $groupValues = $this->requestParser->parse( 'typegroup', $this->httpFoundationRequest->query->get( 'group' ) );
+            $groupValues = $this->requestParser->parse( '', $this->httpFoundationRequest->query->get( 'group' ) );
         }
         catch ( Exceptions\InvalidArgumentException $e )
         {
@@ -808,7 +808,7 @@ class ContentType extends RestController
             throw new BadRequestException( $e->getMessage() );
         }
 
-        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $groupValues['typegroup'] );
+        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $groupValues['contentTypeGroupId'] );
 
         $existingContentTypeGroups = $contentType->getContentTypeGroups();
         $contentTypeInGroup = false;

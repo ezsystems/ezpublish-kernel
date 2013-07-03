@@ -142,7 +142,7 @@ class Trash extends RestController
         $requestDestination = null;
         try
         {
-            $requestDestination = $this->request->destination;
+            $requestDestination = $this->httpFoundationRequest->headers->get( 'Destination' );
         }
         catch ( InvalidArgumentException $e )
         {
@@ -150,11 +150,13 @@ class Trash extends RestController
         }
 
         $parentLocation = null;
-        if ( $requestDestination !== null )
+        if ( $this->httpFoundationRequest->headers->has( 'Destination' ) )
         {
-            $destinationValues = $this->requestParser->parse( 'location', $requestDestination );
+            $destinationValues = $this->requestParser->parse(
+                '', $this->httpFoundationRequest->headers->get( 'Destination' )
+            );
 
-            $locationPath = $destinationValues['location'];
+            $locationPath = $destinationValues['locationPath'];
             $locationPathParts = explode( '/', $locationPath );
 
             try

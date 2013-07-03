@@ -644,7 +644,7 @@ class User extends RestController
         try
         {
             $destinationGroupLocation = $this->locationService->loadLocation(
-                $this->extractLocationIdFromPath( $destinationParts['group'] )
+                $this->extractLocationIdFromPath( $destinationParts['groupPath'] )
             );
         }
         catch ( NotFoundException $e )

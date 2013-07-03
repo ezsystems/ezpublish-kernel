@@ -175,11 +175,13 @@ class FieldDefinitionUpdate extends Base
      */
     protected function getFieldDefinition( array $data )
     {
-        $urlValues = $this->requestParser->parse( 'typeFieldDefinitionDraft', $data["__url"] );
-        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
+        $contentTypeId = $this->requestParser->parseHref( $data["__url"], 'contentTypeId' );
+        $fieldDefinitionId = $this->requestParser->parseHref( $data["__url"], 'fieldDefinitionId' );
+
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $contentTypeId );
         foreach ( $contentTypeDraft->getFieldDefinitions() as $fieldDefinition )
         {
-            if ( $fieldDefinition->id == $urlValues['fieldDefinition'] )
+            if ( $fieldDefinition->id == $fieldDefinitionId )
             {
                 return $fieldDefinition;
             }

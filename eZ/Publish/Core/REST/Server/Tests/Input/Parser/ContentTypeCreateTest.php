@@ -326,4 +326,11 @@ class ContentTypeCreateTest extends BaseTest
             )
         );
     }
+
+    protected function getParseHrefExpectationsMap()
+    {
+        return array(
+            array( '/user/users/14', 'userId', 14 )
+        );
+    }
 }

@@ -183,6 +183,7 @@ XML;
         $request->setContent( $xml );
 
         $response = $this->sendHttpRequest( $request );
+
         self::assertHttpResponseCodeEquals( $response, 201 );
 
         $content = json_decode( $response->getContent(), true );

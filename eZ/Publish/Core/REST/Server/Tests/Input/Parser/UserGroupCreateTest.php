@@ -430,4 +430,12 @@ class UserGroupCreateTest extends BaseTest
             )
         );
     }
+
+    protected function getParseHrefExpectationsMap()
+    {
+        return array(
+            array( '/content/types/3', 'contentTypeId', 3 ),
+            array( '/content/sections/4', 'sectionId', 4 )
+        );
+    }
 }

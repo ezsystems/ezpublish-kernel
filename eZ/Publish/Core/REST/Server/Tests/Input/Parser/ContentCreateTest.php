@@ -630,6 +630,15 @@ class ContentCreateTest extends BaseTest
         return $contentTypeServiceMock;
     }
 
+    protected function getParseHrefExpectationsMap()
+    {
+        return array(
+            array( '/content/types/13', 'contentTypeId', 13 ),
+            array( '/content/sections/4', 'sectionId', 4 ),
+            array( '/user/users/14', 'userId', 14 ),
+        );
+    }
+
     /**
      * Get the content type used in ContentCreate parser
      *

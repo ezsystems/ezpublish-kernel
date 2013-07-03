@@ -39,22 +39,24 @@ class ContentUpdate extends Base
         {
             try
             {
-                $matches = $this->requestParser->parse( 'section', $data['Section']['_href'] );
+                $parsedData['sectionId'] = $this->requestParser->parseHref( $data['Section']['_href'], 'sectionId' );
             }
             catch ( Exceptions\InvalidArgumentException $e )
             {
                 throw new Exceptions\Parser( 'Invalid format for <Section> reference in <ContentUpdate>.' );
             }
-            $parsedData['sectionId'] = $matches['section'];
         }
 
         if ( array_key_exists( 'Owner', $data ) && is_array( $data['Owner'] ) && isset( $data['Owner']['_href'] ) )
         {
-            if ( !preg_match( '(/user/users/(?P<value>[^/]+)$)', $data['Owner']['_href'], $matches ) )
+            try
+            {
+                $parsedData['ownerId'] = $this->requestParser->parseHref( $data['Owner']['_href'], 'userId' );
+            }
+            catch ( Exceptions\InvalidArgumentException $e )
             {
                 throw new Exceptions\Parser( 'Invalid format for <Owner> reference in <ContentUpdate>.' );
             }
-            $parsedData['ownerId'] = $matches['value'];
         }
 
         if ( array_key_exists( 'mainLanguageCode', $data ) )
@@ -64,11 +66,15 @@ class ContentUpdate extends Base
 
         if ( array_key_exists( 'MainLocation', $data ) )
         {
-            if ( !preg_match( '(/content/locations(?P<value>/[0-9/]+)$)', $data['MainLocation']['_href'], $matches ) )
+            try
+            {
+                $parsedData['mainLocationId'] = $this->requestParser->parseHref( $data['MainLocation']['_href'], 'locationPath' );
+                $parsedData['mainLocationId'] = '/' . $parsedData['mainLocationId'];
+            }
+            catch ( Exceptions\InvalidArgumentException $e )
             {
                 throw new Exceptions\Parser( 'Invalid format for <MainLocation> reference in <ContentUpdate>.' );
             }
-            $parsedData['mainLocationId'] = $matches['value'];
         }
 
         if ( array_key_exists( 'alwaysAvailable', $data ) )

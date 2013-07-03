@@ -60,7 +60,7 @@ class RoleAssignInput extends Base
 
         try
         {
-            $matches = $this->requestParser->parse( 'role', $data['Role']['_href'] );
+            $roleId = $this->requestParser->parseHref( $data['Role']['_href'], 'roleId' );
         }
         catch ( Exceptions\InvalidArgumentException $e )
         {
@@ -74,6 +74,6 @@ class RoleAssignInput extends Base
             $limitation = $this->parserTools->parseLimitation( $data['limitation'] );
         }
 
-        return new RoleAssignment( $matches['role'], $limitation );
+        return new RoleAssignment( $roleId, $limitation );
     }
 }

@@ -14,14 +14,11 @@ use eZ\Publish\Core\REST\Server\Tests\Functional\TestCase as RESTFunctionalTestC
 class TrashTest extends RESTFunctionalTestCase
 {
     /**
-     * @covers MOVE /content/locations/{locationPath} Destination:/content/trash
-     * @return string A trash item ID
+     * @return string The created trash item href
      */
     public function testCreateTrashItem()
     {
-        $trashHref = $this->createTrashItem( 'testCreateTrashItem' );
-        $this->addCreatedElement( $trashHref );
-        return $trashHref;
+        return $this->createTrashItem( 'testCreateTrashItem' );
     }
 
     /**
@@ -74,6 +71,22 @@ class TrashTest extends RESTFunctionalTestCase
         $response = $this->sendHttpRequest(
             $this->createHttpRequest( "MOVE", $trashItemId )
         );
+
+        self::assertHttpResponseCodeEquals( $response, 201 );
+        self::assertHttpResponseHasHeader( $response, 'Location' );
+    }
+
+    /**
+     * @covers MOVE /content/trash/{trashItemId} Destination:/content/locations/{locationPath}
+     */
+    public function testRestoreTrashItemWithDestination()
+    {
+        $trashItemHref = $this->createTrashItem( __FUNCTION__ );
+
+        $request = $this->createHttpRequest( "MOVE", $trashItemHref );
+        $request->addHeader( 'Destination: /content/locations/1/2' );
+
+        $response = $this->sendHttpRequest( $request );
 
         self::assertHttpResponseCodeEquals( $response, 201 );
         self::assertHttpResponseHasHeader( $response, 'Location' );

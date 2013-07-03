@@ -113,9 +113,8 @@ class ContentCreate extends Base
             throw new Exceptions\Parser( "Missing 'mainLanguageCode' element for ContentCreate." );
         }
 
-        $contentTypeValues = $this->requestParser->parse( 'type', $data['ContentType']['_href'] );
         $contentType = $this->contentTypeService->loadContentType(
-            $contentTypeValues['type']
+            $this->requestParser->parseHref( $data['ContentType']['_href'], 'contentTypeId' )
         );
 
         $contentCreateStruct = $this->contentService->newContentCreateStruct( $contentType, $data['mainLanguageCode'] );
@@ -127,8 +126,7 @@ class ContentCreate extends Base
                 throw new Exceptions\Parser( "Missing '_href' attribute for Section element in ContentCreate." );
             }
 
-            $sectionValues = $this->requestParser->parse( 'section', $data['Section']['_href'] );
-            $contentCreateStruct->sectionId = $sectionValues['section'];
+            $contentCreateStruct->sectionId = $this->requestParser->parseHref( $data['Section']['_href'], 'sectionId' );;
         }
 
         if ( array_key_exists( 'alwaysAvailable', $data ) )
@@ -153,8 +151,7 @@ class ContentCreate extends Base
                 throw new Exceptions\Parser( "Missing '_href' attribute for User element in ContentCreate." );
             }
 
-            $userValues = $this->requestParser->parse( 'user', $data['User']['_href'] );
-            $contentCreateStruct->ownerId = $userValues['user'];
+            $contentCreateStruct->ownerId = $this->requestParser->parseHref( $data['User']['_href'], 'userId' );
         }
 
         if ( !array_key_exists( 'fields', $data ) || !is_array( $data['fields'] ) || !is_array( $data['fields']['field'] ) )

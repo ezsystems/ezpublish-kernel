@@ -14,7 +14,7 @@ parameters:
     ezpublish_rest.controller.url_alias.class: eZ\Publish\Core\REST\Server\Controller\URLAlias
 
     ezpublish_rest.factory.class: eZ\Bundle\EzPublishRestBundle\ApiLoader\Factory
-    ezpublish_rest.request_parser.class: eZ\Publish\Core\REST\Common\RequestParser\Prefixed
+    ezpublish_rest.request_parser.class: eZ\Bundle\EzPublishRestBundle\RequestParser\Router
     ezpublish_rest.parser_tools.class: eZ\Publish\Core\REST\Common\Input\ParserTools
     ezpublish_rest.field_type_parser.class: eZ\Publish\Core\REST\Common\Input\FieldTypeParser
     ezpublish_rest.listener.class: eZ\Bundle\EzPublishRestBundle\EventListener\RestListener
@@ -66,12 +66,11 @@ services:
     ezpublish_rest.request_parser:
         class: %ezpublish_rest.request_parser.class%
         arguments:
-            # Note: everything related to prefix will be removed when UrlGeneration is handled by Symfony instead
             - %ezpublish_rest.path_prefix%
+            - @router
 
     ezpublish_rest.parser_tools:
         class: %ezpublish_rest.parser_tools.class%
-
 
     ezpublish_rest.field_type_parser:
         class: %ezpublish_rest.field_type_parser.class%

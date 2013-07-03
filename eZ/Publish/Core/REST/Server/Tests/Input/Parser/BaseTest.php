@@ -19,14 +19,14 @@ use eZ\Publish\Core\REST\Server\Tests\BaseTest as ParentBaseTest;
 abstract class BaseTest extends ParentBaseTest
 {
     /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
+     * @var \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $parsingDispatcherMock;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\RequestParser\eZPublish
+     * @var \eZ\Publish\Core\REST\Common\RequestParser|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $requestParser;
+    protected $requestParserMock;
 
     /**
      * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
@@ -54,17 +54,50 @@ abstract class BaseTest extends ParentBaseTest
     }
 
     /**
+     * Returns the parseHref invocation expectations, as an array of:
+     * 0. route to parse the href from (/content/objects/59
+     * 1. attribute name we are looking for (contentId)
+     * 2. expected return value (59)*
+     * @return array
+     */
+    protected function getParseHrefExpectationsMap()
+    {
+        return array();
+    }
+
+    /**
      * Get the Request parser
      *
-     * @return \eZ\Publish\Core\REST\Common\RequestParser\eZPublish
+     * @return \eZ\Publish\Core\REST\Common\RequestParser|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getRequestParser()
+    protected function getRequestParserMock()
     {
-        if ( !isset( $this->requestParser ) )
+        if ( !isset( $this->requestParserMock ) )
         {
-            $this->requestParser = new RequestParser\eZPublish;
+            $parseHrefMap =& $this->getParseHrefExpectationsMap();
+            $callback = function( $href, $attribute ) use ( $parseHrefMap )
+            {
+                foreach ( $parseHrefMap as $map )
+                {
+                    if ( $map[0] == $href && $map[1] == $attribute )
+                    {
+                        if ( $map[2] instanceof \Exception )
+                            throw $map[2];
+                        else
+                            return $map[2];
+                    }
+                }
+                return null;
+            };
+
+            $this->requestParserMock = $this->getMock( 'eZ\\Publish\\Core\\REST\\Common\\RequestParser' );
+
+            $this->requestParserMock
+                ->expects( $this->any() )
+                ->method( 'parseHref' )
+                ->will( $this->returnCallback( $callback ) );
         }
-        return $this->requestParser;
+        return $this->requestParserMock;
     }
 
     /**
@@ -84,7 +117,7 @@ abstract class BaseTest extends ParentBaseTest
     protected function getParser()
     {
         $parser = $this->internalGetParser();
-        $parser->setRequestParser( $this->getRequestParser() );
+        $parser->setRequestParser( $this->getRequestParserMock() );
         return $parser;
     }
 

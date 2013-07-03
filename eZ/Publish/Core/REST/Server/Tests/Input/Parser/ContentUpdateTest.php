@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
+use eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Server\Input\Parser\ContentUpdate as ContentUpdateParser;
 use eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
 use eZ\Publish\Core\REST\Common\Exceptions\Parser;
@@ -158,9 +159,9 @@ class ContentUpdateTest extends BaseTest
         return new RestContentMetadataUpdateStruct(
             array(
                 'mainLanguageCode' => 'eng-GB',
-                'sectionId'        => '23',
+                'sectionId'        => 23,
                 'mainLocationId'   => '/1/2/55',
-                'ownerId'          => '42',
+                'ownerId'          => 42,
                 'alwaysAvailable'  => false,
                 'remoteId'         => '7e7afb135e50490a281dafc0aafb6dac',
                 'modificationDate' => new DateTime( '19/Sept/2012:14:05:00 +0200' ),
@@ -184,7 +185,20 @@ class ContentUpdateTest extends BaseTest
             'alwaysAvailable'  => 'false',
             'remoteId'         => '7e7afb135e50490a281dafc0aafb6dac',
             'modificationDate' => '19/Sept/2012:14:05:00 +0200',
-            'publishDate'    => '19/Sept/2012:14:05:00 +0200'
+            'publishDate'      => '19/Sept/2012:14:05:00 +0200'
+        );
+    }
+
+    protected function getParseHrefExpectationsMap()
+    {
+        return array(
+            array( '/content/sections/23', 'sectionId', 23 ),
+            array( '/user/users/42', 'userId', 42 ),
+            array( '/content/locations/1/2/55', 'locationPath', '1/2/55' ),
+
+            array( '/invalid/section/uri', 'sectionId', new InvalidArgumentException( 'Invalid format for <Section> reference in <ContentUpdate>.' ) ),
+            array( '/invalid/section/uri', 'userId', new InvalidArgumentException( 'Invalid format for <Owner> reference in <ContentUpdate>.' ) ),
+            array( '/invalid/section/uri', 'locationPath', new InvalidArgumentException( 'Invalid format for <MainLocation> reference in <ContentUpdate>.' ) ),
         );
     }
 }

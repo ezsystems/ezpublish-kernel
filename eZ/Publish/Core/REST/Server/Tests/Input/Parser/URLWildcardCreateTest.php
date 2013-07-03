@@ -97,7 +97,7 @@ class URLWildcardCreateTest extends BaseTest
     protected function internalGetParser()
     {
         $parser = new URLWildcardCreate( $this->getParserTools() );
-        $parser->setRequestParser( $this->getRequestParser() );
+        $parser->setRequestParser( $this->getRequestParserMock() );
         return $parser;
     }
 }

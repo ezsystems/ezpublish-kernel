@@ -108,8 +108,7 @@ class UserUpdate extends Base
                 throw new Exceptions\Parser( "Missing '_href' attribute for Section element in UserUpdate." );
             }
 
-            $sectionValues = $this->requestParser->parse( 'section', $data['Section']['_href'] );
-            $parsedData['sectionId'] = $sectionValues['section'];
+            $parsedData['sectionId'] = $this->requestParser->parseHref( $data['Section']['_href'], 'sectionId' );
         }
 
         if ( array_key_exists( 'remoteId', $data ) )
@@ -119,7 +118,7 @@ class UserUpdate extends Base
 
         if ( array_key_exists( 'fields', $data ) )
         {
-            $urlValues = $this->requestParser->parse( 'user', $data['__url'] );
+            $userId = $this->requestParser->parseHref( $data['__url'], 'userId' );
 
             if ( !is_array( $data['fields'] ) || !array_key_exists( 'field', $data['fields'] ) || !is_array( $data['fields']['field'] ) )
             {
@@ -139,7 +138,7 @@ class UserUpdate extends Base
                     throw new Exceptions\Parser( "Missing 'fieldValue' element for '{$fieldData['fieldDefinitionIdentifier']}' identifier in UserUpdate." );
                 }
 
-                $fieldValue = $this->fieldTypeParser->parseFieldValue( $urlValues['user'], $fieldData['fieldDefinitionIdentifier'], $fieldData['fieldValue'] );
+                $fieldValue = $this->fieldTypeParser->parseFieldValue( $userId, $fieldData['fieldDefinitionIdentifier'], $fieldData['fieldValue'] );
 
                 $languageCode = null;
                 if ( array_key_exists( 'languageCode', $fieldData ) )

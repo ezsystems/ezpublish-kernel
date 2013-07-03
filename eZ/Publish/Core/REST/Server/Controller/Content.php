@@ -38,7 +38,7 @@ class Content extends RestController
      */
     public function redirectContent()
     {
-        if ( !$this->httpFoundationRequest->query->has( 'remoteId' ) )
+        if ( !$this->httpFoundationRequestT->query->has( 'remoteId' ) )
         {
             throw new BadRequestException( "'remoteId' parameter is required." );
         }

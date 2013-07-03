@@ -110,4 +110,11 @@ class ContentTypeGroupInputTest extends BaseTest
 
         return $contentTypeServiceMock;
     }
+
+    protected function getParseHrefExpectationsMap()
+    {
+        return array(
+            array( '/user/users/14', 'userId', 14 )
+        );
+    }
 }
