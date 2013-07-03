@@ -138,7 +138,7 @@ class DefaultSignalDispatcherTest extends \PHPUnit_Framework_TestCase
 
         $slot = $this->getMock( '\\eZ\\Publish\\Core\\SignalSlot\\Slot' );
         $slot
-            ->expects( $this->exactly( 2 ) )
+            ->expects( $this->exactly( 3 ) )
             ->method( 'receive' )
             ->with( $signal );
 
@@ -151,6 +151,8 @@ class DefaultSignalDispatcherTest extends \PHPUnit_Framework_TestCase
         $dispatcher = new SignalSlot\SignalDispatcher\DefaultSignalDispatcher( $factory );
         $dispatcher->attach( '\\' . get_class( $signal ), 'my_slot' );
         $dispatcher->attach( '\\' . get_class( $signal ), 'my_second_slot' );
+        // Registering a wildcard slot. It is supposed to receive all the signals, whatever they are.
+        $dispatcher->attach( '*', 'my_wildcard_slot' );
         $dispatcher->emit( $signal );
     }
 }
