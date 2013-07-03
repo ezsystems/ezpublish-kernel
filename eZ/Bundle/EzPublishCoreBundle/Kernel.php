@@ -128,7 +128,7 @@ abstract class Kernel extends BaseKernel
                 trigger_error( 'Could not generate user hash ! Fallback to anonymous hash.', E_USER_WARNING );
             }
             $this->userHash = $resp->headers->get( 'X-User-Hash' );
-            $stashItem->set( $this->userHash );
+            $stashItem->set( $this->userHash, $this->getUserHashCacheTtl() );
             $this->generatingUserHash = false;
         }
 
@@ -164,5 +164,15 @@ abstract class Kernel extends BaseKernel
         return new FileSystem(
             array( 'path' => $this->getCacheDir() . '/stash' )
         );
+    }
+
+    /**
+     * Returns the number of seconds the user hash is considered fresh in cache.
+     *
+     * @return int
+     */
+    protected function getUserHashCacheTtl()
+    {
+        return 600;
     }
 }

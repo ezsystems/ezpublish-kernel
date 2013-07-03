@@ -78,7 +78,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $cacheItem
             ->expects( $this->once() )
             ->method( 'set' )
-            ->with( $hash );
+            ->with( $hash, 600 );
         $cachePool = $this->getMock( 'Stash\\Pool' );
         $cachePool
             ->expects( $this->once() )
