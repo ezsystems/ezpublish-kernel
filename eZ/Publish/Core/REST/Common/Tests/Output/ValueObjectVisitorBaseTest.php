@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\REST\Common\Tests\Output;
 use eZ\Publish\Core\REST\Server\Tests;
 
 use eZ\Publish\Core\REST\Common\Output\Generator;
-use eZ\Publish\Core\REST\Common\RequestParser\eZPublish as RequestParser;
+use eZ\Publish\Core\REST\Common\RequestParser as RequestParser;
 
 abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
 {
@@ -115,13 +115,13 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     }
 
     /**
-     * @return \eZ\Publish\Core\REST\Common\RequestParser
+     * @return \eZ\Publish\Core\REST\Common\RequestParser|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getRequestParser()
     {
         if ( !isset( $this->requestParser ) )
         {
-            $this->requestParser = new RequestParser;
+            $this->requestParser = $this->getMock( 'eZ\\Publish\\Core\\REST\\Common\\RequestParser' );
         }
         return $this->requestParser;
     }
