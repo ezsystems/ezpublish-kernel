@@ -24,7 +24,7 @@ abstract class BaseMatcherFactoryTest extends PHPUnit_Framework_TestCase
         $resolverMock
         ->expects( $this->atLeastOnce() )
         ->method( 'getParameter' )
-        ->with( $this->logicalOr( 'location_view', 'content_view' ) )
+        ->with( $this->logicalOr( 'location_view', 'content_view', 'block_view' ) )
         ->will(
             $this->returnValue(
                 array(
@@ -65,6 +65,19 @@ abstract class BaseMatcherFactoryTest extends PHPUnit_Framework_TestCase
     {
         return $this
             ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' )
+            ->setConstructorArgs( array( $properties ) )
+            ->getMockForAbstractClass();
+    }
+
+    /**
+     * @param array $properties
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getBlockMock( array $properties = array() )
+    {
+        return $this
+            ->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Block' )
             ->setConstructorArgs( array( $properties ) )
             ->getMockForAbstractClass();
     }
