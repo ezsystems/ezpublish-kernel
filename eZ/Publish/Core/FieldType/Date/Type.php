@@ -134,7 +134,7 @@ class Type extends FieldType
      *
      * @return void
      */
-    public function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure( BaseValue $value )
     {
         if ( !$value->date instanceof DateTime )
         {

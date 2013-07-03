@@ -243,7 +243,7 @@ class Type extends FieldType
      *
      * @return void
      */
-    public function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure( BaseValue $value )
     {
         if ( !is_string( $value->text ) )
         {
