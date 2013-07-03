@@ -88,8 +88,9 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertNull( $this->requestEventListener->onKernelRequestUserHash( $this->event ) );
-        $this->assertFalse( $this->event->hasResponse() );
-        $this->assertFalse( $this->event->isPropagationStopped() );
+        $this->assertTrue( $this->event->hasResponse() );
+        $this->assertTrue( $this->event->isPropagationStopped() );
+        $this->assertSame( 400, $this->event->getResponse()->getStatusCode() );
     }
 
     /**

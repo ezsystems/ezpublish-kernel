@@ -182,7 +182,11 @@ class RequestEventListener implements EventSubscriberInterface
 
         // We must have a session at that point since we're supposed to be connected
         if ( !$request->hasSession() )
+        {
+            $event->setResponse( new Response( '', 400 ) );
+            $event->stopPropagation();
             return;
+        }
 
         /** @var $hashGenerator \eZ\Publish\SPI\HashGenerator */
         $hashGenerator = $this->container->get( 'ezpublish.user.hash_generator' );
