@@ -72,11 +72,15 @@ class Router implements RequestParser
         }
         catch ( \Symfony\Component\Routing\Exception\ResourceNotFoundException $e )
         {
+            // Note: this probably won't occur in real life because of the legacy matcher
             throw new InvalidArgumentException( "No route matched '$href''" );
         }
 
+        if ( $parsingResult['_route'] === 'ez_legacy' )
+            throw new InvalidArgumentException( "No route matched '$href'" );
+
         if ( !isset( $parsingResult[$attribute] ) )
-            throw new InvalidArgumentException( "No such attribute '$attribute' in matched route" );
+            throw new InvalidArgumentException( "No such attribute '$attribute' in route matched from $href\n" . print_r( $parsingResult, true ) );
 
         return $parsingResult[$attribute];
     }

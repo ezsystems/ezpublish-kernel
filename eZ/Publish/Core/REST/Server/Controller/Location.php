@@ -172,9 +172,10 @@ class Location extends RestController
             $this->extractLocationIdFromPath( $locationPath )
         );
 
-        $destinationValues = $this->requestParser->parse( 'location', $this->request->destination );
         $destinationLocation = $this->locationService->loadLocation(
-            $this->extractLocationIdFromPath( $destinationValues['location'] )
+            $this->extractLocationIdFromPath(
+                $this->requestParser->parseHref( $this->request->destination, 'locationPath' )
+            )
         );
 
         $newLocation = $this->locationService->copySubtree( $location, $destinationLocation );
@@ -207,15 +208,16 @@ class Location extends RestController
         try
         {
             // First check to see if the destination is for moving within another subtree
-            $destinationValues = $this->requestParser->parse( 'location', $this->request->destination );
-            $destinationLocationId = $this->extractLocationIdFromPath( $destinationValues['location'] );
+            $destinationLocationId = $this->extractLocationIdFromPath(
+                $this->requestParser->parseHref( $this->request->destination, 'locationPath' )
+            );
         }
         catch ( Exceptions\InvalidArgumentException $e )
         {
             try
             {
                 // If parsing of destination fails, let's try to see if destination is trash
-                $this->requestParser->parse( 'trashItems', $this->request->destination );
+                $this->requestParser->parseHref( $this->request->destination, 'locationPath' );
             }
             catch ( Exceptions\InvalidArgumentException $e )
             {
@@ -265,8 +267,11 @@ class Location extends RestController
         $locationId = $this->extractLocationIdFromPath( $locationPath );
         $location = $this->locationService->loadLocation( $locationId );
 
-        $destinationValues = $this->requestParser->parse( 'location', $this->request->destination );
-        $destinationLocation = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $destinationValues['location'] ) );
+        $destinationLocation = $this->locationService->loadLocation(
+            $this->extractLocationIdFromPath(
+                $this->requestParser->parseHref( $this->request->destination, 'locationPath' )
+            )
+        );
 
         $this->locationService->swapLocation( $location, $destinationLocation );
 

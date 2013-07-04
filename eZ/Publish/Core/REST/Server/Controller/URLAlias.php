@@ -114,8 +114,10 @@ class URLAlias extends RestController
 
         if ( $urlAliasCreate['_type'] === 'LOCATION' )
         {
-            $locationUrlValues = $this->requestParser->parse( 'location', $urlAliasCreate['location']['_href'] );
-            $locationPathParts = explode( '/', $locationUrlValues['locationPath'] );
+            $locationPathParts = explode(
+                '/',
+                $this->requestParser->parseHref( $urlAliasCreate['location']['_href'], 'locationPath' )
+            );
 
             $location = $this->locationService->loadLocation(
                 array_pop( $locationPathParts )

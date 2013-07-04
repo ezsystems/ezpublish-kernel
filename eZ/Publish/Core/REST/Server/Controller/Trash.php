@@ -152,12 +152,12 @@ class Trash extends RestController
         $parentLocation = null;
         if ( $this->httpFoundationRequest->headers->has( 'Destination' ) )
         {
-            $destinationValues = $this->requestParser->parse(
-                '', $this->httpFoundationRequest->headers->get( 'Destination' )
+            $locationPathParts = explode(
+                '/',
+                $this->requestParser->parseHref(
+                    $this->httpFoundationRequest->headers->get( 'Destination' ), 'locationPath'
+                )
             );
-
-            $locationPath = $destinationValues['locationPath'];
-            $locationPathParts = explode( '/', $locationPath );
 
             try
             {

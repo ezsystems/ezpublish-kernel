@@ -454,9 +454,9 @@ class User extends RestController
      */
     public function loadUsersAssignedToRole()
     {
-        $roleValues = $this->requestParser->parse( 'role', $this->httpFoundationRequest->query->get( 'roleId' ) );
-
-        $role = $this->roleService->loadRole( $roleValues['role'] );
+        $role = $this->roleService->loadRole(
+            $this->requestParser->parseHref( $this->httpFoundationRequest->query->get( 'roleId' ), 'roleId' )
+        );
         $roleAssignments = $this->roleService->getRoleAssignments( $role );
 
         $restUsers = array();
@@ -576,9 +576,9 @@ class User extends RestController
      */
     public function loadUserGroupsAssignedToRole()
     {
-        $roleValues = $this->requestParser->parse( 'role', $this->httpFoundationRequest->query->get( 'roleId' ) );
-
-        $role = $this->roleService->loadRole( $roleValues['role'] );
+        $role = $this->roleService->loadRole(
+            $this->requestParser->parseHref( $this->httpFoundationRequest->query->get( 'roleId' ), 'roleId' )
+        );
         $roleAssignments = $this->roleService->getRoleAssignments( $role );
 
         $restUserGroups = array();
@@ -639,12 +639,12 @@ class User extends RestController
             $userGroupLocation->contentId
         );
 
-        $destinationParts = $this->requestParser->parse( 'group', $this->request->destination );
+        $locationPath = $this->requestParser->parseHref( $this->request->destination, 'groupPath' );
 
         try
         {
             $destinationGroupLocation = $this->locationService->loadLocation(
-                $this->extractLocationIdFromPath( $destinationParts['groupPath'] )
+                $this->extractLocationIdFromPath( $locationPath )
             );
         }
         catch ( NotFoundException $e )
