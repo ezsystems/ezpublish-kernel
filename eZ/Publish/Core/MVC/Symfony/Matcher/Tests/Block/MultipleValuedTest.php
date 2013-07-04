@@ -10,8 +10,9 @@
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\Block;
 
 use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
+use PHPUnit_Framework_TestCase;
 
-class MultipleValuedTest extends \PHPUnit_Framework_TestCase
+class MultipleValuedTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider matchingConfigProvider

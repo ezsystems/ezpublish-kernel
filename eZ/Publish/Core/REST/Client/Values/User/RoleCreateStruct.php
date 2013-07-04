@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Values\User;
 
 use eZ\Publish\API\Repository\Values;
+use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\User\RoleCreateStruct}
@@ -17,7 +18,7 @@ use eZ\Publish\API\Repository\Values;
  *
  * @see \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
  */
-class RoleCreateStruct extends \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
+class RoleCreateStruct extends APIRoleCreateStruct
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[]

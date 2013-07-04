@@ -12,8 +12,9 @@ namespace eZ\Publish\Core\FieldType\Tests\Page;
 use eZ\Publish\Core\FieldType\Page\PageService;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\FieldType\Page\Parts\Item;
+use PHPUnit_Framework_TestCase;
 
-class PageServiceTest extends \PHPUnit_Framework_TestCase
+class PageServiceTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Class to instantiate to get the page service.

@@ -13,8 +13,9 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound\LogicalOr;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
+use PHPUnit_Framework_TestCase;
 
-class CompoundOrTest extends \PHPUnit_Framework_TestCase
+class CompoundOrTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

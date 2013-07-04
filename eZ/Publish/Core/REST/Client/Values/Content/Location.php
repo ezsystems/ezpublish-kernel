@@ -9,13 +9,15 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\Content;
 
+use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
+
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\Content\Location}
  * class.
  *
  * @see \eZ\Publish\API\Repository\Values\Content\Location
  */
-class Location extends \eZ\Publish\API\Repository\Values\Content\Location
+class Location extends APILocation
 {
     /**
      * ContentInfo

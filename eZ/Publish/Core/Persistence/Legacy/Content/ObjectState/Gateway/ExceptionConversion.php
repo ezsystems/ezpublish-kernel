@@ -12,6 +12,9 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
 use eZ\Publish\SPI\Persistence\Content\ObjectState;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
+use ezcDbException;
+use PDOException;
+use RuntimeException;
 
 /**
  * ObjectState Gateway
@@ -48,13 +51,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadObjectStateData( $stateId );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -72,13 +75,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadObjectStateDataByIdentifier( $identifier, $groupId );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -95,13 +98,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadObjectStateListData( $groupId );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -118,13 +121,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadObjectStateGroupData( $groupId );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -141,13 +144,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadObjectStateGroupDataByIdentifier( $identifier );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -165,13 +168,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadObjectStateGroupListData( $offset, $limit );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -187,13 +190,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->insertObjectState( $objectState, $groupId );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -208,13 +211,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->updateObjectState( $objectState );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -229,13 +232,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->deleteObjectState( $stateId );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -251,13 +254,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->updateObjectStateLinks( $oldStateId, $newStateId );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -272,13 +275,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->deleteObjectStateLinks( $stateId );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -293,13 +296,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->insertObjectStateGroup( $objectStateGroup );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -314,13 +317,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->updateObjectStateGroup( $objectStateGroup );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -335,13 +338,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->deleteObjectStateGroup( $groupId );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -358,13 +361,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->setContentState( $contentId, $groupId, $stateId );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -382,13 +385,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadObjectStateDataForContent( $contentId, $stateGroupId );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -405,13 +408,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->getContentCount( $stateId );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -427,13 +430,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->updateObjectStatePriority( $stateId, $priority );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 }

@@ -13,7 +13,8 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
 
-use eZ\Publish\API\Repository\Exceptions;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use Exception;
 
 /**
  * Test case for operations in the LocationService using in memory storage.
@@ -293,7 +294,7 @@ class LocationServiceTest extends BaseTest
                 $locationCreate
             )->id;
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -307,7 +308,7 @@ class LocationServiceTest extends BaseTest
             // Throws exception since creation of location was rolled back
             $location = $locationService->loadLocation( $createdLocationId );
         }
-        catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             return;
         }
@@ -1265,7 +1266,7 @@ class LocationServiceTest extends BaseTest
             $locationService->loadLocation( $mediaLocationId );
             $this->fail( "Location $mediaLocationId not deleted." );
         }
-        catch ( Exceptions\NotFoundException $e )
+        catch ( NotFoundException $e )
         {
         }
 
@@ -1278,7 +1279,7 @@ class LocationServiceTest extends BaseTest
                 $locationService->loadLocation( $this->generateId( 'location', $childLocationId ) );
                 $this->fail( "Location $childLocationId not deleted." );
             }
-            catch ( Exceptions\NotFoundException $e )
+            catch ( NotFoundException $e )
             {
             }
         }
@@ -1293,7 +1294,7 @@ class LocationServiceTest extends BaseTest
                 $contentService->loadContentInfo( $this->generateId( 'object', $childContentId ) );
                 $this->fail( "Content $childContentId not deleted." );
             }
-            catch ( Exceptions\NotFoundException $e )
+            catch ( NotFoundException $e )
             {
             }
         }

@@ -9,9 +9,11 @@
 
 namespace eZ\Publish\Core\REST\Common\Exceptions;
 
+use InvalidArgumentException;
+
 /**
  * Exception thrown if the request is forbidden
  */
-class ForbiddenException extends \InvalidArgumentException
+class ForbiddenException extends InvalidArgumentException
 {
 }

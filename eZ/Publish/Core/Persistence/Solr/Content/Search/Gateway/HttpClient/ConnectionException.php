@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\HttpClient;
 
+use RuntimeException;
+
 /**
  * HTTPClient connection exception
  */
-class ConnectionException extends \RuntimeException
+class ConnectionException extends RuntimeException
 {
     public function __construct( $server, $path, $method )
     {

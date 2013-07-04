@@ -10,8 +10,9 @@
 namespace eZ\Publish\Core\MVC\Legacy\Templating\Tests\Twig;
 
 use eZ\Publish\Core\MVC\Legacy\Templating\Twig\Environment;
+use PHPUnit_Framework_TestCase;
 
-class EnvironmentTest extends \PHPUnit_Framework_TestCase
+class EnvironmentTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @covers \eZ\Publish\Core\MVC\Legacy\Templating\Twig\Environment::loadTemplate

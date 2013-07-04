@@ -12,6 +12,9 @@ namespace eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
 use eZ\Publish\SPI\Persistence\Content\Search\Field;
 use eZ\Publish\SPI\Persistence\Content\Search\FieldType;
+use DateTime;
+use InvalidArgumentException;
+use Exception;
 
 /**
  * Maps raw document field values to something Solr can index.
@@ -41,21 +44,20 @@ class DateMapper extends FieldValueMapper
     {
         if ( is_numeric( $field->value ) )
         {
-            $date = new \DateTime( "@{$field->value}" );
+            $date = new DateTime( "@{$field->value}" );
         }
         else
         {
             try
             {
-                $date = new \DateTime( $field->value );
+                $date = new DateTime( $field->value );
             }
-            catch ( \Exception $e )
+            catch ( Exception $e )
             {
-                throw new \InvalidArgumentException( "Invalid date provided: " . $field->value );
+                throw new InvalidArgumentException( "Invalid date provided: " . $field->value );
             }
         }
 
         return $date->format( "Y-m-d\\TH:i:s\\Z" );
     }
 }
-

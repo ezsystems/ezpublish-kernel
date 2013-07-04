@@ -1,9 +1,18 @@
 <?php
+/**
+ * File containing the ContentTypeCreateStruct class
+ *
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
 namespace eZ\Publish\Core\REST\Client\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct as APIContentTypeCreateStruct;
 
-class ContentTypeCreateStruct extends \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct
+class ContentTypeCreateStruct extends APIContentTypeCreateStruct
 {
     protected $fieldDefinitions = array();
 

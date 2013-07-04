@@ -13,6 +13,8 @@ use eZ\Publish\API\Repository\Tests;
 use eZ\Publish\API\Repository;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use Exception;
+use PHPUnit_Framework_AssertionFailedError;
 
 /**
  * Integration test for legacy storage field types
@@ -775,11 +777,11 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
             $this->fail( 'Expected exception not thrown.' );
         }
-        catch ( \PHPUnit_Framework_AssertionFailedError $e )
+        catch ( PHPUnit_Framework_AssertionFailedError $e )
         {
             throw $e;
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->assertInstanceOf(
                 $expectedException,
@@ -807,11 +809,11 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
             $this->fail( 'Expected exception not thrown.' );
         }
-        catch ( \PHPUnit_Framework_AssertionFailedError $e )
+        catch ( PHPUnit_Framework_AssertionFailedError $e )
         {
             throw $e;
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->assertInstanceOf(
                 $expectedException,

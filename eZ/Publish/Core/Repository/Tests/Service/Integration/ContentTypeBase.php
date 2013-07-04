@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
 use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use eZ\Publish\API\Repository\Exceptions;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Tests\BaseTest as APIBaseTest;
 use eZ\Publish\Core\FieldType\XmlText\Value as XmlValue;
 
@@ -690,7 +690,7 @@ abstract class ContentTypeBase extends BaseServiceTest
             $contentTypeService->loadContentTypeGroup( $group->id );
             $this->fail( 'Content type group not deleted.' );
         }
-        catch ( Exceptions\NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             // All fine
         }
@@ -2593,7 +2593,7 @@ abstract class ContentTypeBase extends BaseServiceTest
             $contentTypeService->loadContentType( $commentType->id );
             $this->fail( 'Content type could be loaded after delete.' );
         }
-        catch ( Exceptions\NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             // All fine
         }

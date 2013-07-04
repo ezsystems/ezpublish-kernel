@@ -10,8 +10,9 @@
 namespace eZ\Publish\Core\MVC\Symfony\FieldType\Tests\Page;
 
 use eZ\Publish\Core\MVC\Symfony\FieldType\Page\ParameterProvider;
+use PHPUnit_Framework_TestCase;
 
-class ParameterProviderTest extends \PHPUnit_Framework_TestCase
+class ParameterProviderTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @covers eZ\Publish\Core\MVC\Symfony\FieldType\Page\ParameterProvider::getViewParameters

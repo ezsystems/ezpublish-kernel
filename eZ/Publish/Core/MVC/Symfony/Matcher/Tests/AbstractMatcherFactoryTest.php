@@ -9,7 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests;
 
-abstract class AbstractMatcherFactoryTest extends \PHPUnit_Framework_TestCase
+use PHPUnit_Framework_TestCase;
+
+abstract class AbstractMatcherFactoryTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Returns a valid ValueObject (supported by current MatcherFactory), that will match the test rules.

@@ -10,8 +10,9 @@
 namespace eZ\Publish\Core\REST\Common\Tests\Output\Generator;
 
 use eZ\Publish\Core\REST\Common;
+use PHPUnit_Framework_TestCase;
 
-abstract class FieldTypeHashGeneratorBaseTest extends \PHPUnit_Framework_TestCase
+abstract class FieldTypeHashGeneratorBaseTest extends PHPUnit_Framework_TestCase
 {
     private $generator;
 

@@ -12,8 +12,9 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 use eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
+use PHPUnit_Framework_TestCase;
 
-class ViewControllerListenerTest extends \PHPUnit_Framework_TestCase
+class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

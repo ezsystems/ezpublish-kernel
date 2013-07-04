@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\MVC\Legacy\Templating\Twig\TokenParser;
 
 use eZ\Publish\Core\MVC\Legacy\Templating\Twig\Node\LegacyIncludeNode;
 use Twig_Token;
+use Twig_TokenParser;
 use Twig_Node_Expression_Array;
 
 /**
@@ -18,7 +19,7 @@ use Twig_Node_Expression_Array;
  *
  * @deprecated since 5.1
  */
-class LegacyIncludeParser extends \Twig_TokenParser
+class LegacyIncludeParser extends Twig_TokenParser
 {
 
     /**

@@ -11,11 +11,15 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use ezcQuerySelect;
+use PHPUnit_Framework_TestCase;
+use InvalidArgumentException;
+use PDOException;
+use Exception;
 
 /**
  * Base test case for database related tests
  */
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends PHPUnit_Framework_TestCase
 {
     /**
      * DSN used for the DB backend
@@ -103,7 +107,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         {
             $handler = $this->getDatabaseHandler();
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
             $this->markTestSkipped(
                 'PDO session could not be created: ' . $e->getMessage()
@@ -202,7 +206,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
                     $stmt->execute();
                 }
-                catch ( \Exception $e )
+                catch ( Exception $e )
                 {
                     echo "$table ( ", implode( ', ', $row ), " )\n";
                     throw $e;
@@ -284,7 +288,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     {
         if ( !is_object( $object ) )
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Expected object as second parameter, received ' . gettype( $object )
             );
         }

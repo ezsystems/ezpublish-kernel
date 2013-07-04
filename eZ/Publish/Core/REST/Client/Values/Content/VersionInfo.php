@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Values\Content;
 
 use eZ\Publish\Core\REST\Client\ContentService;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 
 /**
  * This class holds version information data. It also contains the corresponding {@link Content} to
@@ -27,7 +28,7 @@ use eZ\Publish\Core\REST\Client\ContentService;
  * @property-read string $initialLanguageCode the language code of the version. This value is used to flag a version as a translation to specific language
  * @property-read array $languageCodes a collection of all languages which exist in this version.
  */
-class VersionInfo extends \eZ\Publish\API\Repository\Values\Content\VersionInfo
+class VersionInfo extends APIVersionInfo
 {
     /**
      * @var \eZ\Publish\Core\REST\Client\ContentService

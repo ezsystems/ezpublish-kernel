@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\MVC\Exception;
 
+use InvalidArgumentException;
+
 /**
  * This exception is thrown when a dynamic parameter could not be found in any scope.
  */
-class ParameterNotFoundException extends \InvalidArgumentException
+class ParameterNotFoundException extends InvalidArgumentException
 {
     public function __construct( $paramName, $namespace, array $triedScopes = array() )
     {

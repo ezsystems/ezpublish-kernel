@@ -12,7 +12,7 @@ namespace eZ\Bundle\EzPublishRestBundle\Tests\DependencyInjection\Compiler;
 use eZ\Bundle\EzPublishRestBundle\DependencyInjection\Compiler\InputHandlerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use \PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase;
 
 class InputHandlerPassTest extends PHPUnit_Framework_TestCase
 {

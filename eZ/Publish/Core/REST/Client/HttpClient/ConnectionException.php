@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Client\HttpClient;
 
+use RuntimeException;
+
 /**
  * HTTPClient connection exception
  */
-class ConnectionException extends \RuntimeException
+class ConnectionException extends RuntimeException
 {
     /**
      * Constructor

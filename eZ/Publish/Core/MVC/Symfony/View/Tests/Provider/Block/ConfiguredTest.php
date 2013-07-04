@@ -10,8 +10,9 @@
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\Provider\Block;
 
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Block\Configured as BlockViewProvider;
+use PHPUnit_Framework_TestCase;
 
-class ConfiguredTest extends \PHPUnit_Framework_TestCase
+class ConfiguredTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

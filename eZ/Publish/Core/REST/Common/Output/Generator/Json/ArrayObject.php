@@ -9,13 +9,15 @@
 
 namespace eZ\Publish\Core\REST\Common\Output\Generator\Json;
 
+use ArrayObject as NativeArrayObject;
+
 /**
  * Json array object
  *
  * Special JSON array object implementation, which allows to access the
  * parent object it is assigned to again.
  */
-class ArrayObject extends \ArrayObject
+class ArrayObject extends NativeArrayObject
 {
     /**
      * Reference to the parent node

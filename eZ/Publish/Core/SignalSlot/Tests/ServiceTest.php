@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
-use \PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase;
 
 abstract class ServiceTest extends PHPUnit_Framework_TestCase
 {

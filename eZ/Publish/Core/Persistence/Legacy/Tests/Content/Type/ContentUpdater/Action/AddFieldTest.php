@@ -12,11 +12,12 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\ContentUpdater\A
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Test case for Content Type Updater.
  */
-class AddFieldTest extends \PHPUnit_Framework_TestCase
+class AddFieldTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Content gateway mock

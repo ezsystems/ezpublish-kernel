@@ -16,11 +16,12 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as Cr
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Test case for Content Type Updater.
  */
-class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
+class ContentUpdaterTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Content gateway mock

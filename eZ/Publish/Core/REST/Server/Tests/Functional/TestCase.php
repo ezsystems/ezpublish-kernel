@@ -1,10 +1,19 @@
 <?php
+/**
+ * File containing the Functional\TestCase class
+ *
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
 namespace eZ\Publish\Core\REST\Server\Tests\Functional;
 
-use \Buzz\Message\Request as HttpRequest;
-use \Buzz\Message\Response as HttpResponse;
+use Buzz\Message\Request as HttpRequest;
+use Buzz\Message\Response as HttpResponse;
+use PHPUnit_Framework_TestCase;
 
-class TestCase extends \PHPUnit_Framework_TestCase
+class TestCase extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \Buzz\Client\ClientInterface

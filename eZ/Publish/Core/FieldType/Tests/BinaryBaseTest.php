@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\BinaryBase\Type as BinaryBaseType;
 use eZ\Publish\Core\FieldType\BinaryBase\Value as BinaryBaseValue;
 use eZ\Publish\SPI\FieldType\BinaryBase\MimeTypeDetector;
-use \eZ\Publish\SPI\FieldType\FileService;
+use eZ\Publish\SPI\FieldType\FileService;
 
 /**
  * Base class for binary field types

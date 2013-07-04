@@ -10,11 +10,12 @@
 namespace eZ\Publish\Core\REST\Common\Tests\Input;
 
 use eZ\Publish\Core\REST\Common;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Dispatcher test class
  */
-class DispatcherTest extends \PHPUnit_Framework_TestCase
+class DispatcherTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser

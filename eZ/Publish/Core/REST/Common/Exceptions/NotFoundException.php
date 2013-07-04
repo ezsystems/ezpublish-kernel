@@ -9,12 +9,14 @@
 
 namespace eZ\Publish\Core\REST\Common\Exceptions;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Exceptions\NotFoundException}
  * interface.
  *
  * @see \eZ\Publish\API\Repository\Exceptions\NotFoundException
  */
-class NotFoundException extends \eZ\Publish\API\Repository\Exceptions\NotFoundException
+class NotFoundException extends APINotFoundException
 {
 }

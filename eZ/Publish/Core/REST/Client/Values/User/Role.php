@@ -9,13 +9,15 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\User;
 
+use eZ\Publish\API\Repository\Values\User\Role as APIRole;
+
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\User\Role}
  * class.
  *
  * @see \eZ\Publish\API\Repository\Values\User\Role
  */
-class Role extends \eZ\Publish\API\Repository\Values\User\Role
+class Role extends APIRole
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Policy[]

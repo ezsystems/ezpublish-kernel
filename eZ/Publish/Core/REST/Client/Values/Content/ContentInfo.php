@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Client\Values\Content;
 
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use eZ\Publish\Core\REST\Client\ContentTypeService;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\Content\ContentInfo}
@@ -31,7 +32,7 @@ use eZ\Publish\Core\REST\Client\ContentTypeService;
  * @property-read mixed $mainLocationId Identifier of the main location.
  * @see \eZ\Publish\API\Repository\Values\Content\ContentInfo
  */
-class ContentInfo extends \eZ\Publish\API\Repository\Values\Content\ContentInfo
+class ContentInfo extends APIContentInfo
 {
     /**
      * @var int

@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\ContentUpdate as ContentUpdateParser;
 use eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
+use eZ\Publish\Core\REST\Common\Exceptions\Parser;
 use DateTime;
 
 class ContentUpdateTest extends BaseTest
@@ -72,7 +73,7 @@ class ContentUpdateTest extends BaseTest
                 $this->getParsingDispatcherMock()
             );
         }
-        catch ( \eZ\Publish\Core\REST\Common\Exceptions\Parser $e )
+        catch ( Parser $e )
         {
             if ( $e->getMessage() != $exceptionMessage )
             {
@@ -114,7 +115,7 @@ class ContentUpdateTest extends BaseTest
                 $this->getParsingDispatcherMock()
             );
         }
-        catch ( \eZ\Publish\Core\REST\Common\Exceptions\Parser $e )
+        catch ( Parser $e )
         {
             if ( $e->getMessage() != $exceptionMessage )
             {

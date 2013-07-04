@@ -11,11 +11,12 @@ namespace eZ\Publish\Core\SignalSlot\Tests\SignalDispatcher;
 
 use eZ\Publish\Core\SignalSlot;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @group signalSlot
  */
-class LegacySlotsTest extends \PHPUnit_Framework_TestCase
+class LegacySlotsTest extends PHPUnit_Framework_TestCase
 {
     const SIGNAL_SLOT_NS = '\\eZ\\Publish\\Core\\SignalSlot';
 

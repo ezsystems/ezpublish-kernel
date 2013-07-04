@@ -9,13 +9,15 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\Content;
 
+use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
+
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\Content\TrashItem}
  * class.
  *
  * @see \eZ\Publish\API\Repository\Values\Content\TrashItem
  */
-class TrashItem extends \eZ\Publish\API\Repository\Values\Content\TrashItem
+class TrashItem extends APITrashItem
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location

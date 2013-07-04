@@ -10,11 +10,12 @@
 namespace eZ\Publish\Core\REST\Common\Tests\UrlHandler;
 
 use eZ\Publish\Core\REST\Common;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Test for Pattern based url handler
  */
-class PatternTest extends \PHPUnit_Framework_TestCase
+class PatternTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Tests parsing unknown URL type

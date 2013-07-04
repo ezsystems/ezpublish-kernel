@@ -11,6 +11,9 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Language;
+use ezcDbException;
+use PDOException;
+use RuntimeException;
 
 /**
  * Language Handler
@@ -47,13 +50,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->insertLanguage( $language );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -70,13 +73,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->updateLanguage( $language );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -93,13 +96,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadLanguageData( $id );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -116,13 +119,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadLanguageDataByLanguageCode( $languageCode );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -137,13 +140,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadAllLanguagesData();
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -160,13 +163,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->deleteLanguage( $id );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 
@@ -183,13 +186,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->canDeleteLanguage( $id );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 }

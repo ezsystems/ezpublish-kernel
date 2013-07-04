@@ -10,12 +10,13 @@ namespace eZ\Publish\Core\FieldType\Tests\MetadataHandler;
 
 use eZ\Publish\Core\IO\FileService;
 use eZ\Publish\Core\IO\MetadataHandler\ImageSize as ImageSizeMetadataHandler;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @group fieldType
  * @group ezimage
  */
-class ImageSizeTest extends \PHPUnit_Framework_TestCase
+class ImageSizeTest extends PHPUnit_Framework_TestCase
 {
     public function testExtract()
     {

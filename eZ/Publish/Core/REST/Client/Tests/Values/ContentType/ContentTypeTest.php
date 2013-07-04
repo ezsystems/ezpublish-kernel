@@ -11,8 +11,9 @@ namespace eZ\Publish\Core\REST\Client\Tests\Values\ContentType;
 
 use eZ\Publish\Core\REST\Client\Values\ContentType\ContentType;
 use eZ\Publish\Core\REST\Client\Values\ContentType\FieldDefinition;
+use PHPUnit_Framework_TestCase;
 
-class ContentTypeTest extends \PHPUnit_Framework_TestCase
+class ContentTypeTest extends PHPUnit_Framework_TestCase
 {
     protected $contentTypeServiceMock;
 

@@ -11,6 +11,9 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use ezcDbException;
+use PDOException;
+use RuntimeException;
 
 /**
  * The Content Search Gateway provides the implementation for one database to
@@ -52,13 +55,13 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->find( $criterion, $offset, $limit, $sort, $translations );
         }
-        catch ( \ezcDbException $e )
+        catch ( ezcDbException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
-        catch ( \PDOException $e )
+        catch ( PDOException $e )
         {
-            throw new \RuntimeException( 'Database error', 0, $e );
+            throw new RuntimeException( 'Database error', 0, $e );
         }
     }
 }

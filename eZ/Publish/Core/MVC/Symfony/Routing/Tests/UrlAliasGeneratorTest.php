@@ -13,8 +13,9 @@ use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\Repository\Values\Content\Location;
+use PHPUnit_Framework_TestCase;
 
-class UrlAliasGeneratorTest extends \PHPUnit_Framework_TestCase
+class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

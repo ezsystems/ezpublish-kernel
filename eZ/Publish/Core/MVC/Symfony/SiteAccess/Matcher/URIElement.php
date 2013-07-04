@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
+use LogicException;
 
 class URIElement implements Matcher, URILexer
 {
@@ -48,7 +49,7 @@ class URIElement implements Matcher, URILexer
         {
             return implode( "_", $this->getURIElements() );
         }
-        catch ( \LogicException $e )
+        catch ( LogicException $e )
         {
             return false;
         }
@@ -72,11 +73,11 @@ class URIElement implements Matcher, URILexer
         foreach ( $elements as $element )
         {
             if ( $element === "" )
-                throw new \LogicException( 'One of the URI elements was empty' );
+                throw new LogicException( 'One of the URI elements was empty' );
         }
 
         if ( count( $elements ) !== $this->elementNumber )
-            throw new \LogicException( 'The number of provided elements to consider is different than the number of elements found in the URI' );
+            throw new LogicException( 'The number of provided elements to consider is different than the number of elements found in the URI' );
 
         return $elements;
     }

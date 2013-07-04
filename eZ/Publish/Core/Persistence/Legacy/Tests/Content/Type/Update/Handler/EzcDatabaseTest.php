@@ -11,11 +11,12 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\UpdateHandler;
 
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\EzcDatabase;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Test case for Content Type Handler.
  */
-class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
+class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Gateway mock

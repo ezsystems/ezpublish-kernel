@@ -22,6 +22,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use LogicException;
+use Exception;
 
 /**
  * Language service, used for language operations
@@ -110,7 +111,7 @@ class LanguageService implements LanguageServiceInterface
             $createdLanguage = $this->languageHandler->create( $createStruct );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -156,7 +157,7 @@ class LanguageService implements LanguageServiceInterface
             $this->languageHandler->update( $updateLanguageStruct );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -196,7 +197,7 @@ class LanguageService implements LanguageServiceInterface
             $this->languageHandler->update( $updateLanguageStruct );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -236,7 +237,7 @@ class LanguageService implements LanguageServiceInterface
             $this->languageHandler->update( $updateLanguageStruct );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -327,7 +328,7 @@ class LanguageService implements LanguageServiceInterface
             $this->repository->rollback();
             throw new InvalidArgumentException( "language", $e->getMessage(), $e );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;

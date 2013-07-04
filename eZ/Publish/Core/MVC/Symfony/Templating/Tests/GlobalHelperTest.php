@@ -13,8 +13,9 @@ use eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper;
 use Symfony\Component\HttpFoundation\Request;
 use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use PHPUnit_Framework_TestCase;
 
-class GlobalHelperTest extends \PHPUnit_Framework_TestCase
+class GlobalHelperTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper

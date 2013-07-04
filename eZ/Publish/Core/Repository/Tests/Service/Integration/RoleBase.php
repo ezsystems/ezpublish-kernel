@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNo
 use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Tests\BaseTest as APIBaseTest;
+use Exception;
 
 /**
  * Test case for Role Service
@@ -228,16 +229,16 @@ abstract class RoleBase extends BaseServiceTest
     {
         $roleService = $this->repository->getRoleService();
 
-        $limitation1 = new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
+        $limitation1 = new Limitation\ContentTypeLimitation();
         $limitation1->limitationValues = array( '1', '3', '13' );
 
-        $limitation2 = new \eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation();
+        $limitation2 = new Limitation\SectionLimitation();
         $limitation2->limitationValues = array( '2', '3' );
 
-        $limitation3 = new \eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation();
+        $limitation3 = new Limitation\OwnerLimitation();
         $limitation3->limitationValues = array( '1', '2' );
 
-        $limitation4 = new \eZ\Publish\API\Repository\Values\User\Limitation\UserGroupLimitation();
+        $limitation4 = new Limitation\UserGroupLimitation();
         $limitation4->limitationValues = array( '1' );
 
         $policyCreateStruct1 = $roleService->newPolicyCreateStruct( 'content', 'read' );
@@ -416,10 +417,10 @@ abstract class RoleBase extends BaseServiceTest
         $role = $roleService->loadRole( 1 );
         $policyCount = count( $role->getPolicies() );
 
-        $limitation1 = new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
+        $limitation1 = new Limitation\ContentTypeLimitation();
         $limitation1->limitationValues = array( '1', '3', '13' );
 
-        $limitation2 = new \eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation();
+        $limitation2 = new Limitation\SectionLimitation();
         $limitation2->limitationValues = array( '2', '3' );
 
         $policyCreateStruct = $roleService->newPolicyCreateStruct( 'content', 'read' );
@@ -474,7 +475,7 @@ abstract class RoleBase extends BaseServiceTest
         self::assertEquals( 'content', $policy->module );
         self::assertEquals( 'read', $policy->function );
 
-        $limitation = new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
+        $limitation = new Limitation\ContentTypeLimitation();
         $limitation->limitationValues = array( '1', '3', '13' );
 
         $policyUpdateStruct = $roleService->newPolicyUpdateStruct();
@@ -694,7 +695,7 @@ abstract class RoleBase extends BaseServiceTest
             $roleService->getRoleAssignmentsForUserGroup( $adminUserGroup );
             $roleService->unassignRoleFromUserGroup( $adminRole, $adminUserGroup );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             self::fail( "Unexpected exception: " . $e->getMessage() . " \n[" . $e->getFile() . ' (' . $e->getLine() . ')]' );
         }

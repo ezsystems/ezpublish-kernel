@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Values\User;
 
 use eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct}
@@ -17,7 +18,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
  *
  * @see \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct
  */
-class PolicyCreateStruct extends \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct
+class PolicyCreateStruct extends APIPolicyCreateStruct
 {
     /**
      * List of limitations added to policy

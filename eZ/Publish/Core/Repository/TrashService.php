@@ -25,6 +25,7 @@ use eZ\Publish\API\Repository\Values\Content\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use DateTime;
+use Exception;
 
 /**
  * Trash service, used for managing trashed content
@@ -128,7 +129,7 @@ class TrashService implements TrashServiceInterface
             $this->persistenceHandler->urlAliasHandler()->locationDeleted( $location->id );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -191,7 +192,7 @@ class TrashService implements TrashServiceInterface
 
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -220,7 +221,7 @@ class TrashService implements TrashServiceInterface
             $this->persistenceHandler->trashHandler()->emptyTrash();
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -250,7 +251,7 @@ class TrashService implements TrashServiceInterface
             $this->persistenceHandler->trashHandler()->deleteTrashItem( $trashItem->id );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;

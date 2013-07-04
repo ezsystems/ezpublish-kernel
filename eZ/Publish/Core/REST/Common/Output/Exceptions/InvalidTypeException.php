@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Common\Output\Exceptions;
 
+use RuntimeException;
+
 /**
  * Output visiting invalid type exception
  */
-class InvalidTypeException extends \RuntimeException
+class InvalidTypeException extends RuntimeException
 {
     /**
      * Construct from invalid data

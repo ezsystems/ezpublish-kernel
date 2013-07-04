@@ -10,6 +10,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
+use Exception;
 
 /**
  * Test case for operations in the URLAliasService using in memory storage.
@@ -51,7 +52,7 @@ class URLAliasServiceTest extends BaseTest
                 );
             }
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->markTestSkipped(
                 'This test cannot be executed, because the utilized ' .

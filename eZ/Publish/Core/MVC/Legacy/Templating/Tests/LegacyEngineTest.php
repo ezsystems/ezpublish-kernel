@@ -10,8 +10,9 @@
 namespace eZ\Publish\Core\MVC\Legacy\Templating\Tests;
 
 use eZ\Publish\Core\MVC\Legacy\Templating\LegacyEngine;
+use PHPUnit_Framework_TestCase;
 
-class LegacyEngineTest extends \PHPUnit_Framework_TestCase
+class LegacyEngineTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Legacy\Templating\LegacyEngine

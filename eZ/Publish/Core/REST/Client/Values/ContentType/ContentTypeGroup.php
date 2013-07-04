@@ -9,7 +9,9 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\ContentType;
 
-class ContentTypeGroup extends \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup as APIContentTypeGroup;
+
+class ContentTypeGroup extends APIContentTypeGroup
 {
     protected $names;
 

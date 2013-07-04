@@ -9,13 +9,15 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\User;
 
+use eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment as APIUserGroupRoleAssignment;
+
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment}
  * class.
  *
  * @see \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment
  */
-class UserGroupRoleAssignment extends \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment
+class UserGroupRoleAssignment extends APIUserGroupRoleAssignment
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Role

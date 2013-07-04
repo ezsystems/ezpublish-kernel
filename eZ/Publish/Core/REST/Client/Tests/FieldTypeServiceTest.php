@@ -10,8 +10,9 @@
 namespace eZ\Publish\Core\REST\Client\Tests;
 
 use eZ\Publish\Core\REST\Client\FieldTypeService;
+use PHPUnit_Framework_TestCase;
 
-class FieldTypeServiceTest extends \PHPUnit_Framework_TestCase
+class FieldTypeServiceTest extends PHPUnit_Framework_TestCase
 {
     public function testHasFieldType()
     {

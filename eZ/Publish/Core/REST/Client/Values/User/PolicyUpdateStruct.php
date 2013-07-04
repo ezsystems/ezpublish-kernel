@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Values\User;
 
 use eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct}
@@ -17,7 +18,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
  *
  * @see \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
  */
-class PolicyUpdateStruct extends \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
+class PolicyUpdateStruct extends APIPolicyUpdateStruct
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Limitation[]

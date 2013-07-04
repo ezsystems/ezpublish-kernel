@@ -9,12 +9,14 @@
 
 namespace eZ\Publish\Core\REST\Client\Exceptions;
 
+use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException as APIPropertyReadOnlyException;
+
 /**
  * This Exception is thrown on a write attempt in a read only property in a value object.
  *
  * @package eZ\Publish\API\Repository\Exceptions
  */
-class PropertyReadOnlyException extends \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException
+class PropertyReadOnlyException extends APIPropertyReadOnlyException
 {
     public function __construct( $propertyName )
     {

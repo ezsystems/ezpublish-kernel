@@ -9,13 +9,15 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\User;
 
+use eZ\Publish\API\Repository\Values\User\Policy as APIPolicy;
+
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\User\Policy}
  * class.
  *
  * @see \eZ\Publish\API\Repository\Values\User\Policy
  */
-class Policy extends \eZ\Publish\API\Repository\Values\User\Policy
+class Policy extends APIPolicy
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Limitation[]

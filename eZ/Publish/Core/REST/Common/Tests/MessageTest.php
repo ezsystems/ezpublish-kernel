@@ -10,11 +10,12 @@
 namespace eZ\Publish\Core\REST\Common\Tests;
 
 use eZ\Publish\Core\REST\Common;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Tests for Message class
  */
-class MessageTest extends \PHPUnit_Framework_TestCase
+class MessageTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Tests creating the message with default headers

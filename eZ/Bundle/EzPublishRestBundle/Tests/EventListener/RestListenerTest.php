@@ -19,7 +19,7 @@ use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
 use eZ\Publish\Core\REST\Server\Request as RESTRequest;
 use eZ\Bundle\EzPublishRestBundle\EventListener\RestListener;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use \PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase;
 
 class RestListenerTest extends PHPUnit_Framework_TestCase
 {

@@ -20,6 +20,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use Exception;
 
 /**
  * URLAlias service
@@ -119,7 +120,7 @@ class URLWildcardService implements URLWildcardServiceInterface
             );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -162,7 +163,7 @@ class URLWildcardService implements URLWildcardServiceInterface
             );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;

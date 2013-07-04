@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Server\Exceptions;
 
+use InvalidArgumentException;
+
 /**
  * Exception thrown if authentication credentials were provided by the
  * authentication failed.
  */
-class AuthenticationFailedException extends \InvalidArgumentException
+class AuthenticationFailedException extends InvalidArgumentException
 {
 }

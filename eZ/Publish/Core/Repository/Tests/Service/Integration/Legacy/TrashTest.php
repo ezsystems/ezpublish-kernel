@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration\Legacy;
 
 use eZ\Publish\Core\Repository\Tests\Service\Integration\TrashBase as BaseTrashServiceTest;
+use Exception;
 
 /**
  * Test case for Trash Service using Legacy storage class
@@ -22,7 +23,7 @@ class TrashTest extends BaseTrashServiceTest
         {
             return Utils::getRepository();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->markTestIncomplete(  $e->getMessage() );
         }

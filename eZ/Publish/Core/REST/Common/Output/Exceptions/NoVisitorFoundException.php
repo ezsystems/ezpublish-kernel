@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Common\Output\Exceptions;
 
+use RuntimeException;
+
 /**
  * No output visitor found exception
  */
-class NoVisitorFoundException extends \RuntimeException
+class NoVisitorFoundException extends RuntimeException
 {
     /**
      * Construct from tested classes

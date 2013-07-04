@@ -11,8 +11,9 @@ namespace eZ\Publish\Core\MVC\Legacy\Templating\Tests\Converter;
 
 use eZ\Publish\Core\MVC\Legacy\Templating\Converter\PagePartsConverter;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use PHPUnit_Framework_TestCase;
 
-class PagePartsConverterTest extends \PHPUnit_Framework_TestCase
+class PagePartsConverterTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider convertProvider

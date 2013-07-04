@@ -10,12 +10,13 @@
 namespace eZ\Publish\Core\FieldType\Tests\Image\PathGenerator;
 
 use eZ\Publish\Core\FieldType\Image\PathGenerator\LegacyPathGenerator;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @group fieldType
  * @group ezimage
  */
-class LegacyPathGeneratorTest extends \PHPUnit_Framework_TestCase
+class LegacyPathGeneratorTest extends PHPUnit_Framework_TestCase
 {
 
     /**

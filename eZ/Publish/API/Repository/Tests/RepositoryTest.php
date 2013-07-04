@@ -10,6 +10,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub;
+use Exception;
 
 /**
  * Test case for operations in the Repository using in memory storage.
@@ -255,7 +256,7 @@ class RepositoryTest extends BaseTest
             $repository->beginTransaction();
             $repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();

@@ -10,8 +10,9 @@
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\Provider\Content;
 
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Content\Configured as ContentViewProvider;
+use PHPUnit_Framework_TestCase;
 
-class ConfiguredTest extends \PHPUnit_Framework_TestCase
+class ConfiguredTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

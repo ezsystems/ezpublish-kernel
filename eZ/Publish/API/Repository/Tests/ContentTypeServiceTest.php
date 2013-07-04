@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Exceptions;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use Exception;
 
 /**
  * Test case for operations in the ContentTypeService using in memory storage.
@@ -569,7 +570,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             $contentTypeService->loadContentTypeGroup( $group->id );
             $this->fail( 'Content type group not deleted.' );
         }
-        catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             // All fine
         }
@@ -2582,7 +2583,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             $contentTypeService->loadContentType( $commentType->id );
             $this->fail( 'Content type could be loaded after delete.' );
         }
-        catch ( Exceptions\NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             // All fine
         }
@@ -2940,7 +2941,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             // Create the new content type group
             $groupId = $contentTypeService->createContentTypeGroup( $groupCreate )->id;
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -2997,7 +2998,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             // Rollback all changes
             $repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3042,7 +3043,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             // Apply update to group
             $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3093,7 +3094,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             // Commit all changes
             $repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3141,7 +3142,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             // Delete the currently created group
             $contentTypeService->deleteContentTypeGroup( $group );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3200,7 +3201,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             // Commit all changes
             $repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3267,7 +3268,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             // Publish the content type draft
             $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3340,7 +3341,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             // Commit all changes.
             $repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3382,7 +3383,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             // Complete copy of the content type
             $copiedType = $contentTypeService->copyContentType( $contentType );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3437,7 +3438,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             // Commit all changes
             $repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3478,7 +3479,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             // Delete the "comment" content type.
             $contentTypeService->deleteContentType( $contentType );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3525,7 +3526,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             // Commit all changes
             $repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3572,7 +3573,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             // Assign group to content type
             $contentTypeService->assignContentTypeGroup( $folderType, $mediaGroup );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3627,7 +3628,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             // Commit all changes
             $repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();

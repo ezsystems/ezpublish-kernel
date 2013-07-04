@@ -23,6 +23,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use Exception;
 
 /**
  * Section service, used for section operations
@@ -104,7 +105,7 @@ class SectionService implements SectionServiceInterface
             );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -161,7 +162,7 @@ class SectionService implements SectionServiceInterface
             );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -280,7 +281,7 @@ class SectionService implements SectionServiceInterface
             );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -313,7 +314,7 @@ class SectionService implements SectionServiceInterface
             $this->sectionHandler->delete( $loadedSection->id );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;

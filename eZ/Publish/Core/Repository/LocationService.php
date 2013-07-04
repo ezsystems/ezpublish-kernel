@@ -29,12 +29,14 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot as Crite
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree as CriterionSubtree;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use DateTime;
+use Exception;
 
 /**
  * Location service, used for complex subtree operations
@@ -179,7 +181,7 @@ class LocationService implements LocationServiceInterface
 
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -461,7 +463,7 @@ class LocationService implements LocationServiceInterface
 
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -525,7 +527,7 @@ class LocationService implements LocationServiceInterface
             $this->persistenceHandler->locationHandler()->update( $updateStruct, $loadedLocation->id );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -558,7 +560,7 @@ class LocationService implements LocationServiceInterface
             $this->persistenceHandler->locationHandler()->swap( $loadedLocation1->id, $loadedLocation2->id );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -585,7 +587,7 @@ class LocationService implements LocationServiceInterface
             $this->persistenceHandler->locationHandler()->hide( $location->id );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -617,7 +619,7 @@ class LocationService implements LocationServiceInterface
             $this->persistenceHandler->locationHandler()->unHide( $location->id );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -709,7 +711,7 @@ class LocationService implements LocationServiceInterface
 
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -766,7 +768,7 @@ class LocationService implements LocationServiceInterface
             $this->persistenceHandler->urlAliasHandler()->locationDeleted( $location->id );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -865,19 +867,19 @@ class LocationService implements LocationServiceInterface
         switch ( $sortField )
         {
             case APILocation::SORT_FIELD_PATH:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPathString( $sortOrder );
+                return new SortClause\LocationPathString( $sortOrder );
 
             case APILocation::SORT_FIELD_PUBLISHED:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DatePublished( $sortOrder );
+                return new SortClause\DatePublished( $sortOrder );
 
             case APILocation::SORT_FIELD_MODIFIED:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DateModified( $sortOrder );
+                return new SortClause\DateModified( $sortOrder );
 
             case APILocation::SORT_FIELD_SECTION:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\SectionIdentifier( $sortOrder );
+                return new SortClause\SectionIdentifier( $sortOrder );
 
             case APILocation::SORT_FIELD_DEPTH:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationDepth( $sortOrder );
+                return new SortClause\LocationDepth( $sortOrder );
 
             //@todo: enable
             // case APILocation::SORT_FIELD_CLASS_IDENTIFIER:
@@ -886,10 +888,10 @@ class LocationService implements LocationServiceInterface
             // case APILocation::SORT_FIELD_CLASS_NAME:
 
             case APILocation::SORT_FIELD_PRIORITY:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPriority( $sortOrder );
+                return new SortClause\LocationPriority( $sortOrder );
 
             case APILocation::SORT_FIELD_NAME:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\ContentName( $sortOrder );
+                return new SortClause\ContentName( $sortOrder );
 
             //@todo: enable
             // case APILocation::SORT_FIELD_MODIFIED_SUBNODE:
@@ -901,7 +903,7 @@ class LocationService implements LocationServiceInterface
             // case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
 
             default:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPathString( $sortOrder );
+                return new SortClause\LocationPathString( $sortOrder );
         }
     }
 

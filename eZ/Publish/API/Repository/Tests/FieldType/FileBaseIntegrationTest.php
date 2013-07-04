@@ -12,6 +12,7 @@ namespace eZ\Publish\API\Repository\Tests\FieldType;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use FileSystemIterator;
+use UnexpectedValueException;
 
 /**
  * Integration test for use field type
@@ -153,7 +154,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
                 }
             }
         }
-        catch ( \UnexpectedValueException $e )
+        catch ( UnexpectedValueException $e )
         {
             // The directory to cleanup just doesn't exist
         }

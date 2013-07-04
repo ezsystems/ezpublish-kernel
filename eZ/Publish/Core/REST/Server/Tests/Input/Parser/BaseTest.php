@@ -11,11 +11,12 @@ namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input;
+use eZ\Publish\Core\REST\Server\Tests\BaseTest as ParentBaseTest;
 
 /**
  * Base test for input parsers.
  */
-abstract class BaseTest extends \eZ\Publish\Core\REST\Server\Tests\BaseTest
+abstract class BaseTest extends ParentBaseTest
 {
     /**
      * @var \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher

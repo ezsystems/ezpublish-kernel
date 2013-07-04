@@ -13,6 +13,7 @@
 namespace eZ\Publish\Core\REST\Server;
 
 use Qafoo\RMF;
+use Exception;
 
 /**
  * MVC dispatcher with integrated authentication
@@ -50,7 +51,7 @@ class AuthenticatingDispatcher extends RMF\Dispatcher\Simple
         {
             $this->authenticator->authenticate( $request );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->view->display( $request, $e );
         }

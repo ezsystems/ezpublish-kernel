@@ -11,11 +11,12 @@ namespace eZ\Publish\Core\MVC\Symfony\View\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\View\Manager;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @group mvc
  */
-class ViewManagerTest extends \PHPUnit_Framework_TestCase
+class ViewManagerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\View\Manager

@@ -9,7 +9,9 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Matcher;
 
-abstract class BaseMatcherFactoryTest extends \PHPUnit_Framework_TestCase
+use PHPUnit_Framework_TestCase;
+
+abstract class BaseMatcherFactoryTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @param string $matcherServiceIdentifier

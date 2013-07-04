@@ -15,8 +15,9 @@ use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
 use eZ\Publish\Core\IO\Handler as IOHandler;
 use DateTime;
 use finfo;
+use PHPUnit_Framework_TestCase;
 
-abstract class Base extends \PHPUnit_Framework_TestCase
+abstract class Base extends PHPUnit_Framework_TestCase
 {
     /**
      * Binary IoHandler

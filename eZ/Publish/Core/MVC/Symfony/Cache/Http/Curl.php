@@ -13,6 +13,7 @@ use Buzz\Client\Curl as BaseCurl;
 use Buzz\Message\RequestInterface;
 use Buzz\Message\MessageInterface;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
 class Curl extends BaseCurl
 {
@@ -34,7 +35,7 @@ class Curl extends BaseCurl
         {
             parent::send( $request, $response, $options );
         }
-        catch ( \RuntimeException $e )
+        catch ( RuntimeException $e )
         {
             // Catch but do not do anything as we consider the request to be ~ asynchronous
             if ( isset( $this->logger ) )

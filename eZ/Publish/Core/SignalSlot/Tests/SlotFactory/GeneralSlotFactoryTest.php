@@ -11,12 +11,13 @@ namespace eZ\Publish\Core\SignalSlot\Tests\SignalDispatcher;
 
 use eZ\Publish\Core\SignalSlot;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @group signalSlot
  * @covers \eZ\Publish\Core\SignalSlot\SlotFactory\GeneralSlotFactory
  */
-class GeneralSlotFactoryTest extends \PHPUnit_Framework_TestCase
+class GeneralSlotFactoryTest extends PHPUnit_Framework_TestCase
 {
     public function providerForFactoryTests()
     {

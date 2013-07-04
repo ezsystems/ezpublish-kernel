@@ -10,11 +10,12 @@
 namespace eZ\Publish\Core\REST\Common\Tests\Input\Handler;
 
 use eZ\Publish\Core\REST\Common;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Xml input handler test class
  */
-class XmlTest extends \PHPUnit_Framework_TestCase
+class XmlTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser

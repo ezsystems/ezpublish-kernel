@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Values\User;
 
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruct;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\User\UserCreateStruct}
@@ -17,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  *
  * @see \eZ\Publish\API\Repository\Values\User\UserCreateStruct
  */
-class UserCreateStruct extends \eZ\Publish\API\Repository\Values\User\UserCreateStruct
+class UserCreateStruct extends APIUserCreateStruct
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Field[]

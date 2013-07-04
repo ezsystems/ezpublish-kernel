@@ -11,8 +11,9 @@ namespace eZ\Publish\Core\MVC\Legacy\Templating\Tests\Adapter;
 
 use eZ\Publish\Core\MVC\Legacy\Templating\Adapter\ValueObjectAdapter;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use PHPUnit_Framework_TestCase;
 
-class ValueObjectAdapterTest extends \PHPUnit_Framework_TestCase
+class ValueObjectAdapterTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

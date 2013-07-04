@@ -13,11 +13,12 @@
 namespace eZ\Publish\Core\REST\Server\Authenticator;
 
 use eZ\Publish\Core\REST\Server\Authenticator;
-use eZ\Publish\Core\REST\Server\Exceptions;
+use eZ\Publish\Core\REST\Server\Exceptions\AuthenticationFailedException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 use Qafoo\RMF;
+use InvalidArgumentException;
 
 /**
  * Authenticator for integration tests
@@ -58,13 +59,13 @@ class BasicAuth extends Authenticator
                 )
             );
         }
-        catch ( \InvalidArgumentException $e )
+        catch ( InvalidArgumentException $e )
         {
             return false;
         }
         catch ( NotFoundException $e )
         {
-            throw new Exceptions\AuthenticationFailedException();
+            throw new AuthenticationFailedException();
         }
     }
 }

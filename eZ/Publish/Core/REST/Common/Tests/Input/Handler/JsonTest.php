@@ -10,11 +10,12 @@
 namespace eZ\Publish\Core\REST\Common\Tests\Input\Handler;
 
 use eZ\Publish\Core\REST\Common;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Json input handler test
  */
-class JsonTest extends \PHPUnit_Framework_TestCase
+class JsonTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Tests conversion of array to JSON

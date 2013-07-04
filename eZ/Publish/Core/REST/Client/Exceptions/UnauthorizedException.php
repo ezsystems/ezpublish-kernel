@@ -9,12 +9,14 @@
 
 namespace eZ\Publish\Core\REST\Client\Exceptions;
 
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException;
+
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Exceptions\UnauthorizedException}
  * interface.
  *
  * @see \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
  */
-class UnauthorizedException extends \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+class UnauthorizedException extends APIUnauthorizedException
 {
 }

@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Exception;
 
+use InvalidArgumentException;
+
 /**
  * Exception thrown no storage for a type was found
  */
-class StorageNotFound extends \InvalidArgumentException
+class StorageNotFound extends InvalidArgumentException
 {
     /**
      * Creates a new exception for $typeName

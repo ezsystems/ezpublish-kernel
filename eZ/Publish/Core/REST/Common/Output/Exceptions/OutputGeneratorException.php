@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Common\Output\Exceptions;
 
+use RuntimeException;
+
 /**
  * Invalid output generation
  */
-class OutputGeneratorException extends \RuntimeException
+class OutputGeneratorException extends RuntimeException
 {
     /**
      * Construct from error message

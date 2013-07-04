@@ -44,7 +44,7 @@ class EzXmlTest extends PHPUnit_Framework_TestCase
         {
             $input = new EzXml( $xmlString );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->assertEquals( $exceptionMessage, $e->getMessage() );
             return;

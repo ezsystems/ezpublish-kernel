@@ -9,9 +9,11 @@
 
 namespace eZ\Publish\Core\REST\Client\Exceptions;
 
+use BadMethodCallException;
+
 /**
  * Exception thrown if an unsupported method is called.
  */
-class MethodNotAllowedException extends \BadMethodCallException
+class MethodNotAllowedException extends BadMethodCallException
 {
 }

@@ -10,6 +10,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use Exception;
 
 /**
  * Test case for operations in the LanguageService using in memory storage.
@@ -544,7 +545,7 @@ class LanguageServiceTest extends BaseTest
             // Create new language
             $languageService->createLanguage( $languageCreate );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -600,7 +601,7 @@ class LanguageServiceTest extends BaseTest
             // Commit all changes
             $repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -640,7 +641,7 @@ class LanguageServiceTest extends BaseTest
             // Update the language name
             $languageService->updateLanguageName( $language, 'My English' );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -686,7 +687,7 @@ class LanguageServiceTest extends BaseTest
             // Commit all changes
             $repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();

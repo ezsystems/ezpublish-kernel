@@ -10,8 +10,9 @@
 namespace eZ\Publish\Core\MVC\Legacy\Templating\Tests\Twig;
 
 use eZ\Publish\Core\MVC\Legacy\Templating\Twig\Template;
+use PHPUnit_Framework_TestCase;
 
-class TemplateTest extends \PHPUnit_Framework_TestCase
+class TemplateTest extends PHPUnit_Framework_TestCase
 {
     const TEMPLATE_NAME = 'design:hello_world.tpl';
 

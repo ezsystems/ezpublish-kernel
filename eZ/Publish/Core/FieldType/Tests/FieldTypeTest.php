@@ -8,7 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
+
 use PHPUnit_Framework_TestCase;
+use Exception;
 
 abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
 {
@@ -436,7 +438,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
                 )
             );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             if ( $e instanceof \PHPUnit_Framework_Exception
                  || $e instanceof \PHPUnit_Framework_Error

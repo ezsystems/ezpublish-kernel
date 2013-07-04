@@ -12,6 +12,7 @@ namespace eZ\Publish\API\Repository\Tests;
 use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for operations in the RoleService using in memory storage.
@@ -159,7 +160,7 @@ class RoleServiceTest extends BaseTest
             // This call will fail with a "NotFoundException"
             $role = $roleService->loadRole( $createdRoleId );
         }
-        catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             return;
         }

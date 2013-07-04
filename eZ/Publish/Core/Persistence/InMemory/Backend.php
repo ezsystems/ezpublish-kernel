@@ -15,6 +15,8 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use eZ\Publish\SPI\Persistence\ValueObject;
 use LogicException;
+use RuntimeException;
+use Exception;
 
 /**
  * The Storage Engine backend for in memory storage
@@ -344,7 +346,7 @@ class Backend
     public function commit()
     {
         if ( empty( $this->transactionDataStack ) )
-            throw new \RuntimeException( "No transactions in progress" );
+            throw new RuntimeException( "No transactions in progress" );
 
         // remove one level of data from transaction stack
         array_pop( $this->transactionDataStack );
@@ -360,7 +362,7 @@ class Backend
     public function rollback()
     {
         if ( empty( $this->transactionDataStack ) )
-            throw new \RuntimeException( "No transactions in progress" );
+            throw new RuntimeException( "No transactions in progress" );
 
         // pop last data set from transaction stack back to live $data set to wipe out changes
         $this->data = array_pop( $this->transactionDataStack );
@@ -588,9 +590,9 @@ class Backend
         {
             return $this->joinToValue( $obj, $joinInfo );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
-            throw new \RuntimeException( "Could not join value using: " . var_export( $data, true ), 0, $e );
+            throw new RuntimeException( "Could not join value using: " . var_export( $data, true ), 0, $e );
         }
     }
 
@@ -622,7 +624,7 @@ class Backend
                 }
                 else
                 {
-                    throw new \RuntimeException( "$property is supposed to be single(1), found none!" );
+                    throw new RuntimeException( "$property is supposed to be single(1), found none!" );
                     $value = null;
                 }
                 continue;

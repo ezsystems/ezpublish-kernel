@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Values\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct as APIContentCreateStruct;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct}
@@ -17,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  *
  * @see \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
  */
-class ContentCreateStruct extends \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
+class ContentCreateStruct extends APIContentCreateStruct
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Field[]

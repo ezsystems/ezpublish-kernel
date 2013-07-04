@@ -11,6 +11,8 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use Exception;
 
 /**
  * Test case for operations in the UserService using in memory storage.
@@ -395,7 +397,7 @@ class UserServiceTest extends BaseTest
                 $parentUserGroup
             )->id;
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -409,7 +411,7 @@ class UserServiceTest extends BaseTest
             // Throws exception since creation of user group was rolled back
             $loadedGroup = $userService->loadUserGroup( $createdUserGroupId );
         }
-        catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             return;
         }
@@ -1015,7 +1017,7 @@ class UserServiceTest extends BaseTest
         {
             $user = $this->createUserVersion1();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -1029,7 +1031,7 @@ class UserServiceTest extends BaseTest
             // Throws exception since creation of user was rolled back
             $loadedUser = $userService->loadUser( $user->id );
         }
-        catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             return;
         }

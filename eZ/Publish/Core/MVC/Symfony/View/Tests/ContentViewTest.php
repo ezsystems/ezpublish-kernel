@@ -10,11 +10,12 @@
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @group mvc
  */
-class ContentViewTest extends \PHPUnit_Framework_TestCase
+class ContentViewTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider constructProvider

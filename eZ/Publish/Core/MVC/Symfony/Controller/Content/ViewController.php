@@ -17,6 +17,7 @@ use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as Authorizatio
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use DateTime;
+use Exception;
 
 class ViewController extends Controller
 {
@@ -106,7 +107,7 @@ class ViewController extends Controller
 
             return $response;
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->handleViewException( $response, $params, $e, $viewType, null, $locationId );
         }
@@ -152,13 +153,13 @@ class ViewController extends Controller
 
             return $response;
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->handleViewException( $response, $params, $e, $viewType, $contentId );
         }
     }
 
-    protected function handleViewException( $response, $params, \Exception $e, $viewType, $contentId = null, $locationId = null )
+    protected function handleViewException( $response, $params, Exception $e, $viewType, $contentId = null, $locationId = null )
     {
         $event = new APIContentExceptionEvent(
             $e,

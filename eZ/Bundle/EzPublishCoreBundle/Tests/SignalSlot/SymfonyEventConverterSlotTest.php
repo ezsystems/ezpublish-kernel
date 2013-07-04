@@ -11,8 +11,9 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\SignalSlot;
 
 use eZ\Bundle\EzPublishCoreBundle\SignalSlot\Slot\SymfonyEventConverterSlot;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use PHPUnit_Framework_TestCase;
 
-class SymfonyEventConverterSlotTest extends \PHPUnit_Framework_TestCase
+class SymfonyEventConverterSlotTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @covers eZ\Bundle\EzPublishCoreBundle\SignalSlot\Slot\SymfonyEventConverterSlot::__construct

@@ -10,6 +10,7 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Tests\SetupWizard;
 
 use eZ\Publish\Core\MVC\Legacy\Tests\LegacyBasedTestCase;
 use eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfigurationConverter;
+use Exception;
 
 class ConfigurationConverterTest extends LegacyBasedTestCase
 {
@@ -64,7 +65,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
         {
             $result = $configurationConverter->fromLegacy( $package, $adminSiteaccess );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             if ( $exception !== null && $e instanceof $exception )
             {

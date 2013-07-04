@@ -9,9 +9,11 @@
 
 namespace eZ\Publish\Core\REST\Common\Exceptions;
 
+use InvalidArgumentException;
+
 /**
  * Exception thrown if a parser discovers an error.
  */
-class Parser extends \InvalidArgumentException
+class Parser extends InvalidArgumentException
 {
 }

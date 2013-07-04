@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 use eZ\Publish\Core\REST\Client\Sessionable;
 use DateTime;
 use ArrayObject;
+use Exception;
 
 /**
  * Base class for api specific tests.
@@ -56,7 +57,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
                 $repository->setSession( $id = md5( microtime() ) );
             }
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->markTestSkipped(
                 'Cannot create a repository with predefined user. ' .

@@ -30,6 +30,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundExcepti
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use Exception;
 
 /**
  * ObjectStateService service
@@ -113,7 +114,7 @@ class ObjectStateService implements ObjectStateServiceInterface
             $spiObjectStateGroup = $this->objectStateHandler->createGroup( $inputStruct );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -233,7 +234,7 @@ class ObjectStateService implements ObjectStateServiceInterface
             );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -262,7 +263,7 @@ class ObjectStateService implements ObjectStateServiceInterface
             $this->objectStateHandler->deleteGroup( $loadedObjectStateGroup->id );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -327,7 +328,7 @@ class ObjectStateService implements ObjectStateServiceInterface
 
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -410,7 +411,7 @@ class ObjectStateService implements ObjectStateServiceInterface
             );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -446,7 +447,7 @@ class ObjectStateService implements ObjectStateServiceInterface
             );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -474,7 +475,7 @@ class ObjectStateService implements ObjectStateServiceInterface
             $this->objectStateHandler->delete( $loadedObjectState->id );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -511,7 +512,7 @@ class ObjectStateService implements ObjectStateServiceInterface
             );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;

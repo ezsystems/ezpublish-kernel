@@ -16,6 +16,8 @@ use eZ\Publish\Core\REST\Server\Authenticator;
 use eZ\Publish\API\Repository\Repository;
 
 use Qafoo\RMF;
+use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * Authenticator for integration tests
@@ -51,9 +53,9 @@ class IntegrationTest extends Authenticator
                 $this->repository->getUserService()->loadUser( $request->testUser )
             );
         }
-        catch ( \InvalidArgumentException $e )
+        catch ( InvalidArgumentException $e )
         {
-            throw new \RuntimeException( "The Integration Test Authenticator requires a test user ID to be set using the HTTP Header X-Test-User." );
+            throw new RuntimeException( "The Integration Test Authenticator requires a test user ID to be set using the HTTP Header X-Test-User." );
         }
     }
 }

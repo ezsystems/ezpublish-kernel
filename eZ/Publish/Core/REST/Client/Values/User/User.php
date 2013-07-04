@@ -9,13 +9,15 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\User;
 
+use eZ\Publish\API\Repository\Values\User\User as APIUser;
+
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\User\User}
  * class.
  *
  * @see \eZ\Publish\API\Repository\Values\User\User
  */
-class User extends \eZ\Publish\API\Repository\Values\User\User
+class User extends APIUser
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Content

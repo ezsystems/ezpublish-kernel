@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Tests\IdManager;
 
 use eZ\Publish\Core\Base\ConfigurationManager;
 use eZ\Publish\Core\Base\ServiceContainer;
+use Exception;
 
 /**
  * A Test Factory is used to setup the infrastructure for a tests, based on a
@@ -191,7 +192,7 @@ class Legacy extends SetupFactory
 
                     $stmt->execute();
                 }
-                catch ( \Exception $e )
+                catch ( Exception $e )
                 {
                     echo "$table ( ", implode( ', ', $row ), " )\n";
                     throw $e;

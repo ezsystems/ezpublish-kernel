@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Values\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUpdateStruct;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct}
@@ -17,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  *
  * @see \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct
  */
-class ContentUpdateStruct extends \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct
+class ContentUpdateStruct extends APIContentUpdateStruct
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Field[]

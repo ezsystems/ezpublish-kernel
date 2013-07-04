@@ -1,8 +1,16 @@
 <?php
+/**
+ * File containing the ContentType class
+ *
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
 
 namespace eZ\Publish\Core\REST\Client\Values\ContentType;
 
 use eZ\Publish\Core\REST\Client\ContentTypeService;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
 
 /**
  * this class represents a content type value
@@ -30,7 +38,7 @@ use eZ\Publish\Core\REST\Client\ContentTypeService;
  * @todo Implement access to field definitions (array and by identifier)
  * @todo Implement fetching of content type groups
  */
-class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentType
+class ContentType extends APIContentType
 {
     /**
      * Content type service to fetch additional information from

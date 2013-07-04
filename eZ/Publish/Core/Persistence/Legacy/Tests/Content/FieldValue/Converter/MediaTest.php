@@ -21,11 +21,12 @@ use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\IO\Handler\InMemory as InMemoryIOHandler;
 use eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Test case for MediaType converter in Legacy storage
  */
-class MediaTest extends \PHPUnit_Framework_TestCase
+class MediaTest extends PHPUnit_Framework_TestCase
 {
     protected $converter;
 

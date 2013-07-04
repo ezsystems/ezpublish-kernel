@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use Exception;
 
 /**
  * Test case for operations in the ContentService using in memory storage.
@@ -3127,7 +3128,7 @@ class ContentServiceTest extends BaseContentServiceTest
             // Create a new content object
             $contentId = $contentService->createContent( $contentCreate )->id;
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3142,7 +3143,7 @@ class ContentServiceTest extends BaseContentServiceTest
             // This call will fail with a "NotFoundException"
             $contentService->loadContent( $contentId );
         }
-        catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
+        catch ( NotFoundException $e )
         {
             // This is expected
             return;
@@ -3194,7 +3195,7 @@ class ContentServiceTest extends BaseContentServiceTest
             // Commit changes
             $repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3231,7 +3232,7 @@ class ContentServiceTest extends BaseContentServiceTest
         {
             $draft = $this->createContentDraftVersion1();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3285,7 +3286,7 @@ class ContentServiceTest extends BaseContentServiceTest
             // Roleback the transaction
             $repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3333,7 +3334,7 @@ class ContentServiceTest extends BaseContentServiceTest
             // Store version number for later reuse
             $versionNo = $drafted->versionInfo->versionNo;
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3394,7 +3395,7 @@ class ContentServiceTest extends BaseContentServiceTest
             // Commit all changes
             $repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3446,7 +3447,7 @@ class ContentServiceTest extends BaseContentServiceTest
             // Store version number for later reuse
             $versionNo = $content->versionInfo->versionNo;
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3509,7 +3510,7 @@ class ContentServiceTest extends BaseContentServiceTest
             // Commit all changes
             $repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3567,7 +3568,7 @@ class ContentServiceTest extends BaseContentServiceTest
             // Publish updated version
             $contentService->publishVersion( $draft->getVersionInfo() );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3631,7 +3632,7 @@ class ContentServiceTest extends BaseContentServiceTest
             // Commit all changes.
             $repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3686,7 +3687,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 $metadataUpdate
             );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3747,7 +3748,7 @@ class ContentServiceTest extends BaseContentServiceTest
             // Commit all changes.
             $repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3794,7 +3795,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
             $contentService->deleteVersion( $draft->getVersionInfo() );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3847,7 +3848,7 @@ class ContentServiceTest extends BaseContentServiceTest
             // Commit all changes.
             $repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3893,7 +3894,7 @@ class ContentServiceTest extends BaseContentServiceTest
             // Delete content object
             $contentService->deleteContent( $contentInfo );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -3945,7 +3946,7 @@ class ContentServiceTest extends BaseContentServiceTest
             // Commit all changes
             $repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -4009,7 +4010,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 $locationCreate
             );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();
@@ -4074,7 +4075,7 @@ class ContentServiceTest extends BaseContentServiceTest
             // Commit all changes
             $repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             // Cleanup hanging transaction on error
             $repository->rollback();

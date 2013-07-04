@@ -37,7 +37,9 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use Exception;
 
 /**
  * This service provides methods for managing Roles and Policies
@@ -143,7 +145,7 @@ class RoleService implements RoleServiceInterface
             $createdRole = $this->userHandler->createRole( $spiRole );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -206,7 +208,7 @@ class RoleService implements RoleServiceInterface
             );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -253,7 +255,7 @@ class RoleService implements RoleServiceInterface
             $this->userHandler->addPolicy( $loadedRole->id, $spiPolicy );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -285,7 +287,7 @@ class RoleService implements RoleServiceInterface
             $this->userHandler->removePolicy( $loadedRole->id, $policy->id );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -331,7 +333,7 @@ class RoleService implements RoleServiceInterface
             $this->userHandler->updatePolicy( $spiPolicy );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -424,7 +426,7 @@ class RoleService implements RoleServiceInterface
             $this->userHandler->deleteRole( $loadedRole->id );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -483,7 +485,7 @@ class RoleService implements RoleServiceInterface
             );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -515,7 +517,7 @@ class RoleService implements RoleServiceInterface
             $this->userHandler->unAssignRole( $userGroup->id, $role->id );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -549,7 +551,7 @@ class RoleService implements RoleServiceInterface
             );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -581,7 +583,7 @@ class RoleService implements RoleServiceInterface
             $this->userHandler->unAssignRole( $user->id, $role->id );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -933,7 +935,7 @@ class RoleService implements RoleServiceInterface
         {
             if ( !isset( $this->settings['limitationTypes'][$identifier] ) )
             {
-                throw new \eZ\Publish\Core\Base\Exceptions\BadStateException(
+                throw new BadStateException(
                     '$identifier',
                     "limitationType[{$identifier}] is not configured but was configured on limitationMap[{$module}][{$function}]"
                 );
@@ -1054,7 +1056,7 @@ class RoleService implements RoleServiceInterface
 
         if ( !isset( $this->settings['limitationTypes'][$identifier] ) )
         {
-            throw new \eZ\Publish\Core\Base\Exceptions\BadStateException(
+            throw new BadStateException(
                 '$identifier',
                 "limitationType[{$identifier}] is not configured but was configured on limitationMap[{$module}][{$function}]"
             );

@@ -9,11 +9,13 @@
 
 namespace eZ\Publish\Core\REST\Common\Exceptions;
 
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException as APIInvalidArgumentException;
+
 /**
  *
  * This exception is thrown if a service method is called with an illegal or non appropriate value
  *
  */
-class InvalidArgumentException extends \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+class InvalidArgumentException extends APIInvalidArgumentException
 {
 }

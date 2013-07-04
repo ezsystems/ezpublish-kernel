@@ -10,8 +10,9 @@
 namespace eZ\Publish\Core\FieldType\Tests\Page;
 
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
+use PHPUnit_Framework_TestCase;
 
-class BlockTest extends \PHPUnit_Framework_TestCase
+class BlockTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @param array $properties

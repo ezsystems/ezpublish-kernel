@@ -10,8 +10,9 @@
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\LocalPurgeClient;
+use PHPUnit_Framework_TestCase;
 
-class LocalPurgeClientTest extends \PHPUnit_Framework_TestCase
+class LocalPurgeClientTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @covers eZ\Publish\Core\MVC\Symfony\Cache\Http\LocalPurgeClient::__construct

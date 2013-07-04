@@ -1,6 +1,15 @@
 <?php
+/**
+ * File containing the FieldDefinition class
+ *
+ * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
 
 namespace eZ\Publish\Core\REST\Client\Values\ContentType;
+
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
 
 /**
  *
@@ -20,7 +29,7 @@ namespace eZ\Publish\Core\REST\Client\Values\ContentType;
  * @property-read boolean $isInfoCollector indicates if this field is used for information collection
  * @property-read $defaultValue the default value of the field
  */
-class FieldDefinition extends \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
+class FieldDefinition extends APIFieldDefinition
 {
     /**
      * Contains the human readable name of this field in all provided languages

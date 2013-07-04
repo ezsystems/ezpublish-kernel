@@ -28,6 +28,7 @@ use eZ\Publish\API\Repository\UserService as UserServiceInterface;
 use eZ\Publish\SPI\Persistence\User as SPIUser;
 use eZ\Publish\Core\FieldType\User\Value as UserValue;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId as CriterionLocationId;
@@ -40,6 +41,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use ezcMailTools;
+use Exception;
 
 /**
  * This service provides methods for managing users and user groups
@@ -132,7 +134,7 @@ class UserService implements UserServiceInterface
             $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -252,7 +254,7 @@ class UserService implements UserServiceInterface
             $this->repository->getContentService()->deleteContent( $loadedUserGroup->getVersionInfo()->getContentInfo() );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -293,7 +295,7 @@ class UserService implements UserServiceInterface
             $locationService->moveSubtree( $userGroupMainLocation, $newParentMainLocation );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -354,7 +356,7 @@ class UserService implements UserServiceInterface
 
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -505,7 +507,7 @@ class UserService implements UserServiceInterface
 
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -632,7 +634,7 @@ class UserService implements UserServiceInterface
             $this->userHandler->delete( $loadedUser->id );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -746,7 +748,7 @@ class UserService implements UserServiceInterface
 
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -801,7 +803,7 @@ class UserService implements UserServiceInterface
             );
             $this->repository->commit();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->repository->rollback();
             throw $e;
@@ -846,7 +848,7 @@ class UserService implements UserServiceInterface
                     $this->repository->commit();
                     return;
                 }
-                catch ( \Exception $e )
+                catch ( Exception $e )
                 {
                     $this->repository->rollback();
                     throw $e;
@@ -1141,19 +1143,19 @@ class UserService implements UserServiceInterface
         switch ( $sortField )
         {
             case Location::SORT_FIELD_PATH:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPathString( $sortOrder );
+                return new SortClause\LocationPathString( $sortOrder );
 
             case Location::SORT_FIELD_PUBLISHED:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DatePublished( $sortOrder );
+                return new SortClause\DatePublished( $sortOrder );
 
             case Location::SORT_FIELD_MODIFIED:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DateModified( $sortOrder );
+                return new SortClause\DateModified( $sortOrder );
 
             case Location::SORT_FIELD_SECTION:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\SectionIdentifier( $sortOrder );
+                return new SortClause\SectionIdentifier( $sortOrder );
 
             case Location::SORT_FIELD_DEPTH:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationDepth( $sortOrder );
+                return new SortClause\LocationDepth( $sortOrder );
 
             //@todo: enable
             // case APILocation::SORT_FIELD_CLASS_IDENTIFIER:
@@ -1162,10 +1164,10 @@ class UserService implements UserServiceInterface
             // case APILocation::SORT_FIELD_CLASS_NAME:
 
             case Location::SORT_FIELD_PRIORITY:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPriority( $sortOrder );
+                return new SortClause\LocationPriority( $sortOrder );
 
             case Location::SORT_FIELD_NAME:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\ContentName( $sortOrder );
+                return new SortClause\ContentName( $sortOrder );
 
             //@todo: enable
             // case APILocation::SORT_FIELD_MODIFIED_SUBNODE:
@@ -1177,7 +1179,7 @@ class UserService implements UserServiceInterface
             // case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
 
             default:
-                return new \eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPathString( $sortOrder );
+                return new SortClause\LocationPathString( $sortOrder );
         }
     }
 }

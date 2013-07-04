@@ -17,6 +17,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use Exception;
 
 /**
  * Test case for SectionHandler using in memory storage.
@@ -726,7 +727,7 @@ class ContentTypeHandlerTest extends HandlerTest
             $handler->load( $type->id, Type::STATUS_DRAFT );
             $this->fail( "Draft of Type still exists after publish()" );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
         }
         $type = $handler->load( $type->id, Type::STATUS_DEFINED );

@@ -13,8 +13,9 @@ use eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use PHPUnit_Framework_TestCase;
 
-class PersistenceCachePurgerTest extends \PHPUnit_Framework_TestCase
+class PersistenceCachePurgerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

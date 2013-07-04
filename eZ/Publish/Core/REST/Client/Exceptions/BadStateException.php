@@ -9,12 +9,14 @@
 
 namespace eZ\Publish\Core\REST\Client\Exceptions;
 
+use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException;
+
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Exceptions\BadStateException}
  * interface.
  *
  * @see \eZ\Publish\API\Repository\Exceptions\BadStateException
  */
-class BadStateException extends \eZ\Publish\API\Repository\Exceptions\BadStateException
+class BadStateException extends APIBadStateException
 {
 }

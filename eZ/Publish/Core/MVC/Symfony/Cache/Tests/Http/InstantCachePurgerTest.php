@@ -10,8 +10,9 @@
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\InstantCachePurger;
+use PHPUnit_Framework_TestCase;
 
-class InstantCachePurgerTest extends \PHPUnit_Framework_TestCase
+class InstantCachePurgerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

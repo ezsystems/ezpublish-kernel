@@ -9,13 +9,15 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\Content;
 
+use eZ\Publish\API\Repository\Values\Content\Relation as APIRelation;
+
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\Content\Relation}
  * class.
  *
  * @see \eZ\Publish\API\Repository\Values\Content\Relation
  */
-class Relation extends \eZ\Publish\API\Repository\Values\Content\Relation
+class Relation extends APIRelation
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo

@@ -11,8 +11,9 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser;
+use PHPUnit_Framework_TestCase;
 
-class ArraySettingsMergeTest extends \PHPUnit_Framework_TestCase
+class ArraySettingsMergeTest extends PHPUnit_Framework_TestCase
 {
 
     protected function setUp()

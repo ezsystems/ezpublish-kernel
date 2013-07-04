@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration\Legacy;
 
 use eZ\Publish\Core\Repository\Tests\Service\Integration\RepositoryTest as BaseRepositoryTest;
+use Exception;
 
 /**
  * Test case for Repository Service using Legacy storage class
@@ -22,7 +23,7 @@ class RepositoryTest extends BaseRepositoryTest
         {
             return Utils::getRepository();
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
             $this->markTestIncomplete(  $e->getMessage() );
         }
