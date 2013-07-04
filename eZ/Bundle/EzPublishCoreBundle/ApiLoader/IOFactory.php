@@ -25,7 +25,9 @@ class IOFactory
 
     /**
      * Constructs a new IOServiceFactory
+     *
      * @param ConfigResolverInterface $configResolver
+     * @param \eZ\Publish\SPI\IO\MimeTypeDetector $mimeTypeDetector
      */
     public function __construct( ConfigResolverInterface $configResolver, MimeTypeDetector $mimeTypeDetector )
     {
@@ -37,7 +39,7 @@ class IOFactory
      * Returns a new IOService instance with the config string in $prefixSetting as a prefix
      *
      * @param IOHandlerInterface $IOHandler
-     * @param string $prefixSetting
+     * @param bool|string $prefixSetting
      *
      * @return \eZ\Publish\Core\IO\IOService
      */
@@ -57,7 +59,7 @@ class IOFactory
      * Returns an IOHandler instance
      *
      * @param $handlerClass The IOHandler class to instanciate
-     * @param string|array $varDirectorySetting Setting(s) that build-up the storage directory
+     * @param string|array $storageDirectorySetting Setting(s) that build-up the storage directory
      *
      * @return mixed
      */
@@ -69,7 +71,7 @@ class IOFactory
         }
         else if ( is_array( $storageDirectorySetting ) )
         {
-            $storageDirectoryParts = '';
+            $storageDirectoryParts = array();
             foreach ( $storageDirectorySetting as $setting )
             {
                 $storageDirectoryParts[] = $this->configResolver->getParameter( $setting );
