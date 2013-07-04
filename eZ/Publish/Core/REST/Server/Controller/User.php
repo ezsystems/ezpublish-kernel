@@ -639,7 +639,10 @@ class User extends RestController
             $userGroupLocation->contentId
         );
 
-        $locationPath = $this->requestParser->parseHref( $this->request->destination, 'groupPath' );
+        $locationPath = $this->requestParser->parseHref(
+            $this->httpFoundationRequest->headers->get( 'Destination' ),
+            'groupPath'
+        );
 
         try
         {

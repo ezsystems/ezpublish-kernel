@@ -174,7 +174,10 @@ class Location extends RestController
 
         $destinationLocation = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath(
-                $this->requestParser->parseHref( $this->request->destination, 'locationPath' )
+                $this->requestParser->parseHref(
+                    $this->httpFoundationRequest->headers->get( 'Destination' ),
+                    'locationPath'
+                )
             )
         );
 
@@ -270,7 +273,10 @@ class Location extends RestController
 
         $destinationLocation = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath(
-                $this->requestParser->parseHref( $this->request->destination, 'locationPath' )
+                $this->requestParser->parseHref(
+                    $this->httpFoundationRequest->headers->get( 'Destination' ),
+                    'locationPath'
+                )
             )
         );
 
