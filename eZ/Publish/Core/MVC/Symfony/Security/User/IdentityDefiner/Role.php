@@ -40,7 +40,7 @@ class Role implements IdentityAware
         );
 
         $roleIds = array();
-        $limitationByRoleId = array();
+        $limitationValues = array();
         /** @var UserRoleAssignment $roleAssignment */
         foreach ( $roleAssignments as $roleAssignment )
         {
@@ -48,22 +48,23 @@ class Role implements IdentityAware
             // If a limitation is present, store the limitation values by roleId
             if ( $roleAssignment->limitation !== null )
             {
-                $limitationByRoleId[$roleAssignment->role->id] = array();
+                $limitationValuesKey = "{$roleAssignment->role->id}-" . $roleAssignment->limitation->getIdentifier();
+                $limitationValues[$limitationValuesKey] = array();
                 foreach ( $roleAssignment->limitation->limitationValues as $value )
                 {
-                    $limitationByRoleId[$roleAssignment->role->id][] = $value;
+                    $limitationValues[$limitationValuesKey][] = $value;
                 }
             }
         }
 
         $identity->setInformation( 'roleIdList', implode( '|', $roleIds ) );
 
-        // Flatten each limitation values to a string and then store it as Indentity information
-        $limitationValues = array();
-        foreach ( $limitationByRoleId as $roleId => $limitationArray )
+        // Flatten each limitation values to a string and then store it as Identity information
+        $limitationValuesFlattened = array();
+        foreach ( $limitationValues as $roleId => $limitationArray )
         {
-            $limitationValues[] = "$roleId:" . implode( '|', $limitationArray );
+            $limitationValuesFlattened[] = "$roleId:" . implode( '|', $limitationArray );
         }
-        $identity->setInformation( 'roleLimitationList', implode( ',', $limitationValues ) );
+        $identity->setInformation( 'roleLimitationList', implode( ',', $limitationValuesFlattened ) );
     }
 }

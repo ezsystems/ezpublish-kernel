@@ -58,6 +58,16 @@ class RoleTest extends \PHPUnit_Framework_TestCase
         $roleId1 = 123;
         $roleId2 = 456;
         $roleId3 = 789;
+        $limitationForRole2 = $this->generateLimitationMock(
+            array(
+                'limitationValues' => array( '/1/2', '/1/2/43' )
+            )
+        );
+        $limitationForRole3 = $this->generateLimitationMock(
+            array(
+                'limitationValues' => array( 'foo', 'bar' )
+            )
+        );
         $returnedRoleAssigments = array(
             $this->generateRoleAssignmentMock(
                 array(
@@ -75,11 +85,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
                             'id' => $roleId2
                         )
                     ),
-                    'limitation' => $this->generateLimitationMock(
-                        array(
-                            'limitationValues' => array( '/1/2', '/1/2/43' )
-                        )
-                    )
+                    'limitation' => $limitationForRole2
                 )
             ),
             $this->generateRoleAssignmentMock(
@@ -89,11 +95,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
                             'id' => $roleId3
                         )
                     ),
-                    'limitation' => $this->generateLimitationMock(
-                        array(
-                            'limitationValues' => array( 'foo', 'bar' )
-                        )
-                    )
+                    'limitation' => $limitationForRole3
                 )
             ),
         );
@@ -111,7 +113,9 @@ class RoleTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey( 'roleIdList', $identityInfo );
         $this->assertSame( "$roleId1|$roleId2|$roleId3", $identityInfo['roleIdList'] );
         $this->assertArrayHasKey( 'roleLimitationList', $identityInfo );
-        $this->assertSame( "$roleId2:/1/2|/1/2/43,$roleId3:foo|bar", $identityInfo['roleLimitationList'] );
+        $limitationIdentifierForRole2 = get_class( $limitationForRole2 );
+        $limitationIdentifierForRole3 = get_class( $limitationForRole3 );
+        $this->assertSame( "$roleId2-$limitationIdentifierForRole2:/1/2|/1/2/43,$roleId3-$limitationIdentifierForRole3:foo|bar", $identityInfo['roleLimitationList'] );
     }
 
     private function generateRoleAssignmentMock( array $properties = array() )
@@ -132,9 +136,14 @@ class RoleTest extends \PHPUnit_Framework_TestCase
 
     private function generateLimitationMock( array $properties = array() )
     {
-        return $this
+        $limitationMock = $this
             ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\User\\Limitation\\RoleLimitation' )
             ->setConstructorArgs( array( $properties ) )
             ->getMockForAbstractClass();
+        $limitationMock
+            ->expects( $this->any() )
+            ->method( 'getIdentifier' )
+            ->will( $this->returnValue( get_class( $limitationMock ) ) );
+        return $limitationMock;
     }
 }
