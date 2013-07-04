@@ -10,6 +10,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\IdentityDefinerPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterStorageEnginePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterLimitationTypePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass;
@@ -43,6 +44,7 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new LocationViewPass );
         $container->addCompilerPass( new BlockViewPass );
         $container->addCompilerPass( new SignalSlotPass );
+        $container->addCompilerPass( new IdentityDefinerPass );
 
         $securityExtension = $container->getExtension( 'security' );
         $securityExtension->addSecurityListenerFactory( new EzPublishSecurityFactory );

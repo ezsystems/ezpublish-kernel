@@ -14,9 +14,28 @@ use eZ\Publish\Core\MVC\Symfony\Cache\Http\RequestAwarePurger;
 use Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache as BaseHttpCache;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 abstract class HttpCache extends BaseHttpCache
 {
+    public function handle( Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true )
+    {
+        // Forbid direct AUTHENTICATE requests to get user hash
+        if (
+            $request->headers->get( 'X-HTTP-Override' ) === 'AUTHENTICATE'
+            && $request->headers->get( 'Accept' ) === Kernel::USER_HASH_ACCEPT_HEADER
+        )
+        {
+            return new Response( '', 405 );
+        }
+
+        if ( $request->isMethodSafe() )
+        {
+            $request->headers->set( 'X-User-Hash', $this->kernel->generateUserHash( $request ) );
+        }
+        return parent::handle( $request, $type, $catch );
+    }
+
     protected function createStore()
     {
         return new LocationAwareStore( $this->cacheDir ?: $this->kernel->getCacheDir() . '/http_cache' );
@@ -39,7 +58,7 @@ abstract class HttpCache extends BaseHttpCache
         }
 
         // Reject all non-authorized clients
-        if ( !$this->isPurgeRequestAllowed( $request ) )
+        if ( !$this->isInternalRequestAllowed( $request ) )
         {
             return new Response( '', 405 );
         }
@@ -75,9 +94,9 @@ abstract class HttpCache extends BaseHttpCache
      *
      * @return boolean
      */
-    protected function isPurgeRequestAllowed( Request $request )
+    protected function isInternalRequestAllowed( Request $request )
     {
-        if ( !$this->isPurgeIPAllowed( $request->getClientIp() ) )
+        if ( !$this->isInternalIPAllowed( $request->getClientIp() ) )
             return false;
 
         return true;
@@ -92,9 +111,9 @@ abstract class HttpCache extends BaseHttpCache
      *
      * @return boolean
      */
-    protected function isPurgeIPAllowed( $ip )
+    protected function isInternalIPAllowed( $ip )
     {
-        $allowedIps = array_fill_keys( $this->getPurgeAllowedIPs(), true );
+        $allowedIps = array_fill_keys( $this->getInternalAllowedIPs(), true );
         if ( !isset( $allowedIps[$ip] ) )
             return false;
 
@@ -106,8 +125,8 @@ abstract class HttpCache extends BaseHttpCache
      *
      * @return array
      */
-    protected function getPurgeAllowedIPs()
+    protected function getInternalAllowedIPs()
     {
-        return array( '127.0.0.1', '::1' );
+        return array( '127.0.0.1', '::1', 'fe80::1' );
     }
 }

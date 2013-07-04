@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
+use eZ\Bundle\EzPublishCoreBundle\Kernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -16,6 +17,8 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 
@@ -55,7 +58,9 @@ class RequestEventListener implements EventSubscriberInterface
             KernelEvents::REQUEST => array(
                 array( 'onKernelRequestSetup', 190 ),
                 array( 'onKernelRequestForward', 10 ),
-                array( 'onKernelRequestRedirect', 0 )
+                array( 'onKernelRequestRedirect', 0 ),
+                // onKernelRequestUserHash needs to be just after Firewall (prio 8), so that user is already logged in the repository.
+                array( 'onKernelRequestUserHash', 7 ),
             )
         );
     }
@@ -156,5 +161,41 @@ class RequestEventListener implements EventSubscriberInterface
                     );
             }
         }
+    }
+
+    /**
+     * Returns a Response containing the current user hash if needed.
+     *
+     * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+     */
+    public function onKernelRequestUserHash( GetResponseEvent $event )
+    {
+        $request = $event->getRequest();
+
+        if (
+            $request->headers->get( 'X-HTTP-Override' ) !== 'AUTHENTICATE'
+            || $request->headers->get( 'Accept' ) !== Kernel::USER_HASH_ACCEPT_HEADER
+        )
+        {
+            return;
+        }
+
+        // We must have a session at that point since we're supposed to be connected
+        if ( !$request->hasSession() )
+        {
+            $event->setResponse( new Response( '', 400 ) );
+            $event->stopPropagation();
+            return;
+        }
+
+        /** @var $hashGenerator \eZ\Publish\SPI\HashGenerator */
+        $hashGenerator = $this->container->get( 'ezpublish.user.hash_generator' );
+        $userHash = $hashGenerator->generate();
+        $this->container->get( 'logger' )->debug( "UserHash: $userHash" );
+
+        $response = new Response();
+        $response->headers->set( 'X-User-Hash', $userHash );
+        $event->setResponse( $response );
+        $event->stopPropagation();
     }
 }
