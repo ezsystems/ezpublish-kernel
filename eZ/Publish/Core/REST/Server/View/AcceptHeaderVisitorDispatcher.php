@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\View;
 
-use eZ\Publish\Core\REST\Server\Request;
+use Symfony\Component\HttpFoundation\Request;
 use eZ\Publish\Core\REST\Common\Output\Visitor as OutputVisitor;
 use Qafoo\RMF\View\NowViewFoundException;
 
@@ -40,20 +40,20 @@ class AcceptHeaderVisitorDispatcher
     /**
      * Dispatches a visitable result to the mapped visitor
      *
-     * @param \eZ\Publish\Core\REST\Server\Request $request
+     * @param \Symfony\Component\HttpFoundation\Request $request
      * @param mixed $result
      *
      * @return \eZ\Publish\Core\REST\Common\Message
      */
     public function dispatch( Request $request, $result )
     {
-        foreach ( $request->mimetype as $mimeType )
+        foreach ( $request->getAcceptableContentTypes() as $mimeType )
         {
+            /** @var \eZ\Publish\Core\REST\Common\Output\Visitor $visitor */
             foreach ( $this->mapping as $regexp => $visitor )
             {
-                if ( preg_match( $regexp, $mimeType['value'] ) )
+                if ( preg_match( $regexp, $mimeType ) )
                 {
-                    /** @var \eZ\Publish\Core\REST\Common\Output\Visitor $visitor */
                     return $visitor->visit( $result );
                 }
             }

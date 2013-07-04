@@ -19,7 +19,6 @@ parameters:
     ezpublish_rest.field_type_parser.class: eZ\Publish\Core\REST\Common\Input\FieldTypeParser
     ezpublish_rest.listener.class: eZ\Bundle\EzPublishRestBundle\EventListener\RestListener
     ezpublish_rest.field_type_serializer.class: eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer
-    ezpublish_rest.request.class: eZ\Publish\Core\REST\Server\Request
 
     ezpublish_rest.field_type_processor_registry.class: eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry
     ezpublish_rest.field_type_processor.ezimage.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\ImageProcessor
@@ -90,7 +89,6 @@ services:
             - [ setInputDispatcher, [@ezpublish_rest.input.dispatcher] ]
             - [ setRouter, [@router] ]
             - [ setRequestParser, [@ezpublish_rest.request_parser] ]
-            - [ setRequest, [@ezpublish_rest.request] ]
             - [ setHttpFoundationRequest, [@request=] ]
             - [ setContainer, [@service_container] ]
             - [ setRepository, [@ezpublish.api.repository] ]
@@ -180,13 +178,9 @@ services:
         class: %ezpublish_rest.listener.class%
         arguments:
             - @service_container
-            - @ezpublish_rest.request
             - @?form.csrf_provider
         tags:
             - { name: kernel.event_subscriber }
-
-    ezpublish_rest.request:
-        class: %ezpublish_rest.request.class%
 
     ezpublish_rest.field_type_processor_registry:
         class: %ezpublish_rest.field_type_processor_registry.class%
