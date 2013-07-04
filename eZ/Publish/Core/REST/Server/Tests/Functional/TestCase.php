@@ -102,7 +102,7 @@ class TestCase extends PHPUnit_Framework_TestCase
         self::assertNotNull( $headerValue, "Failed asserting that response has a $header header" );
         if ( $expectedValue !== null )
         {
-            self::assertEquals( $headerValue, $expectedValue );
+            self::assertEquals( $expectedValue, $headerValue );
         }
     }
 
