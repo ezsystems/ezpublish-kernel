@@ -58,7 +58,7 @@ class IOFactoryTest extends \PHPUnit_Framework_TestCase
         $handlerClass = get_class( $this->getMock( 'eZ\\Publish\\Core\\IO\\Handler' ) );
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\IO\\Handler',
-            $factory->getHandler($handlerClass, $directorySetting)
+            $factory->getHandler( $handlerClass, $directorySetting )
         );
     }
 
