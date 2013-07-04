@@ -33,7 +33,7 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     /**
      * @var \eZ\Publish\Core\REST\Common\RequestParser
      */
-    private $requestParser;
+    protected $requestParser;
 
     /**
      * @var \Symfony\Component\Routing\RouterInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -117,7 +117,7 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     /**
      * @return \eZ\Publish\Core\REST\Common\RequestParser|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getRequestParser()
+    protected function getRequestParser()
     {
         if ( !isset( $this->requestParser ) )
         {

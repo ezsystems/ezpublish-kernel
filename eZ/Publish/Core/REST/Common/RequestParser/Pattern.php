@@ -81,28 +81,26 @@ class Pattern implements RequestParser
      *
      * @return array
      */
-    public function parse( $type, $url )
+    public function parse( $url )
     {
-        if ( !isset( $this->map[$type] ) )
+        foreach ( $this->map as $pattern )
         {
-            throw new Exceptions\InvalidArgumentException( "No URL for type '$type' available." );
-        }
-
-        $pattern = $this->compile( $this->map[$type] );
-
-        if ( !preg_match( $pattern, $url, $match ) )
-        {
-            throw new Exceptions\InvalidArgumentException( "URL '$url' did not match $pattern." );
-        }
-
-        foreach ( $match as $key => $value )
-        {
-            if ( is_numeric( $key ) )
+            $pattern = $this->compile( $pattern );
+            if ( preg_match( $pattern, $url, $match ) )
             {
-                unset( $match[$key] );
+                // remove numeric keys
+                foreach ( $match as $key => $value )
+                {
+                    if ( is_numeric( $key ) )
+                    {
+                        unset( $match[$key] );
+                    }
+                }
+                return $match;
             }
         }
-        return $match;
+
+        throw new Exceptions\InvalidArgumentException( "URL '$url' did not match $pattern." );
     }
 
     /**
@@ -192,5 +190,17 @@ class Pattern implements RequestParser
         }
 
         return $url;
+    }
+
+    public function parseHref( $href, $attribute )
+    {
+        $parsingResult = $this->parse( $href );
+
+        if ( !isset( $parsingResult[$attribute] ) )
+        {
+            throw new InvalidArgumentException( "No such attribute '$attribute' in route matched from $href\n" . print_r( $parsingResult, true ) );
+        }
+
+        return $parsingResult[$attribute];
     }
 }
