@@ -205,30 +205,14 @@ class Location extends RestController
         );
 
         $destinationLocationId = null;
+        $destinationHref = $this->httpFoundationRequest->headers->get( 'Destination' );
         try
         {
             // First check to see if the destination is for moving within another subtree
             $destinationLocationId = $this->extractLocationIdFromPath(
-                $this->requestParser->parseHref( $this->request->destination, 'locationPath' )
+                $this->requestParser->parseHref( $destinationHref, 'locationPath' )
             );
-        }
-        catch ( Exceptions\InvalidArgumentException $e )
-        {
-            try
-            {
-                // If parsing of destination fails, let's try to see if destination is trash
-                $this->requestParser->parseHref( $this->request->destination, 'locationPath' );
-            }
-            catch ( Exceptions\InvalidArgumentException $e )
-            {
-                // If that fails, the Destination header is not formatted right
-                // so just throw the BadRequestException
-                throw new BadRequestException( "{$this->request->destination} is not formatted correctly" );
-            }
-        }
 
-        if ( $destinationLocationId !== null )
-        {
             // We're moving the subtree
             $destinationLocation = $this->locationService->loadLocation( $destinationLocationId );
             $this->locationService->moveSubtree( $locationToMove, $destinationLocation );
@@ -244,15 +228,32 @@ class Location extends RestController
                 )
             );
         }
-
-        // We're trashing the subtree
-        $trashItem = $this->trashService->trash( $locationToMove );
-        return new Values\ResourceCreated(
-            $this->router->generate(
-                'ezpublish_rest_loadTrashItem',
-                array( 'trashItemId' => $trashItem->id )
-            )
-        );
+        // If parsing of destination fails, let's try to see if destination is trash
+        catch ( Exceptions\InvalidArgumentException $e )
+        {
+            try
+            {
+                $route = $this->requestParser->parse( $destinationHref );
+                if ( !isset( $route['_route'] ) || $route['_route'] !== 'ezpublish_rest_loadTrashItems' )
+                {
+                    throw new Exceptions\InvalidArgumentException( '' );
+                }
+                // Trash the subtree
+                $trashItem = $this->trashService->trash( $locationToMove );
+                return new Values\ResourceCreated(
+                    $this->router->generate(
+                        'ezpublish_rest_loadTrashItem',
+                        array( 'trashItemId' => $trashItem->id )
+                    )
+                );
+            }
+            catch ( Exceptions\InvalidArgumentException $e )
+            {
+                // If that fails, the Destination header is not formatted right
+                // so just throw the BadRequestException
+                throw new BadRequestException( "{$destinationHref} is not an acceptable destination" );
+            }
+        }
     }
 
     /**

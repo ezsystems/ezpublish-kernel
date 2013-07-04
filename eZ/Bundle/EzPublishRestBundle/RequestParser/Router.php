@@ -11,6 +11,7 @@ namespace eZ\Bundle\EzPublishRestBundle\RequestParser;
 
 use eZ\Publish\Core\REST\Common\RequestParser;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RouterInterface;
 use eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException;
 
@@ -33,21 +34,38 @@ class Router implements RequestParser
     }
 
     /**
-     * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException If no match was found
+     * @throws ResourceNotFoundException If no match was found
      */
     public function parse( $url )
     {
+        if ( strpos( $url, $this->restRoutesPrefix ) !== 0 )
+        {
+            // @todo mark as depreciated (see EZP-21176)
+            $url = $this->restRoutesPrefix . $url;
+        }
+
         // we create a request with a new context
-        $request = Request::create(
-            $this->restRoutesPrefix . $url, "GET"
-        );
+        $request = Request::create( $url, "GET" );
 
         $originalContext = $this->router->getContext();
         $context = clone $originalContext;
         $context->fromRequest( $request );
         $this->router->setContext( $context );
 
-        $matchResult = $this->router->matchRequest( $request );
+        try
+        {
+            $matchResult = $this->router->matchRequest( $request );
+        }
+        // Note: this probably won't occur in real life because of the legacy matcher
+        catch ( ResourceNotFoundException $e )
+        {
+            throw new InvalidArgumentException( "No route matched '$url'" );
+        }
+
+        if ( !$this->matchesRestRequest( $matchResult ) )
+        {
+            throw new InvalidArgumentException( "No route matched '$url'" );
+        }
 
         $this->router->setContext( $originalContext );
 
@@ -66,22 +84,23 @@ class Router implements RequestParser
      */
     public function parseHref( $href, $attribute )
     {
-        try
-        {
-            $parsingResult = $this->parse( $href );
-        }
-        catch ( \Symfony\Component\Routing\Exception\ResourceNotFoundException $e )
-        {
-            // Note: this probably won't occur in real life because of the legacy matcher
-            throw new InvalidArgumentException( "No route matched '$href''" );
-        }
-
-        if ( $parsingResult['_route'] === 'ez_legacy' )
-            throw new InvalidArgumentException( "No route matched '$href'" );
+        $parsingResult = $this->parse( $href );
 
         if ( !isset( $parsingResult[$attribute] ) )
+        {
             throw new InvalidArgumentException( "No such attribute '$attribute' in route matched from $href\n" . print_r( $parsingResult, true ) );
+        }
 
         return $parsingResult[$attribute];
+    }
+
+    /**
+     * Checks if a router match response matches a REST resource
+     * @param array $match Match array returned by Router::match() / Router::matchRequest()
+     * @return bool
+     */
+    private function matchesRestRequest( $match )
+    {
+        return ( strpos( $match['_route'], 'ezpublish_rest_' ) === 0 );
     }
 }
