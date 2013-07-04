@@ -17,12 +17,11 @@ interface RequestParser
     /**
      * Parse URL and return the IDs contained in the URL
      *
-     * @param string $type
      * @param string $url
      *
      * @return array
      */
-    public function parse( $type, $url );
+    public function parse( $url );
 
     /**
      * Generate a URL of the given type from the specified values
