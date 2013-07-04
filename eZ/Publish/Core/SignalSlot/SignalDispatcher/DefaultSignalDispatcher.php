@@ -26,6 +26,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class DefaultSignalDispatcher extends SignalDispatcher
 {
     /**
+     * Relative namespace for internal signals.
+     */
+    const RELATIVE_SIGNAL_NAMESPACE = 'eZ\\Publish\\Core\\SignalSlot\\Signal';
+
+    /**
      * Slot factory
      *
      * @var \eZ\Publish\Core\SignalSlot\SlotFactory
@@ -33,7 +38,8 @@ class DefaultSignalDispatcher extends SignalDispatcher
     protected $factory;
 
     /**
-     * Signal slot mapping
+     * Signal slot mapping.
+     * '*' signal name stands for "every signals". All slots registered to it will be triggered each time a signal is emitted.
      *
      * @var array
      */
@@ -49,6 +55,10 @@ class DefaultSignalDispatcher extends SignalDispatcher
     {
         $this->factory = $factory;
         $this->mapping = $mapping;
+        if ( !isset( $this->mapping['*'] ) )
+        {
+            $this->mapping['*'] = array();
+        }
     }
 
     /**
@@ -65,10 +75,10 @@ class DefaultSignalDispatcher extends SignalDispatcher
         $signalName = get_class( $signal );
         if ( !isset( $this->mapping[$signalName] ) )
         {
-            return;
+            $this->mapping[$signalName] = array();
         }
 
-        foreach ( $this->mapping[$signalName] as $slotIdentifier )
+        foreach ( array_merge( $this->mapping['*'], $this->mapping[$signalName] ) as $slotIdentifier )
         {
             $slot = $this->factory->getSlot( $slotIdentifier );
             $slot->receive( $signal );
@@ -86,6 +96,15 @@ class DefaultSignalDispatcher extends SignalDispatcher
      */
     public function attach( $signalIdentifier, $slotIdentifier )
     {
+        if ( $signalIdentifier[0] === '\\' )
+        {
+            $signalIdentifier = substr( $signalIdentifier, 1 );
+        }
+        else if ( $signalIdentifier !== '*' )
+        {
+            $signalIdentifier = static::RELATIVE_SIGNAL_NAMESPACE . "\\$signalIdentifier";
+        }
+
         $this->mapping[$signalIdentifier][] = $slotIdentifier;
     }
 }
