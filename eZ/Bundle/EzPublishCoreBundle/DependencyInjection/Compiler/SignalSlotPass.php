@@ -13,6 +13,9 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use LogicException;
 
+/**
+ * This compiler pass will register slots in SignalDispatcher
+ */
 class SignalSlotPass implements CompilerPassInterface
 {
     public function process( ContainerBuilder $container )

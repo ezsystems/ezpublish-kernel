@@ -15,6 +15,9 @@ use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Slot;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * Generic slot that converts signals emitted by Repository services into Symfony events.
+ */
 class SymfonyEventConverterSlot extends Slot
 {
     /**
