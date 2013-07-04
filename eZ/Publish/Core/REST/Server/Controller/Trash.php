@@ -59,8 +59,8 @@ class Trash extends RestController
      */
     public function loadTrashItems()
     {
-        $offset = $this->httpFoundationRequest->query->has( 'offset' ) ? (int)$this->httpFoundationRequest->query->get( 'offset' ) : 0;
-        $limit = $this->httpFoundationRequest->query->has( 'limit' ) ? (int)$this->httpFoundationRequest->query->get( 'limit' ) : -1;
+        $offset = $this->request->query->has( 'offset' ) ? (int)$this->request->query->get( 'offset' ) : 0;
+        $limit = $this->request->query->has( 'limit' ) ? (int)$this->request->query->get( 'limit' ) : -1;
 
         $query = new Query();
         $query->offset = $offset >= 0 ? $offset : null;
@@ -82,7 +82,7 @@ class Trash extends RestController
 
         return new Values\Trash(
             $trashItems,
-            $this->httpFoundationRequest->getPathInfo()
+            $this->request->getPathInfo()
         );
     }
 
@@ -142,7 +142,7 @@ class Trash extends RestController
         $requestDestination = null;
         try
         {
-            $requestDestination = $this->httpFoundationRequest->headers->get( 'Destination' );
+            $requestDestination = $this->request->headers->get( 'Destination' );
         }
         catch ( InvalidArgumentException $e )
         {
@@ -150,12 +150,12 @@ class Trash extends RestController
         }
 
         $parentLocation = null;
-        if ( $this->httpFoundationRequest->headers->has( 'Destination' ) )
+        if ( $this->request->headers->has( 'Destination' ) )
         {
             $locationPathParts = explode(
                 '/',
                 $this->requestParser->parseHref(
-                    $this->httpFoundationRequest->headers->get( 'Destination' ), 'locationPath'
+                    $this->request->headers->get( 'Destination' ), 'locationPath'
                 )
             );
 

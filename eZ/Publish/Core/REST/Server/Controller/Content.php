@@ -38,13 +38,13 @@ class Content extends RestController
      */
     public function redirectContent()
     {
-        if ( !$this->httpFoundationRequestT->query->has( 'remoteId' ) )
+        if ( !$this->request->query->has( 'remoteId' ) )
         {
             throw new BadRequestException( "'remoteId' parameter is required." );
         }
 
         $contentInfo = $this->repository->getContentService()->loadContentInfoByRemoteId(
-            $this->httpFoundationRequest->query->get( 'remoteId' )
+            $this->request->query->get( 'remoteId' )
         );
 
         return new Values\TemporaryRedirect(
@@ -74,9 +74,9 @@ class Content extends RestController
         if ( $this->getMediaType() === 'application/vnd.ez.api.content' )
         {
             $languages = null;
-            if ( $this->httpFoundationRequest->query->has( 'languages' ) )
+            if ( $this->request->query->has( 'languages' ) )
             {
-                $languages = explode( ',', $this->httpFoundationRequest->query->get( 'languages' ) );
+                $languages = explode( ',', $this->request->query->get( 'languages' ) );
             }
 
             $contentVersion = $this->repository->getContentService()->loadContent( $contentId, $languages );
@@ -89,7 +89,7 @@ class Content extends RestController
             $contentVersion,
             $contentType,
             $relations,
-            $this->httpFoundationRequest->getPathInfo()
+            $this->request->getPathInfo()
         );
     }
 
@@ -103,8 +103,8 @@ class Content extends RestController
     {
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->httpFoundationRequest->headers->get( 'Content-Type' ) ),
-                $this->httpFoundationRequest->getContent()
+                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
+                $this->request->getContent()
             )
         );
 
@@ -180,13 +180,13 @@ class Content extends RestController
      */
     public function loadContentInVersion( $contentId, $versionNumber )
     {
-        $questionMark = strpos( $this->httpFoundationRequest->getPathInfo(), '?' );
-        $requestPath = $questionMark !== false ? substr( $this->httpFoundationRequest->getPathInfo(), 0, $questionMark ) : $this->httpFoundationRequest->getPathInfo();
+        $questionMark = strpos( $this->request->getPathInfo(), '?' );
+        $requestPath = $questionMark !== false ? substr( $this->request->getPathInfo(), 0, $questionMark ) : $this->request->getPathInfo();
 
         $languages = null;
-        if ( $this->httpFoundationRequest->query->has( 'languages' ) )
+        if ( $this->request->query->has( 'languages' ) )
         {
-            $languages = explode( ',', $this->httpFoundationRequest->query->get( 'languages' ) );
+            $languages = explode( ',', $this->request->query->get( 'languages' ) );
         }
 
         $content = $this->repository->getContentService()->loadContent(
@@ -202,7 +202,7 @@ class Content extends RestController
             $content,
             $contentType,
             $this->repository->getContentService()->loadRelations( $content->getVersionInfo() ),
-            $this->httpFoundationRequest->getPathInfo()
+            $this->request->getPathInfo()
         );
     }
 
@@ -221,8 +221,8 @@ class Content extends RestController
     {
         $contentCreate = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->httpFoundationRequest->headers->get( 'Content-Type' ) ),
-                $this->httpFoundationRequest->getContent()
+                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
+                $this->request->getContent()
             )
         );
 
@@ -292,7 +292,7 @@ class Content extends RestController
      */
     public function copyContent( $contentId )
     {
-        $destination = $this->httpFoundationRequest->headers->get( 'Destination' );
+        $destination = $this->request->headers->get( 'Destination' );
 
         $parentLocationParts = explode( '/', $destination );
         $copiedContent = $this->repository->getContentService()->copyContent(
@@ -321,7 +321,7 @@ class Content extends RestController
             $this->repository->getContentService()->loadVersions(
                 $this->repository->getContentService()->loadContentInfo( $contentId )
             ),
-            $this->httpFoundationRequest->getPathInfo()
+            $this->request->getPathInfo()
         );
     }
 
@@ -432,7 +432,7 @@ class Content extends RestController
         $contentUpdateStruct = $this->inputDispatcher->parse(
             new Message(
                 array(
-                    'Content-Type' => $this->httpFoundationRequest->headers->get( 'Content-Type' ),
+                    'Content-Type' => $this->request->headers->get( 'Content-Type' ),
                     'Url' => $this->router->generate(
                         'ezpublish_rest_updateVersion', array(
                             'contentId' => $contentId,
@@ -440,7 +440,7 @@ class Content extends RestController
                         )
                     )
                 ),
-                $this->httpFoundationRequest->getContent()
+                $this->request->getContent()
             )
         );
 
@@ -468,9 +468,9 @@ class Content extends RestController
         }
 
         $languages = null;
-        if ( $this->httpFoundationRequest->query->has( 'languages' ) )
+        if ( $this->request->query->has( 'languages' ) )
         {
-            $languages = explode( ',', $this->httpFoundationRequest->query->get( 'languages' ) );
+            $languages = explode( ',', $this->request->query->get( 'languages' ) );
         }
 
         // Reload the content to handle languages GET parameter
@@ -487,7 +487,7 @@ class Content extends RestController
             $content,
             $contentType,
             $this->repository->getContentService()->loadRelations( $content->getVersionInfo() ),
-            $this->httpFoundationRequest->getPathInfo()
+            $this->request->getPathInfo()
         );
     }
 
@@ -550,8 +550,8 @@ class Content extends RestController
      */
     public function loadVersionRelations( $contentId, $versionNumber )
     {
-        $offset = $this->httpFoundationRequest->query->has( 'offset' ) ? (int)$this->httpFoundationRequest->query->get( 'offset' ) : 0;
-        $limit = $this->httpFoundationRequest->query->has( 'limit' ) ? (int)$this->httpFoundationRequest->query->get( 'limit' ) : -1;
+        $offset = $this->request->query->has( 'offset' ) ? (int)$this->request->query->get( 'offset' ) : 0;
+        $limit = $this->request->query->has( 'limit' ) ? (int)$this->request->query->get( 'limit' ) : -1;
 
         $relationList = $this->repository->getContentService()->loadRelations(
             $this->repository->getContentService()->loadVersionInfo(
@@ -570,7 +570,7 @@ class Content extends RestController
             $relationList,
             $contentId,
             $versionNumber,
-            $this->httpFoundationRequest->getPathInfo()
+            $this->request->getPathInfo()
         );
     }
 
@@ -601,7 +601,7 @@ class Content extends RestController
             }
         }
 
-        throw new Exceptions\NotFoundException( "Relation not found: '{$this->httpFoundationRequest->getPathInfo()}'." );
+        throw new Exceptions\NotFoundException( "Relation not found: '{$this->request->getPathInfo()}'." );
     }
 
     /**
@@ -642,7 +642,7 @@ class Content extends RestController
             }
         }
 
-        throw new Exceptions\NotFoundException( "Relation not found: '{$this->httpFoundationRequest->getPathInfo()}'." );
+        throw new Exceptions\NotFoundException( "Relation not found: '{$this->request->getPathInfo()}'." );
     }
 
     /**
@@ -659,8 +659,8 @@ class Content extends RestController
     {
         $destinationContentId = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->httpFoundationRequest->headers->get( 'Content-Type' ) ),
-                $this->httpFoundationRequest->getContent()
+                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
+                $this->request->getContent()
             )
         );
 
@@ -706,8 +706,8 @@ class Content extends RestController
     {
         $viewInput = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->httpFoundationRequest->headers->get( 'Content-Type' ) ),
-                $this->httpFoundationRequest->getContent()
+                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
+                $this->request->getContent()
             )
         );
         return new Values\RestExecutedView(

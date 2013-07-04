@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\REST\Server;
 use eZ\Publish\API\Repository\Repository;
 use Symfony\Component\Routing\RouterInterface;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher as InputDispatcher;
-use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use eZ\Publish\Core\REST\Common\RequestParser as RequestParser;
 
@@ -21,7 +21,7 @@ abstract class Controller
     /**
      * @var \Symfony\Component\HttpFoundation\Request
      */
-    protected $httpFoundationRequest;
+    protected $request;
 
     /**
      * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
@@ -60,9 +60,9 @@ abstract class Controller
         $this->router = $router;
     }
 
-    public function setHttpFoundationRequest( HttpFoundationRequest $httpFoundationRequest )
+    public function setRequest( Request $request )
     {
-        $this->httpFoundationRequest = $httpFoundationRequest;
+        $this->request = $request;
     }
 
     public function setContainer( Container $container )
@@ -88,7 +88,7 @@ abstract class Controller
      */
     protected function getMediaType()
     {
-        foreach ( $this->httpFoundationRequest->getAcceptableContentTypes() as $mimeType )
+        foreach ( $this->request->getAcceptableContentTypes() as $mimeType )
         {
             if ( preg_match( '(^([a-z0-9-/.]+)\+.*$)', strtolower( $mimeType ), $matches ) )
             {
