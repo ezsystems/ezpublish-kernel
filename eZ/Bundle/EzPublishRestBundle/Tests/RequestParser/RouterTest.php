@@ -1,0 +1,159 @@
+<?php
+/**
+ * File containing the RouterTest class.
+ *
+ * @copyright Copyright (C) 2013 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+namespace eZ\Bundle\EzPublishRestBundle\Tests\RequestParser;
+
+use PHPUnit_Framework_TestCase;
+use eZ\Bundle\EzPublishRestBundle\RequestParser\Router as RouterRequestParser;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\RequestContext;
+
+class RouterTest extends PHPUnit_Framework_TestCase
+{
+    /**
+     * @var \Symfony\Cmf\Component\Routing\ChainRouter
+     */
+    private $router;
+
+    protected static $routePrefix = '/api/test/v1';
+
+    public function testParse()
+    {
+        $uri = self::$routePrefix . '/';
+        $request = Request::create( $uri, 'GET' );
+
+        $expectedMatchResult = array(
+            '_route' => 'ezpublish_rest_testRoute',
+            '_controller' => '',
+        );
+
+        $this->getRouterMock()
+            ->expects( $this->once() )
+            ->method( 'matchRequest' )
+            ->with( $this->attributeEqualTo( 'pathInfo', '/api/test/v1/' ) )
+            ->will( $this->returnValue( $expectedMatchResult ) );
+
+        self::assertEquals(
+            $expectedMatchResult,
+            $this->getRequestParser()->parse( $uri )
+        );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage No route matched '/api/test/v1/nomatch'
+     */
+    public function testParseNoMatch()
+    {
+        $uri = self::$routePrefix . '/nomatch';
+
+        $this->getRouterMock()
+            ->expects( $this->once() )
+            ->method( 'matchRequest' )
+            ->with( $this->attributeEqualTo( 'pathInfo', $uri ) )
+            ->will( $this->throwException( new ResourceNotFoundException ) );
+
+        $this->getRequestParser()->parse( $uri );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage No route matched '/no/prefix'
+     */
+    public function testParseNoPrefix()
+    {
+        self::markTestSkipped( "Requires that EZP-21176 is fixed" );
+        $this->getRequestParser()->parse( '/no/prefix' );
+    }
+
+    public function testParseHref()
+    {
+        $href = "/api/test/v1/content/objects/1";
+
+        $expectedMatchResult = array(
+            '_route' => 'ezpublish_rest_testParseHref',
+            'contentId' => 1
+        );
+
+        $this->getRouterMock()
+            ->expects( $this->once() )
+            ->method( 'matchRequest' )
+            ->with( $this->attributeEqualTo( 'pathInfo', $href ) )
+            ->will( $this->returnValue( $expectedMatchResult ) );
+
+        self::assertEquals( 1, $this->getRequestParser()->parseHref( $href, 'contentId' ) );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage No such attribute 'badAttribute' in route matched from /api/test/v1/content/no-attribute
+     */
+    public function testParseHrefAttributeNotFound()
+    {
+        $href = "/api/test/v1/content/no-attribute";
+
+        $matchResult = array(
+            '_route' => 'ezpublish_rest_testParseHrefAttributeNotFound',
+        );
+
+        $this->getRouterMock()
+            ->expects( $this->once() )
+            ->method( 'matchRequest' )
+            ->with( $this->attributeEqualTo( 'pathInfo', $href ) )
+            ->will( $this->returnValue( $matchResult ) );
+
+        self::assertEquals( 1, $this->getRequestParser()->parseHref( $href, 'badAttribute' ) );
+    }
+
+    public function testGenerate()
+    {
+        $routeName = 'ezpublish_rest_testGenerate';
+        $arguments = array( 'arg1' => 1 );
+
+        $expectedResult = self::$routePrefix . '/generate/' . $arguments['arg1'];
+        $this->getRouterMock()
+            ->expects( $this->once() )
+            ->method( 'generate' )
+            ->with( $routeName, $arguments )
+            ->will( $this->returnValue( $expectedResult ) );
+
+        self::assertEquals(
+            $expectedResult,
+            $this->getRequestParser()->generate( $routeName, $arguments )
+        );
+    }
+
+    /**
+     * @return \eZ\Bundle\EzPublishRestBundle\RequestParser\Router
+     */
+    private function getRequestParser()
+    {
+        return new RouterRequestParser(
+            self::$routePrefix,
+            $this->getRouterMock()
+        );
+    }
+
+    /**
+     * @return \Symfony\Cmf\Component\Routing\ChainRouter|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getRouterMock()
+    {
+        if ( !isset( $this->router ) )
+        {
+            $this->router = $this->getMock( 'Symfony\\Cmf\\Component\\Routing\\ChainRouter' );
+
+            $this->router
+                ->expects( $this->any() )
+                ->method( 'getContext' )
+                ->will( $this->returnValue( new RequestContext() ) );
+        }
+        return $this->router;
+    }
+}

@@ -50,7 +50,6 @@ class Router implements RequestParser
 
         // we create a request with a new context
         $request = Request::create( $url, "GET" );
-
         $originalContext = $this->router->getContext();
         $context = clone $originalContext;
         $context->fromRequest( $request );
@@ -94,7 +93,7 @@ class Router implements RequestParser
 
         if ( !isset( $parsingResult[$attribute] ) )
         {
-            throw new InvalidArgumentException( "No such attribute '$attribute' in route matched from $href\n" . print_r( $parsingResult, true ) );
+            throw new InvalidArgumentException( "No such attribute '$attribute' in route matched from $href" );
         }
 
         return $parsingResult[$attribute];
