@@ -54,6 +54,8 @@ class LegacyStorageEngineFactory
      *
      * @param string $fieldTypeServiceId The field type service Id
      * @param string $fieldTypeAlias The field type alias (e.g. "ezstring")
+     *
+     * @todo Refactor since it seems to duplicate RepositoryFactory::registerFieldType()
      */
     public function registerFieldType( $fieldTypeServiceId, $fieldTypeAlias )
     {
