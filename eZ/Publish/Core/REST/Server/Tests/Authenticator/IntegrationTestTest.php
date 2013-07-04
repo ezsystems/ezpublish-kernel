@@ -17,6 +17,7 @@ use Qafoo\RMF;
 
 /**
  * IntegrationTestTest
+ * @todo Remove when the REST client is refactored
  */
 class IntegrationTestTest extends BaseTest
 {

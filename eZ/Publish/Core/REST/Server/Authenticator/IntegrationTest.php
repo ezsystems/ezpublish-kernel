@@ -21,6 +21,7 @@ use RuntimeException;
 
 /**
  * Authenticator for integration tests
+ * @todo Remove when the REST client is refactored
  */
 class IntegrationTest extends Authenticator
 {
