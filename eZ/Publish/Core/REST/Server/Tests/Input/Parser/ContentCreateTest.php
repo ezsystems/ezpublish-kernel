@@ -630,7 +630,7 @@ class ContentCreateTest extends BaseTest
         return $contentTypeServiceMock;
     }
 
-    protected function getParseHrefExpectationsMap()
+    public function getParseHrefExpectationsMap()
     {
         return array(
             array( '/content/types/13', 'contentTypeId', 13 ),

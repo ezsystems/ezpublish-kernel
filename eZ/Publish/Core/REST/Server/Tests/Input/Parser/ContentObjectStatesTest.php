@@ -86,7 +86,7 @@ class ContentObjectStatesTest extends BaseTest
         $objectState->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
-    protected function getParseHrefExpectationsMap()
+    public function getParseHrefExpectationsMap()
     {
         return array(
             array( '/content/objectstategroups/42/objectstates/21', 'objectStateId', 21 ),

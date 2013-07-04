@@ -203,7 +203,7 @@ class RoleAssignInputTest extends BaseTest
         );
     }
 
-    protected function getParseHrefExpectationsMap()
+    public function getParseHrefExpectationsMap()
     {
         return array(
             array( '/user/roles/42', 'roleId', 42 )

@@ -189,7 +189,7 @@ class ContentUpdateTest extends BaseTest
         );
     }
 
-    protected function getParseHrefExpectationsMap()
+    public function getParseHrefExpectationsMap()
     {
         return array(
             array( '/content/sections/23', 'sectionId', 23 ),

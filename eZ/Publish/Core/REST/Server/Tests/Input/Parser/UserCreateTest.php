@@ -569,7 +569,7 @@ class UserCreateTest extends BaseTest
         );
     }
 
-    protected function getParseHrefExpectationsMap()
+    public function getParseHrefExpectationsMap()
     {
         return array(
             array( '/content/types/4', 'contentTypeId', 4 ),

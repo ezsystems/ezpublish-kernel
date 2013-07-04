@@ -100,7 +100,7 @@ class Pattern implements RequestParser
             }
         }
 
-        throw new Exceptions\InvalidArgumentException( "URL '$url' did not match $pattern." );
+        throw new Exceptions\InvalidArgumentException( "URL '$url' did not match any route." );
     }
 
     /**

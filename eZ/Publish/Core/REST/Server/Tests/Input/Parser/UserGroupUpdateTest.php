@@ -337,7 +337,7 @@ class UserGroupUpdateTest extends BaseTest
         return $contentServiceMock;
     }
 
-    protected function getParseHrefExpectationsMap()
+    public function getParseHrefExpectationsMap()
     {
         return array(
             array( '/content/sections/1', 'sectionId', 1 ),

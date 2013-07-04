@@ -287,7 +287,7 @@ class FieldDefinitionUpdateTest extends BaseTest
         );
     }
 
-    protected function getParseHrefExpectationsMap()
+    public function getParseHrefExpectationsMap()
     {
         return array(
             array( '/content/types/42/draft/fieldDefinitions/24', 'contentTypeId', 42 ),

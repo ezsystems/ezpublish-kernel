@@ -200,7 +200,7 @@ class LocationCreateTest extends BaseTest
         return $locationServiceMock;
     }
 
-    protected function getParseHrefExpectationsMap()
+    public function getParseHrefExpectationsMap()
     {
         return array(
             array( '/content/locations/1/2/42', 'locationPath', '1/2/42' )

@@ -76,7 +76,7 @@ class RelationCreateTest extends BaseTest
         return $parser;
     }
 
-    protected function getParseHrefExpectationsMap()
+    public function getParseHrefExpectationsMap()
     {
         return array(
             array( '/content/objects/42', 'contentId', 42 )

@@ -333,7 +333,7 @@ class UserUpdateTest extends BaseTest
         return $contentServiceMock;
     }
 
-    protected function getParseHrefExpectationsMap()
+    public function getParseHrefExpectationsMap()
     {
         return array(
             array( '/user/users/14', 'userId', 14 ),

@@ -60,7 +60,7 @@ abstract class BaseTest extends ParentBaseTest
      * 2. expected return value (59)*
      * @return array
      */
-    protected function getParseHrefExpectationsMap()
+    public function getParseHrefExpectationsMap()
     {
         return array();
     }
@@ -74,10 +74,11 @@ abstract class BaseTest extends ParentBaseTest
     {
         if ( !isset( $this->requestParserMock ) )
         {
-            $parseHrefMap =& $this->getParseHrefExpectationsMap();
-            $callback = function( $href, $attribute ) use ( $parseHrefMap )
+            $that =& $this;
+
+            $callback = function( $href, $attribute ) use ( $that )
             {
-                foreach ( $parseHrefMap as $map )
+                foreach ( $that->getParseHrefExpectationsMap() as $map )
                 {
                     if ( $map[0] == $href && $map[1] == $attribute )
                     {

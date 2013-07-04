@@ -431,7 +431,7 @@ class UserGroupCreateTest extends BaseTest
         );
     }
 
-    protected function getParseHrefExpectationsMap()
+    public function getParseHrefExpectationsMap()
     {
         return array(
             array( '/content/types/3', 'contentTypeId', 3 ),
