@@ -25,6 +25,10 @@ class Router implements RequestParser
      */
     private $router;
 
+    /**
+     * The configured  prefix for REST routes
+     * @var string
+     */
     private $restRoutesPrefix;
 
     public function __construct( $restRoutesPrefix, RouterInterface $router )
@@ -59,11 +63,13 @@ class Router implements RequestParser
         // Note: this probably won't occur in real life because of the legacy matcher
         catch ( ResourceNotFoundException $e )
         {
+            $this->router->setContext( $originalContext );
             throw new InvalidArgumentException( "No route matched '$url'" );
         }
 
         if ( !$this->matchesRestRequest( $matchResult ) )
         {
+            $this->router->setContext( $originalContext );
             throw new InvalidArgumentException( "No route matched '$url'" );
         }
 
