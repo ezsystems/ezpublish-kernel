@@ -55,7 +55,7 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
                     )
                 )
             );
-        return parent::setUp();
+        parent::setUp();
     }
 
     protected function getRouter( \Closure $lazyRepository, UrlAliasGenerator $urlAliasGenerator, RequestContext $requestContext )
@@ -110,6 +110,8 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
 
     /**
      * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::setContainer
+     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::setRootLocationId
+     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::getUrlAlias
      * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::getConfigResolver
      * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::matchRequest
      */
@@ -166,6 +168,8 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
 
     /**
      * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::setContainer
+     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::setRootLocationId
+     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::getUrlAlias
      * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::getConfigResolver
      * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::matchRequest
      */
