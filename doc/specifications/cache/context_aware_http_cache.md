@@ -9,6 +9,10 @@ be based on one of the request headers (e.g. `Accept-Encoding`).
 Thus, to make the cache vary on a specific context (e.g. a hash based on a user roles and limitations), this context must be present
 in the original request.
 
+## Credits
+This feature is based on [Context aware HTTP caching post](http://asm89.github.io/2012/09/26/context-aware-http-caching.html)
+by [asm89](https://github.com/asm89).
+
 ## Solution
 As the response can vary on a request header, the base solution is to make the kernel do a sub-request in order to retrieve
 the context (aka **user hash**). Once the *user hash* has been retrieved, it's injected in the original request in
