@@ -15,8 +15,6 @@ use eZ\Publish\SPI\User\IdentityAware;
 
 /**
  * User hash generator.
- *
- * @todo Allow several services to plug-in and add information to the user identity (via a dedicated service tag)
  */
 class HashGenerator implements HashGeneratorInterface, IdentityAware
 {
