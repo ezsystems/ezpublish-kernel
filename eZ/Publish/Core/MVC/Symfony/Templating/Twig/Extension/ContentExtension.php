@@ -323,7 +323,7 @@ class ContentExtension extends Twig_Extension
     protected function getXmlTextConverter()
     {
         if ( !isset( $this->xmlTextConverter ) )
-            $this->xmlTextConverter = $this->container->get( "ezpublish.fieldType.ezxmltext.converter.html5" );
+            $this->xmlTextConverter = $this->container->get( "ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5" );
 
         return $this->xmlTextConverter;
     }
