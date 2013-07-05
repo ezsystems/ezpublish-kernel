@@ -102,10 +102,14 @@ class Router implements RequestParser
     /**
      * Checks if a router match response matches a REST resource
      * @param array $match Match array returned by Router::match() / Router::matchRequest()
+     * @throws \eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException if the \$match isn't valid
      * @return bool
      */
-    private function matchesRestRequest( $match )
+    private function matchesRestRequest( array $match )
     {
+        if ( !isset( $match['_route'] ) )
+            throw new InvalidArgumentException( "Invalid \$match parameter, no _route key" );
+
         return ( strpos( $match['_route'], 'ezpublish_rest_' ) === 0 );
     }
 }
