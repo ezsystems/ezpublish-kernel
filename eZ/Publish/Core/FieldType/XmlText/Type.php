@@ -54,6 +54,37 @@ class Type extends FieldType
     );
 
     /**
+     * @var \eZ\Publish\Core\FieldType\XmlText\ConverterDispatcher
+     */
+    protected $converterDispatcher;
+
+    /**
+     * @var \eZ\Publish\Core\FieldType\XmlText\Converter
+     */
+    protected $toPersistenceConverter;
+
+    /**
+     * @var \eZ\Publish\Core\FieldType\XmlText\Converter
+     */
+    protected $fromPersistenceConverter;
+
+    /**
+     * @param \eZ\Publish\Core\FieldType\XmlText\ConverterDispatcher $converterDispatcher
+     * @param Converter $toPersistenceConverter
+     * @param Converter $fromPersistenceConverter
+     */
+    public function __construct(
+        ConverterDispatcher $converterDispatcher = null,
+        Converter $toPersistenceConverter = null,
+        Converter $fromPersistenceConverter = null
+    )
+    {
+        $this->converterDispatcher = $converterDispatcher;
+        $this->toPersistenceConverter = $toPersistenceConverter;
+        $this->fromPersistenceConverter = $fromPersistenceConverter;
+    }
+
+    /**
      * Returns the field type identifier for this field type
      *
      * @return string
@@ -127,7 +158,7 @@ class Type extends FieldType
     /**
      * Implements the core of {@see acceptValue()}.
      *
-     * @param \eZ\Publish\Core\FieldType\XmlText\Value|\eZ\Publish\Core\FieldType\XmlText\Input|string $inputValue
+     * @param \eZ\Publish\Core\FieldType\XmlText\Value|\eZ\Publish\Core\FieldType\XmlText\Input|\DOMDocument|string $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\XmlText\Value The potentially converted and structurally plausible value.
      */
@@ -136,8 +167,19 @@ class Type extends FieldType
         if ( is_string( $inputValue ) )
         {
             if ( empty( $inputValue ) )
+            {
                 $inputValue = Value::EMPTY_VALUE;
-            $inputValue = new EzXml( $inputValue );
+            }
+
+            $doc = new DOMDocument;
+            $doc->loadXML( $inputValue );
+            $inputValue = $doc;
+        }
+
+        if ( $inputValue instanceof DOMDocument )
+        {
+            $inputValue = $this->converterDispatcher->dispatch( $inputValue );
+            $inputValue = new Input\Docbook( $inputValue );
         }
 
         if ( $inputValue instanceof Input )
@@ -188,6 +230,7 @@ class Type extends FieldType
             throw new RuntimeException( "'xml' index is missing in hash." );
         }
 
+        return $this->acceptValue( $hash['xml'] );
         $doc = new DOMDocument;
         $doc->loadXML( $hash['xml'] );
         return new Value( $doc );
@@ -215,7 +258,15 @@ class Type extends FieldType
      */
     public function fromPersistenceValue( FieldValue $fieldValue )
     {
-        return new Value( $fieldValue->data );
+        $doc = null;
+        if ( $fieldValue->data !== null )
+        {
+            $xmlString = $this->fromPersistenceConverter->convert( $fieldValue->data );
+            $doc = new DOMDocument;
+            $doc->loadXML( $xmlString );
+        }
+
+        return new Value( $doc );
     }
 
     /**
@@ -225,11 +276,15 @@ class Type extends FieldType
      */
     public function toPersistenceValue( $value )
     {
+        $ezxml = $this->toPersistenceConverter->convert( $value->xml );
+        $doc = new DOMDocument;
+        $doc->loadXML( $ezxml );
+
         return new FieldValue(
             array(
-                'data'         => $value->xml,
+                'data' => $doc,
                 'externalData' => null,
-                'sortKey'      => $this->getSortInfo( $value )
+                'sortKey' => $this->getSortInfo( $value )
             )
         );
     }
