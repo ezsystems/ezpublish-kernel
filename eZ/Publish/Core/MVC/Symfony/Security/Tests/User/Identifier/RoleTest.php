@@ -42,8 +42,8 @@ class RoleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\IdentityDefiner\RoleId::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\IdentityDefiner\RoleId::setIdentity
+     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\IdentityDefiner\Role::__construct
+     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\IdentityDefiner\Role::setIdentity
      */
     public function testSetIdentity()
     {
