@@ -48,7 +48,7 @@ class Router implements RequestParser
             $url = $this->restRoutesPrefix . $url;
         }
 
-        // we create a request with a new context
+        // we create a request with a new context in order to match $url to a route and get its a properties
         $request = Request::create( $url, "GET" );
         $originalContext = $this->router->getContext();
         $context = clone $originalContext;
