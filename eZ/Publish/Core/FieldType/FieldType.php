@@ -364,7 +364,7 @@ abstract class FieldType implements FieldTypeInterface
 
         $value = $this->createValueFromInput( $inputValue );
 
-        $this->checkValueType( $value );
+        static::checkValueType( $value );
 
         if ( $this->isEmptyValue( $value ) )
         {
@@ -408,9 +408,12 @@ abstract class FieldType implements FieldTypeInterface
      *
      * This is an operation method for {@see acceptValue()}.
      *
+     * Default implementation expects the value class to reside in the same namespace as its
+     * FieldType class and is named "Value".
+     *
      * Example implementation:
      * <code>
-     *  protected function checkValueType( $value )
+     *  static protected function checkValueType( $value )
      *  {
      *      if ( !$inputValue instanceof \eZ\Publish\Core\FieldType\CookieJar\Value ) )
      *      {
@@ -425,7 +428,16 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @return void
      */
-    abstract protected function checkValueType( $value );
+    static protected function checkValueType( $value )
+    {
+        $fieldTypeFQN = get_called_class();
+        $valueFQN = substr_replace( $fieldTypeFQN, "Value", strrpos( $fieldTypeFQN, "\\" ) + 1 );
+
+        if ( !$value instanceof $valueFQN )
+        {
+            throw new InvalidArgumentType( "\$value", $valueFQN, $value );
+        }
+    }
 
     /**
      * Throws an exception if value structure is not of expected format.

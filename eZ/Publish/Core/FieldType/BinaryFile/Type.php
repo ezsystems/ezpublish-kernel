@@ -57,27 +57,6 @@ class Type extends BinaryBaseType
     }
 
     /**
-     * Throws an exception if the given $value is not an instance of the supported value subtype.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the parameter is not an instance of the supported value subtype.
-     *
-     * @param mixed $value A value returned by {@see createValueFromInput()}.
-     *
-     * @return void
-     */
-    protected function checkValueType( $value )
-    {
-        if ( !$value instanceof Value )
-        {
-            throw new InvalidArgumentType(
-                '$value',
-                'eZ\\Publish\\Core\\FieldType\\BinaryFile\\Value',
-                $value
-            );
-        }
-    }
-
-    /**
      * Attempts to complete the data in $value
      *
      * @param mixed $value
