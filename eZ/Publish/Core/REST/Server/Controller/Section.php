@@ -50,7 +50,7 @@ class Section extends RestController
      */
     public function listSections()
     {
-        if ( isset( $this->request->variables['identifier'] ) )
+        if ( $this->request->query->has( 'identifier' ) )
         {
             $sections = array(
                 $this->loadSectionByIdentifier()
@@ -61,7 +61,7 @@ class Section extends RestController
             $sections = $this->sectionService->loadSections();
         }
 
-        return new Values\SectionList( $sections, $this->request->path );
+        return new Values\SectionList( $sections, $this->request->getPathInfo() );
     }
 
     /**
@@ -73,7 +73,7 @@ class Section extends RestController
     {
         return $this->sectionService->loadSectionByIdentifier(
             // GET variable
-            $this->request->variables['identifier']
+            $this->request->query->get( 'identifier' )
         );
     }
 
@@ -90,8 +90,8 @@ class Section extends RestController
             $createdSection = $this->sectionService->createSection(
                 $this->inputDispatcher->parse(
                     new Message(
-                        array( 'Content-Type' => $this->request->contentType ),
-                        $this->request->body
+                        array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
+                        $this->request->getContent()
                     )
                 )
             );
@@ -132,8 +132,8 @@ class Section extends RestController
     {
         $createStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->contentType ),
-                $this->request->body
+                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
+                $this->request->getContent()
             )
         );
 

@@ -46,15 +46,13 @@ class ContentObjectStates extends Base
                 throw new Exceptions\Parser( "Missing '_href' attribute for ObjectState." );
             }
 
-            $values = $this->requestParser->parse( 'objectstate', $rawStateData['_href'] );
-
             $states[] = new RestObjectState(
                 new ObjectState(
                     array(
-                        'id' => $values['objectstate']
+                        'id' => $this->requestParser->parseHref( $rawStateData['_href'], 'objectStateId' )
                     )
                 ),
-                $values['objectstategroup']
+                $this->requestParser->parseHref( $rawStateData['_href'], 'objectStateGroupId' )
             );
         }
 

@@ -198,4 +198,11 @@ class VersionUpdateTest extends BaseTest
 
         return $contentServiceMock;
     }
+
+    public function getParseHrefExpectationsMap()
+    {
+        return array(
+            array( '/content/objects/42/versions/1', 'contentId', 42 )
+        );
+    }
 }

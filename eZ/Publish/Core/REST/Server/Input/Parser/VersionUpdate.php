@@ -75,7 +75,7 @@ class VersionUpdate extends Base
                 throw new Exceptions\Parser( "Invalid 'fields' element for VersionUpdate." );
             }
 
-            $urlValues = $this->requestParser->parse( 'objectVersion', $data['__url'] );
+            $contentId = $this->requestParser->parseHref( $data['__url'], 'contentId' );
 
             foreach ( $data['fields']['field'] as $fieldData )
             {
@@ -89,7 +89,11 @@ class VersionUpdate extends Base
                     throw new Exceptions\Parser( "Missing 'fieldValue' element for '{$fieldData['fieldDefinitionIdentifier']}' identifier in VersionUpdate." );
                 }
 
-                $fieldValue = $this->fieldTypeParser->parseFieldValue( $urlValues['object'], $fieldData['fieldDefinitionIdentifier'], $fieldData['fieldValue'] );
+                $fieldValue = $this->fieldTypeParser->parseFieldValue(
+                    $contentId,
+                    $fieldData['fieldDefinitionIdentifier'],
+                    $fieldData['fieldValue']
+                );
 
                 $languageCode = null;
                 if ( array_key_exists( 'languageCode', $fieldData ) )

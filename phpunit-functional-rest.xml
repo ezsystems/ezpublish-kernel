@@ -1,0 +1,15 @@
+<phpunit
+  backupGlobals="false"
+  backupStaticAttributes="false"
+  bootstrap="bootstrap.php"
+  convertErrorsToExceptions="true"
+  convertNoticesToExceptions="true"
+  convertWarningsToExceptions="true"
+  colors="false"
+  >
+  <testsuites>
+    <testsuite name="eZ\Publish\Core\REST\Server\Tests\Functional">
+      <directory>eZ/Publish/Core/REST/Server/Tests/Functional</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>

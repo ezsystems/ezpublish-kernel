@@ -74,9 +74,8 @@ class UserGroupCreate extends Base
                 throw new Exceptions\Parser( "Missing '_href' attribute for ContentType element in UserGroupCreate." );
             }
 
-            $contentTypeValues = $this->requestParser->parse( 'type', $data['ContentType']['_href'] );
             $contentType = $this->contentTypeService->loadContentType(
-                $contentTypeValues['type']
+                $this->requestParser->parseHref( $data['ContentType']['_href'], 'contentTypeId' )
             );
         }
 
@@ -94,8 +93,7 @@ class UserGroupCreate extends Base
                 throw new Exceptions\Parser( "Missing '_href' attribute for Section element in UserGroupCreate." );
             }
 
-            $sectionValues = $this->requestParser->parse( 'section', $data['Section']['_href'] );
-            $userGroupCreateStruct->sectionId = $sectionValues['section'];
+            $userGroupCreateStruct->sectionId = $this->requestParser->parseHref( $data['Section']['_href'], 'sectionId' );
         }
 
         if ( array_key_exists( 'remoteId', $data ) )

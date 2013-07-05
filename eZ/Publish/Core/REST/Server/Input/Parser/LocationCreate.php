@@ -66,8 +66,7 @@ class LocationCreate extends Base
             throw new Exceptions\Parser( "Missing '_href' attribute for ParentLocation element in LocationCreate." );
         }
 
-        $locationHref = $this->requestParser->parse( 'location', $data['ParentLocation']['_href'] );
-        $locationHrefParts = explode( '/', $locationHref['location'] );
+        $locationHrefParts = explode( '/', $this->requestParser->parseHref( $data['ParentLocation']['_href'], 'locationPath' ) );
 
         $locationCreateStruct = $this->locationService->newLocationCreateStruct(
             array_pop( $locationHrefParts )

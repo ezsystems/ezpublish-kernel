@@ -42,24 +42,17 @@ class RestListener implements EventSubscriberInterface
     private $container;
 
     /**
-     * @var \eZ\Publish\Core\REST\Server\Request
-     */
-    private $request;
-
-    /**
      * @var \Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface
      */
     private $csrfProvider;
 
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     * @param \eZ\Publish\Core\REST\Server\Request $request
      * @param \Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface $csrfProvider
      */
-    public function __construct( ContainerInterface $container, RESTRequest $request, CsrfProviderInterface $csrfProvider = null )
+    public function __construct( ContainerInterface $container, CsrfProviderInterface $csrfProvider = null )
     {
         $this->container = $container;
-        $this->request = $request;
         $this->csrfProvider = $csrfProvider;
     }
 
@@ -189,7 +182,7 @@ class RestListener implements EventSubscriberInterface
     {
         // visit response
         $viewDispatcher = $this->container->get( 'ezpublish_rest.output.visitor.dispatcher' );
-        $message = $viewDispatcher->dispatch( $this->container->get( 'ezpublish_rest.request' ), $result );
+        $message = $viewDispatcher->dispatch( $this->container->get( 'request' ), $result );
 
         // @todo It would be even better if visitors would return a Symfony message directly
         return new Response( $message->body, $message->statusCode, $message->headers );

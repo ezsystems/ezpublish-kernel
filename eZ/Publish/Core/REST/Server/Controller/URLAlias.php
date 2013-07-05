@@ -89,11 +89,11 @@ class URLAlias extends RestController
             array_pop( $locationPathParts )
         );
 
-        $custom = isset( $this->request->variables['custom'] ) && $this->request->variables['custom'] === 'false' ? false : true;
+        $custom = $this->request->query->has( 'custom' ) && $this->request->query->get( 'custom' ) === 'false' ? false : true;
 
         return new Values\URLAliasRefList(
             $this->urlAliasService->listLocationAliases( $location, $custom ),
-            $this->request->path
+            $this->request->getPathInfo()
         );
     }
 
@@ -107,15 +107,17 @@ class URLAlias extends RestController
     {
         $urlAliasCreate = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->contentType ),
-                $this->request->body
+                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
+                $this->request->getContent()
             )
         );
 
         if ( $urlAliasCreate['_type'] === 'LOCATION' )
         {
-            $locationUrlValues = $this->requestParser->parse( 'location', $urlAliasCreate['location']['_href'] );
-            $locationPathParts = explode( '/', $locationUrlValues['location'] );
+            $locationPathParts = explode(
+                '/',
+                $this->requestParser->parseHref( $urlAliasCreate['location']['_href'], 'locationPath' )
+            );
 
             $location = $this->locationService->loadLocation(
                 array_pop( $locationPathParts )

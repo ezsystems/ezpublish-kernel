@@ -16,7 +16,6 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
-use eZ\Publish\Core\REST\Server\Request as RESTRequest;
 use eZ\Bundle\EzPublishRestBundle\EventListener\RestListener;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use PHPUnit_Framework_TestCase;
@@ -34,7 +33,7 @@ class RestListenerTest extends PHPUnit_Framework_TestCase
     public function testOnKernelExceptionView(
         $name,
         ContainerInterface $container,
-        RESTRequest $request,
+        Request $request,
         CsrfProviderInterface $csrfProvider,
         GetResponseForExceptionEvent $event,
         $visit
@@ -42,7 +41,7 @@ class RestListenerTest extends PHPUnit_Framework_TestCase
     {
         $listener = $this->getMock(
             'eZ\\Bundle\\EzPublishRestBundle\\EventListener\\RestListener',
-            array( 'visitResult' ), array( $container, $request, $csrfProvider )
+            array( 'visitResult' ), array( $container, $csrfProvider )
         );
         $listener->expects( $this->exactly( $visit ) )
             ->method( 'visitResult' )
@@ -130,7 +129,7 @@ class RestListenerTest extends PHPUnit_Framework_TestCase
     public function testOnKernelResultView(
         $name,
         ContainerInterface $container,
-        RESTRequest $request,
+        Request $request,
         CsrfProviderInterface $csrfProvider,
         GetResponseForControllerResultEvent $event,
         $visit
@@ -138,7 +137,7 @@ class RestListenerTest extends PHPUnit_Framework_TestCase
     {
         $listener = $this->getMock(
             'eZ\\Bundle\\EzPublishRestBundle\\EventListener\\RestListener',
-            array( 'visitResult' ), array( $container, $request, $csrfProvider )
+            array( 'visitResult' ), array( $container, $csrfProvider )
         );
         $listener->expects( $this->exactly( $visit ) )
             ->method( 'visitResult' )
@@ -226,13 +225,13 @@ class RestListenerTest extends PHPUnit_Framework_TestCase
     public function testOnKernelRequest(
         $name,
         ContainerInterface $container,
-        RESTRequest $request,
+        Request $request,
         CsrfProviderInterface $csrfProvider,
         GetResponseEvent $event,
         $shouldThrowException
     )
     {
-        $listener = new RestListener( $container, $request, $csrfProvider );
+        $listener = new RestListener( $container, $csrfProvider );
         $exception = false;
         try
         {
@@ -498,10 +497,7 @@ class RestListenerTest extends PHPUnit_Framework_TestCase
 
     protected function getRequestMock()
     {
-        $request = $this->getMockBuilder( 'eZ\\Publish\\Core\\REST\\Server\\Request' )
-            ->disableOriginalConstructor()
-            ->getMock();
-        return $request;
+        return $this->getMock( 'Symfony\\Component\\HttpFoundation\\Request' );
     }
 
 }

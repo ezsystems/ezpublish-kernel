@@ -568,4 +568,12 @@ class UserCreateTest extends BaseTest
             )
         );
     }
+
+    public function getParseHrefExpectationsMap()
+    {
+        return array(
+            array( '/content/types/4', 'contentTypeId', 4 ),
+            array( '/content/sections/4', 'sectionId', 4 ),
+        );
+    }
 }

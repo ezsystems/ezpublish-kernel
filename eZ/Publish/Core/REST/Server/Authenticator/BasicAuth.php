@@ -24,7 +24,7 @@ use InvalidArgumentException;
  * Authenticator for integration tests
  *
  * This is, by now, just an untested stub.
- * @todo Test
+ * @todo Remove when the REST client is refactored
  */
 class BasicAuth extends Authenticator
 {

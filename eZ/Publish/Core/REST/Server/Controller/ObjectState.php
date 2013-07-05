@@ -66,8 +66,8 @@ class ObjectState extends RestController
             $createdStateGroup = $this->objectStateService->createObjectStateGroup(
                 $this->inputDispatcher->parse(
                     new Message(
-                        array( 'Content-Type' => $this->request->contentType ),
-                        $this->request->body
+                        array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
+                        $this->request->getContent()
                     )
                 )
             );
@@ -102,8 +102,8 @@ class ObjectState extends RestController
                 $objectStateGroup,
                 $this->inputDispatcher->parse(
                     new Message(
-                        array( 'Content-Type' => $this->request->contentType ),
-                        $this->request->body
+                        array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
+                        $this->request->getContent()
                     )
                 )
             );
@@ -223,8 +223,8 @@ class ObjectState extends RestController
     {
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->contentType ),
-                $this->request->body
+                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
+                $this->request->getContent()
             )
         );
 
@@ -254,8 +254,8 @@ class ObjectState extends RestController
     {
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->contentType ),
-                $this->request->body
+                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
+                $this->request->getContent()
             )
         );
 
@@ -315,8 +315,8 @@ class ObjectState extends RestController
     {
         $newObjectStates = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->contentType ),
-                $this->request->body
+                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
+                $this->request->getContent()
             )
         );
 

@@ -12,14 +12,14 @@ namespace eZ\Publish\Core\REST\Server;
 use eZ\Publish\API\Repository\Repository;
 use Symfony\Component\Routing\RouterInterface;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher as InputDispatcher;
-use eZ\Publish\Core\REST\Server\Request as HttpRequest;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use eZ\Publish\Core\REST\Common\RequestParser as RequestParser;
 
 abstract class Controller
 {
     /**
-     * @var \eZ\Publish\Core\REST\Server\Request
+     * @var \Symfony\Component\HttpFoundation\Request
      */
     protected $request;
 
@@ -60,7 +60,7 @@ abstract class Controller
         $this->router = $router;
     }
 
-    public function setRequest( HttpRequest $request )
+    public function setRequest( Request $request )
     {
         $this->request = $request;
     }
@@ -68,6 +68,7 @@ abstract class Controller
     public function setContainer( Container $container )
     {
         $this->container = $container;
+        $this->setRequest( $this->container->get( 'request' ) );
     }
 
     public function setRepository( Repository $repository )
@@ -78,5 +79,24 @@ abstract class Controller
     public function setRequestParser( RequestParser $requestParser )
     {
         $this->requestParser = $requestParser;
+    }
+
+    /**
+     * Extracts the requested media type from $request
+     * @todo refactor, maybe to a REST Request with an accepts('content-type') method
+     *
+     * @return string
+     */
+    protected function getMediaType()
+    {
+        foreach ( $this->request->getAcceptableContentTypes() as $mimeType )
+        {
+            if ( preg_match( '(^([a-z0-9-/.]+)\+.*$)', strtolower( $mimeType ), $matches ) )
+            {
+                return $matches[1];
+            }
+        }
+
+        return 'unknown/unknown';
     }
 }

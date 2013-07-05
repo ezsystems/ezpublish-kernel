@@ -159,8 +159,7 @@ class ContentTypeCreate extends Base
                 throw new Exceptions\Parser( "Missing '_href' attribute for User element in ContentTypeCreate." );
             }
 
-            $userValues = $this->requestParser->parse( 'user', $data['User']['_href'] );
-            $contentTypeCreateStruct->creatorId = $userValues['user'];
+            $contentTypeCreateStruct->creatorId = $this->requestParser->parseHref( $data['User']['_href'], 'userId' );
         }
 
         if ( !array_key_exists( 'FieldDefinitions', $data ) || !is_array( $data['FieldDefinitions'] ) ||

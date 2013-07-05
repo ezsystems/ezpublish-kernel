@@ -202,4 +202,11 @@ class RoleAssignInputTest extends BaseTest
             $this->getParserTools()
         );
     }
+
+    public function getParseHrefExpectationsMap()
+    {
+        return array(
+            array( '/user/roles/42', 'roleId', 42 )
+        );
+    }
 }

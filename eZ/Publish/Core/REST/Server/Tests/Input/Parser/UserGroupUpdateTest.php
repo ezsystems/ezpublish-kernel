@@ -336,4 +336,12 @@ class UserGroupUpdateTest extends BaseTest
 
         return $contentServiceMock;
     }
+
+    public function getParseHrefExpectationsMap()
+    {
+        return array(
+            array( '/content/sections/1', 'sectionId', 1 ),
+            array( '/user/groups/1/5', 'groupPath', '1/5' )
+        );
+    }
 }

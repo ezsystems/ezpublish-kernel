@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Server\Tests\Functional;
+namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
 use Buzz\Message\Request as HttpRequest;
 use Buzz\Message\Response as HttpResponse;
@@ -102,7 +102,7 @@ class TestCase extends PHPUnit_Framework_TestCase
         self::assertNotNull( $headerValue, "Failed asserting that response has a $header header" );
         if ( $expectedValue !== null )
         {
-            self::assertEquals( $headerValue, $expectedValue );
+            self::assertEquals( $expectedValue, $headerValue );
         }
     }
 
@@ -183,9 +183,13 @@ XML;
         $request->setContent( $xml );
 
         $response = $this->sendHttpRequest( $request );
+
         self::assertHttpResponseCodeEquals( $response, 201 );
 
         $content = json_decode( $response->getContent(), true );
+
+        if ( !isset( $content['Content']['CurrentVersion']['Version'] ) )
+            self::fail( "Incomplete response (no version):\n" . $response->getContent() . "\n" );
 
         $response = $this->sendHttpRequest(
             $request = $this->createHttpRequest( "PUBLISH", $content['Content']['CurrentVersion']['Version']['_href'] )

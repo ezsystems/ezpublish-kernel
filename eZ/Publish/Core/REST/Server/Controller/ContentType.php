@@ -56,8 +56,9 @@ class ContentType extends RestController
     {
         $createStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->contentType ),
-                $this->request->body
+                // array( 'Content-Type' => $this->httpFoundationRequest->headers->get( 'Content-Type' ) ),
+                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
+                $this->request->getContent()
             )
         );
 
@@ -87,8 +88,8 @@ class ContentType extends RestController
     {
         $createStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->contentType ),
-                $this->request->body
+                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
+                $this->request->getContent()
             )
         );
 
@@ -120,12 +121,12 @@ class ContentType extends RestController
             $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId )
         );
 
-        if ( $this->getMediaType( $this->request ) == 'application/vnd.ez.api.contenttypelist' )
+        if ( $this->getMediaType() == 'application/vnd.ez.api.contenttypelist' )
         {
-            return new Values\ContentTypeList( $contentTypes, $this->request->path );
+            return new Values\ContentTypeList( $contentTypes, $this->request->getPathInfo() );
         }
 
-        return new Values\ContentTypeInfoList( $contentTypes, $this->request->path );
+        return new Values\ContentTypeInfoList( $contentTypes, $this->request->getPathInfo() );
     }
 
     /**
@@ -158,10 +159,10 @@ class ContentType extends RestController
      */
     public function loadContentTypeGroupList()
     {
-        if ( isset( $this->request->variables['identifier'] ) )
+        if ( $this->request->query->has( 'identifier' ) )
         {
             $contentTypeGroup = $this->contentTypeService->loadContentTypeGroupByIdentifier(
-                $this->request->variables['identifier']
+                $this->request->query->get( 'identifier' )
             );
 
             return new Values\TemporaryRedirect(
@@ -217,25 +218,25 @@ class ContentType extends RestController
     {
         $contentTypes = array();
 
-        if ( isset( $this->request->variables['identifier'] ) )
+        if ( $this->request->query->has( 'identifier' ) )
         {
             $contentTypes = array(
                 $this->loadContentTypeByIdentifier()
             );
         }
-        else if ( isset( $this->request->variables['remoteId'] ) )
+        else if ( $this->request->query->has( 'remoteId' ) )
         {
             $contentTypes = array(
                 $this->loadContentTypeByRemoteId()
             );
         }
 
-        if ( $this->getMediaType( $this->request ) == 'application/vnd.ez.api.contenttypelist' )
+        if ( $this->getMediaType() == 'application/vnd.ez.api.contenttypelist' )
         {
-            return new Values\ContentTypeList( $contentTypes, $this->request->path );
+            return new Values\ContentTypeList( $contentTypes, $this->request->getPathInfo() );
         }
 
-        return new Values\ContentTypeInfoList( $contentTypes, $this->request->path );
+        return new Values\ContentTypeInfoList( $contentTypes, $this->request->getPathInfo() );
     }
 
     /**
@@ -246,7 +247,7 @@ class ContentType extends RestController
     public function loadContentTypeByIdentifier()
     {
         return $this->contentTypeService->loadContentTypeByIdentifier(
-            $this->request->variables['identifier']
+            $this->request->query->get( 'identifier' )
         );
     }
 
@@ -258,7 +259,7 @@ class ContentType extends RestController
     public function loadContentTypeByRemoteId()
     {
         return $this->contentTypeService->loadContentTypeByRemoteId(
-            $this->request->variables['remoteId']
+            $this->request->query->get( 'remoteId' )
         );
     }
 
@@ -281,9 +282,9 @@ class ContentType extends RestController
                 $this->inputDispatcher->parse(
                     new Message(
                         array(
-                            'Content-Type' => $this->request->contentType,
+                            'Content-Type' => $this->request->headers->get( 'Content-Type' ),
                         ),
-                        $this->request->body
+                        $this->request->getContent()
                     )
                 ),
                 array( $contentTypeGroup )
@@ -302,7 +303,7 @@ class ContentType extends RestController
             throw new BadRequestException( $e->getMessage() );
         }
 
-        if ( isset( $this->request->variables['publish'] ) && $this->request->variables['publish'] === 'true' )
+        if ( $this->request->query->has( 'publish' ) && $this->request->query->get( 'publish' ) === 'true' )
         {
             $this->contentTypeService->publishContentTypeDraft( $contentTypeDraft, 'bla' );
 
@@ -375,9 +376,9 @@ class ContentType extends RestController
         $contentTypeUpdateStruct = $this->inputDispatcher->parse(
             new Message(
                 array(
-                    'Content-Type' => $this->request->contentType,
+                    'Content-Type' => $this->request->headers->get( 'Content-Type' ),
                 ),
-                $this->request->body
+                $this->request->getContent()
             )
         );
 
@@ -436,9 +437,9 @@ class ContentType extends RestController
         $contentTypeUpdateStruct = $this->inputDispatcher->parse(
             new Message(
                 array(
-                    'Content-Type' => $this->request->contentType,
+                    'Content-Type' => $this->request->headers->get( 'Content-Type' ),
                 ),
-                $this->request->body
+                $this->request->getContent()
             )
         );
 
@@ -477,9 +478,9 @@ class ContentType extends RestController
         $fieldDefinitionCreate = $this->inputDispatcher->parse(
             new Message(
                 array(
-                    'Content-Type' => $this->request->contentType,
+                    'Content-Type' => $this->request->headers->get( 'Content-Type' ),
                 ),
-                $this->request->body
+                $this->request->getContent()
             )
         );
 
@@ -510,7 +511,7 @@ class ContentType extends RestController
             }
         }
 
-        throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->path}'." );
+        throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->getPathInfo()}'." );
     }
 
     /**
@@ -555,7 +556,7 @@ class ContentType extends RestController
             }
         }
 
-        throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->path}'." );
+        throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->getPathInfo()}'." );
     }
 
     /**
@@ -599,7 +600,7 @@ class ContentType extends RestController
             }
         }
 
-        throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->path}'." );
+        throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->getPathInfo()}'." );
     }
 
     /**
@@ -618,11 +619,11 @@ class ContentType extends RestController
         $fieldDefinitionUpdate = $this->inputDispatcher->parse(
             new Message(
                 array(
-                    'Content-Type' => $this->request->contentType,
+                    'Content-Type' => $this->request->headers->get( 'Content-Type' ),
                     // @todo Needs refactoring! Temporary solution so parser has access to URL
-                    'Url' => $this->request->path
+                    'Url' => $this->request->getPathInfo()
                 ),
-                $this->request->body
+                $this->request->getContent()
             )
         );
 
@@ -637,7 +638,7 @@ class ContentType extends RestController
 
         if ( $fieldDefinition === null )
         {
-            throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->path}'." );
+            throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->getPathInfo()}'." );
         }
 
         try
@@ -664,7 +665,7 @@ class ContentType extends RestController
             }
         }
 
-        throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->path}'." );
+        throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->getPathInfo()}'." );
     }
 
     /**
@@ -691,7 +692,7 @@ class ContentType extends RestController
 
         if ( $fieldDefinition === null )
         {
-            throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->path}'." );
+            throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->getPathInfo()}'." );
         }
 
         $this->contentTypeService->removeFieldDefinition(
@@ -799,7 +800,10 @@ class ContentType extends RestController
 
         try
         {
-            $groupValues = $this->requestParser->parse( 'typegroup', $this->request->variables['group'] );
+            $contentTypeGroupId = $this->requestParser->parseHref(
+                $this->request->query->get( 'group' ),
+                'contentTypeGroupId'
+            );
         }
         catch ( Exceptions\InvalidArgumentException $e )
         {
@@ -807,7 +811,7 @@ class ContentType extends RestController
             throw new BadRequestException( $e->getMessage() );
         }
 
-        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $groupValues['typegroup'] );
+        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId );
 
         $existingContentTypeGroups = $contentType->getContentTypeGroups();
         $contentTypeInGroup = false;
@@ -901,22 +905,5 @@ class ContentType extends RestController
                 'modificationDate' => $createStruct->creationDate,
             )
         );
-    }
-
-    /**
-     * Extracts the requested media type from $request
-     *
-     * @return string
-     */
-    private function getMediaType()
-    {
-        foreach ( $this->request->mimetype as $mimeType )
-        {
-            if ( preg_match( '(^([a-z0-9-/.]+)\+.*$)', $mimeType['value'], $matches ) )
-            {
-                return $matches[1];
-            }
-        }
-        return 'unknown/unknown';
     }
 }

@@ -286,4 +286,12 @@ class FieldDefinitionUpdateTest extends BaseTest
             ),
         );
     }
+
+    public function getParseHrefExpectationsMap()
+    {
+        return array(
+            array( '/content/types/42/draft/fieldDefinitions/24', 'contentTypeId', 42 ),
+            array( '/content/types/42/draft/fieldDefinitions/24', 'fieldDefinitionId', 24 ),
+        );
+    }
 }

@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Server\Tests\Functional;
+namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
-use eZ\Publish\Core\REST\Server\Tests\Functional\TestCase as RESTFunctionalTestCase;
+use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTestCase;
 
 class LocationTest extends RESTFunctionalTestCase
 {

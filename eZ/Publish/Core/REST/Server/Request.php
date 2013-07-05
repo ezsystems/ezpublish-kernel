@@ -13,6 +13,7 @@ use Qafoo\RMF\Request\PropertyHandler;
 
 /**
  * Encapsulated RMF HTTP Request for REST server
+ * @todo Remove when the REST client is refactored
  */
 class Request extends RMFRequest
 {

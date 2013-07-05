@@ -70,18 +70,18 @@ class Location extends RestController
      */
     public function redirectLocation()
     {
-        if ( !isset( $this->request->variables['id'] ) && !isset( $this->request->variables['remoteId'] ) )
+        if ( !$this->request->query->has( 'id' ) && !$this->request->query->has( 'remoteId' ) )
         {
             throw new BadRequestException( "At least one of 'id' or 'remoteId' parameters is required." );
         }
 
-        if ( isset( $this->request->variables['id'] ) )
+        if ( $this->request->query->has( 'id' ) )
         {
-            $location = $this->locationService->loadLocation( $this->request->variables['id'] );
+            $location = $this->locationService->loadLocation( $this->request->query->get( 'id' ) );
         }
         else
         {
-            $location = $this->locationService->loadLocationByRemoteId( $this->request->variables['remoteId'] );
+            $location = $this->locationService->loadLocationByRemoteId( $this->request->query->get( 'remoteId' ) );
         }
 
         return new Values\TemporaryRedirect(
@@ -106,8 +106,8 @@ class Location extends RestController
     {
         $locationCreateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->contentType ),
-                $this->request->body
+                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
+                $this->request->getContent()
             )
         );
 
@@ -172,9 +172,13 @@ class Location extends RestController
             $this->extractLocationIdFromPath( $locationPath )
         );
 
-        $destinationValues = $this->requestParser->parse( 'location', $this->request->destination );
         $destinationLocation = $this->locationService->loadLocation(
-            $this->extractLocationIdFromPath( $destinationValues['location'] )
+            $this->extractLocationIdFromPath(
+                $this->requestParser->parseHref(
+                    $this->request->headers->get( 'Destination' ),
+                    'locationPath'
+                )
+            )
         );
 
         $newLocation = $this->locationService->copySubtree( $location, $destinationLocation );
@@ -204,29 +208,14 @@ class Location extends RestController
         );
 
         $destinationLocationId = null;
+        $destinationHref = $this->request->headers->get( 'Destination' );
         try
         {
             // First check to see if the destination is for moving within another subtree
-            $destinationValues = $this->requestParser->parse( 'location', $this->request->destination );
-            $destinationLocationId = $this->extractLocationIdFromPath( $destinationValues['location'] );
-        }
-        catch ( Exceptions\InvalidArgumentException $e )
-        {
-            try
-            {
-                // If parsing of destination fails, let's try to see if destination is trash
-                $this->requestParser->parse( 'trashItems', $this->request->destination );
-            }
-            catch ( Exceptions\InvalidArgumentException $e )
-            {
-                // If that fails, the Destination header is not formatted right
-                // so just throw the BadRequestException
-                throw new BadRequestException( "{$this->request->destination} is not formatted correctly" );
-            }
-        }
+            $destinationLocationId = $this->extractLocationIdFromPath(
+                $this->requestParser->parseHref( $destinationHref, 'locationPath' )
+            );
 
-        if ( $destinationLocationId !== null )
-        {
             // We're moving the subtree
             $destinationLocation = $this->locationService->loadLocation( $destinationLocationId );
             $this->locationService->moveSubtree( $locationToMove, $destinationLocation );
@@ -242,15 +231,32 @@ class Location extends RestController
                 )
             );
         }
-
-        // We're trashing the subtree
-        $trashItem = $this->trashService->trash( $locationToMove );
-        return new Values\ResourceCreated(
-            $this->router->generate(
-                'ezpublish_rest_loadTrashItem',
-                array( 'trashItemId' => $trashItem->id )
-            )
-        );
+        // If parsing of destination fails, let's try to see if destination is trash
+        catch ( Exceptions\InvalidArgumentException $e )
+        {
+            try
+            {
+                $route = $this->requestParser->parse( $destinationHref );
+                if ( !isset( $route['_route'] ) || $route['_route'] !== 'ezpublish_rest_loadTrashItems' )
+                {
+                    throw new Exceptions\InvalidArgumentException( '' );
+                }
+                // Trash the subtree
+                $trashItem = $this->trashService->trash( $locationToMove );
+                return new Values\ResourceCreated(
+                    $this->router->generate(
+                        'ezpublish_rest_loadTrashItem',
+                        array( 'trashItemId' => $trashItem->id )
+                    )
+                );
+            }
+            catch ( Exceptions\InvalidArgumentException $e )
+            {
+                // If that fails, the Destination header is not formatted right
+                // so just throw the BadRequestException
+                throw new BadRequestException( "{$destinationHref} is not an acceptable destination" );
+            }
+        }
     }
 
     /**
@@ -265,8 +271,14 @@ class Location extends RestController
         $locationId = $this->extractLocationIdFromPath( $locationPath );
         $location = $this->locationService->loadLocation( $locationId );
 
-        $destinationValues = $this->requestParser->parse( 'location', $this->request->destination );
-        $destinationLocation = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $destinationValues['location'] ) );
+        $destinationLocation = $this->locationService->loadLocation(
+            $this->extractLocationIdFromPath(
+                $this->requestParser->parseHref(
+                    $this->request->headers->get( 'Destination' ),
+                    'locationPath'
+                )
+            )
+        );
 
         $this->locationService->swapLocation( $location, $destinationLocation );
 
@@ -285,12 +297,12 @@ class Location extends RestController
             array(
                 new Values\RestLocation(
                     $location = $this->locationService->loadLocationByRemoteId(
-                        $this->request->variables['remoteId']
+                        $this->request->query->get( 'remoteId' )
                     ),
                     $this->locationService->getLocationChildCount( $location )
                 )
             ),
-            $this->request->path
+            $this->request->getPathInfo()
         );
     }
 
@@ -316,7 +328,7 @@ class Location extends RestController
             );
         }
 
-        return new Values\LocationList( $restLocations, $this->request->path );
+        return new Values\LocationList( $restLocations, $this->request->getPathInfo() );
     }
 
     /**
@@ -328,8 +340,8 @@ class Location extends RestController
      */
     public function loadLocationChildren( $locationPath )
     {
-        $offset = isset( $this->request->variables['offset'] ) ? (int)$this->request->variables['offset'] : 0;
-        $limit = isset( $this->request->variables['limit'] ) ? (int)$this->request->variables['limit'] : -1;
+        $offset = $this->request->query->has( 'offset' ) ? (int)$this->request->query->get( 'offset' ) : 0;
+        $limit = $this->request->query->has( 'limit' ) ? (int)$this->request->query->get( 'limit' ) : -1;
 
         $restLocations = array();
         foreach (
@@ -348,7 +360,7 @@ class Location extends RestController
             );
         }
 
-        return new Values\LocationList( $restLocations, $this->request->path );
+        return new Values\LocationList( $restLocations, $this->request->getPathInfo() );
     }
 
     /**
@@ -375,8 +387,8 @@ class Location extends RestController
     {
         $locationUpdate = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->contentType ),
-                $this->request->body
+                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
+                $this->request->getContent()
             )
         );
 

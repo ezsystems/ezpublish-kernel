@@ -17,12 +17,11 @@ interface RequestParser
     /**
      * Parse URL and return the IDs contained in the URL
      *
-     * @param string $type
      * @param string $url
      *
      * @return array
      */
-    public function parse( $type, $url );
+    public function parse( $url );
 
     /**
      * Generate a URL of the given type from the specified values
@@ -33,4 +32,14 @@ interface RequestParser
      * @return string
      */
     public function generate( $type, array $values = array() );
+
+    /**
+     * Tries to match $href as a route, and returns the value of $attribute from the result
+     *
+     * @param string $href
+     * @param string $attribute
+     *
+     * @return mixed|false
+     */
+    public function parseHref( $href, $attribute );
 }
