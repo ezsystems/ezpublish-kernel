@@ -44,7 +44,7 @@ class Router implements RequestParser
     {
         if ( strpos( $url, $this->restRoutesPrefix ) !== 0 )
         {
-            // @todo mark as depreciated (see EZP-21176)
+            // @todo mark as deprecated (see EZP-21176)
             $url = $this->restRoutesPrefix . $url;
         }
 
