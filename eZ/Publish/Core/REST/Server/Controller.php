@@ -68,6 +68,7 @@ abstract class Controller
     public function setContainer( Container $container )
     {
         $this->container = $container;
+        $this->setRequest( $this->container->get( 'request' ) );
     }
 
     public function setRepository( Repository $repository )

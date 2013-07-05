@@ -89,7 +89,6 @@ services:
             - [ setInputDispatcher, [@ezpublish_rest.input.dispatcher] ]
             - [ setRouter, [@router] ]
             - [ setRequestParser, [@ezpublish_rest.request_parser] ]
-            - [ setHttpFoundationRequest, [@request=] ]
             - [ setContainer, [@service_container] ]
             - [ setRepository, [@ezpublish.api.repository] ]
 
