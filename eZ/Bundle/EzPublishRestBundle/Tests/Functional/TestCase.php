@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Server\Tests\Functional;
+namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
 use Buzz\Message\Request as HttpRequest;
 use Buzz\Message\Response as HttpResponse;
