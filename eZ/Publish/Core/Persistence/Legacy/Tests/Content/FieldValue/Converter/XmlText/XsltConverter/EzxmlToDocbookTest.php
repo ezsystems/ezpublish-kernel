@@ -7,15 +7,14 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Converter;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter\XmlText\XsltConverter;
 
-use eZ\Publish\Core\FieldType\XmlText\Converter\DocbookToEzxml;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText\XsltConverter\EzxmlToDocbook;
 use PHPUnit_Framework_TestCase;
 
 /**
- *
  */
-class DocbookToEzxmlTest extends PHPUnit_Framework_TestCase
+class EzxmlToDocbookTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @return array
@@ -25,47 +24,47 @@ class DocbookToEzxmlTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook">
-  <para>This is a paragraph.</para>
-</article>',
-                '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
   <paragraph>This is a paragraph.</paragraph>
-</section>
+</section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" version="5.0">
+  <para>This is a paragraph.</para>
+</article>
 ',
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook">
-  <title>This is a heading.</title>
-  <para>This is a paragraph.</para>
-</article>',
-                '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
-  <heading>This is a heading.</heading>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+  <heading>This is a... heading.</heading>
   <paragraph>This is a paragraph.</paragraph>
-</section>
+</section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" version="5.0">
+  <title>This is a... heading.</title>
+  <para>This is a paragraph.</para>
+</article>
 ',
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook">
-  <title>This is a heading.</title>
-  <para>This is a paragraph.</para>
-  <section>
-    <title>This is a second heading.</title>
-    <para>This is a second paragraph.</para>
-  </section>
-</article>',
-                '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
-  <heading>This is a heading.</heading>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+  <heading>This is a... heading.</heading>
   <paragraph>This is a paragraph.</paragraph>
   <section>
     <heading>This is a second heading.</heading>
     <paragraph>This is a second paragraph.</paragraph>
   </section>
-</section>
+</section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" version="5.0">
+  <title>This is a... heading.</title>
+  <para>This is a paragraph.</para>
+  <section>
+    <title>This is a second heading.</title>
+    <para>This is a second paragraph.</para>
+  </section>
+</article>
 ',
             ),
         );
@@ -93,20 +92,20 @@ class DocbookToEzxmlTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @var \eZ\Publish\Core\FieldType\XmlText\Converter\DocbookToEzxml
+     * @var \eZ\Publish\Core\FieldType\XmlText\Converter\EzxmlToDocbook
      */
     protected $converter;
 
     /**
-     * @return \eZ\Publish\Core\FieldType\XmlText\Converter\DocbookToEzxml
+     * @return \eZ\Publish\Core\FieldType\XmlText\Converter\EzxmlToDocbook
      */
     protected function getConverter()
     {
         if ( $this->converter === null )
         {
             $installationDir = self::getInstallationDir();
-            $stylesheet = "eZ/Publish/Core/FieldType/XmlText/Converter/Resources/stylesheets/docbook_ezxml.xsl";
-            $this->converter = new DocbookToEzxml( $installationDir . "/" . $stylesheet );
+            $stylesheet = "eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/XmlText/XsltConverter/Resources/stylesheets/ezxml_docbook.xsl";
+            $this->converter = new EzxmlToDocbook( $installationDir . "/" . $stylesheet );
         }
 
         return $this->converter;

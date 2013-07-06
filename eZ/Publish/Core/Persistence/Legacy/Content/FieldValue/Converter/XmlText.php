@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText\XsltConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -21,15 +22,23 @@ use DOMDocument;
 class XmlText implements Converter
 {
     /**
-     * Factory for current class
-     *
-     * @note Class should instead be configured as service if it gains dependencies.
-     *
-     * @return XmlText
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText\XsltConverter
      */
-    public static function create()
+    protected $toStorageConverter;
+
+    /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText\XsltConverter
+     */
+    protected $fromStorageConverter;
+
+    /**
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText\XsltConverter $toStorageConverter
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText\XsltConverter $fromStorageConverter
+     */
+    public function __construct( XsltConverter $toStorageConverter, XsltConverter $fromStorageConverter )
     {
-        return new self;
+        $this->toStorageConverter = $toStorageConverter;
+        $this->fromStorageConverter = $fromStorageConverter;
     }
 
     /**
@@ -40,7 +49,7 @@ class XmlText implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataText = $value->data->saveXML();
+        $storageFieldValue->dataText = $this->toStorageConverter->convert( $value->data );
     }
 
     /**
@@ -53,6 +62,10 @@ class XmlText implements Converter
     {
         $domDoc = new DOMDocument;
         $domDoc->loadXML( $value->dataText ?: Value::EMPTY_VALUE );
+
+        $xmlString = $this->fromStorageConverter->convert( $domDoc );
+        $domDoc->loadXML( $xmlString );
+
         $fieldValue->data = $domDoc;
     }
 

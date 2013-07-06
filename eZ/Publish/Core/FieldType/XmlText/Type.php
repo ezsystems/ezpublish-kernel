@@ -59,29 +59,11 @@ class Type extends FieldType
     protected $converterDispatcher;
 
     /**
-     * @var \eZ\Publish\Core\FieldType\XmlText\Converter
-     */
-    protected $toPersistenceConverter;
-
-    /**
-     * @var \eZ\Publish\Core\FieldType\XmlText\Converter
-     */
-    protected $fromPersistenceConverter;
-
-    /**
      * @param \eZ\Publish\Core\FieldType\XmlText\ConverterDispatcher $converterDispatcher
-     * @param Converter $toPersistenceConverter
-     * @param Converter $fromPersistenceConverter
      */
-    public function __construct(
-        ConverterDispatcher $converterDispatcher = null,
-        Converter $toPersistenceConverter = null,
-        Converter $fromPersistenceConverter = null
-    )
+    public function __construct( ConverterDispatcher $converterDispatcher )
     {
         $this->converterDispatcher = $converterDispatcher;
-        $this->toPersistenceConverter = $toPersistenceConverter;
-        $this->fromPersistenceConverter = $fromPersistenceConverter;
     }
 
     /**
@@ -258,15 +240,7 @@ class Type extends FieldType
      */
     public function fromPersistenceValue( FieldValue $fieldValue )
     {
-        $doc = null;
-        if ( $fieldValue->data !== null )
-        {
-            $xmlString = $this->fromPersistenceConverter->convert( $fieldValue->data );
-            $doc = new DOMDocument;
-            $doc->loadXML( $xmlString );
-        }
-
-        return new Value( $doc );
+        return new Value( $fieldValue->data );
     }
 
     /**
@@ -276,13 +250,9 @@ class Type extends FieldType
      */
     public function toPersistenceValue( $value )
     {
-        $ezxml = $this->toPersistenceConverter->convert( $value->xml );
-        $doc = new DOMDocument;
-        $doc->loadXML( $ezxml );
-
         return new FieldValue(
             array(
-                'data' => $doc,
+                'data' => $value->xml,
                 'externalData' => null,
                 'sortKey' => $this->getSortInfo( $value )
             )
