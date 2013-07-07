@@ -159,7 +159,7 @@ class ViewController extends Controller
         }
     }
 
-    protected function handleViewException( $response, $params, Exception $e, $viewType, $contentId = null, $locationId = null )
+    protected function handleViewException( Response $response, $params, Exception $e, $viewType, $contentId = null, $locationId = null )
     {
         $event = new APIContentExceptionEvent(
             $e,
