@@ -47,10 +47,6 @@ class BinaryFileTest extends BinaryBaseTest
         $baseInput = parent::provideInvalidInputForAcceptValue();
         $binaryFileInput = array(
             array(
-                new BinaryFileValue(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
                 new BinaryFileValue( array( 'path' => '/foo/bar' ) ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
@@ -66,12 +62,20 @@ class BinaryFileTest extends BinaryBaseTest
                 new BinaryFileValue
             ),
             array(
+                new BinaryFileValue(),
+                new BinaryFileValue()
+            ),
+            array(
+                array(),
+                new BinaryFileValue()
+            ),
+            array(
                 __FILE__,
                 new BinaryFileValue(
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => null,
+                        'fileSize' => filesize( __FILE__ ),
                         'downloadCount' => 0,
                         'mimeType' => null,
                     )
@@ -85,7 +89,7 @@ class BinaryFileTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => null,
+                        'fileSize' => filesize( __FILE__ ),
                         'downloadCount' => 0,
                         'mimeType' => null,
                     )
@@ -119,7 +123,7 @@ class BinaryFileTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => null,
+                        'fileSize' => filesize( __FILE__ ),
                         'downloadCount' => 42,
                         'mimeType' => null,
                     )
@@ -136,7 +140,7 @@ class BinaryFileTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
-                        'fileSize' => null,
+                        'fileSize' => filesize( __FILE__ ),
                         'downloadCount' => 0,
                         'mimeType' => 'application/text+php',
                     )
@@ -185,7 +189,7 @@ class BinaryFileTest extends BinaryBaseTest
     {
         return array(
             array(
-                null,
+                new BinaryFileValue,
                 null
             ),
             array(
@@ -250,7 +254,7 @@ class BinaryFileTest extends BinaryBaseTest
         return array(
             array(
                 null,
-                null
+                new BinaryFileValue
             ),
             array(
                 array(

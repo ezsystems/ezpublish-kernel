@@ -376,6 +376,11 @@ class UserIntegrationTest extends BaseIntegrationTest
         return $contentService->createContentDraft( $user->content->contentInfo, $user->content->versionInfo );
     }
 
+    public function testCreateContentWithEmptyFieldValue()
+    {
+        $this->markTestSkipped( "User field will never be created empty" );
+    }
+
     public function providerForTestIsEmptyValue()
     {
         return array(

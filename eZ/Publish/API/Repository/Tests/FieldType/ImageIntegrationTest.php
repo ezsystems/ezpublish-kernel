@@ -219,14 +219,6 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     {
         return array(
             array(
-                array(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-            array(
-                new ImageValue( array() ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-            array(
                 new ImageValue(
                     array(
                         'path' => __DIR__ . '/_fixtures/image.jpg',

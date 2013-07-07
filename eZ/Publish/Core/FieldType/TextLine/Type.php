@@ -13,6 +13,8 @@ use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * The TextLine field type.
@@ -101,7 +103,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( FieldDefinition $fieldDefinition, $fieldValue )
+    public function validate( FieldDefinition $fieldDefinition, SPIValue $fieldValue )
     {
         $validationErrors = array();
 
@@ -162,16 +164,12 @@ class Type extends FieldType
      * It will be used to generate content name and url alias if current field is designated
      * to be used in the content name/urlAlias pattern.
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\TextLine\Value $value
      *
-     * @return mixed
+     * @return string
      */
-    public function getName( $value )
+    public function getName( SPIValue $value )
     {
-        if ( $value === null )
-        {
-            return "";
-        }
         return (string)$value->text;
     }
 
@@ -193,52 +191,47 @@ class Type extends FieldType
      *
      * @return boolean
      */
-    public function isEmptyValue( $value )
+    public function isEmptyValue( SPIValue $value )
     {
-        return $value === null || $value->text === null || trim( $value->text ) === "";
+        return $value->text === null || trim( $value->text ) === "";
     }
 
     /**
-     * Implements the core of {@see acceptValue()}.
+     * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
-     * @param mixed $inputValue
+     * @param string|\eZ\Publish\Core\FieldType\TextLine\Value $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\TextLine\Value The potentially converted and structurally plausible value.
      */
-    protected function internalAcceptValue( $inputValue )
+    protected function createValueFromInput( $inputValue )
     {
         if ( is_string( $inputValue ) )
         {
-            if ( trim( $inputValue, " " ) === "" )
-                return $this->getEmptyValue();
-
             $inputValue = new Value( $inputValue );
-        }
-        else if ( !$inputValue instanceof Value )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue',
-                'eZ\\Publish\\Core\\FieldType\\TextLine\\Value',
-                $inputValue
-            );
-        }
-
-        if ( $inputValue->text === null
-            || ( is_string( $inputValue->text ) && trim( $inputValue->text, " " ) === "" ) )
-        {
-            return $this->getEmptyValue();
-        }
-
-        if ( !is_string( $inputValue->text ) )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->text',
-                'string',
-                $inputValue->text
-            );
         }
 
         return $inputValue;
+    }
+
+    /**
+     * Throws an exception if value structure is not of expected format.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
+     *
+     * @param \eZ\Publish\Core\FieldType\TextLine\Value $value
+     *
+     * @return void
+     */
+    protected function checkValueStructure( BaseValue $value )
+    {
+        if ( !is_string( $value->text ) )
+        {
+            throw new InvalidArgumentType(
+                '$value->text',
+                'string',
+                $value->text
+            );
+        }
     }
 
     /**
@@ -246,14 +239,12 @@ class Type extends FieldType
      *
      * @todo String normalization should occur here.
      *
+     * @param \eZ\Publish\Core\FieldType\TextLine\Value $value
+     *
      * @return array
      */
-    protected function getSortInfo( $value )
+    protected function getSortInfo( BaseValue $value )
     {
-        if ( $value === null )
-        {
-            return '';
-        }
         return $value->text;
     }
 
@@ -268,7 +259,7 @@ class Type extends FieldType
     {
         if ( $hash === null )
         {
-            return null;
+            return $this->getEmptyValue();
         }
         return new Value( $hash );
     }
@@ -280,7 +271,7 @@ class Type extends FieldType
      *
      * @return mixed
      */
-    public function toHash( $value )
+    public function toHash( SPIValue $value )
     {
         if ( $this->isEmptyValue( $value ) )
         {

@@ -390,14 +390,6 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     abstract public function providerForTestIsNotEmptyValue();
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\FieldType::isEmptyValue
-     */
-    public function testIsEmptyValueWithNull()
-    {
-        $this->assertTrue( $this->getRepository()->getFieldTypeService()->buildFieldType( $this->getTypeName() )->isEmptyValue( null ) );
-    }
-
-    /**
      * @depends testCreateContentType
      */
     public function testContentTypeField( $contentType )
@@ -632,6 +624,74 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     public function testLoadExternalData()
     {
         $this->assertFieldDataLoadedCorrect( $this->testLoadFieldType() );
+    }
+
+    public function testCreateContentWithEmptyFieldValue()
+    {
+        /** @var \eZ\Publish\Core\FieldType\FieldType $fieldType */
+        $fieldType = $this->getRepository()->getFieldTypeService()->buildFieldType( $this->getTypeName() );
+
+        return $this->createContent( $fieldType->getEmptyValue() );
+    }
+
+    /**
+     * @depends testCreateContentWithEmptyFieldValue
+     */
+    public function testCreatedEmptyFieldValue( $content )
+    {
+        foreach ( $content->getFields() as $field )
+        {
+            if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
+            {
+                return $field;
+            }
+        }
+
+        $this->fail( "Custom field not found." );
+    }
+
+    /**
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends testCreateContentWithEmptyFieldValue
+     * @group xx
+     */
+    public function testLoadEmptyFieldValue()
+    {
+        $content = $this->testCreateContentWithEmptyFieldValue();
+
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        return $contentService->loadContent( $content->contentInfo->id );
+    }
+
+    /**
+     * @depends testLoadEmptyFieldValue
+     */
+    public function testLoadEmptyFieldValueType( $content )
+    {
+        foreach ( $content->getFields() as $field )
+        {
+            if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
+            {
+                return $field;
+            }
+        }
+
+        $this->fail( "Custom field not found." );
+    }
+
+    /**
+     * @depends testLoadEmptyFieldValueType
+     */
+    public function testLoadEmptyFieldValueData( $field )
+    {
+        /** @var \eZ\Publish\Core\FieldType\FieldType $fieldType */
+        $fieldType = $this->getRepository()->getFieldTypeService()->buildFieldType( $this->getTypeName() );
+
+        $this->assertEquals(
+            $fieldType->getEmptyValue(),
+            $fieldType->acceptValue( $field->value )
+        );
     }
 
     /**

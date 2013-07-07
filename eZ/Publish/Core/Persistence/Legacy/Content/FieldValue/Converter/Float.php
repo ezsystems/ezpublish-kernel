@@ -107,7 +107,7 @@ class Float implements Converter
             }
         }
 
-        $fieldDef->defaultValue->data = isset( $storageDef->dataFloat3 ) ? $storageDef->dataFloat3 : 0.0;
+        $fieldDef->defaultValue->data = $storageDef->dataFloat3;
         $fieldDef->defaultValue->sortKey = 0;
     }
 
