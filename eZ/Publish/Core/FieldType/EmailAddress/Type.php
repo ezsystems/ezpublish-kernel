@@ -14,6 +14,8 @@ use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\Validator\EmailAddressValidator;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * The EMailAddress field type.
@@ -67,7 +69,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( FieldDefinition $fieldDefinition, $fieldValue )
+    public function validate( FieldDefinition $fieldDefinition, SPIValue $fieldValue )
     {
         $errors = array();
 
@@ -105,18 +107,12 @@ class Type extends FieldType
      * It will be used to generate content name and url alias if current field is designated
      * to be used in the content name/urlAlias pattern.
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\EmailAddress\Value $value
      *
-     * @return mixed
+     * @return string
      */
-    public function getName( $value )
+    public function getName( SPIValue $value )
     {
-        if ( $value === null )
-        {
-            return '';
-        }
-
-        $value = $this->acceptValue( $value );
         return (string)$value->email;
     }
 
@@ -132,37 +128,41 @@ class Type extends FieldType
     }
 
     /**
-     * Implements the core of {@see acceptValue()}.
+     * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
-     * @param mixed $inputValue
+     * @param string|\eZ\Publish\Core\FieldType\EmailAddress\Value $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\EmailAddress\Value The potentially converted and structurally plausible value.
      */
-    protected function internalAcceptValue( $inputValue )
+    protected function createValueFromInput( $inputValue )
     {
         if ( is_string( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
         }
-        else if ( !$inputValue instanceof Value )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue',
-                'eZ\\Publish\\Core\\FieldType\\EmailAddress\\Value',
-                $inputValue
-            );
-        }
-
-        if ( !is_string( $inputValue->email ) )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->text',
-                'string',
-                $inputValue->email
-            );
-        }
 
         return $inputValue;
+    }
+
+    /**
+     * Throws an exception if value structure is not of expected format.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
+     *
+     * @param \eZ\Publish\Core\FieldType\EmailAddress\Value $value
+     *
+     * @return void
+     */
+    protected function checkValueStructure( BaseValue $value )
+    {
+        if ( !is_string( $value->email ) )
+        {
+            throw new InvalidArgumentType(
+                '$value->email',
+                'string',
+                $value->email
+            );
+        }
     }
 
     /**
@@ -170,14 +170,12 @@ class Type extends FieldType
      *
      * @todo String normalization should occur here.
      *
+     * @param \eZ\Publish\Core\FieldType\EmailAddress\Value $value
+     *
      * @return array
      */
-    protected function getSortInfo( $value )
+    protected function getSortInfo( BaseValue $value )
     {
-        if ( $value === null )
-        {
-            return '';
-        }
         return $value->email;
     }
 
@@ -192,7 +190,7 @@ class Type extends FieldType
     {
         if ( $hash === null )
         {
-            return null;
+            return $this->getEmptyValue();
         }
         return new Value( $hash );
     }
@@ -204,7 +202,7 @@ class Type extends FieldType
      *
      * @return mixed
      */
-    public function toHash( $value )
+    public function toHash( SPIValue $value )
     {
         if ( $this->isEmptyValue( $value ) )
         {

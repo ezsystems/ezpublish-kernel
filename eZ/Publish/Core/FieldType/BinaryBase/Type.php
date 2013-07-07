@@ -14,7 +14,9 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceValue;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * Base FileType class for Binary field types (i.e. BinaryBase & Media)
@@ -48,25 +50,23 @@ abstract class Type extends FieldType
      * It will be used to generate content name and url alias if current field is designated
      * to be used in the content name/urlAlias pattern.
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\BinaryBase\Value $value
      *
-     * @return mixed
+     * @return string
      */
-    public function getName( $value )
+    public function getName( SPIValue $value )
     {
-        $value = $this->acceptValue( $value );
-
         return $value->fileName;
     }
 
     /**
-     * Implements the core of {@see acceptValue()}.
+     * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
-     * @param mixed $inputValue
+     * @param string|array|\eZ\Publish\Core\FieldType\BinaryBase\Value $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\BinaryBase\Value The potentially converted and structurally plausible value.
      */
-    protected function internalAcceptValue( $inputValue )
+    protected function createValueFromInput( $inputValue )
     {
         // construction only from path
         if ( is_string( $inputValue ) )
@@ -80,71 +80,86 @@ abstract class Type extends FieldType
             $inputValue = $this->createValue( $inputValue );
         }
 
-        if ( !$inputValue instanceof Value )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue',
-                'eZ\\Publish\\Core\\FieldType\\BinaryBase\\Value',
-                $inputValue
-            );
-        }
-
-        // Required parameter $path
-        if ( !isset( $inputValue->path ) || !file_exists( $inputValue->path ) )
-        {
-            throw new InvalidArgumentValue(
-                '$inputValue->path',
-                'Path to an existing file',
-                $inputValue->path
-            );
-        }
-
         $this->completeValue( $inputValue );
-
-        // Required parameter $fileName
-        if ( !isset( $inputValue->fileName ) || !is_string( $inputValue->fileName ) )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->fileName',
-                'string',
-                $inputValue->fileName
-            );
-        }
-
-        // Required parameter $fileSize
-        if ( isset( $inputValue->fileSize ) && !is_int( $inputValue->fileSize ) )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->fileSize',
-                'int',
-                $inputValue->fileSize
-            );
-        }
 
         return $inputValue;
     }
 
     /**
+     * Throws an exception if value structure is not of expected format.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
+     *
+     * @param \eZ\Publish\Core\FieldType\BinaryBase\Value $value
+     *
+     * @return void
+     */
+    protected function checkValueStructure( BaseValue $value )
+    {
+        // Required parameter $path
+        if ( !isset( $value->path ) || !file_exists( $value->path ) )
+        {
+            throw new InvalidArgumentValue(
+                '$value->path',
+                $value->path,
+                get_class( $this )
+            );
+        }
+
+        // Required parameter $fileName
+        if ( !isset( $value->fileName ) || !is_string( $value->fileName ) )
+        {
+            throw new InvalidArgumentType(
+                '$value->fileName',
+                'string',
+                $value->fileName
+            );
+        }
+
+        // Optional parameter $fileSize
+        if ( isset( $value->fileSize ) && !is_int( $value->fileSize ) )
+        {
+            throw new InvalidArgumentType(
+                '$value->fileSize',
+                'int',
+                $value->fileSize
+            );
+        }
+    }
+
+    /**
      * Attempts to complete the data in $value
      *
-     * @param Value $value
+     * @param mixed $value
      *
      * @return void
      */
     protected function completeValue( $value )
     {
+        if ( !isset( $value->path ) || !file_exists( $value->path ) )
+        {
+            return;
+        }
+
         if ( !isset( $value->fileName ) )
         {
             $value->fileName = basename( $value->path );
+        }
+
+        if ( !isset( $value->fileSize ) )
+        {
+            $value->fileSize = filesize( $value->path );
         }
     }
 
     /**
      * BinaryBase does not support sorting
      *
+     * @param \eZ\Publish\Core\FieldType\BinaryBase\Value $value
+     *
      * @return boolean
      */
-    protected function getSortInfo( $value )
+    protected function getSortInfo( BaseValue $value )
     {
         return false;
     }
@@ -160,8 +175,7 @@ abstract class Type extends FieldType
     {
         if ( $hash === null )
         {
-            // empty value
-            return null;
+            return $this->getEmptyValue();
         }
 
         return $this->createValue( $hash );
@@ -174,13 +188,8 @@ abstract class Type extends FieldType
      *
      * @return mixed
      */
-    public function toHash( $value )
+    public function toHash( SPIValue $value )
     {
-        if ( $this->isEmptyValue( $value ) )
-        {
-            return null;
-        }
-
         return array(
             'fileName' => $value->fileName,
             'fileSize' => $value->fileSize,
@@ -207,14 +216,14 @@ abstract class Type extends FieldType
      *
      * @see \eZ\Publish\SPI\Persistence\Content\FieldValue
      *
-     * @param mixed $value The value of the field type
+     * @param \eZ\Publish\Core\FieldType\BinaryBase\Value $value The value of the field type
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue the value processed by the storage engine
      */
-    public function toPersistenceValue( $value )
+    public function toPersistenceValue( SPIValue $value )
     {
         // Store original data as external (to indicate they need to be stored)
-        return new FieldValue(
+        return new PersistenceValue(
             array(
                 "data" => null,
                 "externalData" => $this->toHash( $value ),
@@ -232,14 +241,8 @@ abstract class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\BinaryBase\Value
      */
-    public function fromPersistenceValue( FieldValue $fieldValue )
+    public function fromPersistenceValue( PersistenceValue $fieldValue )
     {
-        if ( $fieldValue->externalData === null )
-        {
-            // empty value
-            return null;
-        }
-
         // Restored data comes in $data, since it has already been processed
         // there might be more data in the persistence value than needed here
         $result = $this->fromHash(
@@ -271,7 +274,7 @@ abstract class Type extends FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( FieldDefinition $fieldDefinition, $fieldValue )
+    public function validate( FieldDefinition $fieldDefinition, SPIValue $fieldValue )
     {
         $errors = array();
 

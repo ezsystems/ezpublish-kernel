@@ -54,10 +54,6 @@ class MediaTest extends BinaryBaseTest
         $baseInput = parent::provideInvalidInputForAcceptValue();
         $binaryFileInput = array(
             array(
-                new MediaValue(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
                 new MediaValue( array( 'path' => '/foo/bar' ) ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
@@ -78,7 +74,7 @@ class MediaTest extends BinaryBaseTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                new MediaValue( array( 'width' => new \stdClass() ) ),
+                new MediaValue( array( 'width' => array() ) ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
@@ -93,11 +89,16 @@ class MediaTest extends BinaryBaseTest
                 new MediaValue
             ),
             array(
+                new MediaValue(),
+                new MediaValue()
+            ),
+            array(
                 __FILE__,
                 new MediaValue(
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
                         'hasController' => false,
                         'autoplay' => false,
                         'loop' => false,
@@ -112,6 +113,7 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
                         'hasController' => false,
                         'autoplay' => false,
                         'loop' => false,
@@ -147,6 +149,7 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
                         'mimeType' => 'application/text+php',
                         'hasController' => false,
                         'autoplay' => false,
@@ -165,6 +168,7 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
                         'hasController' => true,
                         'autoplay' => false,
                         'loop' => false,
@@ -182,6 +186,7 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
                         'hasController' => false,
                         'autoplay' => true,
                         'loop' => false,
@@ -199,6 +204,7 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
                         'hasController' => false,
                         'autoplay' => false,
                         'loop' => true,
@@ -216,6 +222,7 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
                         'hasController' => false,
                         'autoplay' => false,
                         'loop' => false,
@@ -233,6 +240,7 @@ class MediaTest extends BinaryBaseTest
                     array(
                         'path' => __FILE__,
                         'fileName' => basename( __FILE__ ),
+                        'fileSize' => filesize( __FILE__ ),
                         'hasController' => false,
                         'autoplay' => false,
                         'loop' => false,
@@ -285,7 +293,7 @@ class MediaTest extends BinaryBaseTest
     {
         return array(
             array(
-                null,
+                new MediaValue(),
                 null
             ),
             array(
@@ -359,7 +367,7 @@ class MediaTest extends BinaryBaseTest
         return array(
             array(
                 null,
-                null
+                new MediaValue(),
             ),
             array(
                 array(

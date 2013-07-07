@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\FieldType\Checkbox;
 
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * Checkbox field type.
@@ -35,14 +37,12 @@ class Type extends FieldType
      * It will be used to generate content name and url alias if current field is designated
      * to be used in the content name/urlAlias pattern.
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\Checkbox\Value $value
      *
-     * @return mixed
+     * @return string
      */
-    public function getName( $value )
+    public function getName( SPIValue $value )
     {
-        $value = $this->acceptValue( $value );
-
         return $value->bool ? '1' : '0';
     }
 
@@ -58,45 +58,60 @@ class Type extends FieldType
     }
 
     /**
-     * Implements the core of {@see acceptValue()}.
+     * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
-     * @param mixed $inputValue
+     * @param boolean|\eZ\Publish\Core\FieldType\Checkbox\Value $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\Checkbox\Value The potentially converted and structurally plausible value.
      */
-    protected function internalAcceptValue( $inputValue )
+    protected function createValueFromInput( $inputValue )
     {
         if ( is_bool( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
-        }
-        else if ( !$inputValue instanceof Value )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue',
-                'eZ\\Publish\\Core\\FieldType\\Checkbox\\Value',
-                $inputValue
-            );
-        }
-
-        if ( !is_bool( $inputValue->bool ) )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->bool',
-                'boolean',
-                $inputValue->bool
-            );
         }
 
         return $inputValue;
     }
 
     /**
+     * Throws an exception if value structure is not of expected format.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
+     *
+     * @param \eZ\Publish\Core\FieldType\Checkbox\Value $value
+     *
+     * @return void
+     */
+    protected function checkValueStructure( BaseValue $value )
+    {
+        if ( !$value instanceof Value )
+        {
+            throw new InvalidArgumentType(
+                '$value',
+                'eZ\\Publish\\Core\\FieldType\\Checkbox\\Value',
+                $value
+            );
+        }
+
+        if ( !is_bool( $value->bool ) )
+        {
+            throw new InvalidArgumentType(
+                '$value->bool',
+                'boolean',
+                $value->bool
+            );
+        }
+    }
+
+    /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
+     *
+     * @param \eZ\Publish\Core\FieldType\Checkbox\Value $value
      *
      * @return array
      */
-    protected function getSortInfo( $value )
+    protected function getSortInfo( BaseValue $value )
     {
         return (int)$value->bool;
     }
@@ -120,7 +135,7 @@ class Type extends FieldType
      *
      * @return mixed
      */
-    public function toHash( $value )
+    public function toHash( SPIValue $value )
     {
         return $value->bool;
     }
@@ -133,17 +148,5 @@ class Type extends FieldType
     public function isSearchable()
     {
         return true;
-    }
-
-    /**
-     * Get index data for field data for search backend
-     *
-     * @param mixed $value
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
-     */
-    public function getIndexData( $value )
-    {
-        throw new \RuntimeException( '@todo: Implement' );
     }
 }

@@ -145,6 +145,8 @@ class Legacy extends SetupFactory
         // @todo FIXME: Needs to be in fixture
         $data['ezcontentobject_trash'] = array();
         $data['ezurlwildcard'] = array();
+        $data['ezmedia'] = array();
+        $data['ezkeyword'] = array();
 
         foreach ( $data as $table => $rows )
         {

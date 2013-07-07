@@ -207,7 +207,7 @@ class IntegerTest extends FieldTypeTest
     {
         return array(
             array(
-                null,
+                new IntegerValue,
                 null,
             ),
             array(
@@ -257,7 +257,7 @@ class IntegerTest extends FieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new IntegerValue,
             ),
             array(
                 42,

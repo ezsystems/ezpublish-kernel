@@ -219,7 +219,7 @@ class TextLineTest extends FieldTypeTest
     {
         return array(
             array(
-                null,
+                new TextLineValue,
                 null
             ),
             array(
@@ -273,7 +273,7 @@ class TextLineTest extends FieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new TextLineValue,
             ),
             array(
                 '',

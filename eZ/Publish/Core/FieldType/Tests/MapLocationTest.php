@@ -91,14 +91,6 @@ class MapLocationTest extends FieldTypeTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                array(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                new MapLocation\Value( array() ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
                 new MapLocation\Value(
                     array(
                         'latitude' => 'foo',
@@ -162,6 +154,14 @@ class MapLocationTest extends FieldTypeTest
         return array(
             array(
                 null,
+                new MapLocation\Value
+            ),
+            array(
+                array(),
+                new MapLocation\Value
+            ),
+            array(
+                new MapLocation\Value,
                 new MapLocation\Value
             ),
             array(
@@ -236,7 +236,7 @@ class MapLocationTest extends FieldTypeTest
     {
         return array(
             array(
-                null,
+                new MapLocation\Value,
                 null,
             ),
             array(
@@ -298,7 +298,7 @@ class MapLocationTest extends FieldTypeTest
         return array(
             array(
                 null,
-                null
+                new MapLocation\Value
             ),
             array(
                 array(
