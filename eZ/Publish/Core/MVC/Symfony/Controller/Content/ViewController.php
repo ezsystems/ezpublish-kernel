@@ -90,11 +90,10 @@ class ViewController extends Controller
     public function viewLocation( $locationId, $viewType, $layout = false, array $params = array() )
     {
         $this->performAccessChecks();
+        $response = $this->buildResponse();
 
         try
         {
-            $response = $this->buildResponse();
-
             $response->headers->set( 'X-Location-Id', $locationId );
             $response->setContent(
                 $this->renderLocation(
@@ -130,17 +129,11 @@ class ViewController extends Controller
     public function viewContent( $contentId, $viewType, $layout = false, array $params = array() )
     {
         $this->performAccessChecks();
+        $response = $this->buildResponse();
 
         try
         {
             $content = $this->getRepository()->getContentService()->loadContent( $contentId );
-
-            // @todo: Use a dedicated etag generator, generating a hash
-            // instead of plain text
-            $response = $this->buildResponse(
-                "ezpublish-content-$contentId-$viewType-$layout",
-                $content->contentInfo->modificationDate
-            );
 
             if ( $response->isNotModified( $this->getRequest() ) )
             {
