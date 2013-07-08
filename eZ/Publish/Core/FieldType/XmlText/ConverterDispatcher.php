@@ -54,7 +54,7 @@ class ConverterDispatcher
      *
      * @param \DOMDocument $document
      *
-     * @return \eZ\Publish\Core\FieldType\XmlText\Input
+     * @return string
      */
     public function dispatch( DOMDocument $document )
     {
