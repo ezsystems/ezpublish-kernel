@@ -48,7 +48,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "5.1.x-dev"
+            "dev-master": "5.2.x-dev"
         },
         "ezpublish-legacy-dir": "vendor/ezsystems/ezpublish-legacy"
     }
