@@ -26,9 +26,6 @@ class Controller extends BaseController
      */
     public function getRepository()
     {
-        if ( !$this->container->has( 'ezpublish.api.repository' ) )
-            throw new \LogicException( 'The EzPublishCoreBundle has not been registered in your application.' );
-
         return $this->container->get( 'ezpublish.api.repository' );
     }
 
