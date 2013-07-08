@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "a6338046d07d9daa74e4952be365e077",
+    "hash": "b6f066399bc06586ac7dac0d2acee854",
     "packages": [
         {
             "name": "doctrine/common",
@@ -57,9 +57,9 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes M. Schmitt",
+                    "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -76,16 +76,16 @@
         },
         {
             "name": "kriswallsmith/buzz",
-            "version": "v0.9",
+            "version": "v0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kriswallsmith/Buzz.git",
-                "reference": "v0.9"
+                "reference": "v0.10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kriswallsmith/Buzz/zipball/v0.9",
-                "reference": "v0.9",
+                "url": "https://api.github.com/repos/kriswallsmith/Buzz/zipball/v0.10",
+                "reference": "v0.10",
                 "shasum": ""
             },
             "require": {
@@ -120,7 +120,7 @@
                 "curl",
                 "http client"
             ],
-            "time": "2013-02-19 00:26:38"
+            "time": "2013-05-19 03:41:15"
         },
         {
             "name": "psr/log",
@@ -186,17 +186,17 @@
         },
         {
             "name": "sensio/distribution-bundle",
-            "version": "v2.2.1",
+            "version": "v2.3.1",
             "target-dir": "Sensio/Bundle/DistributionBundle",
             "source": {
                 "type": "git",
-                "url": "https://github.com/sensio/SensioDistributionBundle.git",
-                "reference": "v2.2.1"
+                "url": "https://github.com/sensiolabs/SensioDistributionBundle.git",
+                "reference": "v2.3.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensio/SensioDistributionBundle/zipball/v2.2.1",
-                "reference": "v2.2.1",
+                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/v2.3.1",
+                "reference": "v2.3.1",
                 "shasum": ""
             },
             "require": {
@@ -205,7 +205,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2.x-dev"
+                    "dev-master": "2.3.x-dev"
                 }
             },
             "autoload": {
@@ -228,32 +228,36 @@
                 "configuration",
                 "distribution"
             ],
-            "time": "2013-03-26 08:24:36"
+            "time": "2013-05-30 16:15:25"
         },
         {
             "name": "symfony-cmf/routing",
-            "version": "1.0.0",
+            "version": "1.1.0-beta1",
             "target-dir": "Symfony/Cmf/Component/Routing",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony-cmf/Routing.git",
-                "reference": "1.0.0"
+                "reference": "1.1.0-beta1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony-cmf/Routing/zipball/1.0.0",
-                "reference": "1.0.0",
+                "url": "https://api.github.com/repos/symfony-cmf/Routing/zipball/1.1.0-beta1",
+                "reference": "1.1.0-beta1",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.2",
-                "symfony/http-kernel": ">=2.1,<2.3-dev",
-                "symfony/routing": ">=2.1,<2.3-dev"
+                "php": ">=5.3.3",
+                "psr/log": ">=1.0,<2.0",
+                "symfony/http-kernel": ">=2.2,<3.0",
+                "symfony/routing": ">=2.2,<3.0"
+            },
+            "suggest": {
+                "symfony/http-foundation": "ChainRouter/DynamicRouter have optional support for Request instances, several enhancers require a Request instances, ~2.2"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0-dev"
+                    "dev-master": "1.1-dev"
                 }
             },
             "autoload": {
@@ -277,26 +281,75 @@
                 "database",
                 "routing"
             ],
-            "time": "2013-03-25 15:02:40"
+            "time": "2013-06-03 17:23:01"
         },
         {
-            "name": "symfony/symfony",
-            "version": "v2.2.1",
+            "name": "symfony/icu",
+            "version": "v1.2.0",
+            "target-dir": "Symfony/Component/Icu",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/symfony.git",
-                "reference": "v2.2.1"
+                "url": "https://github.com/symfony/Icu.git",
+                "reference": "v1.2.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/v2.2.1",
-                "reference": "v2.2.1",
+                "url": "https://api.github.com/repos/symfony/Icu/zipball/v1.2.0",
+                "reference": "v1.2.0",
+                "shasum": ""
+            },
+            "require": {
+                "lib-icu": ">=4.4",
+                "php": ">=5.3.3",
+                "symfony/intl": ">=2.3,<3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Icu\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Bernhard Schussek",
+                    "email": "bschussek@gmail.com"
+                }
+            ],
+            "description": "Contains an excerpt of the ICU data and classes to load it.",
+            "homepage": "http://symfony.com",
+            "keywords": [
+                "icu",
+                "intl"
+            ],
+            "time": "2013-06-03 18:32:58"
+        },
+        {
+            "name": "symfony/symfony",
+            "version": "v2.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/symfony.git",
+                "reference": "v2.3.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/v2.3.1",
+                "reference": "v2.3.1",
                 "shasum": ""
             },
             "require": {
                 "doctrine/common": ">=2.2,<3.0",
                 "php": ">=5.3.3",
                 "psr/log": ">=1.0,<2.0",
+                "symfony/icu": ">=1.0,<2.0",
                 "twig/twig": ">=1.11.0,<2.0"
             },
             "replace": {
@@ -305,6 +358,7 @@
                 "symfony/config": "self.version",
                 "symfony/console": "self.version",
                 "symfony/css-selector": "self.version",
+                "symfony/debug": "self.version",
                 "symfony/dependency-injection": "self.version",
                 "symfony/doctrine-bridge": "self.version",
                 "symfony/dom-crawler": "self.version",
@@ -315,12 +369,14 @@
                 "symfony/framework-bundle": "self.version",
                 "symfony/http-foundation": "self.version",
                 "symfony/http-kernel": "self.version",
+                "symfony/intl": "self.version",
                 "symfony/locale": "self.version",
                 "symfony/monolog-bridge": "self.version",
                 "symfony/options-resolver": "self.version",
                 "symfony/process": "self.version",
                 "symfony/propel1-bridge": "self.version",
                 "symfony/property-access": "self.version",
+                "symfony/proxy-manager-bridge": "self.version",
                 "symfony/routing": "self.version",
                 "symfony/security": "self.version",
                 "symfony/security-bundle": "self.version",
@@ -339,13 +395,15 @@
                 "doctrine/data-fixtures": "1.0.*",
                 "doctrine/dbal": ">=2.2,<3.0",
                 "doctrine/orm": ">=2.2,<3.0,>=2.2.3",
+                "ircmaxell/password-compat": "1.0.*",
                 "monolog/monolog": ">=1.3,<2.0",
+                "ocramius/proxy-manager": ">=0.3.1,<0.4-dev",
                 "propel/propel1": "1.6.*"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2-dev"
+                    "dev-master": "2.3-dev"
                 }
             },
             "autoload": {
@@ -354,7 +412,10 @@
                 },
                 "classmap": [
                     "src/Symfony/Component/HttpFoundation/Resources/stubs",
-                    "src/Symfony/Component/Locale/Resources/stubs"
+                    "src/Symfony/Component/Intl/Resources/stubs"
+                ],
+                "files": [
+                    "src/Symfony/Component/Intl/Resources/stubs/functions.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -376,20 +437,20 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2013-04-06 10:16:33"
+            "time": "2013-06-11 11:46:38"
         },
         {
             "name": "tedivm/stash",
-            "version": "v0.10.4",
+            "version": "v0.10.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tedivm/Stash.git",
-                "reference": "v0.10.4"
+                "reference": "v0.10.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tedivm/Stash/zipball/v0.10.4",
-                "reference": "v0.10.4",
+                "url": "https://api.github.com/repos/tedivm/Stash/zipball/v0.10.5",
+                "reference": "v0.10.5",
                 "shasum": ""
             },
             "require": {
@@ -423,21 +484,21 @@
                 "scalability",
                 "sessions"
             ],
-            "time": "2013-06-13 07:13:33"
+            "time": "2013-06-21 04:09:01"
         },
         {
             "name": "tedivm/stash-bundle",
-            "version": "v0.2.1",
+            "version": "v0.2.2",
             "target-dir": "Tedivm/StashBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tedivm/TedivmStashBundle.git",
-                "reference": "v0.2.1"
+                "reference": "v0.2.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tedivm/TedivmStashBundle/zipball/v0.2.1",
-                "reference": "v0.2.1",
+                "url": "https://api.github.com/repos/tedivm/TedivmStashBundle/zipball/v0.2.2",
+                "reference": "v0.2.2",
                 "shasum": ""
             },
             "require": {
@@ -473,20 +534,20 @@
                 "sessions",
                 "symfony"
             ],
-            "time": "2013-06-16 23:57:16"
+            "time": "2013-06-26 06:19:15"
         },
         {
             "name": "twig/twig",
-            "version": "v1.12.3",
+            "version": "v1.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Twig.git",
-                "reference": "v1.12.3"
+                "reference": "v1.13.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/v1.12.3",
-                "reference": "v1.12.3",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/v1.13.1",
+                "reference": "v1.13.1",
                 "shasum": ""
             },
             "require": {
@@ -495,7 +556,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.12-dev"
+                    "dev-master": "1.13-dev"
                 }
             },
             "autoload": {
@@ -522,7 +583,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2013-04-08 12:40:11"
+            "time": "2013-06-06 06:06:01"
         },
         {
             "name": "zetacomponents/archive",
@@ -1316,12 +1377,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zetacomponents/ImageConversion.git",
-                "reference": "aed8cf2e3a17b049add7578fa199c02e3af903c1"
+                "reference": "36f34c8987ed4f2300cda683d75258cff1f5fa7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zetacomponents/ImageConversion/zipball/aed8cf2e3a17b049add7578fa199c02e3af903c1",
-                "reference": "aed8cf2e3a17b049add7578fa199c02e3af903c1",
+                "url": "https://api.github.com/repos/zetacomponents/ImageConversion/zipball/36f34c8987ed4f2300cda683d75258cff1f5fa7f",
+                "reference": "36f34c8987ed4f2300cda683d75258cff1f5fa7f",
                 "shasum": ""
             },
             "require": {
@@ -1329,7 +1390,7 @@
                 "zetacomponents/image-analysis": ">=1.1.3"
             },
             "require-dev": {
-                "zetacomponents/unit-test": "*"
+                "zetacomponents/unit-test": "@dev"
             },
             "type": "library",
             "autoload": {
@@ -1375,7 +1436,7 @@
             ],
             "description": "A set of classes to apply different filters on images, such as colour changes, resizing and special effects.",
             "homepage": "https://github.com/zetacomponents",
-            "time": "2012-05-28 07:48:05"
+            "time": "2013-04-24 05:01:17"
         },
         {
             "name": "zetacomponents/mail",
@@ -1886,27 +1947,71 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezsystems/ezpublish-legacy.git",
-                "reference": "e870da9aab72a07696dcb87d7214f47a4b07e5d1"
+                "reference": "09c607c0e15a2319a6e76774ab9272c451108a3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezsystems/ezpublish-legacy/zipball/e870da9aab72a07696dcb87d7214f47a4b07e5d1",
-                "reference": "e870da9aab72a07696dcb87d7214f47a4b07e5d1",
+                "url": "https://api.github.com/repos/ezsystems/ezpublish-legacy/zipball/09c607c0e15a2319a6e76774ab9272c451108a3d",
+                "reference": "09c607c0e15a2319a6e76774ab9272c451108a3d",
                 "shasum": ""
             },
             "require": {
+                "ezsystems/ezpublish-legacy-installer": "*",
                 "php": ">=5.3.3"
             },
-            "type": "library",
+            "type": "ezpublish-legacy",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.1.x-dev"
+                    "dev-master": "5.2.x-dev"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
             "description": "eZ Publish LegacyStack (4.x)",
             "homepage": "http://share.ez.no",
-            "time": "2013-04-20 11:07:01"
+            "time": "2013-07-05 13:11:41"
+        },
+        {
+            "name": "ezsystems/ezpublish-legacy-installer",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ezsystems/ezpublish-legacy-installer.git",
+                "reference": "v1.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ezsystems/ezpublish-legacy-installer/zipball/v1.0.0",
+                "reference": "v1.0.0",
+                "shasum": ""
+            },
+            "type": "composer-installer",
+            "extra": {
+                "class": "eZ\\Publish\\Composer\\LegacyInstaller"
+            },
+            "autoload": {
+                "psr-0": {
+                    "eZ\\Publish\\Composer": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Jérôme Vieilledent",
+                    "email": "lolautruche@gmail.com"
+                },
+                {
+                    "name": "Gaetano Giunta",
+                    "email": "gaetano.giunta@ez.no"
+                }
+            ],
+            "description": "Installer for eZ Publish legacy extensions and legacy kernel itself.",
+            "time": "2013-06-07 08:11:03"
         },
         {
             "name": "mikey179/vfsStream",
@@ -1961,6 +2066,7 @@
         "zetacomponents/php-generator": 20,
         "zetacomponents/signal-slot": 20,
         "zetacomponents/system-information": 20,
+        "symfony-cmf/routing": 10,
         "ezsystems/ezpublish-legacy": 20
     },
     "platform": {

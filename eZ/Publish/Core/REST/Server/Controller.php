@@ -60,7 +60,7 @@ abstract class Controller
         $this->router = $router;
     }
 
-    public function setRequest( Request $request )
+    public function setRequest( Request $request = null )
     {
         $this->request = $request;
     }

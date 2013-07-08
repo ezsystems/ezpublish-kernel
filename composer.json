@@ -24,12 +24,12 @@
         "zetacomponents/signal-slot": "@dev",
         "zetacomponents/system-information": "@dev",
         "zetacomponents/webdav": "1.1.*",
-        "symfony/symfony": "2.2.*",
-        "symfony-cmf/routing": "1.0.*",
+        "symfony/symfony": "~2.3",
+        "symfony-cmf/routing": "1.1.*@beta",
         "qafoo/rmf": "1.0.*",
         "kriswallsmith/buzz": ">=0.9",
         "tedivm/stash-bundle": "0.2.*",
-        "sensio/distribution-bundle": "2.2.*"
+        "sensio/distribution-bundle": "~2.3"
     },
     "require-dev": {
         "ezsystems/ezpublish-legacy": "@dev",
@@ -49,6 +49,7 @@
     "extra": {
         "branch-alias": {
             "dev-master": "5.1.x-dev"
-        }
+        },
+        "ezpublish-legacy-dir": "vendor/ezsystems/ezpublish-legacy"
     }
 }

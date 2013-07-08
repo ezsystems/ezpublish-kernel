@@ -25,7 +25,7 @@ services:
         parent: ezpublish_legacy.view_provider
         calls:
             # Injecting the request, in non strict mode ("=") avoiding this service to be forced in request scope.
-            - [setRequest, [@request=]]
+            - [setRequest, [@?request=]]
         tags:
             - {name: ezpublish.location_view_provider, priority: -255}
 
