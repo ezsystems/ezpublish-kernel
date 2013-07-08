@@ -25,7 +25,7 @@
         "zetacomponents/system-information": "@dev",
         "zetacomponents/webdav": "1.1.*",
         "symfony/symfony": "~2.3",
-        "symfony-cmf/routing": "~1.1@beta",
+        "symfony-cmf/routing": "1.1.*@beta",
         "qafoo/rmf": "1.0.*",
         "kriswallsmith/buzz": ">=0.9",
         "tedivm/stash-bundle": "0.2.*",
