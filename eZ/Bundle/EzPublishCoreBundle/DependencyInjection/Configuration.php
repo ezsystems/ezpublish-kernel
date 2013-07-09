@@ -155,6 +155,7 @@ class Configuration implements ConfigurationInterface
                     )
                     ->useAttributeAsKey( 'key' )
                     ->requiresAtLeastOneElement()
+                    ->normalizeKeys( false )
                     ->prototype( 'array' )
                         ->children();
 
