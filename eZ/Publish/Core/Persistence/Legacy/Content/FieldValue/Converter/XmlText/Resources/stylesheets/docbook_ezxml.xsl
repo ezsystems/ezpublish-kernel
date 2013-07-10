@@ -5,7 +5,6 @@
     exclude-result-prefixes="docbook"
     version="1.0">
   <xsl:output indent="yes" encoding="UTF-8"/>
-  <xsl:strip-space elements="*"/>
 
   <xsl:template match="docbook:article">
     <section
@@ -47,5 +46,29 @@
     <heading>
       <xsl:apply-templates/>
     </heading>
+  </xsl:template>
+
+  <xsl:template match="docbook:orderedlist">
+    <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+      <ol>
+        <xsl:apply-templates/>
+      </ol>
+    </paragraph>
+  </xsl:template>
+
+  <xsl:template match="docbook:itemizedlist">
+    <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+      <ul>
+        <xsl:apply-templates/>
+      </ul>
+    </paragraph>
+  </xsl:template>
+
+  <xsl:template match="docbook:itemizedlist/docbook:listitem/docbook:para | docbook:orderedlist/docbook:listitem/docbook:para">
+    <li>
+      <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+        <xsl:apply-templates/>
+      </paragraph>
+    </li>
   </xsl:template>
 </xsl:stylesheet>

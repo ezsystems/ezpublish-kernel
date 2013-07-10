@@ -3,7 +3,6 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     version="1.0">
   <xsl:output indent="yes" encoding="UTF-8"/>
-  <xsl:strip-space elements="*"/>
 
   <xsl:template match="section">
     <xsl:choose>
@@ -21,9 +20,16 @@
   </xsl:template>
 
   <xsl:template match="paragraph">
-    <xsl:element name="para" namespace="http://docbook.org/ns/docbook">
-      <xsl:apply-templates/>
-    </xsl:element>
+    <xsl:choose>
+      <xsl:when test="( ul | ol ) or name( .. ) = 'li'">
+        <xsl:apply-templates/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:element name="para" namespace="http://docbook.org/ns/docbook">
+          <xsl:apply-templates/>
+        </xsl:element>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="emphasize">
@@ -42,6 +48,26 @@
   <xsl:template match="heading">
     <xsl:element name="title" namespace="http://docbook.org/ns/docbook">
       <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="ul">
+    <xsl:element name="itemizedlist" namespace="http://docbook.org/ns/docbook">
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="ol">
+    <xsl:element name="orderedlist" namespace="http://docbook.org/ns/docbook">
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="ul/li | ol/li">
+    <xsl:element name="listitem" namespace="http://docbook.org/ns/docbook">
+      <xsl:element name="para" namespace="http://docbook.org/ns/docbook">
+        <xsl:apply-templates/>
+      </xsl:element>
     </xsl:element>
   </xsl:template>
 </xsl:stylesheet>

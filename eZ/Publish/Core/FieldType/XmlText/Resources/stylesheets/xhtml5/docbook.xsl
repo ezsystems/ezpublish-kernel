@@ -5,7 +5,6 @@
     exclude-result-prefixes="ezxhtml5"
     version="1.0">
   <xsl:output indent="yes" encoding="UTF-8"/>
-  <xsl:strip-space elements="*"/>
 
   <xsl:template match="ezxhtml5:article">
     <article xmlns="http://docbook.org/ns/docbook" version="5.0">
@@ -38,9 +37,29 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="ezxhtml5:*['hx'=translate(local-name(), '123456', 'xxxxxx')]">
+  <xsl:template match="ezxhtml5:h1 | ezxhtml5:h2 | ezxhtml5:h3 | ezxhtml5:h4 | ezxhtml5:h5 | ezxhtml5:h6">
     <xsl:element name="title" namespace="http://docbook.org/ns/docbook">
       <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="ezxhtml5:ol">
+    <xsl:element name="orderedlist" namespace="http://docbook.org/ns/docbook">
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="ezxhtml5:ul">
+    <xsl:element name="itemizedlist" namespace="http://docbook.org/ns/docbook">
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="ezxhtml5:ol/ezxhtml5:li | ezxhtml5:ul/ezxhtml5:li">
+    <xsl:element name="listitem" namespace="http://docbook.org/ns/docbook">
+      <xsl:element name="para" namespace="http://docbook.org/ns/docbook">
+        <xsl:apply-templates/>
+      </xsl:element>
     </xsl:element>
   </xsl:template>
 </xsl:stylesheet>
