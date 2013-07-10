@@ -10,6 +10,8 @@
 namespace eZ\Publish\Core\REST;
 
 use eZ\Publish\Core\FieldType;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\Content\Content;
 
 if ( !defined( 'HTTP_BASE_URL' ) )
 {
@@ -198,6 +200,9 @@ foreach ( $inputParsers as $mimeType => $parser )
 
 // Force sets the used user. This will be refactored most likely, since this is
 // not really valid for a REST client.
+/*
+Code commented while implementing EZP-21168, the stubs are removed.
+
 $repository->setCurrentUser(
     new \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub(
         array(
@@ -209,5 +214,6 @@ $repository->setCurrentUser(
         )
     )
 );
+*/
 
 return $repository;
