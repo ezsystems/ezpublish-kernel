@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText\XsltConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText\XsdValidator;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -32,13 +33,24 @@ class XmlText implements Converter
     protected $fromStorageConverter;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText\XsdValidator
+     */
+    protected $ezxmlValidator;
+
+    /**
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText\XsltConverter $toStorageConverter
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText\XsltConverter $fromStorageConverter
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText\XsdValidator $ezxmlValidator
      */
-    public function __construct( XsltConverter $toStorageConverter, XsltConverter $fromStorageConverter )
+    public function __construct(
+        XsltConverter $toStorageConverter,
+        XsltConverter $fromStorageConverter,
+        XsdValidator $ezxmlValidator
+    )
     {
         $this->toStorageConverter = $toStorageConverter;
         $this->fromStorageConverter = $fromStorageConverter;
+        $this->ezxmlValidator = $ezxmlValidator;
     }
 
     /**
@@ -49,7 +61,18 @@ class XmlText implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataText = $this->toStorageConverter->convert( $value->data );
+        $ezxml = $this->toStorageConverter->convert( $value->data );
+
+        $document = new DOMDocument;
+        $document->loadXML( $ezxml );
+        $errors = $this->ezxmlValidator->validate( $document );
+
+        if ( !empty( $errors ) )
+        {
+            throw new \RuntimeException( "Validation of XML content failed: " . join( "\n", $errors ) );
+        }
+
+        $storageFieldValue->dataText = $ezxml;
     }
 
     /**
@@ -60,13 +83,20 @@ class XmlText implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $domDoc = new DOMDocument;
-        $domDoc->loadXML( $value->dataText ?: Value::EMPTY_VALUE );
+        $document = new DOMDocument;
+        $document->loadXML( $value->dataText ?: Value::EMPTY_VALUE );
 
-        $xmlString = $this->fromStorageConverter->convert( $domDoc );
-        $domDoc->loadXML( $xmlString );
+        $errors = $this->ezxmlValidator->validate( $document );
 
-        $fieldValue->data = $domDoc;
+        if ( !empty( $errors ) )
+        {
+            throw new \RuntimeException( "Validation of XML content failed: " . join( "\n", $errors ) );
+        }
+
+        $xmlString = $this->fromStorageConverter->convert( $document );
+        $document->loadXML( $xmlString );
+
+        $fieldValue->data = $document;
     }
 
     /**
