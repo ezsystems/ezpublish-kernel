@@ -10,10 +10,9 @@
 namespace eZ\Publish\Core\FieldType\XmlText;
 
 use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\Core\FieldType\XmlText\Input;
-use eZ\Publish\Core\FieldType\XmlText\Input\EzXml;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
@@ -59,11 +58,18 @@ class Type extends FieldType
     protected $converterDispatcher;
 
     /**
-     * @param \eZ\Publish\Core\FieldType\XmlText\ConverterDispatcher $converterDispatcher
+     * @var \eZ\Publish\Core\FieldType\XmlText\ValidatorDispatcher
      */
-    public function __construct( ConverterDispatcher $converterDispatcher )
+    protected $validatorDispatcher;
+
+    /**
+     * @param \eZ\Publish\Core\FieldType\XmlText\ConverterDispatcher $converterDispatcher
+     * @param \eZ\Publish\Core\FieldType\XmlText\ValidatorDispatcher $validatorDispatcher
+     */
+    public function __construct( ConverterDispatcher $converterDispatcher, ValidatorDispatcher $validatorDispatcher )
     {
         $this->converterDispatcher = $converterDispatcher;
+        $this->validatorDispatcher = $validatorDispatcher;
     }
 
     /**
@@ -140,7 +146,7 @@ class Type extends FieldType
     /**
      * Implements the core of {@see acceptValue()}.
      *
-     * @param \eZ\Publish\Core\FieldType\XmlText\Value|\eZ\Publish\Core\FieldType\XmlText\Input|\DOMDocument|string $inputValue
+     * @param \eZ\Publish\Core\FieldType\XmlText\Value|\DOMDocument|string $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\XmlText\Value The potentially converted and structurally plausible value.
      */
@@ -160,17 +166,33 @@ class Type extends FieldType
 
         if ( $inputValue instanceof DOMDocument )
         {
+            $errors = $this->validatorDispatcher->dispatch( $inputValue );
+            if ( !empty( $errors ) )
+            {
+                throw new InvalidArgumentException(
+                    "\$inputValue",
+                    "Validation of XML content failed: " . join( "\n", $errors )
+                );
+            }
+
             $inputValue = $this->converterDispatcher->dispatch( $inputValue );
-            $inputValue = new Input\Docbook( $inputValue );
+
+            $document = new DOMDocument;
+            $document->loadXML( $inputValue );
+
+            $errors = $this->validatorDispatcher->dispatch( $document );
+            if ( !empty( $errors ) )
+            {
+                throw new InvalidArgumentException(
+                    "\$inputValue",
+                    "Validation of XML content failed: " . join( "\n", $errors )
+                );
+            }
+
+            $inputValue = new Value( $document );
         }
 
-        if ( $inputValue instanceof Input )
-        {
-            $doc = new DOMDocument;
-            $doc->loadXML( $inputValue->getInternalRepresentation() );
-            $inputValue = new Value( $doc );
-        }
-        else if ( !$inputValue instanceof Value )
+        if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
                 '$inputValue',
