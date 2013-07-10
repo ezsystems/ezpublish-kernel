@@ -65,7 +65,7 @@ class Section extends FacetBuilderVisitor
      *
      * @param FacetBuilder $facetBuilder;
      *
-     * @return void
+     * @return string
      */
     public function visit( FacetBuilder $facetBuilder )
     {
