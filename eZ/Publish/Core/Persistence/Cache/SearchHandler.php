@@ -72,4 +72,13 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
         $this->logger->logCall( __METHOD__, array( 'content' => $contentID, 'version' => $versionID ) );
         $this->persistenceFactory->getSearchHandler()->deleteContent( $contentID, $versionID );
     }
+
+    /**
+     * @see eZ\Publish\SPI\Persistence\Content\Search\Handler::deleteLocation
+     */
+    public function deleteLocation( $locationId )
+    {
+        $this->logger->logCall( __METHOD__, array( 'location' => $locationId ) );
+        $this->persistenceFactory->getSearchHandler()->deleteLocation( $locationId );
+    }
 }

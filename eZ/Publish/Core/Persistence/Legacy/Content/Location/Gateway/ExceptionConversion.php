@@ -137,14 +137,15 @@ class ExceptionConversion extends Gateway
      * Find all content in the given subtree
      *
      * @param mixed $sourceId
+     * @param bool $onlyIds
      *
      * @return array
      */
-    public function getSubtreeContent( $sourceId )
+    public function getSubtreeContent( $sourceId, $onlyIds = false )
     {
         try
         {
-            return $this->innerGateway->getSubtreeContent( $sourceId );
+            return $this->innerGateway->getSubtreeContent( $sourceId, $onlyIds );
         }
         catch ( ezcDbException $e )
         {

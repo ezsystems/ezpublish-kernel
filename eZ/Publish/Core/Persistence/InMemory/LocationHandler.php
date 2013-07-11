@@ -56,6 +56,21 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
+     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::loadSubtreeIds
+     */
+    public function loadSubtreeIds( $locationId )
+    {
+        $return = array();
+
+        foreach ( $this->getSubtreeLocations( $this->load( $locationId ) ) as $location )
+        {
+            $return[$location->id] = $location->contentId;
+        }
+
+        return $return;
+    }
+
+    /**
      * Loads all locations for $contentId, optionally limited to a sub tree
      * identified by $rootLocationId
      *

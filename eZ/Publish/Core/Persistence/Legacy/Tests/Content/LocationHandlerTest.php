@@ -45,12 +45,20 @@ class LocationHandlerTest extends TestCase
      */
     protected $contentHandler;
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->locationGateway = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway' );
+        $this->locationMapper = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper' );
+    }
+
     protected function getLocationHandler()
     {
         $dbHandler = $this->getDatabaseHandler();
         return new Handler(
-            $this->locationGateway = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway' ),
-            $this->locationMapper = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper' ),
+            $this->locationGateway,
+            $this->locationMapper,
             $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler', array(), array(), '', false ),
             $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper', array(), array(), '', false )
         );
@@ -81,6 +89,24 @@ class LocationHandlerTest extends TestCase
         $location = $handler->load( 77 );
 
         $this->assertTrue( $location instanceof \eZ\Publish\SPI\Persistence\Content\Location );
+    }
+
+    public function testLoadLocationSubtree()
+    {
+        $this->locationGateway
+            ->expects( $this->once() )
+            ->method( 'getSubtreeContent' )
+            ->with( 77, true )
+            ->will(
+                $this->returnValue(
+                    array(
+                        array( 77 => 100 ),
+                        array( 78 => 101 ),
+                    )
+                )
+            );
+
+        $this->assertEquals( 2, count( $this->getLocationHandler()->loadSubtreeIds( 77 ) ) );
     }
 
     public function testLoadLocationByRemoteId()

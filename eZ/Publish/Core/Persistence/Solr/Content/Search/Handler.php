@@ -14,6 +14,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
 use eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandlerInterface;
+use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
 use eZ\Publish\SPI\Persistence\Content\Search\Field;
 use eZ\Publish\SPI\Persistence\Content\Search\FieldType;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -80,6 +81,13 @@ class Handler implements SearchHandlerInterface
     protected $objectStateHandler;
 
     /**
+     * Section handler
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Section\Handler
+     */
+    protected $sectionHandler;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway $gateway
@@ -87,13 +95,15 @@ class Handler implements SearchHandlerInterface
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Section\Handler $sectionHandler
      */
     public function __construct(
         Gateway $gateway,
         FieldRegistry $fieldRegistry,
         LocationHandler $locationHandler,
         ContentTypeHandler $contentTypeHandler,
-        ObjectStateHandler $objectStateHandler
+        ObjectStateHandler $objectStateHandler,
+        SectionHandler $sectionHandler
     )
     {
         $this->gateway            = $gateway;
@@ -101,6 +111,7 @@ class Handler implements SearchHandlerInterface
         $this->locationHandler    = $locationHandler;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->objectStateHandler = $objectStateHandler;
+        $this->sectionHandler     = $sectionHandler;
     }
 
     /**
@@ -192,6 +203,16 @@ class Handler implements SearchHandlerInterface
     }
 
     /**
+     * Deletes a location from the index
+     *
+     * @param mixed $locationId
+     */
+    public function deleteLocation( $locationId )
+    {
+        $this->gateway->deleteLocation( $locationId );
+    }
+
+    /**
      * Map content to document.
      *
      * A document is an array of fields
@@ -209,6 +230,7 @@ class Handler implements SearchHandlerInterface
             if ( $location->id == $content->versionInfo->contentInfo->mainLocationId )
                 $mainLocation = $location;
         }
+        $section = $this->sectionHandler->load( $content->versionInfo->contentInfo->sectionId );
 
         $document = array(
             new Field(
@@ -245,6 +267,16 @@ class Handler implements SearchHandlerInterface
                 'section',
                 $content->versionInfo->contentInfo->sectionId,
                 new FieldType\IdentifierField()
+            ),
+            new Field(
+                'section_identifier',
+                $section->identifier,
+                new FieldType\IdentifierField()
+            ),
+            new Field(
+                'section_name',
+                $section->name,
+                new FieldType\StringField()
             ),
             new Field(
                 'remote_id',
@@ -330,7 +362,7 @@ class Handler implements SearchHandlerInterface
             new Field(
                 'language_code',
                 array_keys( $content->versionInfo->names ),
-                new FieldType\StringField()
+                new FieldType\MultipleStringField()
             ),
         );
 
@@ -372,7 +404,7 @@ class Handler implements SearchHandlerInterface
         $document[] = new Field(
             'group',
             $contentType->groupIds,
-            new FieldType\IdentifierField()
+            new FieldType\MultipleIdentifierField()
         );
 
         foreach ( $content->fields as $field )
@@ -393,6 +425,8 @@ class Handler implements SearchHandlerInterface
             }
         }
 
+        /*
+        @todo FIXME: Uncomment when object states implementation is ready to be used
         $objectStateIds = array();
         foreach ( $this->objectStateHandler->loadAllGroups() as $objectStateGroup )
         {
@@ -407,6 +441,7 @@ class Handler implements SearchHandlerInterface
             $objectStateIds,
             new FieldType\IdentifierField()
         );
+        */
 
         return $document;
     }

@@ -110,7 +110,19 @@ class RepositoryStub implements Repository
     /**
      * @var int
      */
+    private $transactionCount = 0;
+
+    /**
+     * @var int
+     */
     private $permissionChecks = 0;
+
+    /**
+     * Array of arrays of commit events indexed by the transaction count.
+     *
+     * @var array
+     */
+    private $commitEventsQueue = array();
 
     /**
      * Instantiates the stubbed repository.
@@ -566,6 +578,7 @@ class RepositoryStub implements Repository
     public function beginTransaction()
     {
         ++$this->transactionDepth;
+        $this->commitEventsQueue[++$this->transactionCount] = array();
     }
 
     /**
@@ -577,11 +590,25 @@ class RepositoryStub implements Repository
      */
     public function commit()
     {
-        if ( 0 === $this->transactionDepth )
+        if ( $this->transactionDepth === 0 )
         {
             throw new \RuntimeException( 'What error code should be used?' );
         }
+
         --$this->transactionDepth;
+
+        if ( $this->transactionDepth === 0 )
+        {
+            foreach ( $this->commitEventsQueue as $eventsQueue )
+            {
+                foreach ( $eventsQueue as $event )
+                {
+                    $event();
+                }
+            }
+
+            $this->commitEventsQueue = array();
+        }
     }
 
     /**
@@ -632,6 +659,24 @@ class RepositoryStub implements Repository
         }
 
         --$this->transactionDepth;
+        unset( $this->commitEventsQueue[$this->transactionCount] );
+    }
+
+    /**
+     * Enqueue an event to be triggered at commit or directly if no transaction has started
+     *
+     * @param Callable $event
+     */
+    public function commitEvent( $event )
+    {
+        if ( $this->transactionDepth !== 0 )
+        {
+            $this->commitEventsQueue[$this->transactionCount][] = $event;
+        }
+        else
+        {
+            $event();
+        }
     }
 
     /**

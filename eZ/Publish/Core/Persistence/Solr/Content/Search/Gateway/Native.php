@@ -233,6 +233,110 @@ class Native extends Gateway
     }
 
     /**
+     * Deletes a location from the index
+     *
+     * @param mixed $locationId
+     */
+    public function deleteLocation( $locationId )
+    {
+        $response = $this->client->request(
+            'GET',
+            '/solr/select?' .
+            http_build_query(
+                array(
+                    "q" => "path_mid:*/$locationId/*",
+                    "fl" => "*",
+                    "wt" => "json",
+                )
+            )
+        );
+        // @todo: Error handling?
+        $data = json_decode( $response->body );
+
+        $locationParent = array( $locationId );
+        $contentToDelete = $contentToUpdate = array();
+        foreach ( $data->response->docs as $doc )
+        {
+            // Check that this document only had one location in which case it can be removed.
+            // @todo When orphaned objects will be possible, we will have to update those doc instead of removing.
+            if ( $doc->location_parent_mid == $locationParent || $doc->location_mid == $locationParent )
+            {
+                $contentToDelete[] = $doc->id;
+            }
+            else
+            {
+                $contentToUpdate[] = $doc;
+            }
+        }
+
+        if ( !empty( $contentToDelete ) )
+        {
+            $this->client->request(
+                "POST",
+                "/solr/update?commit=true&wt=json",
+                new Message(
+                    array(
+                        "Content-Type: text/xml",
+                    ),
+                    "<delete><query>id:(" . implode( " ", $contentToDelete ) . ")</query></delete>"
+                )
+            );
+        }
+
+        if ( !empty( $contentToUpdate ) )
+        {
+            $jsonString = "";
+            foreach ( $contentToUpdate as $doc )
+            {
+                // Removing location references in location_parent_mid, location_mid and path_mid
+                // main_* fields are not modified since removing main node is not permitted.
+                foreach ( $doc->location_parent_mid as $key => $value )
+                {
+                    if ( $value == $locationId )
+                    {
+                        unset( $doc->location_parent_mid[$key] );
+                    }
+                }
+                foreach ( $doc->location_mid as $key => $value )
+                {
+                    if ( $value == $locationId )
+                    {
+                        unset( $doc->location_mid[$key] );
+                    }
+                }
+                foreach ( $doc->path_mid as $key => $value )
+                {
+                    if ( strpos( $value, "/$locationId/" ) )
+                    {
+                        unset( $doc->path_mid[$key] );
+                    }
+                }
+
+                // Reindex arrays
+                $doc->location_parent_mid = array_values( $doc->location_parent_mid );
+                $doc->location_mid = array_values( $doc->location_mid );
+                $doc->path_mid = array_values( $doc->path_mid );
+
+                if ( !empty( $jsonString ) )
+                    $jsonString .= ",";
+
+                $jsonString .= '"add": { "doc": ' . json_encode( $doc ) . "}";
+            }
+
+            $this->client->request(
+                "POST",
+                "/solr/update/json?commit=true&wt=json",
+                new Message(
+                    array(
+                        "Content-Type: application/json",
+                    ),
+                    "{ $jsonString }"
+                )
+            );
+        }
+    }
+
+    /**
      * Purges all contents from the index
      *
      * @return void
