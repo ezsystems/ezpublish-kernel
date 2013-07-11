@@ -13,7 +13,8 @@ Changes affecting version compatibility with former or future versions.
 
 ## Deprecations
 
-
+* It was incidentally possible to reference resources in REST API payloads without
+  the REST prefix. This is no longer possible, and will throw an exception, as expected.
 
 ## Removals
 

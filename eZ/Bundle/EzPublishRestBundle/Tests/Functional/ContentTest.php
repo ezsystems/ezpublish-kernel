@@ -25,19 +25,19 @@ class ContentTest extends RESTFunctionalTestCase
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentCreate>
-  <ContentType href="/content/types/1" />
+  <ContentType href="/api/ezp/v2/content/types/1" />
   <mainLanguageCode>eng-GB</mainLanguageCode>
   <LocationCreate>
-    <ParentLocation href="/content/locations/1/2" />
+    <ParentLocation href="/api/ezp/v2/content/locations/1/2" />
     <priority>0</priority>
     <hidden>false</hidden>
     <sortField>PATH</sortField>
     <sortOrder>ASC</sortOrder>
   </LocationCreate>
-  <Section href="/content/sections/1" />
+  <Section href="/api/ezp/v2/content/sections/1" />
   <alwaysAvailable>true</alwaysAvailable>
   <remoteId>{$string}</remoteId>
-  <User href="/user/users/14" />
+  <User href="/api/ezp/v2/user/users/14" />
   <modificationDate>2012-09-30T12:30:00</modificationDate>
   <fields>
     <field>
@@ -111,7 +111,7 @@ XML;
         $content = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentUpdate>
-  <Owner href="/user/users/10"/>
+  <Owner href="/api/ezp/v2/user/users/10"/>
   <remoteId>{$string}</remoteId>
 </ContentUpdate>
 XML;
@@ -320,7 +320,7 @@ XML;
         $content = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <RelationCreate>
-  <Destination href="/content/objects/10"/>
+  <Destination href="/api/ezp/v2/content/objects/10"/>
 </RelationCreate>
 XML;
 

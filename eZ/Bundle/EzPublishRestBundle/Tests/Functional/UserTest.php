@@ -349,7 +349,7 @@ XML;
     public function testMoveUserGroup( $groupHref )
     {
         $request = $this->createHttpRequest( "MOVE", $groupHref );
-        $request->addHeader( 'Destination: /user/groups/1/5/12' );
+        $request->addHeader( 'Destination: /api/ezp/v2/user/groups/1/5/12' );
 
         $response = $this->sendHttpRequest( $request );
         self::assertHttpResponseCodeEquals( $response, 201 );

@@ -20,7 +20,7 @@ class LocationTest extends RESTFunctionalTestCase
      */
     public function testCreateLocation()
     {
-        $content = $this->createFolder( 'testCreateLocation', '/content/locations/1/2' );
+        $content = $this->createFolder( 'testCreateLocation', '/api/ezp/v2/content/locations/1/2' );
         $contentHref = $content['_href'];
 
         $remoteId = $this->addTestSuffix( "testCreatelocation" );
@@ -28,7 +28,7 @@ class LocationTest extends RESTFunctionalTestCase
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <LocationCreate>
-  <ParentLocation href="/content/locations/1/43" />
+  <ParentLocation href="/api/ezp/v2/content/locations/1/43" />
   <remoteId>{$remoteId}</remoteId>
   <priority>0</priority>
   <hidden>false</hidden>
@@ -97,7 +97,7 @@ XML;
     public function testCopySubtree( $locationHref )
     {
         $request = $this->createHttpRequest( 'COPY', $locationHref );
-        $request->addHeader( 'Destination: /content/locations/1/43' );
+        $request->addHeader( 'Destination: /api/ezp/v2/content/locations/1/43' );
         $response = $this->sendHttpRequest( $request );
 
         self::assertHttpResponseCodeEquals( $response, 201 );
@@ -113,7 +113,7 @@ XML;
     public function testMoveSubtree( $locationHref )
     {
         $request = $this->createHttpRequest( 'MOVE', $locationHref );
-        $request->addHeader( 'Destination: /content/locations/1/5' );
+        $request->addHeader( 'Destination: /api/ezp/v2/content/locations/1/5' );
         $response = $this->sendHttpRequest( $request );
 
         self::assertHttpResponseCodeEquals( $response, 201 );
@@ -137,7 +137,7 @@ XML;
     {
         self::markTestSkipped( "@todo Implement" );
 
-        /*$content = $this->createFolder( __FUNCTION__, "/content/locations/1/2" );
+        /*$content = $this->createFolder( __FUNCTION__, "/api/ezp/v2/content/locations/1/2" );
 
         $request = $this->createHttpRequest( 'SWAP', $locationHref );
         $request->addHeader( "Destination: $newFolderHref" );

@@ -104,8 +104,6 @@ XML;
     public function testAddPolicy( $roleHref )
     {
         // @todo Error in Resource URL in spec @ https://github.com/ezsystems/ezpublish-kernel/blob/master/doc/specifications/rest/REST-API-V2.rst#151213create-policy
-        $roleId = $this->hrefToId( $roleHref );
-
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <PolicyCreate>
@@ -170,7 +168,7 @@ XML;
   <limitations>
     <limitation identifier="Class">
       <values>
-        <ref href="16"/>
+        <ref href="1"/>
       </values>
     </limitation>
   </limitations>
@@ -192,14 +190,13 @@ XML;
      */
     public function testAssignRoleToUser( $roleHref )
     {
-        $roleId = $this->hrefToId( $roleHref );
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <RoleAssignInput>
-  <Role href="{$roleId}" media-type="application/vnd.ez.api.RoleAssignInput+xml"/>
+  <Role href="{$roleHref}" media-type="application/vnd.ez.api.RoleAssignInput+xml"/>
   <limitation identifier="Section">
       <values>
-          <ref href="/content/sections/1" media-type="application/vnd.ez.api.Section+xml" />
+          <ref href="/api/ezp/v2/content/sections/1" media-type="application/vnd.ez.api.Section+xml" />
       </values>
   </limitation>
 </RoleAssignInput>
@@ -254,14 +251,13 @@ XML;
      */
     public function testAssignRoleToUserGroup( $roleHref )
     {
-        $roleId = $this->hrefToId( $roleHref );
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <RoleAssignInput>
-  <Role href="{$roleId}" media-type="application/vnd.ez.api.RoleAssignInput+xml"/>
+  <Role href="{$roleHref}" media-type="application/vnd.ez.api.RoleAssignInput+xml"/>
   <limitation identifier="Section">
       <values>
-          <ref href="/content/sections/1" media-type="application/vnd.ez.api.Section+xml" />
+          <ref href="/api/ezp/v2/content/sections/1" media-type="application/vnd.ez.api.Section+xml" />
       </values>
   </limitation>
 </RoleAssignInput>
