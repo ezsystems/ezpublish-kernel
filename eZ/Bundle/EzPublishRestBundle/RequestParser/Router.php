@@ -21,7 +21,7 @@ use eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException;
 class Router implements RequestParser
 {
     /**
-     * @var \Symfony\Component\Routing\RouterInterface
+     * @var \Symfony\Cmf\Component\Routing\ChainRouter
      */
     private $router;
 
@@ -42,13 +42,7 @@ class Router implements RequestParser
      */
     public function parse( $url )
     {
-        if ( strpos( $url, $this->restRoutesPrefix ) !== 0 )
-        {
-            // @todo mark as deprecated (see EZP-21176)
-            $url = $this->restRoutesPrefix . $url;
-        }
-
-        // we create a request with a new context in order to match $url to a route and get its a properties
+        // we create a request with a new context in order to match $url to a route and get its properties
         $request = Request::create( $url, "GET" );
         $originalContext = $this->router->getContext();
         $context = clone $originalContext;

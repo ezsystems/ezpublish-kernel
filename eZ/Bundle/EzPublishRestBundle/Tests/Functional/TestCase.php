@@ -145,7 +145,7 @@ class TestCase extends PHPUnit_Framework_TestCase
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentCreate>
-  <ContentType href="/content/types/1" />
+  <ContentType href="/api/ezp/v2/content/types/1" />
   <mainLanguageCode>eng-GB</mainLanguageCode>
   <LocationCreate>
     <ParentLocation href="{$parentLocationId}" />
@@ -154,10 +154,10 @@ class TestCase extends PHPUnit_Framework_TestCase
     <sortField>PATH</sortField>
     <sortOrder>ASC</sortOrder>
   </LocationCreate>
-  <Section href="/content/sections/1" />
+  <Section href="/api/ezp/v2/content/sections/1" />
   <alwaysAvailable>true</alwaysAvailable>
   <remoteId>{$string}</remoteId>
-  <User href="/user/users/14" />
+  <User href="/api/ezp/v2/user/users/14" />
   <modificationDate>2012-09-30T12:30:00</modificationDate>
   <fields>
     <field>
@@ -216,16 +216,6 @@ XML;
         $folderLocations = json_decode( $response->getContent(), true );
 
         return $folderLocations;
-    }
-
-    /**
-     * Converts a REST href to an ID
-     * @param string $href
-     * @return string
-     */
-    protected function hrefToId( $href )
-    {
-        return str_replace( '/api/ezp/v2', '', $href );
     }
 
     protected function addTestSuffix( $string )

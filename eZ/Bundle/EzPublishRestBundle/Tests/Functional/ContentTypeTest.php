@@ -508,7 +508,7 @@ XML;
     public function testLinkContentTypeToGroup( $contentTypeHref )
     {
         // @todo Spec example is invalid, missing parameter name
-        $request = $this->createHttpRequest( "POST", "$contentTypeHref/groups?group=/content/typegroups/1" );
+        $request = $this->createHttpRequest( "POST", "$contentTypeHref/groups?group=/api/ezp/v2/content/typegroups/1" );
         $response = $this->sendHttpRequest( $request );
         self::assertHttpResponseCodeEquals( $response, 200 );
 

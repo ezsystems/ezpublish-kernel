@@ -84,7 +84,7 @@ class TrashTest extends RESTFunctionalTestCase
         $trashItemHref = $this->createTrashItem( __FUNCTION__ );
 
         $request = $this->createHttpRequest( "MOVE", $trashItemHref );
-        $request->addHeader( 'Destination: /content/locations/1/2' );
+        $request->addHeader( 'Destination: /api/ezp/v2/content/locations/1/2' );
 
         $response = $this->sendHttpRequest( $request );
 
@@ -112,7 +112,7 @@ class TrashTest extends RESTFunctionalTestCase
         self::markTestSkipped( "Makes the DB inconsistent" );
 
         // create a folder
-        $folderArray = $this->createFolder( __FUNCTION__, '/content/locations/1/2' );
+        $folderArray = $this->createFolder( __FUNCTION__, '/api/ezp/v2/content/locations/1/2' );
 
         // send its main location to trash
         $folderLocations = $this->getContentLocations( $folderArray['_href'] );
@@ -132,7 +132,7 @@ class TrashTest extends RESTFunctionalTestCase
      */
     private function createTrashItem( $id )
     {
-        $folder = $this->createFolder( $id, '/content/locations/1/2' );
+        $folder = $this->createFolder( $id, '/api/ezp/v2/content/locations/1/2' );
         $folderLocations = $this->getContentLocations( $folder['_href'] );
         return $this->sendLocationToTrash( $folderLocations['LocationList']['Location'][0]['_href'] );
     }
@@ -145,7 +145,7 @@ class TrashTest extends RESTFunctionalTestCase
     private function sendLocationToTrash( $contentHref )
     {
         $trashRequest = $this->createHttpRequest( "MOVE", $contentHref );
-        $trashRequest->addHeader( 'Destination: /content/trash' );
+        $trashRequest->addHeader( 'Destination: /api/ezp/v2/content/trash' );
 
         $response = $this->sendHttpRequest( $trashRequest );
 

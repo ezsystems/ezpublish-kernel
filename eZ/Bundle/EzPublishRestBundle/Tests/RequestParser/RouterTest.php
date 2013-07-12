@@ -68,8 +68,15 @@ class RouterTest extends PHPUnit_Framework_TestCase
      */
     public function testParseNoPrefix()
     {
-        self::markTestSkipped( "Requires that EZP-21176 is fixed" );
-        $this->getRequestParser()->parse( '/no/prefix' );
+        $uri = '/no/prefix';
+
+        $this->getRouterMock()
+            ->expects( $this->once() )
+            ->method( 'matchRequest' )
+            ->with( $this->attributeEqualTo( 'pathInfo', $uri ) )
+            ->will( $this->throwException( new ResourceNotFoundException ) );
+
+        $this->getRequestParser()->parse( $uri );
     }
 
     public function testParseHref()
