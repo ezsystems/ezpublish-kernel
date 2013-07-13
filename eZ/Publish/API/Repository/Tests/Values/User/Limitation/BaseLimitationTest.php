@@ -10,8 +10,6 @@
 namespace eZ\Publish\API\Repository\Tests\Values\User\Limitation;
 
 use eZ\Publish\API\Repository\Tests\BaseTest;
-use eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub;
-
 use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
@@ -87,26 +85,5 @@ abstract class BaseLimitationTest extends BaseTest
         /* END: Inline */
 
         return $draft;
-    }
-
-    /**
-     * Marks the limitation integration tests skipped against memory stub
-     *
-     * Since the limitations integration tests rely on multiple factors which are
-     * complicated and hard to mimic by the memory stub, these should only run
-     * against the real core implementation.
-     *
-     * @return void
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-
-        if ( $this->getRepository() instanceof RepositoryStub )
-        {
-            $this->markTestSkipped(
-                'Limitation integration tests cannot be run against memory stub.'
-            );
-        }
     }
 }
