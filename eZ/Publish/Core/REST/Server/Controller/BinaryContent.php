@@ -18,6 +18,7 @@ use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Variation\VariationHandler;
+use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
 
 /**
  * Binary content controller
@@ -81,7 +82,7 @@ class BinaryContent extends RestController
         }
         catch ( InvalidVariationException $e )
         {
-            throw new Exceptions\NotFoundException( "Invalid image variation $variationIdentifier", 0, $e );
+            throw new Exceptions\NotFoundException( "Invalid image variation $variationIdentifier" );
         }
     }
 
