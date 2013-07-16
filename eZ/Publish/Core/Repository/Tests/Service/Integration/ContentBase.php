@@ -466,6 +466,24 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the loadContent() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::loadContent
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testLoadContentWithVersionThrowsUnauthorizedException()
+    {
+        list( $draft, ) = $this->createTestContent();
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $this->repository->getContentService()->loadContent(
+            $draft->id,
+            null,
+            $draft->versionInfo->versionNo
+        );
+    }
+
+    /**
+     * Test for the loadContent() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadContentThrowsNotFoundExceptionContentNotFound()
@@ -597,6 +615,27 @@ abstract class ContentBase extends BaseServiceTest
         $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
 
         $this->repository->getContentService()->loadContentByRemoteId( "f5c88a2209584891056f987fd965b0ba" );
+    }
+
+    /**
+     * Test for the loadContentByRemoteId() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentByRemoteId
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testLoadContentByRemoteIdWithVersionThrowsUnauthorizedException()
+    {
+        $contentService = $this->repository->getContentService();
+
+        $content = $contentService->loadContent( 4 );
+        $draft = $contentService->createContentDraft( $content->contentInfo );
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $contentService->loadContentByRemoteId(
+            $draft->contentInfo->remoteId,
+            null,
+            $draft->versionInfo->versionNo
+        );
     }
 
     /**

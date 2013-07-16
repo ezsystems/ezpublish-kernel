@@ -320,6 +320,12 @@ class ContentService implements ContentServiceInterface
         if ( !$this->repository->canUser( 'content', 'read', $content ) )
             throw new UnauthorizedException( 'content', 'read' );
 
+        if (
+            $versionNo !== null
+            && !$this->repository->canUser( 'content', 'versionread', $content )
+        )
+            throw new UnauthorizedException( 'content', 'versionread' );
+
         return $content;
     }
 
@@ -417,6 +423,12 @@ class ContentService implements ContentServiceInterface
 
         if ( !$this->repository->canUser( 'content', 'read', $content ) )
             throw new UnauthorizedException( 'content', 'read' );
+
+        if (
+            $versionNo !== null
+            && !$this->repository->canUser( 'content', 'versionread', $content )
+        )
+            throw new UnauthorizedException( 'content', 'versionread' );
 
         return $content;
     }
