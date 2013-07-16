@@ -52,7 +52,7 @@ class EzLinkToHtml5 implements Converter
      *
      * @param \DOMDocument $xmlDoc
      *
-     * @return string|null
+     * @return null
      */
     public function convert( DOMDocument $xmlDoc )
     {
