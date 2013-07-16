@@ -32,7 +32,7 @@ abstract class LegacyStorage extends Gateway
     /**
      * Returns a column to property mapping for the storage table.
      *
-     * @return void
+     * @return array
      */
     protected function getPropertyMapping()
     {

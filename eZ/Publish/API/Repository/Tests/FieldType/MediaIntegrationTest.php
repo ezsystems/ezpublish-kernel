@@ -233,14 +233,6 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     {
         return array(
             array(
-                array(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
-            ),
-            array(
-                new MediaValue( array() ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
-            ),
-            array(
                 array(
                     'path' => '/foo/bar/sindelfingen.pdf',
                 ),

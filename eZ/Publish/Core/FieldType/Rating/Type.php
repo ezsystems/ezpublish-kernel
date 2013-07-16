@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\FieldType\Rating;
 
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * Rating field types
@@ -31,18 +33,6 @@ class Type extends FieldType
     }
 
     /**
-     * Returns if the given $value is considered empty by the field type
-     *
-     * @param mixed $value
-     *
-     * @return boolean
-     */
-    public function isEmptyValue( $value )
-    {
-        return $value === null;
-    }
-
-    /**
      * Returns the field type identifier for this field type
      *
      * @return string
@@ -58,55 +48,73 @@ class Type extends FieldType
      * It will be used to generate content name and url alias if current field is designated
      * to be used in the content name/urlAlias pattern.
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\Rating\Value $value
      *
-     * @return mixed
+     * @return string
      */
-    public function getName( $value )
+    public function getName( SPIValue $value )
     {
         throw new \RuntimeException( 'Implement this method' );
     }
 
     /**
-     * Implements the core of {@see acceptValue()}.
+     * Returns if the given $value is considered empty by the field type
      *
-     * @param mixed $inputValue
+     * @param mixed $value
+     *
+     * @return boolean
+     */
+    public function isEmptyValue( SPIValue $value )
+    {
+        return false;
+    }
+
+    /**
+     * Inspects given $inputValue and potentially converts it into a dedicated value object.
+     *
+     * @param boolean|\eZ\Publish\Core\FieldType\Rating\Value $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\Rating\Value The potentially converted and structurally plausible value.
      */
-    protected function internalAcceptValue( $inputValue )
+    protected function createValueFromInput( $inputValue )
     {
         if ( is_bool( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
-        }
-        else if ( !$inputValue instanceof Value )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue',
-                'eZ\\Publish\\Core\\FieldType\\Rating\\Value',
-                $inputValue
-            );
-        }
-
-        if ( !is_bool( $inputValue->isDisabled ) )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->isDisabled',
-                'boolean',
-                $inputValue->isDisabled
-            );
         }
 
         return $inputValue;
     }
 
     /**
+     * Throws an exception if value structure is not of expected format.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
+     *
+     * @param \eZ\Publish\Core\FieldType\Rating\Value $value
+     *
+     * @return void
+     */
+    protected function checkValueStructure( BaseValue $value )
+    {
+        if ( !is_bool( $value->isDisabled ) )
+        {
+            throw new InvalidArgumentType(
+                '$value->isDisabled',
+                'boolean',
+                $value->isDisabled
+            );
+        }
+    }
+
+    /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
+     *
+     * @param \eZ\Publish\Core\FieldType\Rating\Value $value
      *
      * @return array
      */
-    protected function getSortInfo( $value )
+    protected function getSortInfo( BaseValue $value )
     {
         return false;
     }
@@ -130,7 +138,7 @@ class Type extends FieldType
      *
      * @return mixed
      */
-    public function toHash( $value )
+    public function toHash( SPIValue $value )
     {
         return $value->isDisabled;
     }
@@ -143,17 +151,5 @@ class Type extends FieldType
     public function isSearchable()
     {
         return true;
-    }
-
-    /**
-     * Get index data for field data for search backend
-     *
-     * @param mixed $value
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
-     */
-    public function getIndexData( $value )
-    {
-        throw new \RuntimeException( '@todo: Implement' );
     }
 }

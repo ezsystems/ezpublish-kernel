@@ -9,13 +9,13 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Exceptions;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Exception;
+use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 
 /**
  * Test case for operations in the ContentTypeService using in memory storage.
@@ -770,6 +770,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         );
         $titleFieldCreate->fieldSettings = array();
         $titleFieldCreate->isSearchable = true;
+        $titleFieldCreate->defaultValue = 'default title';
 
         $typeCreate->addFieldDefinition( $titleFieldCreate );
 
@@ -797,6 +798,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         );
         $bodyFieldCreate->fieldSettings = array();
         $bodyFieldCreate->isSearchable = true;
+        $bodyFieldCreate->defaultValue = 'default content';
 
         $typeCreate->addFieldDefinition( $bodyFieldCreate );
 
@@ -1318,6 +1320,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         );
         $fieldDefCreate->fieldSettings = array();
         $fieldDefCreate->isSearchable = true;
+        $fieldDefCreate->defaultValue = 'default tags';
 
         $contentTypeService->addFieldDefinition( $contentTypeDraft, $fieldDefCreate );
         /* END: Use Case */
@@ -1572,13 +1575,6 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
-        if ( $repository instanceof RepositoryStub )
-        {
-            $this->markTestSkipped(
-                'Test can not be run against memory stubs.'
-            );
-        }
-
         $contentTypeService = $repository->getContentTypeService();
         $contentService = $repository->getContentService();
 
@@ -1675,13 +1671,6 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     public function testAddFieldDefinitionAddsFieldToContent()
     {
         $repository = $this->getRepository();
-
-        if ( $repository instanceof RepositoryStub )
-        {
-            $this->markTestSkipped(
-                'Test can not be run against memory stubs.'
-            );
-        }
 
         $contentTypeService = $repository->getContentTypeService();
         $contentService = $repository->getContentService();
@@ -2112,7 +2101,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'isRequired' => true,
                 'isInfoCollector' => false,
                 'isSearchable' => true,
-                'defaultValue' => null,
+                'defaultValue' => new TextLineValue,
                 'names' => array(
                     'eng-US' => 'Name',
                 ),
@@ -2127,7 +2116,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'isRequired' => false,
                 'isInfoCollector' => false,
                 'isSearchable' => true,
-                'defaultValue' => null,
+                'defaultValue' => new TextLineValue,
                 'names' => array(
                     'eng-US' => 'Description',
                 ),

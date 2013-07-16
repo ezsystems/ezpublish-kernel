@@ -10,7 +10,9 @@
 namespace eZ\Publish\Core\FieldType\User;
 
 use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
@@ -36,14 +38,12 @@ class Type extends FieldType
      * It will be used to generate content name and url alias if current field is designated
      * to be used in the content name/urlAlias pattern.
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\User\Value $value
      *
-     * @return mixed
+     * @return string
      */
-    public function getName( $value )
+    public function getName( SPIValue $value )
     {
-        $value = $this->acceptValue( $value );
-
         return (string)$value->login;
     }
 
@@ -69,28 +69,34 @@ class Type extends FieldType
     }
 
     /**
-     * Implements the core of {@see acceptValue()}.
+     * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
-     * @param mixed $inputValue
+     * @param array|\eZ\Publish\Core\FieldType\User\Value $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\User\Value The potentially converted and structurally plausible value.
      */
-    protected function internalAcceptValue( $inputValue )
+    protected function createValueFromInput( $inputValue )
     {
         if ( is_array( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
         }
-        else if ( !$inputValue instanceof Value )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue',
-                'eZ\\Publish\\Core\\FieldType\\User\\Value',
-                $inputValue
-            );
-        }
 
         return $inputValue;
+    }
+
+    /**
+     * Throws an exception if value structure is not of expected format.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
+     *
+     * @param \eZ\Publish\Core\FieldType\User\Value $value
+     *
+     * @return void
+     */
+    protected function checkValueStructure( BaseValue $value )
+    {
+        // Does nothing
     }
 
     /**
@@ -98,7 +104,7 @@ class Type extends FieldType
      *
      * @todo: Implement.
      */
-    protected function getSortInfo( $value )
+    protected function getSortInfo( BaseValue $value )
     {
         return false;
     }
@@ -114,7 +120,7 @@ class Type extends FieldType
     {
         if ( $hash === null )
         {
-            return null;
+            return $this->getEmptyValue();
         }
         return new Value( $hash );
     }
@@ -126,7 +132,7 @@ class Type extends FieldType
      *
      * @return mixed
      */
-    public function toHash( $value )
+    public function toHash( SPIValue $value )
     {
         if ( $this->isEmptyValue( $value ) )
         {
@@ -153,11 +159,11 @@ class Type extends FieldType
      *
      * @see \eZ\Publish\SPI\Persistence\Content\FieldValue
      *
-     * @param mixed $value The value of the field type
+     * @param \eZ\Publish\Core\FieldType\User\Value $value The value of the field type
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue the value processed by the storage engine
      */
-    public function toPersistenceValue( $value )
+    public function toPersistenceValue( SPIValue $value )
     {
         return new FieldValue(
             array(
@@ -175,7 +181,7 @@ class Type extends FieldType
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      *
-     * @return mixed
+     * @return \eZ\Publish\Core\FieldType\User\Value
      */
     public function fromPersistenceValue( FieldValue $fieldValue )
     {

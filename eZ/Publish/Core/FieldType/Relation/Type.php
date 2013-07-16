@@ -13,8 +13,8 @@ use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
-use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
@@ -116,11 +116,11 @@ class Type extends FieldType
      * It will be used to generate content name and url alias if current field is designated
      * to be used in the content name/urlAlias pattern.
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\Relation\Value $value
      *
-     * @return mixed
+     * @return string
      */
-    public function getName( $value )
+    public function getName( SPIValue $value )
     {
         throw new \RuntimeException( '@todo Implement this method' );
     }
@@ -137,16 +137,25 @@ class Type extends FieldType
     }
 
     /**
-     * Checks the type and structure of the $Value.
+     * Returns if the given $value is considered empty by the field type
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
+     * @param mixed $value
      *
-     * @param mixed $inputValue A ContentInfo or content ID to build from, or a Relation\Value
+     * @return boolean
+     */
+    public function isEmptyValue( SPIValue $value )
+    {
+        return $value->destinationContentId === null;
+    }
+
+    /**
+     * Inspects given $inputValue and potentially converts it into a dedicated value object.
+     *
+     * @param int|string|\eZ\Publish\API\Repository\Values\Content\ContentInfo|\eZ\Publish\Core\FieldType\Relation\Value $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\Relation\Value The potentially converted and structurally plausible value.
      */
-    protected function internalAcceptValue( $inputValue )
+    protected function createValueFromInput( $inputValue )
     {
         // ContentInfo
         if ( $inputValue instanceof ContentInfo )
@@ -158,25 +167,29 @@ class Type extends FieldType
         {
             $inputValue = new Value( $inputValue );
         }
-        else if ( !$inputValue instanceof Value )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue',
-                'eZ\\Publish\\Core\\Repository\\FieldType\\Relation\\Value',
-                $inputValue
-            );
-        }
-
-        if ( !is_integer( $inputValue->destinationContentId ) && !is_string( $inputValue->destinationContentId ) && $inputValue->destinationContentId !== null )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->destinationContentId',
-                'string|int',
-                $inputValue->destinationContentId
-            );
-        }
 
         return $inputValue;
+    }
+
+    /**
+     * Throws an exception if value structure is not of expected format.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
+     *
+     * @param \eZ\Publish\Core\FieldType\Relation\Value $value
+     *
+     * @return void
+     */
+    protected function checkValueStructure( BaseValue $value )
+    {
+        if ( !is_integer( $value->destinationContentId ) && !is_string( $value->destinationContentId ) )
+        {
+            throw new InvalidArgumentType(
+                '$value->destinationContentId',
+                'string|int',
+                $value->destinationContentId
+            );
+        }
     }
 
     /**
@@ -185,9 +198,11 @@ class Type extends FieldType
      *
      * @todo Repository needs to be provided to be able to get Content Relation name(s), and it is in ctor
      *
-     * @return array
+     * @param \eZ\Publish\Core\FieldType\Relation\Value $value
+     *
+     * @return mixed
      */
-    protected function getSortInfo( $value )
+    protected function getSortInfo( BaseValue $value )
     {
         return (string)$value;
     }
@@ -211,7 +226,7 @@ class Type extends FieldType
      *
      * @return mixed
      */
-    public function toHash( $value )
+    public function toHash( SPIValue $value )
     {
         return array( 'destinationContentId' => $value->destinationContentId );
     }
@@ -232,7 +247,7 @@ class Type extends FieldType
      * Not intended for \eZ\Publish\API\Repository\Values\Content\Relation::COMMON type relations,
      * there is an API for handling those.
      *
-     * @param mixed $fieldValue
+     * @param \eZ\Publish\Core\FieldType\Relation\Value $fieldValue
      *
      * @return array Hash with relation type as key and array of destination content ids as value.
      *
@@ -251,10 +266,14 @@ class Type extends FieldType
      *  )
      * </code>
      */
-    public function getRelations( $fieldValue )
+    public function getRelations( SPIValue $fieldValue )
     {
-        return array(
-            Relation::FIELD => array( $fieldValue->destinationContentId )
-        );
+        $relations = array();
+        if ( $fieldValue->destinationContentId !== null )
+        {
+            $relations[Relation::FIELD] = array( $fieldValue->destinationContentId );
+        }
+
+        return $relations;
     }
 }

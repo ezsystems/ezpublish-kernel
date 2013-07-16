@@ -188,7 +188,7 @@ class UrlTest extends FieldTypeTest
     {
         return array(
             array(
-                null,
+                new UrlValue,
                 null
             ),
             array(
@@ -248,7 +248,7 @@ class UrlTest extends FieldTypeTest
         return array(
             array(
                 null,
-                null
+                new UrlValue,
             ),
             array(
                 array(

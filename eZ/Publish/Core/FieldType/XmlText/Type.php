@@ -13,9 +13,10 @@ use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
-use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
+use eZ\Publish\API\Repository\Values\Content\Relation;
 use DOMDocument;
 use RuntimeException;
 
@@ -88,14 +89,12 @@ class Type extends FieldType
      * It will be used to generate content name and url alias if current field is designated
      * to be used in the content name/urlAlias pattern.
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\XmlText\Value $value
      *
-     * @return mixed
+     * @return string
      */
-    public function getName( $value )
+    public function getName( SPIValue $value )
     {
-        $value = $this->acceptValue( $value );
-
         $result = null;
         if ( $section = $value->xml->documentElement->firstChild )
         {
@@ -131,26 +130,28 @@ class Type extends FieldType
     /**
      * Returns if the given $value is considered empty by the field type
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\XmlText\Value $value
      *
      * @return boolean
      */
-    public function isEmptyValue( $value )
+    public function isEmptyValue( SPIValue $value )
     {
-        if ( $value === null || $value->xml === null )
+        if ( $value->xml === null )
+        {
             return true;
+        }
 
         return !$value->xml->documentElement->hasChildNodes();
     }
 
     /**
-     * Implements the core of {@see acceptValue()}.
+     * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
      * @param \eZ\Publish\Core\FieldType\XmlText\Value|\DOMDocument|string $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\XmlText\Value The potentially converted and structurally plausible value.
      */
-    protected function internalAcceptValue( $inputValue )
+    protected function createValueFromInput( $inputValue )
     {
         if ( is_string( $inputValue ) )
         {
@@ -189,16 +190,28 @@ class Type extends FieldType
             $inputValue = new Value( $inputValue );
         }
 
-        if ( !$inputValue instanceof Value )
+        return $inputValue;
+    }
+
+    /**
+     * Throws an exception if value structure is not of expected format.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
+     *
+     * @param \eZ\Publish\Core\FieldType\XmlText\Value $value
+     *
+     * @return void
+     */
+    protected function checkValueStructure( BaseValue $value )
+    {
+        if ( !$value->xml instanceof DomDocument )
         {
             throw new InvalidArgumentType(
-                '$inputValue',
-                'eZ\\Publish\\Core\\FieldType\\XmlText\\Value',
-                $inputValue
+                '$value->xml',
+                'DomDocument',
+                $value
             );
         }
-
-        return $inputValue;
     }
 
     /**
@@ -206,11 +219,11 @@ class Type extends FieldType
      *
      * @see \eZ\Publish\Core\FieldType
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\XmlText\Value $value
      *
      * @return array|bool
      */
-    protected function getSortInfo( $value )
+    protected function getSortInfo( BaseValue $value )
     {
         return false;
     }
@@ -241,7 +254,7 @@ class Type extends FieldType
      *
      * @return mixed
      */
-    public function toHash( $value )
+    public function toHash( SPIValue $value )
     {
         return array( 'xml' => (string)$value );
     }
@@ -252,7 +265,7 @@ class Type extends FieldType
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      *
-     * @return Value
+     * @return \eZ\Publish\Core\FieldType\XmlText\Value
      */
     public function fromPersistenceValue( FieldValue $fieldValue )
     {
@@ -264,7 +277,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function toPersistenceValue( $value )
+    public function toPersistenceValue( SPIValue $value )
     {
         return new FieldValue(
             array(
@@ -353,7 +366,7 @@ class Type extends FieldType
      * Not intended for \eZ\Publish\API\Repository\Values\Content\Relation::COMMON type relations,
      * there is a service API for handling those.
      *
-     * @param mixed $fieldValue
+     * @param \eZ\Publish\Core\FieldType\XmlText\Value $fieldValue
      *
      * @return array Hash with relation type as key and array of destination content ids as value.
      *
@@ -372,22 +385,23 @@ class Type extends FieldType
      *  )
      * </code>
      */
-    public function getRelations( $fieldValue )
+    public function getRelations( SPIValue $value )
     {
         $relations = array();
 
-        if ( $fieldValue->xml instanceof DOMDocument )
+        /** @var \eZ\Publish\Core\FieldType\XmlText\Value $value */
+        if ( $value->xml instanceof DOMDocument )
         {
             $relations = array(
-                Relation::LINK => $this->getRelatedObjectIds( $fieldValue, Relation::LINK ),
-                Relation::EMBED => $this->getRelatedObjectIds( $fieldValue, Relation::EMBED )
+                Relation::LINK => $this->getRelatedObjectIds( $value, Relation::LINK ),
+                Relation::EMBED => $this->getRelatedObjectIds( $value, Relation::EMBED )
             );
         }
 
         return $relations;
     }
 
-    protected function getRelatedObjectIds( BaseValue $fieldValue, $relationType )
+    protected function getRelatedObjectIds( Value $fieldValue, $relationType )
     {
         if ( $relationType === Relation::EMBED )
         {

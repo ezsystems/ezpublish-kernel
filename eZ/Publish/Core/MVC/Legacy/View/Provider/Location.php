@@ -28,7 +28,7 @@ class Location extends Provider implements LocationViewProviderInterface
      */
     protected $request;
 
-    public function setRequest( Request $request )
+    public function setRequest( Request $request = null )
     {
         $this->request = $request;
     }

@@ -44,7 +44,6 @@
     <filter>
         <whitelist>
             <directory suffix=".php">eZ/Publish/API/Repository/</directory>
-            <directory>eZ/Publish/API/Repository/Tests/Stubs</directory>
             <exclude>
                 <directory>eZ/Publish/API/Repository/Tests</directory>
                 <directory>eZ/Publish/API/Repository/Tutorials</directory>

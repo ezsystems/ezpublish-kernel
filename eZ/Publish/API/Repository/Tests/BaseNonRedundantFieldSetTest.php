@@ -10,7 +10,6 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
-use eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub;
 
 /**
  * Base class for for create and update Content operations in the ContentService with regard to
@@ -128,13 +127,6 @@ class BaseNonRedundantFieldSetTest extends BaseTest
     protected function createTestContent( $mainLanguageCode, array $fieldValues )
     {
         $repository = $this->getRepository();
-
-        if ( $repository instanceof RepositoryStub )
-        {
-            $this->markTestSkipped(
-                "Test can not be run against memory stubs."
-            );
-        }
 
         $contentService = $repository->getContentService();
 

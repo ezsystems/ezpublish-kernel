@@ -106,6 +106,14 @@ Starting from the root resources (ListRoot_) every response includes further lin
 The uris should be used directly as identifiers on the client side and the client should not
 contruct an uri by using an id.
 
+URIs prefix
+-----------
+
+In  this document, we condider, for the sake of readability, that no prefix is used in the URIs. In a real life
+situation, the prefix /api/ezp/v2 is used in all REST hrefs.
+
+Remember in any case that URIs to REST resources should never be generated manually, but obtained from earlier REST
+ calls.
 
 Authentication
 ==============

@@ -419,6 +419,23 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests that default empty value is unchanged by acceptValue() method.
+     */
+    public function testAcceptGetEmptyValue()
+    {
+        $fieldType = $this->getFieldTypeUnderTest();
+        $emptyValue = $fieldType->getEmptyValue();
+
+        $acceptedEmptyValue = $fieldType->acceptValue( $emptyValue );
+
+        $this->assertEquals(
+            $emptyValue,
+            $acceptedEmptyValue,
+            'acceptValue() did not convert properly.'
+        );
+    }
+
+    /**
      * @param mixed $inputValue
      * @param \Exception $expectedException
      *

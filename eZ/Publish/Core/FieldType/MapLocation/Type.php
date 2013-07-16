@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\FieldType\MapLocation;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * MapLocation field types
@@ -36,18 +38,13 @@ class Type extends FieldType
      * It will be used to generate content name and url alias if current field is designated
      * to be used in the content name/urlAlias pattern.
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\MapLocation\Value $value
      *
-     * @return mixed
+     * @return string
      */
-    public function getName( $value )
+    public function getName( SPIValue $value )
     {
-        $value = $this->acceptValue( $value );
-
-        if ( $value !== null )
-        {
-            return $value->address;
-        }
+        return (string)$value->address;
     }
 
     /**
@@ -68,72 +65,75 @@ class Type extends FieldType
      *
      * @return boolean
      */
-    public function isEmptyValue( $value )
+    public function isEmptyValue( SPIValue $value )
     {
-        return $value === null || $value->latitude === null || $value->longitude === null;
+        return $value->latitude === null && $value->longitude === null;
     }
 
     /**
-     * Implements the core of {@see acceptValue()}.
+     * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
-     * @param mixed $inputValue
+     * @param array|\eZ\Publish\Core\FieldType\MapLocation\Value $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\MapLocation\Value The potentially converted and structurally plausible value.
      */
-    protected function internalAcceptValue( $inputValue )
+    protected function createValueFromInput( $inputValue )
     {
         if ( is_array( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
-        }
-        else if ( !$inputValue instanceof Value )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue',
-                'eZ\\Publish\\Core\\FieldType\\MapLocation\\Value',
-                $inputValue
-            );
-        }
-
-        if ( !is_float( $inputValue->latitude ) )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->latitude',
-                'float',
-                $inputValue->latitude
-            );
-        }
-        if ( !is_float( $inputValue->longitude ) )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->longitude',
-                'float',
-                $inputValue->longitude
-            );
-        }
-        if ( !is_string( $inputValue->address ) )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->address',
-                'string',
-                $inputValue->address
-            );
         }
 
         return $inputValue;
     }
 
     /**
+     * Throws an exception if value structure is not of expected format.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
+     *
+     * @param \eZ\Publish\Core\FieldType\MapLocation\Value $value
+     *
+     * @return void
+     */
+    protected function checkValueStructure( BaseValue $value )
+    {
+        if ( !is_float( $value->latitude ) )
+        {
+            throw new InvalidArgumentType(
+                '$value->latitude',
+                'float',
+                $value->latitude
+            );
+        }
+        if ( !is_float( $value->longitude ) )
+        {
+            throw new InvalidArgumentType(
+                '$value->longitude',
+                'float',
+                $value->longitude
+            );
+        }
+        if ( !is_string( $value->address ) )
+        {
+            throw new InvalidArgumentType(
+                '$value->address',
+                'string',
+                $value->address
+            );
+        }
+    }
+
+    /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
+     *
+     * @param \eZ\Publish\Core\FieldType\MapLocation\Value $value
      *
      * @return string
      */
-    protected function getSortInfo( $value )
+    protected function getSortInfo( BaseValue $value )
     {
-        if ( $value !== null )
-        {
-            return $value->address;
-        }
+        return $value->address;
     }
 
     /**
@@ -147,7 +147,7 @@ class Type extends FieldType
     {
         if ( $hash === null )
         {
-            return null;
+            return $this->getEmptyValue();
         }
         return new Value( $hash );
     }
@@ -159,7 +159,7 @@ class Type extends FieldType
      *
      * @return mixed
      */
-    public function toHash( $value )
+    public function toHash( SPIValue $value )
     {
         if ( $this->isEmptyValue( $value ) )
         {
@@ -183,25 +183,13 @@ class Type extends FieldType
     }
 
     /**
-     * Get index data for field data for search backend
-     *
-     * @param mixed $value
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
-     */
-    public function getIndexData( $value )
-    {
-        throw new \RuntimeException( '@todo: Implement' );
-    }
-
-    /**
      * Converts a $value to a persistence value
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\MapLocation\Value $value
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function toPersistenceValue( $value )
+    public function toPersistenceValue( SPIValue $value )
     {
         return new FieldValue(
             array(
@@ -217,13 +205,13 @@ class Type extends FieldType
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      *
-     * @return mixed
+     * @return \eZ\Publish\Core\FieldType\MapLocation\Value
      */
     public function fromPersistenceValue( FieldValue $fieldValue )
     {
         if ( $fieldValue->externalData === null )
         {
-            return null;
+            return $this->getEmptyValue();
         }
         return $this->fromHash( $fieldValue->externalData );
     }

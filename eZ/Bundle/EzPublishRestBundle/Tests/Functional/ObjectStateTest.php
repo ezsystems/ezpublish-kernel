@@ -149,13 +149,12 @@ XML;
      */
     public function testSetObjectStatesForContent( $objectStateHref )
     {
-        $objectStateId = $this->hrefToId( $objectStateHref );
-        $folder = $this->createFolder( __FUNCTION__, '/content/locations/1/2' );
+        $folder = $this->createFolder( __FUNCTION__, '/api/ezp/v2/content/locations/1/2' );
 
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentObjectStates>
- <ObjectState href="{$objectStateId}"/>
+ <ObjectState href="$objectStateHref"/>
 </ContentObjectStates>
 XML;
 

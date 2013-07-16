@@ -13,6 +13,8 @@ use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use DateTime;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 class Type extends FieldType
 {
@@ -59,15 +61,15 @@ class Type extends FieldType
      * It will be used to generate content name and url alias if current field is designated
      * to be used in the content name/urlAlias pattern.
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\DateAndTime\Value $value
      *
-     * @return mixed
+     * @return string
      */
-    public function getName( $value )
+    public function getName( SPIValue $value )
     {
-        if ( $value === null )
+        if ( $this->isEmptyValue( $value ) )
         {
-            return '';
+            return "";
         }
 
         return $value->value->format( 'D Y-d-m H:i:s' );
@@ -85,45 +87,51 @@ class Type extends FieldType
     }
 
     /**
-     * Implements the core of {@see acceptValue()}.
+     * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
-     * @param mixed $inputValue
+     * @param string|int|\DateTime|\eZ\Publish\Core\FieldType\DateAndTime\Value $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\DateAndTime\Value The potentially converted and structurally plausible value.
      */
-    protected function internalAcceptValue( $inputValue )
+    protected function createValueFromInput( $inputValue )
     {
         if ( is_string( $inputValue ) )
         {
             $inputValue = Value::fromString( $inputValue );
         }
+
         if ( is_int( $inputValue ) )
         {
             $inputValue = Value::fromTimestamp( $inputValue );
         }
+
         if ( $inputValue instanceof \DateTime )
         {
             $inputValue = new Value( $inputValue );
         }
-        else if ( !$inputValue instanceof Value )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue',
-                'eZ\\Publish\\Core\\FieldType\\DateAndTime\\Value',
-                $inputValue
-            );
-        }
-
-        if ( isset( $inputValue->value ) && !$inputValue->value instanceof DateTime )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->value',
-                'DateTime',
-                $inputValue->value
-            );
-        }
 
         return $inputValue;
+    }
+
+    /**
+     * Throws an exception if value structure is not of expected format.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
+     *
+     * @param \eZ\Publish\Core\FieldType\DateAndTime\Value $value
+     *
+     * @return void
+     */
+    protected function checkValueStructure( BaseValue $value )
+    {
+        if ( !$value->value instanceof DateTime )
+        {
+            throw new InvalidArgumentType(
+                '$value->value',
+                'DateTime',
+                $value->value
+            );
+        }
     }
 
     /**
@@ -133,9 +141,9 @@ class Type extends FieldType
      *
      * @return array
      */
-    protected function getSortInfo( $value )
+    protected function getSortInfo( BaseValue $value )
     {
-        if ( $value === null || $value->value === null )
+        if ( $value->value === null )
         {
             return null;
         }
@@ -153,7 +161,7 @@ class Type extends FieldType
     {
         if ( $hash === null )
         {
-            return null;
+            return $this->getEmptyValue();
         }
 
         if ( isset( $hash['rfc850'] ) && $hash['rfc850'] )
@@ -171,7 +179,7 @@ class Type extends FieldType
      *
      * @return mixed
      */
-    public function toHash( $value )
+    public function toHash( SPIValue $value )
     {
         if ( $this->isEmptyValue( $value ) )
         {

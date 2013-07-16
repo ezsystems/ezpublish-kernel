@@ -162,10 +162,25 @@ class ContentTypeCreate extends Base
             $contentTypeCreateStruct->creatorId = $this->requestParser->parseHref( $data['User']['_href'], 'userId' );
         }
 
-        if ( !array_key_exists( 'FieldDefinitions', $data ) || !is_array( $data['FieldDefinitions'] ) ||
-             !array_key_exists( 'FieldDefinition', $data['FieldDefinitions'] ) || !is_array( $data['FieldDefinitions']['FieldDefinition'] ) )
+        if ( !array_key_exists( 'FieldDefinitions', $data ) )
         {
-            throw new Exceptions\Parser( "Missing or invalid 'FieldDefinitions' element for ContentTypeCreate." );
+            throw new Exceptions\Parser( "Missing 'FieldDefinitions' element for ContentTypeCreate." );
+        }
+
+        if (
+            !is_array( $data['FieldDefinitions'] ) ||
+            !array_key_exists( 'FieldDefinition', $data['FieldDefinitions'] ) ||
+            !is_array( $data['FieldDefinitions']['FieldDefinition'] )
+        )
+        {
+            throw new Exceptions\Parser( "Invalid 'FieldDefinitions' element for ContentTypeCreate." );
+        }
+
+        // With no field definitions given and when ContentType is immediately published we must return HTTP 400 BadRequest,
+        // instead of relying on service to throw InvalidArgumentException
+        if ( isset( $data["__publish"] ) && $data["__publish"] === true && empty( $data['FieldDefinitions']['FieldDefinition'] ) )
+        {
+            throw new Exceptions\Parser( "ContentTypeCreate should provide at least one field definition." );
         }
 
         foreach ( $data['FieldDefinitions']['FieldDefinition'] as $fieldDefinitionData )

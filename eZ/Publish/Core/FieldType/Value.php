@@ -10,12 +10,13 @@
 namespace eZ\Publish\Core\FieldType;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\SPI\FieldType\Value as ValueInterface;
 
 /**
  * Abstract class for all field value classes.
  * A field value object is to be understood with associated field type
  */
-abstract class Value extends ValueObject
+abstract class Value extends ValueObject implements ValueInterface
 {
     /**
      * Returns a string representation of the field value.

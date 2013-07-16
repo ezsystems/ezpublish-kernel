@@ -13,6 +13,8 @@ use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * The Selection field type.
@@ -115,9 +117,9 @@ class Type extends FieldType
      *
      * @param mixed $value
      *
-     * @return mixed
+     * @return string
      */
-    public function getName( $value )
+    public function getName( SPIValue $value )
     {
         throw new \RuntimeException( 'Implement this method' );
     }
@@ -134,37 +136,41 @@ class Type extends FieldType
     }
 
     /**
-     * Implements the core of {@see acceptValue()}.
+     * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
-     * @param mixed $inputValue
+     * @param array|\eZ\Publish\Core\FieldType\Selection\Value $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\Selection\Value The potentially converted and structurally plausible value.
      */
-    protected function internalAcceptValue( $inputValue )
+    protected function createValueFromInput( $inputValue )
     {
         if ( is_array( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
         }
-        else if ( !$inputValue instanceof Value )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue',
-                'eZ\\Publish\\Core\\FieldType\\Selection\\Value',
-                $inputValue
-            );
-        }
-
-        if ( !is_array( $inputValue->selection ) )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->selection',
-                'array',
-                $inputValue->selection
-            );
-        }
 
         return $inputValue;
+    }
+
+    /**
+     * Throws an exception if value structure is not of expected format.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
+     *
+     * @param \eZ\Publish\Core\FieldType\Selection\Value $value
+     *
+     * @return void
+     */
+    protected function checkValueStructure( BaseValue $value )
+    {
+        if ( !is_array( $value->selection ) )
+        {
+            throw new InvalidArgumentType(
+                '$value->selection',
+                'array',
+                $value->selection
+            );
+        }
     }
 
     /**
@@ -179,7 +185,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( FieldDefinition $fieldDefinition, $fieldValue )
+    public function validate( FieldDefinition $fieldDefinition, SPIValue $fieldValue )
     {
         $validationErrors = array();
 
@@ -220,9 +226,11 @@ class Type extends FieldType
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
+     * @param \eZ\Publish\Core\FieldType\Selection\Value $value
+     *
      * @return array
      */
-    protected function getSortInfo( $value )
+    protected function getSortInfo( BaseValue $value )
     {
         return implode( '-', $value->selection );
     }
@@ -246,7 +254,7 @@ class Type extends FieldType
      *
      * @return mixed
      */
-    public function toHash( $value )
+    public function toHash( SPIValue $value )
     {
         return $value->selection;
     }
@@ -259,17 +267,5 @@ class Type extends FieldType
     public function isSearchable()
     {
         return true;
-    }
-
-    /**
-     * Get index data for field data for search backend
-     *
-     * @param mixed $value
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
-     */
-    public function getIndexData( $value )
-    {
-        throw new \RuntimeException( '@todo: Implement' );
     }
 }

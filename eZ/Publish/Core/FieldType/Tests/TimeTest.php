@@ -218,7 +218,7 @@ class TimeTest extends FieldTypeTest
     {
         return array(
             array(
-                null,
+                new TimeValue(),
                 null,
             ),
             array(
@@ -268,7 +268,7 @@ class TimeTest extends FieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new TimeValue(),
             ),
             array(
                 200,

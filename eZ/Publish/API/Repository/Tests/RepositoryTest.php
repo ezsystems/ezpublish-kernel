@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub;
 use Exception;
 
 /**
@@ -228,11 +227,6 @@ class RepositoryTest extends BaseTest
     public function testGetSearchService()
     {
         $repository = $this->getRepository();
-
-        if ( $repository instanceof \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub )
-        {
-            $this->markTestSkipped( 'SearchService is not available in the memory implementation.' );
-        }
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\SearchService',
@@ -500,13 +494,6 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        if ( $repository instanceof RepositoryStub )
-        {
-            $this->markTestSkipped(
-                'Tests with limited access cannot be run against memory stubs.'
-            );
-        }
-
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
@@ -699,13 +686,6 @@ class RepositoryTest extends BaseTest
     public function testCanUserThrowsInvalidArgumentException()
     {
         $repository = $this->getRepository();
-
-        if ( $repository instanceof RepositoryStub )
-        {
-            $this->markTestSkipped(
-                'Limitation integration tests cannot be run against memory stubs.'
-            );
-        }
 
         $userGroupContentTypeId = $this->generateId( 'type', 3 );
 
