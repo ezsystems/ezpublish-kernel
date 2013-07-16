@@ -5,8 +5,7 @@
     exclude-result-prefixes="docbook"
     version="1.0">
   <xsl:import href="core.xsl"/>
-  <xsl:output indent="yes" omit-xml-declaration="yes" encoding="UTF-8"/>
-
+  <xsl:output omit-xml-declaration="yes" indent="yes" encoding="UTF-8"/>
   <xsl:template match="/docbook:article">
     <xsl:apply-templates/>
   </xsl:template>

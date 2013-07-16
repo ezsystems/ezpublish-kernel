@@ -6,9 +6,9 @@
     version="1.0">
   <xsl:import href="core.xsl"/>
   <xsl:output indent="yes" encoding="UTF-8"/>
-
+  <xsl:variable name="outputNamespace" select="'http://ez.no/namespaces/ezpublish5/xhtml5'"/>
   <xsl:template match="/docbook:article">
-    <xsl:element name="article" namespace="http://ez.no/namespaces/ezpublish5/xhtml5">
+    <xsl:element name="article" namespace="{$outputNamespace}">
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
