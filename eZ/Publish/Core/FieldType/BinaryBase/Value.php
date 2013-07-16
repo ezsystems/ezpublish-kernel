@@ -108,7 +108,7 @@ abstract class Value extends BaseValue
         if ( $propertyName == 'path' )
             return $this->id;
 
-        throw new PropertyNotFoundException( $propertyName, get_class( $this ) );
+        parent::__get( $propertyName );
     }
 
     public function __set( $propertyName, $propertyValue )
@@ -116,6 +116,6 @@ abstract class Value extends BaseValue
         if ( $propertyName == 'path' )
             $this->id = $propertyValue;
 
-        throw new PropertyNotFoundException( $propertyName, get_class( $this ) );
+        parent::__set( $propertyName, $propertyValue );
     }
 }
