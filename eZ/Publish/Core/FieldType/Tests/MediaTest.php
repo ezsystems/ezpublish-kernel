@@ -54,10 +54,6 @@ class MediaTest extends BinaryBaseTest
         $baseInput = parent::provideInvalidInputForAcceptValue();
         $binaryFileInput = array(
             array(
-                new MediaValue(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
                 new MediaValue( array( 'id' => '/foo/bar' ) ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),

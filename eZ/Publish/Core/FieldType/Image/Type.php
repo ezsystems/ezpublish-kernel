@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\FieldType\Image;
 
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -105,11 +106,10 @@ class Type extends FieldType
     protected function checkValueStructure( BaseValue $value )
     {
         // Required parameter $path
-        if ( !isset( $value->path ) || !file_exists( $value->path ) )
+        if ( !isset( $value->id ) || !file_exists( $value->id ) )
         {
-            throw new InvalidArgumentType(
+            throw new InvalidArgumentValue(
                 '$value->path',
-                'string',
                 $value->path
             );
         }
@@ -117,9 +117,8 @@ class Type extends FieldType
         // Required parameter $fileSize
         if ( !isset( $value->fileSize ) || !is_int( $value->fileSize ) )
         {
-            throw new InvalidArgumentType(
+            throw new InvalidArgumentValue(
                 '$value->fileSize',
-                'integer',
                 $value->fileSize
             );
         }

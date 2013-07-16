@@ -96,11 +96,11 @@ abstract class Type extends FieldType
      */
     protected function checkValueStructure( BaseValue $value )
     {
-        // Required parameter $path
-        if ( !isset( $value->path ) || !file_exists( $value->path ) )
+        // Required parameter $id
+        if ( !isset( $value->id ) || !file_exists( $value->id ) )
         {
             throw new InvalidArgumentValue(
-                '$value->path',
+                '$value->id',
                 $value->path,
                 get_class( $this )
             );
@@ -109,20 +109,20 @@ abstract class Type extends FieldType
         // Required parameter $fileName
         if ( !isset( $value->fileName ) || !is_string( $value->fileName ) )
         {
-            throw new InvalidArgumentType(
+            throw new InvalidArgumentValue(
                 '$value->fileName',
-                'string',
-                $value->fileName
+                $value->fileName,
+                get_class( $this )
             );
         }
 
         // Optional parameter $fileSize
         if ( isset( $value->fileSize ) && !is_int( $value->fileSize ) )
         {
-            throw new InvalidArgumentType(
+            throw new InvalidArgumentValue(
                 '$value->fileSize',
-                'int',
-                $value->fileSize
+                $value->fileSize,
+                get_class( $this )
             );
         }
     }
@@ -136,7 +136,7 @@ abstract class Type extends FieldType
      */
     protected function completeValue( $value )
     {
-        if ( !isset( $value->path ) || !file_exists( $value->path ) )
+        if ( !isset( $value->id ) || !file_exists( $value->id ) )
         {
             return;
         }
@@ -149,7 +149,7 @@ abstract class Type extends FieldType
 
         if ( !isset( $value->fileSize ) )
         {
-            $value->fileSize = filesize( $value->path );
+            $value->fileSize = filesize( $value->id );
         }
     }
 

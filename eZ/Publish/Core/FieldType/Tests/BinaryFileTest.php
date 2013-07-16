@@ -47,12 +47,8 @@ class BinaryFileTest extends BinaryBaseTest
         $baseInput = parent::provideInvalidInputForAcceptValue();
         $binaryFileInput = array(
             array(
-                new BinaryFileValue(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
                 new BinaryFileValue( array( 'id' => '/foo/bar' ) ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
             ),
         );
         return array_merge( $baseInput, $binaryFileInput );

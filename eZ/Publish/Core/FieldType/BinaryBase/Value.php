@@ -118,4 +118,12 @@ abstract class Value extends BaseValue
 
         parent::__set( $propertyName, $propertyValue );
     }
+
+    public function __isset( $propertyName )
+    {
+        if ( $propertyName == 'path' )
+            return true;
+
+        parent::__isset( $propertyName );
+    }
 }

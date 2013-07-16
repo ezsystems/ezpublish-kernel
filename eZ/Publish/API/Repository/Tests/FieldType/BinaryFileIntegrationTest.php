@@ -346,6 +346,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
         $fixture = $this->getFixtureData();
         $fixture['create']['downloadCount'] = 0;
         $fixture['create']['uri'] = $fixture['create']['id'];
+        $fixture['create']['path'] = $fixture['create']['id'];
 
         $fieldValue = $this->getValidCreationFieldData();
         $fieldValue->uri = $fixture['create']['uri'];

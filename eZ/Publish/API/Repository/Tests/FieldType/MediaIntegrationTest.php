@@ -359,6 +359,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
         $fixture = $this->getFixtureData();
 
         $fixture['create']['uri'] = $fixture['create']['id'];
+        $fixture['create']['path'] = $fixture['create']['id'];
 
         // Defaults set by type
         $fixture['create']['hasController'] = false;
