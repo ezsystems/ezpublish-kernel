@@ -25,6 +25,9 @@
     </div>
     <script>
         {% raw %}
+        function addslashes( str ) {
+            return (str + '').replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0');
+        }
         var verbose = false;
         jQuery( "#save" ).click( function() {
             jQuery.ajax( {
@@ -59,7 +62,7 @@
                                             "languageCode": "eng-GB",\
                                             "fieldValue": {\
                                                 "xml": "<?xml version=\\"1.0\\" encoding=\\"utf-8\\"?><article xmlns=\\"http://ez.no/namespaces/ezpublish5/xhtml5\\">'
-                                                    + tinymce.activeEditor.getContent().replace(/(\r\n|\n|\r)/gm,"") +
+                                                    + addslashes( tinymce.activeEditor.getContent().replace(/(\r\n|\n|\r)/gm,"") ) +
                                                 '</article>"}}]}}}'
                     }).done(
                         function ( data, status, jqXHR ) {
