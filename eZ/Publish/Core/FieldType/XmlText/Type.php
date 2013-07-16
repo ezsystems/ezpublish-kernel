@@ -177,10 +177,7 @@ class Type extends FieldType
 
             $inputValue = $this->converterDispatcher->dispatch( $inputValue );
 
-            $document = new DOMDocument;
-            $document->loadXML( $inputValue );
-
-            $errors = $this->validatorDispatcher->dispatch( $document );
+            $errors = $this->validatorDispatcher->dispatch( $inputValue );
             if ( !empty( $errors ) )
             {
                 throw new InvalidArgumentException(
@@ -189,7 +186,7 @@ class Type extends FieldType
                 );
             }
 
-            $inputValue = new Value( $document );
+            $inputValue = new Value( $inputValue );
         }
 
         if ( !$inputValue instanceof Value )
@@ -235,9 +232,6 @@ class Type extends FieldType
         }
 
         return $this->acceptValue( $hash['xml'] );
-        $doc = new DOMDocument;
-        $doc->loadXML( $hash['xml'] );
-        return new Value( $doc );
     }
 
     /**

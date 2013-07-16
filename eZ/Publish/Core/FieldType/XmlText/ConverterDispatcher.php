@@ -54,7 +54,7 @@ class ConverterDispatcher
      *
      * @param \DOMDocument $document
      *
-     * @return string
+     * @return \DOMDocument
      */
     public function dispatch( DOMDocument $document )
     {

@@ -318,7 +318,7 @@ class ContentExtension extends Twig_Extension
     }
 
     /**
-     * @return \eZ\Publish\Core\FieldType\XmlText\Converter\Html5
+     * @return \eZ\Publish\Core\FieldType\XmlText\Converter\Xslt
      */
     protected function getXmlTextConverter()
     {
@@ -331,13 +331,13 @@ class ContentExtension extends Twig_Extension
     /**
      * Implements the "xmltext_to_html5" filter
      *
-     * @param string $xmlData
+     * @param \DOMDocument $xmlData
      *
      * @return string
      */
     public function xmltextToHtml5( $xmlData )
     {
-        return $this->getXmlTextConverter()->convert( $xmlData );
+        return $this->getXmlTextConverter()->convert( $xmlData )->saveHTML();
     }
 
     /**

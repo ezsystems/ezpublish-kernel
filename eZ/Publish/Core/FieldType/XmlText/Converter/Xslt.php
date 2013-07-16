@@ -95,7 +95,7 @@ class Xslt implements Converter
      *
      * @param \DOMDocument $xmlDoc
      *
-     * @return string
+     * @return \DOMDocument
      */
     public function convert( DOMDocument $xmlDoc )
     {
@@ -121,7 +121,7 @@ class Xslt implements Converter
         $oldSetting = libxml_use_internal_errors( true );
 
         libxml_clear_errors();
-        $xmlString = $xsl->transformToXML( $xmlDoc );
+        $document = $xsl->transformToDoc( $xmlDoc );
 
         // Get all errors
         $xmlErrors = libxml_get_errors();
@@ -141,6 +141,6 @@ class Xslt implements Converter
             );
         }
 
-        return $xmlString;
+        return $document;
     }
 }
