@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+  <title>Assorted array of links</title>
+  <para>
+    <link xlink:href="#anchor" xlink:show="new" xml:id="id1" xlink:title="Anchor link title">Jump to content</link>
+  </para>
+  <para>
+    <link xlink:href="ezurl://95#fragment1" xlink:show="new" xml:id="id2" xlink:title="Link title">Link text</link>
+  </para>
+  <para>
+    <link xlink:href="ezlocation://111" xlink:show="new" xml:id="id3" xlink:title="Location title">Location content name</link>
+  </para>
+  <para>
+    <link xlink:href="ezlocation://222#fragment2" xlink:show="new" xml:id="id4" xlink:title="Location title 2">Location content name 2</link>
+  </para>
+  <para>
+    <link xlink:href="ezcontent://333" xlink:show="none" xml:id="id5" xlink:title="Content title">Content name</link>
+  </para>
+  <anchor xml:id="anchor"/>
+  <para>Some text for the anchored paragraph.</para>
+</article>

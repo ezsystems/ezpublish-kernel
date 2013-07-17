@@ -3,6 +3,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"
     xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns="http://docbook.org/ns/docbook"
     version="1.0">
   <xsl:output indent="yes" encoding="UTF-8"/>
@@ -15,7 +16,7 @@
         </xsl:element>
       </xsl:when>
       <xsl:otherwise>
-        <article xmlns="http://docbook.org/ns/docbook" version="5.0">
+        <article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
           <xsl:apply-templates/>
         </article>
       </xsl:otherwise>
@@ -75,6 +76,72 @@
         </xsl:element>
       </xsl:when>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="anchor">
+    <xsl:element name="anchor" namespace="http://docbook.org/ns/docbook">
+      <xsl:attribute name="xml:id">
+        <xsl:value-of select="@name"/>
+      </xsl:attribute>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="link">
+    <xsl:variable name="fragment">
+      <xsl:if test="@anchor_name != ''">
+        <xsl:value-of select="concat( '#', @anchor_name )"/>
+      </xsl:if>
+    </xsl:variable>
+    <xsl:element name="link" namespace="http://docbook.org/ns/docbook">
+      <xsl:choose>
+        <xsl:when test="@url_id">
+          <xsl:attribute name="xlink:href">
+            <xsl:value-of select="concat( 'ezurl://', @url_id, $fragment )"/>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:when test="@node_id">
+          <xsl:attribute name="xlink:href">
+            <xsl:value-of select="concat( 'ezlocation://', @node_id, $fragment )"/>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:when test="@object_id">
+          <xsl:attribute name="xlink:href">
+            <xsl:value-of select="concat( 'ezcontent://', @object_id, $fragment )"/>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:when test="@anchor_name">
+          <xsl:attribute name="xlink:href">
+            <xsl:value-of select="concat( '#', @anchor_name )"/>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:message terminate="yes">
+            Unhandled link type
+          </xsl:message>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:attribute name="xlink:show">
+        <xsl:choose>
+          <xsl:when test="@target and @target = '_blank'">
+            <xsl:value-of select="'new'"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="'none'"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+      <xsl:if test="@xhtml:id">
+        <xsl:attribute name="xml:id">
+          <xsl:value-of select="@xhtml:id"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@xhtml:title">
+        <xsl:attribute name="xlink:title">
+          <xsl:value-of select="@xhtml:title"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates/>
+    </xsl:element>
   </xsl:template>
 
   <xsl:template match="heading">

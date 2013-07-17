@@ -10,8 +10,6 @@
         <h1 class="long">XHTML5 editing content #{{ content.contentInfo.id }}: {{ content.contentInfo.name }}</h1>
     </div>
 
-    <h3>Source</h3>
-    <pre style="margin:5px 0;">{{ content.fields.test["eng-GB"].xml|xmltext_to_html5 }}</pre>
     <h3>Edit</h3>
     <div style="margin:5px 0;">
         <form method="post" action="somepage">
@@ -23,6 +21,8 @@
     <div style="margin:25px 0;">
         <button id="save">Save</button>
     </div>
+    <h3>Source</h3>
+    <pre style="margin:5px 0;">{{ content.fields.test["eng-GB"].xml|xmltext_to_html5 }}</pre>
     <script>
         {% raw %}
         function addslashes( str ) {

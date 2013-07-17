@@ -2,7 +2,8 @@
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:docbook="http://docbook.org/ns/docbook"
-    exclude-result-prefixes="docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    exclude-result-prefixes="docbook xlink"
     version="1.0">
   <xsl:output indent="yes" encoding="UTF-8"/>
   <xsl:variable name="outputNamespace" select="''"/>
@@ -91,6 +92,38 @@
         </xsl:element>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="docbook:anchor">
+    <xsl:element name="a" namespace="{$outputNamespace}">
+      <xsl:attribute name="id">
+        <xsl:value-of select="@xml:id"/>
+      </xsl:attribute>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="docbook:link[@xlink:href]">
+    <xsl:element name="a" namespace="{$outputNamespace}">
+      <xsl:attribute name="href">
+        <xsl:value-of select="@xlink:href"/>
+      </xsl:attribute>
+      <xsl:if test="@xlink:show = 'new'">
+        <xsl:attribute name="target">
+          <xsl:value-of select="'_blank'"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@xml:id">
+        <xsl:attribute name="id">
+          <xsl:value-of select="@xml:id"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@xlink:title">
+        <xsl:attribute name="title">
+          <xsl:value-of select="@xlink:title"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates/>
+    </xsl:element>
   </xsl:template>
 
   <xsl:template match="docbook:title">

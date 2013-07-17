@@ -2,13 +2,14 @@
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:ezxhtml5="http://ez.no/namespaces/ezpublish5/xhtml5"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns="http://docbook.org/ns/docbook"
     exclude-result-prefixes="ezxhtml5"
     version="1.0">
   <xsl:output indent="yes" encoding="UTF-8"/>
 
   <xsl:template match="ezxhtml5:article">
-    <article xmlns="http://docbook.org/ns/docbook" version="5.0">
+    <article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
       <xsl:apply-templates/>
     </article>
   </xsl:template>
@@ -63,6 +64,68 @@
       <xsl:attribute name="role">underlined</xsl:attribute>
       <xsl:apply-templates/>
     </emphasis>
+  </xsl:template>
+
+  <xsl:template name="link.href">
+    <link>
+      <xsl:choose>
+        <xsl:when test="starts-with( @href, '#' ) or starts-with( @href, 'ezurl://' ) or starts-with( @href, 'ezlocation://' ) or starts-with( @href, 'ezcontent://' )">
+          <xsl:attribute name="xlink:href">
+            <xsl:value-of select="@href"/>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:message terminate="yes">
+            Unhandled link type
+          </xsl:message>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:attribute name="xlink:show">
+        <xsl:choose>
+          <xsl:when test="@target and @target = '_blank'">
+            <xsl:value-of select="'new'"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="'none'"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+      <xsl:if test="@id">
+        <xsl:attribute name="xml:id">
+          <xsl:value-of select="@id"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@title">
+        <xsl:attribute name="xlink:title">
+          <xsl:value-of select="@title"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates/>
+    </link>
+  </xsl:template>
+
+  <xsl:template name="link.anchor">
+    <anchor>
+      <xsl:attribute name="xml:id">
+        <xsl:value-of select="@id"/>
+      </xsl:attribute>
+    </anchor>
+  </xsl:template>
+
+  <xsl:template match="ezxhtml5:a">
+    <xsl:choose>
+      <xsl:when test="@href">
+        <xsl:call-template name="link.href"/>
+      </xsl:when>
+      <xsl:when test="@id">
+        <xsl:call-template name="link.anchor"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message terminate="yes">
+          Unhandled link type
+        </xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="ezxhtml5:h1 | ezxhtml5:h2 | ezxhtml5:h3 | ezxhtml5:h4 | ezxhtml5:h5 | ezxhtml5:h6">

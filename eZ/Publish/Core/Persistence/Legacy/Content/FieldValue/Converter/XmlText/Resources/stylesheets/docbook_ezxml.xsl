@@ -4,7 +4,8 @@
     xmlns:docbook="http://docbook.org/ns/docbook"
     xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
     xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"
-    exclude-result-prefixes="docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    exclude-result-prefixes="docbook xlink"
     version="1.0">
   <xsl:output indent="yes" encoding="UTF-8"/>
 
@@ -95,6 +96,63 @@
         </emphasize>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="docbook:anchor">
+    <anchor>
+      <xsl:attribute name="name">
+        <xsl:value-of select="@xml:id"/>
+      </xsl:attribute>
+    </anchor>
+  </xsl:template>
+
+  <xsl:template match="docbook:link[@xlink:href]">
+    <link>
+      <xsl:choose>
+        <xsl:when test="starts-with( @xlink:href, 'ezurl://' )">
+          <xsl:attribute name="url_id">
+            <xsl:value-of select="substring-before( concat( substring-after( @xlink:href, 'ezurl://' ), '#' ), '#' )"/>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:when test="starts-with( @xlink:href, 'ezcontent://' )">
+          <xsl:attribute name="object_id">
+            <xsl:value-of select="substring-before( concat( substring-after( @xlink:href, 'ezcontent://' ), '#' ), '#' )"/>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:when test="starts-with( @xlink:href, 'ezlocation://' )">
+          <xsl:attribute name="node_id">
+            <xsl:value-of select="substring-before( concat( substring-after( @xlink:href, 'ezlocation://' ), '#' ), '#' )"/>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:when test="starts-with( @xlink:href, '#' )"/>
+        <xsl:otherwise>
+          <xsl:message terminate="yes">
+            Unhandled link type
+          </xsl:message>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:if test="contains( @xlink:href, '#' )">
+        <xsl:attribute name="anchor_name">
+          <xsl:value-of select="substring-after( @xlink:href, '#' )"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@xlink:show = 'new'">
+        <xsl:attribute name="target">
+          <xsl:value-of select="'_blank'"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@xml:id">
+        <xsl:attribute name="xhtml:id">
+          <xsl:value-of select="@xml:id"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@xlink:title">
+        <xsl:attribute name="xhtml:title">
+          <xsl:value-of select="@xlink:title"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates/>
+    </link>
   </xsl:template>
 
   <xsl:template match="docbook:title">
