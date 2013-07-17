@@ -89,7 +89,9 @@ abstract class Kernel extends BaseKernel
      */
     protected function canGenerateUserHash( Request $request )
     {
-        return in_array( $request->getClientIp(), array( '127.0.0.1', '::1', 'fe80::1' ) );
+        return
+            $request->attributes->get( 'internalRequest' )
+            || in_array( $request->getClientIp(), array( '127.0.0.1', '::1', 'fe80::1' ) );
     }
 
     /**
@@ -121,6 +123,7 @@ abstract class Kernel extends BaseKernel
             $forwardReq = clone $request;
             $forwardReq->headers->set( 'X-HTTP-Override', 'AUTHENTICATE' );
             $forwardReq->headers->set( 'Accept', static::USER_HASH_ACCEPT_HEADER );
+            $forwardReq->attributes->set( 'internalRequest', true );
             $this->generatingUserHash = true;
             $resp = $this->handle( $forwardReq );
             if ( !$resp->headers->has( 'X-User-Hash' ) )
