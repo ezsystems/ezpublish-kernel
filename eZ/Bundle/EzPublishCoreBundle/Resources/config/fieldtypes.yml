@@ -301,7 +301,9 @@ parameters:
     ezpublish.fieldType.ezxmltext.converter.xslt.class: eZ\Publish\Core\FieldType\XmlText\Converter\Xslt
     ezpublish.fieldType.ezxmltext.converter.ezxmlInputToDocbook.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/XmlText/Resources/stylesheets/ezxml_docbook.xsl
     ezpublish.fieldType.ezxmltext.converter.xhtml5ToDocbook.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/stylesheets/xhtml5/docbook.xsl
-    ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/stylesheets/docbook/xhtml5/chunked.xsl
+    ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/stylesheets/docbook/xhtml5/xhtml5.xsl
+    ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5Fragment.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/stylesheets/docbook/xhtml5/fragment.xsl
+    ezpublish.fieldType.ezxmltext.converter.xhtml5ToXhtml5Fragment.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/stylesheets/xhtml5/xhtml5fragment.xsl
 
     ezpublish.fieldType.ezxmltext.converter_dispatcher.class: eZ\Publish\Core\FieldType\XmlText\ConverterDispatcher
 
@@ -320,9 +322,24 @@ services:
         class: %ezpublish.fieldType.ezxmltext.converter.xslt.class%
         arguments: [%ezpublish.fieldType.ezxmltext.converter.xhtml5ToDocbook.resources%]
 
-    ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5:
+    ezpublish.fieldType.ezxmltext.converter.xhtml5ToXhtml5Fragment:
         class: %ezpublish.fieldType.ezxmltext.converter.xslt.class%
-        arguments: [%ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5.resources%, [@ezpublish.fieldType.ezxmltext.converter.embedToHtml5, @ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5]]
+        arguments: [%ezpublish.fieldType.ezxmltext.converter.xhtml5ToXhtml5Fragment.resources%]
+
+    ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5Fragment:
+        class: %ezpublish.fieldType.ezxmltext.converter.xslt.class%
+        arguments:
+            - %ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5.resources%
+            - []
+            -
+                - @ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5
+                #- @ezpublish.fieldType.ezxmltext.converter.embedToHtml5 # @todo
+                - @ezpublish.fieldType.ezxmltext.converter.xhtml5ToXhtml5Fragment
+
+    ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5Edit:
+        class: %ezpublish.fieldType.ezxmltext.converter.xslt.class%
+        arguments:
+            - %ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5Fragment.resources%
 
     ezpublish.fieldType.ezxmltext.converter_dispatcher:
         class: %ezpublish.fieldType.ezxmltext.converter_dispatcher.class%
