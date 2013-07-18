@@ -11,7 +11,6 @@ namespace eZ\Publish\SPI\Tests\FieldType;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText as XmlTextConverter;
 use eZ\Publish\Core\FieldType;
-use eZ\Publish\Core\FieldType\NullStorage;
 use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
@@ -61,7 +60,16 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
 
         $handler->getFieldTypeRegistry()->register(
             'ezxmltext',
-            new FieldType\XmlText\Type()
+            new FieldType\XmlText\Type(
+                new FieldType\XmlText\ConverterDispatcher( array() ),
+                new FieldType\XmlText\ValidatorDispatcher(
+                    array(
+                        "http://docbook.org/ns/docbook" => new FieldType\XmlText\Validator(
+                            $this->getAbsolutePath( "eZ/Publish/Core/FieldType/XmlText/Resources/schemas/docbook/docbook.xsd" )
+                        )
+                    )
+                )
+            )
         );
         $handler->getStorageRegistry()->register(
             'ezxmltext',
@@ -73,7 +81,17 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
         );
         $handler->getFieldValueConverterRegistry()->register(
             'ezxmltext',
-            new XmlTextConverter()
+            new XmlTextConverter(
+                new XmlTextConverter\XsltConverter(
+                    $this->getAbsolutePath( "eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/XmlText/Resources/stylesheets/docbook_ezxml.xsl" )
+                ),
+                new XmlTextConverter\XsltConverter(
+                    $this->getAbsolutePath( "eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/XmlText/Resources/stylesheets/ezxml_docbook.xsl" )
+                ),
+                new XmlTextConverter\XsdValidator(
+                    $this->getAbsolutePath( "eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/XmlText/Resources/schemas/ezxml.xsd" )
+                )
+            )
         );
 
         return $handler;
@@ -127,7 +145,11 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
     public function getInitialValue()
     {
         $xml = new DOMDocument;
-        $xml->loadXML( '<?xml version="1.0" encoding="utf-8"?><section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>Paragraph content…</paragraph></section>' );
+        $xml->loadXML( '<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+  <title>This is a heading.</title>
+  <para>This is a paragraph.</para>
+</article>' );
         return new FieldValue(
             array(
                 'data' => $xml,
@@ -147,7 +169,11 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         $xml = new DOMDocument;
-        $xml->loadXML( '<?xml version="1.0" encoding="utf-8"?><section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>Some different content…</paragraph></section>' );
+        $xml->loadXML( '<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+  <title>This is an updated heading.</title>
+  <para>This is an updated paragraph.</para>
+</article>' );
         return new FieldValue(
             array(
                 'data' => $xml,
@@ -155,6 +181,30 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
                 'sortKey' => null,
             )
         );
+    }
+
+    /**
+     * @param string $relativePath
+     *
+     * @return string
+     */
+    protected function getAbsolutePath( $relativePath )
+    {
+        return self::getInstallationDir() . "/" . $relativePath;
+    }
+
+    /**
+     * @return string
+     */
+    static protected function getInstallationDir()
+    {
+        static $installDir = null;
+        if ( $installDir === null )
+        {
+            $config = require 'config.php';
+            $installDir = $config['service']['parameters']['install_dir'];
+        }
+        return $installDir;
     }
 }
 
