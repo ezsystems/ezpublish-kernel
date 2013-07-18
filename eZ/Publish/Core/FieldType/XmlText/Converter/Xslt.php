@@ -36,6 +36,13 @@ class Xslt implements Converter
     protected $preConverters;
 
     /**
+     * Array of converters that needs to be called after actual processing.
+     *
+     * @var \eZ\Publish\Core\FieldType\XmlText\Converter[]
+     */
+    protected $postConverters;
+
+    /**
      * Textual mapping for libxml error types.
      *
      * @var array
@@ -51,10 +58,11 @@ class Xslt implements Converter
      *
      * @param string $stylesheet Stylesheet to use for conversion
      * @param \eZ\Publish\Core\FieldType\XmlText\Converter[] $preConverters Array of pre-converters
+     * @param \eZ\Publish\Core\FieldType\XmlText\Converter[] $postConverters Array of post-converters
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
      */
-    public function __construct( $stylesheet, array $preConverters = array() )
+    public function __construct( $stylesheet, array $preConverters = array(), array $postConverters = array() )
     {
         $this->stylesheet = $stylesheet;
 
@@ -63,12 +71,24 @@ class Xslt implements Converter
             if ( !$preConverter instanceof Converter )
                 throw new InvalidArgumentType(
                     '$preConverters',
-                    "eZ\\Publish\\Core\\FieldType\\XmlText\\XsltConverter",
+                    "eZ\\Publish\\Core\\FieldType\\XmlText\\Converter\\Xslt",
                     $preConverter
                 );
         }
 
         $this->preConverters = $preConverters;
+
+        foreach ( $postConverters as $postConverter )
+        {
+            if ( !$postConverter instanceof Converter )
+                throw new InvalidArgumentType(
+                    '$postConverters',
+                    "eZ\\Publish\\Core\\FieldType\\XmlText\\Converter\\Xslt",
+                    $postConverter
+                );
+        }
+
+        $this->postConverters = $postConverters;
     }
 
     /**
@@ -88,22 +108,17 @@ class Xslt implements Converter
     }
 
     /**
-     * Convert $xmlDoc from internal representation DOMDocument to HTML5
+     * Performs conversion of the given $document using XSLT stylesheet.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if stylesheet is not found
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if document does not transform
      *
-     * @param \DOMDocument $xmlDoc
+     * @param DOMDocument $document
      *
      * @return \DOMDocument
      */
-    public function convert( DOMDocument $xmlDoc )
+    protected function internalConvert( DOMDocument $document )
     {
-        foreach ( $this->preConverters as $preConverter )
-        {
-            $preConverter->convert( $xmlDoc );
-        }
-
         if ( !file_exists( $this->stylesheet ) )
         {
             throw new InvalidArgumentException(
@@ -121,7 +136,7 @@ class Xslt implements Converter
         $oldSetting = libxml_use_internal_errors( true );
 
         libxml_clear_errors();
-        $document = $xsl->transformToDoc( $xmlDoc );
+        $document = $xsl->transformToDoc( $document );
 
         // Get all errors
         $xmlErrors = libxml_get_errors();
@@ -139,6 +154,33 @@ class Xslt implements Converter
                 "\$xmlDoc",
                 "Transformation of XML content failed: " . join( "\n", $errors )
             );
+        }
+
+        return $document;
+    }
+
+    /**
+     * Performs conversion of the given $document using XSLT stylesheet and configured pre- and post-converters.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if stylesheet is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if document does not transform
+     *
+     * @param \DOMDocument $document
+     *
+     * @return \DOMDocument
+     */
+    public function convert( DOMDocument $document )
+    {
+        foreach ( $this->preConverters as $preConverter )
+        {
+            $document = $preConverter->convert( $document );
+        }
+
+        $document = $this->internalConvert( $document );
+
+        foreach ( $this->postConverters as $postConverter )
+        {
+            $document = $postConverter->convert( $document );
         }
 
         return $document;

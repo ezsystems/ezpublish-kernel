@@ -48,23 +48,31 @@ class EzLinkToHtml5 implements Converter
     }
 
     /**
-     * Converts internal links (eznode:// and ezobject://) to URLs.
+     * Converts internal links (ezcontent:// and ezlocation://) to URLs.
      *
-     * @param \DOMDocument $xmlDoc
+     * @param \DOMDocument $document
      *
-     * @return null
+     * @return \DOMDocument
      */
-    public function convert( DOMDocument $xmlDoc )
+    public function convert( DOMDocument $document )
     {
-        foreach ( $xmlDoc->getElementsByTagName( "link" ) as $link )
+        $document = clone $document;
+        $xpath = new \DOMXPath( $document );
+        $xpath->registerNamespace( "ezxhtml5", "http://ez.no/namespaces/ezpublish5/xhtml5" );
+        $xpathExpression = "//ezxhtml5:a[starts-with( @href, 'ezlocation://' ) or starts-with( @href, 'ezcontent://' )]";
+
+        /** @var \DOMElement $link */
+        foreach ( $xpath->query( $xpathExpression ) as $link )
         {
             $location = null;
+            preg_match( "~^(.+)://([^#]*)?(#.*|\\s*)?$~", $link->getAttribute( "href" ), $matches );
+            list( , $protocol, $id, $fragment ) = $matches;
 
-            if ( $link->hasAttribute( 'object_id' ) )
+            if ( $protocol === "ezcontent" )
             {
                 try
                 {
-                    $content = $this->contentService->loadContent( $link->getAttribute( 'object_id' ) );
+                    $content = $this->contentService->loadContent( $id );
                     $location = $this->locationService->loadLocation( $content->contentInfo->mainLocationId );
                 }
                 catch ( APINotFoundException $e )
@@ -73,7 +81,7 @@ class EzLinkToHtml5 implements Converter
                     {
                         $this->logger->warning(
                             "While generating links for xmltext, could not locate " .
-                            "Content object with ID " . $link->getAttribute( 'object_id' )
+                            "Content object with ID " . $id
                         );
                     }
                 }
@@ -83,17 +91,17 @@ class EzLinkToHtml5 implements Converter
                     {
                         $this->logger->notice(
                             "While generating links for xmltext, unauthorized to load " .
-                            "Content object with ID " . $link->getAttribute( 'object_id' )
+                            "Content object with ID " . $id
                         );
                     }
                 }
             }
 
-            if ( $link->hasAttribute( 'node_id' ) )
+            if ( $protocol === "ezlocation" )
             {
                 try
                 {
-                    $location = $this->locationService->loadLocation( $link->getAttribute( 'node_id' ) );
+                    $location = $this->locationService->loadLocation( $id );
                 }
                 catch ( APINotFoundException $e )
                 {
@@ -101,7 +109,7 @@ class EzLinkToHtml5 implements Converter
                     {
                         $this->logger->warning(
                             "While generating links for xmltext, could not locate " .
-                            "Location with ID " . $link->getAttribute( 'node_id' )
+                            "Location with ID " . $id
                         );
                     }
                 }
@@ -111,7 +119,7 @@ class EzLinkToHtml5 implements Converter
                     {
                         $this->logger->notice(
                             "While generating links for xmltext, unauthorized to load " .
-                            "Location with ID " . $link->getAttribute( 'node_id' )
+                            "Location with ID " . $id
                         );
                     }
                 }
@@ -120,13 +128,10 @@ class EzLinkToHtml5 implements Converter
             if ( $location !== null )
             {
                 $urlAlias = $this->urlAliasService->reverseLookup( $location );
-                $link->setAttribute( 'url', $urlAlias->path );
-            }
-
-            if ( $link->hasAttribute( 'anchor_name' ) )
-            {
-                $link->setAttribute( 'url', $link->getAttribute( 'url' ) . "#" . $link->getAttribute( 'anchor_name' ) );
+                $link->setAttribute( 'href', $urlAlias->path . $fragment );
             }
         }
+
+        return $document;
     }
 }

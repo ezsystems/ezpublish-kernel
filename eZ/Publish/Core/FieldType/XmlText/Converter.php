@@ -24,7 +24,7 @@ interface Converter
      *
      * @param \DOMDocument $xmlDoc
      *
-     * @return \DOMDocument|null
+     * @return \DOMDocument
      */
     public function convert( DOMDocument $xmlDoc );
 }
