@@ -33,9 +33,9 @@ interface Handler
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the file doesn't exist
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      */
-    public function delete( $path );
+    public function delete( $spiBinaryFileId );
 
     /**
      * Updates the file identified by $path with data from $updateFile
@@ -43,73 +43,81 @@ interface Handler
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the source path doesn't exist
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the target path already exists
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      * @param \eZ\Publish\SPI\IO\BinaryFileUpdateStruct $updateFileStruct
      *
      * @return \eZ\Publish\SPI\IO\BinaryFile The updated BinaryFile
      */
-    public function update( $path, BinaryFileUpdateStruct $updateFileStruct );
+    public function update( $spiBinaryFileId, BinaryFileUpdateStruct $updateFileStruct );
 
     /**
      * Checks if the BinaryFile with path $path exists
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      *
      * @return boolean
      */
-    public function exists( $path );
+    public function exists( $spiBinaryFileId );
 
     /**
      * Loads the BinaryFile identified by $path
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If no file identified by $path exists
-     * @param string $uri
+     * @param string $spiBinaryFileId
      *
      * @return \eZ\Publish\SPI\IO\BinaryFile
      */
-    public function load( $uri );
+    public function load( $spiBinaryFileId );
 
     /**
      * Returns a file resource to the BinaryFile identified by $path
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
      *
-     * @param string $uri
+     * @param string $spiBinaryFileId
      *
      * @return resource
      */
-    public function getFileResource( $uri );
+    public function getFileResource( $spiBinaryFileId );
 
     /**
      * Returns the contents of the BinaryFile identified by $path
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the file couldn't be found
      *
-     * @param string $uri
+     * @param string $spiBinaryFileId
      *
      * @return string
      */
-    public function getFileContents( $uri );
+    public function getFileContents( $spiBinaryFileId );
 
     /**
-     * Returns the internal, handler level path for $path
-     * @param string $path
+     * Returns the internal, handler level path from the api level $binaryFileId
+     * @param string $spiBinaryFileId
      * @return string
      */
-    public function getInternalPath( $path );
+    public function getInternalPath( $spiBinaryFileId );
 
     /**
      * Removes the internal storage path from $path
-     * @param string $path
+     * @param string $apiBinaryFileId
      * @return string
      */
-    public function getExternalPath( $path );
+    public function getExternalPath( $apiBinaryFileId );
 
     /**
      * Executes $metadataHandler on $path, and returns the metadata array
      * @param MetadataHandler $metadataHandler
-     * @param string $path
+     * @param string $spiBinaryFileId
      * @return array
      */
-    public function getMetadata( MetadataHandler $metadataHandler, $path );
+    public function getMetadata( MetadataHandler $metadataHandler, $spiBinaryFileId );
+
+    /**
+     * Returns the file's public HTTP URI, as exposed from the outside
+     * @deprecated should not be required. Seek & destroy.
+     * @param string $spiBinaryFileId
+     * @return string
+     */
+    public function getUri( $spiBinaryFileId );
 }

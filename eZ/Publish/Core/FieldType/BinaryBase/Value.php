@@ -15,16 +15,23 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * Base value for binary field types
+ * @property string $path Used for BC with 5.0 (EZP-20948). Equivalent to $id.
  */
 abstract class Value extends BaseValue
 {
     /**
-     * Path string, where the binary file is located
+     * @todo This doesn't really make sense here...
+     * What is the point of exposing this ? It makes no sense as seen from outside (no storage dir nor prefix)
+     * but a path *also* doesn't make sense when we move to a cloud/remote storage
+     * On the other hand, this property IS required when INPUTING files, as they need to be read from
+     * somewhere. It makes no harm, but is still confusing.
+     *
+     * Unique file ID
      *
      * @var string
      * @required
      */
-    public $path;
+    public $id;
 
     /**
      * Display file name
@@ -48,12 +55,25 @@ abstract class Value extends BaseValue
     public $mimeType;
 
     /**
+     * HTTP URI
+     * @var string
+     */
+    public $uri;
+
+    /**
      * Construct a new Value object.
      *
      * @param array $fileData
      */
     public function __construct( array $fileData = array() )
     {
+        // BC with 5.0 (EZP-20948)
+        if ( isset( $fileData['path'] ) )
+        {
+            $fileData['id'] = $fileData['path'];
+            unset( $fileData['path'] );
+        }
+
         foreach ( $fileData as $key => $value )
         {
             try
@@ -80,6 +100,30 @@ abstract class Value extends BaseValue
      */
     public function __toString()
     {
-        return (string)$this->path;
+        return (string)$this->uri;
+    }
+
+    public function __get( $propertyName )
+    {
+        if ( $propertyName == 'path' )
+            return $this->id;
+
+        parent::__get( $propertyName );
+    }
+
+    public function __set( $propertyName, $propertyValue )
+    {
+        if ( $propertyName == 'path' )
+            $this->id = $propertyValue;
+
+        parent::__set( $propertyName, $propertyValue );
+    }
+
+    public function __isset( $propertyName )
+    {
+        if ( $propertyName == 'path' )
+            return true;
+
+        parent::__isset( $propertyName );
     }
 }
