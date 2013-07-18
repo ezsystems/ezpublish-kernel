@@ -329,12 +329,11 @@ services:
     ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5Fragment:
         class: %ezpublish.fieldType.ezxmltext.converter.xslt.class%
         arguments:
-            - %ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5.resources%
-            - []
+            - %ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5Fragment.resources%
             -
                 - @ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5
                 #- @ezpublish.fieldType.ezxmltext.converter.embedToHtml5 # @todo
-                - @ezpublish.fieldType.ezxmltext.converter.xhtml5ToXhtml5Fragment
+            - []
 
     ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5Edit:
         class: %ezpublish.fieldType.ezxmltext.converter.xslt.class%

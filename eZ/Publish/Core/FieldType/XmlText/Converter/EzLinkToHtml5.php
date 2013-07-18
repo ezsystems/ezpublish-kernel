@@ -58,14 +58,14 @@ class EzLinkToHtml5 implements Converter
     {
         $document = clone $document;
         $xpath = new \DOMXPath( $document );
-        $xpath->registerNamespace( "ezxhtml5", "http://ez.no/namespaces/ezpublish5/xhtml5" );
-        $xpathExpression = "//ezxhtml5:a[starts-with( @href, 'ezlocation://' ) or starts-with( @href, 'ezcontent://' )]";
+        $xpath->registerNamespace( "docbook", "http://docbook.org/ns/docbook" );
+        $xpathExpression = "//docbook:link[starts-with( @xlink:href, 'ezlocation://' ) or starts-with( @xlink:href, 'ezcontent://' )]";
 
         /** @var \DOMElement $link */
         foreach ( $xpath->query( $xpathExpression ) as $link )
         {
             $location = null;
-            preg_match( "~^(.+)://([^#]*)?(#.*|\\s*)?$~", $link->getAttribute( "href" ), $matches );
+            preg_match( "~^(.+)://([^#]*)?(#.*|\\s*)?$~", $link->getAttribute( "xlink:href" ), $matches );
             list( , $protocol, $id, $fragment ) = $matches;
 
             if ( $protocol === "ezcontent" )
@@ -128,7 +128,7 @@ class EzLinkToHtml5 implements Converter
             if ( $location !== null )
             {
                 $urlAlias = $this->urlAliasService->reverseLookup( $location );
-                $link->setAttribute( 'href', $urlAlias->path . $fragment );
+                $link->setAttribute( 'xlink:href', $urlAlias->path . $fragment );
             }
         }
 
