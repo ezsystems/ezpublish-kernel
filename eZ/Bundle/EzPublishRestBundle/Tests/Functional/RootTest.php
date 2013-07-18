@@ -23,4 +23,16 @@ class RootTest extends RESTFunctionalTestCase
         );
         self::assertHttpResponseCodeEquals( $response, 200 );
     }
+
+    /**
+     * @covers GET /<wrongUri>
+     */
+    public function testCatchAll()
+    {
+        $response = $this->sendHttpRequest(
+            $this->createHttpRequest( "GET", "/api/ezp/v2/" . uniqid( 'rest' ), '', 'Stuff+json' )
+        );
+        self::assertHttpResponseCodeEquals( $response, 404 );
+        self::assertArrayHasKey( 'ErrorMessage', json_decode( $response->getContent(), true ) );
+    }
 }
