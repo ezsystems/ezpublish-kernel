@@ -317,6 +317,7 @@ services:
     ezpublish.fieldType.ezxmltext.converter.ezxmlInputToDocbook:
         class: %ezpublish.fieldType.ezxmltext.converter.xslt.class%
         arguments: [%ezpublish.fieldType.ezxmltext.converter.ezxmlInputToDocbook.resources%]
+        # @todo: configure pre-converters
 
     ezpublish.fieldType.ezxmltext.converter.xhtml5ToDocbook:
         class: %ezpublish.fieldType.ezxmltext.converter.xslt.class%
