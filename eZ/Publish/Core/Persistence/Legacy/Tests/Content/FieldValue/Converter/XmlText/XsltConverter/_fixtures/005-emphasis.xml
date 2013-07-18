@@ -2,6 +2,6 @@
 <section xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
-  <heading>This is a heading.</heading>
+  <header>This is a heading.</header>
   <paragraph>This is a paragraph with <emphasize>emphasized</emphasize> text.</paragraph>
 </section>

@@ -144,7 +144,7 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="heading">
+  <xsl:template match="header">
     <xsl:element name="title" namespace="http://docbook.org/ns/docbook">
       <xsl:apply-templates/>
     </xsl:element>

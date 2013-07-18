@@ -156,9 +156,9 @@
   </xsl:template>
 
   <xsl:template match="docbook:title">
-    <heading>
+    <header>
       <xsl:apply-templates/>
-    </heading>
+    </header>
   </xsl:template>
 
   <xsl:template match="docbook:orderedlist">
