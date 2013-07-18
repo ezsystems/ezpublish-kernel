@@ -1074,3 +1074,5 @@ ezpublis_rest_catchAll:
     path: /{requestUri}
     defaults:
         _controller: ezpublish_rest.controller.root:catchAll
+    requirements:
+        requestUri: ".*"
