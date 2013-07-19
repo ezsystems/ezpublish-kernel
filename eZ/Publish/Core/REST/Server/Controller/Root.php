@@ -35,6 +35,6 @@ class Root extends RestController
      */
     public function catchAll()
     {
-        throw new NotFoundException;
+        throw new NotFoundException( "No such route" );
     }
 }
