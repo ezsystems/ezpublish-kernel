@@ -185,6 +185,10 @@
         </pre>
     </xsl:template>
 
+    <xsl:template match="anchor">
+        <a><xsl:attribute name="id"><xsl:value-of select="@name"/></xsl:attribute></a>
+    </xsl:template>
+
     <!-- copy unknown elements as-is -->
     <xsl:template match="@* | node()">
         <xsl:copy>
