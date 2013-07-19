@@ -37,7 +37,7 @@ class Html5 implements Converter
      * Constructor
      *
      * @param string $stylesheet Stylesheet to use for conversion
-     * @param \eZ\Publish\Core\FieldType\XmlText\Converter\Output[] $preConverters Array of pre-converters
+     * @param \eZ\Publish\Core\FieldType\XmlText\Converter[] $preConverters Array of pre-converters
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
      */
