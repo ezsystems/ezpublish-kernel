@@ -17,7 +17,11 @@ use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
+use eZ\Publish\Core\Persistence\Solr\Slot;
 use eZ\Publish\Core\FieldType;
+use eZ\Publish\Core\SignalSlot\Repository as SignalSlotRepository;
+use eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher;
+use eZ\Publish\Core\SignalSlot\SlotFactory\GeneralSlotFactory;
 
 /**
  * A Test Factory is used to setup the infrastructure for a tests, based on a
@@ -52,6 +56,44 @@ class LegacySolr extends Legacy
             $this->indexAll( $persistenceHandler, $searchHandler );
         }
 
+        $repository = new SignalSlotRepository(
+            $repository,
+            new DefaultSignalDispatcher(
+                new GeneralSlotFactory(
+                    array(
+                        // Attention: we are passing the NON SignalSlotted repository here because it is still under creation
+                        // this might be an issue and might require a dedicated setRepository() method.
+                        "solr-publish-version" => new Slot\PublishVersion( $repository, $persistenceHandler ),
+                        "solr-copy-content" => new Slot\CopyContent( $repository, $persistenceHandler ),
+                        "solr-delete-content" => new Slot\DeleteContent( $repository, $persistenceHandler ),
+                        "solr-delete-version" => new Slot\DeleteVersion( $repository, $persistenceHandler ),
+                        "solr-delete-location" => new Slot\DeleteLocation( $repository, $persistenceHandler ),
+                        "solr-create-user" => new Slot\CreateUser( $repository, $persistenceHandler ),
+                        "solr-create-user-group" => new Slot\CreateUserGroup( $repository, $persistenceHandler ),
+                        "solr-move-user-group" => new Slot\MoveUserGroup( $repository, $persistenceHandler ),
+                        "solr-copy-subtree" => new Slot\CopySubtree( $repository, $persistenceHandler ),
+                        "solr-move-subtree" => new Slot\MoveSubtree( $repository, $persistenceHandler ),
+                        "solr-trash" => new Slot\Trash( $repository, $persistenceHandler ),
+                        "solr-trash-recover" => new Slot\Recover( $repository, $persistenceHandler ),
+                    )
+                ),
+                array(
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\PublishVersionSignal" => array( "solr-publish-version" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\DeleteContentSignal" => array( "solr-delete-content" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\DeleteVersionSignal" => array( "solr-delete-version" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\CopyContentSignal" => array( "solr-copy-content" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\DeleteLocationSignal" => array( "solr-delete-location" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\CopySubtreeSignal" => array( "solr-copy-subtree" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\MoveSubtreeSignal" => array( "solr-move-subtree" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\TrashService\\TrashSignal" => array( "solr-trash" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\TrashService\\RecoverSignal" => array( "solr-trash-recover" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\CreateUserSignal" => array( "solr-create-user" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\CreateUserGroupSignal" => array( "solr-create-user-group" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\MoveUserGroupSignal" => array( "solr-move-user-group" ),
+                )
+            )
+        );
+
         return $repository;
     }
 
@@ -66,10 +108,15 @@ class LegacySolr extends Legacy
                 'eztext'                => new FieldType\TextLine\SearchField(),
                 'ezxmltext'             => new FieldType\TextLine\SearchField(),
                 // @todo: Define proper types for these:
+                'ezcountry'             => new FieldType\Unindexed(),
+                'ezfloat'               => new FieldType\Unindexed(),
+                'ezinteger'             => new FieldType\Unindexed(),
                 'ezuser'                => new FieldType\Unindexed(),
                 'ezimage'               => new FieldType\Unindexed(),
                 'ezboolean'             => new FieldType\Unindexed(),
                 'ezkeyword'             => new FieldType\Unindexed(),
+                'ezdate'                => new FieldType\Unindexed(),
+                'eztime'                => new FieldType\Unindexed(),
                 'ezdatetime'            => new FieldType\Unindexed(),
                 'ezinisetting'          => new FieldType\Unindexed(),
                 'ezpackage'             => new FieldType\Unindexed(),
@@ -131,9 +178,13 @@ class LegacySolr extends Legacy
                 new SortClauseVisitor\Aggregate(
                     array(
                         new SortClauseVisitor\ContentId(),
+                        new SortClauseVisitor\ContentName(),
                         new SortClauseVisitor\LocationPathString(),
                         new SortClauseVisitor\LocationDepth(),
                         new SortClauseVisitor\LocationPriority(),
+                        new SortClauseVisitor\SectionIdentifier(),
+                        new SortClauseVisitor\SectionName(),
+                        new SortClauseVisitor\DatePublished(),
                     )
                 ),
                 new FacetBuilderVisitor\Aggregate(
@@ -148,6 +199,7 @@ class LegacySolr extends Legacy
                         new FieldValueMapper\IdentifierMapper(),
                         new FieldValueMapper\MultipleIdentifierMapper(),
                         new FieldValueMapper\StringMapper(),
+                        new FieldValueMapper\MultipleStringMapper(),
                         new FieldValueMapper\IntegerMapper(),
                         new FieldValueMapper\DateMapper(),
                         new FieldValueMapper\PriceMapper(),
@@ -159,7 +211,8 @@ class LegacySolr extends Legacy
             $fieldRegistry,
             $persistenceHandler->locationHandler(),
             $persistenceHandler->contentTypeHandler(),
-            $persistenceHandler->objectStateHandler()
+            $persistenceHandler->objectStateHandler(),
+            $persistenceHandler->sectionHandler()
         );
     }
 

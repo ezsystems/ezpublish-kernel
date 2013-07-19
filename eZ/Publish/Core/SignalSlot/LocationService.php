@@ -80,6 +80,7 @@ class LocationService implements LocationServiceInterface
                 array(
                     'subtreeId' => $subtree->id,
                     'targetParentLocationId' => $targetParentLocation->id,
+                    'targetNewSubtreeId' => $returnValue->id,
                 )
             )
         );
@@ -318,7 +319,7 @@ class LocationService implements LocationServiceInterface
      */
     public function deleteLocation( Location $location )
     {
-        $returnValue = $this->service->deleteLocation( $location );
+        $this->service->deleteLocation( $location );
         $this->signalDispatcher->emit(
             new DeleteLocationSignal(
                 array(
@@ -327,7 +328,6 @@ class LocationService implements LocationServiceInterface
                 )
             )
         );
-        return $returnValue;
     }
 
     /**

@@ -30,4 +30,11 @@ class CopySubtreeSignal extends Signal
      * @var mixed
      */
     public $targetParentLocationId;
+
+    /**
+     * TargetNewSubtreeId
+     *
+     * @var mixed
+     */
+    public $targetNewSubtreeId;
 }

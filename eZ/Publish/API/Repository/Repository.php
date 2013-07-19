@@ -201,5 +201,12 @@ interface Repository
      * @throws \RuntimeException If no transaction has been started
      */
     public function rollback();
+
+    /**
+     * Enqueue an event to be triggered at commit or directly if no transaction has started
+     *
+     * @param Callable $event
+     */
+    public function commitEvent( $event );
 }
 

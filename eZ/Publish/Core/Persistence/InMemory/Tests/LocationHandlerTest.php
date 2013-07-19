@@ -249,6 +249,28 @@ class LocationHandlerTest extends HandlerTest
     }
 
     /**
+     * Test loadSubtreeIds function
+     *
+     * @covers \eZ\Publish\Core\Persistence\InMemory\LocationHandler::loadSubtreeIds
+     * @group locationHandler
+     */
+    public function testLoadSubtreeIds()
+    {
+        $locations = $this->persistenceHandler->locationHandler()->loadSubtreeIds( 56 );
+        $locationsSet = array( 56 => 54, 57 => 55, 58 => 56 );
+        $this->assertEquals( 3, count( $locations ) );
+
+        foreach ( $locations as $locationId => $contentId )
+        {
+            $this->assertTrue( isset( $locationsSet[$locationId] ) );
+            $this->assertEquals( $locationsSet[$locationId], $contentId );
+            unset( $locationsSet[$locationId] );
+        }
+
+        $this->assertEmpty( $locationsSet );
+    }
+
+    /**
      * Test create function
      *
      * @covers \eZ\Publish\Core\Persistence\InMemory\LocationHandler::create

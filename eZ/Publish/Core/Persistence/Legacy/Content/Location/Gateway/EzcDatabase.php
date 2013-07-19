@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use RuntimeException;
+use PDO;
 
 /**
  * Location gateway implementation using the zeta database component.
@@ -196,13 +197,14 @@ class EzcDatabase extends Gateway
      * Find all content in the given subtree
      *
      * @param mixed $sourceId
+     * @param bool $onlyIds
      *
      * @return array
      */
-    public function getSubtreeContent( $sourceId )
+    public function getSubtreeContent( $sourceId, $onlyIds = false )
     {
         $query = $this->handler->createSelectQuery();
-        $query->select( '*' )->from(
+        $query->select( $onlyIds ? 'node_id, contentobject_id, depth' : '*' )->from(
             $this->handler->quoteTable( 'ezcontentobject_tree' )
         );
         $this->applySubtreeLimitation( $query, $sourceId );
@@ -214,7 +216,9 @@ class EzcDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+        $results = $statement->fetchAll( $onlyIds ? ( PDO::FETCH_COLUMN | PDO::FETCH_GROUP ) : PDO::FETCH_ASSOC );
+        // array_map() is used to to map all elements stored as $results[$i][0] to $results[$i]
+        return $onlyIds ? array_map( "reset", $results ) : $results;
     }
 
     /**

@@ -241,6 +241,16 @@ class SearchHandler implements SearchHandlerInterface
     }
 
     /**
+     * Deletes a location from the index
+     *
+     * @param mixed $locationId
+     */
+    public function deleteLocation( $locationId )
+    {
+        throw new \Exception( "Not implemented yet." );
+    }
+
+    /**
      * Generate match array for use with Backend based on criteria
      *
      * @param array $criteria
