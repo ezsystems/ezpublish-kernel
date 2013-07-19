@@ -41,7 +41,7 @@ class Configuration implements EventSubscriberInterface
     private $persistenceCachePurger;
 
     /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter
+     * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator
      */
     private $urlAliasGenerator;
 
