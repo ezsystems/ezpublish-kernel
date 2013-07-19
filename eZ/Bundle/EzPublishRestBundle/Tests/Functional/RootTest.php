@@ -34,7 +34,9 @@ class RootTest extends RESTFunctionalTestCase
             $this->createHttpRequest( "GET", "/api/ezp/v2/" . uniqid( 'rest' ), '', 'Stuff+json' )
         );
         self::assertHttpResponseCodeEquals( $response, 404 );
-        self::assertArrayHasKey( 'ErrorMessage', json_decode( $response->getContent(), true ) );
+        $responseArray = json_decode( $response->getContent(), true );
+        self::assertArrayHasKey( 'ErrorMessage', $responseArray );
+        self::assertEquals( "No such route", $responseArray['ErrorMessage']['errorDescription'] );
     }
 
     public function getRandomUriSet()
