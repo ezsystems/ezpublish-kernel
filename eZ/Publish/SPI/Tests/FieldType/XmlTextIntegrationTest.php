@@ -145,11 +145,13 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
     public function getInitialValue()
     {
         $xml = new DOMDocument;
-        $xml->loadXML( '<?xml version="1.0" encoding="UTF-8"?>
+        $xml->loadXML(
+            '<?xml version="1.0" encoding="UTF-8"?>
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
   <title>This is a heading.</title>
   <para>This is a paragraph.</para>
-</article>' );
+</article>'
+        );
         return new FieldValue(
             array(
                 'data' => $xml,
@@ -169,11 +171,13 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         $xml = new DOMDocument;
-        $xml->loadXML( '<?xml version="1.0" encoding="UTF-8"?>
+        $xml->loadXML(
+            '<?xml version="1.0" encoding="UTF-8"?>
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
   <title>This is an updated heading.</title>
   <para>This is an updated paragraph.</para>
-</article>' );
+</article>'
+        );
         return new FieldValue(
             array(
                 'data' => $xml,
