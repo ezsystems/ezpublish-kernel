@@ -10,10 +10,12 @@
 namespace eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway;
 
 use eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlStorage;
 use DOMDocument;
+use RuntimeException;
 
 class LegacyStorage extends Gateway
 {
@@ -34,9 +36,9 @@ class LegacyStorage extends Gateway
         // the given class design there is no sane other option. Actually the
         // dbHandler *should* be passed to the constructor, and there should
         // not be the need to post-inject it.
-        if ( !$dbHandler instanceof \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler )
+        if ( !$dbHandler instanceof EzcDbHandler )
         {
-            throw new \RuntimeException( "Invalid dbHandler passed" );
+            throw new RuntimeException( "Invalid dbHandler passed" );
         }
 
         $this->dbHandler = $dbHandler;
@@ -47,7 +49,7 @@ class LegacyStorage extends Gateway
      *
      * @throws \RuntimeException if no connection has been set, yet.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler|\ezcDbHandler
      */
     protected function getConnection()
     {
@@ -66,46 +68,53 @@ class LegacyStorage extends Gateway
     public function getFieldData( Field $field )
     {
         if ( !$field->value->data instanceof DOMDocument )
-            return;
-
-        /** @var $linkTagsById \DOMElement[] */
-        $linkTagsById = array();
-        $linkTags = $field->value->data->getElementsByTagName( 'link' );
-        if ( $linkTags->length > 0 )
         {
-            foreach ( $linkTags as $link )
-            {
-                $urlId = $link->getAttribute( 'url_id' );
-                if ( !empty( $urlId ) )
-                    $linkTagsById[$urlId] = $link;
-            }
+            return;
+        }
 
-            if ( !empty( $linkTagsById ) )
+        $xpath = new \DOMXPath( $field->value->data );
+        $xpath->registerNamespace( "docbook", "http://docbook.org/ns/docbook" );
+        $xpathExpression = "//docbook:link[starts-with( @xlink:href, 'ezurl://' )]";
+
+        $linksById = array();
+
+        /** @var \DOMElement $link */
+        foreach ( $xpath->query( $xpathExpression ) as $link )
+        {
+            preg_match( "~^ezurl://([^#]*)?(#.*|\\s*)?$~", $link->getAttribute( "xlink:href" ), $matches );
+            list( , $urlId, $fragment ) = $matches;
+
+            if ( !empty( $urlId ) )
             {
-                foreach ( $this->getLinksUrl( $linkTagsById ) as $id => $url )
-                {
-                    $linkTagsById[$id]->setAttribute( 'url', $url );
-                }
+                $linksById[$urlId] = array( $link, $fragment );
+            }
+        }
+
+        if ( !empty( $linksById ) )
+        {
+            foreach ( $this->getLinksUrl( array_keys( $linksById ) ) as $id => $url )
+            {
+                $link = $linksById[$id][0];
+                $link->setAttribute( "xlink:href", $url . $linksById[$id][1] );
             }
         }
     }
 
     /**
-     * Fetches rows in ezurl table referenced by IDs in $linkIds set.
+     * Fetches rows in ezurl table referenced by IDs in $linkIds.
      * Returns as hash with URL id as key and corresponding URL as value.
      *
-     * @param array $linkIds Set of link Ids
+     * @param array $linkIds Array of link Ids
      *
      * @return array
      */
     private function getLinksUrl( array $linkIds )
     {
-        /** @var $q \ezcQuerySelect */
         $q = $this->getConnection()->createSelectQuery();
         $q
             ->select( "id", "url" )
             ->from( UrlStorage::URL_TABLE )
-            ->where( $q->expr->in( 'id', array_keys( $linkIds ) ) );
+            ->where( $q->expr->in( 'id', $linkIds ) );
 
         $statement = $q->prepare();
         $statement->execute();
@@ -183,7 +192,6 @@ class LegacyStorage extends Gateway
 
         if ( !empty( $linksUrls ) )
         {
-            /** @var $q \ezcQuerySelect */
             $q = $this->getConnection()->createSelectQuery();
             $q
                 ->select( "id", "url" )
@@ -205,13 +213,14 @@ class LegacyStorage extends Gateway
      * Inserts a new entry in ezurl table and returns the table last insert id
      *
      * @param string $url The URL to insert in the database
+     *
+     * @return mixed
      */
     private function insertLink( $url )
     {
         $time = time();
         $dbHandler = $this->getConnection();
 
-        /** @var $q \ezcQueryInsert */
         $q = $dbHandler->createInsertQuery();
         $q->insertInto(
             $dbHandler->quoteTable( UrlStorage::URL_TABLE )
@@ -232,7 +241,7 @@ class LegacyStorage extends Gateway
         $q->prepare()->execute();
 
         return $dbHandler->lastInsertId(
-            $dbHandler->getSequenceName( self::URL_TABLE, "id" )
+            $dbHandler->getSequenceName( UrlStorage::URL_TABLE, "id" )
         );
     }
 }
