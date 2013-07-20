@@ -27,6 +27,18 @@ class Html5 implements Converter
     protected $stylesheet;
 
     /**
+     * Array of XSL stylesheets to add to the main one, grouped by priority.
+     *
+     * @var array
+     */
+    protected $customStylesheets;
+
+    /**
+     * @var \XSLTProcessor
+     */
+    private $xsltProcessor;
+
+    /**
      * Array of converters that needs to be called before actual processing.
      *
      * @var \eZ\Publish\Core\FieldType\XmlText\Converter[]
@@ -37,13 +49,25 @@ class Html5 implements Converter
      * Constructor
      *
      * @param string $stylesheet Stylesheet to use for conversion
+     * @param array $customStylesheets Array of XSL stylesheets. Each entry consists in a hash having "path" and "priority" keys.
      * @param \eZ\Publish\Core\FieldType\XmlText\Converter[] $preConverters Array of pre-converters
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
      */
-    public function __construct( $stylesheet, array $preConverters = array() )
+    public function __construct( $stylesheet, array $customStylesheets = array(), array $preConverters = array() )
     {
         $this->stylesheet = $stylesheet;
+
+        // Grouping stylesheets by priority.
+        foreach ( $customStylesheets as $stylesheet )
+        {
+            if ( !isset( $this->customStylesheets[$stylesheet['priority']] ) )
+            {
+                $this->customStylesheets[$stylesheet['priority']] = array();
+            }
+
+            $this->customStylesheets[$stylesheet['priority']][] = $stylesheet['path'];
+        }
 
         foreach ( $preConverters as $preConverter )
         {
@@ -56,6 +80,59 @@ class Html5 implements Converter
         }
 
         $this->preConverters = $preConverters;
+    }
+
+    /**
+     * Returns the XSLTProcessor to use to transform internal XML to HTML5.
+     *
+     * @return \XSLTProcessor
+     */
+    private function getXSLTProcessor()
+    {
+        if ( isset( $this->xsltProcessor ) )
+        {
+            return $this->xsltProcessor;
+        }
+
+        $xslDoc = new DOMDocument;
+        $xslDoc->load( $this->stylesheet );
+
+        // Now loading custom xsl stylesheets dynamically.
+        // According to XSL spec, each <xsl:import> tag MUST be loaded BEFORE any other element.
+        $insertBeforeEl = $xslDoc->documentElement->firstChild;
+        foreach ( $this->getSortedCustomStylesheets() as $stylesheet )
+        {
+            $newEl = $xslDoc->createElement( 'xsl:import' );
+            $hrefAttr = $xslDoc->createAttribute( 'href' );
+            $hrefAttr->value = $stylesheet;
+            $newEl->appendChild( $hrefAttr );
+            $xslDoc->documentElement->insertBefore( $newEl, $insertBeforeEl );
+        }
+        // Now reload XSL DOM to "refresh" it.
+        $xslDoc->loadXML( $xslDoc->saveXML() );
+
+        $this->xsltProcessor = new XSLTProcessor();
+        $this->xsltProcessor->importStyleSheet( $xslDoc );
+        return $this->xsltProcessor;
+    }
+
+    /**
+     * Returns custom stylesheets to load, sorted.
+     * The order is from the lowest priority to the highest since in case of a conflict,
+     * the last loaded XSL template always wins.
+     *
+     * @return array
+     */
+    private function getSortedCustomStylesheets()
+    {
+        $sortedStylesheets = array();
+        ksort( $this->customStylesheets );
+        foreach ( $this->customStylesheets as $stylesheets )
+        {
+            $sortedStylesheets = array_merge( $sortedStylesheets, $stylesheets );
+        }
+
+        return $sortedStylesheets;
     }
 
     /**
@@ -72,11 +149,7 @@ class Html5 implements Converter
             $preConverter->convert( $xmlDoc );
         }
 
-        $xslDoc = new DOMDocument;
-        $xslDoc->load( $this->stylesheet );
-        $xsl = new XSLTProcessor();
-        $xsl->importStyleSheet( $xslDoc );
-
+        $xsl = $this->getXSLTProcessor();
         return $xsl->transformToXML( $xmlDoc );
     }
 }

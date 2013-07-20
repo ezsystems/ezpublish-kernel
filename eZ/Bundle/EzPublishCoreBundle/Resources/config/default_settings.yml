@@ -27,6 +27,15 @@ parameters:
     ezsettings.default.content.default_ttl: 60          # Default TTL cache value for content
     ezsettings.default.content.tree_root.location_id: ~ # Root locationId for routing and link generation. Useful for multisite apps with one repository.
     ezsettings.default.content.tree_root.excluded_uri_prefixes: [] # URI prefixes that are allowed to be outside the content tree
+    # Default XSL stylesheets for XmlText rendering to HTML5.
+    # Built-in stylesheets are treated as custom for the sake of extensibility.
+    ezsettings.default.content.custom_xsl:
+        -
+            path: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_core.xsl
+            priority: 0
+        -
+            path: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_custom.xsl
+            priority: 0
 
     # Cache settings
     ezsettings.default.http_cache.purge_servers: ["http://localhost/"]   # Server(s) URL(s) that will be used for purging HTTP cache with PURGE requests.
