@@ -19,7 +19,7 @@ class Html5 extends BaseHtml5Converter
 {
     public function __construct( $stylesheet, ConfigResolverInterface $configResolver, array $preConverters = array() )
     {
-        $customStylesheets = $configResolver->getParameter( 'content.custom_xsl' );
+        $customStylesheets = $configResolver->getParameter( 'fieldtypes.ezxml.custom_xsl' );
         $customStylesheets = $customStylesheets ?: array();
         parent::__construct( $stylesheet, $customStylesheets, $preConverters );
     }

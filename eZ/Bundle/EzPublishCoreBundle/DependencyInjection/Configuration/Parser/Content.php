@@ -48,16 +48,32 @@ class Content extends AbstractParser
                             ->end()
                         ->end()
                     ->end()
-                    ->arrayNode( 'custom_xsl' )
-                        ->info( 'Custom XSL stylesheets to use for XmlText transformation to HTML5. Useful for "custom tags".' )
-                        ->prototype( 'array' )
-                            ->children()
-                                ->scalarNode( 'path' )
-                                    ->info( 'Path of the XSL stylesheet to load.' )
-                                    ->example( array( 'path' => '%kernel.root_dir%/../src/Acme/TestBundle/Resources/myTag.xsl' ) )
-                                    ->isRequired()
+                ->end()
+            ->end()
+            ->arrayNode( 'fieldtypes' )
+                ->children()
+                    ->arrayNode( 'ezxml' )
+                        ->children()
+                            ->arrayNode( 'custom_tags' )
+                                ->info( 'Custom XSL stylesheets to use for XmlText transformation to HTML5. Useful for "custom tags".' )
+                                ->example(
+                                    array(
+                                        'path' => '%kernel.root_dir%/../src/Acme/TestBundle/Resources/myTag.xsl',
+                                        'priority' => 10
+                                    )
+                                )
+                                ->prototype( 'array' )
+                                    ->children()
+                                        ->scalarNode( 'path' )
+                                            ->info( 'Path of the XSL stylesheet to load.' )
+                                            ->isRequired()
+                                        ->end()
+                                        ->integerNode( 'priority' )
+                                            ->info( 'Priority in the loading order. A high value will have higher precedence in overriding XSL templates.' )
+                                            ->defaultValue( 0 )
+                                        ->end()
+                                    ->end()
                                 ->end()
-                                ->scalarNode( 'priority' )->defaultValue( 0 )->end()
                             ->end()
                         ->end()
                     ->end()
@@ -91,16 +107,19 @@ class Content extends AbstractParser
                         $container->setParameter( "ezsettings.$sa.content.tree_root.excluded_uri_prefixes", $settings['content']['tree_root']['excluded_uri_prefixes'] );
                     }
                 }
+            }
 
+            if ( !empty( $settings['fieldtypes'] ) )
+            {
                 // Workaround to be able to use registerInternalConfigArray() which only supports first level entries.
-                if ( isset( $settings['content']['custom_xsl'] ) )
+                if ( isset( $settings['fieldtypes']['ezxml']['custom_tags'] ) )
                 {
-                    $settings['content.custom_xsl'] = $settings['content']['custom_xsl'];
-                    unset( $settings['content']['custom_xsl'] );
+                    $settings['fieldtypes.ezxml.custom_xsl'] = $settings['fieldtypes']['ezxml']['custom_tags'];
+                    unset( $settings['fieldtypes']['ezxml']['custom_tags'] );
                 }
             }
         }
 
-        $this->registerInternalConfigArray( 'content.custom_xsl', $config, $container );
+        $this->registerInternalConfigArray( 'fieldtypes.ezxml.custom_xsl', $config, $container );
     }
 }
