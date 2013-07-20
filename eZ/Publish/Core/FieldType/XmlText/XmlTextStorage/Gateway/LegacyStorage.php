@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway;
 
 use eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlStorage;
@@ -104,7 +105,7 @@ class LegacyStorage extends Gateway
      *
      * @return array
      */
-    private function getLinksUrl( array $linkIds )
+    protected function getLinksUrl( array $linkIds )
     {
         /** @var $q \ezcQuerySelect */
         $q = $this->getConnection()->createSelectQuery();
@@ -137,51 +138,89 @@ class LegacyStorage extends Gateway
         if ( !$field->value->data instanceof DOMDocument )
             return;
 
-        $linksUrls = array();
-        $linkTags = $field->value->data->getElementsByTagName( 'link' );
-        if ( $linkTags->length > 0 )
+        // Get all element tag types that contain url's or object_remote_id
+        $urls = array();
+        $remoteIds = array();
+        $elements = array();
+        foreach ( array( 'link', 'embed', 'embed-inline' ) as $tagName )
         {
-            // First loop on $linkTags to populate $linksUrls
-            /** @var $link \DOMElement */
-            foreach ( $linkTags as $link )
+            $tags = $field->value->data->getElementsByTagName( $tagName );
+            if ( $tags->length === 0 )
+                continue;
+
+            // First loop on $elements to populate $urls & $remoteIds
+            /** @var $tag \DOMElement */
+            foreach ( $tags as $tag )
             {
-                if ( $link->hasAttribute( 'url' ) )
-                    $url = $link->getAttribute( 'url' );
-                else if ( $link->hasAttribute( 'href' ) )
-                    $url = $link->getAttribute( 'href' );
+                $url = null;
+                if ( $tag->hasAttribute( 'url' ) )
+                    $url = $tag->getAttribute( 'url' );
+                else if ( $tag->hasAttribute( 'href' ) )
+                    $url = $tag->getAttribute( 'href' );
+                else if ( $tag->hasAttribute( 'object_remote_id' ) )
+                    $remoteIds[$tag->getAttribute( 'object_remote_id' )] = true;
                 else
                     continue;
 
-                // Keep urls unique, might be used by several links
-                $linksUrls[$url] = true;
-            }
-
-            $linksIds = $this->getLinksId( array_keys( $linksUrls ) );
-
-            // Now loop again to insert the right value in "url_id" attribute and remove the url/href
-            /** @var $link \DOMElement */
-            foreach ( $linkTags as $link )
-            {
-                $url = null;
-                if ( $link->hasAttribute( 'url' ) )
-                    $url = $link->getAttribute( 'url' );
-                else if ( $link->hasAttribute( 'href' ) )
-                    $url = $link->getAttribute( 'href' );
-
+                // Keep url unique if it has value
                 if ( $url )
+                    $urls[$url] = true;
+
+                $elements[] = $tag;
+            }
+        }
+        unset( $tags );
+
+        // If we found some elements, fix them to point to internal ids
+        if ( !empty( $elements ) )
+        {
+            $linksIds = $this->getLinksId( array_keys( $urls ) );
+            $objectRemoteIdMap = $this->getObjectId( array_keys( $remoteIds ) );
+
+            // Now loop again to insert the right value in "url_id" attribute and fix "object_remote_id"
+            /** @var $element \DOMElement */
+            foreach ( $elements as $element )
+            {
+                if ( $element->hasAttribute( 'url' ) )
                 {
+                    $url = $element->getAttribute( 'url' );
+                    if ( !$url )
+                        throw new NotFoundException( '<link url=', $url );
+
                     // Insert url once if not already existing
                     if ( !isset( $linksIds[$url] ) )
                         $linksIds[$url] = $this->insertLink( $url );
 
-                    $link->setAttribute( 'url_id', $linksIds[$url] );
-                    $link->removeAttribute( 'url' );
-                    $link->removeAttribute( 'href' );
+                    $element->setAttribute( 'url_id', $linksIds[$url] );
+                    $element->removeAttribute( 'url' );
+                }
+                else if ( $element->hasAttribute( 'href' ) )
+                {
+                    $url = $element->getAttribute( 'href' );
+                    if ( !$url )
+                        throw new NotFoundException( '<link href=', $url );
+
+                    // Insert url once if not already existing
+                    if ( !isset( $linksIds[$url] ) )
+                        $linksIds[$url] = $this->insertLink( $url );
+
+                    $element->setAttribute( 'url_id', $linksIds[$url] );
+                    $element->removeAttribute( 'href' );
+                }
+                else if ( $element->hasAttribute( 'object_remote_id' ) )
+                {
+                    $objectRemoteId = $element->getAttribute( 'object_remote_id' );
+                    if ( !isset( $objectRemoteIdMap[$objectRemoteId] ) )
+                        throw new NotFoundException( 'object_remote_id', $objectRemoteId );
+
+                    $element->setAttribute( 'object_id', $objectRemoteIdMap[$objectRemoteId] );
+                    $element->removeAttribute( 'object_remote_id' );
                 }
             }
         }
 
-        return !empty( $linkTagsByUrl );
+        // Return true if some elements where changed
+        return !empty( $elements );
     }
 
     /**
@@ -192,7 +231,7 @@ class LegacyStorage extends Gateway
      *
      * @return array
      */
-    private function getLinksId( array $linksUrls )
+    protected function getLinksId( array $linksUrls )
     {
         $linkIds = array();
 
@@ -217,11 +256,43 @@ class LegacyStorage extends Gateway
     }
 
     /**
+     * Fetches rows in ezcontentobject table referenced by remoteIds in $linksRemoteIds array.
+     * Returns as hash with remote id as key and corresponding id as value.
+     *
+     * @param array $linksRemoteIds
+     *
+     * @return array
+     */
+    protected function getObjectId( array $linksRemoteIds )
+    {
+        $objectRemoteIdMap = array();
+
+        if ( !empty( $linksRemoteIds ) )
+        {
+            /** @var $q \ezcQuerySelect */
+            $q = $this->getConnection()->createSelectQuery();
+            $q
+                ->select( "id", "remote_id" )
+                ->from( "ezcontentobject" )
+                ->where( $q->expr->in( 'remote_id', $linksRemoteIds ) );
+
+            $statement = $q->prepare();
+            $statement->execute();
+            foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
+            {
+                $objectRemoteIdMap[$row['remote_id']] = $row['id'];
+            }
+        }
+
+        return $objectRemoteIdMap;
+    }
+
+    /**
      * Inserts a new entry in ezurl table and returns the table last insert id
      *
      * @param string $url The URL to insert in the database
      */
-    private function insertLink( $url )
+    protected function insertLink( $url )
     {
         $time = time();
         $dbHandler = $this->getConnection();
