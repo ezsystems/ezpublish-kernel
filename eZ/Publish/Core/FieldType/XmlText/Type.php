@@ -10,10 +10,9 @@
 namespace eZ\Publish\Core\FieldType\XmlText;
 
 use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\Core\FieldType\XmlText\Input;
-use eZ\Publish\Core\FieldType\XmlText\Input\EzXml;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
@@ -53,6 +52,26 @@ class Type extends FieldType
             "default" => self::TAG_PRESET_DEFAULT
         )
     );
+
+    /**
+     * @var \eZ\Publish\Core\FieldType\XmlText\ConverterDispatcher
+     */
+    protected $converterDispatcher;
+
+    /**
+     * @var \eZ\Publish\Core\FieldType\XmlText\ValidatorDispatcher
+     */
+    protected $validatorDispatcher;
+
+    /**
+     * @param \eZ\Publish\Core\FieldType\XmlText\ConverterDispatcher $converterDispatcher
+     * @param \eZ\Publish\Core\FieldType\XmlText\ValidatorDispatcher $validatorDispatcher
+     */
+    public function __construct( ConverterDispatcher $converterDispatcher, ValidatorDispatcher $validatorDispatcher )
+    {
+        $this->converterDispatcher = $converterDispatcher;
+        $this->validatorDispatcher = $validatorDispatcher;
+    }
 
     /**
      * Returns the field type identifier for this field type
@@ -128,7 +147,7 @@ class Type extends FieldType
     /**
      * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
-     * @param \eZ\Publish\Core\FieldType\XmlText\Value|\eZ\Publish\Core\FieldType\XmlText\Input|string $inputValue
+     * @param \eZ\Publish\Core\FieldType\XmlText\Value|\DOMDocument|string $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\XmlText\Value The potentially converted and structurally plausible value.
      */
@@ -137,15 +156,38 @@ class Type extends FieldType
         if ( is_string( $inputValue ) )
         {
             if ( empty( $inputValue ) )
+            {
                 $inputValue = Value::EMPTY_VALUE;
-            $inputValue = new EzXml( $inputValue );
+            }
+
+            $doc = new DOMDocument;
+            $doc->loadXML( $inputValue );
+            $inputValue = $doc;
         }
 
-        if ( $inputValue instanceof Input )
+        if ( $inputValue instanceof DOMDocument )
         {
-            $doc = new DOMDocument;
-            $doc->loadXML( $inputValue->getInternalRepresentation() );
-            $inputValue = new Value( $doc );
+            $errors = $this->validatorDispatcher->dispatch( $inputValue );
+            if ( !empty( $errors ) )
+            {
+                throw new InvalidArgumentException(
+                    "\$inputValue",
+                    "Validation of XML content failed: " . join( "\n", $errors )
+                );
+            }
+
+            $inputValue = $this->converterDispatcher->dispatch( $inputValue );
+
+            $errors = $this->validatorDispatcher->dispatch( $inputValue );
+            if ( !empty( $errors ) )
+            {
+                throw new InvalidArgumentException(
+                    "\$inputValue",
+                    "Validation of XML content failed: " . join( "\n", $errors )
+                );
+            }
+
+            $inputValue = new Value( $inputValue );
         }
 
         return $inputValue;
@@ -202,9 +244,7 @@ class Type extends FieldType
             throw new RuntimeException( "'xml' index is missing in hash." );
         }
 
-        $doc = new DOMDocument;
-        $doc->loadXML( $hash['xml'] );
-        return new Value( $doc );
+        return $this->acceptValue( $hash['xml'] );
     }
 
     /**
@@ -241,9 +281,9 @@ class Type extends FieldType
     {
         return new FieldValue(
             array(
-                'data'         => $value->xml,
+                'data' => $value->xml,
                 'externalData' => null,
-                'sortKey'      => $this->getSortInfo( $value )
+                'sortKey' => $this->getSortInfo( $value )
             )
         );
     }

@@ -57,6 +57,15 @@ parameters:
         - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/latin.tr.result
         - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/search.tr.result
 
+    # XmlText XSLT converters
+    ezpublish.fieldType.ezxmltext.converter.xslt_converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText\XsltConverter
+    ezpublish.fieldType.ezxmltext.converter.ezxmlToDocbook.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/XmlText/Resources/stylesheets/ezxml_docbook.xsl
+    ezpublish.fieldType.ezxmltext.converter.docbookToEzxml.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/XmlText/Resources/stylesheets/docbook_ezxml.xsl
+
+    # XmlText XSD validator
+    ezpublish.fieldType.ezxmltext.validator.ezxml.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText\XsdValidator
+    ezpublish.fieldType.ezxmltext.validator.ezxml.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/XmlText/Resources/schemas/ezxml.xsd
+
     # Value converters
     ezpublish.fieldType.ezauthor.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Author
     ezpublish.fieldType.ezbinaryfile.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\BinaryFile
@@ -298,10 +307,26 @@ services:
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: eztext, lazy: true, callback: '::create'}
 
+    ezpublish.fieldType.ezxmltext.converter.ezxmlToDocbook:
+        class: %ezpublish.fieldType.ezxmltext.converter.xslt_converter.class%
+        arguments: [%ezpublish.fieldType.ezxmltext.converter.ezxmlToDocbook.resources%]
+
+    ezpublish.fieldType.ezxmltext.converter.docbookToEzxml:
+        class: %ezpublish.fieldType.ezxmltext.converter.xslt_converter.class%
+        arguments: [%ezpublish.fieldType.ezxmltext.converter.docbookToEzxml.resources%]
+
+    ezpublish.fieldType.ezxmltext.validator.ezxml:
+        class: %ezpublish.fieldType.ezxmltext.validator.ezxml.class%
+        arguments: [%ezpublish.fieldType.ezxmltext.validator.ezxml.resources%]
+
     ezpublish.fieldType.ezxmltext.converter:
         class: %ezpublish.fieldType.ezxmltext.converter.class%
+        arguments:
+            - @ezpublish.fieldType.ezxmltext.converter.docbookToEzxml
+            - @ezpublish.fieldType.ezxmltext.converter.ezxmlToDocbook
+            - @ezpublish.fieldType.ezxmltext.validator.ezxml
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezxmltext, lazy: true, callback: '::create'}
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezxmltext}
 
     ezpublish.fieldType.ezxmltext.storage_gateway:
         class: %ezpublish.fieldType.ezxmltext.storage_gateway.class%
