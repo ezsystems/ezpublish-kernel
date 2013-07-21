@@ -68,18 +68,9 @@
 
   <xsl:template name="link.href">
     <link>
-      <xsl:choose>
-        <xsl:when test="starts-with( @href, '#' ) or starts-with( @href, 'ezurl://' ) or starts-with( @href, 'ezlocation://' ) or starts-with( @href, 'ezcontent://' )">
-          <xsl:attribute name="xlink:href">
-            <xsl:value-of select="@href"/>
-          </xsl:attribute>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:message terminate="yes">
-            Unhandled link type
-          </xsl:message>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:attribute name="xlink:href">
+        <xsl:value-of select="@href"/>
+      </xsl:attribute>
       <xsl:attribute name="xlink:show">
         <xsl:choose>
           <xsl:when test="@target and @target = '_blank'">

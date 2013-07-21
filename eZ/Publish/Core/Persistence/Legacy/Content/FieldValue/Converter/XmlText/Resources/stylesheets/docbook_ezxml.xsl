@@ -126,9 +126,9 @@
         </xsl:when>
         <xsl:when test="starts-with( @xlink:href, '#' )"/>
         <xsl:otherwise>
-          <xsl:message terminate="yes">
-            Unhandled link type
-          </xsl:message>
+          <xsl:attribute name="href">
+            <xsl:value-of select="substring-before( concat( @xlink:href, '#' ), '#' )"/>
+          </xsl:attribute>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:if test="contains( @xlink:href, '#' )">

@@ -163,6 +163,9 @@
           <xs:attribute name="view"/>
           <xs:attributeGroup ref="xhtml:id"/>
           <xs:attribute ref="xhtml:title"/>
+          <!-- Next two are transformed to url_id by storage gateway in input and back to url in output -->
+          <xs:attribute name="href" type="xs:string"/>
+          <xs:attribute name="url" type="xs:string"/>
           <xs:anyAttribute namespace="http://ez.no/namespaces/ezpublish3/custom/" processContents="skip"/>
         </xs:complexType>
       </xs:element>

@@ -14,7 +14,6 @@ use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlStorage;
-use DOMDocument;
 use RuntimeException;
 
 class LegacyStorage extends Gateway
@@ -67,16 +66,12 @@ class LegacyStorage extends Gateway
      */
     public function getFieldData( Field $field )
     {
-        if ( !$field->value->data instanceof DOMDocument )
-        {
-            return;
-        }
-
         $xpath = new \DOMXPath( $field->value->data );
         $xpath->registerNamespace( "docbook", "http://docbook.org/ns/docbook" );
         $xpathExpression = "//docbook:link[starts-with( @xlink:href, 'ezurl://' )]";
 
         $linksById = array();
+        $fragmentsById = array();
 
         /** @var \DOMElement $link */
         foreach ( $xpath->query( $xpathExpression ) as $link )
@@ -86,17 +81,26 @@ class LegacyStorage extends Gateway
 
             if ( !empty( $urlId ) )
             {
-                $linksById[$urlId] = array( $link, $fragment );
+                $linksById[$urlId] = $link;
+                $fragmentsById[$urlId] = $fragment;
             }
         }
 
-        if ( !empty( $linksById ) )
+        $linkUrls = $this->getLinkUrls( array_keys( $linksById ) );
+
+        foreach ( $linksById as $id => $link )
         {
-            foreach ( $this->getLinksUrl( array_keys( $linksById ) ) as $id => $url )
+            if ( isset( $linkUrls[$id] ) )
             {
-                $link = $linksById[$id][0];
-                $link->setAttribute( "xlink:href", $url . $linksById[$id][1] );
+                $href = $linkUrls[$id] . $fragmentsById[$id];
             }
+            else
+            {
+                // URL entry is missing in DB
+                $href = "";
+            }
+
+            $link->setAttribute( "xlink:href", $href );
         }
     }
 
@@ -108,20 +112,24 @@ class LegacyStorage extends Gateway
      *
      * @return array
      */
-    private function getLinksUrl( array $linkIds )
+    private function getLinkUrls( array $linkIds )
     {
-        $q = $this->getConnection()->createSelectQuery();
-        $q
-            ->select( "id", "url" )
-            ->from( UrlStorage::URL_TABLE )
-            ->where( $q->expr->in( 'id', $linkIds ) );
-
-        $statement = $q->prepare();
-        $statement->execute();
         $linkUrls = array();
-        foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
+
+        if ( !empty( $linkIds ) )
         {
-            $linkUrls[$row['id']] = $row['url'];
+            $q = $this->getConnection()->createSelectQuery();
+            $q
+                ->select( "id", "url" )
+                ->from( UrlStorage::URL_TABLE )
+                ->where( $q->expr->in( 'id', $linkIds ) );
+
+            $statement = $q->prepare();
+            $statement->execute();
+            foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
+            {
+                $linkUrls[$row['id']] = $row['url'];
+            }
         }
 
         return $linkUrls;
@@ -137,45 +145,45 @@ class LegacyStorage extends Gateway
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field )
     {
-        if ( !$field->value->data instanceof DOMDocument )
-            return;
+        $xpath = new \DOMXPath( $field->value->data );
+        $xpath->registerNamespace( "docbook", "http://docbook.org/ns/docbook" );
+        $xpathExpression = "//docbook:link[not(" .
+            "starts-with( @xlink:href, 'ezurl://' )" .
+            "or starts-with( @xlink:href, 'ezcontent://' )" .
+            "or starts-with( @xlink:href, 'ezlocation://' )" .
+            "or starts-with( @xlink:href, 'ezremote://' )" .
+            "or starts-with( @xlink:href, '#' ) )]";
 
-        $linksUrls = array();
-        $linkTagsByUrl = array();
-        $linkTags = $field->value->data->getElementsByTagName( 'link' );
-        if ( $linkTags->length > 0 )
+        $linksByUrl = array();
+        $fragmentsByUrl = array();
+
+        /** @var \DOMElement $link */
+        foreach ( $xpath->query( $xpathExpression ) as $link )
         {
-            // First loop on $linkTags to populate $linksUrls
-            /** @var $link \DOMElement */
-            foreach ( $linkTags as $link )
-            {
-                if ( $link->hasAttribute( 'url' ) )
-                    $url = $link->getAttribute( 'url' );
-                else if ( $link->hasAttribute( 'href' ) )
-                    $url = $link->getAttribute( 'href' );
-                else
-                    continue;
+            preg_match( "~^([^#]*)?(#.*|\\s*)?$~", $link->getAttribute( "xlink:href" ), $matches );
+            list( , $url, $fragment ) = $matches;
 
-                $linksUrls[] = $url;
-                $linkTagsByUrl[$url] = $link;
-            }
-
-            $linksIds = $this->getLinksId( $linksUrls );
-
-            // Now loop against $linkTagsByUrl to insert the right value in "url_id" attribute
-            /** @var $link \DOMElement */
-            foreach ( $linkTagsByUrl as $url => $link )
-            {
-                if ( isset( $linksIds[$url] ) )
-                    $linkId = $linksIds[$url];
-                else
-                    $linkId = $this->insertLink( $url );
-
-                $link->setAttribute( 'url_id', $linkId );
-                $link->removeAttribute( 'url' );
-                $link->removeAttribute( 'href' );
-            }
+            $linksByUrl[$url] = $link;
+            $fragmentsByUrl[$url] = $fragment;
         }
+
+        $linksIds = $this->getLinkIds( array_keys( $linksByUrl ) );
+
+        foreach ( $linksByUrl as $url => $link )
+        {
+            if ( isset( $linksIds[$url] ) )
+            {
+                $linkId = $linksIds[$url];
+            }
+            else
+            {
+                $linkId = $this->insertLink( $url );
+            }
+
+            $link->setAttribute( "xlink:href", "ezurl://{$linkId}{$fragmentsByUrl[$url]}" );
+        }
+
+        return !empty( $linksByUrl );
     }
 
     /**
@@ -186,7 +194,7 @@ class LegacyStorage extends Gateway
      *
      * @return array
      */
-    private function getLinksId( array $linksUrls )
+    private function getLinkIds( array $linksUrls )
     {
         $linkIds = array();
 
