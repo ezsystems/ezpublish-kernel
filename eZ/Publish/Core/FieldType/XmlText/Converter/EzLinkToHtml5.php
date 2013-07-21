@@ -72,8 +72,8 @@ class EzLinkToHtml5 implements Converter
             {
                 try
                 {
-                    $content = $this->contentService->loadContent( $id );
-                    $location = $this->locationService->loadLocation( $content->contentInfo->mainLocationId );
+                    $contentInfo = $this->contentService->loadContentInfo( $id );
+                    $location = $this->locationService->loadLocation( $contentInfo->mainLocationId );
                 }
                 catch ( APINotFoundException $e )
                 {

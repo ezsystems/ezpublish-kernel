@@ -348,15 +348,9 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
         $locationService = $this->getMockLocationService();
         $urlAliasService = $this->getMockUrlAliasService();
 
-        $content = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Content' );
         $contentInfo = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\ContentInfo' );
         $location = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Location' );
         $urlAlias = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\URLAlias' );
-
-        $content->expects( $this->once() )
-            ->method( '__get' )
-            ->with( $this->equalTo( 'contentInfo' ) )
-            ->will( $this->returnValue( $contentInfo ) );
 
         $contentInfo->expects( $this->once() )
             ->method( '__get' )
@@ -364,9 +358,9 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $locationId ) );
 
         $contentService->expects( $this->any() )
-            ->method( 'loadContent' )
+            ->method( 'loadContentInfo' )
             ->with( $this->equalTo( $contentId ) )
-            ->will( $this->returnValue( $content ) );
+            ->will( $this->returnValue( $contentInfo ) );
 
         $locationService->expects( $this->once() )
             ->method( 'loadLocation' )
@@ -455,7 +449,7 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
             ->with( $this->equalTo( $logMessage ) );
 
         $contentService->expects( $this->once() )
-            ->method( 'loadContent' )
+            ->method( 'loadContentInfo' )
             ->with( $this->equalTo( $contentId ) )
             ->will( $this->throwException( $exception ) );
 
