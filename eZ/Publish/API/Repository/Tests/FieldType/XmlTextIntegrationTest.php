@@ -37,30 +37,22 @@ class XmlTextIntegrationTest extends RelationBaseIntegrationTest
         $this->createdDOMValue = new DOMDocument;
         $this->createdDOMValue->loadXML(
 <<<EOT
-<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
-<paragraph>Example</paragraph>
-<paragraph><link node_id="58">link1</link></paragraph>
-<paragraph><link object_id="54">link2</link></paragraph>
-<paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
-    <embed view="embed" size="medium" node_id="60" custom:offset="0" custom:limit="5"/>
-    <embed view="embed" size="medium" object_id="56" custom:offset="0" custom:limit="5"/>
-</paragraph>
-</section>
+<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+    <para><link xlink:href="ezlocation://58" xlink:show="none">link1</link></para>
+    <para><link xlink:href="ezcontent://54" xlink:show="none">link2</link></para>
+</article>
 EOT
         );
 
         $this->updatedDOMValue = new DOMDocument;
         $this->updatedDOMValue->loadXML(
 <<<EOT
-<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
-<paragraph>Example 2</paragraph>
-<paragraph><link node_id="60">link1</link></paragraph>
-<paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
-    <embed view="embed" size="medium" object_id="56" custom:offset="0" custom:limit="5"/>
-</paragraph>
-</section>
+<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+    <para><link xlink:href="ezlocation://60" xlink:show="none">link1</link></para>
+    <para><link xlink:href="ezcontent://56" xlink:show="none">link2</link></para>
+</article>
 EOT
         );
     }
@@ -89,20 +81,6 @@ EOT
                     "destinationContentInfo" => $contentService->loadContentInfo( 54 )
                 )
             ),
-            new Relation(
-                array(
-                    "type" => Relation::EMBED,
-                    "sourceContentInfo" => $content->contentInfo,
-                    "destinationContentInfo" => $contentService->loadContentInfo( 58 )
-                )
-            ),
-            new Relation(
-                array(
-                    "type" => Relation::EMBED,
-                    "sourceContentInfo" => $content->contentInfo,
-                    "destinationContentInfo" => $contentService->loadContentInfo( 56 )
-                )
-            )
         );
     }
 
@@ -125,7 +103,7 @@ EOT
             ),
             new Relation(
                 array(
-                    "type" => Relation::EMBED,
+                    "type" => Relation::LINK,
                     "sourceContentInfo" => $content->contentInfo,
                     "destinationContentInfo" => $contentService->loadContentInfo( 56 )
                 )
@@ -222,6 +200,8 @@ EOT
     /**
      * Get initial field data for valid object creation
      *
+     * @todo add embeds when implemented
+     *
      * @return mixed
      */
     public function getValidCreationFieldData()
@@ -229,16 +209,11 @@ EOT
         $doc = new DOMDocument;
         $doc->loadXML(
 <<<EOT
-<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
-<paragraph>Example</paragraph>
-<paragraph><link node_id="58">link1</link></paragraph>
-<paragraph><link object_id="54">link2</link></paragraph>
-<paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
-    <embed view="embed" size="medium" node_id="60" custom:offset="0" custom:limit="5"/>
-    <embed view="embed" size="medium" object_id="56" custom:offset="0" custom:limit="5"/>
-</paragraph>
-</section>
+<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+    <para><link xlink:href="ezlocation://58" xlink:show="none">link1</link></para>
+    <para><link xlink:href="ezcontent://54" xlink:show="none">link2</link></para>
+</article>
 EOT
         );
         return new XmlTextValue( $doc );
@@ -406,10 +381,11 @@ EOT
         $xml = new DOMDocument;
         $xml->loadXML(
 <<<EOT
-<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
-<paragraph>Example</paragraph>
-</section>
+<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+    <title>Some text</title>
+    <para>Foobar</para>
+</article>
 EOT
         );
         return array(
@@ -432,11 +408,15 @@ EOT
         return array(
             array(
                 array(
-                    'xml' => '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
-<paragraph>Foobar</paragraph>
-</section>
-'
+                    'xml' =>
+<<<EOT
+<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+    <title>Some text</title>
+    <para>Foobar</para>
+</article>
+
+EOT
                 )
             )
         );
@@ -466,7 +446,12 @@ EOT
     public function providerForTestIsEmptyValue()
     {
         $doc = new DOMDocument;
-        $doc->loadXML( "<section></section>" );
+        $doc->loadXML(
+<<<EOT
+<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0"/>
+EOT
+        );
 
         return array(
             array( new XmlTextValue ),
@@ -477,9 +462,21 @@ EOT
     public function providerForTestIsNotEmptyValue()
     {
         $doc = new DOMDocument;
-        $doc->loadXML( "<section> </section>" );
+        $doc->loadXML(
+<<<EOT
+<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0"> </article>
+EOT
+        );
         $doc2 = new DOMDocument;
-        $doc2->loadXML( "<section><paragraph></paragraph></section>" );
+        $doc2->loadXML(
+<<<EOT
+<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+    <para/>
+</article>
+EOT
+        );
         return array(
             array(
                 $this->getValidCreationFieldData()
