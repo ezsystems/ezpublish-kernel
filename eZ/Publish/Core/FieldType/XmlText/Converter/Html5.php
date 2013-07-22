@@ -31,7 +31,7 @@ class Html5 implements Converter
      *
      * @var array
      */
-    protected $customStylesheets;
+    protected $customStylesheets = array();
 
     /**
      * @var \XSLTProcessor
