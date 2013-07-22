@@ -17,7 +17,7 @@ class InstantCachePurgerTest extends PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $purgeClient;
+    protected $purgeClient;
 
     protected function setUp()
     {
