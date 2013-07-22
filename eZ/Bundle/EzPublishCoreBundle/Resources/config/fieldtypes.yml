@@ -353,6 +353,7 @@ services:
         class: %ezpublish.fieldType.ezxmltext.validator.xsd_validator.class%
         arguments: [%ezpublish.fieldType.ezxmltext.validator.xsd_validator.docbook.resources%]
 
+    # @todo
     #ezpublish.fieldType.ezxmltext.validator.xsd_validator.ezxhtml5:
     #    class: %ezpublish.fieldType.ezxmltext.validator.xsd_validator.class%
     #    arguments: [%ezpublish.fieldType.ezxmltext.validator.xsd_validator.ezxhtml5.resources%]
@@ -362,7 +363,7 @@ services:
         arguments:
             -
                 http://docbook.org/ns/docbook: @ezpublish.fieldType.ezxmltext.validator.xsd_validator.docbook
-                #http://ez.no/namespaces/ezpublish5/xhtml5: @ezpublish.fieldType.ezxmltext.validator.xsd_validator.ezxhtml5
+                http://ez.no/namespaces/ezpublish5/xhtml5: null
 
     ezpublish.fieldType.parameterProviderRegistry:
         class: %ezpublish.fieldType.parameterProviderRegistry.class%

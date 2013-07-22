@@ -26,11 +26,11 @@ class ValidatorDispatcher
     protected $mapping = array();
 
     /**
-     * @param \eZ\Publish\Core\FieldType\XmlText\Validator[] $converterMap
+     * @param \eZ\Publish\Core\FieldType\XmlText\Validator[] $validatorMap
      */
-    public function __construct( $converterMap )
+    public function __construct( $validatorMap )
     {
-        foreach ( $converterMap as $namespace => $validator )
+        foreach ( $validatorMap as $namespace => $validator )
         {
             $this->addValidator( $namespace, $validator );
         }
@@ -42,7 +42,7 @@ class ValidatorDispatcher
      * @param string $namespace
      * @param \eZ\Publish\Core\FieldType\XmlText\Validator $validator
      */
-    public function addValidator( $namespace, Validator $validator )
+    public function addValidator( $namespace, Validator $validator = null )
     {
         $this->mapping[$namespace] = $validator;
     }
@@ -69,14 +69,12 @@ class ValidatorDispatcher
         {
             if ( $documentNamespace === $namespace )
             {
+                if ( $validator === null )
+                {
+                    return array();
+                }
                 return $validator->validate( $document );
             }
-        }
-
-        // @todo add schema for ezxhtml5
-        if ( $documentNamespace === "http://ez.no/namespaces/ezpublish5/xhtml5" )
-        {
-            return array();
         }
 
         throw new NotFoundException( "Validator", $documentNamespace );
