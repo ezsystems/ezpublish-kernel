@@ -10,8 +10,12 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType;
-use eZ\Publish\Core\FieldType\XmlText\Input\EzXml;
+use eZ\Publish\Core\FieldType\XmlText\Value;
+use eZ\Publish\Core\FieldType\XmlText\ConverterDispatcher;
+use eZ\Publish\Core\FieldType\XmlText\ValidatorDispatcher;
+use eZ\Publish\Core\FieldType\XmlText\Validator;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use Exception;
 use DOMDocument;
@@ -37,8 +41,14 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
     protected function getFieldType()
     {
         return new XmlTextType(
-            $this->getValidatorServiceMock(),
-            $this->getFieldTypeToolsMock()
+            new ConverterDispatcher( array( "http://docbook.org/ns/docbook" => null ) ),
+            new ValidatorDispatcher(
+                array(
+                    "http://docbook.org/ns/docbook" => new Validator(
+                        $this->getAbsolutePath( "eZ/Publish/Core/FieldType/XmlText/Resources/schemas/docbook/docbook.xsd" )
+                    )
+                )
+            )
         );
     }
 
@@ -47,9 +57,9 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
      */
     public function testValidatorConfigurationSchema()
     {
-        $ft = $this->getFieldType();
+        $fieldType = $this->getFieldType();
         self::assertEmpty(
-            $ft->getValidatorConfigurationSchema(),
+            $fieldType->getValidatorConfigurationSchema(),
             "The validator configuration schema does not match what is expected."
         );
     }
@@ -59,7 +69,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
      */
     public function testSettingsSchema()
     {
-        $ft = $this->getFieldType();
+        $fieldType = $this->getFieldType();
         self::assertSame(
             array(
                 "numRows" => array(
@@ -71,7 +81,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
                     "default" => XmlTextType::TAG_PRESET_DEFAULT
                 ),
             ),
-            $ft->getSettingsSchema(),
+            $fieldType->getSettingsSchema(),
             "The settings schema does not match what is expected."
         );
     }
@@ -85,36 +95,86 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
         $this->getFieldType()->acceptValue( $this->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\Value' )->disableOriginalConstructor()->getMock() );
     }
 
+    public static function providerForTestAcceptValueValidFormat()
+    {
+        return array(
+
+            array(
+                $xml = '<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+  <title>This is a heading.</title>
+  <para>This is a paragraph.</para>
+</article>
+'
+            ),
+        );
+    }
+
     /**
      * @covers \eZ\Publish\Core\FieldType\Author\Type::acceptValue
      * @dataProvider providerForTestAcceptValueValidFormat
      */
     public function testAcceptValueValidFormat( $input )
     {
-        $fieldType = new XmlTextType( $this->getValidatorServiceMock(), $this->getFieldTypeToolsMock() );
+        $fieldType = $this->getFieldType();
         $fieldType->acceptValue( $input );
+    }
+
+    public static function providerForTestAcceptValueInvalidFormat()
+    {
+        return array(
+
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+  <h1>This is a heading.</h1>
+</article>',
+                new InvalidArgumentException(
+                    "\$inputValue",
+                    "Validation of XML content failed: Error in 3:0: Element '{http://docbook.org/ns/docbook}h1': This element is not expected. Expected is one of ( {http://docbook.org/ns/docbook}title, {http://docbook.org/ns/docbook}titleabbrev, {http://docbook.org/ns/docbook}subtitle, {http://docbook.org/ns/docbook}info, {http://docbook.org/ns/docbook}glossary, {http://docbook.org/ns/docbook}bibliography, {http://docbook.org/ns/docbook}index, {http://docbook.org/ns/docbook}toc, {http://docbook.org/ns/docbook}appendix, {http://docbook.org/ns/docbook}acknowledgements ).."
+                )
+            ),
+            array(
+                'This is not XML at all!',
+                new InvalidArgumentException(
+                    "\$inputValue",
+                    "Could not create XML document: Start tag expected, '<' not found"
+                )
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?><unknown xmlns="http://www.w3.org/2013/foobar"><format /></unknown>',
+                new NotFoundException(
+                    "Validator",
+                    "http://www.w3.org/2013/foobar"
+                )
+            ),
+        );
     }
 
     /**
      * @covers \eZ\Publish\Core\FieldType\Author\Type::acceptValue
      * @dataProvider providerForTestAcceptValueInvalidFormat
      */
-    public function testAcceptValueInvalidFormat( $input, $errorMessage )
+    public function testAcceptValueInvalidFormat( $input, Exception $expectedException )
     {
         try
         {
-            $fieldType = new XmlTextType( $this->getValidatorServiceMock(), $this->getFieldTypeToolsMock() );
+            $fieldType = $this->getFieldType();
             $fieldType->acceptValue( $input );
             $this->fail( "An InvalidArgumentException was expected! None thrown." );
         }
         catch ( InvalidArgumentException $e )
         {
-            $this->assertEquals( $errorMessage, $e->getMessage() );
+            $this->assertEquals( $expectedException->getMessage(), $e->getMessage() );
+        }
+        catch ( NotFoundException $e )
+        {
+            $this->assertEquals( $expectedException->getMessage(), $e->getMessage() );
         }
         catch ( Exception $e )
         {
             $this->fail(
-                "An InvalidArgumentException was expected! " . get_class( $e ) . " thrown with message: " . $e->getMessage()
+                "Unexpected exception thrown! " . get_class( $e ) . " thrown with message: " . $e->getMessage()
             );
         }
     }
@@ -124,93 +184,41 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
      */
     public function testToPersistenceValue()
     {
-        $xmlData = '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">Header 1</header></section>';
-        $xmlDoc = new DOMDocument;
-        $xmlDoc->loadXML( $xmlData );
-        // @todo Do one per value class
-        $ft = $this->getFieldType();
+        $xmlString = '<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+  <title>This is a heading.</title>
+  <para>This is a paragraph.</para>
+</article>
+';
 
-        $fieldValue = $ft->toPersistenceValue( $ft->acceptValue( $xmlData ) );
+        $fieldType = $this->getFieldType();
+        $fieldValue = $fieldType->toPersistenceValue( $fieldType->acceptValue( $xmlString ) );
 
         self::assertInstanceOf( 'DOMDocument', $fieldValue->data );
-        self::assertSame( $xmlDoc->saveXML(), $fieldValue->data->saveXML() );
-    }
-
-    public static function providerForTestAcceptValueValidFormat()
-    {
-        return array(
-
-            array(
-                $xml = '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">This is a piece of text</header></section>',
-            ),
-            array( new EzXml( $xml ) ),
-
-            array(
-                $xml = '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
-            ),
-            array( new EzXml( $xml ) ),
-        );
-    }
-
-    public static function providerForTestAcceptValueInvalidFormat()
-    {
-        return array(
-
-            array(
-                '<?xml version="1.0" encoding="utf-8"?>
-<section><h1>This is a piece of text</h1></section>',
-                "Argument 'xmlString' is invalid: Validation of XML content failed: Element 'h1': This element is not expected. Expected is one of ( section, paragraph, header )."
-            ),
-
-            array(
-                'This is not XML at all!',
-                "Argument 'xmlString' is invalid: Validation of XML content failed: Start tag expected, '<' not found\nThe document has no document element."
-            ),
-
-            array(
-                '<unknown><format /></unknown>',
-                "Argument 'xmlString' is invalid: Validation of XML content failed: Element 'unknown': No matching global declaration available for the validation root."
-            ),
-        );
+        self::assertSame( $xmlString, $fieldValue->data->saveXML() );
     }
 
     /**
      * @covers \eZ\Publish\Core\FieldType\XmlText\Type::getName
      * @dataProvider providerForTestGetName
      */
-    public function testGetNamePassingValue( $xml, $value )
+    public function testGetName( $xmlString, $expectedName )
     {
-        $ft = $this->getFieldType();
+        $document = new DOMDocument;
+        $document->loadXML( $xmlString );
+        $value = new Value( $document );
+
+        $fieldType = $this->getFieldType();
         $this->assertEquals(
-            $value,
-            $ft->getName( $ft->acceptValue( $xml ) )
+            $expectedName,
+            $fieldType->getName( $value )
         );
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\XmlText\Type::getName
-     * @dataProvider providerForTestGetName
+     * @todo format does not really matter for the method tested, but the fixtures here should be replaced
+     * by valid docbook anyway
      */
-    public function testGetNamePassingXML( $xml, $value )
-    {
-        $ft = $this->getFieldType();
-        $this->assertEquals(
-            $value,
-            $ft->getName(
-                $ft->acceptValue( $xml )
-            )
-        );
-    }
-
     public static function providerForTestGetName()
     {
         return array(
@@ -298,34 +306,26 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @todo handle embeds when implemented
      * @covers \eZ\Publish\Core\FieldType\XmlText\Type::getRelations
      */
     public function testGetRelations()
     {
         $xml =
 <<<EOT
-<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
-    <paragraph><link node_id="72">link1</link></paragraph>
-    <paragraph><link node_id="61">link2</link></paragraph>
-    <paragraph><link node_id="61">link3</link></paragraph>
-    <paragraph><link object_id="70">link4</link></paragraph>
-    <paragraph><link object_id="75">link5</link></paragraph>
-    <paragraph><link object_id="75">link6</link></paragraph>
-    <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
-        <embed view="embed" size="medium" node_id="52" custom:offset="0" custom:limit="5"/>
-        <embed view="embed" size="medium" node_id="42" custom:offset="0" custom:limit="5"/>
-        <embed view="embed" size="medium" node_id="52" custom:offset="0" custom:limit="5"/>
-        <embed view="embed" size="medium" object_id="72" custom:offset="0" custom:limit="5"/>
-        <embed view="embed" size="medium" object_id="74" custom:offset="0" custom:limit="5"/>
-        <embed view="embed" size="medium" object_id="72" custom:offset="0" custom:limit="5"/>
-    </paragraph>
-</section>
+<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+    <title>Some text</title>
+    <para><link xlink:href="ezlocation://72">link1</link></para>
+    <para><link xlink:href="ezlocation://61">link2</link></para>
+    <para><link xlink:href="ezlocation://61">link3</link></para>
+    <para><link xlink:href="ezcontent://70">link4</link></para>
+    <para><link xlink:href="ezcontent://75">link5</link></para>
+    <para><link xlink:href="ezcontent://75">link6</link></para>
+</article>
 EOT;
 
-        $ft = $this->getFieldType();
+        $fieldType = $this->getFieldType();
         $this->assertEquals(
             array(
                 Relation::LINK => array(
@@ -333,11 +333,35 @@ EOT;
                     "contentIds" => array( 70, 75 ),
                 ),
                 Relation::EMBED => array(
-                    "locationIds" => array( 52, 42 ),
-                    "contentIds" => array( 72, 74 ),
+                    "locationIds" => array(),
+                    "contentIds" => array(),
                 ),
             ),
-            $ft->getRelations( $ft->acceptValue( $xml ) )
+            $fieldType->getRelations( $fieldType->acceptValue( $xml ) )
         );
+    }
+
+    /**
+     * @param string $relativePath
+     *
+     * @return string
+     */
+    protected function getAbsolutePath( $relativePath )
+    {
+        return self::getInstallationDir() . "/" . $relativePath;
+    }
+
+    /**
+     * @return string
+     */
+    static protected function getInstallationDir()
+    {
+        static $installDir = null;
+        if ( $installDir === null )
+        {
+            $config = require 'config.php';
+            $installDir = $config['service']['parameters']['install_dir'];
+        }
+        return $installDir;
     }
 }
