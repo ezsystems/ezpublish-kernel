@@ -31,15 +31,41 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    private $xmlText;
+    private $ezxmlString;
+
+    /**
+     * @var string
+     */
+    private $docbookString;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->converter = new XmlTextConverter;
-        $this->xmlText = <<<EOT
-<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>Some paragraph content</paragraph></section>
+        $this->converter = new XmlTextConverter(
+            new XmlTextConverter\XsltConverter(
+                $this->getAbsolutePath( "eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/XmlText/Resources/stylesheets/docbook_ezxml.xsl" )
+            ),
+            new XmlTextConverter\XsltConverter(
+                $this->getAbsolutePath( "eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/XmlText/Resources/stylesheets/ezxml_docbook.xsl" )
+            ),
+            new XmlTextConverter\XsdValidator(
+                $this->getAbsolutePath( "eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/XmlText/Resources/schemas/ezxml.xsd" )
+            )
+        );
+        $this->ezxmlString = <<<EOT
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+  <header>This is a heading.</header>
+  <paragraph>This is a paragraph.</paragraph>
+</section>
+
+EOT;
+        $this->docbookString = <<<EOT
+<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+  <title>This is a heading.</title>
+  <para>This is a paragraph.</para>
+</article>
 
 EOT;
     }
@@ -57,11 +83,11 @@ EOT;
     {
         $value = new FieldValue;
         $value->data = new DOMDocument;
-        $value->data->loadXML( $this->xmlText );
+        $value->data->loadXML( $this->docbookString );
         $storageFieldValue = new StorageFieldValue;
 
         $this->converter->toStorageValue( $value, $storageFieldValue );
-        self::assertSame( $value->data->saveXML(), $storageFieldValue->dataText );
+        self::assertSame( $this->ezxmlString, $storageFieldValue->dataText );
     }
 
     /**
@@ -70,10 +96,34 @@ EOT;
     public function testToFieldValue()
     {
         $storageFieldValue = new StorageFieldValue;
-        $storageFieldValue->dataText = $this->xmlText;
+        $storageFieldValue->dataText = $this->ezxmlString;
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertSame( $storageFieldValue->dataText, $fieldValue->data->saveXML() );
+        self::assertSame( $this->docbookString, $fieldValue->data->saveXML() );
+    }
+
+    /**
+     * @param string $relativePath
+     *
+     * @return string
+     */
+    protected function getAbsolutePath( $relativePath )
+    {
+        return self::getInstallationDir() . "/" . $relativePath;
+    }
+
+    /**
+     * @return string
+     */
+    static protected function getInstallationDir()
+    {
+        static $installDir = null;
+        if ( $installDir === null )
+        {
+            $config = require 'config.php';
+            $installDir = $config['service']['parameters']['install_dir'];
+        }
+        return $installDir;
     }
 }
