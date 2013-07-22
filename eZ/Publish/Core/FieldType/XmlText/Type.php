@@ -160,9 +160,7 @@ class Type extends FieldType
                 $inputValue = Value::EMPTY_VALUE;
             }
 
-            $doc = new DOMDocument;
-            $doc->loadXML( $inputValue );
-            $inputValue = $doc;
+            $inputValue = $this->loadXMLString( $inputValue );
         }
 
         if ( $inputValue instanceof DOMDocument )
@@ -191,6 +189,42 @@ class Type extends FieldType
         }
 
         return $inputValue;
+    }
+
+    /**
+     * Creates \DOMDocument from given $xmlString.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param $xmlString
+     *
+     * @return \DOMDocument
+     */
+    protected function loadXMLString( $xmlString )
+    {
+        $document = new DOMDocument;
+
+        libxml_use_internal_errors( true );
+        libxml_clear_errors();
+
+        $success = $document->loadXML( $xmlString );
+
+        if ( !$success )
+        {
+            $messages = array();
+
+            foreach ( libxml_get_errors() as $error )
+            {
+                $messages[] = trim( $error->message );
+            }
+
+            throw new InvalidArgumentException(
+                "\$inputValue",
+                "Could not create XML document: " . join( "\n", $messages )
+            );
+        }
+
+        return $document;
     }
 
     /**
