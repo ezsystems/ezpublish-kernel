@@ -75,6 +75,7 @@ class Html5 implements Converter
         $xslDoc = new DOMDocument;
         $xslDoc->load( $this->stylesheet );
         $xsl = new XSLTProcessor();
+        $xsl->registerPHPFunctions();
         $xsl->importStyleSheet( $xslDoc );
 
         return $xsl->transformToXML( $xmlDoc );
