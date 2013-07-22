@@ -295,6 +295,10 @@ class ServiceContainer implements Container
             {
                 $builtArguments[$key] = $this->recursivelyLookupArguments( $argument );
             }
+            else if ( $argument === "null" )
+            {
+                $builtArguments[$key] = null;
+            }
             // Scalar values
             else
             {
