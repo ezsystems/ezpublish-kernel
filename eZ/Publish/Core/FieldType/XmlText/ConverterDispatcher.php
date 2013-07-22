@@ -40,9 +40,9 @@ class ConverterDispatcher
      * Adds converter mapping.
      *
      * @param string $namespace
-     * @param \eZ\Publish\Core\FieldType\XmlText\Converter $converter
+     * @param null|\eZ\Publish\Core\FieldType\XmlText\Converter $converter
      */
-    public function addConverter( $namespace, Converter $converter )
+    public function addConverter( $namespace, Converter $converter = null )
     {
         $this->mapping[$namespace] = $converter;
     }
@@ -69,6 +69,10 @@ class ConverterDispatcher
         {
             if ( $documentNamespace === $namespace )
             {
+                if ( $converter === null )
+                {
+                    return $document;
+                }
                 return $converter->convert( $document );
             }
         }
