@@ -435,6 +435,9 @@ class Type extends FieldType
         return $relations;
     }
 
+    /**
+     * @todo handle embeds when implemented
+     */
     protected function getRelatedObjectIds( Value $fieldValue, $relationType )
     {
         if ( $relationType === Relation::EMBED )
