@@ -9,13 +9,14 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Cache;
 
+use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 use Tedivm\StashBundle\Service\CacheService;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandlerInterface;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use Psr\Log\LoggerInterface;
 
-class PersistenceCachePurger
+class PersistenceCachePurger implements CacheClearerInterface
 {
     /**
      * @var \Tedivm\StashBundle\Service\CacheService
@@ -288,5 +289,15 @@ class PersistenceCachePurger
         {
             throw new InvalidArgumentType( "\$id", "int|null", $id );
         }
+    }
+
+    /**
+     * Clears any caches necessary.
+     *
+     * @param string $cacheDir The cache directory.
+     */
+    public function clear( $cacheDir )
+    {
+        $this->all();
     }
 }

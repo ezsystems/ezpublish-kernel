@@ -43,6 +43,7 @@ parameters:
 
     # Cache purging
     ezpublish_legacy.persistence_cache_purger.class: eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger
+    ezpublish_legacy.legacy_cache_purger.class: eZ\Bundle\EzPublishLegacyBundle\Cache\LegacyCachePurger
 
     # Overriding base PageService for ezpage fieldtype.
     ezpublish.fieldType.ezpage.pageService.class: eZ\Bundle\EzPublishLegacyBundle\FieldType\Page\PageService
@@ -150,6 +151,14 @@ services:
     ezpublish_legacy.persistence_cache_purger:
         class: %ezpublish_legacy.persistence_cache_purger.class%
         arguments: [@cache, @ezpublish.spi.persistence.cache.locationHandler, @logger]
+        tags:
+            - { name: kernel.cache_clearer }
+
+    ezpublish_legacy.legacy_cache_purger:
+        class: %ezpublish_legacy.legacy_cache_purger.class%
+        arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: kernel.cache_clearer }
 
     ezpublish_legacy.content_exception_handler:
         class: %ezpublish_legacy.content_exception_handler.class%
