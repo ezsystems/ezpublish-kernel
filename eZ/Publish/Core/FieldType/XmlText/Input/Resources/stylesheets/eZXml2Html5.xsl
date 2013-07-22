@@ -7,8 +7,10 @@
     xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
     exclude-result-prefixes="xhtml custom image">
 
-    <xsl:import href="eZXml2Html5_core.xsl"/>
-    <xsl:import href="eZXml2Html5_custom.xsl"/>
+    <!-- XSL stylesheets are dynamically added to this one via <xsl:import/> -->
+    <!-- See eZ\Publish\Core\FieldType\XmlText\Converter\Html5::getXSLTProcessor() -->
+    <!--<xsl:import href="eZXml2Html5_core.xsl"/>-->
+    <!--<xsl:import href="eZXml2Html5_custom.xsl"/>-->
     <xsl:output method="html" indent="yes" encoding="UTF-8"/>
 
 </xsl:stylesheet>
