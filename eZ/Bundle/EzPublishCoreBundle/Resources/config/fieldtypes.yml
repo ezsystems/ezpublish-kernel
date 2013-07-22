@@ -29,7 +29,7 @@ parameters:
     ezpublish.fieldType.ezurl.externalStorage.class: eZ\Publish\Core\FieldType\Url\UrlStorage
     ezpublish.fieldType.ezxmltext.class: eZ\Publish\Core\FieldType\XmlText\Type
     ezpublish.fieldType.ezxmltext.externalStorage.class: eZ\Publish\Core\FieldType\XmlText\XmlTextStorage
-    ezpublish.fieldType.ezxmltext.converter.html5.class: eZ\Publish\Core\FieldType\XmlText\Converter\Html5
+    ezpublish.fieldType.ezxmltext.converter.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\XmlText\Converter\Html5
     ezpublish.fieldType.ezxmltext.converter.html5.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5.xsl
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5
     ezpublish.fieldType.ezxmlText.converter.embedToHtml5.excludedAttributes: [view, node_id, object_id]
@@ -505,7 +505,10 @@ services:
 
     ezpublish.fieldType.ezxmltext.converter.html5:
         class: %ezpublish.fieldType.ezxmltext.converter.html5.class%
-        arguments: [%ezpublish.fieldType.ezxmltext.converter.html5.resources%, [@ezpublish.fieldType.ezxmltext.converter.embedToHtml5, @ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5]]
+        arguments:
+            - %ezpublish.fieldType.ezxmltext.converter.html5.resources%
+            - @ezpublish.config.resolver
+            - [@ezpublish.fieldType.ezxmltext.converter.embedToHtml5, @ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5]
 
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5:
         class: %ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class%

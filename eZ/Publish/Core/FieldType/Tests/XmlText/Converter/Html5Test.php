@@ -49,7 +49,7 @@ class Html5Test extends PHPUnit_Framework_TestCase
      */
     public function testConstructorException( array $preConverters )
     {
-        new Html5( '', $preConverters );
+        new Html5( '', array(), $preConverters );
     }
 
     public function testPreConverterCalled()
@@ -68,6 +68,7 @@ class Html5Test extends PHPUnit_Framework_TestCase
 
         $html5 = new Html5(
             $this->getDefaultStylesheet(),
+            array(),
             array(
                 $preConverterMock1,
                 $preConverterMock2
