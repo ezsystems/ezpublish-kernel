@@ -54,8 +54,7 @@ class LegacyCachePurger implements CacheClearerInterface
                     $cli = eZCLI::instance(),
                     $script = eZScript::instance(
                         array(
-                            'description' => "eZ Publish Cache Handler\n" .
-                                             "Allows for easy clearing of Cache files\n",
+                            'description' => "eZ Publish Cache Handler",
                             'use-session' => false,
                             'use-modules' => false,
                             'use-extensions' => true
