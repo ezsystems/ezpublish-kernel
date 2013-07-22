@@ -143,4 +143,15 @@ class Html5Test extends PHPUnit_Framework_TestCase
         $xpath = new DomXPath( $result );
         $checkClosure( $xpath->query( $xpathCheck ) );
     }
+
+    public function testAddPreConverter()
+    {
+        $html5Converter = new Html5( 'foo.xsl' );
+        $converter1 = $this->getPreConvertMock();
+        $html5Converter->addPreConverter( $converter1 );
+        $converter2 = $this->getPreConvertMock();
+        $html5Converter->addPreConverter( $converter2 );
+
+        $this->assertSame( array( $converter1, $converter2 ), $html5Converter->getPreConverters() );
+    }
 }

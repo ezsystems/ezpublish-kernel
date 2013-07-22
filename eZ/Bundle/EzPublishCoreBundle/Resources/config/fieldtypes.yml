@@ -508,7 +508,6 @@ services:
         arguments:
             - %ezpublish.fieldType.ezxmltext.converter.html5.resources%
             - @ezpublish.config.resolver
-            - [@ezpublish.fieldType.ezxmltext.converter.embedToHtml5, @ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5]
 
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5:
         class: %ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class%
@@ -516,10 +515,14 @@ services:
             - @ezpublish.view_manager
             - @ezpublish.api.repository
             - %ezpublish.fieldType.ezxmlText.converter.embedToHtml5.excludedAttributes%
+        tags:
+            - { name: ezpublish.ezxml.converter }
 
     ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5:
         class: %ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5.class%
         arguments: [@ezpublish.api.repository, @?logger]
+        tags:
+            - { name: ezpublish.ezxml.converter }
 
     ezpublish.fieldType.ezpage:
         class: %ezpublish.fieldType.ezpage.class%

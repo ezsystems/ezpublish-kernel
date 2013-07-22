@@ -43,7 +43,7 @@ class Html5 implements Converter
      *
      * @var \eZ\Publish\Core\FieldType\XmlText\Converter[]
      */
-    protected $preConverters;
+    private $preConverters;
 
     /**
      * Constructor
@@ -80,6 +80,25 @@ class Html5 implements Converter
         }
 
         $this->preConverters = $preConverters;
+    }
+
+    /**
+     * Adds a pre-converter to the list.
+     * Use a pre-converter when you need some processing before XSLT transformation (e.g. for custom tags).
+     *
+     * @param Converter $preConverter
+     */
+    public function addPreConverter( Converter $preConverter )
+    {
+        $this->preConverters[] = $preConverter;
+    }
+
+    /**
+     * @return array|\eZ\Publish\Core\FieldType\XmlText\Converter[]
+     */
+    public function getPreConverters()
+    {
+        return $this->preConverters;
     }
 
     /**
@@ -145,7 +164,7 @@ class Html5 implements Converter
      */
     public function convert( DOMDocument $xmlDoc )
     {
-        foreach ( $this->preConverters as $preConverter )
+        foreach ( $this->getPreConverters() as $preConverter )
         {
             $preConverter->convert( $xmlDoc );
         }
