@@ -412,25 +412,31 @@ class Type extends FieldType
             $tagName = "link";
         }
 
-        $locationIds = array();
         $contentIds = array();
-        $linkTags = $fieldValue->xml->getElementsByTagName( $tagName );
-        if ( $linkTags->length > 0 )
+        $locationIds = array();
+        $xpath = new \DOMXPath( $fieldValue->xml );
+        $xpath->registerNamespace( "docbook", "http://docbook.org/ns/docbook" );
+        $xpathExpression = "//docbook:{$tagName}[starts-with( @xlink:href, 'ezcontent://' ) or starts-with( @xlink:href, 'ezlocation://' )]";
+
+        /** @var \DOMElement $link */
+        foreach ( $xpath->query( $xpathExpression ) as $link )
         {
-            /** @var $link \DOMElement */
-            foreach ( $linkTags as $link )
+            $location = null;
+            preg_match( "~^(.+)://([^#]*)?(#.*|\\s*)?$~", $link->getAttribute( "xlink:href" ), $matches );
+            list( , $protocol, $id ) = $matches;
+
+            if ( empty( $id ) )
             {
-                $contentId = $link->getAttribute( 'object_id' );
-                if ( !empty( $contentId ) )
-                {
-                    $contentIds[] = $contentId;
-                    continue;
-                }
-                $locationId = $link->getAttribute( 'node_id' );
-                if ( !empty( $locationId ) )
-                {
-                    $locationIds[] = $locationId;
-                }
+                continue;
+            }
+
+            if ( $protocol === "ezcontent" )
+            {
+                $contentIds[] = $id;
+            }
+            else if ( $protocol === "ezlocation" )
+            {
+                $locationIds[] = $id;
             }
         }
 
