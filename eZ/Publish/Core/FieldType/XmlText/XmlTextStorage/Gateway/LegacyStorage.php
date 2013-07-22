@@ -69,7 +69,7 @@ class LegacyStorage extends Gateway
             return;
 
         /** @var $linkTagsById \DOMElement[] */
-        $linkTagsById = array();
+        $linkIds = array();
         $linkTags = $field->value->data->getElementsByTagName( 'link' );
         if ( $linkTags->length > 0 )
         {
@@ -77,14 +77,20 @@ class LegacyStorage extends Gateway
             {
                 $urlId = $link->getAttribute( 'url_id' );
                 if ( !empty( $urlId ) )
-                    $linkTagsById[$urlId] = $link;
+                    $linkIds[$urlId] = true;
             }
 
-            if ( !empty( $linkTagsById ) )
+            if ( !empty( $linkIds ) )
             {
-                foreach ( $this->getLinksUrl( $linkTagsById ) as $id => $url )
+                $linkIdUrlMap = $this->getLinksUrl( array_keys( $linkIds ) );
+                foreach ( $linkTags as $link )
                 {
-                    $linkTagsById[$id]->setAttribute( 'url', $url );
+                    $urlId = $link->getAttribute( 'url_id' );
+                    if ( !empty( $urlId ) )
+                    {
+                        $link->setAttribute( 'url', $linkIdUrlMap[$urlId] );
+                        $link->removeAttribute( 'url_id' );
+                    }
                 }
             }
         }
@@ -105,7 +111,7 @@ class LegacyStorage extends Gateway
         $q
             ->select( "id", "url" )
             ->from( UrlStorage::URL_TABLE )
-            ->where( $q->expr->in( 'id', array_keys( $linkIds ) ) );
+            ->where( $q->expr->in( 'id', $linkIds ) );
 
         $statement = $q->prepare();
         $statement->execute();
@@ -132,7 +138,6 @@ class LegacyStorage extends Gateway
             return;
 
         $linksUrls = array();
-        $linkTagsByUrl = array();
         $linkTags = $field->value->data->getElementsByTagName( 'link' );
         if ( $linkTags->length > 0 )
         {
@@ -147,24 +152,32 @@ class LegacyStorage extends Gateway
                 else
                     continue;
 
-                $linksUrls[] = $url;
-                $linkTagsByUrl[$url] = $link;
+                // Keep urls unique, might be used by several links
+                $linksUrls[$url] = true;
             }
 
-            $linksIds = $this->getLinksId( $linksUrls );
+            $linksIds = $this->getLinksId( array_keys( $linksUrls ) );
 
-            // Now loop against $linkTagsByUrl to insert the right value in "url_id" attribute
+            // Now loop again to insert the right value in "url_id" attribute and remove the url/href
             /** @var $link \DOMElement */
-            foreach ( $linkTagsByUrl as $url => $link )
+            foreach ( $linkTags as $link )
             {
-                if ( isset( $linksIds[$url] ) )
-                    $linkId = $linksIds[$url];
-                else
-                    $linkId = $this->insertLink( $url );
+                $url = null;
+                if ( $link->hasAttribute( 'url' ) )
+                    $url = $link->getAttribute( 'url' );
+                else if ( $link->hasAttribute( 'href' ) )
+                    $url = $link->getAttribute( 'href' );
 
-                $link->setAttribute( 'url_id', $linkId );
-                $link->removeAttribute( 'url' );
-                $link->removeAttribute( 'href' );
+                if ( $url )
+                {
+                    // Insert url once if not already existing
+                    if ( !isset( $linksIds[$url] ) )
+                        $linksIds[$url] = $this->insertLink( $url );
+
+                    $link->setAttribute( 'url_id', $linksIds[$url] );
+                    $link->removeAttribute( 'url' );
+                    $link->removeAttribute( 'href' );
+                }
             }
         }
 
