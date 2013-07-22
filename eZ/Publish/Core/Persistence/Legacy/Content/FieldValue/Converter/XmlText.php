@@ -23,6 +23,14 @@ use DOMDocument;
 class XmlText implements Converter
 {
     /**
+     * ezxml empty value, needed for conversion to Docbook
+     */
+    const EMPTY_VALUE = <<<EOT
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"/>
+EOT;
+
+    /**
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText\XsltConverter
      */
     protected $toStorageConverter;
@@ -84,7 +92,7 @@ class XmlText implements Converter
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
         $document = new DOMDocument;
-        $document->loadXML( $value->dataText ?: Value::EMPTY_VALUE );
+        $document->loadXML( $value->dataText ?: static::EMPTY_VALUE );
 
         $errors = $this->ezxmlValidator->validate( $document );
 
