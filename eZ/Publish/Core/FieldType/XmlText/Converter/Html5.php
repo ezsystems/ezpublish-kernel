@@ -36,7 +36,7 @@ class Html5 implements Converter
     /**
      * @var \XSLTProcessor
      */
-    private $xsltProcessor;
+    protected $xsltProcessor;
 
     /**
      * Array of converters that needs to be called before actual processing.
@@ -87,7 +87,7 @@ class Html5 implements Converter
      *
      * @return \XSLTProcessor
      */
-    private function getXSLTProcessor()
+    protected function getXSLTProcessor()
     {
         if ( isset( $this->xsltProcessor ) )
         {
@@ -113,6 +113,7 @@ class Html5 implements Converter
 
         $this->xsltProcessor = new XSLTProcessor();
         $this->xsltProcessor->importStyleSheet( $xslDoc );
+        $this->xsltProcessor->registerPHPFunctions();
         return $this->xsltProcessor;
     }
 
