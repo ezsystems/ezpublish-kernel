@@ -3,9 +3,15 @@
     "description": "eZ Publish API and kernel. This is the heart of eZ Publish 5.",
     "homepage": "http://share.ez.no",
     "license": "GPL-2.0",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/lolautruche/Archive.git"
+        }
+    ],
     "require": {
         "php": ">=5.3.3",
-        "zetacomponents/archive": "@dev",
+        "zetacomponents/archive": "dev-fixUnpackPHP55",
         "zetacomponents/authentication": "@dev",
         "zetacomponents/authentication-database-tiein": "@dev",
         "zetacomponents/cache": "@dev",
