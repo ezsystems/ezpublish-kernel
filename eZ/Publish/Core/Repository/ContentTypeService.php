@@ -39,6 +39,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as SPIFieldDefinitio
 use eZ\Publish\SPI\Persistence\Content\Type\Group as SPIContentTypeGroup;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as SPIContentTypeGroupCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as SPIContentTypeGroupUpdateStruct;
+use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
@@ -480,10 +481,41 @@ class ContentTypeService implements ContentTypeServiceInterface
             }
         }
 
-        $fieldDefinitions = array();
+        $allValidationErrors = array();
+        $spiFieldDefinitions = array();
+        $fieldTypeIdentifierSet = array();
         foreach ( $contentTypeCreateStruct->fieldDefinitions as $fieldDefinitionCreateStruct )
         {
-            $fieldDefinitions[] = $this->buildSPIFieldDefinitionCreate( $fieldDefinitionCreateStruct );
+            /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
+            $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
+                $fieldDefinitionCreateStruct->fieldTypeIdentifier
+            );
+
+            $fieldType->applyDefaultSettings( $fieldDefinitionCreateStruct->fieldSettings );
+            $fieldType->applyDefaultValidatorConfiguration( $fieldDefinitionCreateStruct->validatorConfiguration );
+
+            $validationErrors = $this->validateFieldDefinitionCreateStruct(
+                $fieldDefinitionCreateStruct,
+                $fieldType,
+                $fieldTypeIdentifierSet
+            );
+
+            if ( !empty( $validationErrors ) )
+            {
+                $allValidationErrors[$fieldDefinitionCreateStruct->identifier] = $validationErrors;
+            }
+
+            if ( !empty( $allValidationErrors ) )
+            {
+                continue;
+            }
+
+            $spiFieldDefinitions[] = $this->buildSPIFieldDefinitionCreate( $fieldDefinitionCreateStruct, $fieldType );
+        }
+
+        if ( !empty( $allValidationErrors ) )
+        {
+            throw new ContentTypeFieldDefinitionValidationException( $allValidationErrors );
         }
 
         if ( $contentTypeCreateStruct->creatorId === null )
@@ -538,7 +570,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "sortField" => $contentTypeCreateStruct->defaultSortField,
                 "sortOrder" => $contentTypeCreateStruct->defaultSortOrder,
                 "groupIds" => $groupIds,
-                "fieldDefinitions" => $fieldDefinitions,
+                "fieldDefinitions" => $spiFieldDefinitions,
                 "defaultAlwaysAvailable" => $contentTypeCreateStruct->defaultAlwaysAvailable
             )
         );
@@ -561,23 +593,22 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * Builds SPIFieldDefinition object using API FieldDefinitionCreateStruct
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException if validator configuration or
-     *         field setting do not validate
+     * Validates FieldDefinitionCreateStruct.
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
+     * @param \eZ\Publish\SPI\FieldType\FieldType $fieldType
+     * @param array $fieldTypeIdentifierSet
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    protected function buildSPIFieldDefinitionCreate( FieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
+    protected function validateFieldDefinitionCreateStruct(
+        FieldDefinitionCreateStruct $fieldDefinitionCreateStruct,
+        SPIFieldType $fieldType,
+        array &$fieldTypeIdentifierSet
+    )
     {
-        /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
-        $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
-            $fieldDefinitionCreateStruct->fieldTypeIdentifier
-        );
-
         $validationErrors = array();
+
         if ( $fieldDefinitionCreateStruct->isSearchable && !$fieldType->isSearchable() )
         {
             $validationErrors[] = new ValidationError(
@@ -585,20 +616,33 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
         }
 
-        $fieldType->applyDefaultSettings( $fieldDefinitionCreateStruct->fieldSettings );
-        $fieldType->applyDefaultValidatorConfiguration( $fieldDefinitionCreateStruct->validatorConfiguration );
+        if ( $fieldType->isSingular() && isset( $fieldTypeIdentifierSet[$fieldDefinitionCreateStruct->fieldTypeIdentifier] ) )
+        {
+            $validationErrors[] = new ValidationError(
+                "FieldType '{$fieldDefinitionCreateStruct->fieldTypeIdentifier}' is singular and can't be repeated in a ContentType"
+            );
+        }
 
-        $validationErrors = array_merge(
+        return array_merge(
             $validationErrors,
             $fieldType->validateValidatorConfiguration( $fieldDefinitionCreateStruct->validatorConfiguration ),
             $fieldType->validateFieldSettings( $fieldDefinitionCreateStruct->fieldSettings )
         );
+    }
 
-        if ( !empty( $validationErrors ) )
-        {
-            throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
-        }
-
+    /**
+     * Builds SPIFieldDefinition object using API FieldDefinitionCreateStruct
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException if validator configuration or
+     *         field setting do not validate
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
+     * @param \eZ\Publish\SPI\FieldType\FieldType $fieldType
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
+     */
+    protected function buildSPIFieldDefinitionCreate( FieldDefinitionCreateStruct $fieldDefinitionCreateStruct, SPIFieldType $fieldType )
+    {
         $spiFieldDefinition = new SPIFieldDefinition(
             array(
                 "id" => null,
@@ -1313,10 +1357,10 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the identifier in already exists in the content type
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If field definition of the same non-repeatable type is being
-     *                                                                 added to the ContentType that already contains one
-     *                                                                 or 'ezuser' type field definition is being added to the
-     *                                                                 ContentType that has Content instances
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
+     *         if a field definition in the $contentTypeCreateStruct is not valid
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     *         if 'ezuser' type field definition is being added to the ContentType that has Content instances
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
@@ -1336,22 +1380,30 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
         }
 
-        $fieldType = $this->repository->getFieldTypeService()->getFieldType(
+        /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
+        $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
             $fieldDefinitionCreateStruct->fieldTypeIdentifier
         );
 
+        $fieldTypeIdentifierSet = array();
         if ( $fieldType->isSingular() )
         {
             foreach ( $loadedContentTypeDraft->getFieldDefinitions() as $fieldDefinition )
             {
-                if ( $fieldDefinition->fieldTypeIdentifier === $fieldDefinitionCreateStruct->fieldTypeIdentifier )
-                {
-                    throw new BadStateException(
-                        "\$contentTypeDraft",
-                        "ContentType already contains field definition of non-repeatable field type '{$fieldDefinition->fieldTypeIdentifier}'"
-                    );
-                }
+                $fieldTypeIdentifierSet[$fieldDefinition->fieldTypeIdentifier] = true;
             }
+        }
+
+        $validationErrors = $this->validateFieldDefinitionCreateStruct(
+            $fieldDefinitionCreateStruct,
+            $fieldType,
+            $fieldTypeIdentifierSet
+        );
+
+        if ( !empty( $validationErrors ) )
+        {
+            $validationErrors = array( $fieldDefinitionCreateStruct->identifier => $validationErrors );
+            throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
         }
 
         if (
@@ -1365,9 +1417,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
         }
 
-        $spiFieldDefinitionCreateStruct = $this->buildSPIFieldDefinitionCreate(
-            $fieldDefinitionCreateStruct
-        );
+        $spiFieldDefinitionCreateStruct = $this->buildSPIFieldDefinitionCreate( $fieldDefinitionCreateStruct, $fieldType );
 
         $this->repository->beginTransaction();
         try
