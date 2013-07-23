@@ -520,7 +520,7 @@ services:
 
     ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5:
         class: %ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5.class%
-        arguments: [@ezpublish.api.repository, @?logger]
+        arguments: [@ezpublish.api.service.location, @ezpublish.api.service.content, @ezpublish.urlalias_router, @?logger]
         tags:
             - { name: ezpublish.ezxml.converter }
 
