@@ -14,6 +14,8 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Exceptions;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException;
+use eZ\Publish\API\Repository\Values\Translation\Message;
 use Exception;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 
@@ -1055,6 +1057,73 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     }
 
     /**
+     * Test for the createContentType() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
+     */
+    public function testCreateContentTypeThrowsContentTypeFieldDefinitionValidationException()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
+
+        $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'temperature', 'ezfloat'
+        );
+        $fieldCreate->isSearchable = true;
+        $fieldCreate->validatorConfiguration = array(
+            'FloatValueValidator' => array(
+                'minFloatValue' => "forty two point one",
+                'maxFloatValue' => "75.3",
+            )
+        );
+        $typeCreate->addFieldDefinition( $fieldCreate );
+
+        $groups = array(
+            $contentTypeService->loadContentTypeGroupByIdentifier( 'Media' ),
+            $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )
+        );
+
+        try
+        {
+            // Throws validation exception, because field can't be created as searchable and it's validator configuration is invalid
+            $contentType = $contentTypeService->createContentType( $typeCreate, $groups );
+        }
+        catch ( ContentTypeFieldDefinitionValidationException $e )
+        {
+            $validationErrors = $e->getFieldErrors();
+        }
+        /* END: Use Case */
+
+        /** @var $validationErrors */
+        $this->assertTrue( isset( $validationErrors ) );
+        $this->assertInternalType( "array", $validationErrors );
+        $this->assertCount( 1, $validationErrors );
+        $this->assertArrayHasKey( "temperature", $validationErrors );
+        $this->assertInternalType( "array", $validationErrors["temperature"] );
+        $this->assertCount( 2, $validationErrors["temperature"] );
+        $this->assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\ValidationError", $validationErrors["temperature"][0] );
+        $this->assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\ValidationError", $validationErrors["temperature"][1] );
+
+        $this->assertEquals(
+            new Message( "FieldType 'ezfloat' is not searchable" ),
+            $validationErrors["temperature"][0]->getTranslatableMessage()
+        );
+        $this->assertEquals(
+            new Message(
+                "Validator parameter '%parameter%' value must be of numeric type",
+                array( "parameter" => "minFloatValue" )
+            ),
+            $validationErrors["temperature"][1]->getTranslatableMessage()
+        );
+    }
+
+    /**
      * Test for the newContentTypeUpdateStruct() method.
      *
      * @return void
@@ -1400,10 +1469,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAddFieldDefinition
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @expectedExceptionMessage ContentType already contains field definition of non-repeatable field type 'ezuser'
      */
-    public function testAddFieldDefinitionThrowsBadStateExceptionNonRepeatableField()
+    public function testAddFieldDefinitionThrowsContentTypeFieldDefinitionValidationException()
     {
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
@@ -1430,9 +1497,30 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $fieldDefCreate->fieldSettings = array();
         $fieldDefCreate->isSearchable = false;
 
-        // Throws an exception because $userContentTypeDraft already contains non-repeatable field type definition 'ezuser'
-        $contentTypeService->addFieldDefinition( $userContentTypeDraft, $fieldDefCreate );
+        try
+        {
+            // Throws an exception because $userContentTypeDraft already contains non-repeatable field type definition 'ezuser'
+            $contentTypeService->addFieldDefinition( $userContentTypeDraft, $fieldDefCreate );
+        }
+        catch ( ContentTypeFieldDefinitionValidationException $e )
+        {
+            $validationErrors = $e->getFieldErrors();
+        }
         /* END: Use Case */
+
+        /** @var $validationErrors */
+        $this->assertTrue( isset( $validationErrors ) );
+        $this->assertInternalType( "array", $validationErrors );
+        $this->assertCount( 1, $validationErrors );
+        $this->assertArrayHasKey( "second_user_account", $validationErrors );
+        $this->assertInternalType( "array", $validationErrors["second_user_account"] );
+        $this->assertCount( 1, $validationErrors["second_user_account"] );
+        $this->assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\ValidationError", $validationErrors["second_user_account"][0] );
+
+        $this->assertEquals(
+            new Message( "FieldType 'ezuser' is singular and can't be repeated in a ContentType" ),
+            $validationErrors["second_user_account"][0]->getTranslatableMessage()
+        );
     }
 
     /**
@@ -1447,7 +1535,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @expectedExceptionMessage Field definition of 'ezuser' field type cannot be added because ContentType has Content instances
      */
-    public function testAddFieldDefinitionThrowsBadStateExceptionContentInstances()
+    public function testAddFieldDefinitionThrowsBadStateException()
     {
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
