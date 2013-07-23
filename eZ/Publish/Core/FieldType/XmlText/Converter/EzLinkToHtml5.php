@@ -9,8 +9,11 @@
 
 namespace eZ\Publish\Core\FieldType\XmlText\Converter;
 
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\FieldType\XmlText\Converter;
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Psr\Log\LoggerInterface;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException;
@@ -30,20 +33,20 @@ class EzLinkToHtml5 implements Converter
     protected $contentService;
 
     /**
-     * @var \eZ\Publish\API\Repository\URLAliasService
+     * @var \eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter
      */
-    protected $urlAliasService;
+    protected $urlAliasRouter;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
-    public function __construct( Repository $repository, LoggerInterface $logger = null )
+    public function __construct( LocationService $locationService, ContentService $contentService, UrlAliasRouter $urlAliasRouter, LoggerInterface $logger = null )
     {
-        $this->locationService = $repository->getLocationService();
-        $this->contentService = $repository->getContentService();
-        $this->urlAliasService = $repository->getURLAliasService();
+        $this->locationService = $locationService;
+        $this->contentService = $contentService;
+        $this->urlAliasRouter = $urlAliasRouter;
         $this->logger = $logger;
     }
 
@@ -119,8 +122,7 @@ class EzLinkToHtml5 implements Converter
 
             if ( $location !== null )
             {
-                $urlAlias = $this->urlAliasService->reverseLookup( $location );
-                $link->setAttribute( 'url', $urlAlias->path );
+                $link->setAttribute( 'url', $this->urlAliasRouter->generate( $location ) );
             }
 
             if ( $link->hasAttribute( 'anchor_name' ) )
