@@ -27,9 +27,11 @@ class UrlAliasGenerator extends Generator
     private $lazyRepository;
 
     /**
+     * The default router (that works with declared routes).
+     *
      * @var \Symfony\Component\Routing\RouterInterface
      */
-    private $router;
+    private $defaultRouter;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -56,10 +58,10 @@ class UrlAliasGenerator extends Generator
      */
     private $siteAccess;
 
-    public function __construct( \Closure $lazyRepository, RouterInterface $router, LoggerInterface $logger = null )
+    public function __construct( \Closure $lazyRepository, RouterInterface $defaultRouter, LoggerInterface $logger = null )
     {
         $this->lazyRepository = $lazyRepository;
-        $this->router = $router;
+        $this->defaultRouter = $defaultRouter;
         $this->logger = $logger;
     }
 
@@ -120,7 +122,7 @@ class UrlAliasGenerator extends Generator
         }
         else
         {
-            $path = $this->router->generate(
+            $path = $this->defaultRouter->generate(
                 self::INTERNAL_LOCATION_ROUTE,
                 array( 'locationId' => $location->id )
             );
