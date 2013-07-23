@@ -13,7 +13,6 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler;
-use eZ\Publish\Core\Repository\DomainMapper;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException;
 use eZ\Publish\API\Repository\Values\User\User;
