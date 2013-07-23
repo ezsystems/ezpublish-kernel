@@ -1411,7 +1411,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         )
         {
             throw new BadStateException(
-                "\$contentTypeId",
+                "\$contentTypeDraft",
                 "Field definition of 'ezuser' field type cannot be added because ContentType has Content instances"
             );
         }
