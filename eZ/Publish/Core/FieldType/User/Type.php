@@ -54,7 +54,7 @@ class Type extends FieldType
      */
     public function isSingular()
     {
-        return false;
+        return true;
     }
 
     /**

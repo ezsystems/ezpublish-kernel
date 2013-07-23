@@ -315,7 +315,7 @@ abstract class FieldType implements FieldTypeInterface
      */
     public function isSingular()
     {
-        return true;
+        return false;
     }
 
     /**

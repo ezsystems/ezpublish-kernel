@@ -1340,7 +1340,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             $fieldDefinitionCreateStruct->fieldTypeIdentifier
         );
 
-        if ( !$fieldType->isSingular() )
+        if ( $fieldType->isSingular() )
         {
             foreach ( $loadedContentTypeDraft->getFieldDefinitions() as $fieldDefinition )
             {
