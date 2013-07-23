@@ -480,6 +480,12 @@ class ContentTypeService implements ContentTypeServiceInterface
             }
         }
 
+        $fieldDefinitions = array();
+        foreach ( $contentTypeCreateStruct->fieldDefinitions as $fieldDefinitionCreateStruct )
+        {
+            $fieldDefinitions[] = $this->buildSPIFieldDefinitionCreate( $fieldDefinitionCreateStruct );
+        }
+
         if ( $contentTypeCreateStruct->creatorId === null )
         {
             $userId = $this->repository->getCurrentUser()->id;
@@ -513,11 +519,6 @@ class ContentTypeService implements ContentTypeServiceInterface
             },
             $contentTypeGroups
         );
-        $fieldDefinitions = array();
-        foreach ( $contentTypeCreateStruct->fieldDefinitions as $fieldDefinitionCreateStruct )
-        {
-            $fieldDefinitions[] = $this->buildSPIFieldDefinitionCreate( $fieldDefinitionCreateStruct );
-        }
 
         $spiContentTypeCreateStruct = new SPIContentTypeCreateStruct(
             array(
