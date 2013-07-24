@@ -43,6 +43,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\ContentTypeValidationException;
 use eZ\Publish\Core\Base\Exceptions\ContentTypeFieldDefinitionValidationException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\FieldType\ValidationError;
@@ -393,6 +394,8 @@ class ContentTypeService implements ContentTypeServiceInterface
      *         - content type create struct does not contain at least one field definition create struct
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
      *         if a field definition in the $contentTypeCreateStruct is not valid
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeValidationException
+     *         if a multiple field definitions of a same singular type are given
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $contentTypeGroups Required array of {@link ContentTypeGroup} to link type with (must contain one)
@@ -490,9 +493,17 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $fieldDefinitionCreateStruct->fieldTypeIdentifier
             );
 
+            if ( $fieldType->isSingular() && isset( $fieldTypeIdentifierSet[$fieldDefinitionCreateStruct->fieldTypeIdentifier] ) )
+            {
+                throw new ContentTypeValidationException(
+                    "FieldType '{$fieldDefinitionCreateStruct->fieldTypeIdentifier}' is singular and can't be repeated in a ContentType"
+                );
+            }
+
+            $fieldTypeIdentifierSet[$fieldDefinitionCreateStruct->fieldTypeIdentifier] = true;
+
             $fieldType->applyDefaultSettings( $fieldDefinitionCreateStruct->fieldSettings );
             $fieldType->applyDefaultValidatorConfiguration( $fieldDefinitionCreateStruct->validatorConfiguration );
-
             $validationErrors = $this->validateFieldDefinitionCreateStruct(
                 $fieldDefinitionCreateStruct,
                 $fieldType,
@@ -596,15 +607,10 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
      * @param \eZ\Publish\SPI\FieldType\FieldType $fieldType
-     * @param array $fieldTypeIdentifierSet
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    protected function validateFieldDefinitionCreateStruct(
-        FieldDefinitionCreateStruct $fieldDefinitionCreateStruct,
-        SPIFieldType $fieldType,
-        array &$fieldTypeIdentifierSet
-    )
+    protected function validateFieldDefinitionCreateStruct( FieldDefinitionCreateStruct $fieldDefinitionCreateStruct, SPIFieldType $fieldType )
     {
         $validationErrors = array();
 
@@ -612,13 +618,6 @@ class ContentTypeService implements ContentTypeServiceInterface
         {
             $validationErrors[] = new ValidationError(
                 "FieldType '{$fieldDefinitionCreateStruct->fieldTypeIdentifier}' is not searchable"
-            );
-        }
-
-        if ( $fieldType->isSingular() && isset( $fieldTypeIdentifierSet[$fieldDefinitionCreateStruct->fieldTypeIdentifier] ) )
-        {
-            $validationErrors[] = new ValidationError(
-                "FieldType '{$fieldDefinitionCreateStruct->fieldTypeIdentifier}' is singular and can't be repeated in a ContentType"
             );
         }
 
@@ -1358,8 +1357,10 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
      *         if a field definition in the $contentTypeCreateStruct is not valid
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
-     *         if 'ezuser' type field definition is being added to the ContentType that has Content instances
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If field definition of the same non-repeatable type is being
+     *                                                                 added to the ContentType that already contains one
+     *                                                                 or 'ezuser' type field definition is being added to the
+     *                                                                 ContentType that has Content instances
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
@@ -1384,25 +1385,27 @@ class ContentTypeService implements ContentTypeServiceInterface
             $fieldDefinitionCreateStruct->fieldTypeIdentifier
         );
 
-        $fieldTypeIdentifierSet = array();
-        if ( $fieldType->isSingular() )
-        {
-            foreach ( $loadedContentTypeDraft->getFieldDefinitions() as $fieldDefinition )
-            {
-                $fieldTypeIdentifierSet[$fieldDefinition->fieldTypeIdentifier] = true;
-            }
-        }
-
-        $validationErrors = $this->validateFieldDefinitionCreateStruct(
-            $fieldDefinitionCreateStruct,
-            $fieldType,
-            $fieldTypeIdentifierSet
-        );
-
+        $fieldType->applyDefaultSettings( $fieldDefinitionCreateStruct->fieldSettings );
+        $fieldType->applyDefaultValidatorConfiguration( $fieldDefinitionCreateStruct->validatorConfiguration );
+        $validationErrors = $this->validateFieldDefinitionCreateStruct( $fieldDefinitionCreateStruct, $fieldType );
         if ( !empty( $validationErrors ) )
         {
             $validationErrors = array( $fieldDefinitionCreateStruct->identifier => $validationErrors );
             throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
+        }
+
+        if ( $fieldType->isSingular() )
+        {
+            foreach ( $loadedContentTypeDraft->getFieldDefinitions() as $fieldDefinition )
+            {
+                if ( $fieldDefinition->fieldTypeIdentifier === $fieldDefinitionCreateStruct->fieldTypeIdentifier )
+                {
+                    throw new BadStateException(
+                        "\$contentTypeDraft",
+                        "ContentType already contains field definition of non-repeatable field type '{$fieldDefinition->fieldTypeIdentifier}'"
+                    );
+                }
+            }
         }
 
         if (
