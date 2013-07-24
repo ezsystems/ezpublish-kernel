@@ -191,7 +191,6 @@ class ParentUserGroupLimitationType extends AbstractPersistenceLimitationType im
                 return false;
             }
 
-            // @todo Needs to take care of inherited groups as well when UserHandler gets knowledge about user groups
             foreach ( $parentOwnerLocations as $parentOwnerLocation )
             {
                 foreach ( $currentUserLocations as $currentUserLocation )
