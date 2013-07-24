@@ -15,6 +15,7 @@ use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+use eZ\Publish\API\Repository\Exceptions\ContentTypeValidationException;
 use eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 
@@ -297,6 +298,10 @@ class ContentType extends RestController
         {
             throw new ForbiddenException( $e->getMessage() );
         }
+        catch ( ContentTypeValidationException $e )
+        {
+            throw new BadRequestException( $e->getMessage() );
+        }
         catch ( ContentTypeFieldDefinitionValidationException $e )
         {
             throw new BadRequestException( $e->getMessage() );
@@ -495,6 +500,14 @@ class ContentType extends RestController
             );
         }
         catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
+        catch ( ContentTypeFieldDefinitionValidationException $e )
+        {
+            throw new BadRequestException( $e->getMessage() );
+        }
+        catch ( BadStateException $e )
         {
             throw new ForbiddenException( $e->getMessage() );
         }
