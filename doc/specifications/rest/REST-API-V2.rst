@@ -3532,6 +3532,7 @@ If publish = true:
 :Error Codes:
     :400: - If the Input does not match the input schema definition,
           - If validation on a field definition fails
+          - If validation of the content type fails, eg. multiple fields of a same singular field type are provided
           - If publish = true and the input is not complete e.g. no field definitions are provided
     :401: If the user is not authorized to create this content type
     :403: If a content type with same identifier already exists
@@ -3899,9 +3900,11 @@ Add Field definition
           FieldDefinition_
 
 :Error Codes:
-    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :400: If the Input does not match the input schema definition or validation on the field definition fails, in this case the response contains an ErrorMessage_
     :401: If the user is not authorized to add a field definition
-    :403: If a field definition with same identifier already exists in the given content type
+    :403: - If a field definition with same identifier already exists in the given content type
+          - If the field definition is of singular type, already existing in the given content type
+          - If the field definition of user type is being added to the content type having content instances
 
 Get Fielddefinition
 ```````````````````
