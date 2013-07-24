@@ -67,7 +67,8 @@ XML;
      */
     public function testRedirectLocationById( $locationHref )
     {
-        $id = array_pop( explode( '/', $locationHref ) );
+        $hrefParts = explode( '/', $locationHref );
+        $id = array_pop( $hrefParts );
         $response = $this->sendHttpRequest(
             $this->createHttpRequest( "GET", "/api/ezp/v2/content/locations?id=$id" )
         );
