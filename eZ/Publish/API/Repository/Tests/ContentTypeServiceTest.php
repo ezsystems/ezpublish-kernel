@@ -1480,6 +1480,78 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $userContentTypeDraft = $contentTypeService->createContentTypeDraft( $userContentType );
 
         $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'temperature', 'ezfloat'
+        );
+        $fieldDefCreate->isSearchable = true;
+        $fieldDefCreate->validatorConfiguration = array(
+            'FloatValueValidator' => array(
+                'minFloatValue' => "42.1",
+                'maxFloatValue' => "seventy five point three",
+            )
+        );
+        $fieldDefCreate->fieldGroup = 'blog-meta';
+        $fieldDefCreate->position = 1;
+        $fieldDefCreate->isTranslatable = false;
+        $fieldDefCreate->isRequired = true;
+        $fieldDefCreate->isInfoCollector = false;
+        $fieldDefCreate->fieldSettings = array();
+
+        try
+        {
+            // Throws an exception because $userContentTypeDraft already contains non-repeatable field type definition 'ezuser'
+            $contentTypeService->addFieldDefinition( $userContentTypeDraft, $fieldDefCreate );
+        }
+        catch ( ContentTypeFieldDefinitionValidationException $e )
+        {
+            $validationErrors = $e->getFieldErrors();
+        }
+        /* END: Use Case */
+
+        /** @var $validationErrors */
+        $this->assertTrue( isset( $validationErrors ) );
+        $this->assertInternalType( "array", $validationErrors );
+        $this->assertCount( 1, $validationErrors );
+        $this->assertArrayHasKey( "temperature", $validationErrors );
+        $this->assertInternalType( "array", $validationErrors["temperature"] );
+        $this->assertCount( 2, $validationErrors["temperature"] );
+        $this->assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\ValidationError", $validationErrors["temperature"][0] );
+        $this->assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\ValidationError", $validationErrors["temperature"][1] );
+
+        $this->assertEquals(
+            new Message( "FieldType 'ezfloat' is not searchable" ),
+            $validationErrors["temperature"][0]->getTranslatableMessage()
+        );
+        $this->assertEquals(
+            new Message(
+                "Validator parameter '%parameter%' value must be of numeric type",
+                array( "parameter" => "maxFloatValue" )
+            ),
+            $validationErrors["temperature"][1]->getTranslatableMessage()
+        );
+    }
+
+    /**
+     * Test for the addFieldDefinition() method.
+     *
+     * Testing that field definition of non-repeatable field type can not be added multiple
+     * times to the same ContentType.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAddFieldDefinition
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @expectedExceptionMessage ContentType already contains field definition of non-repeatable field type 'ezuser'
+     */
+    public function testAddFieldDefinitionThrowsBadStateExceptionNonRepeatableField()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        /* BEGIN: Use Case */
+        $userContentType = $contentTypeService->loadContentTypeByIdentifier( "user" );
+        $userContentTypeDraft = $contentTypeService->createContentTypeDraft( $userContentType );
+
+        $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct(
             'second_user_account', 'ezuser'
         );
         $fieldDefCreate->names = array(
@@ -1497,30 +1569,9 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $fieldDefCreate->fieldSettings = array();
         $fieldDefCreate->isSearchable = false;
 
-        try
-        {
-            // Throws an exception because $userContentTypeDraft already contains non-repeatable field type definition 'ezuser'
-            $contentTypeService->addFieldDefinition( $userContentTypeDraft, $fieldDefCreate );
-        }
-        catch ( ContentTypeFieldDefinitionValidationException $e )
-        {
-            $validationErrors = $e->getFieldErrors();
-        }
+        // Throws an exception because $userContentTypeDraft already contains non-repeatable field type definition 'ezuser'
+        $contentTypeService->addFieldDefinition( $userContentTypeDraft, $fieldDefCreate );
         /* END: Use Case */
-
-        /** @var $validationErrors */
-        $this->assertTrue( isset( $validationErrors ) );
-        $this->assertInternalType( "array", $validationErrors );
-        $this->assertCount( 1, $validationErrors );
-        $this->assertArrayHasKey( "second_user_account", $validationErrors );
-        $this->assertInternalType( "array", $validationErrors["second_user_account"] );
-        $this->assertCount( 1, $validationErrors["second_user_account"] );
-        $this->assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\ValidationError", $validationErrors["second_user_account"][0] );
-
-        $this->assertEquals(
-            new Message( "FieldType 'ezuser' is singular and can't be repeated in a ContentType" ),
-            $validationErrors["second_user_account"][0]->getTranslatableMessage()
-        );
     }
 
     /**
@@ -1535,7 +1586,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @expectedExceptionMessage Field definition of 'ezuser' field type cannot be added because ContentType has Content instances
      */
-    public function testAddFieldDefinitionThrowsBadStateException()
+    public function testAddFieldDefinitionThrowsBadStateExceptionContentInstances()
     {
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
