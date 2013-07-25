@@ -409,7 +409,9 @@ class Handler implements BaseContentTypeHandler
         $createStruct->modifierId = $userId;
         $createStruct->created = $createStruct->modified = time();
         $createStruct->creatorId = $userId;
-        $createStruct->identifier .= '_' . ( $createStruct->remoteId = md5( uniqid( get_class( $createStruct ), true ) ) );
+        $createStruct->remoteId = md5( uniqid( get_class( $createStruct ), true ) );
+        $createStruct->identifier = 'copy_of_' . $createStruct->identifier . '_' . $createStruct->remoteId;
+
         // Set FieldDefinition ids to null to trigger creating new id
         foreach ( $createStruct->fieldDefinitions as $fieldDefinition )
         {
