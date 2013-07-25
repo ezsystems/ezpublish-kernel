@@ -167,6 +167,8 @@ class LegacyStorage extends Gateway
                 $link->removeAttribute( 'href' );
             }
         }
+
+        return !empty( $linkTagsByUrl );
     }
 
     /**
