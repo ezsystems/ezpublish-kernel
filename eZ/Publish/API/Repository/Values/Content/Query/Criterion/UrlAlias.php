@@ -29,9 +29,9 @@ class UrlAlias extends Criterion implements CriterionInterface
      *
      * @param string $operator
      *        Possible values:
-     *        - Operator::IN, requires an array of url alias as the $value
+     *        - Operator::IN, requires an array of url aliases as the $value
      *        - Operator::EQ, requires a single url alias as the $value
-     *        - Operator::LIKE, requires a single url alias as the $value. Wilcards allowed
+     *        - Operator::LIKE, requires a single url alias as the $value, wildcards allowed, using *
      * @param string|string[] $value an array of url alias
      *
      * @throws \InvalidArgumentException if the value type doesn't match the operator
