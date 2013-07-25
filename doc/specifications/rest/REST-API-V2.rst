@@ -2069,7 +2069,7 @@ Perform a query on articles with a specific title.
       <identifier>TitleView</identifier>
       <Query>
         <Criteria>
-          <FullTextCritierion>Title</FieldCritierion>
+          <FieldCritierion>Title</FieldCritierion>
         </Criteria>
         <limit>10</limit>
         <offset>0</offset>
@@ -2100,7 +2100,7 @@ Perform a query on articles with a specific title.
       <public>false</public>
       <Query>
         <Criteria>
-          <FullTextCritierion>Title</FieldCritierion>
+          <FieldCritierion>Title</FieldCritierion>
         </Criteria>
         <limit>10</limit>
         <offset>0</offset>
