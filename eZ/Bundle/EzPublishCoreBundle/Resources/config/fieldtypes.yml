@@ -34,6 +34,7 @@ parameters:
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5
     ezpublish.fieldType.ezxmlText.converter.embedToHtml5.excludedAttributes: [view, node_id, object_id]
     ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EzLinkToHtml5
+    ezpublish.fieldType.ezxmltext.converter.customTags.class: eZ\Publish\Core\FieldType\XmlText\Converter\CustomTags
     ezpublish.fieldType.ezpage.class: eZ\Publish\Core\FieldType\Page\Type
     ezpublish.fieldType.ezpage.pageService.class: eZ\Bundle\EzPublishCoreBundle\FieldType\Page\PageService
     ezpublish.fieldType.ezpage.pageService.factory.class: eZ\Publish\Core\MVC\Symfony\FieldType\Page\PageServiceFactory
@@ -521,6 +522,11 @@ services:
     ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5:
         class: %ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5.class%
         arguments: [@ezpublish.api.service.location, @ezpublish.api.service.content, @ezpublish.urlalias_router, @?logger]
+        tags:
+            - { name: ezpublish.ezxml.converter }
+
+    ezpublish.fieldType.ezxmltext.converter.customTags:
+        class: %ezpublish.fieldType.ezxmltext.converter.customTags.class%
         tags:
             - { name: ezpublish.ezxml.converter }
 

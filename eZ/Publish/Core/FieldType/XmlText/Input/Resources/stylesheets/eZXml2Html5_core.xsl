@@ -26,7 +26,8 @@
 
     <xsl:template match="paragraph">
         <xsl:choose>
-            <xsl:when test="( ul | ol | table ) or (name(..)='li')">
+            <!-- "inline" attribute is dynamically added by CustomTags pre-converter -->
+            <xsl:when test="( ul | ol | table | embed | literal | custom[@inline='false'] ) or (name(..)='li')">
                 <xsl:apply-templates/>
             </xsl:when>
             <xsl:otherwise>
