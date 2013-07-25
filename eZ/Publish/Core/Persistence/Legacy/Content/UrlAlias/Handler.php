@@ -304,7 +304,7 @@ class Handler implements UrlAliasHandlerInterface
         $isPathNew = false;
         foreach ( $pathElements as $level => $pathElement )
         {
-            $pathElement = $this->slugConverter->convert( $pathElement, "noname" . $level + 1 );
+            $pathElement = $this->slugConverter->convert( $pathElement, "noname" . ( $level + 1 ) );
             $pathElementMD5 = $this->getHash( $pathElement );
             if ( !$isPathNew )
             {
@@ -326,7 +326,7 @@ class Handler implements UrlAliasHandlerInterface
         }
 
         // Handle topmost path element
-        $topElement = $this->slugConverter->convert( $topElement, "noname" . count( $pathElements ) + 1 );
+        $topElement = $this->slugConverter->convert( $topElement, "noname" . ( count( $pathElements ) + 1 ) );
 
         // If last (next to topmost) entry parent is special root entry we handle topmost entry as first level entry
         // That is why we need to reset $parentId to 0 and empty $createdPath
