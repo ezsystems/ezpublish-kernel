@@ -35,14 +35,20 @@ class Loader
     protected $webrootDir;
 
     /**
+     * @var URIHelper
+     */
+    protected $uriHelper;
+
+    /**
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
-    public function __construct( $legacyRootDir, $webrootDir, LoggerInterface $logger = null )
+    public function __construct( $legacyRootDir, $webrootDir, URIHelper $uriHelper, LoggerInterface $logger = null )
     {
         $this->legacyRootDir = $legacyRootDir;
         $this->webrootDir = $webrootDir;
+        $this->uriHelper = $uriHelper;
         $this->logger = $logger;
     }
 
@@ -115,13 +121,8 @@ class Loader
                     throw new \InvalidArgumentException( 'A legacy kernel handler must be an instance of ezpKernelHandler.' );
 
                 $webHandler = new $webHandlerClass( $legacyParameters->all() );
-                $uri = eZURI::instance();
-                $uri->setURIString(
-                    $request->attributes->get(
-                        'semanticPathinfo',
-                        $request->getPathinfo()
-                    ) . $request->attributes->get( 'viewParametersString' )
-                );
+                // Fix up legacy URI for global use cases (i.e. using runCallback()).
+                $this->uriHelper->updateLegacyURI( $request );
                 chdir( $webrootDir );
             }
 
