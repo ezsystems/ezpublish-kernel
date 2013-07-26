@@ -35,34 +35,40 @@ class AddFieldTypePass implements CompilerPassInterface
         // Alias attribute is the field type string.
         foreach ( $container->findTaggedServiceIds( 'ezpublish.fieldType' ) as $id => $attributes )
         {
-            if ( !isset( $attributes[0]['alias'] ) )
-                throw new \LogicException( 'ezpublish.fieldType service tag needs an "alias" attribute to identify the field type. None given.' );
+            foreach ( $attributes as $attribute )
+            {
+                if ( !isset( $attribute['alias'] ) )
+                    throw new \LogicException( 'ezpublish.fieldType service tag needs an "alias" attribute to identify the field type. None given.' );
 
-            $repositoryFactoryDef->addMethodCall(
-                'registerFieldType',
-                array(
-                    // Only pass the service Id since field types will be lazy loaded via the service container
-                    $id,
-                    $attributes[0]['alias']
-                )
-            );
+                $repositoryFactoryDef->addMethodCall(
+                    'registerFieldType',
+                    array(
+                        // Only pass the service Id since field types will be lazy loaded via the service container
+                        $id,
+                        $attribute['alias']
+                    )
+                );
+            }
         }
 
         // Parameter providers for field types.
         $parameterProviderRegistryDef = $container->getDefinition( 'ezpublish.fieldType.parameterProviderRegistry' );
         foreach ( $container->findTaggedServiceIds( 'ezpublish.fieldType.parameterProvider' ) as $id => $attributes )
         {
-            if ( !isset( $attributes[0]['alias'] ) )
-                throw new \LogicException( 'ezpublish.fieldType.parameterProvier service tag needs an "alias" attribute to identify the field type. None given.' );
+            foreach ( $attributes as $attribute )
+            {
+                if ( !isset( $attribute['alias'] ) )
+                    throw new \LogicException( 'ezpublish.fieldType.parameterProvier service tag needs an "alias" attribute to identify the field type. None given.' );
 
-            $parameterProviderRegistryDef->addMethodCall(
-                'setParameterProvider',
-                array(
-                    // Only pass the service Id since field types will be lazy loaded via the service container
-                    new Reference( $id ),
-                    $attributes[0]['alias']
-                )
-            );
+                $parameterProviderRegistryDef->addMethodCall(
+                    'setParameterProvider',
+                    array(
+                        // Only pass the service Id since field types will be lazy loaded via the service container
+                        new Reference( $id ),
+                        $attribute['alias']
+                    )
+                );
+            }
         }
 
         // Gateways for external storage handlers.
@@ -71,62 +77,68 @@ class AddFieldTypePass implements CompilerPassInterface
         // Referencing the services by alias (field type string)
         foreach ( $container->findTaggedServiceIds( 'ezpublish.fieldType.externalStorageHandler.gateway' ) as $id => $attributes )
         {
-            if ( !isset( $attributes[0]['alias'] ) )
-                throw new \LogicException( 'ezpublish.fieldType.externalStorageHandler.gateway service tag needs an "alias" attribute to identify the field type. None given.' );
+            foreach ( $attributes as $attribute )
+            {
+                if ( !isset( $attribute['alias'] ) )
+                    throw new \LogicException( 'ezpublish.fieldType.externalStorageHandler.gateway service tag needs an "alias" attribute to identify the field type. None given.' );
 
-            if ( !isset( $attributes[0]['identifier'] ) )
-                throw new \LogicException( 'ezpublish.fieldType.externalStorageHandler.gateway service tag needs an "identifier" attribute to identify the gateway. None given.' );
+                if ( !isset( $attribute['identifier'] ) )
+                    throw new \LogicException( 'ezpublish.fieldType.externalStorageHandler.gateway service tag needs an "identifier" attribute to identify the gateway. None given.' );
 
-            $externalStorageGateways[$attributes[0]['alias']] = array(
-                'id'            => $id,
-                'identifier'    => $attributes[0]['identifier']
-            );
+                $externalStorageGateways[$attribute['alias']] = array(
+                    'id'            => $id,
+                    'identifier'    => $attribute['identifier']
+                );
+            }
         }
 
         // External storage handlers for field types that need them.
         // Alias attribute is the field type string.
         foreach ( $container->findTaggedServiceIds( 'ezpublish.fieldType.externalStorageHandler' ) as $id => $attributes )
         {
-            if ( !isset( $attributes[0]['alias'] ) )
-                throw new \LogicException( 'ezpublish.fieldType.externalStorageHandler service tag needs an "alias" attribute to identify the field type. None given.' );
-
-            // If the storage handler is gateway based, then we need to add a corresponding gateway to it.
-            // Will throw a LogicException if no gateway is defined for this field type.
-            $storageHandlerDef = $container->findDefinition( $id );
-            $storageHandlerClass = $storageHandlerDef->getClass();
-            if ( preg_match( '/^%([^%\s]+)%$/', $storageHandlerClass, $match ) )
-                $storageHandlerClass = $container->getParameter( $match[1] );
-
-            if (
-                is_subclass_of(
-                    $storageHandlerClass,
-                    'eZ\\Publish\\Core\\FieldType\\GatewayBasedStorage'
-                )
-            )
+            foreach ( $attributes as $attribute )
             {
-                if ( !isset( $externalStorageGateways[$attributes[0]['alias']] ) )
-                    throw new \LogicException(
-                        "External storage handler '$id' for field type {$attributes[0]['alias']} needs a storage gateway but none was given.
-                        Consider defining a storage gateway as a service for this field type and add the 'ezpublish.fieldType.externalStorageHandler.gateway tag'"
-                    );
+                if ( !isset( $attribute['alias'] ) )
+                    throw new \LogicException( 'ezpublish.fieldType.externalStorageHandler service tag needs an "alias" attribute to identify the field type. None given.' );
 
-                $storageHandlerDef->addMethodCall(
-                    'addGateway',
+                // If the storage handler is gateway based, then we need to add a corresponding gateway to it.
+                // Will throw a LogicException if no gateway is defined for this field type.
+                $storageHandlerDef = $container->findDefinition( $id );
+                $storageHandlerClass = $storageHandlerDef->getClass();
+                if ( preg_match( '/^%([^%\s]+)%$/', $storageHandlerClass, $match ) )
+                    $storageHandlerClass = $container->getParameter( $match[1] );
+
+                if (
+                    is_subclass_of(
+                        $storageHandlerClass,
+                        'eZ\\Publish\\Core\\FieldType\\GatewayBasedStorage'
+                    )
+                )
+                {
+                    if ( !isset( $externalStorageGateways[$attribute['alias']] ) )
+                        throw new \LogicException(
+                            "External storage handler '$id' for field type {$attribute['alias']} needs a storage gateway but none was given.
+                        Consider defining a storage gateway as a service for this field type and add the 'ezpublish.fieldType.externalStorageHandler.gateway tag'"
+                        );
+
+                    $storageHandlerDef->addMethodCall(
+                        'addGateway',
+                        array(
+                            $externalStorageGateways[$attribute['alias']]['identifier'],
+                            new Reference( $externalStorageGateways[$attribute['alias']]['id'] )
+                        )
+                    );
+                }
+
+                $repositoryFactoryDef->addMethodCall(
+                    'registerExternalStorageHandler',
                     array(
-                        $externalStorageGateways[$attributes[0]['alias']]['identifier'],
-                        new Reference( $externalStorageGateways[$attributes[0]['alias']]['id'] )
+                        // Only pass the service Id since field types will be lazy loaded via the service container
+                        $id,
+                        $attribute['alias']
                     )
                 );
             }
-
-            $repositoryFactoryDef->addMethodCall(
-                'registerExternalStorageHandler',
-                array(
-                    // Only pass the service Id since field types will be lazy loaded via the service container
-                    $id,
-                    $attributes[0]['alias']
-                )
-            );
         }
     }
 }

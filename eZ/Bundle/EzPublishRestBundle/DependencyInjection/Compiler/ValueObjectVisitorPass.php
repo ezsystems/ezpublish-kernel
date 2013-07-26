@@ -29,13 +29,16 @@ class ValueObjectVisitorPass implements CompilerPassInterface
 
         foreach ( $container->findTaggedServiceIds( 'ezpublish_rest.output.value_object_visitor' ) as $id => $attributes )
         {
-            if ( !isset( $attributes[0]['type'] ) )
-                throw new \LogicException( 'ezpublish_rest.output.value_object_visitor service tag needs a "type" attribute to identify the field type. None given.' );
+            foreach ( $attributes as $attribute )
+            {
+                if ( !isset( $attribute['type'] ) )
+                    throw new \LogicException( 'ezpublish_rest.output.value_object_visitor service tag needs a "type" attribute to identify the field type. None given.' );
 
-            $definition->addMethodCall(
-                'addVisitor',
-                array( $attributes[0]["type"], new Reference( $id ) )
-            );
+                $definition->addMethodCall(
+                    'addVisitor',
+                    array( $attribute["type"], new Reference( $id ) )
+                );
+            }
         }
 
     }

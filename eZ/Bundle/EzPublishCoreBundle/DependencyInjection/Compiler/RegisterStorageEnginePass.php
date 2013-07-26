@@ -17,7 +17,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class RegisterStorageEnginePass implements CompilerPassInterface
 {
-
     /**
      * Performs compiler passes for persistence factories
      *
@@ -38,19 +37,24 @@ class RegisterStorageEnginePass implements CompilerPassInterface
 
         foreach ( $container->findTaggedServiceIds( 'ezpublish.storageEngine' ) as $id => $attributes )
         {
-            // Set the default id on parameter ezpublish.spi.persistence.default_id for lazy factory
-            if ( $attributes[0]['alias'] === $default )
-                $container->setParameter( 'ezpublish.spi.persistence.default_id', $id );
+            foreach ( $attributes as $attribute )
+            {
+                if ( !isset( $attribute['alias'] ) )
+                    throw new \LogicException( 'ezpublish.storageEngine service tag needs an "alias" attribute to identify the field type. None given.' );
 
-            // Register the storage engine on the main storage engine factory
-            $storageEngineFactoryDef->addMethodCall(
-                'registerStorageEngine',
-                array(
-                    $id,
-                    // @todo: Maybe there should be some validation here. What if no alias is provided ?
-                    $attributes[0]['alias']
-                )
-            );
+                // Set the default id on parameter ezpublish.spi.persistence.default_id for lazy factory
+                if ( $attribute['alias'] === $default )
+                    $container->setParameter( 'ezpublish.spi.persistence.default_id', $id );
+
+                // Register the storage engine on the main storage engine factory
+                $storageEngineFactoryDef->addMethodCall(
+                    'registerStorageEngine',
+                    array(
+                        $id,
+                        $attribute['alias']
+                    )
+                );
+            }
         }
     }
 }
