@@ -11,6 +11,8 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 
 use DateTime;
 use eZ\Bundle\EzPublishLegacyBundle\LegacyResponse;
+use eZ\Publish\Core\MVC\Legacy\Kernel\URIHelper;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Templating\EngineInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
@@ -36,19 +38,36 @@ class LegacyKernelController
     private $legacyLayout;
 
     /**
+     * @var \eZ\Publish\Core\MVC\Legacy\Kernel\URIHelper
+     */
+    private $uriHelper;
+
+    /**
+     * @var \Symfony\Component\HttpFoundation\Request
+     */
+    private $request;
+
+    /**
      * @todo Maybe following dependencies should be mutualized in an abstract controller
      *       Injection can be done through "parent service" feature for DIC : http://symfony.com/doc/master/components/dependency_injection/parentservices.html
+     *
      * @param \Closure $kernelClosure
      * @param \Symfony\Component\Templating\EngineInterface $templateEngine
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
-     * @param mixed $legacyLayout
+     * @param \eZ\Publish\Core\MVC\Legacy\Kernel\URIHelper $uriHelper
      */
-    public function __construct( \Closure $kernelClosure, EngineInterface $templateEngine, ConfigResolverInterface $configResolver )
+    public function __construct( \Closure $kernelClosure, EngineInterface $templateEngine, ConfigResolverInterface $configResolver, URIHelper $uriHelper )
     {
         $this->kernel = $kernelClosure();
         $this->templateEngine = $templateEngine;
         $this->legacyLayout = $configResolver->getParameter( 'module_default_layout', 'ezpublish_legacy' );
         $this->configResolver = $configResolver;
+        $this->uriHelper = $uriHelper;
+    }
+
+    public function setRequest( Request $request = null )
+    {
+        $this->request = $request;
     }
 
     /**
@@ -77,6 +96,9 @@ class LegacyKernelController
         $legacyMode = $this->configResolver->getParameter( 'legacy_mode' );
 
         $this->kernel->setUseExceptions( false );
+
+        // Fix up legacy URI with current request since we can be in a sub-request here.
+        $this->uriHelper->updateLegacyURI( $this->request );
 
         // If we have a layout for legacy AND we're not in legacy mode, we ask the legacy kernel not to generate layout.
         if ( isset( $this->legacyLayout ) && !$legacyMode )

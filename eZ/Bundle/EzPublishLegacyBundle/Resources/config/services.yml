@@ -21,6 +21,7 @@ parameters:
     ezpublish_legacy.webconfigurator.class: Sensio\Bundle\DistributionBundle\Configurator\Configurator
 
     ezpublish_legacy.router.class: eZ\Bundle\EzPublishLegacyBundle\Routing\FallbackRouter
+    ezpublish_legacy.uri_helper.class: eZ\Publish\Core\MVC\Legacy\Kernel\URIHelper
     ezpublish_legacy.url_generator.class: eZ\Bundle\EzPublishLegacyBundle\Routing\UrlGenerator
     ezpublish_legacy.siteaccess_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess
     ezpublish_legacy.session_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Session
@@ -49,6 +50,7 @@ parameters:
     ezpublish.fieldType.ezpage.pageService.class: eZ\Bundle\EzPublishLegacyBundle\FieldType\Page\PageService
 
     ezpublish_legacy.rest_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\RestListener
+    ezpublish_legacy.siteaccess_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\SiteAccessListener
 
 services:
     ezpublish_legacy.kernel:
@@ -65,6 +67,7 @@ services:
         arguments:
             - %ezpublish_legacy.root_dir%
             - %webroot_dir%
+            - @ezpublish_legacy.uri_helper
             - @?logger
 
     ezpublish_legacy.kernel_handler.web:
@@ -94,6 +97,9 @@ services:
             - @ezpublish_legacy.kernel
             - @templating
             - @ezpublish.config.resolver
+            - @ezpublish_legacy.uri_helper
+        calls:
+            - [setRequest, [@?request=]]
 
     ezpublish_legacy.treemenu.controller:
         class: %ezpublish_legacy.treemenu.controller.class%
@@ -118,6 +124,9 @@ services:
         arguments: [@service_container, @?request_context, @?logger]
         tags:
             - {name: router, priority: -255}
+
+    ezpublish_legacy.uri_helper:
+        class: %ezpublish_legacy.uri_helper.class%
 
     ezpublish_legacy.url_generator:
         class: %ezpublish_legacy.url_generator.class%
@@ -208,5 +217,11 @@ services:
     ezpublish_legacy.rest_listener:
         class: %ezpublish_legacy.rest_listener.class%
         arguments: [%ezpublish_rest.csrf_token_intention%]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish_legacy.siteaccess_listener:
+        class: %ezpublish_legacy.siteaccess_listener.class%
+        arguments: [@ezpublish_legacy.url_generator]
         tags:
             - { name: kernel.event_subscriber }

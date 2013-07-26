@@ -9,6 +9,8 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Routing;
 
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 use eZModule;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 use Symfony\Component\Routing\RequestContext;
@@ -20,9 +22,19 @@ class UrlGenerator extends Generator
      */
     private $legacyKernelClosure;
 
+    /**
+     * @var SiteAccess
+     */
+    private $siteAccess;
+
     public function __construct( \Closure $legacyKernelClosure )
     {
         $this->legacyKernelClosure = $legacyKernelClosure;
+    }
+
+    public function setSiteAccess( SiteAccess $siteAccess = null )
+    {
+        $this->siteAccess = $siteAccess;
     }
 
     /**
@@ -54,9 +66,10 @@ class UrlGenerator extends Generator
             $legacyModuleUri = substr( $legacyModuleUri, 0, -1 );
 
         list( $moduleName, $viewName ) = explode( '/', $legacyModuleUri );
+        $siteAccess = $this->siteAccess;
 
         return $this->getLegacyKernel()->runCallback(
-            function () use ( $legacyModuleUri, $moduleName, $viewName, $parameters )
+            function () use ( $legacyModuleUri, $moduleName, $viewName, $parameters, $siteAccess )
             {
                 $module = eZModule::findModule( $moduleName );
                 if ( !$module instanceof eZModule )
@@ -73,6 +86,11 @@ class UrlGenerator extends Generator
                         continue;
 
                     $unorderedParams .= "/($paramName)/$paramValue";
+                }
+
+                if ( isset( $siteAccess ) && $siteAccess->matcher instanceof URILexer )
+                {
+                    $legacyModuleUri = trim( $this->siteAccess->matcher->analyseLink( "/$legacyModuleUri" ), '/' );
                 }
 
                 return "/$legacyModuleUri$unorderedParams";
