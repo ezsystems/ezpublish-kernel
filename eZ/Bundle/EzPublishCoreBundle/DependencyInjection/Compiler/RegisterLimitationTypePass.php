@@ -35,16 +35,19 @@ class RegisterLimitationTypePass implements CompilerPassInterface
         // Alias attribute is the limitation type name.
         foreach ( $container->findTaggedServiceIds( 'ezpublish.limitationType' ) as $id => $attributes )
         {
-            if ( !isset( $attributes[0]['alias'] ) )
-                throw new \LogicException( 'ezpublish.limitationType service tag needs an "alias" attribute to identify the limitation type. None given.' );
+            foreach ( $attributes as $attribute )
+            {
+                if ( !isset( $attribute['alias'] ) )
+                    throw new \LogicException( 'ezpublish.limitationType service tag needs an "alias" attribute to identify the limitation type. None given.' );
 
-            $repositoryFactoryDef->addMethodCall(
-                'registerLimitationType',
-                array(
-                    $attributes[0]['alias'],
-                    new Reference( $id )
-                )
-            );
+                $repositoryFactoryDef->addMethodCall(
+                    'registerLimitationType',
+                    array(
+                        $attribute['alias'],
+                        new Reference( $id )
+                    )
+                );
+            }
         }
     }
 }

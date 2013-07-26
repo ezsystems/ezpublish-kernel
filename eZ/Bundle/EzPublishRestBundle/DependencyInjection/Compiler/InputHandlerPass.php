@@ -33,13 +33,16 @@ class InputHandlerPass implements CompilerPassInterface
         // @todo rethink the relationships between registries. Rename if required.
         foreach ( $container->findTaggedServiceIds( 'ezpublish_rest.input.handler' ) as $id => $attributes )
         {
-            if ( !isset( $attributes[0]['format'] ) )
-                throw new \LogicException( 'ezpublish_rest.input.handler service tag needs a "format" attribute to identify the input handler. None given.' );
+            foreach ( $attributes as $attribute )
+            {
+                if ( !isset( $attribute['format'] ) )
+                    throw new \LogicException( 'ezpublish_rest.input.handler service tag needs a "format" attribute to identify the input handler. None given.' );
 
-            $definition->addMethodCall(
-                'addHandler',
-                array( $attributes[0]["format"], new Reference( $id ) )
-            );
+                $definition->addMethodCall(
+                    'addHandler',
+                    array( $attribute["format"], new Reference( $id ) )
+                );
+            }
         }
 
     }

@@ -32,37 +32,40 @@ class OutputVisitorPass implements CompilerPassInterface
 
         foreach ( $container->findTaggedServiceIds( 'ezpublish_rest.output.visitor' ) as $id => $attributes )
         {
-            if ( !isset( $attributes[0]['regexps'] ) )
+            foreach ( $attributes as $attribute )
             {
-                throw new \LogicException( 'ezpublish_rest.output.visitor service tag needs a "regexps" attribute to identify the Accept header. None given.' );
-            }
-
-            if ( is_array( $attributes[0]['regexps'] ) )
-            {
-                $regexps = $attributes[0]['regexps'];
-            }
-            else if ( is_string( $attributes[0]['regexps'] ) )
-            {
-                try
+                if ( !isset( $attribute['regexps'] ) )
                 {
-                    $regexps = $container->getParameter( $attributes[0]['regexps'] );
+                    throw new \LogicException( 'ezpublish_rest.output.visitor service tag needs a "regexps" attribute to identify the Accept header. None given.' );
                 }
-                catch ( InvalidArgumentException $e )
-                {
-                    throw new \LogicException( "The regexps attribute of the ezpublish_rest.output.visitor service tag can be a string matching a container parameter name. No parameter {$attributes[0]['regexps']} could be found." );
-                }
-            }
-            else
-            {
-                throw new \LogicException( 'ezpublish_rest.output.visitor service tag needs a "regexps" attribute, either as an array or a string. Invalid value.' );
-            }
 
-            foreach ( $regexps as $regexp )
-            {
-                $definition->addMethodCall(
-                    'addVisitor',
-                    array( $regexp, new Reference( $id ) )
-                );
+                if ( is_array( $attribute['regexps'] ) )
+                {
+                    $regexps = $attribute['regexps'];
+                }
+                else if ( is_string( $attribute['regexps'] ) )
+                {
+                    try
+                    {
+                        $regexps = $container->getParameter( $attribute['regexps'] );
+                    }
+                    catch ( InvalidArgumentException $e )
+                    {
+                        throw new \LogicException( "The regexps attribute of the ezpublish_rest.output.visitor service tag can be a string matching a container parameter name. No parameter {$attribute['regexps']} could be found." );
+                    }
+                }
+                else
+                {
+                    throw new \LogicException( 'ezpublish_rest.output.visitor service tag needs a "regexps" attribute, either as an array or a string. Invalid value.' );
+                }
+
+                foreach ( $regexps as $regexp )
+                {
+                    $definition->addMethodCall(
+                        'addVisitor',
+                        array( $regexp, new Reference( $id ) )
+                    );
+                }
             }
         }
 

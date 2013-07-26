@@ -34,45 +34,53 @@ class LegacyStorageEnginePass implements CompilerPassInterface
         // Alias attribute is the field type string.
         foreach ( $container->findTaggedServiceIds( 'ezpublish.fieldType' ) as $id => $attributes )
         {
-            if ( !isset( $attributes[0]['alias'] ) )
-                throw new \LogicException( 'ezpublish.fieldType service tag needs an "alias" attribute to identify the field type. None given.' );
+            foreach ( $attributes as $attribute )
+            {
+                if ( !isset( $attribute['alias'] ) )
+                    throw new \LogicException( 'ezpublish.fieldType service tag needs an "alias" attribute to identify the field type. None given.' );
 
-            $legacyStorageEngineDef->addMethodCall(
-                'registerFieldType',
-                array(
-                    // Only pass the service Id since field types will be lazy loaded via the service container
-                    $id,
-                    $attributes[0]['alias']
-                )
-            );
+                $legacyStorageEngineDef->addMethodCall(
+                    'registerFieldType',
+                    array(
+                        // Only pass the service Id since field types will be lazy loaded via the service container
+                        $id,
+                        $attribute['alias']
+                    )
+                );
+            }
         }
 
         foreach ( $container->findTaggedServiceIds( 'ezpublish.storageEngine.legacy.converter' ) as $id => $attributes )
         {
-            if ( isset( $attributes[0]['lazy'] ) && $attributes[0]['lazy'] === true )
+            foreach ( $attributes as $attribute )
             {
-                if ( !isset( $attributes[0]['callback'] ) )
-                    throw new LogicException( "Converter service '$id' is marked as lazy but no callback is provided! Please provide a callback." );
+                if ( !isset( $attribute['alias'] ) )
+                    throw new \LogicException( 'ezpublish.storageEngine.legacy.converter service tag needs an "alias" attribute to identify the field type. None given.' );
 
-                $converter = $attributes[0]['callback'];
-                if ( strpos( $converter, '::' ) === 0 )
+                if ( isset( $attribute['lazy'] ) && $attribute['lazy'] === true )
                 {
-                    $converter = $container->getDefinition( $id )->getClass() . $converter;
-                }
-            }
-            else
-            {
-                $converter = new Reference( $id );
-            }
+                    if ( !isset( $attribute['callback'] ) )
+                        throw new LogicException( "Converter service '$id' is marked as lazy but no callback is provided! Please provide a callback." );
 
-            $legacyStorageEngineDef->addMethodCall(
-                'registerFieldTypeConverter',
-                array(
-                    // @todo: Maybe there should be some validation here. What if no alias is provided ?
-                    $attributes[0]['alias'],
-                    $converter
-                )
-            );
+                    $converter = $attribute['callback'];
+                    if ( strpos( $converter, '::' ) === 0 )
+                    {
+                        $converter = $container->getDefinition( $id )->getClass() . $converter;
+                    }
+                }
+                else
+                {
+                    $converter = new Reference( $id );
+                }
+
+                $legacyStorageEngineDef->addMethodCall(
+                    'registerFieldTypeConverter',
+                    array(
+                        $attribute['alias'],
+                        $converter
+                    )
+                );
+            }
         }
     }
 }
