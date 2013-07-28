@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\FieldType\XmlText\Converter;
 
 use eZ\Publish\Core\FieldType\XmlText\Converter;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use DOMDocument;
 use XSLTProcessor;
@@ -29,20 +28,6 @@ class Xslt implements Converter
     protected $stylesheet;
 
     /**
-     * Array of converters that needs to be called before actual processing.
-     *
-     * @var \eZ\Publish\Core\FieldType\XmlText\Converter[]
-     */
-    protected $preConverters;
-
-    /**
-     * Array of converters that needs to be called after actual processing.
-     *
-     * @var \eZ\Publish\Core\FieldType\XmlText\Converter[]
-     */
-    protected $postConverters;
-
-    /**
      * Textual mapping for libxml error types.
      *
      * @var array
@@ -57,38 +42,10 @@ class Xslt implements Converter
      * Constructor
      *
      * @param string $stylesheet Stylesheet to use for conversion
-     * @param \eZ\Publish\Core\FieldType\XmlText\Converter[] $preConverters Array of pre-converters
-     * @param \eZ\Publish\Core\FieldType\XmlText\Converter[] $postConverters Array of post-converters
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
      */
-    public function __construct( $stylesheet, array $preConverters = array(), array $postConverters = array() )
+    public function __construct( $stylesheet )
     {
         $this->stylesheet = $stylesheet;
-
-        foreach ( $preConverters as $preConverter )
-        {
-            if ( !$preConverter instanceof Converter )
-                throw new InvalidArgumentType(
-                    '$preConverters',
-                    "eZ\\Publish\\Core\\FieldType\\XmlText\\Converter\\Xslt",
-                    $preConverter
-                );
-        }
-
-        $this->preConverters = $preConverters;
-
-        foreach ( $postConverters as $postConverter )
-        {
-            if ( !$postConverter instanceof Converter )
-                throw new InvalidArgumentType(
-                    '$postConverters',
-                    "eZ\\Publish\\Core\\FieldType\\XmlText\\Converter\\Xslt",
-                    $postConverter
-                );
-        }
-
-        $this->postConverters = $postConverters;
     }
 
     /**
@@ -113,11 +70,11 @@ class Xslt implements Converter
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if stylesheet is not found
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if document does not transform
      *
-     * @param DOMDocument $document
+     * @param \DOMDocument $document
      *
      * @return \DOMDocument
      */
-    protected function internalConvert( DOMDocument $document )
+    public function convert( DOMDocument $document )
     {
         if ( !file_exists( $this->stylesheet ) )
         {
@@ -154,33 +111,6 @@ class Xslt implements Converter
                 "\$xmlDoc",
                 "Transformation of XML content failed: " . join( "\n", $errors )
             );
-        }
-
-        return $document;
-    }
-
-    /**
-     * Performs conversion of the given $document using XSLT stylesheet and configured pre- and post-converters.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if stylesheet is not found
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if document does not transform
-     *
-     * @param \DOMDocument $document
-     *
-     * @return \DOMDocument
-     */
-    public function convert( DOMDocument $document )
-    {
-        foreach ( $this->preConverters as $preConverter )
-        {
-            $document = $preConverter->convert( $document );
-        }
-
-        $document = $this->internalConvert( $document );
-
-        foreach ( $this->postConverters as $postConverter )
-        {
-            $document = $postConverter->convert( $document );
         }
 
         return $document;
