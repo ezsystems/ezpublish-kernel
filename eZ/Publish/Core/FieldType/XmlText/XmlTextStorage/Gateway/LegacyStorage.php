@@ -14,6 +14,7 @@ use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlStorage;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use RuntimeException;
 
 class LegacyStorage extends Gateway
@@ -70,34 +71,47 @@ class LegacyStorage extends Gateway
         $xpath->registerNamespace( "docbook", "http://docbook.org/ns/docbook" );
         $xpathExpression = "//docbook:link[starts-with( @xlink:href, 'ezurl://' )]";
 
-        $linksById = array();
-        $fragmentsById = array();
+        $links = $xpath->query( $xpathExpression );
+
+        if ( empty( $links ) )
+        {
+            return;
+        }
+
+        $linkIdSet = array();
+        $linksInfo = array();
 
         /** @var \DOMElement $link */
-        foreach ( $xpath->query( $xpathExpression ) as $link )
+        foreach ( $links as $index => $link )
         {
-            preg_match( "~^ezurl://([^#]*)?(#.*|\\s*)?$~", $link->getAttribute( "xlink:href" ), $matches );
-            list( , $urlId, $fragment ) = $matches;
+            preg_match(
+                "~^ezurl://([^#]*)?(#.*|\\s*)?$~",
+                $link->getAttribute( "xlink:href" ),
+                $matches
+            );
+            $linksInfo[$index] = $matches;
 
-            if ( !empty( $urlId ) )
+            if ( !empty( $matches[1] ) )
             {
-                $linksById[$urlId] = $link;
-                $fragmentsById[$urlId] = $fragment;
+                $linkIdSet[$matches[1]] = true;
             }
         }
 
-        $linkUrls = $this->getLinkUrls( array_keys( $linksById ) );
+        $linkUrls = $this->getLinkUrls( array_keys( $linkIdSet ) );
 
-        foreach ( $linksById as $id => $link )
+        foreach ( $links as $index => $link )
         {
-            if ( isset( $linkUrls[$id] ) )
+            list( , $urlId, $fragment ) = $linksInfo[$index];
+
+            if ( isset( $linkUrls[$urlId] ) )
             {
-                $href = $linkUrls[$id] . $fragmentsById[$id];
+                $href = $linkUrls[$urlId] . $fragment;
             }
             else
             {
-                // URL entry is missing in DB
-                $href = "";
+                // URL id is empty or not in the DB
+                // @TODO log error
+                $href = "#";
             }
 
             $link->setAttribute( "xlink:href", $href );
@@ -138,6 +152,8 @@ class LegacyStorage extends Gateway
     /**
      * Stores data, external to XMLText type
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      *
@@ -147,43 +163,71 @@ class LegacyStorage extends Gateway
     {
         $xpath = new \DOMXPath( $field->value->data );
         $xpath->registerNamespace( "docbook", "http://docbook.org/ns/docbook" );
-        $xpathExpression = "//docbook:link[not(" .
-            "starts-with( @xlink:href, 'ezurl://' )" .
+        // This will select only links with non-empty 'xlink:href' attribute value
+        $xpathExpression = "//docbook:link[string( @xlink:href ) and not( starts-with( @xlink:href, 'ezurl://' )" .
             "or starts-with( @xlink:href, 'ezcontent://' )" .
             "or starts-with( @xlink:href, 'ezlocation://' )" .
-            "or starts-with( @xlink:href, 'ezremote://' )" .
             "or starts-with( @xlink:href, '#' ) )]";
 
-        $linksByUrl = array();
-        $fragmentsByUrl = array();
+        $links = $xpath->query( $xpathExpression );
 
-        /** @var \DOMElement $link */
-        foreach ( $xpath->query( $xpathExpression ) as $link )
+        if ( empty( $links ) )
         {
-            preg_match( "~^([^#]*)?(#.*|\\s*)?$~", $link->getAttribute( "xlink:href" ), $matches );
-            list( , $url, $fragment ) = $matches;
-
-            $linksByUrl[$url] = $link;
-            $fragmentsByUrl[$url] = $fragment;
+            return false;
         }
 
-        $linksIds = $this->getLinkIds( array_keys( $linksByUrl ) );
+        $urlSet = array();
+        $remoteIdSet = array();
+        $linksInfo = array();
 
-        foreach ( $linksByUrl as $url => $link )
+        /** @var \DOMElement $link */
+        foreach ( $links as $index => $link )
         {
-            if ( isset( $linksIds[$url] ) )
+            preg_match(
+                "~^(ezremote://)?([^#]*)?(#.*|\\s*)?$~",
+                $link->getAttribute( "xlink:href" ),
+                $matches
+            );
+            $linksInfo[$index] = $matches;
+
+            if ( empty( $matches[1] ) )
             {
-                $linkId = $linksIds[$url];
+                $urlSet[$matches[2]] = true;
             }
             else
             {
-                $linkId = $this->insertLink( $url );
+                $remoteIdSet[$matches[2]] = true;
             }
-
-            $link->setAttribute( "xlink:href", "ezurl://{$linkId}{$fragmentsByUrl[$url]}" );
         }
 
-        return !empty( $linksByUrl );
+        $linksIds = $this->getLinkIds( array_keys( $urlSet ) );
+        $contentIds = $this->getContentIds( array_keys( $remoteIdSet ) );
+
+        foreach ( $links as $index => $link )
+        {
+            list( , $protocol, $url, $fragment ) = $linksInfo[$index];
+
+            if ( empty( $protocol ) )
+            {
+                if ( !isset( $linksIds[$url] ) )
+                {
+                    $linksIds[$url] = $this->insertLink( $url );
+                }
+                $href = "ezurl://{$linksIds[$url]}{$fragment}";
+            }
+            else
+            {
+                if ( !isset( $contentIds[$url] ) )
+                {
+                    throw new NotFoundException( "Content", $url );
+                }
+                $href = "ezcontent://{$contentIds[$url]}{$fragment}";
+            }
+
+            $link->setAttribute( "xlink:href", $href );
+        }
+
+        return true;
     }
 
     /**
@@ -215,6 +259,38 @@ class LegacyStorage extends Gateway
         }
 
         return $linkIds;
+    }
+
+    /**
+     * Fetches rows in ezcontentobject table referenced by remoteIds in $linksRemoteIds array.
+     * Returns as hash with remote id as key and corresponding id as value.
+     *
+     * @param array $linksRemoteIds
+     *
+     * @return array
+     */
+    protected function getContentIds( array $linksRemoteIds )
+    {
+        $objectRemoteIdMap = array();
+
+        if ( !empty( $linksRemoteIds ) )
+        {
+            /** @var $q \ezcQuerySelect */
+            $q = $this->getConnection()->createSelectQuery();
+            $q
+                ->select( "id", "remote_id" )
+                ->from( "ezcontentobject" )
+                ->where( $q->expr->in( 'remote_id', $linksRemoteIds ) );
+
+            $statement = $q->prepare();
+            $statement->execute();
+            foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
+            {
+                $objectRemoteIdMap[$row['remote_id']] = $row['id'];
+            }
+        }
+
+        return $objectRemoteIdMap;
     }
 
     /**
