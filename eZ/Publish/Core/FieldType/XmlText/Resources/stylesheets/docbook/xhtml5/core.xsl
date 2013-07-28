@@ -94,6 +94,18 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template match="docbook:subscript">
+    <xsl:element name="sub" namespace="{$outputNamespace}">
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="docbook:superscript">
+    <xsl:element name="sup" namespace="{$outputNamespace}">
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
   <xsl:template match="docbook:anchor">
     <xsl:element name="a" namespace="{$outputNamespace}">
       <xsl:attribute name="id">

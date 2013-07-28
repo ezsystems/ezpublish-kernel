@@ -75,6 +75,16 @@
           <xsl:apply-templates/>
         </xsl:element>
       </xsl:when>
+      <xsl:when test="@name='sub'">
+        <xsl:element name="subscript" namespace="http://docbook.org/ns/docbook">
+          <xsl:apply-templates/>
+        </xsl:element>
+      </xsl:when>
+      <xsl:when test="@name='sup'">
+        <xsl:element name="superscript" namespace="http://docbook.org/ns/docbook">
+          <xsl:apply-templates/>
+        </xsl:element>
+      </xsl:when>
     </xsl:choose>
   </xsl:template>
 

@@ -98,6 +98,18 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template match="docbook:subscript">
+    <custom name="sub">
+      <xsl:apply-templates/>
+    </custom>
+  </xsl:template>
+
+  <xsl:template match="docbook:superscript">
+    <custom name="sup">
+      <xsl:apply-templates/>
+    </custom>
+  </xsl:template>
+
   <xsl:template match="docbook:anchor">
     <anchor>
       <xsl:attribute name="name">

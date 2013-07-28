@@ -66,6 +66,18 @@
     </emphasis>
   </xsl:template>
 
+  <xsl:template match="ezxhtml5:sub">
+    <subscript>
+      <xsl:apply-templates/>
+    </subscript>
+  </xsl:template>
+
+  <xsl:template match="ezxhtml5:sup">
+    <superscript>
+      <xsl:apply-templates/>
+    </superscript>
+  </xsl:template>
+
   <xsl:template name="link.href">
     <link>
       <xsl:attribute name="xlink:href">
