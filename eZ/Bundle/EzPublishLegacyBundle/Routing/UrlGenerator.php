@@ -90,7 +90,7 @@ class UrlGenerator extends Generator
 
                 if ( isset( $siteAccess ) && $siteAccess->matcher instanceof URILexer )
                 {
-                    $legacyModuleUri = trim( $this->siteAccess->matcher->analyseLink( "/$legacyModuleUri" ), '/' );
+                    $legacyModuleUri = trim( $siteAccess->matcher->analyseLink( "/$legacyModuleUri" ), '/' );
                 }
 
                 return "/$legacyModuleUri$unorderedParams";

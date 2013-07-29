@@ -92,8 +92,9 @@ class Loader
     {
         $legacyRootDir = $this->legacyRootDir;
         $webrootDir = $this->webrootDir;
+        $uriHelper = $this->uriHelper;
 
-        return function () use ( $legacyRootDir, $webrootDir, $container, $defaultLegacyOptions, $webHandlerClass )
+        return function () use ( $legacyRootDir, $webrootDir, $container, $defaultLegacyOptions, $webHandlerClass, $uriHelper )
         {
             static $webHandler;
             if ( !$webHandler instanceof ezpKernelHandler )
@@ -122,7 +123,7 @@ class Loader
 
                 $webHandler = new $webHandlerClass( $legacyParameters->all() );
                 // Fix up legacy URI for global use cases (i.e. using runCallback()).
-                $this->uriHelper->updateLegacyURI( $request );
+                $uriHelper->updateLegacyURI( $request );
                 chdir( $webrootDir );
             }
 
