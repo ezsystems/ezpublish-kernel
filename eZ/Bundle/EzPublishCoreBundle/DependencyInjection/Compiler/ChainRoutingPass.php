@@ -33,6 +33,10 @@ class ChainRoutingPass implements CompilerPassInterface
         if ( $container->hasDefinition( 'router.default' ) )
         {
             $defaultRouter = $container->getDefinition( 'router.default' );
+            $defaultRouter->addMethodCall(
+                'setNonSiteAccessAwareRoutes',
+                array( '%ezpublish.default_router.non_siteaccess_aware_routes%' )
+            );
             if ( !$defaultRouter->hasTag( 'router' ) )
             {
                 $defaultRouter->addTag(

@@ -11,9 +11,12 @@ namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
+use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * SiteAccess match listener.
@@ -25,9 +28,21 @@ class SiteAccessListener implements EventSubscriberInterface
      */
     private $container;
 
-    public function __construct( ContainerInterface $container )
+    /**
+     * @var \Symfony\Component\Routing\RouterInterface
+     */
+    private $defaultRouter;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator
+     */
+    private $urlAliasGenerator;
+
+    public function __construct( ContainerInterface $container, RouterInterface $defaultRouter, UrlAliasGenerator $urlAliasGenerator )
     {
         $this->container = $container;
+        $this->defaultRouter = $defaultRouter;
+        $this->urlAliasGenerator = $urlAliasGenerator;
     }
 
     public static function getSubscribedEvents()
@@ -42,7 +57,10 @@ class SiteAccessListener implements EventSubscriberInterface
         $request = $event->getRequest();
         $siteAccess = $event->getSiteAccess();
         $this->container->set( 'ezpublish.siteaccess', $siteAccess );
-        $this->container->get( 'ezpublish.urlalias_generator' )->setSiteAccess( $siteAccess );
+        if ( $this->urlAliasGenerator instanceof SiteAccessAware )
+            $this->urlAliasGenerator->setSiteAccess( $siteAccess );
+        if ( $this->defaultRouter instanceof SiteAccessAware )
+            $this->defaultRouter->setSiteAccess( $siteAccess );
 
         // We already have semanticPathinfo (sub-request)
         if ( $request->attributes->has( 'semanticPathinfo' ) )
