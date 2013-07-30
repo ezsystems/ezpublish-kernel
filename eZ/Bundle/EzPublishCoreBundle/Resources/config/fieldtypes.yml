@@ -309,7 +309,7 @@ parameters:
     ezpublish.fieldType.ezxmltext.converter_dispatcher.class: eZ\Publish\Core\FieldType\XmlText\ConverterDispatcher
 
     ezpublish.fieldType.ezxmltext.validator.xsd_validator.class: eZ\Publish\Core\FieldType\XmlText\Validator
-    ezpublish.fieldType.ezxmltext.validator.xsd_validator.docbook.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/schemas/docbook/docbook.xsd
+    ezpublish.fieldType.ezxmltext.validator.xsd_validator.docbook.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/schemas/docbook/ezpublish.rng
     #ezpublish.fieldType.ezxmltext.validator.xsd_validator.ezxhtml5.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/schemas/ezxhtml5/ezxhtml5.xsd
 
     ezpublish.fieldType.ezxmltext.validator_dispatcher.class: eZ\Publish\Core\FieldType\XmlText\ValidatorDispatcher
