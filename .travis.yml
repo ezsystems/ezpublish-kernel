@@ -31,8 +31,6 @@ matrix:
       env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York"
     - php: 5.5
       env: TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
-    - php: 5.5
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Asia/Calcutta"
 #    - php: 5.5
 #      env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
 
