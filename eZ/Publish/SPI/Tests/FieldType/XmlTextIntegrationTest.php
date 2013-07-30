@@ -65,7 +65,7 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
                 new FieldType\XmlText\ValidatorDispatcher(
                     array(
                         "http://docbook.org/ns/docbook" => new FieldType\XmlText\Validator(
-                            $this->getAbsolutePath( "eZ/Publish/Core/FieldType/XmlText/Resources/schemas/docbook/docbook.xsd" )
+                            $this->getAbsolutePath( "eZ/Publish/Core/FieldType/XmlText/Resources/schemas/docbook/ezpublish.rng" )
                         )
                     )
                 )
@@ -147,10 +147,10 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
         $xml = new DOMDocument;
         $xml->loadXML(
             '<?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0">
   <title>This is a heading.</title>
   <para>This is a paragraph.</para>
-</article>'
+</section>'
         );
         return new FieldValue(
             array(
@@ -173,10 +173,10 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
         $xml = new DOMDocument;
         $xml->loadXML(
             '<?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0">
   <title>This is an updated heading.</title>
   <para>This is an updated paragraph.</para>
-</article>'
+</section>'
         );
         return new FieldValue(
             array(

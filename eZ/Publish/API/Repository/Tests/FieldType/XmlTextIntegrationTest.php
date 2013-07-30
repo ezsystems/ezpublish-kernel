@@ -38,10 +38,10 @@ class XmlTextIntegrationTest extends RelationBaseIntegrationTest
         $this->createdDOMValue->loadXML(
 <<<EOT
 <?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0">
     <para><link xlink:href="ezlocation://58" xlink:show="none">link1</link></para>
     <para><link xlink:href="ezcontent://54" xlink:show="none">link2</link></para>
-</article>
+</section>
 EOT
         );
 
@@ -49,10 +49,10 @@ EOT
         $this->updatedDOMValue->loadXML(
 <<<EOT
 <?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0">
     <para><link xlink:href="ezlocation://60" xlink:show="none">link1</link></para>
     <para><link xlink:href="ezcontent://56" xlink:show="none">link2</link></para>
-</article>
+</section>
 EOT
         );
     }
@@ -210,10 +210,10 @@ EOT
         $doc->loadXML(
 <<<EOT
 <?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0">
     <para><link xlink:href="ezlocation://58" xlink:show="none">link1</link></para>
     <para><link xlink:href="ezcontent://54" xlink:show="none">link2</link></para>
-</article>
+</section>
 EOT
         );
         return new XmlTextValue( $doc );
@@ -382,10 +382,10 @@ EOT
         $xml->loadXML(
 <<<EOT
 <?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0">
     <title>Some text</title>
     <para>Foobar</para>
-</article>
+</section>
 EOT
         );
         return array(
@@ -411,10 +411,10 @@ EOT
                     'xml' =>
 <<<EOT
 <?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0">
     <title>Some text</title>
     <para>Foobar</para>
-</article>
+</section>
 
 EOT
                 )
@@ -449,7 +449,7 @@ EOT
         $doc->loadXML(
 <<<EOT
 <?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0"/>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0"/>
 EOT
         );
 
@@ -465,16 +465,16 @@ EOT
         $doc->loadXML(
 <<<EOT
 <?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0"> </article>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0"> </section>
 EOT
         );
         $doc2 = new DOMDocument;
         $doc2->loadXML(
 <<<EOT
 <?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0">
     <para/>
-</article>
+</section>
 EOT
         );
         return array(

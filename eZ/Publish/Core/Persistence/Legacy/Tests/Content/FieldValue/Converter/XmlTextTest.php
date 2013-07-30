@@ -62,10 +62,10 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
 EOT;
         $this->docbookString = <<<EOT
 <?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0">
   <title>This is a heading.</title>
   <para>This is a paragraph.</para>
-</article>
+</section>
 
 EOT;
     }

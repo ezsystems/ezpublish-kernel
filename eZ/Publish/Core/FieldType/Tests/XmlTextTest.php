@@ -45,7 +45,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
             new ValidatorDispatcher(
                 array(
                     "http://docbook.org/ns/docbook" => new Validator(
-                        $this->getAbsolutePath( "eZ/Publish/Core/FieldType/XmlText/Resources/schemas/docbook/docbook.xsd" )
+                        $this->getAbsolutePath( "eZ/Publish/Core/FieldType/XmlText/Resources/schemas/docbook/ezpublish.rng" )
                     )
                 )
             )
@@ -101,10 +101,10 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
 
             array(
                 $xml = '<?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
   <title>This is a heading.</title>
   <para>This is a paragraph.</para>
-</article>
+</section>
 '
             ),
         );
@@ -126,12 +126,12 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
 
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
   <h1>This is a heading.</h1>
-</article>',
+</section>',
                 new InvalidArgumentException(
                     "\$inputValue",
-                    "Validation of XML content failed: Error in 3:0: Element '{http://docbook.org/ns/docbook}h1': This element is not expected. Expected is one of ( {http://docbook.org/ns/docbook}title, {http://docbook.org/ns/docbook}titleabbrev, {http://docbook.org/ns/docbook}subtitle, {http://docbook.org/ns/docbook}info, {http://docbook.org/ns/docbook}glossary, {http://docbook.org/ns/docbook}bibliography, {http://docbook.org/ns/docbook}index, {http://docbook.org/ns/docbook}toc, {http://docbook.org/ns/docbook}appendix, {http://docbook.org/ns/docbook}acknowledgements ).."
+                    "Validation of XML content failed: Error in 3:0: Element section has extra content: h1."
                 )
             ),
             array(
@@ -185,10 +185,10 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
     public function testToPersistenceValue()
     {
         $xmlString = '<?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
   <title>This is a heading.</title>
   <para>This is a paragraph.</para>
-</article>
+</section>
 ';
 
         $fieldType = $this->getFieldType();
@@ -314,7 +314,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
         $xml =
 <<<EOT
 <?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
     <title>Some text</title>
     <para><link xlink:href="ezlocation://72">link1</link></para>
     <para><link xlink:href="ezlocation://61">link2</link></para>
@@ -322,7 +322,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
     <para><link xlink:href="ezcontent://70">link4</link></para>
     <para><link xlink:href="ezcontent://75">link5</link></para>
     <para><link xlink:href="ezcontent://75">link6</link></para>
-</article>
+</section>
 EOT;
 
         $fieldType = $this->getFieldType();
