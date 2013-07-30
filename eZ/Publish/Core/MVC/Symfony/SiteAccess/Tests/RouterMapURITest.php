@@ -51,7 +51,8 @@ class RouterMapURITest extends PHPUnit_Framework_TestCase
     {
         return array(
             array( '/my_siteaccess/foo/bar', '/foo/bar' ),
-            array( '/vive/le/sucre', '/le/sucre' )
+            array( '/vive/le/sucre', '/le/sucre' ),
+            array( '/ezdemo_site/some/thing?foo=ezdemo_site&bar=toto', '/some/thing?foo=ezdemo_site&bar=toto' )
         );
     }
 }

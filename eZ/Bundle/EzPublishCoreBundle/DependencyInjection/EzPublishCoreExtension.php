@@ -64,7 +64,7 @@ class EzPublishCoreExtension extends Extension
         $this->registerPageConfiguration( $config, $container );
 
         // Routing
-        $this->handleRouting( $container, $loader );
+        $this->handleRouting( $config, $container, $loader );
         // Public API loading
         $this->handleApiLoading( $container, $loader );
         $this->handleTemplating( $container, $loader );
@@ -174,13 +174,25 @@ class EzPublishCoreExtension extends Extension
     /**
      * Handle routing parameters
      *
+     * @param array $config
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param \Symfony\Component\DependencyInjection\Loader\FileLoader $loader
      */
-    private function handleRouting( ContainerBuilder $container, FileLoader $loader )
+    private function handleRouting( array $config, ContainerBuilder $container, FileLoader $loader )
     {
         $loader->load( 'routing.yml' );
         $container->setAlias( 'router', 'ezpublish.chain_router' );
+
+        if ( isset( $config['router']['default_router']['non_siteaccess_aware_routes'] ) )
+        {
+            $container->setParameter(
+                'ezpublish.default_router.non_siteaccess_aware_routes',
+                array_merge(
+                    $container->getParameter( 'ezpublish.default_router.non_siteaccess_aware_routes' ),
+                    $config['router']['default_router']['non_siteaccess_aware_routes']
+                )
+            );
+        }
     }
 
     /**

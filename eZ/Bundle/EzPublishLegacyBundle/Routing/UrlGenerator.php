@@ -10,12 +10,13 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\Routing;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 use eZModule;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 use Symfony\Component\Routing\RequestContext;
 
-class UrlGenerator extends Generator
+class UrlGenerator extends Generator implements SiteAccessAware
 {
     /**
      * @var \Closure
