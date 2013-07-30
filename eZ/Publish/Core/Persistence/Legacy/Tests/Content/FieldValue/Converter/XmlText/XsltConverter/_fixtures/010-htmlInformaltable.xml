@@ -5,7 +5,7 @@
   <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
     <table class="tableClass" width="24" border="42" custom:summary="tableTitle" custom:caption="">
       <tr class="rowClass1">
-        <th class="headingClass1" custom:valign="top" xhtml:colspan="1" xhtml:rowspan="5" custom:abbr="XSLT" custom:scope="column">11</th>
+        <th class="headingClass1" custom:valign="top" xhtml:colspan="1" xhtml:rowspan="5" custom:abbr="XSLT" custom:scope="col">11</th>
         <th class="headingClass2" custom:valign="middle" xhtml:colspan="2" xhtml:rowspan="6" custom:abbr="XSD" custom:scope="row">12</th>
       </tr>
       <tr class="rowClass2">
