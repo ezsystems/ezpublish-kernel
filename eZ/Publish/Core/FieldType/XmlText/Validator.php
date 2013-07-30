@@ -83,8 +83,22 @@ class Validator
         $oldSetting = libxml_use_internal_errors( true );
         libxml_clear_errors();
 
-        // @todo hanlde relax ng
-        $document->schemaValidate( $this->schema );
+        $pathInfo = pathinfo( $this->schema );
+        switch ( $pathInfo["extension"] )
+        {
+            case "xsd";
+                $document->schemaValidate( $this->schema );
+                break;
+            case "rng";
+                $document->relaxNGValidate( $this->schema );
+                break;
+            default:
+                throw new InvalidArgumentException(
+                    "schemaPath",
+                    "Validator is capable of handling XSD and RELAX NG schemas, ending in .xsd or .rng." .
+                    "File '{$this->schema}' does not seem to be either of these."
+                );
+        }
 
         // Get all errors
         $xmlErrors = libxml_get_errors();
