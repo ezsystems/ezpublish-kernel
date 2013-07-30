@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://ez.no/namespaces/ezpublish5/xhtml5">
+<section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5">
   <ul>
     <li>This is a list item.</li>
   </ul>
-</article>
+</section>

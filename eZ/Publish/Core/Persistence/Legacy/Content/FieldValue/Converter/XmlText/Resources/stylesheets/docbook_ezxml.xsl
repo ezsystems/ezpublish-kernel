@@ -9,7 +9,7 @@
     version="1.0">
   <xsl:output indent="yes" encoding="UTF-8"/>
 
-  <xsl:template match="docbook:article">
+  <xsl:template match="/docbook:section">
     <section
         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
         xmlns:image="http://ez.no/namespaces/ezpublish3/image/"

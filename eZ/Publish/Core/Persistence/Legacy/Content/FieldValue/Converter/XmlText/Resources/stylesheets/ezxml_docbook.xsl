@@ -16,11 +16,11 @@
         </xsl:element>
       </xsl:when>
       <xsl:otherwise>
-        <article xmlns="http://docbook.org/ns/docbook"
+        <section xmlns="http://docbook.org/ns/docbook"
                  xmlns:xlink="http://www.w3.org/1999/xlink"
                  version="5.0-variant ezpublish-1.0">
           <xsl:apply-templates/>
-        </article>
+        </section>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>

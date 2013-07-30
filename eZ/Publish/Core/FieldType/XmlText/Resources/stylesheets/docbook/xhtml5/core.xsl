@@ -8,9 +8,9 @@
   <xsl:output indent="yes" encoding="UTF-8"/>
   <xsl:variable name="outputNamespace" select="''"/>
 
-  <xsl:template match="docbook:article">
+  <xsl:template match="docbook:section">
     <xsl:if test="not(parent::*)">
-      <xsl:element name="article" namespace="{$outputNamespace}">
+      <xsl:element name="section" namespace="{$outputNamespace}">
         <xsl:apply-templates/>
       </xsl:element>
     </xsl:if>
@@ -139,7 +139,7 @@
   </xsl:template>
 
   <xsl:template match="docbook:title">
-    <xsl:variable name="level" select="count(ancestor-or-self::docbook:section) + 2"/>
+    <xsl:variable name="level" select="count(ancestor-or-self::docbook:section) + 1"/>
 
     <xsl:choose>
       <xsl:when test="$level &gt; 6">

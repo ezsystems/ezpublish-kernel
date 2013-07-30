@@ -6,7 +6,7 @@
     version="1.0">
   <xsl:import href="core.xsl"/>
   <xsl:output omit-xml-declaration="yes" indent="yes" encoding="UTF-8"/>
-  <xsl:template match="/docbook:article">
+  <xsl:template match="/docbook:section">
     <xsl:apply-templates/>
   </xsl:template>
 </xsl:stylesheet>

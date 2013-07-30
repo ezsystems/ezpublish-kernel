@@ -4,7 +4,7 @@
     xmlns:ezxhtml5="http://ez.no/namespaces/ezpublish5/xhtml5"
     version="1.0">
   <xsl:output omit-xml-declaration="yes" indent="yes" encoding="UTF-8"/>
-  <xsl:template match="/ezxhtml5:article">
+  <xsl:template match="/ezxhtml5:section">
     <xsl:apply-templates/>
   </xsl:template>
   <xsl:template match="*">
