@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<article xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         version="5.0-variant ezpublish-1.0">
   <para>The equation e<superscript>πi</superscript> + 1 = 0 ties together five of the most important mathematical constants.</para>
 </article>
