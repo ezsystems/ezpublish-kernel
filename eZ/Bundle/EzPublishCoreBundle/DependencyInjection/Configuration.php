@@ -40,6 +40,7 @@ class Configuration implements ConfigurationInterface
         $this->addHttpCacheSection( $rootNode );
         $this->addSystemSection( $rootNode );
         $this->addPageSection( $rootNode );
+        $this->addRouterSection( $rootNode );
 
         return $treeBuilder;
     }
@@ -293,5 +294,32 @@ EOT;
                 ->end()
             ->end();
 
+    }
+
+    private function addRouterSection( ArrayNodeDefinition $rootNode )
+    {
+        $nonSAAwareInfo = <<<EOT
+Route names that are not supposed to be SiteAccess aware, i.e. Routes pointing to asset generation (like assetic).
+Note that you can just specify a prefix to match a selection of routes.
+e.g. "_assetic_" will match "_assetic_*"
+Defaults to ['_assetic_', '_wdt', '_profiler', '_configurator_']
+EOT;
+        $rootNode
+            ->children()
+                ->arrayNode( 'router' )
+                    ->children()
+                        ->arrayNode( 'default_router' )
+                            ->children()
+                                ->arrayNode( 'non_siteaccess_aware_routes' )
+                                    ->prototype( 'scalar' )->end()
+                                    ->info( $nonSAAwareInfo )
+                                    ->example( array( 'my_route_name', 'some_prefix_' ) )
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                    ->info( 'Router related settings' )
+                ->end()
+            ->end();
     }
 }

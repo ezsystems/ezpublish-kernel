@@ -12,6 +12,7 @@ namespace eZ\Bundle\EzPublishLegacyBundle\EventListener;
 use eZ\Bundle\EzPublishLegacyBundle\Routing\UrlGenerator;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class SiteAccessListener implements EventSubscriberInterface
@@ -35,6 +36,7 @@ class SiteAccessListener implements EventSubscriberInterface
 
     public function onSiteAccessMatch( PostSiteAccessMatchEvent $event )
     {
-        $this->urlGenerator->setSiteAccess( $event->getSiteAccess() );
+        if ( $this->urlGenerator instanceof SiteAccessAware )
+            $this->urlGenerator->setSiteAccess( $event->getSiteAccess() );
     }
 }

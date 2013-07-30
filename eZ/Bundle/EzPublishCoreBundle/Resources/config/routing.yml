@@ -1,6 +1,8 @@
 parameters:
     # Redefining the default router class to implement the RequestMatcherInterface
     router.class: eZ\Bundle\EzPublishCoreBundle\Routing\DefaultRouter
+    ezpublish.default_router.non_siteaccess_aware_routes: ['_assetic_', '_wdt', '_profiler', '_configurator_']
+
     ezpublish.chain_router.class: Symfony\Cmf\Component\Routing\ChainRouter
     ezpublish.url_generator.base.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator
     ezpublish.urlalias_router.class: eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter
@@ -60,7 +62,7 @@ services:
 
     ezpublish.siteaccess_listener:
         class: %ezpublish.siteaccess_listener.class%
-        arguments: [@service_container]
+        arguments: [@service_container, @router.default, @ezpublish.urlalias_generator]
         tags:
             - { name: kernel.event_subscriber }
 
