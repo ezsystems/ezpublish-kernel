@@ -3,7 +3,8 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:docbook="http://docbook.org/ns/docbook"
     xmlns:xlink="http://www.w3.org/1999/xlink"
-    exclude-result-prefixes="docbook xlink"
+    xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
+    exclude-result-prefixes="docbook xlink ezxhtml"
     version="1.0">
   <xsl:output indent="yes" encoding="UTF-8"/>
   <xsl:variable name="outputNamespace" select="''"/>
@@ -224,11 +225,18 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
-      <!--xsl:if test="@xhtml:width">
-          <xsl:attribute name="width">
-              <xsl:value-of select="@xhtml:width"/>
-          </xsl:attribute>
-      </xsl:if-->
+      <xsl:if test="@ezxhtml:width != ''">
+        <xsl:attribute name="style">
+          <xsl:choose>
+            <xsl:when test="substring( @ezxhtml:width, string-length( @ezxhtml:width) ) = '%'">
+              <xsl:value-of select="concat( 'width:', @ezxhtml:width, ';' )"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="concat( 'width:', @ezxhtml:width, 'px;' )"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:if test="@valign">
         <xsl:attribute name="valign">
           <xsl:value-of select="@valign"/>
@@ -265,11 +273,18 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
-      <!--xsl:if test="@xhtml:width">
-        <xsl:attribute name="width">
-          <xsl:value-of select="@xhtml:width"/>
+      <xsl:if test="@ezxhtml:width != ''">
+        <xsl:attribute name="style">
+          <xsl:choose>
+            <xsl:when test="substring( @ezxhtml:width, string-length( @ezxhtml:width ) ) = '%'">
+              <xsl:value-of select="concat( 'width:', @ezxhtml:width, ';' )"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="concat( 'width:', @ezxhtml:width, 'px;' )"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:attribute>
-      </xsl:if-->
+      </xsl:if>
       <xsl:if test="@valign">
         <xsl:attribute name="valign">
           <xsl:value-of select="@valign"/>

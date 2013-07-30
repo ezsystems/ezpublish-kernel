@@ -2,6 +2,7 @@
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:ezxhtml5="http://ez.no/namespaces/ezpublish5/xhtml5"
+    xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns="http://docbook.org/ns/docbook"
     exclude-result-prefixes="ezxhtml5"
@@ -11,6 +12,7 @@
   <xsl:template match="/ezxhtml5:section">
     <section xmlns="http://docbook.org/ns/docbook"
              xmlns:xlink="http://www.w3.org/1999/xlink"
+             xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
              version="5.0-variant ezpublish-1.0">
       <xsl:apply-templates/>
     </section>
@@ -222,11 +224,23 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
-      <!--xsl:if test="@xhtml:width">
-          <xsl:attribute name="width">
-              <xsl:value-of select="@xhtml:width"/>
+      <xsl:if test="contains( @style, 'width:' )">
+        <xsl:variable name="width">
+          <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( @style, 'width' ), ';' ), ':' ), ';' ), ' ', '' )"/>
+        </xsl:variable>
+        <xsl:if test="$width != ''">
+          <xsl:attribute name="ezxhtml:width">
+            <xsl:choose>
+              <xsl:when test="substring( $width, string-length( $width ) - 1 ) = 'px'">
+                <xsl:value-of select="substring-before( $width, 'px' )"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="$width"/>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:attribute>
-      </xsl:if-->
+        </xsl:if>
+      </xsl:if>
       <xsl:if test="@valign">
         <xsl:attribute name="valign">
           <xsl:value-of select="@valign"/>
@@ -263,11 +277,23 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
-      <!--xsl:if test="@xhtml:width">
-        <xsl:attribute name="width">
-          <xsl:value-of select="@xhtml:width"/>
-        </xsl:attribute>
-      </xsl:if-->
+      <xsl:if test="contains( @style, 'width:' )">
+        <xsl:variable name="width">
+          <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( @style, 'width' ), ';' ), ':' ), ';' ), ' ', '' )"/>
+        </xsl:variable>
+        <xsl:if test="$width != ''">
+          <xsl:attribute name="ezxhtml:width">
+            <xsl:choose>
+              <xsl:when test="substring( $width, string-length( $width ) - 1 ) = 'px'">
+                <xsl:value-of select="substring-before( $width, 'px' )"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="$width"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:attribute>
+        </xsl:if>
+      </xsl:if>
       <xsl:if test="@valign">
         <xsl:attribute name="valign">
           <xsl:value-of select="@valign"/>

@@ -2,10 +2,11 @@
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:docbook="http://docbook.org/ns/docbook"
+    xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
     xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
     xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"
     xmlns:xlink="http://www.w3.org/1999/xlink"
-    exclude-result-prefixes="docbook xlink"
+    exclude-result-prefixes="docbook xlink ezxhtml"
     version="1.0">
   <xsl:output indent="yes" encoding="UTF-8"/>
 
@@ -251,11 +252,11 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
-      <!--xsl:if test="@xhtml:width">
-          <xsl:attribute name="width">
-              <xsl:value-of select="@xhtml:width"/>
-          </xsl:attribute>
-      </xsl:if-->
+      <xsl:if test="@ezxhtml:width">
+        <xsl:attribute name="xhtml:width">
+          <xsl:value-of select="@ezxhtml:width"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:if test="@valign">
         <xsl:attribute name="custom:valign">
           <xsl:value-of select="@valign"/>
@@ -292,11 +293,11 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
-      <!--xsl:if test="@xhtml:width">
-        <xsl:attribute name="width">
-          <xsl:value-of select="@xhtml:width"/>
+      <xsl:if test="@ezxhtml:width">
+        <xsl:attribute name="xhtml:width">
+          <xsl:value-of select="@ezxhtml:width"/>
         </xsl:attribute>
-      </xsl:if-->
+      </xsl:if>
       <xsl:if test="@valign">
         <xsl:attribute name="custom:valign">
           <xsl:value-of select="@valign"/>

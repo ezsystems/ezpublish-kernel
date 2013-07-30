@@ -3,12 +3,12 @@
   <table class="tableClass" width="24%" border="42" title="tableTitle">
     <caption>Table caption.</caption>
     <tr class="rowClass1">
-      <th class="headingClass1" valign="top" colspan="1" rowspan="5" abbr="XSLT" scope="col">11</th>
-      <th class="headingClass2" valign="middle" colspan="2" rowspan="6" abbr="XSD" scope="row">12</th>
+      <th class="headingClass1" style="width:102px;" valign="top" colspan="1" rowspan="5" abbr="XSLT" scope="col">11</th>
+      <th class="headingClass2" style="width:37%;" valign="middle" colspan="2" rowspan="6" abbr="XSD" scope="row">12</th>
     </tr>
     <tr class="rowClass2">
-      <td class="cellClass1" valign="bottom" colspan="3" rowspan="7">21</td>
-      <td class="cellClass2" valign="baseline" colspan="4" rowspan="8">22</td>
+      <td class="cellClass1" style="width:74%;" valign="bottom" colspan="3" rowspan="7">21</td>
+      <td class="cellClass2" style="width:38px;" valign="baseline" colspan="4" rowspan="8">22</td>
     </tr>
   </table>
 </section>

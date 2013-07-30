@@ -2,7 +2,7 @@
 <grammar xmlns="http://relaxng.org/ns/structure/1.0"
          xmlns:db="http://docbook.org/ns/docbook"
          xmlns:ez="http://ez.no/xmlns/ezpublish/docbook"
-         xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml5"
+         xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
          xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
          xmlns:a="http://ez.no/xmlns/annotation"
          xmlns:m="http://ez.no/xmlns/module"
@@ -468,7 +468,7 @@
             Table cell width, unit can be 'px' or '%'.
           </a:documentation>
           <choice>
-            <data type="string"><param name="pattern">[0-9]+px</param></data>
+            <data type="string"><param name="pattern">[0-9]+</param></data>
             <data type="string"><param name="pattern">[0-9]+%</param></data>
           </choice>
         </attribute>
