@@ -9,6 +9,8 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Cache;
 
+use eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Configuration;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 use eZCacheHelper;
 use eZCLI;
@@ -26,9 +28,16 @@ class LegacyCachePurger implements CacheClearerInterface
      */
     private $legacyKernelClosure;
 
-    public function __construct( \Closure $legacyKernelClosure )
+    public function __construct( \Closure $legacyKernelClosure, Configuration $configurationMapper, Filesystem $fs, $legacyRootDir )
     {
         $this->legacyKernelClosure = $legacyKernelClosure;
+
+        // If ezp_extension.php doesn't exist, it means that eZ Publish is not yet installed.
+        // Hence we deactivate configuration mapper to avoid potential issues (e.g. ezxFormToken which cannot be loaded).
+        if ( !$fs->exists( "$legacyRootDir/var/autoload/ezp_extension.php" ) )
+        {
+            $configurationMapper->setIsEnabled( false );
+        }
     }
 
     /**
