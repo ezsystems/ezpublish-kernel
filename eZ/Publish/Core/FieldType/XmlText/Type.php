@@ -56,7 +56,7 @@ class Type extends FieldType
     /**
      * @var \eZ\Publish\Core\FieldType\XmlText\ConverterDispatcher
      */
-    protected $converterDispatcher;
+    protected $inputConverterDispatcher;
 
     /**
      * @var \eZ\Publish\Core\FieldType\XmlText\ValidatorDispatcher
@@ -64,12 +64,12 @@ class Type extends FieldType
     protected $validatorDispatcher;
 
     /**
-     * @param \eZ\Publish\Core\FieldType\XmlText\ConverterDispatcher $converterDispatcher
+     * @param \eZ\Publish\Core\FieldType\XmlText\ConverterDispatcher $inputConverterDispatcher
      * @param \eZ\Publish\Core\FieldType\XmlText\ValidatorDispatcher $validatorDispatcher
      */
-    public function __construct( ConverterDispatcher $converterDispatcher, ValidatorDispatcher $validatorDispatcher )
+    public function __construct( ConverterDispatcher $inputConverterDispatcher, ValidatorDispatcher $validatorDispatcher )
     {
-        $this->converterDispatcher = $converterDispatcher;
+        $this->inputConverterDispatcher = $inputConverterDispatcher;
         $this->validatorDispatcher = $validatorDispatcher;
     }
 
@@ -174,7 +174,7 @@ class Type extends FieldType
                 );
             }
 
-            $inputValue = $this->converterDispatcher->dispatch( $inputValue );
+            $inputValue = $this->inputConverterDispatcher->dispatch( $inputValue );
 
             $errors = $this->validatorDispatcher->dispatch( $inputValue );
             if ( !empty( $errors ) )

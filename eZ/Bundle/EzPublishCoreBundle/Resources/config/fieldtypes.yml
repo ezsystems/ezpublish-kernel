@@ -300,13 +300,13 @@ parameters:
 
     ezpublish.fieldType.ezxmltext.converter.xslt.class: eZ\Publish\Core\FieldType\XmlText\Converter\Xslt
     ezpublish.fieldType.ezxmltext.converter.aggregate.class: eZ\Publish\Core\FieldType\XmlText\Converter\Aggregate
-    ezpublish.fieldType.ezxmltext.converter.ezxmlInputToDocbook.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/XmlText/Resources/stylesheets/ezxml_docbook.xsl
-    ezpublish.fieldType.ezxmltext.converter.xhtml5ToDocbook.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/stylesheets/xhtml5/docbook.xsl
-    ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/stylesheets/docbook/xhtml5/xhtml5.xsl
-    ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5Fragment.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/stylesheets/docbook/xhtml5/fragment.xsl
+    ezpublish.fieldType.ezxmltext.converter.input.ezxml.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/XmlText/Resources/stylesheets/ezxml_docbook.xsl
+    ezpublish.fieldType.ezxmltext.converter.input.xhtml5.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/stylesheets/xhtml5/docbook.xsl
+    ezpublish.fieldType.ezxmltext.converter.output.xhtml5.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/stylesheets/docbook/xhtml5/xhtml5.xsl
+    ezpublish.fieldType.ezxmltext.converter.output.xhtml5.fragment.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/stylesheets/docbook/xhtml5/fragment.xsl
     ezpublish.fieldType.ezxmltext.converter.xhtml5ToXhtml5Fragment.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/stylesheets/xhtml5/xhtml5fragment.xsl
 
-    ezpublish.fieldType.ezxmltext.converter_dispatcher.class: eZ\Publish\Core\FieldType\XmlText\ConverterDispatcher
+    ezpublish.fieldType.ezxmltext.inputConverterDispatcher.class: eZ\Publish\Core\FieldType\XmlText\ConverterDispatcher
 
     ezpublish.fieldType.ezxmltext.validator.xsd_validator.class: eZ\Publish\Core\FieldType\XmlText\Validator
     ezpublish.fieldType.ezxmltext.validator.xsd_validator.docbook.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/schemas/docbook/ezpublish.rng
@@ -315,13 +315,13 @@ parameters:
     ezpublish.fieldType.ezxmltext.validator_dispatcher.class: eZ\Publish\Core\FieldType\XmlText\ValidatorDispatcher
 
 services:
-    ezpublish.fieldType.ezxmltext.converter.ezxmlInputToDocbook:
+    ezpublish.fieldType.ezxmltext.converter.input.ezxml:
         class: %ezpublish.fieldType.ezxmltext.converter.xslt.class%
-        arguments: [%ezpublish.fieldType.ezxmltext.converter.ezxmlInputToDocbook.resources%]
+        arguments: [%ezpublish.fieldType.ezxmltext.converter.input.ezxml.resources%]
 
-    ezpublish.fieldType.ezxmltext.converter.xhtml5ToDocbook:
+    ezpublish.fieldType.ezxmltext.converter.input.xhtml5:
         class: %ezpublish.fieldType.ezxmltext.converter.xslt.class%
-        arguments: [%ezpublish.fieldType.ezxmltext.converter.xhtml5ToDocbook.resources%]
+        arguments: [%ezpublish.fieldType.ezxmltext.converter.input.xhtml5.resources%]
 
     ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5:
         class: %ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5.class%
@@ -339,27 +339,27 @@ services:
         #tags:
         #    - {name: ezpublish.ezxmltext.converter.output.xhtml5, priority: -100}
 
-    ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5FragmentCore:
+    ezpublish.fieldType.ezxmltext.converter.output.xhtml5.fragment.core:
         class: %ezpublish.fieldType.ezxmltext.converter.xslt.class%
-        arguments: [%ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5Fragment.resources%]
+        arguments: [%ezpublish.fieldType.ezxmltext.converter.output.xhtml5.fragment.resources%]
         tags:
             - {name: ezpublish.ezxmltext.converter.output.xhtml5, priority: 0}
 
-    ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5Fragment:
+    ezpublish.fieldType.ezxmltext.converter.output.xhtml5.fragment:
         class: %ezpublish.fieldType.ezxmltext.converter.aggregate.class%
 
     ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5Edit:
         class: %ezpublish.fieldType.ezxmltext.converter.xslt.class%
         arguments:
-            - %ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5Fragment.resources%
+            - %ezpublish.fieldType.ezxmltext.converter.output.xhtml5.fragment.resources%
 
-    ezpublish.fieldType.ezxmltext.converter_dispatcher:
-        class: %ezpublish.fieldType.ezxmltext.converter_dispatcher.class%
+    ezpublish.fieldType.ezxmltext.inputConverterDispatcher:
+        class: %ezpublish.fieldType.ezxmltext.inputConverterDispatcher.class%
         arguments:
             -
                 http://docbook.org/ns/docbook: null
-                http://ez.no/namespaces/ezpublish3/xhtml/: @ezpublish.fieldType.ezxmltext.converter.ezxmlInputToDocbook
-                http://ez.no/namespaces/ezpublish5/xhtml5: @ezpublish.fieldType.ezxmltext.converter.xhtml5ToDocbook
+                http://ez.no/namespaces/ezpublish3/xhtml/: @ezpublish.fieldType.ezxmltext.converter.input.ezxml
+                http://ez.no/namespaces/ezpublish5/xhtml5: @ezpublish.fieldType.ezxmltext.converter.input.xhtml5
 
     ezpublish.fieldType.ezxmltext.validator.xsd_validator.docbook:
         class: %ezpublish.fieldType.ezxmltext.validator.xsd_validator.class%
@@ -572,7 +572,7 @@ services:
         class: %ezpublish.fieldType.ezxmltext.class%
         parent: ezpublish.fieldType
         arguments:
-            - @ezpublish.fieldType.ezxmltext.converter_dispatcher
+            - @ezpublish.fieldType.ezxmltext.inputConverterDispatcher
             - @ezpublish.fieldType.ezxmltext.validator_dispatcher
         tags:
             - {name: ezpublish.fieldType, alias: ezxmltext}

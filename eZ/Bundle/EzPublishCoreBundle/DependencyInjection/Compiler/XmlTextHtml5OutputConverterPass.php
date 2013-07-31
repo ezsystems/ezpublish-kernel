@@ -20,12 +20,12 @@ class XmlTextHtml5OutputConverterPass implements CompilerPassInterface
 {
     public function process( ContainerBuilder $container )
     {
-        if ( !$container->hasDefinition( 'ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5Fragment' ) )
+        if ( !$container->hasDefinition( 'ezpublish.fieldType.ezxmltext.converter.output.xhtml5.fragment' ) )
         {
             return;
         }
 
-        $html5ConverterDef = $container->getDefinition( 'ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5Fragment' );
+        $html5ConverterDef = $container->getDefinition( 'ezpublish.fieldType.ezxmltext.converter.output.xhtml5.fragment' );
         foreach ( $container->findTaggedServiceIds( 'ezpublish.ezxmltext.converter.output.xhtml5' ) as $id => $attributes )
         {
             $priority = isset( $attributes[0]['priority'] ) ? (int)$attributes[0]['priority'] : 0;
