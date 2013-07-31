@@ -81,7 +81,7 @@ Currently SPI consists of:
 ## Dependencies
 * **Composer**: Just run `curl -s http://getcomposer.org/installer | php` to get **composer.phar**
 * **PHPUnit 3.6+**
-* **PHP 5 Modules**: php5\_sqlite
+* **PHP 5 Modules**: php5\_sqlite php5\_intl php5\_xsl
 * **Database**: sqlite3 if not installed by above stage
 
 ## How to run tests
@@ -100,7 +100,9 @@ eZ Publish 5.x is a fully open source, community-driven project, and code contri
 
 Short:
 * Remember to first create a issue in our issue tracker and refer to it in commits and pull requests headers, example:
-  "Fixed EZP-20104: ContentController should return error status when content is not found"
+  "Fix EZP-20104: ContentController should return error status when content is not found"
+  or
+  "Implement EZP-201xx: Add support for X in Y"
 * If you want to contribute implementation specification proposals, place them in [doc/](doc/) folder.
 * Keep different changes in different commits in case cherry-pick is preferred instead of a merge later.
   * A Pull Request should only cover one issue
