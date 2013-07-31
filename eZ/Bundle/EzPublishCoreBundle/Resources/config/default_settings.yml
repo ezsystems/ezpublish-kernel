@@ -224,6 +224,10 @@ parameters:
         GMapItems:
             name: Google Map Items
 
+    # Themes related settings
+    ezsettings.default.themes.list: [foo, bar]
+    ezsettings.default.themes.active_theme: foo
+
     ###
     # Internal settings
     ###

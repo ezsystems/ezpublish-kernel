@@ -17,6 +17,8 @@ parameters:
     ezpublish.templating.global_helper.core.class: eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper
     ezpublish.twig.extension.core.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\CoreExtension
 
+    ezpublish.templating_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\TemplatingListener
+
 services:
     twig.loader.string:
         class: %twig.loader.string.class%
@@ -80,3 +82,13 @@ services:
         arguments: [@ezpublish.templating.global_helper]
         tags:
             - {name: twig.extension}
+
+    ezpublish.templating_listener:
+        class: %ezpublish.templating_listener.class%
+        arguments:
+            - @service_container
+            - @liip_theme.active_theme
+            - @liip_theme.file_locator
+            - ["%kernel.root_dir%/../src/Acme/TestBundle"]
+        tags:
+            - {name: kernel.event_subscriber}
