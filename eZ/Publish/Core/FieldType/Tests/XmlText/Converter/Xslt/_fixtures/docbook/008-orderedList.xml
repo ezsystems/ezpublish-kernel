@@ -3,7 +3,7 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
          version="5.0-variant ezpublish-1.0">
-  <orderedlist>
+  <orderedlist ezxhtml:class="orderedListClass">
     <listitem><para>This is a list item.</para></listitem>
   </orderedlist>
 </section>

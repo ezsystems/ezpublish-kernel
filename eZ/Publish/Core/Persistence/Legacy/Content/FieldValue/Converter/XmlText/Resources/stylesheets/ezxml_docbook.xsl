@@ -27,6 +27,7 @@
     </xsl:choose>
   </xsl:template>
 
+  <!-- TODO investigate always stripping paragraphs with temporary namespace -->
   <xsl:template match="paragraph">
     <xsl:choose>
       <xsl:when test="( table | ul | ol ) or name( .. ) = 'li'">
@@ -34,6 +35,11 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:element name="para" namespace="http://docbook.org/ns/docbook">
+          <xsl:if test="@class">
+            <xsl:attribute name="ezxhtml:class">
+              <xsl:value-of select="@class"/>
+            </xsl:attribute>
+          </xsl:if>
           <xsl:variable name="lines" select="line"/>
           <xsl:choose>
             <xsl:when test="count( $lines ) &gt; 0">
@@ -60,13 +66,23 @@
 
   <xsl:template match="emphasize">
     <xsl:element name="emphasis" namespace="http://docbook.org/ns/docbook">
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
 
   <xsl:template match="strong">
     <xsl:element name="emphasis" namespace="http://docbook.org/ns/docbook">
-      <xsl:attribute name="role">strong</xsl:attribute>
+      <xsl:if test="@class">
+        <xsl:attribute name="role">strong</xsl:attribute>
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
@@ -154,24 +170,44 @@
           <xsl:value-of select="@xhtml:title"/>
         </xsl:attribute>
       </xsl:if>
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
 
   <xsl:template match="header">
     <xsl:element name="title" namespace="http://docbook.org/ns/docbook">
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
 
   <xsl:template match="ul">
     <xsl:element name="itemizedlist" namespace="http://docbook.org/ns/docbook">
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
 
   <xsl:template match="ol">
     <xsl:element name="orderedlist" namespace="http://docbook.org/ns/docbook">
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>

@@ -27,6 +27,11 @@
 
   <xsl:template match="docbook:para">
     <paragraph>
+      <xsl:if test="@ezxhtml:class">
+        <xsl:attribute name="class">
+          <xsl:value-of select="@ezxhtml:class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </paragraph>
   </xsl:template>
@@ -83,6 +88,11 @@
     <xsl:choose>
       <xsl:when test="@role='strong'">
         <strong>
+          <xsl:if test="@ezxhtml:class">
+            <xsl:attribute name="class">
+              <xsl:value-of select="@ezxhtml:class"/>
+            </xsl:attribute>
+          </xsl:if>
           <xsl:apply-templates/>
         </strong>
       </xsl:when>
@@ -93,6 +103,11 @@
       </xsl:when>
       <xsl:otherwise>
         <emphasize>
+          <xsl:if test="@ezxhtml:class">
+            <xsl:attribute name="class">
+              <xsl:value-of select="@ezxhtml:class"/>
+            </xsl:attribute>
+          </xsl:if>
           <xsl:apply-templates/>
         </emphasize>
       </xsl:otherwise>
@@ -164,12 +179,22 @@
           <xsl:value-of select="@xlink:title"/>
         </xsl:attribute>
       </xsl:if>
+      <xsl:if test="@ezxhtml:class">
+        <xsl:attribute name="class">
+          <xsl:value-of select="@ezxhtml:class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </link>
   </xsl:template>
 
   <xsl:template match="docbook:title">
     <header>
+      <xsl:if test="@ezxhtml:class">
+        <xsl:attribute name="class">
+          <xsl:value-of select="@ezxhtml:class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </header>
   </xsl:template>
@@ -177,6 +202,11 @@
   <xsl:template match="docbook:orderedlist">
     <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
       <ol>
+        <xsl:if test="@ezxhtml:class">
+          <xsl:attribute name="class">
+            <xsl:value-of select="@ezxhtml:class"/>
+          </xsl:attribute>
+        </xsl:if>
         <xsl:apply-templates/>
       </ol>
     </paragraph>
@@ -185,6 +215,11 @@
   <xsl:template match="docbook:itemizedlist">
     <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
       <ul>
+        <xsl:if test="@ezxhtml:class">
+          <xsl:attribute name="class">
+            <xsl:value-of select="@ezxhtml:class"/>
+          </xsl:attribute>
+        </xsl:if>
         <xsl:apply-templates/>
       </ul>
     </paragraph>

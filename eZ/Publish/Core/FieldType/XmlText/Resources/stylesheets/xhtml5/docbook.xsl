@@ -25,9 +25,14 @@
   </xsl:template>
 
   <xsl:template match="ezxhtml5:p">
-    <xsl:choose>
-      <xsl:when test="child::ezxhtml5:br">
-        <para>
+    <para>
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="child::ezxhtml5:br">
           <literallayout class="normal">
             <xsl:for-each select="node()">
               <xsl:choose>
@@ -40,18 +45,26 @@
               </xsl:choose>
             </xsl:for-each>
           </literallayout>
-        </para>
-      </xsl:when>
-      <xsl:otherwise>
-        <para>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:if test="@class">
+            <xsl:attribute name="ezxhtml:class">
+              <xsl:value-of select="@class"/>
+            </xsl:attribute>
+          </xsl:if>
           <xsl:apply-templates/>
-        </para>
-      </xsl:otherwise>
-    </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
+    </para>
   </xsl:template>
 
   <xsl:template match="ezxhtml5:em">
     <emphasis>
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </emphasis>
   </xsl:template>
@@ -59,6 +72,11 @@
   <xsl:template match="ezxhtml5:strong">
     <emphasis>
       <xsl:attribute name="role">strong</xsl:attribute>
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </emphasis>
   </xsl:template>
@@ -107,6 +125,11 @@
           <xsl:value-of select="@title"/>
         </xsl:attribute>
       </xsl:if>
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </link>
   </xsl:template>
@@ -137,18 +160,33 @@
 
   <xsl:template match="ezxhtml5:h1 | ezxhtml5:h2 | ezxhtml5:h3 | ezxhtml5:h4 | ezxhtml5:h5 | ezxhtml5:h6">
     <title>
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </title>
   </xsl:template>
 
   <xsl:template match="ezxhtml5:ol">
     <orderedlist>
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </orderedlist>
   </xsl:template>
 
   <xsl:template match="ezxhtml5:ul">
     <itemizedlist>
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </itemizedlist>
   </xsl:template>
@@ -224,7 +262,7 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
-      <xsl:if test="contains( @style, 'width:' )">
+      <xsl:if test="contains( @style, 'width' )">
         <xsl:variable name="width">
           <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( @style, 'width' ), ';' ), ':' ), ';' ), ' ', '' )"/>
         </xsl:variable>

@@ -3,5 +3,5 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
          version="5.0-variant ezpublish-1.0">
-  <title>This is a heading.</title>
+  <title ezxhtml:class="titleClass">This is a heading.</title>
 </section>

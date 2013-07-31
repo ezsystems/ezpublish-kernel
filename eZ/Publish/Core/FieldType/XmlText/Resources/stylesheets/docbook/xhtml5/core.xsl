@@ -25,6 +25,11 @@
 
   <xsl:template match="docbook:para">
     <xsl:element name="p" namespace="{$outputNamespace}">
+      <xsl:if test="@ezxhtml:class">
+        <xsl:attribute name="class">
+          <xsl:value-of select="@ezxhtml:class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
@@ -79,6 +84,11 @@
     <xsl:choose>
       <xsl:when test="@role='strong'">
         <xsl:element name="strong" namespace="{$outputNamespace}">
+          <xsl:if test="@ezxhtml:class">
+            <xsl:attribute name="class">
+              <xsl:value-of select="@ezxhtml:class"/>
+            </xsl:attribute>
+          </xsl:if>
           <xsl:apply-templates/>
         </xsl:element>
       </xsl:when>
@@ -89,6 +99,11 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:element name="em" namespace="{$outputNamespace}">
+          <xsl:if test="@ezxhtml:class">
+            <xsl:attribute name="class">
+              <xsl:value-of select="@ezxhtml:class"/>
+            </xsl:attribute>
+          </xsl:if>
           <xsl:apply-templates/>
         </xsl:element>
       </xsl:otherwise>
@@ -135,35 +150,55 @@
           <xsl:value-of select="@xlink:title"/>
         </xsl:attribute>
       </xsl:if>
+      <xsl:if test="@ezxhtml:class">
+        <xsl:attribute name="class">
+          <xsl:value-of select="@ezxhtml:class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
 
   <xsl:template match="docbook:title">
     <xsl:variable name="level" select="count(ancestor-or-self::docbook:section) + 1"/>
-
-    <xsl:choose>
-      <xsl:when test="$level &gt; 6">
-        <xsl:element name="h6" namespace="{$outputNamespace}">
-          <xsl:apply-templates/>
-        </xsl:element>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:element name="h{$level}" namespace="{$outputNamespace}">
-          <xsl:apply-templates/>
-        </xsl:element>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:variable name="headingTag">
+      <xsl:choose>
+        <xsl:when test="$level &gt; 6">
+          <xsl:value-of select="'h6'"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat( 'h', $level )"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:element name="{$headingTag}" namespace="{$outputNamespace}">
+      <xsl:if test="@ezxhtml:class">
+        <xsl:attribute name="class">
+          <xsl:value-of select="@ezxhtml:class"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates/>
+    </xsl:element>
   </xsl:template>
 
   <xsl:template match="docbook:orderedlist">
     <xsl:element name="ol" namespace="{$outputNamespace}">
+      <xsl:if test="@ezxhtml:class">
+        <xsl:attribute name="class">
+          <xsl:value-of select="@ezxhtml:class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
 
   <xsl:template match="docbook:itemizedlist">
     <xsl:element name="ul" namespace="{$outputNamespace}">
+      <xsl:if test="@ezxhtml:class">
+        <xsl:attribute name="class">
+          <xsl:value-of select="@ezxhtml:class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>

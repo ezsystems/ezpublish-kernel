@@ -4,5 +4,5 @@
          xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
          version="5.0-variant ezpublish-1.0">
   <title>This is a heading.</title>
-  <para>This is a paragraph with <emphasis>emphasized</emphasis> text.</para>
+  <para>This is a paragraph with <emphasis ezxhtml:class="emphasisClass">emphasized</emphasis> text.</para>
 </section>
