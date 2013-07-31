@@ -331,10 +331,16 @@ services:
         class: %ezpublish.fieldType.ezxmltext.converter.aggregate.class%
         arguments:
             -
-                - @ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5
+                -
+                    service: @ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5
+                    priority: -200
                 # @todo implement
-                #- @ezpublish.fieldType.ezxmltext.converter.embedToHtml5
-                - @ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5FragmentCore
+                #-
+                #    service: @ezpublish.fieldType.ezxmltext.converter.embedToHtml5
+                #    priority: -100
+                -
+                    service: @ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5FragmentCore
+                    priority: 0
 
     ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5Edit:
         class: %ezpublish.fieldType.ezxmltext.converter.xslt.class%

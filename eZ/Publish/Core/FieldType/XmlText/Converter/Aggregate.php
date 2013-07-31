@@ -13,25 +13,32 @@ use eZ\Publish\Core\FieldType\XmlText\Converter;
 use DOMDocument;
 
 /**
- * Aggregate converter converts using configured converters in succession.
+ * Aggregate converter converts using configured converters in prioritized order.
  */
 class Aggregate implements Converter
 {
     /**
-     * An array of converters.
+     * An array of arrays of converters, indexed by priority.
      *
-     * @var \eZ\Publish\Core\FieldType\XmlText\Converter[]
+     * @var mixed
      */
-    protected $converters = array();
+    protected $convertersByPriority = array();
 
     /**
-     * @param \eZ\Publish\Core\FieldType\XmlText\Converter[] $converters
+     * Indicates if the array of converters is sorted by priority.
+     *
+     * @var boolean
+     */
+    protected $areConvertersSorted = false;
+
+    /**
+     * @param mixed $converters An array of Converters with priorities
      */
     public function __construct( array $converters )
     {
         foreach ( $converters as $converter )
         {
-            $this->addConverter( $converter );
+            $this->addConverter( $converter["service"], $converter["priority"] );
         }
     }
 
@@ -39,10 +46,12 @@ class Aggregate implements Converter
      * Registers converter.
      *
      * @param \eZ\Publish\Core\FieldType\XmlText\Converter $converter
+     * @param int $priority
      */
-    public function addConverter( Converter $converter )
+    public function addConverter( Converter $converter, $priority )
     {
-        $this->converters[] = $converter;
+        $this->convertersByPriority[$priority][] = $converter;
+        $this->areConvertersSorted = false;
     }
 
     /**
@@ -54,9 +63,19 @@ class Aggregate implements Converter
      */
     public function convert( DOMDocument $document )
     {
-        foreach ( $this->converters as $converter )
+        if ( !$this->areConvertersSorted )
         {
-            $document = $converter->convert( $document );
+            ksort( $this->convertersByPriority );
+            $this->areConvertersSorted = true;
+        }
+
+        foreach ( $this->convertersByPriority as $converters )
+        {
+            /** @var \eZ\Publish\Core\FieldType\XmlText\Converter $converter */
+            foreach ( $converters as $converter )
+            {
+                $document = $converter->convert( $document );
+            }
         }
 
         return $document;
