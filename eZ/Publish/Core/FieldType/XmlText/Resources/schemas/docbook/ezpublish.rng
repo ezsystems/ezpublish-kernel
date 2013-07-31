@@ -495,23 +495,4 @@
     <notAllowed/>
   </define>
 
-  <define name="ez.custom.legacy">
-    <a:documentation>
-      eZ Publish legacy custom tags extension.
-      Anything with 'http://ez.no/xmlns/ezpublish/docbook/custom/legacy' namespace is allowed.
-    </a:documentation>
-    <element>
-      <nsName ns="http://ez.no/xmlns/ezpublish/docbook/custom/legacy"/>
-      <zeroOrMore>
-        <choice>
-          <attribute>
-            <nsName ns="http://ez.no/xmlns/ezpublish/docbook/custom/legacy"/>
-          </attribute>
-          <text/>
-          <ref name="ez.custom.legacy"/>
-        </choice>
-      </zeroOrMore>
-    </element>
-  </define>
-
 </grammar>
