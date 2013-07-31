@@ -46,37 +46,12 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getMockUrlAliasService()
+    protected function getMockUrlAliasRouter()
     {
-        return $this->getMockBuilder( 'eZ\Publish\Core\Repository\URLAliasService' )
+        return $this
+            ->getMockBuilder( 'eZ\\Publish\\Core\\MVC\\Symfony\\Routing\\UrlAliasRouter' )
             ->disableOriginalConstructor()
             ->getMock();
-    }
-
-    /**
-     * @param $contentService
-     * @param $locationService
-     * @param $urlAliasService
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\Repository
-     */
-    protected function getMockRepository( $contentService, $locationService, $urlAliasService )
-    {
-        $repository = $this->getMock( 'eZ\Publish\API\Repository\Repository' );
-
-        $repository->expects( $this->any() )
-            ->method( 'getContentService' )
-            ->will( $this->returnValue( $contentService ) );
-
-        $repository->expects( $this->any() )
-            ->method( 'getLocationService' )
-            ->will( $this->returnValue( $locationService ) );
-
-        $repository->expects( $this->any() )
-            ->method( 'getURLAliasService' )
-            ->will( $this->returnValue( $urlAliasService ) );
-
-        return $repository;
     }
 
     /**
@@ -87,22 +62,22 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
         return array(
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
   <para>
     <link xlink:href="/test">Link text</link>
   </para>
-</article>',
+</section>',
                 '/test',
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
   <para>
     <link xlink:href="/test#anchor">Link text</link>
   </para>
-</article>',
+</section>',
                 '/test#anchor',
             ),
         );
@@ -120,7 +95,7 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
 
         $contentService = $this->getMockContentService();
         $locationService = $this->getMockLocationService();
-        $urlAliasService = $this->getMockUrlAliasService();
+        $urlAliasRouter = $this->getMockUrlAliasRouter();
 
         $contentService->expects( $this->never() )
             ->method( $this->anything() );
@@ -128,16 +103,10 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
         $locationService->expects( $this->never() )
             ->method( $this->anything() );
 
-        $urlAliasService->expects( $this->never() )
+        $urlAliasRouter->expects( $this->never() )
             ->method( $this->anything() );
 
-        $repository = $this->getMockRepository(
-            $contentService,
-            $locationService,
-            $urlAliasService
-        );
-
-        $converter = new EzLinkToHtml5( $repository );
+        $converter = new EzLinkToHtml5( $locationService, $contentService, $urlAliasRouter );
 
         $xmlDoc = $converter->convert( $xmlDoc );
 
@@ -155,24 +124,24 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
         return array(
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
   <para>
     <link xlink:href="ezlocation://106">Content name</link>
   </para>
-</article>',
+</section>',
                 106,
                 'test',
                 'test',
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
   <para>
     <link xlink:href="ezlocation://106#anchor">Content name</link>
   </para>
-</article>',
+</section>',
                 106,
                 'test',
                 'test#anchor',
@@ -192,33 +161,21 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
 
         $contentService = $this->getMockContentService();
         $locationService = $this->getMockLocationService();
-        $urlAliasService = $this->getMockUrlAliasService();
+        $urlAliasRouter = $this->getMockUrlAliasRouter();
 
         $location = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Location' );
-        $urlAlias = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\URLAlias' );
 
         $locationService->expects( $this->once() )
             ->method( 'loadLocation' )
             ->with( $this->equalTo( $locationId ) )
             ->will( $this->returnValue( $location ) );
 
-        $urlAliasService->expects( $this->once() )
-            ->method( 'reverseLookup' )
+        $urlAliasRouter->expects( $this->once() )
+            ->method( 'generate' )
             ->with( $this->equalTo( $location ) )
-            ->will( $this->returnValue( $urlAlias ) );
-
-        $urlAlias->expects( $this->once() )
-            ->method( '__get' )
-            ->with( $this->equalTo( 'path' ) )
             ->will( $this->returnValue( $rawUrl ) );
 
-        $repository = $this->getMockRepository(
-            $contentService,
-            $locationService,
-            $urlAliasService
-        );
-
-        $converter = new EzLinkToHtml5( $repository );
+        $converter = new EzLinkToHtml5( $locationService, $contentService, $urlAliasRouter );
 
         $xmlDoc = $converter->convert( $xmlDoc );
 
@@ -236,12 +193,12 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
         return array(
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
   <para>
     <link xlink:href="ezlocation://106">Content name</link>
   </para>
-</article>',
+</section>',
                 106,
                 new APINotFoundException( "Location", 106 ),
                 'warning',
@@ -249,12 +206,12 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
   <para>
     <link xlink:href="ezlocation://106">Content name</link>
   </para>
-</article>',
+</section>',
                 106,
                 new APIUnauthorizedException( "Location", 106 ),
                 'notice',
@@ -275,7 +232,7 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
 
         $contentService = $this->getMockContentService();
         $locationService = $this->getMockLocationService();
-        $urlAliasService = $this->getMockUrlAliasService();
+        $urlAliasRouter = $this->getMockUrlAliasRouter();
 
         $logger = $this->getMock( 'Psr\Log\LoggerInterface' );
 
@@ -288,13 +245,7 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
             ->with( $this->equalTo( $locationId ) )
             ->will( $this->throwException( $exception ) );
 
-        $repository = $this->getMockRepository(
-            $contentService,
-            $locationService,
-            $urlAliasService
-        );
-
-        $converter = new EzLinkToHtml5( $repository, $logger );
+        $converter = new EzLinkToHtml5( $locationService, $contentService, $urlAliasRouter, $logger );
 
         $converter->convert( $xmlDoc );
     }
@@ -307,12 +258,12 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
         return array(
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
   <para>
     <link xlink:href="ezcontent://104">Content name</link>
   </para>
-</article>',
+</section>',
                 104,
                 106,
                 'test',
@@ -320,12 +271,12 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
   <para>
     <link xlink:href="ezcontent://104#anchor">Content name</link>
   </para>
-</article>',
+</section>',
                 104,
                 106,
                 'test',
@@ -346,11 +297,10 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
 
         $contentService = $this->getMockContentService();
         $locationService = $this->getMockLocationService();
-        $urlAliasService = $this->getMockUrlAliasService();
+        $urlAliasRouter = $this->getMockUrlAliasRouter();
 
         $contentInfo = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\ContentInfo' );
         $location = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Location' );
-        $urlAlias = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\URLAlias' );
 
         $contentInfo->expects( $this->once() )
             ->method( '__get' )
@@ -367,23 +317,12 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
             ->with( $this->equalTo( $locationId ) )
             ->will( $this->returnValue( $location ) );
 
-        $urlAliasService->expects( $this->once() )
-            ->method( 'reverseLookup' )
+        $urlAliasRouter->expects( $this->once() )
+            ->method( 'generate' )
             ->with( $this->equalTo( $location ) )
-            ->will( $this->returnValue( $urlAlias ) );
-
-        $urlAlias->expects( $this->once() )
-            ->method( '__get' )
-            ->with( $this->equalTo( 'path' ) )
             ->will( $this->returnValue( $rawUrl ) );
 
-        $repository = $this->getMockRepository(
-            $contentService,
-            $locationService,
-            $urlAliasService
-        );
-
-        $converter = new EzLinkToHtml5( $repository );
+        $converter = new EzLinkToHtml5( $locationService, $contentService, $urlAliasRouter );
 
         $xmlDoc = $converter->convert( $xmlDoc );
 
@@ -401,12 +340,12 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
         return array(
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
   <para>
     <link xlink:href="ezcontent://205">Content name</link>
   </para>
-</article>',
+</section>',
                 205,
                 new APINotFoundException( "Content", 205 ),
                 'warning',
@@ -414,12 +353,12 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
-<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
   <para>
     <link xlink:href="ezcontent://205">Content name</link>
   </para>
-</article>',
+</section>',
                 205,
                 new APIUnauthorizedException( "Content", 205 ),
                 'notice',
@@ -440,7 +379,7 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
 
         $contentService = $this->getMockContentService();
         $locationService = $this->getMockLocationService();
-        $urlAliasService = $this->getMockUrlAliasService();
+        $urlAliasRouter = $this->getMockUrlAliasRouter();
 
         $logger = $this->getMock( 'Psr\Log\LoggerInterface' );
 
@@ -453,13 +392,7 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
             ->with( $this->equalTo( $contentId ) )
             ->will( $this->throwException( $exception ) );
 
-        $repository = $this->getMockRepository(
-            $contentService,
-            $locationService,
-            $urlAliasService
-        );
-
-        $converter = new EzLinkToHtml5( $repository, $logger );
+        $converter = new EzLinkToHtml5( $locationService, $contentService, $urlAliasRouter, $logger );
 
         $converter->convert( $xmlDoc );
     }
