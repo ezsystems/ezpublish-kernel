@@ -34,7 +34,7 @@ class Aggregate implements Converter
     /**
      * @param mixed $converters An array of Converters with priorities
      */
-    public function __construct( array $converters )
+    public function __construct( array $converters = array() )
     {
         foreach ( $converters as $converter )
         {

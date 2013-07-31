@@ -323,24 +323,30 @@ services:
         class: %ezpublish.fieldType.ezxmltext.converter.xslt.class%
         arguments: [%ezpublish.fieldType.ezxmltext.converter.xhtml5ToDocbook.resources%]
 
+    ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5:
+        class: %ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5.class%
+        arguments: [@ezpublish.api.service.location, @ezpublish.api.service.content, @ezpublish.urlalias_router, @?logger]
+        tags:
+            - {name: ezpublish.ezxmltext.converter.output.xhtml5, priority: -200}
+
+    ezpublish.fieldType.ezxmltext.converter.embedToHtml5:
+        class: %ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class%
+        arguments:
+            - @ezpublish.view_manager
+            - @ezpublish.api.repository
+            - %ezpublish.fieldType.ezxmlText.converter.embedToHtml5.excludedAttributes%
+        # @todo implement
+        #tags:
+        #    - {name: ezpublish.ezxmltext.converter.output.xhtml5, priority: -100}
+
     ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5FragmentCore:
         class: %ezpublish.fieldType.ezxmltext.converter.xslt.class%
         arguments: [%ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5Fragment.resources%]
+        tags:
+            - {name: ezpublish.ezxmltext.converter.output.xhtml5, priority: 0}
 
     ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5Fragment:
         class: %ezpublish.fieldType.ezxmltext.converter.aggregate.class%
-        arguments:
-            -
-                -
-                    service: @ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5
-                    priority: -200
-                # @todo implement
-                #-
-                #    service: @ezpublish.fieldType.ezxmltext.converter.embedToHtml5
-                #    priority: -100
-                -
-                    service: @ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5FragmentCore
-                    priority: 0
 
     ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5Edit:
         class: %ezpublish.fieldType.ezxmltext.converter.xslt.class%
@@ -575,17 +581,6 @@ services:
         class: %ezpublish.fieldType.ezxmltext.externalStorage.class%
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezxmltext}
-
-    ezpublish.fieldType.ezxmltext.converter.embedToHtml5:
-        class: %ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class%
-        arguments:
-            - @ezpublish.view_manager
-            - @ezpublish.api.repository
-            - %ezpublish.fieldType.ezxmlText.converter.embedToHtml5.excludedAttributes%
-
-    ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5:
-        class: %ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5.class%
-        arguments: [@ezpublish.api.service.location, @ezpublish.api.service.content, @ezpublish.urlalias_router, @?logger]
 
     ezpublish.fieldType.ezpage:
         class: %ezpublish.fieldType.ezpage.class%
