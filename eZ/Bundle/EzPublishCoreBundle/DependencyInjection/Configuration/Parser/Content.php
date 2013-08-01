@@ -156,17 +156,17 @@ class Content extends AbstractParser
                 // Workaround to be able to use registerInternalConfigArray() which only supports first level entries.
                 if ( isset( $settings['fieldtypes']['ezxml']['output_custom_tags'] ) )
                 {
-                    $settings['fieldtypes.ezxml.output_custom_tags'] = $settings['fieldtypes']['ezxml']['output_custom_tags'];
+                    $settings['fieldtypes.ezxml.output_custom_xsl'] = $settings['fieldtypes']['ezxml']['output_custom_tags'];
                     unset( $settings['fieldtypes']['ezxml']['output_custom_tags'] );
                 }
                 if ( isset( $settings['fieldtypes']['ezxml']['edit_custom_tags'] ) )
                 {
-                    $settings['fieldtypes.ezxml.edit_custom_tags'] = $settings['fieldtypes']['ezxml']['edit_custom_tags'];
+                    $settings['fieldtypes.ezxml.edit_custom_xsl'] = $settings['fieldtypes']['ezxml']['edit_custom_tags'];
                     unset( $settings['fieldtypes']['ezxml']['edit_custom_tags'] );
                 }
                 if ( isset( $settings['fieldtypes']['ezxml']['input_custom_tags'] ) )
                 {
-                    $settings['fieldtypes.ezxml.input_custom_tags'] = $settings['fieldtypes']['ezxml']['input_custom_tags'];
+                    $settings['fieldtypes.ezxml.input_custom_xsl'] = $settings['fieldtypes']['ezxml']['input_custom_tags'];
                     unset( $settings['fieldtypes']['ezxml']['input_custom_tags'] );
                 }
             }
