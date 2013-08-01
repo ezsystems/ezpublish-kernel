@@ -321,8 +321,10 @@ services:
         arguments: [%ezpublish.fieldType.ezxmltext.converter.input.ezxml.resources%]
 
     ezpublish.fieldType.ezxmltext.converter.input.xhtml5:
-        class: %ezpublish.fieldType.ezxmltext.converter.xslt.class%
-        arguments: [%ezpublish.fieldType.ezxmltext.converter.input.xhtml5.resources%]
+        class: %ezpublish.fieldType.ezxmltext.converter.input.html5.class%
+        arguments:
+            - %ezpublish.fieldType.ezxmltext.converter.input.xhtml5.resources%
+            - @ezpublish.config.resolver
 
     ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5:
         class: %ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5.class%

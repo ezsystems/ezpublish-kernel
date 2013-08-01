@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Html5Edit class.
+ * File containing the Html5Input class.
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -15,11 +15,11 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 /**
  * Adds ConfigResolver awareness to the Xslt converter.
  */
-class Html5Edit extends XsltConverter
+class Html5Input extends XsltConverter
 {
     public function __construct( $stylesheet, ConfigResolverInterface $configResolver )
     {
-        $customStylesheets = $configResolver->getParameter( 'fieldtypes.ezxml.edit_custom_xsl' );
+        $customStylesheets = $configResolver->getParameter( 'fieldtypes.ezxml.input_custom_xsl' );
         $customStylesheets = $customStylesheets ?: array();
         parent::__construct( $stylesheet, $customStylesheets );
     }

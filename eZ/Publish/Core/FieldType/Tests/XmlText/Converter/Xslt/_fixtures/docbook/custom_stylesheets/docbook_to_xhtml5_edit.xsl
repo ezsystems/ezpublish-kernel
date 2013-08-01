@@ -11,6 +11,7 @@
       <xsl:attribute name="width"><xsl:value-of select="@ezcustom:videoWidth"/></xsl:attribute>
       <xsl:attribute name="height"><xsl:value-of select="@ezcustom:videoHeight"/></xsl:attribute>
       <xsl:attribute name="src"><xsl:value-of select="@ezcustom:video"/></xsl:attribute>
+      <xsl:value-of select="@ezcustom:video"/>
     </xsl:element>
   </xsl:template>
 
