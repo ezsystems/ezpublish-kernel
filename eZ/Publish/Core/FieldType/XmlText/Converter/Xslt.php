@@ -28,6 +28,13 @@ class Xslt implements Converter
     protected $stylesheet;
 
     /**
+     * Array of XSL stylesheets to add to the main one, grouped by priority.
+     *
+     * @var array
+     */
+    protected $customStylesheets = array();
+
+    /**
      * Textual mapping for libxml error types.
      *
      * @var array
@@ -42,10 +49,17 @@ class Xslt implements Converter
      * Constructor
      *
      * @param string $stylesheet Stylesheet to use for conversion
+     * @param array $customStylesheets Array of XSL stylesheets. Each entry consists in a hash having "path" and "priority" keys.
      */
-    public function __construct( $stylesheet )
+    public function __construct( $stylesheet, array $customStylesheets = array() )
     {
         $this->stylesheet = $stylesheet;
+
+        // Grouping stylesheets by priority.
+        foreach ( $customStylesheets as $customStylesheet )
+        {
+            $this->customStylesheets[$customStylesheet['priority']][] = $customStylesheet['path'];
+        }
     }
 
     /**
@@ -65,6 +79,60 @@ class Xslt implements Converter
     }
 
     /**
+     * Returns the XSLTProcessor to use to transform internal XML to HTML5.
+     *
+     * @return \XSLTProcessor
+     */
+    protected function getXSLTProcessor()
+    {
+        if ( isset( $this->xsltProcessor ) )
+        {
+            return $this->xsltProcessor;
+        }
+
+        $xslDoc = new DOMDocument;
+        $xslDoc->load( $this->stylesheet );
+
+        // Now loading custom xsl stylesheets dynamically.
+        // According to XSL spec, each <xsl:import> tag MUST be loaded BEFORE any other element.
+        $insertBeforeEl = $xslDoc->documentElement->firstChild;
+        foreach ( $this->getSortedCustomStylesheets() as $stylesheet )
+        {
+            $newEl = $xslDoc->createElement( 'xsl:import' );
+            $hrefAttr = $xslDoc->createAttribute( 'href' );
+            $hrefAttr->value = $stylesheet;
+            $newEl->appendChild( $hrefAttr );
+            $xslDoc->documentElement->insertBefore( $newEl, $insertBeforeEl );
+        }
+        // Now reload XSL DOM to "refresh" it.
+        $xslDoc->loadXML( $xslDoc->saveXML() );
+
+        $this->xsltProcessor = new XSLTProcessor();
+        $this->xsltProcessor->importStyleSheet( $xslDoc );
+        $this->xsltProcessor->registerPHPFunctions();
+        return $this->xsltProcessor;
+    }
+
+    /**
+     * Returns custom stylesheets to load, sorted.
+     * The order is from the lowest priority to the highest since in case of a conflict,
+     * the last loaded XSL template always wins.
+     *
+     * @return array
+     */
+    protected function getSortedCustomStylesheets()
+    {
+        $sortedStylesheets = array();
+        ksort( $this->customStylesheets );
+        foreach ( $this->customStylesheets as $stylesheets )
+        {
+            $sortedStylesheets = array_merge( $sortedStylesheets, $stylesheets );
+        }
+
+        return $sortedStylesheets;
+    }
+
+    /**
      * Performs conversion of the given $document using XSLT stylesheet.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if stylesheet is not found
@@ -79,21 +147,20 @@ class Xslt implements Converter
         if ( !file_exists( $this->stylesheet ) )
         {
             throw new InvalidArgumentException(
-                "schemaPath",
+                "stylesheetPath",
                 "Conversion of XML document cannot be performed, file '{$this->stylesheet}' does not exist."
             );
         }
 
         $xslDoc = new DOMDocument;
         $xslDoc->load( $this->stylesheet );
-        $xsl = new XSLTProcessor();
-        $xsl->importStyleSheet( $xslDoc );
+        $processor = $this->getXSLTProcessor();
 
         // We want to handle the occurred errors ourselves.
         $oldSetting = libxml_use_internal_errors( true );
 
         libxml_clear_errors();
-        $document = $xsl->transformToDoc( $document );
+        $document = $processor->transformToDoc( $document );
 
         // Get all errors
         $xmlErrors = libxml_get_errors();

@@ -7,9 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Converter\Xslt;
-
-use eZ\Publish\Core\FieldType\Tests\XmlText\Converter\Xslt\BaseTest;
+namespace eZ\Publish\Core\FieldType\Tests\XmlText\Converter\Xslt;
 
 /**
  *
@@ -22,9 +20,21 @@ class Xhtml5ToDocbookTest extends BaseTest
     static protected $stylesheet = "eZ/Publish/Core/FieldType/XmlText/Resources/stylesheets/xhtml5/docbook.xsl";
 
     /**
+     * Custom XSLT stylesheets configuration.
+     *
+     * @var string
+     */
+    static protected $customStylesheets = array(
+        array(
+            "path" => "eZ/Publish/Core/FieldType/Tests/XmlText/Converter/Xslt/_fixtures/xhtml5/custom_stylesheets/xhtml5_edit_to_docbook.xsl",
+            "priority" => 99
+        ),
+    );
+
+    /**
      *
      */
-    static protected $inputDir = "eZ/Publish/Core/FieldType/Tests/XmlText/Converter/Xslt/_fixtures/xhtml5";
+    static protected $inputDir = "eZ/Publish/Core/FieldType/Tests/XmlText/Converter/Xslt/_fixtures/xhtml5/edit";
 
     /**
      *

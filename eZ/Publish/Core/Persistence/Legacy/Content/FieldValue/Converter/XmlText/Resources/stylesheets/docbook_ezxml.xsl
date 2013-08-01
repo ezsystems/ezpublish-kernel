@@ -3,10 +3,11 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:docbook="http://docbook.org/ns/docbook"
     xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
+    xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
     xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
     xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"
     xmlns:xlink="http://www.w3.org/1999/xlink"
-    exclude-result-prefixes="docbook xlink ezxhtml"
+    exclude-result-prefixes="docbook xlink ezxhtml ezcustom"
     version="1.0">
   <xsl:output indent="yes" encoding="UTF-8"/>
 
@@ -351,4 +352,24 @@
       <xsl:apply-templates/>
     </td>
   </xsl:template>
+
+  <xsl:template match="ezcustom:custom">
+    <xsl:element name="custom">
+      <xsl:for-each select="@ezcustom:*">
+        <xsl:choose>
+          <xsl:when test="local-name() = 'name'">
+            <xsl:attribute name="name">
+              <xsl:value-of select="current()"/>
+            </xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="custom:{local-name()}">
+              <xsl:value-of select="current()"/>
+            </xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:for-each>
+    </xsl:element>
+  </xsl:template>
+
 </xsl:stylesheet>

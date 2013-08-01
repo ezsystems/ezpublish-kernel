@@ -6,6 +6,7 @@
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns="http://docbook.org/ns/docbook"
     xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
+    xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
     version="1.0">
   <xsl:output indent="yes" encoding="UTF-8"/>
 
@@ -20,6 +21,7 @@
         <section xmlns="http://docbook.org/ns/docbook"
                  xmlns:xlink="http://www.w3.org/1999/xlink"
                  xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
+                 xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
                  version="5.0-variant ezpublish-1.0">
           <xsl:apply-templates/>
         </section>
@@ -87,7 +89,7 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="custom">
+  <xsl:template match="custom[@name='underline' or @name='sub' or @name='sup']">
     <xsl:choose>
       <xsl:when test="@name='underline'">
         <xsl:element name="emphasis" namespace="http://docbook.org/ns/docbook">
@@ -347,4 +349,16 @@
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
+
+  <!-- All custom elements not otherwise matched are copied under 'ezcustom' namespace, together with their attributes -->
+  <xsl:template match="custom">
+    <xsl:element name="ezcustom:{local-name()}">
+      <xsl:for-each select="@*">
+        <xsl:attribute name="ezcustom:{local-name()}">
+          <xsl:value-of select="current()"/>
+        </xsl:attribute>
+      </xsl:for-each>
+    </xsl:element>
+  </xsl:template>
+
 </xsl:stylesheet>

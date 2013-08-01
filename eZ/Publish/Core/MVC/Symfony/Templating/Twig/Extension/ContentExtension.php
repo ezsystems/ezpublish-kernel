@@ -331,7 +331,7 @@ class ContentExtension extends Twig_Extension
     protected function getXmlTextConverter()
     {
         if ( !isset( $this->xmlTextConverter ) )
-            $this->xmlTextConverter = $this->container->get( "ezpublish.fieldType.ezxmltext.converter.output.xhtml5.fragment" );
+            $this->xmlTextConverter = $this->container->get( "ezpublish.fieldType.ezxmltext.converter.output.xhtml5" );
 
         return $this->xmlTextConverter;
     }
@@ -354,7 +354,7 @@ class ContentExtension extends Twig_Extension
     protected function getXmlTextEditConverter()
     {
         if ( !isset( $this->xmlTextEditConverter ) )
-            $this->xmlTextEditConverter = $this->container->get( "ezpublish.fieldType.ezxmltext.converter.docbookToXhtml5Edit" );
+            $this->xmlTextEditConverter = $this->container->get( "ezpublish.fieldType.ezxmltext.converter.edit.xhtml5" );
 
         return $this->xmlTextEditConverter;
     }

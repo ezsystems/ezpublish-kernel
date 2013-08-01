@@ -26,6 +26,13 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     static protected $stylesheet;
 
     /**
+     * Custom XSLT stylesheets configuration.
+     *
+     * @var string
+     */
+    static protected $customStylesheets = array();
+
+    /**
      * Directory with input fixtures.
      *
      * @var string
@@ -91,11 +98,31 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $stylesheet
+     *
      * @return string
      */
-    protected function getStylesheetPath()
+    protected function getStylesheetPath( $stylesheet )
     {
-        return self::getInstallationDir() . "/" . static::$stylesheet;
+        return self::getInstallationDir() . "/" . $stylesheet;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getCustomStylesheets()
+    {
+        $customStylesheets = array();
+
+        foreach ( static::$customStylesheets as $customStylesheet )
+        {
+            $customStylesheets[] = array(
+                "path" => $this->getStylesheetPath( $customStylesheet["path"] ),
+                "priority" => $customStylesheet["priority"]
+            );
+        }
+
+        return $customStylesheets;
     }
 
     /**
@@ -124,7 +151,10 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     {
         if ( $this->converter === null )
         {
-            $this->converter = new Xslt( $this->getStylesheetPath() );
+            $this->converter = new Xslt(
+                $this->getStylesheetPath( static::$stylesheet ),
+                $this->getCustomStyleSheets()
+            );
         }
 
         return $this->converter;

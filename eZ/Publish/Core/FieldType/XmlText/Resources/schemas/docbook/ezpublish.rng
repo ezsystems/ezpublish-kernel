@@ -495,4 +495,25 @@
     <notAllowed/>
   </define>
 
+  <define name="ez.custom.extra" combine="choice">
+    <a:documentation>
+      Validation for custom tag.
+      TODO: temporary here until pre-processing of custom schemas is implemented.
+    </a:documentation>
+    <element name="ezcustom:custom">
+      <attribute name="ezcustom:name">
+        <text/>
+      </attribute>
+      <attribute name="ezcustom:videoWidth">
+        <text/>
+      </attribute>
+      <attribute name="ezcustom:videoHeight">
+        <text/>
+      </attribute>
+      <attribute name="ezcustom:video">
+        <text/>
+      </attribute>
+    </element>
+  </define>
+
 </grammar>
