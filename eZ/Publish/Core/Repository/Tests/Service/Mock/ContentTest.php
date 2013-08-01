@@ -2833,8 +2833,16 @@ class ContentTest extends BaseServiceMockTest
                     "initialLanguageId" => 4242
                 )
             );
-            $spiContentUpdateStruct2 = clone $spiContentUpdateStruct;
-            $spiContentUpdateStruct2->modificationDate++;
+
+            // During code coverage runs, timestamp might differ 1-3 seconds
+            $spiContentUpdateStructTs1 = clone $spiContentUpdateStruct;
+            $spiContentUpdateStructTs1->modificationDate++;
+
+            $spiContentUpdateStructTs2 = clone $spiContentUpdateStructTs1;
+            $spiContentUpdateStructTs2->modificationDate++;
+
+            $spiContentUpdateStructTs3 = clone $spiContentUpdateStructTs2;
+            $spiContentUpdateStructTs3->modificationDate++;
 
             $spiContent = new SPIContent(
                 array(
@@ -2852,7 +2860,7 @@ class ContentTest extends BaseServiceMockTest
                 ->with(
                     42,
                     7,
-                    $this->logicalOr( $spiContentUpdateStruct, $spiContentUpdateStruct2 )
+                    $this->logicalOr( $spiContentUpdateStruct, $spiContentUpdateStructTs1, $spiContentUpdateStructTs2, $spiContentUpdateStructTs3 )
                 )
                 ->will( $this->returnValue( $spiContent ) );
 
