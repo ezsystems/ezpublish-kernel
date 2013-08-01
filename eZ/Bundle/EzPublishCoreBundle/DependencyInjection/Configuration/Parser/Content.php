@@ -166,7 +166,7 @@ class Content extends AbstractParser
                 }
                 if ( isset( $settings['fieldtypes']['ezxml']['input_custom_tags'] ) )
                 {
-                    $settings['fieldtypes.ezxml.edit_custom_tags'] = $settings['fieldtypes']['ezxml']['input_custom_tags'];
+                    $settings['fieldtypes.ezxml.input_custom_tags'] = $settings['fieldtypes']['ezxml']['input_custom_tags'];
                     unset( $settings['fieldtypes']['ezxml']['input_custom_tags'] );
                 }
             }
