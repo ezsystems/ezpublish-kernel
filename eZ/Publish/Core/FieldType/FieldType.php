@@ -319,6 +319,16 @@ abstract class FieldType implements FieldTypeInterface
     }
 
     /**
+     * Indicates if the field definition of this type can be added to a ContentType with Content instances.
+     *
+     * @return boolean
+     */
+    public function onlyEmptyInstance()
+    {
+        return false;
+    }
+
+    /**
      * Returns if the given $value is considered empty by the field type
      *
      * Default implementation, which performs a "==" check with the value

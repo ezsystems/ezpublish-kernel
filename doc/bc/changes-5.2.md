@@ -46,8 +46,8 @@ Changes affecting version compatibility with former or future versions.
   happen:
 
   * When the field definition is of singular type already existing in the content type.
-  * When the field definition is of 'ezuser' field type, and content type has content
-    instances.
+  * When the field definition is of the type that can't be added to a content type that
+    already has content instances is being added to such content type.
 
 No further changes known in this release at time of writing.
 See online on your corresponding eZ Publish version for

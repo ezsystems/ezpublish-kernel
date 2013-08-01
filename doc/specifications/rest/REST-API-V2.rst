@@ -3904,7 +3904,7 @@ Add Field definition
     :401: If the user is not authorized to add a field definition
     :403: - If a field definition with same identifier already exists in the given content type
           - If the field definition is of singular type, already existing in the given content type
-          - If the field definition of user type is being added to the content type having content instances
+          - If the field definition of the type that can't be added to a content type that already has content instances is being added to such content type
 
 Get Fielddefinition
 ```````````````````

@@ -1577,7 +1577,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     /**
      * Test for the addFieldDefinition() method.
      *
-     * Testing that field definition of 'ezuser' field type can not be added to the ContentType that
+     * Testing adding field definition of the field type that can not be added to the ContentType that
      * already has Content instances.
      *
      * @return void
@@ -1613,7 +1613,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $fieldDefCreate->fieldSettings = array();
         $fieldDefCreate->isSearchable = false;
 
-        // Throws an exception because 'folder' ContentType has Content instances
+        // Throws an exception because 'ezuser' type field definition can't be added to ContentType that already has Content instances
         $contentTypeService->addFieldDefinition( $folderContentTypeDraft, $fieldDefCreate );
         /* END: Use Case */
     }
