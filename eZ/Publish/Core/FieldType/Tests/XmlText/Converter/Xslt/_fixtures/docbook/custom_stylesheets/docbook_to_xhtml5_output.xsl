@@ -12,7 +12,9 @@
       <xsl:element name="iframe" namespace="{$outputNamespace}">
         <xsl:attribute name="width"><xsl:value-of select="@ezcustom:videoWidth"/></xsl:attribute>
         <xsl:attribute name="height"><xsl:value-of select="@ezcustom:videoHeight"/></xsl:attribute>
-        <xsl:attribute name="src"><xsl:value-of select="@ezcustom:video"/></xsl:attribute>
+        <xsl:attribute name="src">
+          <xsl:value-of select="concat( 'http://www.youtube.com/embed/', substring-after( @ezcustom:video, 'http://www.youtube.com/watch?v=' ) )"/>
+        </xsl:attribute>
         <xsl:attribute name="frameborder">0</xsl:attribute>
         <xsl:attribute name="allowfullscreen"/>
       </xsl:element>
