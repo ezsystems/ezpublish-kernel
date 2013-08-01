@@ -318,7 +318,7 @@ class LegacyStorage extends Gateway
         $q->prepare()->execute();
 
         return $dbHandler->lastInsertId(
-            $dbHandler->getSequenceName( self::URL_TABLE, "id" )
+            $dbHandler->getSequenceName( UrlStorage::URL_TABLE, "id" )
         );
     }
 }
