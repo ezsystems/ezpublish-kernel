@@ -14,7 +14,7 @@ use PHPUnit_Framework_TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
-class XmlTextConverterPassTest extends PHPUnit_Framework_TestCase
+class XmlTextHtml5OutputConverterPassTest extends PHPUnit_Framework_TestCase
 {
     public function testProcess()
     {
