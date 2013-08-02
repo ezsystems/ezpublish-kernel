@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Controller;
 
+use eZ\Publish\Core\REST\Common\Exceptions\NotFoundException;
 use eZ\Publish\Core\REST\Common\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 
@@ -25,5 +26,15 @@ class Root extends RestController
     public function loadRootResource()
     {
         return new Values\Root();
+    }
+
+    /**
+     * Catch-all for REST requests
+     *
+     * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
+     */
+    public function catchAll()
+    {
+        throw new NotFoundException( "No such route" );
     }
 }

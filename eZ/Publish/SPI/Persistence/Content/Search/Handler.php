@@ -78,4 +78,11 @@ interface Handler
      * @return void
      */
     public function deleteContent( $contentId, $versionId = null );
+
+    /**
+     * Deletes a location from the index
+     *
+     * @param mixed $locationId
+     */
+    public function deleteLocation( $locationId );
 }

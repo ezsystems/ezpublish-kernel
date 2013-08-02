@@ -171,7 +171,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
             array(
                 'data'         => null,
                 'externalData' => array(
-                    'path' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                    'id' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
                     'fileName' => 'Ice-Flower-Media.jpg',
                     'fileSize' => filesize( $path ),
                     'mimeType' => 'image/jpeg',
@@ -180,6 +180,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                     'loop' => true,
                     'width' => 23,
                     'height' => 42,
+                    'uri' => $path,
                 ),
                 'sortKey'      => '',
             )
@@ -200,7 +201,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
         $this->assertNotNull( $field->value->externalData );
 
         $this->assertTrue(
-            file_exists( $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['path'] ),
+            file_exists( $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id'] ),
             "Stored file $path exists"
         );
 
@@ -229,7 +230,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
             array(
                 'data'         => null,
                 'externalData' => array(
-                    'path' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                    'id' => ( $path = __DIR__ . '/_fixtures/image.png' ),
                     'fileName' => 'Blueish-Blue-Media.jpg',
                     'fileSize' => filesize( $path ),
                     'mimeType' => 'image/png',
@@ -238,6 +239,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                     'loop' => false,
                     'width' => 0,
                     'height' => 0,
+                    'uri' => $path,
                 ),
                 'sortKey'      => '',
             )
@@ -261,7 +263,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
         $this->assertNotNull( $field->value->externalData );
 
         $this->assertTrue(
-            file_exists( $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['path'] ),
+            file_exists( $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id'] ),
             "Stored file $path exists"
         );
 

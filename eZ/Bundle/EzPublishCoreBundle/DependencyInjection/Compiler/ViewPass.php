@@ -33,17 +33,20 @@ abstract class ViewPass implements CompilerPassInterface
         $viewManagerDef = $container->getDefinition( "ezpublish.view_manager" );
         foreach ( $container->findTaggedServiceIds( static::VIEW_PROVIDER_IDENTIFIER ) as $id => $attributes )
         {
-            $priority = isset( $attributes[0]["priority"] ) ? (int)$attributes[0]["priority"] : 0;
-            // Priority range is between -255 (the lowest) and 255 (the highest)
-            $priority = max( min( $priority, 255 ), -255 );
+            foreach ( $attributes as $attribute )
+            {
+                $priority = isset( $attribute["priority"] ) ? (int)$attribute["priority"] : 0;
+                // Priority range is between -255 (the lowest) and 255 (the highest)
+                $priority = max( min( $priority, 255 ), -255 );
 
-            $viewManagerDef->addMethodCall(
-                static::ADD_VIEW_PROVIDER_METHOD,
-                array(
-                    new Reference( $id ),
-                    $priority
-                )
-            );
+                $viewManagerDef->addMethodCall(
+                    static::ADD_VIEW_PROVIDER_METHOD,
+                    array(
+                        new Reference( $id ),
+                        $priority
+                    )
+                );
+            }
         }
     }
 }

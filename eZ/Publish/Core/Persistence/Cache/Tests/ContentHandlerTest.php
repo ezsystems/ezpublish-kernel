@@ -493,6 +493,12 @@ class ContentHandlerTest extends HandlerTest
             ->with( 'content', 'info', 2 )
             ->will( $this->returnValue( null ) );
 
+        $this->cacheMock
+            ->expects( $this->at( 2 ) )
+            ->method( 'clear' )
+            ->with( 'location', 'subtree' )
+            ->will( $this->returnValue( null ) );
+
         $handler = $this->persistenceHandler->contentHandler();
         $handler->deleteVersion( 2, 1 );
     }
@@ -536,9 +542,15 @@ class ContentHandlerTest extends HandlerTest
             ->with( 'content', 2 )
             ->will( $this->returnValue( true ) );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->at( 1 ) )
+            ->method( 'clear' )
+            ->with( 'location', 'subtree' )
+            ->will( $this->returnValue( true ) );
+
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $this->cacheMock
+            ->expects( $this->at( 2 ) )
             ->method( 'getItem' )
             ->with( 'content', 2, 1 )
             ->will( $this->returnValue( $cacheItemMock ) );
@@ -554,7 +566,7 @@ class ContentHandlerTest extends HandlerTest
 
         $cacheItemMock2 = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
-            ->expects( $this->at( 2 ) )
+            ->expects( $this->at( 3 ) )
             ->method( 'getItem' )
             ->with( 'content', 'info', 2 )
             ->will( $this->returnValue( $cacheItemMock2 ) );

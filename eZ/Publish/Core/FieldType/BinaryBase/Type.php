@@ -71,7 +71,7 @@ abstract class Type extends FieldType
         // construction only from path
         if ( is_string( $inputValue ) )
         {
-            $inputValue = array( 'path' => $inputValue );
+            $inputValue = array( 'id' => $inputValue );
         }
 
         // default construction from array
@@ -96,11 +96,11 @@ abstract class Type extends FieldType
      */
     protected function checkValueStructure( BaseValue $value )
     {
-        // Required parameter $path
-        if ( !isset( $value->path ) || !file_exists( $value->path ) )
+        // Required parameter $id
+        if ( !isset( $value->id ) || !file_exists( $value->id ) )
         {
             throw new InvalidArgumentValue(
-                '$value->path',
+                '$value->id',
                 $value->path,
                 get_class( $this )
             );
@@ -109,20 +109,20 @@ abstract class Type extends FieldType
         // Required parameter $fileName
         if ( !isset( $value->fileName ) || !is_string( $value->fileName ) )
         {
-            throw new InvalidArgumentType(
+            throw new InvalidArgumentValue(
                 '$value->fileName',
-                'string',
-                $value->fileName
+                $value->fileName,
+                get_class( $this )
             );
         }
 
         // Optional parameter $fileSize
         if ( isset( $value->fileSize ) && !is_int( $value->fileSize ) )
         {
-            throw new InvalidArgumentType(
+            throw new InvalidArgumentValue(
                 '$value->fileSize',
-                'int',
-                $value->fileSize
+                $value->fileSize,
+                get_class( $this )
             );
         }
     }
@@ -136,19 +136,20 @@ abstract class Type extends FieldType
      */
     protected function completeValue( $value )
     {
-        if ( !isset( $value->path ) || !file_exists( $value->path ) )
+        if ( !isset( $value->id ) || !file_exists( $value->id ) )
         {
             return;
         }
 
         if ( !isset( $value->fileName ) )
         {
-            $value->fileName = basename( $value->path );
+            // @todo this may not always work...
+            $value->fileName = basename( $value->id );
         }
 
         if ( !isset( $value->fileSize ) )
         {
-            $value->fileSize = filesize( $value->path );
+            $value->fileSize = filesize( $value->id );
         }
     }
 
@@ -191,10 +192,13 @@ abstract class Type extends FieldType
     public function toHash( SPIValue $value )
     {
         return array(
+            'id' => $value->id,
+            // Kept for BC with eZ Publish 5.0 (EZP-20948)
+            'path' => $value->id,
             'fileName' => $value->fileName,
             'fileSize' => $value->fileSize,
-            'path' => $value->path,
             'mimeType' => $value->mimeType,
+            'uri' => $value->uri,
         );
     }
 
@@ -247,8 +251,8 @@ abstract class Type extends FieldType
         // there might be more data in the persistence value than needed here
         $result = $this->fromHash(
             array(
-                'path' => ( isset( $fieldValue->externalData['path'] )
-                    ? $fieldValue->externalData['path']
+                'id' => ( isset( $fieldValue->externalData['id'] )
+                    ? $fieldValue->externalData['id']
                     : null ),
                 'fileName' => ( isset( $fieldValue->externalData['fileName'] )
                     ? $fieldValue->externalData['fileName']
@@ -258,6 +262,9 @@ abstract class Type extends FieldType
                     : null ),
                 'mimeType' => ( isset( $fieldValue->externalData['mimeType'] )
                     ? $fieldValue->externalData['mimeType']
+                    : null ),
+                'uri' => ( isset( $fieldValue->externalData['uri'] )
+                    ? $fieldValue->externalData['uri']
                     : null ),
             )
         );
@@ -287,6 +294,8 @@ abstract class Type extends FieldType
         {
             switch ( $validatorIdentifier )
             {
+                // @todo There is a risk if we rely on a user built Value, since the FileSize
+                // property can be set manually, making this validation pointless
                 case 'FileSizeValidator':
                     if ( !isset( $parameters['maxFileSize'] ) || $parameters['maxFileSize'] == false )
                     {

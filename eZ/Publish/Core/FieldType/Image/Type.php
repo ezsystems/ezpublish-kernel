@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\FieldType\Image;
 
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -105,11 +106,10 @@ class Type extends FieldType
     protected function checkValueStructure( BaseValue $value )
     {
         // Required parameter $path
-        if ( !isset( $value->path ) || !file_exists( $value->path ) )
+        if ( !isset( $value->id ) || !file_exists( $value->id ) )
         {
-            throw new InvalidArgumentType(
+            throw new InvalidArgumentValue(
                 '$value->path',
-                'string',
                 $value->path
             );
         }
@@ -117,9 +117,8 @@ class Type extends FieldType
         // Required parameter $fileSize
         if ( !isset( $value->fileSize ) || !is_int( $value->fileSize ) )
         {
-            throw new InvalidArgumentType(
+            throw new InvalidArgumentValue(
                 '$value->fileSize',
-                'integer',
                 $value->fileSize
             );
         }
@@ -292,11 +291,13 @@ class Type extends FieldType
         }
 
         return array(
+            'id' => $value->id,
+            'path' => $value->id,
             'alternativeText' => $value->alternativeText,
             'fileName' => $value->fileName,
             'fileSize' => $value->fileSize,
-            'path' => $value->path,
             'imageId' => $value->imageId,
+            'uri' => $value->uri
         );
     }
 
@@ -337,6 +338,9 @@ class Type extends FieldType
         // there might be more data in the persistence value than needed here
         $result = $this->fromHash(
             array(
+                'id' => ( isset( $fieldValue->data['id'] )
+                    ? $fieldValue->data['id']
+                    : null ),
                 'alternativeText' => ( isset( $fieldValue->data['alternativeText'] )
                     ? $fieldValue->data['alternativeText']
                     : null ),
@@ -346,8 +350,8 @@ class Type extends FieldType
                 'fileSize' => ( isset( $fieldValue->data['fileSize'] )
                     ? $fieldValue->data['fileSize']
                     : null ),
-                'path' => ( isset( $fieldValue->data['path'] )
-                    ? $fieldValue->data['path']
+                'uri' => ( isset( $fieldValue->data['uri'] )
+                    ? $fieldValue->data['uri']
                     : null ),
                 'imageId' => ( isset( $fieldValue->data['imageId'] )
                     ? $fieldValue->data['imageId']

@@ -80,7 +80,8 @@ class TrashServiceTest extends ServiceTest
                 'eZ\Publish\Core\SignalSlot\Signal\TrashService\RecoverSignal',
                 array(
                     'trashItemId' => $trashItemId,
-                    'newParentLocationId' => $rootId
+                    'newParentLocationId' => $rootId,
+                    'newLocationId' => $locationId,
                 )
             ),
             array(

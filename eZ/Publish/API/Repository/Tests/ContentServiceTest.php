@@ -15,6 +15,8 @@ use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Exception;
@@ -117,10 +119,18 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentService = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
         $locationService = $repository->getLocationService();
+        $roleService = $repository->getRoleService();
 
-        // get user with additional rights
-        $user = $this->createAnonymousWithAdditonalRights();
-        $repository->setCurrentUser( $user );
+        // Give Anonymous user role additional rights
+        $role = $roleService->loadRoleByIdentifier( 'Anonymous' );
+        $policyCreateStruct = $roleService->newPolicyCreateStruct( 'content', 'create' );
+        $policyCreateStruct->addLimitation( new SectionLimitation( array( 'limitationValues' => array( 1 ) ) ) );
+        $policyCreateStruct->addLimitation( new LocationLimitation( array( 'limitationValues' => array( 2 ) ) ) );
+        $policyCreateStruct->addLimitation( new ContentTypeLimitation( array( 'limitationValues' => array( 1 ) ) ) );
+        $roleService->addPolicy( $role, $policyCreateStruct );
+
+        // Set Anonymous user as current
+        $repository->setCurrentUser( $repository->getUserService()->loadAnonymousUser() );
 
         // Create a new content object:
         $contentCreate = $contentService->newContentCreateStruct(
@@ -4464,39 +4474,5 @@ class ContentServiceTest extends BaseContentServiceTest
                 )
             ),
         );
-    }
-
-    /**
-     * Creates a pseudo editor with a limitation to objects in the "Media/Images"
-     * subtree.
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     */
-    private function createAnonymousWithAdditonalRights()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Inline */
-        $roleService = $repository->getRoleService();
-        $userService = $repository->getUserService();
-
-        $user = $userService->loadAnonymousUser();
-        $role = $roleService->loadRoleByIdentifier( 'Editor' );
-
-        // Assign "Editor" role with limitation to standard Section
-        $roleService->assignRoleToUser(
-            $role,
-            $user,
-            new SectionLimitation(
-                array(
-                    'limitationValues' => array( 1 )
-                )
-            )
-        );
-
-        $pseudoEditor = $userService->loadUser( $user->id );
-        /* END: Inline */
-
-        return $pseudoEditor;
     }
 }

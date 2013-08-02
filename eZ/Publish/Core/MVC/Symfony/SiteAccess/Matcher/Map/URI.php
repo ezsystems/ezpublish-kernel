@@ -55,12 +55,21 @@ class URI extends Map implements Matcher, URILexer
      */
     public function analyseLink( $linkUri )
     {
+        // Removing query string to analyse as SiteAccess might be in it.
+        $qsPos = strpos( $linkUri, '?' );
+        $queryString = '';
+        if ( $qsPos !== false )
+        {
+            $queryString = substr( $linkUri, $qsPos );
+            $linkUri = substr( $linkUri, 0, $qsPos );
+        }
+
         if ( strpos( $linkUri, $this->key ) === false )
         {
             $linkUri = '/' . $this->key . $linkUri;
         }
 
-        return $linkUri;
+        return $linkUri . $queryString;
     }
 
 }

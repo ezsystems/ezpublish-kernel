@@ -1,5 +1,5 @@
 parameters:
-    ezpublish.http_cache.purger.instant.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\InstantCachePurger
+    ezpublish.http_cache.purger.instant.class: eZ\Bundle\EzPublishCoreBundle\Cache\Http\InstantCachePurger
     ezpublish.http_cache.purge_client.local.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\LocalPurgeClient
     ezpublish.http_cache.store.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore
     ezpublish.http_cache.store.root: %kernel.cache_dir%/http_cache
@@ -13,6 +13,8 @@ services:
     ezpublish.http_cache.purger.instant:
         class: %ezpublish.http_cache.purger.instant.class%
         arguments: [@ezpublish.http_cache.purge_client]
+        tags:
+            - { name: kernel.cache_clearer }
 
     ezpublish.http_cache.purger:
         alias: ezpublish.http_cache.purger.instant

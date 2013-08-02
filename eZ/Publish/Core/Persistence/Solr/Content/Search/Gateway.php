@@ -50,6 +50,15 @@ abstract class Gateway
     abstract public function deleteContent( $contentId, $versionId = null );
 
     /**
+     * Deletes a location from the index
+     *
+     * @param mixed $locationId
+     *
+     * @return void
+     */
+    abstract public function deleteLocation( $locationId );
+
+    /**
      * Purges all contents from the index
      *
      * @return void

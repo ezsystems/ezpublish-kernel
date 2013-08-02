@@ -36,6 +36,25 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
+     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::loadSubtreeIds
+     */
+    public function loadSubtreeIds( $locationId )
+    {
+        $cache = $this->cache->getItem( 'location', 'subtree', $locationId );
+        $locationIds = $cache->get();
+
+        if ( $cache->isMiss() )
+        {
+            $this->logger->logCall( __METHOD__, array( 'location' => $locationId ) );
+            $cache->set(
+                $locationIds = $this->persistenceFactory->getLocationHandler()->loadSubtreeIds( $locationId )
+            );
+        }
+
+        return $locationIds;
+    }
+
+    /**
      * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::loadLocationsByContent
      */
     public function loadLocationsByContent( $contentId, $rootLocationId = null )
@@ -168,6 +187,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
 
         $this->cache->clear( 'location', $locationId1 );
         $this->cache->clear( 'location', $locationId2 );
+        $this->cache->clear( 'location', 'subtree' );
         $this->cache->clear( 'content', 'locations' );
 
         return $return;
@@ -181,6 +201,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $this->logger->logCall( __METHOD__, array( 'location' => $locationId, 'struct' => $struct ) );
         $this->persistenceFactory->getLocationHandler()->update( $struct, $locationId );
         $this->cache->clear( 'location', $locationId );
+        $this->cache->clear( 'location', 'subtree' );
     }
 
     /**
@@ -192,6 +213,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $location = $this->persistenceFactory->getLocationHandler()->create( $locationStruct );
 
         $this->cache->getItem( 'location', $location->id )->set( $location );
+        $this->cache->clear( 'location', 'subtree' );
         $this->cache->clear( 'content', 'locations', $location->contentId );
 
         return $location;

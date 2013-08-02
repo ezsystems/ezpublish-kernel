@@ -113,33 +113,33 @@ class Legacy implements IOHandlerInterface
      */
     public function create( BinaryFileCreateStruct $createStruct )
     {
-        if ( $this->exists( $createStruct->uri ) )
+        if ( $this->exists( $createStruct->id ) )
         {
             throw new InvalidArgumentException(
-                "\$createFilestruct->uri",
-                "file '" . $this->getStoragePath( $createStruct->uri ). "' already exists"
+                "\$createFilestruct->id",
+                "file '" . $this->getStoragePath( $createStruct->id ). "' already exists"
             );
         }
 
-        $storagePath = $this->getStoragePath( $createStruct->uri );
+        $storagePath = $this->getStoragePath( $createStruct->id );
         $scope = $this->getScope( $storagePath );
-        $datatype = $this->getDatatype( $createStruct->mimeType );
+        $dataType = $this->getDatatype( $createStruct->mimeType );
 
         $clusterHandler = $this->getClusterHandler();
         $this->getLegacyKernel()->runCallback(
-            function () use ( $createStruct, $storagePath, $datatype, $scope, $clusterHandler )
+            function () use ( $createStruct, $storagePath, $dataType, $scope, $clusterHandler )
             {
                 $clusterHandler->fileStoreContents(
                     $storagePath,
                     fread( $createStruct->getInputStream(), $createStruct->size ),
                     $scope,
-                    $datatype
+                    $dataType
                 );
             },
             false
         );
 
-        return $this->load( $createStruct->uri );
+        return $this->load( $createStruct->id );
     }
 
     protected function getDatatype( $mimeType )
@@ -192,15 +192,15 @@ class Legacy implements IOHandlerInterface
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If the file doesn't exist
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      */
-    public function delete( $path )
+    public function delete( $spiBinaryFileId )
     {
-        if ( !$this->exists( $path ) )
+        if ( !$this->exists( $spiBinaryFileId ) )
         {
-            throw new NotFoundException( 'BinaryFile', $path );
+            throw new NotFoundException( 'BinaryFile', $spiBinaryFileId );
         }
-        $storagePath = $this->getStoragePath( $path );
+        $storagePath = $this->getStoragePath( $spiBinaryFileId );
         $clusterHandler = $this->getClusterHandler();
         $this->getLegacyKernel()->runCallback(
             function () use ( $storagePath, $clusterHandler )
@@ -217,42 +217,42 @@ class Legacy implements IOHandlerInterface
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If the source path doesn't exist
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If the target path already exists
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      * @param \eZ\Publish\SPI\IO\BinaryFileUpdateStruct $updateFileStruct
      *
      * @return \eZ\Publish\SPI\IO\BinaryFile The updated BinaryFile
      */
-    public function update( $path, BinaryFileUpdateStruct $updateFileStruct )
+    public function update( $spiBinaryFileId, BinaryFileUpdateStruct $updateFileStruct )
     {
-        if ( !$this->exists( $path ) )
+        if ( !$this->exists( $spiBinaryFileId ) )
         {
-            throw new NotFoundException( 'BinaryFile', $path );
+            throw new NotFoundException( 'BinaryFile', $spiBinaryFileId );
         }
 
-        $destinationPath = $updateFileStruct->uri;
-        if ( isset( $updateFileStruct->uri ) && $updateFileStruct->uri !== $path )
+        $destinationPath = $updateFileStruct->id;
+        if ( isset( $updateFileStruct->id ) && $updateFileStruct->id !== $spiBinaryFileId )
         {
-            if ( $this->exists( $updateFileStruct->uri ) )
+            if ( $this->exists( $updateFileStruct->id ) )
             {
                 throw new InvalidArgumentException(
-                    "\$updateFileStruct->uri",
-                    "File '" . $this->getStoragePath( $updateFileStruct->uri ). "' already exists"
+                    "\$updateFileStruct->id",
+                    "Destination ID '" . $this->getStoragePath( $updateFileStruct->id ). "' already exists"
                 );
             }
 
-            $updateFileStruct->uri = $this->getStoragePath( $updateFileStruct->uri );
+            $updateFileStruct->id = $this->getStoragePath( $updateFileStruct->id );
         }
 
-        $storagePath = $this->getStoragePath( $path );
+        $storagePath = $this->getStoragePath( $spiBinaryFileId );
         $clusterHandler = $this->getClusterHandler();
         $this->getLegacyKernel()->runCallback(
             function () use ( $storagePath, $updateFileStruct, $clusterHandler )
             {
                 // path
-                if ( $updateFileStruct->uri !== null && $updateFileStruct->uri != $storagePath )
+                if ( $updateFileStruct->id !== null && $updateFileStruct->id != $storagePath )
                 {
-                    $clusterHandler->fileMove( $storagePath, $updateFileStruct->uri );
-                    $storagePath = $updateFileStruct->uri;
+                    $clusterHandler->fileMove( $storagePath, $updateFileStruct->id );
+                    $storagePath = $updateFileStruct->id;
                 }
 
                 $resource = $updateFileStruct->getInputStream();
@@ -263,10 +263,10 @@ class Legacy implements IOHandlerInterface
 
                     $metaData = $clusterFile->metaData;
                     $scope = isset( $metaData['scope'] ) ? $metaData['scope'] : false;
-                    $datatype = isset( $metaData['datatype'] ) ? $metaData['datatype'] : false;
-                    $clusterFile->storeContents( $binaryUpdateData, $scope, $datatype );
+                    $dataType = isset( $metaData['datatype'] ) ? $metaData['datatype'] : false;
+                    $clusterFile->storeContents( $binaryUpdateData, $scope, $dataType );
 
-                    // Unfortunately required due to insufficient handly of in memory cache in eZDFSFileHandler...
+                    // Unfortunately required due to insufficient handling of in memory cache in eZDFSFileHandler...
                     if ( isset( $GLOBALS['eZClusterInfo'][$storagePath] ) )
                     {
                         unset( $GLOBALS['eZClusterInfo'][$storagePath] );
@@ -282,18 +282,18 @@ class Legacy implements IOHandlerInterface
     /**
      * Checks if the BinaryFile with path $path exists
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      *
      * @return boolean
      */
-    public function exists( $path )
+    public function exists( $spiBinaryFileId )
     {
-        $path = $this->getStoragePath( $path );
+        $spiBinaryFileId = $this->getStoragePath( $spiBinaryFileId );
         $clusterHandler = $this->getClusterHandler();
         return $this->getLegacyKernel()->runCallback(
-            function () use ( $clusterHandler, $path )
+            function () use ( $clusterHandler, $spiBinaryFileId )
             {
-                return $clusterHandler->fileExists( $path );
+                return $clusterHandler->fileExists( $spiBinaryFileId );
             },
             false
         );
@@ -304,18 +304,18 @@ class Legacy implements IOHandlerInterface
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If no file identified by $path exists
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      *
      * @return \eZ\Publish\SPI\IO\BinaryFile
      */
-    public function load( $path )
+    public function load( $spiBinaryFileId )
     {
-        if ( !$this->exists( $path ) )
+        if ( !$this->exists( $spiBinaryFileId ) )
         {
-            throw new NotFoundException( 'BinaryFile', $path );
+            throw new NotFoundException( 'spiBinaryFile', $spiBinaryFileId );
         }
 
-        $storagePath = $this->getStoragePath( $path );
+        $storagePath = $this->getStoragePath( $spiBinaryFileId );
         $metaData = $this->getLegacyKernel()->runCallback(
             function () use ( $storagePath )
             {
@@ -326,12 +326,13 @@ class Legacy implements IOHandlerInterface
         );
 
         $file = new BinaryFile();
-        $file->uri = $path;
+        $file->id = $spiBinaryFileId;
 
         $file->mtime = new DateTime();
         $file->mtime->setTimestamp( $metaData['mtime'] );
 
         $file->size = $metaData['size'];
+        $file->uri = $this->getUri( $spiBinaryFileId );
 
         // will only work with some ClusterFileHandlers (DB based ones, not with FS ones)
         if ( isset( $metaData['datatype'] ) )
@@ -345,18 +346,18 @@ class Legacy implements IOHandlerInterface
     /**
      * Returns a file resource to the BinaryFile identified by $path
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      *
      * @throws NotFoundException if $path doesn't exist
      * @return resource
      */
-    public function getFileResource( $path )
+    public function getFileResource( $spiBinaryFileId )
     {
-        if ( !$this->exists( $path ) )
+        if ( !$this->exists( $spiBinaryFileId ) )
         {
-            throw new NotFoundException( "BinaryFile", $path );
+            throw new NotFoundException( "spiBinaryFile", $spiBinaryFileId );
         }
-        return $this->getFileResourceProvider()->getResource( $this->getStoragePath( $path ) );
+        return $this->getFileResourceProvider()->getResource( $this->getStoragePath( $spiBinaryFileId ) );
     }
 
     /**
@@ -364,18 +365,18 @@ class Legacy implements IOHandlerInterface
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException if the file couldn't be found
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      *
      * @return string
      */
-    public function getFileContents( $path )
+    public function getFileContents( $spiBinaryFileId )
     {
-        if ( !$this->exists( $path ) )
+        if ( !$this->exists( $spiBinaryFileId ) )
         {
-            throw new NotFoundException( 'BinaryFile', $path );
+            throw new NotFoundException( 'BinaryFile', $spiBinaryFileId );
         }
 
-        $storagePath = $this->getStoragePath( $path );
+        $storagePath = $this->getStoragePath( $spiBinaryFileId );
         $clusterHandler = $this->getClusterHandler();
         return $this->getLegacyKernel()->runCallback(
             function () use ( $storagePath, $clusterHandler )
@@ -386,9 +387,9 @@ class Legacy implements IOHandlerInterface
         );
     }
 
-    public function getInternalPath( $path )
+    public function getInternalPath( $spiBinaryFileId )
     {
-        return $this->getStoragePath( $path );
+        return $this->getStoragePath( $spiBinaryFileId );
     }
 
     public function getExternalPath( $path )
@@ -396,10 +397,10 @@ class Legacy implements IOHandlerInterface
         return $this->removeStoragePath( $path );
     }
 
-    public function getMetadata( MetadataHandler $metadataHandler, $path )
+    public function getMetadata( MetadataHandler $metadataHandler, $spiBinaryFileId )
     {
         $clusterHandler = $this->getClusterHandler(
-            $this->getStoragePath( $path )
+            $this->getStoragePath( $spiBinaryFileId )
         );
 
         return $this->getLegacyKernel()->runCallback(
@@ -506,17 +507,23 @@ class Legacy implements IOHandlerInterface
     }
 
     /**
-     * Transforms a path in a storage path using the $storageDirectory
-     * @param string $path
+     * Transforms an SPI id in a storage path using the $storageDirectory
+     * @param string $spiBinaryFileId
      * @return string
      */
-    protected function getStoragePath( $path )
+    protected function getStoragePath( $spiBinaryFileId )
     {
         if ( $this->storageDirectory )
-            $path = $this->storageDirectory . DIRECTORY_SEPARATOR . $path;
-        return $path;
+            $spiBinaryFileId = $this->storageDirectory . '/' . $spiBinaryFileId;
+        return $spiBinaryFileId;
     }
 
+    /**
+     * @param string $path
+     *
+     * @return string spiBinaryFileId
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     */
     protected function removeStoragePath( $path )
     {
         if ( !$this->storageDirectory )
@@ -526,9 +533,14 @@ class Legacy implements IOHandlerInterface
 
         if ( strpos( $path, $this->storageDirectory . DIRECTORY_SEPARATOR ) !== 0 )
         {
-            throw new InvalidArgumentException( '$path', "Storage directory not found in $path" );
+            throw new InvalidArgumentException( '$path', "Storage directory '$this->storageDirectory' not found in $path" );
         }
 
         return substr( $path, strlen( $this->storageDirectory ) + 1 );
+    }
+
+    public function getUri( $spiBinaryFileId )
+    {
+        return '/' . $this->getInternalPath( $spiBinaryFileId );
     }
 }

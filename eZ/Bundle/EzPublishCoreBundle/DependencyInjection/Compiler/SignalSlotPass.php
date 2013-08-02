@@ -26,12 +26,15 @@ class SignalSlotPass implements CompilerPassInterface
         $signalDispatcherDef = $container->getDefinition( 'ezpublish.signalslot.signal_dispatcher' );
         foreach ( $container->findTaggedServiceIds( 'ezpublish.api.slot' ) as $id => $attributes )
         {
-            if ( !isset( $attributes[0]['signal'] ) )
+            foreach ( $attributes as $attribute )
             {
-                throw new LogicException( "Could not find 'signal' attribute on '$id' service, which is mandatory for services tagged as 'ezpublish.api.slot'" );
-            }
+                if ( !isset( $attribute['signal'] ) )
+                {
+                    throw new LogicException( "Could not find 'signal' attribute on '$id' service, which is mandatory for services tagged as 'ezpublish.api.slot'" );
+                }
 
-            $signalDispatcherDef->addMethodCall( 'attach', array( $attributes[0]['signal'], $id ) );
+                $signalDispatcherDef->addMethodCall( 'attach', array( $attribute['signal'], $id ) );
+            }
         }
     }
 }

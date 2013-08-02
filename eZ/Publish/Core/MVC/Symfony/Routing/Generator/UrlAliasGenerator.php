@@ -13,6 +13,7 @@ use Psr\Log\LoggerInterface;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 use Symfony\Component\Routing\RouterInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 
 /**
@@ -20,16 +21,18 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
  *
  * @see \eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter
  */
-class UrlAliasGenerator extends Generator
+class UrlAliasGenerator extends Generator implements SiteAccessAware
 {
     const INTERNAL_LOCATION_ROUTE = '_ezpublishLocation';
 
     private $lazyRepository;
 
     /**
+     * The default router (that works with declared routes).
+     *
      * @var \Symfony\Component\Routing\RouterInterface
      */
-    private $router;
+    private $defaultRouter;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -56,17 +59,17 @@ class UrlAliasGenerator extends Generator
      */
     private $siteAccess;
 
-    public function __construct( \Closure $lazyRepository, RouterInterface $router, LoggerInterface $logger = null )
+    public function __construct( \Closure $lazyRepository, RouterInterface $defaultRouter, LoggerInterface $logger = null )
     {
         $this->lazyRepository = $lazyRepository;
-        $this->router = $router;
+        $this->defaultRouter = $defaultRouter;
         $this->logger = $logger;
     }
 
     /**
      * @param SiteAccess $siteAccess
      */
-    public function setSiteAccess( SiteAccess $siteAccess )
+    public function setSiteAccess( SiteAccess $siteAccess = null )
     {
         $this->siteAccess = $siteAccess;
     }
@@ -120,7 +123,7 @@ class UrlAliasGenerator extends Generator
         }
         else
         {
-            $path = $this->router->generate(
+            $path = $this->defaultRouter->generate(
                 self::INTERNAL_LOCATION_ROUTE,
                 array( 'locationId' => $location->id )
             );

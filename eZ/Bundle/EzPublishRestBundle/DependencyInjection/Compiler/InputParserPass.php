@@ -32,13 +32,16 @@ class InputParserPass implements CompilerPassInterface
 
         foreach ( $container->findTaggedServiceIds( 'ezpublish_rest.input.parser' ) as $id => $attributes )
         {
-            if ( !isset( $attributes[0]['mediaType'] ) )
-                throw new \LogicException( 'ezpublish_rest.input.parser service tag needs a "mediaType" attribute to identify the input parser. None given.' );
+            foreach ( $attributes as $attribute )
+            {
+                if ( !isset( $attribute['mediaType'] ) )
+                    throw new \LogicException( 'ezpublish_rest.input.parser service tag needs a "mediaType" attribute to identify the input parser. None given.' );
 
-            $definition->addMethodCall(
-                'addParser',
-                array( $attributes[0]["mediaType"], new Reference( $id ) )
-            );
+                $definition->addMethodCall(
+                    'addParser',
+                    array( $attribute["mediaType"], new Reference( $id ) )
+                );
+            }
         }
     }
 }

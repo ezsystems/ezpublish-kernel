@@ -209,7 +209,6 @@ class UserGroupLimitationType extends AbstractPersistenceLimitationType implemen
         }
 
         $groupIds = array();
-        // @todo Needs to take care of inherited groups as well when UserHandler gets knowledge about user groups
         $currentUserLocations = $this->persistence->locationHandler()->loadLocationsByContent( $currentUser->id );
         if ( !empty( $currentUserLocations ) )
         {

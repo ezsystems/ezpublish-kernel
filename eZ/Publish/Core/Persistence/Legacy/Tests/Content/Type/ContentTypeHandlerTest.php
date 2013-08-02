@@ -796,7 +796,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
                     'eZ\\Publish\\SPI\\Persistence\\Content\\Type'
                 )
             )->will(
-                $this->returnValue( new CreateStruct() )
+                $this->returnValue( new CreateStruct( array( 'identifier' => 'testCopy' ) ) )
             );
 
         $handlerMock = $this->getMock(
@@ -834,6 +834,10 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
                             time()
                         ),
                         'created'
+                    ),
+                    $this->attribute(
+                        $this->matchesRegularExpression( "/^copy_of_testCopy_([a-z0-9]+)$/" ),
+                        'identifier'
                     )
                 )
             )->will(

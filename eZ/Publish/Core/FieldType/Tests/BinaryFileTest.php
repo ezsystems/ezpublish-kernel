@@ -47,8 +47,8 @@ class BinaryFileTest extends BinaryBaseTest
         $baseInput = parent::provideInvalidInputForAcceptValue();
         $binaryFileInput = array(
             array(
-                new BinaryFileValue( array( 'path' => '/foo/bar' ) ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                new BinaryFileValue( array( 'id' => '/foo/bar' ) ),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
             ),
         );
         return array_merge( $baseInput, $binaryFileInput );
@@ -73,7 +73,7 @@ class BinaryFileTest extends BinaryBaseTest
                 __FILE__,
                 new BinaryFileValue(
                     array(
-                        'path' => __FILE__,
+                        'id' => __FILE__,
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => filesize( __FILE__ ),
                         'downloadCount' => 0,
@@ -84,10 +84,10 @@ class BinaryFileTest extends BinaryBaseTest
                 array( /* 'getMimeType' => 'text/plain' */ )
             ),
             array(
-                array( 'path' => __FILE__ ),
+                array( 'id' => __FILE__ ),
                 new BinaryFileValue(
                     array(
-                        'path' => __FILE__,
+                        'id' => __FILE__,
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => filesize( __FILE__ ),
                         'downloadCount' => 0,
@@ -99,12 +99,12 @@ class BinaryFileTest extends BinaryBaseTest
             ),
             array(
                 array(
-                    'path' => __FILE__,
+                    'id' => __FILE__,
                     'fileSize' => 23,
                 ),
                 new BinaryFileValue(
                     array(
-                        'path' => __FILE__,
+                        'id' => __FILE__,
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => 23,
                         'downloadCount' => 0,
@@ -116,12 +116,12 @@ class BinaryFileTest extends BinaryBaseTest
             ),
             array(
                 array(
-                    'path' => __FILE__,
+                    'id' => __FILE__,
                     'downloadCount' => 42,
                 ),
                 new BinaryFileValue(
                     array(
-                        'path' => __FILE__,
+                        'id' => __FILE__,
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => filesize( __FILE__ ),
                         'downloadCount' => 42,
@@ -133,12 +133,12 @@ class BinaryFileTest extends BinaryBaseTest
             ),
             array(
                 array(
-                    'path' => __FILE__,
+                    'id' => __FILE__,
                     'mimeType' => 'application/text+php',
                 ),
                 new BinaryFileValue(
                     array(
-                        'path' => __FILE__,
+                        'id' => __FILE__,
                         'fileName' => basename( __FILE__ ),
                         'fileSize' => filesize( __FILE__ ),
                         'downloadCount' => 0,
@@ -165,14 +165,14 @@ class BinaryFileTest extends BinaryBaseTest
      *      ),
      *      array(
      *          new BinaryFileValue( array(
-     *              'path' => 'some/file/here',
+     *              'id' => 'some/file/here',
      *              'fileName' => 'sindelfingen.jpg',
      *              'fileSize' => 2342,
      *              'downloadCount' => 0,
      *              'mimeType' => 'image/jpeg',
      *          ) ),
      *          array(
-     *              'path' => 'some/file/here',
+     *              'id' => 'some/file/here',
      *              'fileName' => 'sindelfingen.jpg',
      *              'fileSize' => 2342,
      *              'downloadCount' => 0,
@@ -195,22 +195,47 @@ class BinaryFileTest extends BinaryBaseTest
             array(
                 new BinaryFileValue(
                     array(
-                        'path' => 'some/file/here',
+                        'id' => 'some/file/here',
                         'fileName' => 'sindelfingen.jpg',
                         'fileSize' => 2342,
                         'downloadCount' => 0,
                         'mimeType' => 'image/jpeg',
+                        'uri' => 'http://some/file/here',
                     )
                 ),
                 array(
+                    'id' => 'some/file/here',
+                    // Used for BC with 5.0 (EZP-20948)
                     'path' => 'some/file/here',
                     'fileName' => 'sindelfingen.jpg',
                     'fileSize' => 2342,
                     'downloadCount' => 0,
                     'mimeType' => 'image/jpeg',
+                    'uri' => 'http://some/file/here',
                 )
             ),
-            // ...
+            // BC with 5.0 (EZP-20948). Path can be used as input instead of ID.
+            array(
+                new BinaryFileValue(
+                    array(
+                        'path' => 'some/file/here',
+                        'fileName' => 'sindelfingen.jpg',
+                        'fileSize' => 2342,
+                        'downloadCount' => 0,
+                        'mimeType' => 'image/jpeg',
+                        'uri' => 'http://some/file/here',
+                    )
+                ),
+                array(
+                    'id' => 'some/file/here',
+                    'path' => 'some/file/here',
+                    'fileName' => 'sindelfingen.jpg',
+                    'fileSize' => 2342,
+                    'downloadCount' => 0,
+                    'mimeType' => 'image/jpeg',
+                    'uri' => 'http://some/file/here',
+                )
+            )
         );
     }
 
@@ -229,14 +254,14 @@ class BinaryFileTest extends BinaryBaseTest
      *      ),
      *      array(
      *          array(
-     *              'path' => 'some/file/here',
+     *              'id' => 'some/file/here',
      *              'fileName' => 'sindelfingen.jpg',
      *              'fileSize' => 2342,
      *              'downloadCount' => 0,
      *              'mimeType' => 'image/jpeg',
      *          ),
      *          new BinaryFileValue( array(
-     *              'path' => 'some/file/here',
+     *              'id' => 'some/file/here',
      *              'fileName' => 'sindelfingen.jpg',
      *              'fileSize' => 2342,
      *              'downloadCount' => 0,
@@ -258,6 +283,25 @@ class BinaryFileTest extends BinaryBaseTest
             ),
             array(
                 array(
+                    'id' => 'some/file/here',
+                    'fileName' => 'sindelfingen.jpg',
+                    'fileSize' => 2342,
+                    'downloadCount' => 0,
+                    'mimeType' => 'image/jpeg',
+                ),
+                new BinaryFileValue(
+                    array(
+                        'id' => 'some/file/here',
+                        'fileName' => 'sindelfingen.jpg',
+                        'fileSize' => 2342,
+                        'downloadCount' => 0,
+                        'mimeType' => 'image/jpeg',
+                    )
+                )
+            ),
+            // BC with 5.0 (EZP-20948). Path can be used as input instead of ID.
+            array(
+                array(
                     'path' => 'some/file/here',
                     'fileName' => 'sindelfingen.jpg',
                     'fileSize' => 2342,
@@ -266,14 +310,14 @@ class BinaryFileTest extends BinaryBaseTest
                 ),
                 new BinaryFileValue(
                     array(
-                        'path' => 'some/file/here',
+                        'id' => 'some/file/here',
                         'fileName' => 'sindelfingen.jpg',
                         'fileSize' => 2342,
                         'downloadCount' => 0,
                         'mimeType' => 'image/jpeg',
                     )
                 )
-            ),
+            )
             // @todo: Provide upload struct (via REST)!
         );
     }

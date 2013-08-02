@@ -30,6 +30,17 @@ interface Handler
     public function load( $locationId );
 
     /**
+     * Loads the subtree ids of the location identified by $locationId.
+     *
+     * @param int $locationId
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @return array Location ids are in the index, Content ids in the value.
+     */
+    public function loadSubtreeIds( $locationId );
+
+    /**
      * Loads the data for the location identified by $remoteId.
      *
      * @param string $remoteId
