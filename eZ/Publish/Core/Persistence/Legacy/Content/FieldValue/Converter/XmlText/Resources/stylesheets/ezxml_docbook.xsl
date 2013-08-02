@@ -29,7 +29,10 @@
     </xsl:choose>
   </xsl:template>
 
-  <!-- TODO investigate always stripping paragraphs with temporary namespace -->
+  <xsl:template match="paragraph[self::*[namespace::*[name() = 'tmp']] and not( ancestor::*[namespace::*[name() = 'tmp']] )]">
+    <xsl:apply-templates/>
+  </xsl:template>
+
   <xsl:template match="paragraph">
     <xsl:choose>
       <xsl:when test="( table | ul | ol ) or name( .. ) = 'li'">
