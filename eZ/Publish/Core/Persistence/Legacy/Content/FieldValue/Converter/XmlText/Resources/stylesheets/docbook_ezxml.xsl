@@ -354,22 +354,24 @@
   </xsl:template>
 
   <xsl:template match="ezcustom:custom">
-    <xsl:element name="custom">
-      <xsl:for-each select="@ezcustom:*">
-        <xsl:choose>
-          <xsl:when test="local-name() = 'name'">
-            <xsl:attribute name="name">
-              <xsl:value-of select="current()"/>
-            </xsl:attribute>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:attribute name="custom:{local-name()}">
-              <xsl:value-of select="current()"/>
-            </xsl:attribute>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:for-each>
-    </xsl:element>
+    <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+      <xsl:element name="custom">
+        <xsl:for-each select="@ezcustom:*">
+          <xsl:choose>
+            <xsl:when test="local-name() = 'name'">
+              <xsl:attribute name="name">
+                <xsl:value-of select="current()"/>
+              </xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="custom:{local-name()}">
+                <xsl:value-of select="current()"/>
+              </xsl:attribute>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:for-each>
+      </xsl:element>
+    </paragraph>
   </xsl:template>
 
 </xsl:stylesheet>
