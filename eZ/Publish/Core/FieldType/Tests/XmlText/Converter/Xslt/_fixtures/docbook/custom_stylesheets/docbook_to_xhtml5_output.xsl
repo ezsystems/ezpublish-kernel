@@ -13,7 +13,7 @@
         <xsl:attribute name="width"><xsl:value-of select="@ezcustom:videoWidth"/></xsl:attribute>
         <xsl:attribute name="height"><xsl:value-of select="@ezcustom:videoHeight"/></xsl:attribute>
         <xsl:attribute name="src">
-          <xsl:value-of select="concat( 'http://www.youtube.com/embed/', substring-after( @ezcustom:video, 'http://www.youtube.com/watch?v=' ) )"/>
+          <xsl:value-of select="concat( 'http://www.youtube.com/embed/', substring-before( concat( substring-after( @ezcustom:video, 'http://www.youtube.com/watch?v=' ), '&amp;' ), '&amp;' ) )"/>
         </xsl:attribute>
         <xsl:attribute name="frameborder">0</xsl:attribute>
         <xsl:attribute name="allowfullscreen"/>

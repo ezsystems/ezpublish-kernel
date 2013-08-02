@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5">
   <div class="jvembed jvembed-youtube">
-    <iframe width="480" height="360" src="http://www.youtube.com/watch?v=5BSGdX7eNn4" frameborder="0" allowfullscreen=""/>
+    <iframe width="480" height="360" src="http://www.youtube.com/embed/5BSGdX7eNn4" frameborder="0" allowfullscreen=""/>
   </div>
   <p>This is a paragraph with <u>underlined</u> text.</p>
   <p>Thirsty? Have some H<sub>2</sub>O.</p>
