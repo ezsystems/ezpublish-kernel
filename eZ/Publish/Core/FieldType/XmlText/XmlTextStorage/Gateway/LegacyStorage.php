@@ -126,7 +126,7 @@ class LegacyStorage extends Gateway
      *
      * @return array
      */
-    private function getLinkUrls( array $linkIds )
+    protected function getLinkUrls( array $linkIds )
     {
         $linkUrls = array();
 
@@ -238,7 +238,7 @@ class LegacyStorage extends Gateway
      *
      * @return array
      */
-    private function getLinkIds( array $linksUrls )
+    protected function getLinkIds( array $linksUrls )
     {
         $linkIds = array();
 
@@ -300,7 +300,7 @@ class LegacyStorage extends Gateway
      *
      * @return mixed
      */
-    private function insertLink( $url )
+    protected function insertLink( $url )
     {
         $time = time();
         $dbHandler = $this->getConnection();
