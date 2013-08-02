@@ -498,7 +498,7 @@
   <define name="ez.custom.extra" combine="choice">
     <a:documentation>
       Validation for custom tag.
-      TODO: temporary here until pre-processing of custom schemas is implemented.
+      TODO: temporary here until dynamic config of custom tag schemas is implemented.
     </a:documentation>
     <element name="ezcustom:custom">
       <attribute name="ezcustom:name">
