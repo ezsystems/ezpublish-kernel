@@ -98,6 +98,28 @@ class RestContentType extends RestContentTypeBase
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Modifier' );
 
+        $generator->startObjectElement( 'Groups', 'ContentTypeGroupRefList' );
+        $generator->startAttribute(
+            'href',
+            $this->router->generate(
+                'ezpublish_rest_loadGroupsOfContentType',
+                array( 'contentTypeId' => $contentType->id )
+            )
+        );
+        $generator->endAttribute( 'href' );
+        $generator->endObjectElement( 'Groups' );
+
+        $generator->startObjectElement( 'Draft', 'ContentType' );
+        $generator->startAttribute(
+            'href',
+            $this->router->generate(
+                'ezpublish_rest_loadContentTypeDraft',
+                array( 'contentTypeId' => $contentType->id )
+            )
+        );
+        $generator->endAttribute( 'href' );
+        $generator->endObjectElement( 'Draft' );
+
         $generator->startValueElement( 'remoteId', $contentType->remoteId );
         $generator->endValueElement( 'remoteId' );
 

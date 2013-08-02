@@ -52,6 +52,12 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
             "/content/objectstategroups/$objectStateGroup->id"
         );
 
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadObjectStates',
+            array( 'objectStateGroupId' => $objectStateGroup->id ),
+            "/content/objectstategroups/$objectStateGroup->id/objectstates"
+        );
+
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
@@ -78,7 +84,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'ObjectStateGroup',
                 'children' => array(
-                    'count' => 6
+                    'count' => 7
                 )
             ),
             $result,

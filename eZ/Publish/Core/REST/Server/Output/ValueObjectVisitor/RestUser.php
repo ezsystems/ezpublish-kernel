@@ -95,6 +95,14 @@ class RestUser extends ValueObjectVisitor
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Locations' );
 
+        $generator->startObjectElement( 'Groups', 'UserGroupRefList' );
+        $generator->startAttribute(
+            'href',
+            $this->router->generate( 'ezpublish_rest_loadUserGroupsOfUser', array( 'userId' => $contentInfo->id ) )
+        );
+        $generator->endAttribute( 'href' );
+        $generator->endObjectElement( 'Groups' );
+
         $generator->startObjectElement( 'Owner', 'User' );
         $generator->startAttribute(
             'href',

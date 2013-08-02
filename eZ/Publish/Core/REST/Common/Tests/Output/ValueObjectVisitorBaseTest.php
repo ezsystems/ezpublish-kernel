@@ -41,9 +41,15 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     private $routerMock;
 
     /**
-     * @var int
+     * @var \Symfony\Component\Routing\RouterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
+    private $templatedRouterMock;
+
+    /** @var int */
     private $routerCallIndex = 0;
+
+    /** @var int */
+    private $templatedRouterCallIndex = 0;
 
     /**
      * Gets the visitor mock
@@ -111,6 +117,7 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
         $visitor = $this->internalGetVisitor();
         $visitor->setRequestParser( $this->getRequestParser() );
         $visitor->setRouter( $this->getRouterMock() );
+        $visitor->setTemplateRouter( $this->getTemplatedRouterMock() );
         return $visitor;
     }
 
@@ -159,6 +166,38 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     {
         $this->getRouterMock()
             ->expects( $this->at( $this->routerCallIndex++ ) )
+            ->method( 'generate' )
+            ->with(
+                $this->equalTo( $routeName ),
+                $this->equalTo( $arguments )
+            )
+            ->will( $this->returnValue( $returnValue ) );
+    }
+
+    /**
+     * @return \Symfony\Component\Routing\RouterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getTemplatedRouterMock()
+    {
+        if ( !isset( $this->templatedRouterMock ) )
+        {
+            $this->templatedRouterMock = $this->getMock( 'Symfony\\Component\\Routing\\RouterInterface' );
+        }
+
+        return $this->templatedRouterMock;
+    }
+
+    /**
+     * Adds an expectation to the templatedRouterMock. Expectations must be added sequentially.
+     *
+     * @param string $routeName
+     * @param array $arguments
+     * @param string $returnValue
+     */
+    protected function addTemplatedRouteExpectation( $routeName, $arguments, $returnValue )
+    {
+        $this->getTemplatedRouterMock()
+            ->expects( $this->at( $this->templatedRouterCallIndex++ ) )
             ->method( 'generate' )
             ->with(
                 $this->equalTo( $routeName ),

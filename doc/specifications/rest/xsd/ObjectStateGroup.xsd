@@ -33,6 +33,7 @@
           </xsd:element>
           <xsd:element name="names" type="multiLanguageValuesType" />
           <xsd:element name="descriptions" type="multiLanguageValuesType" />
+          <xsd:element name="ObjectStates" type="ref" />
         </xsd:all>
       </xsd:extension>
     </xsd:complexContent>
