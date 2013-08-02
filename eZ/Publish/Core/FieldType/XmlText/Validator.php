@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the eZ\Publish\Core\FieldType\XmlText\Validator\XsdValidator class.
+ * File containing the eZ\Publish\Core\FieldType\XmlText\Validator class.
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -14,7 +14,7 @@ use DOMDocument;
 use LibXMLError;
 
 /**
- * @todo complete doc
+ * Validates XML document using XSD or RELAX NG schema.
  */
 class Validator
 {
