@@ -215,10 +215,16 @@ class Field extends CriterionHandler
             );
         }
 
-        if ( isset( $whereExpressions[1] ) )
-            $subSelect->where( $subSelect->expr->lOr( $whereExpressions ) );
-        else
-            $subSelect->where( $whereExpressions[0] );
+        $subSelect->where(
+            $subSelect->expr->lAnd(
+                $subSelect->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_attribute' ),
+                    $this->dbHandler->quoteColumn( 'current_version', 'ezcontentobject' )
+                ),
+                // Join conditions with a logical OR if several conditions exist
+                count( $whereExpressions ) > 1 ? $subSelect->expr->lOr( $whereExpressions ) : $whereExpressions[0]
+            )
+        );
 
         return $query->expr->in(
             $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
