@@ -38,7 +38,7 @@ class EZP21069Test extends BaseTest
             $contentTypeService->loadContentTypeByIdentifier( 'folder' ),
             'eng-GB'
         );
-        $contentCreateStruct->setField ( 'name', 'TheOriginalNews' );
+        $contentCreateStruct->setField( 'name', 'TheOriginalNews' );
         $contentService->publishVersion(
             $contentService->createContent(
                 $contentCreateStruct, array( $locationService->newLocationCreateStruct( 2 ) )
