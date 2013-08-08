@@ -38,7 +38,7 @@ class EZP21069Test extends BaseTest
             $contentTypeService->loadContentTypeByIdentifier( 'folder' ),
             'eng-GB'
         );
-        $contentCreateStruct->setField ( 'name', 'TheOriginalNews' );
+        $contentCreateStruct->setField( 'name', 'TheOriginalNews' );
         $contentService->publishVersion(
             $contentService->createContent(
                 $contentCreateStruct, array( $locationService->newLocationCreateStruct( 2 ) )
@@ -60,21 +60,48 @@ class EZP21069Test extends BaseTest
                 $contentUpdateStruct
             )->versionInfo
         );
+
+        // Create an draft
+        $contentDraftStruct = $contentService->newContentUpdateStruct();
+        $contentDraftStruct->setField( 'name', 'TheDraftNews' );
+
+        $contentService->updateContent(
+            $contentService->createContentDraft(
+                $locationService->loadLocation(
+                    $urlAliasService->lookup( "/TheUpdatedNews", 'eng-GB' )->destination
+                )->getContentInfo()
+            )->versionInfo,
+            $contentDraftStruct
+        );
     }
 
     public function testSearchOnPreviousAttributeContentGivesNoResult()
     {
         $query = new Query();
         $query->criterion = new Field( 'name', Operator::EQ, "TheOriginalNews" );
+        $results = $this->getRepository()->getSearchService()->findContent( $query );
 
-        $this->assertEmpty( $this->getRepository()->getSearchService()->findContent( $query )->searchHits );
+        $this->assertEquals( 0, $results->totalCount );
+        $this->assertEmpty( $results->searchHits );
     }
 
     public function testSearchOnCurrentAttributeContentGivesOnesResult()
     {
         $query = new Query();
         $query->criterion = new Field( 'name', Operator::EQ, "TheUpdatedNews" );
+        $results = $this->getRepository()->getSearchService()->findContent( $query );
 
-        $this->assertEquals( 1, count( $this->getRepository()->getSearchService()->findContent( $query )->searchHits ) );
+        $this->assertEquals( 1, $results->totalCount );
+        $this->assertEquals( 1, count( $results->searchHits ) );
+    }
+
+    public function testSearchOnDraftAttributeContentGivesNoResult()
+    {
+        $query = new Query();
+        $query->criterion = new Field( 'name', Operator::EQ, "TheDraftNews" );
+        $results = $this->getRepository()->getSearchService()->findContent( $query );
+
+        $this->assertEquals( 0, $results->totalCount );
+        $this->assertEmpty( $results->searchHits );
     }
 }
