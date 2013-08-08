@@ -113,6 +113,9 @@ class LegacyKernelController
 
         if ( isset( $this->legacyLayout ) && !$legacyMode && !isset( $moduleResult['pagelayout'] ) )
         {
+            // Replace original module_result content by filtered one
+            $moduleResult['content'] = $result->getContent();
+
             $response = $this->render(
                 $this->legacyLayout,
                 array( 'module_result' => $moduleResult )
