@@ -139,6 +139,16 @@ class FieldType implements FieldTypeInterface
     }
 
     /**
+     * Indicates if the field definition of this type can be added to a ContentType with Content instances.
+     *
+     * @return boolean
+     */
+    public function onlyEmptyInstance()
+    {
+        return $this->internalFieldType->onlyEmptyInstance();
+    }
+
+    /**
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *

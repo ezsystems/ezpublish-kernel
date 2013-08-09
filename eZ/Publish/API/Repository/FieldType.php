@@ -111,6 +111,13 @@ interface FieldType
     public function isSingular();
 
     /**
+     * Indicates if the field definition of this type can be added to a ContentType with Content instances.
+     *
+     * @return boolean
+     */
+    public function onlyEmptyInstance();
+
+    /**
      * Returns the empty value for this field type.
      *
      * @return mixed

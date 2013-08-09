@@ -30,6 +30,25 @@ Changes affecting version compatibility with former or future versions.
   Path remains available for both input and output, as a BC facilitator,
   but will be removed in a further major version and should not be used
 
+* ContentTypeService->createContentType()
+
+  The ContentTypeValidationException is introduced on this method, thrown when
+  ContentType being created is not valid. This will be the case when multiple field
+  definitions of the same singular type are provided in the create struct.
+
+* ContentTypeService->addFieldDefinition()
+
+  ContentTypeFieldDefinitionValidationException is added to the interface of this
+  method. This exception was already being used, therefore this is only a PHPDoc change.
+
+  BadStateException is added to this method, thrown when content type that is being
+  updated is in a bad state. There are currently two possible cases when this can
+  happen:
+
+  * When the field definition is of singular type already existing in the content type.
+  * When the field definition is of the type that can't be added to a content type that
+    already has content instances is being added to such content type.
+
 No further changes known in this release at time of writing.
 See online on your corresponding eZ Publish version for
 updated list of known issues (missing features, breaks and errata).
