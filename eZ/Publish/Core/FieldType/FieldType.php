@@ -315,7 +315,17 @@ abstract class FieldType implements FieldTypeInterface
      */
     public function isSingular()
     {
-        return true;
+        return false;
+    }
+
+    /**
+     * Indicates if the field definition of this type can be added to a ContentType with Content instances.
+     *
+     * @return boolean
+     */
+    public function onlyEmptyInstance()
+    {
+        return false;
     }
 
     /**

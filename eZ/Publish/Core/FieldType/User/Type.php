@@ -54,7 +54,17 @@ class Type extends FieldType
      */
     public function isSingular()
     {
-        return false;
+        return true;
+    }
+
+    /**
+     * Indicates if the field definition of this type can be added to a ContentType with Content instances.
+     *
+     * @return boolean
+     */
+    public function onlyEmptyInstance()
+    {
+        return true;
     }
 
     /**
