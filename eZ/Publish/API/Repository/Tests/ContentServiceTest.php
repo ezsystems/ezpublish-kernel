@@ -1004,6 +1004,38 @@ class ContentServiceTest extends BaseContentServiceTest
     /**
      * Test for the createContentDraft() method.
      *
+     * Test that editor has access to edit own draft.
+     * Note: Editors have access to version_read, which is needed to load content drafts.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @group user
+     */
+    public function testCreateContentDraftAndLoadAccess()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Set new editor as user
+        $repository->setCurrentUser( $user );
+
+        // Create draft
+        $draft = $this->createContentDraftVersion1( 2, 'folder' );
+
+        // Try to load the draft
+        $contentService = $repository->getContentService();
+        $loadedDraft = $contentService->loadContent( $draft->id );
+
+        /* END: Use Case */
+
+        $this->assertEquals( $draft->id, $loadedDraft->id );
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $draft
      *
      * @return void
