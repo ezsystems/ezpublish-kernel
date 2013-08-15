@@ -117,11 +117,11 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject[] $targets An array of location, parent or "assignment" value objects
+     * @param \eZ\Publish\API\Repository\Values\ValueObject[]|null $targets The context of the $object, like Location of Content, if null none where provided by caller
      *
      * @return boolean
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = array() )
+    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = null )
     {
         if ( !$value instanceof APILocationLimitation )
         {
@@ -148,10 +148,13 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
             );
         }
 
-        // Check all locations if no specific placement was provided
-        if ( empty( $targets ) )
+        // Load locations if no specific placement was provided
+        if ( $targets === null )
         {
-            $targets = $this->persistence->locationHandler()->loadLocationsByContent( $object->id );
+            if ( $object->published )
+                $targets = $this->persistence->locationHandler()->loadLocationsByContent( $object->id );
+            else// @todo Need support for draft locations to to work correctly
+                $targets = $this->persistence->locationHandler()->loadParentLocationsForDraftContent( $object->id );
         }
 
         foreach ( $targets as $target )
@@ -178,13 +181,13 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
      *         objects of type LocationCreateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
-     * @param array $targets
+     * @param array|null $targets
      *
      * @return bool
      */
-    protected function evaluateForContentCreateStruct( APILimitationValue $value, array $targets )
+    protected function evaluateForContentCreateStruct( APILimitationValue $value, array $targets = null )
     {
-        // If targets is empty return false as user does not have access
+        // If targets is empty/null return false as user does not have access
         // to content w/o location with this limitation
         if ( empty( $targets ) )
         {

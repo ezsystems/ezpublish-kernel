@@ -386,15 +386,11 @@ class Repository implements RepositoryInterface
             return $permissionSets;
         }
 
-        if ( $targets === null )
-        {
-            $targets = array();
-        }
-        else if ( $targets instanceof ValueObject )
+        if ( $targets instanceof ValueObject )
         {
             $targets = array( $targets );
         }
-        else if ( !is_array( $targets ) )
+        else if ( $targets !== null && !is_array( $targets ) )
         {
             throw new InvalidArgumentType(
                 "\$targets",
@@ -414,7 +410,7 @@ class Repository implements RepositoryInterface
             {
                 $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
                 if ( !$type->evaluate( $permissionSet['limitation'], $currentUser, $object, $targets ) )
-                    continue;
+                    continue;// Continue to next policy set, all limitations must pass
             }
 
             /**

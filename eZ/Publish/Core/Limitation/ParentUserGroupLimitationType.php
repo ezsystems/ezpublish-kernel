@@ -121,11 +121,11 @@ class ParentUserGroupLimitationType extends AbstractPersistenceLimitationType im
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject[] $targets An array of location, parent or "assignment" value objects
+     * @param \eZ\Publish\API\Repository\Values\ValueObject[]|null $targets The context of the $object, like Location of Content, if null none where provided by caller
      *
      * @return boolean
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = array() )
+    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = null )
     {
         if ( !$value instanceof APIParentUserGroupLimitation )
             throw new InvalidArgumentException( '$value', 'Must be of type: APIParentUserGroupLimitation' );
@@ -138,6 +138,7 @@ class ParentUserGroupLimitationType extends AbstractPersistenceLimitationType im
             );
         }
 
+        // Parent Limitations are usually used by content/create where target is specified, so we return false if not provided.
         if ( empty( $targets ) )
         {
             return false;
