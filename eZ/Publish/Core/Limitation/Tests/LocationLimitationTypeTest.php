@@ -256,7 +256,7 @@ class LocationLimitationTypeTest extends Base
         $versionInfoMock
             ->expects( $this->once() )
             ->method( 'getContentInfo' )
-            ->will( $this->returnValue( new ContentInfo() ) );
+            ->will( $this->returnValue( new ContentInfo( array( 'published' => true ) ) ) );
 
         $versionInfoMock2 = $this->getMock(
             "eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo",
@@ -269,13 +269,13 @@ class LocationLimitationTypeTest extends Base
         $versionInfoMock2
             ->expects( $this->once() )
             ->method( 'getContentInfo' )
-            ->will( $this->returnValue( new ContentInfo() ) );
+            ->will( $this->returnValue( new ContentInfo( array( 'published' => true ) ) ) );
 
         return array(
             // ContentInfo, with targets, no access
             array(
                 'limitation' => new LocationLimitation(),
-                'object' => new ContentInfo(),
+                'object' => new ContentInfo( array( 'published' => true ) ),
                 'targets' => array( new Location() ),
                 'persistence' => array(),
                 'expected' => false
@@ -283,7 +283,7 @@ class LocationLimitationTypeTest extends Base
             // ContentInfo, with targets, no access
             array(
                 'limitation' => new LocationLimitation( array( 'limitationValues' => array( 2 ) ) ),
-                'object' => new ContentInfo(),
+                'object' => new ContentInfo( array( 'published' => true ) ),
                 'targets' => array( new Location( array( 'id' => 55 ) ) ),
                 'persistence' => array(),
                 'expected' => false
@@ -291,7 +291,7 @@ class LocationLimitationTypeTest extends Base
             // ContentInfo, with targets, with access
             array(
                 'limitation' => new LocationLimitation( array( 'limitationValues' => array( 2 ) ) ),
-                'object' => new ContentInfo(),
+                'object' => new ContentInfo( array( 'published' => true ) ),
                 'targets' => array( new Location( array( 'id' => 2 ) ) ),
                 'persistence' => array(),
                 'expected' => true
@@ -299,16 +299,32 @@ class LocationLimitationTypeTest extends Base
             // ContentInfo, no targets, with access
             array(
                 'limitation' => new LocationLimitation( array( 'limitationValues' => array( 2 ) ) ),
-                'object' => new ContentInfo(),
-                'targets' => array(),
+                'object' => new ContentInfo( array( 'published' => true ) ),
+                'targets' => null,
                 'persistence' => array( new Location( array( 'id' => 2 ) ) ),
                 'expected' => true
             ),
             // ContentInfo, no targets, no access
             array(
                 'limitation' => new LocationLimitation( array( 'limitationValues' => array( 2, 43 ) ) ),
-                'object' => new ContentInfo(),
-                'targets' => array(),
+                'object' => new ContentInfo( array( 'published' => true ) ),
+                'targets' => null,
+                'persistence' => array( new Location( array( 'id' => 55 ) ) ),
+                'expected' => false
+            ),
+            // ContentInfo, no targets, un-published, with access
+            array(
+                'limitation' => new LocationLimitation( array( 'limitationValues' => array( 2 ) ) ),
+                'object' => new ContentInfo( array( 'published' => false ) ),
+                'targets' => null,
+                'persistence' => array( new Location( array( 'id' => 2 ) ) ),
+                'expected' => true
+            ),
+            // ContentInfo, no targets, un-published, no access
+            array(
+                'limitation' => new LocationLimitation( array( 'limitationValues' => array( 2, 43 ) ) ),
+                'object' => new ContentInfo( array( 'published' => false ) ),
+                'targets' => null,
                 'persistence' => array( new Location( array( 'id' => 55 ) ) ),
                 'expected' => false
             ),
@@ -362,7 +378,7 @@ class LocationLimitationTypeTest extends Base
     public function testEvaluate(
         LocationLimitation $limitation,
         ValueObject $object,
-        array $targets,
+        $targets,
         array $persistenceLocations,
         $expected
     )
@@ -376,7 +392,7 @@ class LocationLimitationTypeTest extends Base
             ->method( $this->anything() );
 
         $persistenceMock = $this->getPersistenceMock();
-        if ( empty( $persistenceLocations ) )
+        if ( empty( $persistenceLocations ) && $targets !== null )
         {
             $persistenceMock
                 ->expects( $this->never() )
@@ -391,7 +407,7 @@ class LocationLimitationTypeTest extends Base
 
             $this->locationHandlerMock
                 ->expects( $this->once() )
-                ->method( "loadLocationsByContent" )
+                ->method( $object instanceof ContentInfo && $object->published ? "loadLocationsByContent" : "loadParentLocationsForDraftContent" )
                 ->with( $object->id )
                 ->will( $this->returnValue( $persistenceLocations ) );
         }
@@ -452,7 +468,7 @@ class LocationLimitationTypeTest extends Base
     public function testEvaluateInvalidArgument(
         Limitation $limitation,
         ValueObject $object,
-        array $targets,
+        $targets,
         array $persistenceLocations
     )
     {

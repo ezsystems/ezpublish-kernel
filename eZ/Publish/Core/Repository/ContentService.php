@@ -1476,27 +1476,6 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * Returns true if user has a right to publish given previously unpublished $content, false otherwise.
-     *
-     * @param APIContent $content
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     *
-     * @return boolean
-     */
-    protected function canUserPublishContent( APIContent $content )
-    {
-        $spiLocations = $this->persistenceHandler->locationHandler()->loadParentLocationsForDraftContent(
-            $content->getVersionInfo()->getContentInfo()->id
-        );
-        if ( $this->repository->canUser( "content", "create", $content, $spiLocations ) )
-        {
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Publishes a content version
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish this version
@@ -1516,7 +1495,7 @@ class ContentService implements ContentServiceInterface
 
         if ( !$content->getVersionInfo()->getContentInfo()->published )
         {
-            if ( !$this->canUserPublishContent( $content ) )
+            if ( !$this->repository->canUser( "content", "create", $content ) )
             {
                 throw new UnauthorizedException( 'content', 'create' );
             }

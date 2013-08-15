@@ -151,7 +151,10 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
         // Load locations if no specific placement was provided
         if ( $targets === null )
         {
-            $targets = $this->persistence->locationHandler()->loadLocationsByContent( $object->id );
+            if ( $object->published )
+                $targets = $this->persistence->locationHandler()->loadLocationsByContent( $object->id );
+            else// @todo Need support for draft locations to to work correctly
+                $targets = $this->persistence->locationHandler()->loadParentLocationsForDraftContent( $object->id );
         }
 
         foreach ( $targets as $target )
