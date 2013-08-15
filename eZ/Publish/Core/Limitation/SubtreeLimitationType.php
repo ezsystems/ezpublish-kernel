@@ -119,11 +119,11 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject[] $targets An array of location, parent or "assignment" value objects
+     * @param \eZ\Publish\API\Repository\Values\ValueObject[]|null $targets The context of the $object, like Location of Content, if null none where provided by caller
      *
      * @return boolean
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = array() )
+    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = null )
     {
         if ( !$value instanceof APISubtreeLimitation )
         {
@@ -150,8 +150,8 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
             );
         }
 
-        // Check all locations if no specific placement was provided
-        if ( empty( $targets ) )
+        // Load locations if no specific placement was provided
+        if ( $targets === null )
         {
             $targets = $this->persistence->locationHandler()->loadLocationsByContent( $object->id );
         }
@@ -193,7 +193,7 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
      */
     protected function evaluateForContentCreateStruct( APILimitationValue $value, array $targets )
     {
-        // If targets is empty return false as user does not have access
+        // If targets is empty/null return false as user does not have access
         // to content w/o location with this limitation
         if ( empty( $targets ) )
         {
