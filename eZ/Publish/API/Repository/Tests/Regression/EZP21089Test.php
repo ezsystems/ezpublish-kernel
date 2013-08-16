@@ -115,7 +115,7 @@ class EZP21089Test extends BaseTest
             $this->contentType,
             'eng-GB'
         );
-        $contentCreateStruct->setField ( 'title', 'Test' );
+        $contentCreateStruct->setField( 'title', 'Test' );
         $contentService->createContent(
             $contentCreateStruct, array( $repository->getLocationService()->newLocationCreateStruct( 2 ) )
         );
