@@ -158,7 +158,7 @@ EOT
      */
     protected function getInitialData()
     {
-        return include __DIR__ . '/../../../Publish/Core/Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php';
+        return include __DIR__ . "/../../../../data/demo_data.php";
     }
 
     /**
@@ -185,7 +185,7 @@ EOT
      */
     protected function getSchemaStatements( $dbType )
     {
-        $schemaPath = __DIR__ . '/../../../Publish/Core/Persistence/Legacy/Tests/_fixtures/schema.' . $dbType . '.sql';
+        $schemaPath = __DIR__ . "/../../../../data/{$dbType}/schema.sql";
         return array_filter( preg_split( '(;\\s*$)m', file_get_contents( $schemaPath ) ) );
     }
 
