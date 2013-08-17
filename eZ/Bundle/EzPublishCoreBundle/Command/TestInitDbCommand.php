@@ -44,7 +44,7 @@ EOT
 
         if (
             $input->isInteractive() &&
-            !$this->getHelperSet()->get('dialog')->askConfirmation(
+            !$this->getHelperSet()->get( 'dialog' )->askConfirmation(
                 $output,
                 "<question>Are you sure you want to delete all data in '{$database}' database?</question>",
                 false
@@ -53,7 +53,6 @@ EOT
         {
             return;
         }
-
 
         $output->writeln( "<info>Database is now being emptied and re filled with fixture data.</info>" );
 
