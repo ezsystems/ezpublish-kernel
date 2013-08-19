@@ -167,7 +167,7 @@
         </a>
     </xsl:template>
 
-    <xsl:template match="embed">
+    <xsl:template match="embed | embed-inline">
         <div>
             <xsl:if test="@align">
                 <xsl:attribute name="class"><xsl:value-of select="concat('object-', @align)"/></xsl:attribute>
