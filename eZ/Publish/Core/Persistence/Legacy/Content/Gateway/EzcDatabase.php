@@ -267,10 +267,11 @@ class EzcDatabase extends Gateway
      *
      * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $struct
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $prePublishVersionInfo Provided on publish
      *
      * @return void
      */
-    public function updateContent( $contentId, MetadataUpdateStruct $struct )
+    public function updateContent( $contentId, MetadataUpdateStruct $struct, VersionInfo $prePublishVersionInfo = null )
     {
         $q = $this->dbHandler->createUpdateQuery();
         $q->update( $this->dbHandler->quoteTable( 'ezcontentobject' ) );
@@ -317,7 +318,25 @@ class EzcDatabase extends Gateway
                 $q->bindValue( $struct->remoteId, null, \PDO::PARAM_STR )
             );
         }
+        if ( $prePublishVersionInfo !== null )
+        {
+            $mask = 0;
 
+            if ( isset( $struct->alwaysAvailable ) )
+                $mask |= $struct->alwaysAvailable ? 1 : 0;
+            else
+                $mask |= $prePublishVersionInfo->contentInfo->alwaysAvailable ? 1 : 0;
+
+            foreach ( $prePublishVersionInfo->languageIds as $languageId )
+            {
+                $mask |= $languageId;
+            }
+
+            $q->set(
+                $this->dbHandler->quoteColumn( 'language_mask' ),
+                $q->bindValue( $mask, null, \PDO::PARAM_INT )
+            );
+        }
         $q->where(
             $q->expr->eq(
                 $this->dbHandler->quoteColumn( 'id' ),
