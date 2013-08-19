@@ -325,7 +325,7 @@ class ContentHandlerTest extends TestCase
         $gatewayMock
             ->expects( $this->once() )
             ->method( 'updateContent' )
-            ->with( 23, $metadataUpdateStruct );
+            ->with( 23, $metadataUpdateStruct, $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ) );
 
         $locationMock
             ->expects( $this->once() )
