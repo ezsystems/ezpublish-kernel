@@ -49,10 +49,19 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\User\Handler::loadByLogin
      */
-    public function loadByLogin( $login, $alsoMatchEmail = false )
+    public function loadByLogin( $login )
     {
-        $this->logger->logCall( __METHOD__, array( 'user' => $login, 'email?' => $alsoMatchEmail ) );
-        return $this->persistenceFactory->getUserHandler()->loadByLogin( $login, $alsoMatchEmail );
+        $this->logger->logCall( __METHOD__, array( 'user' => $login ) );
+        return $this->persistenceFactory->getUserHandler()->loadByLogin( $login );
+    }
+
+    /**
+     * @see eZ\Publish\SPI\Persistence\User\Handler::loadByEmail
+     */
+    public function loadByEmail( $email )
+    {
+        $this->logger->logCall( __METHOD__, array( 'email' => $email ) );
+        return $this->persistenceFactory->getUserHandler()->loadByEmail( $email );
     }
 
     /**

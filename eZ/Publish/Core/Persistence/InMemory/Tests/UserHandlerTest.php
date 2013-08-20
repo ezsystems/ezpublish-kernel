@@ -47,31 +47,31 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * Test loadByLogin function
+     * Test loadByLogin & loadByEmail function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadByLogin
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadByEmail
      */
     public function testLoadByLogin()
     {
-        $users = $this->persistenceHandler->userHandler()->loadByLogin( 'anonymous' );
-        $this->assertEquals( 1, count( $users ) );
-        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User', $users[0] );
-        $this->assertEquals( 10, $users[0]->id );
-        $this->assertEquals( 'nospam@ez.no', $users[0]->email );
-        $this->assertEquals( 'anonymous', $users[0]->login );
+        $user = $this->persistenceHandler->userHandler()->loadByLogin( 'anonymous' );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User', $user );
+        $this->assertEquals( 10, $user->id );
+        $this->assertEquals( 'nospam@ez.no', $user->email );
+        $this->assertEquals( 'anonymous', $user->login );
 
-        $users = $this->persistenceHandler->userHandler()->loadByLogin( 'anonymous', true );
-        $this->assertEquals( 1, count( $users ) );
-        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User', $users[0] );
-        $this->assertEquals( 10, $users[0]->id );
-        $this->assertEquals( 'nospam@ez.no', $users[0]->email );
-        $this->assertEquals( 'anonymous', $users[0]->login );
+        $users = $this->persistenceHandler->userHandler()->loadByEmail( 'anonymous' );
+        if ( !empty( $users ) )
+        {
+            $this->fail( 'Succeeded loading user by non existent email' );
+        }
     }
 
     /**
-     * Test loadByLogin function
+     * Test loadByLogin & loadByEmail function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadByLogin
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadByEmail
      */
     public function testLoadByLoginWithEmail()
     {
@@ -84,7 +84,7 @@ class UserHandlerTest extends HandlerTest
         {
         }
 
-        $users = $this->persistenceHandler->userHandler()->loadByLogin( 'nospam@ez.no', true );
+        $users = $this->persistenceHandler->userHandler()->loadByEmail( 'nospam@ez.no' );
         $this->assertEquals( 1, count( $users ) );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User', $users[0] );
         $this->assertEquals( 10, $users[0]->id );
@@ -93,9 +93,10 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * Test loadByLogin function
+     * Test loadByLogin & loadByEmail function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadByLogin
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadByEmail
      */
     public function testLoadByLoginUnExistingUser()
     {
@@ -108,13 +109,10 @@ class UserHandlerTest extends HandlerTest
         {
         }
 
-        try
+        $users = $this->persistenceHandler->userHandler()->loadByEmail( 'kamelåså@ez.no' );
+        if ( !empty( $users ) )
         {
-            $this->persistenceHandler->userHandler()->loadByLogin( 'kamelåså@ez.no', true );
             $this->fail( 'Succeeded loading user by non existent email' );
-        }
-        catch ( NotFound $e )
-        {
         }
     }
 

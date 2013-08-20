@@ -1181,6 +1181,99 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test for the loadUserByLogin() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::loadUserByLogin()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     */
+    public function testLoadUserByLogin()
+    {
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Load the newly created user
+        $userReloaded = $userService->loadUserByLogin( 'user' );
+        /* END: Use Case */
+
+        $this->assertEquals( $user, $userReloaded );
+    }
+
+    /**
+     * Test for the loadUserByLogin() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::loadUserByLogin()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserByLogin
+     */
+    public function testLoadUserByLoginThrowsNotFoundExceptionForUnknownLogin()
+    {
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $this->createUserVersion1();
+
+        // This call will fail with a "NotFoundException", because the given
+        // login/password combination does not exist.
+        $userService->loadUserByLogin( 'USER' );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the loadUsersByEmail() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::loadUsersByEmail()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     */
+    public function testLoadUserByEmail()
+    {
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Load the newly created user
+        $usersReloaded = $userService->loadUsersByEmail( 'user@example.com' );
+        /* END: Use Case */
+
+        $this->assertEquals( array( $user ), $usersReloaded );
+    }
+
+    /**
+     * Test for the loadUsersByEmail() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::loadUsersByEmail()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserByEmail
+     */
+    public function testLoadUserByEmailReturnsEmptyInUnknownEmail()
+    {
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $this->createUserVersion1();
+
+        // This call will return empty array, because the given
+        // login/password combination does not exist.
+        $emptyUserList = $userService->loadUsersByEmail( 'USER@example.com' );
+        /* END: Use Case */
+
+        $this->assertEquals( array(), $emptyUserList );
+    }
+
+    /**
      * Test for the deleteUser() method.
      *
      * @return void

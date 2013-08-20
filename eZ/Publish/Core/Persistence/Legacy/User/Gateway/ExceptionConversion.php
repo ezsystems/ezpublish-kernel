@@ -105,18 +105,17 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Loads user with user ID.
+     * Loads user with user login.
      *
      * @param string $login
-     * @param string|null $email
      *
      * @return array
      */
-    public function loadByLoginOrMail( $login, $email = null )
+    public function loadByLogin( $login )
     {
         try
         {
-            return $this->innerGateway->loadByLoginOrMail( $login, $email );
+            return $this->innerGateway->loadByLogin( $login );
         }
         catch ( ezcDbException $e )
         {
@@ -127,6 +126,29 @@ class ExceptionConversion extends Gateway
             throw new RuntimeException( 'Database error', 0, $e );
         }
     }
+
+    /**
+     * Loads user with user email.
+     *
+     * @param string $email
+     *
+     * @return array
+     */
+     public function loadByEmail( $email )
+     {
+         try
+         {
+             return $this->innerGateway->loadByEmail( $email );
+         }
+         catch ( \ezcDbException $e )
+         {
+             throw new \RuntimeException( 'Database error', 0, $e );
+         }
+         catch ( \PDOException $e )
+         {
+             throw new \RuntimeException( 'Database error', 0, $e );
+         }
+     }
 
     /**
      * Update the user information specified by the user struct

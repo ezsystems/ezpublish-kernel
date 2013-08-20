@@ -241,6 +241,35 @@ class UserService implements APIUserService, Sessionable
     }
 
     /**
+     * Loads a user for the given login
+     *
+     * @param string $login
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
+     */
+    public function loadUserByLogin( $login )
+    {
+        throw new \Exception( "@todo: Implement." );
+    }
+
+    /**
+     * Loads a user for the given email
+     *
+     * Returns an array of Users since eZ Publish has under certain circumstances allowed
+     * several users having same email in the past (by means of a configuration option).
+     *
+     * @param string $email
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User[]
+     */
+    public function loadUsersByEmail( $email )
+    {
+        throw new \Exception( "@todo: Implement." );
+    }
+
+    /**
      * This method deletes a user
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user

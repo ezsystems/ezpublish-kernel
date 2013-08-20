@@ -30,7 +30,8 @@ class UserHandlerTest extends HandlerTest
         return array(
             //array( 'create', array( new User ) ),
             array( 'load', array( 14 ) ),
-            array( 'loadByLogin', array( 'admin', true ) ),
+            array( 'loadByLogin', array( 'admin' ) ),
+            array( 'loadByEmail', array( 'admin@ez.no' ) ),
             //array( 'update', array( new User ) ),
             //array( 'delete', array( 14 ) ),
             //array( 'createRole', array( new Role ) ),

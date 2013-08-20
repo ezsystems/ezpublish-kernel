@@ -78,40 +78,39 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
-     * Loads user with user login / email.
+     * Loads user with user login.
      *
      * @param string $login
-     * @param boolean $alsoMatchEmail Also match user email, caller must verify that $login is a valid email address.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no users are found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user is not found
      *
-     * @return \eZ\Publish\SPI\Persistence\User[]
+     * @return \eZ\Publish\SPI\Persistence\User
      */
-    public function loadByLogin( $login, $alsoMatchEmail = false )
+    public function loadByLogin( $login )
     {
         $users = $this->backend->find( 'User', array( 'login' => $login ) );
-        if ( !$alsoMatchEmail )
-        {
-            if ( empty( $users ) )
-                throw new NotFound( 'User', $login );
-
-            return $users;
-        }
-
-        foreach ( $this->backend->find( 'User', array( 'email' => $login ) ) as $emailUser )
-        {
-            foreach ( $users as $loginUser )
-            {
-                if ( $emailUser->id === $loginUser->id )
-                    continue 2;
-            }
-            $users[] = $emailUser;
-        }
-
         if ( empty( $users ) )
             throw new NotFound( 'User', $login );
 
-        return $users;
+        if ( isset( $users[1] ) )
+            throw new LogicException( "Found more then one user with login '{$login}'" );
+
+        return $users[0];
+    }
+
+    /**
+     * Loads user(s) with user email.
+     *
+     * As earlier eZ Publish versions supported several users having same email (ini config),
+     * this function may return several users.
+     *
+     * @param string $email
+     *
+     * @return \eZ\Publish\SPI\Persistence\User[]
+     */
+    public function loadByEmail( $email )
+    {
+        return $this->backend->find( 'User', array( 'email' => $email ) );
     }
 
     /**
