@@ -118,14 +118,15 @@ class ExceptionConversion extends Gateway
      *
      * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $struct
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $prePublishVersionInfo Provided on publish
      *
      * @return void
      */
-    public function updateContent( $contentId, MetadataUpdateStruct $struct )
+    public function updateContent( $contentId, MetadataUpdateStruct $struct, VersionInfo $prePublishVersionInfo = null )
     {
         try
         {
-            return $this->innerGateway->updateContent( $contentId, $struct );
+            return $this->innerGateway->updateContent( $contentId, $struct, $prePublishVersionInfo );
         }
         catch ( ezcDbException $e )
         {
