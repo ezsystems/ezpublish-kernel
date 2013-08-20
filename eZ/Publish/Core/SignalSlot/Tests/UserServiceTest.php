@@ -157,6 +157,18 @@ class UserServiceTest extends ServiceTest
                 0
             ),
             array(
+                'loadUserByLogin',
+                array( "admin" ),
+                $user,
+                0
+            ),
+            array(
+                'loadUsersByEmail',
+                array( "admin@ez.no" ),
+                array( $user ),
+                0
+            ),
+            array(
                 'deleteUser',
                 array( $user ),
                 null,

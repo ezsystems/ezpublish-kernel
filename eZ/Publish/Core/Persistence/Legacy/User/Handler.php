@@ -16,6 +16,7 @@ use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Policy;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway as RoleGateway;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use LogicException;
 
 /**
  * Storage Engine handler for user module
@@ -93,20 +94,47 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Loads user with user login / email.
+     * Loads user with user login.
      *
      * @param string $login
-     * @param boolean $alsoMatchEmail Also match user email, caller must verify that $login is a valid email address.
      *
-     * @return \eZ\Publish\SPI\Persistence\User[]
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\User
      */
-    public function loadByLogin( $login, $alsoMatchEmail = false )
+    public function loadByLogin( $login )
     {
-        $data = $this->userGateway->loadByLoginOrMail( $login, $alsoMatchEmail ? $login : null );
+        $data = $this->userGateway->loadByLogin( $login );
 
         if ( empty( $data ) )
         {
             throw new NotFound( 'user', $login );
+        }
+        else if ( isset( $data[1] ) )
+        {
+            throw new LogicException( "Found more then one user with login '{$login}'" );
+        }
+
+        return $this->mapper->mapUser( $data[0] );
+    }
+
+    /**
+     * Loads user(s) with user email.
+     *
+     * As earlier eZ Publish versions supported several users having same email (ini config),
+     * this function may return several users.
+     *
+     * @param string $email
+     *
+     * @return \eZ\Publish\SPI\Persistence\User[]
+     */
+    public function loadByEmail( $email )
+    {
+        $data = $this->userGateway->loadByEmail( $email );
+
+        if ( empty( $data ) )
+        {
+            return array();
         }
 
         return $this->mapper->mapUsers( $data );
