@@ -168,7 +168,7 @@ class EzcDatabase extends Gateway
         )->where(
             $query->expr->eq(
                 $this->handler->quoteColumn( 'login', 'ezuser' ),
-                $query->bindValue( $login )
+                $query->bindValue( $login, null, \PDO::PARAM_STR )
             )
         );
 
@@ -207,7 +207,7 @@ class EzcDatabase extends Gateway
          )->where(
              $query->expr->eq(
                  $this->handler->quoteColumn( 'email', 'ezuser' ),
-                 $query->bindValue( $email )
+                 $query->bindValue( $email, null, \PDO::PARAM_STR )
              )
          );
 
