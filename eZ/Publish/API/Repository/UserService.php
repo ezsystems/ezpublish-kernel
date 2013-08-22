@@ -146,6 +146,9 @@ interface UserService
     /**
      * Loads a user for the given login and password
      *
+     * This method is case sensitive in regards to $login and $password as a comparison of password hash is done
+     * which contains both parameters.
+     *
      * @param string $login
      * @param string $password the plain password
      *
@@ -158,6 +161,8 @@ interface UserService
     /**
      * Loads a user for the given login
      *
+     * Note: This method loads user by $login where $login might be case in-sensitive on certain storage engines!
+     *
      * @param string $login
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
@@ -168,6 +173,8 @@ interface UserService
 
     /**
      * Loads a user for the given email
+     *
+     * Note: This method loads user by $email where $email might be case in-sensitive on certain storage engines!
      *
      * Returns an array of Users since eZ Publish has under certain circumstances allowed
      * several users having same email in the past (by means of a configuration option).

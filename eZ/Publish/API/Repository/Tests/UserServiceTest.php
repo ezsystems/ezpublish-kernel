@@ -1222,7 +1222,7 @@ class UserServiceTest extends BaseTest
 
         // This call will fail with a "NotFoundException", because the given
         // login/password combination does not exist.
-        $userService->loadUserByLogin( 'USER' );
+        $userService->loadUserByLogin( 'user42' );
         /* END: Use Case */
     }
 
@@ -1267,7 +1267,7 @@ class UserServiceTest extends BaseTest
 
         // This call will return empty array, because the given
         // login/password combination does not exist.
-        $emptyUserList = $userService->loadUsersByEmail( 'USER@example.com' );
+        $emptyUserList = $userService->loadUsersByEmail( 'user42@example.com' );
         /* END: Use Case */
 
         $this->assertEquals( array(), $emptyUserList );

@@ -46,6 +46,8 @@ interface Handler
     /**
      * Loads user with user login.
      *
+     * Note: This method loads user by $login case in-sensitive on certain storage engines!
+     *
      * @param string $login
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user is not found
@@ -59,6 +61,8 @@ interface Handler
      *
      * As earlier eZ Publish versions supported several users having same email (ini config),
      * this function may return several users.
+     *
+     * Note: This method loads user by $email case in-sensitive on certain storage engines!
      *
      * @param string $email
      *
