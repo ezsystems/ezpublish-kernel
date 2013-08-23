@@ -257,6 +257,7 @@ General Error Codes
 :404: Requested resource was not found
 :405: The request method is not available.  The available methods are returned for this resource
 :406: The request contains an Accept header which is not supported.
+      An href in the request doesn't match an API resource (prefix missing ?)
 
 .. _ListRoot:
 
