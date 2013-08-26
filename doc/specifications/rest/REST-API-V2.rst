@@ -3,8 +3,6 @@
 eZ Publish REST API V2 RFC
 ==========================
 
-.. sectnum::
-
 .. contents:: Table of Contents
 
 General considerations
