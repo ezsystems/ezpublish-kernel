@@ -126,7 +126,7 @@ services:
         class: %ezpublish.spi.persistence.cache.abstractHandler.class%
         abstract:  true
         arguments:
-            - @cache
+            - @ezpublish.cache_pool
             - @ezpublish.spi.persistence.lazy_factory
             - @ezpublish.spi.persistence.cache.persistenceLogger
 

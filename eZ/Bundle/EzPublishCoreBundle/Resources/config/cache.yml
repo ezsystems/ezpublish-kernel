@@ -1,4 +1,6 @@
 parameters:
+    ezpublish.cache_pool.class: Stash\Pool
+    ezpublish.cache_pool.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\CacheFactory
     ezpublish.http_cache.purger.instant.class: eZ\Bundle\EzPublishCoreBundle\Cache\Http\InstantCachePurger
     ezpublish.http_cache.purge_client.local.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\LocalPurgeClient
     ezpublish.http_cache.store.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore
@@ -10,6 +12,15 @@ parameters:
     ezpublish.http_cache.purge_client.browser.class: Buzz\Browser
 
 services:
+    ezpublish.cache_pool:
+        class: %ezpublish.cache_pool.class%
+        factory_service: ezpublish.cache_pool.factory
+        factory_method: getCachePool
+        arguments: [@ezpublish.config.resolver, @service_container]
+
+    ezpublish.cache_pool.factory:
+        class: %ezpublish.cache_pool.factory.class%
+
     ezpublish.http_cache.purger.instant:
         class: %ezpublish.http_cache.purger.instant.class%
         arguments: [@ezpublish.http_cache.purge_client]
