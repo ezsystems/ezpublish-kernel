@@ -53,6 +53,16 @@ class TransformationProcessorDefinitionBasedTest extends TestCase
         );
     }
 
+    public function testApplyAllLowercaseNormalizations()
+    {
+        $processor = $this->getProcessor();
+
+        $this->assertSame(
+            'hello world!',
+            $processor->transformByGroup( 'Hello World!', 'lowercase' )
+        );
+    }
+
     /**
      * The main point of this test is, that it shows that all normalizations
      * available can be compiled without errors. The actual expectation is not
