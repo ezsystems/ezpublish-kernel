@@ -32,7 +32,7 @@ abstract class CriterionVisitor
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
      *
-     * @return void
+     * @return string
      */
     abstract public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null );
 
