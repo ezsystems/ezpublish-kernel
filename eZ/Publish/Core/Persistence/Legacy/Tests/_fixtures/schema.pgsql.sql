@@ -844,6 +844,8 @@ CREATE INDEX ezurlalias_ml_text ON ezurlalias_ml USING btree (text, id, link);
 
 CREATE INDEX ezurlalias_ml_text_lang ON ezurlalias_ml USING btree (text, lang_mask, parent);
 
+CREATE INDEX ezuser_login ON ezuser USING btree (login);
+
 CREATE INDEX ezuser_role_contentobject_id ON ezuser_role USING btree (contentobject_id);
 
 CREATE INDEX ezuser_role_role_id ON ezuser_role USING btree (role_id);
