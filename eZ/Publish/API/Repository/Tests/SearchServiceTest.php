@@ -304,7 +304,7 @@ class SearchServiceTest extends BaseTest
                         'criterion' => new Criterion\Field(
                             'name',
                             Criterion\Operator::EQ,
-                            'Members'
+                            'members'
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
                     )
@@ -317,7 +317,7 @@ class SearchServiceTest extends BaseTest
                         'criterion' => new Criterion\Field(
                             'name',
                             Criterion\Operator::IN,
-                            array( 'Members', 'Anonymous Users' )
+                            array( 'members', 'anonymous users' )
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
                     )
@@ -345,7 +345,7 @@ class SearchServiceTest extends BaseTest
                                 new Criterion\Field(
                                     'name',
                                     Criterion\Operator::EQ,
-                                    'Members'
+                                    'members'
                                 ),
                                 new Criterion\DateMetadata(
                                     Criterion\DateMetadata::MODIFIED,
