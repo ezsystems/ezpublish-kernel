@@ -13,6 +13,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Language;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use ezcQuery;
+use RuntimeException;
 
 /**
  * ezcDatabase based Language Gateway
@@ -54,6 +55,14 @@ class EzcDatabase extends Gateway
         $statement->execute();
 
         $lastId = (int)$statement->fetchColumn();
+
+        // Legacy only supports 8 * PHP_INT_SIZE - 2 languages:
+        // One bit cannot be used because PHP uses signed integers and a second one is reserved for the
+        // "always available flag".
+        if ( $lastId == pow( 2, 8 * PHP_INT_SIZE - 2 ) )
+        {
+            throw new RuntimeException( "Maximum number of languages reached!" );
+        }
         // Next power of 2 for bit masks
         $nextId = ( $lastId !== 0 ? $lastId << 1 : 2 );
 
