@@ -447,7 +447,7 @@ class SearchServiceTest extends BaseTest
      *
      * @dataProvider getCaseInsensitiveSearches
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @ depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldFiltersCaseSensitivity( Query $query, $fixture, $closure = null )
     {
