@@ -98,18 +98,17 @@ application/xml or application/json.
 URIs
 ----
 
-The REST api is designed that the client has not to construct any uri's to resources by itself.
+The REST API is designed so that the client need not construct any URIs to resources by itself.
 Starting from the root resources (ListRoot_) every response includes further links to related resources.
-The uris should be used directly as identifiers on the client side and the client should not
-construct an uri by using an id.
+The URIs should be used directly as identifiers on the client side and the client should not
+construct an URI by using an id.
 
 URIs prefix
 -----------
+In this document, for the sake of readability, no prefix is used in the URIs. In real life, /api/ezp/v2
+prefixes all REST hrefs.
 
-In  this document, we consider, for the sake of readability, that no prefix is used in the URIs. In a real life
-situation, the prefix /api/ezp/v2 is used in all REST hrefs.
-
-Remember in any case that URIs to REST resources should never be generated manually, but obtained from earlier REST
+Remember that URIs to REST resources should never be generated manually, but obtained from earlier REST
  calls.
 
 OPTIONS requests
@@ -162,7 +161,7 @@ See "/user/sessions/" section for details on performing login / logout.
 
 Session cookie
 ~~~~~~~~~~~~~~
-If activated the user has to login to use this and the client has to send the session cookie in every request, using a standard Cookie header. The name (sessionName) and value (sessionID) of the header is defined  in response when doing a POST /user/sessions.
+If activated, the user must log in to use this and the client must send the session cookie in every request, using a standard Cookie header. The name (sessionName) and value (sessionID) of the header is defined  in response when doing a POST /user/sessions.
 
 Example request header:
     Cookie: <SessionName> : <sessionID>
@@ -183,12 +182,12 @@ Example request headers:
     DELETE /user/sessions/<sessionID>
     X-CSRF-Token: <csrfToken>
 
-If an unsafe request is missing CSRF token, or it has wrong value, a response error must be given:
+If an unsafe request is missing the CSRF token, or it has the wrong value, a response error must be given:
     401 Unauthorized
 
 Rich client application security concerns
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The whole point of CSRF protection is to avoid that users accidentally can do harmful operations by being tricked into executing a http(s) request against a web applications they are logged into, in case of browsers this will then be blocked by lack of CSRF token. However if you develop a rich client application (javascript, java, flash, silverlight, iOS, android, ..) that is:
+The whole point of CSRF protection is to prevent users accidentally running harmful operations by being tricked into executing a http(s) request against a web applications they are logged into, in case of browsers this will then be blocked by lack of CSRF token. However if you develop a rich client application (javascript, java, flash, silverlight, iOS, android, ..) that is:
 
 * Registering itself as a protocol handler
 
