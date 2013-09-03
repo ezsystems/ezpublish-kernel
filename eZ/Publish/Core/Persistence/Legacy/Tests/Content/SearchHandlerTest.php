@@ -95,6 +95,14 @@ class SearchHandlerTest extends LanguageAwareTestCase
             $rules[] = str_replace( self::getInstallationDir(), '', $file );
         }
 
+        $transformationProcessor = new Content\Search\TransformationProcessor\DefinitionBased(
+            new Content\Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() ),
+            new Content\Search\TransformationProcessor\PcreCompiler(
+                new Content\Search\Utf8Converter()
+            ),
+            $rules
+        );
+
         return new Content\Search\Handler(
             new Content\Search\Gateway\EzcDatabase(
                 $this->getDatabaseHandler(),
@@ -150,13 +158,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         ),
                         new Content\Search\Gateway\CriterionHandler\FullText(
                             $this->getDatabaseHandler(),
-                            new Content\Search\TransformationProcessor\DefinitionBased(
-                                new Content\Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() ),
-                                new Content\Search\TransformationProcessor\PcreCompiler(
-                                    new Content\Search\Utf8Converter()
-                                ),
-                                $rules
-                            ),
+                            $transformationProcessor,
                             $fullTextSearchConfiguration
                         ),
                         new Content\Search\Gateway\CriterionHandler\Field(
@@ -168,7 +170,8 @@ class SearchHandlerTest extends LanguageAwareTestCase
                                     'ezprice' => new Integer(),
                                     'ezurl' => new Url()
                                 )
-                            )
+                            ),
+                            $transformationProcessor
                         ),
                         new Content\Search\Gateway\CriterionHandler\ObjectStateId(
                             $this->getDatabaseHandler()
