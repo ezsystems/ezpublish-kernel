@@ -176,16 +176,16 @@ class Field extends CriterionHandler
             {
                 case Criterion\Operator::IN:
                     $filter = $subSelect->expr->in(
-                        $column,
-                        $criterion->value
+                        "lower($column)",
+                        array_map( 'strtolower', $criterion->value )
                     );
                     break;
 
                 case Criterion\Operator::BETWEEN:
                     $filter = $subSelect->expr->between(
-                        $column,
-                        $subSelect->bindValue( $criterion->value[0] ),
-                        $subSelect->bindValue( $criterion->value[1] )
+                        "lower($column)",
+                        $subSelect->bindValue( strtolower( $criterion->value[0] ) ),
+                        $subSelect->bindValue( strtolower( $criterion->value[1] ) )
                     );
                     break;
 
@@ -197,8 +197,8 @@ class Field extends CriterionHandler
                 case Criterion\Operator::LIKE:
                     $operatorFunction = $this->comparatorMap[$criterion->operator];
                     $filter = $subSelect->expr->$operatorFunction(
-                        $column,
-                        $subSelect->bindValue( $criterion->value )
+                        "lower($column)",
+                        $subSelect->bindValue( strtolower( $criterion->value ) )
                     );
                     break;
 
