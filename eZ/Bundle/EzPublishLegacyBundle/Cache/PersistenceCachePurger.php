@@ -10,16 +10,19 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\Cache;
 
 use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
-use Tedivm\StashBundle\Service\CacheService;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandlerInterface;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class PersistenceCachePurger
+ */
 class PersistenceCachePurger implements CacheClearerInterface
 {
     /**
-     * @var \Tedivm\StashBundle\Service\CacheService
+     * @var \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator
      */
     protected $cache;
 
@@ -50,10 +53,11 @@ class PersistenceCachePurger implements CacheClearerInterface
     /**
      * Setups current handler with everything needed
      *
-     * @param \Tedivm\StashBundle\Service\CacheService $cache
+     * @param \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator $cache
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
+     * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct( CacheService $cache, LocationHandlerInterface $locationHandler, LoggerInterface $logger )
+    public function __construct( CacheServiceDecorator $cache, LocationHandlerInterface $locationHandler, LoggerInterface $logger )
     {
         $this->cache = $cache;
         $this->locationHandler = $locationHandler;
