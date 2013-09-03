@@ -190,6 +190,14 @@ CREATE SEQUENCE ezurlwildcard_s
     MINVALUE 1
     CACHE 1;
 
+DROP SEQUENCE IF EXISTS ezuser_accountkey_s;
+CREATE SEQUENCE ezuser_accountkey_s
+    START 1
+    INCREMENT 1
+    MAXVALUE 9223372036854775807
+    MINVALUE 1
+    CACHE 1;
+
 DROP SEQUENCE IF EXISTS ezuser_role_s;
 CREATE SEQUENCE ezuser_role_s
     START 1
@@ -668,6 +676,14 @@ CREATE TABLE ezuser (
     password_hash_type integer DEFAULT 1 NOT NULL
 );
 
+DROP TABLE IF EXISTS ezuser_accountkey;
+CREATE TABLE ezuser_accountkey (
+    hash_key character varying(32) DEFAULT ''::character varying NOT NULL,
+    id integer DEFAULT nextval('ezuser_accountkey_s'::text) NOT NULL,
+    "time" integer DEFAULT 0 NOT NULL,
+    user_id integer DEFAULT 0 NOT NULL
+);
+
 DROP TABLE IF EXISTS ezuser_role;
 CREATE TABLE ezuser_role (
     contentobject_id integer,
@@ -681,6 +697,15 @@ DROP TABLE IF EXISTS ezuser_setting;
 CREATE TABLE ezuser_setting (
     is_enabled integer DEFAULT 0 NOT NULL,
     max_login integer,
+    user_id integer DEFAULT 0 NOT NULL
+);
+
+DROP TABLE IF EXISTS ezuservisit;
+CREATE TABLE ezuservisit (
+    current_visit_timestamp integer DEFAULT 0 NOT NULL,
+    failed_login_attempts integer DEFAULT 0 NOT NULL,
+    last_visit_timestamp integer DEFAULT 0 NOT NULL,
+    login_count integer DEFAULT 0 NOT NULL,
     user_id integer DEFAULT 0 NOT NULL
 );
 
@@ -862,9 +887,13 @@ CREATE INDEX ezurlalias_ml_text_lang ON ezurlalias_ml USING btree (text, lang_ma
 
 CREATE INDEX ezuser_login ON ezuser USING btree (login);
 
+CREATE INDEX hash_key ON ezuser_accountkey USING btree (hash_key);
+
 CREATE INDEX ezuser_role_contentobject_id ON ezuser_role USING btree (contentobject_id);
 
 CREATE INDEX ezuser_role_role_id ON ezuser_role USING btree (role_id);
+
+CREATE INDEX ezuservisit_co_visit_count ON ezuservisit USING btree (current_visit_timestamp, login_count);
 
 CREATE INDEX ezkeyword_keyword ON ezkeyword USING btree (keyword);
 CREATE INDEX ezkeyword_id ON ezkeyword USING btree (keyword,id);
@@ -986,11 +1015,17 @@ ALTER TABLE ONLY ezurlwildcard
 ALTER TABLE ONLY ezuser
     ADD CONSTRAINT ezuser_pkey PRIMARY KEY (contentobject_id);
 
+ALTER TABLE ONLY ezuser_accountkey
+    ADD CONSTRAINT ezuser_accountkey_pkey PRIMARY KEY (id);
+
 ALTER TABLE ONLY ezuser_role
     ADD CONSTRAINT ezuser_role_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY ezuser_setting
     ADD CONSTRAINT ezuser_setting_pkey PRIMARY KEY (user_id);
+
+ALTER TABLE ONLY ezuservisit
+    ADD CONSTRAINT ezuservisit_pkey PRIMARY KEY (user_id);
 
 ALTER TABLE ONLY ezkeyword
     ADD CONSTRAINT ezkeyword_pkey PRIMARY KEY (id);
