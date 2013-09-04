@@ -33,7 +33,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\ContentId(
+                        'filter'    => new Criterion\ContentId(
                             array( 1, 4, 10 )
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
@@ -44,7 +44,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\LogicalAnd(
+                        'filter'    => new Criterion\LogicalAnd(
                             array(
                                 new Criterion\ContentId(
                                     array( 1, 4, 10 )
@@ -62,7 +62,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\LogicalOr(
+                        'filter'    => new Criterion\LogicalOr(
                             array(
                                 new Criterion\ContentId(
                                     array( 1, 4, 10 )
@@ -80,7 +80,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\LogicalAnd(
+                        'filter'    => new Criterion\LogicalAnd(
                             array(
                                 new Criterion\ContentId(
                                     array( 1, 4, 10 )
@@ -100,7 +100,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\Subtree(
+                        'filter'    => new Criterion\Subtree(
                             '/1/5/'
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
@@ -111,7 +111,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\ContentTypeId(
+                        'filter'    => new Criterion\ContentTypeId(
                             4
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
@@ -122,7 +122,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\ContentTypeGroupId(
+                        'filter'    => new Criterion\ContentTypeGroupId(
                             2
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
@@ -133,7 +133,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\DateMetadata(
+                        'filter'    => new Criterion\DateMetadata(
                             Criterion\DateMetadata::MODIFIED,
                             Criterion\Operator::GT,
                             1343140540
@@ -146,7 +146,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\DateMetadata(
+                        'filter'    => new Criterion\DateMetadata(
                             Criterion\DateMetadata::MODIFIED,
                             Criterion\Operator::GTE,
                             1311154215
@@ -159,7 +159,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\DateMetadata(
+                        'filter'    => new Criterion\DateMetadata(
                             Criterion\DateMetadata::MODIFIED,
                             Criterion\Operator::LTE,
                             1311154215
@@ -173,7 +173,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\DateMetadata(
+                        'filter'    => new Criterion\DateMetadata(
                             Criterion\DateMetadata::MODIFIED,
                             Criterion\Operator::IN,
                             array( 1033920794, 1060695457, 1343140540 )
@@ -186,7 +186,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\DateMetadata(
+                        'filter'    => new Criterion\DateMetadata(
                             Criterion\DateMetadata::MODIFIED,
                             Criterion\Operator::BETWEEN,
                             array( 1033920776, 1072180276 )
@@ -199,7 +199,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\DateMetadata(
+                        'filter'    => new Criterion\DateMetadata(
                             Criterion\DateMetadata::CREATED,
                             Criterion\Operator::BETWEEN,
                             array( 1033920776, 1072180278 )
@@ -212,7 +212,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\LocationId(
+                        'filter'    => new Criterion\LocationId(
                             array( 1, 2, 5 )
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
@@ -223,7 +223,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\ParentLocationId(
+                        'filter'    => new Criterion\ParentLocationId(
                             array( 1 )
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
@@ -234,7 +234,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\RemoteId(
+                        'filter'    => new Criterion\RemoteId(
                             array( 'f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca' )
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
@@ -245,7 +245,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\LocationRemoteId(
+                        'filter'    => new Criterion\LocationRemoteId(
                             array( '3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983' )
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
@@ -256,7 +256,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\SectionId(
+                        'filter'    => new Criterion\SectionId(
                             array( 2 )
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
@@ -267,7 +267,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\Status(
+                        'filter'    => new Criterion\Status(
                             array( Criterion\Status::STATUS_PUBLISHED )
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
@@ -301,7 +301,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\Field(
+                        'filter'    => new Criterion\Field(
                             'name',
                             Criterion\Operator::EQ,
                             'Members'
@@ -314,7 +314,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\Field(
+                        'filter'    => new Criterion\Field(
                             'name',
                             Criterion\Operator::IN,
                             array( 'Members', 'Anonymous Users' )
@@ -327,7 +327,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\DateMetadata(
+                        'filter'    => new Criterion\DateMetadata(
                             Criterion\DateMetadata::MODIFIED,
                             Criterion\Operator::BETWEEN,
                             array( 1033920275, 1033920794 )
@@ -340,7 +340,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\LogicalOr(
+                        'filter'    => new Criterion\LogicalOr(
                             array(
                                 new Criterion\Field(
                                     'name',
@@ -362,7 +362,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\FullText(
+                        'filter'    => new Criterion\FullText(
                             'contact'
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
@@ -373,7 +373,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\FullText(
+                        'filter'    => new Criterion\FullText(
                             'Contact*'
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
@@ -424,7 +424,7 @@ class SearchServiceTest extends BaseTest
         $searchService->findContent(
             new Query(
                 array(
-                    'criterion' => new Criterion\Field(
+                    'filter'    => new Criterion\Field(
                         'some_hopefully_unknown_field',
                         Criterion\Operator::BETWEEN,
                         array( 10, 1000 )
@@ -446,7 +446,7 @@ class SearchServiceTest extends BaseTest
         $searchService->findContent(
             new Query(
                 array(
-                    'criterion' => new Criterion\Field(
+                    'filter'    => new Criterion\Field(
                         'some_hopefully_unknown_field',
                         Criterion\Operator::EQ,
                         1000
@@ -468,7 +468,7 @@ class SearchServiceTest extends BaseTest
         $searchService->findContent(
             new Query(
                 array(
-                    'criterion' => new Criterion\Field(
+                    'filter'    => new Criterion\Field(
                         'tag_cloud_url',
                         Criterion\Operator::EQ,
                         'http://nimbus.com'
@@ -518,7 +518,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 2 ) ),
+                        'filter'      => new Criterion\SectionId( array( 2 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'sortClauses' => array()
@@ -540,7 +540,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 2 ) ),
+                        'filter'      => new Criterion\SectionId( array( 2 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'sortClauses' => array( new SortClause\LocationPathString( Query::SORT_DESC ) )
@@ -551,7 +551,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 2 ) ),
+                        'filter'      => new Criterion\SectionId( array( 2 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'sortClauses' => array( new SortClause\LocationDepth( Query::SORT_ASC ) )
@@ -587,7 +587,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 3 ) ),
+                        'filter'      => new Criterion\SectionId( array( 3 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'sortClauses' => array(
@@ -602,7 +602,7 @@ class SearchServiceTest extends BaseTest
                 // FIXME: this test is not relevant since all priorities are "0"
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 2 ) ),
+                        'filter'      => new Criterion\SectionId( array( 2 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'sortClauses' => array(
@@ -628,7 +628,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 2 ) ),
+                        'filter'      => new Criterion\SectionId( array( 2 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'sortClauses' => array(
@@ -642,7 +642,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 4, 2, 6, 3 ) ),
+                        'filter'      => new Criterion\SectionId( array( 4, 2, 6, 3 ) ),
                         'offset'      => 0,
                         'limit'       => null,
                         'sortClauses' => array(
@@ -656,7 +656,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 4, 2, 6, 3 ) ),
+                        'filter'      => new Criterion\SectionId( array( 4, 2, 6, 3 ) ),
                         'offset'      => 0,
                         'limit'       => null,
                         'sortClauses' => array(
@@ -670,7 +670,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 2, 3 ) ),
+                        'filter'      => new Criterion\SectionId( array( 2, 3 ) ),
                         'offset'      => 0,
                         'limit'       => null,
                         'sortClauses' => array(
@@ -684,7 +684,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\ContentTypeId( 1 ),
+                        'filter'    => new Criterion\ContentTypeId( 1 ),
                         'offset'      => 0,
                         'limit'       => null,
                         'sortClauses' => array(
@@ -698,7 +698,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 5 ) ),
+                        'filter'      => new Criterion\SectionId( array( 5 ) ),
                         'offset'      => 0,
                         'limit'       => null,
                         'sortClauses' => array(
@@ -731,7 +731,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                        'filter'      => new Criterion\SectionId( array( 1 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'facetBuilders' => array(
@@ -745,7 +745,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                        'filter'      => new Criterion\SectionId( array( 1 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'facetBuilders' => array(
@@ -763,7 +763,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                        'filter'      => new Criterion\SectionId( array( 1 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'facetBuilders' => array(
@@ -781,7 +781,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                        'filter'      => new Criterion\SectionId( array( 1 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'facetBuilders' => array(
@@ -795,7 +795,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                        'filter'      => new Criterion\SectionId( array( 1 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'facetBuilders' => array(
@@ -809,7 +809,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                        'filter'      => new Criterion\SectionId( array( 1 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'facetBuilders' => array(
@@ -824,7 +824,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                        'filter'      => new Criterion\SectionId( array( 1 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'facetBuilders' => array(
@@ -839,7 +839,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                        'filter'      => new Criterion\SectionId( array( 1 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'facetBuilders' => array(
@@ -853,7 +853,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                        'filter'      => new Criterion\SectionId( array( 1 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'facetBuilders' => array(
@@ -871,7 +871,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                        'filter'      => new Criterion\SectionId( array( 1 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'facetBuilders' => array(
@@ -890,7 +890,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                        'filter'      => new Criterion\SectionId( array( 1 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'facetBuilders' => array(
@@ -910,7 +910,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                        'filter'      => new Criterion\SectionId( array( 1 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'facetBuilders' => array(
@@ -931,7 +931,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                        'filter'      => new Criterion\SectionId( array( 1 ) ),
                         'offset'      => 0,
                         'limit'       => 10,
                         'facetBuilders' => array(
