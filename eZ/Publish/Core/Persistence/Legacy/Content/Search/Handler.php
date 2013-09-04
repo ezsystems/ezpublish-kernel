@@ -102,7 +102,14 @@ class Handler implements SearchHandlerInterface
             throw new NotImplementedException( "Facets are not supported by the legacy search engine." );
         }
 
-        $data = $this->gateway->find( $query->filter, $query->offset, $query->limit, $query->sortClauses, null );
+        // The legacy search does not know about scores, so that we just
+        // combine the query with the filter
+        $filter = new Criterion\LogicalAnd( array(
+            $query->query,
+            $query->filter
+        ) );
+
+        $data = $this->gateway->find( $filter, $query->offset, $query->limit, $query->sortClauses, null );
 
         $result = new SearchResult();
         $result->time = microtime( true ) - $start;

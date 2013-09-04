@@ -467,6 +467,7 @@ class Handler implements HandlerInterface
                         $db,
                         new Content\Search\Gateway\CriteriaConverter(
                             array(
+                                new CriterionHandler\MatchAll( $db ),
                                 new CriterionHandler\ContentId( $db ),
                                 new CriterionHandler\LogicalNot( $db ),
                                 new CriterionHandler\LogicalAnd( $db ),
