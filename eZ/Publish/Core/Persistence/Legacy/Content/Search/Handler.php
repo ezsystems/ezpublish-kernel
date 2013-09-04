@@ -136,12 +136,12 @@ class Handler implements SearchHandlerInterface
      */
     public function findSingle( Criterion $filter, Criterion $query, array $fieldFilters = array() )
     {
-        $query = new Query();
-        $query->filter = $filter;
-        $query->query  = $query;
-        $query->offset = 0;
-        $query->limit  = 1;
-        $result = $this->findContent( $query, $fieldFilters );
+        $searchQuery = new Query();
+        $searchQuery->filter = $filter;
+        $searchQuery->query  = $query;
+        $searchQuery->offset = 0;
+        $searchQuery->limit  = 1;
+        $result = $this->findContent( $searchQuery, $fieldFilters );
 
         if ( !$result->totalCount )
             throw new NotFoundException( 'Content', "findSingle() found no content for given \$criterion" );
