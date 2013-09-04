@@ -140,24 +140,24 @@ class Handler implements SearchHandlerInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
      * @todo define structs for the field filters
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function findSingle( Criterion $criterion, array $fieldFilters = array() )
+    public function findSingle( Criterion $filter, array $fieldFilters = array() )
     {
         $query = new Query();
-        $query->criterion = $criterion;
-        $query->offset    = 0;
-        $query->limit     = 1;
+        $query->filter = $filter;
+        $query->offset = 0;
+        $query->limit  = 1;
         $result = $this->findContent( $query, $fieldFilters );
 
         if ( !$result->totalCount )
-            throw new NotFoundException( 'Content', "findSingle() found no content for given \$criterion" );
+            throw new NotFoundException( 'Content', "findSingle() found no content for given \$filter" );
         else if ( $result->totalCount > 1 )
-            throw new InvalidArgumentException( "totalCount", "findSingle() found more then one item for given \$criterion" );
+            throw new InvalidArgumentException( "totalCount", "findSingle() found more then one item for given \$filter" );
 
         $first = reset( $result->searchHits );
         return $first->valueObject;
