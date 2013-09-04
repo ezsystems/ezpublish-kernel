@@ -113,7 +113,7 @@ class Native extends Gateway
     public function findContent( Query $query, array $fieldFilters = array() )
     {
         $parameters = array(
-            "q" => "*:*",
+            "q" => $this->criterionVisitor->visit( $query->query ),
             "fq" => $this->criterionVisitor->visit( $query->filter ),
             "sort" => implode(
                 ", ",

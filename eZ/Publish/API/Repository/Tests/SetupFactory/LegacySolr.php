@@ -143,6 +143,7 @@ class LegacySolr extends Legacy
                 new Search\Gateway\HttpClient\Stream( getenv( "solrServer" ) ),
                 new CriterionVisitor\Aggregate(
                     array(
+                        new CriterionVisitor\MatchAll(),
                         new CriterionVisitor\ContentIdIn(),
                         new CriterionVisitor\LogicalAnd(),
                         new CriterionVisitor\LogicalOr(),
