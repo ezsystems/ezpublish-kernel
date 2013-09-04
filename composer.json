@@ -9,8 +9,20 @@
             "url": "https://github.com/lolautruche/Archive.git"
         }
     ],
+    "suggest": {
+        "php-64bit": "For support of more than 30 languages, a 64bit php installation on all involved prod/dev machines is required"
+    },
     "require": {
         "php": ">=5.3.3",
+        "ext-ctype": "*",
+        "ext-fileinfo": "*",
+        "ext-gd": "*",
+        "ext-intl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-PDO": "*",
+        "ext-SPL": "*",
+        "ext-xsl": "*",
         "zetacomponents/archive": "dev-fixUnpackPHP55",
         "zetacomponents/authentication": "@dev",
         "zetacomponents/authentication-database-tiein": "@dev",
