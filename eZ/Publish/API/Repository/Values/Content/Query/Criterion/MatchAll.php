@@ -23,7 +23,7 @@ class MatchAll extends Criterion implements CriterionInterface
      */
     public function __construct()
     {
-        parent::__construct( null, null, null );
+        // Do NOT call parent constructor. It tries to be too smart.
     }
 
     public function getSpecifications()

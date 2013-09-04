@@ -93,6 +93,7 @@ class SearchService implements SearchServiceInterface
     public function findContent( Query $query, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
         $query = clone $query;
+        $query->query = $query->query ?: new Criterion\MatchAll();
 
         if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $query->filter ) )
         {
@@ -124,22 +125,25 @@ class SearchService implements SearchServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than one result matching the criterions
      *
      * @todo define structs for the field filters
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $query
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function findSingle( Criterion $criterion, array $fieldFilters = array(), $filterOnUserPermissions = true )
+    public function findSingle( Criterion $filter, Criterion $query = null, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
-        if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $criterion ) )
+        $query = $query ?: new Criterion\MatchAll();
+
+        if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $filter ) )
         {
             throw new NotFoundException( 'Content', '*' );
         }
 
         return $this->domainMapper->buildContentDomainObject(
-            $this->searchHandler->findSingle( $criterion, $fieldFilters )
+            $this->searchHandler->findSingle( $filter, $query, $fieldFilters )
         );
     }
 
