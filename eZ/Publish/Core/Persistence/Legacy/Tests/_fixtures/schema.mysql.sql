@@ -41,11 +41,11 @@ CREATE TABLE `ezmedia` (
 
 DROP TABLE IF EXISTS ezcobj_state;
 CREATE TABLE ezcobj_state (
-  default_language_id int(11) NOT NULL DEFAULT 0,
+  default_language_id bigint(20) NOT NULL DEFAULT 0,
   group_id int(11) NOT NULL DEFAULT 0,
   id int(11) NOT NULL auto_increment,
   identifier varchar(45) NOT NULL DEFAULT '',
-  language_mask int(11) NOT NULL DEFAULT 0,
+  language_mask bigint(20) NOT NULL DEFAULT 0,
   priority int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
   UNIQUE KEY ezcobj_state_identifier ( group_id, identifier ),
@@ -56,10 +56,10 @@ CREATE TABLE ezcobj_state (
 
 DROP TABLE IF EXISTS ezcobj_state_group;
 CREATE TABLE ezcobj_state_group (
-  default_language_id int(11) NOT NULL DEFAULT 0,
+  default_language_id bigint(20) NOT NULL DEFAULT 0,
   id int(11) NOT NULL auto_increment,
   identifier varchar(45) NOT NULL DEFAULT '',
-  language_mask int(11) NOT NULL DEFAULT 0,
+  language_mask bigint(20) NOT NULL DEFAULT 0,
   PRIMARY KEY ( id ),
   UNIQUE KEY ezcobj_state_group_identifier ( identifier ),
   KEY ezcobj_state_group_lmask ( language_mask )
@@ -70,8 +70,8 @@ DROP TABLE IF EXISTS ezcobj_state_group_language;
 CREATE TABLE ezcobj_state_group_language (
   contentobject_state_group_id int(11) NOT NULL DEFAULT 0,
   description longtext NOT NULL,
-  language_id int(11) NOT NULL DEFAULT 0,
-  real_language_id int(11) NOT NULL DEFAULT 0,
+  language_id bigint(20) NOT NULL DEFAULT 0,
+  real_language_id bigint(20) NOT NULL DEFAULT 0,
   name varchar(45) NOT NULL DEFAULT '',
   PRIMARY KEY ( contentobject_state_group_id, real_language_id )
 ) ENGINE=InnoDB;
@@ -81,7 +81,7 @@ DROP TABLE IF EXISTS ezcobj_state_language;
 CREATE TABLE ezcobj_state_language (
   contentobject_state_id int(11) NOT NULL DEFAULT 0,
   description longtext NOT NULL,
-  language_id int(11) NOT NULL DEFAULT 0,
+  language_id bigint(20) NOT NULL DEFAULT 0,
   name varchar(45) NOT NULL DEFAULT '',
   PRIMARY KEY ( contentobject_state_id, language_id )
 ) ENGINE=InnoDB;
@@ -98,7 +98,7 @@ CREATE TABLE ezcobj_state_link (
 DROP TABLE IF EXISTS ezcontent_language;
 CREATE TABLE ezcontent_language (
   disabled int(11) NOT NULL default '0',
-  id int(11) NOT NULL default '0',
+  id bigint(20) NOT NULL default '0',
   locale varchar(20) NOT NULL default '',
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id),
@@ -115,9 +115,9 @@ CREATE TABLE ezcontentclass (
   creator_id int(11) NOT NULL default '0',
   id int(11) NOT NULL auto_increment,
   identifier varchar(50) NOT NULL default '',
-  initial_language_id int(11) NOT NULL default '0',
+  initial_language_id bigint(20) NOT NULL default '0',
   is_container int(11) NOT NULL default '0',
-  language_mask int(11) NOT NULL default '0',
+  language_mask bigint(20) NOT NULL default '0',
   modified int(11) NOT NULL default '0',
   modifier_id int(11) NOT NULL default '0',
   remote_id varchar(100) NOT NULL default '',
@@ -187,7 +187,7 @@ DROP TABLE IF EXISTS ezcontentclass_name;
 CREATE TABLE ezcontentclass_name (
   contentclass_id int(11) NOT NULL default '0',
   contentclass_version int(11) NOT NULL default '0',
-  language_id int(11) NOT NULL default '0',
+  language_id bigint(20) NOT NULL default '0',
   language_locale varchar(20) NOT NULL default '',
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (contentclass_id,contentclass_version,language_id)
@@ -217,8 +217,8 @@ CREATE TABLE ezcontentobject (
   contentclass_id int(11) NOT NULL default '0',
   current_version int(11) default NULL,
   id int(11) NOT NULL auto_increment,
-  initial_language_id int(11) NOT NULL default '0',
-  language_mask int(11) NOT NULL default '0',
+  initial_language_id bigint(20) NOT NULL default '0',
+  language_mask bigint(20) NOT NULL default '0',
   modified int(11) NOT NULL default '0',
   name varchar(255) default NULL,
   owner_id int(11) NOT NULL default '0',
@@ -251,7 +251,7 @@ CREATE TABLE ezcontentobject_attribute (
   data_type_string varchar(50) default '',
   id int(11) NOT NULL auto_increment,
   language_code varchar(20) NOT NULL default '',
-  language_id int(11) NOT NULL default '0',
+  language_id bigint(20) NOT NULL default '0',
   sort_key_int int(11) NOT NULL default '0',
   sort_key_string varchar(255) NOT NULL default '',
   version int(11) NOT NULL default '0',
@@ -288,7 +288,7 @@ CREATE TABLE ezcontentobject_name (
   content_translation varchar(20) NOT NULL default '',
   content_version int(11) NOT NULL default '0',
   contentobject_id int(11) NOT NULL default '0',
-  language_id int(11) NOT NULL default '0',
+  language_id bigint(20) NOT NULL default '0',
   name varchar(255) default NULL,
   real_translation varchar(20) default NULL,
   PRIMARY KEY  (contentobject_id,content_version,content_translation),
@@ -369,8 +369,8 @@ CREATE TABLE ezcontentobject_version (
   created int(11) NOT NULL default '0',
   creator_id int(11) NOT NULL default '0',
   id int(11) NOT NULL auto_increment,
-  initial_language_id int(11) NOT NULL default '0',
-  language_mask int(11) NOT NULL default '0',
+  initial_language_id bigint(20) NOT NULL default '0',
+  language_mask bigint(20) NOT NULL default '0',
   modified int(11) NOT NULL default '0',
   status int(11) NOT NULL default '0',
   user_id int(11) NOT NULL default '0',
@@ -528,7 +528,7 @@ CREATE TABLE ezurlalias_ml (
   id int(11) NOT NULL default '0',
   is_alias int(11) NOT NULL default '0',
   is_original int(11) NOT NULL default '0',
-  lang_mask int(11) NOT NULL default '0',
+  lang_mask bigint(20) NOT NULL default '0',
   link int(11) NOT NULL default '0',
   parent int(11) NOT NULL default '0',
   text longtext NOT NULL,
