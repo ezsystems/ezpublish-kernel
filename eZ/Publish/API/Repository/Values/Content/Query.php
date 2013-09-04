@@ -21,12 +21,24 @@ class Query extends ValueObject
     const SORT_DESC = 'descending';
 
     /**
-     * The Query criterion
-     * Can contain multiple criterion, as items of a logical one (by default AND)
+     * The Query filter
+     *
+     * Can contain multiple criterion, as items of a logical one (by default
+     * AND)
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
-    public $criterion;
+    public $filter;
+
+    /**
+     * The Query query
+     *
+     * Can contain multiple criterion, as items of a logical one (by default
+     * AND). Defaults to MatchAll.
+     *
+     * @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion
+     */
+    public $query;
 
     /**
      * Query sorting clauses
