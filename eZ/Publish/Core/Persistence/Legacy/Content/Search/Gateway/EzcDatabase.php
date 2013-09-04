@@ -96,11 +96,11 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Returns a list of object satisfying the $criterion.
+     * Returns a list of object satisfying the $filter.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
      *
-     * @param Criterion $criterion
+     * @param Criterion $filter
      * @param int $offset
      * @param int|null $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
@@ -108,17 +108,17 @@ class EzcDatabase extends Gateway
      *
      * @return mixed[][]
      */
-    public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, array $translations = null )
+    public function find( Criterion $filter, $offset = 0, $limit = null, array $sort = null, array $translations = null )
     {
         $limit = $limit !== null ? $limit : self::MAX_LIMIT;
 
-        $count = $this->getResultCount( $criterion, $sort, $translations );
+        $count = $this->getResultCount( $filter, $sort, $translations );
         if ( $limit === 0 || $count <= $offset )
         {
             return array( 'count' => $count, 'rows' => array() );
         }
 
-        $contentIds = $this->getContentIds( $criterion, $sort, $offset, $limit, $translations );
+        $contentIds = $this->getContentIds( $filter, $sort, $offset, $limit, $translations );
 
         return array(
             'count' => $count,
@@ -129,16 +129,16 @@ class EzcDatabase extends Gateway
     /**
      * Get query condition
      *
-     * @param Criterion $criterion
+     * @param Criterion $filter
      * @param \ezcQuerySelect $query
      * @param mixed $translations
      *
      * @return string
      */
-    protected function getQueryCondition( Criterion $criterion, ezcQuerySelect $query, $translations )
+    protected function getQueryCondition( Criterion $filter, ezcQuerySelect $query, $translations )
     {
         $condition = $query->expr->lAnd(
-            $this->criteriaConverter->convertCriteria( $query, $criterion ),
+            $this->criteriaConverter->convertCriteria( $query, $filter ),
             $query->expr->eq(
                 'ezcontentobject_version.status',
                 VersionInfo::STATUS_PUBLISHED
@@ -174,12 +174,12 @@ class EzcDatabase extends Gateway
     /**
      * Get result count
      *
-     * @param Criterion $criterion
+     * @param Criterion $filter
      * @param array $sort
      * @param mixed $translations
      * @return int
      */
-    protected function getResultCount( Criterion $criterion, $sort, $translations )
+    protected function getResultCount( Criterion $filter, $sort, $translations )
     {
         $query = $this->handler->createSelectQuery();
 
@@ -198,7 +198,7 @@ class EzcDatabase extends Gateway
         }
 
         $query->where(
-            $this->getQueryCondition( $criterion, $query, $translations )
+            $this->getQueryCondition( $filter, $query, $translations )
         );
 
         $statement = $query->prepare();
@@ -210,7 +210,7 @@ class EzcDatabase extends Gateway
     /**
      * Get sorted arrays of content IDs, which should be returned
      *
-     * @param Criterion $criterion
+     * @param Criterion $filter
      * @param array $sort
      * @param mixed $offset
      * @param mixed $limit
@@ -218,7 +218,7 @@ class EzcDatabase extends Gateway
      *
      * @return int[]
      */
-    protected function getContentIds( Criterion $criterion, $sort, $offset, $limit, $translations )
+    protected function getContentIds( Criterion $filter, $sort, $offset, $limit, $translations )
     {
         $query = $this->handler->createSelectQuery();
 
@@ -246,7 +246,7 @@ class EzcDatabase extends Gateway
         }
 
         $query->where(
-            $this->getQueryCondition( $criterion, $query, $translations )
+            $this->getQueryCondition( $filter, $query, $translations )
         );
 
         if ( $sort !== null )

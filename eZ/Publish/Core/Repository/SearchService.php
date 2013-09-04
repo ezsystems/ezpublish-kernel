@@ -94,7 +94,7 @@ class SearchService implements SearchServiceInterface
     {
         $query = clone $query;
 
-        if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $query->criterion ) )
+        if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $query->filter ) )
         {
             return new SearchResult( array( 'time' => 0, 'totalCount' => 0 ) );
         }

@@ -101,7 +101,7 @@ class Handler implements SearchHandlerInterface
             throw new NotImplementedException( "Facets are not supported by the legacy search engine." );
         }
 
-        $data = $this->gateway->find( $query->criterion, $query->offset, $query->limit, $query->sortClauses, null );
+        $data = $this->gateway->find( $query->filter, $query->offset, $query->limit, $query->sortClauses, null );
 
         $result = new SearchResult();
         $result->time = microtime( true ) - $start;
@@ -133,12 +133,12 @@ class Handler implements SearchHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function findSingle( Criterion $criterion, array $fieldFilters = array() )
+    public function findSingle( Criterion $filter, array $fieldFilters = array() )
     {
         $query = new Query();
-        $query->criterion = $criterion;
-        $query->offset    = 0;
-        $query->limit     = 1;
+        $query->filter = $filter;
+        $query->offset = 0;
+        $query->limit  = 1;
         $result = $this->findContent( $query, $fieldFilters );
 
         if ( !$result->totalCount )
