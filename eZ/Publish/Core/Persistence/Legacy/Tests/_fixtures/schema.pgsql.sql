@@ -276,21 +276,21 @@ CREATE TABLE ezgmaplocation (
 
 DROP TABLE IF EXISTS ezcobj_state;
 CREATE TABLE ezcobj_state (
-    default_language_id integer NOT NULL DEFAULT 0,
+    default_language_id bigint NOT NULL DEFAULT 0,
     group_id integer NOT NULL DEFAULT 0,
     id integer DEFAULT nextval('ezcobj_state_s'::text) NOT NULL,
     identifier character varying(45) NOT NULL DEFAULT ''::character varying,
-    language_mask integer NOT NULL DEFAULT 0,
+    language_mask bigint NOT NULL DEFAULT 0,
     priority integer NOT NULL DEFAULT 0
 );
 
 
 DROP TABLE IF EXISTS ezcobj_state_group;
 CREATE TABLE ezcobj_state_group (
-    default_language_id integer NOT NULL DEFAULT 0,
+    default_language_id bigint NOT NULL DEFAULT 0,
     id integer DEFAULT nextval('ezcobj_state_group_s'::text) NOT NULL,
     identifier character varying(45) NOT NULL DEFAULT ''::character varying,
-    language_mask integer NOT NULL DEFAULT 0
+    language_mask bigint NOT NULL DEFAULT 0
 );
 
 
@@ -298,8 +298,8 @@ DROP TABLE IF EXISTS ezcobj_state_group_language;
 CREATE TABLE ezcobj_state_group_language (
     contentobject_state_group_id integer NOT NULL DEFAULT 0,
     description text NOT NULL,
-    language_id integer NOT NULL DEFAULT 0,
-    real_language_id integer NOT NULL DEFAULT 0,
+    language_id bigint NOT NULL DEFAULT 0,
+    real_language_id bigint NOT NULL DEFAULT 0,
     name character varying(45) NOT NULL DEFAULT ''::character varying
 );
 
@@ -308,7 +308,7 @@ DROP TABLE IF EXISTS ezcobj_state_language;
 CREATE TABLE ezcobj_state_language (
     contentobject_state_id integer NOT NULL DEFAULT 0,
     description text NOT NULL,
-    language_id integer NOT NULL DEFAULT 0,
+    language_id bigint NOT NULL DEFAULT 0,
     name character varying(45) NOT NULL DEFAULT ''::character varying
 );
 
@@ -321,7 +321,7 @@ CREATE TABLE ezcobj_state_link (
 DROP TABLE IF EXISTS ezcontent_language;
 CREATE TABLE ezcontent_language (
     disabled integer DEFAULT 0 NOT NULL,
-    id integer DEFAULT 0 NOT NULL,
+    id bigint DEFAULT 0 NOT NULL,
     locale character varying(20) DEFAULT ''::character varying NOT NULL,
     name character varying(255) DEFAULT ''::character varying NOT NULL
 );
@@ -334,9 +334,9 @@ CREATE TABLE ezcontentclass (
     creator_id integer DEFAULT 0 NOT NULL,
     id integer DEFAULT nextval('ezcontentclass_s'::text) NOT NULL,
     identifier character varying(50) DEFAULT ''::character varying NOT NULL,
-    initial_language_id integer DEFAULT 0 NOT NULL,
+    initial_language_id bigint DEFAULT 0 NOT NULL,
     is_container integer DEFAULT 0 NOT NULL,
-    language_mask integer DEFAULT 0 NOT NULL,
+    language_mask bigint DEFAULT 0 NOT NULL,
     modified integer DEFAULT 0 NOT NULL,
     modifier_id integer DEFAULT 0 NOT NULL,
     remote_id character varying(100) DEFAULT ''::character varying NOT NULL,
@@ -391,7 +391,7 @@ DROP TABLE IF EXISTS ezcontentclass_name;
 CREATE TABLE ezcontentclass_name (
     contentclass_id integer DEFAULT 0 NOT NULL,
     contentclass_version integer DEFAULT 0 NOT NULL,
-    language_id integer DEFAULT 0 NOT NULL,
+    language_id bigint DEFAULT 0 NOT NULL,
     language_locale character varying(20) DEFAULT ''::character varying NOT NULL,
     name character varying(255) DEFAULT ''::character varying NOT NULL
 );
@@ -411,8 +411,8 @@ CREATE TABLE ezcontentobject (
     contentclass_id integer DEFAULT 0 NOT NULL,
     current_version integer,
     id integer DEFAULT nextval('ezcontentobject_s'::text) NOT NULL,
-    initial_language_id integer DEFAULT 0 NOT NULL,
-    language_mask integer DEFAULT 0 NOT NULL,
+    initial_language_id bigint DEFAULT 0 NOT NULL,
+    language_mask bigint DEFAULT 0 NOT NULL,
     modified integer DEFAULT 0 NOT NULL,
     name character varying(255),
     owner_id integer DEFAULT 0 NOT NULL,
@@ -433,7 +433,7 @@ CREATE TABLE ezcontentobject_attribute (
     data_type_string character varying(50) DEFAULT ''::character varying,
     id integer DEFAULT nextval('ezcontentobject_attribute_s'::text) NOT NULL,
     language_code character varying(20) DEFAULT ''::character varying NOT NULL,
-    language_id integer DEFAULT 0 NOT NULL,
+    language_id bigint DEFAULT 0 NOT NULL,
     sort_key_int integer DEFAULT 0 NOT NULL,
     sort_key_string character varying(255) DEFAULT ''::character varying NOT NULL,
     "version" integer DEFAULT 0 NOT NULL
@@ -454,7 +454,7 @@ CREATE TABLE ezcontentobject_name (
     content_translation character varying(20) DEFAULT ''::character varying NOT NULL,
     content_version integer DEFAULT 0 NOT NULL,
     contentobject_id integer DEFAULT 0 NOT NULL,
-    language_id integer DEFAULT 0 NOT NULL,
+    language_id bigint DEFAULT 0 NOT NULL,
     name character varying(255),
     real_translation character varying(20)
 );
@@ -504,8 +504,8 @@ CREATE TABLE ezcontentobject_version (
     created integer DEFAULT 0 NOT NULL,
     creator_id integer DEFAULT 0 NOT NULL,
     id integer DEFAULT nextval('ezcontentobject_version_s'::text) NOT NULL,
-    initial_language_id integer DEFAULT 0 NOT NULL,
-    language_mask integer DEFAULT 0 NOT NULL,
+    initial_language_id bigint DEFAULT 0 NOT NULL,
+    language_mask bigint DEFAULT 0 NOT NULL,
     modified integer DEFAULT 0 NOT NULL,
     status integer DEFAULT 0 NOT NULL,
     user_id integer DEFAULT 0 NOT NULL,
@@ -647,7 +647,7 @@ CREATE TABLE ezurlalias_ml (
     id integer DEFAULT 0 NOT NULL,
     is_alias integer DEFAULT 0 NOT NULL,
     is_original integer DEFAULT 0 NOT NULL,
-    lang_mask integer DEFAULT 0 NOT NULL,
+    lang_mask bigint DEFAULT 0 NOT NULL,
     link integer DEFAULT 0 NOT NULL,
     parent integer DEFAULT 0 NOT NULL,
     text text NOT NULL,

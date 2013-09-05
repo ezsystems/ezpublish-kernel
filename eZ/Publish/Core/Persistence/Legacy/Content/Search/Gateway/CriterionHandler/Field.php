@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
 use ezcQuerySelect;
 use RuntimeException;
 
@@ -40,15 +41,23 @@ class Field extends CriterionHandler
     protected $fieldConverterRegistry;
 
     /**
+     * Transformation processor
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor
+     */
+    protected $transformationProcessor;
+
+    /**
      * Construct from handler handler
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $fieldConverterRegistry
      */
-    public function __construct( EzcDbHandler $dbHandler, Registry $fieldConverterRegistry )
+    public function __construct( EzcDbHandler $dbHandler, Registry $fieldConverterRegistry, TransformationProcessor $transformationProcessor )
     {
         $this->dbHandler = $dbHandler;
         $this->fieldConverterRegistry = $fieldConverterRegistry;
+        $this->transformationProcessor = $transformationProcessor;
     }
 
     /**
@@ -177,15 +186,15 @@ class Field extends CriterionHandler
                 case Criterion\Operator::IN:
                     $filter = $subSelect->expr->in(
                         $column,
-                        $criterion->value
+                        array_map( array( $this, 'lowercase' ), $criterion->value )
                     );
                     break;
 
                 case Criterion\Operator::BETWEEN:
                     $filter = $subSelect->expr->between(
                         $column,
-                        $subSelect->bindValue( $criterion->value[0] ),
-                        $subSelect->bindValue( $criterion->value[1] )
+                        $subSelect->bindValue( $this->lowercase( $criterion->value[0] ) ),
+                        $subSelect->bindValue( $this->lowercase( $criterion->value[1] ) )
                     );
                     break;
 
@@ -198,7 +207,7 @@ class Field extends CriterionHandler
                     $operatorFunction = $this->comparatorMap[$criterion->operator];
                     $filter = $subSelect->expr->$operatorFunction(
                         $column,
-                        $subSelect->bindValue( $criterion->value )
+                        $subSelect->bindValue( $this->lowercase( $criterion->value ) )
                     );
                     break;
 
@@ -230,6 +239,11 @@ class Field extends CriterionHandler
             $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
             $subSelect
         );
+    }
+
+    protected function lowerCase( $string )
+    {
+        return $this->transformationProcessor->transformByGroup( $string, "lowercase" );
     }
 }
 

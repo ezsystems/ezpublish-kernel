@@ -490,7 +490,8 @@ class Handler implements HandlerInterface
                                 ),
                                 new CriterionHandler\Field(
                                     $db,
-                                    $this->converterRegistry
+                                    $this->converterRegistry,
+                                    $this->transformationProcessor
                                 ),
                                 new CriterionHandler\ObjectStateId( $db ),
                                 new CriterionHandler\LanguageCode(
