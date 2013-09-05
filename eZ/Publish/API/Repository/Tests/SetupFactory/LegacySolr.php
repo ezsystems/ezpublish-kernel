@@ -170,7 +170,7 @@ class LegacySolr extends Legacy
                         new CriterionVisitor\DateMetadata\ModifiedBetween(),
                         new CriterionVisitor\DateMetadata\PublishedBetween(),
                         new CriterionVisitor\StatusIn(),
-                        new CriterionVisitor\FullText(),
+                        new CriterionVisitor\FullText( $fieldMap ),
                         new CriterionVisitor\Field\FieldIn( $fieldMap ),
                         new CriterionVisitor\Field\FieldRange( $fieldMap ),
                     )

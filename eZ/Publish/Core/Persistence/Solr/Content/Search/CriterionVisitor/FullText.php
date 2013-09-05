@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
@@ -17,6 +18,27 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
  */
 class FullText extends CriterionVisitor
 {
+    /**
+     * Field map
+     *
+     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap
+     */
+    protected $fieldMap;
+
+    /**
+     * Create from content type handler and field registry
+     *
+     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry $fieldRegistry
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator $nameGenerator
+     *
+     * @return void
+     */
+    public function __construct( FieldMap $fieldMap )
+    {
+        $this->fieldMap = $fieldMap;
+    }
+
     /**
      * CHeck if visitor is applicable to current criterion
      *
@@ -39,7 +61,28 @@ class FullText extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        return "text:" . $criterion->value;
+        $queries = array(
+            "text:" . $criterion->value,
+        );
+
+        foreach ( $criterion->boost as $field => $boost )
+        {
+            $fields = $this->fieldMap->getFieldTypes();
+            foreach ( $fields[$field] as $fieldName )
+            {
+                $queries[] = $fieldName . ":" . $criterion->value . "^" . $boost;
+            }
+        }
+
+        return "(" . implode(
+            ') OR (',
+            array_map(
+                function ($search) use ($criterion) {
+                    return $search . ($criterion->fuzzyness < 1 ? sprintf("~%.1f", $criterion->fuzzyness) : "");
+                },
+                $queries
+            )
+        ) . ")";
     }
 }
 
