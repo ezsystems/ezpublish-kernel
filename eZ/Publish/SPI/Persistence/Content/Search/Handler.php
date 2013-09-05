@@ -43,13 +43,12 @@ interface Handler
      *
      * @todo define structs for the field filters
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $query
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function findSingle( Criterion $filter, Criterion $query, array $fieldFilters = array() );
+    public function findSingle( Criterion $filter, array $fieldFilters = array() );
 
     /**
      * Suggests a list of values for the given prefix
