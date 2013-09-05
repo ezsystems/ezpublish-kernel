@@ -183,6 +183,9 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         new Content\Search\Gateway\CriterionHandler\Visibility(
                             $this->getDatabaseHandler()
                         ),
+                        new Content\Search\Gateway\CriterionHandler\UrlAlias(
+                            $this->getDatabaseHandler()
+                        ),
                     )
                 ),
                 new Content\Search\Gateway\SortClauseConverter(
@@ -1323,6 +1326,164 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         'criterion' => new Criterion\LanguageCode( 'eng-US', 'eng-GB' ),
                         'limit' => 10,
                         'sortClauses' => array( new SortClause\ContentId ),
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\UrlAlias
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testUrlAliasFilter()
+    {
+        $this->assertSearchResults(
+            array( 11 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UrlAlias( Criterion\Operator::EQ, '/Users/Members' ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\UrlAlias
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testUrlAliasFilterStrictMatch()
+    {
+        $this->assertSearchResults(
+            array(),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UrlAlias( Criterion\Operator::EQ, '/Users/Mem*ers' ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\UrlAlias
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testUrlAliasFilterIn()
+    {
+        $this->assertSearchResults(
+            array( 4, 11, 13 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UrlAlias(
+                            Criterion\Operator::IN,
+                            array(
+                                '/Users',
+                                '/Users/Members',
+                                '/Users/Editors'
+                            )
+                        ),
+                        'limit' => 10,
+                        'sortClauses' => array( new SortClause\ContentId ),
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\UrlAlias
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testUrlAliasFilterInFuzzyMatch()
+    {
+        $this->assertSearchResults(
+            array( 4, 11, 13 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UrlAlias(
+                            Criterion\Operator::IN,
+                            array(
+                                '/Us*rs',
+                                '/U*ers/Mem*ers',
+                                '/Use*s/Edit*rs'
+                            )
+                        ),
+                        'limit' => 10,
+                        'sortClauses' => array( new SortClause\ContentId ),
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\UrlAlias
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testUrlAliasFilterInSingle()
+    {
+        $this->assertSearchResults(
+            array( 11 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UrlAlias( Criterion\Operator::IN, array( '/Users/Members' ) ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LanguageCode
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testUrlAliasFilterLike()
+    {
+        $this->assertSearchResults(
+            array( 13 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UrlAlias( Criterion\Operator::LIKE, '/*/Edit*rs' ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LanguageCode
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     * @group cc
+     */
+    public function testUrlAliasFilterLikeMultiple()
+    {
+        $this->assertSearchResults(
+            // Members, Administrator users, Anonymous Users, Partners
+            array( 11, 12, 42, 225 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UrlAlias( Criterion\Operator::LIKE, '/Users/*ers' ),
+                        'limit' => 10,
                     )
                 )
             )

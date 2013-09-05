@@ -381,6 +381,68 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'FullTextWildcard.php',
             ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UrlAlias(
+                            Criterion\Operator::EQ,
+                            'Users'
+                        ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'UrlAlias.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UrlAlias(
+                            Criterion\Operator::IN,
+                            array(
+                                'Users/Members',
+                                '*rs/*di*to*',
+                                '*/Admin*-Users',
+                                'Users/Anonymous*',
+                            )
+                        ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'UrlAliasIn.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UrlAlias(
+                            Criterion\Operator::LIKE,
+                            '*/*Users'
+                        ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'UrlAliasLike.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\LogicalOr(
+                            array(
+                                new Criterion\UrlAlias(
+                                    Criterion\Operator::IN,
+                                    array( 'Users/Member*' )
+                                ),
+                                new Criterion\DateMetadata(
+                                    Criterion\DateMetadata::MODIFIED,
+                                    Criterion\Operator::BETWEEN,
+                                    array( 1033920275, 1033920794 )
+                                ),
+                            )
+                        ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'UrlAliasOr.php',
+            ),
         );
     }
 
