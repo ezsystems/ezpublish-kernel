@@ -440,7 +440,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\Field(
+                        'filter' => new Criterion\Field(
                             'name',
                             Criterion\Operator::EQ,
                             'members'
@@ -453,7 +453,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\Field(
+                        'filter' => new Criterion\Field(
                             'name',
                             Criterion\Operator::EQ,
                             'Members'
@@ -466,7 +466,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\Field(
+                        'filter' => new Criterion\Field(
                             'name',
                             Criterion\Operator::EQ,
                             'MEMBERS'
