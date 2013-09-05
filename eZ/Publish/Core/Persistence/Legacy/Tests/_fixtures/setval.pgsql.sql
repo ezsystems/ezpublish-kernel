@@ -17,8 +17,6 @@ SELECT setval('ezpolicy_limitation_value_s',max(id)) FROM ezpolicy_limitation_va
 SELECT setval('ezpolicy_s',max(id)) FROM ezpolicy;
 SELECT setval('ezrole_s',max(id)) FROM ezrole;
 SELECT setval('ezsearch_object_word_link_s',max(id)) FROM ezsearch_object_word_link;
-SELECT setval('ezsearch_return_count_s',max(id)) FROM ezsearch_return_count;
-SELECT setval('ezsearch_search_phrase_s',max(id)) FROM ezsearch_search_phrase;
 SELECT setval('ezsearch_word_s',max(id)) FROM ezsearch_word;
 SELECT setval('ezsection_s',max(id)) FROM ezsection;
 SELECT setval('ezurl_s',max(id)) FROM ezurl;
