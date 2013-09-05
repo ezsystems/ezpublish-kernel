@@ -80,6 +80,21 @@ class FullTextTest extends TestCase
         );
     }
 
+    public function testVisitBoostUnknownField()
+    {
+        $visitor = $this->getFullTextCriterionVisitor();
+
+        $criterion = new Criterion\FullText("Hello");
+        $criterion->boost = array(
+            'unknown_field' => 2,
+        );
+
+        $this->assertEquals(
+            "(text:Hello)",
+            $visitor->visit( $criterion )
+        );
+    }
+
     public function testVisitFuzzyBoost()
     {
         $visitor = $this->getFullTextCriterionVisitor();

@@ -68,6 +68,12 @@ class FullText extends CriterionVisitor
         foreach ( $criterion->boost as $field => $boost )
         {
             $fields = $this->fieldMap->getFieldTypes();
+
+            if ( !isset( $fields[$field] ) )
+            {
+                continue;
+            }
+
             foreach ( $fields[$field] as $fieldName )
             {
                 $queries[] = $fieldName . ":" . $criterion->value . "^" . $boost;
