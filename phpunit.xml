@@ -32,6 +32,9 @@
     <testsuite name="eZ\Publish\Core\Persistence\Legacy">
       <directory>eZ/Publish/Core/Persistence/Legacy/Tests</directory>
     </testsuite>
+    <testsuite name="eZ\Publish\Core\Persistence\Solr">
+      <directory>eZ/Publish/Core/Persistence/Solr/Tests</directory>
+    </testsuite>
     <testsuite name="eZ\Publish\Core\IO">
       <directory>eZ/Publish/Core/IO/Tests</directory>
     </testsuite>
