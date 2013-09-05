@@ -10,9 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
-use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap;
 
 /**
  * Visits the Field criterion
@@ -20,32 +18,11 @@ use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry;
 abstract class Field extends CriterionVisitor
 {
     /**
-     * Field registry
+     * Field map
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry
+     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap
      */
-    protected $fieldRegistry;
-
-    /**
-     * Content type handler
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
-     */
-    protected $contentTypeHandler;
-
-    /**
-     * Field name generator
-     *
-     * @var FieldNameGenerator
-     */
-    protected $nameGenerator;
-
-    /**
-     * Available field types
-     *
-     * @var array
-     */
-    protected $fieldTypes;
+    protected $fieldMap;
 
     /**
      * Create from content type handler and field registry
@@ -56,11 +33,9 @@ abstract class Field extends CriterionVisitor
      *
      * @return void
      */
-    public function __construct( FieldRegistry $fieldRegistry, ContentTypeHandler $contentTypeHandler, FieldNameGenerator $nameGenerator )
+    public function __construct( FieldMap $fieldMap )
     {
-        $this->fieldRegistry      = $fieldRegistry;
-        $this->contentTypeHandler = $contentTypeHandler;
-        $this->nameGenerator      = $nameGenerator;
+        $this->fieldMap = $fieldMap;
     }
 
     /**
@@ -70,36 +45,6 @@ abstract class Field extends CriterionVisitor
      */
     protected function getFieldTypes()
     {
-        if ( $this->fieldTypes !== null )
-        {
-            return $this->fieldTypes;
-        }
-
-        foreach ( $this->contentTypeHandler->loadAllGroups() as $group )
-        {
-            foreach ( $this->contentTypeHandler->loadContentTypes( $group->id ) as $contentType )
-            {
-                foreach ( $contentType->fieldDefinitions as $fieldDefinition )
-                {
-                    if ( !$fieldDefinition->isSearchable )
-                    {
-                        continue;
-                    }
-
-                    $fieldType = $this->fieldRegistry->getType( $fieldDefinition->fieldType );
-
-                    foreach ( $fieldType->getIndexDefinition() as $name => $type )
-                    {
-                        $this->fieldTypes[$fieldDefinition->identifier][] =
-                            $this->nameGenerator->getTypedName(
-                                $this->nameGenerator->getName( $name, $fieldDefinition->identifier, $contentType->identifier ),
-                                $type
-                            );
-                    }
-                }
-            }
-        }
-
-        return $this->fieldTypes;
+        return $this->fieldMap->getFieldTypes();
     }
 }
