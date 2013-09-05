@@ -93,6 +93,7 @@ class SearchService implements SearchServiceInterface
     public function findContent( Query $query, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
         $query = clone $query;
+        $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
 
         if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $query->filter ) )

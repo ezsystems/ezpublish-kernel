@@ -79,14 +79,21 @@ class FullText extends Criterion implements CriterionInterface
      */
     public $wildcards;
 
-    /**
-     * Creates a FullText criterion on $text, using the IN Operator
-     *
-     * @param string $value The text to match on
-     */
-    public function __construct( $value )
+    public function __construct( $value, array $properties = array() )
     {
         parent::__construct( null, Operator::LIKE, $value );
+
+        // Assign additional properties, ugly but with the existing constructor
+        // API the only sensible way, I guess.
+        foreach ( $properties as $name => $value )
+        {
+            if ( !isset( $this->$name ) )
+            {
+                throw new \InvalidArgumentException( "Unknown property $name." );
+            }
+
+            $this->$name = $value;
+        }
     }
 
     public function getSpecifications()

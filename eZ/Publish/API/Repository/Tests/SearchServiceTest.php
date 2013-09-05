@@ -26,7 +26,7 @@ use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
  */
 class SearchServiceTest extends BaseTest
 {
-    public function getSearches()
+    public function getFilterSearches()
     {
         $fixtureDir = $this->getFixtureDir();
         return array(
@@ -359,11 +359,36 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'FieldOr.php',
             ),
+        );
+    }
+
+    public function getQuerySearches()
+    {
+        $fixtureDir = $this->getFixtureDir();
+        return array(
             array(
                 new Query(
                     array(
-                        'filter'    => new Criterion\FullText(
-                            'contact'
+                        'filter'    => new Criterion\ContentId(
+                            array( 58, 10 )
+                        ),
+                        'query'    => new Criterion\FullText( 'contact' ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'FullTextFiltered.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'query'    => new Criterion\FullText(
+                            'contact',
+                            array(
+                                'boost' => array(
+                                    'title' => 2,
+                                ),
+                                'fuzzyness' => .5,
+                            )
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
                     )
@@ -373,7 +398,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'filter'    => new Criterion\FullText(
+                        'query'    => new Criterion\FullText(
                             'Contact*'
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
@@ -387,11 +412,23 @@ class SearchServiceTest extends BaseTest
     /**
      * Test for the findContent() method.
      *
-     * @dataProvider getSearches
+     * @dataProvider getFilterSearches
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
-    public function testFindContent( Query $query, $fixture, $closure = null )
+    public function testFindContentFiltered( Query $query, $fixture, $closure = null )
+    {
+        $this->assertQueryFixture( $query, $fixture, $closure );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @dataProvider getQuerySearches
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testQueryContent( Query $query, $fixture, $closure = null )
     {
         $this->assertQueryFixture( $query, $fixture, $closure );
     }
