@@ -78,7 +78,7 @@ abstract class TransformationProcessor
      *
      * @return string
      */
-    public function transform( $string, array $ruleNames = null )
+    public function transform( $string, array $ruleNames = array() )
     {
         $rules = $this->getRules();
 
@@ -88,6 +88,40 @@ abstract class TransformationProcessor
             {
                 // Just continue on unknown rules, or should we throw an error
                 // here?
+                continue;
+            }
+
+            foreach ( $rules[$ruleName] as $rule )
+            {
+                $string = preg_replace_callback(
+                    $rule['regexp'],
+                    $rule['callback'],
+                    $string
+                );
+            }
+        }
+
+        return $string;
+    }
+
+    /**
+     * Transform the given string by group
+     *
+     * Transform the given string using a rule group.
+     *
+     * @param string $string
+     * @param string $ruleGroup
+     *
+     * @return string
+     */
+    public function transformByGroup( $string, $ruleGroup )
+    {
+        $rules = $this->getRules();
+
+        foreach ( array_keys( $rules ) as $ruleName )
+        {
+            if ( strpos( $ruleName, $ruleGroup ) === false )
+            {
                 continue;
             }
 

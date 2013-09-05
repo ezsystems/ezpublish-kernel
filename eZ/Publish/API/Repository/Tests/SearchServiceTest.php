@@ -396,6 +396,64 @@ class SearchServiceTest extends BaseTest
         $this->assertQueryFixture( $query, $fixture, $closure );
     }
 
+    public function getCaseInsensitiveSearches()
+    {
+        $fixtureDir = $this->getFixtureDir();
+        return array(
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Field(
+                            'name',
+                            Criterion\Operator::EQ,
+                            'members'
+                        ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'Field.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Field(
+                            'name',
+                            Criterion\Operator::EQ,
+                            'Members'
+                        ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'Field.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Field(
+                            'name',
+                            Criterion\Operator::EQ,
+                            'MEMBERS'
+                        ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'Field.php',
+            ),
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @dataProvider getCaseInsensitiveSearches
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testFieldFiltersCaseSensitivity( Query $query, $fixture, $closure = null )
+    {
+        $this->assertQueryFixture( $query, $fixture, $closure );
+    }
+
     public function testFindSingle()
     {
         $repository    = $this->getRepository();
