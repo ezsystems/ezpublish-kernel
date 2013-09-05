@@ -36,6 +36,50 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 class FullText extends Criterion implements CriterionInterface
 {
     /**
+     * Fuzzyness of the fulltext search.
+     *
+     * May be a value between 0. (fuzzy) and 1. (sharp).
+     *
+     * @var float
+     */
+    public $fuzzyness = 1.;
+
+    /**
+     * Boost for certain fields
+     *
+     * Array of boosts to apply for cetrain fields – the array should look like
+     * this:
+     *
+     * <code>
+     *  array(
+     *      'title' => 2,
+     *      …
+     *  )
+     * </code>
+     *
+     * @var array
+     */
+    public $boost = array();
+
+    /**
+     * Analyzer configuration
+     *
+     * @TODO: Define how this could look like
+     *
+     * @var mixed
+     */
+    public $analyzers;
+
+    /**
+     * Analyzer wildcard handling configuration
+     *
+     * @TODO: Define how this could look like
+     *
+     * @var mixed
+     */
+    public $wildcards;
+
+    /**
      * Creates a FullText criterion on $text, using the IN Operator
      *
      * @param string $value The text to match on
