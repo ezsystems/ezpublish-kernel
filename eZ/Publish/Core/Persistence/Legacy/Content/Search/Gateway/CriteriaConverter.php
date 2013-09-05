@@ -57,7 +57,7 @@ class CriteriaConverter
             }
         }
 
-        throw new RuntimeException( 'No conversion for criterion found.' );
+        throw new RuntimeException( 'No conversion for criterion ' . get_class( $criterion ) . ' found.' );
     }
 }
 

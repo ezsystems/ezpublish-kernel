@@ -170,7 +170,7 @@ class SearchHandlerTest extends HandlerTest
         $result = $this->persistenceHandler->searchHandler()->findContent(
             new Query(
                 array(
-                    'criterion' => new ContentId( $this->content->versionInfo->contentInfo->id ),
+                    'filter' => new ContentId( $this->content->versionInfo->contentInfo->id ),
                 )
             )
         );
@@ -195,7 +195,7 @@ class SearchHandlerTest extends HandlerTest
         $result = $this->persistenceHandler->searchHandler()->findContent(
             new Query(
                 array(
-                    'criterion' => new LogicalOr(
+                    'filter' => new LogicalOr(
                         array(
                             new LocationRemoteId( 'f3e90596361e31d496d4026eb624c983' ),
                             new LocationRemoteId( '3f6d92f8044aed134f32153517850f5a' )
@@ -258,7 +258,7 @@ class SearchHandlerTest extends HandlerTest
         $searchResult = $this->persistenceHandler->searchHandler()->findContent(
             new Query(
                 array(
-                    'criterion' => new ObjectStateId( 1 )
+                    'filter' => new ObjectStateId( 1 )
                 )
             )
         );
@@ -275,7 +275,7 @@ class SearchHandlerTest extends HandlerTest
         $searchResult = $this->persistenceHandler->searchHandler()->findContent(
             new Query(
                 array(
-                    'criterion' => new LanguageCode( 'eng-US' )
+                    'filter' => new LanguageCode( 'eng-US' )
                 )
             )
         );

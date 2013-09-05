@@ -96,7 +96,7 @@ class SearchHandler implements SearchHandlerInterface
     {
         // Only some criteria are supported as getting full support for all in InMemory engine is not a priority
         $match = array();
-        $this->generateMatchByCriteria( array( $query->criterion ), $match );
+        $this->generateMatchByCriteria( array( $query->filter ), $match );
 
         if ( empty( $match ) )
         {
@@ -196,10 +196,10 @@ class SearchHandler implements SearchHandlerInterface
      */
     public function findSingle( Criterion $filter, array $fieldFilters = array() )
     {
-        $list = $this->findContent( new Query( array( 'criterion' => $criterion ) ) );
+        $list = $this->findContent( new Query( array( 'filter' => $filter ) ) );
 
         if ( !$list->totalCount )
-            throw new NotFound( 'Content', var_export( $criterion, true ) );
+            throw new NotFound( 'Content', var_export( $filter, true ) );
         else if ( $list->totalCount > 1 )
             throw new InvalidArgumentException( "totalCount", "findSingle() found more then one item for query" );
 

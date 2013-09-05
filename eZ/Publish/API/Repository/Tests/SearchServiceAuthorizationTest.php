@@ -46,7 +46,7 @@ class SearchServiceAuthorizationTest extends BaseTest
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
 
         // Should return Content with location id: 2 as the anonymous user should have access to standard section
-        $searchResult = $searchService->findContent( new Query( array( 'criterion' => new Criterion\LocationId( 2 ) ) ) );
+        $searchResult = $searchService->findContent( new Query( array( 'filter' => new Criterion\LocationId( 2 ) ) ) );
         /* END: Use Case */
 
         self::assertEquals( 1, $searchResult->totalCount, "Search query should return totalCount of 1" );
@@ -73,7 +73,7 @@ class SearchServiceAuthorizationTest extends BaseTest
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
 
         // This call will return an empty search result
-        $searchResult = $searchService->findContent( new Query( array( 'criterion' => new Criterion\LocationId( 5 ) ) ) );
+        $searchResult = $searchService->findContent( new Query( array( 'filter' => new Criterion\LocationId( 5 ) ) ) );
         /* END: Use Case */
 
         self::assertEmpty(

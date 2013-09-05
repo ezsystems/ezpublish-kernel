@@ -95,6 +95,7 @@ class Handler implements SearchHandlerInterface
     public function findContent( Query $query, array $fieldFilters = array() )
     {
         $start = microtime( true );
+        $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
 
         if ( count( $query->facetBuilders ) )

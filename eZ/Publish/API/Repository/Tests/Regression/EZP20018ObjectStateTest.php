@@ -27,7 +27,7 @@ class EZP20018ObjectStateTest extends BaseTest
     public function testSearchForNonUsedObjectState()
     {
         $query = new Query();
-        $query->criterion = new ObjectStateId( 2 );
+        $query->filter = new ObjectStateId( 2 );
         $results1 = $this->getRepository()->getSearchService()->findContent( $query );
 
         $this->assertEquals( 0, $results1->totalCount );
@@ -55,7 +55,7 @@ class EZP20018ObjectStateTest extends BaseTest
     public function testSearchForUsedObjectState()
     {
         $query = new Query();
-        $query->criterion = new ObjectStateId( 1 );
+        $query->filter = new ObjectStateId( 1 );
         $results1 = $this->getRepository()->getSearchService()->findContent( $query );
 
         $this->assertEquals( 18, $results1->totalCount );

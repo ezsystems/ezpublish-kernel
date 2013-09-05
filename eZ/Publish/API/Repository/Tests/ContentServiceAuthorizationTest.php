@@ -1181,7 +1181,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         // Create a search query for content objects about "eZ Publish"
         $query = new Query();
-        $query->criterion = new Criterion\LogicalAnd(
+        $query->filter = new Criterion\LogicalAnd(
             array(
                 new Criterion\Field( 'title', Criterion\Operator::LIKE, '*eZ Publish*' )
             )
@@ -1222,7 +1222,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         // Create a search query for content objects about "eZ Publish"
         $query = new Query();
-        $query->criterion = new Criterion\LogicalAnd(
+        $query->filter = new Criterion\LogicalAnd(
             array(
                 new Criterion\Field( 'name', Criterion\Operator::LIKE, 'Administrator users' )
             )
@@ -1261,7 +1261,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         // Create a search query for content objects about "eZ Publish"
         $query = new Query();
-        $query->criterion = new Criterion\LogicalAnd(
+        $query->filter = new Criterion\LogicalAnd(
             array(
                 new Criterion\Field( 'name', Criterion\Operator::LIKE, 'Administrator users' )
             )

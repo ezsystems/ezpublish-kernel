@@ -219,7 +219,7 @@ class UserService implements UserServiceInterface
         $searchQuery->offset = $offset >= 0 ? (int)$offset : 0;
         $searchQuery->limit = $limit >= 0 ? (int)$limit  : null;
 
-        $searchQuery->criterion = new CriterionLogicalAnd(
+        $searchQuery->filter = new CriterionLogicalAnd(
             array(
                 new CriterionContentTypeId( $this->settings['userGroupClassID'] ),
                 new CriterionParentLocationId( $locationId ),
@@ -920,7 +920,7 @@ class UserService implements UserServiceInterface
         $searchQuery->offset = 0;
         $searchQuery->limit = null;
 
-        $searchQuery->criterion = new CriterionLogicalAnd(
+        $searchQuery->filter = new CriterionLogicalAnd(
             array(
                 new CriterionContentTypeId( $this->settings['userGroupClassID'] ),
                 new CriterionLocationId( $parentLocationIds ),
@@ -963,7 +963,7 @@ class UserService implements UserServiceInterface
 
         $searchQuery = new Query();
 
-        $searchQuery->criterion = new CriterionLogicalAnd(
+        $searchQuery->filter = new CriterionLogicalAnd(
             array(
                 new CriterionContentTypeId( $this->settings['userClassID'] ),
                 new CriterionParentLocationId( $mainGroupLocation->id ),

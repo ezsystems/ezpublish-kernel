@@ -100,7 +100,7 @@ class SearchTest extends BaseServiceMockTest
             ->getMockBuilder( "eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion" )
             ->disableOriginalConstructor()
             ->getMock();
-        $query = new Query( array( "criterion" => $criterionMock ) );
+        $query = new Query( array( "filter" => $criterionMock ) );
 
         $service->findContent( $query, array(), true );
     }
@@ -195,7 +195,7 @@ class SearchTest extends BaseServiceMockTest
             ->getMockBuilder( "eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion" )
             ->disableOriginalConstructor()
             ->getMock();
-        $query = new Query( array( "criterion" => $criterionMock, "limit" => 10 ) );
+        $query = new Query( array( "filter" => $criterionMock, "limit" => 10 ) );
         $fieldFilters = array();
         $spiContent = new SPIContent;
         $contentMock = $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\Content\\Content" );
@@ -264,7 +264,7 @@ class SearchTest extends BaseServiceMockTest
             ->getMockBuilder( "eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion" )
             ->disableOriginalConstructor()
             ->getMock();
-        $query = new Query( array( "criterion" => $criterionMock ) );
+        $query = new Query( array( "filter" => $criterionMock ) );
 
         $result = $service->findContent( $query, array(), true );
 
@@ -312,8 +312,8 @@ class SearchTest extends BaseServiceMockTest
             ->with( $this->equalTo( "content" ), $this->equalTo( "read" ) )
             ->will( $this->returnValue( $criterionMock ) );
 
-        $serviceQuery = new Query( array( "criterion" => $serviceCriterion, "limit" => 10 ) );
-        $handlerQuery = new Query( array( "criterion" => $handlerCriterion, "limit" => 10 ) );
+        $serviceQuery = new Query( array( "filter" => $serviceCriterion, "limit" => 10 ) );
+        $handlerQuery = new Query( array( "filter" => $handlerCriterion, "limit" => 10 ) );
         $fieldFilters = array();
 
         $searchHandlerMock->expects( $this->once() )
@@ -712,10 +712,10 @@ class SearchTest extends BaseServiceMockTest
             $criterionMock, $limitationCount, $permissionSets
         );
 
-        $serviceQuery = new Query( array( "criterion" => $criterionMock, "limit" => 10 ) );
+        $serviceQuery = new Query( array( "filter" => $criterionMock, "limit" => 10 ) );
         $handlerQuery = new Query(
             array(
-                "criterion" => new Criterion\LogicalAnd( array( $criterionMock, $criteria ) ),
+                "filter" => new Criterion\LogicalAnd( array( $criterionMock, $criteria ) ),
                 "limit" => 10
             )
         );

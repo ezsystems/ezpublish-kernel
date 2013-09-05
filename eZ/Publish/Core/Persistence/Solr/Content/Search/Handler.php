@@ -129,7 +129,9 @@ class Handler implements SearchHandlerInterface
      */
     public function findContent( Query $query, array $fieldFilters = array() )
     {
+        $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
+
         return $this->gateway->findContent( $query, $fieldFilters );
     }
 
