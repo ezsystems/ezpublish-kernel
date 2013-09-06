@@ -11,7 +11,6 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Tests\Cache;
 
 use eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger;
 use eZ\Publish\SPI\Persistence\Content\Location;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use PHPUnit_Framework_TestCase;
 
@@ -41,7 +40,7 @@ class PersistenceCachePurgerTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->cacheService = $this
-            ->getMockBuilder( 'Tedivm\\StashBundle\\Service\\CacheService' )
+            ->getMockBuilder( 'eZ\\Publish\\Core\\Persistence\\Cache\\CacheServiceDecorator' )
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -90,7 +89,8 @@ class PersistenceCachePurgerTest extends PHPUnit_Framework_TestCase
     {
         $this->cacheService
             ->expects( $this->once() )
-            ->method( 'clear' );
+            ->method( 'clear' )
+            ->with();
 
         $this->cachePurger->all();
         $this->assertTrue( $this->cachePurger->isAllCleared() );

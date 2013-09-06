@@ -10,13 +10,18 @@
 namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
-use Tedivm\StashBundle\Service\CacheService;
+use eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
+/**
+ * Class AbstractHandler
+ *
+ * Abstract handler for use in other Persistence Cache Handlers.
+ */
 abstract class AbstractHandler
 {
     /**
-     * @var \Tedivm\StashBundle\Service\CacheService
+     * @var \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator
      */
     protected $cache;
 
@@ -26,19 +31,19 @@ abstract class AbstractHandler
     protected $persistenceFactory;
 
     /**
-     * @var PersistenceLogger
+     * @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger
      */
     protected $logger;
 
     /**
      * Setups current handler with everything needed
      *
-     * @param \Tedivm\StashBundle\Service\CacheService $cache
+     * @param \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator $cache
      * @param \eZ\Publish\Core\Persistence\Factory $persistenceFactory
-     * @param PersistenceLogger $logger
+     * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      */
     public function __construct(
-        CacheService $cache,
+        CacheServiceDecorator $cache,
         PersistenceFactory $persistenceFactory,
         PersistenceLogger $logger )
     {
