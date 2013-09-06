@@ -435,21 +435,7 @@ class SearchServiceTest extends BaseTest
 
     public function getCaseInsensitiveSearches()
     {
-        $fixtureDir = $this->getFixtureDir();
         return array(
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\Field(
-                            'name',
-                            Criterion\Operator::EQ,
-                            'members'
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
-                ),
-                $fixtureDir . 'Field.php',
-            ),
             array(
                 new Query(
                     array(
@@ -461,7 +447,18 @@ class SearchServiceTest extends BaseTest
                         'sortClauses' => array( new SortClause\ContentId() )
                     )
                 ),
-                $fixtureDir . 'Field.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'filter' => new Criterion\Field(
+                            'name',
+                            Criterion\Operator::EQ,
+                            'members'
+                        ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
             ),
             array(
                 new Query(
@@ -474,7 +471,6 @@ class SearchServiceTest extends BaseTest
                         'sortClauses' => array( new SortClause\ContentId() )
                     )
                 ),
-                $fixtureDir . 'Field.php',
             ),
         );
     }
@@ -486,9 +482,12 @@ class SearchServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
-    public function testFieldFiltersCaseSensitivity( Query $query, $fixture, $closure = null )
+    public function testFieldFiltersCaseSensitivity( Query $query )
     {
-        $this->assertQueryFixture( $query, $fixture, $closure );
+        $this->assertQueryFixture(
+            $query,
+            $this->getFixtureDir() . 'Field.php'
+        );
     }
 
     public function testFindSingle()
