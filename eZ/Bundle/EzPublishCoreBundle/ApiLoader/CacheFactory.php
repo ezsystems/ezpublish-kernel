@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Class CacheFactory
  *
- * Service "ezpublish.cache_pool", selects a Stash cache service based on siteaccess[-group] setting "cache_pool"
+ * Service "ezpublish.cache_pool", selects a Stash cache service based on siteaccess[-group] setting "cache_pool_name"
  */
 class CacheFactory
 {
@@ -25,6 +25,6 @@ class CacheFactory
      */
     public function getCachePool( ConfigResolverInterface $configResolver, ContainerInterface $container  )
     {
-        return $container->get( sprintf( 'stash.%s_cache', $configResolver->getParameter( "cache_pool" ) ) );
+        return $container->get( sprintf( 'stash.%s_cache', $configResolver->getParameter( "cache_pool_name" ) ) );
     }
 }
