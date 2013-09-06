@@ -128,7 +128,7 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock->expects( $this->never() )->method( "hasAccess" );
 
         $serviceQuery = new Query;
-        $handlerQuery = new Query( array( "limit" => SearchService::MAX_LIMIT ) );
+        $handlerQuery = new Query( array( "filter" => new Criterion\MatchAll(), "limit" => SearchService::MAX_LIMIT ) );
         $fieldFilters = array();
         $spiContent = new SPIContent;
         $contentMock = $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\Content\\Content" );
