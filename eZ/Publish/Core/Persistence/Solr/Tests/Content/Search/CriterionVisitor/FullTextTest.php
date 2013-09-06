@@ -33,9 +33,7 @@ class FullTextTest extends TestCase
         $fieldMap
             ->expects( $this->any() )
             ->method( 'getFieldTypes' )
-            ->will( $this->returnValue( array(
-                'title' => array( 'title_1_s', 'title_2_s' ),
-            ) ) );
+            ->will( $this->returnValue( array( 'title' => array( 'title_1_s', 'title_2_s' ) ) ) );
 
         return new CriterionVisitor\FullText( $fieldMap );
     }
@@ -44,7 +42,7 @@ class FullTextTest extends TestCase
     {
         $visitor = $this->getFullTextCriterionVisitor();
 
-        $criterion = new Criterion\FullText("Hello");
+        $criterion = new Criterion\FullText( "Hello" );
 
         $this->assertEquals(
             "(text:Hello)",
@@ -56,7 +54,7 @@ class FullTextTest extends TestCase
     {
         $visitor = $this->getFullTextCriterionVisitor();
 
-        $criterion = new Criterion\FullText("Hello");
+        $criterion = new Criterion\FullText( "Hello" );
         $criterion->fuzzyness = .5;
 
         $this->assertEquals(
@@ -69,10 +67,8 @@ class FullTextTest extends TestCase
     {
         $visitor = $this->getFullTextCriterionVisitor();
 
-        $criterion = new Criterion\FullText("Hello");
-        $criterion->boost = array(
-            'title' => 2,
-        );
+        $criterion = new Criterion\FullText( "Hello" );
+        $criterion->boost = array( 'title' => 2 );
 
         $this->assertEquals(
             "(text:Hello) OR (title_1_s:Hello^2) OR (title_2_s:Hello^2)",
@@ -84,7 +80,7 @@ class FullTextTest extends TestCase
     {
         $visitor = $this->getFullTextCriterionVisitor();
 
-        $criterion = new Criterion\FullText("Hello");
+        $criterion = new Criterion\FullText( "Hello" );
         $criterion->boost = array(
             'unknown_field' => 2,
         );
@@ -99,11 +95,9 @@ class FullTextTest extends TestCase
     {
         $visitor = $this->getFullTextCriterionVisitor();
 
-        $criterion = new Criterion\FullText("Hello");
+        $criterion = new Criterion\FullText( "Hello" );
         $criterion->fuzzyness = .5;
-        $criterion->boost = array(
-            'title' => 2,
-        );
+        $criterion->boost = array( 'title' => 2 );
 
         $this->assertEquals(
             "(text:Hello~0.5) OR (title_1_s:Hello^2~0.5) OR (title_2_s:Hello^2~0.5)",
