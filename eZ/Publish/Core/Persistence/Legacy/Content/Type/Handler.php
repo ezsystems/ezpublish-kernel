@@ -176,6 +176,10 @@ class Handler implements BaseContentTypeHandler
     }
 
     /**
+     * Loads a content type by id and status
+     *
+     * Note: This method is responsible of having the Field Definitions of the loaded ContentType sorted by placement.
+     *
      * @param int $contentTypeId
      * @param int $status
      *
@@ -195,6 +199,8 @@ class Handler implements BaseContentTypeHandler
     /**
      * Loads a (defined) content type by identifier
      *
+     * Note: This method is responsible of having the Field Definitions of the loaded ContentType sorted by placement.
+     *
      * @param string $identifier
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If defined type is not found
@@ -211,6 +217,8 @@ class Handler implements BaseContentTypeHandler
 
     /**
      * Loads a (defined) content type by remote id
+     *
+     * Note: This method is responsible of having the Field Definitions of the loaded ContentType sorted by placement.
      *
      * @param mixed $remoteId
      *
