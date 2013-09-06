@@ -66,7 +66,7 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
         );
 
         $this->cacheMock = $this->getMock(
-            "Tedivm\\StashBundle\\Service\\CacheService",
+            "eZ\\Publish\\Core\\Persistence\\Cache\\CacheServiceDecorator",
             array(),
             array(),
             '',
