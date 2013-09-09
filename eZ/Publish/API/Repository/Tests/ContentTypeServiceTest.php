@@ -1498,7 +1498,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         try
         {
-            // Throws an exception because $userContentTypeDraft already contains non-repeatable field type definition 'ezuser'
+            // Throws an exception because 'ezfloat' field type can't be created as searchable
             $contentTypeService->addFieldDefinition( $userContentTypeDraft, $fieldDefCreate );
         }
         catch ( ContentTypeFieldDefinitionValidationException $e )
