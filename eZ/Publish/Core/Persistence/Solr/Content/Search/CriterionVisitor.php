@@ -52,7 +52,7 @@ abstract class CriterionVisitor
      * @param mixed $start
      * @param mixed $end
      *
-     * @return void
+     * @return string
      */
     protected function getRange( $operator, $start, $end )
     {
