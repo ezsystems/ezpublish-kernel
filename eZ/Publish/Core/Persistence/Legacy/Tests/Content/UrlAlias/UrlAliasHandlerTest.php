@@ -1796,6 +1796,73 @@ class UrlAliasHandlerTest extends TestCase
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::createUrlAlias
      * @group create
      * @group custom
+     */
+    public function testCreateCustomUrlAliasWithNonameParts()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/publish_base.php" );
+
+        $path = "there-is-a//custom-location-alias//here";
+        $customUrlAlias = $handler->createCustomUrlAlias(
+            314,
+            $path,
+            false,
+            "cro-HR",
+            false
+        );
+        $customUrlAliasLoaded = $handler->lookup( "there-is-a/noname2/custom-location-alias/noname4/here" );
+
+        self::assertEquals( 6, $this->countRows() );
+
+        self::assertEquals(
+            new UrlAlias(
+                array(
+                    "id" => "5-" . md5( "here" ),
+                    "type" => UrlAlias::LOCATION,
+                    "destination" => 314,
+                    "languageCodes" => array( "cro-HR" ),
+                    "alwaysAvailable" => false,
+                    "isHistory" => false,
+                    "isCustom" => true,
+                    "forward" => false
+                )
+            ),
+            $customUrlAlias
+        );
+
+        self::assertEquals(
+            $pathData = array(
+                array(
+                    "always-available" => true,
+                    "translations" => array( "always-available" => "there-is-a" )
+                ),
+                array(
+                    "always-available" => true,
+                    "translations" => array( "always-available" => "noname2" )
+                ),
+                array(
+                    "always-available" => true,
+                    "translations" => array( "always-available" => "custom-location-alias" )
+                ),
+                array(
+                    "always-available" => true,
+                    "translations" => array( "always-available" => "noname4" )
+                ),
+                array(
+                    "always-available" => false,
+                    "translations" => array( "cro-HR" => "here" )
+                )
+            ),
+            $customUrlAliasLoaded->pathData
+        );
+    }
+
+    /**
+     * Test for the createUrlAlias() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::createUrlAlias
+     * @group create
+     * @group custom
      * @todo pathData
      */
     public function testCreatedCustomUrlAliasIsLoadable()
