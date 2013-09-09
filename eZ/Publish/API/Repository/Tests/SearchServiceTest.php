@@ -422,6 +422,28 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
+     * Test for deprecated $criterion property on query object
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @deprecated
+     */
+    public function testDeprecatedCriteriaProperty()
+    {
+        $this->assertQueryFixture(
+            new Query(
+                array(
+                    'criterion' => new Criterion\ContentId(
+                        array( 1, 4, 10 )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                )
+            ),
+            $this->getFixtureDir() . 'DeprecatedContentIdQuery.php'
+        );
+    }
+
+    /**
      * Test for the findContent() method.
      *
      * @dataProvider getQuerySearches
