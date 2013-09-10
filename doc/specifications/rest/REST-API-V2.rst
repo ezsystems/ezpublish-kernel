@@ -6660,7 +6660,6 @@ View XML Schema
 
       <xsd:simpleType name="userMetaDataType">
         <xsd:restriction base="xsd:string">
-          <xsd:enumeration value="CREATOR" />
           <xsd:enumeration value="MODIFIER" />
           <xsd:enumeration value="OWNER" />
           <xsd:enumeration value="GROUP" />
@@ -6864,7 +6863,6 @@ View XML Schema
       <xsd:simpleType name="userFacetSelector">
         <xsd:restriction base="xsd:string">
           <xsd:enumeration value="OWNER" />
-          <xsd:enumeration value="CREATTOR" />
           <xsd:enumeration value="MODIFIER" />
           <xsd:enumeration value="GROUP" />
         </xsd:restriction>
