@@ -562,7 +562,7 @@ JSON Example
           "hidden": "false",
           "sortField": "PATH",
           "sortOrder": "ASC"
-        }
+        },
         "Section": {
           "_href": "/content/sections/4"
         },
@@ -584,15 +584,15 @@ JSON Example
               "fieldDefinitionIdentifier": "authors",
               "languageCode": "eng-US",
               "fieldValue": [
-                    {
-                      "name": "John Doe",
-                      "email": "john.doe@example.net"
-                    },
-                    {
-                      "name": "Bruce Willis",
-                      "email": "bruce.willis@example.net"
-                    }
-                  ]
+                 {
+                   "name": "John Doe",
+                   "email": "john.doe@example.net"
+                 },
+                 {
+                   "name": "Bruce Willis",
+                   "email": "bruce.willis@example.net"
+                 }
+              ]
             }
           ]
         }
@@ -3353,8 +3353,8 @@ Get Content Type Group
     :404: If the content type group does not exist
 
 
-Get Content Type Group by id
-````````````````````````````
+Get Content Type Group by identifier
+````````````````````````````````````
 :Resource: /content/typegroups
 :Method: GET
 :Description: loads the content type group for a given identifier
@@ -5962,7 +5962,7 @@ XML Example
 
     HTTP/1.1 201 Created
     Location: /user/sessions/go327ij2cirpo59pb6rrv2a4el2
-    Set-Cookie: eZSSID : go327ij2cirpo59pb6rrv2a4el2; Domain=.example.net; Path=/; Expires=Wed, 13-Jan-2021 22:23:01 GMT; HttpOnly
+    Set-Cookie: eZSSID=go327ij2cirpo59pb6rrv2a4el2; domain=.example.net; path=/; expires=Wed, 13-Jan-2021 22:23:01 GMT; HttpOnly
     Content-Type: application/vnd.ez.api.Session+xml
     Content-Length: xxx
 
@@ -5985,7 +5985,7 @@ JSON Example
     POST /user/sessions HTTP/1.1
     Host: www.example.net
     Accept: application/vnd.ez.api.Session+json
-    Content-Type: application/vnd.ez.api.SessionInput+xml
+    Content-Type: application/vnd.ez.api.SessionInput+json
     Content-Length: xxx
 
 .. code:: json
@@ -6001,7 +6001,7 @@ JSON Example
 
     HTTP/1.1 201 Created
     Location: /user/sessions/go327ij2cirpo59pb6rrv2a4el2
-    Set-Cookie: eZSSID : go327ij2cirpo59pb6rrv2a4el2; Domain=.example.net; Path=/; Expires=Wed, 13-Jan-2021 22:23:01 GMT; HttpOnly
+    Set-Cookie: eZSSID=go327ij2cirpo59pb6rrv2a4el2; domain=.example.net; path=/; expires=Wed, 13-Jan-2021 22:23:01 GMT; HttpOnly
     Content-Type: application/vnd.ez.api.Session+json
     Content-Length: xxx
 
@@ -6028,7 +6028,7 @@ Delete session (logout a User):
 :Description: The user session is removed i.e. the user is logged out.
 :Headers:
     :Cookie:
-        <sessionName> : <sessionID>
+        <sessionName>=<sessionID>
     :X-CSRF-Token:
         <csrfToken> The <csrfToken> needed on all unsafe http methods with session.
 :Response: 204
@@ -6043,7 +6043,7 @@ Example
 
     DELETE /user/sessions/go327ij2cirpo59pb6rrv2a4el2 HTTP/1.1
     Host: www.example.net
-    Cookie: eZSSID : go327ij2cirpo59pb6rrv2a4el2
+    Cookie: eZSSID=go327ij2cirpo59pb6rrv2a4el2
     X-CSRF-Token: 23lkneri34ijajedfw39orj3j93
 
 .. code:: http
