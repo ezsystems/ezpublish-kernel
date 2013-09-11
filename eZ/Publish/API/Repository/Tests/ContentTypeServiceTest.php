@@ -1575,6 +1575,59 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     }
 
     /**
+     * Test for the ContentTypeService::createContentType() method
+     *
+     * Testing that field definition of non-repeatable field type can not be added multiple
+     * times to the same ContentTypeCreateStruct.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\ContentTypeValidationException
+     * @expectedExceptionMessage FieldType 'ezuser' is singular and can't be repeated in a ContentType
+     */
+    public function testCreateContentThrowsContentTypeValidationException()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeCreateStruct = $contentTypeService->newContentTypeCreateStruct( 'this_is_new' );
+        $contentTypeCreateStruct->names = array( 'eng-GB' => 'This is new' );
+        $contentTypeCreateStruct->mainLanguageCode = 'eng-GB';
+
+        // create first field definition
+        $firstFieldDefinition = $contentTypeService->newFieldDefinitionCreateStruct(
+            'first_user',
+            'ezuser'
+        );
+        $firstFieldDefinition->names = array(
+            'eng-GB' => 'First user account',
+        );
+        $firstFieldDefinition->position = 1;
+
+        $contentTypeCreateStruct->addFieldDefinition( $firstFieldDefinition );
+
+        // create second field definition
+        $secondFieldDefinition = $contentTypeService->newFieldDefinitionCreateStruct(
+            'second_user',
+            'ezuser'
+        );
+        $secondFieldDefinition->names = array(
+            'eng-GB' => 'Second user account',
+        );
+        $secondFieldDefinition->position = 2;
+
+        $contentTypeCreateStruct->addFieldDefinition( $secondFieldDefinition );
+
+        // Throws an exception because the ContentTypeCreateStruct has a singular field repeated
+        $contentTypeService->createContentType(
+            $contentTypeCreateStruct,
+            array( $contentTypeService->loadContentTypeGroupByIdentifier( 'Content' ) )
+        );
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the addFieldDefinition() method.
      *
      * Testing adding field definition of the field type that can not be added to the ContentType that
