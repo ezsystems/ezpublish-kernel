@@ -44,7 +44,10 @@ class ContentInfo extends ValueObject
     protected $contentTypeId;
 
     /**
-     * the computed name (via name schema) in the main language of the content object
+     * The computed name (via name schema) in the main language of the Content object
+     *
+     * For names in other languages then main see {@see \eZ\Publish\API\Repository\Values\Content\VersionInfo}
+     *
      * @var string
      */
     protected $name;
