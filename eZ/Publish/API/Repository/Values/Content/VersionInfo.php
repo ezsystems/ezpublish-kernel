@@ -82,6 +82,8 @@ abstract class VersionInfo extends ValueObject
     /**
      * Creator user ID.
      *
+     * Creator of the version, in the search API this is referred to as the modifier of the published content.
+     *
      * @var mixed
      */
     protected $creatorId;
