@@ -551,6 +551,59 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the ContentService::loadContent() method on an archive.
+     *
+     * This test the version permission on loading archived versions
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadContent()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     */
+    public function testLoadContentThrowsUnauthorizedExceptionsOnArchives()
+    {
+        /** @var $repository \eZ\Publish\API\Repository\Repository */
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // get necessary services
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+        $locationSercice = $repository->getLocationService();
+
+        // set admin as current user
+        $repository->setCurrentUser( $repository->getUserService()->loadUserByLogin( "admin" ) );
+
+        // create folder
+        $newStruct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier( "folder" ),
+            'eng-US'
+        );
+        $newStruct->setField( "name", "Test Folder" );
+        $draft = $contentService->createContent(
+            $newStruct,
+            array( $locationSercice->newLocationCreateStruct( 2 ) )
+        );
+        $object = $contentService->publishVersion( $draft->versionInfo );
+
+        // update folder to make an archived version
+        $updateStruct = $contentService->newContentUpdateStruct();
+        $updateStruct->setField( "name", "Test Folder Updated" );
+        $draftUpdated = $contentService->updateContent(
+            $contentService->createContentDraft( $object->contentInfo )->versionInfo,
+            $updateStruct
+        );
+        $objectUpdated = $contentService->publishVersion( $draftUpdated->versionInfo );
+
+        // set an anonymous as current user
+        $repository->setCurrentUser( $repository->getUserService()->loadAnonymousUser() );
+
+        // throws an unauthorized exception since anonymous user don't have access to archived versions
+        $contentService->loadContent( $objectUpdated->id, null, 1 );
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the loadContentByRemoteId() method.
      *
      * @return void
