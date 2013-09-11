@@ -197,7 +197,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         );
         sort( $ids );
         $this->assertEquals(
-            array( 4, 10, 11, 12, 13, 14, 42 ),
+            array( 4, 10, 11, 12, 13, 14, 42, 226 ),
             $ids
         );
     }
@@ -218,7 +218,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         );
 
         $this->assertEquals(
-            array( 10, 42, 13, 14, 12, 11, 4 ),
+            array( 10, 42, 13, 14, 12, 226, 11, 4 ),
             array_map(
                 function ( $hit )
                 {
@@ -267,7 +267,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $nextIds = array_slice( $ids, 5 );
         sort( $nextIds );
         $this->assertEquals(
-            array( 10, 14 ),
+            array( 10, 14, 226 ),
             $nextIds
         );
     }
@@ -291,7 +291,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         );
 
         $this->assertEquals(
-            array( 4, 42, 13, 12, 11, 10, 14 ),
+            array( 4, 42, 13, 12, 11, 10, 14, 226 ),
             array_map(
                 function ( $hit )
                 {
@@ -329,7 +329,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         );
         sort( $ids );
         $this->assertEquals(
-            array( 4, 10, 11, 12, 13, 14, 42 ),
+            array( 4, 10, 11, 12, 13, 14, 42, 226 ),
             $ids
         );
     }
@@ -352,7 +352,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         );
 
         $this->assertEquals(
-            array( 4, 12, 13, 42, 10, 14, 11 ),
+            array( 4, 12, 13, 42, 10, 14, 11, 226 ),
             array_map(
                 function ( $hit )
                 {
@@ -381,7 +381,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         );
 
         $this->assertEquals(
-            array( 4, 10, 11, 12, 13, 14, 42 ),
+            array( 4, 10, 11, 12, 13, 14, 226, 42 ),
             array_map(
                 function ( $hit )
                 {
@@ -414,7 +414,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         // the logic is then to have a set of sorted id's to compare with
         // the comparison being done slice by slice.
         $idMapSet = array(
-            2 => array( 4, 10, 11, 12, 13, 14, 42 ),
+            2 => array( 4, 10, 11, 12, 13, 14, 42, 226 ),
             3 => array( 41, 49, 50, 51, 57, 58, 59, 60, 61, 62, 63, 64, 66, 200, 201 ),
             4 => array( 45, 52 ),
             6 => array( 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164 ),
@@ -507,7 +507,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         );
 
         $this->assertEquals(
-            array( 14, 12, 10, 42, 57, 13, 50, 49, 41, 11, 51, 62, 4, 58, 59, 61, 60, 64, 63, 200, 66, 201 ),
+            array( 226, 14, 12, 10, 42, 57, 13, 50, 49, 41, 11, 51, 62, 4, 58, 59, 61, 60, 64, 63, 200, 66, 201 ),
             array_map(
                 function ( $hit )
                 {
