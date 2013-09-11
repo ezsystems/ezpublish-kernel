@@ -347,10 +347,9 @@ class SearchHandler implements SearchHandlerInterface
                 {
                     if ( $criterion->target === $criterion::OWNER && !isset( $match['versionInfo']['contentInfo']['ownerId'] ) )
                         $match['versionInfo']['contentInfo']['ownerId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
-                    else if ( $criterion->target === $criterion::CREATOR && !isset( $match['versionInfo']['creatorId'] ) )
+                    else if ( $criterion->target === $criterion::MODIFIER && !isset( $match['versionInfo']['creatorId'] ) )
                         $match['versionInfo']['creatorId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
-                    //else if ( $criterion->target === $criterion::MODIFIER && !isset( $match['version']['creatorId'] ) )
-                        //$match['version']['creatorId'] = $criterion->value[0];
+
                     continue;
                 }
                 throw new Exception( "Support for provided criterion not supported or used more then once: " . get_class( $criterion ) );
