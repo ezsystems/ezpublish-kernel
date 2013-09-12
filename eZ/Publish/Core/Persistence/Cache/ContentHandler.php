@@ -139,6 +139,8 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
             ->getItem( 'content', 'info', $contentId )
             ->set( $contentInfo = $this->persistenceFactory->getContentHandler()->updateMetadata( $contentId, $struct ) );
 
+        $this->cache->clear( 'content', $contentId, $contentInfo->currentVersionNo );
+
         return $contentInfo;
     }
 
