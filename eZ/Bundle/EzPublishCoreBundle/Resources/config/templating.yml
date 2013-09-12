@@ -40,7 +40,7 @@ services:
 
     ezpublish.content_view_provider.configured:
         class: %ezpublish.content_view_provider.configured.class%
-        arguments: [@ezpublish.location_view.matcher_factory]
+        arguments: [@ezpublish.content_view.matcher_factory]
         tags:
             - {name: ezpublish.content_view_provider, priority: 10}
 
