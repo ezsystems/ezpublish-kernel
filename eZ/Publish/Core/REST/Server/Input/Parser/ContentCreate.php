@@ -126,7 +126,7 @@ class ContentCreate extends Base
                 throw new Exceptions\Parser( "Missing '_href' attribute for Section element in ContentCreate." );
             }
 
-            $contentCreateStruct->sectionId = $this->requestParser->parseHref( $data['Section']['_href'], 'sectionId' );;
+            $contentCreateStruct->sectionId = $this->requestParser->parseHref( $data['Section']['_href'], 'sectionId' );
         }
 
         if ( array_key_exists( 'alwaysAvailable', $data ) )
