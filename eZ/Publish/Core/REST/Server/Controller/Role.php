@@ -412,7 +412,7 @@ class Role extends RestController
         $this->roleService->unassignRoleFromUserGroup( $role, $userGroup );
 
         $roleAssignments = $this->roleService->getRoleAssignmentsForUserGroup( $userGroup );
-        return new Values\RoleAssignmentList( $roleAssignments, $grouPath, true );
+        return new Values\RoleAssignmentList( $roleAssignments, $groupPath, true );
     }
 
     /**
