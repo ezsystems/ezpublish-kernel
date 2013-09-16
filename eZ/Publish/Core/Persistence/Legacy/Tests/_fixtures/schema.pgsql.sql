@@ -743,8 +743,6 @@ CREATE INDEX ezkeyword_attr_link_oaid ON ezkeyword_attribute_link USING btree (o
 
 CREATE INDEX ezuser_accountkey_hash_key ON ezuser_accountkey USING btree (hash_key);
 
-CREATE INDEX ezuservisit_co_visit_count ON ezuservisit USING btree (current_visit_timestamp,login_count);
-
 ALTER TABLE ONLY ezcobj_state
     ADD CONSTRAINT ezcobj_state_pkey PRIMARY KEY (id);
 
@@ -861,9 +859,6 @@ ALTER TABLE ONLY ezuser_role
 
 ALTER TABLE ONLY ezuser_setting
     ADD CONSTRAINT ezuser_setting_pkey PRIMARY KEY (user_id);
-
-ALTER TABLE ONLY ezuser_accountkey
-    ADD CONSTRAINT ezuser_accountkey_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY ezuservisit
     ADD CONSTRAINT ezuservisit_pkey PRIMARY KEY (user_id);
