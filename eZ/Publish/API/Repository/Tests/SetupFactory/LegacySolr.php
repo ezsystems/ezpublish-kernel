@@ -108,7 +108,7 @@ class LegacySolr extends Legacy
                 'eztext'                => new FieldType\TextLine\SearchField(),
                 'ezxmltext'             => new FieldType\TextLine\SearchField(),
                 // @todo: Define proper types for these:
-                'ezcountry'             => new FieldType\Unindexed(),
+                'ezcountry'             => new FieldType\Country\SearchField(),
                 'ezfloat'               => new FieldType\Unindexed(),
                 'ezinteger'             => new FieldType\Unindexed(),
                 'ezuser'                => new FieldType\Unindexed(),
