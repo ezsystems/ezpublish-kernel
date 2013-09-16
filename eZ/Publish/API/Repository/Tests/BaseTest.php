@@ -17,6 +17,7 @@ use eZ\Publish\Core\REST\Client\Sessionable;
 use DateTime;
 use ArrayObject;
 use Exception;
+use PDOException;
 
 /**
  * Base class for api specific tests.
@@ -56,6 +57,14 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             {
                 $repository->setSession( $id = md5( microtime() ) );
             }
+        }
+        catch ( PDOException $e )
+        {
+            $this->fail(
+                "The communication with the database cannot be established. " .
+                "This is required in order to perform the tests.\n\n" .
+                "Exception: " . $e
+            );
         }
         catch ( Exception $e )
         {
