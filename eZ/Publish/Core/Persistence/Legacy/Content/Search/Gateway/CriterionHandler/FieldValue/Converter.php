@@ -60,16 +60,14 @@ class Converter
      */
     public function convertCriteria( $fieldTypeIdentifier, ezcQuerySelect $query, Criterion $criterion, $column )
     {
-        try
+        if ( $this->registry->has( $fieldTypeIdentifier ) )
         {
             return $this->registry->get( $fieldTypeIdentifier )->handle( $query, $criterion, $column );
         }
-        catch ( OutOfBoundsException $e )
+
+        if ( $this->defaultHandler === null )
         {
-            if ( $this->defaultHandler === null )
-            {
-                throw new RuntimeException( "No conversion for a field type '$fieldTypeIdentifier' found." );
-            }
+            throw new RuntimeException( "No conversion for a field type '$fieldTypeIdentifier' found." );
         }
 
         return $this->defaultHandler->handle( $query, $criterion, $column );

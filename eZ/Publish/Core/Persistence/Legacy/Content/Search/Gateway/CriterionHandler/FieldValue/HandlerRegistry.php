@@ -69,4 +69,16 @@ class HandlerRegistry
 
         return $this->map[$fieldTypeIdentifier];
     }
+
+    /**
+     * Checks if handler is registered for the given $fieldTypeIdentifier.
+     *
+     * @param string $fieldTypeIdentifier
+     *
+     * @return boolean
+     */
+    public function has( $fieldTypeIdentifier )
+    {
+        return isset( $this->map[$fieldTypeIdentifier] );
+    }
 }
