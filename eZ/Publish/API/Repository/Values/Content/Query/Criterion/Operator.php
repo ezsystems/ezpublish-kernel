@@ -27,4 +27,5 @@ abstract class Operator
     const IN = "in";
     const BETWEEN = "between";
     const LIKE = "like";
+    const CONTAINS = "contains";
 }
