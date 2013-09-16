@@ -32,7 +32,8 @@ class FieldIn extends Field
         return
             $criterion instanceof Criterion\Field &&
             ( ( $criterion->operator ?: Operator::IN ) === Operator::IN ||
-              $criterion->operator === Operator::EQ );
+                $criterion->operator === Operator::EQ ||
+                $criterion->operator === Operator::CONTAINS );
     }
 
     /**
