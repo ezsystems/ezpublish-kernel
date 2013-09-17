@@ -31,6 +31,7 @@ use eZ\Publish\SPI\Persistence\Content\CreateStruct as SPIContentCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Field as SPIField;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group as SPIObjectStateGroup;
 use eZ\Publish\SPI\Persistence\Content\ObjectState as SPIObjectState;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
@@ -107,7 +108,257 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the loadVersionInfo() method.
      *
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
+     */
+    public function testLoadVersionInfoById()
+    {
+        $repository = $this->getRepositoryMock();
+        $contentServiceMock = $this->getPartlyMockedContentService( array( "loadContentInfo" ) );
+        /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandler */
+        $contentHandler = $this->getPersistenceMock()->contentHandler();
+        $domainMapperMock = $this->getDomainMapperMock();
+        $versionInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo" );
+        $contentInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
+
+        $contentInfoMock->expects( $this->any() )
+            ->method( "__get" )
+            ->with( "currentVersionNo" )
+            ->will( $this->returnValue( 24 ) );
+
+        $versionInfoMock->expects( $this->any() )
+            ->method( "__get" )
+            ->with( "contentInfo" )
+            ->will( $this->returnValue( $contentInfoMock ) );
+
+        $contentServiceMock->expects( $this->once() )
+            ->method( "loadContentInfo" )
+            ->with( $this->equalTo( 42 ) )
+            ->will(
+                $this->returnValue(
+                    new ContentInfo( array( "currentVersionNo" => 24 ) )
+                )
+            );
+
+        $contentHandler->expects( $this->once() )
+            ->method( "loadVersionInfo" )
+            ->with(
+                $this->equalTo( 42 ),
+                $this->equalTo( 24 )
+            )->will(
+                $this->returnValue( new SPIVersionInfo() )
+            );
+
+        $domainMapperMock->expects( $this->once() )
+            ->method( "buildVersionInfoDomainObject" )
+            ->with( new SPIVersionInfo() )
+            ->will( $this->returnValue( $versionInfoMock ) );
+
+        $repository->expects( $this->once() )
+            ->method( "canUser" )
+            ->with(
+                $this->equalTo( "content" ),
+                $this->equalTo( "read" ),
+                $this->equalTo( $versionInfoMock )
+            )->will( $this->returnValue( true ) );
+
+        $result = $contentServiceMock->loadVersionInfoById( 42 );
+
+        $this->assertEquals( $versionInfoMock, $result );
+    }
+
+    /**
+     * Test for the loadVersionInfo() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     */
+    public function testLoadVersionInfoByIdThrowsNotFoundException()
+    {
+        $contentServiceMock = $this->getPartlyMockedContentService( array( "loadContentInfo" ) );
+        /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandler */
+        $contentHandler = $this->getPersistenceMock()->contentHandler();
+
+        $contentHandler->expects( $this->once() )
+            ->method( "loadVersionInfo" )
+            ->with(
+                $this->equalTo( 42 ),
+                $this->equalTo( 24 )
+            )->will(
+                $this->throwException(
+                    new NotFoundException(
+                        "Content",
+                        array(
+                            "contentId" => 42,
+                            "versionNo" => 24
+                        )
+                    )
+                )
+            );
+
+        $contentServiceMock->loadVersionInfoById( 42, 24 );
+    }
+
+    /**
+     * Test for the loadVersionInfo() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     */
+    public function testLoadVersionInfoByIdThrowsUnauthorizedException()
+    {
+        $repository = $this->getRepositoryMock();
+        $contentServiceMock = $this->getPartlyMockedContentService();
+        /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandler */
+        $contentHandler = $this->getPersistenceMock()->contentHandler();
+        $domainMapperMock = $this->getDomainMapperMock();
+        $versionInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo" );
+        $contentInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
+
+        $contentInfoMock->expects( $this->any() )
+            ->method( "__get" )
+            ->with( "currentVersionNo" )
+            ->will( $this->returnValue( 48 ) );
+
+        $versionInfoMock->expects( $this->any() )
+            ->method( "__get" )
+            ->with( "contentInfo" )
+            ->will( $this->returnValue( $contentInfoMock ) );
+
+        $contentHandler->expects( $this->once() )
+            ->method( "loadVersionInfo" )
+            ->with(
+                $this->equalTo( 42 ),
+                $this->equalTo( 24 )
+            )->will(
+                $this->returnValue( new SPIVersionInfo() )
+            );
+
+        $domainMapperMock->expects( $this->once() )
+            ->method( "buildVersionInfoDomainObject" )
+            ->with( new SPIVersionInfo() )
+            ->will( $this->returnValue( $versionInfoMock ) );
+
+        $repository->expects( $this->once() )
+            ->method( "canUser" )
+            ->with(
+                $this->equalTo( "content" ),
+                $this->equalTo( "versionread" ),
+                $this->equalTo( $versionInfoMock )
+            )->will( $this->returnValue( false ) );
+
+        $contentServiceMock->loadVersionInfoById( 42, 24 );
+    }
+
+    /**
+     * Test for the loadVersionInfo() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
+     */
+    public function testLoadVersionInfoByIdWithVersionNo()
+    {
+        $repository = $this->getRepositoryMock();
+        $contentServiceMock = $this->getPartlyMockedContentService();
+        /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandler */
+        $contentHandler = $this->getPersistenceMock()->contentHandler();
+        $domainMapperMock = $this->getDomainMapperMock();
+        $versionInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo" );
+        $contentInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
+
+        $contentInfoMock->expects( $this->any() )
+            ->method( "__get" )
+            ->with( "currentVersionNo" )
+            ->will( $this->returnValue( 24 ) );
+
+        $versionInfoMock->expects( $this->any() )
+            ->method( "__get" )
+            ->with( "contentInfo" )
+            ->will( $this->returnValue( $contentInfoMock ) );
+
+        $contentHandler->expects( $this->once() )
+            ->method( "loadVersionInfo" )
+            ->with(
+                $this->equalTo( 42 ),
+                $this->equalTo( 24 )
+            )->will(
+                $this->returnValue( new SPIVersionInfo() )
+            );
+
+        $domainMapperMock->expects( $this->once() )
+            ->method( "buildVersionInfoDomainObject" )
+            ->with( new SPIVersionInfo() )
+            ->will( $this->returnValue( $versionInfoMock ) );
+
+        $repository->expects( $this->once() )
+            ->method( "canUser" )
+            ->with(
+                $this->equalTo( "content" ),
+                $this->equalTo( "read" ),
+                $this->equalTo( $versionInfoMock )
+            )->will( $this->returnValue( true ) );
+
+        $result = $contentServiceMock->loadVersionInfoById( 42, 24 );
+
+        $this->assertEquals( $versionInfoMock, $result );
+    }
+
+    /**
+     * Test for the loadVersionInfo() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
+     */
+    public function testLoadVersionInfoByIdWithCurrentVersionNo()
+    {
+        $repository = $this->getRepositoryMock();
+        $contentServiceMock = $this->getPartlyMockedContentService();
+        /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandler */
+        $contentHandler = $this->getPersistenceMock()->contentHandler();
+        $domainMapperMock = $this->getDomainMapperMock();
+        $versionInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo" );
+        $contentInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
+
+        $contentInfoMock->expects( $this->any() )
+            ->method( "__get" )
+            ->with( "currentVersionNo" )
+            ->will( $this->returnValue( 48 ) );
+
+        $versionInfoMock->expects( $this->any() )
+            ->method( "__get" )
+            ->with( "contentInfo" )
+            ->will( $this->returnValue( $contentInfoMock ) );
+
+        $contentHandler->expects( $this->once() )
+            ->method( "loadVersionInfo" )
+            ->with(
+                $this->equalTo( 42 ),
+                $this->equalTo( 24 )
+            )->will(
+                $this->returnValue( new SPIVersionInfo() )
+            );
+
+        $domainMapperMock->expects( $this->once() )
+            ->method( "buildVersionInfoDomainObject" )
+            ->with( new SPIVersionInfo() )
+            ->will( $this->returnValue( $versionInfoMock ) );
+
+        $repository->expects( $this->once() )
+            ->method( "canUser" )
+            ->with(
+                $this->equalTo( "content" ),
+                $this->equalTo( "versionread" ),
+                $this->equalTo( $versionInfoMock )
+            )->will( $this->returnValue( true ) );
+
+        $result = $contentServiceMock->loadVersionInfoById( 42, 24 );
+
+        $this->assertEquals( $versionInfoMock, $result );
+    }
+
+    /**
+     * Test for the loadVersionInfo() method.
+     *
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo
+     * @depends eZ\Publish\Core\Repository\Tests\Service\Mock\ContentTest::testLoadVersionInfoByIdWithVersionNo
+     * @depends eZ\Publish\Core\Repository\Tests\Service\Mock\ContentTest::testLoadVersionInfoByIdWithCurrentVersionNo
      */
     public function testLoadVersionInfo()
     {
