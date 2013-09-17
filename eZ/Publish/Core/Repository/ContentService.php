@@ -251,8 +251,20 @@ class ContentService implements ContentServiceInterface
         }
 
         $versionInfo = $this->domainMapper->buildVersionInfoDomainObject( $spiVersionInfo );
-        if ( !$this->repository->canUser( 'content', 'versionread', $versionInfo ) )
-            throw new UnauthorizedException( 'content', 'versionread' );
+
+        if ( $versionInfo->contentInfo->currentVersionNo === $versionNo )
+        {
+            $function = "read";
+        }
+        else
+        {
+            $function = "versionread";
+        }
+
+        if ( !$this->repository->canUser( 'content', $function, $versionInfo ) )
+        {
+            throw new UnauthorizedException( 'content', $function );
+        }
 
         return $versionInfo;
     }
