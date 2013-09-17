@@ -156,16 +156,14 @@ class Content extends RestController
      */
     public function redirectCurrentVersion( $contentId )
     {
-        $versionInfo = $this->repository->getContentService()->loadVersionInfo(
-            $this->repository->getContentService()->loadContentInfo( $contentId )
-        );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo( $contentId );
 
         return new Values\TemporaryRedirect(
             $this->router->generate(
                 'ezpublish_rest_loadContentInVersion',
                 array(
                     'contentId' => $contentId,
-                    'versionNumber' => $versionInfo->versionNo
+                    'versionNumber' => $contentInfo->currentVersionNo
                 )
             )
         );
