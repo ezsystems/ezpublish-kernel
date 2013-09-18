@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**
  * Visits the MatchAll criterion
