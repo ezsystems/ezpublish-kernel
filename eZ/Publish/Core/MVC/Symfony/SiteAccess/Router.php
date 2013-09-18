@@ -116,16 +116,17 @@ class Router
         $this->siteAccess = new $siteAccessClass();
 
         // Request header always have precedence
-        if ( isset( $request->headers['X-Siteaccess'] ) )
+        // @note: request headers are always in lower cased.
+        if ( !empty( $request->headers['x-siteaccess'] ) )
         {
-            $siteaccessName = $request->headers['X-Siteaccess'];
+            $siteaccessName = $request->headers['x-siteaccess'][0];
             if ( !isset( $this->siteAccessList[$siteaccessName] ) )
             {
                 unset( $this->siteAccess );
                 throw new InvalidSiteAccessException( $siteaccessName, array_keys( $this->siteAccessList ), 'X-Siteaccess request header' );
             }
 
-            $this->siteAccess->name = $request->headers['X-Siteaccess'];
+            $this->siteAccess->name = $siteaccessName;
             $this->siteAccess->matchingType = 'header';
             return $this->siteAccess;
         }
