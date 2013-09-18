@@ -143,7 +143,8 @@ class ContentExtension extends Twig_Extension
                 'renderFieldDefinitionSettings',
                 array( 'is_safe' => array( 'html' ) )
             ),
-            'ez_image_alias' => new Twig_Function_Method( $this, 'getImageVariation' )
+            'ez_image_alias' => new Twig_Function_Method( $this, 'getImageVariation' ),
+            'ez_contenttype_by_content' => new Twig_Function_Method( $this, 'contentTypeByContent' )
         );
     }
 
@@ -355,6 +356,16 @@ class ContentExtension extends Twig_Extension
             $this->imageVariationService = $this->container->get( 'ezpublish.fieldType.ezimage.variation_service' );
 
         return $this->imageVariationService->getVariation( $field, $versionInfo, $variationName );
+    }
+
+    /**
+     * @param Content $content
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     */
+    public function contentTypeByContent( Content $content )
+    {
+        $repository = $this->container->get( 'ezpublish.api.repository' );
+        return $repository->getContentTypeService()->loadContentType( $content->contentInfo->contentTypeId );
     }
 
     /**
