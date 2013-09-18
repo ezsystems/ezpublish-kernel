@@ -27,9 +27,7 @@ abstract class Field extends CriterionVisitor
     /**
      * Create from content type handler and field registry
      *
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry $fieldRegistry
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator $nameGenerator
+     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap $fieldMap
      *
      * @return void
      */
