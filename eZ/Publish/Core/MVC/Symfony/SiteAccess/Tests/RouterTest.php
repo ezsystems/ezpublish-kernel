@@ -13,6 +13,7 @@ use PHPUnit_Framework_TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
+use Symfony\Component\HttpFoundation\Request;
 
 class RouterTest extends PHPUnit_Framework_TestCase
 {
@@ -117,10 +118,12 @@ class RouterTest extends PHPUnit_Framework_TestCase
     public function testMatchWithRequestHeader( $router )
     {
         $saName = 'headerbased_sa';
+        $request = Request::create( '/foo/bar' );
+        $request->headers->set( 'X-Siteaccess', $saName );
         $sa = $router->match(
             new SimplifiedRequest(
                 array(
-                    'headers' => array( 'X-Siteaccess' => $saName )
+                    'headers' => $request->headers->all()
                 )
             )
         );
