@@ -123,7 +123,6 @@ class ContentTypeCreate extends Base
             $contentTypeCreateStruct->defaultAlwaysAvailable = $this->parserTools->parseBooleanValue( $data['defaultAlwaysAvailable'] );
         }
 
-        // @todo XSD says that names is mandatory, but content type can be created without names
         if ( array_key_exists( 'names', $data ) )
         {
             if ( !is_array( $data['names'] ) || !array_key_exists( 'value', $data['names'] ) || !is_array( $data['names']['value'] ) )
