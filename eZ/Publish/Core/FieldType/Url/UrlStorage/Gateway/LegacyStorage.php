@@ -159,8 +159,8 @@ class LegacyStorage extends Gateway
     /**
      * Inserts a new entry in ezurl table with $field value data
      *
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      *
      * @return mixed
      */
