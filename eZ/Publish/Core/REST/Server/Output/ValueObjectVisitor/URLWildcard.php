@@ -45,7 +45,10 @@ class URLWildcard extends ValueObjectVisitor
         $generator->startValueElement( 'destinationUrl', $data->destinationUrl );
         $generator->endValueElement( 'destinationUrl' );
 
-        $generator->startValueElement( 'forward', $data->forward ? 'true' : 'false' );
+        $generator->startValueElement(
+            'forward',
+            $this->serializeBool( $generator, $data->forward )
+        );
         $generator->endValueElement( 'forward' );
 
         $generator->endObjectElement( 'UrlWildcard' );

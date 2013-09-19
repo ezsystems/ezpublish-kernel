@@ -559,14 +559,14 @@ JSON Example
             "_href": "/content/locations/1/4/89"
           },
           "priority": "0",
-          "hidden": "false",
+          "hidden": false,
           "sortField": "PATH",
           "sortOrder": "ASC"
         }
         "Section": {
           "_href": "/content/sections/4"
         },
-        "alwaysAvailable": "true",
+        "alwaysAvailable": true,
         "remoteId": "remoteId12345678",
         "fields": {
           "field": [
@@ -698,7 +698,7 @@ JSON Example
         },
         "lastModificationDate": "2012-02-12T12:30:00",
         "mainLanguageCode": "eng-US",
-        "alwaysAvailable": "true"
+        "alwaysAvailable": true
       }
     }
 

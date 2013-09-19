@@ -56,13 +56,14 @@ abstract class ValueObjectVisitor
     /**
      * Returns a string representation for the given $boolValue
      *
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param boolean $boolValue
      *
-     * @return string
+     * @return mixed
      */
-    protected function serializeBool( $boolValue )
+    protected function serializeBool( Generator $generator, $boolValue )
     {
-        return ( $boolValue ? 'true' : 'false' );
+        return $generator->serializeBool( $boolValue );
     }
 
     /**

@@ -10,6 +10,9 @@ Changes affecting version compatibility with former or future versions.
   legacy pagelayout templates were improperly used to carry out tasks with side
   effects (logging, calling webservices, etc)
 
+* In the REST API JSON responses, the boolean properties are now real boolean
+  values instead of the string "true" or "false".
+
 ## Deprecations
 
 * It was incidentally possible to reference resources in REST API payloads without
