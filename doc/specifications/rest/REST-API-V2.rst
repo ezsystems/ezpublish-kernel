@@ -8192,8 +8192,7 @@ ContentTypeCreate XML Schema
 
       <xsd:complexType name="vnd.ez.api.ContentTypeCreate">
         <xsd:all>
-          <xsd:element name="identifier" type="xsd:string"
-            minOccurs="0" maxOccurs="1">
+          <xsd:element name="identifier" type="xsd:string">
             <xsd:annotation>
               <xsd:documentation>
                 String identifier of a content type

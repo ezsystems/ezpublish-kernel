@@ -68,7 +68,6 @@ class ContentTypeCreate extends Base
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
-        // @todo XSD says that minOccurs = 0 for identifier, but identifier is required
         if ( !array_key_exists( 'identifier', $data ) )
         {
             throw new Exceptions\Parser( "Missing 'identifier' element for ContentTypeCreate." );
