@@ -30,6 +30,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as SPILocationCreat
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 use DateTime;
 
@@ -377,6 +378,34 @@ class DomainMapper
         }
 
         return false;
+    }
+
+    /**
+     * Validates given translated list $list, which should be an array of strings with language codes as keys.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param mixed $list
+     * @param string $argumentName
+     *
+     * @return void
+     */
+    public function validateTranslatedList( $list, $argumentName )
+    {
+        if ( !is_array( $list ) )
+        {
+            throw new InvalidArgumentType( $argumentName, "array", $list );
+        }
+
+        foreach ( $list as $languageCode => $translation )
+        {
+            $this->contentLanguageHandler->loadByLanguageCode( $languageCode );
+
+            if ( !is_string( $translation ) )
+            {
+                throw new InvalidArgumentType( $argumentName . "['$languageCode']", "string", $translation );
+            }
+        }
     }
 
     /**
