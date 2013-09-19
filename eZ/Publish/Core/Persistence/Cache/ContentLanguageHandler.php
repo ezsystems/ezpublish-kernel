@@ -35,10 +35,11 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
     public function update( Language $struct )
     {
         $this->logger->logCall( __METHOD__, array( 'struct' => $struct ) );
-        $this->cache
-            ->getItem( 'language', $struct->id )
-            ->set( $language = $this->persistenceFactory->getContentLanguageHandler()->update( $struct ) );
-        return $language;
+        $return = $this->persistenceFactory->getContentLanguageHandler()->update( $struct );
+
+        $this->cache->clear( 'language', $struct->id );
+
+        return $return;
     }
 
     /**
