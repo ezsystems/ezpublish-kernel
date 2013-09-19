@@ -8215,7 +8215,7 @@ ContentTypeCreate XML Schema
               <xsd:documentation>
                 The user under which this creation should
                 be done
-                  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="remoteId" type="xsd:string"
@@ -8234,7 +8234,7 @@ ContentTypeCreate XML Schema
                 If nothing is provided,
                 nameSchema will be used
                 instead.
-                  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="nameSchema" type="xsd:string">
@@ -8256,7 +8256,7 @@ ContentTypeCreate XML Schema
                 field_def will be used if available. If not,
                 other_field_def
                 will be used for content name generation
-                  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="isContainer" type="xsd:boolean">
@@ -8270,7 +8270,7 @@ ContentTypeCreate XML Schema
             <xsd:annotation>
               <xsd:documentation>
                 Main language
-                  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="defaultAlwaysAvailable" type="xsd:boolean"
