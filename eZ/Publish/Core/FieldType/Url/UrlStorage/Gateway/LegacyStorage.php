@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway;
 
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
@@ -42,7 +43,7 @@ class LegacyStorage extends Gateway
         // the given class design there is no sane other option. Actually the
         // dbHandler *should* be passed to the constructor, and there should
         // not be the need to post-inject it.
-        if ( ! ( $dbHandler instanceof \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler ) )
+        if ( ! ( $dbHandler instanceof EzcDbHandler ) )
         {
             throw new \RuntimeException( "Invalid dbHandler passed" );
         }
