@@ -58,7 +58,7 @@ class FieldDefinitionCreateStruct extends ValueObject
     public $fieldGroup;
 
     /**
-     * the position of the field definition in the content typr
+     * The position of the field definition in the content type
      * if not set the field is added at the end
      *
      * @var int
