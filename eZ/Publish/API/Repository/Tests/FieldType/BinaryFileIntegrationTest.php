@@ -39,7 +39,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     /**
      * Sets up fixture data.
      *
-     * @return void
+     * @return array
      */
     protected function getFixtureData()
     {

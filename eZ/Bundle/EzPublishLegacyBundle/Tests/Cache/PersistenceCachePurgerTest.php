@@ -57,7 +57,7 @@ class PersistenceCachePurgerTest extends PHPUnit_Framework_TestCase
      */
     public function testNotFoundLocation()
     {
-        $id = 'locationIdThatDoesNotExist';;
+        $id = 'locationIdThatDoesNotExist';
         $this->locationHandler
             ->expects( $this->once() )
             ->method( 'load' )

@@ -625,7 +625,6 @@ class Backend
                 else
                 {
                     throw new RuntimeException( "$property is supposed to be single(1), found none!" );
-                    $value = null;
                 }
                 continue;
             }
