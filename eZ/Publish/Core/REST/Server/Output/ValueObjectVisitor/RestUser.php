@@ -112,7 +112,10 @@ class RestUser extends ValueObjectVisitor
         $generator->startValueElement( 'mainLanguageCode', $contentInfo->mainLanguageCode );
         $generator->endValueElement( 'mainLanguageCode' );
 
-        $generator->startValueElement( 'alwaysAvailable', $contentInfo->alwaysAvailable ? 'true' : 'false' );
+        $generator->startValueElement(
+            'alwaysAvailable',
+            $this->serializeBool( $generator, $contentInfo->alwaysAvailable )
+        );
         $generator->endValueElement( 'alwaysAvailable' );
 
         $visitor->visitValueObject(
@@ -129,7 +132,10 @@ class RestUser extends ValueObjectVisitor
         $generator->startValueElement( 'email', $data->content->email );
         $generator->endValueElement( 'email' );
 
-        $generator->startValueElement( 'enabled', $data->content->enabled ? 'true' : 'false' );
+        $generator->startValueElement(
+            'enabled',
+            $this->serializeBool( $generator, $data->content->enabled )
+        );
         $generator->endValueElement( 'enabled' );
 
         $generator->startObjectElement( 'UserGroups', 'UserGroupList' );

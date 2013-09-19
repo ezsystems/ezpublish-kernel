@@ -383,4 +383,12 @@ abstract class Generator
             );
         }
     }
+
+    /**
+     * Serializes a boolean value
+     *
+     * @param boolean $boolValue
+     * @return mixed
+     */
+    abstract public function serializeBool( $boolValue );
 }

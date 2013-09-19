@@ -324,4 +324,15 @@ class Json extends Generator
             $hashValue
         );
     }
+
+    /**
+     * Serializes a boolean value
+     *
+     * @param boolean $boolValue
+     * @return boolean
+     */
+    public function serializeBool( $boolValue )
+    {
+        return (bool)$boolValue;
+    }
 }

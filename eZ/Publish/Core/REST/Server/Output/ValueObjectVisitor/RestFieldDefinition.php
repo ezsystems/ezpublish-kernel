@@ -86,13 +86,22 @@ class RestFieldDefinition extends RestContentTypeBase
         $generator->startValueElement( 'position', $fieldDefinition->position );
         $generator->endValueElement( 'position' );
 
-        $generator->startValueElement( 'isTranslatable', $this->serializeBool( $fieldDefinition->isTranslatable ) );
+        $generator->startValueElement(
+            'isTranslatable',
+            $this->serializeBool( $generator, $fieldDefinition->isTranslatable )
+        );
         $generator->endValueElement( 'isTranslatable' );
 
-        $generator->startValueElement( 'isRequired', $this->serializeBool( $fieldDefinition->isRequired ) );
+        $generator->startValueElement(
+            'isRequired',
+            $this->serializeBool( $generator, $fieldDefinition->isRequired )
+        );
         $generator->endValueElement( 'isRequired' );
 
-        $generator->startValueElement( 'isInfoCollector', $this->serializeBool( $fieldDefinition->isInfoCollector ) );
+        $generator->startValueElement(
+            'isInfoCollector',
+            $this->serializeBool( $generator, $fieldDefinition->isInfoCollector )
+        );
         $generator->endValueElement( 'isInfoCollector' );
 
         $this->fieldTypeSerializer->serializeFieldDefaultValue(
@@ -101,7 +110,10 @@ class RestFieldDefinition extends RestContentTypeBase
             $fieldDefinition->defaultValue
         );
 
-        $generator->startValueElement( 'isSearchable', $this->serializeBool( $fieldDefinition->isSearchable ) );
+        $generator->startValueElement(
+            'isSearchable',
+            $this->serializeBool( $generator, $fieldDefinition->isSearchable )
+        );
         $generator->endValueElement( 'isSearchable' );
 
         $this->visitNamesList( $generator, $fieldDefinition->getNames() );

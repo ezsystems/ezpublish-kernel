@@ -65,16 +65,28 @@ class URLAlias extends ValueObjectVisitor
         $generator->startValueElement( 'languageCodes', implode( ',', $data->languageCodes ) );
         $generator->endValueElement( 'languageCodes' );
 
-        $generator->startValueElement( 'alwaysAvailable', $this->serializeBool( $data->alwaysAvailable ) );
+        $generator->startValueElement(
+            'alwaysAvailable',
+            $this->serializeBool( $generator, $data->alwaysAvailable )
+        );
         $generator->endValueElement( 'alwaysAvailable' );
 
-        $generator->startValueElement( 'isHistory', $this->serializeBool( $data->isHistory ) );
+        $generator->startValueElement(
+            'isHistory',
+            $this->serializeBool( $generator, $data->isHistory )
+        );
         $generator->endValueElement( 'isHistory' );
 
-        $generator->startValueElement( 'forward', $this->serializeBool( $data->forward ) );
+        $generator->startValueElement(
+            'forward',
+            $this->serializeBool( $generator, $data->forward )
+        );
         $generator->endValueElement( 'forward' );
 
-        $generator->startValueElement( 'custom', $this->serializeBool( $data->isCustom ) );
+        $generator->startValueElement(
+            'custom',
+            $this->serializeBool( $generator, $data->isCustom )
+        );
         $generator->endValueElement( 'custom' );
 
         $generator->endObjectElement( 'UrlAlias' );
