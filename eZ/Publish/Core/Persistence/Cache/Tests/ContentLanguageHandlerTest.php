@@ -245,12 +245,11 @@ class ContentLanguageHandlerTest extends HandlerTest
     public function testUpdate()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
             ->expects( $this->once() )
-            ->method( 'getItem' )
+            ->method( 'clear' )
             ->with( 'language', 2 )
-            ->will( $this->returnValue( $cacheItemMock ) );
+            ->will( $this->returnValue( true ) );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
         $this->persistenceFactoryMock
@@ -269,15 +268,6 @@ class ContentLanguageHandlerTest extends HandlerTest
                     )
                 )
             );
-
-        $cacheItemMock
-            ->expects( $this->once() )
-            ->method( 'set' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language' ) );
-
-        $cacheItemMock
-            ->expects( $this->never() )
-            ->method( 'get' );
 
         $handler = $this->persistenceHandler->contentLanguageHandler();
         $handler->update( new SPILanguage( array( 'id' => 2 ) ) );
