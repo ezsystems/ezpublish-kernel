@@ -68,7 +68,7 @@ Given the following content subtree:
 ```
 
 * Without defining a root location,
-    * `my-cool-article` will be accessible with `/website1/catory1/my-cool-article` URI.
+    * `my-cool-article` will be accessible with `/website1/category1/my-cool-article` URI.
     * Links to `my-cool-article` will point to `/website1/category1/my-cool-article`.
 * Defining `website1` as root location, 
     * `my-cool-article` will be accessible with `/category1/my-cool-article` URI.

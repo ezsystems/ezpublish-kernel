@@ -514,7 +514,6 @@ class ContentHandler implements ContentHandlerInterface
     public function updateMetadata( $contentId, MetadataUpdateStruct $content )
     {
         $updateData = (array)$content;
-        $updateData["alwaysAvailable"] = $updateData["alwaysAvailable"];
         $updateData["mainLanguageCode"] = $this->handler->contentLanguageHandler()
             ->load( $content->mainLanguageId )->languageCode;
 
