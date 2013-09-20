@@ -47,6 +47,9 @@ class UrlStorage extends GatewayBasedStorage
     }
 
     /**
+     * Deletes field data for all $fieldIds in the version identified by
+     * $versionInfo.
+     *
      * @param VersionInfo $versionInfo
      * @param array $fieldIds
      * @param array $context
@@ -55,6 +58,11 @@ class UrlStorage extends GatewayBasedStorage
      */
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
+        $gateway = $this->getGateway( $context );
+        foreach ( $fieldIds as $fieldId )
+        {
+            $gateway->deleteFieldData( $fieldId, $versionInfo->versionNo );
+        }
     }
 
     /**
