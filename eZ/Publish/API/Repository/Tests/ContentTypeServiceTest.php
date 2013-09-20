@@ -1071,6 +1071,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $contentTypeService = $repository->getContentTypeService();
 
         $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
+        $typeCreate->mainLanguageCode = "eng-GB";
+        $typeCreate->names = array( "eng-GB" => "Blog post" );
 
         $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
             'temperature', 'ezfloat'
