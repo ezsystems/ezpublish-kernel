@@ -96,7 +96,8 @@ class LegacyStorage extends Gateway
     public function getFieldData( Field $field )
     {
         $url = $this->fetchById( $field->value->data["urlId"] );
-        $field->value->externalData = $url["url"];
+        // @TODO: maybe log an error if URL entry was not found?
+        $field->value->externalData = isset( $url["url"] ) ? $url["url"] : "";
     }
 
     /**
