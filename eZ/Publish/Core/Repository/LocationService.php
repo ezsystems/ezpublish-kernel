@@ -282,10 +282,10 @@ class LocationService implements LocationServiceInterface
      */
     public function loadLocationChildren( APILocation $location, $offset = 0, $limit = -1 )
     {
-        if ( !$this->isValidSortField( $location->sortField ) )
+        if ( !$this->domainMapper->isValidLocationSortField( $location->sortField ) )
             throw new InvalidArgumentValue( "sortField", $location->sortField, "Location" );
 
-        if ( !$this->isValidSortOrder( $location->sortOrder ) )
+        if ( !$this->domainMapper->isValidLocationSortOrder( $location->sortOrder ) )
             throw new InvalidArgumentValue( "sortOrder", $location->sortOrder, "Location" );
 
         if ( !is_int( $offset ) )
@@ -491,10 +491,10 @@ class LocationService implements LocationServiceInterface
         if ( $locationUpdateStruct->remoteId !== null && ( !is_string( $locationUpdateStruct->remoteId ) || empty( $locationUpdateStruct->remoteId ) ) )
             throw new InvalidArgumentValue( "remoteId", $locationUpdateStruct->remoteId, "LocationUpdateStruct" );
 
-        if ( $locationUpdateStruct->sortField !== null && !$this->isValidSortField( $locationUpdateStruct->sortField ) )
+        if ( $locationUpdateStruct->sortField !== null && !$this->domainMapper->isValidLocationSortField( $locationUpdateStruct->sortField ) )
             throw new InvalidArgumentValue( "sortField", $locationUpdateStruct->sortField, "LocationUpdateStruct" );
 
-        if ( $locationUpdateStruct->sortOrder !== null && !$this->isValidSortOrder( $locationUpdateStruct->sortOrder ) )
+        if ( $locationUpdateStruct->sortOrder !== null && !$this->domainMapper->isValidLocationSortOrder( $locationUpdateStruct->sortOrder ) )
             throw new InvalidArgumentValue( "sortOrder", $locationUpdateStruct->sortOrder, "LocationUpdateStruct" );
 
         $loadedLocation = $this->loadLocation( $location->id );
@@ -842,18 +842,6 @@ class LocationService implements LocationServiceInterface
     }
 
     /**
-     * @param int|null $timestamp
-     *
-     * @return \DateTime|null
-     */
-    protected function getDateTime( $timestamp )
-    {
-        $dateTime = new DateTime();
-        $dateTime->setTimestamp( $timestamp );
-        return $dateTime;
-    }
-
-    /**
      * Instantiates a correct sort clause object based on provided location sort field and sort order
      *
      * @param int $sortField
@@ -905,59 +893,5 @@ class LocationService implements LocationServiceInterface
             default:
                 return new SortClause\LocationPathString( $sortOrder );
         }
-    }
-
-    /**
-     * Checks if given $sortField value is one of the defined sort field constants.
-     *
-     * @access private Temporarily made accessible for ContentService, until Mapper class that
-     * can be shared between services is implemented
-     *
-     * @param mixed $sortField
-     *
-     * @return bool
-     */
-    public function isValidSortField( $sortField )
-    {
-        switch ( $sortField )
-        {
-            case APILocation::SORT_FIELD_PATH:
-            case APILocation::SORT_FIELD_PUBLISHED:
-            case APILocation::SORT_FIELD_MODIFIED:
-            case APILocation::SORT_FIELD_SECTION:
-            case APILocation::SORT_FIELD_DEPTH:
-            case APILocation::SORT_FIELD_CLASS_IDENTIFIER:
-            case APILocation::SORT_FIELD_CLASS_NAME:
-            case APILocation::SORT_FIELD_PRIORITY:
-            case APILocation::SORT_FIELD_NAME:
-            case APILocation::SORT_FIELD_MODIFIED_SUBNODE:
-            case APILocation::SORT_FIELD_NODE_ID:
-            case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
-                return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Checks if given $sortOrder value is one of the defined sort order constants.
-     *
-     * @access private Temporarily made accessible for ContentService, until Mapper class that
-     * can be shared between services is implemented
-     *
-     * @param $sortOrder
-     *
-     * @return bool
-     */
-    public function isValidSortOrder( $sortOrder )
-    {
-        switch ( $sortOrder )
-        {
-            case APILocation::SORT_ORDER_DESC:
-            case APILocation::SORT_ORDER_ASC:
-                return true;
-        }
-
-        return false;
     }
 }

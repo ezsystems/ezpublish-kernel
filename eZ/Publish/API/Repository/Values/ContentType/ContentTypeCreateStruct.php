@@ -92,7 +92,7 @@ abstract class ContentTypeCreateStruct extends ValueObject
     public $defaultAlwaysAvailable = true;
 
     /**
-     * AN array of names with languageCode keys
+     * An array of names with languageCode keys
      *
      * @required - at least one name in the main language is required
      *
