@@ -3,12 +3,6 @@
     "description": "eZ Publish API and kernel. This is the heart of eZ Publish 5.",
     "homepage": "http://share.ez.no",
     "license": "GPL-2.0",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/lolautruche/Archive.git"
-        }
-    ],
     "suggest": {
         "php-64bit": "For support of more than 30 languages, a 64bit php installation on all involved prod/dev machines is required"
     },
@@ -23,7 +17,7 @@
         "ext-PDO": "*",
         "ext-SPL": "*",
         "ext-xsl": "*",
-        "zetacomponents/archive": "dev-fixUnpackPHP55",
+        "zetacomponents/archive": "@dev",
         "zetacomponents/authentication": "@dev",
         "zetacomponents/authentication-database-tiein": "@dev",
         "zetacomponents/cache": "@dev",
