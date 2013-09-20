@@ -228,4 +228,95 @@ class LegacyStorage extends Gateway
 
         $q->prepare()->execute();
     }
+
+    /**
+     * Deletes external URL data for field with $fieldId in $versionNo.
+     *
+     * If URL unlinked is found to be orphaned, it will be deleted.
+     *
+     * @param mixed $fieldId
+     * @param mixed $versionNo
+     *
+     * @return void
+     */
+    public function deleteFieldData( $fieldId, $versionNo )
+    {
+        $this->unlinkUrl( $fieldId, $versionNo );
+        $this->deleteOrphanedUrls();
+    }
+
+    /**
+     * Removes link to URL for $fieldId in $versionNo.
+     *
+     * @param mixed $fieldId
+     * @param mixed $versionNo
+     *
+     * @return void
+     */
+    protected function unlinkUrl( $fieldId, $versionNo )
+    {
+        $dbHandler = $this->getConnection();
+
+        $deleteQuery = $dbHandler->createDeleteQuery();
+        $deleteQuery->deleteFrom(
+            $dbHandler->quoteTable( self::URL_LINK_TABLE )
+        )->where(
+            $deleteQuery->expr->lAnd(
+                $deleteQuery->expr->in( $dbHandler->quoteColumn( "contentobject_attribute_id" ), $fieldId ),
+                $deleteQuery->expr->in( $dbHandler->quoteColumn( "contentobject_attribute_version" ), $versionNo )
+            )
+        );
+
+        $deleteQuery->prepare()->execute();
+    }
+
+    /**
+     * Deletes all orphaned URLs.
+     *
+     * @todo using two queries because zeta Database does not support joins in delete query.
+     * That could be avoided if the feature is implemented there.
+     *
+     * URL is orphaned if it is not linked to a content attribute through ezurl_object_link table.
+     *
+     * @return void
+     */
+    protected function deleteOrphanedUrls()
+    {
+        $dbHandler = $this->getConnection();
+
+        $query = $dbHandler->createSelectQuery();
+        $query->select(
+            $dbHandler->quoteColumn( "id", self::URL_TABLE )
+        )->from(
+            $dbHandler->quoteTable( self::URL_TABLE )
+        )->leftJoin(
+            $dbHandler->quoteTable( self::URL_LINK_TABLE ),
+            $query->expr->eq(
+                $dbHandler->quoteColumn( "url_id", self::URL_LINK_TABLE ),
+                $dbHandler->quoteColumn( "id", self::URL_TABLE )
+            )
+        )->where(
+            $query->expr->isNull(
+                $dbHandler->quoteColumn( "url_id", self::URL_LINK_TABLE )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+        $ids = $statement->fetchAll( \PDO::FETCH_COLUMN );
+
+        if ( empty( $ids ) )
+        {
+            return;
+        }
+
+        $deleteQuery = $dbHandler->createDeleteQuery();
+        $deleteQuery->deleteFrom(
+            $dbHandler->quoteTable( self::URL_TABLE )
+        )->where(
+            $deleteQuery->expr->in( $dbHandler->quoteColumn( "id" ), $ids )
+        );
+
+        $deleteQuery->prepare()->execute();
+    }
 }
