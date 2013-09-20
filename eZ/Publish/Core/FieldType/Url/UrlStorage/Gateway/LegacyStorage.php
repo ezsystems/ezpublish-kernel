@@ -20,6 +20,7 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 class LegacyStorage extends Gateway
 {
     const URL_TABLE = "ezurl";
+    const URL_LINK_TABLE = "ezurl_object_link";
 
     /**
      * Connection
@@ -72,12 +73,16 @@ class LegacyStorage extends Gateway
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field )
     {
-        $dbHandler = $this->getConnection();
-
         if ( ( $row = $this->fetchByLink( $field->value->externalData ) ) !== false )
+        {
             $urlId = $row["id"];
+        }
         else
-            $urlId = $this->insert( $versionInfo, $field );
+        {
+            $urlId = $this->insert( $field );
+        }
+
+        $this->linkUrl( $urlId, $field->id, $versionInfo->versionNo );
 
         $field->value->data["urlId"] = $urlId;
 
@@ -159,12 +164,11 @@ class LegacyStorage extends Gateway
     /**
      * Inserts a new entry in ezurl table with $field value data
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      *
      * @return mixed
      */
-    private function insert( VersionInfo $versionInfo, Field $field )
+    private function insert( Field $field )
     {
         $dbHandler = $this->getConnection();
 
@@ -192,5 +196,35 @@ class LegacyStorage extends Gateway
         return $dbHandler->lastInsertId(
             $dbHandler->getSequenceName( self::URL_TABLE, "id" )
         );
+    }
+
+    /**
+     * Creates link to URL with $urlId for field with $fieldId in $versionNo.
+     *
+     * @param mixed $urlId
+     * @param mixed $fieldId
+     * @param mixed $versionNo
+     *
+     * @return void
+     */
+    protected function linkUrl( $urlId, $fieldId, $versionNo )
+    {
+        $dbHandler = $this->getConnection();
+
+        $q = $dbHandler->createInsertQuery();
+        $q->insertInto(
+            $dbHandler->quoteTable( self::URL_LINK_TABLE )
+        )->set(
+            $dbHandler->quoteColumn( "contentobject_attribute_id" ),
+            $q->bindValue( $fieldId, null, \PDO::PARAM_INT )
+        )->set(
+            $dbHandler->quoteColumn( "contentobject_attribute_version" ),
+            $q->bindValue( $versionNo, null, \PDO::PARAM_INT )
+        )->set(
+            $dbHandler->quoteColumn( "url_id" ),
+            $q->bindValue( $urlId, null, \PDO::PARAM_INT )
+        );
+
+        $q->prepare()->execute();
     }
 }
