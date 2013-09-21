@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\User;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\User;
+use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter;
+use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler\ObjectStateHandler as ObjectStateLimitationHandler;
 use eZ\Publish\SPI\Persistence;
 
 /**
@@ -24,7 +26,8 @@ class UserHandlerTest extends TestCase
         return new User\Handler(
             new User\Gateway\EzcDatabase( $dbHandler ),
             new User\Role\Gateway\EzcDatabase( $dbHandler ),
-            new User\Mapper()
+            new User\Mapper(),
+            new LimitationConverter( array( new ObjectStateLimitationHandler( $dbHandler ) ) )
         );
     }
 
