@@ -331,6 +331,6 @@ class Filesystem implements IOHandlerInterface
 
     public function getUri( $spiBinaryFileId )
     {
-        return ( $this->prefix ? $this->prefix . '/' : '') . $spiBinaryFileId;
+        return '/' . ( $this->prefix ? $this->prefix . '/' : '') . $spiBinaryFileId;
     }
 }
