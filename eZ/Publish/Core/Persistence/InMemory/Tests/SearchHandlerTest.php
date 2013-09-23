@@ -81,7 +81,13 @@ class SearchHandlerTest extends HandlerTest
             )
         );
 
-        $this->content = $this->persistenceHandler->contentHandler()->create( $struct );
+        $draft = $this->persistenceHandler->contentHandler()->create( $struct );
+        $this->content = $this->persistenceHandler->contentHandler()->publish(
+            $draft->versionInfo->contentInfo->id,
+            $draft->versionInfo->versionNo,
+            new Content\MetadataUpdateStruct()
+        );
+
         $this->contentToDelete[] = $this->content;
         $this->contentId = $this->content->versionInfo->contentInfo->id;
     }

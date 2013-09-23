@@ -52,7 +52,6 @@ parameters:
     ezpublish_rest.input.parser.internal.criterion.ParentLocationRemoteId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\ParentLocationRemoteId
     ezpublish_rest.input.parser.internal.criterion.SectionIdentifier.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\SectionIdentifier
     ezpublish_rest.input.parser.internal.criterion.SectionId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\SectionId
-    ezpublish_rest.input.parser.internal.criterion.Status.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\Status
     ezpublish_rest.input.parser.internal.criterion.Subtree.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\Subtree
     ezpublish_rest.input.parser.internal.criterion.UrlAlias.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\UrlAlias
     ezpublish_rest.input.parser.internal.criterion.UserMetadata.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\UserMetadata
@@ -453,12 +452,6 @@ services:
         class: %ezpublish_rest.input.parser.internal.criterion.SectionId.class%
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.criterion.SectionId }
-
-    ezpublish_rest.input.parser.internal.criterion.Status:
-        parent: ezpublish_rest.input.parser
-        class: %ezpublish_rest.input.parser.internal.criterion.Status.class%
-        tags:
-            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.criterion.Status }
 
     ezpublish_rest.input.parser.internal.criterion.Subtree:
         parent: ezpublish_rest.input.parser
