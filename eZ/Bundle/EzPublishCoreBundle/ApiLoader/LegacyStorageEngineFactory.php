@@ -86,7 +86,7 @@ class LegacyStorageEngineFactory
             new StorageRegistry(
                 $this->container->get( 'ezpublish.api.repository.factory' )->getExternalStorageHandlers()
             ),
-            $this->container->get( 'ezpublish.api.storage_engine.legacy.transformation_processor' ),
+            $this->container->get( 'ezpublish.api.storage_engine.transformation_processor' ),
             array(
                 'defer_type_update' => (bool)$deferTypeUpdate,
                 'field_type' => $this->fieldTypes,
