@@ -425,6 +425,21 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
+     * @see \eZ\Publish\SPI\Persistence\Content\Handler
+     */
+    public function loadContentInfoByRemoteId( $remoteId )
+    {
+        $res = $this->backend->find(
+            'Content\\ContentInfo',
+            array( 'remoteId' => $remoteId )
+        );
+        if ( !isset( $res[0] ) )
+            throw new NotFoundException( "Content", "remoteId:{$remoteId}" );
+
+        return $res[0];
+    }
+
+    /**
      * Returns the metadata object for a content identified by $contentId.
      *
      * @param int|string $contentId

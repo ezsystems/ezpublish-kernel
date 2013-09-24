@@ -325,6 +325,24 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
+     * Test loadContentInfoByRemoteId function
+     *
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ContentHandler::loadContentInfoByRemoteId
+     * @group contentHandler
+     */
+    public function testLoadContentInfoByRemoteId()
+    {
+        $contentInfo = $this->persistenceHandler
+            ->contentHandler()
+            ->loadContentInfoByRemoteId( "a6e35cbcb7cd6ae4b691f3eee30cd262" );
+
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo', $contentInfo );
+
+        $this->assertEquals( 41, $contentInfo->id );
+        $this->assertEquals( 1, $contentInfo->currentVersionNo );
+    }
+
+    /**
      * Test deleteVersion function
      *
      * @covers \eZ\Publish\Core\Persistence\InMemory\ContentHandler::deleteVersion
