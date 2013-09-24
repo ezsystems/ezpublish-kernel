@@ -350,6 +350,31 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * Loads data for a content object identified by its remote ID
+     *
+     * Returns an array with the relevant data.
+     *
+     * @param mixed $remoteId
+     *
+     * @return array
+     */
+    public function loadContentInfoByRemoteId( $remoteId )
+    {
+        try
+        {
+            return $this->innerGateway->loadContentInfoByRemoteId( $remoteId );
+        }
+        catch ( \ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( \PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
      * Loads info for content identified by $contentId.
      * Will basically return a hash containing all field values for ezcontentobject table plus following keys:
      *  - always_available => Boolean indicating if content's language mask contains alwaysAvailable bit field

@@ -252,5 +252,6 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $this->persistenceFactory->getLocationHandler()->changeMainLocation( $contentId, $locationId );
         $this->cache->clear( 'content', $contentId );
         $this->cache->clear( 'content', 'info', $contentId );
+        $this->cache->clear( 'content', 'info', 'remoteId' );
     }
 }
