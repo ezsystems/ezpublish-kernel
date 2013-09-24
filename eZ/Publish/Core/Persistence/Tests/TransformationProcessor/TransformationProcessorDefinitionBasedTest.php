@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandler;
+namespace eZ\Publish\Core\Persistence\Tests\TransformationProcessor;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased;
+use eZ\Publish\Core\Persistence;
+use eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased;
 
 /**
  * Test case for LocationHandlerTest
@@ -27,8 +27,8 @@ class TransformationProcessorDefinitionBasedTest extends TestCase
         }
 
         return new DefinitionBased(
-            new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() ),
-            new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() ),
+            new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() ),
+            new Persistence\TransformationProcessor\PcreCompiler( new Persistence\Utf8Converter() ),
             $rules
         );
     }

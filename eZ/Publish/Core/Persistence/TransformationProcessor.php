@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
+namespace eZ\Publish\Core\Persistence;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PcreCompiler;
+use eZ\Publish\Core\Persistence\TransformationProcessor\PcreCompiler;
 
 /**
  * Interface for processing a set of transformations on a string
@@ -41,7 +41,7 @@ abstract class TransformationProcessor
     /**
      * Transformation compiler
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PcreCompiler
+     * @var \eZ\Publish\Core\Persistence\TransformationProcessor\PcreCompiler
      */
     protected $compiler = null;
 
@@ -51,7 +51,7 @@ abstract class TransformationProcessor
      * Through the $ruleFiles array, a list of files with full text
      * transformation rules is given.
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PcreCompiler $compiler
+     * @param \eZ\Publish\Core\Persistence\TransformationProcessor\PcreCompiler $compiler
      * @param array $ruleFiles
      */
     public function __construct( PcreCompiler $compiler, array $ruleFiles = array() )

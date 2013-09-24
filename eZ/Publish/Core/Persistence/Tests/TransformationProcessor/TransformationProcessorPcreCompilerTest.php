@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandler;
+namespace eZ\Publish\Core\Persistence\Tests\TransformationProcessor;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search;
+use eZ\Publish\Core\Persistence;
 
 /**
  * Test case for LocationHandlerTest
@@ -40,8 +40,8 @@ class TransformationProcessorPcreCompilerTest extends TestCase
 
     public function testCompileMap()
     {
-        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
-        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
+        $parser = new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Persistence\TransformationProcessor\PcreCompiler( new Persistence\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -58,8 +58,8 @@ class TransformationProcessorPcreCompilerTest extends TestCase
 
     public function testCompileMapRemove()
     {
-        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
-        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
+        $parser = new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Persistence\TransformationProcessor\PcreCompiler( new Persistence\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -76,8 +76,8 @@ class TransformationProcessorPcreCompilerTest extends TestCase
 
     public function testCompileMapKeep()
     {
-        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
-        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
+        $parser = new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Persistence\TransformationProcessor\PcreCompiler( new Persistence\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -94,8 +94,8 @@ class TransformationProcessorPcreCompilerTest extends TestCase
 
     public function testCompileMapAscii()
     {
-        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
-        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
+        $parser = new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Persistence\TransformationProcessor\PcreCompiler( new Persistence\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -112,8 +112,8 @@ class TransformationProcessorPcreCompilerTest extends TestCase
 
     public function testCompileMapUnicode()
     {
-        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
-        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
+        $parser = new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Persistence\TransformationProcessor\PcreCompiler( new Persistence\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -130,8 +130,8 @@ class TransformationProcessorPcreCompilerTest extends TestCase
 
     public function testCompileReplace()
     {
-        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
-        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
+        $parser = new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Persistence\TransformationProcessor\PcreCompiler( new Persistence\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -148,8 +148,8 @@ class TransformationProcessorPcreCompilerTest extends TestCase
 
     public function testCompileTranspose()
     {
-        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
-        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
+        $parser = new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Persistence\TransformationProcessor\PcreCompiler( new Persistence\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -166,8 +166,8 @@ class TransformationProcessorPcreCompilerTest extends TestCase
 
     public function testCompileTransposeAsciiLowercase()
     {
-        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
-        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
+        $parser = new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Persistence\TransformationProcessor\PcreCompiler( new Persistence\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -184,8 +184,8 @@ class TransformationProcessorPcreCompilerTest extends TestCase
 
     public function testCompileTransposePlus()
     {
-        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
-        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
+        $parser = new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Persistence\TransformationProcessor\PcreCompiler( new Persistence\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -202,8 +202,8 @@ class TransformationProcessorPcreCompilerTest extends TestCase
 
     public function testCompileModuloTranspose()
     {
-        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
-        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
+        $parser = new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Persistence\TransformationProcessor\PcreCompiler( new Persistence\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
