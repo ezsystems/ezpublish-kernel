@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+namespace eZ\Publish\Core\Persistence\TransformationProcessor;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+use eZ\Publish\Core\Persistence\TransformationProcessor;
 
 /**
  * Class for processing a set of transformations, loaded from .tr files, on a string
@@ -26,7 +26,7 @@ class PreprocessedBased extends TransformationProcessor
     /**
      * Constructor
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PcreCompiler $compiler
+     * @param \eZ\Publish\Core\Persistence\TransformationProcessor\PcreCompiler $compiler
      * @param string $installDir Base dir for rule loading
      * @param array $ruleFiles
      */
