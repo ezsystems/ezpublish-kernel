@@ -221,15 +221,13 @@ class Type extends FieldType
      * Returns information for FieldValue->$sortKey relevant to the field type.
      * For this FieldType, the related object's name is returned.
      *
-     * @todo What to do here?
-     *
      * @param \eZ\Publish\Core\FieldType\RelationList\Value $value
      *
      * @return array
      */
     protected function getSortInfo( BaseValue $value )
     {
-        return (string)$value;
+        return false;
     }
 
     /**

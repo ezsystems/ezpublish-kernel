@@ -111,8 +111,6 @@ class Type extends FieldType
 
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
-     *
-     * @todo: Implement.
      */
     protected function getSortInfo( BaseValue $value )
     {
