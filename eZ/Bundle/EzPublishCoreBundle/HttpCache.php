@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-abstract class HttpCache extends BaseHttpCache
+class HttpCache extends BaseHttpCache
 {
     public function handle( Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true )
     {
