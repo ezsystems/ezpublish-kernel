@@ -54,25 +54,24 @@ class CountryIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
-        $handler->getFieldTypeRegistry()->register(
-            'ezcountry',
-            new FieldType\Country\Type(
-                array(
-                    "BE" => array(
-                        "Name" => "Belgium",
-                        "Alpha2" => "BE",
-                        "Alpha3" => "BEL",
-                        "IDC" => "32",
-                    ),
-                    "FR" => array(
-                        "Name" => "France",
-                        "Alpha2" => "FR",
-                        "Alpha3" => "FRA",
-                        "IDC" => "33",
-                    ),
-                )
+        $fieldType = new FieldType\Country\Type(
+            array(
+                "BE" => array(
+                    "Name" => "Belgium",
+                    "Alpha2" => "BE",
+                    "Alpha3" => "BEL",
+                    "IDC" => "32",
+                ),
+                "FR" => array(
+                    "Name" => "France",
+                    "Alpha2" => "FR",
+                    "Alpha3" => "FRA",
+                    "IDC" => "33",
+                ),
             )
         );
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $handler->getFieldTypeRegistry()->register( 'ezcountry', $fieldType );
         $handler->getStorageRegistry()->register(
             'ezcountry',
             new FieldType\NullStorage()

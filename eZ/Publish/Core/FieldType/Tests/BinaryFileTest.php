@@ -31,10 +31,10 @@ class BinaryFileTest extends BinaryBaseTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new BinaryFileType(
-            $this->getIOServiceMock(),
-            $this->getMimeTypeDetectorMock()
-        );
+        $fieldType = new BinaryFileType();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     protected function getEmptyValueExpectation()

@@ -35,7 +35,10 @@ class DateAndTimeTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new DateAndTime();
+        $fieldType = new DateAndTime();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**

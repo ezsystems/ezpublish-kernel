@@ -32,7 +32,10 @@ class TextBlockTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new TextBlockType();
+        $fieldType = new TextBlockType();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**

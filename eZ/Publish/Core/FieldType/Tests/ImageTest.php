@@ -55,7 +55,10 @@ class ImageTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new ImageType();
+        $fieldType = new ImageType();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**
