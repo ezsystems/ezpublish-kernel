@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\InMemory;
 
+use eZ\Publish\Core\Persistence;
+use eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -521,6 +523,48 @@ class Backend
     }
 
     /**
+     * @return string
+     */
+    static protected function getInstallationDir()
+    {
+        static $installDir = null;
+        if ( $installDir === null )
+        {
+            $config = require 'config.php';
+            $installDir = $config['service']['parameters']['install_dir'];
+        }
+        return $installDir;
+    }
+
+    /**
+     * @var \eZ\Publish\Core\Persistence\TransformationProcessor
+     */
+    protected $transformationProcessor;
+
+    /**
+     * @return \eZ\Publish\Core\Persistence\TransformationProcessor
+     */
+    public function getTransformationProcessor()
+    {
+        if ( !isset( $this->transformationProcessor ) )
+        {
+            $rules = array();
+            foreach ( glob( __DIR__ . '/../Tests/TransformationProcessor/_fixtures/transformations/*.tr' ) as $file )
+            {
+                $rules[] = str_replace( self::getInstallationDir(), '', $file );
+            }
+
+            $this->transformationProcessor = new DefinitionBased(
+                new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() ),
+                new Persistence\TransformationProcessor\PcreCompiler( new Persistence\Utf8Converter() ),
+                $rules
+            );
+        }
+
+        return $this->transformationProcessor;
+    }
+
+    /**
      * Creates Value object based on array value from Backend.
      *
      * @param string $type
@@ -548,8 +592,9 @@ class Backend
                     }
 
                     $fieldTypeClassName = "$fieldTypeNS\\Type";
-                    /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
+                    /** @var $fieldType \eZ\Publish\Core\FieldType\FieldType */
                     $fieldType = new $fieldTypeClassName();
+                    $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
                     $value = $fieldType->toPersistenceValue( $fieldTypeValue );
                 }
                 else if ( $type === "Content\\Type\\FieldDefinition" && $prop === "fieldTypeConstraints" && !$data["fieldTypeConstraints"] instanceof FieldTypeConstraints )
