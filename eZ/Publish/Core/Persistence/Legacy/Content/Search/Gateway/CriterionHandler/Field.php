@@ -52,6 +52,7 @@ class Field extends CriterionHandler
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $fieldConverterRegistry
+     * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
      */
     public function __construct( EzcDbHandler $dbHandler, Registry $fieldConverterRegistry, TransformationProcessor $transformationProcessor )
     {

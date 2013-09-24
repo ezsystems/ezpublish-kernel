@@ -75,9 +75,9 @@ class FullText extends CriterionHandler
     /**
      * Construct from full text search configuration
      *
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\TransformationProcessor $processor
      * @param array $configuration
-     *
-     * @return void
      */
     public function __construct( EzcDbHandler $dbHandler, TransformationProcessor $processor, array $configuration = array() )
     {
