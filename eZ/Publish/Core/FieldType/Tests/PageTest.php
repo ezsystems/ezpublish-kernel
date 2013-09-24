@@ -65,10 +65,13 @@ class PageTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new PageType(
+        $fieldType = new PageType(
             $this->getPageServiceMock(),
             new HashConverter
         );
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     protected function getPageReference()

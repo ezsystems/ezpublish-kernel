@@ -59,10 +59,9 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
-        $handler->getFieldTypeRegistry()->register(
-            'ezxmltext',
-            new FieldType\XmlText\Type()
-        );
+        $fieldType = new FieldType\XmlText\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $handler->getFieldTypeRegistry()->register( 'ezxmltext', $fieldType );
         $handler->getStorageRegistry()->register(
             'ezxmltext',
             new FieldType\XmlText\XmlTextStorage(

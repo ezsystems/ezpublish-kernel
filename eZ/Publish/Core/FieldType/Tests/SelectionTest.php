@@ -32,7 +32,10 @@ class SelectionTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Selection();
+        $fieldType = new Selection();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**

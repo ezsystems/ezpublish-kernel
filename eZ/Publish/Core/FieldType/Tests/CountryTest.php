@@ -32,7 +32,7 @@ class CountryTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Country(
+        $fieldType = new Country(
             array(
                 "BE" => array(
                     "Name" => "Belgium",
@@ -72,6 +72,9 @@ class CountryTest extends FieldTypeTest
                 ),
             )
         );
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**

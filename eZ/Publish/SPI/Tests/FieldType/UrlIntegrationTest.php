@@ -55,10 +55,9 @@ class UrlIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
-        $handler->getFieldTypeRegistry()->register(
-            'ezurl',
-            new FieldType\Url\Type()
-        );
+        $fieldType = new FieldType\Url\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $handler->getFieldTypeRegistry()->register( 'ezurl', $fieldType );
         $handler->getStorageRegistry()->register(
             'ezurl',
             new FieldType\Url\UrlStorage(

@@ -32,7 +32,10 @@ class FloatTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Float();
+        $fieldType = new Float();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**

@@ -32,7 +32,10 @@ class IntegerTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Integer();
+        $fieldType = new Integer();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**
