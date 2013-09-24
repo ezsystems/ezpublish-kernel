@@ -19,10 +19,10 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandl
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase as LanguageGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased\Parser;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PcreCompiler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter;
+use eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased;
+use eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased\Parser;
+use eZ\Publish\Core\Persistence\TransformationProcessor\PcreCompiler;
+use eZ\Publish\Core\Persistence\Utf8Converter;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
@@ -2985,12 +2985,12 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor
+     * @return \eZ\Publish\Core\Persistence\TransformationProcessor
      */
     public function getProcessor()
     {
         $rules = array();
-        foreach ( glob( __DIR__ . '/../SearchHandler/_fixtures/transformations/*.tr' ) as $file )
+        foreach ( glob( __DIR__ . '/../../../../Tests/TransformationProcessor/_fixtures/transformations/*.tr' ) as $file )
         {
             $rules[] = str_replace( self::getInstallationDir(), '', $file );
         }
