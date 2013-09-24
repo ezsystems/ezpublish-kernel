@@ -30,7 +30,7 @@ class Value extends BaseValue
      */
     public function __construct( $isDisabled = false )
     {
-        $this->isDisabled = (bool)$isDisabled;
+        $this->isDisabled = $isDisabled;
     }
 
     /**
