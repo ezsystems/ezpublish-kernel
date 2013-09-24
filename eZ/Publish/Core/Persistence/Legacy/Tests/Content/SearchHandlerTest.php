@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
+use eZ\Publish\Core\Persistence;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content;
 use eZ\Publish\SPI\Persistence\Content as ContentObject;
@@ -90,15 +91,15 @@ class SearchHandlerTest extends LanguageAwareTestCase
     protected function getContentSearchHandler( array $fullTextSearchConfiguration = array() )
     {
         $rules = array();
-        foreach ( glob( __DIR__ . '/SearchHandler/_fixtures/transformations/*.tr' ) as $file )
+        foreach ( glob( __DIR__ . '/../../../Tests/TransformationProcessor/_fixtures/transformations/*.tr' ) as $file )
         {
             $rules[] = str_replace( self::getInstallationDir(), '', $file );
         }
 
-        $transformationProcessor = new Content\Search\TransformationProcessor\DefinitionBased(
-            new Content\Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() ),
-            new Content\Search\TransformationProcessor\PcreCompiler(
-                new Content\Search\Utf8Converter()
+        $transformationProcessor = new Persistence\TransformationProcessor\DefinitionBased(
+            new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() ),
+            new Persistence\TransformationProcessor\PcreCompiler(
+                new Persistence\Utf8Converter()
             ),
             $rules
         );

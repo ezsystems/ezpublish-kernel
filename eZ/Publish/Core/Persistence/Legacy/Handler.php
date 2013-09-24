@@ -24,7 +24,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper as ObjectState
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler as UrlAliasHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper as UrlAliasMapper;
@@ -266,7 +266,7 @@ class Handler implements HandlerInterface
     /**
      * Transform Processor
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor
+     * @var \eZ\Publish\Core\Persistence\TransformationProcessor
      */
     protected $transformationProcessor;
 
@@ -284,7 +284,7 @@ class Handler implements HandlerInterface
      * @param \eZ\Publish\Core\Persistence\FieldTypeRegistry $fieldTypeRegistry Should contain field types
      * @param Content\FieldValue\ConverterRegistry $converterRegistry Should contain Field Type converters
      * @param Content\StorageRegistry $storageRegistry Should contain Field Type external storage handlers
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor $transformationProcessor Search Text Transformation processor
+     * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor Search Text Transformation processor
      * @param array $config List of optional configuration flags:
      *                      The flag 'defer_type_update' defines if content types should be
      *                      published immediately (false), when the
