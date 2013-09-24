@@ -108,7 +108,7 @@ class ViewController extends Controller
         }
         catch ( Exception $e )
         {
-            $this->handleViewException( $response, $params, $e, $viewType, null, $locationId );
+            return $this->handleViewException( $response, $params, $e, $viewType, null, $locationId );
         }
     }
 
@@ -148,7 +148,7 @@ class ViewController extends Controller
         }
         catch ( Exception $e )
         {
-            $this->handleViewException( $response, $params, $e, $viewType, $contentId );
+            return $this->handleViewException( $response, $params, $e, $viewType, $contentId );
         }
     }
 
