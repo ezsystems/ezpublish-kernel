@@ -18,6 +18,7 @@ services:
         parent: security.authentication.provider.pre_authenticated
         calls:
             - [setLazyRepository, [@ezpublish.api.repository.lazy]]
+            - [setLogger, [@?logger]]
 
     ezpublish.security.authentication_provider.basic:
         class: %ezpublish.security.authentication_provider.basic.class%
