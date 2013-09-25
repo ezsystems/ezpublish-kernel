@@ -36,6 +36,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper as UrlWildcard
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase as UrlWildcardGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler;
 use eZ\Publish\Core\Persistence\Legacy\User\Mapper as UserMapper;
+use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter;
+use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler\ObjectStateHandler as ObjectStateLimitationHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as ConverterRegistry;
 use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use ezcDbTransactionException;
@@ -743,7 +745,8 @@ class Handler implements HandlerInterface
                     new User\Gateway\EzcDatabase( $this->dbHandler )
                 ),
                 new User\Role\Gateway\EzcDatabase( $this->dbHandler ),
-                new UserMapper()
+                new UserMapper(),
+                new LimitationConverter( array( new ObjectStateLimitationHandler( $this->dbHandler ) ) )
             );
         }
         return $this->userHandler;
