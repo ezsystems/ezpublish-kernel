@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authentication;
 
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\PreAuthenticatedAuthenticationProvider;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
@@ -78,7 +78,7 @@ class Provider extends PreAuthenticatedAuthenticationProvider
             // We need to always return a security token, with at least anonymous user logged in.
             // See https://jira.ez.no/browse/EZP-21520
             if ( $this->logger )
-                $this->logger->warn( $e->getMessage(), array( 'userId' => $token->getUsername() ) );
+                $this->logger->warning( $e->getMessage(), array( 'userId' => $token->getUsername() ) );
 
             $user = new User(
                 $this->getRepository()->getUserService()->loadAnonymousUser(),
