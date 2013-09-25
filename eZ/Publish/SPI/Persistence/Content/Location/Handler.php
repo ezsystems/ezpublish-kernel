@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\SPI\Persistence\Content\Location;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
@@ -61,6 +62,24 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\Content\Location[]
      */
     public function loadLocationsByContent( $contentId, $rootLocationId = null );
+
+    /**
+     * Finds all locations given some $criterion.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param int $offset
+     * @param int $limit
+     */
+    public function findLocations( Criterion $criterion, $offset = 0, $limit = 10 );
+
+    /**
+     * Counts all locations given some $criterion.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     *
+     * @return int
+     */
+    public function getLocationCount( Criterion $criterion );
 
     /**
      * Loads all parent Locations for unpublished Content by given $contentId.

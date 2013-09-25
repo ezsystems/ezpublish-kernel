@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
@@ -141,6 +142,24 @@ class Handler implements BaseLocationHandler
     {
         $rows = $this->locationGateway->loadLocationDataByContent( $contentId, $rootLocationId );
         return $this->locationMapper->createLocationsFromRows( $rows );
+    }
+
+    /**
+     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::findLocations
+     */
+    public function findLocations( Criterion $criterion, $offset = 0, $limit = 10 )
+    {
+        return $this->locationMapper->createLocationsFromRows(
+            $this->locationGateway->find( $criterion, $offset, $limit )
+        );
+    }
+
+    /**
+     * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::getLocationCount
+     */
+    public function getLocationCount( Criterion $criterion )
+    {
+        return $this->locationGateway->count( $criterion );
     }
 
     /**
