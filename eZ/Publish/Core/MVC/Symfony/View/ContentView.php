@@ -133,7 +133,7 @@ class ContentView implements ContentViewInterface
      */
     public function setTemplateIdentifier( $templateIdentifier )
     {
-        if ( !is_string( $templateIdentifier ) || !$templateIdentifier instanceof \Closure )
+        if ( !is_string( $templateIdentifier ) && !$templateIdentifier instanceof \Closure )
             throw new InvalidArgumentType( 'templateIdentifier', 'string or \Closure', $templateIdentifier );
 
         $this->templateIdentifier = $templateIdentifier;
