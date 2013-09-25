@@ -179,6 +179,18 @@
         </div>
     </xsl:template>
 
+    <xsl:template match="embed-inline">
+        <span>
+            <xsl:if test="@align">
+                <xsl:attribute name="class"><xsl:value-of select="concat('object-', @align)"/></xsl:attribute>
+            </xsl:if>
+            <xsl:if test="@id">
+                <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
+            </xsl:if>
+            <xsl:value-of select="text()" disable-output-escaping="yes"/>
+        </span>
+    </xsl:template>
+
     <xsl:template match="literal">
         <pre>
             <xsl:copy-of select="@*"/>
