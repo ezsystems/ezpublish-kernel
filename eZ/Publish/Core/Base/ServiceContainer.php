@@ -211,18 +211,24 @@ class ServiceContainer implements Container
             $serviceObject = $reflectionObj->newInstanceArgs( $arguments );
         }
 
-        if ( $settings['shared'] )
-            $this->dependencies["@{$serviceName}"] = $serviceObject;
-
         if ( !empty( $settings['method'] ) )
         {
             $list = $this->recursivelyLookupArguments( $settings['method'] );
             foreach ( $list as $methodName => $arguments )
             {
-                foreach ( $arguments as $argumentKey => $argumentValue )
-                    $serviceObject->$methodName( $argumentValue, $argumentKey );
+                if ( !is_array( $arguments ) )
+                {
+                    throw new BadConfiguration(
+                        "service\\[{$serviceName}]\\method",
+                        "setter method must be configured with an array of arguments"
+                    );
+                }
+                call_user_func_array( array( $serviceObject, $methodName ), $arguments );
             }
         }
+
+        if ( $settings['shared'] )
+            $this->dependencies["@{$serviceName}"] = $serviceObject;
 
         return $serviceObject;
     }
