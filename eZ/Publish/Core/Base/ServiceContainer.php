@@ -219,7 +219,7 @@ class ServiceContainer implements Container
                 if ( !is_array( $arguments ) )
                 {
                     throw new BadConfiguration(
-                        "service\\[{$serviceName}]\\method",
+                        "service\\[{$serviceName}]\\method\\[{$methodName}]",
                         "setter method must be configured with an array of arguments"
                     );
                 }
