@@ -20,6 +20,8 @@
 
         <a name="eztoc{translate($name, '.', '_')}" id="eztoc{translate($name, '.', '_')}"/>
         <xsl:element name="h{$level}">
+            <xsl:copy-of select="@class"/>
+            <xsl:copy-of select="@align"/>
             <xsl:apply-templates/>
         </xsl:element>
     </xsl:template>
@@ -32,6 +34,8 @@
             </xsl:when>
             <xsl:otherwise>
                 <p>
+                    <xsl:copy-of select="@class"/>
+                    <xsl:copy-of select="@align"/>
                     <xsl:apply-templates/>
                 </p>
             </xsl:otherwise>
@@ -121,6 +125,8 @@
                     <xsl:value-of select="@xhtml:width"/>
                 </xsl:attribute>
             </xsl:if>
+            <xsl:copy-of select="@class"/>
+            <xsl:copy-of select="@align"/>
             <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
@@ -141,6 +147,7 @@
 
     <xsl:template match="ol | ul | li">
         <xsl:copy>
+            <xsl:copy-of select="@class"/>
             <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
@@ -163,6 +170,7 @@
                     <xsl:value-of select="@title"/>
                 </xsl:attribute>
             </xsl:if>
+            <xsl:value-of select="@class"/>
             <xsl:apply-templates/>
         </a>
     </xsl:template>
