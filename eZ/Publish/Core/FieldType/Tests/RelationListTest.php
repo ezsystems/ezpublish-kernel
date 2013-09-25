@@ -32,7 +32,10 @@ class RelationListTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new RelationList();
+        $fieldType = new RelationList();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**

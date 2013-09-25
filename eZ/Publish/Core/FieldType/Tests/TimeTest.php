@@ -32,7 +32,10 @@ class TimeTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Time();
+        $fieldType = new Time();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**

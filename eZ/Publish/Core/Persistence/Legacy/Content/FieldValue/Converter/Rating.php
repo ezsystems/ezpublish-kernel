@@ -69,6 +69,7 @@ class Rating implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
+        $fieldDef->defaultValue->data = false;
     }
 
     /**

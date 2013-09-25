@@ -32,7 +32,10 @@ class EmailAddressTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new EmailAddressType();
+        $fieldType = new EmailAddressType();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**

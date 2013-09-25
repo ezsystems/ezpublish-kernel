@@ -36,9 +36,24 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
      */
     protected function getFieldType()
     {
-        return new XmlTextType(
-            $this->getValidatorServiceMock(),
-            $this->getFieldTypeToolsMock()
+        $fieldType = new XmlTextType();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getTransformationProcessorMock()
+    {
+        return $this->getMockForAbstractClass(
+            "eZ\\Publish\\Core\\Persistence\\TransformationProcessor",
+            array(),
+            '',
+            false,
+            true,
+            true
         );
     }
 
@@ -91,7 +106,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
      */
     public function testAcceptValueValidFormat( $input )
     {
-        $fieldType = new XmlTextType( $this->getValidatorServiceMock(), $this->getFieldTypeToolsMock() );
+        $fieldType = $this->getFieldType();
         $fieldType->acceptValue( $input );
     }
 
@@ -103,7 +118,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
     {
         try
         {
-            $fieldType = new XmlTextType( $this->getValidatorServiceMock(), $this->getFieldTypeToolsMock() );
+            $fieldType = $this->getFieldType();
             $fieldType->acceptValue( $input );
             $this->fail( "An InvalidArgumentException was expected! None thrown." );
         }

@@ -54,10 +54,9 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
-        $handler->getFieldTypeRegistry()->register(
-            'ezdatetime',
-            new FieldType\DateAndTime\Type()
-        );
+        $fieldType = new FieldType\DateAndTime\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $handler->getFieldTypeRegistry()->register( 'ezdatetime', $fieldType );
         $handler->getStorageRegistry()->register(
             'ezdatetime',
             new FieldType\NullStorage()

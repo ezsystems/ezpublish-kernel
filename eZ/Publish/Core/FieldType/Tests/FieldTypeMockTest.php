@@ -19,7 +19,12 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
     public function testApplyDefaultSettingsThrowsInvalidArgumentException()
     {
         /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
-        $stub = $this->getMockForAbstractClass( "\\eZ\\Publish\\Core\\FieldType\\FieldType" );
+        $stub = $this->getMockForAbstractClass(
+            "\\eZ\\Publish\\Core\\FieldType\\FieldType",
+            array(),
+            "",
+            false
+        );
 
         $stub->applyDefaultSettings( new \DateTime );
     }
@@ -36,7 +41,7 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
             "\\eZ\\Publish\\Core\\FieldType\\FieldType",
             array(),
             "",
-            true,
+            false,
             true,
             true,
             array( "getSettingsSchema" )
@@ -161,7 +166,12 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
     public function testApplyDefaultValidatorConfigurationEmptyThrowsInvalidArgumentException()
     {
         /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
-        $stub = $this->getMockForAbstractClass( "\\eZ\\Publish\\Core\\FieldType\\FieldType" );
+        $stub = $this->getMockForAbstractClass(
+            "\\eZ\\Publish\\Core\\FieldType\\FieldType",
+            array(),
+            "",
+            false
+        );
 
         $stub->applyDefaultValidatorConfiguration( new \DateTime );
     }
@@ -173,7 +183,7 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
             "\\eZ\\Publish\\Core\\FieldType\\FieldType",
             array(),
             "",
-            true,
+            false,
             true,
             true,
             array( "getValidatorConfigurationSchema" )
@@ -204,7 +214,7 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
             "\\eZ\\Publish\\Core\\FieldType\\FieldType",
             array(),
             "",
-            true,
+            false,
             true,
             true,
             array( "getValidatorConfigurationSchema" )

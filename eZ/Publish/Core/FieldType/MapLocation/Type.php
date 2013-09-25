@@ -133,7 +133,7 @@ class Type extends FieldType
      */
     protected function getSortInfo( BaseValue $value )
     {
-        return $value->address;
+        return $this->transformationProcessor->transformByGroup( (string)$value, "lowercase" );
     }
 
     /**

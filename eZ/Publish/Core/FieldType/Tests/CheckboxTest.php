@@ -29,11 +29,14 @@ class CheckboxTest extends FieldTypeTest
      * NOT take care for test case wide caching of the field type, just return
      * a new instance from this method!
      *
-     * @return FieldType
+     * @return \eZ\Publish\SPI\FieldType\FieldType
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Checkbox();
+        $fieldType = new Checkbox();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**
@@ -249,7 +252,7 @@ class CheckboxTest extends FieldTypeTest
      */
     public function testToPersistenceValue()
     {
-        $ft = new Checkbox();
+        $ft = $this->createFieldTypeUnderTest();
         $fieldValue = $ft->toPersistenceValue( new CheckboxValue( true ) );
 
         self::assertSame( true, $fieldValue->data );

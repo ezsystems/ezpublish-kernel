@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandler;
+namespace eZ\Publish\Core\Persistence\Tests\TransformationProcessor;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search;
+use eZ\Publish\Core\Persistence;
 
 /**
  * Test case for LocationHandlerTest
@@ -33,7 +33,7 @@ class TransformationProcessorDefinitionBasedParserTest extends TestCase
      */
     public function testParse( $file )
     {
-        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $parser = new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
 
         $fixture = include $file . '.result';
         $this->assertEquals(

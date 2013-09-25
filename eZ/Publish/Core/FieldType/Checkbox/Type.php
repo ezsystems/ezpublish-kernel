@@ -109,7 +109,7 @@ class Type extends FieldType
      *
      * @param \eZ\Publish\Core\FieldType\Checkbox\Value $value
      *
-     * @return array
+     * @return int
      */
     protected function getSortInfo( BaseValue $value )
     {

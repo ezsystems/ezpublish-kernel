@@ -31,7 +31,10 @@ class MediaTest extends BinaryBaseTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new MediaType();
+        $fieldType = new MediaType();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     protected function getEmptyValueExpectation()

@@ -32,7 +32,10 @@ class TextLineTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new TextLineType();
+        $fieldType = new TextLineType();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**

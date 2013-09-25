@@ -55,10 +55,9 @@ class KeywordIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
-        $handler->getFieldTypeRegistry()->register(
-            'ezkeyword',
-            new FieldType\Keyword\Type()
-        );
+        $fieldType = new FieldType\Keyword\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $handler->getFieldTypeRegistry()->register( 'ezkeyword', $fieldType );
         $handler->getStorageRegistry()->register(
             'ezkeyword',
             new FieldType\Keyword\KeywordStorage(

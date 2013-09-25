@@ -22,6 +22,21 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
     private $fieldTypeUnderTest;
 
     /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getTransformationProcessorMock()
+    {
+        return $this->getMockForAbstractClass(
+            "eZ\\Publish\\Core\\Persistence\\TransformationProcessor",
+            array(),
+            '',
+            false,
+            true,
+            true
+        );
+    }
+
+    /**
      * Returns the field type under test.
      *
      * This method is used by all test cases to retrieve the field type under

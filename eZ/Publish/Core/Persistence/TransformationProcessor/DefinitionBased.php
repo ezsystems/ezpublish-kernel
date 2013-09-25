@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+namespace eZ\Publish\Core\Persistence\TransformationProcessor;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PcreCompiler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased\Parser;
+use eZ\Publish\Core\Persistence\TransformationProcessor;
+use eZ\Publish\Core\Persistence\TransformationProcessor\PcreCompiler;
+use eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased\Parser;
 
 /**
  * Class for processing a set of transformations, loaded from .tr files, on a string
@@ -21,7 +21,7 @@ class DefinitionBased extends TransformationProcessor
     /**
      * Transformation parser
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased\Parser
+     * @var \eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased\Parser
      */
     protected $parser = null;
 
@@ -30,14 +30,14 @@ class DefinitionBased extends TransformationProcessor
      *
      * Through the $ruleFiles array, a list of files with full text
      * transformation rules is given. These files are parsed by
-     * {@link \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased\Parser}
+     * {@link \eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased\Parser}
      * and then used for normalization in the full text search.
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased\Parser $parser
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PcreCompiler $compiler
+     * @param \eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased\Parser $parser
+     * @param \eZ\Publish\Core\Persistence\TransformationProcessor\PcreCompiler $compiler
      * @param array $ruleFiles
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased
+     * @return \eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased
      */
     public function __construct( Parser $parser, PcreCompiler $compiler, array $ruleFiles = array() )
     {

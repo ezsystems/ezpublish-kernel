@@ -32,7 +32,10 @@ class UrlTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new UrlType();
+        $fieldType = new UrlType();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**
