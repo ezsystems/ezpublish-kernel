@@ -19,6 +19,7 @@ use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -118,17 +119,11 @@ class ContentTest extends BaseServiceMockTest
         $contentHandler = $this->getPersistenceMock()->contentHandler();
         $domainMapperMock = $this->getDomainMapperMock();
         $versionInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo" );
-        $contentInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
-
-        $contentInfoMock->expects( $this->any() )
-            ->method( "__get" )
-            ->with( "currentVersionNo" )
-            ->will( $this->returnValue( 24 ) );
 
         $versionInfoMock->expects( $this->any() )
             ->method( "__get" )
-            ->with( "contentInfo" )
-            ->will( $this->returnValue( $contentInfoMock ) );
+            ->with( "status" )
+            ->will( $this->returnValue( APIVersionInfo::STATUS_PUBLISHED ) );
 
         $contentServiceMock->expects( $this->once() )
             ->method( "loadContentInfo" )
@@ -204,7 +199,7 @@ class ContentTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
      * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
-    public function testLoadVersionInfoByIdThrowsUnauthorizedException()
+    public function testLoadVersionInfoByIdThrowsUnauthorizedExceptionNonPublishedVersion()
     {
         $repository = $this->getRepositoryMock();
         $contentServiceMock = $this->getPartlyMockedContentService();
@@ -212,17 +207,11 @@ class ContentTest extends BaseServiceMockTest
         $contentHandler = $this->getPersistenceMock()->contentHandler();
         $domainMapperMock = $this->getDomainMapperMock();
         $versionInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo" );
-        $contentInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
-
-        $contentInfoMock->expects( $this->any() )
-            ->method( "__get" )
-            ->with( "currentVersionNo" )
-            ->will( $this->returnValue( 48 ) );
 
         $versionInfoMock->expects( $this->any() )
             ->method( "__get" )
-            ->with( "contentInfo" )
-            ->will( $this->returnValue( $contentInfoMock ) );
+            ->with( "status" )
+            ->will( $this->returnValue( APIVersionInfo::STATUS_DRAFT ) );
 
         $contentHandler->expects( $this->once() )
             ->method( "loadVersionInfo" )
@@ -254,7 +243,7 @@ class ContentTest extends BaseServiceMockTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
      */
-    public function testLoadVersionInfoByIdWithVersionNo()
+    public function testLoadVersionInfoByIdPublishedVersion()
     {
         $repository = $this->getRepositoryMock();
         $contentServiceMock = $this->getPartlyMockedContentService();
@@ -262,17 +251,11 @@ class ContentTest extends BaseServiceMockTest
         $contentHandler = $this->getPersistenceMock()->contentHandler();
         $domainMapperMock = $this->getDomainMapperMock();
         $versionInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo" );
-        $contentInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
-
-        $contentInfoMock->expects( $this->any() )
-            ->method( "__get" )
-            ->with( "currentVersionNo" )
-            ->will( $this->returnValue( 24 ) );
 
         $versionInfoMock->expects( $this->any() )
             ->method( "__get" )
-            ->with( "contentInfo" )
-            ->will( $this->returnValue( $contentInfoMock ) );
+            ->with( "status" )
+            ->will( $this->returnValue( APIVersionInfo::STATUS_PUBLISHED ) );
 
         $contentHandler->expects( $this->once() )
             ->method( "loadVersionInfo" )
@@ -306,7 +289,7 @@ class ContentTest extends BaseServiceMockTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
      */
-    public function testLoadVersionInfoByIdWithCurrentVersionNo()
+    public function testLoadVersionInfoByIdNonPublishedVersion()
     {
         $repository = $this->getRepositoryMock();
         $contentServiceMock = $this->getPartlyMockedContentService();
@@ -314,17 +297,11 @@ class ContentTest extends BaseServiceMockTest
         $contentHandler = $this->getPersistenceMock()->contentHandler();
         $domainMapperMock = $this->getDomainMapperMock();
         $versionInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo" );
-        $contentInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
-
-        $contentInfoMock->expects( $this->any() )
-            ->method( "__get" )
-            ->with( "currentVersionNo" )
-            ->will( $this->returnValue( 48 ) );
 
         $versionInfoMock->expects( $this->any() )
             ->method( "__get" )
-            ->with( "contentInfo" )
-            ->will( $this->returnValue( $contentInfoMock ) );
+            ->with( "status" )
+            ->will( $this->returnValue( APIVersionInfo::STATUS_DRAFT ) );
 
         $contentHandler->expects( $this->once() )
             ->method( "loadVersionInfo" )

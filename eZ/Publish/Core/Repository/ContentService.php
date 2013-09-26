@@ -252,7 +252,7 @@ class ContentService implements ContentServiceInterface
 
         $versionInfo = $this->domainMapper->buildVersionInfoDomainObject( $spiVersionInfo );
 
-        if ( $versionInfo->contentInfo->currentVersionNo === $versionNo )
+        if ( $versionInfo->status === APIVersionInfo::STATUS_PUBLISHED )
         {
             $function = "read";
         }
