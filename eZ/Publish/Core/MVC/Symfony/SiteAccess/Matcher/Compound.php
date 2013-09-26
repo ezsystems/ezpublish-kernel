@@ -120,4 +120,15 @@ abstract class Compound implements CompoundInterface, URILexer
                array_keys( $this->getSubMatchers() )
            ) . ')';
     }
+
+    /**
+     * Serialization occurs when serializing the siteaccess for subrequests.
+     *
+     * @see \eZ\Bundle\EzPublishCoreBundle\Fragment\FragmentUriGenerator::generateFragmentUri()
+     */
+    public function __sleep()
+    {
+        // We don't need the whole matcher map and the matcher builder once serialized.
+        return array( 'config', 'subMatchers', 'request' );
+    }
 }
