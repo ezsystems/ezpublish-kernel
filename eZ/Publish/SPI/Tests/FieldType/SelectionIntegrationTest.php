@@ -40,10 +40,9 @@ class SelectionIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
-        $handler->getFieldTypeRegistry()->register(
-            'ezselection',
-            new FieldType\Selection\Type()
-        );
+        $fieldType = new FieldType\Selection\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $handler->getFieldTypeRegistry()->register( 'ezselection', $fieldType );
         $handler->getStorageRegistry()->register(
             'ezselection',
             new FieldType\NullStorage()

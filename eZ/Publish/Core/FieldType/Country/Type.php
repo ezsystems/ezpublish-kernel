@@ -189,7 +189,7 @@ class Type extends FieldType
         $countries = array();
         foreach ( $value->countries as $countryInfo )
         {
-            $countries[] = strtolower( $countryInfo["Name"] );
+            $countries[] = $this->transformationProcessor->transformByGroup( $countryInfo["Name"], "lowercase" );
         }
 
         sort( $countries );

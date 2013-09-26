@@ -54,10 +54,9 @@ class AuthorIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
-        $handler->getFieldTypeRegistry()->register(
-            'ezauthor',
-            new FieldType\Author\Type()
-        );
+        $fieldType = new FieldType\Author\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $handler->getFieldTypeRegistry()->register( 'ezauthor', $fieldType );
         $handler->getStorageRegistry()->register(
             'ezauthor',
             new FieldType\NullStorage()

@@ -32,7 +32,10 @@ class KeywordTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new KeywordType();
+        $fieldType = new KeywordType();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**

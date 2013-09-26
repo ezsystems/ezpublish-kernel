@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+use eZ\Publish\Core\Persistence\TransformationProcessor;
 use ezcQuerySelect;
 use RuntimeException;
 
@@ -43,7 +43,7 @@ class Field extends CriterionHandler
     /**
      * Transformation processor
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor
+     * @var \eZ\Publish\Core\Persistence\TransformationProcessor
      */
     protected $transformationProcessor;
 
@@ -52,6 +52,7 @@ class Field extends CriterionHandler
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $fieldConverterRegistry
+     * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
      */
     public function __construct( EzcDbHandler $dbHandler, Registry $fieldConverterRegistry, TransformationProcessor $transformationProcessor )
     {

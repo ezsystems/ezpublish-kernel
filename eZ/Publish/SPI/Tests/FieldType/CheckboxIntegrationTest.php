@@ -54,10 +54,9 @@ class CheckboxIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
-        $handler->getFieldTypeRegistry()->register(
-            'ezbool',
-            new FieldType\Checkbox\Type()
-        );
+        $fieldType = new FieldType\Checkbox\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $handler->getFieldTypeRegistry()->register( 'ezbool', $fieldType );
         $handler->getStorageRegistry()->register(
             'ezbool',
             new FieldType\NullStorage()

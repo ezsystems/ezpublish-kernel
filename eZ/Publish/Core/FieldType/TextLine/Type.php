@@ -237,15 +237,13 @@ class Type extends FieldType
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
-     * @todo String normalization should occur here.
-     *
      * @param \eZ\Publish\Core\FieldType\TextLine\Value $value
      *
      * @return array
      */
     protected function getSortInfo( BaseValue $value )
     {
-        return $value->text;
+        return $this->transformationProcessor->transformByGroup( (string)$value, "lowercase" );
     }
 
     /**

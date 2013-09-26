@@ -13,7 +13,6 @@ use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * The User field type.
@@ -111,8 +110,6 @@ class Type extends FieldType
 
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
-     *
-     * @todo: Implement.
      */
     protected function getSortInfo( BaseValue $value )
     {

@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+namespace eZ\Publish\Core\Persistence\TransformationProcessor;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+use eZ\Publish\Core\Persistence\Utf8Converter;
+use eZ\Publish\Core\Persistence\TransformationProcessor;
 use RuntimeException;
 
 /**
@@ -22,14 +22,14 @@ class PcreCompiler
     /**
      * Class for converting UTF-8 characters
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter
+     * @var \eZ\Publish\Core\Persistence\Utf8Converter
      */
     protected $converter;
 
     /**
      * Construct from UTF8Converter
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter $converter
+     * @param \eZ\Publish\Core\Persistence\Utf8Converter $converter
      */
     public function __construct( Utf8Converter $converter )
     {

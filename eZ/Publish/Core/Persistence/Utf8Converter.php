@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
+namespace eZ\Publish\Core\Persistence;
 
 use RuntimeException;
 

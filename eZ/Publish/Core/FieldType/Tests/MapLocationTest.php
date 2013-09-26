@@ -27,7 +27,10 @@ class MapLocationTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new MapLocation\Type();
+        $fieldType = new MapLocation\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**

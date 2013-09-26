@@ -32,7 +32,10 @@ class UserTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new UserType();
+        $fieldType = new UserType();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**

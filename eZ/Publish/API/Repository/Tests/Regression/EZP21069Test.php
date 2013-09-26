@@ -87,7 +87,6 @@ class EZP21069Test extends BaseTest
 
     public function testSearchOnCurrentAttributeContentGivesOnesResult()
     {
-        $this->markTestSkipped( "This test fails under PostgreSQL, it needs to be investigated" );
         $query = new Query();
         $query->criterion = new Field( 'name', Operator::EQ, "TheUpdatedNews" );
         $results = $this->getRepository()->getSearchService()->findContent( $query );
