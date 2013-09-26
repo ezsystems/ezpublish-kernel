@@ -265,6 +265,37 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the loadVersionInfoById() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfoById($contentId, $versionNo)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoById
+     */
+    public function testLoadVersionInfoByIdThrowsUnauthorizedExceptionForFirstDraft()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $contentDraft = $this->createContentDraftVersion1();
+
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadVersionInfoById(
+            $contentDraft->id,
+            $contentDraft->contentInfo->currentVersionNo
+        );
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the loadContentByContentInfo() method.
      *
      * @return void
