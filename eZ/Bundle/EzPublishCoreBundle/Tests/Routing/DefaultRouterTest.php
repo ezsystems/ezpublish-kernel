@@ -16,6 +16,42 @@ use Symfony\Component\Routing\RequestContext;
 
 class DefaultRouterTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    private $container;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    private $configResolver;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->container = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
+        $this->configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
+        $this->container
+            ->expects( $this->any() )
+            ->method( 'get' )
+            ->with( 'ezpublish.config.resolver' )
+            ->will( $this->returnValue( $this->configResolver ) );
+    }
+
+    /**
+     * @param array $mockedMethods
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|DefaultRouter
+     */
+    private function generateRouter( array $mockedMethods = array() )
+    {
+        return $this
+            ->getMockBuilder( 'eZ\\Bundle\\EzPublishCoreBundle\\Routing\\DefaultRouter' )
+            ->setConstructorArgs( array( $this->container, 'foo' ) )
+            ->setMethods( $mockedMethods )
+            ->getMock();
+    }
+
     public function testMatchRequestWithSemanticPathinfo()
     {
         $pathinfo = '/siteaccess/foo/bar';
@@ -31,11 +67,7 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
         $request->attributes->set( 'semanticPathinfo', $semanticPathinfo );
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultRouter $router */
-        $router = $this
-            ->getMockBuilder( 'eZ\\Bundle\\EzPublishCoreBundle\\Routing\\DefaultRouter' )
-            ->disableOriginalConstructor()
-            ->setMethods( array( 'match' ) )
-            ->getMock();
+        $router = $this->generateRouter( array( 'match' ) );
 
         $matchedParameters = array( '_controller' => 'AcmeBundle:myAction' );
         $router
@@ -61,17 +93,68 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $pathinfo ) );
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultRouter $router */
-        $router = $this
-            ->getMockBuilder( 'eZ\\Bundle\\EzPublishCoreBundle\\Routing\\DefaultRouter' )
-            ->disableOriginalConstructor()
-            ->setMethods( array( 'match' ) )
-            ->getMock();
-
+        $router = $this->generateRouter( array( 'match' ) );
         $router
             ->expects( $this->once() )
             ->method( 'match' )
             ->with( $pathinfo )
             ->will( $this->returnValue( $matchedParameters ) );
+        $this->assertSame( $matchedParameters, $router->matchRequest( $request ) );
+    }
+
+    /**
+     * @expectedException Symfony\Component\Routing\Exception\ResourceNotFoundException
+     */
+    public function testMatchRequestLegacyMode()
+    {
+        $pathinfo = '/siteaccess/foo/bar';
+        $semanticPathinfo = '/foo/bar';
+        $request = Request::create( $pathinfo );
+        $request->attributes->set( 'semanticPathinfo', $semanticPathinfo );
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultRouter $router */
+        $router = $this->generateRouter( array( 'match' ) );
+
+        $this->configResolver
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'legacy_mode' )
+            ->will( $this->returnValue( true ) );
+
+        $matchedParameters = array( '_route' => 'my_route' );
+        $router
+            ->expects( $this->once() )
+            ->method( 'match' )
+            ->with( $semanticPathinfo )
+            ->will( $this->returnValue( $matchedParameters ) );
+
+        $router->matchRequest( $request );
+    }
+
+    public function testMatchRequestLegacyModeAuthorizedRoute()
+    {
+        $pathinfo = '/siteaccess/foo/bar';
+        $semanticPathinfo = '/foo/bar';
+        $request = Request::create( $pathinfo );
+        $request->attributes->set( 'semanticPathinfo', $semanticPathinfo );
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultRouter $router */
+        $router = $this->generateRouter( array( 'match' ) );
+        $router->setLegacyAwareRoutes( array( 'my_legacy_aware_route' ) );
+
+        $this->configResolver
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'legacy_mode' )
+            ->will( $this->returnValue( true ) );
+
+        $matchedParameters = array( '_route' => 'my_legacy_aware_route' );
+        $router
+            ->expects( $this->once() )
+            ->method( 'match' )
+            ->with( $semanticPathinfo )
+            ->will( $this->returnValue( $matchedParameters ) );
+
         $this->assertSame( $matchedParameters, $router->matchRequest( $request ) );
     }
 
@@ -88,11 +171,7 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $url ) );
 
         /** @var DefaultRouter|\PHPUnit_Framework_MockObject_MockObject $router */
-        $router = $this
-            ->getMockBuilder( 'eZ\\Bundle\\EzPublishCoreBundle\\Routing\\DefaultRouter' )
-            ->disableOriginalConstructor()
-            ->setMethods( array( 'getGenerator' ) )
-            ->getMock();
+        $router = $this->generateRouter( array( 'getGenerator' ) );
         $router
             ->expects( $this->any() )
             ->method( 'getGenerator' )
@@ -134,11 +213,7 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $urlGenerated ) );
 
         /** @var DefaultRouter|\PHPUnit_Framework_MockObject_MockObject $router */
-        $router = $this
-            ->getMockBuilder( 'eZ\\Bundle\\EzPublishCoreBundle\\Routing\\DefaultRouter' )
-            ->disableOriginalConstructor()
-            ->setMethods( array( 'getGenerator' ) )
-            ->getMock();
+        $router = $this->generateRouter( array( 'getGenerator' ) );
         $router
             ->expects( $this->any() )
             ->method( 'getGenerator' )
