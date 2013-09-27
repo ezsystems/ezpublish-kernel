@@ -137,11 +137,15 @@ class LimitationConverterTest extends TestCase
             ObjectStateLimitationHandler::STATE_GROUP . 'invalid' => array( 5 )
         );
         $converter->toSPI( $policy );
+
+        $this->assertArrayHasKey( Limitation::STATE, $policy->limitations );
+
+        // Don't expect backend to return sorted result, so lets sort values before testing
+        sort( $policy->limitations[Limitation::STATE], SORT_NUMERIC );
+
         $this->assertEquals(
-            array(
-                Limitation::STATE => array( 1, 2, 5 )
-            ),
-            $policy->limitations,
+            array( 1, 2, 5 ),
+            $policy->limitations[Limitation::STATE],
             'Expected State limitation to be transformed into StateGroup_ limitations'
         );
     }
