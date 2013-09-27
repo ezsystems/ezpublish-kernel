@@ -194,6 +194,18 @@ class EzPublishCoreExtension extends Extension
                 )
             );
         }
+
+        // Define additional routes that are allowed with legacy_mode: true.
+        if ( isset( $config['router']['default_router']['legacy_aware_routes'] ) )
+        {
+            $container->setParameter(
+                'ezpublish.default_router.legacy_aware_routes',
+                array_merge(
+                    $container->getParameter( 'ezpublish.default_router.legacy_aware_routes' ),
+                    $config['router']['default_router']['legacy_aware_routes']
+                )
+            );
+        }
     }
 
     /**
