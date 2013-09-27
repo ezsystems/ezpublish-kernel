@@ -20,6 +20,5 @@
   <para>
     <link xlink:href="ezcontent://333" xlink:show="none" xml:id="id5" xlink:title="Content title" ezxhtml:class="linkClass5">Content name</link>
   </para>
-  <anchor xml:id="anchor"/>
-  <para>Some text for the anchored paragraph.</para>
+  <para><anchor xml:id="anchor"/>Some anchored content.</para>
 </section>

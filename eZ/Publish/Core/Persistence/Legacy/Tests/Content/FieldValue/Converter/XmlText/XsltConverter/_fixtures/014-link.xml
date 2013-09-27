@@ -18,6 +18,5 @@
   <paragraph>
     <link object_id="333" xhtml:id="id5" xhtml:title="Content title" class="linkClass5">Content name</link>
   </paragraph>
-  <anchor name="anchor"/>
-  <paragraph>Some text for the anchored paragraph.</paragraph>
+  <paragraph><anchor name="anchor"/>Some anchored content.</paragraph>
 </section>

@@ -16,6 +16,5 @@
   <p>
     <a href="ezcontent://333" id="id5" title="Content title" class="linkClass5">Content name</a>
   </p>
-  <a id="anchor"/>
-  <p>Some text for the anchored paragraph.</p>
+  <p><a id="anchor"/>Some anchored content.</p>
 </section>
