@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\FieldType\Tests\XmlText\Converter\Xslt;
 
 use eZ\Publish\Core\FieldType\XmlText\Converter\Xslt;
+use eZ\Publish\Core\FieldType\XmlText\Validator;
 use PHPUnit_Framework_TestCase;
 use DOMDocument;
 
@@ -19,46 +20,44 @@ use DOMDocument;
 abstract class BaseTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Path to the XSLT file.
-     *
-     * @var string
+     * @var \eZ\Publish\Core\FieldType\XmlText\Converter
      */
-    static protected $stylesheet;
+    protected $converter;
 
     /**
-     * Custom XSLT stylesheets configuration.
-     *
-     * @var string
+     * @var \eZ\Publish\Core\FieldType\XmlText\Validator
      */
-    static protected $customStylesheets = array();
+    protected $validator;
 
     /**
-     * Directory with input fixtures.
+     * @param string $inputFile
+     * @param string $outputFile
      *
-     * @var string
+     * @dataProvider providerForTestConvert
      */
-    static protected $inputDir;
-
-    /**
-     * Directory with expected conversion results.
-     *
-     * @var string
-     */
-    static protected $outputDir;
-
-    public function getXmlFixtures()
+    public function testConvert( $inputFile, $outputFile )
     {
-        $fixtures = array();
+        $inputDocument = $this->createDocument( $inputFile );
+        $outputDocument = $this->createDocument( $outputFile );
 
-        foreach ( glob( self::getInstallationDir() . "/" . static::$inputDir . "/*.xml" ) as $xmlFile )
+        $converter = $this->getConverter();
+        $convertedDocument = $converter->convert( $inputDocument );
+
+        $this->assertEquals(
+            $outputDocument->saveXML(),
+            $convertedDocument->saveXML()
+        );
+
+        $validator = $this->getConversionValidator();
+        if ( isset( $validator ) )
         {
-            $fixtures[] = array(
-                $xmlFile,
-                self::getInstallationDir() . "/" . static::$outputDir . "/" . basename( $xmlFile )
+            $errors = $validator->validate( $convertedDocument );
+            $this->assertTrue(
+                empty( $errors ),
+                "Conversion result did not validate against the configured schema:" .
+                $this->formatValidationErrors( $errors )
             );
         }
-
-        return $fixtures;
     }
 
     /**
@@ -78,71 +77,15 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         return $document;
     }
 
-    /**
-     * @param string $inputFile
-     * @param string $outputFile
-     *
-     * @dataProvider getXmlFixtures
-     */
-    public function testConvert( $inputFile, $outputFile )
+    protected function formatValidationErrors( array $errors )
     {
-        $inputDocument = $this->createDocument( $inputFile );
-        $outputDocument = $this->createDocument( $outputFile );
-
-        $converter = $this->getConverter();
-
-        $this->assertEquals(
-            $outputDocument->saveXML(),
-            $converter->convert( $inputDocument )->saveXML()
-        );
-    }
-
-    /**
-     * @param string $stylesheet
-     *
-     * @return string
-     */
-    protected function getStylesheetPath( $stylesheet )
-    {
-        return self::getInstallationDir() . "/" . $stylesheet;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getCustomStylesheets()
-    {
-        $customStylesheets = array();
-
-        foreach ( static::$customStylesheets as $customStylesheet )
+        $output = "\n";
+        foreach ( $errors as $error )
         {
-            $customStylesheets[] = array(
-                "path" => $this->getStylesheetPath( $customStylesheet["path"] ),
-                "priority" => $customStylesheet["priority"]
-            );
+            $output .= " - " . $error . "\n";
         }
-
-        return $customStylesheets;
+        return $output;
     }
-
-    /**
-     * @return string
-     */
-    static protected function getInstallationDir()
-    {
-        static $installDir = null;
-        if ( $installDir === null )
-        {
-            $config = require 'config.php';
-            $installDir = $config['service']['parameters']['install_dir'];
-        }
-        return $installDir;
-    }
-
-    /**
-     * @var \eZ\Publish\Core\FieldType\XmlText\Converter\Xslt
-     */
-    protected $converter;
 
     /**
      * @return \eZ\Publish\Core\FieldType\XmlText\Converter\Xslt
@@ -152,11 +95,70 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         if ( $this->converter === null )
         {
             $this->converter = new Xslt(
-                $this->getStylesheetPath( static::$stylesheet ),
-                $this->getCustomStyleSheets()
+                $this->getConversionTransformationStylesheet(),
+                $this->getCustomConversionTransformationStylesheets()
             );
         }
 
         return $this->converter;
     }
+
+    /**
+     * @return \eZ\Publish\Core\FieldType\XmlText\Validator
+     */
+    protected function getConversionValidator()
+    {
+        $validationSchema = $this->getConversionValidationSchema();
+        if ( $validationSchema !== null && $this->validator === null )
+        {
+            $this->validator = new Validator( $validationSchema );
+        }
+
+        return $this->validator;
+    }
+
+    /**
+     * Provider for conversion test.
+     *
+     * @return array
+     */
+    abstract public function providerForTestConvert();
+
+    /**
+     * Return the absolute path to conversion transformation stylesheet.
+     *
+     * @return string
+     */
+    abstract protected function getConversionTransformationStylesheet();
+
+    /**
+     * Return custom XSLT stylesheets configuration.
+     *
+     * Stylesheet paths must be absolute.
+     *
+     * Code example:
+     *
+     * <code>
+     *  array(
+     *      array(
+     *          "path" => __DIR__ . "/core.xsl",
+     *          "priority" => 100
+     *      ),
+     *      array(
+     *          "path" => __DIR__ . "/custom.xsl",
+     *          "priority" => 99
+     *      ),
+     *  )
+     * </code>
+     *
+     * @return array
+     */
+    abstract protected function getCustomConversionTransformationStylesheets();
+
+    /**
+     * Return the absolute path to conversion result validation schema, or null if no validation is to be performed.
+     *
+     * @return null|string
+     */
+    abstract protected function getConversionValidationSchema();
 }

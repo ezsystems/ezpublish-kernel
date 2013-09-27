@@ -54,7 +54,7 @@ class Validator
     protected function formatLibXmlError( LibXMLError $error )
     {
         return sprintf(
-            "%s in %d:%d: %s.",
+            "%s in %d:%d: %s",
             $this->errorTypes[$error->level],
             $error->line,
             $error->column,
@@ -72,7 +72,7 @@ class Validator
      */
     public function validate( DOMDocument $document )
     {
-        if ( !file_exists( $this->schema ) )
+        if ( !file_exists( $this->schema ) || !is_file( $this->schema ) )
         {
             throw new InvalidArgumentException(
                 "schemaPath",
@@ -95,7 +95,7 @@ class Validator
             default:
                 throw new InvalidArgumentException(
                     "schemaPath",
-                    "Validator is capable of handling XSD and RELAX NG schemas, ending in .xsd or .rng." .
+                    "Validator is capable of handling XSD and RELAX NG schema files, ending in .xsd or .rng." .
                     "File '{$this->schema}' does not seem to be either of these."
                 );
         }

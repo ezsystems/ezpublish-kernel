@@ -70,7 +70,7 @@ class Xslt implements Converter
     protected function formatLibXmlError( LibXMLError $error )
     {
         return sprintf(
-            "%s in %d:%d: %s.",
+            "%s in %d:%d: %s",
             $this->errorTypes[$error->level],
             $error->line,
             $error->column,

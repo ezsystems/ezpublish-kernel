@@ -131,7 +131,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
 </section>',
                 new InvalidArgumentException(
                     "\$inputValue",
-                    "Validation of XML content failed: Error in 3:0: Element section has extra content: h1."
+                    "Validation of XML content failed: Error in 3:0: Element section has extra content: h1"
                 )
             ),
             array(

@@ -55,7 +55,7 @@ class XsdValidator
     protected function formatLibXmlError( LibXMLError $error )
     {
         return sprintf(
-            "%s in %d:%d: %s.",
+            "%s in %d:%d: %s",
             $this->errorTypes[$error->level],
             $error->line,
             $error->column,
@@ -76,14 +76,13 @@ class XsdValidator
         {
             throw new InvalidArgumentException(
                 "schemaPath",
-                "Conversion of XML document cannot be performed, file '{$this->schema}' does not exist."
+                "Validation of XML document cannot be performed, file '{$this->schema}' does not exist."
             );
         }
 
         $oldSetting = libxml_use_internal_errors( true );
         libxml_clear_errors();
 
-        // @todo hanlde relax ng
         $document->schemaValidate( $this->schema );
 
         // Get all errors
