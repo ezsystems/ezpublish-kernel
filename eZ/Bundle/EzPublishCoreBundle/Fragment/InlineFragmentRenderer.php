@@ -20,14 +20,14 @@ class InlineFragmentRenderer extends BaseRenderer
      */
     private $fragmentUriGenerator;
 
-    protected function generateFragmentUri( ControllerReference $reference, Request $request )
+    protected function generateFragmentUri( ControllerReference $reference, Request $request, $absolute = false )
     {
         if ( !isset( $this->fragmentUriGenerator ) )
         {
             $this->fragmentUriGenerator = new FragmentUriGenerator;
         }
 
-        $this->fragmentUriGenerator->generateFragmentUri( $reference, $request );
+        $this->fragmentUriGenerator->generateFragmentUri( $reference, $request, $absolute );
         return parent::generateFragmentUri( $reference, $request );
     }
 }
