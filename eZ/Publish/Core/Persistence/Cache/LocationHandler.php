@@ -138,6 +138,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $return = $this->persistenceFactory->getLocationHandler()->move( $sourceId, $destinationParentId );
 
         $this->cache->clear( 'location' );//TIMBER! (path[Identification]String)
+        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup' );
 
         return $return;
     }
@@ -160,6 +161,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $return = $this->persistenceFactory->getLocationHandler()->hide( $locationId );
 
         $this->cache->clear( 'location' );//TIMBER! (visibility)
+        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup' );
 
         return $return;
     }
@@ -173,6 +175,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $return = $this->persistenceFactory->getLocationHandler()->unHide( $locationId );
 
         $this->cache->clear( 'location' );//TIMBER! (visibility)
+        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup' );
 
         return $return;
     }
@@ -189,6 +192,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $this->cache->clear( 'location', $locationId2 );
         $this->cache->clear( 'location', 'subtree' );
         $this->cache->clear( 'content', 'locations' );
+        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup' );
 
         return $return;
     }
@@ -215,6 +219,8 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $this->cache->getItem( 'location', $location->id )->set( $location );
         $this->cache->clear( 'location', 'subtree' );
         $this->cache->clear( 'content', 'locations', $location->contentId );
+        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', $location->contentId );
+        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', 'inherited/' . $location->contentId );
 
         return $location;
     }
@@ -229,6 +235,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
 
         $this->cache->clear( 'location' );//TIMBER!
         $this->cache->clear( 'content' );//TIMBER!
+        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup' );
 
         return $return;
     }
