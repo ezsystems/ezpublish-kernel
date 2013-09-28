@@ -25,6 +25,8 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\SPI\FieldType\FieldStorageEvents\PostPublishFieldStorageEvent;
+use eZ\Publish\SPI\FieldType\FieldStorageEvents\PrePublishFieldStorageEvent;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct as SPIContentUpdateStruct;
@@ -716,6 +718,92 @@ class ContentTest extends BaseServiceMockTest
                 )
             ),
             array()
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Repository\ContentService::publishVersion()
+     * @covers eZ\Publish\Core\Repository\ContentService::internalPublishVersion()
+     */
+    public function testPublishVersion()
+    {
+        $repository = $this->getRepositoryMock();
+
+        $contentService = $this->getPartlyMockedContentService( array( "internalLoadContent", "internalPublishVersion" ) );
+
+        /** @var Content|\PHPUnit_Framework_MockObject_MockObject $contentMock */
+        $contentMock = $this->getMock( 'eZ\\Publish\\API\\Repository\Values\\Content\\Content' );
+
+        $contentService->expects( $this->once() )
+            ->method( 'internalLoadContent' )
+            ->with()
+            ->will( $this->returnValue( $contentMock ) );
+
+        /** @var VersionInfo|\PHPUnit_Framework_MockObject_MockObject $versionInfoMock */
+        $versionInfoMock = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo' );
+
+        /** @var ContentInfo|\PHPUnit_Framework_MockObject_MockObject $contentInfoMock */
+        $contentInfoMock = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' );
+
+        $contentMock->expects( $this->any() )
+            ->method( 'getVersionInfo' )
+            ->will( $this->returnValue( $versionInfoMock ) );
+
+        $versionInfoMock->expects( $this->any() )
+            ->method( 'getContentInfo' )
+            ->will( $this->returnValue( $contentInfoMock ) );
+
+        $contentInfoMock->expects( $this->any() )
+            ->method( '__get' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'published', false ),
+                        array( 'id' => 0 )
+                    )
+                )
+            );
+
+        $versionInfoMock->expects( $this->any() )
+            ->method( '__get' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'versionNo' => 1 )
+                    )
+                )
+            );
+
+        $getMap = array(
+            array( 'published', false ),
+            array( 'id' => 0 )
+        );
+        $contentInfoMock->expects( $this->any() )
+            ->method( '__get' )
+            ->will( $this->returnValueMap( $getMap ) );
+
+        $repository->expects( $this->once() )
+            ->method( "canUser" )
+            ->with( "content", "create" )
+            ->will( $this->returnValue( true ) );
+
+        /** @var \eZ\Publish\SPI\Persistence\Content\Handler $contentHandlerMock */
+        $contentHandlerMock = $this->getPersistenceMockHandler( 'Content\\Handler' );
+
+        $repository->expects( $this->once() )
+            ->method( 'beginTransaction' );
+
+        $contentService->expects( $this->once() )
+            ->method( 'internalPublishVersion' )
+            ->with( $versionInfoMock )
+            ->will( $this->returnValue( $contentMock ) );
+
+        $repository->expects( $this->once() )
+            ->method( 'commit' );
+
+        self::assertEquals(
+            $contentMock,
+            $contentService->publishVersion( $versionInfoMock )
         );
     }
 

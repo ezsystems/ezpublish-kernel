@@ -11,9 +11,11 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
+use eZ\Publish\SPI\FieldType\FieldStorage\Events\PrePublishFieldStorageEvent;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use Mockery;
 
 /**
  * Test case for Content Handler
@@ -40,6 +42,13 @@ class StorageHandlerTest extends TestCase
      * @var \eZ\Publish\SPI\FieldType\FieldStorage
      */
     protected $storageMock;
+
+    /**
+     * Mock for event aware external storage (doesn't mock FieldStorage, only EventAware)
+     *
+     * @var \eZ\Publish\SPI\FieldType\FieldStorage
+     */
+    protected $eventAwareStorageMock;
 
     /**
      * Mock for versionInfo
@@ -169,6 +178,59 @@ class StorageHandlerTest extends TestCase
         $handler->deleteFieldData( 'foobar', new VersionInfo(), array( 1, 2, 3 ) );
     }
 
+    public function testSendEventNotAware()
+    {
+        $storageHandler = $this->getStorageHandler();
+        $storageRegistryMock = $this->getStorageRegistryMock();
+        $storageMock = $this->getStorageMock();
+        $event = new PrePublishFieldStorageEvent();
+        $event->setField( new Field( array( 'type' => 'test' ) ) );
+
+        $storageRegistryMock
+            ->expects( $this->once() )
+            ->method( 'getStorage' )
+            ->with( $event->getField()->type )
+            ->will( $this->returnValue( $storageMock ) );
+
+        $storageMock
+            ->expects( $this->never() )
+            ->method( 'handleEvent' );
+
+        self::assertEquals(
+            false,
+            $storageHandler->sendEvent( $event )
+        );
+    }
+
+    public function testSendEventAware()
+    {
+        $returnValue = true;
+
+        $storageHandler = $this->getStorageHandler();
+        $storageRegistryMock = $this->getStorageRegistryMock();
+        $storageMock = $this->getEventAwareStorageMock();
+        $event = new PrePublishFieldStorageEvent();
+        $event->setField( new Field( array( 'type' => 'test' ) ) );
+
+        $storageRegistryMock
+            ->expects( $this->once() )
+            ->method( 'getStorage' )
+            ->with( $event->getField()->type )
+            ->will( $this->returnValue( $storageMock ) );
+
+        $storageMock
+            ->shouldReceive( 'handleEvent' )
+            ->once()
+            ->andReturn( $returnValue );
+
+        self::assertEquals(
+            $returnValue,
+            $storageHandler->sendEvent(
+                $event
+            )
+        );
+    }
+
     /**
      * Returns the StorageHandler to test
      *
@@ -199,7 +261,7 @@ class StorageHandlerTest extends TestCase
     /**
      * Returns a StorageRegistry mock
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getStorageRegistryMock()
     {
@@ -217,7 +279,7 @@ class StorageHandlerTest extends TestCase
     /**
      * Returns a Storage mock
      *
-     * @return \eZ\Publish\SPI\FieldType\FieldStorage
+     * @return \eZ\Publish\SPI\FieldType\FieldStorage|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getStorageMock()
     {
@@ -228,6 +290,22 @@ class StorageHandlerTest extends TestCase
             );
         }
         return $this->storageMock;
+    }
+
+    /**
+     * Returns a Storage mock
+     *
+     * @return \eZ\Publish\SPI\FieldType\FieldStorage\EventAware|\Mockery\MockInterface
+     */
+    protected function getEventAwareStorageMock()
+    {
+        if ( !isset( $this->eventAwareStorageMock ) )
+        {
+            $this->eventAwareStorageMock = Mockery::mock(
+                'eZ\Publish\SPI\FieldType\FieldStorage\EventAware, eZ\Publish\SPI\FieldType\FieldStorage'
+            );
+        }
+        return $this->eventAwareStorageMock;
     }
 
     protected function getVersionInfoMock()

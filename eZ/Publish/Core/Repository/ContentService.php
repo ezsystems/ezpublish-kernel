@@ -44,6 +44,8 @@ use eZ\Publish\SPI\Persistence\Content\UpdateStruct as SPIContentUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Field as SPIField;
 use eZ\Publish\SPI\Persistence\Content\Relation as SPIRelation;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreateStruct;
+use eZ\Publish\SPI\FieldType\FieldStorage\Events\PrePublishFieldStorageEvent;
+use eZ\Publish\SPI\FieldType\FieldStorage\Events\PostPublishFieldStorageEvent;
 use Exception;
 
 /**
@@ -1504,7 +1506,7 @@ class ContentService implements ContentServiceInterface
     public function publishVersion( APIVersionInfo $versionInfo )
     {
         $content = $this->internalLoadContent(
-            $versionInfo->contentInfo->id,
+            $versionInfo->getContentInfo()->id,
             null,
             $versionInfo->versionNo
         );
@@ -1553,11 +1555,19 @@ class ContentService implements ContentServiceInterface
             throw new BadStateException( "\$versionInfo", "Only versions in draft status can be published." );
         }
 
+        $contentHandler = $this->persistenceHandler->contentHandler();
+
+        $contentHandler->sendFieldStorageEvent(
+            $versionInfo->getContentInfo()->id,
+            $versionInfo->versionNo,
+            new PrePublishFieldStorageEvent()
+        );
+
         $metadataUpdateStruct = new SPIMetadataUpdateStruct();
         $metadataUpdateStruct->publicationDate = isset( $publicationDate ) ? $publicationDate : time();
         $metadataUpdateStruct->modificationDate = $metadataUpdateStruct->publicationDate;
 
-        $spiContent = $this->persistenceHandler->contentHandler()->publish(
+        $spiContent = $contentHandler->publish(
             $versionInfo->getContentInfo()->id,
             $versionInfo->versionNo,
             $metadataUpdateStruct
@@ -1565,6 +1575,13 @@ class ContentService implements ContentServiceInterface
         $content = $this->domainMapper->buildContentDomainObject( $spiContent );
 
         $this->publishUrlAliasesForContent( $content );
+
+        $spiContent = $contentHandler->sendFieldStorageEvent(
+            $versionInfo->getContentInfo()->id,
+            $versionInfo->versionNo,
+            new PostPublishFieldStorageEvent()
+        );
+        $content = $this->domainMapper->buildContentDomainObject( $spiContent );
 
         return $content;
     }
