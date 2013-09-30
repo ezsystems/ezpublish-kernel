@@ -268,23 +268,33 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
-      <xsl:if test="@ezxhtml:width != ''">
-        <xsl:attribute name="style">
-          <xsl:choose>
-            <xsl:when test="substring( @ezxhtml:width, string-length( @ezxhtml:width) ) = '%'">
-              <xsl:value-of select="concat( 'width:', @ezxhtml:width, ';' )"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="concat( 'width:', @ezxhtml:width, 'px;' )"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:if test="@valign">
-        <xsl:attribute name="valign">
-          <xsl:value-of select="@valign"/>
-        </xsl:attribute>
-      </xsl:if>
+      <xsl:variable name="inlineStyleWidth">
+        <xsl:choose>
+          <xsl:when test="@ezxhtml:width != ''">
+            <xsl:choose>
+              <xsl:when test="substring( @ezxhtml:width, string-length( @ezxhtml:width ) ) = '%'">
+                <xsl:value-of select="concat( 'width:', @ezxhtml:width, ';' )"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="concat( 'width:', @ezxhtml:width, 'px;' )"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="''"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:variable name="inlineStyleValign">
+        <xsl:choose>
+          <xsl:when test="@valign">
+            <xsl:value-of select="concat( 'vertical-align:', @valign, ';' )"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="''"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
       <xsl:if test="@colspan">
         <xsl:attribute name="colspan">
           <xsl:value-of select="@colspan"/>
@@ -305,6 +315,11 @@
           <xsl:value-of select="@scope"/>
         </xsl:attribute>
       </xsl:if>
+      <xsl:if test="$inlineStyleWidth != '' or $inlineStyleValign != ''">
+        <xsl:attribute name="style">
+          <xsl:value-of select="concat( $inlineStyleWidth, $inlineStyleValign )"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
@@ -316,23 +331,33 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
-      <xsl:if test="@ezxhtml:width != ''">
-        <xsl:attribute name="style">
-          <xsl:choose>
-            <xsl:when test="substring( @ezxhtml:width, string-length( @ezxhtml:width ) ) = '%'">
-              <xsl:value-of select="concat( 'width:', @ezxhtml:width, ';' )"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="concat( 'width:', @ezxhtml:width, 'px;' )"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:if test="@valign">
-        <xsl:attribute name="valign">
-          <xsl:value-of select="@valign"/>
-        </xsl:attribute>
-      </xsl:if>
+      <xsl:variable name="inlineStyleWidth">
+        <xsl:choose>
+          <xsl:when test="@ezxhtml:width != ''">
+            <xsl:choose>
+              <xsl:when test="substring( @ezxhtml:width, string-length( @ezxhtml:width ) ) = '%'">
+                <xsl:value-of select="concat( 'width:', @ezxhtml:width, ';' )"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="concat( 'width:', @ezxhtml:width, 'px;' )"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="''"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:variable name="inlineStyleValign">
+        <xsl:choose>
+          <xsl:when test="@valign">
+            <xsl:value-of select="concat( 'vertical-align:', @valign, ';' )"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="''"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
       <xsl:if test="@colspan">
         <xsl:attribute name="colspan">
           <xsl:value-of select="@colspan"/>
@@ -341,6 +366,11 @@
       <xsl:if test="@rowspan">
         <xsl:attribute name="rowspan">
           <xsl:value-of select="@rowspan"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="$inlineStyleWidth != '' or $inlineStyleValign != ''">
+        <xsl:attribute name="style">
+          <xsl:value-of select="concat( $inlineStyleWidth, $inlineStyleValign )"/>
         </xsl:attribute>
       </xsl:if>
       <xsl:apply-templates/>

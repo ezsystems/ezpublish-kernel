@@ -292,10 +292,15 @@
           </xsl:attribute>
         </xsl:if>
       </xsl:if>
-      <xsl:if test="@valign">
-        <xsl:attribute name="valign">
-          <xsl:value-of select="@valign"/>
-        </xsl:attribute>
+      <xsl:if test="contains( @style, 'vertical-align' )">
+        <xsl:variable name="verticalAlign">
+          <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( @style, 'vertical-align' ), ';' ), ':' ), ';' ), ' ', '' )"/>
+        </xsl:variable>
+        <xsl:if test="$verticalAlign != ''">
+          <xsl:attribute name="valign">
+            <xsl:value-of select="$verticalAlign"/>
+          </xsl:attribute>
+        </xsl:if>
       </xsl:if>
       <xsl:if test="@colspan">
         <xsl:attribute name="colspan">
@@ -345,10 +350,15 @@
           </xsl:attribute>
         </xsl:if>
       </xsl:if>
-      <xsl:if test="@valign">
-        <xsl:attribute name="valign">
-          <xsl:value-of select="@valign"/>
-        </xsl:attribute>
+      <xsl:if test="contains( @style, 'vertical-align' )">
+        <xsl:variable name="verticalAlign">
+          <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( @style, 'vertical-align' ), ';' ), ':' ), ';' ), ' ', '' )"/>
+        </xsl:variable>
+        <xsl:if test="$verticalAlign != ''">
+          <xsl:attribute name="valign">
+            <xsl:value-of select="$verticalAlign"/>
+          </xsl:attribute>
+        </xsl:if>
       </xsl:if>
       <xsl:if test="@colspan">
         <xsl:attribute name="colspan">
