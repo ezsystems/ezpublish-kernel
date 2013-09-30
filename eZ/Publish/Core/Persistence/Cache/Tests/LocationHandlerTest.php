@@ -462,13 +462,13 @@ class LocationHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
-            ->expects( $this->at(0) )
+            ->expects( $this->at( 0 ) )
             ->method( 'clear' )
             ->with( 'location' )
             ->will( $this->returnValue( true ) );
 
         $this->cacheMock
-            ->expects( $this->at(1) )
+            ->expects( $this->at( 1 ) )
             ->method( 'clear' )
             ->with( 'user', 'role', 'assignments', 'byGroup' )
             ->will( $this->returnValue( true ) );
