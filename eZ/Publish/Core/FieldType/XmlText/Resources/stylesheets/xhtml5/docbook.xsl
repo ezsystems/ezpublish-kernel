@@ -217,10 +217,22 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
-      <xsl:if test="@width">
-        <xsl:attribute name="width">
-          <xsl:value-of select="@width"/>
-        </xsl:attribute>
+      <xsl:if test="contains( @style, 'width:' )">
+        <xsl:variable name="width">
+          <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( @style, 'width' ), ';' ), ':' ), ';' ), ' ', '' )"/>
+        </xsl:variable>
+        <xsl:if test="$width != ''">
+          <xsl:attribute name="width">
+            <xsl:choose>
+              <xsl:when test="substring( $width, string-length( $width ) - 1 ) = 'px'">
+                <xsl:value-of select="substring-before( $width, 'px' )"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="$width"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:attribute>
+        </xsl:if>
       </xsl:if>
       <xsl:if test="@border">
         <xsl:attribute name="border">

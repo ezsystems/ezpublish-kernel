@@ -218,8 +218,15 @@
         </xsl:attribute>
       </xsl:if>
       <xsl:if test="@width">
-        <xsl:attribute name="width">
-          <xsl:value-of select="@width"/>
+        <xsl:attribute name="style">
+          <xsl:choose>
+            <xsl:when test="substring( @width, string-length( @width) ) = '%'">
+              <xsl:value-of select="concat( 'width:', @width, ';' )"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="concat( 'width:', @width, 'px;' )"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:attribute>
       </xsl:if>
       <xsl:if test="@border">
