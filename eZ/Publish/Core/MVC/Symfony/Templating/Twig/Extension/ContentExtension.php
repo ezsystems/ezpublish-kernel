@@ -18,9 +18,8 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Twig_Extension;
 use Twig_Environment;
-use Twig_Function_Method;
-use Twig_Filter_Method;
 use Twig_SimpleFunction;
+use Twig_SimpleFilter;
 use Twig_Template;
 use InvalidArgumentException;
 use LogicException;
@@ -141,17 +140,21 @@ class ContentExtension extends Twig_Extension
     public function getFunctions()
     {
         return array(
-            'ez_render_field' => new Twig_Function_Method(
-                $this,
-                'renderField',
+            new Twig_SimpleFunction(
+                'ez_render_field',
+                array( $this, 'renderField' ),
                 array( 'is_safe' => array( 'html' ) )
             ),
-            'ez_render_fielddefinition_settings' => new Twig_Function_Method(
-                $this,
-                'renderFieldDefinitionSettings',
+            new Twig_SimpleFunction(
+                'ez_render_fielddefinition_settings',
+                array( $this, 'renderFieldDefinitionSettings' ),
                 array( 'is_safe' => array( 'html' ) )
             ),
-            'ez_image_alias' => new Twig_Function_Method( $this, 'getImageVariation' ),
+            new Twig_SimpleFunction(
+                'ez_image_alias',
+                array( $this, 'getImageVariation' ),
+                array( 'is_safe' => array( 'html' ) )
+            ),
             new Twig_SimpleFunction(
                 'ez_content_name',
                 array( $this, 'getContentNameTranslated' )
@@ -167,7 +170,11 @@ class ContentExtension extends Twig_Extension
     public function getFilters()
     {
         return array(
-            'xmltext_to_html5' => new Twig_Filter_Method( $this, 'xmltextToHtml5' ),
+            new Twig_SimpleFilter(
+                'xmltext_to_html5',
+                array( $this, 'xmlTextToHtml5' ),
+                array( 'is_safe' => array( 'html' ) )
+            )
         );
     }
 
