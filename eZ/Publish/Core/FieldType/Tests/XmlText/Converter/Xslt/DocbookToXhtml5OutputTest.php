@@ -87,6 +87,6 @@ class DocbookToXhtml5OutputTest extends BaseTest
      */
     protected function getConversionValidationSchema()
     {
-        return null;
+        return __DIR__ . "/../../../../XmlText/Resources/schemas/ezxhtml5/ezxhtml5.xsd";
     }
 }
