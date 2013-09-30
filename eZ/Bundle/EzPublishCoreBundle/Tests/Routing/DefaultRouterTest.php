@@ -56,14 +56,7 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
     {
         $pathinfo = '/siteaccess/foo/bar';
         $semanticPathinfo = '/foo/bar';
-        $request = $this
-            ->getMockBuilder( 'Symfony\\Component\\HttpFoundation\\Request' )
-            ->setMethods( array( 'getPathInfo' ) )
-            ->getMock();
-        $request
-            ->expects( $this->any() )
-            ->method( 'getPathInfo' )
-            ->will( $this->returnValue( $pathinfo ) );
+        $request = Request::create( $pathinfo );
         $request->attributes->set( 'semanticPathinfo', $semanticPathinfo );
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultRouter $router */
@@ -83,14 +76,7 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
         $matchedParameters = array( '_controller' => 'AcmeBundle:myAction' );
         $pathinfo = '/siteaccess/foo/bar';
 
-        $request = $this
-            ->getMockBuilder( 'Symfony\\Component\\HttpFoundation\\Request' )
-            ->setMethods( array( 'getPathInfo' ) )
-            ->getMock();
-        $request
-            ->expects( $this->atLeastOnce() )
-            ->method( 'getPathInfo' )
-            ->will( $this->returnValue( $pathinfo ) );
+        $request = Request::create( $pathinfo );
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultRouter $router */
         $router = $this->generateRouter( array( 'match' ) );
