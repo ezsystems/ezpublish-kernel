@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
+use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
@@ -19,6 +20,7 @@ use Twig_Extension;
 use Twig_Environment;
 use Twig_Function_Method;
 use Twig_Filter_Method;
+use Twig_SimpleFunction;
 use Twig_Template;
 use InvalidArgumentException;
 use LogicException;
@@ -97,7 +99,12 @@ class ContentExtension extends Twig_Extension
      */
     protected $configResolver;
 
-    public function __construct( ContainerInterface $container, ConfigResolverInterface $resolver )
+    /**
+     * @var \eZ\Publish\Core\Helper\TranslationHelper
+     */
+    protected $contentHelper;
+
+    public function __construct( ContainerInterface $container, ConfigResolverInterface $resolver, TranslationHelper $contentHelper )
     {
         $comp = function ( $a, $b )
         {
@@ -113,6 +120,7 @@ class ContentExtension extends Twig_Extension
         $this->blocks = array();
         $this->container = $container;
         $this->configResolver = $resolver;
+        $this->contentHelper = $contentHelper;
     }
 
     /**
@@ -143,7 +151,11 @@ class ContentExtension extends Twig_Extension
                 'renderFieldDefinitionSettings',
                 array( 'is_safe' => array( 'html' ) )
             ),
-            'ez_image_alias' => new Twig_Function_Method( $this, 'getImageVariation' )
+            'ez_image_alias' => new Twig_Function_Method( $this, 'getImageVariation' ),
+            new Twig_SimpleFunction(
+                'ez_content_name',
+                array( $this, 'getContentNameTranslated' )
+            )
         );
     }
 
@@ -264,26 +276,7 @@ class ContentExtension extends Twig_Extension
      */
     public function renderField( Content $content, $fieldIdentifier, array $params = array() )
     {
-        if ( !isset( $params['lang'] ) )
-        {
-            $languages = $this->configResolver->getParameter( 'languages' );
-        }
-        else
-        {
-            $languages = array( $params['lang'] );
-            unset( $params['lang'] );
-        }
-        // Always add null as last entry so that we can use it pass it as languageCode $content->getField(),
-        // forcing to use the main language if all others fail.
-        $languages[] = null;
-
-        // Loop over prioritized languages to get the appropriate translated field.
-        foreach ( $languages as $lang )
-        {
-            $field = $content->getField( $fieldIdentifier, $lang );
-            if ( $field instanceof Field )
-                break;
-        }
+        $field = $this->contentHelper->getTranslatedField( $content, $fieldIdentifier, isset( $params['lang'] ) ? $params['lang'] : null );
 
         if ( !$field instanceof Field )
         {
@@ -514,5 +507,16 @@ class ContentExtension extends Twig_Extension
         }
 
         return $this->fieldTypeIdentifiers[$key];
+    }
+
+    /**
+     * @param \eZ\Publish\Core\Repository\Values\Content\Content $content
+     * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
+     *
+     * @return string
+     */
+    public function getContentNameTranslated( Content $content, $forcedLanguage = null )
+    {
+        return $this->contentHelper->getTranslatedName( $content, $forcedLanguage );
     }
 }
