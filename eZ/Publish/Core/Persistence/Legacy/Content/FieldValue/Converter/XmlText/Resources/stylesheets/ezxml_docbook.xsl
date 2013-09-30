@@ -247,14 +247,24 @@
           <xsl:value-of select="@width"/>
         </xsl:attribute>
       </xsl:if>
-      <xsl:if test="@border != 0">
-        <xsl:attribute name="border">
-          <xsl:value-of select="@border"/>
-        </xsl:attribute>
-      </xsl:if>
       <xsl:if test="@custom:summary != ''">
         <xsl:attribute name="title">
           <xsl:value-of select="@custom:summary"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@border != 0">
+        <xsl:attribute name="border">
+          <xsl:value-of select="'1'"/>
+        </xsl:attribute>
+        <xsl:attribute name="style">
+          <xsl:choose>
+            <xsl:when test="contains( @border, '%' )">
+              <xsl:value-of select="concat( 'border-width:', @border, ';' )"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="concat( 'border-width:', @border, 'px;' )"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:attribute>
       </xsl:if>
       <xsl:if test="$tableElement = 'table'">

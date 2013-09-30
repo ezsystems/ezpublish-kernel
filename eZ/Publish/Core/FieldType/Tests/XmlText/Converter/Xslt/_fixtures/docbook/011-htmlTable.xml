@@ -4,7 +4,7 @@
          xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
          xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
          version="5.0-variant ezpublish-1.0">
-  <table class="tableClass" width="24%" border="42" title="tableTitle">
+  <table class="tableClass" width="24%" title="tableTitle">
     <caption>Table caption.</caption>
     <tbody>
       <tr class="rowClass1">

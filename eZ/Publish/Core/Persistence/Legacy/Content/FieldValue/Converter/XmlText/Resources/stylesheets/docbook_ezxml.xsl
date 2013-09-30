@@ -249,8 +249,18 @@
         </xsl:if>
         <xsl:attribute name="border">
           <xsl:choose>
-            <xsl:when test="@border">
-              <xsl:value-of select="@border"/>
+            <xsl:when test="contains( @style, 'border-width' )">
+              <xsl:variable name="borderWidth">
+                <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( @style, 'border-width' ), ';' ), ':' ), ';' ), ' ', '' )"/>
+              </xsl:variable>
+              <xsl:choose>
+                <xsl:when test="substring( $borderWidth, string-length( $borderWidth ) - 1 ) = 'px'">
+                  <xsl:value-of select="substring-before( $borderWidth, 'px' )"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="$borderWidth"/>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
               <xsl:text>0</xsl:text>

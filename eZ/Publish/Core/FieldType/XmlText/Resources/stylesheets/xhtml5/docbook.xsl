@@ -234,15 +234,25 @@
           </xsl:attribute>
         </xsl:if>
       </xsl:if>
-      <xsl:if test="@border">
-        <xsl:attribute name="border">
-          <xsl:value-of select="@border"/>
-        </xsl:attribute>
-      </xsl:if>
       <xsl:if test="@title">
         <xsl:attribute name="title">
           <xsl:value-of select="@title"/>
         </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@border != ''">
+        <xsl:attribute name="border">
+          <xsl:value-of select="'1'"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="contains( @style, 'border-width:' )">
+        <xsl:variable name="borderWidth">
+          <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( @style, 'border-width' ), ';' ), ':' ), ';' ), ' ', '' )"/>
+        </xsl:variable>
+        <xsl:if test="$borderWidth != ''">
+          <xsl:attribute name="style">
+            <xsl:value-of select="concat( 'border-width:', $borderWidth, ';' )"/>
+          </xsl:attribute>
+        </xsl:if>
       </xsl:if>
       <xsl:if test="$tablename = 'table'">
         <caption>

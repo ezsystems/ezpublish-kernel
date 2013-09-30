@@ -217,26 +217,51 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
-      <xsl:if test="@width">
-        <xsl:attribute name="style">
-          <xsl:choose>
-            <xsl:when test="substring( @width, string-length( @width) ) = '%'">
-              <xsl:value-of select="concat( 'width:', @width, ';' )"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="concat( 'width:', @width, 'px;' )"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:if test="@border">
+      <xsl:variable name="inlineStyleWidth">
+        <xsl:choose>
+          <xsl:when test="@width != ''">
+            <xsl:choose>
+              <xsl:when test="substring( @width, string-length( @width ) ) = '%'">
+                <xsl:value-of select="concat( 'width:', @width, ';' )"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="concat( 'width:', @width, 'px;' )"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="''"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:variable name="inlineStyleBorder">
+        <xsl:choose>
+          <xsl:when test="contains( @style, 'border-width:' )">
+            <xsl:variable name="borderWidth">
+              <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( @style, 'border-width' ), ';' ), ':' ), ';' ), ' ', '' )"/>
+            </xsl:variable>
+            <xsl:if test="$borderWidth != ''">
+              <xsl:value-of select="concat( 'border-width:', $borderWidth, ';' )"/>
+            </xsl:if>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="''"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:if test="@border != ''">
         <xsl:attribute name="border">
-          <xsl:value-of select="@border"/>
+          <xsl:value-of select="'1'"/>
         </xsl:attribute>
       </xsl:if>
       <xsl:if test="@title">
         <xsl:attribute name="title">
           <xsl:value-of select="@title"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="$inlineStyleWidth != '' or $inlineStyleBorder != ''">
+        <xsl:attribute name="style">
+          <xsl:value-of select="concat( $inlineStyleWidth, $inlineStyleBorder )"/>
         </xsl:attribute>
       </xsl:if>
       <xsl:if test="local-name(.) = 'table' and ./docbook:caption != ''">
