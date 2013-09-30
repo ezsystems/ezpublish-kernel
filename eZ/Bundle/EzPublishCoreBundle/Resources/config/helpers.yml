@@ -1,0 +1,9 @@
+parameters:
+    # Helpers
+    ezpublish.translation_helper.class: eZ\Publish\Core\Helper\TranslationHelper
+
+services:
+    # Helpers
+    ezpublish.translation_helper:
+        class: %ezpublish.translation_helper.class%
+        arguments: [@ezpublish.config.resolver]
