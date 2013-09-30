@@ -1162,6 +1162,34 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the loadRelations() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadRelations()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadRelations
+     */
+    public function testLoadRelationsForDraftVersionThrowsUnauthorizedException()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $draft = $this->createContentDraftVersion1();
+
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->loadRelations( $draft->versionInfo );
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the loadReverseRelations() method.
      *
      * @return void
