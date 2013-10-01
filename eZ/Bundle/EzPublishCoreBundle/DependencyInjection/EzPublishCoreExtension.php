@@ -71,6 +71,7 @@ class EzPublishCoreExtension extends Extension
         $this->handleSessionLoading( $container, $loader );
         $this->handleCache( $config, $container, $loader );
         $this->handleLocale( $config, $container, $loader );
+        $this->handleHelpers( $config, $container, $loader );
 
         // Map settings
         foreach ( $this->configParsers as $configParser )
@@ -296,5 +297,17 @@ class EzPublishCoreExtension extends Extension
             'ezpublish.locale.conversion_map',
             $config['locale_conversion'] + $container->getParameter( 'ezpublish.locale.conversion_map' )
         );
+    }
+
+    /**
+     * Handle helpers.
+     *
+     * @param array $config
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \Symfony\Component\DependencyInjection\Loader\FileLoader $loader
+     */
+    private function handleHelpers( array $config, ContainerBuilder $container, FileLoader $loader )
+    {
+        $loader->load( 'helpers.yml' );
     }
 }
