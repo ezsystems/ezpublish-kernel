@@ -60,4 +60,3 @@ class CriteriaConverter
         throw new RuntimeException( 'No conversion for criterion found.' );
     }
 }
-
