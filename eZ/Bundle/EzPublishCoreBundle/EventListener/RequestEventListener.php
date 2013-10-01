@@ -137,6 +137,7 @@ class RequestEventListener implements EventSubscriberInterface
             {
                 $siteaccess = $request->attributes->get( 'siteaccess' );
                 $semanticPathinfo = $request->attributes->get( 'semanticPathinfo' );
+                $queryString = $request->getQueryString();
                 if (
                     $request->attributes->get( 'prependSiteaccessOnRedirect', true )
                     && $siteaccess instanceof SiteAccess
@@ -148,7 +149,7 @@ class RequestEventListener implements EventSubscriberInterface
 
                 $event->setResponse(
                     new RedirectResponse(
-                        $semanticPathinfo,
+                        $semanticPathinfo . $queryString ? "?$querystring" : '',
                         301
                     )
                 );
