@@ -472,6 +472,121 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
+     * Create test Content with ezcountry field having multiple countries selected.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected function createMultipleCountriesContent()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+
+        $createStruct = $contentTypeService->newContentTypeCreateStruct( "countries-multiple" );
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->remoteId = "countries-multiple-123";
+        $createStruct->names = array( "eng-GB" => "Multiple countries" );
+        $createStruct->creatorId = 14;
+        $createStruct->creationDate = new \DateTime();
+
+        $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct( "countries", "ezcountry" );
+        $fieldCreate->names = array( "eng-GB" => "Countries" );
+        $fieldCreate->fieldGroup = "main";
+        $fieldCreate->position = 1;
+        $fieldCreate->isTranslatable = false;
+        $fieldCreate->isSearchable = true;
+        $fieldCreate->fieldSettings = array( "isMultiple" => true );
+
+        $createStruct->addFieldDefinition( $fieldCreate );
+
+        $contentGroup = $contentTypeService->loadContentTypeGroupByIdentifier( "Content" );
+        $contentTypeDraft = $contentTypeService->createContentType( $createStruct, array( $contentGroup ) );
+        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+        $contentType = $contentTypeService->loadContentType( $contentTypeDraft->id );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->remoteId = "countries-multiple-456";
+        $createStruct->alwaysAvailable = false;
+        $createStruct->setField(
+            "countries",
+            array( "BE", "DE", "FR", "HR", "NO", "PT", "RU" )
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $content = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        return $content;
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testFieldCollectionContains()
+    {
+        $testContent = $this->createMultipleCountriesContent();
+
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof \eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr )
+        {
+            $country = "BE";
+        }
+        else
+        {
+            $country = "Belgium";
+        }
+
+        $query = new Query(
+            array(
+                'criterion' => new Criterion\Field(
+                    "countries",
+                    Criterion\Operator::CONTAINS,
+                    $country
+                )
+            )
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 1, $result->totalCount );
+        $this->assertEquals(
+            $testContent->id,
+            $result->searchHits[0]->valueObject->id
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testFieldCollectionContains
+     */
+    public function testFieldCollectionContainsNoMatch()
+    {
+        $this->createMultipleCountriesContent();
+        $query = new Query(
+            array(
+                'criterion'   => new Criterion\Field(
+                    "countries",
+                    Criterion\Operator::CONTAINS,
+                    "Netherlands Antilles"
+                )
+            )
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 0, $result->totalCount );
+    }
+
+    /**
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testInvalidFieldIdentifierRange()
@@ -1022,6 +1137,7 @@ class SearchServiceTest extends BaseTest
      *
      * @param Query $query
      * @param string $fixture
+     * @param null|callable $closure
      *
      * @return void
      */

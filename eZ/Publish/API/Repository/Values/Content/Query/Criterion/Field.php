@@ -31,6 +31,7 @@ class Field extends Criterion implements CriterionInterface
             new Specifications( Operator::LTE, Specifications::FORMAT_SINGLE ),
             new Specifications( Operator::LIKE, Specifications::FORMAT_SINGLE ),
             new Specifications( Operator::BETWEEN, Specifications::FORMAT_ARRAY, null, 2 ),
+            new Specifications( Operator::CONTAINS, Specifications::FORMAT_SINGLE ),
         );
     }
 }
