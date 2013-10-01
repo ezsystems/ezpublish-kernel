@@ -30,7 +30,7 @@ services:
 
     ezpublish.twig.extension.content:
         class: %ezpublish.twig.extension.content.class%
-        arguments: [@service_container, @ezpublish.config.resolver, @ezpublish.content_helper]
+        arguments: [@service_container, @ezpublish.config.resolver, @ezpublish.translation_helper]
         tags:
             - {name: twig.extension}
 
