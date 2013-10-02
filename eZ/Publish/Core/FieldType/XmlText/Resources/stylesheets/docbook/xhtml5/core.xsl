@@ -238,7 +238,10 @@
         <xsl:choose>
           <xsl:when test="contains( @style, 'border-width:' )">
             <xsl:variable name="borderWidth">
-              <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( @style, 'border-width' ), ';' ), ':' ), ';' ), ' ', '' )"/>
+              <xsl:call-template name="extractStyleValue">
+                <xsl:with-param name="style" select="@style"/>
+                <xsl:with-param name="property" select="'border-width'"/>
+              </xsl:call-template>
             </xsl:variable>
             <xsl:if test="$borderWidth != ''">
               <xsl:value-of select="concat( 'border-width:', $borderWidth, ';' )"/>
@@ -400,6 +403,12 @@
       </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template name="extractStyleValue">
+    <xsl:param name="style"/>
+    <xsl:param name="property"/>
+    <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( $style, $property ), ';' ), ':' ), ';' ), ' ', '' )"/>
   </xsl:template>
 
 </xsl:stylesheet>

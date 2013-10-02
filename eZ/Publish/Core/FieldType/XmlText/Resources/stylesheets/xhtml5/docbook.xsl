@@ -219,7 +219,10 @@
       </xsl:if>
       <xsl:if test="contains( @style, 'width:' )">
         <xsl:variable name="width">
-          <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( @style, 'width' ), ';' ), ':' ), ';' ), ' ', '' )"/>
+          <xsl:call-template name="extractStyleValue">
+            <xsl:with-param name="style" select="@style"/>
+            <xsl:with-param name="property" select="'width'"/>
+          </xsl:call-template>
         </xsl:variable>
         <xsl:if test="$width != ''">
           <xsl:attribute name="width">
@@ -246,7 +249,10 @@
       </xsl:if>
       <xsl:if test="contains( @style, 'border-width:' )">
         <xsl:variable name="borderWidth">
-          <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( @style, 'border-width' ), ';' ), ':' ), ';' ), ' ', '' )"/>
+          <xsl:call-template name="extractStyleValue">
+            <xsl:with-param name="style" select="@style"/>
+            <xsl:with-param name="property" select="'border-width'"/>
+          </xsl:call-template>
         </xsl:variable>
         <xsl:if test="$borderWidth != ''">
           <xsl:attribute name="style">
@@ -287,7 +293,10 @@
       </xsl:if>
       <xsl:if test="contains( @style, 'width' )">
         <xsl:variable name="width">
-          <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( @style, 'width' ), ';' ), ':' ), ';' ), ' ', '' )"/>
+          <xsl:call-template name="extractStyleValue">
+            <xsl:with-param name="style" select="@style"/>
+            <xsl:with-param name="property" select="'width'"/>
+          </xsl:call-template>
         </xsl:variable>
         <xsl:if test="$width != ''">
           <xsl:attribute name="ezxhtml:width">
@@ -304,7 +313,10 @@
       </xsl:if>
       <xsl:if test="contains( @style, 'vertical-align' )">
         <xsl:variable name="verticalAlign">
-          <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( @style, 'vertical-align' ), ';' ), ':' ), ';' ), ' ', '' )"/>
+          <xsl:call-template name="extractStyleValue">
+            <xsl:with-param name="style" select="@style"/>
+            <xsl:with-param name="property" select="'vertical-align'"/>
+          </xsl:call-template>
         </xsl:variable>
         <xsl:if test="$verticalAlign != ''">
           <xsl:attribute name="valign">
@@ -345,7 +357,10 @@
       </xsl:if>
       <xsl:if test="contains( @style, 'width:' )">
         <xsl:variable name="width">
-          <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( @style, 'width' ), ';' ), ':' ), ';' ), ' ', '' )"/>
+          <xsl:call-template name="extractStyleValue">
+            <xsl:with-param name="style" select="@style"/>
+            <xsl:with-param name="property" select="'width'"/>
+          </xsl:call-template>
         </xsl:variable>
         <xsl:if test="$width != ''">
           <xsl:attribute name="ezxhtml:width">
@@ -362,7 +377,10 @@
       </xsl:if>
       <xsl:if test="contains( @style, 'vertical-align' )">
         <xsl:variable name="verticalAlign">
-          <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( @style, 'vertical-align' ), ';' ), ':' ), ';' ), ' ', '' )"/>
+          <xsl:call-template name="extractStyleValue">
+            <xsl:with-param name="style" select="@style"/>
+            <xsl:with-param name="property" select="'vertical-align'"/>
+          </xsl:call-template>
         </xsl:variable>
         <xsl:if test="$verticalAlign != ''">
           <xsl:attribute name="valign">
@@ -383,4 +401,11 @@
       <xsl:apply-templates/>
     </td>
   </xsl:template>
+
+  <xsl:template name="extractStyleValue">
+    <xsl:param name="style"/>
+    <xsl:param name="property"/>
+    <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( $style, $property ), ';' ), ':' ), ';' ), ' ', '' )"/>
+  </xsl:template>
+
 </xsl:stylesheet>
