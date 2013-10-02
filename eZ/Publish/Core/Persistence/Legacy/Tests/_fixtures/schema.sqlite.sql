@@ -315,7 +315,9 @@ CREATE TABLE eznode_assignment (
   parent_remote_id text(100) NOT NULL,
   remote_id text(100) NOT NULL DEFAULT 0,
   sort_field integer DEFAULT 1,
-  sort_order integer DEFAULT 1
+  sort_order integer DEFAULT 1,
+  priority integer NOT NULL DEFAULT 0,
+  is_hidden integer NOT NULL DEFAULT 0
 );
 CREATE INDEX eznode_assignment_co_version ON eznode_assignment (contentobject_version);
 CREATE INDEX eznode_assignment_coid_cov ON eznode_assignment (contentobject_id,contentobject_version);
