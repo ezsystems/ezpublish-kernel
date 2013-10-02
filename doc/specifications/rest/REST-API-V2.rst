@@ -2039,10 +2039,10 @@ Create View
 :Headers:
     :Accept:
         :application/vnd.ez.api.View+xml: the view in xml format (see View_)
-        :application/vnd.ez.api.View+json: the view in xml format (see View_)
+        :application/vnd.ez.api.View+json: the view in json format (see View_)
     :Content-Type:
         :application/vnd.ez.api.ViewInput+xml: the view input in xml format (see View_)
-        :application/vnd.ez.api.ViewInput+json: the view input in xml format (see View_)
+        :application/vnd.ez.api.ViewInput+json: the view input in json format (see View_)
 :Response:
 
 .. code:: http
@@ -2076,7 +2076,8 @@ Perform a query on articles with a specific title.
       <identifier>TitleView</identifier>
       <Query>
         <Criteria>
-          <FullTextCritierion>Title</FieldCritierion>
+          <ContentTypeIdentifierCriterion>image</ContentTypeIdentifierCriterion>
+          <SectionIdentifierCriterion>media</SectionIdentifierCriterion>
         </Criteria>
         <limit>10</limit>
         <offset>0</offset>
