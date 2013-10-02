@@ -2060,7 +2060,7 @@ Create View
 XML Example
 '''''''''''
 
-Perform a query on articles with a specific title.
+Perform a query on images withing the media section, sorted by name, limiting results to 10.
 
 .. code:: http
 
