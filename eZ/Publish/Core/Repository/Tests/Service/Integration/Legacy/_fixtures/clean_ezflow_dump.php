@@ -21131,6 +21131,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '1',
   'sort_order' => '1',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
  1 =>
  array (
@@ -21145,6 +21147,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '9',
   'sort_order' => '1',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
  2 =>
  array (
@@ -21159,6 +21163,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '9',
   'sort_order' => '1',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
  3 =>
  array (
@@ -21173,6 +21179,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '1',
   'sort_order' => '1',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
  4 =>
  array (
@@ -21187,6 +21195,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '1',
   'sort_order' => '1',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
  5 =>
  array (
@@ -21201,6 +21211,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '1',
   'sort_order' => '1',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
  6 =>
  array (
@@ -21215,6 +21227,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '1',
   'sort_order' => '1',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
  7 =>
  array (
@@ -21229,6 +21243,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '1',
   'sort_order' => '1',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
  8 =>
  array (
@@ -21243,6 +21259,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '9',
   'sort_order' => '1',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
  9 =>
  array (
@@ -21257,6 +21275,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '9',
   'sort_order' => '1',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
  10 =>
  array (
@@ -21271,6 +21291,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '9',
   'sort_order' => '1',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
  11 =>
  array (
@@ -21285,6 +21307,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '9',
   'sort_order' => '1',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
  12 =>
  array (
@@ -21299,6 +21323,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '1',
   'sort_order' => '1',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
  13 =>
  array (
@@ -21313,6 +21339,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '2',
   'sort_order' => '0',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
  14 =>
  array (
@@ -21327,6 +21355,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '1',
   'sort_order' => '1',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
  15 =>
  array (
@@ -21341,6 +21371,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '1',
   'sort_order' => '1',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
  16 =>
  array (
@@ -21355,6 +21387,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '8',
   'sort_order' => '1',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
  17 =>
  array (
@@ -21369,6 +21403,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '1',
   'sort_order' => '1',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
  18 =>
  array (
@@ -21383,6 +21419,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '1',
   'sort_order' => '1',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
  19 =>
  array (
@@ -21397,6 +21435,8 @@ array (
   'remote_id' => '0',
   'sort_field' => '1',
   'sort_order' => '1',
+  'priority' => '0',
+  'is_hidden' => '0',
  ),
 ),
 'eznotificationcollection' =>
