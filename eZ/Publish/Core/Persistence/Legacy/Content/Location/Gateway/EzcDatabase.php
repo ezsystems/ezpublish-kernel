@@ -751,6 +751,12 @@ class EzcDatabase extends Gateway
             )->set(
                 $this->handler->quoteColumn( 'sort_order' ),
                 $query->bindValue( Location::SORT_ORDER_DESC, null, \PDO::PARAM_INT )
+            )->set(
+                $this->handler->quoteColumn( 'priority' ),
+                $query->bindValue( $createStruct->priority, null, \PDO::PARAM_INT )
+            )->set(
+                $this->handler->quoteColumn( 'is_hidden' ),
+                $query->bindValue( $createStruct->hidden, null, \PDO::PARAM_INT )
             );
         $query->prepare()->execute();
     }
