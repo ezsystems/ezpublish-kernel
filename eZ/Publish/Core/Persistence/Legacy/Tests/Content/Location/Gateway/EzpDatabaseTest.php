@@ -856,6 +856,51 @@ class EzpDatabaseTest extends TestCase
     /**
      * @depends testCreateLocationNodeAssignmentCreation
      */
+    public function testConvertNodeAssignmentsMainLocation()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+
+        $handler = $this->getLocationGateway();
+        $handler->createNodeAssignment(
+            new CreateStruct(
+                array(
+                    'contentId' => 68,
+                    'contentVersion' => 1,
+                    'mainLocationId' => true,
+                    'priority' => 101,
+                    'remoteId' => 'some_id',
+                    'sortField' => 1,
+                    'sortOrder' => 1,
+                    'hidden' => true,
+                    // Note: not stored in node assignment, will be calculated from parent
+                    // visibility upon Location creation from node assignment
+                    'invisible' => false
+                )
+            ),
+            '77',
+            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
+        );
+
+        $handler->createLocationsFromNodeAssignments( 68, 1 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( 228 ) ),
+            $query
+                ->select( 'main_node_id' )
+                ->from( 'ezcontentobject_tree' )
+                ->where(
+                    $query->expr->lAnd(
+                        $query->expr->eq( 'contentobject_id', 68 ),
+                        $query->expr->eq( 'parent_node_id', 77 )
+                    )
+                )
+        );
+    }
+
+    /**
+     * @depends testCreateLocationNodeAssignmentCreation
+     */
     public function testConvertNodeAssignmentsUpdateAssignment()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
