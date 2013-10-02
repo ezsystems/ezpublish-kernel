@@ -880,6 +880,9 @@ class EzcDatabase extends Gateway
             {
                 $mainLocationId = $this->getMainNodeId( $contentId );
             }
+
+            $parentLocationData = $this->getBasicNodeData( $row['parent_node'] );
+            $isInvisible = $row['is_hidden'] || $parentLocationData['is_hidden'] || $parentLocationData['is_invisible'];
             $this->create(
                 new CreateStruct(
                     array(
@@ -891,9 +894,10 @@ class EzcDatabase extends Gateway
                         'sortOrder' => $row['sort_order'],
                         'priority' => $row['priority'],
                         'hidden' => $row['is_hidden'],
+                        'invisible' => $isInvisible,
                     )
                 ),
-                $this->getBasicNodeData( $row['parent_node'] )
+                $parentLocationData
             );
 
             $this->updateNodeAssignment(
