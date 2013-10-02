@@ -889,6 +889,8 @@ class EzcDatabase extends Gateway
                         'remoteId' => $row['remote_id'],
                         'sortField' => $row['sort_field'],
                         'sortOrder' => $row['sort_order'],
+                        'priority' => $row['priority'],
+                        'hidden' => $row['is_hidden'],
                     )
                 ),
                 $this->getBasicNodeData( $row['parent_node'] )
