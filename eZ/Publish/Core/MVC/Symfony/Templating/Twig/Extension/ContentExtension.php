@@ -158,6 +158,10 @@ class ContentExtension extends Twig_Extension
             new Twig_SimpleFunction(
                 'ez_content_name',
                 array( $this, 'getContentNameTranslated' )
+            ),
+            new Twig_SimpleFunction(
+                'ez_field_value',
+                array( $this, 'getTranslatedFieldValue' )
             )
         );
     }
@@ -525,5 +529,17 @@ class ContentExtension extends Twig_Extension
     public function getContentNameTranslated( Content $content, $forcedLanguage = null )
     {
         return $this->contentHelper->getTranslatedName( $content, $forcedLanguage );
+    }
+
+    /**
+     * @param \eZ\Publish\Core\Repository\Values\Content\Content $content
+     * @param string $fieldDefIdentifier Identifier for the field we want to get the value from.
+     * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale).
+     *
+     * @return mixed A primitive type or a field type Value object depending on the field type.
+     */
+    public function getTranslatedFieldValue( Content $content, $fieldDefIdentifier, $forcedLanguage = null )
+    {
+        return $this->contentHelper->getTranslatedField( $content, $fieldDefIdentifier, $forcedLanguage )->value;
     }
 }
