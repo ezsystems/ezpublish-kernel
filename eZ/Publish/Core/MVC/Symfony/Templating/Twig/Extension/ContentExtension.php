@@ -157,7 +157,7 @@ class ContentExtension extends Twig_Extension
             ),
             new Twig_SimpleFunction(
                 'ez_content_name',
-                array( $this, 'getContentNameTranslated' )
+                array( $this, 'getTranslatedContentName' )
             ),
             new Twig_SimpleFunction(
                 'ez_field_value',
@@ -526,7 +526,7 @@ class ContentExtension extends Twig_Extension
      *
      * @return string
      */
-    public function getContentNameTranslated( Content $content, $forcedLanguage = null )
+    public function getTranslatedContentName( Content $content, $forcedLanguage = null )
     {
         return $this->contentHelper->getTranslatedName( $content, $forcedLanguage );
     }
