@@ -200,12 +200,6 @@ class GlobalHelperTest extends PHPUnit_Framework_TestCase
     {
         $this->container
             ->expects( $this->once() )
-            ->method( 'has' )
-            ->with( 'ezpublish.config.resolver' )
-            ->will( $this->returnValue( true ) );
-
-        $this->container
-            ->expects( $this->once() )
             ->method( 'get' )
             ->with( 'ezpublish.config.resolver' )
             ->will(
@@ -213,5 +207,40 @@ class GlobalHelperTest extends PHPUnit_Framework_TestCase
             );
 
         $this->helper->getConfigResolver();
+    }
+
+    public function testGetRootLocation()
+    {
+        $locationServiceMock = $this->getMock( 'eZ\\Publish\\API\\Repository\\LocationService' );
+        $configResolverMock = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
+        $this->container
+            ->expects( $this->any() )
+            ->method( 'get' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'ezpublish.config.resolver', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $configResolverMock ),
+                        array( 'ezpublish.api.service.location', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $locationServiceMock )
+                    )
+                )
+            );
+
+        $rootLocationId = 2;
+        $configResolverMock
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'content.tree_root.location_id' )
+            ->will( $this->returnValue( $rootLocationId ) );
+
+        $rootLocation = $this
+            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' )
+            ->setConstructorArgs( array( array( 'id' => $rootLocationId ) ) );
+        $locationServiceMock
+            ->expects( $this->once() )
+            ->method( 'loadLocation' )
+            ->with( $rootLocationId )
+            ->will( $this->returnValue( $rootLocation ) );
+
+        $this->assertSame( $rootLocation, $this->helper->getRootLocation() );
     }
 }
