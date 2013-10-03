@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
+use eZ\Publish\Core\Helper\FieldHelper;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Field;
@@ -101,9 +102,14 @@ class ContentExtension extends Twig_Extension
     /**
      * @var \eZ\Publish\Core\Helper\TranslationHelper
      */
-    protected $contentHelper;
+    protected $translationHelper;
 
-    public function __construct( ContainerInterface $container, ConfigResolverInterface $resolver, TranslationHelper $contentHelper )
+    /**
+     * @var \eZ\Publish\Core\Helper\FieldHelper
+     */
+    protected $fieldHelper;
+
+    public function __construct( ContainerInterface $container, ConfigResolverInterface $resolver, TranslationHelper $translationHelper, FieldHelper $fieldHelper )
     {
         $comp = function ( $a, $b )
         {
@@ -119,7 +125,8 @@ class ContentExtension extends Twig_Extension
         $this->blocks = array();
         $this->container = $container;
         $this->configResolver = $resolver;
-        $this->contentHelper = $contentHelper;
+        $this->translationHelper = $translationHelper;
+        $this->fieldHelper = $fieldHelper;
     }
 
     /**
@@ -162,7 +169,11 @@ class ContentExtension extends Twig_Extension
             new Twig_SimpleFunction(
                 'ez_field_value',
                 array( $this, 'getTranslatedFieldValue' )
-            )
+            ),
+            new Twig_SimpleFunction(
+                'ez_is_field_empty',
+                array( $this, 'isFieldEmpty' )
+            ),
         );
     }
 
@@ -287,7 +298,7 @@ class ContentExtension extends Twig_Extension
      */
     public function renderField( Content $content, $fieldIdentifier, array $params = array() )
     {
-        $field = $this->contentHelper->getTranslatedField( $content, $fieldIdentifier, isset( $params['lang'] ) ? $params['lang'] : null );
+        $field = $this->translationHelper->getTranslatedField( $content, $fieldIdentifier, isset( $params['lang'] ) ? $params['lang'] : null );
 
         if ( !$field instanceof Field )
         {
@@ -528,7 +539,7 @@ class ContentExtension extends Twig_Extension
      */
     public function getTranslatedContentName( Content $content, $forcedLanguage = null )
     {
-        return $this->contentHelper->getTranslatedName( $content, $forcedLanguage );
+        return $this->translationHelper->getTranslatedName( $content, $forcedLanguage );
     }
 
     /**
@@ -540,6 +551,20 @@ class ContentExtension extends Twig_Extension
      */
     public function getTranslatedFieldValue( Content $content, $fieldDefIdentifier, $forcedLanguage = null )
     {
-        return $this->contentHelper->getTranslatedField( $content, $fieldDefIdentifier, $forcedLanguage )->value;
+        return $this->translationHelper->getTranslatedField( $content, $fieldDefIdentifier, $forcedLanguage )->value;
+    }
+
+    /**
+     * Checks if a given field is considered empty.
+     *
+     * @param \eZ\Publish\Core\Repository\Values\Content\Content $content
+     * @param string $fieldDefIdentifier Identifier for the field we want to get the value from.
+     * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale).
+     *
+     * @return bool
+     */
+    public function isFieldEmpty( Content $content, $fieldDefIdentifier, $forcedLanguage = null )
+    {
+        return $this->fieldHelper->isFieldEmpty( $content, $fieldDefIdentifier, $forcedLanguage );
     }
 }
