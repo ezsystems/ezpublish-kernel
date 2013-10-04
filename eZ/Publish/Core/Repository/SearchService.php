@@ -13,7 +13,6 @@ use eZ\Publish\Core\Repository\DomainMapper;
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
@@ -53,17 +52,24 @@ class SearchService implements SearchServiceInterface
     protected $domainMapper;
 
     /**
+     * @var \eZ\Publish\Core\Repository\PermissionsCriterionHandler
+     */
+    protected $permissionsCriterionHandler;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandler
-     * @param array $settings
      * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
+     * @param \eZ\Publish\Core\Repository\PermissionsCriterionHandler $permissionsCriterionHandler
+     * @param array $settings
      */
     public function __construct(
         RepositoryInterface $repository,
         Handler $searchHandler,
         DomainMapper $domainMapper,
+        PermissionsCriterionHandler $permissionsCriterionHandler,
         array $settings = array()
     )
     {
@@ -74,6 +80,7 @@ class SearchService implements SearchServiceInterface
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
+        $this->permissionsCriterionHandler = $permissionsCriterionHandler;
     }
 
     /**
@@ -94,7 +101,7 @@ class SearchService implements SearchServiceInterface
     {
         $query = clone $query;
 
-        if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $query->criterion ) )
+        if ( $filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion( $query->criterion ) )
         {
             return new SearchResult( array( 'time' => 0, 'totalCount' => 0 ) );
         }
@@ -133,7 +140,7 @@ class SearchService implements SearchServiceInterface
      */
     public function findSingle( Criterion $criterion, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
-        if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $criterion ) )
+        if ( $filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion( $criterion ) )
         {
             throw new NotFoundException( 'Content', '*' );
         }
@@ -154,138 +161,5 @@ class SearchService implements SearchServiceInterface
     public function suggest( $prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null )
     {
 
-    }
-
-    /**
-     * Adds content, read Permission criteria if needed and return false if no access at all
-     *
-     * @access private Temporarily made accessible until Location service stops using searchHandler()
-     * @uses getPermissionsCriterion()
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     *
-     * @return boolean|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
-     */
-    public function addPermissionsCriterion( Criterion &$criterion )
-    {
-        $permissionCriterion = $this->getPermissionsCriterion();
-        if ( $permissionCriterion === true || $permissionCriterion === false )
-        {
-            return $permissionCriterion;
-        }
-
-        // Merge with original $criterion
-        if ( $criterion instanceof Criterion\LogicalAnd )
-        {
-            $criterion->criteria[] = $permissionCriterion;
-        }
-        else
-        {
-            $criterion = new Criterion\LogicalAnd(
-                array(
-                    $criterion,
-                    $permissionCriterion
-                )
-            );
-        }
-        return true;
-    }
-
-    /**
-     * Get content-read Permission criteria if needed and return false if no access at all
-     *
-     * @access private Temporarily made accessible until Location service stops using searchHandler()
-     *
-     * @uses \eZ\Publish\API\Repository::hasAccess()
-     * @throws \RuntimeException If empty array of limitations are provided from hasAccess()
-     *
-     * @param string $module
-     * @param string $function
-     *
-     * @return boolean|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
-     */
-    public function getPermissionsCriterion( $module = 'content', $function = 'read' )
-    {
-        $permissionSets = $this->repository->hasAccess( $module, $function );
-        if ( $permissionSets === false || $permissionSets === true )
-        {
-            return $permissionSets;
-        }
-
-        if ( empty( $permissionSets ) )
-            throw new \RuntimeException( "Got an empty array of limitations from hasAccess( '{$module}', '{$function}' )" );
-
-        /**
-         * RoleAssignment is a OR condition, so is policy, while limitations is a AND condition
-         *
-         * If RoleAssignment has limitation then policy OR conditions are wrapped in a AND condition with the
-         * role limitation, otherwise it will be merged into RoleAssignment's OR condition.
-         */
-        $currentUser = $this->repository->getCurrentUser();
-        $roleAssignmentOrCriteria = array();
-        $roleService = $this->repository->getRoleService();
-        foreach ( $permissionSets as $permissionSet )
-        {
-            // $permissionSet is a RoleAssignment, but in the form of role limitation & role policies hash
-            $policyOrCriteria = array();
-            /**
-             * @var \eZ\Publish\API\Repository\Values\User\Policy $policy
-             */
-            foreach ( $permissionSet['policies'] as $policy )
-            {
-                $limitations = $policy->getLimitations();
-                if ( $limitations === '*' || empty( $limitations ) )
-                    continue;
-
-                $limitationsAndCriteria = array();
-                foreach ( $limitations as $limitation )
-                {
-                    $type = $roleService->getLimitationType( $limitation->getIdentifier() );
-                    $limitationsAndCriteria[] = $type->getCriterion( $limitation, $currentUser );
-                }
-
-                $policyOrCriteria[] = isset( $limitationsAndCriteria[1] ) ?
-                    new Criterion\LogicalAnd( $limitationsAndCriteria ) :
-                    $limitationsAndCriteria[0];
-            }
-
-            /**
-             * Apply role limitations if there is one
-             * @var \eZ\Publish\API\Repository\Values\User\Limitation[] $permissionSet
-             */
-            if ( $permissionSet['limitation'] instanceof Limitation )
-            {
-                // We need to match both the limitation AND *one* of the policies, aka; roleLimit AND policies(OR)
-                $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
-                if ( !empty( $policyOrCriteria ) )
-                {
-                    $roleAssignmentOrCriteria[] = new Criterion\LogicalAnd(
-                        array(
-                            $type->getCriterion( $permissionSet['limitation'], $currentUser ),
-                            isset( $policyOrCriteria[1] ) ? new Criterion\LogicalOr( $policyOrCriteria ) : $policyOrCriteria[0]
-                        )
-                    );
-                }
-                else
-                {
-                    $roleAssignmentOrCriteria[] = $type->getCriterion( $permissionSet['limitation'], $currentUser );
-                }
-            }
-            // Otherwise merge $policyOrCriteria into $roleAssignmentOrCriteria
-            else if ( !empty( $policyOrCriteria ) )
-            {
-                // There is no role limitation, so any of the policies can globally match in the returned OR criteria
-                $roleAssignmentOrCriteria = empty( $roleAssignmentOrCriteria ) ?
-                    $policyOrCriteria :
-                    array_merge( $roleAssignmentOrCriteria, $policyOrCriteria );
-            }
-        }
-
-        if ( empty( $roleAssignmentOrCriteria ) )
-            return false;
-
-        return isset( $roleAssignmentOrCriteria[1] ) ?
-            new Criterion\LogicalOr( $roleAssignmentOrCriteria ) :
-            $roleAssignmentOrCriteria[0];
     }
 }

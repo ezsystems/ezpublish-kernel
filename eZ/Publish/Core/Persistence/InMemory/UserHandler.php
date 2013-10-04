@@ -178,6 +178,7 @@ class UserHandler implements UserHandlerInterface
         $list = $this->backend->find(
             'User\\Role',
             array( 'id' => $roleId ),
+            array(),
             array(
                 'policies' => array(
                     'type' => 'User\\Policy',
@@ -205,6 +206,7 @@ class UserHandler implements UserHandlerInterface
         $list = $this->backend->find(
             'User\\Role',
             array( 'identifier' => $identifier ),
+            array(),
             array(
                 'policies' => array(
                     'type' => 'User\\Policy',
@@ -227,6 +229,7 @@ class UserHandler implements UserHandlerInterface
     {
         return $this->backend->find(
             'User\\Role',
+            array(),
             array(),
             array(
                 'policies' => array(
@@ -288,6 +291,7 @@ class UserHandler implements UserHandlerInterface
                 $list = $this->backend->find(
                     'Content',
                     array( 'id' => $location->contentId ),
+                    array(),
                     array(
                         'versionInfo' => array(
                             'type' => 'Content\\VersionInfo',
@@ -465,6 +469,7 @@ class UserHandler implements UserHandlerInterface
         $list = $this->backend->find(
             'Content',
             array( 'id' => $userId ),
+            array(),
             array(
                 'versionInfo' => array(
                     'type' => 'Content\\VersionInfo',
@@ -503,6 +508,7 @@ class UserHandler implements UserHandlerInterface
                 $list2 = $this->backend->find(
                     'Content',
                     array( 'id' => $location->contentId ),
+                    array(),
                     array(
                         'versionInfo' => array(
                             'type' => 'Content\\VersionInfo',
@@ -546,6 +552,7 @@ class UserHandler implements UserHandlerInterface
         $list = $this->backend->find(
             'User\\Role',
             array( 'groupIds' => $content->versionInfo->contentInfo->id ),
+            array(),
             array(
                 'policies' => array(
                     'type' => 'User\\Policy',

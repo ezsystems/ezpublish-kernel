@@ -130,6 +130,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         return $this->backend->find(
             'Content\\Type',
             array( 'groupIds' => $groupId, 'status' => $status ),
+            array(),
             array(
                 'fieldDefinitions' => array(
                     'type' => 'Content\\Type\\FieldDefinition',
@@ -154,6 +155,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         $type = $this->backend->find(
             'Content\\Type',
             array( 'id' => $contentTypeId, 'status' => $status ),
+            array(),
             array(
                 'fieldDefinitions' => array(
                     'type' => 'Content\\Type\\FieldDefinition',
@@ -182,6 +184,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         $type = $this->backend->find(
             'Content\\Type',
             array( 'identifier' => $identifier, 'status' => Type::STATUS_DEFINED ),
+            array(),
             array(
                 'fieldDefinitions' => array(
                     'type' => 'Content\\Type\\FieldDefinition',
@@ -210,6 +213,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         $type = $this->backend->find(
             'Content\\Type',
             array( 'remoteId' => $remoteId, 'status' => Type::STATUS_DEFINED ),
+            array(),
             array(
                 'fieldDefinitions' => array(
                     'type' => 'Content\\Type\\FieldDefinition',

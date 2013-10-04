@@ -175,6 +175,7 @@ class Backend
      *
      * @param string $type
      * @param array $match A multi level array with property => value to match against
+     * @param array $excludeMatch A multi level array with property => value to explicitly exclude
      * @param array $joinInfo Optional info on how to join in other objects to become part of a
      *                        aggregate where $type is root.
      *                        Format:
@@ -193,9 +194,9 @@ class Backend
      *
      * @return object[]
      */
-    public function find( $type, array $match = array(), array $joinInfo = array() )
+    public function find( $type, array $match = array(), array $excludeMatch = array(), array $joinInfo = array() )
     {
-        $items = $this->rawFind( $type, $match, $joinInfo );
+        $items = $this->rawFind( $type, $match, $excludeMatch, $joinInfo );
         foreach ( $items as $key => $item )
             $items[$key] = $this->toValue( $type, $item, $joinInfo );
 
@@ -315,15 +316,16 @@ class Backend
      *
      * @param string $type
      * @param array $match A flat array with property => value to match against
+     * @param array $excludeMatch A flat array with property => value to explicitly exclude
      * @param array $joinInfo See {@link find()}
      *
      * @uses rawFind()
      *
      * @return int
      */
-    public function count( $type, array $match = array(), array $joinInfo = array() )
+    public function count( $type, array $match = array(), array $excludeMatch = array(), array $joinInfo = array() )
     {
-        return count( $this->rawFind( $type, $match, $joinInfo ) );
+        return count( $this->rawFind( $type, $match, $excludeMatch, $joinInfo ) );
     }
 
     /**
@@ -377,13 +379,14 @@ class Backend
      *
      * @param string $type
      * @param array $match A multi level array with property => value to match against
+     * @param array $excludeMatch A multi level array with property => value to explicitly exclude
      * @param array $joinInfo See {@link find()}
      *
      * @return array[]
      * @throws InvalidArgumentValue On invalid $type
      * @throws LogicException When there is a collision between match rules in $joinInfo and $match
      */
-    protected function rawFind( $type, array $match = array(), array $joinInfo = array() )
+    protected function rawFind( $type, array $match = array(), array $excludeMatch = array(), array $joinInfo = array() )
     {
         if ( !is_scalar( $type ) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
@@ -402,10 +405,12 @@ class Backend
                 $item[$joinProperty] = $this->rawFind(
                     $joinItem['type'],
                     $joinItem['match'],
-                    ( isset( $joinItem['sub'] ) ? $joinItem['sub'] : array() )
+                    isset( $joinItem['excludeMatch'] ) ? $joinItem['excludeMatch'] : array(),
+                    isset( $joinItem['sub'] ) ? $joinItem['sub'] : array()
                 );
             }
-            if ( $this->match( $item, $match ) )
+
+            if ( $this->match( $item, $match ) && ( empty( $excludeMatch ) || !$this->match( $item, $excludeMatch ) ) )
                 $items[] = $item;
         }
         return $items;
