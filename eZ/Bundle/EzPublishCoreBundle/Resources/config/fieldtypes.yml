@@ -352,6 +352,7 @@ services:
             - @ezpublish.fieldType.ezbinaryfile.IOService
             - @ezpublish.fieldType.ezbinaryfile.pathGenerator
             - @ezpublish.core.io.mimeTypeDetector
+            - @?logger
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezbinaryfile}
 
@@ -418,6 +419,7 @@ services:
             - @ezpublish.fieldType.ezimage.IOService
             - @ezpublish.fieldType.ezimage.pathGenerator
             - @ezpublish.fieldType.metadataHandler.imagesize
+            - @?logger
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezimage}
 
@@ -451,6 +453,7 @@ services:
             - @ezpublish.fieldType.ezbinaryfile.IOService
             - @ezpublish.fieldType.ezbinaryfile.pathGenerator
             - @ezpublish.core.io.mimeTypeDetector
+            - @?logger
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezmedia}
 

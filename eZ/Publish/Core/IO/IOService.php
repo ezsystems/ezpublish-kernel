@@ -183,16 +183,9 @@ class IOService
         if ( $binaryFileId[0] === '/' )
             return false;
 
-        try
-        {
-            $spiBinaryFile = $this->ioHandler->load( $this->getPrefixedUri( $binaryFileId ) );
-        }
-        catch ( NotFoundException $e )
-        {
-            return false;
-        }
-
-        return $this->buildDomainBinaryFileObject( $spiBinaryFile );
+        return $this->buildDomainBinaryFileObject(
+            $this->ioHandler->load( $this->getPrefixedUri( $binaryFileId ) )
+        );
     }
 
     /**
@@ -278,6 +271,11 @@ class IOService
             $metadataHandler,
             $this->getPrefixedUri( $binaryFile->id )
         );
+    }
+
+    public function exists( $binaryFileId )
+    {
+        return $this->ioHandler->exists( $this->getPrefixedUri( $binaryFileId ) );
     }
 
     /**
