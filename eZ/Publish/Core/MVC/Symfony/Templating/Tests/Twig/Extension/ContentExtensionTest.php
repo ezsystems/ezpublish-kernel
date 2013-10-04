@@ -29,12 +29,13 @@ class ContentExtensionIntegrationTest extends Twig_Test_IntegrationTestCase
     public function getExtensions()
     {
         $configResolver = $this->getConfigResolverMock();
+
         return array(
             new ContentExtension(
                 $this->getContainerMock(),
                 $configResolver,
                 new TranslationHelper( $configResolver ),
-                $this->getMock( 'eZ\\Publish\\Core\\Helper\\FieldHelper' )
+                $this->getMockBuilder( 'eZ\\Publish\\Core\\Helper\\FieldHelper' )->disableOriginalConstructor()->getMock()
             )
         );
     }
