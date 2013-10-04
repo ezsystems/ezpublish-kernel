@@ -34,7 +34,7 @@ class Legacy implements IOHandlerInterface
     /**
      * File resource provider
      * @see getFileResourceProvider
-     * @var FileReso
+     * @var FileResource
      */
     private $fileResourceProvider = null;
 
@@ -63,12 +63,6 @@ class Legacy implements IOHandlerInterface
      */
     private $storageDirectory;
 
-    /**
-     * Created Legacy handler instance
-     *
-     * @param string $storageDirectory
-     * @param \eZ\Publish\Core\MVC\Legacy\Kernel $legacyKernel
-     */
     public function __construct( $storageDirectory, LegacyKernel $legacyKernel = null )
     {
         if ( $legacyKernel )
@@ -312,7 +306,7 @@ class Legacy implements IOHandlerInterface
     {
         if ( !$this->exists( $spiBinaryFileId ) )
         {
-            throw new NotFoundException( 'spiBinaryFile', $spiBinaryFileId );
+            throw new NotFoundException( 'BinaryFile', $spiBinaryFileId );
         }
 
         $storagePath = $this->getStoragePath( $spiBinaryFileId );
