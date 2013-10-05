@@ -14,6 +14,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use eZ\Bundle\EzPublishCoreBundle\Kernel;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -44,6 +45,11 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     private $event;
 
+    /**
+     * @var HttpKernelInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $httpKernel;
+
     protected function setUp()
     {
         parent::setUp();
@@ -58,8 +64,9 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
             ->setMethods( array( 'getSession', 'hasSession' ) )
             ->getMock();
 
+        $this->httpKernel = $this->getMock( 'Symfony\\Component\\HttpKernel\\HttpKernelInterface' );
         $this->event = new GetResponseEvent(
-            $this->getMock( 'Symfony\\Component\\HttpKernel\\HttpKernelInterface' ),
+            $this->httpKernel,
             $this->request,
             HttpKernelInterface::MASTER_REQUEST
         );
@@ -134,5 +141,42 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf( 'Symfony\\Component\\HttpFoundation\\Response', $response );
         $this->assertTrue( $response->headers->has( 'X-User-Hash' ) );
         $this->assertSame( $hash, $response->headers->get( 'X-User-Hash' ) );
+    }
+
+    public function testOnKernelRequestForwardSubRequest()
+    {
+        $this->httpKernel
+            ->expects( $this->never() )
+            ->method( 'handle' );
+
+        $event = new GetResponseEvent( $this->httpKernel, new Request, HttpKernelInterface::SUB_REQUEST );
+        $this->requestEventListener->onKernelRequestForward( $event );
+    }
+
+    public function testOnKernelRequestForward()
+    {
+        $queryParameters = array( 'some' => 'thing' );
+        $cookieParameters = array( 'cookie' => 'value' );
+        $request = Request::create( '/test_sa/foo/bar', 'GET', $queryParameters, $cookieParameters );
+        $semanticPathinfo = '/foo/something';
+        $request->attributes->set( 'semanticPathinfo', $semanticPathinfo );
+        $request->attributes->set( 'needsForward', true );
+        $request->attributes->set( 'someAttribute', 'someValue' );
+
+        $expectedForwardRequest = Request::create( $semanticPathinfo, 'GET', $queryParameters, $cookieParameters );
+        $expectedForwardRequest->attributes->set( 'semanticPathinfo', $semanticPathinfo );
+        $expectedForwardRequest->attributes->set( 'someAttribute', 'someValue' );
+
+        $response = new Response( 'Success!' );
+        $this->httpKernel
+            ->expects( $this->once() )
+            ->method( 'handle' )
+            ->with( $this->equalTo( $expectedForwardRequest ) )
+            ->will( $this->returnValue( $response ) );
+
+        $event = new GetResponseEvent( $this->httpKernel, $request, HttpKernelInterface::MASTER_REQUEST );
+        $this->requestEventListener->onKernelRequestForward( $event );
+        $this->assertSame( $response, $event->getResponse() );
+        $this->assertTrue( $event->isPropagationStopped() );
     }
 }
