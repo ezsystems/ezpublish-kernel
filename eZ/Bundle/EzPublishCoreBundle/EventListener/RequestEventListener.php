@@ -18,17 +18,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
+use Symfony\Component\HttpFoundation\Request;
 
 class RequestEventListener implements EventSubscriberInterface
 {
-    /**
-     * @var \Symfony\Bundle\FrameworkBundle\HttpKernel
-     */
-    private $httpKernel;
-
     /**
      * @var \Psr\Log\LoggerInterface
      */
@@ -46,7 +41,6 @@ class RequestEventListener implements EventSubscriberInterface
 
     public function __construct( ContainerInterface $container, LoggerInterface $logger = null )
     {
-        $this->httpKernel = $container->get( 'http_kernel' );
         $this->container = $container;
         $this->logger = $logger;
         $this->router = $container->get( 'router' );
@@ -98,15 +92,26 @@ class RequestEventListener implements EventSubscriberInterface
      */
     public function onKernelRequestForward( GetResponseEvent $event )
     {
-        if ( $event->getRequestType() == HttpKernelInterface::MASTER_REQUEST )
+        if ( $event->getRequestType() === HttpKernelInterface::MASTER_REQUEST )
         {
             $request = $event->getRequest();
             if ( $request->attributes->get( 'needsForward' ) && $request->attributes->has( 'semanticPathinfo' ) )
             {
                 $semanticPathinfo = $request->attributes->get( 'semanticPathinfo' );
-                $event->setResponse(
-                    $this->httpKernel->render( $semanticPathinfo )
+                $request->attributes->remove( 'needsForward' );
+                $forwardRequest = Request::create(
+                    $semanticPathinfo,
+                    $request->getMethod(),
+                    $request->getMethod() === 'POST' ? $request->request->all() : $request->query->all(),
+                    $request->cookies->all(),
+                    $request->files->all(),
+                    $request->server->all(),
+                    $request->getContent()
                 );
+                $forwardRequest->attributes->add( $request->attributes->all() );
+                // Not forcing HttpKernelInterface::SUB_REQUEST on purpose since we're very early here
+                // and we need to bootstrap essential stuff like sessions.
+                $event->setResponse( $event->getKernel()->handle( $forwardRequest ) );
                 $event->stopPropagation();
 
                 if ( isset( $this->logger ) )
