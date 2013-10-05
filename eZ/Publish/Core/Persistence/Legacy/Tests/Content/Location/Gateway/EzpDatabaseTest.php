@@ -177,7 +177,7 @@ class EzpDatabaseTest extends TestCase
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
             array(
-                array( 67, 1, 0, 53, 1, 5, 77, '9cec85d730eec7578190ee95ce5a36f5', 0, 2, 1 ),
+                array( 67, 1, 0, 53, 1, 5, 77, '9cec85d730eec7578190ee95ce5a36f5', 0, 2, 1, 0, 0 ),
             ),
             $query
                 ->select( '*' )
@@ -582,6 +582,8 @@ class EzpDatabaseTest extends TestCase
             array( 'sort_field', 2 ),
             array( 'sort_order', 0 ),
             array( 'is_main', 0 ),
+            array( 'priority', 1 ),
+            array( 'is_hidden', 1 ),
         );
     }
 
@@ -601,8 +603,9 @@ class EzpDatabaseTest extends TestCase
                     'mainLocationId' => 1,
                     'priority' => 1,
                     'remoteId' => 'some_id',
-                    'sortField' => 1,
-                    'sortOrder' => 1,
+                    'sortField' => 2,
+                    'sortOrder' => 0,
+                    'hidden' => 1,
                 )
             ),
             '77',
@@ -770,10 +773,33 @@ class EzpDatabaseTest extends TestCase
         );
     }
 
+    public static function getConvertNodeAssignmentsLocationValues()
+    {
+        return array(
+            array( 'contentobject_id', '68' ),
+            array( 'contentobject_is_published', '1' ),
+            array( 'contentobject_version', '1' ),
+            array( 'depth', '3' ),
+            array( 'is_hidden', '1' ),
+            array( 'is_invisible', '1' ),
+            array( 'main_node_id', '70' ),
+            array( 'modified_subnode', time() ),
+            array( 'node_id', '228' ),
+            array( 'parent_node_id', '77' ),
+            array( 'path_identification_string', null ),
+            array( 'path_string', '/1/2/77/228/' ),
+            array( 'priority', '101' ),
+            array( 'remote_id', 'some_id' ),
+            array( 'sort_field', '1' ),
+            array( 'sort_order', '1' ),
+        );
+    }
+
     /**
      * @depends testCreateLocationNodeAssignmentCreation
+     * @dataProvider getConvertNodeAssignmentsLocationValues
      */
-    public function testConvertNodeAssignments()
+    public function testConvertNodeAssignments( $field, $value )
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
 
@@ -783,11 +809,72 @@ class EzpDatabaseTest extends TestCase
                 array(
                     'contentId' => 68,
                     'contentVersion' => 1,
-                    'mainLocationId' => 1,
-                    'priority' => 1,
+                    'mainLocationId' => false,
+                    'priority' => 101,
                     'remoteId' => 'some_id',
                     'sortField' => 1,
                     'sortOrder' => 1,
+                    'hidden' => true,
+                    // Note: not stored in node assignment, will be calculated from parent
+                    // visibility upon Location creation from node assignment
+                    'invisible' => false
+                )
+            ),
+            '77',
+            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
+        );
+
+        $handler->createLocationsFromNodeAssignments( 68, 1 );
+
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select( $field )
+            ->from( 'ezcontentobject_tree' )
+            ->where(
+                $query->expr->lAnd(
+                    $query->expr->eq( 'contentobject_id', 68 ),
+                    $query->expr->eq( 'parent_node_id', 77 )
+                )
+            );
+
+        if ( $field === "modified_subnode" )
+        {
+            $statement = $query->prepare();
+            $statement->execute();
+            $result = $statement->fetch( \PDO::FETCH_ASSOC );
+            $this->assertGreaterThanOrEqual( $value, $result );
+        }
+        else
+        {
+            $this->assertQueryResult(
+                array( array( $value ) ),
+                $query
+            );
+        }
+    }
+
+    /**
+     * @depends testCreateLocationNodeAssignmentCreation
+     */
+    public function testConvertNodeAssignmentsMainLocation()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+
+        $handler = $this->getLocationGateway();
+        $handler->createNodeAssignment(
+            new CreateStruct(
+                array(
+                    'contentId' => 68,
+                    'contentVersion' => 1,
+                    'mainLocationId' => true,
+                    'priority' => 101,
+                    'remoteId' => 'some_id',
+                    'sortField' => 1,
+                    'sortOrder' => 1,
+                    'hidden' => true,
+                    // Note: not stored in node assignment, will be calculated from parent
+                    // visibility upon Location creation from node assignment
+                    'invisible' => false
                 )
             ),
             '77',
@@ -798,14 +885,104 @@ class EzpDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array( array( '/1/2/77/228/' ) ),
+            array( array( 228 ) ),
             $query
-                ->select( 'path_string' )
+                ->select( 'main_node_id' )
                 ->from( 'ezcontentobject_tree' )
                 ->where(
                     $query->expr->lAnd(
                         $query->expr->eq( 'contentobject_id', 68 ),
                         $query->expr->eq( 'parent_node_id', 77 )
+                    )
+                )
+        );
+    }
+
+    /**
+     * @depends testCreateLocationNodeAssignmentCreation
+     */
+    public function testConvertNodeAssignmentsParentHidden()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+
+        $handler = $this->getLocationGateway();
+        $handler->createNodeAssignment(
+            new CreateStruct(
+                array(
+                    'contentId' => 68,
+                    'contentVersion' => 1,
+                    'mainLocationId' => true,
+                    'priority' => 101,
+                    'remoteId' => 'some_id',
+                    'sortField' => 1,
+                    'sortOrder' => 1,
+                    'hidden' => false,
+                    // Note: not stored in node assignment, will be calculated from parent
+                    // visibility upon Location creation from node assignment
+                    'invisible' => false
+                )
+            ),
+            '224',
+            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
+        );
+
+        $handler->createLocationsFromNodeAssignments( 68, 1 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( 0, 1 ) ),
+            $query
+                ->select( 'is_hidden, is_invisible' )
+                ->from( 'ezcontentobject_tree' )
+                ->where(
+                    $query->expr->lAnd(
+                        $query->expr->eq( 'contentobject_id', 68 ),
+                        $query->expr->eq( 'parent_node_id', 224 )
+                    )
+                )
+        );
+    }
+
+    /**
+     * @depends testCreateLocationNodeAssignmentCreation
+     */
+    public function testConvertNodeAssignmentsParentInvisible()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+
+        $handler = $this->getLocationGateway();
+        $handler->createNodeAssignment(
+            new CreateStruct(
+                array(
+                    'contentId' => 68,
+                    'contentVersion' => 1,
+                    'mainLocationId' => true,
+                    'priority' => 101,
+                    'remoteId' => 'some_id',
+                    'sortField' => 1,
+                    'sortOrder' => 1,
+                    'hidden' => false,
+                    // Note: not stored in node assignment, will be calculated from parent
+                    // visibility upon Location creation from node assignment
+                    'invisible' => false
+                )
+            ),
+            '225',
+            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
+        );
+
+        $handler->createLocationsFromNodeAssignments( 68, 1 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( 0, 1 ) ),
+            $query
+                ->select( 'is_hidden, is_invisible' )
+                ->from( 'ezcontentobject_tree' )
+                ->where(
+                    $query->expr->lAnd(
+                        $query->expr->eq( 'contentobject_id', 68 ),
+                        $query->expr->eq( 'parent_node_id', 225 )
                     )
                 )
         );
