@@ -462,9 +462,15 @@ class LocationHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
-            ->expects( $this->once() )
+            ->expects( $this->at( 0 ) )
             ->method( 'clear' )
             ->with( 'location' )
+            ->will( $this->returnValue( true ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'clear' )
+            ->with( 'user', 'role', 'assignments', 'byGroup' )
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
@@ -594,6 +600,12 @@ class LocationHandlerTest extends HandlerTest
             ->with( 'content', 'locations' )
             ->will( $this->returnValue( true ) );
 
+        $this->cacheMock
+            ->expects( $this->at( 4 ) )
+            ->method( 'clear' )
+            ->with( 'user', 'role', 'assignments', 'byGroup' )
+            ->will( $this->returnValue( true ) );
+
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
         $this->persistenceFactoryMock
             ->expects( $this->once() )
@@ -693,6 +705,18 @@ class LocationHandlerTest extends HandlerTest
             ->with( 'content', 'locations', 2 )
             ->will( $this->returnValue( true ) );
 
+        $this->cacheMock
+            ->expects( $this->at( 3 ) )
+            ->method( 'clear' )
+            ->with( 'user', 'role', 'assignments', 'byGroup', 2 )
+            ->will( $this->returnValue( true ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 4 ) )
+            ->method( 'clear' )
+            ->with( 'user', 'role', 'assignments', 'byGroup', 'inherited/' . 2 )
+            ->will( $this->returnValue( true ) );
+
         $handler = $this->persistenceHandler->locationHandler();
         $handler->create( new CreateStruct );
     }
@@ -713,6 +737,12 @@ class LocationHandlerTest extends HandlerTest
             ->expects( $this->at( 1 ) )
             ->method( 'clear' )
             ->with( 'content' )
+            ->will( $this->returnValue( true ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 2 ) )
+            ->method( 'clear' )
+            ->with( 'user', 'role', 'assignments', 'byGroup' )
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
