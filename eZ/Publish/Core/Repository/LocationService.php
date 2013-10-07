@@ -27,7 +27,6 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot as CriterionLogicalNot;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree as CriterionSubtree;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
@@ -363,12 +362,7 @@ class LocationService implements LocationServiceInterface
     {
         $query = new Query(
             array(
-                'criterion' => new CriterionLogicalAnd(
-                    array(
-                        new CriterionParentLocationId( $parentLocationId ),
-                        new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
-                    )
-                ),
+                'criterion' => new CriterionParentLocationId( $parentLocationId ),
                 'offset' => ( $offset >= 0 ? (int)$offset : 0 ),
                 'limit' => ( $limit >= 0 ? (int)$limit  : null )
             )

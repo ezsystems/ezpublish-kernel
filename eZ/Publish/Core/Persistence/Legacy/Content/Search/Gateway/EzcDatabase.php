@@ -13,6 +13,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -139,6 +140,10 @@ class EzcDatabase extends Gateway
     {
         $condition = $query->expr->lAnd(
             $this->criteriaConverter->convertCriteria( $query, $criterion ),
+            $query->expr->eq(
+                'ezcontentobject.status',
+                ContentInfo::STATUS_PUBLISHED
+            ),
             $query->expr->eq(
                 'ezcontentobject_version.status',
                 VersionInfo::STATUS_PUBLISHED

@@ -173,9 +173,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         new Content\Search\Gateway\CriterionHandler\SectionId(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\Status(
-                            $this->getDatabaseHandler()
-                        ),
                         new Content\Search\Gateway\CriterionHandler\FullText(
                             $this->getDatabaseHandler(),
                             $transformationProcessor,
@@ -1050,8 +1047,11 @@ class SearchHandlerTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'criterion' => new Criterion\Status(
-                            array( Criterion\Status::STATUS_PUBLISHED )
+                        // Status criterion is gone, but this will also match all published
+                        'criterion' => new Criterion\LogicalNot(
+                            new Criterion\ContentId(
+                                array( 0 )
+                            )
                         ),
                         'limit' => 10,
                     )
