@@ -408,7 +408,7 @@ class ContentExtension extends Twig_Extension
      *
      * @param Content $content
      * @param Field $field
-     * @param null|string $localTemplate a file where to look for the block first
+     * @param null|string|\Twig_Template $localTemplate a file where to look for the block first
      *
      * @throws \LogicException If no template block can be found for $field
      *
@@ -419,8 +419,13 @@ class ContentExtension extends Twig_Extension
         $fieldBlockName = $this->getRenderFieldBlockName( $content, $field );
         if ( $localTemplate !== null )
         {
-            $tpl = $this->environment->loadTemplate( $localTemplate );
-            $block = $this->searchBlock( $fieldBlockName, $tpl );
+            // $localTemplate might be a Twig_Template instance already (e.g. using _self Twig keyword)
+            if ( !$localTemplate instanceof Twig_Template )
+            {
+                $localTemplate = $this->environment->loadTemplate( $localTemplate );
+            }
+
+            $block = $this->searchBlock( $fieldBlockName, $localTemplate );
             if ( $block !== null )
             {
                 return array( $fieldBlockName => $block );
