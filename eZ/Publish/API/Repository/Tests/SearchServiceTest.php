@@ -267,8 +267,9 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\Status(
-                            array( Criterion\Status::STATUS_PUBLISHED )
+                        // There is no Status Criterion anymore, this should match all published as well
+                        'criterion' => new Criterion\Subtree(
+                            '/1/'
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
                     )

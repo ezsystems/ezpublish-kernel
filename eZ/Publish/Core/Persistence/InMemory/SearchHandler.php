@@ -30,7 +30,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -101,6 +100,10 @@ class SearchHandler implements SearchHandlerInterface
         if ( empty( $match ) )
         {
             throw new Exception( "Logical error: \$match is empty" );
+        }
+        else
+        {
+            $match['versionInfo']['contentInfo']['isPublished'] = true;
         }
 
         $list = $this->backend->find(
@@ -315,23 +318,6 @@ class SearchHandler implements SearchHandlerInterface
             else if ( $criterion instanceof SectionId && !isset( $match['versionInfo']['contentInfo']['sectionId'] ) )
             {
                 $match['versionInfo']['contentInfo']['sectionId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
-            }
-            else if ( $criterion instanceof Status && !isset( $match['versionInfo']['status'] ) )
-            {
-                switch ( $criterion->value[0] )
-                {
-                    case Status::STATUS_ARCHIVED:
-                        $match['versionInfo']['status'] = VersionInfo::STATUS_ARCHIVED;
-                        break;
-                    case Status::STATUS_DRAFT:
-                        $match['versionInfo']['status'] = VersionInfo::STATUS_DRAFT;
-                        break;
-                    case Status::STATUS_PUBLISHED:
-                        $match['versionInfo']['status'] = VersionInfo::STATUS_PUBLISHED;
-                        break;
-                    default:
-                        throw new Exception( "Unsupported StatusCriterion->value[0]: " . $criterion->value[0] );
-                }
             }
             else if ( $criterion instanceof ParentLocationId && !isset( $match['locations']['parentId'] ) )
             {

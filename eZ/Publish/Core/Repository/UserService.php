@@ -33,7 +33,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as Crite
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId as CriterionLocationId;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus;
 use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
@@ -222,8 +221,7 @@ class UserService implements UserServiceInterface
         $searchQuery->criterion = new CriterionLogicalAnd(
             array(
                 new CriterionContentTypeId( $this->settings['userGroupClassID'] ),
-                new CriterionParentLocationId( $locationId ),
-                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
+                new CriterionParentLocationId( $locationId )
             )
         );
 
@@ -923,8 +921,7 @@ class UserService implements UserServiceInterface
         $searchQuery->criterion = new CriterionLogicalAnd(
             array(
                 new CriterionContentTypeId( $this->settings['userGroupClassID'] ),
-                new CriterionLocationId( $parentLocationIds ),
-                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
+                new CriterionLocationId( $parentLocationIds )
             )
         );
 
@@ -966,8 +963,7 @@ class UserService implements UserServiceInterface
         $searchQuery->criterion = new CriterionLogicalAnd(
             array(
                 new CriterionContentTypeId( $this->settings['userClassID'] ),
-                new CriterionParentLocationId( $mainGroupLocation->id ),
-                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
+                new CriterionParentLocationId( $mainGroupLocation->id )
             )
         );
 
