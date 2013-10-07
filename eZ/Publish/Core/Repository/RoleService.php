@@ -80,7 +80,6 @@ class RoleService implements RoleServiceInterface
             'limitationMap' => array(
                 // @todo Inject these dynamically by activated eZ Controllers, see PR #252
                 'content' => array(
-                    // @todo 'State' incorrect, it's dynamic pr state group, see eZContentObjectStateGroup::limitations()
                     'read' => array( 'Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true ),
                     'diff' => array( 'Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true ),
                     'view_embed' => array( 'Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true ),
