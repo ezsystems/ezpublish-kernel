@@ -747,10 +747,16 @@ class EzcDatabase extends Gateway
                 $query->bindValue( $createStruct->remoteId, null, \PDO::PARAM_STR )
             )->set(
                 $this->handler->quoteColumn( 'sort_field' ),
-                $query->bindValue( Location::SORT_FIELD_PUBLISHED, null, \PDO::PARAM_INT )
+                $query->bindValue( $createStruct->sortField, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'sort_order' ),
-                $query->bindValue( Location::SORT_ORDER_DESC, null, \PDO::PARAM_INT )
+                $query->bindValue( $createStruct->sortOrder, null, \PDO::PARAM_INT )
+            )->set(
+                $this->handler->quoteColumn( 'priority' ),
+                $query->bindValue( $createStruct->priority, null, \PDO::PARAM_INT )
+            )->set(
+                $this->handler->quoteColumn( 'is_hidden' ),
+                $query->bindValue( $createStruct->hidden, null, \PDO::PARAM_INT )
             );
         $query->prepare()->execute();
     }
@@ -874,6 +880,9 @@ class EzcDatabase extends Gateway
             {
                 $mainLocationId = $this->getMainNodeId( $contentId );
             }
+
+            $parentLocationData = $this->getBasicNodeData( $row['parent_node'] );
+            $isInvisible = $row['is_hidden'] || $parentLocationData['is_hidden'] || $parentLocationData['is_invisible'];
             $this->create(
                 new CreateStruct(
                     array(
@@ -883,9 +892,12 @@ class EzcDatabase extends Gateway
                         'remoteId' => $row['remote_id'],
                         'sortField' => $row['sort_field'],
                         'sortOrder' => $row['sort_order'],
+                        'priority' => $row['priority'],
+                        'hidden' => $row['is_hidden'],
+                        'invisible' => $isInvisible,
                     )
                 ),
-                $this->getBasicNodeData( $row['parent_node'] )
+                $parentLocationData
             );
 
             $this->updateNodeAssignment(

@@ -931,18 +931,31 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionCreatesLocationsDefinedOnCreate
-     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
-     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationByRemoteId
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
-    public function testCreateContentWithLocationCreateParameterSetsMainLocationId( array $testData )
+    public function testCreateContentWithLocationCreateParameterCreatesExpectedLocation( array $testData )
     {
+        /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
+        /** @var \eZ\Publish\API\Repository\Values\Content\Location $location */
         list( $content, $location ) = $testData;
 
-        $this->assertEquals(
-            $content->getVersionInfo()->getContentInfo()->mainLocationId,
-            $location->id
+        $parentLocationId = $this->generateId( 'location', 56 );
+        $parentLocation = $this->getRepository()->getLocationService()->loadLocation( $parentLocationId );
+        $mainLocationId = $content->getVersionInfo()->getContentInfo()->mainLocationId;
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id' => $mainLocationId,
+                'priority' => 23,
+                'hidden' => true,
+                'invisible' => true,
+                'remoteId' => '0123456789abcdef0123456789abcdef',
+                'parentLocationId' => $parentLocationId,
+                'pathString' => $parentLocation->pathString . $mainLocationId . '/',
+                'depth' => $parentLocation->depth + 1,
+                'sortField' => Location::SORT_FIELD_NODE_ID,
+                'sortOrder' => Location::SORT_ORDER_DESC,
+            ),
+            $location
         );
     }
 
