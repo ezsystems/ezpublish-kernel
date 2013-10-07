@@ -13,6 +13,19 @@ Changes affecting version compatibility with former or future versions.
 * In the REST API JSON responses, the boolean properties are now real boolean
   values instead of the string "true" or "false".
 
+* Symfony routes are not interpreted any more with `legacy_mode: true` (see [EZP-21628](https://jira.ez.no/browse/EZP-21628)).
+  However, it is possible to define routes that can be interpreted anyway:
+
+  ```yaml
+  ezpublish:
+      router:
+          default_router:
+              # Routes that are allowed when legacy_mode is true.
+              # Must be routes identifiers (e.g. "my_route_name").
+              # Can be a prefix, so that all routes beginning with given prefix will be taken into account.
+              legacy_aware_routes: [my_route_name, my_route_prefix_]
+  ```
+
 ## Deprecations
 
 * It was incidentally possible to reference resources in REST API payloads without
