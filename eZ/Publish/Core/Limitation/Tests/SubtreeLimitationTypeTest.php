@@ -147,7 +147,7 @@ class SubtreeLimitationTypeTest extends Base
 
             foreach ( $limitation->limitationValues as $key => $value )
             {
-                $pathArray = explode( '/', trim( '/', $value ) );
+                $pathArray = explode( '/', trim( $value, '/' ) );
                 $this->locationHandlerMock
                     ->expects( $this->at( $key ) )
                     ->method( "load" )
@@ -192,7 +192,7 @@ class SubtreeLimitationTypeTest extends Base
 
             foreach ( $limitation->limitationValues as $key => $value )
             {
-                $pathArray = explode( '/', trim( '/', $value ) );
+                $pathArray = explode( '/', trim( $value, '/' ) );
                 $this->locationHandlerMock
                     ->expects( $this->at( $key ) )
                     ->method( "load" )

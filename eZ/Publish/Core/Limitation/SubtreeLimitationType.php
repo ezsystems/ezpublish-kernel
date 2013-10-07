@@ -77,7 +77,7 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
         {
             try
             {
-                $pathArray = explode( '/', trim( '/', $path ) );
+                $pathArray = explode( '/', trim( $path, '/' ) );
                 $subtreeRootLocationId = end( $pathArray );
                 $this->persistence->locationHandler()->load( $subtreeRootLocationId );
             }
