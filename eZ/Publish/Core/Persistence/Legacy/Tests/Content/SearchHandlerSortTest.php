@@ -86,7 +86,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                         new Content\Search\Gateway\SortClauseHandler\SectionIdentifier( $db ),
                         new Content\Search\Gateway\SortClauseHandler\SectionName( $db ),
                         new Content\Search\Gateway\SortClauseHandler\ContentName( $db ),
-                        new Content\Search\Gateway\SortClauseHandler\Field( $db ),
+                        new Content\Search\Gateway\SortClauseHandler\Field( $db, $this->getLanguageHandler() ),
                     )
                 ),
                 new QueryBuilder( $this->getDatabaseHandler() ),
@@ -529,7 +529,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                     'offset'      => 0,
                     'limit'       => null,
                     'sortClauses' => array(
-                        new SortClause\Field( "article", "title" ),
+                        new SortClause\Field( "article", "title", "eng-US" ),
                     )
                 )
             )
@@ -596,7 +596,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                     'offset'      => 0,
                     'limit'       => null,
                     'sortClauses' => array(
-                        new SortClause\Field( "product", "price" ),
+                        new SortClause\Field( "product", "price", "eng-US" ),
                     )
                 )
             )

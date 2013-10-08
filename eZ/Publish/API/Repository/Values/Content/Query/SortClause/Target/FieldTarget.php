@@ -20,12 +20,31 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target;
  */
 class FieldTarget extends Target
 {
+    /**
+     * Identifier of a targeted Field ContentType
+     *
+     * @var string
+     */
     public $typeIdentifier;
+
+    /**
+     * Identifier of a targeted Field FieldDefinition
+     *
+     * @var string
+     */
     public $fieldIdentifier;
 
-    public function __construct( $typeIdentifier, $fieldIdentifier )
+    /**
+     * Language code of the targeted Field
+     *
+     * @var string
+     */
+    public $languageCode;
+
+    public function __construct( $typeIdentifier, $fieldIdentifier, $languageCode )
     {
         $this->typeIdentifier = $typeIdentifier;
         $this->fieldIdentifier = $fieldIdentifier;
+        $this->languageCode = $languageCode;
     }
 }
