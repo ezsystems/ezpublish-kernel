@@ -472,6 +472,24 @@ class RoleService implements RoleServiceInterface
         if ( $this->repository->canUser( 'role', 'assign', $userGroup, $role ) !== true )
             throw new UnauthorizedException( 'role', 'assign' );
 
+        if ( $roleLimitation === null )
+        {
+            $limitation = null;
+        }
+        else
+        {
+            $validationErrors = $this->validateLimitation( $roleLimitation );
+            if ( !empty( $validationErrors ) )
+            {
+                throw new InvalidArgumentException(
+                    "limitations",
+                    "Some validations did not validate:\n " . var_export( $validationErrors, true )
+                );
+            }
+
+            $limitation = array( $roleLimitation->getIdentifier() => $roleLimitation->limitationValues );
+        }
+
         $loadedRole = $this->loadRole( $role->id );
         $loadedUserGroup = $this->repository->getUserService()->loadUserGroup( $userGroup->id );
 
@@ -481,7 +499,7 @@ class RoleService implements RoleServiceInterface
             $this->userHandler->assignRole(
                 $loadedUserGroup->id,
                 $loadedRole->id,
-                $roleLimitation ? array( $roleLimitation->getIdentifier() => $roleLimitation->limitationValues ) : null
+                $limitation
             );
             $this->repository->commit();
         }
@@ -538,6 +556,24 @@ class RoleService implements RoleServiceInterface
         if ( $this->repository->canUser( 'role', 'assign', $user, $role ) !== true )
             throw new UnauthorizedException( 'role', 'assign' );
 
+        if ( $roleLimitation === null )
+        {
+            $limitation = null;
+        }
+        else
+        {
+            $validationErrors = $this->validateLimitation( $roleLimitation );
+            if ( !empty( $validationErrors ) )
+            {
+                throw new InvalidArgumentException(
+                    "limitations",
+                    "Some validations did not validate:\n " . var_export( $validationErrors, true )
+                );
+            }
+
+            $limitation = array( $roleLimitation->getIdentifier() => $roleLimitation->limitationValues );
+        }
+
         $loadedRole = $this->loadRole( $role->id );
         $loadedUser = $this->repository->getUserService()->loadUser( $user->id );
 
@@ -547,7 +583,7 @@ class RoleService implements RoleServiceInterface
             $this->userHandler->assignRole(
                 $loadedUser->id,
                 $loadedRole->id,
-                $roleLimitation ? array( $roleLimitation->getIdentifier() => $roleLimitation->limitationValues ) : null
+                $limitation
             );
             $this->repository->commit();
         }
@@ -976,7 +1012,7 @@ class RoleService implements RoleServiceInterface
     /**
      * Creates SPI Policy value object from provided module, function and limitations
      *
-     * @uses validateLimitation()
+     * @uses validatePolicyLimitation()
      * @param string $module
      * @param string $function
      * @param \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations
@@ -1000,7 +1036,7 @@ class RoleService implements RoleServiceInterface
                     );
                 }
 
-                $validationErrors = $this->validateLimitation( $module, $function, $limitation );
+                $validationErrors = $this->validatePolicyLimitation( $module, $function, $limitation );
                 $limitationsToCreate[$limitation->getIdentifier()] = $limitation->limitationValues;
 
                 if ( !empty( $validationErrors ) )
@@ -1038,7 +1074,7 @@ class RoleService implements RoleServiceInterface
      * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException If the Role settings is in a bad state
      * @return array
      */
-    protected function validateLimitation( $module, $function, Limitation $limitation )
+    protected function validatePolicyLimitation( $module, $function, Limitation $limitation )
     {
         if ( empty( $this->settings['limitationMap'][$module][$function] ) )
             $validLimitations = array();
@@ -1054,11 +1090,26 @@ class RoleService implements RoleServiceInterface
             );
         }
 
+        return $this->validateLimitation( $limitation );
+    }
+
+    /**
+     * Validates limitation
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException If the Role settings is in a bad state
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
+     *
+     * @return \eZ\Publish\Core\FieldType\ValidationError[]
+     */
+    protected function validateLimitation( Limitation $limitation )
+    {
+        $identifier = $limitation->getIdentifier();
         if ( !isset( $this->settings['limitationTypes'][$identifier] ) )
         {
             throw new BadStateException(
                 '$identifier',
-                "limitationType[{$identifier}] is not configured but was configured on limitationMap[{$module}][{$function}]"
+                "limitationType[{$identifier}] is not configured"
             );
         }
 
