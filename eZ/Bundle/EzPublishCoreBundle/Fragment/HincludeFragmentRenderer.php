@@ -28,6 +28,6 @@ class HincludeFragmentRenderer extends ContainerAwareHIncludeFragmentRenderer
         }
 
         $this->fragmentUriGenerator->generateFragmentUri( $reference, $request, $absolute );
-        return parent::generateFragmentUri( $reference, $request );
+        return parent::generateFragmentUri( $reference, $request, $absolute );
     }
 }

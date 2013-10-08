@@ -28,6 +28,6 @@ class InlineFragmentRenderer extends BaseRenderer
         }
 
         $this->fragmentUriGenerator->generateFragmentUri( $reference, $request, $absolute );
-        return parent::generateFragmentUri( $reference, $request );
+        return parent::generateFragmentUri( $reference, $request, $absolute );
     }
 }
