@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler;
 
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use ezcQuerySelect;
@@ -18,6 +20,25 @@ use ezcQuerySelect;
  */
 class Field extends SortClauseHandler
 {
+    /**
+     * Language handler
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
+     */
+    protected $languageHandler;
+
+    /**
+     * Creates a new Field sort clause handler
+     *
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
+     */
+    public function __construct( EzcDbHandler $dbHandler, LanguageHandler $languageHandler )
+    {
+        $this->languageHandler = $languageHandler;
+        parent::__construct( $dbHandler );
+    }
+
     /**
      * Check if this sort clause handler accepts to handle the given sort clause.
      *
@@ -76,7 +97,10 @@ class Field extends SortClauseHandler
      */
     public function applyJoin( ezcQuerySelect $query, SortClause $sortClause, $number )
     {
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget $fieldTarget */
+        $fieldTarget = $sortClause->targetData;
         $table = $this->getSortTableName( $number );
+
         $query
             ->innerJoin(
                 $query->alias(
@@ -91,6 +115,17 @@ class Field extends SortClauseHandler
                     $query->expr->eq(
                         $this->dbHandler->quoteColumn( "version", $table ),
                         $this->dbHandler->quoteColumn( "current_version", "ezcontentobject" )
+                    ),
+                    $query->expr->gt(
+                        $query->expr->bitAnd(
+                            $this->dbHandler->quoteColumn( "language_id", $table ),
+                            $query->bindValue(
+                                $this->languageHandler->loadByLanguageCode( $fieldTarget->languageCode )->id,
+                                null,
+                                \PDO::PARAM_INT
+                            )
+                        ),
+                        0
                     )
                 )
             )
@@ -106,7 +141,7 @@ class Field extends SortClauseHandler
                     ),
                     $query->expr->eq(
                         $this->dbHandler->quoteColumn( "identifier", "cc_attr_$number" ),
-                        $query->bindValue( $sortClause->targetData->fieldIdentifier )
+                        $query->bindValue( $fieldTarget->fieldIdentifier )
                     )
                 )
             )
@@ -122,7 +157,7 @@ class Field extends SortClauseHandler
                     ),
                     $query->expr->eq(
                         $this->dbHandler->quoteColumn( "identifier", "cc_$number" ),
-                        $query->bindValue( $sortClause->targetData->typeIdentifier )
+                        $query->bindValue( $fieldTarget->typeIdentifier )
                     )
                 )
             );

@@ -953,7 +953,7 @@ class SearchServiceTest extends BaseTest
                         'offset'      => 0,
                         'limit'       => null,
                         'sortClauses' => array(
-                            new SortClause\Field( "folder", "name" ),
+                            new SortClause\Field( "folder", "name", "eng-US" ),
                             new SortClause\ContentId(),
                         )
                     )
@@ -967,7 +967,7 @@ class SearchServiceTest extends BaseTest
                         'offset'      => 0,
                         'limit'       => null,
                         'sortClauses' => array(
-                            new SortClause\Field( "template_look", "title" ),
+                            new SortClause\Field( "template_look", "title", "eng-US" ),
                             new SortClause\ContentId(),
                         )
                     )
