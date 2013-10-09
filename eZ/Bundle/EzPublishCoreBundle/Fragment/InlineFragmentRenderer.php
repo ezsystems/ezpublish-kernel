@@ -27,7 +27,13 @@ class InlineFragmentRenderer extends BaseRenderer
             $this->fragmentUriGenerator = new FragmentUriGenerator;
         }
 
+        // Generate base fragment URI and add other needed attributes
         $this->fragmentUriGenerator->generateFragmentUri( $reference, $request, $absolute );
+        if ( $request->attributes->has( 'semanticPathinfo' ) )
+            $reference->attributes['semanticPathinfo'] = $request->attributes->get( 'semanticPathinfo' );
+        if ( $request->attributes->has( 'viewParametersString' ) )
+            $reference->attributes['viewParametersString'] = $request->attributes->get( 'viewParametersString' );
+
         return parent::generateFragmentUri( $reference, $request, $absolute );
     }
 }
