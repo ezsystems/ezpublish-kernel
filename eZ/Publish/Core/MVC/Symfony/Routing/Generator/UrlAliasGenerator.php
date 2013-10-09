@@ -109,7 +109,8 @@ class UrlAliasGenerator extends Generator implements SiteAccessAware
             if ( $this->rootLocationId !== null )
             {
                 $pathPrefix = $this->getPathPrefixByRootLocationId( $this->rootLocationId );
-                if ( mb_stripos( $path, $pathPrefix ) === 0 )
+                // "/" cannot be considered as a path prefix since it's root, so we ignore it.
+                if ( $pathPrefix !== '/' && mb_stripos( $path, $pathPrefix ) === 0 )
                 {
                     $path = mb_substr( $path, mb_strlen( $pathPrefix ) );
                 }
