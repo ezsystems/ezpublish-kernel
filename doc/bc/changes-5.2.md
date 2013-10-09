@@ -26,6 +26,12 @@ Changes affecting version compatibility with former or future versions.
               legacy_aware_routes: [my_route_name, my_route_prefix_]
   ```
 
+* Value of `eZ\Publish\API\Repository\Values\Content\VersionInfo::STATUS_ARCHIVED` constant
+  is changed form 2 to 3. This brings it in align with status constants defined in SPI and
+  stored in database. The change was done with introduction of Status Limitation, in order
+  to avoid unnecessary translation between the two layers. It will cause BC problems only
+  if hardcoded values were used instead of provided constants.
+
 ## Deprecations
 
 * It was incidentally possible to reference resources in REST API payloads without
