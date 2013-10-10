@@ -11,3 +11,5 @@ docblox.xml
 composer.phar
 /vendor/
 var/
+composer.lock
+
