@@ -116,7 +116,7 @@ class UrlAliasGenerator extends Generator implements SiteAccessAware
                 }
                 // Location path is outside configured content tree and doesn't have an excluded prefix.
                 // This is most likely an error (from content edition or link generation logic).
-                else if ( !$this->isUriPrefixExcluded( $path ) && $this->logger !== null )
+                else if ( $pathPrefix !== '/' && !$this->isUriPrefixExcluded( $path ) && $this->logger !== null )
                 {
                     $this->logger->warning( "Generating a link to a location outside root content tree: '$path' is outside tree starting to location #$this->rootLocationId" );
                 }
