@@ -37,11 +37,11 @@ class FieldTarget extends Target
     /**
      * Language code of the targeted Field
      *
-     * @var string
+     * @var null|string
      */
     public $languageCode;
 
-    public function __construct( $typeIdentifier, $fieldIdentifier, $languageCode )
+    public function __construct( $typeIdentifier, $fieldIdentifier, $languageCode = null )
     {
         $this->typeIdentifier = $typeIdentifier;
         $this->fieldIdentifier = $fieldIdentifier;

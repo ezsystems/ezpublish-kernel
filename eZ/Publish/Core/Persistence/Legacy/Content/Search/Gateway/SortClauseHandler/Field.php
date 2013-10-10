@@ -118,12 +118,16 @@ class Field extends SortClauseHandler
                     ),
                     $query->expr->gt(
                         $query->expr->bitAnd(
-                            $this->dbHandler->quoteColumn( "language_id", $table ),
-                            $query->bindValue(
-                                $this->languageHandler->loadByLanguageCode( $fieldTarget->languageCode )->id,
-                                null,
-                                \PDO::PARAM_INT
-                            )
+                            $query->expr->bitAnd(
+                                $this->dbHandler->quoteColumn( "language_id", $table ), ~1
+                            ),
+                            $fieldTarget->languageCode === null ?
+                                $this->dbHandler->quoteColumn( "initial_language_id", "ezcontentobject" ) :
+                                $query->bindValue(
+                                    $this->languageHandler->loadByLanguageCode( $fieldTarget->languageCode )->id,
+                                    null,
+                                    \PDO::PARAM_INT
+                                )
                         ),
                         0
                     )

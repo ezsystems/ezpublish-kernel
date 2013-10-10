@@ -529,7 +529,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                     'offset'      => 0,
                     'limit'       => null,
                     'sortClauses' => array(
-                        new SortClause\Field( "article", "title", "eng-US" ),
+                        new SortClause\Field( "article", "title", Query::SORT_ASC, "eng-US" ),
                     )
                 )
             )
@@ -596,7 +596,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                     'offset'      => 0,
                     'limit'       => null,
                     'sortClauses' => array(
-                        new SortClause\Field( "product", "price", "eng-US" ),
+                        new SortClause\Field( "product", "price", Query::SORT_ASC, "eng-US" ),
                     )
                 )
             )
