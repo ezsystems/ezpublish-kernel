@@ -221,6 +221,9 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         new Content\Search\Gateway\CriterionHandler\UserMetadata(
                             $this->getDatabaseHandler()
                         ),
+                        new Content\Search\Gateway\CriterionHandler\RelationList(
+                            $this->getDatabaseHandler()
+                        ),
                     )
                 ),
                 new Content\Search\Gateway\SortClauseConverter(
@@ -1690,6 +1693,138 @@ class SearchHandlerTest extends LanguageAwareTestCase
                             Criterion\UserMetadata::GROUP,
                             Criterion\Operator::IN,
                             array( 13 )
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\RelationList
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testRelationListFilterContainsSingle()
+    {
+        $this->assertSearchResults(
+            array( 67 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\RelationList(
+                            'billboard',
+                            Criterion\Operator::CONTAINS,
+                            array( 60 )
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\RelationList
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testRelationListFilterContainsSingleNoMatch()
+    {
+        $this->assertSearchResults(
+            array(),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\RelationList(
+                            'billboard',
+                            Criterion\Operator::CONTAINS,
+                            array( 4 )
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\RelationList
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testRelationListFilterContainsArray()
+    {
+        $this->assertSearchResults(
+            array( 67 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\RelationList(
+                            'billboard',
+                            Criterion\Operator::CONTAINS,
+                            array( 60, 75 )
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\RelationList
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testRelationListFilterContainsArrayNotMatch()
+    {
+        $this->assertSearchResults(
+            array(),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\RelationList(
+                            'billboard',
+                            Criterion\Operator::CONTAINS,
+                            array( 60, 64 )
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\RelationList
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testRelationListFilterInArray()
+    {
+        $this->assertSearchResults(
+            array( 67, 75 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\RelationList(
+                            'billboard',
+                            Criterion\Operator::IN,
+                            array( 60, 64 )
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\RelationList
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testRelationListFilterInArrayNotMatch()
+    {
+        $this->assertSearchResults(
+            array(),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\RelationList(
+                            'billboard',
+                            Criterion\Operator::IN,
+                            array( 4, 10 )
                         ),
                     )
                 )
