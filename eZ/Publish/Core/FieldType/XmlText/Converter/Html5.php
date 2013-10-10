@@ -121,11 +121,13 @@ class Html5 implements Converter
         $insertBeforeEl = $xslDoc->documentElement->firstChild;
         foreach ( $this->getSortedCustomStylesheets() as $stylesheet )
         {
-            $newEl = $xslDoc->createElement( 'xsl:import' );
-            $hrefAttr = $xslDoc->createAttribute( 'href' );
-            $hrefAttr->value = $stylesheet;
-            $newEl->appendChild( $hrefAttr );
-            $xslDoc->documentElement->insertBefore( $newEl, $insertBeforeEl );
+            if ( file_exists($stylesheet) ) {
+                $newEl = $xslDoc->createElement( 'xsl:import' );
+                $hrefAttr = $xslDoc->createAttribute( 'href' );
+                $hrefAttr->value = $stylesheet;
+                $newEl->appendChild( $hrefAttr );
+                $xslDoc->documentElement->insertBefore( $newEl, $insertBeforeEl );
+            }
         }
         // Now reload XSL DOM to "refresh" it.
         $xslDoc->loadXML( $xslDoc->saveXML() );
