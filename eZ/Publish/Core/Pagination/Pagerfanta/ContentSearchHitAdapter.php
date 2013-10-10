@@ -29,6 +29,11 @@ class ContentSearchHitAdapter implements AdapterInterface
      */
     private $searchService;
 
+    /**
+     * @var int
+     */
+    private $nbResults;
+
     public function __construct( Query $query, SearchService $searchService )
     {
         $this->query = $query;
@@ -42,9 +47,14 @@ class ContentSearchHitAdapter implements AdapterInterface
      */
     public function getNbResults()
     {
+        if ( isset( $this->nbResults ) )
+        {
+            return $this->nbResults;
+        }
+
         $countQuery = clone $this->query;
         $countQuery->limit = 0;
-        return $this->searchService->findContent( $countQuery )->totalCount;
+        return $this->nbResults = $this->searchService->findContent( $countQuery )->totalCount;
     }
 
     /**
@@ -61,6 +71,12 @@ class ContentSearchHitAdapter implements AdapterInterface
         $query->offset = $offset;
         $query->limit = $length;
 
-        return $this->searchService->findContent( $query )->searchHits;
+        $searchResult = $this->searchService->findContent( $query );
+        if ( !isset( $this->nbResults ) )
+        {
+            $this->nbResults = $searchResult->totalCount;
+        }
+
+        return $searchResult->searchHits;
     }
 }
