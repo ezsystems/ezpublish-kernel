@@ -13,6 +13,7 @@ use eZ\Publish\Core\FieldType\XmlText\Converter;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use DOMDocument;
 use XSLTProcessor;
+use RuntimeException;
 
 /**
  * Converts internal XmlText representation to HTML5
@@ -121,6 +122,11 @@ class Html5 implements Converter
         $insertBeforeEl = $xslDoc->documentElement->firstChild;
         foreach ( $this->getSortedCustomStylesheets() as $stylesheet )
         {
+            if ( !file_exists( $stylesheet ) )
+            {
+                throw new RuntimeException( "Cannot find XSL stylesheet for XMLText rendering: $stylesheet" );
+            }
+
             $newEl = $xslDoc->createElement( 'xsl:import' );
             $hrefAttr = $xslDoc->createAttribute( 'href' );
             $hrefAttr->value = $stylesheet;
