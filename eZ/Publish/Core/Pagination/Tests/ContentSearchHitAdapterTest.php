@@ -65,12 +65,15 @@ class ContentSearchHitAdapterTest extends PHPUnit_Framework_TestCase
 
         $adapter = $this->getAdapter( $query, $this->searchService );
         $this->assertSame( $nbResults, $adapter->getNbResults() );
+        // Running a 2nd time to ensure SearchService::findContent() is called only once.
+        $this->assertSame( $nbResults, $adapter->getNbResults() );
     }
 
     public function testGetSlice()
     {
         $offset = 20;
         $limit = 10;
+        $nbResults = 123;
 
         $query = new Query();
         $query->criterion = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface' );
@@ -92,7 +95,7 @@ class ContentSearchHitAdapterTest extends PHPUnit_Framework_TestCase
             $hits[] = new SearchHit( array( 'valueObject' => $content ) );
         }
         $finalResult = $this->getExpectedFinalResultFromHits( $hits );
-        $searchResult = new SearchResult( array( 'searchHits' => $hits ) );
+        $searchResult = new SearchResult( array( 'searchHits' => $hits, 'totalCount' => $nbResults ) );
         $this
             ->searchService
             ->expects( $this->once() )
@@ -102,6 +105,7 @@ class ContentSearchHitAdapterTest extends PHPUnit_Framework_TestCase
 
         $adapter = $this->getAdapter( $query, $this->searchService );
         $this->assertSame( $finalResult, $adapter->getSlice( $offset, $limit ) );
+        $this->assertSame( $nbResults, $adapter->getNbResults() );
     }
 
     /**
