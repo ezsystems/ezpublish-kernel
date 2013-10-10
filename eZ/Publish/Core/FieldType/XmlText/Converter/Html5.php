@@ -125,7 +125,7 @@ class Html5 implements Converter
             {
                 throw new RuntimeException( "Cannot find XSL stylesheet for XMLText rendering: $stylesheet" );
             }
-            
+
             $newEl = $xslDoc->createElement( 'xsl:import' );
             $hrefAttr = $xslDoc->createAttribute( 'href' );
             $hrefAttr->value = $stylesheet;
