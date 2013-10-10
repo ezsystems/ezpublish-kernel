@@ -24,10 +24,10 @@ class Field extends SortClause
      *
      * @param string $typeIdentifier
      * @param string $fieldIdentifier
-     * @param string $languageCode
      * @param string $sortDirection
+     * @param null|string $languageCode
      */
-    public function __construct( $typeIdentifier, $fieldIdentifier, $languageCode, $sortDirection = Query::SORT_ASC )
+    public function __construct( $typeIdentifier, $fieldIdentifier, $sortDirection = Query::SORT_ASC, $languageCode = null )
     {
         parent::__construct(
             'field',
