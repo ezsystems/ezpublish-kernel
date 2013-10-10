@@ -13,6 +13,7 @@ use eZ\Publish\Core\FieldType\XmlText\Converter;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use DOMDocument;
 use XSLTProcessor;
+use RuntimeException;
 
 /**
  * Converts internal XmlText representation to HTML5
