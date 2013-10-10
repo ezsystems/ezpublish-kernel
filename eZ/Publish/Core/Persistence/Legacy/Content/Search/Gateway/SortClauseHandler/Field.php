@@ -101,38 +101,95 @@ class Field extends SortClauseHandler
         $fieldTarget = $sortClause->targetData;
         $table = $this->getSortTableName( $number );
 
-        $query
-            ->innerJoin(
-                $query->alias(
-                    $this->dbHandler->quoteTable( "ezcontentobject_attribute" ),
-                    $this->dbHandler->quoteIdentifier( $table )
-                ),
-                $query->expr->lAnd(
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn( "contentobject_id", $table ),
-                        $this->dbHandler->quoteColumn( "id", "ezcontentobject" )
+        if ( $fieldTarget->languageCode === null )
+        {
+            $linkTable = $table;
+            $query
+                ->innerJoin(
+                    $query->alias(
+                        $this->dbHandler->quoteTable( "ezcontentobject_attribute" ),
+                        $this->dbHandler->quoteIdentifier( $table )
                     ),
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn( "version", $table ),
-                        $this->dbHandler->quoteColumn( "current_version", "ezcontentobject" )
-                    ),
-                    $query->expr->gt(
-                        $query->expr->bitAnd(
+                    $query->expr->lAnd(
+                        $query->expr->eq(
+                            $this->dbHandler->quoteColumn( "contentobject_id", $table ),
+                            $this->dbHandler->quoteColumn( "id", "ezcontentobject" )
+                        ),
+                        $query->expr->eq(
+                            $this->dbHandler->quoteColumn( "version", $table ),
+                            $this->dbHandler->quoteColumn( "current_version", "ezcontentobject" )
+                        ),
+                        $query->expr->gt(
                             $query->expr->bitAnd(
-                                $this->dbHandler->quoteColumn( "language_id", $table ), ~1
+                                $query->expr->bitAnd( $this->dbHandler->quoteColumn( "language_id", $table ), ~1 ),
+                                $this->dbHandler->quoteColumn( "initial_language_id", "ezcontentobject" )
                             ),
-                            $fieldTarget->languageCode === null ?
-                                $this->dbHandler->quoteColumn( "initial_language_id", "ezcontentobject" ) :
+                            0
+                        )
+                    )
+                );
+        }
+        else
+        {
+            $linkTable = $table . "_main_language";
+            $query
+                ->innerJoin(
+                    $query->alias(
+                        $this->dbHandler->quoteTable( "ezcontentobject_attribute" ),
+                        $this->dbHandler->quoteIdentifier( $linkTable )
+                    ),
+                    $query->expr->lAnd(
+                        $query->expr->eq(
+                            $this->dbHandler->quoteColumn( "contentobject_id", $linkTable ),
+                            $this->dbHandler->quoteColumn( "id", "ezcontentobject" )
+                        ),
+                        $query->expr->eq(
+                            $this->dbHandler->quoteColumn( "version", $linkTable ),
+                            $this->dbHandler->quoteColumn( "current_version", "ezcontentobject" )
+                        ),
+                        $query->expr->gt(
+                            $query->expr->bitAnd(
+                                $query->expr->bitAnd( $this->dbHandler->quoteColumn( "language_id", $linkTable ), ~1 ),
+                                $this->dbHandler->quoteColumn( "initial_language_id", "ezcontentobject" )
+                            ),
+                            0
+                        )
+                    )
+                )
+                ->leftJoin(
+                    $query->alias(
+                        $this->dbHandler->quoteTable( "ezcontentobject_attribute" ),
+                        $this->dbHandler->quoteIdentifier( $table )
+                    ),
+                    $query->expr->lAnd(
+                        $query->expr->eq(
+                            $this->dbHandler->quoteColumn( "contentobject_id", $linkTable ),
+                            $this->dbHandler->quoteColumn( "contentobject_id", $table )
+                        ),
+                        $query->expr->eq(
+                            $this->dbHandler->quoteColumn( "contentclassattribute_id", $linkTable ),
+                            $this->dbHandler->quoteColumn( "contentclassattribute_id", $table )
+                        ),
+                        $query->expr->eq(
+                            $this->dbHandler->quoteColumn( "version", $linkTable ),
+                            $this->dbHandler->quoteColumn( "version", $table )
+                        ),
+                        $query->expr->gt(
+                            $query->expr->bitAnd(
+                                $query->expr->bitAnd( $this->dbHandler->quoteColumn( "language_id", $table ), ~1 ),
                                 $query->bindValue(
                                     $this->languageHandler->loadByLanguageCode( $fieldTarget->languageCode )->id,
                                     null,
                                     \PDO::PARAM_INT
                                 )
-                        ),
-                        0
+                            ),
+                            0
+                        )
                     )
-                )
-            )
+                );
+        }
+
+        $query
             ->innerJoin(
                 $query->alias(
                     $this->dbHandler->quoteTable( "ezcontentclass_attribute" ),
@@ -140,7 +197,7 @@ class Field extends SortClauseHandler
                 ),
                 $query->expr->lAnd(
                     $query->expr->eq(
-                        $this->dbHandler->quoteColumn( "contentclassattribute_id", $table ),
+                        $this->dbHandler->quoteColumn( "contentclassattribute_id", $linkTable ),
                         $this->dbHandler->quoteColumn( "id", "cc_attr_$number" )
                     ),
                     $query->expr->eq(

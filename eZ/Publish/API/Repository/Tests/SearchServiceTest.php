@@ -1393,6 +1393,100 @@ class SearchServiceTest extends BaseTest
     /**
      * Test for the findContent() method.
      *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testMultilingualFieldSortUnusedLanguageDoesNotFilterResultSet()
+    {
+        $contentType = $this->createTestContentType();
+
+        $contentIdList = array();
+        $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 2 )->id;
+        $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 4 )->id;
+        $contentIdList[3] = $this->createMultilingualContent( $contentType, 2, 3 )->id;
+        $contentIdList[4] = $this->createMultilingualContent( $contentType, 1, 1 )->id;
+
+        $query = new Query(
+            array(
+                'criterion' => new Criterion\ContentTypeIdentifier( "test-type" ),
+                'sortClauses' => array(
+                    // "test-type" Content instance do not exist in "eng-US"
+                    new SortClause\Field( "test-type", "integer", Query::SORT_ASC, "eng-US" ),
+                )
+            )
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 4, $result->totalCount );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testMultilingualFieldSortUnusedLanguageDoesNotFilterResultSet
+     */
+    public function testMultilingualFieldSortUnusedLanguageDoesNotChangeSort()
+    {
+        $contentType = $this->createTestContentType();
+
+        $contentIdList = array();
+        $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 2, "eng-GB" )->id;
+        $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 4, "eng-GB" )->id;
+        $contentIdList[3] = $this->createMultilingualContent( $contentType, 2, 3, "ger-DE" )->id;
+        $contentIdList[4] = $this->createMultilingualContent( $contentType, 1, 1, "ger-DE" )->id;
+
+        $query = new Query(
+            array(
+                'criterion' => new Criterion\ContentTypeIdentifier( "test-type" ),
+                'sortClauses' => array(
+                    // "test-type" Content instance do not exist in "eng-US"
+                    new SortClause\Field( "test-type", "integer", Query::SORT_DESC ),
+                    new SortClause\Field( "test-type", "integer", Query::SORT_ASC, "ger-DE" ),
+                )
+            )
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 4, $result->totalCount );
+
+        /**
+         * Expected order, Value eng-GB, Value ger-DE
+         *
+         * Content 3, 2, 3
+         * Content 2, 2, 4
+         * Content 1, 1, 2
+         * Content 4, 1, 1
+         */
+
+        $this->assertEquals(
+            $contentIdList[3],
+            $result->searchHits[0]->valueObject->id
+        );
+        $this->assertEquals(
+            $contentIdList[2],
+            $result->searchHits[1]->valueObject->id
+        );
+        $this->assertEquals(
+            $contentIdList[4],
+            $result->searchHits[2]->valueObject->id
+        );
+        $this->assertEquals(
+            $contentIdList[1],
+            $result->searchHits[3]->valueObject->id
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
      * @dataProvider getSortedSearches
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
