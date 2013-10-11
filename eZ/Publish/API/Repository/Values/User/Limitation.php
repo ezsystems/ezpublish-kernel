@@ -31,6 +31,7 @@ abstract class Limitation extends ValueObject
     const SUBTREE = "Subtree";
     const USERGROUP = "Group";
     const PARENTUSERGROUP = "ParentGroup";
+    const STATUS = "Status";
 
     /**
      * Returns the limitation identifier (one of the defined constants) or a custom limitation
