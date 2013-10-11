@@ -146,7 +146,7 @@ class DomainMapper
                 "modificationDate" => $this->getDateTime( $spiVersionInfo->modificationDate ),
                 "creatorId" => $spiVersionInfo->creatorId,
                 "creationDate" => $this->getDateTime( $spiVersionInfo->creationDate ),
-                "status" => $this->convertVersionStatus( $spiVersionInfo->status ),
+                "status" => $spiVersionInfo->status,
                 "initialLanguageCode" => $spiVersionInfo->initialLanguageCode,
                 "languageCodes" => $languageCodes,
                 "names" => $spiVersionInfo->names,
@@ -222,28 +222,6 @@ class DomainMapper
                 "destinationContentInfo" => $destinationContentInfo
             )
         );
-    }
-
-    /**
-     * Converts SPI VersionInfo::STATUS_* constant to the API VersionInfo::STATUS_* constant.
-     *
-     * @param mixed $spiStatus
-     *
-     * @return mixed
-     */
-    public function convertVersionStatus( $spiStatus )
-    {
-        switch ( $spiStatus )
-        {
-            case SPIVersionInfo::STATUS_DRAFT:
-                return VersionInfo::STATUS_DRAFT;
-            case SPIVersionInfo::STATUS_PUBLISHED:
-                return VersionInfo::STATUS_PUBLISHED;
-            case SPIVersionInfo::STATUS_ARCHIVED:
-                return VersionInfo::STATUS_ARCHIVED;
-        }
-
-        return null;
     }
 
     /**
