@@ -24,8 +24,17 @@ class DFS implements IOHandler
     /** @var DBInterface */
     protected $db;
 
-    public function construct( DBInterface $db, FSINterface $fs )
+    /** @var string */
+    protected $storagePrefix;
+
+    /**
+     * @param StoragePrefix $storagePrefix
+     * @param DBInterface $db
+     * @param FSInterface $fs
+     */
+    public function construct( StoragePrefix $storagePrefix, DBInterface $db, FSInterface $fs )
     {
+        $this->storagePrefix = $storagePrefix;
         $this->db = $db;
         $this->fs = $fs;
     }
@@ -175,5 +184,4 @@ class DFS implements IOHandler
     {
         // TODO: Implement getUri() method.
     }
-
 }
