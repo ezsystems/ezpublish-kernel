@@ -50,7 +50,9 @@ class DFS implements IOHandler
      */
     public function create( BinaryFileCreateStruct $createStruct )
     {
-        // TODO: Implement create() method.
+        $path = $this->addStoragePrefix( $createStruct->id );
+        $this->db->insert( $path, $createStruct->mtime );
+        $this->fs->createFromStream( $path, $createStruct->getInputStream() );
     }
 
     /**
@@ -62,7 +64,9 @@ class DFS implements IOHandler
      */
     public function delete( $spiBinaryFileId )
     {
-        // TODO: Implement delete() method.
+        $path = $this->addStoragePrefix( $spiBinaryFileId );
+        $this->db->delete( $path );
+        $this->fs->delete( $path );
     }
 
     /**

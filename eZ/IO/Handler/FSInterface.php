@@ -8,7 +8,27 @@
  */
 namespace BD\Bundle\DFSBundle\eZ\IO\Handler;
 
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+
 interface FSInterface
 {
+    /**
+     * Creates the file $path with data from $resource
+     * @param string $path
+     * @param resource $resource
+     *
+     * @throws InvalidArgumentException If file already exists
+     *
+     * @return void
+     */
+    public function createFromStream( $path, $resource );
 
+    /**
+     * Deletes the file $path
+     * @param string $path
+     *
+     * @throws NotFoundException If $path isn't found
+     */
+    public function delete( $path );
 }
