@@ -18,6 +18,18 @@ use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
 
 class DFS implements IOHandler
 {
+    /** @var FSInterface */
+    protected $fs;
+
+    /** @var DBInterface */
+    protected $db;
+
+    public function construct( DBInterface $db, FSINterface $fs )
+    {
+        $this->db = $db;
+        $this->fs = $fs;
+    }
+
     /**
      * Creates and stores a new BinaryFile based on the BinaryFileCreateStruct $file
      *
