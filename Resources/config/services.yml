@@ -1,7 +1,16 @@
 parameters:
-#    bd_test.example.class: BD\Bundle\TestBundle\Example
+    dfs.io_handler.class: BD\Bundle\DFSBundle\eZ\IO\Handler\DFS
+    dfs.io_handler.db.class: BD\Bundle\DFSBundle\eZ\IO\Handler\DBInterface
+    dfs.io_handler.fs.class: BD\Bundle\DFSBundle\eZ\IO\Handler\FSInterface
 
 services:
-#    bd_test.example:
-#        class: %bd_test.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    dfs.io_handler:
+        class: %dfs.io_handler.class%
+        arguments:
+            [ @dfs.io_handler.db, @dfs.io_handler.fs ]
+
+    dfs.io_handler.db:
+        class: %dfs.io_handler.db.class%
+
+    dfs.io_handler.fs:
+        class: %dfs.io_handler.fs.class%
