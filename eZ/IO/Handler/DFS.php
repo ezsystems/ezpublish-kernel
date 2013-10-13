@@ -28,11 +28,11 @@ class DFS implements IOHandler
     protected $storagePrefix;
 
     /**
-     * @param StoragePrefix $storagePrefix
+     * @param string $storagePrefix
      * @param DBInterface $db
      * @param FSInterface $fs
      */
-    public function construct( StoragePrefix $storagePrefix, DBInterface $db, FSInterface $fs )
+    public function construct( $storagePrefix, DBInterface $db, FSInterface $fs )
     {
         $this->storagePrefix = $storagePrefix;
         $this->db = $db;
