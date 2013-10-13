@@ -28,4 +28,33 @@ interface DBInterface
      * @param string $path
      */
     public function delete( $path );
+
+    /**
+     * Loads and returns metadata for $path
+     *
+     * @param string $path
+     *
+     * @return array A hash with metadata for $path. Keys: mtime, size.
+     */
+    public function loadMetadata( $path );
+
+    /**
+     * Checks if a file $path exists
+     *
+     * @param string $path
+     *
+     * @return bool
+     */
+    public function exists( $path );
+
+    /**
+     * Renames file $fromPath to $toPath
+     *
+     * @param $fromPath
+     * @param $toPath
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $toPath already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $fromPath does not exist
+     */
+    public function rename( $fromPath, $toPath );
 }
