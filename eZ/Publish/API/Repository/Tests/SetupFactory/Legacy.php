@@ -213,10 +213,14 @@ class Legacy extends SetupFactory
      */
     protected function clearInternalCaches()
     {
+        /** @var $handler \eZ\Publish\Core\Persistence\Legacy\Handler */
         $handler = $this->getServiceContainer()->get( 'persistence_handler_legacy' );
-
         $handler->contentLanguageHandler()->clearCache();
         $handler->contentTypeHandler()->clearCache();
+
+        /** @var $decorator \eZ\Publish\Core\Persistence\Cache\Tests\Helpers\IntegrationTestCacheServiceDecorator */
+        $decorator = $this->getServiceContainer()->get( 'persistence_handler_cache_integration_decorator' );
+        $decorator->clearAllTestData();
     }
 
     /**
@@ -386,7 +390,7 @@ class Legacy extends SetupFactory
 
             $serviceSettings = $configManager->getConfiguration( 'service' )->getAll();
 
-            $serviceSettings['persistence_handler']['alias'] = 'persistence_handler_legacy';
+            $serviceSettings['persistence_handler']['alias'] = 'persistence_handler_cache';
             $serviceSettings['io_handler']['alias'] = 'io_handler_legacy';
 
             // Needed for URLAliasService tests

@@ -85,7 +85,8 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
             new CacheUserHandler( $this->cacheMock, $this->persistenceFactoryMock, $this->loggerMock ),
             new CacheSearchHandler( $this->cacheMock, $this->persistenceFactoryMock, $this->loggerMock ),
             new CacheUrlAliasHandler( $this->cacheMock, $this->persistenceFactoryMock, $this->loggerMock ),
-            $this->loggerMock
+            $this->loggerMock,
+            $this->cacheMock
         );
     }
 
