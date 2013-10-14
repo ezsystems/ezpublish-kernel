@@ -20,6 +20,7 @@ use eZ\Publish\Core\Persistence\Cache\UserHandler as CacheUserHandler;
 use eZ\Publish\Core\Persistence\Cache\SearchHandler as CacheSearchHandler;
 use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
+use eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator;
 
 /**
  * Persistence Cache Handler class
@@ -77,6 +78,11 @@ class Handler implements PersistenceHandlerInterface
     protected $logger;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator
+     */
+    protected $cache;
+
+    /**
      * Construct the class
      *
      * @param \eZ\Publish\Core\Persistence\Factory $persistenceFactory Must be factory for inner persistence, ie: legacy
@@ -89,6 +95,7 @@ class Handler implements PersistenceHandlerInterface
      * @param SearchHandler $searchHandler
      * @param UrlAliasHandler $urlAliasHandler
      * @param PersistenceLogger $logger
+     * @param CacheServiceDecorator $cache
      */
     public function __construct(
         PersistenceFactory $persistenceFactory,
@@ -100,7 +107,8 @@ class Handler implements PersistenceHandlerInterface
         CacheUserHandler $userHandler,
         CacheSearchHandler $searchHandler,
         CacheUrlAliasHandler $urlAliasHandler,
-        PersistenceLogger $logger
+        PersistenceLogger $logger,
+        CacheServiceDecorator $cache
     )
     {
         $this->persistenceFactory = $persistenceFactory;
@@ -113,6 +121,7 @@ class Handler implements PersistenceHandlerInterface
         $this->searchHandler = $searchHandler;
         $this->urlAliasHandler = $urlAliasHandler;
         $this->logger = $logger;
+        $this->cache = $cache;
     }
 
     /**
@@ -241,6 +250,7 @@ class Handler implements PersistenceHandlerInterface
     public function rollback()
     {
         $this->logger->logCall( __METHOD__ );
+        $this->cache->clear();
         $this->persistenceFactory->getPersistenceHandler()->rollback();
     }
 }

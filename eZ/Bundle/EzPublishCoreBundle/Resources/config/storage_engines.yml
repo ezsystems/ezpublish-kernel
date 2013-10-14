@@ -110,6 +110,7 @@ services:
             - @ezpublish.spi.persistence.cache.searchHandler
             - @ezpublish.spi.persistence.cache.urlAliasHandler
             - @ezpublish.spi.persistence.cache.persistenceLogger
+            - @ezpublish.cache_pool.spi.cache.decorator
 
     ezpublish.spi.persistence.lazy_factory:
         class: %ezpublish.spi.persistence.lazy_factory.class%
