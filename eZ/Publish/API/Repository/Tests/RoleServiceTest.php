@@ -818,15 +818,18 @@ class RoleServiceTest extends BaseTest
             }
         }
 
-        $this->assertEquals(
-            array(
-                new ContentTypeLimitation(
-                    array(
-                        'limitationValues' => array( 29, 30 )
-                    )
-                )
-            ),
-            $limitations
+        $this->assertCount( 1, $limitations );
+        $this->assertInstanceOf(
+            "\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation",
+            $limitations[0]
+        );
+
+        $expectedData = array(
+            'limitationValues' => array( 29, 30 )
+        );
+        $this->assertPropertiesCorrectUnsorted(
+            $expectedData,
+            $limitations[0]
         );
     }
 
