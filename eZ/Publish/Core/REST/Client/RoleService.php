@@ -274,7 +274,7 @@ class RoleService implements APIRoleService, Sessionable
      * Updates the limitations of a policy. The module and function cannot be changed and
      * the limitations are replaced by the ones in $roleUpdateStruct
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to u�date a policy
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a policy
      *
      * @param \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct $policyUpdateStruct
      * @param \eZ\Publish\API\Repository\Values\User\Policy $policy
