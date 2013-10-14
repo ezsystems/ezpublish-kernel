@@ -65,7 +65,7 @@ before_script:
   - cp config.php-DEVELOPMENT config.php
   - ./composer_install_github_key.sh
   - composer install --dev --prefer-source
-  - "if [ \"$TEST_CONFIG\" = \"phpunit-integration-legacy-solr.xml\" ] ; then curl https://raw.github.com/patrickallaert/travis-solr/master/travis-solr.sh | SOLR_VERSION=3.6.2 SOLR_CONFS=eZ/Publish/Core/Persistence/Solr/Content/Search/schema.xml bash ; fi"
+  - "if [ \"$TEST_CONFIG\" = \"phpunit-integration-legacy-solr.xml\" ] ; then curl https://raw.github.com/andrerom/travis-solr/ez/travis-solr.sh | SOLR_VERSION=3.6.2 SOLR_CONFS=eZ/Publish/Core/Persistence/Solr/Content/Search/schema.xml bash ; fi"
 
 # execute phpunit as the script command
 script: "phpunit -d date.timezone=$TIMEZONE -d memory_limit=-1 -c $TEST_CONFIG"
