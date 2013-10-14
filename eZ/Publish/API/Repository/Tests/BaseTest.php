@@ -201,6 +201,28 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Asserts that properties given in $expectedValues are correctly set in
+     * $actualObject.
+     *
+     * If the property type is array, it will be sorted before comparison.
+     * @TODO: introduced because of randomly failing tests, ref: https://jira.ez.no/browse/EZP-21734
+     *
+     * @param mixed[] $expectedValues
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $actualObject
+     *
+     * @return void
+     */
+    protected function assertPropertiesCorrectUnsorted( array $expectedValues, ValueObject $actualObject )
+    {
+        foreach ( $expectedValues as $propertyName => $propertyValue )
+        {
+            $this->assertPropertiesEqual(
+                $propertyName, $propertyValue, $actualObject->$propertyName, true
+            );
+        }
+    }
+
+    /**
      * Asserts all properties from $expectedValues are correctly set in
      * $actualObject. Additional (virtual) properties can be asserted using
      * $additionalProperties.
@@ -228,7 +250,25 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    private function assertPropertiesEqual( $propertyName, $expectedValue, $actualValue )
+    /**
+     * @see \eZ\Publish\API\Repository\Tests\BaseTest::assertPropertiesCorrectUnsorted()
+     *
+     * @param array $items An array of scalar values
+     */
+    private function sortItems( array &$items )
+    {
+        $sorter = function ( $a, $b )
+        {
+            if ( !is_scalar( $a ) || !is_scalar( $b ) )
+            {
+                $this->fail( "Wrong usage: method " . __METHOD__ . " accepts only an array of scalar values" );
+            }
+            return strcmp( $a, $b );
+        };
+        usort( $items, $sorter );
+    }
+
+    private function assertPropertiesEqual( $propertyName, $expectedValue, $actualValue, $sortArray = false )
     {
         if ( $expectedValue instanceof ArrayObject )
         {
@@ -245,6 +285,12 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         else if ( $actualValue instanceof DateTime )
         {
             $actualValue = $actualValue->format( DateTime::RFC850 );
+        }
+
+        if ( $sortArray && is_array( $actualValue ) && is_array( $expectedValue ) )
+        {
+            $this->sortItems( $actualValue );
+            $this->sortItems( $expectedValue );
         }
 
         $this->assertEquals(
