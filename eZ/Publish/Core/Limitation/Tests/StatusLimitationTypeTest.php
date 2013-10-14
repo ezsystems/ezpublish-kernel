@@ -24,8 +24,6 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
 class StatusLimitationTypeTest extends Base
 {
     /**
-     * @covers \eZ\Publish\Core\Limitation\StatusLimitationType::__construct
-     *
      * @return \eZ\Publish\Core\Limitation\StatusLimitationType
      */
     public function testConstruct()
