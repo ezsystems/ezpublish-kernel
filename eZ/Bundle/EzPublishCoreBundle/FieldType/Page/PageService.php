@@ -43,6 +43,7 @@ class PageService extends BasePageService implements RepositoryAwareInterface
     public function getValidBlockItemsAsContentInfo( Block $block )
     {
         $contentService = $this->repository->getContentService();
+        $contentInfoObjects = array();
         foreach ( $this->getValidBlockItems( $block ) as $item )
         {
             $contentInfoObjects[] = $contentService->loadContentInfo( $item->contentId );
