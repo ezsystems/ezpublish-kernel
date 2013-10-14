@@ -36,14 +36,12 @@ class LegacySolr extends Legacy
      */
     public function getRepository( $initializeFromScratch = true )
     {
+        // Load repository fists so all initialize steps are done
         $repository = parent::getRepository( $initializeFromScratch );
 
-        // @HACK: This is a hack to inject a different search handler -- is
+        // @TODO @HACK: This is a hack to inject a different search handler -- is
         // there a well supported way to do this? I don't think so.
-        $persistenceProperty = new \ReflectionProperty( $repository, 'persistenceHandler' );
-        $persistenceProperty->setAccessible( true );
-        $persistenceHandler = $persistenceProperty->getValue( $repository );
-
+        $persistenceHandler = $this->getServiceContainer()->get( 'persistence_handler_legacy' );
         $searchProperty = new \ReflectionProperty( $persistenceHandler, 'searchHandler' );
         $searchProperty->setAccessible( true );
         $searchProperty->setValue(
