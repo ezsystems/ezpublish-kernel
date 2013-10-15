@@ -99,9 +99,26 @@ class StatusLimitationTypeTest extends Base
         return array(
             array( new StatusLimitation(), 0 ),
             array( new StatusLimitation( array() ), 0 ),
-            array( new StatusLimitation( array( 'limitationValues' => array( 1 ) ) ), 0 ),
+            array(
+                new StatusLimitation(
+                    array(
+                        'limitationValues' => array( SPIVersionInfo::STATUS_PUBLISHED )
+                    )
+                ),
+                0
+            ),
             array( new StatusLimitation( array( 'limitationValues' => array( 100 ) ) ), 1 ),
-            array( new StatusLimitation( array( 'limitationValues' => array( 1, PHP_INT_MAX ) ) ), 1 ),
+            array(
+                new StatusLimitation(
+                    array(
+                        'limitationValues' => array(
+                            SPIVersionInfo::STATUS_PUBLISHED,
+                            PHP_INT_MAX
+                        )
+                    )
+                ),
+                1
+            ),
             array(
                 new StatusLimitation(
                     array(
@@ -112,6 +129,18 @@ class StatusLimitationTypeTest extends Base
                     )
                 ),
                 2
+            ),
+            array(
+                new StatusLimitation(
+                    array(
+                        'limitationValues' => array(
+                            SPIVersionInfo::STATUS_DRAFT,
+                            SPIVersionInfo::STATUS_PUBLISHED,
+                            SPIVersionInfo::STATUS_ARCHIVED
+                        )
+                    )
+                ),
+                0
             ),
         );
     }
