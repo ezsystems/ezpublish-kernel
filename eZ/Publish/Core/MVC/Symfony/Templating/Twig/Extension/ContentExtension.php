@@ -9,6 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Helper\FieldHelper;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\Repository\Values\Content\Content;
@@ -537,14 +540,25 @@ class ContentExtension extends Twig_Extension
     }
 
     /**
-     * @param \eZ\Publish\Core\Repository\Values\Content\Content $content
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $content Must be a valid Content or ContentInfo object.
      * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType When $content is not a valid Content or ContentInfo object.
      *
      * @return string
      */
-    public function getTranslatedContentName( Content $content, $forcedLanguage = null )
+    public function getTranslatedContentName( ValueObject $content, $forcedLanguage = null )
     {
-        return $this->translationHelper->getTranslatedName( $content, $forcedLanguage );
+        if ( $content instanceof Content )
+        {
+            return $this->translationHelper->getTranslatedContentName( $content, $forcedLanguage );
+        }
+        else if ( $content instanceof ContentInfo )
+        {
+            return $this->translationHelper->getTranslatedContentNameByContentInfo( $content, $forcedLanguage );
+        }
+
+        throw new InvalidArgumentType( '$content', 'eZ\Publish\API\Repository\Values\Content\Content or eZ\Publish\API\Repository\Values\Content\ContentInfo', $content );
     }
 
     /**

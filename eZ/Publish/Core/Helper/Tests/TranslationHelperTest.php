@@ -9,12 +9,12 @@
 
 namespace eZ\Publish\Core\Helper\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\Core\Helper\TranslationHelper;
-use string;
 
 class TranslationHelperTest extends PHPUnit_Framework_TestCase
 {
@@ -22,6 +22,11 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface
      */
     private $configResolver;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\ContentService
+     */
+    private $contentService;
 
     /**
      * @var \eZ\Publish\Core\Helper\TranslationHelper
@@ -42,7 +47,8 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
-        $this->contentHelper = new \eZ\Publish\Core\Helper\TranslationHelper( $this->configResolver );
+        $this->contentService = $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' );
+        $this->contentHelper = new TranslationHelper( $this->configResolver, $this->contentService );
         $this->translatedNames = array(
             'eng-GB' => 'My name in english',
             'fre-FR' => 'Mon nom en français',
@@ -90,7 +96,32 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
             ->with( 'languages' )
             ->will( $this->returnValue( $prioritizedLanguages ) );
 
-        $this->assertSame( $this->translatedNames[$expectedLocale], $this->contentHelper->getTranslatedName( $content ) );
+        $this->assertSame( $this->translatedNames[$expectedLocale], $this->contentHelper->getTranslatedContentName( $content ) );
+    }
+
+    /**
+     * @dataProvider getTranslatedNameProvider
+     *
+     * @param array $prioritizedLanguages
+     * @param string $expectedLocale
+     */
+    public function testGetTranslatedNameByContentInfo( array $prioritizedLanguages, $expectedLocale )
+    {
+        $content = $this->generateContent();
+        $contentInfo = new ContentInfo( array( 'id' => 123 ) );
+        $this->configResolver
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'languages' )
+            ->will( $this->returnValue( $prioritizedLanguages ) );
+
+        $this->contentService
+            ->expects( $this->once() )
+            ->method( 'loadContentByContentInfo' )
+            ->with( $contentInfo )
+            ->will( $this->returnValue( $content ) );
+
+        $this->assertSame( $this->translatedNames[$expectedLocale], $this->contentHelper->getTranslatedContentNameByContentInfo( $contentInfo ) );
     }
 
     public function getTranslatedNameProvider()
@@ -104,6 +135,49 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testGetTranslatedNameByContentInfoForcedLanguage()
+    {
+        $content = $this->generateContent();
+        $contentInfo = new ContentInfo( array( 'id' => 123 ) );
+        $this->configResolver
+            ->expects( $this->never() )
+            ->method( 'getParameter' );
+
+        $this->contentService
+            ->expects( $this->exactly( 2 ) )
+            ->method( 'loadContentByContentInfo' )
+            ->with( $contentInfo )
+            ->will( $this->returnValue( $content ) );
+
+        $this->assertSame( 'My name in english', $this->contentHelper->getTranslatedContentNameByContentInfo( $contentInfo, 'eng-GB' ) );
+        $this->assertSame( 'Mon nom en français', $this->contentHelper->getTranslatedContentNameByContentInfo( $contentInfo, 'eng-US' ) );
+    }
+
+    public function testGetTranslatedNameByContentInfoForcedLanguageMainLanguage()
+    {
+        $name = 'Name in main language';
+        $mainLanguage = 'eng-GB';
+        $contentInfo = new ContentInfo(
+            array(
+                'id' => 123,
+                'mainLanguageCode' => $mainLanguage,
+                'name' => $name
+            )
+        );
+        $this->configResolver
+            ->expects( $this->never() )
+            ->method( 'getParameter' );
+
+        $this->contentService
+            ->expects( $this->never() )
+            ->method( 'loadContentByContentInfo' );
+
+        $this->assertSame(
+            $name,
+            $this->contentHelper->getTranslatedContentNameByContentInfo( $contentInfo, $mainLanguage )
+        );
+    }
+
     public function testGetTranslatedNameForcedLanguage()
     {
         $content = $this->generateContent();
@@ -111,8 +185,8 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
             ->expects( $this->never() )
             ->method( 'getParameter' );
 
-        $this->assertSame( 'My name in english', $this->contentHelper->getTranslatedName( $content, 'eng-GB' ) );
-        $this->assertSame( 'Mon nom en français', $this->contentHelper->getTranslatedName( $content, 'eng-US' ) );
+        $this->assertSame( 'My name in english', $this->contentHelper->getTranslatedContentName( $content, 'eng-GB' ) );
+        $this->assertSame( 'Mon nom en français', $this->contentHelper->getTranslatedContentName( $content, 'eng-US' ) );
     }
 
     /**
