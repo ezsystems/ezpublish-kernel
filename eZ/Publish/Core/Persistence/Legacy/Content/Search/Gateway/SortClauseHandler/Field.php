@@ -13,6 +13,7 @@ use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\SPI\Persistence\Content\Type;
 use ezcQuerySelect;
 
 /**
@@ -203,6 +204,10 @@ class Field extends SortClauseHandler
                     $query->expr->eq(
                         $this->dbHandler->quoteColumn( "identifier", "cc_attr_$number" ),
                         $query->bindValue( $fieldTarget->fieldIdentifier )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( "version", "cc_attr_$number" ),
+                        $query->bindValue( Type::STATUS_DEFINED, null, \PDO::PARAM_INT )
                     )
                 )
             )
@@ -219,6 +224,10 @@ class Field extends SortClauseHandler
                     $query->expr->eq(
                         $this->dbHandler->quoteColumn( "identifier", "cc_$number" ),
                         $query->bindValue( $fieldTarget->typeIdentifier )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( "version", "cc_$number" ),
+                        $query->bindValue( Type::STATUS_DEFINED, null, \PDO::PARAM_INT )
                     )
                 )
             );
