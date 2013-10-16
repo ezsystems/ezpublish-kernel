@@ -22,7 +22,8 @@ use eZ\Publish\Core\FieldType;
 use eZ\Publish\Core\SignalSlot\Repository as SignalSlotRepository;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher;
 use eZ\Publish\Core\SignalSlot\SlotFactory\GeneralSlotFactory;
-use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\Core\Persistence\Legacy\Handler as LegacyPersistenceHandler;
+use eZ\Publish\Core\Persistence\Cache\Handler as CachePersistenceHandler;
 use eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandler;
 
 /**
@@ -44,17 +45,18 @@ class LegacySolr extends Legacy
 
         // @TODO @HACK: This is a hack to inject a different search handler -- is
         // there a well supported way to do this? I don't think so.
-        $persistenceHandler = $this->getServiceContainer()->get( 'persistence_handler_legacy' );
-        $searchProperty = new \ReflectionProperty( $persistenceHandler, 'searchHandler' );
+        $persistenceHandler = $this->getServiceContainer()->get( 'persistence_handler' );
+        $legacyPersistenceHandler = $this->getServiceContainer()->get( 'persistence_handler_legacy' );
+        $searchProperty = new \ReflectionProperty( $legacyPersistenceHandler, 'searchHandler' );
         $searchProperty->setAccessible( true );
         $searchProperty->setValue(
-            $persistenceHandler,
+            $legacyPersistenceHandler,
             $searchHandler = $this->getSearchHandler( $persistenceHandler )
         );
 
         if ( $initializeFromScratch )
         {
-            $this->indexAll( $persistenceHandler, $searchHandler );
+            $this->indexAll( $legacyPersistenceHandler, $persistenceHandler, $searchHandler );
         }
 
         $repository = new SignalSlotRepository(
@@ -99,10 +101,10 @@ class LegacySolr extends Legacy
     }
 
     /**
-     * @param PersistenceHandler $persistenceHandler
+     * @param CachePersistenceHandler $persistenceHandler
      * @return Search\Handler
      */
-    protected function getSearchHandler( PersistenceHandler $persistenceHandler )
+    protected function getSearchHandler( CachePersistenceHandler $persistenceHandler )
     {
         $nameGenerator = new FieldNameGenerator();
         $fieldRegistry = new FieldRegistry(
@@ -221,16 +223,17 @@ class LegacySolr extends Legacy
     }
 
     /**
-     * @param PersistenceHandler $persistenceHandler
+     * @param LegacyPersistenceHandler $legacyPersistenceHandler
+     * @param CachePersistenceHandler $cachePersistenceHandler
      * @param SearchHandler $searchHandler
      */
-    protected function indexAll( PersistenceHandler $persistenceHandler, SearchHandler $searchHandler )
+    protected function indexAll( LegacyPersistenceHandler $legacyPersistenceHandler, CachePersistenceHandler $cachePersistenceHandler, SearchHandler $searchHandler )
     {
         // @todo: Is there a nicer way to get access to all content objects? We
         // require this to run a full index here.
-        $dbHandlerProperty = new \ReflectionProperty( $persistenceHandler, 'dbHandler' );
+        $dbHandlerProperty = new \ReflectionProperty( $legacyPersistenceHandler, 'dbHandler' );
         $dbHandlerProperty->setAccessible( true );
-        $db = $dbHandlerProperty->getValue( $persistenceHandler );
+        $db = $dbHandlerProperty->getValue( $legacyPersistenceHandler );
 
         $query = $db->createSelectQuery()
             ->select( 'id', 'current_version' )
@@ -243,7 +246,7 @@ class LegacySolr extends Legacy
         while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) )
         {
             $searchHandler->indexContent(
-                $persistenceHandler->contentHandler()->load( $row['id'], $row['current_version'] )
+                $cachePersistenceHandler->contentHandler()->load( $row['id'], $row['current_version'] )
             );
         }
     }
