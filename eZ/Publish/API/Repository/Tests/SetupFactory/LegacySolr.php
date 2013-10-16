@@ -22,6 +22,8 @@ use eZ\Publish\Core\FieldType;
 use eZ\Publish\Core\SignalSlot\Repository as SignalSlotRepository;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher;
 use eZ\Publish\Core\SignalSlot\SlotFactory\GeneralSlotFactory;
+use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandler;
 
 /**
  * A Test Factory is used to setup the infrastructure for a tests, based on a
@@ -32,6 +34,7 @@ class LegacySolr extends Legacy
     /**
      * Returns a configured repository for testing.
      *
+     * @param bool $initializeFromScratch
      * @return \eZ\Publish\API\Repository\Repository
      */
     public function getRepository( $initializeFromScratch = true )
@@ -95,7 +98,11 @@ class LegacySolr extends Legacy
         return $repository;
     }
 
-    protected function getSearchHandler( $persistenceHandler )
+    /**
+     * @param PersistenceHandler $persistenceHandler
+     * @return Search\Handler
+     */
+    protected function getSearchHandler( PersistenceHandler $persistenceHandler )
     {
         $nameGenerator = new FieldNameGenerator();
         $fieldRegistry = new FieldRegistry(
@@ -213,7 +220,11 @@ class LegacySolr extends Legacy
         );
     }
 
-    protected function indexAll( $persistenceHandler, $searchHandler )
+    /**
+     * @param PersistenceHandler $persistenceHandler
+     * @param SearchHandler $searchHandler
+     */
+    protected function indexAll( PersistenceHandler $persistenceHandler, SearchHandler $searchHandler )
     {
         // @todo: Is there a nicer way to get access to all content objects? We
         // require this to run a full index here.
