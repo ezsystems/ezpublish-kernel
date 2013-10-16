@@ -9,7 +9,9 @@
 
 namespace eZ\Publish\Core\Helper;
 
+use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
@@ -23,21 +25,27 @@ class TranslationHelper
      */
     protected $configResolver;
 
-    public function __construct( ConfigResolverInterface $configResolver )
+    /**
+     * @var \eZ\Publish\API\Repository\ContentService
+     */
+    protected $contentService;
+
+    public function __construct( ConfigResolverInterface $configResolver, ContentService $contentService )
     {
         $this->configResolver = $configResolver;
+        $this->contentService = $contentService;
     }
 
     /**
      * Returns content name, translated.
-     * By default this method returns the name in current language, unless $forcedLanguage is provided.
+     * By default this method uses prioritized languages, unless $forcedLanguage is provided.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
      *
      * @return string
      */
-    public function getTranslatedName( Content $content, $forcedLanguage = null )
+    public function getTranslatedContentName( Content $content, $forcedLanguage = null )
     {
         if ( $forcedLanguage !== null )
         {
@@ -60,6 +68,30 @@ class TranslationHelper
                 return $translatedName;
             }
         }
+    }
+
+    /**
+     * Returns content name, translated, from a ContentInfo object.
+     * By default this method uses prioritized languages, unless $forcedLanguage is provided.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
+     *
+     * @todo Remove ContentService usage when translated names are available in ContentInfo (see https://jira.ez.no/browse/EZP-21755)
+     *
+     * @return string
+     */
+    public function getTranslatedContentNameByContentInfo( ContentInfo $contentInfo, $forcedLanguage = null )
+    {
+        if ( isset( $forcedLanguage ) && $forcedLanguage === $contentInfo->mainLanguageCode )
+        {
+            return $contentInfo->name;
+        }
+
+        return $this->getTranslatedContentName(
+            $this->contentService->loadContentByContentInfo( $contentInfo ),
+            $forcedLanguage
+        );
     }
 
     /**

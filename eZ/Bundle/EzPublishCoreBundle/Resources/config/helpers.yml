@@ -7,7 +7,7 @@ services:
     # Helpers
     ezpublish.translation_helper:
         class: %ezpublish.translation_helper.class%
-        arguments: [@ezpublish.config.resolver]
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.service.content]
 
     ezpublish.field_helper:
         class: %ezpublish.field_helper.class%
