@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
 use eZ\Publish\Core\Persistence\Solr;
 use eZ\Publish\Core\Persistence\Solr\Content\Search;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\Handler as SolrSearchHandler;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator;
@@ -24,7 +25,6 @@ use eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher;
 use eZ\Publish\Core\SignalSlot\SlotFactory\GeneralSlotFactory;
 use eZ\Publish\Core\Persistence\Legacy\Handler as LegacyPersistenceHandler;
 use eZ\Publish\Core\Persistence\Cache\Handler as CachePersistenceHandler;
-use eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandler;
 
 /**
  * A Test Factory is used to setup the infrastructure for a tests, based on a
@@ -225,9 +225,9 @@ class LegacySolr extends Legacy
     /**
      * @param LegacyPersistenceHandler $legacyPersistenceHandler
      * @param CachePersistenceHandler $cachePersistenceHandler
-     * @param SearchHandler $searchHandler
+     * @param SolrSearchHandler $searchHandler
      */
-    protected function indexAll( LegacyPersistenceHandler $legacyPersistenceHandler, CachePersistenceHandler $cachePersistenceHandler, SearchHandler $searchHandler )
+    protected function indexAll( LegacyPersistenceHandler $legacyPersistenceHandler, CachePersistenceHandler $cachePersistenceHandler, SolrSearchHandler $searchHandler )
     {
         // @todo: Is there a nicer way to get access to all content objects? We
         // require this to run a full index here.
@@ -242,12 +242,15 @@ class LegacySolr extends Legacy
         $stmt = $query->prepare();
         $stmt->execute();
 
-        $searchHandler->purgeIndex();
+        $contentHandler = $cachePersistenceHandler->contentHandler();
         while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) )
         {
-            $searchHandler->indexContent(
-                $cachePersistenceHandler->contentHandler()->load( $row['id'], $row['current_version'] )
-            );
+            $contentObjects[] = $contentHandler->load( $row['id'], $row['current_version'] );
         }
+
+        $searchHandler->setCommit( false );
+        $searchHandler->purgeIndex();
+        $searchHandler->setCommit( true );
+        $searchHandler->bulkIndexContent( $contentObjects );
     }
 }
