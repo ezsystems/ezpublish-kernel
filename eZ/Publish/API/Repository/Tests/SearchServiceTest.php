@@ -1062,6 +1062,11 @@ class SearchServiceTest extends BaseTest
     {
         $contentType = $this->createTestContentType();
 
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
         $contentIdList = array();
         $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 2 )->id;
         $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 4 )->id;
@@ -1078,7 +1083,6 @@ class SearchServiceTest extends BaseTest
             )
         );
 
-        $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
         $result = $searchService->findContent( $query );
 
@@ -1114,6 +1118,11 @@ class SearchServiceTest extends BaseTest
     {
         $contentType = $this->createTestContentType();
 
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
         $contentIdList = array();
         $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 2 )->id;
         $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 4 )->id;
@@ -1130,7 +1139,6 @@ class SearchServiceTest extends BaseTest
             )
         );
 
-        $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
         $result = $searchService->findContent( $query );
 
@@ -1167,6 +1175,11 @@ class SearchServiceTest extends BaseTest
     {
         $contentType = $this->createTestContentType();
 
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
         $contentIdList = array();
         $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 2 )->id;
         $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 4 )->id;
@@ -1183,7 +1196,6 @@ class SearchServiceTest extends BaseTest
             )
         );
 
-        $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
         $result = $searchService->findContent( $query );
 
@@ -1272,6 +1284,11 @@ class SearchServiceTest extends BaseTest
     {
         $contentType = $this->createTestContentType();
 
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
         $contentIdList = array();
         $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 2, 1, "ger-DE" )->id;
         $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 4, 3, "ger-DE" )->id;
@@ -1288,7 +1305,6 @@ class SearchServiceTest extends BaseTest
             )
         );
 
-        $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
         $result = $searchService->findContent( $query );
 
@@ -1320,9 +1336,14 @@ class SearchServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
-    public function testMultilingualFieldSortWithDefaultLanguageVariant2()
+    public function testMultilingualFieldSortWithDefaultLanguage()
     {
         $contentType = $this->createTestContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
 
         $contentIdList = array();
         $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 2, 1, "ger-DE" )->id;
@@ -1340,7 +1361,6 @@ class SearchServiceTest extends BaseTest
             )
         );
 
-        $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
         $result = $searchService->findContent( $query );
 
@@ -1372,9 +1392,14 @@ class SearchServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
-    public function testMultilingualFieldSortWithDefaultLanguageVariant3()
+    public function testMultilingualFieldSortWithDefaultLanguageVariant2()
     {
         $contentType = $this->createTestContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
 
         $contentIdList = array();
         $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 2, 1, "eng-GB" )->id;
@@ -1392,7 +1417,6 @@ class SearchServiceTest extends BaseTest
             )
         );
 
-        $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
         $result = $searchService->findContent( $query );
 
@@ -1428,6 +1452,11 @@ class SearchServiceTest extends BaseTest
     {
         $contentType = $this->createTestContentType();
 
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
         $contentIdList = array();
         $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 2 )->id;
         $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 4 )->id;
@@ -1444,7 +1473,6 @@ class SearchServiceTest extends BaseTest
             )
         );
 
-        $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
         $result = $searchService->findContent( $query );
 
@@ -1461,6 +1489,11 @@ class SearchServiceTest extends BaseTest
     public function testMultilingualFieldSortUnusedLanguageDoesNotChangeSort()
     {
         $contentType = $this->createTestContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
 
         $contentIdList = array();
         $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 2, 1, "eng-GB" )->id;
@@ -1480,7 +1513,6 @@ class SearchServiceTest extends BaseTest
             )
         );
 
-        $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
         $result = $searchService->findContent( $query );
 
