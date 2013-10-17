@@ -37,7 +37,7 @@ class Simple extends Handler
             case Criterion\Operator::CONTAINS:
                 $filter = $query->expr->eq(
                     $this->dbHandler->quoteColumn( $column ),
-                    $this->lowerCase( $criterion->value )
+                    $query->bindValue( $this->lowerCase( $criterion->value ) )
                 );
                 break;
 
