@@ -134,6 +134,46 @@ class RoleServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::createRole()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
+     */
+    public function testCreateRoleThrowsLimitationValidationException()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService = $repository->getRoleService();
+
+        // Create new role create struct
+        $roleCreate = $roleService->newRoleCreateStruct( 'Lumberjack' );
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
+
+        // Create new subtree limitation
+        $limitation = new SubtreeLimitation(
+            array(
+                'limitationValues' => array( "/mountain/forest/tree/42/" )
+            )
+        );
+
+        // Create policy create struct and add limitation to it
+        $policyCreate = $roleService->newPolicyCreateStruct( "content", "remove" );
+        $policyCreate->addLimitation( $limitation );
+
+        // Add policy create struct to role create struct
+        $roleCreate->addPolicy( $policyCreate );
+
+        // This call will fail with an LimitationValidationException, because subtree
+        // "/mountain/forest/tree/42/" does not exist
+        $roleService->createRole( $roleCreate );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the createRole() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::createRole()
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewRoleCreateStruct
      */
     public function testCreateRoleInTransactionWithRollback()
@@ -621,6 +661,46 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
+     * Test for the addPolicy() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::addPolicy()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewPolicyCreateStruct
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRole
+     */
+    public function testAddPolicyThrowsLimitationValidationException()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService = $repository->getRoleService();
+
+        $roleCreate = $roleService->newRoleCreateStruct( 'Lumberjack' );
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
+
+        $role = $roleService->createRole( $roleCreate );
+
+        // Create new subtree limitation
+        $limitation = new SubtreeLimitation(
+            array(
+                'limitationValues' => array( "/mountain/forest/tree/42/" )
+            )
+        );
+
+        // Create policy create struct and add limitation to it
+        $policyCreateStruct = $roleService->newPolicyCreateStruct( 'content', 'remove' );
+        $policyCreateStruct->addLimitation( $limitation );
+
+        // This call will fail with an LimitationValidationException, because subtree
+        // "/mountain/forest/tree/42/" does not exist
+        $roleService->addPolicy( $role, $policyCreateStruct );
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the createRole() method.
      *
      * @return void
@@ -831,6 +911,74 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
+     * Test for the updatePolicy() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::updatePolicy()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicy
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewPolicyCreateStruct
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewPolicyUpdateStruct
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewRoleCreateStruct
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRole
+     */
+    public function testUpdatePolicyThrowsLimitationValidationException()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService = $repository->getRoleService();
+
+        // Instantiate new policy create
+        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'remove' );
+
+        // Add some limitations for the new policy
+        $policyCreate->addLimitation(
+            new SubtreeLimitation(
+                array(
+                    'limitationValues' => array( "/1/2/" )
+                )
+            )
+        );
+
+        // Instantiate a role create and add the policy create
+        $roleCreate = $roleService->newRoleCreateStruct( 'myRole' );
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
+
+        $roleCreate->addPolicy( $policyCreate );
+
+        // Create a new role instance.
+        $role = $roleService->createRole( $roleCreate );
+
+        // Search for the new policy instance
+        $policy = null;
+        foreach ( $role->getPolicies() as $policy )
+        {
+            if ( $policy->module === 'content' && $policy->function === 'remove' )
+            {
+                break;
+            }
+        }
+
+        // Create an update struct and set a modified limitation
+        $policyUpdate = $roleService->newPolicyUpdateStruct();
+        $policyUpdate->addLimitation(
+            new SubtreeLimitation(
+                array(
+                    'limitationValues' => array( "/mountain/forest/tree/42/" )
+                )
+            )
+        );
+
+        // This call will fail with an LimitationValidationException, because subtree
+        // "/mountain/forest/tree/42/" does not exist
+        $policy = $roleService->updatePolicy( $policy, $policyUpdate );
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the removePolicy() method.
      *
      * @return void
@@ -1002,6 +1150,43 @@ class RoleServiceTest extends BaseTest
             ),
             $roleLimitation
         );
+    }
+
+    /**
+     * Test for the assignRoleToUser() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUser($role, $user, $roleLimitation)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUser
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
+     */
+    public function testAssignRoleToUserWithRoleLimitationThrowsLimitationValidationException()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService = $repository->getRoleService();
+
+        // Load the existing "Anonymous" role
+        $role = $roleService->loadRoleByIdentifier( 'Anonymous' );
+
+        // Get current user
+        $currentUser = $repository->getCurrentUser();
+
+        // Assign the "Anonymous" role to the current user
+        // This call will fail with an LimitationValidationException, because subtree "/lorem/ipsum/42/"
+        // does not exists
+        $roleService->assignRoleToUser(
+            $role,
+            $currentUser,
+            new SubtreeLimitation(
+                array(
+                    'limitationValues' => array( '/lorem/ipsum/42/' )
+                )
+            )
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -1195,6 +1380,47 @@ class RoleServiceTest extends BaseTest
             ),
             $roleLimitation
         );
+    }
+
+    /**
+     * Test for the assignRoleToUserGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUserGroup($role, $userGroup, $roleLimitation)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUserGroup
+     */
+    public function testAssignRoleToUserGroupWithRoleLimitationThrowsLimitationValidationException()
+    {
+        $repository = $this->getRepository();
+
+        $mainGroupId = $this->generateId( 'group', 4 );
+        /* BEGIN: Use Case */
+        // $mainGroupId is the ID of the main "Users" group
+
+        $userService = $repository->getUserService();
+        $roleService = $repository->getRoleService();
+
+        $userGroup = $userService->loadUserGroup( $mainGroupId );
+
+        // Load the existing "Anonymous" role
+        $role = $roleService->loadRoleByIdentifier( 'Anonymous' );
+
+        // Assign the "Anonymous" role to the newly created user group
+        // This call will fail with an LimitationValidationException, because subtree "/lorem/ipsum/42/"
+        // does not exists
+        $roleService->assignRoleToUserGroup(
+            $role,
+            $userGroup,
+            new SubtreeLimitation(
+                array(
+                    'limitationValues' => array( '/lorem/ipsum/42/' )
+                )
+            )
+        );
+        /* END: Use Case */
     }
 
     /**
