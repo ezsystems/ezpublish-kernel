@@ -5407,6 +5407,7 @@ Assign Role to User or User Group
           Role_
 
 :Error Codes:
+    :400: If validation of limitation in RoleAssignInput_ fails
     :401: If the user is not authorized to assign this role
 
 XML Example
@@ -5712,7 +5713,8 @@ Create Policy
           Policy_
 
 :Error Codes:
-    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :400: - If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+          - If validation of limitation in PolicyCreate fails (see Policy_)
     :401: If the user is not authorized to create the policy
     :404: If the role does not exist
 
@@ -5802,7 +5804,8 @@ Update Policy
           Policy_
 
 :Error Codes:
-    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :400: - If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+          - If validation of limitation in PolicyUpdate fails (see Policy_)
     :401: If the user is not authorized to update the policy
     :404: If the role does not exist
     :412: If the current ETag does not match with the provided one in the If-Match header
