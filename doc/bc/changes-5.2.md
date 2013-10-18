@@ -42,6 +42,10 @@ Changes affecting version compatibility with former or future versions.
   As explained in API, the 'path' property for those classes is deprecated,
   and 'id' should be used instead.
 
+* PageController::viewBlock()
+
+  `pageService` injection will be removed in v6.0. See https://jira.ez.no/browse/EZP-21786.
+
 ## Removals
 
 ### API
