@@ -5689,7 +5689,7 @@ Create Policy
 `````````````
 :Resource: /user/roles/<ID>/policies/<ID>
 :Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
-:Description: updates a policy
+:Description: creates a policy
 :Headers:
     :Accept:
          :application/vnd.ez.api.Policy+xml:  if set the updated policy is returned in xml format (see Policy_)
@@ -9113,7 +9113,7 @@ Policy XML Schema
         </xsd:complexContent>
       </xsd:complexType>
 
-      <xsd:complexType name="vnd.ez.api.PolityCreate">
+      <xsd:complexType name="vnd.ez.api.PolicyCreate">
         <xsd:all>
           <xsd:element name="module" type="xsd:string" />
           <xsd:element name="function" type="xsd:string" />
@@ -9121,7 +9121,7 @@ Policy XML Schema
         </xsd:all>
       </xsd:complexType>
 
-      <xsd:complexType name="vnd.ez.api.PolityUpdate">
+      <xsd:complexType name="vnd.ez.api.PolicyUpdate">
         <xsd:all>
           <xsd:element name="limitations" type="limitationListType"></xsd:element>
         </xsd:all>
@@ -9139,8 +9139,8 @@ Policy XML Schema
       </xsd:complexType>
       <xsd:element name="Policy" type="vnd.ez.api.Policy"/>
       <xsd:element name="PolicyList" type="vnd.ez.api.PolicyList"/>
-      <xsd:element name="PolicyCreate" type="vnd.ez.api.PolityCreate"/>
-      <xsd:element name="PolicyUpdate" type="vnd.ez.api.PolityUpdate"/>
+      <xsd:element name="PolicyCreate" type="vnd.ez.api.PolicyCreate"/>
+      <xsd:element name="PolicyUpdate" type="vnd.ez.api.PolicyUpdate"/>
     </xsd:schema>
 
 
