@@ -5687,8 +5687,8 @@ XML Example
 
 Create Policy
 `````````````
-:Resource: /user/roles/<ID>/policies/<ID>
-:Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
+:Resource: /user/roles/<ID>/policies
+:Method: POST
 :Description: creates a policy
 :Headers:
     :Accept:
