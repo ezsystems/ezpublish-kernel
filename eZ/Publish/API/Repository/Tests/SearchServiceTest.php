@@ -381,6 +381,35 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'FullTextWildcard.php',
             ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\LanguageCode( "eng-GB" ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'LanguageCode.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\LanguageCode( array( "eng-US", "eng-GB" ) ),
+                        'offset' => 10,
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'LanguageCodeIn.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\LanguageCode( "eng-GB", true ),
+                        'offset' => 10,
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'LanguageCodeAlwaysAvailable.php',
+            ),
         );
     }
 

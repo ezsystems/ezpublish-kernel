@@ -1433,8 +1433,29 @@ class SearchHandlerTest extends LanguageAwareTestCase
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'criterion' => new Criterion\LanguageCode( 'eng-US', 'eng-GB' ),
+                        'criterion' => new Criterion\LanguageCode( array( 'eng-US', 'eng-GB' ) ),
                         'limit' => 10,
+                        'sortClauses' => array( new SortClause\ContentId ),
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LanguageCode
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testLanguageCodeFilterWithAlwaysAvailable()
+    {
+        $this->assertSearchResults(
+            array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49, 50, 51, 56, 57, 65, 68, 70, 74, 76, 80 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\LanguageCode( 'eng-GB', true ),
+                        'limit' => 20,
                         'sortClauses' => array( new SortClause\ContentId ),
                     )
                 )
