@@ -411,6 +411,69 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'LanguageCodeAlwaysAvailable.php',
             ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::EQ, 1 ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'Depth.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::IN, array( 1, 3 ) ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'DepthIn.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::GT, 2 ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'DepthGt.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::GTE, 2 ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'DepthGte.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::LT, 2 ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'Depth.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::LTE, 2 ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'DepthLte.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::BETWEEN, array( 1, 2 ) ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'DepthLte.php',
+            ),
         );
     }
 
