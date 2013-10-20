@@ -64,7 +64,8 @@ class LanguageCode extends CriterionHandler
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
     {
         $languages = array_flip( $criterion->value );
-        $languages['always-available'] = 0;
+        /** @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode */
+        $languages['always-available'] = $criterion->matchAlwaysAvailable;
 
         return $query->expr->gt(
             $query->expr->bitAnd(
