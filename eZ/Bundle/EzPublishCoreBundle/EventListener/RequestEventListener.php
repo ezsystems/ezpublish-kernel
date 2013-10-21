@@ -154,7 +154,7 @@ class RequestEventListener implements EventSubscriberInterface
 
                 $event->setResponse(
                     new RedirectResponse(
-                        $semanticPathinfo . $queryString ? "?$queryString" : '',
+                        $semanticPathinfo . ( $queryString ? "?$queryString" : '' ),
                         301
                     )
                 );
