@@ -86,7 +86,7 @@ class Depth extends CriterionHandler
                 );
 
             default:
-                throw new RuntimeException( 'Unknown operator.' );
+                throw new RuntimeException( "Unknown operator '{$criterion->operator}' for Depth criterion handler." );
         }
     }
 }

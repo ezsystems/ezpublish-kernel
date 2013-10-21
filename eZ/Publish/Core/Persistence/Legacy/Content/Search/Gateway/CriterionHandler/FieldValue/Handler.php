@@ -115,7 +115,7 @@ abstract class Handler
                 break;
 
             default:
-                throw new RuntimeException( 'Unknown operator.' );
+                throw new RuntimeException( "Unknown operator '{$criterion->operator}' for Field criterion handler." );
         }
 
         return $filter;
