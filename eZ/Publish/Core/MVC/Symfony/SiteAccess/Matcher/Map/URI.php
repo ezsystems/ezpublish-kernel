@@ -43,7 +43,7 @@ class URI extends Map implements Matcher, URILexer
      */
     public function analyseURI( $uri )
     {
-        return str_replace( "/$this->key", '', $uri );
+        return substr( $uri, strlen( "/$this->key" ) );
     }
 
     /**
@@ -67,12 +67,7 @@ class URI extends Map implements Matcher, URILexer
             $linkUri = substr( $linkUri, 0, $qsPos );
         }
 
-        if ( strpos( $linkUri, $this->key ) === false )
-        {
-            $linkUri = "/{$this->key}{$joiningSlash}{$linkUri}";
-        }
-
-        return $linkUri . $queryString;
+        return "/{$this->key}{$joiningSlash}{$linkUri}{$queryString}";
     }
 
 }
