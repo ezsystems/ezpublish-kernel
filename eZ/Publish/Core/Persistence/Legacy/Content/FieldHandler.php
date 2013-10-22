@@ -186,14 +186,13 @@ class FieldHandler
                 if ( !$fieldDefinition->isTranslatable && $languageCode != $mainLanguageCode )
                 {
                     $createInNewLanguageCode = $languageCode;
-                    $field = $contentFieldMap[$fieldDefinition->id][$mainLanguageCode];
                 }
                 else
                 {
                     $createInNewLanguageCode = null;
-                    $field = $contentFieldMap[$fieldDefinition->id][$languageCode];
                 }
 
+                $field = $contentFieldMap[$fieldDefinition->id][$languageCode];
                 $content->fields[] = $this->createExistingFieldInNewVersion(
                     $field,
                     $content,
