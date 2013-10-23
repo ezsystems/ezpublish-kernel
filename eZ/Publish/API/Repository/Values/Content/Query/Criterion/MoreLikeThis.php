@@ -38,7 +38,7 @@ class MoreLikeThis extends Criterion implements CriterionInterface
      *
      * @throws \InvalidArgumentException if the value type doesn't match the expected type
      */
-    public function __construct($type,  $value )
+    public function __construct( $type,  $value )
     {
         $this->type = $type;
 
