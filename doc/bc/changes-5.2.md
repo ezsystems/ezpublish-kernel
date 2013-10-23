@@ -32,6 +32,11 @@ Changes affecting version compatibility with former or future versions.
   to avoid unnecessary translation between the two layers. It will cause BC problems only
   if hardcoded values were used instead of provided constants.
 
+* LanguageCode criterion `eZ\Publish\API\Repository\Values\Content\Query\Criterion` has new
+  optional parameter `$matchAlwaysAvailable`, defaulting to `false`. With this parameter it
+  is possible to match Content that has no translations in languages passed to the criterion,
+  but is always available.
+
 ## Deprecations
 
 * It was incidentally possible to reference resources in REST API payloads without
