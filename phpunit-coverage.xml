@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Please replicate changes to this file to phpunit-coverage.xml -->
 <phpunit
   backupGlobals="false"
   backupStaticAttributes="false"
@@ -34,9 +33,6 @@
     <testsuite name="eZ\Publish\Core\Persistence\Legacy">
       <directory>eZ/Publish/Core/Persistence/Legacy/Tests</directory>
     </testsuite>
-    <testsuite name="eZ\Publish\Core\Persistence\Solr">
-      <directory>eZ/Publish/Core/Persistence/Solr/Tests</directory>
-    </testsuite>
     <testsuite name="eZ\Publish\Core\IO">
       <directory>eZ/Publish/Core/IO/Tests</directory>
     </testsuite>
@@ -55,12 +51,6 @@
     </testsuite>
     <testsuite name="eZ Publish SignalSlot test suite">
         <directory>eZ/Publish/Core/SignalSlot</directory>
-    </testsuite>
-    <testsuite name="eZ\Publish\Core\Pagination">
-        <directory>eZ/Publish/Core/Pagination</directory>
-    </testsuite>
-    <testsuite name="eZ\Publish\Core\Helper">
-        <directory>eZ/Publish/Core/Helper</directory>
     </testsuite>
   </testsuites>
   <filter>
@@ -82,4 +72,7 @@
       </exclude>
     </whitelist>
   </filter>
+  <logging>
+    <log type="coverage-clover" target="build/logs/clover-core.xml" />
+  </logging>
 </phpunit>

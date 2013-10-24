@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Please replicate changes to this file to phpunit-integration-legacy-coverage.xml -->
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
          bootstrap="bootstrap.php"
@@ -52,11 +51,14 @@
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">eZ/Publish/API/Repository</directory>
+            <directory suffix=".php">eZ/Publish/API/Repository/</directory>
             <exclude>
                 <directory>eZ/Publish/API/Repository/Tests</directory>
                 <directory>eZ/Publish/API/Repository/Tutorials</directory>
             </exclude>
         </whitelist>
     </filter>
+    <logging>
+        <log type="coverage-clover" target="build/logs/clover-integration-legacy.xml" />
+    </logging>
 </phpunit>
