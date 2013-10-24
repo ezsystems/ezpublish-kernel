@@ -1,5 +1,6 @@
 # eZ Publish 5.x Kernel
 [![Build Status](https://travis-ci.org/ezsystems/ezpublish-kernel.png?branch=master)](https://travis-ci.org/ezsystems/ezpublish-kernel)
+[![Coverage Status](https://coveralls.io/repos/ezsystems/ezpublish-kernel/badge.png?branch=master)](https://coveralls.io/r/ezsystems/ezpublish-kernel?branch=master)
 
 Welcome to the new eZ Publish 5.x Kernel, this code repository contains several layers of API's and implementation of them.
 However it does not contain all parts that make up the eZ Publish 5 install, for the full eZ Publish 5 package including

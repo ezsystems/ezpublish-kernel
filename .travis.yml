@@ -17,12 +17,18 @@ env:
     - TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Europe/Oslo"
     - TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" TIMEZONE="Asia/Calcutta"
     - TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York"
+    - TEST_CONFIG="phpunit-coverage.xml" TIMEZONE="America/New_York"
+    - TEST_CONFIG="phpunit-integration-legacy-coverage.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York"
 #  - TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
 
 matrix:
   allow_failures:
     - php: 5.3.3
       env: TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
+    - php: 5.4
+      env: TEST_CONFIG="phpunit-coverage.xml" TIMEZONE="America/New_York"
+    - php: 5.4
+      env: TEST_CONFIG="phpunit-integration-legacy-coverage.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York"
   exclude:
     - php: 5.3.3
       env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York"
@@ -52,6 +58,20 @@ matrix:
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" TIMEZONE="Asia/Calcutta"
     - php: 5.5
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York"
+    - php: 5.3
+      env: TEST_CONFIG="phpunit-coverage.xml" TIMEZONE="America/New_York"
+    - php: 5.3.3
+      env: TEST_CONFIG="phpunit-coverage.xml" TIMEZONE="America/New_York"
+    - php: 5.5
+      env: TEST_CONFIG="phpunit-coverage.xml" TIMEZONE="America/New_York"
+    - php: 5.3
+      env: TEST_CONFIG="phpunit-integration-legacy-coverage.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York"
+    - php: 5.3.3
+      env: TEST_CONFIG="phpunit-integration-legacy-coverage.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York"
+    - php: 5.5
+      env: TEST_CONFIG="phpunit-integration-legacy-coverage.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York"
+
+
 
 # test only master (+ Pull requests)
 branches:
@@ -60,15 +80,19 @@ branches:
 
 # setup requirements for running unit tests
 before_script:
-  - if [ $DB == "mysql" ]; then mysql -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;" -uroot ; fi
-  - if [ $DB == "postgresql" ]; then psql -c "CREATE DATABASE $DB_NAME;" -U postgres ; psql -c "CREATE EXTENSION pgcrypto;" -U postgres $DB_NAME ; fi
+  - if [ "$DB" = "mysql" ]; then mysql -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;" -uroot ; fi
+  - if [ "$DB" = "postgresql" ]; then psql -c "CREATE DATABASE $DB_NAME;" -U postgres ; psql -c "CREATE EXTENSION pgcrypto;" -U postgres $DB_NAME ; fi
   - cp config.php-DEVELOPMENT config.php
   - ./composer_install_github_key.sh
   - composer install --dev --prefer-source
+  - if [[ "$TEST_CONFIG" = *"coverage"* ]]; then mkdir -p build/logs ; fi
 #  - "if [ \"$TEST_CONFIG\" = \"phpunit-integration-legacy-solr.xml\" ] ; then curl https://raw.github.com/patrickallaert/travis-solr/master/travis-solr.sh | SOLR_VERSION=3.6.2 SOLR_CONFS=eZ/Publish/Core/Persistence/Solr/Content/Search/schema.xml bash ; fi"
 
 # execute phpunit as the script command
 script: "phpunit -d date.timezone=$TIMEZONE -d memory_limit=-1 -c $TEST_CONFIG"
+
+after_script:
+  - if [[ "$TEST_CONFIG" = *"coverage"* ]]; then php vendor/bin/coveralls ; fi
 
 # disable mail notifications
 notification:
