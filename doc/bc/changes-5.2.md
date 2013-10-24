@@ -37,6 +37,17 @@ Changes affecting version compatibility with former or future versions.
   is possible to match Content that has no translations in languages passed to the criterion,
   but is always available.
 
+* Exception `eZ\Publish\API\Repository\Exceptions\LimitationValidationException` is added,
+  thrown in `RoleService` methods creating and updating Limitations, when given Limitation is
+  not valid. These are: `createRole`, `addPolicy`, `updatePolicy`, `assignRoleToUserGroup`
+  and `assignRoleToUser`.
+
+* Exception `eZ\Publish\API\Repository\Exceptions\InvalidArgumentException` is documented on
+  `RoleService` methods `addPolicy` and `updatePolicy`, thrown when Limitation of the same
+  type is repeated in policy create or update struct or if Limitation is not allowed on
+  module/function. This only documents existing behaviour, therefore it is only documentation
+  change.
+
 ## Deprecations
 
 * It was incidentally possible to reference resources in REST API payloads without
