@@ -9,8 +9,11 @@
 
 namespace eZ\Publish\Core\REST\Server\Controller;
 
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+use eZ\Publish\API\Repository\Exceptions\LimitationValidationException;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Exceptions;
+use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 
@@ -237,10 +240,17 @@ class Role extends RestController
             )
         );
 
-        $role = $this->roleService->addPolicy(
-            $this->roleService->loadRole( $roleId ),
-            $createStruct
-        );
+        try
+        {
+            $role = $this->roleService->addPolicy(
+                $this->roleService->loadRole( $roleId ),
+                $createStruct
+            );
+        }
+        catch ( LimitationValidationException $e )
+        {
+            throw new BadRequestException( $e->getMessage() );
+        }
 
         $policies = $role->getPolicies();
 
@@ -281,10 +291,17 @@ class Role extends RestController
         {
             if ( $policy->id == $policyId )
             {
-                return $this->roleService->updatePolicy(
-                    $policy,
-                    $updateStruct
-                );
+                try
+                {
+                    return $this->roleService->updatePolicy(
+                        $policy,
+                        $updateStruct
+                    );
+                }
+                catch ( LimitationValidationException $e )
+                {
+                    throw new BadRequestException( $e->getMessage() );
+                }
             }
         }
 
@@ -342,7 +359,14 @@ class Role extends RestController
         $user = $this->userService->loadUser( $userId );
         $role = $this->roleService->loadRole( $roleAssignment->roleId );
 
-        $this->roleService->assignRoleToUser( $role, $user, $roleAssignment->limitation );
+        try
+        {
+            $this->roleService->assignRoleToUser( $role, $user, $roleAssignment->limitation );
+        }
+        catch ( LimitationValidationException $e )
+        {
+            throw new BadRequestException( $e->getMessage() );
+        }
 
         $roleAssignments = $this->roleService->getRoleAssignmentsForUser( $user );
         return new Values\RoleAssignmentList( $roleAssignments, $user->id );
@@ -369,7 +393,15 @@ class Role extends RestController
         $userGroup = $this->userService->loadUserGroup( $groupLocation->contentId );
 
         $role = $this->roleService->loadRole( $roleAssignment->roleId );
-        $this->roleService->assignRoleToUserGroup( $role, $userGroup, $roleAssignment->limitation );
+
+        try
+        {
+            $this->roleService->assignRoleToUserGroup( $role, $userGroup, $roleAssignment->limitation );
+        }
+        catch ( LimitationValidationException $e )
+        {
+            throw new BadRequestException( $e->getMessage() );
+        }
 
         $roleAssignments = $this->roleService->getRoleAssignmentsForUserGroup( $userGroup );
         return new Values\RoleAssignmentList( $roleAssignments, $groupPath, true );

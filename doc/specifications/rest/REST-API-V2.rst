@@ -5407,6 +5407,7 @@ Assign Role to User or User Group
           Role_
 
 :Error Codes:
+    :400: If validation of limitation in RoleAssignInput_ fails
     :401: If the user is not authorized to assign this role
 
 XML Example
@@ -5687,9 +5688,9 @@ XML Example
 
 Create Policy
 `````````````
-:Resource: /user/roles/<ID>/policies/<ID>
-:Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
-:Description: updates a policy
+:Resource: /user/roles/<ID>/policies
+:Method: POST
+:Description: creates a policy
 :Headers:
     :Accept:
          :application/vnd.ez.api.Policy+xml:  if set the updated policy is returned in xml format (see Policy_)
@@ -5712,7 +5713,8 @@ Create Policy
           Policy_
 
 :Error Codes:
-    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :400: - If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+          - If validation of limitation in PolicyCreate fails (see Policy_)
     :401: If the user is not authorized to create the policy
     :404: If the role does not exist
 
@@ -5802,7 +5804,8 @@ Update Policy
           Policy_
 
 :Error Codes:
-    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :400: - If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+          - If validation of limitation in PolicyUpdate fails (see Policy_)
     :401: If the user is not authorized to update the policy
     :404: If the role does not exist
     :412: If the current ETag does not match with the provided one in the If-Match header
@@ -9113,7 +9116,7 @@ Policy XML Schema
         </xsd:complexContent>
       </xsd:complexType>
 
-      <xsd:complexType name="vnd.ez.api.PolityCreate">
+      <xsd:complexType name="vnd.ez.api.PolicyCreate">
         <xsd:all>
           <xsd:element name="module" type="xsd:string" />
           <xsd:element name="function" type="xsd:string" />
@@ -9121,7 +9124,7 @@ Policy XML Schema
         </xsd:all>
       </xsd:complexType>
 
-      <xsd:complexType name="vnd.ez.api.PolityUpdate">
+      <xsd:complexType name="vnd.ez.api.PolicyUpdate">
         <xsd:all>
           <xsd:element name="limitations" type="limitationListType"></xsd:element>
         </xsd:all>
@@ -9139,8 +9142,8 @@ Policy XML Schema
       </xsd:complexType>
       <xsd:element name="Policy" type="vnd.ez.api.Policy"/>
       <xsd:element name="PolicyList" type="vnd.ez.api.PolicyList"/>
-      <xsd:element name="PolicyCreate" type="vnd.ez.api.PolityCreate"/>
-      <xsd:element name="PolicyUpdate" type="vnd.ez.api.PolityUpdate"/>
+      <xsd:element name="PolicyCreate" type="vnd.ez.api.PolicyCreate"/>
+      <xsd:element name="PolicyUpdate" type="vnd.ez.api.PolicyUpdate"/>
     </xsd:schema>
 
 
