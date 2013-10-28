@@ -170,7 +170,7 @@
                     <xsl:value-of select="@title"/>
                 </xsl:attribute>
             </xsl:if>
-            <xsl:value-of select="@class"/>
+            <xsl:copy-of select="@class"/>
             <xsl:apply-templates/>
         </a>
     </xsl:template>
