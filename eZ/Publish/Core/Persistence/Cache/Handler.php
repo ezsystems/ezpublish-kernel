@@ -226,6 +226,7 @@ class Handler implements PersistenceHandlerInterface
     /**
      * Begin transaction
      *
+     * @todo Either disable cache or layer it with in-memory cache per transaction (last layer would be the normal layer)
      * Begins an transaction, make sure you'll call commit or rollback when done,
      * otherwise work will be lost.
      */
