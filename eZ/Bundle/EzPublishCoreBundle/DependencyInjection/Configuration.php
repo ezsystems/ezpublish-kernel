@@ -94,6 +94,7 @@ class Configuration implements ConfigurationInterface
                             ->useAttributeAsKey( 'key' )
                             ->normalizeKeys( false )
                             ->prototype( 'array' )
+                                ->useAttributeAsKey( 'key' )
                                 ->beforeNormalization()
                                     // Value passed to the matcher should always be an array.
                                     // If value is not an array, we transform it to a hash, with 'value' as key.
