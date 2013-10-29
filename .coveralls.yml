@@ -1,0 +1,2 @@
+src_dir: eZ
+coverage_clover: build/logs/clover*.xml

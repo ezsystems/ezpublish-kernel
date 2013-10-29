@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Please replicate changes to this file to phpunit-integration-legacy-coverage.xml -->
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
          bootstrap="bootstrap.php"
@@ -59,4 +58,7 @@
             </exclude>
         </whitelist>
     </filter>
+    <logging>
+        <log type="coverage-clover" target="build/logs/clover-integration-legacy.xml" />
+    </logging>
 </phpunit>
