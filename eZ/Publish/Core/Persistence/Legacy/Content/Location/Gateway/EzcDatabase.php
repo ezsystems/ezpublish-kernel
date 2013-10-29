@@ -1033,7 +1033,9 @@ class EzcDatabase extends Gateway
     {
         $parentData = $this->getBasicNodeData( $parentLocationId );
 
-        $newPathIdentificationString = $parentData["path_identification_string"] . "/" . $text;
+        $newPathIdentificationString = empty( $parentData["path_identification_string"] ) ?
+            $text :
+            $parentData["path_identification_string"] . "/" . $text;
 
         /** @var $query \ezcQueryUpdate */
         $query = $this->handler->createUpdateQuery();
