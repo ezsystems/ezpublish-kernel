@@ -311,7 +311,7 @@
     {% if parameters.height is sameas(false) %}
         {% set mapHeight = false %}
     {% else %}
-        {% set mapHeight = parameters.width|default( defaultHeight ) %}
+        {% set mapHeight = parameters.height|default( defaultHeight ) %}
     {% endif %}
 
     {% set showMap = defautShowMap %}
