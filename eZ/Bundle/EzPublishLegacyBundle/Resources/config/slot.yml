@@ -19,6 +19,8 @@ parameters:
     ezpublish_legacy.signalslot.enable_language.class: eZ\Publish\Core\SignalSlot\Slot\LegacyEnableLanguageSlot
     ezpublish_legacy.signalslot.update_language_name.class: eZ\Publish\Core\SignalSlot\Slot\LegacyUpdateLanguageNameSlot
     ezpublish_legacy.signalslot.update_user.class: eZ\Publish\Core\SignalSlot\Slot\LegacyUpdateUserSlot
+    ezpublish_legacy.signalslot.assign_user_to_user_group.class: eZ\Publish\Core\SignalSlot\Slot\LegacyAssignUserToUserGroupSlot
+    ezpublish_legacy.signalslot.unassign_user_from_user_group.class: eZ\Publish\Core\SignalSlot\Slot\LegacyUnassignUserFromUserGroupSlot
 
 services:
     ezpublish_legacy.signalslot.assign_section:
@@ -140,3 +142,15 @@ services:
         arguments: [@ezpublish_legacy.kernel]
         tags:
             - { name: ezpublish.api.slot, signal: UserService\UpdateUserSignal }
+
+    ezpublish_legacy.signalslot.assign_user_to_user_group:
+        class: %ezpublish_legacy.signalslot.assign_user_to_user_group.class%
+        arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: UserService\AssignUserToUserGroupSignal }
+
+    ezpublish_legacy.signalslot.unassign_user_from_user_group:
+        class: %ezpublish_legacy.signalslot.unassign_user_from_user_group.class%
+        arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: UserService\UnAssignUserFromUserGroupSignal }
