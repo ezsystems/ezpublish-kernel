@@ -1369,15 +1369,15 @@ class SearchHandlerTest extends LanguageAwareTestCase
     public function testFullTextFilterEmptyString()
     {
         $this->assertSearchResults(
-             array( 191 ),
-                 $this->getContentSearchHandler()->findContent(
-                      new Query(
-                          array(
-                               'criterion' => new Criterion\FullText( '' ),
-                               'limit' => 10,
-                          )
-                      )
-                 )
+            array(),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\FullText( '' ),
+                        'limit' => 10,
+                    )
+                )
+            )
         );
     }
 
@@ -1389,15 +1389,15 @@ class SearchHandlerTest extends LanguageAwareTestCase
     public function testFullTextFilterTransformedString()
     {
         $this->assertSearchResults(
-             array( 191 ),
-                 $this->getContentSearchHandler()->findContent(
-                      new Query(
-                          array(
-                               'criterion' => new Criterion\FullText( '>' ),
-                               'limit' => 10,
-                          )
-                      )
-                 )
+            array(),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\FullText( '>' ),
+                        'limit' => 10,
+                    )
+                )
+            )
         );
     }
 
