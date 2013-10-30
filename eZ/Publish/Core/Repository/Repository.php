@@ -23,8 +23,7 @@ use RuntimeException;
  * Repository class
  * @package eZ\Publish\Core\Repository
  */
-class Repository implements RepositoryInterface
-{
+class Repository implements RepositoryInterface {
     /**
      * Repository Handler object
      *
@@ -193,8 +192,7 @@ class Repository implements RepositoryInterface
      * @param array $serviceSettings
      * @param \eZ\Publish\API\Repository\Values\User\User|null $user
      */
-    public function __construct( PersistenceHandler $persistenceHandler, array $serviceSettings = array(), User $user = null )
-    {
+    public function __construct(PersistenceHandler $persistenceHandler, array $serviceSettings = array(), User $user = null) {
         $this->persistenceHandler = $persistenceHandler;
         $this->serviceSettings = $serviceSettings + array(
             'content' => array(),
