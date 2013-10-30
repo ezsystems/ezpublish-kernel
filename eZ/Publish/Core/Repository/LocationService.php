@@ -742,10 +742,10 @@ class LocationService implements LocationServiceInterface
             $query = new Query(
                 array(
                     'limit' => 0,
-                    'criterion' => new CriterionLogicalAnd(
+                    'criterion' => new CriterionLogicalAnd( array(
                         new CriterionSubtree( $location->pathString ),
                         new CriterionLogicalNot( $contentReadCriterion )
-                    )
+                    ) )
                 )
             );
             $result = $this->repository->getSearchService()->findContent( $query, array(), false );
