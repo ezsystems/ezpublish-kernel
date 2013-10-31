@@ -281,6 +281,7 @@
  # This field type block accepts the following parameters:
  # - string mapType the Google map type (ROADMAP, SATELLITE, HYBRID or TERRAIN), default is ROADMAP
  # - boolean showMap whether to show the Google map or not, default is true
+ # - boolean showInfo whether to show the latitude, longitude and address or not, default is true
  # - integer zoom the default zoom level, default is 13
  # - string|false width the width of the rendered map with its unit (ie "500px" or "50em"),
  #                      set to false to not set any width style inline, default is 500px
@@ -292,6 +293,7 @@
     {% set defaultWidth = '500px' %}
     {% set defaultHeight = '200px' %}
     {% set defautShowMap = true %}
+    {% set defautShowInfo = true %}
     {% set defaultZoom = 13 %}
     {% set defaultMapType = 'ROADMAP' %}
 
@@ -315,10 +317,16 @@
     {% endif %}
 
     {% set showMap = defautShowMap %}
-    {% if parameters and parameters.showMap is sameas(false) %}
+    {% if parameters.showMap is defined and not parameters.showMap %}
         {% set showMap = false %}
     {% endif %}
 
+    {% set showInfo = defautShowInfo %}
+    {% if parameters.showInfo is defined and not parameters.showInfo %}
+        {% set showInfo = false %}
+    {% endif %}
+
+    {% if showInfo %}
     <dl>
         <dt>Latitude</dt>
         <dd>{{ hasContent ? latitude : "Not set" }}</dd>
@@ -329,6 +337,7 @@
         <dd>{{ address }}</dd>
         {% endif %}
     </dl>
+    {% endif %}
 
     {% if hasContent and showMap %}
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
