@@ -41,6 +41,7 @@ class ParentContentTypeLimitationTest extends BaseLimitationTest
         $user = $this->createUserVersion1();
 
         $roleService = $repository->getRoleService();
+        $contentService = $repository->getContentService();
 
         $role = $roleService->loadRoleByIdentifier( 'Editor' );
 
@@ -63,11 +64,12 @@ class ParentContentTypeLimitationTest extends BaseLimitationTest
         $repository->setCurrentUser( $user );
 
         $draft = $this->createWikiPageDraft();
+        $content = $contentService->publishVersion( $draft->versionInfo );
         /* END: Use Case */
 
         $this->assertEquals(
             'An awesome wiki page',
-            $draft->getFieldValue( 'title' )->text
+            $content->getFieldValue( 'title' )->text
         );
     }
 
