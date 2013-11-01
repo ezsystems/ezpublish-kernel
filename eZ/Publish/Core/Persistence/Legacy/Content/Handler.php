@@ -250,14 +250,6 @@ class Handler implements BaseContentHandler
         );
 
         // Clone fields from previous version and append them to the new one
-        $fields = $content->fields;
-        $content->fields = array();
-        foreach ( $fields as $field )
-        {
-            $newField = clone $field;
-            $newField->versionNo = $content->versionInfo->versionNo;
-            $content->fields[] = $newField;
-        }
         $this->fieldHandler->createExistingFieldsInNewVersion( $content );
 
         // Create relations for new version

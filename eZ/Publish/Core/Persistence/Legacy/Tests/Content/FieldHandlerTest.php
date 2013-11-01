@@ -296,14 +296,8 @@ class FieldHandlerTest extends LanguageAwareTestCase
      */
     protected function assertCreateExistingFieldsInNewVersion( $storageHandlerUpdatesFields = false )
     {
-        $typeHandlerMock = $this->getTypeHandlerMock();
         $contentGatewayMock = $this->getContentGatewayMock();
         $storageHandlerMock = $this->getStorageHandlerMock();
-
-        $typeHandlerMock->expects( $this->once() )
-            ->method( "load" )
-            ->with( $this->equalTo( 1 ) )
-            ->will( $this->returnValue( $this->getContentTypeFixture() ) );
 
         $contentGatewayMock->expects( $this->exactly( 6 ) )
             ->method( 'insertExistingField' )
@@ -329,11 +323,6 @@ class FieldHandlerTest extends LanguageAwareTestCase
                 );
                 $originalField = clone $field;
                 $field->versionNo = 1;
-                // These fields are copied from main language
-                if ( ( $fieldDefinitionId == 2 || $fieldDefinitionId == 3 ) && $languageCode == "eng-US" )
-                {
-                    $originalField->languageCode = "eng-GB";
-                }
                 $storageHandlerMock->expects( $this->at( $callNo++ ) )
                     ->method( 'copyFieldData' )
                     ->with(
@@ -956,14 +945,13 @@ class FieldHandlerTest extends LanguageAwareTestCase
         $thirdFieldUs->fieldDefinitionId = 3;
         $thirdFieldUs->languageCode = "eng-US";
 
-        $content->fields = array_merge(
-            $content->fields,
-            array(
-                $firstFieldGb,
-                $secondFieldUs,
-                $thirdFieldGb,
-                $thirdFieldUs
-            )
+        $content->fields = array(
+            $content->fields[0],
+            $firstFieldGb,
+            $secondFieldUs,
+            $content->fields[1],
+            $thirdFieldUs,
+            $thirdFieldGb
         );
 
         return $content;
