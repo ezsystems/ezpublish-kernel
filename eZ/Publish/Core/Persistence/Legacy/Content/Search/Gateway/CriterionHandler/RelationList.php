@@ -141,7 +141,7 @@ class RelationList extends CriterionHandler
                 );
 
             default:
-                throw new RuntimeException( 'Unknown operator.' );
+                throw new RuntimeException( "Unknown operator '{$criterion->operator}' for RelationList criterion handler." );
         }
     }
 }

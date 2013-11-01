@@ -224,6 +224,9 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         new Content\Search\Gateway\CriterionHandler\RelationList(
                             $this->getDatabaseHandler()
                         ),
+                        new Content\Search\Gateway\CriterionHandler\Depth(
+                            $this->getDatabaseHandler()
+                        ),
                     )
                 ),
                 new Content\Search\Gateway\SortClauseConverter(
@@ -724,6 +727,141 @@ class SearchHandlerTest extends LanguageAwareTestCase
                     array(
                         'criterion' => new Criterion\Subtree( '/1/2/69/' ),
                         'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Depth
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testContentDepthFilterEq()
+    {
+        $this->assertSearchResults(
+            array( 4, 41, 45, 56, 65 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::EQ, 1 ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Depth
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testContentDepthFilterIn()
+    {
+        $this->assertSearchResults(
+            array( 4, 11, 12, 13, 41, 42, 45, 49, 50, 51, 52, 54, 56, 57, 65, 67, 75, 84, 94, 105, 151, 154, 165, 188, 225 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::IN, array( 1, 2 ) ),
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Depth
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testContentDepthFilterBetween()
+    {
+        $this->assertSearchResults(
+            array( 4, 41, 45, 56, 65 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::BETWEEN, array( 0, 1 ) ),
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Depth
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testContentDepthFilterGreaterThan()
+    {
+        $this->assertSearchResults(
+            array( 97, 100, 133, 134, 135, 137, 138, 140, 141, 142, 143, 146, 149, 172, 173, 175, 192, 194, 195, 196, 197, 198, 199, 200, 201, 203, 204, 205, 206, 207, 208, 209, 210, 212, 213 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::GT, 4 ),
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Depth
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testContentDepthFilterGreaterThanOrEqual()
+    {
+        $this->assertSearchResults(
+            array( 97, 100, 133, 134, 135, 137, 138, 140, 141, 142, 143, 146, 149, 172, 173, 175, 192, 194, 195, 196, 197, 198, 199, 200, 201, 203, 204, 205, 206, 207, 208, 209, 210, 212, 213 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::GTE, 5 ),
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Depth
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testContentDepthFilterLessThan()
+    {
+        $this->assertSearchResults(
+            array( 4, 41, 45, 56, 65 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::LT, 2 ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Depth
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testContentDepthFilterLessThanOrEqual()
+    {
+        $this->assertSearchResults(
+            array( 4, 11, 12, 13, 41, 42, 45, 49, 50, 51, 52, 54, 56, 57, 65, 67, 75, 84, 94, 105, 151, 154, 165, 188, 225 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::LTE, 2 ),
                     )
                 )
             )

@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the EzcDatabase date metadata criterion handler class
+ * File containing the EzcDatabase location depth criterion handler class
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -16,9 +16,9 @@ use ezcQuerySelect;
 use RuntimeException;
 
 /**
- * Date metadata criterion handler
+ * Location depth criterion handler
  */
-class DateMetadata extends CriterionHandler
+class Depth extends CriterionHandler
 {
     /**
      * Check if this criterion handler accepts to handle the given criterion.
@@ -29,7 +29,7 @@ class DateMetadata extends CriterionHandler
      */
     public function accept( Criterion $criterion )
     {
-        return $criterion instanceof Criterion\DateMetadata;
+        return $criterion instanceof Criterion\Depth;
     }
 
     /**
@@ -45,11 +45,18 @@ class DateMetadata extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
     {
-        $column = $this->dbHandler->quoteColumn(
-            $criterion->target === Criterion\DateMetadata::MODIFIED ?
-                'modified' :
-                'published',
-            'ezcontentobject'
+        $table = $this->getUniqueTableName();
+        $column = $this->dbHandler->quoteColumn( 'depth', $table );
+
+        $query->leftJoin(
+            $query->alias(
+                $this->dbHandler->quoteTable( 'ezcontentobject_tree' ),
+                $this->dbHandler->quoteIdentifier( $table )
+            ),
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'contentobject_id', $table ),
+                $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' )
+            )
         );
 
         switch ( $criterion->operator )
@@ -79,9 +86,8 @@ class DateMetadata extends CriterionHandler
                 );
 
             default:
-                throw new RuntimeException( "Unknown operator '{$criterion->operator}' for DateMetadata criterion handler." );
+                throw new RuntimeException( "Unknown operator '{$criterion->operator}' for Depth criterion handler." );
         }
-
     }
 }
 
