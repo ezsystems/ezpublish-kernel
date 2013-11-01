@@ -743,8 +743,10 @@ class LocationService implements LocationServiceInterface
                 array(
                     'limit' => 0,
                     'criterion' => new CriterionLogicalAnd(
-                        new CriterionSubtree( $location->pathString ),
-                        new CriterionLogicalNot( $contentReadCriterion )
+                        array(
+                            new CriterionSubtree( $location->pathString ),
+                            new CriterionLogicalNot( $contentReadCriterion )
+                        )
                     )
                 )
             );

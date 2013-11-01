@@ -10,6 +10,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation;
 
 /**
  * Test case for operations in the LocationService using in memory storage.
@@ -282,6 +283,97 @@ class LocationServiceAuthorizationTest extends BaseTest
 
         // This call will fail with an "UnauthorizedException"
         $locationService->deleteLocation( $location );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the deleteLocation() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @expectedExceptionMessage User does not have access to 'remove' 'content'
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testDeleteLocation
+     */
+    public function testDeleteLocationWithSubtreeThrowsUnauthorizedException()
+    {
+        $repository = $this->getRepository();
+
+        $parentLocationId = $this->generateId( 'location', 43 );
+        $administratorUserId = $this->generateId( 'user', 14 );
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $roleService = $repository->getRoleService();
+
+        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+
+        $removePolicy = null;
+        foreach ( $role->getPolicies() as $policy )
+        {
+            if ( 'content' != $policy->module || 'remove' != $policy->function )
+            {
+                continue;
+            }
+            $removePolicy = $policy;
+            break;
+        }
+
+        if ( null === $removePolicy )
+        {
+            throw new \ErrorException( 'No content:remove policy found.' );
+        }
+
+        // Update content/remove policy to only allow removal of the user's own content
+        $policyUpdate = $roleService->newPolicyUpdateStruct();
+        $policyUpdate->addLimitation(
+            new OwnerLimitation(
+                array( 'limitationValues' => array( 1 ) )
+            )
+        );
+        $roleService->updatePolicy( $removePolicy, $policyUpdate );
+
+        // Set current user to newly created user
+        $repository->setCurrentUser( $user );
+
+        $locationService = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $userService = $repository->getUserService();
+
+        // Create and publish Content with Location under $parentLocationId
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+
+        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
+        $contentCreateStruct->setField( 'name', 'My awesome possibly deletable folder' );
+        $contentCreateStruct->alwaysAvailable = true;
+
+        $locationCreateStruct = $locationService->newLocationCreateStruct( $parentLocationId );
+
+        $contentDraft = $contentService->createContent( $contentCreateStruct, array( $locationCreateStruct ) );
+        $content = $contentService->publishVersion( $contentDraft->versionInfo );
+
+        // New user will be able to delete this Location at this point
+        $firstLocation = $locationService->loadLocation( $content->contentInfo->mainLocationId );
+
+        // Set current user to administrator user
+        $administratorUser = $userService->loadUser( $administratorUserId );
+        $repository->setCurrentUser( $administratorUser );
+
+        // Under newly created Location create Content with administrator user
+        // After this created user will not be able to delete $firstLocation
+        $locationCreateStruct = $locationService->newLocationCreateStruct( $firstLocation->id );
+        $contentDraft = $contentService->createContent( $contentCreateStruct, array( $locationCreateStruct ) );
+        $content = $contentService->publishVersion( $contentDraft->versionInfo );
+        $secondLocation = $locationService->loadLocation( $content->contentInfo->mainLocationId );
+
+        // Set current user to newly created user again, and try to delete $firstLocation
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException" because user does not have
+        // permission to delete $secondLocation which is in the subtree of the $firstLocation
+        $locationService->deleteLocation( $firstLocation );
         /* END: Use Case */
     }
 
