@@ -169,6 +169,7 @@ class LegacySolr extends Legacy
                         new CriterionVisitor\DateMetadata\ModifiedBetween(),
                         new CriterionVisitor\DateMetadata\PublishedBetween(),
                         new CriterionVisitor\FullText(),
+                        new CriterionVisitor\UserMetadataIn(),
                         new CriterionVisitor\Field\FieldIn(
                             $fieldRegistry,
                             $persistenceHandler->contentTypeHandler(),

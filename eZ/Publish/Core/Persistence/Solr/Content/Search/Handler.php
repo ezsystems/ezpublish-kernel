@@ -285,6 +285,11 @@ class Handler implements SearchHandlerInterface
                 new FieldType\IdentifierField()
             ),
             new Field(
+                'owner',
+                $content->versionInfo->contentInfo->ownerId,
+                new FieldType\IdentifierField()
+            ),
+            new Field(
                 'section',
                 $content->versionInfo->contentInfo->sectionId,
                 new FieldType\IdentifierField()
