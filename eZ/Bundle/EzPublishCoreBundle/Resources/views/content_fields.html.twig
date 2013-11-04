@@ -303,15 +303,14 @@
 
     {% set zoom = parameters.zoom|default( defaultZoom ) %}
     {% set mapType = parameters.mapType|default( defaultMapType ) %}
-    {% if parameters.width is sameas(false) %}
-        {% set mapWidth = false %}
-    {% else %}
-        {% set mapWidth = parameters.width|default( defaultWidth ) %}
+
+    {% set mapWidth, mapHeight = defaultWidth, defaultHeight %}
+    {% if parameters.width is defined %}
+        {% set mapWidth = parameters.width %}
     {% endif %}
-    {% if parameters.height is sameas(false) %}
-        {% set mapHeight = false %}
-    {% else %}
-        {% set mapHeight = parameters.height|default( defaultHeight ) %}
+
+    {% if parameters.height is defined %}
+        {% set mapHeight = parameters.height %}
     {% endif %}
 
     {% set showMap = defautShowMap %}
