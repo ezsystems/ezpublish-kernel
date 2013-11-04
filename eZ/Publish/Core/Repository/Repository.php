@@ -23,8 +23,7 @@ use RuntimeException;
  * Repository class
  * @package eZ\Publish\Core\Repository
  */
-class Repository implements RepositoryInterface
-{
+class Repository implements RepositoryInterface {
     /**
      * Repository Handler object
      *
@@ -44,7 +43,7 @@ class Repository implements RepositoryInterface
      *
      * @var bool
      */
-    private $sudoFlag = false;
+    private $sudoFlag=false;
 
     /**
      * Instance of content service
@@ -193,8 +192,7 @@ class Repository implements RepositoryInterface
      * @param array $serviceSettings
      * @param \eZ\Publish\API\Repository\Values\User\User|null $user
      */
-    public function __construct( PersistenceHandler $persistenceHandler, array $serviceSettings = array(), User $user = null )
-    {
+    public function __construct(PersistenceHandler $persistenceHandler, array $serviceSettings = array(), User $user = null) {
         $this->persistenceHandler = $persistenceHandler;
         $this->serviceSettings = $serviceSettings + array(
             'content' => array(),
@@ -229,8 +227,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    public function getCurrentUser()
-    {
+    public function getCurrentUser() {
         if ( !$this->currentUser instanceof User )
         {
             $this->currentUser = $this->getUserService()->loadAnonymousUser();
@@ -813,7 +810,7 @@ class Repository implements RepositoryInterface
             --$this->transactionDepth;
             unset( $this->commitEventsQueue[$this->transactionCount] );
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             throw new RuntimeException( $e->getMessage(), 0, $e );
         }
@@ -845,8 +842,7 @@ class Repository implements RepositoryInterface
      *
      * @return \DateTime
      */
-    public function createDateTime( $timestamp = null )
-    {
+    public function createDateTime( $timestamp = null ) {
         $dateTime = new \DateTime();
         if ( $timestamp !== null )
         {
