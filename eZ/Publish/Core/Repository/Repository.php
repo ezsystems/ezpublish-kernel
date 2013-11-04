@@ -842,8 +842,7 @@ class Repository implements RepositoryInterface {
      *
      * @return \DateTime
      */
-    public function createDateTime( $timestamp = null )
-    {
+    public function createDateTime( $timestamp = null ) {
         $dateTime = new \DateTime();
         if ( $timestamp !== null )
         {
