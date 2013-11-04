@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+use eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr;
 
 /**
  * Test case for operations in the SearchService using in memory storage.
@@ -1059,6 +1060,12 @@ class SearchServiceTest extends BaseTest
      */
     public function testMultilingualFieldSort()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -1115,6 +1122,12 @@ class SearchServiceTest extends BaseTest
      */
     public function testMultilingualFieldSortVariant2()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -1172,6 +1185,12 @@ class SearchServiceTest extends BaseTest
      */
     public function testMultilingualFieldSortVariant3()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -1229,6 +1248,12 @@ class SearchServiceTest extends BaseTest
      */
     public function testSearchWithFieldSortThrowsInvalidArgumentExceptionTranslatableField()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
         $contentType = $this->createTestContentType();
         $this->createMultilingualContent( $contentType, 1, 2 );
 
@@ -1255,6 +1280,12 @@ class SearchServiceTest extends BaseTest
      */
     public function testSearchWithFieldSortThrowsInvalidArgumentExceptionNonTranslatableField()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
         $contentType = $this->createTestContentType();
         $this->createMultilingualContent( $contentType, 1, 2, 3, "eng-GB" );
 
@@ -1281,6 +1312,12 @@ class SearchServiceTest extends BaseTest
      */
     public function testMultilingualFieldSortWithNonTranslatableField()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -1337,6 +1374,12 @@ class SearchServiceTest extends BaseTest
      */
     public function testMultilingualFieldSortWithDefaultLanguage()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -1393,6 +1436,12 @@ class SearchServiceTest extends BaseTest
      */
     public function testMultilingualFieldSortWithDefaultLanguageVariant2()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -1449,6 +1498,12 @@ class SearchServiceTest extends BaseTest
      */
     public function testMultilingualFieldSortUnusedLanguageDoesNotFilterResultSet()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -1487,6 +1542,12 @@ class SearchServiceTest extends BaseTest
      */
     public function testMultilingualFieldSortUnusedLanguageDoesNotChangeSort()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
