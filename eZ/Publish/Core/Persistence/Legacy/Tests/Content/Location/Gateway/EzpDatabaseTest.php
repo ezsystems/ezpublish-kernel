@@ -1202,5 +1202,39 @@ class EzpDatabaseTest extends TestCase
             // Do nothing
         }
     }
+
+    public function providerForTestUpdatePathIdentificationString()
+    {
+        return array(
+            array( 77, 2, "new_solutions", "new_solutions" ),
+            array( 75, 69, "stylesheets", "products/stylesheets" )
+        );
+    }
+
+    /**
+     * Test for the updatePathIdentificationString() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::updatePathIdentificationString
+     * @dataProvider providerForTestUpdatePathIdentificationString
+     */
+    public function testUpdatePathIdentificationString( $locationId, $parentLocationId, $text, $expected )
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+
+        $gateway = $this->getLocationGateway();
+        $gateway->updatePathIdentificationString( $locationId, $parentLocationId, $text );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( $expected ) ),
+            $query->select(
+                'path_identification_string'
+            )->from(
+                'ezcontentobject_tree'
+            )->where(
+                $query->expr->eq( 'node_id', $locationId )
+            )
+        );
+    }
 }
 
