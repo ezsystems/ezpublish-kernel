@@ -43,7 +43,7 @@ class Repository implements RepositoryInterface {
      *
      * @var bool
      */
-    private $sudoFlag = false;
+    private $sudoFlag=false;
 
     /**
      * Instance of content service
