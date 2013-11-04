@@ -1074,7 +1074,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'criterion' => new Criterion\ContentTypeIdentifier( "test-type" ),
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
                 'sortClauses' => array(
                     new SortClause\Field( "test-type", "integer", Query::SORT_DESC, "eng-GB" ),
                     new SortClause\Field( "test-type", "integer", Query::SORT_ASC, "ger-DE" ),
@@ -1130,7 +1130,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'criterion' => new Criterion\ContentTypeIdentifier( "test-type" ),
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
                 'sortClauses' => array(
                     new SortClause\Field( "test-type", "integer", Query::SORT_ASC, "eng-GB" ),
                     new SortClause\Field( "test-type", "integer", Query::SORT_DESC, "ger-DE" ),
@@ -1187,7 +1187,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'criterion' => new Criterion\ContentTypeIdentifier( "test-type" ),
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
                 'sortClauses' => array(
                     new SortClause\Field( "test-type", "integer", Query::SORT_DESC, "ger-DE" ),
                     new SortClause\Field( "test-type", "integer", Query::SORT_ASC, "eng-GB" ),
@@ -1234,7 +1234,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'criterion' => new Criterion\ContentTypeIdentifier( "test-type" ),
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
                 'sortClauses' => array(
                     new SortClause\Field( "test-type", "integer", Query::SORT_ASC ),
                 )
@@ -1260,7 +1260,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'criterion' => new Criterion\ContentTypeIdentifier( "test-type" ),
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
                 'sortClauses' => array(
                     // The main language can change, so no language code allowed on non-translatable field whatsoever
                     new SortClause\Field( "test-type", "integer2", Query::SORT_ASC, "eng-GB" ),
@@ -1296,7 +1296,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'criterion' => new Criterion\ContentTypeIdentifier( "test-type" ),
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
                 'sortClauses' => array(
                     new SortClause\Field( "test-type", "integer", Query::SORT_DESC, "eng-GB" ),
                     new SortClause\Field( "test-type", "integer2", Query::SORT_ASC ),
@@ -1352,7 +1352,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'criterion' => new Criterion\ContentTypeIdentifier( "test-type" ),
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
                 'sortClauses' => array(
                     new SortClause\Field( "test-type", "integer", Query::SORT_ASC, "eng-GB" ),
                     new SortClause\Field( "test-type", "integer2", Query::SORT_DESC ),
@@ -1408,7 +1408,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'criterion' => new Criterion\ContentTypeIdentifier( "test-type" ),
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
                 'sortClauses' => array(
                     new SortClause\Field( "test-type", "integer2", Query::SORT_DESC ),
                     new SortClause\Field( "test-type", "integer", Query::SORT_DESC, "ger-DE" ),
@@ -1464,7 +1464,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'criterion' => new Criterion\ContentTypeIdentifier( "test-type" ),
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
                 'sortClauses' => array(
                     // "test-type" Content instance do not exist in "eng-US"
                     new SortClause\Field( "test-type", "integer", Query::SORT_ASC, "eng-US" ),
@@ -1502,7 +1502,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             array(
-                'criterion' => new Criterion\ContentTypeIdentifier( "test-type" ),
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
                 'sortClauses' => array(
                     // "test-type" Content instance do not exist in "eng-US"
                     new SortClause\Field( "test-type", "integer", Query::SORT_DESC, "eng-US" ),
