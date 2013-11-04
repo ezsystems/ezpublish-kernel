@@ -576,9 +576,11 @@ class ParentContentTypeLimitationTest extends Base
 
             $this->locationHandlerMock
                 ->expects( $this->once() )
-                ->method( $object instanceof ContentInfo && $object->published ?
-                    "loadLocationsByContent" :
-                    "loadParentLocationsForDraftContent" )
+                ->method(
+                    $object instanceof ContentInfo && $object->published ?
+                        "loadLocationsByContent" :
+                        "loadParentLocationsForDraftContent"
+                )
                 ->with( $object->id )
                 ->will( $this->returnValue( $persistence["locations"] ) );
 

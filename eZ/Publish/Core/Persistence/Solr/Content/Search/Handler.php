@@ -189,7 +189,6 @@ class Handler implements SearchHandlerInterface
         $this->gateway->bulkIndexContent( array( $document ) );
     }
 
-
     /**
      * Indexes several content objects
      *

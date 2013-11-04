@@ -57,7 +57,6 @@ class UserMetadataIn extends CriterionVisitor
                 throw new NotImplementedException(
                     "No visitor available for: " . get_class( $criterion ) . ' with operator ' . $criterion->operator
                 );
-
         }
         return '(' .
             implode(
