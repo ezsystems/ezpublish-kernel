@@ -810,7 +810,7 @@ class Repository implements RepositoryInterface {
             --$this->transactionDepth;
             unset( $this->commitEventsQueue[$this->transactionCount] );
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             throw new RuntimeException( $e->getMessage(), 0, $e );
         }
