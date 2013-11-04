@@ -227,8 +227,7 @@ class Repository implements RepositoryInterface {
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    public function getCurrentUser()
-    {
+    public function getCurrentUser() {
         if ( !$this->currentUser instanceof User )
         {
             $this->currentUser = $this->getUserService()->loadAnonymousUser();
