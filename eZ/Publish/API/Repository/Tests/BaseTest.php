@@ -48,7 +48,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         try
         {
-            $repository = $this->getRepository();
+            // Use setup factory instance here w/o clearing data in case test don't need to
+            $repository = $this->getSetupFactory()->getRepository( false );
 
             // Set session if we are testing the REST backend to make it
             // possible to persist data in the memory backend during multiple
@@ -147,13 +148,14 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param bool $initialInitializeFromScratch Only has an effect if set in first call within a test
      * @return \eZ\Publish\API\Repository\Repository
      */
-    protected function getRepository()
+    protected function getRepository( $initialInitializeFromScratch = true  )
     {
         if ( null === $this->repository )
         {
-            $this->repository = $this->getSetupFactory()->getRepository();
+            $this->repository = $this->getSetupFactory()->getRepository( $initialInitializeFromScratch );
         }
         return $this->repository;
     }

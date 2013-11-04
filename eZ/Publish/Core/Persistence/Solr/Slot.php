@@ -44,8 +44,9 @@ abstract class Slot extends BaseSlot
         $searchHandler = $this->persistenceHandler->searchHandler();
 
         $this->repository->commitEvent(
-            function () use ( $searchHandler, $content )
+            function ( $lastEvent ) use ( $searchHandler, $content )
             {
+                $searchHandler->setCommit( $lastEvent );
                 $searchHandler->indexContent( $content );
             }
         );
@@ -62,8 +63,9 @@ abstract class Slot extends BaseSlot
         $searchHandler = $this->persistenceHandler->searchHandler();
 
         $this->repository->commitEvent(
-            function () use ( $searchHandler, $contentId, $versionNo )
+            function ( $lastEvent ) use ( $searchHandler, $contentId, $versionNo )
             {
+                $searchHandler->setCommit( $lastEvent );
                 $searchHandler->deleteContent( $contentId, $versionNo );
             }
         );
@@ -79,8 +81,9 @@ abstract class Slot extends BaseSlot
         $searchHandler = $this->persistenceHandler->searchHandler();
 
         $this->repository->commitEvent(
-            function () use ( $searchHandler, $locationId )
+            function ( $lastEvent ) use ( $searchHandler, $locationId )
             {
+                $searchHandler->setCommit( $lastEvent );
                 $searchHandler->deleteLocation( $locationId );
             }
         );

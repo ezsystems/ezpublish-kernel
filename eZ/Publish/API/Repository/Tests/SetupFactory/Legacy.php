@@ -94,7 +94,7 @@ class Legacy extends SetupFactory
      */
     public function getRepository( $initializeFromScratch = true )
     {
-        if ( $initializeFromScratch )
+        if ( $initializeFromScratch || !self::$schemaInitialized )
         {
             $this->initializeSchema();
             $this->insertData();

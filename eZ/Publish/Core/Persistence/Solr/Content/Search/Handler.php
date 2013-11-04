@@ -186,7 +186,28 @@ class Handler implements SearchHandlerInterface
     public function indexContent( Content $content )
     {
         $document = $this->mapContent( $content );
-        $this->gateway->indexContent( $document );
+        $this->gateway->bulkIndexContent( array( $document ) );
+    }
+
+
+    /**
+     * Indexes several content objects
+     *
+     * @todo: This function and setCommit() is needed for Persistence\Solr for test speed but not part
+     *       of interface for the reason described in Solr\Content\Search\Gateway\Native::bulkIndexContent
+     *       Short: Bulk handling should be properly designed before added to the interface.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content[] $contentObjects
+     *
+     * @return void
+     */
+    public function bulkIndexContent( array $contentObjects)
+    {
+        foreach ( $contentObjects as $content )
+            $documents[] = $this->mapContent( $content );
+
+        if ( !empty( $documents ) )
+            $this->gateway->bulkIndexContent( $documents );
     }
 
     /**
@@ -261,6 +282,11 @@ class Handler implements SearchHandlerInterface
             new Field(
                 'creator',
                 $content->versionInfo->creatorId,
+                new FieldType\IdentifierField()
+            ),
+            new Field(
+                'owner',
+                $content->versionInfo->contentInfo->ownerId,
                 new FieldType\IdentifierField()
             ),
             new Field(
@@ -456,6 +482,18 @@ class Handler implements SearchHandlerInterface
     public function purgeIndex()
     {
         $this->gateway->purgeIndex();
+    }
+
+    /**
+     * Set if index/delete actions should commit or if several actions is to be expected
+     *
+     * This should be set to false before group of actions and true before the last one
+     *
+     * @param bool $commit
+     */
+    public function setCommit( $commit )
+    {
+       $this->gateway->setCommit( $commit );
     }
 }
 
