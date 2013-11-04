@@ -2775,7 +2775,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelationSetsExpectedRelations
      */
-    public function testCreateContentDraftFromContentWithRelations()
+    public function testCreateContentDraftWithRelations()
     {
         $repository = $this->getRepository();
 
