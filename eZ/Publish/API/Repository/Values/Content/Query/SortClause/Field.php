@@ -21,12 +21,18 @@ class Field extends SortClause
 {
     /**
      * Constructs a new Field SortClause on Type $typeIdentifier and Field $fieldIdentifier
+     *
      * @param string $typeIdentifier
      * @param string $fieldIdentifier
      * @param string $sortDirection
+     * @param null|string $languageCode
      */
-    public function __construct( $typeIdentifier, $fieldIdentifier, $sortDirection = Query::SORT_ASC )
+    public function __construct( $typeIdentifier, $fieldIdentifier, $sortDirection = Query::SORT_ASC, $languageCode = null )
     {
-        parent::__construct( 'field', $sortDirection, new FieldTarget( $typeIdentifier, $fieldIdentifier ) );
+        parent::__construct(
+            'field',
+            $sortDirection,
+            new FieldTarget( $typeIdentifier, $fieldIdentifier, $languageCode )
+        );
     }
 }

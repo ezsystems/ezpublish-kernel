@@ -12,11 +12,13 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\Core\Repository\DomainMapper;
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\SPI\Persistence\Content\Search\Handler;
 
 /**
@@ -94,6 +96,8 @@ class SearchService implements SearchServiceInterface
     {
         $query = clone $query;
 
+        $this->validateSortClauses( $query );
+
         if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $query->criterion ) )
         {
             return new SearchResult( array( 'time' => 0, 'totalCount' => 0 ) );
@@ -114,6 +118,52 @@ class SearchService implements SearchServiceInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Validates sort clauses of a given $query.
+     *
+     * For the moment this validates only Field sort clauses.
+     * Valid Field sort clause provides $languageCode if targeted field is translatable,
+     * and the same in reverse - it does not provide $languageCode for non-translatable field.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If sort clauses are not valid
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
+     *
+     * @return void
+     */
+    protected function validateSortClauses( Query $query )
+    {
+        foreach ( $query->sortClauses as $key => $sortClause )
+        {
+            if ( !$sortClause instanceof SortClause\Field )
+            {
+                continue;
+            }
+
+            /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget $fieldTarget */
+            $fieldTarget = $sortClause->targetData;
+            $contentType = $this->repository->getContentTypeService()->loadContentTypeByIdentifier(
+                $fieldTarget->typeIdentifier
+            );
+
+            if ( $contentType->getFieldDefinition( $fieldTarget->fieldIdentifier )->isTranslatable )
+            {
+                if ( $fieldTarget->languageCode === null )
+                {
+                    throw new InvalidArgumentException(
+                        "\$query->sortClauses[{$key}]", "No language is specified for translatable field"
+                    );
+                }
+            }
+            else if ( $fieldTarget->languageCode !== null )
+            {
+                throw new InvalidArgumentException(
+                    "\$query->sortClauses[{$key}]", "Language is specified for non-translatable field, null should be used instead"
+                );
+            }
+        }
     }
 
     /**

@@ -26,7 +26,7 @@ abstract class SortClauseHandler
     protected $dbHandler;
 
     /**
-     * Creates a new criterion handler
+     * Creates a new sort clause handler
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      */
