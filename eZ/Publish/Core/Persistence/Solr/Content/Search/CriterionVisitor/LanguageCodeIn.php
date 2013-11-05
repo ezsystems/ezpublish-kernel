@@ -21,7 +21,7 @@ class LanguageCodeIn extends CriterionVisitor
     /**
      * CHeck if visitor is applicable to current criterion
      *
-     * @param Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
      * @return boolean
      */
@@ -36,25 +36,28 @@ class LanguageCodeIn extends CriterionVisitor
     /**
      * Map field value to a proper Solr representation
      *
-     * @param Criterion $criterion
-     * @param CriterionVisitor $subVisitor
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor $subVisitor
      *
      * @return string
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        return '(' .
-            implode(
-                ' OR ',
-                array_map(
-                    function ( $value )
-                    {
-                        return 'language_code_ms:"' . $value . '"';
-                    },
-                    $criterion->value
-                )
-            ) .
-            ')';
+        $languageCodeExpressions = array_map(
+            function ( $value )
+            {
+                return 'language_code_ms:"' . $value . '"';
+            },
+            $criterion->value
+        );
+
+        /** @var Criterion\LanguageCode $criterion */
+        if ( $criterion->matchAlwaysAvailable )
+        {
+            $languageCodeExpressions[] = "always_available_b:true";
+        }
+
+        return '(' . implode( ' OR ', $languageCodeExpressions ) . ')';
     }
 }
 
