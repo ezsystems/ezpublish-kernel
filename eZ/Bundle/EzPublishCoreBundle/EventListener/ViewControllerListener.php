@@ -83,8 +83,11 @@ class ViewControllerListener implements EventSubscriberInterface
             }
             else if ( $request->attributes->has( 'contentId' ) )
             {
-                $valueObject = $this->repository->getContentService()->loadContentInfo(
-                    $request->attributes->get( 'contentId' )
+                $valueObject = $this->repository->sudo(
+                    function ( $repository ) use ( $request )
+                    {
+                        return $repository->getContentService()->loadContentInfo( $request->attributes->get( 'contentId' ) );
+                    }
                 );
             }
         }
