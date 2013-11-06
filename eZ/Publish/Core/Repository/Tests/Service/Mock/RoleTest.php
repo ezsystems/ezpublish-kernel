@@ -21,7 +21,7 @@ class RoleTest extends BaseServiceMockTest
      * Test for the createRole() method.
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::createRole
-     * @covers \eZ\Publish\Core\Repository\RoleService::validateRoleCreateStructLimitations
+     * @covers \eZ\Publish\Core\Repository\RoleService::validateRoleCreateStruct
      * @covers \eZ\Publish\Core\Repository\RoleService::validateLimitations
      * @covers \eZ\Publish\Core\Repository\RoleService::validateLimitation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
