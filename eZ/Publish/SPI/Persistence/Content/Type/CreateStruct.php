@@ -9,50 +9,20 @@
 
 namespace eZ\Publish\SPI\Persistence\Content\Type;
 
+use eZ\Publish\SPI\Persistence\MultiLanguageValueBase;
 use eZ\Publish\SPI\Persistence\ValueObject;
 use eZ\Publish\SPI\Persistence\Content\Location;
 
 /**
  */
-class CreateStruct extends ValueObject
+class CreateStruct extends MultiLanguageValueBase
 {
-    /**
-     * Human readable name of the content type
-     *
-     * The structure of this field is:
-     * <code>
-     * array( 'eng' => '<name_eng>', 'de' => '<name_de>' );
-     * </code>
-     *
-     * @var string[]
-     */
-    public $name;
-
     /**
      * Version (state) to create.
      *
      * @var int
      */
     public $status;
-
-    /**
-     * Human readable description of the content type
-     *
-     * The structure of this field is:
-     * <code>
-     * array( 'eng' => '<description_eng>', 'de' => '<description_de>' );
-     * </code>
-     *
-     * @var string[]
-     */
-    public $description = array();
-
-    /**
-     * String identifier of a type
-     *
-     * @var string
-     */
-    public $identifier;
 
     /**
      * Creation date (timestamp)
@@ -110,13 +80,6 @@ class CreateStruct extends ValueObject
      * @var boolean
      */
     public $isContainer;
-
-    /**
-     * Initial language
-     *
-     * @var mixed
-     */
-    public $initialLanguageId;
 
     /**
      * Specifies which property the child locations should be sorted on by default when created

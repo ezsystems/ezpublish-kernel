@@ -9,12 +9,13 @@
 
 namespace eZ\Publish\SPI\Persistence\Content;
 
+use eZ\Publish\SPI\Persistence\MultiLanguageValueBase;
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * @todo What about sort_field and sort_order?
  */
-class Type extends ValueObject
+class Type extends MultiLanguageValueBase
 {
     /**
      * @var int Status constant for defined (aka "published") Type
@@ -44,37 +45,6 @@ class Type extends ValueObject
      * @var int One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      */
     public $status = self::STATUS_DRAFT;
-
-    /**
-     * Human readable name of the content type
-     *
-     * The structure of this field is:
-     * <code>
-     * array( 'eng' => '<name_eng>', 'de' => '<name_de>' );
-     * </code>
-     *
-     * @var string[]
-     */
-    public $name;
-
-    /**
-     * Human readable description of the content type
-     *
-     * The structure of this field is:
-     * <code>
-     * array( 'eng' => '<description_eng>', 'de' => '<description_de>' );
-     * </code>
-     *
-     * @var string[]
-     */
-    public $description = array();
-
-    /**
-     * String identifier of a type
-     *
-     * @var string
-     */
-    public $identifier;
 
     /**
      * Creation date (timestamp)
@@ -140,13 +110,6 @@ class Type extends ValueObject
      * @var boolean
      */
     public $isContainer;
-
-    /**
-     * Initial language
-     *
-     * @var mixed
-     */
-    public $initialLanguageId;
 
     /**
      * Specifies which property the child locations should be sorted on by default when created
