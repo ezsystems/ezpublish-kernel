@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\SPI\Persistence\Content\Type;
 
+use eZ\Publish\SPI\Persistence\MultiLanguageValueBase;
 use eZ\Publish\SPI\Persistence\ValueObject;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -17,7 +18,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
  * @todo Do we need a FieldDefinitionCreateStruct?
  * @todo What about the "serialized_data_text" field in legacy storage?
  */
-class FieldDefinition extends ValueObject
+class FieldDefinition extends MultiLanguageValueBase
 {
     /**
      * Primary key
@@ -25,27 +26,6 @@ class FieldDefinition extends ValueObject
      * @var mixed
      */
     public $id;
-
-    /**
-     * Name
-     *
-     * @var string[]
-     */
-    public $name;
-
-    /**
-     * Description
-     *
-     * @var string[]
-     */
-    public $description = array();
-
-    /**
-     * Readable string identifier of a field definition
-     *
-     * @var string
-     */
-    public $identifier;
 
     /**
      * Field group name
