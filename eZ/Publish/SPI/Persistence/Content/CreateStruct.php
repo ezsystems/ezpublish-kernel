@@ -21,6 +21,14 @@ class CreateStruct extends ValueObject
     public $name;
 
     /**
+     * discriminator for different domain objects based on content
+     * currently we have "content" and "user"
+     *
+     * @var string
+     */
+    public $contentClass;
+
+    /**
      * @var int
      */
     public $typeId;

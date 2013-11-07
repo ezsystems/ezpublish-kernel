@@ -30,6 +30,14 @@ class ContentInfo extends ValueObject
     public $id;
 
     /**
+     * discriminator for different domain objects based on content
+     * currently we have "content" and "user"
+     *
+     * @var string
+     */
+    public $contentClass;
+
+    /**
      * Computed name (via name schema) in the main language
      *
      * @var string
