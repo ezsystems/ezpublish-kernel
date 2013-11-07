@@ -9,32 +9,35 @@
 
 namespace eZ\Publish\SPI\Persistence\Content\Section;
 
+use eZ\Publish\SPI\Persistence\Content\Section\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Section\UpdateStruct;
+
 /**
  */
 interface Handler
 {
     /**
-     * Create a new section
+     * Create a new section.
      *
-     * @param string $name
-     * @param string $identifier
+     * The caller ensures that the identifier does not exist
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Section\CreateStruct $createStruct
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Section
-     * @todo Should validate that $identifier is unique??
-     * @todo What about translatable $name?
      */
-    public function create( $name, $identifier );
+    public function create( CreateStruct $createStruct );
 
     /**
-     * Update name and identifier of a section
+     * Update names, description or identifier of a section
+     *
+     * The caller ensures that the new identifier does not exist
      *
      * @param mixed $id
-     * @param string $name
-     * @param string $identifier
+     * @param \eZ\Publish\SPI\Persistence\Content\Section\UpdateStruct $updateStruct
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
-    public function update( $id, $name, $identifier );
+    public function update( $id, UpdateStruct $updateStruct );
 
     /**
      * Get section data
@@ -68,9 +71,7 @@ interface Handler
     /**
      * Delete a section
      *
-     * Might throw an exception if the section is still associated with some
-     * content objects. Make sure that no content objects are associated with
-     * the section any more *before* calling this method.
+     * The caller ensures that the section exists and no content objects are assigned
      *
      * @param mixed $id
      */
