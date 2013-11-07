@@ -194,8 +194,6 @@ interface Handler
      * Creates a relation between $sourceContentId in $sourceContentVersionNo
      * and $destinationContentId with a specific $type.
      *
-     * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
-     *
      * @param \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $createStruct
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation
@@ -205,27 +203,19 @@ interface Handler
     /**
      * Removes a relation by relation Id.
      *
-     * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
-     *
      * @param mixed $relationId
-     * @param int $type {@see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
-     *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
-     *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
-     *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
      *
      * @return void
      */
-    public function removeRelation( $relationId, $type );
+    public function removeRelation( $relationId );
 
     /**
      * Loads relations from $sourceContentId. Optionally, loads only those with $type and $sourceContentVersionNo.
      *
      * @param mixed $sourceContentId Source Content ID
      * @param mixed|null $sourceContentVersionNo Source Content Version, null if not specified
-     * @param int|null $type {@see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
-     *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
-     *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
-     *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
+     * @param string|null $type
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
     public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null );
@@ -236,10 +226,8 @@ interface Handler
      * Only loads relations against published versions.
      *
      * @param mixed $destinationContentId Destination Content ID
-     * @param int|null $type {@see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
-     *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
-     *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
-     *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
+     * @param string $type
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
     public function loadReverseRelations( $destinationContentId, $type = null );

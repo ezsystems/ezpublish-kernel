@@ -52,13 +52,9 @@ class Relation extends ValueObject
     public $destinationContentId;
 
     /**
-     * Type bitmask
+     * the relation type
      *
-     * @see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
-     *      \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
-     *      \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
-     *      \eZ\Publish\API\Repository\Values\Content\Relation::FIELD
-     * @var int
+     * @var string
      */
     public $type;
 }
