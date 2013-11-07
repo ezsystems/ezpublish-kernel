@@ -28,11 +28,11 @@ class FieldDefinition extends MultiLanguageValueBase
     public $id;
 
     /**
-     * Field group name
+     * Field group id
      *
-     * @var string
+     * @var mixed
      */
-    public $fieldGroup;
+    public $fieldGroupId;
 
     /**
      * Position

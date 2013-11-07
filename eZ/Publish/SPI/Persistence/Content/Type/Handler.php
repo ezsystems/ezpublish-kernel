@@ -12,6 +12,8 @@ namespace eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldGroup\CreateStruct as FieldGroupCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldGroup\UpdateStruct as FieldGroupUpdateStruct;
 
 /**
  */
@@ -280,4 +282,52 @@ interface Handler
      * @return void
      */
     public function publish( $contentTypeId );
+
+    /**
+     * creates a new field group
+     *
+     * @param FieldGroupCreateStruct $createStruct
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldGroup
+     */
+    public function createFieldGroup( FieldGroupCreateStruct $createStruct );
+
+    /**
+     * loads all existing field groups
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldGroup[]
+     */
+    public function loadFieldGroups();
+
+    /**
+     * loads a field group for the given $id
+     *
+     * @param $id
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the field group with the give $id is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldGroup
+     */
+    public function loadFieldGroup( $id );
+
+    /**
+     * loads a field group for the given $identifier
+     *
+     * @param $identifier
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the field group with the give $identifier is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldGroup
+     */
+    public function loadFieldGroupByIdentifier( $identifier );
+
+    /**
+     * updates the given field group
+     *
+     * @param mixed $id
+     * @param FieldGroupUpdateStruct $updateStruct
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldGroup
+     */
+    public function updateFieldGroup( $id, FieldGroupUpdateStruct $updateStruct );
 }
