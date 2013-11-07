@@ -27,7 +27,7 @@ class UpdateStruct extends ValueObject
      *
      * @var int
      */
-    public $modified;
+    public $modificationDate;
 
     /**
      * Modifier user id

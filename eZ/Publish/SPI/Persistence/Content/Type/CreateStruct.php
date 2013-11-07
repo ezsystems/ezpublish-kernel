@@ -29,14 +29,14 @@ class CreateStruct extends MultiLanguageValueBase
      *
      * @var int
      */
-    public $created;
+    public $creationDate;
 
     /**
      * Modification date (timestamp)
      *
      * @var int
      */
-    public $modified;
+    public $modificationDate;
 
     /**
      * Creator user id

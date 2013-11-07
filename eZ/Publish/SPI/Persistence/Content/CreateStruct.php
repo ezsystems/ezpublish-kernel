@@ -77,5 +77,5 @@ class CreateStruct extends ValueObject
      *
      * @var int
      */
-    public $modified;
+    public $modificationDate;
 }
