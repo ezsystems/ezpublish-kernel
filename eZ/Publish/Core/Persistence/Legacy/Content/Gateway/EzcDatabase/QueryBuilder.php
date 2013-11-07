@@ -16,16 +16,16 @@ class QueryBuilder
     /**
      * Database handler
      *
-     * @var \EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected $dbHandler;
 
     /**
      * Creates a new query builder.
      *
-     * @param \EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      */
-    public function __construct( ezcDbHandler $dbHandler )
+    public function __construct( EzcDbHandler $dbHandler )
     {
         $this->dbHandler = $dbHandler;
     }

@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
+use Exception;
 
 /**
  * Visits the DateMetadata criterion

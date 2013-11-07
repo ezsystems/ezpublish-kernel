@@ -110,7 +110,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
             );
             switch ( $urlAlias->type )
             {
-                case UrlAlias::LOCATION:
+                case URLAlias::LOCATION:
                     $params += array(
                         '_controller' => static::LOCATION_VIEW_CONTROLLER,
                         'locationId' => $urlAlias->destination,
@@ -138,8 +138,8 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 
                     break;
 
-                case UrlAlias::RESOURCE:
-                case UrlAlias::VIRTUAL:
+                case URLAlias::RESOURCE:
+                case URLAlias::VIRTUAL:
                     $request->attributes->set( 'semanticPathinfo', '/' . trim( $urlAlias->destination, '/' ) );
                     // In URLAlias terms, "forward" means "redirect".
                     if ( $urlAlias->forward )

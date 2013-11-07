@@ -48,7 +48,7 @@ class LegacyDeleteLocationSlot extends AbstractLegacySlot
                 else
                 {
                     // Else Content was deleted with the last Location, so we remove it from the index
-                    ezSearch::removeObjectById( $signal->contentId );
+                    eZSearch::removeObjectById( $signal->contentId );
                 }
 
                 eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId, true, array( $signal->locationId ) );
