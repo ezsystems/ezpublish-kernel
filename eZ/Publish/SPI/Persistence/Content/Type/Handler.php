@@ -225,7 +225,6 @@ interface Handler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type is not found
      * @todo Add FieldDefinition\CreateStruct?
      */
     public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition );
@@ -241,14 +240,12 @@ interface Handler
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param mixed $fieldDefinitionId
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If field is not found
-     *
      * @return void
      */
     public function removeFieldDefinition( $contentTypeId, $status, $fieldDefinitionId );
 
     /**
-     * This method updates the given $fieldDefinition on a Type.
+     * This method updates the given $fieldDefinition on an existing Type.
      *
      * This method creates a new version of the Type with the updated
      * $fieldDefinition. It does not update existing content objects depending
@@ -260,7 +257,6 @@ interface Handler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      *
      * @return void
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If field is not found
      * @todo Add FieldDefinition\UpdateStruct?
      */
     public function updateFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition );
