@@ -63,15 +63,6 @@ class CreateStruct extends ValueObject
     public $contentVersion;
 
     /**
-     * Legacy format of the url alias.
-     *
-     * This field might be removed in a later version.
-     *
-     * @var string
-     */
-    public $pathIdentificationString;
-
-    /**
      * Identifier of the main location.
      *
      * If the content object in this location has multiple locations,

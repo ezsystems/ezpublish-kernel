@@ -88,15 +88,6 @@ class Location extends ValueObject
     public $parentId;
 
     /**
-     * Legacy format of the url alias.
-     *
-     * This field might be removed in a later version.
-     *
-     * @var string
-     */
-    public $pathIdentificationString;
-
-    /**
      * The materialized path of the location entry, eg: /1/2/
      *
      * @var string
