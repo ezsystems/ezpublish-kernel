@@ -9,36 +9,14 @@
 
 namespace eZ\Publish\SPI\Persistence\Content\Type\Group;
 
+use eZ\Publish\SPI\Persistence\MultiLanguageValueBase;
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  */
-class CreateStruct extends ValueObject
+class CreateStruct extends MultiLanguageValueBase
 {
-    /**
-     * Name
-     *
-     * @since 5.0
-     * @var string[]
-     */
-    public $name = array();
-
-    /**
-     * Description
-     *
-     * @since 5.0
-     * @var string[]
-     */
-    public $description = array();
-
-    /**
-     * Readable string identifier of a group
-     *
-     * @var string
-     */
-    public $identifier;
-
-    /**
+   /**
      * Created date (timestamp)
      *
      * @var int

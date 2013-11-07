@@ -23,29 +23,6 @@ class UpdateStruct extends ValueObject
     public $id;
 
     /**
-     * Name
-     *
-     * @since 5.0
-     * @var string[]
-     */
-    public $name = array();
-
-    /**
-     * Description
-     *
-     * @since 5.0
-     * @var string[]
-     */
-    public $description = array();
-
-    /**
-     * Readable string identifier of a group
-     *
-     * @var string
-     */
-    public $identifier;
-
-    /**
      * Modified date (timestamp)
      *
      * @var int

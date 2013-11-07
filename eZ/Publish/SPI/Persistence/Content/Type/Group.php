@@ -9,11 +9,12 @@
 
 namespace eZ\Publish\SPI\Persistence\Content\Type;
 
+use eZ\Publish\SPI\Persistence\MultiLanguageValueBase;
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  */
-class Group extends ValueObject
+class Group extends MultiLanguageValueBase
 {
     /**
      * Primary key
@@ -21,31 +22,6 @@ class Group extends ValueObject
      * @var mixed
      */
     public $id;
-
-    /**
-     * Name
-     *
-     * @since 5.0
-     * @var string[]
-     */
-    public $name = array();
-
-    /**
-     * Description
-     *
-     * @since 5.0
-     * @var string[]
-     */
-    public $description = array();
-
-    /**
-     * Readable string identifier of a group
-     *
-     * Legacy note: Maps to existing name property
-     *
-     * @var string
-     */
-    public $identifier;
 
     /**
      * Created date (timestamp)
