@@ -55,14 +55,6 @@ class CreateStruct extends ValueObject
     public $contentId;
 
     /**
-     * version of the corresponding {@link Content}.
-     * @todo Rename to $contentVersionNo?
-     *
-     * @var int Content version.
-     */
-    public $contentVersion;
-
-    /**
      * Specifies which property the child locations should be sorted on.
      *
      * Valid values are found at {@link Location::SORT_FIELD_*}
