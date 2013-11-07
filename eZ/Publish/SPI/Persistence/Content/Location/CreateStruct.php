@@ -63,18 +63,6 @@ class CreateStruct extends ValueObject
     public $contentVersion;
 
     /**
-     * Identifier of the main location.
-     *
-     * If the content object in this location has multiple locations,
-     * $mainLocationId will point to the main one.
-     * This is allowed to be set to true, this will mean this should become main location
-     * (@todo Find a better way to deal with being able to create the main location)
-     *
-     * @var mixed|true
-     */
-    public $mainLocationId = true;
-
-    /**
      * Specifies which property the child locations should be sorted on.
      *
      * Valid values are found at {@link Location::SORT_FIELD_*}
