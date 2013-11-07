@@ -170,27 +170,25 @@ interface Handler
     public function copy( $userId, $contentTypeId, $status );
 
     /**
-     * Unlink a content type group from a content type
+     * Unlink a content type group from a content type.
+     *
+     * The caller ensures that the content type and the group exist and the
+     * content type group is not the only group of the content type
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or type with provided status is not found
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If $groupId is last group on $contentTypeId or
-     *                                                                 not a group assigned to type
      */
     public function unlink( $groupId, $contentTypeId, $status );
 
     /**
      * Link a content type group with a content type
      *
+     * The caller ensures, that the content type and the group exist and the type is not already part of the group
+     *
      * @param mixed $groupId
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or type with provided status is not found
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is already part of group
      */
     public function link( $groupId, $contentTypeId, $status );
 
