@@ -80,11 +80,11 @@ class FieldDefinition extends MultiLanguageValueBase
     public $fieldTypeConstraints;
 
     /**
-     * Default value of the field
+     * An array of multi language default values of the field with languageCode as keys.
      *
-     * @var \eZ\Publish\SPI\Persistence\Content\FieldValue
+     * @var \eZ\Publish\SPI\Persistence\Content\FieldValue[]
      */
-    public $defaultValue;
+    public $defaultValues;
 
     /**
      * @todo: Document
