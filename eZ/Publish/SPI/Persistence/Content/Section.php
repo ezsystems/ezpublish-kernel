@@ -9,11 +9,12 @@
 
 namespace eZ\Publish\SPI\Persistence\Content;
 
+use eZ\Publish\SPI\Persistence\MultiLanguageValueBase;
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  */
-class Section extends ValueObject
+class Section extends MultiLanguageValueBase
 {
     /**
      * Id of the section
@@ -21,18 +22,4 @@ class Section extends ValueObject
      * @var int
      */
     public $id;
-
-    /**
-     * Unique identifier of the section
-     *
-     * @var string
-     */
-    public $identifier;
-
-    /**
-     * Name of the section
-     *
-     * @var string
-     */
-    public $name;
 }
