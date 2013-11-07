@@ -37,8 +37,21 @@ class LegacyDeleteLocationSlot extends AbstractLegacySlot
         $kernel->runCallback(
             function () use ( $signal )
             {
+                // First clear object memory cache to prevent false detection of possibly deleted Content
+                eZContentObject::clearCache( $signal->contentId );
+
+                if ( eZContentObject::exists( $signal->contentId ) )
+                {
+                    // If Content still exists reindex is needed
+                    eZContentOperationCollection::registerSearchObject( $signal->contentId );
+                }
+                else
+                {
+                    // Else Content was deleted with the last Location, so we remove it from the index
+                    ezSearch::removeObjectById( $signal->contentId );
+                }
+
                 eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId, true, array( $signal->locationId ) );
-                eZContentOperationCollection::registerSearchObject( $signal->contentId );
                 eZSearch::removeNodes( array( $signal->locationId ) );
                 eZContentObject::clearCache();// Clear all object memory cache to free memory
             },
