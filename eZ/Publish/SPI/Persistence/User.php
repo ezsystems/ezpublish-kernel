@@ -58,12 +58,46 @@ class User extends ValueObject
     public $isEnabled = false;
 
     /**
-     * Max number of time user is allowed to login
-     *
-     * @todo: Not used in kernel, should probably be a number of login allowed before changing password.
-     *        But new users gets 0 before they activate, admin has 10, and anonymous has 1000 in clean data.
+     * Max number of time user is allowed to login before he must change his password
+     * (e.g. new user get 0 to force them to change password before first login)
      *
      * @var int
      */
     public $maxLogin = 0;
+
+    /**
+     * not clear
+     *
+     * @var int
+     */
+    public $currentVisitTime;
+
+    /**
+     * the timestamp of the last login
+     *
+     * @var int
+     */
+    public $lastVisitDate;
+
+    /**
+     * the timestamp this value was last changed
+     *
+     * @var int
+     */
+    public $lastChangedDate;
+
+    /**
+     * failed login attempts
+     *
+     * @var int
+     */
+    public $failedLoginAttempts;
+
+    /**
+     * number of sessions
+     *
+     * @var int
+     */
+    public $loginCount;
+
 }
