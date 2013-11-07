@@ -19,7 +19,8 @@ use eZ\Publish\API\Repository\Values\Content\Query;
  *
  * @package eZ\Publish\SPI\Persistence\Content
  */
-class View extends MultiLanguageValueBase {
+class View extends MultiLanguageValueBase
+{
     /**
      * The unique system id
      *

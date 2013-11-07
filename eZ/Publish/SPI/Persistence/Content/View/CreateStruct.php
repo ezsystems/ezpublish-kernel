@@ -19,7 +19,8 @@ use eZ\Publish\API\Repository\Values\Content\Query;
  *
  * @package eZ\Publish\SPI\Persistence\Content\View
  */
-class CreateStruct extends MultiLanguageValueBase {
+class CreateStruct extends MultiLanguageValueBase
+{
     /**
      * The query for the view
      *
