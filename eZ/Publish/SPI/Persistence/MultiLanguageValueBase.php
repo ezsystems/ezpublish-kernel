@@ -11,7 +11,7 @@
 namespace eZ\Publish\SPI\Persistence;
 
 
-class MultiLanguageValueBase
+class MultiLanguageValueBase extends ValueObject
 {
     /**
      * Human readable multi language names of the object
