@@ -842,7 +842,6 @@ class EzcDatabase extends Gateway
                 // @todo remove throw when tested
                 $path = join( "/", $pathData );
                 throw new \RuntimeException( "Path ({$path}...) is broken, last id is '{$id}': " . __METHOD__ );
-                //break;
             }
 
             $id = $rows[0]["parent"];
