@@ -100,6 +100,7 @@ should not remove or drastically change the existing definitions.
     <dynamicField name="*_t" type="text" indexed="true" stored="true"/>
     <dynamicField name="*_h" type="html" indexed="true" stored="false"/>
     <dynamicField name="*_b" type="boolean" indexed="true" stored="true"/>
+    <dynamicField name="*_mb" type="boolean" indexed="true" stored="true" multiValued="true"/>
     <dynamicField name="*_f" type="float" indexed="true" stored="true"/>
     <dynamicField name="*_d" type="double" indexed="true" stored="true"/>
     <dynamicField name="*_dt" type="date" indexed="true" stored="true"/>
