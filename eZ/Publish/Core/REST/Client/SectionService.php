@@ -259,7 +259,7 @@ class SectionService implements APISectionService, Sessionable
         // Will throw exception on error, no return value for method
         // @todo: Deactivated due to missing implementation of visitor for
         // content on the server side.
-        // $result = $this->inputDispatcher->parse( $response );
+        // Should be: $result = $this->inputDispatcher->parse( $response );
     }
 
     /**

@@ -38,7 +38,6 @@ class ContentTypeFieldDefinitionValidationException extends APIContentTypeFieldD
      */
     public function __construct( array $errors )
     {
-        // var_dump( $errors );
         $this->errors = $errors;
         parent::__construct( "ContentType FieldDefinitions did not validate" );
     }
