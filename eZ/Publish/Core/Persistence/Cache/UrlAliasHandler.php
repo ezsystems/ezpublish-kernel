@@ -154,7 +154,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         foreach ( $urlAliases as $urlAlias )
         {
             $this->cache->clear( 'urlAlias', $urlAlias->id );
-            if ( $urlAlias->type === URLAlias::LOCATION )
+            if ( $urlAlias->type === UrlAlias::LOCATION )
                 $this->cache->clear( 'urlAlias', 'location', $urlAlias->destination );
         }
 

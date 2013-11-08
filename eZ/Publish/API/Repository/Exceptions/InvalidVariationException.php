@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Exceptions;
 
+use Exception;
+
 class InvalidVariationException extends InvalidArgumentException
 {
     public function __construct( $variationName, $variationType, $code = 0, Exception $previous = null )
