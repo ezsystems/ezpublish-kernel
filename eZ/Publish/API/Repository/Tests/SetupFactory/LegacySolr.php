@@ -184,6 +184,7 @@ class LegacySolr extends Legacy
                             $persistenceHandler->contentTypeHandler(),
                             $nameGenerator
                         ),
+                        new CriterionVisitor\Visibility(),
                     )
                 ),
                 new SortClauseVisitor\Aggregate(
