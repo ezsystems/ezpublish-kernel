@@ -41,6 +41,19 @@ class EzcDbHandler
         $this->ezcDbHandler = $ezcDbHandler;
     }
 
+    public function setDbHandler( ezcDbHandlerWrapped $ezcDbHandler )
+    {
+        $this->ezcDbHandler = $ezcDbHandler;
+    }
+
+    /**
+     * @return \ezcDbHandler
+     */
+    public function getDbHandler()
+    {
+        return $this->ezcDbHandler;
+    }
+
     /**
      * Factory for getting EzcDbHandler handler object
      *
