@@ -389,6 +389,17 @@ class Handler implements SearchHandlerInterface
                 array_keys( $content->versionInfo->names ),
                 new FieldType\MultipleStringField()
             ),
+            new Field(
+                'invisible',
+                array_map(
+                    function ( $location )
+                    {
+                        return $location->invisible;
+                    },
+                    $locations
+                ),
+                new FieldType\MultipleBooleanField()
+            ),
         );
 
         if ( $mainLocation !== null )
