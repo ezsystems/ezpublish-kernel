@@ -334,8 +334,11 @@ class ContentTest extends BaseServiceMockTest
      * Test for the loadVersionInfo() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo
-     * @depends eZ\Publish\Core\Repository\Tests\Service\Mock\ContentTest::testLoadVersionInfoByIdWithVersionNo
-     * @depends eZ\Publish\Core\Repository\Tests\Service\Mock\ContentTest::testLoadVersionInfoByIdWithCurrentVersionNo
+     * @depends eZ\Publish\Core\Repository\Tests\Service\Mock\ContentTest::testLoadVersionInfoById
+     * @depends eZ\Publish\Core\Repository\Tests\Service\Mock\ContentTest::testLoadVersionInfoByIdThrowsNotFoundException
+     * @depends eZ\Publish\Core\Repository\Tests\Service\Mock\ContentTest::testLoadVersionInfoByIdThrowsUnauthorizedExceptionNonPublishedVersion
+     * @depends eZ\Publish\Core\Repository\Tests\Service\Mock\ContentTest::testLoadVersionInfoByIdPublishedVersion
+     * @depends eZ\Publish\Core\Repository\Tests\Service\Mock\ContentTest::testLoadVersionInfoByIdNonPublishedVersion
      */
     public function testLoadVersionInfo()
     {
