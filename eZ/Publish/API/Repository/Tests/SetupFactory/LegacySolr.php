@@ -78,6 +78,8 @@ class LegacySolr extends Legacy
                         "solr-move-subtree" => new Slot\MoveSubtree( $repository, $persistenceHandler ),
                         "solr-trash" => new Slot\Trash( $repository, $persistenceHandler ),
                         "solr-trash-recover" => new Slot\Recover( $repository, $persistenceHandler ),
+                        "solr-hide-location" => new Slot\HideLocation( $repository, $persistenceHandler ),
+                        "solr-unhide-location" => new Slot\UnhideLocation( $repository, $persistenceHandler ),
                     )
                 ),
                 array(
@@ -88,6 +90,8 @@ class LegacySolr extends Legacy
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\DeleteLocationSignal" => array( "solr-delete-location" ),
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\CopySubtreeSignal" => array( "solr-copy-subtree" ),
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\MoveSubtreeSignal" => array( "solr-move-subtree" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\HideLocationSignal" => array( "solr-hide-location" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\UnhideLocationSignal" => array( "solr-unhide-location" ),
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\TrashService\\TrashSignal" => array( "solr-trash" ),
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\TrashService\\RecoverSignal" => array( "solr-trash-recover" ),
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\CreateUserSignal" => array( "solr-create-user" ),
