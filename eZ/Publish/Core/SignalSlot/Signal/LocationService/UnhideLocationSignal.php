@@ -23,4 +23,18 @@ class UnhideLocationSignal extends Signal
      * @var mixed
      */
     public $locationId;
+
+    /**
+     * Content ID
+     *
+     * @var mixed
+     */
+    public $contentId;
+
+    /**
+     * Content current version number
+     *
+     * @var int
+     */
+    public $currentVersionNo;
 }
