@@ -8,8 +8,8 @@
  */
 namespace BD\Bundle\DFSBundle\eZ\IO\Handler;
 
-use BD\Bundle\DFSBundle\eZ\IO\Handler\DFS\DB;
-use BD\Bundle\DFSBundle\eZ\IO\Handler\DFS\FS;
+use BD\Bundle\DFSBundle\eZ\IO\Handler\DFS\MetadataHandler;
+use BD\Bundle\DFSBundle\eZ\IO\Handler\DFS\BinaryDataHandler;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\Handler as IOHandler;
@@ -20,10 +20,10 @@ use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
 
 class DFS implements IOHandler
 {
-    /** @var FS */
+    /** @var BinaryDataHandler */
     protected $fs;
 
-    /** @var DB */
+    /** @var MetadataHandler */
     protected $db;
 
     /** @var string */
@@ -31,10 +31,10 @@ class DFS implements IOHandler
 
     /**
      * @param string $storagePrefix
-     * @param DB $db
-     * @param DB $fs
+     * @param MetadataHandler $db
+     * @param MetadataHandler $fs
      */
-    public function construct( $storagePrefix, DB $db, FS $fs )
+    public function construct( $storagePrefix, MetadataHandler $db, BinaryDataHandler $fs )
     {
         $this->storagePrefix = $storagePrefix;
         $this->db = $db;

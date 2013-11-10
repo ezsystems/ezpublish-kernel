@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the FSInterface class.
+ * File containing the BinaryDataHandler interface
  *
  * @copyright Copyright (C) 2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -12,7 +12,7 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\MetadataHandler;
 
-interface FS
+interface BinaryDataHandler
 {
     /**
      * Creates the file $path with data from $resource

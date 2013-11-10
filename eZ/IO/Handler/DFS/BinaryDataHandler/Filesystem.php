@@ -1,16 +1,16 @@
 <?php
 /**
- * File containing the Native class.
+ * File containing the Filesystem BinaryDataHandler class.
  *
  * @copyright Copyright (C) 2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace BD\Bundle\DFSBundle\eZ\IO\Handler\DFS\FS;
+namespace BD\Bundle\DFSBundle\eZ\IO\Handler\DFS\BinaryDataHandler;
 
-use BD\Bundle\DFSBundle\eZ\IO\Handler\DFS\FS as FSInterface
+use BD\Bundle\DFSBundle\eZ\IO\Handler\DFS\BinaryDataHandler;
 
-class Native implements FSInterface
+class Filesystem implements BinaryDataHandler
 {
     /**
      * Creates the file $path with data from $resource
