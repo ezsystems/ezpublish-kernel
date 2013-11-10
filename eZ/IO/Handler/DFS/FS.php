@@ -6,13 +6,13 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace BD\Bundle\DFSBundle\eZ\IO\Handler;
+namespace BD\Bundle\DFSBundle\eZ\IO\Handler\DFS;
 
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\MetadataHandler;
 
-interface FSInterface
+interface FS
 {
     /**
      * Creates the file $path with data from $resource

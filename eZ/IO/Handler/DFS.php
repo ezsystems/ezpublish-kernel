@@ -8,6 +8,8 @@
  */
 namespace BD\Bundle\DFSBundle\eZ\IO\Handler;
 
+use BD\Bundle\DFSBundle\eZ\IO\Handler\DFS\DB;
+use BD\Bundle\DFSBundle\eZ\IO\Handler\DFS\FS;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\Handler as IOHandler;
@@ -18,10 +20,10 @@ use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
 
 class DFS implements IOHandler
 {
-    /** @var FSInterface */
+    /** @var FS */
     protected $fs;
 
-    /** @var DBInterface */
+    /** @var DB */
     protected $db;
 
     /** @var string */
@@ -29,10 +31,10 @@ class DFS implements IOHandler
 
     /**
      * @param string $storagePrefix
-     * @param DBInterface $db
-     * @param FSInterface $fs
+     * @param DB $db
+     * @param DB $fs
      */
-    public function construct( $storagePrefix, DBInterface $db, FSInterface $fs )
+    public function construct( $storagePrefix, DB $db, FS $fs )
     {
         $this->storagePrefix = $storagePrefix;
         $this->db = $db;
