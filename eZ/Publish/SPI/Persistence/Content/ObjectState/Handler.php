@@ -17,11 +17,11 @@ interface Handler
     /**
      * Creates a new object state group
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct $input
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\CreateStruct $createStruct
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
      */
-    public function createGroup( InputStruct $input );
+    public function createGroup( CreateStruct $createStruct );
 
     /**
      * Loads a object state group
@@ -68,11 +68,11 @@ interface Handler
      * Updates an object state group
      *
      * @param mixed $groupId
-     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct $input
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\UpdateStruct $input
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
      */
-    public function updateGroup( $groupId, InputStruct $input );
+    public function updateGroup( $groupId, UpdateStruct $input );
 
     /**
      * Deletes a object state group including all states and links to content
@@ -88,11 +88,11 @@ interface Handler
      * set to this state.
      *
      * @param mixed $groupId
-     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct $input
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\CreateStruct $createStruct
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
-    public function create( $groupId, InputStruct $input );
+    public function create( $groupId, CreateStruct $createStruct );
 
     /**
      * Loads an object state
@@ -121,11 +121,11 @@ interface Handler
      * Updates an object state
      *
      * @param mixed $stateId
-     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct $input
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\UpdateStruct $updateStruct
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
-    public function update( $stateId, InputStruct $input );
+    public function update( $stateId, UpdateStruct $updateStruct );
 
     /**
      * Changes the priority of the state
