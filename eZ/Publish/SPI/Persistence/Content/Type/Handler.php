@@ -32,10 +32,11 @@ interface Handler
     public function updateGroup( GroupUpdateStruct $group );
 
     /**
-     * @param mixed $groupId
+     * deletes a content type group
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type group contains types
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type group with id is not found
+     * the caller ensures that the group exists and contains no type
+     *
+     * @param mixed $groupId
      */
     public function deleteGroup( $groupId );
 
@@ -143,11 +144,11 @@ interface Handler
      * Creates a draft of existing defined content type
      *
      * Updates modified date, sets $modifierId and status to Type::STATUS_DRAFT on the new returned draft.
+     * The caller ensures that the content type with $contentTypeId exists and has status DRAFT and there is no
+     * other DRAFT.
      *
      * @param mixed $modifierId
      * @param mixed $contentTypeId
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type with defined status is not found
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
@@ -158,12 +159,11 @@ interface Handler
      *
      * New Content Type will have $userId as creator / modifier, created / modified should be updated, new remoteId created
      * and identifier should be 'copy_of_<identifier>_' + the new remoteId or another unique number.
+     * The caller ensures that the user and the given content type with the given status exist.
      *
      * @param mixed $userId
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user or type with provided status is not found
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
@@ -270,6 +270,8 @@ interface Handler
      * been adapted.
      *
      * Flags the content type as updated.
+     *
+     * The caller ensures that the content type with status DRAFT exists
      *
      * @param mixed $contentTypeId
      *
