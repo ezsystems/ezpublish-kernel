@@ -233,18 +233,6 @@ interface Handler
     public function loadReverseRelations( $destinationContentId, $type = null );
 
     /**
-     * Performs the publishing operations required to set the version identified by $updateStruct->versionNo and
-     * $updateStruct->id as the published one.
-     *
-     * @param int $contentId
-     * @param int $versionNo
-     * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $metaDataUpdateStruct
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content The published Content
-     */
-    public function publish( $contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct );
-
-    /**
      * Changes main location of content identified by given $contentId to location identified by given $locationId
      *
      * @param mixed $contentId
