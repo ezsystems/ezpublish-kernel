@@ -81,6 +81,7 @@ class LegacySolr extends Legacy
                         "solr-trash-recover" => new Slot\Recover( $repository, $persistenceHandler ),
                         "solr-hide-location" => new Slot\HideLocation( $repository, $persistenceHandler ),
                         "solr-unhide-location" => new Slot\UnhideLocation( $repository, $persistenceHandler ),
+                        "solr-set-content-state" => new Slot\SetContentState( $repository, $persistenceHandler ),
                     )
                 ),
                 array(
@@ -98,6 +99,7 @@ class LegacySolr extends Legacy
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\CreateUserSignal" => array( "solr-create-user" ),
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\CreateUserGroupSignal" => array( "solr-create-user-group" ),
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\MoveUserGroupSignal" => array( "solr-move-user-group" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ObjectStateService\\SetContentStateSignal" => array( "solr-set-content-state" ),
                 )
             )
         );
