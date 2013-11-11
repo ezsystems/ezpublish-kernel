@@ -49,7 +49,7 @@ class ObjectStateIdIn extends CriterionVisitor
                 array_map(
                     function ( $value )
                     {
-                        return 'object_state_id:"' . $value . '"';
+                        return 'object_state_mid:"' . $value . '"';
                     },
                     $criterion->value
                 )
