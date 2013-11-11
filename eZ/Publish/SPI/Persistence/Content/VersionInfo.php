@@ -91,13 +91,6 @@ class VersionInfo extends ValueObject
     public $status;
 
     /**
-     * In 4.x this is the language code which is used for labeling a translation.
-     *
-     * @var int
-     */
-    public $initialLanguageCode;
-
-    /**
      * List of languages in this version
      * Reflects which languages fields exists in for this version.
      *
