@@ -65,5 +65,6 @@
             "dev-master": "5.2.x-dev"
         },
         "ezpublish-legacy-dir": "vendor/ezsystems/ezpublish-legacy"
-    }
+    },
+    "version": "5.2.0"
 }
