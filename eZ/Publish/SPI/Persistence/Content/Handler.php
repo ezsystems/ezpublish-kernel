@@ -243,4 +243,14 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
     public function publish( $contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct );
+
+    /**
+     * Changes main location of content identified by given $contentId to location identified by given $locationId
+     *
+     * @param mixed $contentId
+     * @param mixed $locationId
+     *
+     * @return void
+     */
+    public function changeMainLocation( $contentId, $locationId );
 }

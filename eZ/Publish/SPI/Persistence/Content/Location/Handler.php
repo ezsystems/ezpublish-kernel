@@ -191,14 +191,4 @@ interface Handler
      * @return void
      */
     public function setSectionForSubtree( $locationId, $sectionId );
-
-    /**
-     * Changes main location of content identified by given $contentId to location identified by given $locationId
-     *
-     * @param mixed $contentId
-     * @param mixed $locationId
-     *
-     * @return void
-     */
-    public function changeMainLocation( $contentId, $locationId );
 }
