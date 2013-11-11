@@ -14,6 +14,13 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class UpdateStruct extends ValueObject
 {
     /**
+     * used for setting the status of the location to Location::STATUS_PUBLISHED when content is published
+     *
+     * @var int
+     */
+    public $status;
+
+    /**
      * Location priority
      *
      * Position of the Location among its siblings when sorted using priority
