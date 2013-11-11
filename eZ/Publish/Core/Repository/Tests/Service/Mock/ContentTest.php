@@ -863,7 +863,7 @@ class ContentTest extends BaseServiceMockTest
         array $spiFields,
         array $fieldDefinitions,
         array $locationCreateStructs = array(),
-        array $objectStateGroups = array(),
+        $withObjectStates = false,
         $execute = true
     )
     {
@@ -1036,9 +1036,12 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo( array() )
             );
 
-        $objectStateHandlerMock->expects( $this->once() )
-            ->method( "loadAllGroups" )
-            ->will( $this->returnValue( $objectStateGroups ) );
+        if ( !$withObjectStates )
+        {
+            $objectStateHandlerMock->expects( $this->once() )
+                ->method( "loadAllGroups" )
+                ->will( $this->returnValue( array() ) );
+        }
 
         if ( $execute )
         {
@@ -2186,7 +2189,7 @@ class ContentTest extends BaseServiceMockTest
             $spiFields,
             $fieldDefinitions,
             $locationCreateStructs,
-            array(),
+            false,
             // Do not execute
             false
         );
@@ -2454,7 +2457,7 @@ class ContentTest extends BaseServiceMockTest
             $spiFields,
             $fieldDefinitions,
             array(),
-            $objectStateGroups,
+            true,
             // Do not execute
             false
         );
@@ -2465,49 +2468,10 @@ class ContentTest extends BaseServiceMockTest
         $mockedService = $this->getPartlyMockedContentService();
         /** @var \PHPUnit_Framework_MockObject_MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->contentHandler();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $objectStateHandlerMock */
-        $objectStateHandlerMock = $this->getPersistenceMock()->objectStateHandler();
         $domainMapperMock = $this->getDomainMapperMock();
 
-        $objectStateHandlerMock->expects( $this->at( 1 ) )
-            ->method( "loadObjectStates" )
-            ->with( $this->equalTo( 10 ) )
-            ->will(
-                $this->returnValue(
-                    array(
-                        new SPIObjectState( array( "id" => 11, "groupId" => 10 ) ),
-                        new SPIObjectState( array( "id" => 12, "groupId" => 10 ) )
-                    )
-                )
-            );
-
-        $objectStateHandlerMock->expects( $this->at( 2 ) )
-            ->method( "loadObjectStates" )
-            ->with( $this->equalTo( 20 ) )
-            ->will(
-                $this->returnValue(
-                    array(
-                        new SPIObjectState( array( "id" => 21, "groupId" => 20 ) ),
-                        new SPIObjectState( array( "id" => 22, "groupId" => 20 ) )
-                    )
-                )
-            );
-
-        $objectStateHandlerMock->expects( $this->at( 3 ) )
-            ->method( "setContentState" )
-            ->with(
-                $this->equalTo( 42 ),
-                $this->equalTo( 10 ),
-                $this->equalTo( 11 )
-            );
-
-        $objectStateHandlerMock->expects( $this->at( 4 ) )
-            ->method( "setContentState" )
-            ->with(
-                $this->equalTo( 42 ),
-                $this->equalTo( 20 ),
-                $this->equalTo( 21 )
-            );
+        $this->mockGetDefaultObjectStates();
+        $this->mockSetDefaultObjectStates();
 
         $spiContentCreateStruct = new SPIContentCreateStruct(
             array(
@@ -2587,7 +2551,7 @@ class ContentTest extends BaseServiceMockTest
             array(),
             $fieldDefinitions,
             array(),
-            array(),
+            false,
             // Do not execute test
             false
         );
