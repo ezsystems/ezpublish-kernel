@@ -144,15 +144,15 @@ interface Handler
     public function delete( $stateId );
 
     /**
-     * Sets the object-state of a state group to $stateId for the given content.
+     * Sets the object-state to $stateId for the given content.
+     * The caller ensures that the stateId belongs to the correct object state group
      *
      * @param mixed $contentId
-     * @param mixed $groupId
      * @param mixed $stateId
      *
      * @return boolean
      */
-    public function setContentState( $contentId, $groupId, $stateId );
+    public function setContentState( $contentId, $stateId );
 
     /**
      * Gets the object-state of object identified by $contentId.
