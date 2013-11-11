@@ -1661,6 +1661,8 @@ class ContentService implements ContentServiceInterface
         if ( !$this->repository->canUser( 'content', 'create', $contentInfo, $destinationLocationCreateStruct ) )
             throw new UnauthorizedException( 'content', 'create' );
 
+        $defaultObjectStates = $this->getDefaultObjectStates();
+
         $this->repository->beginTransaction();
         try
         {
@@ -1668,6 +1670,15 @@ class ContentService implements ContentServiceInterface
                 $contentInfo->id,
                 $versionInfo ? $versionInfo->versionNo : null
             );
+
+            foreach ( $defaultObjectStates as $objectStateGroupId => $objectState )
+            {
+                $this->persistenceHandler->objectStateHandler()->setContentState(
+                    $spiContent->versionInfo->contentInfo->id,
+                    $objectStateGroupId,
+                    $objectState->id
+                );
+            }
 
             $content = $this->internalPublishVersion(
                 $this->domainMapper->buildVersionInfoDomainObject( $spiContent->versionInfo ),

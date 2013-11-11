@@ -19,6 +19,7 @@ use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
@@ -33,7 +34,10 @@ use eZ\Publish\SPI\Persistence\Content\Field as SPIField;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group as SPIObjectStateGroup;
 use eZ\Publish\SPI\Persistence\Content\ObjectState as SPIObjectState;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
+use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct as SPIMetadataUpdateStruct;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use Exception;
 
 /**
  * Mock test case for Content service
@@ -5096,6 +5100,429 @@ class ContentTest extends BaseServiceMockTest
 
         // Execute
         $this->partlyMockedContentService->updateContent( $versionInfo, $contentUpdateStruct );
+    }
+
+    /**
+     * Test for the copyContent() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::copyContent
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     */
+    public function testCopyContentThrowsUnauthorizedException()
+    {
+        $repository = $this->getRepositoryMock();
+        $contentService = $this->getPartlyMockedContentService( array( "internalLoadContentInfo" ) );
+        $contentInfo = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
+        $locationCreateStruct = new LocationCreateStruct();
+
+        $contentInfo->expects( $this->any() )
+            ->method( "__get" )
+            ->with( "id" )
+            ->will( $this->returnValue( 42 ) );
+
+        $repository->expects( $this->once() )
+            ->method( "canUser" )
+            ->with(
+                "content",
+                "create",
+                $contentInfo,
+                $locationCreateStruct
+            )
+            ->will( $this->returnValue( false ) );
+
+        /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo */
+        $contentService->copyContent( $contentInfo, $locationCreateStruct  );
+    }
+
+    /**
+     * Test for the copyContent() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::copyContent
+     * @covers \eZ\Publish\Core\Repository\ContentService::getDefaultObjectStates
+     * @covers \eZ\Publish\Core\Repository\ContentService::internalPublishVersion
+     */
+    public function testCopyContent()
+    {
+        $repositoryMock = $this->getRepositoryMock();
+        $contentService = $this->getPartlyMockedContentService( array( "internalLoadContentInfo" ) );
+        $locationServiceMock = $this->getLocationServiceMock();
+        $contentInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
+        $locationCreateStruct = new LocationCreateStruct();
+
+        $repositoryMock->expects( $this->exactly( 2 ) )
+            ->method( "getLocationService" )
+            ->will( $this->returnValue( $locationServiceMock ) );
+
+        $contentInfoMock->expects( $this->any() )
+            ->method( "__get" )
+            ->with( "id" )
+            ->will( $this->returnValue( 42 ) );
+        $versionInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo" );
+
+        $versionInfoMock->expects( $this->any() )
+            ->method( "__get" )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( "versionNo", 123 ),
+                        array( "status", VersionInfo::STATUS_DRAFT ),
+                    )
+                )
+            );
+        $versionInfoMock->expects( $this->once() )
+            ->method( "getContentInfo" )
+            ->will( $this->returnValue( $contentInfoMock ) );
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandlerMock */
+        $contentHandlerMock = $this->getPersistenceMock()->contentHandler();
+        $domainMapperMock = $this->getDomainMapperMock();
+
+        $repositoryMock->expects( $this->once() )->method( "beginTransaction" );
+        $repositoryMock->expects( $this->once() )->method( "commit" );
+        $repositoryMock->expects( $this->once() )
+            ->method( "canUser" )
+            ->with(
+                "content",
+                "create",
+                $contentInfoMock,
+                $locationCreateStruct
+            )
+            ->will( $this->returnValue( true ) );
+
+        $spiContentInfo = new SPIContentInfo( array( "id" => 42 ) );
+        $spiVersionInfo = new SPIVersionInfo(
+            array(
+                "contentInfo" => $spiContentInfo,
+                "creationDate" => 123456
+            )
+        );
+        $spiContent = new SPIContent( array( "versionInfo" => $spiVersionInfo ) );
+        $contentHandlerMock->expects( $this->once() )
+            ->method( "copy" )
+            ->with( 42, null )
+            ->will( $this->returnValue( $spiContent ) );
+
+        $this->mockGetDefaultObjectStates();
+        $this->mockSetDefaultObjectStates();
+
+        $domainMapperMock->expects( $this->once() )
+            ->method( "buildVersionInfoDomainObject" )
+            ->with( $spiVersionInfo )
+            ->will( $this->returnValue( $versionInfoMock ) );
+
+        /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfoMock */
+        $content = $this->mockPublishVersion( 123456 );
+        $locationServiceMock->expects( $this->once() )
+            ->method( "createLocation" )
+            ->with(
+                $content->getVersionInfo()->getContentInfo(),
+                $locationCreateStruct
+            );
+
+        /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfoMock */
+        $contentService->copyContent( $contentInfoMock, $locationCreateStruct, null );
+    }
+
+    /**
+     * Test for the copyContent() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::copyContent
+     * @covers \eZ\Publish\Core\Repository\ContentService::getDefaultObjectStates
+     * @covers \eZ\Publish\Core\Repository\ContentService::internalPublishVersion
+     */
+    public function testCopyContentWithVersionInfo()
+    {
+        $repositoryMock = $this->getRepositoryMock();
+        $contentService = $this->getPartlyMockedContentService( array( "internalLoadContentInfo" ) );
+        $locationServiceMock = $this->getLocationServiceMock();
+        $contentInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
+        $locationCreateStruct = new LocationCreateStruct();
+
+        $repositoryMock->expects( $this->exactly( 2 ) )
+            ->method( "getLocationService" )
+            ->will( $this->returnValue( $locationServiceMock ) );
+
+        $contentInfoMock->expects( $this->any() )
+            ->method( "__get" )
+            ->with( "id" )
+            ->will( $this->returnValue( 42 ) );
+        $versionInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo" );
+
+        $versionInfoMock->expects( $this->any() )
+            ->method( "__get" )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( "versionNo", 123 ),
+                        array( "status", VersionInfo::STATUS_DRAFT ),
+                    )
+                )
+            );
+        $versionInfoMock->expects( $this->once() )
+            ->method( "getContentInfo" )
+            ->will( $this->returnValue( $contentInfoMock ) );
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandlerMock */
+        $contentHandlerMock = $this->getPersistenceMock()->contentHandler();
+        $domainMapperMock = $this->getDomainMapperMock();
+
+        $repositoryMock->expects( $this->once() )->method( "beginTransaction" );
+        $repositoryMock->expects( $this->once() )->method( "commit" );
+        $repositoryMock->expects( $this->once() )
+            ->method( "canUser" )
+            ->with(
+                "content",
+                "create",
+                $contentInfoMock,
+                $locationCreateStruct
+            )
+            ->will( $this->returnValue( true ) );
+
+        $spiContentInfo = new SPIContentInfo( array( "id" => 42 ) );
+        $spiVersionInfo = new SPIVersionInfo(
+            array(
+                "contentInfo" => $spiContentInfo,
+                "creationDate" => 123456
+            )
+        );
+        $spiContent = new SPIContent( array( "versionInfo" => $spiVersionInfo ) );
+        $contentHandlerMock->expects( $this->once() )
+            ->method( "copy" )
+            ->with( 42, 123 )
+            ->will( $this->returnValue( $spiContent ) );
+
+        $this->mockGetDefaultObjectStates();
+        $this->mockSetDefaultObjectStates();
+
+        $domainMapperMock->expects( $this->once() )
+            ->method( "buildVersionInfoDomainObject" )
+            ->with( $spiVersionInfo )
+            ->will( $this->returnValue( $versionInfoMock ) );
+
+        /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfoMock */
+        $content = $this->mockPublishVersion( 123456 );
+        $locationServiceMock->expects( $this->once() )
+            ->method( "createLocation" )
+            ->with(
+                $content->getVersionInfo()->getContentInfo(),
+                $locationCreateStruct
+            );
+
+        /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfoMock */
+        $contentService->copyContent( $contentInfoMock, $locationCreateStruct, $versionInfoMock );
+    }
+
+    /**
+     * Test for the copyContent() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::copyContent
+     * @covers \eZ\Publish\Core\Repository\ContentService::getDefaultObjectStates
+     * @covers \eZ\Publish\Core\Repository\ContentService::internalPublishVersion
+     * @expectedException \Exception
+     * @expectedExceptionMessage Handler threw an exception
+     */
+    public function testCopyContentWithRollback()
+    {
+        $repositoryMock = $this->getRepositoryMock();
+        $contentService = $this->getPartlyMockedContentService();
+        /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandlerMock */
+        $contentHandlerMock = $this->getPersistenceMock()->contentHandler();
+        $locationCreateStruct = new LocationCreateStruct();
+        $contentInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
+        $contentInfoMock->expects( $this->any() )
+            ->method( "__get" )
+            ->with( "id" )
+            ->will( $this->returnValue( 42 ) );
+
+        $this->mockGetDefaultObjectStates();
+
+        $repositoryMock->expects( $this->once() )->method( "beginTransaction" );
+        $repositoryMock->expects( $this->once() )->method( "rollback" );
+        $repositoryMock->expects( $this->once() )
+            ->method( "canUser" )
+            ->with(
+                "content",
+                "create",
+                $contentInfoMock,
+                $locationCreateStruct
+            )
+            ->will( $this->returnValue( true ) );
+
+        $contentHandlerMock->expects( $this->once() )
+            ->method( "copy" )
+            ->with( 42, null )
+            ->will( $this->throwException( new Exception( "Handler threw an exception" ) ) );
+
+        /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfoMock */
+        $contentService->copyContent( $contentInfoMock, $locationCreateStruct, null );
+    }
+
+    /**
+     * @return void
+     */
+    protected function mockGetDefaultObjectStates()
+    {
+        /** @var \PHPUnit_Framework_MockObject_MockObject $objectStateHandlerMock */
+        $objectStateHandlerMock = $this->getPersistenceMock()->objectStateHandler();
+
+        $objectStateGroups = array(
+            new SPIObjectStateGroup( array( "id" => 10 ) ),
+            new SPIObjectStateGroup( array( "id" => 20 ) )
+        );
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject $objectStateHandlerMock */
+        $objectStateHandlerMock->expects( $this->once() )
+            ->method( "loadAllGroups" )
+            ->will( $this->returnValue( $objectStateGroups ) );
+
+        $objectStateHandlerMock->expects( $this->at( 1 ) )
+            ->method( "loadObjectStates" )
+            ->with( $this->equalTo( 10 ) )
+            ->will(
+                $this->returnValue(
+                    array(
+                        new SPIObjectState( array( "id" => 11, "groupId" => 10 ) ),
+                        new SPIObjectState( array( "id" => 12, "groupId" => 10 ) )
+                    )
+                )
+            );
+
+        $objectStateHandlerMock->expects( $this->at( 2 ) )
+            ->method( "loadObjectStates" )
+            ->with( $this->equalTo( 20 ) )
+            ->will(
+                $this->returnValue(
+                    array(
+                        new SPIObjectState( array( "id" => 21, "groupId" => 20 ) ),
+                        new SPIObjectState( array( "id" => 22, "groupId" => 20 ) )
+                    )
+                )
+            );
+    }
+
+    /**
+     * @return void
+     */
+    protected function mockSetDefaultObjectStates()
+    {
+        /** @var \PHPUnit_Framework_MockObject_MockObject $objectStateHandlerMock */
+        $objectStateHandlerMock = $this->getPersistenceMock()->objectStateHandler();
+
+        $defaultObjectStates = array(
+            new SPIObjectState( array( "id" => 11, "groupId" => 10 ) ),
+            new SPIObjectState( array( "id" => 21, "groupId" => 20 ) )
+        );
+        foreach ( $defaultObjectStates as $index => $objectState )
+        {
+            $objectStateHandlerMock->expects( $this->at( $index + 3 ) )
+                ->method( "setContentState" )
+                ->with(
+                    42,
+                    $objectState->groupId,
+                    $objectState->id
+                );
+        }
+
+    }
+
+    /**
+     * @param int|null $publicationDate
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected function mockPublishVersion( $publicationDate = null )
+    {
+        $domainMapperMock = $this->getDomainMapperMock();
+        $contentMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\Content" );
+        /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandlerMock */
+        $versionInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo" );
+        $contentInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
+        $contentHandlerMock = $this->getPersistenceMock()->contentHandler();
+        $metadataUpdateStruct = new SPIMetadataUpdateStruct();
+
+        $contentMock->expects( $this->any() )
+            ->method( "__get" )
+            ->with( "contentInfo" )
+            ->will( $this->returnValue( $contentInfoMock ) );
+        $contentMock->expects( $this->any() )
+            ->method( "getVersionInfo" )
+            ->will( $this->returnValue( $versionInfoMock ) );
+        $versionInfoMock->expects( $this->any() )
+            ->method( "getContentInfo" )
+            ->will( $this->returnValue( $contentInfoMock ) );
+        $contentInfoMock->expects( $this->any() )
+            ->method( "__get" )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( "alwaysAvailable", true ),
+                        array( "mainLanguageCode", "eng-GB" ),
+                    )
+                )
+            );
+
+        // Account for 1 second of test execution time
+        $metadataUpdateStruct->publicationDate = isset( $publicationDate ) ? $publicationDate : time();
+        $metadataUpdateStruct->modificationDate = $metadataUpdateStruct->publicationDate;
+        $metadataUpdateStruct2 = clone $metadataUpdateStruct;
+        $metadataUpdateStruct2->publicationDate++;
+        $metadataUpdateStruct2->modificationDate++;
+
+        $spiContent = new SPIContent();
+        $contentHandlerMock->expects( $this->once() )
+            ->method( "publish" )
+            ->with(
+                42,
+                123,
+                $this->logicalOr( $metadataUpdateStruct, $metadataUpdateStruct2 )
+            )
+            ->will( $this->returnValue( $spiContent ) );
+
+        $domainMapperMock->expects( $this->once() )
+            ->method( "buildContentDomainObject" )
+            ->with( $spiContent )
+            ->will( $this->returnValue( $contentMock ) );
+
+        /** @var \eZ\Publish\API\Repository\Values\Content\Content $contentMock */
+        $this->mockPublishUrlAliasesForContent( $contentMock );
+
+        return $contentMock;
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     */
+    protected function mockPublishUrlAliasesForContent( APIContent $content )
+    {
+        $nameSchemaServiceMock = $this->getNameSchemaServiceMock();
+        /** @var \PHPUnit_Framework_MockObject_MockObject $urlAliasHandlerMock */
+        $urlAliasHandlerMock = $this->getPersistenceMock()->urlAliasHandler();
+        $locationServiceMock = $this->getLocationServiceMock();
+        $location = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\Location" );
+
+        $location->expects( $this->at( 0 ) )
+            ->method( "__get" )
+            ->with( "id" )
+            ->will( $this->returnValue( 123 ) );
+        $location->expects( $this->at( 1 ) )
+            ->method( "__get" )
+            ->with( "parentLocationId" )
+            ->will( $this->returnValue( 456 ) );
+
+        $urlAliasNames = array( "eng-GB" => "hello" );
+        $nameSchemaServiceMock->expects( $this->once() )
+            ->method( "resolveUrlAliasSchema" )
+            ->with( $content )
+            ->will( $this->returnValue( $urlAliasNames ) );
+
+        $locationServiceMock->expects( $this->once() )
+            ->method( "loadLocations" )
+            ->with( $content->getVersionInfo()->getContentInfo() )
+            ->will( $this->returnValue( array( $location ) ) );
+
+        $urlAliasHandlerMock->expects( $this->once() )
+            ->method( "publishUrlAliasForLocation" )
+            ->with( 123, 456, "hello", "eng-GB", true, true );
     }
 
     protected $domainMapperMock;
