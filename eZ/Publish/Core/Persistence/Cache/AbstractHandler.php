@@ -10,8 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
-use eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator;
-use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
 /**
  * Class AbstractHandler

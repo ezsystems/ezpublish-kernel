@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Server\Controller;
 
-use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\LimitationValidationException;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Exceptions;

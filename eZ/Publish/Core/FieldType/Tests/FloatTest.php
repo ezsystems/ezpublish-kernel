@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Float\Type as Float;
 use eZ\Publish\Core\FieldType\Float\Value as FloatValue;
-use ReflectionObject;
 
 /**
  * @group fieldType

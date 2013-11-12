@@ -14,7 +14,6 @@ use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\REST\Server\Input\Parser\ContentCreate;
-use eZ\Publish\Core\REST\Server\Input\Parser\LocationCreate;
 
 class ContentCreateTest extends BaseTest
 {

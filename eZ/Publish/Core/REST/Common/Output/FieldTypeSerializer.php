@@ -14,7 +14,6 @@ use eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry;
 use eZ\Publish\API\Repository\FieldTypeService;
 use eZ\Publish\API\Repository\FieldType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**

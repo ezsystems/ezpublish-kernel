@@ -21,8 +21,6 @@ use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Bundle\EzPublishRestBundle\RestEvents;
 
-use eZ\Publish\Core\REST\Server\Request as RESTRequest;
-
 /**
  * This class listens, as a service, for the kernel.view event, triggered when a controller method
  * didn't return a Response object.

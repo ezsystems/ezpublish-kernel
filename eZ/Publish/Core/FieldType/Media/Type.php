@@ -15,7 +15,6 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\SPI\fieldType\Value as SPIValue;
-use eZ\Publish\Core\FieldType\BinaryBase\Value as BinaryBaseValue;
 
 /**
  * The TextLine field type.

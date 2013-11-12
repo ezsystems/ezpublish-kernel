@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Persistence\TransformationProcessor;
 
 use eZ\Publish\Core\Persistence\TransformationProcessor;
-use eZ\Publish\Core\Persistence\TransformationProcessor\PcreCompiler;
 use eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased\Parser;
 
 /**

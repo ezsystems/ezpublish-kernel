@@ -10,7 +10,6 @@
 namespace eZ\Publish\SPI\Persistence\Content\Language;
 
 use eZ\Publish\SPI\Persistence\Content\Language;
-use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 
 /**
  * Language Handler interface

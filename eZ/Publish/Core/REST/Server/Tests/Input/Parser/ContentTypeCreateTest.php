@@ -13,7 +13,6 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeCreateStruct;
 use eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeCreate;
-use eZ\Publish\Core\REST\Server\Input\Parser\FieldDefinitionCreate;
 
 class ContentTypeCreateTest extends BaseTest
 {

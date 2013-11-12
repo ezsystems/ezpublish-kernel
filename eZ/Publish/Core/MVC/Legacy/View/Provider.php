@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\View;
 
-use eZ\Publish\Core\MVC\Legacy\View\TwigContentViewLayoutDecorator;
 use eZ\Publish\Core\MVC\Legacy\Templating\LegacyHelper;
 use Psr\Log\LoggerInterface;
 use Closure;

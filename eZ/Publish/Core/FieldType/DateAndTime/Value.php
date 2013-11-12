@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\FieldType\DateAndTime;
 
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use Exception;
 use DateTime;
 

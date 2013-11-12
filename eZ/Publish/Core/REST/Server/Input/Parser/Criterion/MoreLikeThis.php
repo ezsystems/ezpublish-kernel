@@ -13,7 +13,6 @@ use eZ\Publish\Core\REST\Server\Input\Parser\Base;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Exceptions;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\MoreLikeThis as MoreLikeThisCriterion;
 
 /**
  * Parser for MoreLikeThis Criterion

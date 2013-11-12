@@ -19,7 +19,6 @@ use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\ContentService;
-use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class ContentServiceTest extends ServiceTest
 {

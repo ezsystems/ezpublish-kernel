@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\MVC\Legacy\Templating\Twig\Extension;
 
 use eZ\Publish\Core\MVC\Legacy\Templating\Twig\TokenParser\LegacyIncludeParser;
 use eZ\Publish\Core\MVC\Legacy\Templating\LegacyEngine;
-use eZTemplate;
 use Twig_Extension;
 
 /**

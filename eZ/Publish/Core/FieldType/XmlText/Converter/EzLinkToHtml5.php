@@ -12,7 +12,6 @@ namespace eZ\Publish\Core\FieldType\XmlText\Converter;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\FieldType\XmlText\Converter;
-use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Psr\Log\LoggerInterface;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;

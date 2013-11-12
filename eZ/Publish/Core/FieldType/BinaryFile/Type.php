@@ -10,11 +10,8 @@
 namespace eZ\Publish\Core\FieldType\BinaryFile;
 
 use eZ\Publish\Core\FieldType\BinaryBase\Type as BinaryBaseType;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
-use eZ\Publish\Core\FieldType\Value as BaseValue;
-use eZ\Publish\Core\FieldType\BinaryBase\Value as BinaryBaseValue;
 
 /**
  * The TextLine field type.

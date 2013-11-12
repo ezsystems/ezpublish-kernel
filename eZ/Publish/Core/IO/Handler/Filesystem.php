@@ -16,7 +16,6 @@ use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
-use eZClusterFileHandler;
 use DateTime;
 use RuntimeException;
 use eZ\Publish\Core\IO\MetadataHandler;
