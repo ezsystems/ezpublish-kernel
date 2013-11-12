@@ -20,8 +20,6 @@ use eZ\Publish\Core\Persistence\Cache\UserHandler as CacheUserHandler;
 use eZ\Publish\Core\Persistence\Cache\SearchHandler as CacheSearchHandler;
 use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
 use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
-use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
-use eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator;
 
 /**
  * Persistence Cache Handler class

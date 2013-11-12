@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Image\Type as ImageType;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
-use ReflectionObject;
 
 /**
  * @group fieldType

@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\Content;
 
-use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use eZ\Publish\Core\REST\Client\ContentTypeService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo;
 

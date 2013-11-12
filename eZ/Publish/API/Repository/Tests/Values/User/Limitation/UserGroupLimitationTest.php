@@ -10,7 +10,6 @@
 namespace eZ\Publish\API\Repository\Tests\Values\User\Limitation;
 
 use eZ\Publish\API\Repository\Values\User\Limitation\UserGroupLimitation;
-use eZ\Publish\API\Repository\Tests\Values\User\Limitation\BaseLimitationTest;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 

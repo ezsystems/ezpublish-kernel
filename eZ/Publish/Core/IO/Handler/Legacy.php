@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\IO\Handler;
 
 use eZ\Publish\Core\IO\Handler as IOHandlerInterface;
 use eZ\Publish\Core\IO\MetadataHandler;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\SPI\IO\BinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;

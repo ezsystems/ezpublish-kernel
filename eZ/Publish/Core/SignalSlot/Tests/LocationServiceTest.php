@@ -15,7 +15,6 @@ use eZ\Publish\API\Repository\Values\Content\LocationList;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\LocationService;
-use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class LocationServiceTest extends ServiceTest
 {

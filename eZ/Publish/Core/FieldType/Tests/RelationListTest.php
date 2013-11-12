@@ -11,8 +11,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\RelationList\Type as RelationList;
 use eZ\Publish\Core\FieldType\RelationList\Value;
-use eZ\Publish\Core\FieldType\Tests\FieldTypeTest;
-use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;

@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Client\Exceptions;
 
-use eZ\Publish\Core\REST\Client\Exceptions\InvalidArgumentException;
-
 /**
  * Invalid Argument Type Exception implementation
  *

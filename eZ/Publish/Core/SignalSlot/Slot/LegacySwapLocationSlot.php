@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\SignalSlot\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\SignalSlot\Slot\AbstractLegacySlot;
 use eZContentCacheManager;
 use eZContentObject;
 use eZSearch;

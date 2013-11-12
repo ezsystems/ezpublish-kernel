@@ -13,7 +13,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FieldValue\Handler;
 use ezcQuerySelect;
 use RuntimeException;
-use OutOfBoundsException;
 
 /**
  * Content locator gateway implementation using the zeta database component.

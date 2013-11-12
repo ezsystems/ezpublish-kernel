@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\SPI\FieldType;
 
-use eZ\Publish\SPI\FieldType\Event;
-
 /**
  * A field type interface which field types can optionally implement.
  *

@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Block;
 
-use eZ\Publish\Core\MVC\Symfony\Matcher\Block\MultipleValued;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 
 class View extends MultipleValued

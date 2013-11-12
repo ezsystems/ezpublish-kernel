@@ -14,7 +14,6 @@ use eZ\Publish\Core\MVC\RepositoryAwareInterface;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId;
 
 class PageService extends BasePageService implements RepositoryAwareInterface
 {

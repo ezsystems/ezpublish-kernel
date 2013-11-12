@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\MVC\Legacy\Templating\Twig;
 
 use Twig_Environment;
 use eZ\Publish\Core\MVC\Legacy\Templating\LegacyEngine;
-use eZ\Publish\Core\MVC\Legacy\Templating\Twig\Template;
 
 class Environment extends Twig_Environment
 {
