@@ -236,12 +236,6 @@ class Backend
         // Make sure id isn't changed
         unset( $data[$idColumn] );
 
-        /*foreach ( $data as $prop => $value )
-        {
-            if ( $value === null )
-                throw new InvalidArgumentValue( 'data', "'$prop' on '$type' was of value NULL" );
-        }*/
-
         $return = false;
         foreach ( $this->data[$type] as $key => $item )
         {
