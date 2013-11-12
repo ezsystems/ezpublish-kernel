@@ -144,6 +144,9 @@ class LegacyKernelController
             $headerName = strtolower( $headerArray[0] );
             $headerValue = $headerArray[1];
 
+            // Removing existing header to avoid duplicate values
+            header_remove( $headerName );
+
             switch ( $headerName )
             {
                 // max-age and s-maxage are skipped because they are values of the cache-control header
