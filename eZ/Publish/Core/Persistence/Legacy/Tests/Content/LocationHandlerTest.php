@@ -18,6 +18,8 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper;
+use eZ\Publish\SPI\Persistence\Content\ObjectState;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Group as ObjectStateGroup;
 
 /**
  * Test case for LocationHandlerTest
@@ -45,6 +47,13 @@ class LocationHandlerTest extends TestCase
      */
     protected $contentHandler;
 
+    /**
+     * Mocked object state handler instance
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $objectStateHandler;
+
     public function setUp()
     {
         parent::setUp();
@@ -60,7 +69,8 @@ class LocationHandlerTest extends TestCase
             $this->locationGateway,
             $this->locationMapper,
             $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler', array(), array(), '', false ),
-            $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper', array(), array(), '', false )
+            $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper', array(), array(), '', false ),
+            $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\ObjectState\\Handler', array(), array(), '', false )
         );
     }
 
@@ -407,7 +417,8 @@ class LocationHandlerTest extends TestCase
                 $locationGatewayMock,
                 $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper" ),
                 $contentHandlerMock,
-                $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper", array(), array(), "", false )
+                $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper", array(), array(), "", false ),
+                $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\ObjectState\\Handler", array(), array(), "", false )
             )
         );
 
@@ -626,6 +637,44 @@ class LocationHandlerTest extends TestCase
             ->with( $destinationData["node_id"] )
             ->will( $this->returnValue( $destinationData ) );
 
+        $objectStateHandlerCall = 0;
+        $this->objectStateHandler->expects( $this->at( $objectStateHandlerCall++ ) )
+            ->method( "loadAllGroups" )
+            ->will(
+                $this->returnValue(
+                    array(
+                        new ObjectStateGroup( array( "id" => 10 ) ),
+                        new ObjectStateGroup( array( "id" => 20 ) )
+                    )
+                )
+            );
+        $this->objectStateHandler->expects( $this->at( $objectStateHandlerCall++ ) )
+            ->method( "loadObjectStates" )
+            ->with( $this->equalTo( 10 ) )
+            ->will(
+                $this->returnValue(
+                    array(
+                        new ObjectState( array( "id" => 11, "groupId" => 10 ) ),
+                        new ObjectState( array( "id" => 12, "groupId" => 10 ) )
+                    )
+                )
+            );
+        $this->objectStateHandler->expects( $this->at( $objectStateHandlerCall++ ) )
+            ->method( "loadObjectStates" )
+            ->with( $this->equalTo( 20 ) )
+            ->will(
+                $this->returnValue(
+                    array(
+                        new ObjectState( array( "id" => 21, "groupId" => 20 ) ),
+                        new ObjectState( array( "id" => 22, "groupId" => 20 ) )
+                    )
+                )
+            );
+        $defaultObjectStates = array(
+            new ObjectState( array( "id" => 11, "groupId" => 10 ) ),
+            new ObjectState( array( "id" => 21, "groupId" => 20 ) )
+        );
+
         $contentIds = array_values(
             array_unique(
                 array_map(
@@ -661,6 +710,17 @@ class LocationHandlerTest extends TestCase
                         )
                     )
                 );
+
+            foreach ( $defaultObjectStates as $objectState )
+            {
+                $this->objectStateHandler->expects( $this->at( $objectStateHandlerCall++ ) )
+                    ->method( "setContentState" )
+                    ->with(
+                        $contentId + $offset,
+                        $objectState->groupId,
+                        $objectState->id
+                    );
+            }
 
             $this->contentHandler
                 ->expects( $this->at( $index * 2 + 1 ) )
@@ -780,7 +840,8 @@ class LocationHandlerTest extends TestCase
                 $this->locationGateway = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway', array(), array(), '', false ),
                 $this->locationMapper = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper', array(), array(), '', false ),
                 $this->contentHandler = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler', array(), array(), '', false ),
-                $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper', array(), array(), '', false )
+                $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper', array(), array(), '', false ),
+                $this->objectStateHandler = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\ObjectState\\Handler', array(), array(), '', false ),
             )
         );
     }
