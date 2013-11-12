@@ -9,6 +9,7 @@ parameters:
     ezpublish_legacy.kernel_handler.treemenu.class: ezpKernelTreeMenu
 
     ezpublish_legacy.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\LegacyKernelController
+    ezpublish_legacy.response_manager.class: eZ\Bundle\EzPublishLegacyBundle\LegacyResponse\LegacyResponseManager
     ezpublish_legacy.treemenu.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\LegacyTreeMenuController
     ezpublish_legacy.treemenu.controller.options: {}
     ezpublish_legacy.setup.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\LegacySetupController
@@ -91,13 +92,17 @@ services:
     ezpublish_legacy.kernel_handler:
         alias: ezpublish_legacy.kernel_handler.web
 
+    ezpublish_legacy.response_manager:
+        class: %ezpublish_legacy.response_manager.class%
+        arguments: [@templating, @ezpublish.config.resolver]
+
     ezpublish_legacy.controller:
         class: %ezpublish_legacy.controller.class%
         arguments:
             - @ezpublish_legacy.kernel
-            - @templating
             - @ezpublish.config.resolver
             - @ezpublish_legacy.uri_helper
+            - @ezpublish_legacy.response_manager
         calls:
             - [setRequest, [@?request=]]
 
